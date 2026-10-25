@@ -1,0 +1,7 @@
+# growth: 对局推进时的成本（8 座，planner budget=64，3 局，标准目录）
+log_len_bucket	steps	clone_p50	hash_p50	fmt_p50	plan_p50	nodes_p50	plan_ns_per_node_p50	plan_allocs_p50	plan_KB_p50	submit_p50	submit_allocs_p50	submit_KB_p50
+0-383	458	2925	4150	83	6917	1	5625	82	21	5375	19	9
+383-766	451	7391	4183	83	8625	1	7250	89	21	5459	20	9
+766-1149	447	11833	4275	83	6583	1	5875	74	21	5500	17	9
+1149-1532	362	15408	4200	83	7542	1	6667	70	21	5416	16	9
+TOTAL steps=1718 plan_ms=23.2 submit_ms=9.0 allocs_per_step=262 max_log_len=1532

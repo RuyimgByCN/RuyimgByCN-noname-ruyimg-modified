@@ -155,7 +155,14 @@ impl Engine {
         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         // 段检查点：供开放段失败时 `abort_segment` 回滚到段前（N07）。
         // PA02：模拟会话不存检查点——模拟段失败即弃置整个克隆，无需回滚。
-        let checkpoint = if self.simulation { None } else { Some(self.save()) };
+        // PA05：`time_slice == None`（默认）时段不可能 Yielded 暂停，
+        // 检查点在任何结果臂都不会被消费——惰性跳过，省去每命令一次
+        // 全量快照构造（core/解析/挂起机器深快照的分配）。
+        let checkpoint = if self.simulation || self.time_slice.is_none() {
+            None
+        } else {
+            Some(self.save())
+        };
         // PA02：模拟会话的日志写进本段弃置缓冲，不进权威宿主日志。
         let mut sim_log = self.simulation.then(Vec::new);
         let log: &mut Vec<LogEvent> = match sim_log.as_mut() {
@@ -287,7 +294,8 @@ impl Engine {
                 self.segment_open = false;
                 self.segment_checkpoint = None;
                 // PA02：模拟会话不算权威哈希——规划只判 Rejected 与评分
-                // 投影，不消费该值；正式引擎哈希语义不变。
+                // 投影，不消费该值；正式引擎哈希语义不变。PA03：缓冲化
+                // 后的 canonical_hash 字节与原实现一致。
                 CommandOutcome::Accepted {
                     state_hash: if self.simulation {
                         [0u8; 32]

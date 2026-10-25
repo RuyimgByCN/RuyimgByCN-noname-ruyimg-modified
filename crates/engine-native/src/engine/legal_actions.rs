@@ -170,6 +170,38 @@ impl Engine {
     }
 }
 
+/// 保守快拒（PA05）：仅当与正式校验**共用同一段代码**判定必拒时返回
+/// true，`push_action` 据此跳过探针克隆+模拟提交。接受集与纯探针实现
+/// 完全一致（单调：快拒只裁掉正式路径同样会拒的候选；其余一切拒绝面
+/// ——牌种分派校验与结算期失败——仍由探针兜底）。
+fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameAction) -> bool {
+    match action {
+        // NextPhase 唯一校验：当前回合玩家（apply_command 同款）。
+        GameAction::NextPhase => seat != engine.turn().current,
+        // 出牌：共享校验前缀（play_card 同一段代码）。
+        GameAction::PlayCard { card, targets } => crate::engine::common_play_validation(
+            engine.state_core(),
+            engine.catalog(),
+            seat,
+            *card,
+            targets,
+        )
+        .is_err(),
+        // 应答：三段校验均纯只读（apply_command 同款）。
+        GameAction::Answer { choice_id, selection } => match engine.open_choice() {
+            None => true,
+            Some(open) => {
+                open.id != *choice_id
+                    || open.observer != seat
+                    || !open.spec.accepts(selection)
+            }
+        },
+        // ActivateSkill（激活门控）/RevealGeneral（明置窗口）校验面较深，
+        // 不做快拒——照旧探针。
+        _ => false,
+    }
+}
+
 /// 候选入列：内核校验通过且未重复才加入。
 /// 候选探测触发内核不变量 panic 的累计次数（NC12 长程防护；供测试/诊断读取）。
 static PROBE_FAULTS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
@@ -222,6 +254,10 @@ fn push_action(
     // PA05：动作本体作去重键（GameAction: Ord）——省去每候选一次
     // `format!` 字符串分配；仅在候选被接受后才克隆入集。
     if dedup.contains(&action) {
+        return;
+    }
+    // PA05：保守快拒——共享校验代码判定必拒的候选不再克隆探测。
+    if certainly_illegal(engine, seat, &action) {
         return;
     }
     // NC12 长程防护（2026-10-19）：候选探测同样在**克隆**上真实 `submit`，若内核在

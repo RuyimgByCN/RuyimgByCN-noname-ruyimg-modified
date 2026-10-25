@@ -1,13 +1,17 @@
 use super::*;
 
-pub(super) fn play_card(
-    state: &mut GameState,
-    catalog: &SharedCatalog,
+/// 出牌公共校验前缀（PA05 抽取）：授权/阶段/封锁/限用/手牌持有/目标
+/// 界与目标禁指——**纯只读**。`play_card` 与合法动作快拒
+/// （`legal_actions::certainly_illegal`）共用同一段代码，语义不可能
+/// 漂移；此后牌种分派校验（杀限/距离/满血/装备空栏等）仍由
+/// `play_card` 各分支负责。
+pub(super) fn common_play_validation(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
     actor: PlayerId,
     card: CardId,
-    targets: Vec<PlayerId>,
+    targets: &[PlayerId],
 ) -> Result<(), RejectReason> {
-    let core = &state.core;
     // 授权：只有当前回合玩家可以出牌。
     if actor != core.turn.current {
         return Err(RejectReason::NotYourTurn);
@@ -100,6 +104,18 @@ pub(super) fn play_card(
             }
         }
     }
+    Ok(())
+}
+
+pub(super) fn play_card(
+    state: &mut GameState,
+    catalog: &SharedCatalog,
+    actor: PlayerId,
+    card: CardId,
+    targets: Vec<PlayerId>,
+) -> Result<(), RejectReason> {
+    common_play_validation(&state.core, catalog, actor, card, &targets)?;
+    let core = &state.core;
     let mut kind = catalog.card_kind(card);
     // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
     //（viewAs 转化，独立于杀转化链——sha 牌可转化；登记差异：

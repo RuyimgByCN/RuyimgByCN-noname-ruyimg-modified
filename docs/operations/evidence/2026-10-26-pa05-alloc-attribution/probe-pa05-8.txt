@@ -1,0 +1,1721 @@
+seed=0 step=0 log=0 parks=0 stack=0 skills=0 discard=0 deck=92 nodes=1 action=NextPhase
+seed=0 step=1 log=3 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=1 action=NextPhase
+seed=0 step=2 log=5 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=15 action=PlayCard { card: 0, targets: [7] }
+seed=0 step=3 log=7 parks=0 stack=0 skills=0 discard=1 deck=90 nodes=8 action=NextPhase
+seed=0 step=4 log=10 parks=1 stack=2 skills=0 discard=1 deck=90 nodes=6 action=Answer { choice_id: 1, selection: [Card(33)] }
+seed=0 step=5 log=12 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=0 step=6 log=14 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=0 step=7 log=17 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=0 step=8 log=20 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=1 action=NextPhase
+seed=0 step=9 log=22 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=8 action=PlayCard { card: 12, targets: [0] }
+seed=0 step=10 log=24 parks=1 stack=1 skills=0 discard=2 deck=88 nodes=3 action=Answer { choice_id: 2, selection: [Card(38)] }
+seed=0 step=11 log=26 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=0 step=12 log=29 parks=1 stack=2 skills=0 discard=4 deck=88 nodes=6 action=Answer { choice_id: 3, selection: [Card(55)] }
+seed=0 step=13 log=31 parks=0 stack=0 skills=0 discard=5 deck=88 nodes=1 action=NextPhase
+seed=0 step=14 log=33 parks=0 stack=0 skills=0 discard=5 deck=88 nodes=1 action=NextPhase
+seed=0 step=15 log=36 parks=0 stack=0 skills=0 discard=5 deck=88 nodes=1 action=NextPhase
+seed=0 step=16 log=39 parks=0 stack=0 skills=0 discard=5 deck=86 nodes=1 action=NextPhase
+seed=0 step=17 log=41 parks=0 stack=0 skills=0 discard=5 deck=86 nodes=8 action=PlayCard { card: 7, targets: [1] }
+seed=0 step=18 log=43 parks=1 stack=1 skills=0 discard=5 deck=86 nodes=3 action=Answer { choice_id: 4, selection: [Card(37)] }
+seed=0 step=19 log=45 parks=0 stack=0 skills=0 discard=7 deck=86 nodes=1 action=NextPhase
+seed=0 step=20 log=48 parks=1 stack=2 skills=0 discard=7 deck=86 nodes=6 action=Answer { choice_id: 5, selection: [Card(81)] }
+seed=0 step=21 log=50 parks=0 stack=0 skills=0 discard=8 deck=86 nodes=1 action=NextPhase
+seed=0 step=22 log=52 parks=0 stack=0 skills=0 discard=8 deck=86 nodes=1 action=NextPhase
+seed=0 step=23 log=55 parks=0 stack=0 skills=0 discard=8 deck=86 nodes=1 action=NextPhase
+seed=0 step=24 log=58 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=0 step=25 log=60 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=0 step=26 log=63 parks=1 stack=2 skills=0 discard=8 deck=84 nodes=8 action=Answer { choice_id: 6, selection: [Card(115), Card(83)] }
+seed=0 step=27 log=66 parks=0 stack=0 skills=0 discard=10 deck=84 nodes=1 action=NextPhase
+seed=0 step=28 log=68 parks=0 stack=0 skills=0 discard=10 deck=84 nodes=1 action=NextPhase
+seed=0 step=29 log=71 parks=0 stack=0 skills=0 discard=10 deck=84 nodes=1 action=NextPhase
+seed=0 step=30 log=74 parks=0 stack=0 skills=0 discard=10 deck=82 nodes=1 action=NextPhase
+seed=0 step=31 log=76 parks=0 stack=0 skills=0 discard=10 deck=82 nodes=1 action=NextPhase
+seed=0 step=32 log=79 parks=1 stack=2 skills=0 discard=10 deck=82 nodes=8 action=Answer { choice_id: 7, selection: [Card(60), Card(80)] }
+seed=0 step=33 log=82 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=0 step=34 log=84 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=0 step=35 log=87 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=0 step=36 log=90 parks=0 stack=0 skills=0 discard=12 deck=80 nodes=1 action=NextPhase
+seed=0 step=37 log=92 parks=0 stack=0 skills=0 discard=12 deck=80 nodes=15 action=PlayCard { card: 23, targets: [4] }
+seed=0 step=38 log=94 parks=1 stack=1 skills=0 discard=12 deck=80 nodes=3 action=Answer { choice_id: 8, selection: [Card(41)] }
+seed=0 step=39 log=96 parks=0 stack=0 skills=0 discard=14 deck=80 nodes=8 action=NextPhase
+seed=0 step=40 log=99 parks=1 stack=2 skills=0 discard=14 deck=80 nodes=6 action=Answer { choice_id: 9, selection: [Card(94)] }
+seed=0 step=41 log=101 parks=0 stack=0 skills=0 discard=15 deck=80 nodes=1 action=NextPhase
+seed=0 step=42 log=103 parks=0 stack=0 skills=0 discard=15 deck=80 nodes=1 action=NextPhase
+seed=0 step=43 log=106 parks=0 stack=0 skills=0 discard=15 deck=80 nodes=1 action=NextPhase
+seed=0 step=44 log=109 parks=0 stack=0 skills=0 discard=15 deck=78 nodes=1 action=NextPhase
+seed=0 step=45 log=111 parks=0 stack=0 skills=0 discard=15 deck=78 nodes=8 action=PlayCard { card: 4, targets: [5] }
+seed=0 step=46 log=113 parks=1 stack=1 skills=0 discard=15 deck=78 nodes=4 action=Answer { choice_id: 10, selection: [Card(36)] }
+seed=0 step=47 log=115 parks=0 stack=0 skills=0 discard=17 deck=78 nodes=1 action=NextPhase
+seed=0 step=48 log=118 parks=1 stack=2 skills=0 discard=17 deck=78 nodes=6 action=Answer { choice_id: 11, selection: [Card(61)] }
+seed=0 step=49 log=120 parks=0 stack=0 skills=0 discard=18 deck=78 nodes=1 action=NextPhase
+seed=0 step=50 log=122 parks=0 stack=0 skills=0 discard=18 deck=78 nodes=1 action=NextPhase
+seed=0 step=51 log=125 parks=0 stack=0 skills=0 discard=18 deck=78 nodes=1 action=NextPhase
+seed=0 step=52 log=128 parks=0 stack=0 skills=0 discard=18 deck=76 nodes=1 action=NextPhase
+seed=0 step=53 log=130 parks=0 stack=0 skills=0 discard=18 deck=76 nodes=22 action=PlayCard { card: 28, targets: [0] }
+seed=0 step=54 log=132 parks=0 stack=0 skills=0 discard=19 deck=76 nodes=15 action=NextPhase
+seed=0 step=55 log=135 parks=1 stack=2 skills=0 discard=19 deck=76 nodes=7 action=Answer { choice_id: 12, selection: [Card(105), Card(63)] }
+seed=0 step=56 log=138 parks=0 stack=0 skills=0 discard=21 deck=76 nodes=1 action=NextPhase
+seed=0 step=57 log=140 parks=0 stack=0 skills=0 discard=21 deck=76 nodes=1 action=NextPhase
+seed=0 step=58 log=143 parks=0 stack=0 skills=0 discard=21 deck=76 nodes=1 action=NextPhase
+seed=0 step=59 log=146 parks=0 stack=0 skills=0 discard=21 deck=74 nodes=1 action=NextPhase
+seed=0 step=60 log=148 parks=0 stack=0 skills=0 discard=21 deck=74 nodes=15 action=PlayCard { card: 6, targets: [7] }
+seed=0 step=61 log=150 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=8 action=NextPhase
+seed=0 step=62 log=153 parks=1 stack=2 skills=0 discard=22 deck=74 nodes=5 action=Answer { choice_id: 13, selection: [Card(117)] }
+seed=0 step=63 log=155 parks=0 stack=0 skills=0 discard=23 deck=74 nodes=1 action=NextPhase
+seed=0 step=64 log=157 parks=0 stack=0 skills=0 discard=23 deck=74 nodes=1 action=NextPhase
+seed=0 step=65 log=160 parks=0 stack=0 skills=0 discard=23 deck=74 nodes=1 action=NextPhase
+seed=0 step=66 log=163 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=1 action=NextPhase
+seed=0 step=67 log=165 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=1 action=NextPhase
+seed=0 step=68 log=168 parks=1 stack=2 skills=0 discard=23 deck=72 nodes=6 action=Answer { choice_id: 14, selection: [Card(87)] }
+seed=0 step=69 log=170 parks=0 stack=0 skills=0 discard=24 deck=72 nodes=1 action=NextPhase
+seed=0 step=70 log=172 parks=0 stack=0 skills=0 discard=24 deck=72 nodes=1 action=NextPhase
+seed=0 step=71 log=175 parks=0 stack=0 skills=0 discard=24 deck=72 nodes=1 action=NextPhase
+seed=0 step=72 log=178 parks=0 stack=0 skills=0 discard=24 deck=70 nodes=1 action=NextPhase
+seed=0 step=73 log=180 parks=0 stack=0 skills=0 discard=24 deck=70 nodes=15 action=PlayCard { card: 17, targets: [1] }
+seed=0 step=74 log=182 parks=1 stack=1 skills=0 discard=24 deck=70 nodes=3 action=Answer { choice_id: 15, selection: [Card(42)] }
+seed=0 step=75 log=184 parks=0 stack=0 skills=0 discard=26 deck=70 nodes=8 action=NextPhase
+seed=0 step=76 log=187 parks=1 stack=2 skills=0 discard=26 deck=70 nodes=6 action=Answer { choice_id: 16, selection: [Card(114)] }
+seed=0 step=77 log=189 parks=0 stack=0 skills=0 discard=27 deck=70 nodes=1 action=NextPhase
+seed=0 step=78 log=191 parks=0 stack=0 skills=0 discard=27 deck=70 nodes=1 action=NextPhase
+seed=0 step=79 log=194 parks=0 stack=0 skills=0 discard=27 deck=70 nodes=1 action=NextPhase
+seed=0 step=80 log=197 parks=0 stack=0 skills=0 discard=27 deck=68 nodes=1 action=NextPhase
+seed=0 step=81 log=199 parks=0 stack=0 skills=0 discard=27 deck=68 nodes=8 action=PlayCard { card: 20, targets: [2] }
+seed=0 step=82 log=201 parks=0 stack=0 skills=0 discard=28 deck=68 nodes=1 action=NextPhase
+seed=0 step=83 log=204 parks=1 stack=2 skills=0 discard=28 deck=68 nodes=6 action=Answer { choice_id: 17, selection: [Card(109)] }
+seed=0 step=84 log=206 parks=0 stack=0 skills=0 discard=29 deck=68 nodes=1 action=NextPhase
+seed=0 step=85 log=208 parks=0 stack=0 skills=0 discard=29 deck=68 nodes=1 action=NextPhase
+seed=0 step=86 log=211 parks=0 stack=0 skills=0 discard=29 deck=68 nodes=1 action=NextPhase
+seed=0 step=87 log=214 parks=0 stack=0 skills=0 discard=29 deck=66 nodes=1 action=NextPhase
+seed=0 step=88 log=216 parks=0 stack=0 skills=0 discard=29 deck=66 nodes=1 action=NextPhase
+seed=0 step=89 log=219 parks=1 stack=2 skills=0 discard=29 deck=66 nodes=6 action=Answer { choice_id: 18, selection: [Card(46)] }
+seed=0 step=90 log=221 parks=0 stack=0 skills=0 discard=30 deck=66 nodes=1 action=NextPhase
+seed=0 step=91 log=223 parks=0 stack=0 skills=0 discard=30 deck=66 nodes=1 action=NextPhase
+seed=0 step=92 log=226 parks=0 stack=0 skills=0 discard=30 deck=66 nodes=1 action=NextPhase
+seed=0 step=93 log=229 parks=0 stack=0 skills=0 discard=30 deck=64 nodes=1 action=NextPhase
+seed=0 step=94 log=231 parks=0 stack=0 skills=0 discard=30 deck=64 nodes=8 action=PlayCard { card: 3, targets: [4] }
+seed=0 step=95 log=233 parks=1 stack=1 skills=0 discard=30 deck=64 nodes=3 action=Answer { choice_id: 19, selection: [Card(31)] }
+seed=0 step=96 log=235 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=1 action=NextPhase
+seed=0 step=97 log=237 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=1 action=NextPhase
+seed=0 step=98 log=239 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=1 action=NextPhase
+seed=0 step=99 log=242 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=1 action=NextPhase
+seed=0 step=100 log=245 parks=0 stack=0 skills=0 discard=32 deck=62 nodes=1 action=NextPhase
+seed=0 step=101 log=247 parks=0 stack=0 skills=0 discard=32 deck=62 nodes=8 action=PlayCard { card: 2, targets: [5] }
+seed=0 step=102 log=249 parks=1 stack=1 skills=0 discard=32 deck=62 nodes=3 action=Answer { choice_id: 20, selection: [Card(43)] }
+seed=0 step=103 log=251 parks=0 stack=0 skills=0 discard=34 deck=62 nodes=1 action=NextPhase
+seed=0 step=104 log=254 parks=1 stack=2 skills=0 discard=34 deck=62 nodes=6 action=Answer { choice_id: 21, selection: [Card(51)] }
+seed=0 step=105 log=256 parks=0 stack=0 skills=0 discard=35 deck=62 nodes=1 action=NextPhase
+seed=0 step=106 log=258 parks=0 stack=0 skills=0 discard=35 deck=62 nodes=1 action=NextPhase
+seed=0 step=107 log=261 parks=0 stack=0 skills=0 discard=35 deck=62 nodes=1 action=NextPhase
+seed=0 step=108 log=264 parks=0 stack=0 skills=0 discard=35 deck=60 nodes=1 action=NextPhase
+seed=0 step=109 log=266 parks=0 stack=0 skills=0 discard=35 deck=60 nodes=15 action=PlayCard { card: 19, targets: [0] }
+seed=0 step=110 log=268 parks=0 stack=0 skills=0 discard=36 deck=60 nodes=8 action=NextPhase
+seed=0 step=111 log=271 parks=1 stack=2 skills=0 discard=36 deck=60 nodes=6 action=Answer { choice_id: 22, selection: [Card(97), Card(5)] }
+seed=0 step=112 log=274 parks=0 stack=0 skills=0 discard=38 deck=60 nodes=1 action=NextPhase
+seed=0 step=113 log=276 parks=0 stack=0 skills=0 discard=38 deck=60 nodes=1 action=NextPhase
+seed=0 step=114 log=279 parks=0 stack=0 skills=0 discard=38 deck=60 nodes=1 action=NextPhase
+seed=0 step=115 log=282 parks=0 stack=0 skills=0 discard=38 deck=58 nodes=1 action=NextPhase
+seed=0 step=116 log=284 parks=0 stack=0 skills=0 discard=38 deck=58 nodes=15 action=PlayCard { card: 13, targets: [1] }
+seed=0 step=117 log=286 parks=0 stack=0 skills=0 discard=39 deck=58 nodes=8 action=NextPhase
+seed=0 step=118 log=289 parks=1 stack=2 skills=0 discard=39 deck=58 nodes=6 action=Answer { choice_id: 23, selection: [Card(45), Card(123)] }
+seed=0 step=119 log=292 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=0 step=120 log=294 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=0 step=121 log=297 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=0 step=122 log=300 parks=0 stack=0 skills=0 discard=41 deck=56 nodes=1 action=NextPhase
+seed=0 step=123 log=302 parks=0 stack=0 skills=0 discard=41 deck=56 nodes=8 action=PlayCard { card: 9, targets: [0] }
+seed=0 step=124 log=304 parks=0 stack=0 skills=0 discard=42 deck=56 nodes=1 action=NextPhase
+seed=0 step=125 log=307 parks=1 stack=2 skills=0 discard=42 deck=56 nodes=5 action=Answer { choice_id: 24, selection: [Card(101)] }
+seed=0 step=126 log=309 parks=0 stack=0 skills=0 discard=43 deck=56 nodes=1 action=NextPhase
+seed=0 step=127 log=311 parks=0 stack=0 skills=0 discard=43 deck=56 nodes=1 action=NextPhase
+seed=0 step=128 log=314 parks=0 stack=0 skills=0 discard=43 deck=56 nodes=1 action=NextPhase
+seed=0 step=129 log=317 parks=0 stack=0 skills=0 discard=43 deck=54 nodes=1 action=NextPhase
+seed=0 step=130 log=319 parks=0 stack=0 skills=0 discard=43 deck=54 nodes=8 action=PlayCard { card: 27, targets: [1] }
+seed=0 step=131 log=321 parks=0 stack=0 skills=0 discard=44 deck=54 nodes=1 action=NextPhase
+seed=0 step=132 log=324 parks=1 stack=2 skills=0 discard=44 deck=54 nodes=7 action=Answer { choice_id: 25, selection: [Card(52), Card(82)] }
+seed=0 step=133 log=327 parks=0 stack=0 skills=0 discard=46 deck=54 nodes=1 action=NextPhase
+seed=0 step=134 log=329 parks=0 stack=0 skills=0 discard=46 deck=54 nodes=1 action=NextPhase
+seed=0 step=135 log=332 parks=0 stack=0 skills=0 discard=46 deck=54 nodes=1 action=NextPhase
+seed=0 step=136 log=335 parks=0 stack=0 skills=0 discard=46 deck=52 nodes=1 action=NextPhase
+seed=0 step=137 log=337 parks=0 stack=0 skills=0 discard=46 deck=52 nodes=1 action=NextPhase
+seed=0 step=138 log=340 parks=1 stack=2 skills=0 discard=46 deck=52 nodes=8 action=Answer { choice_id: 26, selection: [Card(102), Card(76)] }
+seed=0 step=139 log=343 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=0 step=140 log=345 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=0 step=141 log=348 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=0 step=142 log=351 parks=0 stack=0 skills=0 discard=48 deck=50 nodes=1 action=NextPhase
+seed=0 step=143 log=353 parks=0 stack=0 skills=0 discard=48 deck=50 nodes=8 action=PlayCard { card: 16, targets: [5] }
+seed=0 step=144 log=355 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=0 step=145 log=357 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=0 step=146 log=359 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=0 step=147 log=362 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=0 step=148 log=365 parks=0 stack=0 skills=0 discard=49 deck=48 nodes=1 action=NextPhase
+seed=0 step=149 log=367 parks=0 stack=0 skills=0 discard=49 deck=48 nodes=1 action=NextPhase
+seed=0 step=150 log=370 parks=1 stack=2 skills=0 discard=49 deck=48 nodes=7 action=Answer { choice_id: 27, selection: [Card(48), Card(62)] }
+seed=0 step=151 log=373 parks=0 stack=0 skills=0 discard=51 deck=48 nodes=1 action=NextPhase
+seed=0 step=152 log=375 parks=0 stack=0 skills=0 discard=51 deck=48 nodes=1 action=NextPhase
+seed=0 step=153 log=378 parks=0 stack=0 skills=0 discard=51 deck=48 nodes=1 action=NextPhase
+seed=0 step=154 log=381 parks=0 stack=0 skills=0 discard=51 deck=46 nodes=1 action=NextPhase
+seed=0 step=155 log=383 parks=0 stack=0 skills=0 discard=51 deck=46 nodes=8 action=PlayCard { card: 24, targets: [7] }
+seed=0 step=156 log=385 parks=1 stack=1 skills=0 discard=51 deck=46 nodes=3 action=Answer { choice_id: 28, selection: [Card(39)] }
+seed=0 step=157 log=387 parks=0 stack=0 skills=0 discard=53 deck=46 nodes=1 action=NextPhase
+seed=0 step=158 log=390 parks=1 stack=2 skills=0 discard=53 deck=46 nodes=6 action=Answer { choice_id: 29, selection: [Card(66)] }
+seed=0 step=159 log=392 parks=0 stack=0 skills=0 discard=54 deck=46 nodes=1 action=NextPhase
+seed=0 step=160 log=394 parks=0 stack=0 skills=0 discard=54 deck=46 nodes=1 action=NextPhase
+seed=0 step=161 log=397 parks=0 stack=0 skills=0 discard=54 deck=46 nodes=1 action=NextPhase
+seed=0 step=162 log=400 parks=0 stack=0 skills=0 discard=54 deck=44 nodes=1 action=NextPhase
+seed=0 step=163 log=402 parks=0 stack=0 skills=0 discard=54 deck=44 nodes=1 action=NextPhase
+seed=0 step=164 log=405 parks=1 stack=2 skills=0 discard=54 deck=44 nodes=4 action=Answer { choice_id: 30, selection: [Card(74)] }
+seed=0 step=165 log=407 parks=0 stack=0 skills=0 discard=55 deck=44 nodes=1 action=NextPhase
+seed=0 step=166 log=409 parks=0 stack=0 skills=0 discard=55 deck=44 nodes=1 action=NextPhase
+seed=0 step=167 log=412 parks=0 stack=0 skills=0 discard=55 deck=44 nodes=1 action=NextPhase
+seed=0 step=168 log=415 parks=0 stack=0 skills=0 discard=55 deck=42 nodes=1 action=NextPhase
+seed=0 step=169 log=417 parks=0 stack=0 skills=0 discard=55 deck=42 nodes=15 action=PlayCard { card: 11, targets: [7] }
+seed=0 step=170 log=419 parks=0 stack=0 skills=0 discard=56 deck=42 nodes=8 action=NextPhase
+seed=0 step=171 log=422 parks=1 stack=2 skills=0 discard=56 deck=42 nodes=5 action=Answer { choice_id: 31, selection: [Card(56), Card(18)] }
+seed=0 step=172 log=425 parks=0 stack=0 skills=0 discard=58 deck=42 nodes=1 action=NextPhase
+seed=0 step=173 log=427 parks=0 stack=0 skills=0 discard=58 deck=42 nodes=1 action=NextPhase
+seed=0 step=174 log=430 parks=0 stack=0 skills=0 discard=58 deck=42 nodes=1 action=NextPhase
+seed=0 step=175 log=433 parks=0 stack=0 skills=0 discard=58 deck=40 nodes=1 action=NextPhase
+seed=0 step=176 log=435 parks=0 stack=0 skills=0 discard=58 deck=40 nodes=8 action=PlayCard { card: 29, targets: [2] }
+seed=0 step=177 log=437 parks=0 stack=0 skills=0 discard=59 deck=40 nodes=1 action=NextPhase
+seed=0 step=178 log=440 parks=1 stack=2 skills=0 discard=59 deck=40 nodes=6 action=Answer { choice_id: 32, selection: [Card(118), Card(89)] }
+seed=0 step=179 log=443 parks=0 stack=0 skills=0 discard=61 deck=40 nodes=1 action=NextPhase
+seed=0 step=180 log=445 parks=0 stack=0 skills=0 discard=61 deck=40 nodes=1 action=NextPhase
+seed=0 step=181 log=448 parks=0 stack=0 skills=0 discard=61 deck=40 nodes=1 action=NextPhase
+seed=0 step=182 log=451 parks=0 stack=0 skills=0 discard=61 deck=38 nodes=1 action=NextPhase
+seed=0 step=183 log=453 parks=0 stack=0 skills=0 discard=61 deck=38 nodes=1 action=NextPhase
+seed=0 step=184 log=456 parks=1 stack=2 skills=0 discard=61 deck=38 nodes=7 action=Answer { choice_id: 33, selection: [Card(95), Card(77), Card(78)] }
+seed=0 step=185 log=460 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=0 step=186 log=462 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=0 step=187 log=465 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=0 step=188 log=468 parks=0 stack=0 skills=0 discard=64 deck=36 nodes=1 action=NextPhase
+seed=0 step=189 log=470 parks=0 stack=0 skills=0 discard=64 deck=36 nodes=1 action=NextPhase
+seed=0 step=190 log=473 parks=1 stack=2 skills=0 discard=64 deck=36 nodes=8 action=Answer { choice_id: 34, selection: [Card(64), Card(70)] }
+seed=0 step=191 log=476 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=0 step=192 log=478 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=0 step=193 log=481 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=0 step=194 log=484 parks=0 stack=0 skills=0 discard=66 deck=34 nodes=1 action=NextPhase
+seed=0 step=195 log=486 parks=0 stack=0 skills=0 discard=66 deck=34 nodes=1 action=NextPhase
+seed=0 step=196 log=489 parks=1 stack=2 skills=0 discard=66 deck=34 nodes=8 action=Answer { choice_id: 35, selection: [Card(86), Card(116)] }
+seed=0 step=197 log=492 parks=0 stack=0 skills=0 discard=68 deck=34 nodes=1 action=NextPhase
+seed=0 step=198 log=494 parks=0 stack=0 skills=0 discard=68 deck=34 nodes=1 action=NextPhase
+seed=0 step=199 log=497 parks=0 stack=0 skills=0 discard=68 deck=34 nodes=1 action=NextPhase
+seed=0 step=200 log=500 parks=0 stack=0 skills=0 discard=68 deck=32 nodes=1 action=NextPhase
+seed=0 step=201 log=502 parks=0 stack=0 skills=0 discard=68 deck=32 nodes=1 action=NextPhase
+seed=0 step=202 log=505 parks=1 stack=2 skills=0 discard=68 deck=32 nodes=7 action=Answer { choice_id: 36, selection: [Card(68), Card(32)] }
+seed=0 step=203 log=508 parks=0 stack=0 skills=0 discard=70 deck=32 nodes=1 action=NextPhase
+seed=0 step=204 log=510 parks=0 stack=0 skills=0 discard=70 deck=32 nodes=1 action=NextPhase
+seed=0 step=205 log=513 parks=0 stack=0 skills=0 discard=70 deck=32 nodes=1 action=NextPhase
+seed=0 step=206 log=516 parks=0 stack=0 skills=0 discard=70 deck=30 nodes=1 action=NextPhase
+seed=0 step=207 log=518 parks=0 stack=0 skills=0 discard=70 deck=30 nodes=8 action=PlayCard { card: 10, targets: [5] }
+seed=0 step=208 log=520 parks=0 stack=0 skills=0 discard=71 deck=30 nodes=1 action=NextPhase
+seed=0 step=209 log=523 parks=1 stack=2 skills=0 discard=71 deck=30 nodes=6 action=Answer { choice_id: 37, selection: [Card(90)] }
+seed=0 step=210 log=525 parks=0 stack=0 skills=0 discard=72 deck=30 nodes=1 action=NextPhase
+seed=0 step=211 log=527 parks=0 stack=0 skills=0 discard=72 deck=30 nodes=1 action=NextPhase
+seed=0 step=212 log=530 parks=0 stack=0 skills=0 discard=72 deck=30 nodes=1 action=NextPhase
+seed=0 step=213 log=533 parks=0 stack=0 skills=0 discard=72 deck=28 nodes=1 action=NextPhase
+seed=0 step=214 log=535 parks=0 stack=0 skills=0 discard=72 deck=28 nodes=1 action=NextPhase
+seed=0 step=215 log=538 parks=1 stack=2 skills=0 discard=72 deck=28 nodes=6 action=Answer { choice_id: 38, selection: [Card(57), Card(110), Card(91)] }
+seed=0 step=216 log=542 parks=0 stack=0 skills=0 discard=75 deck=28 nodes=1 action=NextPhase
+seed=0 step=217 log=544 parks=0 stack=0 skills=0 discard=75 deck=28 nodes=1 action=NextPhase
+seed=0 step=218 log=547 parks=0 stack=0 skills=0 discard=75 deck=28 nodes=1 action=NextPhase
+seed=0 step=219 log=550 parks=0 stack=0 skills=0 discard=75 deck=26 nodes=1 action=NextPhase
+seed=0 step=220 log=552 parks=0 stack=0 skills=0 discard=75 deck=26 nodes=1 action=NextPhase
+seed=0 step=221 log=555 parks=1 stack=2 skills=0 discard=75 deck=26 nodes=5 action=Answer { choice_id: 39, selection: [Card(58), Card(106)] }
+seed=0 step=222 log=558 parks=0 stack=0 skills=0 discard=77 deck=26 nodes=1 action=NextPhase
+seed=0 step=223 log=560 parks=0 stack=0 skills=0 discard=77 deck=26 nodes=1 action=NextPhase
+seed=0 step=224 log=563 parks=0 stack=0 skills=0 discard=77 deck=26 nodes=1 action=NextPhase
+seed=0 step=225 log=566 parks=0 stack=0 skills=0 discard=77 deck=24 nodes=1 action=NextPhase
+seed=0 step=226 log=568 parks=0 stack=0 skills=0 discard=77 deck=24 nodes=1 action=NextPhase
+seed=0 step=227 log=571 parks=1 stack=2 skills=0 discard=77 deck=24 nodes=6 action=Answer { choice_id: 40, selection: [Card(108), Card(34)] }
+seed=0 step=228 log=574 parks=0 stack=0 skills=0 discard=79 deck=24 nodes=1 action=NextPhase
+seed=0 step=229 log=576 parks=0 stack=0 skills=0 discard=79 deck=24 nodes=1 action=NextPhase
+seed=0 step=230 log=579 parks=0 stack=0 skills=0 discard=79 deck=24 nodes=1 action=NextPhase
+seed=0 step=231 log=582 parks=0 stack=0 skills=0 discard=79 deck=22 nodes=1 action=NextPhase
+seed=0 step=232 log=584 parks=0 stack=0 skills=0 discard=79 deck=22 nodes=8 action=PlayCard { card: 15, targets: [1] }
+seed=0 step=233 log=586 parks=0 stack=0 skills=0 discard=80 deck=22 nodes=1 action=NextPhase
+seed=0 step=234 log=589 parks=1 stack=2 skills=0 discard=80 deck=22 nodes=4 action=Answer { choice_id: 41, selection: [Card(59)] }
+seed=0 step=235 log=591 parks=0 stack=0 skills=0 discard=81 deck=22 nodes=1 action=NextPhase
+seed=0 step=236 log=593 parks=0 stack=0 skills=0 discard=81 deck=22 nodes=1 action=NextPhase
+seed=0 step=237 log=596 parks=0 stack=0 skills=0 discard=81 deck=22 nodes=1 action=NextPhase
+seed=0 step=238 log=599 parks=0 stack=0 skills=0 discard=81 deck=20 nodes=1 action=NextPhase
+seed=0 step=239 log=601 parks=0 stack=0 skills=0 discard=81 deck=20 nodes=8 action=PlayCard { card: 1, targets: [4] }
+seed=0 step=240 log=603 parks=1 stack=1 skills=0 discard=81 deck=20 nodes=3 action=Answer { choice_id: 42, selection: [Card(35)] }
+seed=0 step=241 log=605 parks=0 stack=0 skills=0 discard=83 deck=20 nodes=1 action=NextPhase
+seed=0 step=242 log=608 parks=1 stack=2 skills=0 discard=83 deck=20 nodes=6 action=Answer { choice_id: 43, selection: [Card(44)] }
+seed=0 step=243 log=610 parks=0 stack=0 skills=0 discard=84 deck=20 nodes=1 action=NextPhase
+seed=0 step=244 log=612 parks=0 stack=0 skills=0 discard=84 deck=20 nodes=1 action=NextPhase
+seed=0 step=245 log=615 parks=0 stack=0 skills=0 discard=84 deck=20 nodes=1 action=NextPhase
+seed=0 step=246 log=618 parks=0 stack=0 skills=0 discard=84 deck=18 nodes=1 action=NextPhase
+seed=0 step=247 log=620 parks=0 stack=0 skills=0 discard=84 deck=18 nodes=8 action=PlayCard { card: 26, targets: [5] }
+seed=0 step=248 log=622 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=1 action=NextPhase
+seed=0 step=249 log=624 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=1 action=NextPhase
+seed=0 step=250 log=626 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=1 action=NextPhase
+seed=0 step=251 log=629 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=1 action=NextPhase
+seed=0 step=252 log=632 parks=0 stack=0 skills=0 discard=85 deck=16 nodes=1 action=NextPhase
+seed=0 step=253 log=634 parks=0 stack=0 skills=0 discard=85 deck=16 nodes=8 action=PlayCard { card: 25, targets: [4] }
+seed=0 step=254 log=636 parks=0 stack=0 skills=0 discard=86 deck=16 nodes=1 action=NextPhase
+seed=0 step=255 log=639 parks=1 stack=2 skills=0 discard=86 deck=16 nodes=6 action=Answer { choice_id: 44, selection: [Card(49), Card(103), Card(99)] }
+seed=0 step=256 log=643 parks=0 stack=0 skills=0 discard=89 deck=16 nodes=1 action=NextPhase
+seed=0 step=257 log=645 parks=0 stack=0 skills=0 discard=89 deck=16 nodes=1 action=NextPhase
+seed=0 step=258 log=648 parks=0 stack=0 skills=0 discard=89 deck=16 nodes=1 action=NextPhase
+seed=0 step=259 log=651 parks=0 stack=0 skills=0 discard=89 deck=14 nodes=1 action=NextPhase
+seed=0 step=260 log=653 parks=0 stack=0 skills=0 discard=89 deck=14 nodes=1 action=NextPhase
+seed=0 step=261 log=656 parks=1 stack=2 skills=0 discard=89 deck=14 nodes=8 action=Answer { choice_id: 45, selection: [Card(92), Card(73)] }
+seed=0 step=262 log=659 parks=0 stack=0 skills=0 discard=91 deck=14 nodes=1 action=NextPhase
+seed=0 step=263 log=661 parks=0 stack=0 skills=0 discard=91 deck=14 nodes=1 action=NextPhase
+seed=0 step=264 log=664 parks=0 stack=0 skills=0 discard=91 deck=14 nodes=1 action=NextPhase
+seed=0 step=265 log=667 parks=0 stack=0 skills=0 discard=91 deck=12 nodes=1 action=NextPhase
+seed=0 step=266 log=669 parks=0 stack=0 skills=0 discard=91 deck=12 nodes=1 action=NextPhase
+seed=0 step=267 log=672 parks=1 stack=2 skills=0 discard=91 deck=12 nodes=5 action=Answer { choice_id: 46, selection: [Card(93), Card(113)] }
+seed=0 step=268 log=675 parks=0 stack=0 skills=0 discard=93 deck=12 nodes=1 action=NextPhase
+seed=0 step=269 log=677 parks=0 stack=0 skills=0 discard=93 deck=12 nodes=1 action=NextPhase
+seed=0 step=270 log=680 parks=0 stack=0 skills=0 discard=93 deck=12 nodes=1 action=NextPhase
+seed=0 step=271 log=683 parks=0 stack=0 skills=0 discard=93 deck=10 nodes=1 action=NextPhase
+seed=0 step=272 log=685 parks=0 stack=0 skills=0 discard=93 deck=10 nodes=1 action=NextPhase
+seed=0 step=273 log=688 parks=1 stack=2 skills=0 discard=93 deck=10 nodes=5 action=Answer { choice_id: 47, selection: [Card(67), Card(69)] }
+seed=0 step=274 log=691 parks=0 stack=0 skills=0 discard=95 deck=10 nodes=1 action=NextPhase
+seed=0 step=275 log=693 parks=0 stack=0 skills=0 discard=95 deck=10 nodes=1 action=NextPhase
+seed=0 step=276 log=696 parks=0 stack=0 skills=0 discard=95 deck=10 nodes=1 action=NextPhase
+seed=0 step=277 log=699 parks=0 stack=0 skills=0 discard=95 deck=8 nodes=1 action=NextPhase
+seed=0 step=278 log=701 parks=0 stack=0 skills=0 discard=95 deck=8 nodes=15 action=PlayCard { card: 21, targets: [0] }
+seed=0 step=279 log=705 parks=1 stack=3 skills=0 discard=96 deck=8 nodes=3 action=Answer { choice_id: 48, selection: [Pass] }
+seed=0 step=280 log=707 parks=1 stack=3 skills=0 discard=96 deck=8 nodes=3 action=Answer { choice_id: 49, selection: [Pass] }
+seed=0 step=281 log=709 parks=0 stack=0 skills=0 discard=97 deck=8 nodes=7 action=NextPhase
+seed=0 step=282 log=712 parks=1 stack=2 skills=0 discard=97 deck=8 nodes=5 action=Answer { choice_id: 50, selection: [Card(53), Card(50)] }
+seed=0 step=283 log=715 parks=0 stack=0 skills=0 discard=99 deck=8 nodes=1 action=NextPhase
+seed=0 step=284 log=717 parks=0 stack=0 skills=0 discard=99 deck=8 nodes=1 action=NextPhase
+seed=0 step=285 log=720 parks=0 stack=0 skills=0 discard=99 deck=8 nodes=1 action=NextPhase
+seed=0 step=286 log=723 parks=0 stack=0 skills=0 discard=99 deck=6 nodes=1 action=NextPhase
+seed=0 step=287 log=725 parks=0 stack=0 skills=0 discard=99 deck=6 nodes=1 action=NextPhase
+seed=0 step=288 log=728 parks=1 stack=2 skills=0 discard=99 deck=6 nodes=6 action=Answer { choice_id: 51, selection: [Card(88), Card(75)] }
+seed=0 step=289 log=731 parks=0 stack=0 skills=0 discard=101 deck=6 nodes=1 action=NextPhase
+seed=0 step=290 log=733 parks=0 stack=0 skills=0 discard=101 deck=6 nodes=1 action=NextPhase
+seed=0 step=291 log=736 parks=0 stack=0 skills=0 discard=101 deck=6 nodes=1 action=NextPhase
+seed=0 step=292 log=739 parks=0 stack=0 skills=0 discard=101 deck=4 nodes=1 action=NextPhase
+seed=0 step=293 log=741 parks=0 stack=0 skills=0 discard=101 deck=4 nodes=13 action=PlayCard { card: 14, targets: [2] }
+seed=0 step=294 log=743 parks=0 stack=0 skills=0 discard=102 deck=4 nodes=7 action=NextPhase
+seed=0 step=295 log=746 parks=1 stack=2 skills=0 discard=102 deck=4 nodes=6 action=Answer { choice_id: 52, selection: [Card(96)] }
+seed=0 step=296 log=748 parks=0 stack=0 skills=0 discard=103 deck=4 nodes=1 action=NextPhase
+seed=0 step=297 log=750 parks=0 stack=0 skills=0 discard=103 deck=4 nodes=1 action=NextPhase
+seed=0 step=298 log=753 parks=0 stack=0 skills=0 discard=103 deck=4 nodes=1 action=NextPhase
+seed=0 step=299 log=756 parks=0 stack=0 skills=0 discard=103 deck=2 nodes=1 action=NextPhase
+seed=0 step=300 log=758 parks=0 stack=0 skills=0 discard=103 deck=2 nodes=1 action=NextPhase
+seed=0 step=301 log=761 parks=1 stack=2 skills=0 discard=103 deck=2 nodes=8 action=Answer { choice_id: 53, selection: [Card(112), Card(122), Card(65)] }
+seed=0 step=302 log=765 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=0 step=303 log=767 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=0 step=304 log=770 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=0 step=305 log=773 parks=0 stack=0 skills=0 discard=106 deck=0 nodes=1 action=NextPhase
+seed=0 step=306 log=775 parks=0 stack=0 skills=0 discard=106 deck=0 nodes=1 action=NextPhase
+seed=0 step=307 log=778 parks=1 stack=2 skills=0 discard=106 deck=0 nodes=5 action=Answer { choice_id: 54, selection: [Card(79), Card(120)] }
+seed=0 step=308 log=781 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=0 step=309 log=783 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=0 step=310 log=786 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=0 step=311 log=790 parks=0 stack=0 skills=0 discard=0 deck=106 nodes=1 action=NextPhase
+seed=0 step=312 log=792 parks=0 stack=0 skills=0 discard=0 deck=106 nodes=1 action=NextPhase
+seed=0 step=313 log=795 parks=1 stack=2 skills=0 discard=0 deck=106 nodes=8 action=Answer { choice_id: 55, selection: [Card(72), Card(85)] }
+seed=0 step=314 log=798 parks=0 stack=0 skills=0 discard=2 deck=106 nodes=1 action=NextPhase
+seed=0 step=315 log=800 parks=0 stack=0 skills=0 discard=2 deck=106 nodes=1 action=NextPhase
+seed=0 step=316 log=803 parks=0 stack=0 skills=0 discard=2 deck=106 nodes=1 action=NextPhase
+seed=0 step=317 log=806 parks=0 stack=0 skills=0 discard=2 deck=104 nodes=1 action=NextPhase
+seed=0 step=318 log=808 parks=0 stack=0 skills=0 discard=2 deck=104 nodes=1 action=NextPhase
+seed=0 step=319 log=811 parks=1 stack=2 skills=0 discard=2 deck=104 nodes=5 action=Answer { choice_id: 56, selection: [Card(30), Card(112)] }
+seed=0 step=320 log=814 parks=0 stack=0 skills=0 discard=4 deck=104 nodes=1 action=NextPhase
+seed=0 step=321 log=816 parks=0 stack=0 skills=0 discard=4 deck=104 nodes=1 action=NextPhase
+seed=0 step=322 log=819 parks=0 stack=0 skills=0 discard=4 deck=104 nodes=1 action=NextPhase
+seed=0 step=323 log=822 parks=0 stack=0 skills=0 discard=4 deck=102 nodes=1 action=NextPhase
+seed=0 step=324 log=824 parks=0 stack=0 skills=0 discard=4 deck=102 nodes=13 action=PlayCard { card: 8, targets: [2] }
+seed=0 step=325 log=828 parks=1 stack=3 skills=0 discard=5 deck=102 nodes=3 action=Answer { choice_id: 57, selection: [Card(47)] }
+seed=0 step=326 log=832 parks=0 stack=0 skills=0 discard=6 deck=102 nodes=7 action=NextPhase
+seed=0 step=327 log=835 parks=1 stack=2 skills=0 discard=6 deck=102 nodes=3 action=Answer { choice_id: 58, selection: [Card(5)] }
+seed=0 step=328 log=837 parks=0 stack=0 skills=0 discard=7 deck=102 nodes=1 action=NextPhase
+seed=0 step=329 log=839 parks=0 stack=0 skills=0 discard=7 deck=102 nodes=1 action=NextPhase
+seed=0 step=330 log=842 parks=0 stack=0 skills=0 discard=7 deck=102 nodes=1 action=NextPhase
+seed=0 step=331 log=845 parks=0 stack=0 skills=0 discard=7 deck=100 nodes=1 action=NextPhase
+seed=0 step=332 log=847 parks=0 stack=0 skills=0 discard=7 deck=100 nodes=1 action=NextPhase
+seed=0 step=333 log=850 parks=1 stack=2 skills=0 discard=7 deck=100 nodes=5 action=Answer { choice_id: 59, selection: [Card(104), Card(102)] }
+seed=0 step=334 log=853 parks=0 stack=0 skills=0 discard=9 deck=100 nodes=1 action=NextPhase
+seed=0 step=335 log=855 parks=0 stack=0 skills=0 discard=9 deck=100 nodes=1 action=NextPhase
+seed=0 step=336 log=858 parks=0 stack=0 skills=0 discard=9 deck=100 nodes=1 action=NextPhase
+seed=0 step=337 log=861 parks=0 stack=0 skills=0 discard=9 deck=98 nodes=1 action=NextPhase
+seed=0 step=338 log=863 parks=0 stack=0 skills=0 discard=9 deck=98 nodes=7 action=PlayCard { card: 22, targets: [2] }
+seed=0 step=339 log=867 parks=0 stack=0 skills=0 discard=11 deck=98 nodes=1 action=NextPhase
+seed=0 step=340 log=870 parks=1 stack=2 skills=0 discard=11 deck=98 nodes=6 action=Answer { choice_id: 60, selection: [Card(121)] }
+seed=0 step=341 log=872 parks=0 stack=0 skills=0 discard=12 deck=98 nodes=1 action=NextPhase
+seed=0 step=342 log=874 parks=0 stack=0 skills=0 discard=12 deck=98 nodes=1 action=NextPhase
+seed=0 step=343 log=877 parks=0 stack=0 skills=0 discard=12 deck=98 nodes=1 action=NextPhase
+seed=0 step=344 log=880 parks=0 stack=0 skills=0 discard=12 deck=96 nodes=1 action=NextPhase
+seed=0 step=345 log=882 parks=0 stack=0 skills=0 discard=12 deck=96 nodes=6 action=PlayCard { card: 26, targets: [5] }
+seed=0 step=346 log=886 parks=0 stack=0 skills=0 discard=14 deck=96 nodes=1 action=NextPhase
+seed=0 step=347 log=889 parks=1 stack=2 skills=0 discard=14 deck=96 nodes=5 action=Answer { choice_id: 61, selection: [Card(107)] }
+seed=0 step=348 log=891 parks=0 stack=0 skills=0 discard=15 deck=96 nodes=1 action=NextPhase
+seed=0 step=349 log=893 parks=0 stack=0 skills=0 discard=15 deck=96 nodes=1 action=NextPhase
+seed=0 step=350 log=896 parks=0 stack=0 skills=0 discard=15 deck=96 nodes=1 action=NextPhase
+seed=0 step=351 log=899 parks=0 stack=0 skills=0 discard=15 deck=94 nodes=1 action=NextPhase
+seed=0 step=352 log=901 parks=0 stack=0 skills=0 discard=15 deck=94 nodes=1 action=NextPhase
+seed=0 step=353 log=904 parks=1 stack=2 skills=0 discard=15 deck=94 nodes=8 action=Answer { choice_id: 62, selection: [Card(40), Card(119)] }
+seed=0 step=354 log=907 parks=0 stack=0 skills=0 discard=17 deck=94 nodes=1 action=NextPhase
+seed=0 step=355 log=909 parks=0 stack=0 skills=0 discard=17 deck=94 nodes=1 action=NextPhase
+seed=0 step=356 log=912 parks=0 stack=0 skills=0 discard=17 deck=94 nodes=1 action=NextPhase
+seed=0 step=357 log=915 parks=0 stack=0 skills=0 discard=17 deck=92 nodes=1 action=NextPhase
+seed=0 step=358 log=917 parks=0 stack=0 skills=0 discard=17 deck=92 nodes=5 action=PlayCard { card: 17, targets: [1] }
+seed=0 step=359 log=921 parks=1 stack=3 skills=0 discard=18 deck=92 nodes=3 action=Answer { choice_id: 63, selection: [Pass] }
+seed=0 step=360 log=923 parks=0 stack=0 skills=0 discard=19 deck=92 nodes=1 action=NextPhase
+seed=0 step=361 log=926 parks=1 stack=2 skills=0 discard=19 deck=92 nodes=3 action=Answer { choice_id: 64, selection: [Card(35)] }
+seed=0 step=362 log=928 parks=0 stack=0 skills=0 discard=20 deck=92 nodes=1 action=NextPhase
+seed=0 step=363 log=930 parks=0 stack=0 skills=0 discard=20 deck=92 nodes=1 action=NextPhase
+seed=0 step=364 log=933 parks=0 stack=0 skills=0 discard=20 deck=92 nodes=1 action=NextPhase
+seed=0 step=365 log=936 parks=0 stack=0 skills=0 discard=20 deck=90 nodes=1 action=NextPhase
+seed=0 step=366 log=938 parks=0 stack=0 skills=0 discard=20 deck=90 nodes=1 action=NextPhase
+seed=0 step=367 log=941 parks=1 stack=2 skills=0 discard=20 deck=90 nodes=8 action=Answer { choice_id: 65, selection: [Card(71), Card(100)] }
+seed=0 step=368 log=944 parks=0 stack=0 skills=0 discard=22 deck=90 nodes=1 action=NextPhase
+seed=0 step=369 log=946 parks=0 stack=0 skills=0 discard=22 deck=90 nodes=1 action=NextPhase
+seed=0 step=370 log=949 parks=0 stack=0 skills=0 discard=22 deck=90 nodes=1 action=NextPhase
+seed=0 step=371 log=952 parks=0 stack=0 skills=0 discard=22 deck=88 nodes=1 action=NextPhase
+seed=0 step=372 log=954 parks=0 stack=0 skills=0 discard=22 deck=88 nodes=4 action=PlayCard { card: 23, targets: [3] }
+seed=0 step=373 log=956 parks=1 stack=1 skills=0 discard=22 deck=88 nodes=3 action=Answer { choice_id: 66, selection: [Card(39)] }
+seed=0 step=374 log=958 parks=0 stack=0 skills=0 discard=24 deck=88 nodes=1 action=NextPhase
+seed=0 step=375 log=961 parks=1 stack=2 skills=0 discard=24 deck=88 nodes=5 action=Answer { choice_id: 67, selection: [Card(111)] }
+seed=0 step=376 log=963 parks=0 stack=0 skills=0 discard=25 deck=88 nodes=1 action=NextPhase
+seed=0 step=377 log=965 parks=0 stack=0 skills=0 discard=25 deck=88 nodes=1 action=NextPhase
+seed=0 step=378 log=968 parks=0 stack=0 skills=0 discard=25 deck=88 nodes=1 action=NextPhase
+seed=0 step=379 log=971 parks=0 stack=0 skills=0 discard=25 deck=86 nodes=1 action=NextPhase
+seed=0 step=380 log=973 parks=0 stack=0 skills=0 discard=25 deck=86 nodes=4 action=PlayCard { card: 1, targets: [4] }
+seed=0 step=381 log=975 parks=1 stack=1 skills=0 discard=25 deck=86 nodes=3 action=Answer { choice_id: 68, selection: [Card(34)] }
+seed=0 step=382 log=977 parks=0 stack=0 skills=0 discard=27 deck=86 nodes=1 action=NextPhase
+seed=0 step=383 log=980 parks=1 stack=2 skills=0 discard=27 deck=86 nodes=6 action=Answer { choice_id: 69, selection: [Card(60)] }
+seed=0 step=384 log=982 parks=0 stack=0 skills=0 discard=28 deck=86 nodes=1 action=NextPhase
+seed=0 step=385 log=984 parks=0 stack=0 skills=0 discard=28 deck=86 nodes=1 action=NextPhase
+seed=0 step=386 log=987 parks=0 stack=0 skills=0 discard=28 deck=86 nodes=1 action=NextPhase
+seed=0 step=387 log=990 parks=0 stack=0 skills=0 discard=28 deck=84 nodes=1 action=NextPhase
+seed=0 step=388 log=992 parks=0 stack=0 skills=0 discard=28 deck=84 nodes=4 action=PlayCard { card: 12, targets: [6] }
+seed=0 step=389 log=994 parks=1 stack=1 skills=0 discard=28 deck=84 nodes=3 action=Answer { choice_id: 70, selection: [Card(33)] }
+seed=0 step=390 log=996 parks=0 stack=0 skills=0 discard=30 deck=84 nodes=1 action=NextPhase
+seed=0 step=391 log=999 parks=1 stack=2 skills=0 discard=30 deck=84 nodes=3 action=Answer { choice_id: 71, selection: [Card(80)] }
+seed=0 step=392 log=1001 parks=0 stack=0 skills=0 discard=31 deck=84 nodes=1 action=NextPhase
+seed=0 step=393 log=1003 parks=0 stack=0 skills=0 discard=31 deck=84 nodes=1 action=NextPhase
+seed=0 step=394 log=1006 parks=0 stack=0 skills=0 discard=31 deck=84 nodes=1 action=NextPhase
+seed=0 step=395 log=1009 parks=0 stack=0 skills=0 discard=31 deck=82 nodes=1 action=NextPhase
+seed=0 step=396 log=1011 parks=0 stack=0 skills=0 discard=31 deck=82 nodes=1 action=NextPhase
+seed=0 step=397 log=1014 parks=1 stack=2 skills=0 discard=31 deck=82 nodes=6 action=Answer { choice_id: 72, selection: [Card(93)] }
+seed=0 step=398 log=1016 parks=0 stack=0 skills=0 discard=32 deck=82 nodes=1 action=NextPhase
+seed=0 step=399 log=1018 parks=0 stack=0 skills=0 discard=32 deck=82 nodes=1 action=NextPhase
+seed=0 step=400 log=1021 parks=0 stack=0 skills=0 discard=32 deck=82 nodes=1 action=NextPhase
+seed=0 step=401 log=1024 parks=0 stack=0 skills=0 discard=32 deck=80 nodes=1 action=NextPhase
+seed=0 step=402 log=1026 parks=0 stack=0 skills=0 discard=32 deck=80 nodes=1 action=NextPhase
+seed=0 step=403 log=1029 parks=1 stack=2 skills=0 discard=32 deck=80 nodes=5 action=Answer { choice_id: 73, selection: [Card(84)] }
+seed=0 step=404 log=1031 parks=0 stack=0 skills=0 discard=33 deck=80 nodes=1 action=NextPhase
+seed=0 step=405 log=1033 parks=0 stack=0 skills=0 discard=33 deck=80 nodes=1 action=NextPhase
+seed=0 step=406 log=1036 parks=0 stack=0 skills=0 discard=33 deck=80 nodes=1 action=NextPhase
+seed=0 step=407 log=1039 parks=0 stack=0 skills=0 discard=33 deck=78 nodes=1 action=NextPhase
+seed=0 step=408 log=1041 parks=0 stack=0 skills=0 discard=33 deck=78 nodes=1 action=NextPhase
+seed=0 step=409 log=1044 parks=1 stack=2 skills=0 discard=33 deck=78 nodes=6 action=Answer { choice_id: 74, selection: [Card(75)] }
+seed=0 step=410 log=1046 parks=0 stack=0 skills=0 discard=34 deck=78 nodes=1 action=NextPhase
+seed=0 step=411 log=1048 parks=0 stack=0 skills=0 discard=34 deck=78 nodes=1 action=NextPhase
+seed=0 step=412 log=1051 parks=0 stack=0 skills=0 discard=34 deck=78 nodes=1 action=NextPhase
+seed=0 step=413 log=1054 parks=0 stack=0 skills=0 discard=34 deck=76 nodes=1 action=NextPhase
+seed=0 step=414 log=1056 parks=0 stack=0 skills=0 discard=34 deck=76 nodes=1 action=NextPhase
+seed=0 step=415 log=1059 parks=1 stack=2 skills=0 discard=34 deck=76 nodes=5 action=Answer { choice_id: 75, selection: [Card(31), Card(115)] }
+seed=0 step=416 log=1062 parks=0 stack=0 skills=0 discard=36 deck=76 nodes=1 action=NextPhase
+seed=0 step=417 log=1064 parks=0 stack=0 skills=0 discard=36 deck=76 nodes=1 action=NextPhase
+seed=0 step=418 log=1067 parks=0 stack=0 skills=0 discard=36 deck=76 nodes=1 action=NextPhase
+seed=0 step=419 log=1070 parks=0 stack=0 skills=0 discard=36 deck=74 nodes=1 action=NextPhase
+seed=0 step=420 log=1072 parks=0 stack=0 skills=0 discard=36 deck=74 nodes=1 action=NextPhase
+seed=0 step=421 log=1075 parks=1 stack=2 skills=0 discard=36 deck=74 nodes=8 action=Answer { choice_id: 76, selection: [Card(79), Card(117)] }
+seed=0 step=422 log=1078 parks=0 stack=0 skills=0 discard=38 deck=74 nodes=1 action=NextPhase
+seed=0 step=423 log=1080 parks=0 stack=0 skills=0 discard=38 deck=74 nodes=1 action=NextPhase
+seed=0 step=424 log=1083 parks=0 stack=0 skills=0 discard=38 deck=74 nodes=1 action=NextPhase
+seed=0 step=425 log=1086 parks=0 stack=0 skills=0 discard=38 deck=72 nodes=1 action=NextPhase
+seed=0 step=426 log=1088 parks=0 stack=0 skills=0 discard=38 deck=72 nodes=1 action=NextPhase
+seed=0 step=427 log=1091 parks=1 stack=2 skills=0 discard=38 deck=72 nodes=7 action=Answer { choice_id: 77, selection: [Card(76), Card(42)] }
+seed=0 step=428 log=1094 parks=0 stack=0 skills=0 discard=40 deck=72 nodes=1 action=NextPhase
+seed=0 step=429 log=1096 parks=0 stack=0 skills=0 discard=40 deck=72 nodes=1 action=NextPhase
+seed=0 step=430 log=1099 parks=0 stack=0 skills=0 discard=40 deck=72 nodes=1 action=NextPhase
+seed=0 step=431 log=1102 parks=0 stack=0 skills=0 discard=40 deck=70 nodes=1 action=NextPhase
+seed=0 step=432 log=1104 parks=0 stack=0 skills=0 discard=40 deck=70 nodes=4 action=PlayCard { card: 13, targets: [4] }
+seed=0 step=433 log=1106 parks=1 stack=1 skills=0 discard=40 deck=70 nodes=3 action=Answer { choice_id: 78, selection: [Card(32)] }
+seed=0 step=434 log=1108 parks=0 stack=0 skills=0 discard=42 deck=70 nodes=1 action=NextPhase
+seed=0 step=435 log=1111 parks=1 stack=2 skills=0 discard=42 deck=70 nodes=6 action=Answer { choice_id: 79, selection: [Card(89)] }
+seed=0 step=436 log=1113 parks=0 stack=0 skills=0 discard=43 deck=70 nodes=1 action=NextPhase
+seed=0 step=437 log=1115 parks=0 stack=0 skills=0 discard=43 deck=70 nodes=1 action=NextPhase
+seed=0 step=438 log=1118 parks=0 stack=0 skills=0 discard=43 deck=70 nodes=1 action=NextPhase
+seed=0 step=439 log=1121 parks=0 stack=0 skills=0 discard=43 deck=68 nodes=1 action=NextPhase
+seed=0 step=440 log=1123 parks=0 stack=0 skills=0 discard=43 deck=68 nodes=1 action=NextPhase
+seed=0 step=441 log=1126 parks=1 stack=2 skills=0 discard=43 deck=68 nodes=5 action=Answer { choice_id: 80, selection: [Card(62), Card(88)] }
+seed=0 step=442 log=1129 parks=0 stack=0 skills=0 discard=45 deck=68 nodes=1 action=NextPhase
+seed=0 step=443 log=1131 parks=0 stack=0 skills=0 discard=45 deck=68 nodes=1 action=NextPhase
+seed=0 step=444 log=1134 parks=0 stack=0 skills=0 discard=45 deck=68 nodes=1 action=NextPhase
+seed=0 step=445 log=1137 parks=0 stack=0 skills=0 discard=45 deck=66 nodes=1 action=NextPhase
+seed=0 step=446 log=1139 parks=0 stack=0 skills=0 discard=45 deck=66 nodes=4 action=PlayCard { card: 16, targets: [4] }
+seed=0 step=447 log=1141 parks=0 stack=0 skills=0 discard=46 deck=66 nodes=1 action=NextPhase
+seed=0 step=448 log=1144 parks=1 stack=2 skills=0 discard=46 deck=66 nodes=6 action=Answer { choice_id: 81, selection: [Card(43)] }
+seed=0 step=449 log=1146 parks=0 stack=0 skills=0 discard=47 deck=66 nodes=1 action=NextPhase
+seed=0 step=450 log=1148 parks=0 stack=0 skills=0 discard=47 deck=66 nodes=1 action=NextPhase
+seed=0 step=451 log=1151 parks=0 stack=0 skills=0 discard=47 deck=66 nodes=1 action=NextPhase
+seed=0 step=452 log=1154 parks=0 stack=0 skills=0 discard=47 deck=64 nodes=1 action=NextPhase
+seed=0 step=453 log=1156 parks=0 stack=0 skills=0 discard=47 deck=64 nodes=4 action=PlayCard { card: 10, targets: [3] }
+seed=0 step=454 log=1158 parks=1 stack=1 skills=0 discard=47 deck=64 nodes=3 action=Answer { choice_id: 82, selection: [Card(37)] }
+seed=0 step=455 log=1160 parks=0 stack=0 skills=0 discard=49 deck=64 nodes=1 action=NextPhase
+seed=0 step=456 log=1163 parks=1 stack=2 skills=0 discard=49 deck=64 nodes=4 action=Answer { choice_id: 83, selection: [Card(110)] }
+seed=0 step=457 log=1165 parks=0 stack=0 skills=0 discard=50 deck=64 nodes=1 action=NextPhase
+seed=0 step=458 log=1167 parks=0 stack=0 skills=0 discard=50 deck=64 nodes=1 action=NextPhase
+seed=0 step=459 log=1170 parks=0 stack=0 skills=0 discard=50 deck=64 nodes=1 action=NextPhase
+seed=0 step=460 log=1173 parks=0 stack=0 skills=0 discard=50 deck=62 nodes=1 action=NextPhase
+seed=0 step=461 log=1175 parks=0 stack=0 skills=0 discard=50 deck=62 nodes=1 action=NextPhase
+seed=0 step=462 log=1178 parks=1 stack=2 skills=0 discard=50 deck=62 nodes=8 action=Answer { choice_id: 84, selection: [Card(52), Card(106)] }
+seed=0 step=463 log=1181 parks=0 stack=0 skills=0 discard=52 deck=62 nodes=1 action=NextPhase
+seed=0 step=464 log=1183 parks=0 stack=0 skills=0 discard=52 deck=62 nodes=1 action=NextPhase
+seed=0 step=465 log=1186 parks=0 stack=0 skills=0 discard=52 deck=62 nodes=1 action=NextPhase
+seed=0 step=466 log=1189 parks=0 stack=0 skills=0 discard=52 deck=60 nodes=1 action=NextPhase
+seed=0 step=467 log=1191 parks=0 stack=0 skills=0 discard=52 deck=60 nodes=1 action=NextPhase
+seed=0 step=468 log=1194 parks=1 stack=2 skills=0 discard=52 deck=60 nodes=5 action=Answer { choice_id: 85, selection: [Card(65), Card(101)] }
+seed=0 step=469 log=1197 parks=0 stack=0 skills=0 discard=54 deck=60 nodes=1 action=NextPhase
+seed=0 step=470 log=1199 parks=0 stack=0 skills=0 discard=54 deck=60 nodes=1 action=NextPhase
+seed=0 step=471 log=1202 parks=0 stack=0 skills=0 discard=54 deck=60 nodes=1 action=NextPhase
+seed=0 step=472 log=1205 parks=0 stack=0 skills=0 discard=54 deck=58 nodes=1 action=NextPhase
+seed=0 step=473 log=1207 parks=0 stack=0 skills=0 discard=54 deck=58 nodes=4 action=PlayCard { card: 25, targets: [4] }
+seed=0 step=474 log=1209 parks=0 stack=0 skills=0 discard=55 deck=58 nodes=1 action=NextPhase
+seed=0 step=475 log=1211 parks=0 stack=0 skills=0 discard=55 deck=58 nodes=1 action=NextPhase
+seed=0 step=476 log=1213 parks=0 stack=0 skills=0 discard=55 deck=58 nodes=1 action=NextPhase
+seed=0 step=477 log=1216 parks=0 stack=0 skills=0 discard=55 deck=58 nodes=1 action=NextPhase
+seed=0 step=478 log=1219 parks=0 stack=0 skills=0 discard=55 deck=56 nodes=1 action=NextPhase
+seed=0 step=479 log=1221 parks=0 stack=0 skills=0 discard=55 deck=56 nodes=1 action=NextPhase
+seed=0 step=480 log=1224 parks=1 stack=2 skills=0 discard=55 deck=56 nodes=6 action=Answer { choice_id: 86, selection: [Card(58), Card(99), Card(44)] }
+seed=0 step=481 log=1228 parks=0 stack=0 skills=0 discard=58 deck=56 nodes=1 action=NextPhase
+seed=0 step=482 log=1230 parks=0 stack=0 skills=0 discard=58 deck=56 nodes=1 action=NextPhase
+seed=0 step=483 log=1233 parks=0 stack=0 skills=0 discard=58 deck=56 nodes=1 action=NextPhase
+seed=0 step=484 log=1236 parks=0 stack=0 skills=0 discard=58 deck=54 nodes=1 action=NextPhase
+seed=0 step=485 log=1238 parks=0 stack=0 skills=0 discard=58 deck=54 nodes=4 action=PlayCard { card: 9, targets: [4] }
+seed=0 step=486 log=1242 parks=1 stack=3 skills=0 discard=59 deck=54 nodes=3 action=Answer { choice_id: 87, selection: [Pass] }
+seed=0 step=487 log=1244 parks=0 stack=0 skills=0 discard=60 deck=54 nodes=1 action=NextPhase
+seed=0 step=488 log=1247 parks=1 stack=2 skills=0 discard=60 deck=54 nodes=6 action=Answer { choice_id: 88, selection: [Card(86)] }
+seed=0 step=489 log=1249 parks=0 stack=0 skills=0 discard=61 deck=54 nodes=1 action=NextPhase
+seed=0 step=490 log=1251 parks=0 stack=0 skills=0 discard=61 deck=54 nodes=1 action=NextPhase
+seed=0 step=491 log=1254 parks=0 stack=0 skills=0 discard=61 deck=54 nodes=1 action=NextPhase
+seed=0 step=492 log=1257 parks=0 stack=0 skills=0 discard=61 deck=52 nodes=1 action=NextPhase
+seed=0 step=493 log=1259 parks=0 stack=0 skills=0 discard=61 deck=52 nodes=3 action=PlayCard { card: 15, targets: [3] }
+seed=0 step=494 log=1261 parks=0 stack=0 skills=0 discard=62 deck=52 nodes=1 action=NextPhase
+seed=0 step=495 log=1264 parks=1 stack=2 skills=0 discard=62 deck=52 nodes=3 action=Answer { choice_id: 89, selection: [Card(114)] }
+seed=0 step=496 log=1266 parks=0 stack=0 skills=0 discard=63 deck=52 nodes=1 action=NextPhase
+seed=0 step=497 log=1268 parks=0 stack=0 skills=0 discard=63 deck=52 nodes=1 action=NextPhase
+seed=0 step=498 log=1271 parks=0 stack=0 skills=0 discard=63 deck=52 nodes=1 action=NextPhase
+seed=0 step=499 log=1274 parks=0 stack=0 skills=0 discard=63 deck=50 nodes=1 action=NextPhase
+seed=0 step=500 log=1276 parks=0 stack=0 skills=0 discard=63 deck=50 nodes=1 action=NextPhase
+seed=0 step=501 log=1279 parks=1 stack=2 skills=0 discard=63 deck=50 nodes=8 action=Answer { choice_id: 90, selection: [Card(67), Card(105), Card(91)] }
+seed=0 step=502 log=1283 parks=0 stack=0 skills=0 discard=66 deck=50 nodes=1 action=NextPhase
+seed=0 step=503 log=1285 parks=0 stack=0 skills=0 discard=66 deck=50 nodes=1 action=NextPhase
+seed=0 step=504 log=1288 parks=0 stack=0 skills=0 discard=66 deck=50 nodes=1 action=NextPhase
+seed=0 step=505 log=1291 parks=0 stack=0 skills=0 discard=66 deck=48 nodes=1 action=NextPhase
+seed=0 step=506 log=1293 parks=0 stack=0 skills=0 discard=66 deck=48 nodes=1 action=NextPhase
+seed=0 step=507 log=1296 parks=1 stack=2 skills=0 discard=66 deck=48 nodes=8 action=Answer { choice_id: 91, selection: [Card(118), Card(70)] }
+seed=0 step=508 log=1299 parks=0 stack=0 skills=0 discard=68 deck=48 nodes=1 action=NextPhase
+seed=0 step=509 log=1301 parks=0 stack=0 skills=0 discard=68 deck=48 nodes=1 action=NextPhase
+seed=0 step=510 log=1304 parks=0 stack=0 skills=0 discard=68 deck=48 nodes=1 action=NextPhase
+seed=0 step=511 log=1307 parks=0 stack=0 skills=0 discard=68 deck=46 nodes=1 action=NextPhase
+seed=0 step=512 log=1309 parks=0 stack=0 skills=0 discard=68 deck=46 nodes=3 action=PlayCard { card: 3, targets: [3] }
+seed=0 step=513 log=1311 parks=0 stack=0 skills=0 discard=69 deck=46 nodes=1 action=NextPhase
+seed=0 step=514 log=1314 parks=1 stack=2 skills=0 discard=69 deck=46 nodes=3 action=Answer { choice_id: 92, selection: [Card(97)] }
+seed=0 step=515 log=1316 parks=0 stack=0 skills=0 discard=70 deck=46 nodes=1 action=NextPhase
+seed=0 step=516 log=1318 parks=0 stack=0 skills=0 discard=70 deck=46 nodes=1 action=NextPhase
+seed=0 step=517 log=1321 parks=0 stack=0 skills=0 discard=70 deck=46 nodes=1 action=NextPhase
+seed=0 step=518 log=1324 parks=0 stack=0 skills=0 discard=70 deck=44 nodes=1 action=NextPhase
+seed=0 step=519 log=1326 parks=0 stack=0 skills=0 discard=70 deck=44 nodes=3 action=PlayCard { card: 6, targets: [6] }
+seed=0 step=520 log=1328 parks=1 stack=1 skills=0 discard=70 deck=44 nodes=3 action=Answer { choice_id: 93, selection: [Card(41)] }
+seed=0 step=521 log=1330 parks=0 stack=0 skills=0 discard=72 deck=44 nodes=1 action=NextPhase
+seed=0 step=522 log=1333 parks=1 stack=2 skills=0 discard=72 deck=44 nodes=6 action=Answer { choice_id: 94, selection: [Card(92), Card(48)] }
+seed=0 step=523 log=1336 parks=0 stack=0 skills=0 discard=74 deck=44 nodes=1 action=NextPhase
+seed=0 step=524 log=1338 parks=0 stack=0 skills=0 discard=74 deck=44 nodes=1 action=NextPhase
+seed=0 step=525 log=1341 parks=0 stack=0 skills=0 discard=74 deck=44 nodes=1 action=NextPhase
+seed=0 step=526 log=1344 parks=0 stack=0 skills=0 discard=74 deck=42 nodes=1 action=NextPhase
+seed=0 step=527 log=1346 parks=0 stack=0 skills=0 discard=74 deck=42 nodes=3 action=PlayCard { card: 4, targets: [3] }
+seed=0 step=528 log=1348 parks=0 stack=0 skills=0 discard=75 deck=42 nodes=1 action=NextPhase
+seed=0 step=529 log=1350 parks=0 stack=0 skills=0 discard=75 deck=42 nodes=1 action=NextPhase
+seed=0 step=530 log=1352 parks=0 stack=0 skills=0 discard=75 deck=42 nodes=1 action=NextPhase
+seed=0 step=531 log=1355 parks=0 stack=0 skills=0 discard=75 deck=42 nodes=1 action=NextPhase
+seed=0 step=532 log=1358 parks=0 stack=0 skills=0 discard=75 deck=40 nodes=1 action=NextPhase
+seed=0 step=533 log=1360 parks=0 stack=0 skills=0 discard=75 deck=40 nodes=1 action=NextPhase
+seed=0 step=534 log=1363 parks=1 stack=2 skills=0 discard=75 deck=40 nodes=5 action=Answer { choice_id: 95, selection: [Card(96), Card(68)] }
+seed=0 step=535 log=1366 parks=0 stack=0 skills=0 discard=77 deck=40 nodes=1 action=NextPhase
+seed=0 step=536 log=1368 parks=0 stack=0 skills=0 discard=77 deck=40 nodes=1 action=NextPhase
+seed=0 step=537 log=1371 parks=0 stack=0 skills=0 discard=77 deck=40 nodes=1 action=NextPhase
+seed=0 step=538 log=1374 parks=0 stack=0 skills=0 discard=77 deck=38 nodes=1 action=NextPhase
+seed=0 step=539 log=1376 parks=0 stack=0 skills=0 discard=77 deck=38 nodes=3 action=PlayCard { card: 0, targets: [6] }
+seed=0 step=540 log=1378 parks=0 stack=0 skills=0 discard=78 deck=38 nodes=1 action=NextPhase
+seed=0 step=541 log=1381 parks=1 stack=2 skills=0 discard=78 deck=38 nodes=5 action=Answer { choice_id: 96, selection: [Card(109), Card(116)] }
+seed=0 step=542 log=1384 parks=0 stack=0 skills=0 discard=80 deck=38 nodes=1 action=NextPhase
+seed=0 step=543 log=1386 parks=0 stack=0 skills=0 discard=80 deck=38 nodes=1 action=NextPhase
+seed=0 step=544 log=1389 parks=0 stack=0 skills=0 discard=80 deck=38 nodes=1 action=NextPhase
+seed=0 step=545 log=1392 parks=0 stack=0 skills=0 discard=80 deck=36 nodes=1 action=NextPhase
+seed=0 step=546 log=1394 parks=0 stack=0 skills=0 discard=80 deck=36 nodes=1 action=NextPhase
+seed=0 step=547 log=1397 parks=1 stack=2 skills=0 discard=80 deck=36 nodes=8 action=Answer { choice_id: 97, selection: [Card(95), Card(57), Card(53)] }
+seed=0 step=548 log=1401 parks=0 stack=0 skills=0 discard=83 deck=36 nodes=1 action=NextPhase
+seed=0 step=549 log=1403 parks=0 stack=0 skills=0 discard=83 deck=36 nodes=1 action=NextPhase
+seed=0 step=550 log=1406 parks=0 stack=0 skills=0 discard=83 deck=36 nodes=1 action=NextPhase
+seed=0 step=551 log=1409 parks=0 stack=0 skills=0 discard=83 deck=34 nodes=1 action=NextPhase
+seed=0 step=552 log=1411 parks=0 stack=0 skills=0 discard=83 deck=34 nodes=1 action=NextPhase
+seed=0 step=553 log=1414 parks=1 stack=2 skills=0 discard=83 deck=34 nodes=5 action=Answer { choice_id: 98, selection: [Card(122), Card(64)] }
+seed=0 step=554 log=1417 parks=0 stack=0 skills=0 discard=85 deck=34 nodes=1 action=NextPhase
+seed=0 step=555 log=1419 parks=0 stack=0 skills=0 discard=85 deck=34 nodes=1 action=NextPhase
+seed=0 step=556 log=1422 parks=0 stack=0 skills=0 discard=85 deck=34 nodes=1 action=NextPhase
+seed=0 step=557 log=1425 parks=0 stack=0 skills=0 discard=85 deck=32 nodes=1 action=NextPhase
+seed=0 step=558 log=1427 parks=0 stack=0 skills=0 discard=85 deck=32 nodes=3 action=PlayCard { card: 7, targets: [6] }
+seed=0 step=559 log=1429 parks=0 stack=0 skills=0 discard=86 deck=32 nodes=1 action=NextPhase
+seed=0 step=560 log=1432 parks=1 stack=2 skills=0 discard=86 deck=32 nodes=3 action=Answer { choice_id: 99, selection: [Card(49)] }
+seed=0 step=561 log=1434 parks=0 stack=0 skills=0 discard=87 deck=32 nodes=1 action=NextPhase
+seed=0 step=562 log=1436 parks=0 stack=0 skills=0 discard=87 deck=32 nodes=1 action=NextPhase
+seed=0 step=563 log=1439 parks=0 stack=0 skills=0 discard=87 deck=32 nodes=1 action=NextPhase
+seed=0 step=564 log=1442 parks=0 stack=0 skills=0 discard=87 deck=30 nodes=1 action=NextPhase
+seed=0 step=565 log=1444 parks=0 stack=0 skills=0 discard=87 deck=30 nodes=3 action=PlayCard { card: 21, targets: [3] }
+seed=0 step=566 log=1448 parks=0 stack=0 skills=0 discard=89 deck=30 nodes=1 action=NextPhase
+seed=0 step=567 log=1451 parks=1 stack=2 skills=0 discard=89 deck=30 nodes=6 action=Answer { choice_id: 100, selection: [Card(113), Card(103)] }
+seed=0 step=568 log=1454 parks=0 stack=0 skills=0 discard=91 deck=30 nodes=1 action=NextPhase
+seed=0 step=569 log=1456 parks=0 stack=0 skills=0 discard=91 deck=30 nodes=1 action=NextPhase
+seed=0 step=570 log=1459 parks=0 stack=0 skills=0 discard=91 deck=30 nodes=1 action=NextPhase
+seed=0 step=571 log=1462 parks=0 stack=0 skills=0 discard=91 deck=28 nodes=1 action=NextPhase
+seed=0 step=572 log=1464 parks=0 stack=0 skills=0 discard=91 deck=28 nodes=2 action=PlayCard { card: 2, targets: [6] }
+seed=0 step=573 log=1466 parks=1 stack=1 skills=0 discard=91 deck=28 nodes=3 action=Answer { choice_id: 101, selection: [Card(36)] }
+seed=0 step=574 log=1468 parks=0 stack=0 skills=0 discard=93 deck=28 nodes=1 action=NextPhase
+seed=0 step=575 log=1471 parks=1 stack=2 skills=0 discard=93 deck=28 nodes=3 action=Answer { choice_id: 102, selection: [Card(120)] }
+seed=0 step=576 log=1473 parks=0 stack=0 skills=0 discard=94 deck=28 nodes=1 action=NextPhase
+seed=0 step=577 log=1475 parks=0 stack=0 skills=0 discard=94 deck=28 nodes=1 action=NextPhase
+seed=0 step=578 log=1478 parks=0 stack=0 skills=0 discard=94 deck=28 nodes=1 action=NextPhase
+seed=0 step=579 log=1481 parks=0 stack=0 skills=0 discard=94 deck=26 nodes=1 action=NextPhase
+seed=0 step=580 log=1483 parks=0 stack=0 skills=0 discard=94 deck=26 nodes=1 action=NextPhase
+seed=0 step=581 log=1486 parks=1 stack=2 skills=0 discard=94 deck=26 nodes=4 action=Answer { choice_id: 103, selection: [Card(78)] }
+seed=0 step=582 log=1488 parks=0 stack=0 skills=0 discard=95 deck=26 nodes=1 action=NextPhase
+seed=0 step=583 log=1490 parks=0 stack=0 skills=0 discard=95 deck=26 nodes=1 action=NextPhase
+seed=0 step=584 log=1493 parks=0 stack=0 skills=0 discard=95 deck=26 nodes=1 action=NextPhase
+seed=0 step=585 log=1496 parks=0 stack=0 skills=0 discard=95 deck=24 nodes=1 action=NextPhase
+seed=0 step=586 log=1498 parks=0 stack=0 skills=0 discard=95 deck=24 nodes=2 action=PlayCard { card: 11, targets: [6] }
+seed=0 step=587 log=1500 parks=0 stack=0 skills=0 discard=96 deck=24 nodes=1 action=NextPhase
+seed=0 step=588 log=1503 parks=1 stack=2 skills=0 discard=96 deck=24 nodes=3 action=Answer { choice_id: 104, selection: [Card(63)] }
+seed=0 step=589 log=1505 parks=0 stack=0 skills=0 discard=97 deck=24 nodes=1 action=NextPhase
+seed=0 step=590 log=1507 parks=0 stack=0 skills=0 discard=97 deck=24 nodes=1 action=NextPhase
+seed=0 step=591 log=1510 parks=0 stack=0 skills=0 discard=97 deck=24 nodes=1 action=NextPhase
+seed=0 step=592 log=1513 parks=0 stack=0 skills=0 discard=97 deck=22 nodes=1 action=NextPhase
+seed=0 step=593 log=1515 parks=0 stack=0 skills=0 discard=97 deck=22 nodes=1 action=NextPhase
+seed=0 step=594 log=1518 parks=1 stack=2 skills=0 discard=97 deck=22 nodes=6 action=Answer { choice_id: 105, selection: [Card(83), Card(77), Card(45)] }
+seed=0 step=595 log=1522 parks=0 stack=0 skills=0 discard=100 deck=22 nodes=1 action=NextPhase
+seed=0 step=596 log=1524 parks=0 stack=0 skills=0 discard=100 deck=22 nodes=1 action=NextPhase
+seed=0 step=597 log=1527 parks=0 stack=0 skills=0 discard=100 deck=22 nodes=1 action=NextPhase
+seed=0 step=598 log=1530 parks=0 stack=0 skills=0 discard=100 deck=20 nodes=1 action=NextPhase
+seed=0 step=599 log=1532 parks=0 stack=0 skills=0 discard=100 deck=20 nodes=3 action=PlayCard { card: 14, targets: [6] }
+seed=0 END rev=600 outcome=Some(Outcome { winner: Player(7) })
+seed=1 step=0 log=0 parks=0 stack=0 skills=0 discard=0 deck=92 nodes=1 action=NextPhase
+seed=1 step=1 log=3 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=1 action=NextPhase
+seed=1 step=2 log=5 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=1 action=NextPhase
+seed=1 step=3 log=8 parks=1 stack=2 skills=0 discard=0 deck=90 nodes=8 action=Answer { choice_id: 1, selection: [Card(115), Card(90)] }
+seed=1 step=4 log=11 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=1 step=5 log=13 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=1 step=6 log=16 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=1 step=7 log=19 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=1 action=NextPhase
+seed=1 step=8 log=21 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=15 action=PlayCard { card: 27, targets: [0] }
+seed=1 step=9 log=23 parks=0 stack=0 skills=0 discard=3 deck=88 nodes=8 action=NextPhase
+seed=1 step=10 log=26 parks=1 stack=2 skills=0 discard=3 deck=88 nodes=6 action=Answer { choice_id: 2, selection: [Card(53)] }
+seed=1 step=11 log=28 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=1 step=12 log=30 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=1 step=13 log=33 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=1 step=14 log=36 parks=0 stack=0 skills=0 discard=4 deck=86 nodes=1 action=NextPhase
+seed=1 step=15 log=38 parks=0 stack=0 skills=0 discard=4 deck=86 nodes=8 action=PlayCard { card: 10, targets: [1] }
+seed=1 step=16 log=40 parks=0 stack=0 skills=0 discard=5 deck=86 nodes=1 action=NextPhase
+seed=1 step=17 log=43 parks=1 stack=2 skills=0 discard=5 deck=86 nodes=6 action=Answer { choice_id: 3, selection: [Card(50)] }
+seed=1 step=18 log=45 parks=0 stack=0 skills=0 discard=6 deck=86 nodes=1 action=NextPhase
+seed=1 step=19 log=47 parks=0 stack=0 skills=0 discard=6 deck=86 nodes=1 action=NextPhase
+seed=1 step=20 log=50 parks=0 stack=0 skills=0 discard=6 deck=86 nodes=1 action=NextPhase
+seed=1 step=21 log=53 parks=0 stack=0 skills=0 discard=6 deck=84 nodes=1 action=NextPhase
+seed=1 step=22 log=55 parks=0 stack=0 skills=0 discard=6 deck=84 nodes=22 action=PlayCard { card: 20, targets: [2] }
+seed=1 step=23 log=57 parks=0 stack=0 skills=0 discard=7 deck=84 nodes=15 action=NextPhase
+seed=1 step=24 log=60 parks=1 stack=2 skills=0 discard=7 deck=84 nodes=6 action=Answer { choice_id: 4, selection: [Card(100)] }
+seed=1 step=25 log=62 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=1 step=26 log=64 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=1 step=27 log=67 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=1 step=28 log=70 parks=0 stack=0 skills=0 discard=8 deck=82 nodes=1 action=NextPhase
+seed=1 step=29 log=72 parks=0 stack=0 skills=0 discard=8 deck=82 nodes=1 action=NextPhase
+seed=1 step=30 log=75 parks=1 stack=2 skills=0 discard=8 deck=82 nodes=8 action=Answer { choice_id: 5, selection: [Card(87), Card(83)] }
+seed=1 step=31 log=78 parks=0 stack=0 skills=0 discard=10 deck=82 nodes=1 action=NextPhase
+seed=1 step=32 log=80 parks=0 stack=0 skills=0 discard=10 deck=82 nodes=1 action=NextPhase
+seed=1 step=33 log=83 parks=0 stack=0 skills=0 discard=10 deck=82 nodes=1 action=NextPhase
+seed=1 step=34 log=86 parks=0 stack=0 skills=0 discard=10 deck=80 nodes=1 action=NextPhase
+seed=1 step=35 log=88 parks=0 stack=0 skills=0 discard=10 deck=80 nodes=15 action=PlayCard { card: 24, targets: [4] }
+seed=1 step=36 log=90 parks=1 stack=1 skills=0 discard=10 deck=80 nodes=3 action=Answer { choice_id: 6, selection: [Card(43)] }
+seed=1 step=37 log=92 parks=0 stack=0 skills=0 discard=12 deck=80 nodes=8 action=NextPhase
+seed=1 step=38 log=95 parks=1 stack=2 skills=0 discard=12 deck=80 nodes=6 action=Answer { choice_id: 7, selection: [Card(56)] }
+seed=1 step=39 log=97 parks=0 stack=0 skills=0 discard=13 deck=80 nodes=1 action=NextPhase
+seed=1 step=40 log=99 parks=0 stack=0 skills=0 discard=13 deck=80 nodes=1 action=NextPhase
+seed=1 step=41 log=102 parks=0 stack=0 skills=0 discard=13 deck=80 nodes=1 action=NextPhase
+seed=1 step=42 log=105 parks=0 stack=0 skills=0 discard=13 deck=78 nodes=1 action=NextPhase
+seed=1 step=43 log=107 parks=0 stack=0 skills=0 discard=13 deck=78 nodes=8 action=PlayCard { card: 23, targets: [5] }
+seed=1 step=44 log=109 parks=1 stack=1 skills=0 discard=13 deck=78 nodes=4 action=Answer { choice_id: 8, selection: [Card(32)] }
+seed=1 step=45 log=111 parks=0 stack=0 skills=0 discard=15 deck=78 nodes=1 action=NextPhase
+seed=1 step=46 log=114 parks=1 stack=2 skills=0 discard=15 deck=78 nodes=6 action=Answer { choice_id: 9, selection: [Card(96)] }
+seed=1 step=47 log=116 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=1 step=48 log=118 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=1 step=49 log=121 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=1 step=50 log=124 parks=0 stack=0 skills=0 discard=16 deck=76 nodes=1 action=NextPhase
+seed=1 step=51 log=126 parks=0 stack=0 skills=0 discard=16 deck=76 nodes=15 action=PlayCard { card: 12, targets: [0] }
+seed=1 step=52 log=128 parks=0 stack=0 skills=0 discard=17 deck=76 nodes=8 action=NextPhase
+seed=1 step=53 log=131 parks=1 stack=2 skills=0 discard=17 deck=76 nodes=6 action=Answer { choice_id: 10, selection: [Card(71)] }
+seed=1 step=54 log=133 parks=0 stack=0 skills=0 discard=18 deck=76 nodes=1 action=NextPhase
+seed=1 step=55 log=135 parks=0 stack=0 skills=0 discard=18 deck=76 nodes=1 action=NextPhase
+seed=1 step=56 log=138 parks=0 stack=0 skills=0 discard=18 deck=76 nodes=1 action=NextPhase
+seed=1 step=57 log=141 parks=0 stack=0 skills=0 discard=18 deck=74 nodes=1 action=NextPhase
+seed=1 step=58 log=143 parks=0 stack=0 skills=0 discard=18 deck=74 nodes=1 action=NextPhase
+seed=1 step=59 log=146 parks=1 stack=2 skills=0 discard=18 deck=74 nodes=8 action=Answer { choice_id: 11, selection: [Card(101), Card(119), Card(76), Card(88)] }
+seed=1 step=60 log=151 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=1 step=61 log=153 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=1 step=62 log=156 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=1 step=63 log=159 parks=0 stack=0 skills=0 discard=22 deck=72 nodes=1 action=NextPhase
+seed=1 step=64 log=161 parks=0 stack=0 skills=0 discard=22 deck=72 nodes=15 action=PlayCard { card: 26, targets: [0] }
+seed=1 step=65 log=163 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=8 action=NextPhase
+seed=1 step=66 log=166 parks=1 stack=2 skills=0 discard=23 deck=72 nodes=7 action=Answer { choice_id: 12, selection: [Card(62), Card(70)] }
+seed=1 step=67 log=169 parks=0 stack=0 skills=0 discard=25 deck=72 nodes=1 action=NextPhase
+seed=1 step=68 log=171 parks=0 stack=0 skills=0 discard=25 deck=72 nodes=1 action=NextPhase
+seed=1 step=69 log=174 parks=0 stack=0 skills=0 discard=25 deck=72 nodes=1 action=NextPhase
+seed=1 step=70 log=177 parks=0 stack=0 skills=0 discard=25 deck=70 nodes=1 action=NextPhase
+seed=1 step=71 log=179 parks=0 stack=0 skills=0 discard=25 deck=70 nodes=1 action=NextPhase
+seed=1 step=72 log=182 parks=1 stack=2 skills=0 discard=25 deck=70 nodes=8 action=Answer { choice_id: 13, selection: [Card(73), Card(107), Card(82)] }
+seed=1 step=73 log=186 parks=0 stack=0 skills=0 discard=28 deck=70 nodes=1 action=NextPhase
+seed=1 step=74 log=188 parks=0 stack=0 skills=0 discard=28 deck=70 nodes=1 action=NextPhase
+seed=1 step=75 log=191 parks=0 stack=0 skills=0 discard=28 deck=70 nodes=1 action=NextPhase
+seed=1 step=76 log=194 parks=0 stack=0 skills=0 discard=28 deck=68 nodes=1 action=NextPhase
+seed=1 step=77 log=196 parks=0 stack=0 skills=0 discard=28 deck=68 nodes=15 action=PlayCard { card: 18, targets: [4] }
+seed=1 step=78 log=198 parks=0 stack=0 skills=0 discard=29 deck=68 nodes=8 action=NextPhase
+seed=1 step=79 log=201 parks=1 stack=2 skills=0 discard=29 deck=68 nodes=6 action=Answer { choice_id: 14, selection: [Card(89)] }
+seed=1 step=80 log=203 parks=0 stack=0 skills=0 discard=30 deck=68 nodes=1 action=NextPhase
+seed=1 step=81 log=205 parks=0 stack=0 skills=0 discard=30 deck=68 nodes=1 action=NextPhase
+seed=1 step=82 log=208 parks=0 stack=0 skills=0 discard=30 deck=68 nodes=1 action=NextPhase
+seed=1 step=83 log=211 parks=0 stack=0 skills=0 discard=30 deck=66 nodes=1 action=NextPhase
+seed=1 step=84 log=213 parks=0 stack=0 skills=0 discard=30 deck=66 nodes=1 action=NextPhase
+seed=1 step=85 log=216 parks=1 stack=2 skills=0 discard=30 deck=66 nodes=7 action=Answer { choice_id: 15, selection: [Card(86), Card(65)] }
+seed=1 step=86 log=219 parks=0 stack=0 skills=0 discard=32 deck=66 nodes=1 action=NextPhase
+seed=1 step=87 log=221 parks=0 stack=0 skills=0 discard=32 deck=66 nodes=1 action=NextPhase
+seed=1 step=88 log=224 parks=0 stack=0 skills=0 discard=32 deck=66 nodes=1 action=NextPhase
+seed=1 step=89 log=227 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=1 action=NextPhase
+seed=1 step=90 log=229 parks=0 stack=0 skills=0 discard=32 deck=64 nodes=15 action=PlayCard { card: 0, targets: [4] }
+seed=1 step=91 log=231 parks=0 stack=0 skills=0 discard=33 deck=64 nodes=8 action=NextPhase
+seed=1 step=92 log=233 parks=0 stack=0 skills=0 discard=33 deck=64 nodes=1 action=NextPhase
+seed=1 step=93 log=235 parks=0 stack=0 skills=0 discard=33 deck=64 nodes=1 action=NextPhase
+seed=1 step=94 log=238 parks=0 stack=0 skills=0 discard=33 deck=64 nodes=1 action=NextPhase
+seed=1 step=95 log=241 parks=0 stack=0 skills=0 discard=33 deck=62 nodes=1 action=NextPhase
+seed=1 step=96 log=243 parks=0 stack=0 skills=0 discard=33 deck=62 nodes=8 action=PlayCard { card: 14, targets: [5] }
+seed=1 step=97 log=245 parks=1 stack=1 skills=0 discard=33 deck=62 nodes=4 action=Answer { choice_id: 16, selection: [Card(31)] }
+seed=1 step=98 log=247 parks=0 stack=0 skills=0 discard=35 deck=62 nodes=1 action=NextPhase
+seed=1 step=99 log=250 parks=1 stack=2 skills=0 discard=35 deck=62 nodes=6 action=Answer { choice_id: 17, selection: [Card(109)] }
+seed=1 step=100 log=252 parks=0 stack=0 skills=0 discard=36 deck=62 nodes=1 action=NextPhase
+seed=1 step=101 log=254 parks=0 stack=0 skills=0 discard=36 deck=62 nodes=1 action=NextPhase
+seed=1 step=102 log=257 parks=0 stack=0 skills=0 discard=36 deck=62 nodes=1 action=NextPhase
+seed=1 step=103 log=260 parks=0 stack=0 skills=0 discard=36 deck=60 nodes=1 action=NextPhase
+seed=1 step=104 log=262 parks=0 stack=0 skills=0 discard=36 deck=60 nodes=15 action=PlayCard { card: 22, targets: [0] }
+seed=1 step=105 log=266 parks=1 stack=3 skills=0 discard=37 deck=60 nodes=3 action=Answer { choice_id: 18, selection: [Card(45)] }
+seed=1 step=106 log=270 parks=0 stack=0 skills=0 discard=38 deck=60 nodes=8 action=NextPhase
+seed=1 step=107 log=273 parks=1 stack=2 skills=0 discard=38 deck=60 nodes=6 action=Answer { choice_id: 19, selection: [Card(106)] }
+seed=1 step=108 log=275 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=1 step=109 log=277 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=1 step=110 log=280 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=1 step=111 log=283 parks=0 stack=0 skills=0 discard=39 deck=58 nodes=1 action=NextPhase
+seed=1 step=112 log=285 parks=0 stack=0 skills=0 discard=39 deck=58 nodes=8 action=PlayCard { card: 11, targets: [1] }
+seed=1 step=113 log=287 parks=0 stack=0 skills=0 discard=40 deck=58 nodes=1 action=NextPhase
+seed=1 step=114 log=290 parks=1 stack=2 skills=0 discard=40 deck=58 nodes=3 action=Answer { choice_id: 20, selection: [Card(104)] }
+seed=1 step=115 log=292 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=1 step=116 log=294 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=1 step=117 log=297 parks=0 stack=0 skills=0 discard=41 deck=58 nodes=1 action=NextPhase
+seed=1 step=118 log=300 parks=0 stack=0 skills=0 discard=41 deck=56 nodes=1 action=NextPhase
+seed=1 step=119 log=302 parks=0 stack=0 skills=0 discard=41 deck=56 nodes=15 action=PlayCard { card: 2, targets: [0] }
+seed=1 step=120 log=306 parks=1 stack=3 skills=0 discard=42 deck=56 nodes=4 action=Answer { choice_id: 21, selection: [Pass] }
+seed=1 step=121 log=308 parks=1 stack=3 skills=0 discard=42 deck=56 nodes=3 action=Answer { choice_id: 22, selection: [Pass] }
+seed=1 step=122 log=310 parks=1 stack=3 skills=0 discard=42 deck=56 nodes=3 action=Answer { choice_id: 23, selection: [Pass] }
+seed=1 step=123 log=312 parks=0 stack=0 skills=0 discard=43 deck=56 nodes=7 action=NextPhase
+seed=1 step=124 log=315 parks=1 stack=2 skills=0 discard=43 deck=56 nodes=6 action=Answer { choice_id: 24, selection: [Card(48), Card(98)] }
+seed=1 step=125 log=318 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=1 step=126 log=320 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=1 step=127 log=323 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=1 step=128 log=326 parks=0 stack=0 skills=0 discard=45 deck=54 nodes=1 action=NextPhase
+seed=1 step=129 log=328 parks=0 stack=0 skills=0 discard=45 deck=54 nodes=1 action=NextPhase
+seed=1 step=130 log=331 parks=1 stack=2 skills=0 discard=45 deck=54 nodes=7 action=Answer { choice_id: 25, selection: [Card(77), Card(72)] }
+seed=1 step=131 log=334 parks=0 stack=0 skills=0 discard=47 deck=54 nodes=1 action=NextPhase
+seed=1 step=132 log=336 parks=0 stack=0 skills=0 discard=47 deck=54 nodes=1 action=NextPhase
+seed=1 step=133 log=339 parks=0 stack=0 skills=0 discard=47 deck=54 nodes=1 action=NextPhase
+seed=1 step=134 log=342 parks=0 stack=0 skills=0 discard=47 deck=52 nodes=1 action=NextPhase
+seed=1 step=135 log=344 parks=0 stack=0 skills=0 discard=47 deck=52 nodes=7 action=PlayCard { card: 9, targets: [4] }
+seed=1 step=136 log=346 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=1 step=137 log=349 parks=1 stack=2 skills=0 discard=48 deck=52 nodes=6 action=Answer { choice_id: 26, selection: [Card(66)] }
+seed=1 step=138 log=351 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=1 step=139 log=353 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=1 step=140 log=356 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=1 step=141 log=359 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=1 step=142 log=361 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=7 action=PlayCard { card: 1, targets: [5] }
+seed=1 step=143 log=363 parks=1 stack=1 skills=0 discard=49 deck=50 nodes=3 action=Answer { choice_id: 27, selection: [Card(39)] }
+seed=1 step=144 log=365 parks=0 stack=0 skills=0 discard=51 deck=50 nodes=1 action=NextPhase
+seed=1 step=145 log=368 parks=1 stack=2 skills=0 discard=51 deck=50 nodes=6 action=Answer { choice_id: 28, selection: [Card(74), Card(85), Card(61)] }
+seed=1 step=146 log=372 parks=0 stack=0 skills=0 discard=54 deck=50 nodes=1 action=NextPhase
+seed=1 step=147 log=374 parks=0 stack=0 skills=0 discard=54 deck=50 nodes=1 action=NextPhase
+seed=1 step=148 log=377 parks=0 stack=0 skills=0 discard=54 deck=50 nodes=1 action=NextPhase
+seed=1 step=149 log=380 parks=0 stack=0 skills=0 discard=54 deck=48 nodes=1 action=NextPhase
+seed=1 step=150 log=382 parks=0 stack=0 skills=0 discard=54 deck=48 nodes=13 action=PlayCard { card: 7, targets: [4] }
+seed=1 step=151 log=384 parks=1 stack=1 skills=0 discard=54 deck=48 nodes=3 action=Answer { choice_id: 29, selection: [Card(40)] }
+seed=1 step=152 log=386 parks=0 stack=0 skills=0 discard=56 deck=48 nodes=7 action=NextPhase
+seed=1 step=153 log=388 parks=0 stack=0 skills=0 discard=56 deck=48 nodes=1 action=NextPhase
+seed=1 step=154 log=390 parks=0 stack=0 skills=0 discard=56 deck=48 nodes=1 action=NextPhase
+seed=1 step=155 log=393 parks=0 stack=0 skills=0 discard=56 deck=48 nodes=1 action=NextPhase
+seed=1 step=156 log=396 parks=0 stack=0 skills=0 discard=56 deck=46 nodes=1 action=NextPhase
+seed=1 step=157 log=398 parks=0 stack=0 skills=0 discard=56 deck=46 nodes=7 action=PlayCard { card: 4, targets: [5] }
+seed=1 step=158 log=400 parks=1 stack=1 skills=0 discard=56 deck=46 nodes=3 action=Answer { choice_id: 30, selection: [Card(44)] }
+seed=1 step=159 log=402 parks=0 stack=0 skills=0 discard=58 deck=46 nodes=1 action=NextPhase
+seed=1 step=160 log=405 parks=1 stack=2 skills=0 discard=58 deck=46 nodes=6 action=Answer { choice_id: 31, selection: [Card(81)] }
+seed=1 step=161 log=407 parks=0 stack=0 skills=0 discard=59 deck=46 nodes=1 action=NextPhase
+seed=1 step=162 log=409 parks=0 stack=0 skills=0 discard=59 deck=46 nodes=1 action=NextPhase
+seed=1 step=163 log=412 parks=0 stack=0 skills=0 discard=59 deck=46 nodes=1 action=NextPhase
+seed=1 step=164 log=415 parks=0 stack=0 skills=0 discard=59 deck=44 nodes=1 action=NextPhase
+seed=1 step=165 log=417 parks=0 stack=0 skills=0 discard=59 deck=44 nodes=13 action=PlayCard { card: 6, targets: [1] }
+seed=1 step=166 log=419 parks=0 stack=0 skills=0 discard=60 deck=44 nodes=7 action=NextPhase
+seed=1 step=167 log=422 parks=1 stack=2 skills=0 discard=60 deck=44 nodes=6 action=Answer { choice_id: 32, selection: [Card(60)] }
+seed=1 step=168 log=424 parks=0 stack=0 skills=0 discard=61 deck=44 nodes=1 action=NextPhase
+seed=1 step=169 log=426 parks=0 stack=0 skills=0 discard=61 deck=44 nodes=1 action=NextPhase
+seed=1 step=170 log=429 parks=0 stack=0 skills=0 discard=61 deck=44 nodes=1 action=NextPhase
+seed=1 step=171 log=432 parks=0 stack=0 skills=0 discard=61 deck=42 nodes=1 action=NextPhase
+seed=1 step=172 log=434 parks=0 stack=0 skills=0 discard=61 deck=42 nodes=7 action=PlayCard { card: 17, targets: [2] }
+seed=1 step=173 log=436 parks=0 stack=0 skills=0 discard=62 deck=42 nodes=1 action=NextPhase
+seed=1 step=174 log=439 parks=1 stack=2 skills=0 discard=62 deck=42 nodes=5 action=Answer { choice_id: 33, selection: [Card(52), Card(94)] }
+seed=1 step=175 log=442 parks=0 stack=0 skills=0 discard=64 deck=42 nodes=1 action=NextPhase
+seed=1 step=176 log=444 parks=0 stack=0 skills=0 discard=64 deck=42 nodes=1 action=NextPhase
+seed=1 step=177 log=447 parks=0 stack=0 skills=0 discard=64 deck=42 nodes=1 action=NextPhase
+seed=1 step=178 log=450 parks=0 stack=0 skills=0 discard=64 deck=40 nodes=1 action=NextPhase
+seed=1 step=179 log=452 parks=0 stack=0 skills=0 discard=64 deck=40 nodes=1 action=NextPhase
+seed=1 step=180 log=455 parks=1 stack=2 skills=0 discard=64 deck=40 nodes=7 action=Answer { choice_id: 34, selection: [Card(84), Card(59), Card(51)] }
+seed=1 step=181 log=459 parks=0 stack=0 skills=0 discard=67 deck=40 nodes=1 action=NextPhase
+seed=1 step=182 log=461 parks=0 stack=0 skills=0 discard=67 deck=40 nodes=1 action=NextPhase
+seed=1 step=183 log=464 parks=0 stack=0 skills=0 discard=67 deck=40 nodes=1 action=NextPhase
+seed=1 step=184 log=467 parks=0 stack=0 skills=0 discard=67 deck=38 nodes=1 action=NextPhase
+seed=1 step=185 log=469 parks=0 stack=0 skills=0 discard=67 deck=38 nodes=7 action=PlayCard { card: 8, targets: [2] }
+seed=1 step=186 log=471 parks=0 stack=0 skills=0 discard=68 deck=38 nodes=1 action=NextPhase
+seed=1 step=187 log=474 parks=1 stack=2 skills=0 discard=68 deck=38 nodes=6 action=Answer { choice_id: 35, selection: [Card(47)] }
+seed=1 step=188 log=476 parks=0 stack=0 skills=0 discard=69 deck=38 nodes=1 action=NextPhase
+seed=1 step=189 log=478 parks=0 stack=0 skills=0 discard=69 deck=38 nodes=1 action=NextPhase
+seed=1 step=190 log=481 parks=0 stack=0 skills=0 discard=69 deck=38 nodes=1 action=NextPhase
+seed=1 step=191 log=484 parks=0 stack=0 skills=0 discard=69 deck=36 nodes=1 action=NextPhase
+seed=1 step=192 log=486 parks=0 stack=0 skills=0 discard=69 deck=36 nodes=1 action=NextPhase
+seed=1 step=193 log=489 parks=1 stack=2 skills=0 discard=69 deck=36 nodes=3 action=Answer { choice_id: 36, selection: [Card(105)] }
+seed=1 step=194 log=491 parks=0 stack=0 skills=0 discard=70 deck=36 nodes=1 action=NextPhase
+seed=1 step=195 log=493 parks=0 stack=0 skills=0 discard=70 deck=36 nodes=1 action=NextPhase
+seed=1 step=196 log=496 parks=0 stack=0 skills=0 discard=70 deck=36 nodes=1 action=NextPhase
+seed=1 step=197 log=499 parks=0 stack=0 skills=0 discard=70 deck=34 nodes=1 action=NextPhase
+seed=1 step=198 log=501 parks=0 stack=0 skills=0 discard=70 deck=34 nodes=13 action=PlayCard { card: 13, targets: [4] }
+seed=1 step=199 log=505 parks=0 stack=0 skills=0 discard=72 deck=34 nodes=6 action=NextPhase
+seed=1 step=200 log=507 parks=0 stack=0 skills=0 discard=72 deck=34 nodes=1 action=NextPhase
+seed=1 step=201 log=509 parks=0 stack=0 skills=0 discard=72 deck=34 nodes=1 action=NextPhase
+seed=1 step=202 log=512 parks=0 stack=0 skills=0 discard=72 deck=34 nodes=1 action=NextPhase
+seed=1 step=203 log=515 parks=0 stack=0 skills=0 discard=72 deck=32 nodes=1 action=NextPhase
+seed=1 step=204 log=517 parks=0 stack=0 skills=0 discard=72 deck=32 nodes=1 action=NextPhase
+seed=1 step=205 log=520 parks=1 stack=2 skills=0 discard=72 deck=32 nodes=8 action=Answer { choice_id: 37, selection: [Card(122), Card(108)] }
+seed=1 step=206 log=523 parks=0 stack=0 skills=0 discard=74 deck=32 nodes=1 action=NextPhase
+seed=1 step=207 log=525 parks=0 stack=0 skills=0 discard=74 deck=32 nodes=1 action=NextPhase
+seed=1 step=208 log=528 parks=0 stack=0 skills=0 discard=74 deck=32 nodes=1 action=NextPhase
+seed=1 step=209 log=531 parks=0 stack=0 skills=0 discard=74 deck=30 nodes=1 action=NextPhase
+seed=1 step=210 log=533 parks=0 stack=0 skills=0 discard=74 deck=30 nodes=11 action=PlayCard { card: 5, targets: [1] }
+seed=1 step=211 log=535 parks=1 stack=1 skills=0 discard=74 deck=30 nodes=3 action=Answer { choice_id: 38, selection: [Card(30)] }
+seed=1 step=212 log=537 parks=0 stack=0 skills=0 discard=76 deck=30 nodes=6 action=NextPhase
+seed=1 step=213 log=540 parks=1 stack=2 skills=0 discard=76 deck=30 nodes=6 action=Answer { choice_id: 39, selection: [Card(69)] }
+seed=1 step=214 log=542 parks=0 stack=0 skills=0 discard=77 deck=30 nodes=1 action=NextPhase
+seed=1 step=215 log=544 parks=0 stack=0 skills=0 discard=77 deck=30 nodes=1 action=NextPhase
+seed=1 step=216 log=547 parks=0 stack=0 skills=0 discard=77 deck=30 nodes=1 action=NextPhase
+seed=1 step=217 log=550 parks=0 stack=0 skills=0 discard=77 deck=28 nodes=1 action=NextPhase
+seed=1 step=218 log=552 parks=0 stack=0 skills=0 discard=77 deck=28 nodes=6 action=PlayCard { card: 3, targets: [2] }
+seed=1 step=219 log=556 parks=0 stack=0 skills=0 discard=80 deck=28 nodes=1 action=NextPhase
+seed=1 step=220 log=558 parks=0 stack=0 skills=0 discard=80 deck=28 nodes=1 action=NextPhase
+seed=1 step=221 log=560 parks=0 stack=0 skills=0 discard=80 deck=28 nodes=1 action=NextPhase
+seed=1 step=222 log=563 parks=0 stack=0 skills=0 discard=80 deck=28 nodes=1 action=NextPhase
+seed=1 step=223 log=566 parks=0 stack=0 skills=0 discard=80 deck=26 nodes=1 action=NextPhase
+seed=1 step=224 log=568 parks=0 stack=0 skills=0 discard=80 deck=26 nodes=5 action=PlayCard { card: 28, targets: [1] }
+seed=1 step=225 log=572 parks=0 stack=0 skills=0 discard=82 deck=26 nodes=1 action=NextPhase
+seed=1 step=226 log=575 parks=1 stack=2 skills=0 discard=82 deck=26 nodes=6 action=Answer { choice_id: 40, selection: [Card(113)] }
+seed=1 step=227 log=577 parks=0 stack=0 skills=0 discard=83 deck=26 nodes=1 action=NextPhase
+seed=1 step=228 log=579 parks=0 stack=0 skills=0 discard=83 deck=26 nodes=1 action=NextPhase
+seed=1 step=229 log=582 parks=0 stack=0 skills=0 discard=83 deck=26 nodes=1 action=NextPhase
+seed=1 step=230 log=585 parks=0 stack=0 skills=0 discard=83 deck=24 nodes=1 action=NextPhase
+seed=1 step=231 log=587 parks=0 stack=0 skills=0 discard=83 deck=24 nodes=4 action=PlayCard { card: 15, targets: [3] }
+seed=1 step=232 log=589 parks=1 stack=1 skills=0 discard=83 deck=24 nodes=4 action=Answer { choice_id: 41, selection: [Card(42)] }
+seed=1 step=233 log=591 parks=0 stack=0 skills=0 discard=85 deck=24 nodes=1 action=NextPhase
+seed=1 step=234 log=593 parks=0 stack=0 skills=0 discard=85 deck=24 nodes=1 action=NextPhase
+seed=1 step=235 log=595 parks=0 stack=0 skills=0 discard=85 deck=24 nodes=1 action=NextPhase
+seed=1 step=236 log=598 parks=0 stack=0 skills=0 discard=85 deck=24 nodes=1 action=NextPhase
+seed=1 step=237 log=601 parks=0 stack=0 skills=0 discard=85 deck=22 nodes=1 action=NextPhase
+seed=1 step=238 log=603 parks=0 stack=0 skills=0 discard=85 deck=22 nodes=1 action=NextPhase
+seed=1 step=239 log=606 parks=1 stack=2 skills=0 discard=85 deck=22 nodes=8 action=Answer { choice_id: 42, selection: [Card(78), Card(67)] }
+seed=1 step=240 log=609 parks=0 stack=0 skills=0 discard=87 deck=22 nodes=1 action=NextPhase
+seed=1 step=241 log=611 parks=0 stack=0 skills=0 discard=87 deck=22 nodes=1 action=NextPhase
+seed=1 step=242 log=614 parks=0 stack=0 skills=0 discard=87 deck=22 nodes=1 action=NextPhase
+seed=1 step=243 log=617 parks=0 stack=0 skills=0 discard=87 deck=20 nodes=1 action=NextPhase
+seed=1 step=244 log=619 parks=0 stack=0 skills=0 discard=87 deck=20 nodes=7 action=PlayCard { card: 19, targets: [3] }
+seed=1 step=245 log=621 parks=1 stack=1 skills=0 discard=87 deck=20 nodes=3 action=Answer { choice_id: 43, selection: [Card(41)] }
+seed=1 step=246 log=623 parks=0 stack=0 skills=0 discard=89 deck=20 nodes=4 action=NextPhase
+seed=1 step=247 log=626 parks=1 stack=2 skills=0 discard=89 deck=20 nodes=6 action=Answer { choice_id: 44, selection: [Card(80)] }
+seed=1 step=248 log=628 parks=0 stack=0 skills=0 discard=90 deck=20 nodes=1 action=NextPhase
+seed=1 step=249 log=630 parks=0 stack=0 skills=0 discard=90 deck=20 nodes=1 action=NextPhase
+seed=1 step=250 log=633 parks=0 stack=0 skills=0 discard=90 deck=20 nodes=1 action=NextPhase
+seed=1 step=251 log=636 parks=0 stack=0 skills=0 discard=90 deck=18 nodes=1 action=NextPhase
+seed=1 step=252 log=638 parks=0 stack=0 skills=0 discard=90 deck=18 nodes=1 action=NextPhase
+seed=1 step=253 log=640 parks=0 stack=0 skills=0 discard=90 deck=18 nodes=1 action=NextPhase
+seed=1 step=254 log=642 parks=0 stack=0 skills=0 discard=90 deck=18 nodes=1 action=NextPhase
+seed=1 step=255 log=645 parks=0 stack=0 skills=0 discard=90 deck=18 nodes=1 action=NextPhase
+seed=1 step=256 log=648 parks=0 stack=0 skills=0 discard=90 deck=16 nodes=1 action=NextPhase
+seed=1 step=257 log=650 parks=0 stack=0 skills=0 discard=90 deck=16 nodes=1 action=NextPhase
+seed=1 step=258 log=653 parks=1 stack=2 skills=0 discard=90 deck=16 nodes=8 action=Answer { choice_id: 45, selection: [Card(54), Card(99)] }
+seed=1 step=259 log=656 parks=0 stack=0 skills=0 discard=92 deck=16 nodes=1 action=NextPhase
+seed=1 step=260 log=658 parks=0 stack=0 skills=0 discard=92 deck=16 nodes=1 action=NextPhase
+seed=1 step=261 log=661 parks=0 stack=0 skills=0 discard=92 deck=16 nodes=1 action=NextPhase
+seed=1 step=262 log=664 parks=0 stack=0 skills=0 discard=92 deck=14 nodes=1 action=NextPhase
+seed=1 step=263 log=666 parks=0 stack=0 skills=0 discard=92 deck=14 nodes=4 action=PlayCard { card: 21, targets: [5] }
+seed=1 step=264 log=668 parks=1 stack=1 skills=0 discard=92 deck=14 nodes=3 action=Answer { choice_id: 46, selection: [Card(37)] }
+seed=1 step=265 log=670 parks=0 stack=0 skills=0 discard=94 deck=14 nodes=1 action=NextPhase
+seed=1 step=266 log=673 parks=1 stack=2 skills=0 discard=94 deck=14 nodes=6 action=Answer { choice_id: 47, selection: [Card(33)] }
+seed=1 step=267 log=675 parks=0 stack=0 skills=0 discard=95 deck=14 nodes=1 action=NextPhase
+seed=1 step=268 log=677 parks=0 stack=0 skills=0 discard=95 deck=14 nodes=1 action=NextPhase
+seed=1 step=269 log=680 parks=0 stack=0 skills=0 discard=95 deck=14 nodes=1 action=NextPhase
+seed=1 step=270 log=683 parks=0 stack=0 skills=0 discard=95 deck=12 nodes=1 action=NextPhase
+seed=1 step=271 log=685 parks=0 stack=0 skills=0 discard=95 deck=12 nodes=4 action=PlayCard { card: 25, targets: [3] }
+seed=1 step=272 log=687 parks=0 stack=0 skills=0 discard=96 deck=12 nodes=1 action=NextPhase
+seed=1 step=273 log=690 parks=1 stack=2 skills=0 discard=96 deck=12 nodes=6 action=Answer { choice_id: 48, selection: [Card(75)] }
+seed=1 step=274 log=692 parks=0 stack=0 skills=0 discard=97 deck=12 nodes=1 action=NextPhase
+seed=1 step=275 log=694 parks=0 stack=0 skills=0 discard=97 deck=12 nodes=1 action=NextPhase
+seed=1 step=276 log=697 parks=0 stack=0 skills=0 discard=97 deck=12 nodes=1 action=NextPhase
+seed=1 step=277 log=700 parks=0 stack=0 skills=0 discard=97 deck=10 nodes=1 action=NextPhase
+seed=1 step=278 log=702 parks=0 stack=0 skills=0 discard=97 deck=10 nodes=4 action=PlayCard { card: 29, targets: [5] }
+seed=1 step=279 log=704 parks=0 stack=0 skills=0 discard=98 deck=10 nodes=1 action=NextPhase
+seed=1 step=280 log=707 parks=1 stack=2 skills=0 discard=98 deck=10 nodes=7 action=Answer { choice_id: 49, selection: [Card(112), Card(97)] }
+seed=1 step=281 log=710 parks=0 stack=0 skills=0 discard=100 deck=10 nodes=1 action=NextPhase
+seed=1 step=282 log=712 parks=0 stack=0 skills=0 discard=100 deck=10 nodes=1 action=NextPhase
+seed=1 step=283 log=715 parks=0 stack=0 skills=0 discard=100 deck=10 nodes=1 action=NextPhase
+seed=1 step=284 log=718 parks=0 stack=0 skills=0 discard=100 deck=8 nodes=1 action=NextPhase
+seed=1 step=285 log=720 parks=0 stack=0 skills=0 discard=100 deck=8 nodes=1 action=NextPhase
+seed=1 step=286 log=723 parks=1 stack=2 skills=0 discard=100 deck=8 nodes=7 action=Answer { choice_id: 50, selection: [Card(118), Card(121)] }
+seed=1 step=287 log=726 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=1 step=288 log=728 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=1 step=289 log=731 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=1 step=290 log=734 parks=0 stack=0 skills=0 discard=102 deck=6 nodes=1 action=NextPhase
+seed=1 step=291 log=736 parks=0 stack=0 skills=0 discard=102 deck=6 nodes=4 action=PlayCard { card: 16, targets: [5] }
+seed=1 step=292 log=738 parks=0 stack=0 skills=0 discard=103 deck=6 nodes=1 action=NextPhase
+seed=1 step=293 log=741 parks=1 stack=2 skills=0 discard=103 deck=6 nodes=6 action=Answer { choice_id: 51, selection: [Card(55)] }
+seed=1 step=294 log=743 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=1 step=295 log=745 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=1 step=296 log=748 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=1 step=297 log=751 parks=0 stack=0 skills=0 discard=104 deck=4 nodes=1 action=NextPhase
+seed=1 step=298 log=753 parks=0 stack=0 skills=0 discard=104 deck=4 nodes=1 action=NextPhase
+seed=1 step=299 log=756 parks=1 stack=2 skills=0 discard=104 deck=4 nodes=8 action=Answer { choice_id: 52, selection: [Card(34), Card(49)] }
+seed=1 step=300 log=759 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=1 step=301 log=761 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=1 step=302 log=764 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=1 step=303 log=767 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=1 step=304 log=769 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=1 step=305 log=772 parks=1 stack=2 skills=0 discard=106 deck=2 nodes=7 action=Answer { choice_id: 53, selection: [Card(79), Card(46)] }
+seed=1 step=306 log=775 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=1 step=307 log=777 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=1 step=308 log=780 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=1 step=309 log=783 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=1 step=310 log=785 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=1 step=311 log=788 parks=1 stack=2 skills=0 discard=108 deck=0 nodes=7 action=Answer { choice_id: 54, selection: [Card(116), Card(120), Card(95)] }
+seed=1 step=312 log=792 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=1 step=313 log=794 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=1 step=314 log=797 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=1 step=315 log=801 parks=0 stack=0 skills=0 discard=0 deck=109 nodes=1 action=NextPhase
+seed=1 step=316 log=803 parks=0 stack=0 skills=0 discard=0 deck=109 nodes=4 action=PlayCard { card: 24, targets: [5] }
+seed=1 step=317 log=805 parks=1 stack=1 skills=0 discard=0 deck=109 nodes=3 action=Answer { choice_id: 55, selection: [Card(38)] }
+seed=1 step=318 log=807 parks=0 stack=0 skills=0 discard=2 deck=109 nodes=1 action=NextPhase
+seed=1 step=319 log=810 parks=1 stack=2 skills=0 discard=2 deck=109 nodes=6 action=Answer { choice_id: 56, selection: [Card(35)] }
+seed=1 step=320 log=812 parks=0 stack=0 skills=0 discard=3 deck=109 nodes=1 action=NextPhase
+seed=1 step=321 log=814 parks=0 stack=0 skills=0 discard=3 deck=109 nodes=1 action=NextPhase
+seed=1 step=322 log=817 parks=0 stack=0 skills=0 discard=3 deck=109 nodes=1 action=NextPhase
+seed=1 step=323 log=820 parks=0 stack=0 skills=0 discard=3 deck=107 nodes=1 action=NextPhase
+seed=1 step=324 log=822 parks=0 stack=0 skills=0 discard=3 deck=107 nodes=4 action=PlayCard { card: 18, targets: [3] }
+seed=1 step=325 log=824 parks=0 stack=0 skills=0 discard=4 deck=107 nodes=1 action=NextPhase
+seed=1 step=326 log=827 parks=1 stack=2 skills=0 discard=4 deck=107 nodes=6 action=Answer { choice_id: 57, selection: [Card(91)] }
+seed=1 step=327 log=829 parks=0 stack=0 skills=0 discard=5 deck=107 nodes=1 action=NextPhase
+seed=1 step=328 log=831 parks=0 stack=0 skills=0 discard=5 deck=107 nodes=1 action=NextPhase
+seed=1 step=329 log=834 parks=0 stack=0 skills=0 discard=5 deck=107 nodes=1 action=NextPhase
+seed=1 step=330 log=837 parks=0 stack=0 skills=0 discard=5 deck=105 nodes=1 action=NextPhase
+seed=1 step=331 log=839 parks=0 stack=0 skills=0 discard=5 deck=105 nodes=7 action=PlayCard { card: 0, targets: [5] }
+seed=1 step=332 log=841 parks=0 stack=0 skills=0 discard=6 deck=105 nodes=4 action=NextPhase
+seed=1 step=333 log=844 parks=1 stack=2 skills=0 discard=6 deck=105 nodes=6 action=Answer { choice_id: 58, selection: [Card(111), Card(123)] }
+seed=1 step=334 log=847 parks=0 stack=0 skills=0 discard=8 deck=105 nodes=1 action=NextPhase
+seed=1 step=335 log=849 parks=0 stack=0 skills=0 discard=8 deck=105 nodes=1 action=NextPhase
+seed=1 step=336 log=852 parks=0 stack=0 skills=0 discard=8 deck=105 nodes=1 action=NextPhase
+seed=1 step=337 log=855 parks=0 stack=0 skills=0 discard=8 deck=103 nodes=1 action=NextPhase
+seed=1 step=338 log=857 parks=0 stack=0 skills=0 discard=8 deck=103 nodes=4 action=PlayCard { card: 2, targets: [3] }
+seed=1 step=339 log=859 parks=0 stack=0 skills=0 discard=9 deck=103 nodes=1 action=NextPhase
+seed=1 step=340 log=862 parks=1 stack=2 skills=0 discard=9 deck=103 nodes=3 action=Answer { choice_id: 59, selection: [Card(57)] }
+seed=1 step=341 log=864 parks=0 stack=0 skills=0 discard=10 deck=103 nodes=1 action=NextPhase
+seed=1 step=342 log=866 parks=0 stack=0 skills=0 discard=10 deck=103 nodes=1 action=NextPhase
+seed=1 step=343 log=869 parks=0 stack=0 skills=0 discard=10 deck=103 nodes=1 action=NextPhase
+seed=1 step=344 log=872 parks=0 stack=0 skills=0 discard=10 deck=101 nodes=1 action=NextPhase
+seed=1 step=345 log=874 parks=0 stack=0 skills=0 discard=10 deck=101 nodes=1 action=NextPhase
+seed=1 step=346 log=877 parks=1 stack=2 skills=0 discard=10 deck=101 nodes=8 action=Answer { choice_id: 60, selection: [Card(110), Card(36)] }
+seed=1 step=347 log=880 parks=0 stack=0 skills=0 discard=12 deck=101 nodes=1 action=NextPhase
+seed=1 step=348 log=882 parks=0 stack=0 skills=0 discard=12 deck=101 nodes=1 action=NextPhase
+seed=1 step=349 log=885 parks=0 stack=0 skills=0 discard=12 deck=101 nodes=1 action=NextPhase
+seed=1 step=350 log=888 parks=0 stack=0 skills=0 discard=12 deck=99 nodes=1 action=NextPhase
+seed=1 step=351 log=890 parks=0 stack=0 skills=0 discard=12 deck=99 nodes=4 action=PlayCard { card: 28, targets: [3] }
+seed=1 step=352 log=894 parks=1 stack=3 skills=0 discard=13 deck=99 nodes=3 action=Answer { choice_id: 61, selection: [Pass] }
+seed=1 step=353 log=896 parks=0 stack=0 skills=0 discard=15 deck=99 nodes=1 action=NextPhase
+seed=1 step=354 log=899 parks=1 stack=2 skills=0 discard=15 deck=99 nodes=6 action=Answer { choice_id: 62, selection: [Card(102)] }
+seed=1 step=355 log=901 parks=0 stack=0 skills=0 discard=16 deck=99 nodes=1 action=NextPhase
+seed=1 step=356 log=903 parks=0 stack=0 skills=0 discard=16 deck=99 nodes=1 action=NextPhase
+seed=1 step=357 log=906 parks=0 stack=0 skills=0 discard=16 deck=99 nodes=1 action=NextPhase
+seed=1 step=358 log=909 parks=0 stack=0 skills=0 discard=16 deck=97 nodes=1 action=NextPhase
+seed=1 step=359 log=911 parks=0 stack=0 skills=0 discard=16 deck=97 nodes=3 action=PlayCard { card: 29, targets: [6] }
+seed=1 step=360 log=913 parks=1 stack=1 skills=0 discard=16 deck=97 nodes=4 action=Answer { choice_id: 63, selection: [Card(33)] }
+seed=1 step=361 log=915 parks=0 stack=0 skills=0 discard=18 deck=97 nodes=1 action=NextPhase
+seed=1 step=362 log=918 parks=1 stack=2 skills=0 discard=18 deck=97 nodes=3 action=Answer { choice_id: 64, selection: [Card(49)] }
+seed=1 step=363 log=920 parks=0 stack=0 skills=0 discard=19 deck=97 nodes=1 action=NextPhase
+seed=1 step=364 log=922 parks=0 stack=0 skills=0 discard=19 deck=97 nodes=1 action=NextPhase
+seed=1 step=365 log=925 parks=0 stack=0 skills=0 discard=19 deck=97 nodes=1 action=NextPhase
+seed=1 step=366 log=928 parks=0 stack=0 skills=0 discard=19 deck=95 nodes=1 action=NextPhase
+seed=1 step=367 log=930 parks=0 stack=0 skills=0 discard=19 deck=95 nodes=1 action=NextPhase
+seed=1 step=368 log=933 parks=1 stack=2 skills=0 discard=19 deck=95 nodes=6 action=Answer { choice_id: 65, selection: [Card(63)] }
+seed=1 step=369 log=935 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=1 step=370 log=937 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=1 step=371 log=940 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=1 step=372 log=943 parks=0 stack=0 skills=0 discard=20 deck=93 nodes=1 action=NextPhase
+seed=1 step=373 log=945 parks=0 stack=0 skills=0 discard=20 deck=93 nodes=3 action=PlayCard { card: 23, targets: [5] }
+seed=1 step=374 log=947 parks=1 stack=1 skills=0 discard=20 deck=93 nodes=3 action=Answer { choice_id: 66, selection: [Card(40)] }
+seed=1 step=375 log=949 parks=0 stack=0 skills=0 discard=22 deck=93 nodes=1 action=NextPhase
+seed=1 step=376 log=952 parks=1 stack=2 skills=0 discard=22 deck=93 nodes=6 action=Answer { choice_id: 67, selection: [Card(93)] }
+seed=1 step=377 log=954 parks=0 stack=0 skills=0 discard=23 deck=93 nodes=1 action=NextPhase
+seed=1 step=378 log=956 parks=0 stack=0 skills=0 discard=23 deck=93 nodes=1 action=NextPhase
+seed=1 step=379 log=959 parks=0 stack=0 skills=0 discard=23 deck=93 nodes=1 action=NextPhase
+seed=1 step=380 log=962 parks=0 stack=0 skills=0 discard=23 deck=91 nodes=1 action=NextPhase
+seed=1 step=381 log=964 parks=0 stack=0 skills=0 discard=23 deck=91 nodes=3 action=PlayCard { card: 1, targets: [6] }
+seed=1 step=382 log=966 parks=1 stack=1 skills=0 discard=23 deck=91 nodes=4 action=Answer { choice_id: 68, selection: [Card(37)] }
+seed=1 step=383 log=968 parks=0 stack=0 skills=0 discard=25 deck=91 nodes=1 action=NextPhase
+seed=1 step=384 log=970 parks=0 stack=0 skills=0 discard=25 deck=91 nodes=1 action=NextPhase
+seed=1 step=385 log=972 parks=0 stack=0 skills=0 discard=25 deck=91 nodes=1 action=NextPhase
+seed=1 step=386 log=975 parks=0 stack=0 skills=0 discard=25 deck=91 nodes=1 action=NextPhase
+seed=1 step=387 log=978 parks=0 stack=0 skills=0 discard=25 deck=89 nodes=1 action=NextPhase
+seed=1 step=388 log=980 parks=0 stack=0 skills=0 discard=25 deck=89 nodes=1 action=NextPhase
+seed=1 step=389 log=983 parks=1 stack=2 skills=0 discard=25 deck=89 nodes=6 action=Answer { choice_id: 69, selection: [Card(66)] }
+seed=1 step=390 log=985 parks=0 stack=0 skills=0 discard=26 deck=89 nodes=1 action=NextPhase
+seed=1 step=391 log=987 parks=0 stack=0 skills=0 discard=26 deck=89 nodes=1 action=NextPhase
+seed=1 step=392 log=990 parks=0 stack=0 skills=0 discard=26 deck=89 nodes=1 action=NextPhase
+seed=1 step=393 log=993 parks=0 stack=0 skills=0 discard=26 deck=87 nodes=1 action=NextPhase
+seed=1 step=394 log=995 parks=0 stack=0 skills=0 discard=26 deck=87 nodes=1 action=NextPhase
+seed=1 step=395 log=998 parks=1 stack=2 skills=0 discard=26 deck=87 nodes=8 action=Answer { choice_id: 70, selection: [Card(64), Card(73)] }
+seed=1 step=396 log=1001 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=1 step=397 log=1003 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=1 step=398 log=1006 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=1 step=399 log=1009 parks=0 stack=0 skills=0 discard=28 deck=85 nodes=1 action=NextPhase
+seed=1 step=400 log=1011 parks=0 stack=0 skills=0 discard=28 deck=85 nodes=1 action=NextPhase
+seed=1 step=401 log=1014 parks=1 stack=2 skills=0 discard=28 deck=85 nodes=5 action=Answer { choice_id: 71, selection: [Card(61), Card(117)] }
+seed=1 step=402 log=1017 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=1 step=403 log=1019 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=1 step=404 log=1022 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=1 step=405 log=1025 parks=0 stack=0 skills=0 discard=30 deck=83 nodes=1 action=NextPhase
+seed=1 step=406 log=1027 parks=0 stack=0 skills=0 discard=30 deck=83 nodes=3 action=PlayCard { card: 15, targets: [5] }
+seed=1 step=407 log=1031 parks=1 stack=3 skills=0 discard=31 deck=83 nodes=3 action=Answer { choice_id: 72, selection: [Pass] }
+seed=1 step=408 log=1033 parks=0 stack=0 skills=0 discard=32 deck=83 nodes=1 action=NextPhase
+seed=1 step=409 log=1036 parks=1 stack=2 skills=0 discard=32 deck=83 nodes=6 action=Answer { choice_id: 73, selection: [Card(44)] }
+seed=1 step=410 log=1038 parks=0 stack=0 skills=0 discard=33 deck=83 nodes=1 action=NextPhase
+seed=1 step=411 log=1040 parks=0 stack=0 skills=0 discard=33 deck=83 nodes=1 action=NextPhase
+seed=1 step=412 log=1043 parks=0 stack=0 skills=0 discard=33 deck=83 nodes=1 action=NextPhase
+seed=1 step=413 log=1046 parks=0 stack=0 skills=0 discard=33 deck=81 nodes=1 action=NextPhase
+seed=1 step=414 log=1048 parks=0 stack=0 skills=0 discard=33 deck=81 nodes=1 action=NextPhase
+seed=1 step=415 log=1051 parks=1 stack=2 skills=0 discard=33 deck=81 nodes=8 action=Answer { choice_id: 74, selection: [Card(107), Card(105)] }
+seed=1 step=416 log=1054 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=1 step=417 log=1056 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=1 step=418 log=1059 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=1 step=419 log=1062 parks=0 stack=0 skills=0 discard=35 deck=79 nodes=1 action=NextPhase
+seed=1 step=420 log=1064 parks=0 stack=0 skills=0 discard=35 deck=79 nodes=1 action=NextPhase
+seed=1 step=421 log=1067 parks=1 stack=2 skills=0 discard=35 deck=79 nodes=8 action=Answer { choice_id: 75, selection: [Card(99), Card(86)] }
+seed=1 step=422 log=1070 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=1 step=423 log=1072 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=1 step=424 log=1075 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=1 step=425 log=1078 parks=0 stack=0 skills=0 discard=37 deck=77 nodes=1 action=NextPhase
+seed=1 step=426 log=1080 parks=0 stack=0 skills=0 discard=37 deck=77 nodes=2 action=PlayCard { card: 7, targets: [6] }
+seed=1 step=427 log=1082 parks=0 stack=0 skills=0 discard=38 deck=77 nodes=1 action=NextPhase
+seed=1 step=428 log=1085 parks=1 stack=2 skills=0 discard=38 deck=77 nodes=6 action=Answer { choice_id: 76, selection: [Card(104)] }
+seed=1 step=429 log=1087 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=1 step=430 log=1089 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=1 step=431 log=1092 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=1 step=432 log=1095 parks=0 stack=0 skills=0 discard=39 deck=75 nodes=1 action=NextPhase
+seed=1 step=433 log=1097 parks=0 stack=0 skills=0 discard=39 deck=75 nodes=3 action=PlayCard { card: 27, targets: [7] }
+seed=1 step=434 log=1099 parks=1 stack=1 skills=0 discard=39 deck=75 nodes=3 action=Answer { choice_id: 77, selection: [Card(41)] }
+seed=1 step=435 log=1101 parks=0 stack=0 skills=0 discard=41 deck=75 nodes=2 action=NextPhase
+seed=1 step=436 log=1104 parks=1 stack=2 skills=0 discard=41 deck=75 nodes=7 action=Answer { choice_id: 78, selection: [Card(113), Card(121)] }
+seed=1 step=437 log=1107 parks=0 stack=0 skills=0 discard=43 deck=75 nodes=1 action=NextPhase
+seed=1 step=438 log=1109 parks=0 stack=0 skills=0 discard=43 deck=75 nodes=1 action=NextPhase
+seed=1 step=439 log=1112 parks=0 stack=0 skills=0 discard=43 deck=75 nodes=1 action=NextPhase
+seed=1 step=440 log=1115 parks=0 stack=0 skills=0 discard=43 deck=73 nodes=1 action=NextPhase
+seed=1 step=441 log=1117 parks=0 stack=0 skills=0 discard=43 deck=73 nodes=2 action=PlayCard { card: 6, targets: [6] }
+seed=1 step=442 log=1119 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=1 step=443 log=1121 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=1 step=444 log=1123 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=1 step=445 log=1126 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=1 step=446 log=1129 parks=0 stack=0 skills=0 discard=44 deck=71 nodes=1 action=NextPhase
+seed=1 step=447 log=1131 parks=0 stack=0 skills=0 discard=44 deck=71 nodes=2 action=PlayCard { card: 17, targets: [7] }
+seed=1 step=448 log=1133 parks=0 stack=0 skills=0 discard=45 deck=71 nodes=1 action=NextPhase
+seed=1 step=449 log=1136 parks=1 stack=2 skills=0 discard=45 deck=71 nodes=6 action=Answer { choice_id: 79, selection: [Card(119), Card(112)] }
+seed=1 step=450 log=1139 parks=0 stack=0 skills=0 discard=47 deck=71 nodes=1 action=NextPhase
+seed=1 step=451 log=1141 parks=0 stack=0 skills=0 discard=47 deck=71 nodes=1 action=NextPhase
+seed=1 step=452 log=1144 parks=0 stack=0 skills=0 discard=47 deck=71 nodes=1 action=NextPhase
+seed=1 step=453 log=1147 parks=0 stack=0 skills=0 discard=47 deck=69 nodes=1 action=NextPhase
+seed=1 step=454 log=1149 parks=0 stack=0 skills=0 discard=47 deck=69 nodes=1 action=NextPhase
+seed=1 step=455 log=1152 parks=1 stack=2 skills=0 discard=47 deck=69 nodes=8 action=Answer { choice_id: 80, selection: [Card(84), Card(54), Card(81)] }
+seed=1 step=456 log=1156 parks=0 stack=0 skills=0 discard=50 deck=69 nodes=1 action=NextPhase
+seed=1 step=457 log=1158 parks=0 stack=0 skills=0 discard=50 deck=69 nodes=1 action=NextPhase
+seed=1 step=458 log=1161 parks=0 stack=0 skills=0 discard=50 deck=69 nodes=1 action=NextPhase
+seed=1 step=459 log=1164 parks=0 stack=0 skills=0 discard=50 deck=67 nodes=1 action=NextPhase
+seed=1 step=460 log=1166 parks=0 stack=0 skills=0 discard=50 deck=67 nodes=1 action=NextPhase
+seed=1 step=461 log=1169 parks=1 stack=2 skills=0 discard=50 deck=67 nodes=6 action=Answer { choice_id: 81, selection: [Card(116), Card(94)] }
+seed=1 step=462 log=1172 parks=0 stack=0 skills=0 discard=52 deck=67 nodes=1 action=NextPhase
+seed=1 step=463 log=1174 parks=0 stack=0 skills=0 discard=52 deck=67 nodes=1 action=NextPhase
+seed=1 step=464 log=1177 parks=0 stack=0 skills=0 discard=52 deck=67 nodes=1 action=NextPhase
+seed=1 step=465 log=1180 parks=0 stack=0 skills=0 discard=52 deck=65 nodes=1 action=NextPhase
+seed=1 step=466 log=1182 parks=0 stack=0 skills=0 discard=52 deck=65 nodes=1 action=NextPhase
+seed=1 step=467 log=1185 parks=1 stack=2 skills=0 discard=52 deck=65 nodes=7 action=Answer { choice_id: 82, selection: [Card(72), Card(60)] }
+seed=1 step=468 log=1188 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=1 step=469 log=1190 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=1 step=470 log=1193 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=1 step=471 log=1196 parks=0 stack=0 skills=0 discard=54 deck=63 nodes=1 action=NextPhase
+seed=1 step=472 log=1198 parks=0 stack=0 skills=0 discard=54 deck=63 nodes=1 action=NextPhase
+seed=1 step=473 log=1201 parks=1 stack=2 skills=0 discard=54 deck=63 nodes=6 action=Answer { choice_id: 83, selection: [Card(97), Card(103)] }
+seed=1 step=474 log=1204 parks=0 stack=0 skills=0 discard=56 deck=63 nodes=1 action=NextPhase
+seed=1 step=475 log=1206 parks=0 stack=0 skills=0 discard=56 deck=63 nodes=1 action=NextPhase
+seed=1 step=476 log=1209 parks=0 stack=0 skills=0 discard=56 deck=63 nodes=1 action=NextPhase
+seed=1 step=477 log=1212 parks=0 stack=0 skills=0 discard=56 deck=61 nodes=1 action=NextPhase
+seed=1 step=478 log=1214 parks=0 stack=0 skills=0 discard=56 deck=61 nodes=1 action=NextPhase
+seed=1 step=479 log=1217 parks=1 stack=2 skills=0 discard=56 deck=61 nodes=7 action=Answer { choice_id: 84, selection: [Card(65), Card(59)] }
+seed=1 step=480 log=1220 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=1 step=481 log=1222 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=1 step=482 log=1225 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=1 step=483 log=1228 parks=0 stack=0 skills=0 discard=58 deck=59 nodes=1 action=NextPhase
+seed=1 step=484 log=1230 parks=0 stack=0 skills=0 discard=58 deck=59 nodes=1 action=NextPhase
+seed=1 step=485 log=1233 parks=1 stack=2 skills=0 discard=58 deck=59 nodes=6 action=Answer { choice_id: 85, selection: [Card(122), Card(30)] }
+seed=1 step=486 log=1236 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=1 step=487 log=1238 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=1 step=488 log=1241 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=1 step=489 log=1244 parks=0 stack=0 skills=0 discard=60 deck=57 nodes=1 action=NextPhase
+seed=1 step=490 log=1246 parks=0 stack=0 skills=0 discard=60 deck=57 nodes=1 action=NextPhase
+seed=1 step=491 log=1249 parks=1 stack=2 skills=0 discard=60 deck=57 nodes=7 action=Answer { choice_id: 86, selection: [Card(80), Card(48)] }
+seed=1 step=492 log=1252 parks=0 stack=0 skills=0 discard=62 deck=57 nodes=1 action=NextPhase
+seed=1 step=493 log=1254 parks=0 stack=0 skills=0 discard=62 deck=57 nodes=1 action=NextPhase
+seed=1 step=494 log=1257 parks=0 stack=0 skills=0 discard=62 deck=57 nodes=1 action=NextPhase
+seed=1 step=495 log=1260 parks=0 stack=0 skills=0 discard=62 deck=55 nodes=1 action=NextPhase
+seed=1 step=496 log=1262 parks=0 stack=0 skills=0 discard=62 deck=55 nodes=1 action=NextPhase
+seed=1 step=497 log=1265 parks=1 stack=2 skills=0 discard=62 deck=55 nodes=6 action=Answer { choice_id: 87, selection: [Card(39), Card(55)] }
+seed=1 step=498 log=1268 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=1 step=499 log=1270 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=1 step=500 log=1273 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=1 step=501 log=1276 parks=0 stack=0 skills=0 discard=64 deck=53 nodes=1 action=NextPhase
+seed=1 step=502 log=1278 parks=0 stack=0 skills=0 discard=64 deck=53 nodes=2 action=PlayCard { card: 10, targets: [6] }
+seed=1 step=503 log=1280 parks=0 stack=0 skills=0 discard=65 deck=53 nodes=1 action=NextPhase
+seed=1 step=504 log=1283 parks=1 stack=2 skills=0 discard=65 deck=53 nodes=5 action=Answer { choice_id: 88, selection: [Card(118)] }
+seed=1 step=505 log=1285 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=1 step=506 log=1287 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=1 step=507 log=1290 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=1 step=508 log=1293 parks=0 stack=0 skills=0 discard=66 deck=51 nodes=1 action=NextPhase
+seed=1 step=509 log=1295 parks=0 stack=0 skills=0 discard=66 deck=51 nodes=3 action=PlayCard { card: 22, targets: [7] }
+seed=1 step=510 log=1297 parks=0 stack=0 skills=0 discard=67 deck=51 nodes=2 action=NextPhase
+seed=1 step=511 log=1300 parks=1 stack=2 skills=0 discard=67 deck=51 nodes=5 action=Answer { choice_id: 89, selection: [Card(51), Card(85)] }
+seed=1 step=512 log=1303 parks=0 stack=0 skills=0 discard=69 deck=51 nodes=1 action=NextPhase
+seed=1 step=513 log=1305 parks=0 stack=0 skills=0 discard=69 deck=51 nodes=1 action=NextPhase
+seed=1 step=514 log=1308 parks=0 stack=0 skills=0 discard=69 deck=51 nodes=1 action=NextPhase
+seed=1 step=515 log=1311 parks=0 stack=0 skills=0 discard=69 deck=49 nodes=1 action=NextPhase
+seed=1 step=516 log=1313 parks=0 stack=0 skills=0 discard=69 deck=49 nodes=1 action=NextPhase
+seed=1 step=517 log=1316 parks=1 stack=2 skills=0 discard=69 deck=49 nodes=7 action=Answer { choice_id: 90, selection: [Card(52), Card(45), Card(114)] }
+seed=1 step=518 log=1320 parks=0 stack=0 skills=0 discard=72 deck=49 nodes=1 action=NextPhase
+seed=1 step=519 log=1322 parks=0 stack=0 skills=0 discard=72 deck=49 nodes=1 action=NextPhase
+seed=1 step=520 log=1325 parks=0 stack=0 skills=0 discard=72 deck=49 nodes=1 action=NextPhase
+seed=1 step=521 log=1328 parks=0 stack=0 skills=0 discard=72 deck=47 nodes=1 action=NextPhase
+seed=1 step=522 log=1330 parks=0 stack=0 skills=0 discard=72 deck=47 nodes=2 action=PlayCard { card: 3, targets: [7] }
+seed=1 step=523 log=1332 parks=1 stack=1 skills=0 discard=72 deck=47 nodes=3 action=Answer { choice_id: 91, selection: [Card(32)] }
+seed=1 step=524 log=1334 parks=0 stack=0 skills=0 discard=74 deck=47 nodes=1 action=NextPhase
+seed=1 step=525 log=1337 parks=1 stack=2 skills=0 discard=74 deck=47 nodes=3 action=Answer { choice_id: 92, selection: [Card(78)] }
+seed=1 step=526 log=1339 parks=0 stack=0 skills=0 discard=75 deck=47 nodes=1 action=NextPhase
+seed=1 step=527 log=1341 parks=0 stack=0 skills=0 discard=75 deck=47 nodes=1 action=NextPhase
+seed=1 step=528 log=1344 parks=0 stack=0 skills=0 discard=75 deck=47 nodes=1 action=NextPhase
+seed=1 step=529 log=1347 parks=0 stack=0 skills=0 discard=75 deck=45 nodes=1 action=NextPhase
+seed=1 step=530 log=1349 parks=0 stack=0 skills=0 discard=75 deck=45 nodes=1 action=NextPhase
+seed=1 step=531 log=1352 parks=1 stack=2 skills=0 discard=75 deck=45 nodes=4 action=Answer { choice_id: 93, selection: [Card(89)] }
+seed=1 step=532 log=1354 parks=0 stack=0 skills=0 discard=76 deck=45 nodes=1 action=NextPhase
+seed=1 step=533 log=1356 parks=0 stack=0 skills=0 discard=76 deck=45 nodes=1 action=NextPhase
+seed=1 step=534 log=1359 parks=0 stack=0 skills=0 discard=76 deck=45 nodes=1 action=NextPhase
+seed=1 step=535 log=1362 parks=0 stack=0 skills=0 discard=76 deck=43 nodes=1 action=NextPhase
+seed=1 step=536 log=1364 parks=0 stack=0 skills=0 discard=76 deck=43 nodes=3 action=PlayCard { card: 21, targets: [7] }
+seed=1 step=537 log=1366 parks=0 stack=0 skills=0 discard=77 deck=43 nodes=2 action=NextPhase
+seed=1 step=538 log=1369 parks=1 stack=2 skills=0 discard=77 deck=43 nodes=3 action=Answer { choice_id: 94, selection: [Card(101)] }
+seed=1 step=539 log=1371 parks=0 stack=0 skills=0 discard=78 deck=43 nodes=1 action=NextPhase
+seed=1 step=540 log=1373 parks=0 stack=0 skills=0 discard=78 deck=43 nodes=1 action=NextPhase
+seed=1 step=541 log=1376 parks=0 stack=0 skills=0 discard=78 deck=43 nodes=1 action=NextPhase
+seed=1 step=542 log=1379 parks=0 stack=0 skills=0 discard=78 deck=41 nodes=1 action=NextPhase
+seed=1 step=543 log=1381 parks=0 stack=0 skills=0 discard=78 deck=41 nodes=2 action=PlayCard { card: 16, targets: [6] }
+seed=1 END rev=544 outcome=Some(Outcome { winner: Player(7) })
+seed=2 step=0 log=0 parks=0 stack=0 skills=0 discard=0 deck=92 nodes=1 action=NextPhase
+seed=2 step=1 log=3 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=1 action=NextPhase
+seed=2 step=2 log=5 parks=0 stack=0 skills=0 discard=0 deck=90 nodes=8 action=PlayCard { card: 26, targets: [7] }
+seed=2 step=3 log=7 parks=0 stack=0 skills=0 discard=1 deck=90 nodes=1 action=NextPhase
+seed=2 step=4 log=10 parks=1 stack=2 skills=0 discard=1 deck=90 nodes=6 action=Answer { choice_id: 1, selection: [Card(102)] }
+seed=2 step=5 log=12 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=2 step=6 log=14 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=2 step=7 log=17 parks=0 stack=0 skills=0 discard=2 deck=90 nodes=1 action=NextPhase
+seed=2 step=8 log=20 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=1 action=NextPhase
+seed=2 step=9 log=22 parks=0 stack=0 skills=0 discard=2 deck=88 nodes=1 action=NextPhase
+seed=2 step=10 log=25 parks=1 stack=2 skills=0 discard=2 deck=88 nodes=8 action=Answer { choice_id: 2, selection: [Card(51), Card(40)] }
+seed=2 step=11 log=28 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=2 step=12 log=30 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=2 step=13 log=33 parks=0 stack=0 skills=0 discard=4 deck=88 nodes=1 action=NextPhase
+seed=2 step=14 log=36 parks=0 stack=0 skills=0 discard=4 deck=86 nodes=1 action=NextPhase
+seed=2 step=15 log=38 parks=0 stack=0 skills=0 discard=4 deck=86 nodes=22 action=PlayCard { card: 1, targets: [1] }
+seed=2 step=16 log=40 parks=1 stack=1 skills=0 discard=4 deck=86 nodes=3 action=Answer { choice_id: 3, selection: [Card(44)] }
+seed=2 step=17 log=42 parks=0 stack=0 skills=0 discard=6 deck=86 nodes=15 action=NextPhase
+seed=2 step=18 log=45 parks=1 stack=2 skills=0 discard=6 deck=86 nodes=6 action=Answer { choice_id: 4, selection: [Card(35)] }
+seed=2 step=19 log=47 parks=0 stack=0 skills=0 discard=7 deck=86 nodes=1 action=NextPhase
+seed=2 step=20 log=49 parks=0 stack=0 skills=0 discard=7 deck=86 nodes=1 action=NextPhase
+seed=2 step=21 log=52 parks=0 stack=0 skills=0 discard=7 deck=86 nodes=1 action=NextPhase
+seed=2 step=22 log=55 parks=0 stack=0 skills=0 discard=7 deck=84 nodes=1 action=NextPhase
+seed=2 step=23 log=57 parks=0 stack=0 skills=0 discard=7 deck=84 nodes=8 action=PlayCard { card: 15, targets: [2] }
+seed=2 step=24 log=59 parks=0 stack=0 skills=0 discard=8 deck=84 nodes=1 action=NextPhase
+seed=2 step=25 log=62 parks=1 stack=2 skills=0 discard=8 deck=84 nodes=6 action=Answer { choice_id: 5, selection: [Card(80)] }
+seed=2 step=26 log=64 parks=0 stack=0 skills=0 discard=9 deck=84 nodes=1 action=NextPhase
+seed=2 step=27 log=66 parks=0 stack=0 skills=0 discard=9 deck=84 nodes=1 action=NextPhase
+seed=2 step=28 log=69 parks=0 stack=0 skills=0 discard=9 deck=84 nodes=1 action=NextPhase
+seed=2 step=29 log=72 parks=0 stack=0 skills=0 discard=9 deck=82 nodes=1 action=NextPhase
+seed=2 step=30 log=74 parks=0 stack=0 skills=0 discard=9 deck=82 nodes=8 action=PlayCard { card: 7, targets: [3] }
+seed=2 step=31 log=76 parks=1 stack=1 skills=0 discard=9 deck=82 nodes=4 action=Answer { choice_id: 6, selection: [Card(33)] }
+seed=2 step=32 log=78 parks=0 stack=0 skills=0 discard=11 deck=82 nodes=1 action=NextPhase
+seed=2 step=33 log=81 parks=1 stack=2 skills=0 discard=11 deck=82 nodes=6 action=Answer { choice_id: 7, selection: [Card(107)] }
+seed=2 step=34 log=83 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=2 step=35 log=85 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=2 step=36 log=88 parks=0 stack=0 skills=0 discard=12 deck=82 nodes=1 action=NextPhase
+seed=2 step=37 log=91 parks=0 stack=0 skills=0 discard=12 deck=80 nodes=1 action=NextPhase
+seed=2 step=38 log=93 parks=0 stack=0 skills=0 discard=12 deck=80 nodes=8 action=PlayCard { card: 17, targets: [4] }
+seed=2 step=39 log=95 parks=0 stack=0 skills=0 discard=13 deck=80 nodes=1 action=NextPhase
+seed=2 step=40 log=98 parks=1 stack=2 skills=0 discard=13 deck=80 nodes=6 action=Answer { choice_id: 8, selection: [Card(106)] }
+seed=2 step=41 log=100 parks=0 stack=0 skills=0 discard=14 deck=80 nodes=1 action=NextPhase
+seed=2 step=42 log=102 parks=0 stack=0 skills=0 discard=14 deck=80 nodes=1 action=NextPhase
+seed=2 step=43 log=105 parks=0 stack=0 skills=0 discard=14 deck=80 nodes=1 action=NextPhase
+seed=2 step=44 log=108 parks=0 stack=0 skills=0 discard=14 deck=78 nodes=1 action=NextPhase
+seed=2 step=45 log=110 parks=0 stack=0 skills=0 discard=14 deck=78 nodes=15 action=PlayCard { card: 23, targets: [5] }
+seed=2 step=46 log=112 parks=0 stack=0 skills=0 discard=15 deck=78 nodes=8 action=NextPhase
+seed=2 step=47 log=115 parks=1 stack=2 skills=0 discard=15 deck=78 nodes=6 action=Answer { choice_id: 9, selection: [Card(53)] }
+seed=2 step=48 log=117 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=2 step=49 log=119 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=2 step=50 log=122 parks=0 stack=0 skills=0 discard=16 deck=78 nodes=1 action=NextPhase
+seed=2 step=51 log=125 parks=0 stack=0 skills=0 discard=16 deck=76 nodes=1 action=NextPhase
+seed=2 step=52 log=127 parks=0 stack=0 skills=0 discard=16 deck=76 nodes=8 action=PlayCard { card: 28, targets: [6] }
+seed=2 step=53 log=129 parks=0 stack=0 skills=0 discard=17 deck=76 nodes=1 action=NextPhase
+seed=2 step=54 log=132 parks=1 stack=2 skills=0 discard=17 deck=76 nodes=7 action=Answer { choice_id: 10, selection: [Card(121), Card(57)] }
+seed=2 step=55 log=135 parks=0 stack=0 skills=0 discard=19 deck=76 nodes=1 action=NextPhase
+seed=2 step=56 log=137 parks=0 stack=0 skills=0 discard=19 deck=76 nodes=1 action=NextPhase
+seed=2 step=57 log=140 parks=0 stack=0 skills=0 discard=19 deck=76 nodes=1 action=NextPhase
+seed=2 step=58 log=143 parks=0 stack=0 skills=0 discard=19 deck=74 nodes=1 action=NextPhase
+seed=2 step=59 log=145 parks=0 stack=0 skills=0 discard=19 deck=74 nodes=8 action=PlayCard { card: 20, targets: [7] }
+seed=2 step=60 log=147 parks=1 stack=1 skills=0 discard=19 deck=74 nodes=3 action=Answer { choice_id: 11, selection: [Card(42)] }
+seed=2 step=61 log=149 parks=0 stack=0 skills=0 discard=21 deck=74 nodes=1 action=NextPhase
+seed=2 step=62 log=152 parks=1 stack=2 skills=0 discard=21 deck=74 nodes=6 action=Answer { choice_id: 12, selection: [Card(68)] }
+seed=2 step=63 log=154 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=2 step=64 log=156 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=2 step=65 log=159 parks=0 stack=0 skills=0 discard=22 deck=74 nodes=1 action=NextPhase
+seed=2 step=66 log=162 parks=0 stack=0 skills=0 discard=22 deck=72 nodes=1 action=NextPhase
+seed=2 step=67 log=164 parks=0 stack=0 skills=0 discard=22 deck=72 nodes=1 action=NextPhase
+seed=2 step=68 log=167 parks=1 stack=2 skills=0 discard=22 deck=72 nodes=6 action=Answer { choice_id: 13, selection: [Card(110)] }
+seed=2 step=69 log=169 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=1 action=NextPhase
+seed=2 step=70 log=171 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=1 action=NextPhase
+seed=2 step=71 log=174 parks=0 stack=0 skills=0 discard=23 deck=72 nodes=1 action=NextPhase
+seed=2 step=72 log=177 parks=0 stack=0 skills=0 discard=23 deck=70 nodes=1 action=NextPhase
+seed=2 step=73 log=179 parks=0 stack=0 skills=0 discard=23 deck=70 nodes=22 action=PlayCard { card: 5, targets: [1] }
+seed=2 step=74 log=181 parks=0 stack=0 skills=0 discard=24 deck=70 nodes=15 action=NextPhase
+seed=2 step=75 log=184 parks=1 stack=2 skills=0 discard=24 deck=70 nodes=7 action=Answer { choice_id: 14, selection: [Card(98), Card(21)] }
+seed=2 step=76 log=187 parks=0 stack=0 skills=0 discard=26 deck=70 nodes=1 action=NextPhase
+seed=2 step=77 log=189 parks=0 stack=0 skills=0 discard=26 deck=70 nodes=1 action=NextPhase
+seed=2 step=78 log=192 parks=0 stack=0 skills=0 discard=26 deck=70 nodes=1 action=NextPhase
+seed=2 step=79 log=195 parks=0 stack=0 skills=0 discard=26 deck=68 nodes=1 action=NextPhase
+seed=2 step=80 log=197 parks=0 stack=0 skills=0 discard=26 deck=68 nodes=1 action=NextPhase
+seed=2 step=81 log=200 parks=1 stack=2 skills=0 discard=26 deck=68 nodes=6 action=Answer { choice_id: 15, selection: [Card(74)] }
+seed=2 step=82 log=202 parks=0 stack=0 skills=0 discard=27 deck=68 nodes=1 action=NextPhase
+seed=2 step=83 log=204 parks=0 stack=0 skills=0 discard=27 deck=68 nodes=1 action=NextPhase
+seed=2 step=84 log=207 parks=0 stack=0 skills=0 discard=27 deck=68 nodes=1 action=NextPhase
+seed=2 step=85 log=210 parks=0 stack=0 skills=0 discard=27 deck=66 nodes=1 action=NextPhase
+seed=2 step=86 log=212 parks=0 stack=0 skills=0 discard=27 deck=66 nodes=8 action=PlayCard { card: 11, targets: [3] }
+seed=2 step=87 log=214 parks=1 stack=1 skills=0 discard=27 deck=66 nodes=3 action=Answer { choice_id: 16, selection: [Card(43)] }
+seed=2 step=88 log=216 parks=0 stack=0 skills=0 discard=29 deck=66 nodes=1 action=NextPhase
+seed=2 step=89 log=219 parks=1 stack=2 skills=0 discard=29 deck=66 nodes=7 action=Answer { choice_id: 17, selection: [Card(118), Card(72)] }
+seed=2 step=90 log=222 parks=0 stack=0 skills=0 discard=31 deck=66 nodes=1 action=NextPhase
+seed=2 step=91 log=224 parks=0 stack=0 skills=0 discard=31 deck=66 nodes=1 action=NextPhase
+seed=2 step=92 log=227 parks=0 stack=0 skills=0 discard=31 deck=66 nodes=1 action=NextPhase
+seed=2 step=93 log=230 parks=0 stack=0 skills=0 discard=31 deck=64 nodes=1 action=NextPhase
+seed=2 step=94 log=232 parks=0 stack=0 skills=0 discard=31 deck=64 nodes=1 action=NextPhase
+seed=2 step=95 log=235 parks=1 stack=2 skills=0 discard=31 deck=64 nodes=8 action=Answer { choice_id: 18, selection: [Card(69), Card(62), Card(66)] }
+seed=2 step=96 log=239 parks=0 stack=0 skills=0 discard=34 deck=64 nodes=1 action=NextPhase
+seed=2 step=97 log=241 parks=0 stack=0 skills=0 discard=34 deck=64 nodes=1 action=NextPhase
+seed=2 step=98 log=244 parks=0 stack=0 skills=0 discard=34 deck=64 nodes=1 action=NextPhase
+seed=2 step=99 log=247 parks=0 stack=0 skills=0 discard=34 deck=62 nodes=1 action=NextPhase
+seed=2 step=100 log=249 parks=0 stack=0 skills=0 discard=34 deck=62 nodes=15 action=PlayCard { card: 4, targets: [7] }
+seed=2 step=101 log=251 parks=0 stack=0 skills=0 discard=35 deck=62 nodes=8 action=NextPhase
+seed=2 step=102 log=254 parks=1 stack=2 skills=0 discard=35 deck=62 nodes=7 action=Answer { choice_id: 19, selection: [Card(46), Card(54)] }
+seed=2 step=103 log=257 parks=0 stack=0 skills=0 discard=37 deck=62 nodes=1 action=NextPhase
+seed=2 step=104 log=259 parks=0 stack=0 skills=0 discard=37 deck=62 nodes=1 action=NextPhase
+seed=2 step=105 log=262 parks=0 stack=0 skills=0 discard=37 deck=62 nodes=1 action=NextPhase
+seed=2 step=106 log=265 parks=0 stack=0 skills=0 discard=37 deck=60 nodes=1 action=NextPhase
+seed=2 step=107 log=267 parks=0 stack=0 skills=0 discard=37 deck=60 nodes=8 action=PlayCard { card: 24, targets: [0] }
+seed=2 step=108 log=269 parks=0 stack=0 skills=0 discard=38 deck=60 nodes=1 action=NextPhase
+seed=2 step=109 log=272 parks=1 stack=2 skills=0 discard=38 deck=60 nodes=4 action=Answer { choice_id: 20, selection: [Card(64)] }
+seed=2 step=110 log=274 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=2 step=111 log=276 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=2 step=112 log=279 parks=0 stack=0 skills=0 discard=39 deck=60 nodes=1 action=NextPhase
+seed=2 step=113 log=282 parks=0 stack=0 skills=0 discard=39 deck=58 nodes=1 action=NextPhase
+seed=2 step=114 log=284 parks=0 stack=0 skills=0 discard=39 deck=58 nodes=1 action=NextPhase
+seed=2 step=115 log=287 parks=1 stack=2 skills=0 discard=39 deck=58 nodes=8 action=Answer { choice_id: 21, selection: [Card(123), Card(89), Card(91)] }
+seed=2 step=116 log=291 parks=0 stack=0 skills=0 discard=42 deck=58 nodes=1 action=NextPhase
+seed=2 step=117 log=293 parks=0 stack=0 skills=0 discard=42 deck=58 nodes=1 action=NextPhase
+seed=2 step=118 log=296 parks=0 stack=0 skills=0 discard=42 deck=58 nodes=1 action=NextPhase
+seed=2 step=119 log=299 parks=0 stack=0 skills=0 discard=42 deck=56 nodes=1 action=NextPhase
+seed=2 step=120 log=301 parks=0 stack=0 skills=0 discard=42 deck=56 nodes=1 action=NextPhase
+seed=2 step=121 log=304 parks=1 stack=2 skills=0 discard=42 deck=56 nodes=8 action=Answer { choice_id: 22, selection: [Card(60), Card(99), Card(93)] }
+seed=2 step=122 log=308 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=2 step=123 log=310 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=2 step=124 log=313 parks=0 stack=0 skills=0 discard=45 deck=56 nodes=1 action=NextPhase
+seed=2 step=125 log=316 parks=0 stack=0 skills=0 discard=45 deck=54 nodes=1 action=NextPhase
+seed=2 step=126 log=318 parks=0 stack=0 skills=0 discard=45 deck=54 nodes=15 action=PlayCard { card: 0, targets: [1] }
+seed=2 step=127 log=320 parks=1 stack=1 skills=0 discard=45 deck=54 nodes=3 action=Answer { choice_id: 23, selection: [Card(37)] }
+seed=2 step=128 log=322 parks=0 stack=0 skills=0 discard=47 deck=54 nodes=8 action=NextPhase
+seed=2 step=129 log=325 parks=1 stack=2 skills=0 discard=47 deck=54 nodes=5 action=Answer { choice_id: 24, selection: [Card(75)] }
+seed=2 step=130 log=327 parks=0 stack=0 skills=0 discard=48 deck=54 nodes=1 action=NextPhase
+seed=2 step=131 log=329 parks=0 stack=0 skills=0 discard=48 deck=54 nodes=1 action=NextPhase
+seed=2 step=132 log=332 parks=0 stack=0 skills=0 discard=48 deck=54 nodes=1 action=NextPhase
+seed=2 step=133 log=335 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=2 step=134 log=337 parks=0 stack=0 skills=0 discard=48 deck=52 nodes=1 action=NextPhase
+seed=2 step=135 log=340 parks=1 stack=2 skills=0 discard=48 deck=52 nodes=6 action=Answer { choice_id: 25, selection: [Card(87)] }
+seed=2 step=136 log=342 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=2 step=137 log=344 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=2 step=138 log=347 parks=0 stack=0 skills=0 discard=49 deck=52 nodes=1 action=NextPhase
+seed=2 step=139 log=350 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=2 step=140 log=352 parks=0 stack=0 skills=0 discard=49 deck=50 nodes=1 action=NextPhase
+seed=2 step=141 log=355 parks=1 stack=2 skills=0 discard=49 deck=50 nodes=7 action=Answer { choice_id: 26, selection: [Card(113), Card(122)] }
+seed=2 step=142 log=358 parks=0 stack=0 skills=0 discard=51 deck=50 nodes=1 action=NextPhase
+seed=2 step=143 log=360 parks=0 stack=0 skills=0 discard=51 deck=50 nodes=1 action=NextPhase
+seed=2 step=144 log=363 parks=0 stack=0 skills=0 discard=51 deck=50 nodes=1 action=NextPhase
+seed=2 step=145 log=366 parks=0 stack=0 skills=0 discard=51 deck=48 nodes=1 action=NextPhase
+seed=2 step=146 log=368 parks=0 stack=0 skills=0 discard=51 deck=48 nodes=8 action=PlayCard { card: 8, targets: [4] }
+seed=2 step=147 log=370 parks=0 stack=0 skills=0 discard=52 deck=48 nodes=1 action=NextPhase
+seed=2 step=148 log=373 parks=1 stack=2 skills=0 discard=52 deck=48 nodes=5 action=Answer { choice_id: 27, selection: [Card(100)] }
+seed=2 step=149 log=375 parks=0 stack=0 skills=0 discard=53 deck=48 nodes=1 action=NextPhase
+seed=2 step=150 log=377 parks=0 stack=0 skills=0 discard=53 deck=48 nodes=1 action=NextPhase
+seed=2 step=151 log=380 parks=0 stack=0 skills=0 discard=53 deck=48 nodes=1 action=NextPhase
+seed=2 step=152 log=383 parks=0 stack=0 skills=0 discard=53 deck=46 nodes=1 action=NextPhase
+seed=2 step=153 log=385 parks=0 stack=0 skills=0 discard=53 deck=46 nodes=8 action=PlayCard { card: 22, targets: [5] }
+seed=2 step=154 log=387 parks=0 stack=0 skills=0 discard=54 deck=46 nodes=1 action=NextPhase
+seed=2 step=155 log=390 parks=1 stack=2 skills=0 discard=54 deck=46 nodes=5 action=Answer { choice_id: 28, selection: [Card(50)] }
+seed=2 step=156 log=392 parks=0 stack=0 skills=0 discard=55 deck=46 nodes=1 action=NextPhase
+seed=2 step=157 log=394 parks=0 stack=0 skills=0 discard=55 deck=46 nodes=1 action=NextPhase
+seed=2 step=158 log=397 parks=0 stack=0 skills=0 discard=55 deck=46 nodes=1 action=NextPhase
+seed=2 step=159 log=400 parks=0 stack=0 skills=0 discard=55 deck=44 nodes=1 action=NextPhase
+seed=2 step=160 log=402 parks=0 stack=0 skills=0 discard=55 deck=44 nodes=15 action=PlayCard { card: 14, targets: [0] }
+seed=2 step=161 log=404 parks=0 stack=0 skills=0 discard=56 deck=44 nodes=8 action=NextPhase
+seed=2 step=162 log=407 parks=1 stack=2 skills=0 discard=56 deck=44 nodes=4 action=Answer { choice_id: 29, selection: [Card(103)] }
+seed=2 step=163 log=409 parks=0 stack=0 skills=0 discard=57 deck=44 nodes=1 action=NextPhase
+seed=2 step=164 log=411 parks=0 stack=0 skills=0 discard=57 deck=44 nodes=1 action=NextPhase
+seed=2 step=165 log=414 parks=0 stack=0 skills=0 discard=57 deck=44 nodes=1 action=NextPhase
+seed=2 step=166 log=417 parks=0 stack=0 skills=0 discard=57 deck=42 nodes=1 action=NextPhase
+seed=2 step=167 log=419 parks=0 stack=0 skills=0 discard=57 deck=42 nodes=1 action=NextPhase
+seed=2 step=168 log=422 parks=1 stack=2 skills=0 discard=57 deck=42 nodes=7 action=Answer { choice_id: 30, selection: [Card(52), Card(115), Card(114)] }
+seed=2 step=169 log=426 parks=0 stack=0 skills=0 discard=60 deck=42 nodes=1 action=NextPhase
+seed=2 step=170 log=428 parks=0 stack=0 skills=0 discard=60 deck=42 nodes=1 action=NextPhase
+seed=2 step=171 log=431 parks=0 stack=0 skills=0 discard=60 deck=42 nodes=1 action=NextPhase
+seed=2 step=172 log=434 parks=0 stack=0 skills=0 discard=60 deck=40 nodes=1 action=NextPhase
+seed=2 step=173 log=436 parks=0 stack=0 skills=0 discard=60 deck=40 nodes=8 action=PlayCard { card: 3, targets: [0] }
+seed=2 step=174 log=438 parks=1 stack=1 skills=0 discard=60 deck=40 nodes=3 action=Answer { choice_id: 31, selection: [Card(30)] }
+seed=2 step=175 log=440 parks=0 stack=0 skills=0 discard=62 deck=40 nodes=1 action=NextPhase
+seed=2 step=176 log=442 parks=0 stack=0 skills=0 discard=62 deck=40 nodes=1 action=NextPhase
+seed=2 step=177 log=444 parks=0 stack=0 skills=0 discard=62 deck=40 nodes=1 action=NextPhase
+seed=2 step=178 log=447 parks=0 stack=0 skills=0 discard=62 deck=40 nodes=1 action=NextPhase
+seed=2 step=179 log=450 parks=0 stack=0 skills=0 discard=62 deck=38 nodes=1 action=NextPhase
+seed=2 step=180 log=452 parks=0 stack=0 skills=0 discard=62 deck=38 nodes=22 action=PlayCard { card: 16, targets: [1] }
+seed=2 step=181 log=454 parks=0 stack=0 skills=0 discard=63 deck=38 nodes=15 action=NextPhase
+seed=2 step=182 log=457 parks=1 stack=2 skills=0 discard=63 deck=38 nodes=5 action=Answer { choice_id: 32, selection: [Card(61)] }
+seed=2 step=183 log=459 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=2 step=184 log=461 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=2 step=185 log=464 parks=0 stack=0 skills=0 discard=64 deck=38 nodes=1 action=NextPhase
+seed=2 step=186 log=467 parks=0 stack=0 skills=0 discard=64 deck=36 nodes=1 action=NextPhase
+seed=2 step=187 log=469 parks=0 stack=0 skills=0 discard=64 deck=36 nodes=1 action=NextPhase
+seed=2 step=188 log=472 parks=1 stack=2 skills=0 discard=64 deck=36 nodes=8 action=Answer { choice_id: 33, selection: [Card(90), Card(117)] }
+seed=2 step=189 log=475 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=2 step=190 log=477 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=2 step=191 log=480 parks=0 stack=0 skills=0 discard=66 deck=36 nodes=1 action=NextPhase
+seed=2 step=192 log=483 parks=0 stack=0 skills=0 discard=66 deck=34 nodes=1 action=NextPhase
+seed=2 step=193 log=485 parks=0 stack=0 skills=0 discard=66 deck=34 nodes=1 action=NextPhase
+seed=2 step=194 log=488 parks=1 stack=2 skills=0 discard=66 deck=34 nodes=7 action=Answer { choice_id: 34, selection: [Card(119), Card(97), Card(73)] }
+seed=2 step=195 log=492 parks=0 stack=0 skills=0 discard=69 deck=34 nodes=1 action=NextPhase
+seed=2 step=196 log=494 parks=0 stack=0 skills=0 discard=69 deck=34 nodes=1 action=NextPhase
+seed=2 step=197 log=497 parks=0 stack=0 skills=0 discard=69 deck=34 nodes=1 action=NextPhase
+seed=2 step=198 log=500 parks=0 stack=0 skills=0 discard=69 deck=32 nodes=1 action=NextPhase
+seed=2 step=199 log=502 parks=0 stack=0 skills=0 discard=69 deck=32 nodes=8 action=PlayCard { card: 6, targets: [6] }
+seed=2 step=200 log=504 parks=1 stack=1 skills=0 discard=69 deck=32 nodes=3 action=Answer { choice_id: 35, selection: [Card(32)] }
+seed=2 step=201 log=506 parks=0 stack=0 skills=0 discard=71 deck=32 nodes=1 action=NextPhase
+seed=2 step=202 log=509 parks=1 stack=2 skills=0 discard=71 deck=32 nodes=6 action=Answer { choice_id: 36, selection: [Card(109), Card(49)] }
+seed=2 step=203 log=512 parks=0 stack=0 skills=0 discard=73 deck=32 nodes=1 action=NextPhase
+seed=2 step=204 log=514 parks=0 stack=0 skills=0 discard=73 deck=32 nodes=1 action=NextPhase
+seed=2 step=205 log=517 parks=0 stack=0 skills=0 discard=73 deck=32 nodes=1 action=NextPhase
+seed=2 step=206 log=520 parks=0 stack=0 skills=0 discard=73 deck=30 nodes=1 action=NextPhase
+seed=2 step=207 log=522 parks=0 stack=0 skills=0 discard=73 deck=30 nodes=1 action=NextPhase
+seed=2 step=208 log=525 parks=1 stack=2 skills=0 discard=73 deck=30 nodes=5 action=Answer { choice_id: 37, selection: [Card(56)] }
+seed=2 step=209 log=527 parks=0 stack=0 skills=0 discard=74 deck=30 nodes=1 action=NextPhase
+seed=2 step=210 log=529 parks=0 stack=0 skills=0 discard=74 deck=30 nodes=1 action=NextPhase
+seed=2 step=211 log=532 parks=0 stack=0 skills=0 discard=74 deck=30 nodes=1 action=NextPhase
+seed=2 step=212 log=535 parks=0 stack=0 skills=0 discard=74 deck=28 nodes=1 action=NextPhase
+seed=2 step=213 log=537 parks=0 stack=0 skills=0 discard=74 deck=28 nodes=8 action=PlayCard { card: 12, targets: [0] }
+seed=2 step=214 log=539 parks=0 stack=0 skills=0 discard=75 deck=28 nodes=1 action=NextPhase
+seed=2 step=215 log=542 parks=1 stack=2 skills=0 discard=75 deck=28 nodes=4 action=Answer { choice_id: 38, selection: [Card(39)] }
+seed=2 step=216 log=544 parks=0 stack=0 skills=0 discard=76 deck=28 nodes=1 action=NextPhase
+seed=2 step=217 log=546 parks=0 stack=0 skills=0 discard=76 deck=28 nodes=1 action=NextPhase
+seed=2 step=218 log=549 parks=0 stack=0 skills=0 discard=76 deck=28 nodes=1 action=NextPhase
+seed=2 step=219 log=552 parks=0 stack=0 skills=0 discard=76 deck=26 nodes=1 action=NextPhase
+seed=2 step=220 log=554 parks=0 stack=0 skills=0 discard=76 deck=26 nodes=1 action=NextPhase
+seed=2 step=221 log=557 parks=1 stack=2 skills=0 discard=76 deck=26 nodes=5 action=Answer { choice_id: 39, selection: [Card(71), Card(111)] }
+seed=2 step=222 log=560 parks=0 stack=0 skills=0 discard=78 deck=26 nodes=1 action=NextPhase
+seed=2 step=223 log=562 parks=0 stack=0 skills=0 discard=78 deck=26 nodes=1 action=NextPhase
+seed=2 step=224 log=565 parks=0 stack=0 skills=0 discard=78 deck=26 nodes=1 action=NextPhase
+seed=2 step=225 log=568 parks=0 stack=0 skills=0 discard=78 deck=24 nodes=1 action=NextPhase
+seed=2 step=226 log=570 parks=0 stack=0 skills=0 discard=78 deck=24 nodes=1 action=NextPhase
+seed=2 step=227 log=573 parks=1 stack=2 skills=0 discard=78 deck=24 nodes=7 action=Answer { choice_id: 40, selection: [Card(120), Card(96), Card(76)] }
+seed=2 step=228 log=577 parks=0 stack=0 skills=0 discard=81 deck=24 nodes=1 action=NextPhase
+seed=2 step=229 log=579 parks=0 stack=0 skills=0 discard=81 deck=24 nodes=1 action=NextPhase
+seed=2 step=230 log=582 parks=0 stack=0 skills=0 discard=81 deck=24 nodes=1 action=NextPhase
+seed=2 step=231 log=585 parks=0 stack=0 skills=0 discard=81 deck=22 nodes=1 action=NextPhase
+seed=2 step=232 log=587 parks=0 stack=0 skills=0 discard=81 deck=22 nodes=15 action=PlayCard { card: 9, targets: [1] }
+seed=2 step=233 log=589 parks=0 stack=0 skills=0 discard=82 deck=22 nodes=8 action=NextPhase
+seed=2 step=234 log=592 parks=1 stack=2 skills=0 discard=82 deck=22 nodes=5 action=Answer { choice_id: 41, selection: [Card(116)] }
+seed=2 step=235 log=594 parks=0 stack=0 skills=0 discard=83 deck=22 nodes=1 action=NextPhase
+seed=2 step=236 log=596 parks=0 stack=0 skills=0 discard=83 deck=22 nodes=1 action=NextPhase
+seed=2 step=237 log=599 parks=0 stack=0 skills=0 discard=83 deck=22 nodes=1 action=NextPhase
+seed=2 step=238 log=602 parks=0 stack=0 skills=0 discard=83 deck=20 nodes=1 action=NextPhase
+seed=2 step=239 log=604 parks=0 stack=0 skills=0 discard=83 deck=20 nodes=1 action=NextPhase
+seed=2 step=240 log=607 parks=1 stack=2 skills=0 discard=83 deck=20 nodes=8 action=Answer { choice_id: 42, selection: [Card(108), Card(104)] }
+seed=2 step=241 log=610 parks=0 stack=0 skills=0 discard=85 deck=20 nodes=1 action=NextPhase
+seed=2 step=242 log=612 parks=0 stack=0 skills=0 discard=85 deck=20 nodes=1 action=NextPhase
+seed=2 step=243 log=615 parks=0 stack=0 skills=0 discard=85 deck=20 nodes=1 action=NextPhase
+seed=2 step=244 log=618 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=1 action=NextPhase
+seed=2 step=245 log=620 parks=0 stack=0 skills=0 discard=85 deck=18 nodes=8 action=PlayCard { card: 25, targets: [5] }
+seed=2 step=246 log=622 parks=0 stack=0 skills=0 discard=86 deck=18 nodes=1 action=NextPhase
+seed=2 step=247 log=625 parks=1 stack=2 skills=0 discard=86 deck=18 nodes=4 action=Answer { choice_id: 43, selection: [Card(79)] }
+seed=2 step=248 log=627 parks=0 stack=0 skills=0 discard=87 deck=18 nodes=1 action=NextPhase
+seed=2 step=249 log=629 parks=0 stack=0 skills=0 discard=87 deck=18 nodes=1 action=NextPhase
+seed=2 step=250 log=632 parks=0 stack=0 skills=0 discard=87 deck=18 nodes=1 action=NextPhase
+seed=2 step=251 log=635 parks=0 stack=0 skills=0 discard=87 deck=16 nodes=1 action=NextPhase
+seed=2 step=252 log=637 parks=0 stack=0 skills=0 discard=87 deck=16 nodes=1 action=NextPhase
+seed=2 step=253 log=640 parks=1 stack=2 skills=0 discard=87 deck=16 nodes=6 action=Answer { choice_id: 44, selection: [Card(95), Card(58), Card(47)] }
+seed=2 step=254 log=644 parks=0 stack=0 skills=0 discard=90 deck=16 nodes=1 action=NextPhase
+seed=2 step=255 log=646 parks=0 stack=0 skills=0 discard=90 deck=16 nodes=1 action=NextPhase
+seed=2 step=256 log=649 parks=0 stack=0 skills=0 discard=90 deck=16 nodes=1 action=NextPhase
+seed=2 step=257 log=652 parks=0 stack=0 skills=0 discard=90 deck=14 nodes=1 action=NextPhase
+seed=2 step=258 log=654 parks=0 stack=0 skills=0 discard=90 deck=14 nodes=8 action=PlayCard { card: 19, targets: [5] }
+seed=2 step=259 log=658 parks=1 stack=3 skills=0 discard=91 deck=14 nodes=3 action=Answer { choice_id: 45, selection: [Pass] }
+seed=2 step=260 log=660 parks=1 stack=3 skills=0 discard=91 deck=14 nodes=3 action=Answer { choice_id: 46, selection: [Pass] }
+seed=2 step=261 log=662 parks=1 stack=3 skills=0 discard=91 deck=14 nodes=3 action=Answer { choice_id: 47, selection: [Pass] }
+seed=2 step=262 log=664 parks=0 stack=0 skills=0 discard=92 deck=14 nodes=1 action=NextPhase
+seed=2 step=263 log=667 parks=1 stack=2 skills=0 discard=92 deck=14 nodes=5 action=Answer { choice_id: 48, selection: [Card(81)] }
+seed=2 step=264 log=669 parks=0 stack=0 skills=0 discard=93 deck=14 nodes=1 action=NextPhase
+seed=2 step=265 log=671 parks=0 stack=0 skills=0 discard=93 deck=14 nodes=1 action=NextPhase
+seed=2 step=266 log=674 parks=0 stack=0 skills=0 discard=93 deck=14 nodes=1 action=NextPhase
+seed=2 step=267 log=677 parks=0 stack=0 skills=0 discard=93 deck=12 nodes=1 action=NextPhase
+seed=2 step=268 log=679 parks=0 stack=0 skills=0 discard=93 deck=12 nodes=7 action=PlayCard { card: 18, targets: [0] }
+seed=2 step=269 log=681 parks=1 stack=1 skills=0 discard=93 deck=12 nodes=3 action=Answer { choice_id: 49, selection: [Card(36)] }
+seed=2 step=270 log=683 parks=0 stack=0 skills=0 discard=95 deck=12 nodes=1 action=NextPhase
+seed=2 step=271 log=686 parks=1 stack=2 skills=0 discard=95 deck=12 nodes=4 action=Answer { choice_id: 50, selection: [Card(82)] }
+seed=2 step=272 log=688 parks=0 stack=0 skills=0 discard=96 deck=12 nodes=1 action=NextPhase
+seed=2 step=273 log=690 parks=0 stack=0 skills=0 discard=96 deck=12 nodes=1 action=NextPhase
+seed=2 step=274 log=693 parks=0 stack=0 skills=0 discard=96 deck=12 nodes=1 action=NextPhase
+seed=2 step=275 log=696 parks=0 stack=0 skills=0 discard=96 deck=10 nodes=1 action=NextPhase
+seed=2 step=276 log=698 parks=0 stack=0 skills=0 discard=96 deck=10 nodes=13 action=PlayCard { card: 2, targets: [1] }
+seed=2 step=277 log=702 parks=1 stack=3 skills=0 discard=97 deck=10 nodes=3 action=Answer { choice_id: 51, selection: [Pass] }
+seed=2 step=278 log=704 parks=1 stack=3 skills=0 discard=97 deck=10 nodes=3 action=Answer { choice_id: 52, selection: [Pass] }
+seed=2 step=279 log=706 parks=1 stack=3 skills=0 discard=97 deck=10 nodes=3 action=Answer { choice_id: 53, selection: [Pass] }
+seed=2 step=280 log=708 parks=0 stack=0 skills=0 discard=99 deck=10 nodes=6 action=NextPhase
+seed=2 step=281 log=710 parks=0 stack=0 skills=0 discard=99 deck=10 nodes=1 action=NextPhase
+seed=2 step=282 log=712 parks=0 stack=0 skills=0 discard=99 deck=10 nodes=1 action=NextPhase
+seed=2 step=283 log=715 parks=0 stack=0 skills=0 discard=99 deck=10 nodes=1 action=NextPhase
+seed=2 step=284 log=718 parks=0 stack=0 skills=0 discard=99 deck=8 nodes=1 action=NextPhase
+seed=2 step=285 log=720 parks=0 stack=0 skills=0 discard=99 deck=8 nodes=6 action=PlayCard { card: 10, targets: [0] }
+seed=2 step=286 log=724 parks=1 stack=3 skills=0 discard=100 deck=8 nodes=3 action=Answer { choice_id: 54, selection: [Pass] }
+seed=2 step=287 log=726 parks=1 stack=3 skills=0 discard=100 deck=8 nodes=3 action=Answer { choice_id: 55, selection: [Pass] }
+seed=2 step=288 log=728 parks=1 stack=3 skills=0 discard=100 deck=8 nodes=3 action=Answer { choice_id: 56, selection: [Pass] }
+seed=2 step=289 log=730 parks=0 stack=0 skills=0 discard=101 deck=8 nodes=1 action=NextPhase
+seed=2 step=290 log=733 parks=1 stack=2 skills=0 discard=101 deck=8 nodes=5 action=Answer { choice_id: 57, selection: [Card(84)] }
+seed=2 step=291 log=735 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=2 step=292 log=737 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=2 step=293 log=740 parks=0 stack=0 skills=0 discard=102 deck=8 nodes=1 action=NextPhase
+seed=2 step=294 log=743 parks=0 stack=0 skills=0 discard=102 deck=6 nodes=1 action=NextPhase
+seed=2 step=295 log=745 parks=0 stack=0 skills=0 discard=102 deck=6 nodes=1 action=NextPhase
+seed=2 step=296 log=748 parks=1 stack=2 skills=0 discard=102 deck=6 nodes=8 action=Answer { choice_id: 58, selection: [Card(94), Card(112)] }
+seed=2 step=297 log=751 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=2 step=298 log=753 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=2 step=299 log=756 parks=0 stack=0 skills=0 discard=104 deck=6 nodes=1 action=NextPhase
+seed=2 step=300 log=759 parks=0 stack=0 skills=0 discard=104 deck=4 nodes=1 action=NextPhase
+seed=2 step=301 log=761 parks=0 stack=0 skills=0 discard=104 deck=4 nodes=5 action=PlayCard { card: 29, targets: [3] }
+seed=2 step=302 log=763 parks=0 stack=0 skills=0 discard=105 deck=4 nodes=1 action=NextPhase
+seed=2 step=303 log=766 parks=1 stack=2 skills=0 discard=105 deck=4 nodes=4 action=Answer { choice_id: 59, selection: [Card(86)] }
+seed=2 step=304 log=768 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=2 step=305 log=770 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=2 step=306 log=773 parks=0 stack=0 skills=0 discard=106 deck=4 nodes=1 action=NextPhase
+seed=2 step=307 log=776 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=2 step=308 log=778 parks=0 stack=0 skills=0 discard=106 deck=2 nodes=1 action=NextPhase
+seed=2 step=309 log=781 parks=1 stack=2 skills=0 discard=106 deck=2 nodes=7 action=Answer { choice_id: 60, selection: [Card(48), Card(34)] }
+seed=2 step=310 log=784 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=2 step=311 log=786 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=2 step=312 log=789 parks=0 stack=0 skills=0 discard=108 deck=2 nodes=1 action=NextPhase
+seed=2 step=313 log=792 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=1 action=NextPhase
+seed=2 step=314 log=794 parks=0 stack=0 skills=0 discard=108 deck=0 nodes=5 action=PlayCard { card: 27, targets: [2] }
+seed=2 step=315 log=796 parks=1 stack=1 skills=0 discard=108 deck=0 nodes=3 action=Answer { choice_id: 61, selection: [Card(41)] }
+seed=2 step=316 log=798 parks=0 stack=0 skills=0 discard=110 deck=0 nodes=1 action=NextPhase
+seed=2 step=317 log=801 parks=1 stack=2 skills=0 discard=110 deck=0 nodes=4 action=Answer { choice_id: 62, selection: [Card(70)] }
+seed=2 step=318 log=803 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=2 step=319 log=805 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=2 step=320 log=808 parks=0 stack=0 skills=0 discard=111 deck=0 nodes=1 action=NextPhase
+seed=2 step=321 log=812 parks=0 stack=0 skills=0 discard=0 deck=109 nodes=1 action=NextPhase
+seed=2 step=322 log=814 parks=0 stack=0 skills=0 discard=0 deck=109 nodes=1 action=NextPhase
+seed=2 step=323 log=817 parks=1 stack=2 skills=0 discard=0 deck=109 nodes=5 action=Answer { choice_id: 63, selection: [Card(78)] }
+seed=2 step=324 log=819 parks=0 stack=0 skills=0 discard=1 deck=109 nodes=1 action=NextPhase
+seed=2 step=325 log=821 parks=0 stack=0 skills=0 discard=1 deck=109 nodes=1 action=NextPhase
+seed=2 step=326 log=824 parks=0 stack=0 skills=0 discard=1 deck=109 nodes=1 action=NextPhase
+seed=2 step=327 log=827 parks=0 stack=0 skills=0 discard=1 deck=107 nodes=1 action=NextPhase
+seed=2 step=328 log=829 parks=0 stack=0 skills=0 discard=1 deck=107 nodes=5 action=PlayCard { card: 22, targets: [2] }
+seed=2 step=329 log=831 parks=0 stack=0 skills=0 discard=2 deck=107 nodes=1 action=NextPhase
+seed=2 step=330 log=834 parks=1 stack=2 skills=0 discard=2 deck=107 nodes=7 action=Answer { choice_id: 64, selection: [Card(67), Card(85)] }
+seed=2 step=331 log=837 parks=0 stack=0 skills=0 discard=4 deck=107 nodes=1 action=NextPhase
+seed=2 step=332 log=839 parks=0 stack=0 skills=0 discard=4 deck=107 nodes=1 action=NextPhase
+seed=2 step=333 log=842 parks=0 stack=0 skills=0 discard=4 deck=107 nodes=1 action=NextPhase
+seed=2 step=334 log=845 parks=0 stack=0 skills=0 discard=4 deck=105 nodes=1 action=NextPhase
+seed=2 step=335 log=847 parks=0 stack=0 skills=0 discard=4 deck=105 nodes=5 action=PlayCard { card: 21, targets: [3] }
+seed=2 step=336 log=849 parks=0 stack=0 skills=0 discard=5 deck=105 nodes=1 action=NextPhase
+seed=2 step=337 log=852 parks=1 stack=2 skills=0 discard=5 deck=105 nodes=4 action=Answer { choice_id: 65, selection: [Card(83)] }
+seed=2 step=338 log=854 parks=0 stack=0 skills=0 discard=6 deck=105 nodes=1 action=NextPhase
+seed=2 step=339 log=856 parks=0 stack=0 skills=0 discard=6 deck=105 nodes=1 action=NextPhase
+seed=2 step=340 log=859 parks=0 stack=0 skills=0 discard=6 deck=105 nodes=1 action=NextPhase
+seed=2 step=341 log=862 parks=0 stack=0 skills=0 discard=6 deck=103 nodes=1 action=NextPhase
+seed=2 step=342 log=864 parks=0 stack=0 skills=0 discard=6 deck=103 nodes=5 action=PlayCard { card: 7, targets: [4] }
+seed=2 step=343 log=866 parks=1 stack=1 skills=0 discard=6 deck=103 nodes=4 action=Answer { choice_id: 66, selection: [Card(31)] }
+seed=2 step=344 log=868 parks=0 stack=0 skills=0 discard=8 deck=103 nodes=1 action=NextPhase
+seed=2 step=345 log=871 parks=1 stack=2 skills=0 discard=8 deck=103 nodes=5 action=Answer { choice_id: 67, selection: [Card(59)] }
+seed=2 step=346 log=873 parks=0 stack=0 skills=0 discard=9 deck=103 nodes=1 action=NextPhase
+seed=2 step=347 log=875 parks=0 stack=0 skills=0 discard=9 deck=103 nodes=1 action=NextPhase
+seed=2 step=348 log=878 parks=0 stack=0 skills=0 discard=9 deck=103 nodes=1 action=NextPhase
+seed=2 step=349 log=881 parks=0 stack=0 skills=0 discard=9 deck=101 nodes=1 action=NextPhase
+seed=2 step=350 log=883 parks=0 stack=0 skills=0 discard=9 deck=101 nodes=1 action=NextPhase
+seed=2 step=351 log=886 parks=1 stack=2 skills=0 discard=9 deck=101 nodes=6 action=Answer { choice_id: 68, selection: [Card(55), Card(77)] }
+seed=2 step=352 log=889 parks=0 stack=0 skills=0 discard=11 deck=101 nodes=1 action=NextPhase
+seed=2 step=353 log=891 parks=0 stack=0 skills=0 discard=11 deck=101 nodes=1 action=NextPhase
+seed=2 step=354 log=894 parks=0 stack=0 skills=0 discard=11 deck=101 nodes=1 action=NextPhase
+seed=2 step=355 log=897 parks=0 stack=0 skills=0 discard=11 deck=99 nodes=1 action=NextPhase
+seed=2 step=356 log=899 parks=0 stack=0 skills=0 discard=11 deck=99 nodes=5 action=PlayCard { card: 19, targets: [3] }
+seed=2 step=357 log=901 parks=0 stack=0 skills=0 discard=12 deck=99 nodes=1 action=NextPhase
+seed=2 step=358 log=904 parks=1 stack=2 skills=0 discard=12 deck=99 nodes=6 action=Answer { choice_id: 69, selection: [Card(105), Card(81)] }
+seed=2 step=359 log=907 parks=0 stack=0 skills=0 discard=14 deck=99 nodes=1 action=NextPhase
+seed=2 step=360 log=909 parks=0 stack=0 skills=0 discard=14 deck=99 nodes=1 action=NextPhase
+seed=2 step=361 log=912 parks=0 stack=0 skills=0 discard=14 deck=99 nodes=1 action=NextPhase
+seed=2 step=362 log=915 parks=0 stack=0 skills=0 discard=14 deck=97 nodes=1 action=NextPhase
+seed=2 step=363 log=917 parks=0 stack=0 skills=0 discard=14 deck=97 nodes=1 action=NextPhase
+seed=2 step=364 log=920 parks=1 stack=2 skills=0 discard=14 deck=97 nodes=7 action=Answer { choice_id: 70, selection: [Card(88), Card(92), Card(113), Card(70)] }
+seed=2 step=365 log=925 parks=0 stack=0 skills=0 discard=18 deck=97 nodes=1 action=NextPhase
+seed=2 step=366 log=927 parks=0 stack=0 skills=0 discard=18 deck=97 nodes=1 action=NextPhase
+seed=2 step=367 log=930 parks=0 stack=0 skills=0 discard=18 deck=97 nodes=1 action=NextPhase
+seed=2 step=368 log=933 parks=0 stack=0 skills=0 discard=18 deck=95 nodes=1 action=NextPhase
+seed=2 step=369 log=935 parks=0 stack=0 skills=0 discard=18 deck=95 nodes=5 action=PlayCard { card: 28, targets: [3] }
+seed=2 step=370 log=937 parks=1 stack=1 skills=0 discard=18 deck=95 nodes=3 action=Answer { choice_id: 71, selection: [Card(42)] }
+seed=2 step=371 log=939 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=2 step=372 log=941 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=2 step=373 log=943 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=2 step=374 log=946 parks=0 stack=0 skills=0 discard=20 deck=95 nodes=1 action=NextPhase
+seed=2 step=375 log=949 parks=0 stack=0 skills=0 discard=20 deck=93 nodes=1 action=NextPhase
+seed=2 step=376 log=951 parks=0 stack=0 skills=0 discard=20 deck=93 nodes=1 action=NextPhase
+seed=2 step=377 log=954 parks=1 stack=2 skills=0 discard=20 deck=93 nodes=7 action=Answer { choice_id: 72, selection: [Card(45), Card(38)] }
+seed=2 step=378 log=957 parks=0 stack=0 skills=0 discard=22 deck=93 nodes=1 action=NextPhase
+seed=2 step=379 log=959 parks=0 stack=0 skills=0 discard=22 deck=93 nodes=1 action=NextPhase
+seed=2 step=380 log=962 parks=0 stack=0 skills=0 discard=22 deck=93 nodes=1 action=NextPhase
+seed=2 step=381 log=965 parks=0 stack=0 skills=0 discard=22 deck=91 nodes=1 action=NextPhase
+seed=2 step=382 log=967 parks=0 stack=0 skills=0 discard=22 deck=91 nodes=5 action=PlayCard { card: 27, targets: [2] }
+seed=2 step=383 log=969 parks=0 stack=0 skills=0 discard=23 deck=91 nodes=1 action=NextPhase
+seed=2 step=384 log=972 parks=1 stack=2 skills=0 discard=23 deck=91 nodes=4 action=Answer { choice_id: 73, selection: [Card(79)] }
+seed=2 step=385 log=974 parks=0 stack=0 skills=0 discard=24 deck=91 nodes=1 action=NextPhase
+seed=2 step=386 log=976 parks=0 stack=0 skills=0 discard=24 deck=91 nodes=1 action=NextPhase
+seed=2 step=387 log=979 parks=0 stack=0 skills=0 discard=24 deck=91 nodes=1 action=NextPhase
+seed=2 step=388 log=982 parks=0 stack=0 skills=0 discard=24 deck=89 nodes=1 action=NextPhase
+seed=2 step=389 log=984 parks=0 stack=0 skills=0 discard=24 deck=89 nodes=1 action=NextPhase
+seed=2 step=390 log=987 parks=1 stack=2 skills=0 discard=24 deck=89 nodes=6 action=Answer { choice_id: 74, selection: [Card(74), Card(51), Card(109)] }
+seed=2 step=391 log=991 parks=0 stack=0 skills=0 discard=27 deck=89 nodes=1 action=NextPhase
+seed=2 step=392 log=993 parks=0 stack=0 skills=0 discard=27 deck=89 nodes=1 action=NextPhase
+seed=2 step=393 log=996 parks=0 stack=0 skills=0 discard=27 deck=89 nodes=1 action=NextPhase
+seed=2 step=394 log=999 parks=0 stack=0 skills=0 discard=27 deck=87 nodes=1 action=NextPhase
+seed=2 step=395 log=1001 parks=0 stack=0 skills=0 discard=27 deck=87 nodes=1 action=NextPhase
+seed=2 step=396 log=1004 parks=1 stack=2 skills=0 discard=27 deck=87 nodes=3 action=Answer { choice_id: 75, selection: [Card(106)] }
+seed=2 step=397 log=1006 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=2 step=398 log=1008 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=2 step=399 log=1011 parks=0 stack=0 skills=0 discard=28 deck=87 nodes=1 action=NextPhase
+seed=2 step=400 log=1014 parks=0 stack=0 skills=0 discard=28 deck=85 nodes=1 action=NextPhase
+seed=2 step=401 log=1016 parks=0 stack=0 skills=0 discard=28 deck=85 nodes=1 action=NextPhase
+seed=2 step=402 log=1019 parks=1 stack=2 skills=0 discard=28 deck=85 nodes=6 action=Answer { choice_id: 76, selection: [Card(30), Card(39)] }
+seed=2 step=403 log=1022 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=2 step=404 log=1024 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=2 step=405 log=1027 parks=0 stack=0 skills=0 discard=30 deck=85 nodes=1 action=NextPhase
+seed=2 step=406 log=1030 parks=0 stack=0 skills=0 discard=30 deck=83 nodes=1 action=NextPhase
+seed=2 step=407 log=1032 parks=0 stack=0 skills=0 discard=30 deck=83 nodes=1 action=NextPhase
+seed=2 step=408 log=1035 parks=1 stack=2 skills=0 discard=30 deck=83 nodes=7 action=Answer { choice_id: 77, selection: [Card(84), Card(60)] }
+seed=2 step=409 log=1038 parks=0 stack=0 skills=0 discard=32 deck=83 nodes=1 action=NextPhase
+seed=2 step=410 log=1040 parks=0 stack=0 skills=0 discard=32 deck=83 nodes=1 action=NextPhase
+seed=2 step=411 log=1043 parks=0 stack=0 skills=0 discard=32 deck=83 nodes=1 action=NextPhase
+seed=2 step=412 log=1046 parks=0 stack=0 skills=0 discard=32 deck=81 nodes=1 action=NextPhase
+seed=2 step=413 log=1048 parks=0 stack=0 skills=0 discard=32 deck=81 nodes=5 action=PlayCard { card: 15, targets: [2] }
+seed=2 step=414 log=1052 parks=1 stack=3 skills=0 discard=33 deck=81 nodes=3 action=Answer { choice_id: 78, selection: [Pass] }
+seed=2 step=415 log=1054 parks=0 stack=0 skills=0 discard=34 deck=81 nodes=1 action=NextPhase
+seed=2 step=416 log=1057 parks=1 stack=2 skills=0 discard=34 deck=81 nodes=4 action=Answer { choice_id: 79, selection: [Card(71)] }
+seed=2 step=417 log=1059 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=2 step=418 log=1061 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=2 step=419 log=1064 parks=0 stack=0 skills=0 discard=35 deck=81 nodes=1 action=NextPhase
+seed=2 step=420 log=1067 parks=0 stack=0 skills=0 discard=35 deck=79 nodes=1 action=NextPhase
+seed=2 step=421 log=1069 parks=0 stack=0 skills=0 discard=35 deck=79 nodes=1 action=NextPhase
+seed=2 step=422 log=1072 parks=1 stack=2 skills=0 discard=35 deck=79 nodes=5 action=Answer { choice_id: 80, selection: [Card(115), Card(65)] }
+seed=2 step=423 log=1075 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=2 step=424 log=1077 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=2 step=425 log=1080 parks=0 stack=0 skills=0 discard=37 deck=79 nodes=1 action=NextPhase
+seed=2 step=426 log=1083 parks=0 stack=0 skills=0 discard=37 deck=77 nodes=1 action=NextPhase
+seed=2 step=427 log=1085 parks=0 stack=0 skills=0 discard=37 deck=77 nodes=1 action=NextPhase
+seed=2 step=428 log=1088 parks=1 stack=2 skills=0 discard=37 deck=77 nodes=6 action=Answer { choice_id: 81, selection: [Card(123), Card(108)] }
+seed=2 step=429 log=1091 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=2 step=430 log=1093 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=2 step=431 log=1096 parks=0 stack=0 skills=0 discard=39 deck=77 nodes=1 action=NextPhase
+seed=2 step=432 log=1099 parks=0 stack=0 skills=0 discard=39 deck=75 nodes=1 action=NextPhase
+seed=2 step=433 log=1101 parks=0 stack=0 skills=0 discard=39 deck=75 nodes=1 action=NextPhase
+seed=2 step=434 log=1104 parks=1 stack=2 skills=0 discard=39 deck=75 nodes=7 action=Answer { choice_id: 82, selection: [Card(89), Card(86)] }
+seed=2 step=435 log=1107 parks=0 stack=0 skills=0 discard=41 deck=75 nodes=1 action=NextPhase
+seed=2 step=436 log=1109 parks=0 stack=0 skills=0 discard=41 deck=75 nodes=1 action=NextPhase
+seed=2 step=437 log=1112 parks=0 stack=0 skills=0 discard=41 deck=75 nodes=1 action=NextPhase
+seed=2 step=438 log=1115 parks=0 stack=0 skills=0 discard=41 deck=73 nodes=1 action=NextPhase
+seed=2 step=439 log=1117 parks=0 stack=0 skills=0 discard=41 deck=73 nodes=4 action=PlayCard { card: 4, targets: [3] }
+seed=2 step=440 log=1121 parks=0 stack=0 skills=0 discard=43 deck=73 nodes=1 action=NextPhase
+seed=2 step=441 log=1124 parks=1 stack=2 skills=0 discard=43 deck=73 nodes=4 action=Answer { choice_id: 83, selection: [Card(95)] }
+seed=2 step=442 log=1126 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=2 step=443 log=1128 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=2 step=444 log=1131 parks=0 stack=0 skills=0 discard=44 deck=73 nodes=1 action=NextPhase
+seed=2 step=445 log=1134 parks=0 stack=0 skills=0 discard=44 deck=71 nodes=1 action=NextPhase
+seed=2 step=446 log=1136 parks=0 stack=0 skills=0 discard=44 deck=71 nodes=1 action=NextPhase
+seed=2 step=447 log=1139 parks=1 stack=2 skills=0 discard=44 deck=71 nodes=6 action=Answer { choice_id: 84, selection: [Card(111), Card(110)] }
+seed=2 step=448 log=1142 parks=0 stack=0 skills=0 discard=46 deck=71 nodes=1 action=NextPhase
+seed=2 step=449 log=1144 parks=0 stack=0 skills=0 discard=46 deck=71 nodes=1 action=NextPhase
+seed=2 step=450 log=1147 parks=0 stack=0 skills=0 discard=46 deck=71 nodes=1 action=NextPhase
+seed=2 step=451 log=1150 parks=0 stack=0 skills=0 discard=46 deck=69 nodes=1 action=NextPhase
+seed=2 step=452 log=1152 parks=0 stack=0 skills=0 discard=46 deck=69 nodes=3 action=PlayCard { card: 10, targets: [4] }
+seed=2 step=453 log=1154 parks=1 stack=1 skills=0 discard=46 deck=69 nodes=3 action=Answer { choice_id: 85, selection: [Card(32)] }
+seed=2 step=454 log=1156 parks=0 stack=0 skills=0 discard=48 deck=69 nodes=1 action=NextPhase
+seed=2 step=455 log=1159 parks=1 stack=2 skills=0 discard=48 deck=69 nodes=5 action=Answer { choice_id: 86, selection: [Card(69)] }
+seed=2 step=456 log=1161 parks=0 stack=0 skills=0 discard=49 deck=69 nodes=1 action=NextPhase
+seed=2 step=457 log=1163 parks=0 stack=0 skills=0 discard=49 deck=69 nodes=1 action=NextPhase
+seed=2 step=458 log=1166 parks=0 stack=0 skills=0 discard=49 deck=69 nodes=1 action=NextPhase
+seed=2 step=459 log=1169 parks=0 stack=0 skills=0 discard=49 deck=67 nodes=1 action=NextPhase
+seed=2 step=460 log=1171 parks=0 stack=0 skills=0 discard=49 deck=67 nodes=3 action=PlayCard { card: 11, targets: [4] }
+seed=2 step=461 log=1173 parks=0 stack=0 skills=0 discard=50 deck=67 nodes=1 action=NextPhase
+seed=2 step=462 log=1176 parks=1 stack=2 skills=0 discard=50 deck=67 nodes=4 action=Answer { choice_id: 87, selection: [Card(76)] }
+seed=2 step=463 log=1178 parks=0 stack=0 skills=0 discard=51 deck=67 nodes=1 action=NextPhase
+seed=2 step=464 log=1180 parks=0 stack=0 skills=0 discard=51 deck=67 nodes=1 action=NextPhase
+seed=2 step=465 log=1183 parks=0 stack=0 skills=0 discard=51 deck=67 nodes=1 action=NextPhase
+seed=2 step=466 log=1186 parks=0 stack=0 skills=0 discard=51 deck=65 nodes=1 action=NextPhase
+seed=2 step=467 log=1188 parks=0 stack=0 skills=0 discard=51 deck=65 nodes=3 action=PlayCard { card: 26, targets: [6] }
+seed=2 step=468 log=1190 parks=1 stack=1 skills=0 discard=51 deck=65 nodes=3 action=Answer { choice_id: 88, selection: [Card(37)] }
+seed=2 step=469 log=1192 parks=0 stack=0 skills=0 discard=53 deck=65 nodes=1 action=NextPhase
+seed=2 step=470 log=1195 parks=1 stack=2 skills=0 discard=53 deck=65 nodes=3 action=Answer { choice_id: 89, selection: [Card(62)] }
+seed=2 step=471 log=1197 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=2 step=472 log=1199 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=2 step=473 log=1202 parks=0 stack=0 skills=0 discard=54 deck=65 nodes=1 action=NextPhase
+seed=2 step=474 log=1205 parks=0 stack=0 skills=0 discard=54 deck=63 nodes=1 action=NextPhase
+seed=2 step=475 log=1207 parks=0 stack=0 skills=0 discard=54 deck=63 nodes=1 action=NextPhase
+seed=2 step=476 log=1210 parks=1 stack=2 skills=0 discard=54 deck=63 nodes=5 action=Answer { choice_id: 90, selection: [Card(61)] }
+seed=2 step=477 log=1212 parks=0 stack=0 skills=0 discard=55 deck=63 nodes=1 action=NextPhase
+seed=2 step=478 log=1214 parks=0 stack=0 skills=0 discard=55 deck=63 nodes=1 action=NextPhase
+seed=2 step=479 log=1217 parks=0 stack=0 skills=0 discard=55 deck=63 nodes=1 action=NextPhase
+seed=2 step=480 log=1220 parks=0 stack=0 skills=0 discard=55 deck=61 nodes=1 action=NextPhase
+seed=2 step=481 log=1222 parks=0 stack=0 skills=0 discard=55 deck=61 nodes=3 action=PlayCard { card: 18, targets: [4] }
+seed=2 step=482 log=1226 parks=0 stack=0 skills=0 discard=57 deck=61 nodes=1 action=NextPhase
+seed=2 step=483 log=1229 parks=1 stack=2 skills=0 discard=57 deck=61 nodes=4 action=Answer { choice_id: 91, selection: [Card(102)] }
+seed=2 step=484 log=1231 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=2 step=485 log=1233 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=2 step=486 log=1236 parks=0 stack=0 skills=0 discard=58 deck=61 nodes=1 action=NextPhase
+seed=2 step=487 log=1239 parks=0 stack=0 skills=0 discard=58 deck=59 nodes=1 action=NextPhase
+seed=2 step=488 log=1241 parks=0 stack=0 skills=0 discard=58 deck=59 nodes=1 action=NextPhase
+seed=2 step=489 log=1244 parks=1 stack=2 skills=0 discard=58 deck=59 nodes=7 action=Answer { choice_id: 92, selection: [Card(101), Card(40)] }
+seed=2 step=490 log=1247 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=2 step=491 log=1249 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=2 step=492 log=1252 parks=0 stack=0 skills=0 discard=60 deck=59 nodes=1 action=NextPhase
+seed=2 step=493 log=1255 parks=0 stack=0 skills=0 discard=60 deck=57 nodes=1 action=NextPhase
+seed=2 step=494 log=1257 parks=0 stack=0 skills=0 discard=60 deck=57 nodes=2 action=PlayCard { card: 8, targets: [6] }
+seed=2 step=495 log=1259 parks=1 stack=1 skills=0 discard=60 deck=57 nodes=3 action=Answer { choice_id: 93, selection: [Card(33)] }
+seed=2 step=496 log=1261 parks=0 stack=0 skills=0 discard=62 deck=57 nodes=1 action=NextPhase
+seed=2 step=497 log=1264 parks=1 stack=2 skills=0 discard=62 deck=57 nodes=4 action=Answer { choice_id: 94, selection: [Card(122)] }
+seed=2 step=498 log=1266 parks=0 stack=0 skills=0 discard=63 deck=57 nodes=1 action=NextPhase
+seed=2 step=499 log=1268 parks=0 stack=0 skills=0 discard=63 deck=57 nodes=1 action=NextPhase
+seed=2 step=500 log=1271 parks=0 stack=0 skills=0 discard=63 deck=57 nodes=1 action=NextPhase
+seed=2 step=501 log=1274 parks=0 stack=0 skills=0 discard=63 deck=55 nodes=1 action=NextPhase
+seed=2 step=502 log=1276 parks=0 stack=0 skills=0 discard=63 deck=55 nodes=1 action=NextPhase
+seed=2 step=503 log=1279 parks=1 stack=2 skills=0 discard=63 deck=55 nodes=5 action=Answer { choice_id: 95, selection: [Card(117)] }
+seed=2 step=504 log=1281 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=2 step=505 log=1283 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=2 step=506 log=1286 parks=0 stack=0 skills=0 discard=64 deck=55 nodes=1 action=NextPhase
+seed=2 step=507 log=1289 parks=0 stack=0 skills=0 discard=64 deck=53 nodes=1 action=NextPhase
+seed=2 step=508 log=1291 parks=0 stack=0 skills=0 discard=64 deck=53 nodes=1 action=NextPhase
+seed=2 step=509 log=1294 parks=1 stack=2 skills=0 discard=64 deck=53 nodes=6 action=Answer { choice_id: 96, selection: [Card(120), Card(93)] }
+seed=2 step=510 log=1297 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=2 step=511 log=1299 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=2 step=512 log=1302 parks=0 stack=0 skills=0 discard=66 deck=53 nodes=1 action=NextPhase
+seed=2 step=513 log=1305 parks=0 stack=0 skills=0 discard=66 deck=51 nodes=1 action=NextPhase
+seed=2 step=514 log=1307 parks=0 stack=0 skills=0 discard=66 deck=51 nodes=1 action=NextPhase
+seed=2 step=515 log=1310 parks=1 stack=2 skills=0 discard=66 deck=51 nodes=7 action=Answer { choice_id: 97, selection: [Card(100), Card(52)] }
+seed=2 step=516 log=1313 parks=0 stack=0 skills=0 discard=68 deck=51 nodes=1 action=NextPhase
+seed=2 step=517 log=1315 parks=0 stack=0 skills=0 discard=68 deck=51 nodes=1 action=NextPhase
+seed=2 step=518 log=1318 parks=0 stack=0 skills=0 discard=68 deck=51 nodes=1 action=NextPhase
+seed=2 step=519 log=1321 parks=0 stack=0 skills=0 discard=68 deck=49 nodes=1 action=NextPhase
+seed=2 step=520 log=1323 parks=0 stack=0 skills=0 discard=68 deck=49 nodes=2 action=PlayCard { card: 14, targets: [6] }
+seed=2 step=521 log=1325 parks=1 stack=1 skills=0 discard=68 deck=49 nodes=3 action=Answer { choice_id: 98, selection: [Card(41)] }
+seed=2 step=522 log=1327 parks=0 stack=0 skills=0 discard=70 deck=49 nodes=1 action=NextPhase
+seed=2 step=523 log=1330 parks=1 stack=2 skills=0 discard=70 deck=49 nodes=4 action=Answer { choice_id: 99, selection: [Card(58)] }
+seed=2 step=524 log=1332 parks=0 stack=0 skills=0 discard=71 deck=49 nodes=1 action=NextPhase
+seed=2 step=525 log=1334 parks=0 stack=0 skills=0 discard=71 deck=49 nodes=1 action=NextPhase
+seed=2 step=526 log=1337 parks=0 stack=0 skills=0 discard=71 deck=49 nodes=1 action=NextPhase
+seed=2 step=527 log=1340 parks=0 stack=0 skills=0 discard=71 deck=47 nodes=1 action=NextPhase
+seed=2 step=528 log=1342 parks=0 stack=0 skills=0 discard=71 deck=47 nodes=1 action=NextPhase
+seed=2 step=529 log=1345 parks=1 stack=2 skills=0 discard=71 deck=47 nodes=5 action=Answer { choice_id: 100, selection: [Card(112)] }
+seed=2 step=530 log=1347 parks=0 stack=0 skills=0 discard=72 deck=47 nodes=1 action=NextPhase
+seed=2 step=531 log=1349 parks=0 stack=0 skills=0 discard=72 deck=47 nodes=1 action=NextPhase
+seed=2 step=532 log=1352 parks=0 stack=0 skills=0 discard=72 deck=47 nodes=1 action=NextPhase
+seed=2 step=533 log=1355 parks=0 stack=0 skills=0 discard=72 deck=45 nodes=1 action=NextPhase
+seed=2 step=534 log=1357 parks=0 stack=0 skills=0 discard=72 deck=45 nodes=1 action=NextPhase
+seed=2 step=535 log=1360 parks=1 stack=2 skills=0 discard=72 deck=45 nodes=6 action=Answer { choice_id: 101, selection: [Card(57), Card(116)] }
+seed=2 step=536 log=1363 parks=0 stack=0 skills=0 discard=74 deck=45 nodes=1 action=NextPhase
+seed=2 step=537 log=1365 parks=0 stack=0 skills=0 discard=74 deck=45 nodes=1 action=NextPhase
+seed=2 step=538 log=1368 parks=0 stack=0 skills=0 discard=74 deck=45 nodes=1 action=NextPhase
+seed=2 step=539 log=1371 parks=0 stack=0 skills=0 discard=74 deck=43 nodes=1 action=NextPhase
+seed=2 step=540 log=1373 parks=0 stack=0 skills=0 discard=74 deck=43 nodes=1 action=NextPhase
+seed=2 step=541 log=1376 parks=1 stack=2 skills=0 discard=74 deck=43 nodes=7 action=Answer { choice_id: 102, selection: [Card(63), Card(72)] }
+seed=2 step=542 log=1379 parks=0 stack=0 skills=0 discard=76 deck=43 nodes=1 action=NextPhase
+seed=2 step=543 log=1381 parks=0 stack=0 skills=0 discard=76 deck=43 nodes=1 action=NextPhase
+seed=2 step=544 log=1384 parks=0 stack=0 skills=0 discard=76 deck=43 nodes=1 action=NextPhase
+seed=2 step=545 log=1387 parks=0 stack=0 skills=0 discard=76 deck=41 nodes=1 action=NextPhase
+seed=2 step=546 log=1389 parks=0 stack=0 skills=0 discard=76 deck=41 nodes=2 action=PlayCard { card: 5, targets: [6] }
+seed=2 step=547 log=1391 parks=0 stack=0 skills=0 discard=77 deck=41 nodes=1 action=NextPhase
+seed=2 step=548 log=1394 parks=1 stack=2 skills=0 discard=77 deck=41 nodes=4 action=Answer { choice_id: 103, selection: [Card(99)] }
+seed=2 step=549 log=1396 parks=0 stack=0 skills=0 discard=78 deck=41 nodes=1 action=NextPhase
+seed=2 step=550 log=1398 parks=0 stack=0 skills=0 discard=78 deck=41 nodes=1 action=NextPhase
+seed=2 step=551 log=1401 parks=0 stack=0 skills=0 discard=78 deck=41 nodes=1 action=NextPhase
+seed=2 step=552 log=1404 parks=0 stack=0 skills=0 discard=78 deck=39 nodes=1 action=NextPhase
+seed=2 step=553 log=1406 parks=0 stack=0 skills=0 discard=78 deck=39 nodes=1 action=NextPhase
+seed=2 step=554 log=1409 parks=1 stack=2 skills=0 discard=78 deck=39 nodes=7 action=Answer { choice_id: 104, selection: [Card(94), Card(118), Card(103)] }
+seed=2 step=555 log=1413 parks=0 stack=0 skills=0 discard=81 deck=39 nodes=1 action=NextPhase
+seed=2 step=556 log=1415 parks=0 stack=0 skills=0 discard=81 deck=39 nodes=1 action=NextPhase
+seed=2 step=557 log=1418 parks=0 stack=0 skills=0 discard=81 deck=39 nodes=1 action=NextPhase
+seed=2 step=558 log=1421 parks=0 stack=0 skills=0 discard=81 deck=37 nodes=1 action=NextPhase
+seed=2 step=559 log=1423 parks=0 stack=0 skills=0 discard=81 deck=37 nodes=2 action=PlayCard { card: 0, targets: [6] }
+seed=2 step=560 log=1425 parks=0 stack=0 skills=0 discard=82 deck=37 nodes=1 action=NextPhase
+seed=2 step=561 log=1428 parks=1 stack=2 skills=0 discard=82 deck=37 nodes=4 action=Answer { choice_id: 105, selection: [Card(64)] }
+seed=2 step=562 log=1430 parks=0 stack=0 skills=0 discard=83 deck=37 nodes=1 action=NextPhase
+seed=2 step=563 log=1432 parks=0 stack=0 skills=0 discard=83 deck=37 nodes=1 action=NextPhase
+seed=2 step=564 log=1435 parks=0 stack=0 skills=0 discard=83 deck=37 nodes=1 action=NextPhase
+seed=2 step=565 log=1438 parks=0 stack=0 skills=0 discard=83 deck=35 nodes=1 action=NextPhase
+seed=2 step=566 log=1440 parks=0 stack=0 skills=0 discard=83 deck=35 nodes=3 action=PlayCard { card: 16, targets: [7] }
+seed=2 step=567 log=1442 parks=0 stack=0 skills=0 discard=84 deck=35 nodes=2 action=NextPhase
+seed=2 step=568 log=1445 parks=1 stack=2 skills=0 discard=84 deck=35 nodes=5 action=Answer { choice_id: 106, selection: [Card(80), Card(48)] }
+seed=2 step=569 log=1448 parks=0 stack=0 skills=0 discard=86 deck=35 nodes=1 action=NextPhase
+seed=2 step=570 log=1450 parks=0 stack=0 skills=0 discard=86 deck=35 nodes=1 action=NextPhase
+seed=2 step=571 log=1453 parks=0 stack=0 skills=0 discard=86 deck=35 nodes=1 action=NextPhase
+seed=2 step=572 log=1456 parks=0 stack=0 skills=0 discard=86 deck=33 nodes=1 action=NextPhase
+seed=2 step=573 log=1458 parks=0 stack=0 skills=0 discard=86 deck=33 nodes=2 action=PlayCard { card: 25, targets: [6] }
+seed=2 END rev=574 outcome=Some(Outcome { winner: Player(7) })
