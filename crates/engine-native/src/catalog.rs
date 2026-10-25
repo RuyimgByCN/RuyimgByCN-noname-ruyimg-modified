@@ -1285,8 +1285,13 @@ pub struct Catalog {
     pub skills: Vec<SkillDef>,
     /// 扩展武将（G1 角色包管线）：接在基础武将表之后的目录条目。
     pub extension_generals: Vec<crate::content::extension::ExtensionGeneral>,
+    /// 从启用扩展初始化声明派生的全局授技；恢复时随目录重建，不入存档。
+    pub extension_global_skills: Vec<SkillDefId>,
     /// 事件类别 -> 触发定义列表（静态，运行时按实例过滤）。
     dispatch: BTreeMap<EventKind, Vec<SkillDefId>>,
+    /// 名称 -> 技能定义号（构建时生成，首个匹配，与线性扫描语义一致；
+    /// PA01：computed_distance 等热路径按名查技，曾随目录规模线性劣化）。
+    by_name: std::collections::HashMap<&'static str, SkillDefId>,
     /// 规则版本：目录语义变化时递增；随状态入摘要、随快照做恢复绑定。
     /// 由内容模块在构建后赋值（`Catalog::build` 初始化为 0）。
     pub ruleset_version: u64,
@@ -1353,11 +1358,18 @@ impl Catalog {
         // 技能表按定义号排列，保证目录本身确定。
         skills.shrink_to_fit();
         let vm_card_history = skills.iter().any(|s| s.behavior.needs_vm_card_history());
+        let mut by_name: std::collections::HashMap<&'static str, SkillDefId> =
+            std::collections::HashMap::with_capacity(skills.len());
+        for (id, def) in skills.iter().enumerate() {
+            by_name.entry(def.name).or_insert(id as SkillDefId);
+        }
         Catalog {
             cards,
             skills,
             extension_generals: Vec::new(),
+            extension_global_skills: Vec::new(),
             dispatch,
+            by_name,
             ruleset_version: 0,
             vm_card_history,
         }
@@ -1402,9 +1414,9 @@ impl Catalog {
         self.skills[id as usize].name
     }
 
-    /// 按名字查技能定义号（构建内容/测试用）。
+    /// 按名字查技能定义号（构建内容/测试用；O(1) 查表，首个匹配）。
     pub fn skill_by_name(&self, name: &str) -> Option<SkillDefId> {
-        self.skills.iter().position(|s| s.name == name).map(|i| i as SkillDefId)
+        self.by_name.get(name).copied()
     }
 
     /// 按名字查牌编号（测试布阵用）。

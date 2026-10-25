@@ -292,35 +292,41 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
     };
     let mut entries: Vec<QueuedTrigger> = Vec::new();
     let turn_current = core.turn.current;
-    for &def_id in catalog.candidates(kind) {
-        let def = &catalog.skills[def_id as usize];
-        let Some(meta) = def.trigger.as_ref() else { continue };
-        for ((owner, idef), inst) in core.skills.range(..) {
-            if *idef != def_id || !inst.enabled || !core.player(*owner).alive {
-                continue;
-            }
-            let qctx = QueryCtx { state: core, catalog };
-            if !def.behavior.filter(&qctx, *owner, &event) {
-                continue;
-            }
-            // NC01：触发结算顺序按**顺座次序**（不是最短距离）
-            let seat_rel = core.seat_steps_from(turn_current, *owner);
-            entries.push(QueuedTrigger {
-                def: def_id,
-                owner: *owner,
-                order: (
-                    match meta.timing {
-                        Timing::First => 0,
-                        Timing::Normal => 1,
-                        Timing::Last => 2,
-                    },
-                    -meta.priority,
-                    u8::from(meta.optional),
-                    seat_rel,
-                    def_id,
-                ),
-            });
+    // PA01 活跃触发索引：候选遍历的代价与本局是否持有无关（目录 6215 技能
+    // 档曾令 8 座提交 p50 ×3.3），改为从实例侧单遍出发，直接比对定义的
+    // 触发元数据——dispatch 列表即由 event/extra_events 构建，成员关系
+    // 严格等价。入队集合不变；最终顺序由下方含 def_id 的全序键决定，
+    // 与遍历序无关。
+    for ((owner, def_id), inst) in core.skills.range(..) {
+        if !inst.enabled || !core.player(*owner).alive {
+            continue;
         }
+        let def = &catalog.skills[*def_id as usize];
+        let Some(meta) = def.trigger.as_ref() else { continue };
+        if meta.event != kind && !meta.extra_events.contains(&kind) {
+            continue;
+        }
+        let qctx = QueryCtx { state: core, catalog };
+        if !def.behavior.filter(&qctx, *owner, &event) {
+            continue;
+        }
+        // NC01：触发结算顺序按**顺座次序**（不是最短距离）
+        let seat_rel = core.seat_steps_from(turn_current, *owner);
+        entries.push(QueuedTrigger {
+            def: *def_id,
+            owner: *owner,
+            order: (
+                match meta.timing {
+                    Timing::First => 0,
+                    Timing::Normal => 1,
+                    Timing::Last => 2,
+                },
+                -meta.priority,
+                u8::from(meta.optional),
+                seat_rel,
+                *def_id,
+            ),
+        });
     }
     entries.sort_by_key(|e| e.order);
     let f = res.frame_mut(frame_id).expect("frame");

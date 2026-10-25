@@ -1,0 +1,10 @@
+# scale: 未持有触发技能 N 对每命令耗时的影响（8 座，3 局，planner budget=32）
+N	catalog_skills	steps	events	submit_p50	submit_p95	submit_total_ms	plan_p50	plan_p95	plan_total_ms
+N=0 skill_instances=11
+0	215	1467	4355	11709	16584	16.13	47916	188417	101.86
+N=500 skill_instances=11
+500	715	1467	4355	12208	17833	20.89	50875	198958	112.94
+N=2000 skill_instances=11
+2000	2215	1467	4355	12041	16583	16.33	48208	190584	103.74
+N=6000 skill_instances=11
+6000	6215	1467	4355	12083	17041	16.64	49167	187458	102.79
