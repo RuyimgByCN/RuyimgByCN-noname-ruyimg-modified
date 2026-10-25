@@ -1,5 +1,26 @@
 use super::*;
 
+/// PA03 缓冲摘要写入器：先拼缓冲再一次 blake3 update。blake3 流式与
+/// 一次性对同一字节序列产出**相同摘要**，故字节序与既有 golden/跨目标
+/// 对照完全一致；逐字段约 800 次小块 `Hasher::update` 比缓冲后一次
+/// 慢约 1.4–1.7 倍（内核复核表 C 与哈希微基准）。
+pub(super) struct HashSink {
+    buf: Vec<u8>,
+}
+
+impl HashSink {
+    fn with_state_capacity() -> Self {
+        Self {
+            buf: Vec::with_capacity(4096),
+        }
+    }
+
+    #[inline]
+    fn update(&mut self, bytes: &[u8]) {
+        self.buf.extend_from_slice(bytes);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // 确定性摘要：blake3 编码全部状态字段。执行位置含开放选择、挂起元数据与
 // 每台挂起机器的**规范快照**（MachineSnapshot 全字段——不同机器的局部状态
@@ -7,7 +28,7 @@ use super::*;
 // 不互认）。重放一致性以静止点哈希核对。
 // ---------------------------------------------------------------------------
 
-pub(super) fn push_vm_aux(h: &mut Hasher, a: &crate::state::VmAux) {
+pub(super) fn push_vm_aux(h: &mut HashSink, a: &crate::state::VmAux) {
     if a.is_empty() {
         return;
     }
@@ -60,13 +81,13 @@ pub(super) fn push_vm_aux(h: &mut Hasher, a: &crate::state::VmAux) {
     }
 }
 
-pub(super) fn push_static_owned(h: &mut Hasher, s: &str) {
+pub(super) fn push_static_owned(h: &mut HashSink, s: &str) {
     push_u32(h, s.len() as u32);
     h.update(s.as_bytes());
 }
 
 pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
-    let mut h = Hasher::new();
+    let mut h = HashSink::with_state_capacity();
     let c = &state.core;
     // NC07：座位环（换位结果）进入规范摘要——此前未参与，两个仅座位次序不同
     // 的状态会得到相同摘要（漂移源）。
@@ -631,11 +652,13 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         push_machine(&mut h, &p.machine.snapshot());
     }
-    h.finalize().into()
+    let mut hasher = Hasher::new();
+    hasher.update(&h.buf);
+    hasher.finalize().into()
 }
 
 /// 机器规范快照的摘要编码：判别符 + 全字段；嵌套机器递归。
-pub(super) fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
+pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
     use crate::snap::MachineSnapshot as M;
     match s {
         M::Sha {
@@ -1488,7 +1511,7 @@ pub(super) fn push_machine(h: &mut Hasher, s: &crate::snap::MachineSnapshot) {
     }
 }
 
-pub(super) fn push_event_data(h: &mut Hasher, data: &EventData) {
+pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
     match data {
         EventData::Damage(d) => {
             push_u8(h, 1);
@@ -1642,37 +1665,37 @@ pub(super) fn push_event_data(h: &mut Hasher, data: &EventData) {
     }
 }
 
-pub(super) fn push_u8(h: &mut Hasher, v: u8) {
+pub(super) fn push_u8(h: &mut HashSink, v: u8) {
     h.update(&[v]);
 }
-pub(super) fn push_u16(h: &mut Hasher, v: u16) {
+pub(super) fn push_u16(h: &mut HashSink, v: u16) {
     h.update(&v.to_le_bytes());
 }
-pub(super) fn push_u32(h: &mut Hasher, v: u32) {
+pub(super) fn push_u32(h: &mut HashSink, v: u32) {
     h.update(&v.to_le_bytes());
 }
-pub(super) fn push_u64(h: &mut Hasher, v: u64) {
+pub(super) fn push_u64(h: &mut HashSink, v: u64) {
     h.update(&v.to_le_bytes());
 }
-pub(super) fn push_i32(h: &mut Hasher, v: i32) {
+pub(super) fn push_i32(h: &mut HashSink, v: i32) {
     h.update(&v.to_le_bytes());
 }
-pub(super) fn push_usize(h: &mut Hasher, v: usize) {
+pub(super) fn push_usize(h: &mut HashSink, v: usize) {
     h.update(&(v as u64).to_le_bytes());
 }
-pub(super) fn push_cards(h: &mut Hasher, cards: &[CardId]) {
+pub(super) fn push_cards(h: &mut HashSink, cards: &[CardId]) {
     push_u32(h, cards.len() as u32);
     for c in cards {
         push_u32(h, *c);
     }
 }
-pub(super) fn push_players(h: &mut Hasher, players: &[PlayerId]) {
+pub(super) fn push_players(h: &mut HashSink, players: &[PlayerId]) {
     push_u32(h, players.len() as u32);
     for p in players {
         push_u8(h, *p);
     }
 }
-pub(super) fn push_options(h: &mut Hasher, opts: &[ChoiceOption]) {
+pub(super) fn push_options(h: &mut HashSink, opts: &[ChoiceOption]) {
     push_u32(h, opts.len() as u32);
     for o in opts {
         match o {
@@ -1697,7 +1720,7 @@ pub(super) fn push_options(h: &mut Hasher, opts: &[ChoiceOption]) {
         }
     }
 }
-pub(super) fn push_static(h: &mut Hasher, s: &'static str) {
+pub(super) fn push_static(h: &mut HashSink, s: &'static str) {
     push_u32(h, s.len() as u32);
     h.update(s.as_bytes());
 }
