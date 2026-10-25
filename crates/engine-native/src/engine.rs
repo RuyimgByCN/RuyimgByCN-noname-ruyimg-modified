@@ -173,6 +173,10 @@ pub struct Engine {
     auth_secret: u64,
     /// N11-a：令牌代次（随快照延续；恢复时 +1）——恢复前旧令牌失效。
     auth_generation: u64,
+    /// PA02 模拟会话：`plan_action` 的模拟克隆（见 [`Self::clone_for_simulation`]）。
+    /// true 时提交不写宿主日志、不存段检查点、不算状态哈希（`Accepted`
+    /// 返回全零哈希）。会话数据，不入状态/哈希/快照；正式引擎恒 false。
+    pub(crate) simulation: bool,
 }
 
 const DEFAULT_BUDGET: u32 = 4096;

@@ -1,6 +1,34 @@
 use super::*;
 
 impl Engine {
+    /// PA02 规划模拟专用克隆：权威会话数据不带走（宿主日志从空开始、段
+    /// 检查点弃置），其余字段（去重高水位、时间片、配额）原样保留，保证
+    /// 模拟提交与正式提交共用同一结算代码且规则行为同源。手工构造而不走
+    /// derive `clone()`：后者会先整份复制宿主日志再被丢弃——节点成本
+    /// 随对局日志线性增长的根因之一。返回引擎处于模拟会话
+    /// （`simulation = true`）：提交不写日志、不存检查点、不算哈希
+    /// （`Accepted` 带全零哈希）。仅供 `plan_action` 内部模拟使用，
+    /// 不得作为权威引擎。
+    pub(crate) fn clone_for_simulation(&self) -> Self {
+        Self {
+            catalog: self.catalog.clone(),
+            state: self.state.clone(),
+            log: Vec::new(),
+            last_dedup: self.last_dedup,
+            time_slice: self.time_slice,
+            segment_open: self.segment_open,
+            debug_budget: self.debug_budget,
+            segment_checkpoint: None,
+            seat_quota: self.seat_quota,
+            seat_cmd_counts: self.seat_cmd_counts.clone(),
+            auth_tokens: self.auth_tokens.clone(),
+            auth_counter: self.auth_counter,
+            auth_secret: self.auth_secret,
+            auth_generation: self.auth_generation,
+            simulation: true,
+        }
+    }
+
     /// 提交命令：单一工作副本上结算，拒绝则整段丢弃。
     ///
     /// 信任边界（校验顺序即拒绝优先级）：
@@ -126,8 +154,15 @@ impl Engine {
         // 每段重置预算：硬上限只约束本段，不跨段累计（ADR 0708 缺陷修复）。
         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         // 段检查点：供开放段失败时 `abort_segment` 回滚到段前（N07）。
-        let checkpoint = self.save();
-        if let Err(reason) = apply_command(&mut work, cmd.clone(), &self.catalog, &mut self.log) {
+        // PA02：模拟会话不存检查点——模拟段失败即弃置整个克隆，无需回滚。
+        let checkpoint = if self.simulation { None } else { Some(self.save()) };
+        // PA02：模拟会话的日志写进本段弃置缓冲，不进权威宿主日志。
+        let mut sim_log = self.simulation.then(Vec::new);
+        let log: &mut Vec<LogEvent> = match sim_log.as_mut() {
+            Some(v) => v,
+            None => &mut self.log,
+        };
+        if let Err(reason) = apply_command(&mut work, cmd.clone(), &self.catalog, log) {
             self.log.truncate(log_mark);
             return CommandOutcome::Rejected(reason);
         }
@@ -154,7 +189,8 @@ impl Engine {
                 match outcome {
                     CommandOutcome::Suspended => {
                         // 段开放：保留检查点供失败中止（N07）。
-                        self.segment_checkpoint = Some((checkpoint, log_mark));
+                        // PA02：模拟会话 checkpoint 为 None——模拟段不中止回滚。
+                        self.segment_checkpoint = checkpoint.map(|c| (c, log_mark));
                     }
                     _ => self.segment_checkpoint = None,
                 }
@@ -174,11 +210,17 @@ impl Engine {
         mut work: GameState,
         log_mark: usize,
     ) -> CommandOutcome {
+        // PA02：模拟会话的日志写进本段弃置缓冲，不进权威宿主日志。
+        let mut sim_log = self.simulation.then(Vec::new);
+        let log: &mut Vec<LogEvent> = match sim_log.as_mut() {
+            Some(v) => v,
+            None => &mut self.log,
+        };
         match run(
             &mut work.core,
             &mut work.resolution,
             &self.catalog,
-            &mut self.log,
+            log,
             self.time_slice,
         ) {
             StepOutcome::BudgetExhausted => {
@@ -244,10 +286,54 @@ impl Engine {
                 self.state = work;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
+                // PA02：模拟会话不算权威哈希——规划只判 Rejected 与评分
+                // 投影，不消费该值；正式引擎哈希语义不变。
                 CommandOutcome::Accepted {
-                    state_hash: canonical_hash(&self.state),
+                    state_hash: if self.simulation {
+                        [0u8; 32]
+                    } else {
+                        canonical_hash(&self.state)
+                    },
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod pa02_simulation_tests {
+    use super::*;
+
+    /// PA02：模拟会话提交跳过权威会话副作用（日志/检查点/哈希），
+    /// 但规则推进与正式提交完全同源——同一命令在两边产出相同状态。
+    #[test]
+    fn simulation_submit_skips_session_work_and_matches_authoritative_state() {
+        let mut real = Engine::new(42007, 4);
+        let mut sim = real.clone_for_simulation();
+        let cmd = |e: &Engine| GameCommand {
+            actor: e.turn().current,
+            expected_revision: e.revision(),
+            dedup_id: 1,
+            action: GameAction::NextPhase,
+        };
+        let sim_out = sim.submit(cmd(&sim));
+        match sim_out {
+            CommandOutcome::Accepted { state_hash } => {
+                assert_eq!(state_hash, [0u8; 32], "模拟会话 Accepted 须带全零哈希");
+            }
+            other => panic!("模拟提交应被接受，得到 {other:?}"),
+        }
+        assert_eq!(sim.log.len(), 0, "模拟会话不得写入宿主日志");
+
+        let real_out = real.submit(cmd(&real));
+        match real_out {
+            CommandOutcome::Accepted { state_hash } => {
+                assert_ne!(state_hash, [0u8; 32], "正式提交须返回真实哈希");
+            }
+            other => panic!("正式提交应被接受，得到 {other:?}"),
+        }
+        assert!(!real.log().is_empty(), "正式提交应写入宿主日志");
+        assert_eq!(sim.revision(), real.revision());
+        assert_eq!(sim.state_hash(), real.state_hash(), "同一命令两边规则状态须一致");
     }
 }

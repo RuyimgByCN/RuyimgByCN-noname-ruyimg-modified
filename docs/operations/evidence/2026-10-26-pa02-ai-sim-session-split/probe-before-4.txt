@@ -1,0 +1,725 @@
+seed=0 step=0 rev=0 seat=0 action=NextPhase nodes=1
+seed=0 step=1 rev=1 seat=0 action=NextPhase nodes=1
+seed=0 step=2 rev=2 seat=0 action=PlayCard { card: 0, targets: [3] } nodes=7
+seed=0 step=3 rev=3 seat=0 action=NextPhase nodes=4
+seed=0 step=4 rev=4 seat=0 action=Answer { choice_id: 1, selection: [Card(33)] } nodes=6
+seed=0 step=5 rev=5 seat=0 action=NextPhase nodes=1
+seed=0 step=6 rev=6 seat=0 action=NextPhase nodes=1
+seed=0 step=7 rev=7 seat=1 action=NextPhase nodes=1
+seed=0 step=8 rev=8 seat=1 action=NextPhase nodes=1
+seed=0 step=9 rev=9 seat=1 action=PlayCard { card: 12, targets: [0] } nodes=4
+seed=0 step=10 rev=10 seat=1 action=NextPhase nodes=1
+seed=0 step=11 rev=11 seat=1 action=Answer { choice_id: 2, selection: [Card(55)] } nodes=6
+seed=0 step=12 rev=12 seat=1 action=NextPhase nodes=1
+seed=0 step=13 rev=13 seat=1 action=NextPhase nodes=1
+seed=0 step=14 rev=14 seat=2 action=NextPhase nodes=1
+seed=0 step=15 rev=15 seat=2 action=NextPhase nodes=1
+seed=0 step=16 rev=16 seat=2 action=PlayCard { card: 7, targets: [1] } nodes=7
+seed=0 step=17 rev=17 seat=2 action=NextPhase nodes=4
+seed=0 step=18 rev=18 seat=2 action=Answer { choice_id: 3, selection: [Card(81)] } nodes=6
+seed=0 step=19 rev=19 seat=2 action=NextPhase nodes=1
+seed=0 step=20 rev=20 seat=2 action=NextPhase nodes=1
+seed=0 step=21 rev=21 seat=3 action=NextPhase nodes=1
+seed=0 step=22 rev=22 seat=3 action=NextPhase nodes=1
+seed=0 step=23 rev=23 seat=3 action=NextPhase nodes=1
+seed=0 step=24 rev=24 seat=3 action=Answer { choice_id: 4, selection: [Card(115), Card(83), Card(109)] } nodes=8
+seed=0 step=25 rev=25 seat=3 action=NextPhase nodes=1
+seed=0 step=26 rev=26 seat=3 action=NextPhase nodes=1
+seed=0 step=27 rev=27 seat=0 action=NextPhase nodes=1
+seed=0 step=28 rev=28 seat=0 action=NextPhase nodes=1
+seed=0 step=29 rev=29 seat=0 action=PlayCard { card: 6, targets: [1] } nodes=4
+seed=0 step=30 rev=30 seat=0 action=NextPhase nodes=1
+seed=0 step=31 rev=31 seat=0 action=Answer { choice_id: 5, selection: [Card(117), Card(60)] } nodes=7
+seed=0 step=32 rev=32 seat=0 action=NextPhase nodes=1
+seed=0 step=33 rev=33 seat=0 action=NextPhase nodes=1
+seed=0 step=34 rev=34 seat=1 action=NextPhase nodes=1
+seed=0 step=35 rev=35 seat=1 action=NextPhase nodes=1
+seed=0 step=36 rev=36 seat=1 action=NextPhase nodes=1
+seed=0 step=37 rev=37 seat=1 action=Answer { choice_id: 6, selection: [Card(87), Card(101), Card(46), Card(86)] } nodes=8
+seed=0 step=38 rev=38 seat=1 action=NextPhase nodes=1
+seed=0 step=39 rev=39 seat=1 action=NextPhase nodes=1
+seed=0 step=40 rev=40 seat=2 action=NextPhase nodes=1
+seed=0 step=41 rev=41 seat=2 action=NextPhase nodes=1
+seed=0 step=42 rev=42 seat=2 action=PlayCard { card: 23, targets: [1] } nodes=7
+seed=0 step=43 rev=43 seat=2 action=NextPhase nodes=4
+seed=0 step=44 rev=44 seat=2 action=Answer { choice_id: 7, selection: [Card(114)] } nodes=6
+seed=0 step=45 rev=45 seat=2 action=NextPhase nodes=1
+seed=0 step=46 rev=46 seat=2 action=NextPhase nodes=1
+seed=0 step=47 rev=47 seat=3 action=NextPhase nodes=1
+seed=0 step=48 rev=48 seat=3 action=NextPhase nodes=1
+seed=0 step=49 rev=49 seat=3 action=NextPhase nodes=1
+seed=0 step=50 rev=50 seat=3 action=Answer { choice_id: 8, selection: [Card(102), Card(48)] } nodes=7
+seed=0 step=51 rev=51 seat=3 action=NextPhase nodes=1
+seed=0 step=52 rev=52 seat=3 action=NextPhase nodes=1
+seed=0 step=53 rev=53 seat=0 action=NextPhase nodes=1
+seed=0 step=54 rev=54 seat=0 action=NextPhase nodes=1
+seed=0 step=55 rev=55 seat=0 action=NextPhase nodes=1
+seed=0 step=56 rev=56 seat=0 action=Answer { choice_id: 9, selection: [Card(80), Card(61)] } nodes=7
+seed=0 step=57 rev=57 seat=0 action=NextPhase nodes=1
+seed=0 step=58 rev=58 seat=0 action=NextPhase nodes=1
+seed=0 step=59 rev=59 seat=1 action=NextPhase nodes=1
+seed=0 step=60 rev=60 seat=1 action=NextPhase nodes=1
+seed=0 step=61 rev=61 seat=1 action=NextPhase nodes=1
+seed=0 step=62 rev=62 seat=1 action=Answer { choice_id: 10, selection: [Card(66), Card(90), Card(37)] } nodes=6
+seed=0 step=63 rev=63 seat=1 action=NextPhase nodes=1
+seed=0 step=64 rev=64 seat=1 action=NextPhase nodes=1
+seed=0 step=65 rev=65 seat=2 action=NextPhase nodes=1
+seed=0 step=66 rev=66 seat=2 action=NextPhase nodes=1
+seed=0 step=67 rev=67 seat=2 action=PlayCard { card: 28, targets: [1] } nodes=4
+seed=0 step=68 rev=68 seat=2 action=Answer { choice_id: 11, selection: [Pass] } nodes=3
+seed=0 step=69 rev=69 seat=0 action=Answer { choice_id: 12, selection: [Pass] } nodes=4
+seed=0 step=70 rev=70 seat=2 action=NextPhase nodes=1
+seed=0 step=71 rev=71 seat=2 action=Answer { choice_id: 13, selection: [Card(52)] } nodes=6
+seed=0 step=72 rev=72 seat=2 action=NextPhase nodes=1
+seed=0 step=73 rev=73 seat=2 action=NextPhase nodes=1
+seed=0 step=74 rev=74 seat=3 action=NextPhase nodes=1
+seed=0 step=75 rev=75 seat=3 action=NextPhase nodes=1
+seed=0 step=76 rev=76 seat=3 action=NextPhase nodes=1
+seed=0 step=77 rev=77 seat=3 action=Answer { choice_id: 14, selection: [Card(36), Card(63)] } nodes=7
+seed=0 step=78 rev=78 seat=3 action=NextPhase nodes=1
+seed=0 step=79 rev=79 seat=3 action=NextPhase nodes=1
+seed=0 step=80 rev=80 seat=0 action=NextPhase nodes=1
+seed=0 step=81 rev=81 seat=0 action=NextPhase nodes=1
+seed=0 step=82 rev=82 seat=0 action=NextPhase nodes=1
+seed=0 step=83 rev=83 seat=0 action=Answer { choice_id: 15, selection: [Card(51), Card(38)] } nodes=7
+seed=0 step=84 rev=84 seat=0 action=NextPhase nodes=1
+seed=0 step=85 rev=85 seat=0 action=NextPhase nodes=1
+seed=0 step=86 rev=86 seat=2 action=NextPhase nodes=1
+seed=0 step=87 rev=87 seat=2 action=NextPhase nodes=1
+seed=0 step=88 rev=88 seat=2 action=PlayCard { card: 3, targets: [0] } nodes=3
+seed=0 step=89 rev=89 seat=0 action=Answer { choice_id: 16, selection: [Card(41)] } nodes=3
+seed=0 step=90 rev=90 seat=2 action=NextPhase nodes=1
+seed=0 step=91 rev=91 seat=2 action=Answer { choice_id: 17, selection: [Card(94)] } nodes=6
+seed=0 step=92 rev=92 seat=2 action=NextPhase nodes=1
+seed=0 step=93 rev=93 seat=2 action=NextPhase nodes=1
+seed=0 step=94 rev=94 seat=3 action=NextPhase nodes=1
+seed=0 step=95 rev=95 seat=3 action=NextPhase nodes=1
+seed=0 step=96 rev=96 seat=3 action=PlayCard { card: 4, targets: [0] } nodes=3
+seed=0 step=97 rev=97 seat=3 action=NextPhase nodes=1
+seed=0 step=98 rev=98 seat=3 action=Answer { choice_id: 18, selection: [Card(97)] } nodes=5
+seed=0 step=99 rev=99 seat=3 action=NextPhase nodes=1
+seed=0 step=100 rev=100 seat=3 action=NextPhase nodes=1
+seed=0 step=101 rev=101 seat=0 action=NextPhase nodes=1
+seed=0 step=102 rev=102 seat=0 action=NextPhase nodes=1
+seed=0 step=103 rev=103 seat=0 action=PlayCard { card: 19, targets: [2] } nodes=5
+seed=0 step=104 rev=104 seat=2 action=Answer { choice_id: 19, selection: [Card(43)] } nodes=3
+seed=0 step=105 rev=105 seat=0 action=NextPhase nodes=3
+seed=0 step=106 rev=106 seat=0 action=Answer { choice_id: 20, selection: [Card(45)] } nodes=4
+seed=0 step=107 rev=107 seat=0 action=NextPhase nodes=1
+seed=0 step=108 rev=108 seat=0 action=NextPhase nodes=1
+seed=0 step=109 rev=109 seat=2 action=NextPhase nodes=1
+seed=0 step=110 rev=110 seat=2 action=NextPhase nodes=1
+seed=0 step=111 rev=111 seat=2 action=PlayCard { card: 13, targets: [0] } nodes=3
+seed=0 step=112 rev=112 seat=2 action=NextPhase nodes=1
+seed=0 step=113 rev=113 seat=2 action=NextPhase nodes=1
+seed=0 step=114 rev=114 seat=2 action=NextPhase nodes=1
+seed=0 step=115 rev=115 seat=3 action=NextPhase nodes=1
+seed=0 step=116 rev=116 seat=3 action=NextPhase nodes=1
+seed=0 step=117 rev=117 seat=3 action=NextPhase nodes=1
+seed=0 step=118 rev=118 seat=3 action=Answer { choice_id: 21, selection: [Card(76), Card(64)] } nodes=7
+seed=0 step=119 rev=119 seat=3 action=NextPhase nodes=1
+seed=0 step=120 rev=120 seat=3 action=NextPhase nodes=1
+seed=0 step=121 rev=121 seat=0 action=NextPhase nodes=1
+seed=0 step=122 rev=122 seat=0 action=NextPhase nodes=1
+seed=0 step=123 rev=123 seat=0 action=PlayCard { card: 5, targets: [3] } nodes=7
+seed=0 step=124 rev=124 seat=3 action=Answer { choice_id: 22, selection: [Card(42)] } nodes=3
+seed=0 step=125 rev=125 seat=0 action=NextPhase nodes=5
+seed=0 step=126 rev=126 seat=0 action=Answer { choice_id: 23, selection: [Card(116), Card(17)] } nodes=5
+seed=0 step=127 rev=127 seat=0 action=NextPhase nodes=1
+seed=0 step=128 rev=128 seat=0 action=NextPhase nodes=1
+seed=0 step=129 rev=129 seat=2 action=NextPhase nodes=1
+seed=0 step=130 rev=130 seat=2 action=NextPhase nodes=1
+seed=0 step=131 rev=131 seat=2 action=PlayCard { card: 20, targets: [0] } nodes=3
+seed=0 step=132 rev=132 seat=2 action=NextPhase nodes=1
+seed=0 step=133 rev=133 seat=2 action=Answer { choice_id: 24, selection: [Card(105)] } nodes=6
+seed=0 step=134 rev=134 seat=2 action=NextPhase nodes=1
+seed=0 step=135 rev=135 seat=2 action=NextPhase nodes=1
+seed=0 step=136 rev=136 seat=3 action=NextPhase nodes=1
+seed=0 step=137 rev=137 seat=3 action=NextPhase nodes=1
+seed=0 step=138 rev=138 seat=3 action=NextPhase nodes=1
+seed=0 step=139 rev=139 seat=3 action=Answer { choice_id: 25, selection: [Card(92)] } nodes=5
+seed=0 step=140 rev=140 seat=3 action=NextPhase nodes=1
+seed=0 step=141 rev=141 seat=3 action=NextPhase nodes=1
+seed=0 step=142 rev=142 seat=2 action=NextPhase nodes=1
+seed=0 step=143 rev=143 seat=2 action=NextPhase nodes=1
+seed=0 step=144 rev=144 seat=2 action=NextPhase nodes=1
+seed=0 step=145 rev=145 seat=2 action=Answer { choice_id: 26, selection: [Card(82), Card(95)] } nodes=8
+seed=0 step=146 rev=146 seat=2 action=NextPhase nodes=1
+seed=0 step=147 rev=147 seat=2 action=NextPhase nodes=1
+seed=0 step=148 rev=148 seat=3 action=NextPhase nodes=1
+seed=0 step=149 rev=149 seat=3 action=NextPhase nodes=1
+seed=0 step=150 rev=150 seat=3 action=PlayCard { card: 2, targets: [2] } nodes=2
+seed=0 step=151 rev=151 seat=3 action=NextPhase nodes=1
+seed=0 step=152 rev=152 seat=3 action=Answer { choice_id: 27, selection: [Card(89)] } nodes=5
+seed=0 step=153 rev=153 seat=3 action=NextPhase nodes=1
+seed=0 step=154 rev=154 seat=3 action=NextPhase nodes=1
+seed=0 step=155 rev=155 seat=2 action=NextPhase nodes=1
+seed=0 step=156 rev=156 seat=2 action=NextPhase nodes=1
+seed=0 step=157 rev=157 seat=2 action=NextPhase nodes=1
+seed=0 step=158 rev=158 seat=2 action=Answer { choice_id: 28, selection: [Card(123), Card(70), Card(62)] } nodes=8
+seed=0 step=159 rev=159 seat=2 action=NextPhase nodes=1
+seed=0 step=160 rev=160 seat=2 action=NextPhase nodes=1
+seed=0 step=161 rev=161 seat=3 action=NextPhase nodes=1
+seed=0 step=162 rev=162 seat=3 action=NextPhase nodes=1
+seed=0 step=163 rev=163 seat=3 action=PlayCard { card: 11, targets: [2] } nodes=2
+seed=0 step=164 rev=164 seat=2 action=Answer { choice_id: 29, selection: [Card(39)] } nodes=3
+seed=0 step=165 rev=165 seat=3 action=NextPhase nodes=1
+seed=0 step=166 rev=166 seat=3 action=Answer { choice_id: 30, selection: [Card(112)] } nodes=5
+seed=0 step=167 rev=167 seat=3 action=NextPhase nodes=1
+seed=0 step=168 rev=168 seat=3 action=NextPhase nodes=1
+seed=0 step=169 rev=169 seat=2 action=NextPhase nodes=1
+seed=0 step=170 rev=170 seat=2 action=NextPhase nodes=1
+seed=0 step=171 rev=171 seat=2 action=PlayCard { card: 9, targets: [3] } nodes=2
+seed=0 step=172 rev=172 seat=3 action=Answer { choice_id: 31, selection: [Card(31)] } nodes=3
+seed=0 step=173 rev=173 seat=2 action=NextPhase nodes=1
+seed=0 step=174 rev=174 seat=2 action=NextPhase nodes=1
+seed=0 step=175 rev=175 seat=2 action=NextPhase nodes=1
+seed=0 step=176 rev=176 seat=3 action=NextPhase nodes=1
+seed=0 step=177 rev=177 seat=3 action=NextPhase nodes=1
+seed=0 step=178 rev=178 seat=3 action=NextPhase nodes=1
+seed=0 step=179 rev=179 seat=3 action=Answer { choice_id: 32, selection: [Card(73)] } nodes=5
+seed=0 step=180 rev=180 seat=3 action=NextPhase nodes=1
+seed=0 step=181 rev=181 seat=3 action=NextPhase nodes=1
+seed=0 step=182 rev=182 seat=2 action=NextPhase nodes=1
+seed=0 step=183 rev=183 seat=2 action=NextPhase nodes=1
+seed=0 step=184 rev=184 seat=2 action=NextPhase nodes=1
+seed=0 step=185 rev=185 seat=2 action=Answer { choice_id: 33, selection: [Card(68), Card(74)] } nodes=7
+seed=0 step=186 rev=186 seat=2 action=NextPhase nodes=1
+seed=0 step=187 rev=187 seat=2 action=NextPhase nodes=1
+seed=0 step=188 rev=188 seat=3 action=NextPhase nodes=1
+seed=0 step=189 rev=189 seat=3 action=NextPhase nodes=1
+seed=0 step=190 rev=190 seat=3 action=PlayCard { card: 16, targets: [2] } nodes=2
+seed=0 step=191 rev=191 seat=2 action=Answer { choice_id: 34, selection: [Card(44)] } nodes=3
+seed=0 step=192 rev=192 seat=3 action=NextPhase nodes=1
+seed=0 step=193 rev=193 seat=3 action=Answer { choice_id: 35, selection: [Card(56)] } nodes=5
+seed=0 step=194 rev=194 seat=3 action=NextPhase nodes=1
+seed=0 step=195 rev=195 seat=3 action=NextPhase nodes=1
+seed=0 step=196 rev=196 seat=2 action=NextPhase nodes=1
+seed=0 step=197 rev=197 seat=2 action=NextPhase nodes=1
+seed=0 step=198 rev=198 seat=2 action=NextPhase nodes=1
+seed=0 step=199 rev=199 seat=2 action=Answer { choice_id: 36, selection: [Card(108)] } nodes=5
+seed=0 step=200 rev=200 seat=2 action=NextPhase nodes=1
+seed=0 step=201 rev=201 seat=2 action=NextPhase nodes=1
+seed=0 step=202 rev=202 seat=3 action=NextPhase nodes=1
+seed=0 step=203 rev=203 seat=3 action=NextPhase nodes=1
+seed=0 step=204 rev=204 seat=3 action=PlayCard { card: 24, targets: [2] } nodes=2
+seed=0 step=205 rev=205 seat=2 action=Answer { choice_id: 37, selection: [Card(32)] } nodes=3
+seed=0 step=206 rev=206 seat=3 action=NextPhase nodes=1
+seed=0 step=207 rev=207 seat=3 action=Answer { choice_id: 38, selection: [Card(77)] } nodes=5
+seed=0 step=208 rev=208 seat=3 action=NextPhase nodes=1
+seed=0 step=209 rev=209 seat=3 action=NextPhase nodes=1
+seed=0 step=210 rev=210 seat=2 action=NextPhase nodes=1
+seed=0 step=211 rev=211 seat=2 action=NextPhase nodes=1
+seed=0 step=212 rev=212 seat=2 action=NextPhase nodes=1
+seed=0 step=213 rev=213 seat=2 action=Answer { choice_id: 39, selection: [Card(96)] } nodes=5
+seed=0 step=214 rev=214 seat=2 action=NextPhase nodes=1
+seed=0 step=215 rev=215 seat=2 action=NextPhase nodes=1
+seed=0 step=216 rev=216 seat=3 action=NextPhase nodes=1
+seed=0 step=217 rev=217 seat=3 action=NextPhase nodes=1
+seed=0 step=218 rev=218 seat=3 action=PlayCard { card: 18, targets: [2] } nodes=2
+seed=0 step=219 rev=219 seat=3 action=NextPhase nodes=1
+seed=0 step=220 rev=220 seat=3 action=Answer { choice_id: 40, selection: [Card(78)] } nodes=5
+seed=0 step=221 rev=221 seat=3 action=NextPhase nodes=1
+seed=0 step=222 rev=222 seat=3 action=NextPhase nodes=1
+seed=0 step=223 rev=223 seat=2 action=NextPhase nodes=1
+seed=0 step=224 rev=224 seat=2 action=NextPhase nodes=1
+seed=0 step=225 rev=225 seat=2 action=PlayCard { card: 29, targets: [3] } nodes=2
+seed=0 step=226 rev=226 seat=3 action=Answer { choice_id: 41, selection: [Card(35)] } nodes=3
+seed=0 step=227 rev=227 seat=2 action=NextPhase nodes=1
+seed=0 step=228 rev=228 seat=2 action=Answer { choice_id: 42, selection: [Card(49), Card(57)] } nodes=6
+seed=0 step=229 rev=229 seat=2 action=NextPhase nodes=1
+seed=0 step=230 rev=230 seat=2 action=NextPhase nodes=1
+seed=0 step=231 rev=231 seat=3 action=NextPhase nodes=1
+seed=0 step=232 rev=232 seat=3 action=NextPhase nodes=1
+seed=0 step=233 rev=233 seat=3 action=NextPhase nodes=1
+seed=0 step=234 rev=234 seat=3 action=Answer { choice_id: 43, selection: [Card(72)] } nodes=5
+seed=0 step=235 rev=235 seat=3 action=NextPhase nodes=1
+seed=0 step=236 rev=236 seat=3 action=NextPhase nodes=1
+seed=0 step=237 rev=237 seat=2 action=NextPhase nodes=1
+seed=0 step=238 rev=238 seat=2 action=NextPhase nodes=1
+seed=0 step=239 rev=239 seat=2 action=NextPhase nodes=1
+seed=0 step=240 rev=240 seat=2 action=Answer { choice_id: 44, selection: [Card(110), Card(34)] } nodes=6
+seed=0 step=241 rev=241 seat=2 action=NextPhase nodes=1
+seed=0 step=242 rev=242 seat=2 action=NextPhase nodes=1
+seed=0 step=243 rev=243 seat=3 action=NextPhase nodes=1
+seed=0 step=244 rev=244 seat=3 action=NextPhase nodes=1
+seed=0 step=245 rev=245 seat=3 action=NextPhase nodes=1
+seed=0 step=246 rev=246 seat=3 action=Answer { choice_id: 45, selection: [Card(58), Card(59)] } nodes=7
+seed=0 step=247 rev=247 seat=3 action=NextPhase nodes=1
+seed=0 step=248 rev=248 seat=3 action=NextPhase nodes=1
+seed=0 step=249 rev=249 seat=2 action=NextPhase nodes=1
+seed=0 step=250 rev=250 seat=2 action=NextPhase nodes=1
+seed=0 step=251 rev=251 seat=2 action=NextPhase nodes=1
+seed=0 step=252 rev=252 seat=2 action=Answer { choice_id: 46, selection: [Card(121), Card(71)] } nodes=6
+seed=0 step=253 rev=253 seat=2 action=NextPhase nodes=1
+seed=0 step=254 rev=254 seat=2 action=NextPhase nodes=1
+seed=0 step=255 rev=255 seat=3 action=NextPhase nodes=1
+seed=0 step=256 rev=256 seat=3 action=NextPhase nodes=1
+seed=0 step=257 rev=257 seat=3 action=PlayCard { card: 10, targets: [2] } nodes=2
+seed=0 step=258 rev=258 seat=3 action=NextPhase nodes=1
+seed=0 step=259 rev=259 seat=3 action=Answer { choice_id: 47, selection: [Card(88)] } nodes=5
+seed=0 step=260 rev=260 seat=3 action=NextPhase nodes=1
+seed=0 step=261 rev=261 seat=3 action=NextPhase nodes=1
+seed=0 step=262 rev=262 seat=2 action=NextPhase nodes=1
+seed=0 step=263 rev=263 seat=2 action=NextPhase nodes=1
+seed=0 step=264 rev=264 seat=2 action=NextPhase nodes=1
+seed=0 step=265 rev=265 seat=2 action=Answer { choice_id: 48, selection: [Card(103), Card(99), Card(91)] } nodes=6
+seed=0 step=266 rev=266 seat=2 action=NextPhase nodes=1
+seed=0 step=267 rev=267 seat=2 action=NextPhase nodes=1
+seed=0 step=268 rev=268 seat=3 action=NextPhase nodes=1
+seed=0 step=269 rev=269 seat=3 action=NextPhase nodes=1
+seed=0 step=270 rev=270 seat=3 action=NextPhase nodes=1
+seed=0 step=271 rev=271 seat=3 action=Answer { choice_id: 49, selection: [Card(122), Card(65)] } nodes=7
+seed=0 step=272 rev=272 seat=3 action=NextPhase nodes=1
+seed=0 step=273 rev=273 seat=3 action=NextPhase nodes=1
+seed=0 step=274 rev=274 seat=2 action=NextPhase nodes=1
+seed=0 step=275 rev=275 seat=2 action=NextPhase nodes=1
+seed=0 step=276 rev=276 seat=2 action=NextPhase nodes=1
+seed=0 step=277 rev=277 seat=2 action=Answer { choice_id: 50, selection: [Card(93), Card(53)] } nodes=5
+seed=0 step=278 rev=278 seat=2 action=NextPhase nodes=1
+seed=0 step=279 rev=279 seat=2 action=NextPhase nodes=1
+seed=0 step=280 rev=280 seat=3 action=NextPhase nodes=1
+seed=0 step=281 rev=281 seat=3 action=NextPhase nodes=1
+seed=0 step=282 rev=282 seat=3 action=PlayCard { card: 15, targets: [2] } nodes=2
+seed=0 step=283 rev=283 seat=3 action=Answer { choice_id: 51, selection: [Pass] } nodes=3
+seed=0 step=284 rev=284 seat=2 action=Answer { choice_id: 52, selection: [Card(50)] } nodes=3
+seed=0 step=285 rev=285 seat=3 action=NextPhase nodes=1
+seed=0 step=286 rev=286 seat=3 action=Answer { choice_id: 53, selection: [Card(85)] } nodes=5
+seed=0 step=287 rev=287 seat=3 action=NextPhase nodes=1
+seed=0 step=288 rev=288 seat=3 action=NextPhase nodes=1
+seed=0 step=289 rev=289 seat=2 action=NextPhase nodes=1
+seed=0 step=290 rev=290 seat=2 action=NextPhase nodes=1
+seed=0 step=291 rev=291 seat=2 action=PlayCard { card: 1, targets: [3] } nodes=2
+seed=0 step=292 rev=292 seat=2 action=NextPhase nodes=1
+seed=0 step=293 rev=293 seat=2 action=NextPhase nodes=1
+seed=0 step=294 rev=294 seat=2 action=NextPhase nodes=1
+seed=0 step=295 rev=295 seat=3 action=NextPhase nodes=1
+seed=0 step=296 rev=296 seat=3 action=NextPhase nodes=1
+seed=0 step=297 rev=297 seat=3 action=PlayCard { card: 26, targets: [2] } nodes=2
+seed=0 END rev=298 outcome=Some(Outcome { winner: Player(3) })
+seed=1 step=0 rev=0 seat=0 action=NextPhase nodes=1
+seed=1 step=1 rev=1 seat=0 action=NextPhase nodes=1
+seed=1 step=2 rev=2 seat=0 action=NextPhase nodes=1
+seed=1 step=3 rev=3 seat=0 action=Answer { choice_id: 1, selection: [Card(115), Card(90)] } nodes=8
+seed=1 step=4 rev=4 seat=0 action=NextPhase nodes=1
+seed=1 step=5 rev=5 seat=0 action=NextPhase nodes=1
+seed=1 step=6 rev=6 seat=1 action=NextPhase nodes=1
+seed=1 step=7 rev=7 seat=1 action=NextPhase nodes=1
+seed=1 step=8 rev=8 seat=1 action=PlayCard { card: 27, targets: [0] } nodes=4
+seed=1 step=9 rev=9 seat=1 action=NextPhase nodes=1
+seed=1 step=10 rev=10 seat=1 action=Answer { choice_id: 2, selection: [Card(53)] } nodes=6
+seed=1 step=11 rev=11 seat=1 action=NextPhase nodes=1
+seed=1 step=12 rev=12 seat=1 action=NextPhase nodes=1
+seed=1 step=13 rev=13 seat=2 action=NextPhase nodes=1
+seed=1 step=14 rev=14 seat=2 action=NextPhase nodes=1
+seed=1 step=15 rev=15 seat=2 action=PlayCard { card: 24, targets: [1] } nodes=4
+seed=1 step=16 rev=16 seat=1 action=Answer { choice_id: 3, selection: [Card(43)] } nodes=3
+seed=1 step=17 rev=17 seat=2 action=NextPhase nodes=1
+seed=1 step=18 rev=18 seat=2 action=Answer { choice_id: 4, selection: [Card(50)] } nodes=6
+seed=1 step=19 rev=19 seat=2 action=NextPhase nodes=1
+seed=1 step=20 rev=20 seat=2 action=NextPhase nodes=1
+seed=1 step=21 rev=21 seat=3 action=NextPhase nodes=1
+seed=1 step=22 rev=22 seat=3 action=NextPhase nodes=1
+seed=1 step=23 rev=23 seat=3 action=PlayCard { card: 20, targets: [2] } nodes=7
+seed=1 step=24 rev=24 seat=3 action=NextPhase nodes=4
+seed=1 step=25 rev=25 seat=3 action=Answer { choice_id: 5, selection: [Card(100)] } nodes=6
+seed=1 step=26 rev=26 seat=3 action=NextPhase nodes=1
+seed=1 step=27 rev=27 seat=3 action=NextPhase nodes=1
+seed=1 step=28 rev=28 seat=0 action=NextPhase nodes=1
+seed=1 step=29 rev=29 seat=0 action=NextPhase nodes=1
+seed=1 step=30 rev=30 seat=0 action=NextPhase nodes=1
+seed=1 step=31 rev=31 seat=0 action=Answer { choice_id: 6, selection: [Card(101), Card(119), Card(87)] } nodes=8
+seed=1 step=32 rev=32 seat=0 action=NextPhase nodes=1
+seed=1 step=33 rev=33 seat=0 action=NextPhase nodes=1
+seed=1 step=34 rev=34 seat=1 action=NextPhase nodes=1
+seed=1 step=35 rev=35 seat=1 action=NextPhase nodes=1
+seed=1 step=36 rev=36 seat=1 action=NextPhase nodes=1
+seed=1 step=37 rev=37 seat=1 action=Answer { choice_id: 7, selection: [Card(62)] } nodes=6
+seed=1 step=38 rev=38 seat=1 action=NextPhase nodes=1
+seed=1 step=39 rev=39 seat=1 action=NextPhase nodes=1
+seed=1 step=40 rev=40 seat=2 action=NextPhase nodes=1
+seed=1 step=41 rev=41 seat=2 action=NextPhase nodes=1
+seed=1 step=42 rev=42 seat=2 action=NextPhase nodes=1
+seed=1 step=43 rev=43 seat=2 action=Answer { choice_id: 8, selection: [Card(73), Card(107), Card(82)] } nodes=8
+seed=1 step=44 rev=44 seat=2 action=NextPhase nodes=1
+seed=1 step=45 rev=45 seat=2 action=NextPhase nodes=1
+seed=1 step=46 rev=46 seat=3 action=NextPhase nodes=1
+seed=1 step=47 rev=47 seat=3 action=NextPhase nodes=1
+seed=1 step=48 rev=48 seat=3 action=PlayCard { card: 18, targets: [0] } nodes=4
+seed=1 step=49 rev=49 seat=3 action=NextPhase nodes=1
+seed=1 step=50 rev=50 seat=3 action=Answer { choice_id: 9, selection: [Card(89)] } nodes=6
+seed=1 step=51 rev=51 seat=3 action=NextPhase nodes=1
+seed=1 step=52 rev=52 seat=3 action=NextPhase nodes=1
+seed=1 step=53 rev=53 seat=0 action=NextPhase nodes=1
+seed=1 step=54 rev=54 seat=0 action=NextPhase nodes=1
+seed=1 step=55 rev=55 seat=0 action=NextPhase nodes=1
+seed=1 step=56 rev=56 seat=0 action=Answer { choice_id: 10, selection: [Card(83), Card(96), Card(109)] } nodes=7
+seed=1 step=57 rev=57 seat=0 action=NextPhase nodes=1
+seed=1 step=58 rev=58 seat=0 action=NextPhase nodes=1
+seed=1 step=59 rev=59 seat=1 action=NextPhase nodes=1
+seed=1 step=60 rev=60 seat=1 action=NextPhase nodes=1
+seed=1 step=61 rev=61 seat=1 action=PlayCard { card: 26, targets: [0] } nodes=4
+seed=1 step=62 rev=62 seat=1 action=NextPhase nodes=1
+seed=1 step=63 rev=63 seat=1 action=Answer { choice_id: 11, selection: [Card(70)] } nodes=6
+seed=1 step=64 rev=64 seat=1 action=NextPhase nodes=1
+seed=1 step=65 rev=65 seat=1 action=NextPhase nodes=1
+seed=1 step=66 rev=66 seat=2 action=NextPhase nodes=1
+seed=1 step=67 rev=67 seat=2 action=NextPhase nodes=1
+seed=1 step=68 rev=68 seat=2 action=PlayCard { card: 10, targets: [3] } nodes=4
+seed=1 step=69 rev=69 seat=3 action=Answer { choice_id: 12, selection: [Card(32)] } nodes=4
+seed=1 step=70 rev=70 seat=2 action=NextPhase nodes=1
+seed=1 step=71 rev=71 seat=2 action=Answer { choice_id: 13, selection: [Card(56)] } nodes=5
+seed=1 step=72 rev=72 seat=2 action=NextPhase nodes=1
+seed=1 step=73 rev=73 seat=2 action=NextPhase nodes=1
+seed=1 step=74 rev=74 seat=3 action=NextPhase nodes=1
+seed=1 step=75 rev=75 seat=3 action=NextPhase nodes=1
+seed=1 step=76 rev=76 seat=3 action=PlayCard { card: 9, targets: [0] } nodes=4
+seed=1 step=77 rev=77 seat=1 action=Answer { choice_id: 14, selection: [Pass] } nodes=4
+seed=1 step=78 rev=78 seat=3 action=NextPhase nodes=1
+seed=1 step=79 rev=79 seat=3 action=NextPhase nodes=1
+seed=1 step=80 rev=80 seat=3 action=NextPhase nodes=1
+seed=1 step=81 rev=81 seat=1 action=NextPhase nodes=1
+seed=1 step=82 rev=82 seat=1 action=NextPhase nodes=1
+seed=1 step=83 rev=83 seat=1 action=NextPhase nodes=1
+seed=1 step=84 rev=84 seat=1 action=Answer { choice_id: 15, selection: [Card(86), Card(81)] } nodes=8
+seed=1 step=85 rev=85 seat=1 action=NextPhase nodes=1
+seed=1 step=86 rev=86 seat=1 action=NextPhase nodes=1
+seed=1 step=87 rev=87 seat=2 action=NextPhase nodes=1
+seed=1 step=88 rev=88 seat=2 action=NextPhase nodes=1
+seed=1 step=89 rev=89 seat=2 action=PlayCard { card: 0, targets: [1] } nodes=3
+seed=1 step=90 rev=90 seat=2 action=NextPhase nodes=1
+seed=1 step=91 rev=91 seat=2 action=Answer { choice_id: 16, selection: [Card(71)] } nodes=5
+seed=1 step=92 rev=92 seat=2 action=NextPhase nodes=1
+seed=1 step=93 rev=93 seat=2 action=NextPhase nodes=1
+seed=1 step=94 rev=94 seat=3 action=NextPhase nodes=1
+seed=1 step=95 rev=95 seat=3 action=NextPhase nodes=1
+seed=1 step=96 rev=96 seat=3 action=PlayCard { card: 23, targets: [1] } nodes=3
+seed=1 step=97 rev=97 seat=3 action=NextPhase nodes=1
+seed=1 step=98 rev=98 seat=3 action=Answer { choice_id: 17, selection: [Card(31)] } nodes=6
+seed=1 step=99 rev=99 seat=3 action=NextPhase nodes=1
+seed=1 step=100 rev=100 seat=3 action=NextPhase nodes=1
+seed=1 step=101 rev=101 seat=1 action=NextPhase nodes=1
+seed=1 step=102 rev=102 seat=1 action=NextPhase nodes=1
+seed=1 step=103 rev=103 seat=1 action=PlayCard { card: 12, targets: [3] } nodes=5
+seed=1 step=104 rev=104 seat=1 action=NextPhase nodes=3
+seed=1 step=105 rev=105 seat=1 action=Answer { choice_id: 18, selection: [Card(122), Card(48), Card(65)] } nodes=7
+seed=1 step=106 rev=106 seat=1 action=NextPhase nodes=1
+seed=1 step=107 rev=107 seat=1 action=NextPhase nodes=1
+seed=1 step=108 rev=108 seat=2 action=NextPhase nodes=1
+seed=1 step=109 rev=109 seat=2 action=NextPhase nodes=1
+seed=1 step=110 rev=110 seat=2 action=NextPhase nodes=1
+seed=1 step=111 rev=111 seat=2 action=Answer { choice_id: 19, selection: [Card(106), Card(77)] } nodes=7
+seed=1 step=112 rev=112 seat=2 action=NextPhase nodes=1
+seed=1 step=113 rev=113 seat=2 action=NextPhase nodes=1
+seed=1 step=114 rev=114 seat=3 action=NextPhase nodes=1
+seed=1 step=115 rev=115 seat=3 action=NextPhase nodes=1
+seed=1 step=116 rev=116 seat=3 action=PlayCard { card: 2, targets: [1] } nodes=3
+seed=1 step=117 rev=117 seat=3 action=NextPhase nodes=1
+seed=1 step=118 rev=118 seat=3 action=Answer { choice_id: 20, selection: [Card(60), Card(69)] } nodes=7
+seed=1 step=119 rev=119 seat=3 action=NextPhase nodes=1
+seed=1 step=120 rev=120 seat=3 action=NextPhase nodes=1
+seed=1 step=121 rev=121 seat=1 action=NextPhase nodes=1
+seed=1 step=122 rev=122 seat=1 action=NextPhase nodes=1
+seed=1 step=123 rev=123 seat=1 action=PlayCard { card: 22, targets: [2] } nodes=3
+seed=1 step=124 rev=124 seat=1 action=NextPhase nodes=1
+seed=1 step=125 rev=125 seat=1 action=Answer { choice_id: 21, selection: [Card(74), Card(72)] } nodes=5
+seed=1 step=126 rev=126 seat=1 action=NextPhase nodes=1
+seed=1 step=127 rev=127 seat=1 action=NextPhase nodes=1
+seed=1 step=128 rev=128 seat=2 action=NextPhase nodes=1
+seed=1 step=129 rev=129 seat=2 action=NextPhase nodes=1
+seed=1 step=130 rev=130 seat=2 action=NextPhase nodes=1
+seed=1 step=131 rev=131 seat=2 action=Answer { choice_id: 22, selection: [Card(54), Card(45), Card(104)] } nodes=7
+seed=1 step=132 rev=132 seat=2 action=NextPhase nodes=1
+seed=1 step=133 rev=133 seat=2 action=NextPhase nodes=1
+seed=1 step=134 rev=134 seat=3 action=NextPhase nodes=1
+seed=1 step=135 rev=135 seat=3 action=NextPhase nodes=1
+seed=1 step=136 rev=136 seat=3 action=NextPhase nodes=1
+seed=1 step=137 rev=137 seat=3 action=Answer { choice_id: 23, selection: [Card(66), Card(108)] } nodes=7
+seed=1 step=138 rev=138 seat=3 action=NextPhase nodes=1
+seed=1 step=139 rev=139 seat=3 action=NextPhase nodes=1
+seed=1 step=140 rev=140 seat=1 action=NextPhase nodes=1
+seed=1 step=141 rev=141 seat=1 action=NextPhase nodes=1
+seed=1 step=142 rev=142 seat=1 action=PlayCard { card: 7, targets: [3] } nodes=3
+seed=1 step=143 rev=143 seat=1 action=NextPhase nodes=1
+seed=1 step=144 rev=144 seat=1 action=Answer { choice_id: 24, selection: [Card(84)] } nodes=3
+seed=1 step=145 rev=145 seat=1 action=NextPhase nodes=1
+seed=1 step=146 rev=146 seat=1 action=NextPhase nodes=1
+seed=1 step=147 rev=147 seat=2 action=NextPhase nodes=1
+seed=1 step=148 rev=148 seat=2 action=NextPhase nodes=1
+seed=1 step=149 rev=149 seat=2 action=PlayCard { card: 14, targets: [1] } nodes=3
+seed=1 step=150 rev=150 seat=1 action=Answer { choice_id: 25, selection: [Card(39)] } nodes=3
+seed=1 step=151 rev=151 seat=2 action=NextPhase nodes=1
+seed=1 step=152 rev=152 seat=2 action=Answer { choice_id: 26, selection: [Card(47)] } nodes=4
+seed=1 step=153 rev=153 seat=2 action=NextPhase nodes=1
+seed=1 step=154 rev=154 seat=2 action=NextPhase nodes=1
+seed=1 step=155 rev=155 seat=3 action=NextPhase nodes=1
+seed=1 step=156 rev=156 seat=3 action=NextPhase nodes=1
+seed=1 step=157 rev=157 seat=3 action=PlayCard { card: 6, targets: [1] } nodes=3
+seed=1 step=158 rev=158 seat=3 action=Answer { choice_id: 27, selection: [Pass] } nodes=3
+seed=1 step=159 rev=159 seat=3 action=NextPhase nodes=1
+seed=1 step=160 rev=160 seat=3 action=Answer { choice_id: 28, selection: [Card(98), Card(85)] } nodes=6
+seed=1 step=161 rev=161 seat=3 action=NextPhase nodes=1
+seed=1 step=162 rev=162 seat=3 action=NextPhase nodes=1
+seed=1 step=163 rev=163 seat=2 action=NextPhase nodes=1
+seed=1 step=164 rev=164 seat=2 action=NextPhase nodes=1
+seed=1 step=165 rev=165 seat=2 action=PlayCard { card: 11, targets: [3] } nodes=2
+seed=1 step=166 rev=166 seat=2 action=NextPhase nodes=1
+seed=1 step=167 rev=167 seat=2 action=Answer { choice_id: 29, selection: [Card(113)] } nodes=4
+seed=1 step=168 rev=168 seat=2 action=NextPhase nodes=1
+seed=1 step=169 rev=169 seat=2 action=NextPhase nodes=1
+seed=1 step=170 rev=170 seat=3 action=NextPhase nodes=1
+seed=1 step=171 rev=171 seat=3 action=NextPhase nodes=1
+seed=1 step=172 rev=172 seat=3 action=PlayCard { card: 17, targets: [2] } nodes=2
+seed=1 step=173 rev=173 seat=3 action=NextPhase nodes=1
+seed=1 step=174 rev=174 seat=3 action=Answer { choice_id: 30, selection: [Card(61), Card(80)] } nodes=5
+seed=1 step=175 rev=175 seat=3 action=NextPhase nodes=1
+seed=1 step=176 rev=176 seat=3 action=NextPhase nodes=1
+seed=1 step=177 rev=177 seat=2 action=NextPhase nodes=1
+seed=1 step=178 rev=178 seat=2 action=NextPhase nodes=1
+seed=1 step=179 rev=179 seat=2 action=NextPhase nodes=1
+seed=1 step=180 rev=180 seat=2 action=Answer { choice_id: 31, selection: [Card(78), Card(103), Card(59)] } nodes=6
+seed=1 step=181 rev=181 seat=2 action=NextPhase nodes=1
+seed=1 step=182 rev=182 seat=2 action=NextPhase nodes=1
+seed=1 step=183 rev=183 seat=3 action=NextPhase nodes=1
+seed=1 step=184 rev=184 seat=3 action=NextPhase nodes=1
+seed=1 step=185 rev=185 seat=3 action=NextPhase nodes=1
+seed=1 step=186 rev=186 seat=3 action=Answer { choice_id: 32, selection: [Card(52), Card(112)] } nodes=5
+seed=1 step=187 rev=187 seat=3 action=NextPhase nodes=1
+seed=1 step=188 rev=188 seat=3 action=NextPhase nodes=1
+seed=1 step=189 rev=189 seat=2 action=NextPhase nodes=1
+seed=1 step=190 rev=190 seat=2 action=NextPhase nodes=1
+seed=1 step=191 rev=191 seat=2 action=PlayCard { card: 1, targets: [3] } nodes=2
+seed=1 step=192 rev=192 seat=3 action=Answer { choice_id: 33, selection: [Card(42)] } nodes=3
+seed=1 step=193 rev=193 seat=2 action=NextPhase nodes=1
+seed=1 step=194 rev=194 seat=2 action=Answer { choice_id: 34, selection: [Card(51)] } nodes=3
+seed=1 step=195 rev=195 seat=2 action=NextPhase nodes=1
+seed=1 step=196 rev=196 seat=2 action=NextPhase nodes=1
+seed=1 step=197 rev=197 seat=3 action=NextPhase nodes=1
+seed=1 step=198 rev=198 seat=3 action=NextPhase nodes=1
+seed=1 step=199 rev=199 seat=3 action=PlayCard { card: 13, targets: [2] } nodes=2
+seed=1 step=200 rev=200 seat=2 action=Answer { choice_id: 35, selection: [Card(40)] } nodes=3
+seed=1 step=201 rev=201 seat=3 action=NextPhase nodes=1
+seed=1 step=202 rev=202 seat=3 action=NextPhase nodes=1
+seed=1 step=203 rev=203 seat=3 action=NextPhase nodes=1
+seed=1 step=204 rev=204 seat=2 action=NextPhase nodes=1
+seed=1 step=205 rev=205 seat=2 action=NextPhase nodes=1
+seed=1 step=206 rev=206 seat=2 action=PlayCard { card: 4, targets: [3] } nodes=2
+seed=1 step=207 rev=207 seat=3 action=Answer { choice_id: 36, selection: [Card(44)] } nodes=3
+seed=1 step=208 rev=208 seat=2 action=NextPhase nodes=1
+seed=1 step=209 rev=209 seat=2 action=NextPhase nodes=1
+seed=1 step=210 rev=210 seat=2 action=NextPhase nodes=1
+seed=1 step=211 rev=211 seat=3 action=NextPhase nodes=1
+seed=1 step=212 rev=212 seat=3 action=NextPhase nodes=1
+seed=1 step=213 rev=213 seat=3 action=PlayCard { card: 5, targets: [2] } nodes=2
+seed=1 END rev=214 outcome=Some(Outcome { winner: Player(3) })
+seed=2 step=0 rev=0 seat=0 action=NextPhase nodes=1
+seed=2 step=1 rev=1 seat=0 action=NextPhase nodes=1
+seed=2 step=2 rev=2 seat=0 action=PlayCard { card: 26, targets: [3] } nodes=7
+seed=2 step=3 rev=3 seat=3 action=Answer { choice_id: 1, selection: [Card(33)] } nodes=3
+seed=2 step=4 rev=4 seat=0 action=NextPhase nodes=4
+seed=2 step=5 rev=5 seat=0 action=Answer { choice_id: 2, selection: [Card(102)] } nodes=6
+seed=2 step=6 rev=6 seat=0 action=NextPhase nodes=1
+seed=2 step=7 rev=7 seat=0 action=NextPhase nodes=1
+seed=2 step=8 rev=8 seat=1 action=NextPhase nodes=1
+seed=2 step=9 rev=9 seat=1 action=NextPhase nodes=1
+seed=2 step=10 rev=10 seat=1 action=NextPhase nodes=1
+seed=2 step=11 rev=11 seat=1 action=Answer { choice_id: 3, selection: [Card(51), Card(40)] } nodes=8
+seed=2 step=12 rev=12 seat=1 action=NextPhase nodes=1
+seed=2 step=13 rev=13 seat=1 action=NextPhase nodes=1
+seed=2 step=14 rev=14 seat=2 action=NextPhase nodes=1
+seed=2 step=15 rev=15 seat=2 action=NextPhase nodes=1
+seed=2 step=16 rev=16 seat=2 action=PlayCard { card: 1, targets: [1] } nodes=10
+seed=2 step=17 rev=17 seat=1 action=Answer { choice_id: 4, selection: [Card(44)] } nodes=3
+seed=2 step=18 rev=18 seat=2 action=NextPhase nodes=7
+seed=2 step=19 rev=19 seat=2 action=Answer { choice_id: 5, selection: [Card(35)] } nodes=6
+seed=2 step=20 rev=20 seat=2 action=NextPhase nodes=1
+seed=2 step=21 rev=21 seat=2 action=NextPhase nodes=1
+seed=2 step=22 rev=22 seat=3 action=NextPhase nodes=1
+seed=2 step=23 rev=23 seat=3 action=NextPhase nodes=1
+seed=2 step=24 rev=24 seat=3 action=NextPhase nodes=1
+seed=2 step=25 rev=25 seat=3 action=Answer { choice_id: 6, selection: [Card(80)] } nodes=6
+seed=2 step=26 rev=26 seat=3 action=NextPhase nodes=1
+seed=2 step=27 rev=27 seat=3 action=NextPhase nodes=1
+seed=2 step=28 rev=28 seat=0 action=NextPhase nodes=1
+seed=2 step=29 rev=29 seat=0 action=NextPhase nodes=1
+seed=2 step=30 rev=30 seat=0 action=PlayCard { card: 7, targets: [1] } nodes=4
+seed=2 step=31 rev=31 seat=0 action=NextPhase nodes=1
+seed=2 step=32 rev=32 seat=0 action=Answer { choice_id: 7, selection: [Card(68)] } nodes=6
+seed=2 step=33 rev=33 seat=0 action=NextPhase nodes=1
+seed=2 step=34 rev=34 seat=0 action=NextPhase nodes=1
+seed=2 step=35 rev=35 seat=1 action=NextPhase nodes=1
+seed=2 step=36 rev=36 seat=1 action=NextPhase nodes=1
+seed=2 step=37 rev=37 seat=1 action=PlayCard { card: 23, targets: [0] } nodes=7
+seed=2 step=38 rev=38 seat=1 action=NextPhase nodes=4
+seed=2 step=39 rev=39 seat=1 action=Answer { choice_id: 8, selection: [Card(110)] } nodes=5
+seed=2 step=40 rev=40 seat=1 action=NextPhase nodes=1
+seed=2 step=41 rev=41 seat=1 action=NextPhase nodes=1
+seed=2 step=42 rev=42 seat=2 action=NextPhase nodes=1
+seed=2 step=43 rev=43 seat=2 action=NextPhase nodes=1
+seed=2 step=44 rev=44 seat=2 action=PlayCard { card: 5, targets: [1] } nodes=10
+seed=2 step=45 rev=45 seat=2 action=NextPhase nodes=7
+seed=2 step=46 rev=46 seat=2 action=Answer { choice_id: 9, selection: [Card(98)] } nodes=6
+seed=2 step=47 rev=47 seat=2 action=NextPhase nodes=1
+seed=2 step=48 rev=48 seat=2 action=NextPhase nodes=1
+seed=2 step=49 rev=49 seat=3 action=NextPhase nodes=1
+seed=2 step=50 rev=50 seat=3 action=NextPhase nodes=1
+seed=2 step=51 rev=51 seat=3 action=NextPhase nodes=1
+seed=2 step=52 rev=52 seat=3 action=Answer { choice_id: 10, selection: [Card(74), Card(87)] } nodes=8
+seed=2 step=53 rev=53 seat=3 action=NextPhase nodes=1
+seed=2 step=54 rev=54 seat=3 action=NextPhase nodes=1
+seed=2 step=55 rev=55 seat=0 action=NextPhase nodes=1
+seed=2 step=56 rev=56 seat=0 action=NextPhase nodes=1
+seed=2 step=57 rev=57 seat=0 action=NextPhase nodes=1
+seed=2 step=58 rev=58 seat=0 action=Answer { choice_id: 11, selection: [Card(123), Card(107), Card(53)] } nodes=8
+seed=2 step=59 rev=59 seat=0 action=NextPhase nodes=1
+seed=2 step=60 rev=60 seat=0 action=NextPhase nodes=1
+seed=2 step=61 rev=61 seat=1 action=NextPhase nodes=1
+seed=2 step=62 rev=62 seat=1 action=NextPhase nodes=1
+seed=2 step=63 rev=63 seat=1 action=PlayCard { card: 4, targets: [2] } nodes=4
+seed=2 step=64 rev=64 seat=1 action=NextPhase nodes=1
+seed=2 step=65 rev=65 seat=1 action=Answer { choice_id: 12, selection: [Card(118), Card(72)] } nodes=6
+seed=2 step=66 rev=66 seat=1 action=NextPhase nodes=1
+seed=2 step=67 rev=67 seat=1 action=NextPhase nodes=1
+seed=2 step=68 rev=68 seat=2 action=NextPhase nodes=1
+seed=2 step=69 rev=69 seat=2 action=NextPhase nodes=1
+seed=2 step=70 rev=70 seat=2 action=PlayCard { card: 17, targets: [1] } nodes=10
+seed=2 step=71 rev=71 seat=2 action=NextPhase nodes=7
+seed=2 step=72 rev=72 seat=2 action=Answer { choice_id: 13, selection: [Card(106), Card(28)] } nodes=7
+seed=2 step=73 rev=73 seat=2 action=NextPhase nodes=1
+seed=2 step=74 rev=74 seat=2 action=NextPhase nodes=1
+seed=2 step=75 rev=75 seat=3 action=NextPhase nodes=1
+seed=2 step=76 rev=76 seat=3 action=NextPhase nodes=1
+seed=2 step=77 rev=77 seat=3 action=PlayCard { card: 15, targets: [0] } nodes=4
+seed=2 step=78 rev=78 seat=3 action=NextPhase nodes=1
+seed=2 step=79 rev=79 seat=3 action=Answer { choice_id: 14, selection: [Card(69)] } nodes=6
+seed=2 step=80 rev=80 seat=3 action=NextPhase nodes=1
+seed=2 step=81 rev=81 seat=3 action=NextPhase nodes=1
+seed=2 step=82 rev=82 seat=0 action=NextPhase nodes=1
+seed=2 step=83 rev=83 seat=0 action=NextPhase nodes=1
+seed=2 step=84 rev=84 seat=0 action=NextPhase nodes=1
+seed=2 step=85 rev=85 seat=0 action=Answer { choice_id: 15, selection: [Card(46), Card(89), Card(91)] } nodes=7
+seed=2 step=86 rev=86 seat=0 action=NextPhase nodes=1
+seed=2 step=87 rev=87 seat=0 action=NextPhase nodes=1
+seed=2 step=88 rev=88 seat=1 action=NextPhase nodes=1
+seed=2 step=89 rev=89 seat=1 action=NextPhase nodes=1
+seed=2 step=90 rev=90 seat=1 action=NextPhase nodes=1
+seed=2 step=91 rev=91 seat=1 action=Answer { choice_id: 16, selection: [Card(60), Card(99), Card(66)] } nodes=6
+seed=2 step=92 rev=92 seat=1 action=NextPhase nodes=1
+seed=2 step=93 rev=93 seat=1 action=NextPhase nodes=1
+seed=2 step=94 rev=94 seat=2 action=NextPhase nodes=1
+seed=2 step=95 rev=95 seat=2 action=NextPhase nodes=1
+seed=2 step=96 rev=96 seat=2 action=PlayCard { card: 21, targets: [1] } nodes=4
+seed=2 step=97 rev=97 seat=2 action=Answer { choice_id: 17, selection: [Pass] } nodes=3
+seed=2 step=98 rev=98 seat=2 action=NextPhase nodes=1
+seed=2 step=99 rev=99 seat=2 action=Answer { choice_id: 18, selection: [Card(121)] } nodes=5
+seed=2 step=100 rev=100 seat=2 action=NextPhase nodes=1
+seed=2 step=101 rev=101 seat=2 action=NextPhase nodes=1
+seed=2 step=102 rev=102 seat=3 action=NextPhase nodes=1
+seed=2 step=103 rev=103 seat=3 action=NextPhase nodes=1
+seed=2 step=104 rev=104 seat=3 action=NextPhase nodes=1
+seed=2 step=105 rev=105 seat=3 action=Answer { choice_id: 19, selection: [Card(62), Card(57)] } nodes=8
+seed=2 step=106 rev=106 seat=3 action=NextPhase nodes=1
+seed=2 step=107 rev=107 seat=3 action=NextPhase nodes=1
+seed=2 step=108 rev=108 seat=0 action=NextPhase nodes=1
+seed=2 step=109 rev=109 seat=0 action=NextPhase nodes=1
+seed=2 step=110 rev=110 seat=0 action=PlayCard { card: 20, targets: [2] } nodes=3
+seed=2 step=111 rev=111 seat=0 action=NextPhase nodes=1
+seed=2 step=112 rev=112 seat=0 action=Answer { choice_id: 20, selection: [Card(113)] } nodes=4
+seed=2 step=113 rev=113 seat=0 action=NextPhase nodes=1
+seed=2 step=114 rev=114 seat=0 action=NextPhase nodes=1
+seed=2 step=115 rev=115 seat=2 action=NextPhase nodes=1
+seed=2 step=116 rev=116 seat=2 action=NextPhase nodes=1
+seed=2 step=117 rev=117 seat=2 action=NextPhase nodes=1
+seed=2 step=118 rev=118 seat=2 action=Answer { choice_id: 21, selection: [Card(75), Card(54), Card(50)] } nodes=7
+seed=2 step=119 rev=119 seat=2 action=NextPhase nodes=1
+seed=2 step=120 rev=120 seat=2 action=NextPhase nodes=1
+seed=2 step=121 rev=121 seat=3 action=NextPhase nodes=1
+seed=2 step=122 rev=122 seat=3 action=NextPhase nodes=1
+seed=2 step=123 rev=123 seat=3 action=PlayCard { card: 0, targets: [0] } nodes=3
+seed=2 step=124 rev=124 seat=3 action=NextPhase nodes=1
+seed=2 step=125 rev=125 seat=3 action=Answer { choice_id: 22, selection: [Card(64)] } nodes=6
+seed=2 step=126 rev=126 seat=3 action=NextPhase nodes=1
+seed=2 step=127 rev=127 seat=3 action=NextPhase nodes=1
+seed=2 step=128 rev=128 seat=0 action=NextPhase nodes=1
+seed=2 step=129 rev=129 seat=0 action=NextPhase nodes=1
+seed=2 step=130 rev=130 seat=0 action=NextPhase nodes=1
+seed=2 step=131 rev=131 seat=0 action=Answer { choice_id: 23, selection: [Card(122), Card(52), Card(90)] } nodes=6
+seed=2 step=132 rev=132 seat=0 action=NextPhase nodes=1
+seed=2 step=133 rev=133 seat=0 action=NextPhase nodes=1
+seed=2 step=134 rev=134 seat=2 action=NextPhase nodes=1
+seed=2 step=135 rev=135 seat=2 action=NextPhase nodes=1
+seed=2 step=136 rev=136 seat=2 action=PlayCard { card: 11, targets: [0] } nodes=3
+seed=2 step=137 rev=137 seat=2 action=NextPhase nodes=1
+seed=2 step=138 rev=138 seat=2 action=Answer { choice_id: 24, selection: [Card(93)] } nodes=4
+seed=2 step=139 rev=139 seat=2 action=NextPhase nodes=1
+seed=2 step=140 rev=140 seat=2 action=NextPhase nodes=1
+seed=2 step=141 rev=141 seat=3 action=NextPhase nodes=1
+seed=2 step=142 rev=142 seat=3 action=NextPhase nodes=1
+seed=2 step=143 rev=143 seat=3 action=NextPhase nodes=1
+seed=2 step=144 rev=144 seat=3 action=Answer { choice_id: 25, selection: [Card(43), Card(42)] } nodes=8
+seed=2 step=145 rev=145 seat=3 action=NextPhase nodes=1
+seed=2 step=146 rev=146 seat=3 action=NextPhase nodes=1
+seed=2 step=147 rev=147 seat=2 action=NextPhase nodes=1
+seed=2 step=148 rev=148 seat=2 action=NextPhase nodes=1
+seed=2 step=149 rev=149 seat=2 action=PlayCard { card: 22, targets: [3] } nodes=2
+seed=2 step=150 rev=150 seat=2 action=NextPhase nodes=1
+seed=2 step=151 rev=151 seat=2 action=Answer { choice_id: 26, selection: [Card(120)] } nodes=4
+seed=2 step=152 rev=152 seat=2 action=NextPhase nodes=1
+seed=2 step=153 rev=153 seat=2 action=NextPhase nodes=1
+seed=2 step=154 rev=154 seat=3 action=NextPhase nodes=1
+seed=2 step=155 rev=155 seat=3 action=NextPhase nodes=1
+seed=2 step=156 rev=156 seat=3 action=PlayCard { card: 24, targets: [2] } nodes=2
+seed=2 step=157 rev=157 seat=2 action=Answer { choice_id: 27, selection: [Card(32)] } nodes=3
+seed=2 step=158 rev=158 seat=3 action=NextPhase nodes=1
+seed=2 step=159 rev=159 seat=3 action=Answer { choice_id: 28, selection: [Card(103), Card(61)] } nodes=7
+seed=2 step=160 rev=160 seat=3 action=NextPhase nodes=1
+seed=2 step=161 rev=161 seat=3 action=NextPhase nodes=1
+seed=2 step=162 rev=162 seat=2 action=NextPhase nodes=1
+seed=2 step=163 rev=163 seat=2 action=NextPhase nodes=1
+seed=2 step=164 rev=164 seat=2 action=NextPhase nodes=1
+seed=2 step=165 rev=165 seat=2 action=Answer { choice_id: 29, selection: [Card(119)] } nodes=4
+seed=2 step=166 rev=166 seat=2 action=NextPhase nodes=1
+seed=2 step=167 rev=167 seat=2 action=NextPhase nodes=1
+seed=2 step=168 rev=168 seat=3 action=NextPhase nodes=1
+seed=2 step=169 rev=169 seat=3 action=NextPhase nodes=1
+seed=2 step=170 rev=170 seat=3 action=NextPhase nodes=1
+seed=2 step=171 rev=171 seat=3 action=Answer { choice_id: 30, selection: [Card(109), Card(49)] } nodes=7
+seed=2 step=172 rev=172 seat=3 action=NextPhase nodes=1
+seed=2 step=173 rev=173 seat=3 action=NextPhase nodes=1
+seed=2 step=174 rev=174 seat=2 action=NextPhase nodes=1
+seed=2 step=175 rev=175 seat=2 action=NextPhase nodes=1
+seed=2 step=176 rev=176 seat=2 action=PlayCard { card: 16, targets: [3] } nodes=2
+seed=2 step=177 rev=177 seat=3 action=Answer { choice_id: 31, selection: [Card(39)] } nodes=4
+seed=2 step=178 rev=178 seat=2 action=NextPhase nodes=1
+seed=2 step=179 rev=179 seat=2 action=Answer { choice_id: 32, selection: [Card(115)] } nodes=4
+seed=2 step=180 rev=180 seat=2 action=NextPhase nodes=1
+seed=2 step=181 rev=181 seat=2 action=NextPhase nodes=1
+seed=2 step=182 rev=182 seat=3 action=NextPhase nodes=1
+seed=2 step=183 rev=183 seat=3 action=NextPhase nodes=1
+seed=2 step=184 rev=184 seat=3 action=NextPhase nodes=1
+seed=2 step=185 rev=185 seat=3 action=Answer { choice_id: 33, selection: [Card(37)] } nodes=5
+seed=2 step=186 rev=186 seat=3 action=NextPhase nodes=1
+seed=2 step=187 rev=187 seat=3 action=NextPhase nodes=1
+seed=2 step=188 rev=188 seat=2 action=NextPhase nodes=1
+seed=2 step=189 rev=189 seat=2 action=NextPhase nodes=1
+seed=2 step=190 rev=190 seat=2 action=NextPhase nodes=1
+seed=2 step=191 rev=191 seat=2 action=Answer { choice_id: 34, selection: [Card(114), Card(116)] } nodes=6
+seed=2 step=192 rev=192 seat=2 action=NextPhase nodes=1
+seed=2 step=193 rev=193 seat=2 action=NextPhase nodes=1
+seed=2 step=194 rev=194 seat=3 action=NextPhase nodes=1
+seed=2 step=195 rev=195 seat=3 action=NextPhase nodes=1
+seed=2 step=196 rev=196 seat=3 action=PlayCard { card: 8, targets: [2] } nodes=2
+seed=2 step=197 rev=197 seat=3 action=NextPhase nodes=1
+seed=2 step=198 rev=198 seat=3 action=Answer { choice_id: 35, selection: [Card(96)] } nodes=5
+seed=2 step=199 rev=199 seat=3 action=NextPhase nodes=1
+seed=2 step=200 rev=200 seat=3 action=NextPhase nodes=1
+seed=2 step=201 rev=201 seat=2 action=NextPhase nodes=1
+seed=2 step=202 rev=202 seat=2 action=NextPhase nodes=1
+seed=2 step=203 rev=203 seat=2 action=NextPhase nodes=1
+seed=2 step=204 rev=204 seat=2 action=Answer { choice_id: 36, selection: [Card(97), Card(73), Card(56)] } nodes=6
+seed=2 step=205 rev=205 seat=2 action=NextPhase nodes=1
+seed=2 step=206 rev=206 seat=2 action=NextPhase nodes=1
+seed=2 step=207 rev=207 seat=3 action=NextPhase nodes=1
+seed=2 step=208 rev=208 seat=3 action=NextPhase nodes=1
+seed=2 step=209 rev=209 seat=3 action=PlayCard { card: 14, targets: [2] } nodes=3
+seed=2 END rev=210 outcome=Some(Outcome { winner: Player(3) })

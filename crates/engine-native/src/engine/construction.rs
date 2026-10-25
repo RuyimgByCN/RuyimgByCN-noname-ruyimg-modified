@@ -28,6 +28,15 @@ impl Engine {
     }
 
     pub(super) fn new_identity_unchecked(seed: u64, seats: usize) -> Self {
+        Self::new_with_mode(
+            seed,
+            seats,
+            Self::identity_mode(seats),
+            OpeningPlan::Standard,
+        )
+    }
+
+    fn identity_mode(seats: usize) -> GameMode {
         let loyalists = match seats {
             4 | 5 | 6 => 1,
             _ => 2,
@@ -41,12 +50,20 @@ impl Engine {
         }
         roles.push(crate::state::Role::Traitor);
         debug_assert_eq!(roles.len(), seats);
-        Self::new_with_mode(
-            seed,
-            seats,
-            GameMode::Identity { roles },
-            OpeningPlan::Standard,
-        )
+        GameMode::Identity { roles }
+    }
+
+    /// 身份局使用同一扩展目录和初始化钩子；非法人数返回错误。
+    pub fn try_new_identity_with_extensions(
+        seed: u64,
+        seats: usize,
+        packs: &[&crate::content::extension::ExtensionPack],
+    ) -> Result<Self, String> {
+        if !(4..=8).contains(&seats) {
+            return Err(format!("identity mode supports 4-8 seats, got {seats}"));
+        }
+        Self::new_with_extensions_mode(seed, seats, packs, Self::identity_mode(seats))
+            .map_err(|e| format!("{e:?}"))
     }
 
     /// KOF 引擎层（P2/N08 模式入口批四）：2 人局，携带会话将池/比分/局数。
@@ -400,6 +417,7 @@ impl Engine {
             segment_open: false,
             debug_budget: None,
             segment_checkpoint: None,
+            simulation: false,
         }
     }
 
@@ -410,15 +428,18 @@ impl Engine {
         seats: usize,
         packs: &[&crate::content::extension::ExtensionPack],
     ) -> Result<Self, crate::content::extension::ExtensionError> {
+        Self::new_with_extensions_mode(seed, seats, packs, GameMode::Prototype)
+    }
+
+    fn new_with_extensions_mode(
+        seed: u64,
+        seats: usize,
+        packs: &[&crate::content::extension::ExtensionPack],
+        mode: GameMode,
+    ) -> Result<Self, crate::content::extension::ExtensionError> {
         let catalog = content::standard::standard_catalog_with_extensions(packs)?;
         let catalog: SharedCatalog = std::sync::Arc::new(catalog);
-        let mut e = Self::new_with_catalog(
-            seed,
-            seats,
-            GameMode::Prototype,
-            catalog,
-            OpeningPlan::Standard,
-        );
+        let mut e = Self::new_with_catalog(seed, seats, mode, catalog, OpeningPlan::Standard);
         // G1 wuxing 初始化钩子：每名角色随机五行属性 + 牌堆按 1/3 比例
         // 随机获得属性（规则随机性使用引擎 RNG，保持可重放）。
         if packs
@@ -439,109 +460,20 @@ impl Engine {
                     core.card_natures.insert(card, nature);
                 }
             }
-            // 生克技能授予全部存活角色（上游 `_` 前缀全局技能语义）
-            let shengke: Vec<crate::ids::SkillDefId> = e
-                .catalog
-                .skills
-                .iter()
-                .enumerate()
-                .filter(|(_, def)| {
-                    def.behavior.as_host_behavior()
-                        == Some(crate::content::host::HostBehavior::ShengkeCheck)
-                })
-                .map(|(i, _)| i as crate::ids::SkillDefId)
-                .collect();
-            for def in shengke {
-                for p in 0..seats as crate::ids::PlayerId {
-                    e.state.core.skills.insert(
-                        (p, def),
-                        crate::state::SkillInstance {
-                            owner: p,
-                            enabled: true,
-                            once_used: false,
-                            expires_end_of_turn: false,
-                            rounds: 0,
-                        },
-                    );
-                }
-            }
         }
-        // G1 swd 器族手持技初始化钩子（卡牌面补切批⑩）：四象五件手持触发
-        // 技授予全部存活角色（效果由手持 filter 门控——未持牌不触发）。
-        if packs
-            .iter()
-            .any(|p| p.enabled && p.init_hook == crate::content::extension::InitHook::SwdJiqiHeld)
-        {
-            let jiqi_defs: Vec<crate::ids::SkillDefId> = e
-                .catalog
-                .skills
-                .iter()
-                .enumerate()
-                .filter(|(_, def)| {
-                    matches!(
-                        def.behavior.as_host_behavior(),
-                        Some(
-                            crate::content::host::HostBehavior::SwdQinglongzhiguiHeld
-                                | crate::content::host::HostBehavior::SwdZhuquezhizhangHeld
-                                | crate::content::host::HostBehavior::SwdBaishouzhihuHeld
-                                | crate::content::host::HostBehavior::SwdXuanwuzhihuangHeld
-                                | crate::content::host::HostBehavior::SwdHuanglinzhicongHeld
-                                | crate::content::host::HostBehavior::SwdShencaojieGuard
-                                | crate::content::host::HostBehavior::SwdYuchanSwap
-                                | crate::content::host::HostBehavior::SwdShenmiguoWindow
-                        )
-                    )
-                })
-                .map(|(i, _)| i as crate::ids::SkillDefId)
-                .collect();
-            for def in jiqi_defs {
-                for p in 0..seats as crate::ids::PlayerId {
-                    e.state.core.skills.insert(
-                        (p, def),
-                        crate::state::SkillInstance {
-                            owner: p,
-                            enabled: true,
-                            once_used: false,
-                            expires_end_of_turn: false,
-                            rounds: 0,
-                        },
-                    );
-                }
-            }
-        }
-        // G1 古剑·金莲烛：伤害前置事件取消监听技授予全体角色——
-        // 持有金莲烛时才经过滤器生效（上游 global damageBefore 触发
-        // + chooseToUse 语义的确定性化）。
-        if packs.iter().any(|p| {
-            p.enabled
-                && p.host_skills
-                    .iter()
-                    .any(|d| d.behavior == crate::content::host::HostBehavior::JinlianzhuCancel)
-        }) {
-            let listeners: Vec<crate::ids::SkillDefId> = e
-                .catalog
-                .skills
-                .iter()
-                .enumerate()
-                .filter(|(_, def)| {
-                    def.behavior.as_host_behavior()
-                        == Some(crate::content::host::HostBehavior::JinlianzhuCancel)
-                })
-                .map(|(i, _)| i as crate::ids::SkillDefId)
-                .collect();
-            for def in listeners {
-                for p in 0..seats as crate::ids::PlayerId {
-                    e.state.core.skills.insert(
-                        (p, def),
-                        crate::state::SkillInstance {
-                            owner: p,
-                            enabled: true,
-                            once_used: false,
-                            expires_end_of_turn: false,
-                            rounds: 0,
-                        },
-                    );
-                }
+        // Grants use the same derived declarations that selection and restore read.
+        for &def in &e.catalog.extension_global_skills {
+            for p in 0..seats as crate::ids::PlayerId {
+                e.state.core.skills.insert(
+                    (p, def),
+                    crate::state::SkillInstance {
+                        owner: p,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: false,
+                        rounds: 0,
+                    },
+                );
             }
         }
         Ok(e)

@@ -1,0 +1,1718 @@
+0,0,NextPhase,1
+0,1,NextPhase,1
+0,2,PlayCard { card: 0, targets: [7] },15
+0,3,NextPhase,8
+0,4,Answer { choice_id: 1, selection: [Card(33)] },6
+0,5,NextPhase,1
+0,6,NextPhase,1
+0,7,NextPhase,1
+0,8,NextPhase,1
+0,9,PlayCard { card: 12, targets: [0] },8
+0,10,Answer { choice_id: 2, selection: [Card(38)] },3
+0,11,NextPhase,1
+0,12,Answer { choice_id: 3, selection: [Card(55)] },6
+0,13,NextPhase,1
+0,14,NextPhase,1
+0,15,NextPhase,1
+0,16,NextPhase,1
+0,17,PlayCard { card: 7, targets: [1] },8
+0,18,Answer { choice_id: 4, selection: [Card(37)] },3
+0,19,NextPhase,1
+0,20,Answer { choice_id: 5, selection: [Card(81)] },6
+0,21,NextPhase,1
+0,22,NextPhase,1
+0,23,NextPhase,1
+0,24,NextPhase,1
+0,25,NextPhase,1
+0,26,Answer { choice_id: 6, selection: [Card(115), Card(83)] },8
+0,27,NextPhase,1
+0,28,NextPhase,1
+0,29,NextPhase,1
+0,30,NextPhase,1
+0,31,NextPhase,1
+0,32,Answer { choice_id: 7, selection: [Card(60), Card(80)] },8
+0,33,NextPhase,1
+0,34,NextPhase,1
+0,35,NextPhase,1
+0,36,NextPhase,1
+0,37,PlayCard { card: 23, targets: [4] },15
+0,38,Answer { choice_id: 8, selection: [Card(41)] },3
+0,39,NextPhase,8
+0,40,Answer { choice_id: 9, selection: [Card(94)] },6
+0,41,NextPhase,1
+0,42,NextPhase,1
+0,43,NextPhase,1
+0,44,NextPhase,1
+0,45,PlayCard { card: 4, targets: [5] },8
+0,46,Answer { choice_id: 10, selection: [Card(36)] },4
+0,47,NextPhase,1
+0,48,Answer { choice_id: 11, selection: [Card(61)] },6
+0,49,NextPhase,1
+0,50,NextPhase,1
+0,51,NextPhase,1
+0,52,NextPhase,1
+0,53,PlayCard { card: 28, targets: [0] },22
+0,54,NextPhase,15
+0,55,Answer { choice_id: 12, selection: [Card(105), Card(63)] },7
+0,56,NextPhase,1
+0,57,NextPhase,1
+0,58,NextPhase,1
+0,59,NextPhase,1
+0,60,PlayCard { card: 6, targets: [7] },15
+0,61,NextPhase,8
+0,62,Answer { choice_id: 13, selection: [Card(117)] },5
+0,63,NextPhase,1
+0,64,NextPhase,1
+0,65,NextPhase,1
+0,66,NextPhase,1
+0,67,NextPhase,1
+0,68,Answer { choice_id: 14, selection: [Card(87)] },6
+0,69,NextPhase,1
+0,70,NextPhase,1
+0,71,NextPhase,1
+0,72,NextPhase,1
+0,73,PlayCard { card: 17, targets: [1] },15
+0,74,Answer { choice_id: 15, selection: [Card(42)] },3
+0,75,NextPhase,8
+0,76,Answer { choice_id: 16, selection: [Card(114)] },6
+0,77,NextPhase,1
+0,78,NextPhase,1
+0,79,NextPhase,1
+0,80,NextPhase,1
+0,81,PlayCard { card: 20, targets: [2] },8
+0,82,NextPhase,1
+0,83,Answer { choice_id: 17, selection: [Card(109)] },6
+0,84,NextPhase,1
+0,85,NextPhase,1
+0,86,NextPhase,1
+0,87,NextPhase,1
+0,88,NextPhase,1
+0,89,Answer { choice_id: 18, selection: [Card(46)] },6
+0,90,NextPhase,1
+0,91,NextPhase,1
+0,92,NextPhase,1
+0,93,NextPhase,1
+0,94,PlayCard { card: 3, targets: [4] },8
+0,95,Answer { choice_id: 19, selection: [Card(31)] },3
+0,96,NextPhase,1
+0,97,NextPhase,1
+0,98,NextPhase,1
+0,99,NextPhase,1
+0,100,NextPhase,1
+0,101,PlayCard { card: 2, targets: [5] },8
+0,102,Answer { choice_id: 20, selection: [Card(43)] },3
+0,103,NextPhase,1
+0,104,Answer { choice_id: 21, selection: [Card(51)] },6
+0,105,NextPhase,1
+0,106,NextPhase,1
+0,107,NextPhase,1
+0,108,NextPhase,1
+0,109,PlayCard { card: 19, targets: [0] },15
+0,110,NextPhase,8
+0,111,Answer { choice_id: 22, selection: [Card(97), Card(5)] },6
+0,112,NextPhase,1
+0,113,NextPhase,1
+0,114,NextPhase,1
+0,115,NextPhase,1
+0,116,PlayCard { card: 13, targets: [1] },15
+0,117,NextPhase,8
+0,118,Answer { choice_id: 23, selection: [Card(45), Card(123)] },6
+0,119,NextPhase,1
+0,120,NextPhase,1
+0,121,NextPhase,1
+0,122,NextPhase,1
+0,123,PlayCard { card: 9, targets: [0] },8
+0,124,NextPhase,1
+0,125,Answer { choice_id: 24, selection: [Card(101)] },5
+0,126,NextPhase,1
+0,127,NextPhase,1
+0,128,NextPhase,1
+0,129,NextPhase,1
+0,130,PlayCard { card: 27, targets: [1] },8
+0,131,NextPhase,1
+0,132,Answer { choice_id: 25, selection: [Card(52), Card(82)] },7
+0,133,NextPhase,1
+0,134,NextPhase,1
+0,135,NextPhase,1
+0,136,NextPhase,1
+0,137,NextPhase,1
+0,138,Answer { choice_id: 26, selection: [Card(102), Card(76)] },8
+0,139,NextPhase,1
+0,140,NextPhase,1
+0,141,NextPhase,1
+0,142,NextPhase,1
+0,143,PlayCard { card: 16, targets: [5] },8
+0,144,NextPhase,1
+0,145,NextPhase,1
+0,146,NextPhase,1
+0,147,NextPhase,1
+0,148,NextPhase,1
+0,149,NextPhase,1
+0,150,Answer { choice_id: 27, selection: [Card(48), Card(62)] },7
+0,151,NextPhase,1
+0,152,NextPhase,1
+0,153,NextPhase,1
+0,154,NextPhase,1
+0,155,PlayCard { card: 24, targets: [7] },8
+0,156,Answer { choice_id: 28, selection: [Card(39)] },3
+0,157,NextPhase,1
+0,158,Answer { choice_id: 29, selection: [Card(66)] },6
+0,159,NextPhase,1
+0,160,NextPhase,1
+0,161,NextPhase,1
+0,162,NextPhase,1
+0,163,NextPhase,1
+0,164,Answer { choice_id: 30, selection: [Card(74)] },4
+0,165,NextPhase,1
+0,166,NextPhase,1
+0,167,NextPhase,1
+0,168,NextPhase,1
+0,169,PlayCard { card: 11, targets: [7] },15
+0,170,NextPhase,8
+0,171,Answer { choice_id: 31, selection: [Card(56), Card(18)] },5
+0,172,NextPhase,1
+0,173,NextPhase,1
+0,174,NextPhase,1
+0,175,NextPhase,1
+0,176,PlayCard { card: 29, targets: [2] },8
+0,177,NextPhase,1
+0,178,Answer { choice_id: 32, selection: [Card(118), Card(89)] },6
+0,179,NextPhase,1
+0,180,NextPhase,1
+0,181,NextPhase,1
+0,182,NextPhase,1
+0,183,NextPhase,1
+0,184,Answer { choice_id: 33, selection: [Card(95), Card(77), Card(78)] },7
+0,185,NextPhase,1
+0,186,NextPhase,1
+0,187,NextPhase,1
+0,188,NextPhase,1
+0,189,NextPhase,1
+0,190,Answer { choice_id: 34, selection: [Card(64), Card(70)] },8
+0,191,NextPhase,1
+0,192,NextPhase,1
+0,193,NextPhase,1
+0,194,NextPhase,1
+0,195,NextPhase,1
+0,196,Answer { choice_id: 35, selection: [Card(86), Card(116)] },8
+0,197,NextPhase,1
+0,198,NextPhase,1
+0,199,NextPhase,1
+0,200,NextPhase,1
+0,201,NextPhase,1
+0,202,Answer { choice_id: 36, selection: [Card(68), Card(32)] },7
+0,203,NextPhase,1
+0,204,NextPhase,1
+0,205,NextPhase,1
+0,206,NextPhase,1
+0,207,PlayCard { card: 10, targets: [5] },8
+0,208,NextPhase,1
+0,209,Answer { choice_id: 37, selection: [Card(90)] },6
+0,210,NextPhase,1
+0,211,NextPhase,1
+0,212,NextPhase,1
+0,213,NextPhase,1
+0,214,NextPhase,1
+0,215,Answer { choice_id: 38, selection: [Card(57), Card(110), Card(91)] },6
+0,216,NextPhase,1
+0,217,NextPhase,1
+0,218,NextPhase,1
+0,219,NextPhase,1
+0,220,NextPhase,1
+0,221,Answer { choice_id: 39, selection: [Card(58), Card(106)] },5
+0,222,NextPhase,1
+0,223,NextPhase,1
+0,224,NextPhase,1
+0,225,NextPhase,1
+0,226,NextPhase,1
+0,227,Answer { choice_id: 40, selection: [Card(108), Card(34)] },6
+0,228,NextPhase,1
+0,229,NextPhase,1
+0,230,NextPhase,1
+0,231,NextPhase,1
+0,232,PlayCard { card: 15, targets: [1] },8
+0,233,NextPhase,1
+0,234,Answer { choice_id: 41, selection: [Card(59)] },4
+0,235,NextPhase,1
+0,236,NextPhase,1
+0,237,NextPhase,1
+0,238,NextPhase,1
+0,239,PlayCard { card: 1, targets: [4] },8
+0,240,Answer { choice_id: 42, selection: [Card(35)] },3
+0,241,NextPhase,1
+0,242,Answer { choice_id: 43, selection: [Card(44)] },6
+0,243,NextPhase,1
+0,244,NextPhase,1
+0,245,NextPhase,1
+0,246,NextPhase,1
+0,247,PlayCard { card: 26, targets: [5] },8
+0,248,NextPhase,1
+0,249,NextPhase,1
+0,250,NextPhase,1
+0,251,NextPhase,1
+0,252,NextPhase,1
+0,253,PlayCard { card: 25, targets: [4] },8
+0,254,NextPhase,1
+0,255,Answer { choice_id: 44, selection: [Card(49), Card(103), Card(99)] },6
+0,256,NextPhase,1
+0,257,NextPhase,1
+0,258,NextPhase,1
+0,259,NextPhase,1
+0,260,NextPhase,1
+0,261,Answer { choice_id: 45, selection: [Card(92), Card(73)] },8
+0,262,NextPhase,1
+0,263,NextPhase,1
+0,264,NextPhase,1
+0,265,NextPhase,1
+0,266,NextPhase,1
+0,267,Answer { choice_id: 46, selection: [Card(93), Card(113)] },5
+0,268,NextPhase,1
+0,269,NextPhase,1
+0,270,NextPhase,1
+0,271,NextPhase,1
+0,272,NextPhase,1
+0,273,Answer { choice_id: 47, selection: [Card(67), Card(69)] },5
+0,274,NextPhase,1
+0,275,NextPhase,1
+0,276,NextPhase,1
+0,277,NextPhase,1
+0,278,PlayCard { card: 21, targets: [0] },15
+0,279,Answer { choice_id: 48, selection: [Pass] },3
+0,280,Answer { choice_id: 49, selection: [Pass] },3
+0,281,NextPhase,7
+0,282,Answer { choice_id: 50, selection: [Card(53), Card(50)] },5
+0,283,NextPhase,1
+0,284,NextPhase,1
+0,285,NextPhase,1
+0,286,NextPhase,1
+0,287,NextPhase,1
+0,288,Answer { choice_id: 51, selection: [Card(88), Card(75)] },6
+0,289,NextPhase,1
+0,290,NextPhase,1
+0,291,NextPhase,1
+0,292,NextPhase,1
+0,293,PlayCard { card: 14, targets: [2] },13
+0,294,NextPhase,7
+0,295,Answer { choice_id: 52, selection: [Card(96)] },6
+0,296,NextPhase,1
+0,297,NextPhase,1
+0,298,NextPhase,1
+0,299,NextPhase,1
+0,300,NextPhase,1
+0,301,Answer { choice_id: 53, selection: [Card(112), Card(122), Card(65)] },8
+0,302,NextPhase,1
+0,303,NextPhase,1
+0,304,NextPhase,1
+0,305,NextPhase,1
+0,306,NextPhase,1
+0,307,Answer { choice_id: 54, selection: [Card(79), Card(120)] },5
+0,308,NextPhase,1
+0,309,NextPhase,1
+0,310,NextPhase,1
+0,311,NextPhase,1
+0,312,NextPhase,1
+0,313,Answer { choice_id: 55, selection: [Card(72), Card(85)] },8
+0,314,NextPhase,1
+0,315,NextPhase,1
+0,316,NextPhase,1
+0,317,NextPhase,1
+0,318,NextPhase,1
+0,319,Answer { choice_id: 56, selection: [Card(30), Card(112)] },5
+0,320,NextPhase,1
+0,321,NextPhase,1
+0,322,NextPhase,1
+0,323,NextPhase,1
+0,324,PlayCard { card: 8, targets: [2] },13
+0,325,Answer { choice_id: 57, selection: [Card(47)] },3
+0,326,NextPhase,7
+0,327,Answer { choice_id: 58, selection: [Card(5)] },3
+0,328,NextPhase,1
+0,329,NextPhase,1
+0,330,NextPhase,1
+0,331,NextPhase,1
+0,332,NextPhase,1
+0,333,Answer { choice_id: 59, selection: [Card(104), Card(102)] },5
+0,334,NextPhase,1
+0,335,NextPhase,1
+0,336,NextPhase,1
+0,337,NextPhase,1
+0,338,PlayCard { card: 22, targets: [2] },7
+0,339,NextPhase,1
+0,340,Answer { choice_id: 60, selection: [Card(121)] },6
+0,341,NextPhase,1
+0,342,NextPhase,1
+0,343,NextPhase,1
+0,344,NextPhase,1
+0,345,PlayCard { card: 26, targets: [5] },6
+0,346,NextPhase,1
+0,347,Answer { choice_id: 61, selection: [Card(107)] },5
+0,348,NextPhase,1
+0,349,NextPhase,1
+0,350,NextPhase,1
+0,351,NextPhase,1
+0,352,NextPhase,1
+0,353,Answer { choice_id: 62, selection: [Card(40), Card(119)] },8
+0,354,NextPhase,1
+0,355,NextPhase,1
+0,356,NextPhase,1
+0,357,NextPhase,1
+0,358,PlayCard { card: 17, targets: [1] },5
+0,359,Answer { choice_id: 63, selection: [Pass] },3
+0,360,NextPhase,1
+0,361,Answer { choice_id: 64, selection: [Card(35)] },3
+0,362,NextPhase,1
+0,363,NextPhase,1
+0,364,NextPhase,1
+0,365,NextPhase,1
+0,366,NextPhase,1
+0,367,Answer { choice_id: 65, selection: [Card(71), Card(100)] },8
+0,368,NextPhase,1
+0,369,NextPhase,1
+0,370,NextPhase,1
+0,371,NextPhase,1
+0,372,PlayCard { card: 23, targets: [3] },4
+0,373,Answer { choice_id: 66, selection: [Card(39)] },3
+0,374,NextPhase,1
+0,375,Answer { choice_id: 67, selection: [Card(111)] },5
+0,376,NextPhase,1
+0,377,NextPhase,1
+0,378,NextPhase,1
+0,379,NextPhase,1
+0,380,PlayCard { card: 1, targets: [4] },4
+0,381,Answer { choice_id: 68, selection: [Card(34)] },3
+0,382,NextPhase,1
+0,383,Answer { choice_id: 69, selection: [Card(60)] },6
+0,384,NextPhase,1
+0,385,NextPhase,1
+0,386,NextPhase,1
+0,387,NextPhase,1
+0,388,PlayCard { card: 12, targets: [6] },4
+0,389,Answer { choice_id: 70, selection: [Card(33)] },3
+0,390,NextPhase,1
+0,391,Answer { choice_id: 71, selection: [Card(80)] },3
+0,392,NextPhase,1
+0,393,NextPhase,1
+0,394,NextPhase,1
+0,395,NextPhase,1
+0,396,NextPhase,1
+0,397,Answer { choice_id: 72, selection: [Card(93)] },6
+0,398,NextPhase,1
+0,399,NextPhase,1
+0,400,NextPhase,1
+0,401,NextPhase,1
+0,402,NextPhase,1
+0,403,Answer { choice_id: 73, selection: [Card(84)] },5
+0,404,NextPhase,1
+0,405,NextPhase,1
+0,406,NextPhase,1
+0,407,NextPhase,1
+0,408,NextPhase,1
+0,409,Answer { choice_id: 74, selection: [Card(75)] },6
+0,410,NextPhase,1
+0,411,NextPhase,1
+0,412,NextPhase,1
+0,413,NextPhase,1
+0,414,NextPhase,1
+0,415,Answer { choice_id: 75, selection: [Card(31), Card(115)] },5
+0,416,NextPhase,1
+0,417,NextPhase,1
+0,418,NextPhase,1
+0,419,NextPhase,1
+0,420,NextPhase,1
+0,421,Answer { choice_id: 76, selection: [Card(79), Card(117)] },8
+0,422,NextPhase,1
+0,423,NextPhase,1
+0,424,NextPhase,1
+0,425,NextPhase,1
+0,426,NextPhase,1
+0,427,Answer { choice_id: 77, selection: [Card(76), Card(42)] },7
+0,428,NextPhase,1
+0,429,NextPhase,1
+0,430,NextPhase,1
+0,431,NextPhase,1
+0,432,PlayCard { card: 13, targets: [4] },4
+0,433,Answer { choice_id: 78, selection: [Card(32)] },3
+0,434,NextPhase,1
+0,435,Answer { choice_id: 79, selection: [Card(89)] },6
+0,436,NextPhase,1
+0,437,NextPhase,1
+0,438,NextPhase,1
+0,439,NextPhase,1
+0,440,NextPhase,1
+0,441,Answer { choice_id: 80, selection: [Card(62), Card(88)] },5
+0,442,NextPhase,1
+0,443,NextPhase,1
+0,444,NextPhase,1
+0,445,NextPhase,1
+0,446,PlayCard { card: 16, targets: [4] },4
+0,447,NextPhase,1
+0,448,Answer { choice_id: 81, selection: [Card(43)] },6
+0,449,NextPhase,1
+0,450,NextPhase,1
+0,451,NextPhase,1
+0,452,NextPhase,1
+0,453,PlayCard { card: 10, targets: [3] },4
+0,454,Answer { choice_id: 82, selection: [Card(37)] },3
+0,455,NextPhase,1
+0,456,Answer { choice_id: 83, selection: [Card(110)] },4
+0,457,NextPhase,1
+0,458,NextPhase,1
+0,459,NextPhase,1
+0,460,NextPhase,1
+0,461,NextPhase,1
+0,462,Answer { choice_id: 84, selection: [Card(52), Card(106)] },8
+0,463,NextPhase,1
+0,464,NextPhase,1
+0,465,NextPhase,1
+0,466,NextPhase,1
+0,467,NextPhase,1
+0,468,Answer { choice_id: 85, selection: [Card(65), Card(101)] },5
+0,469,NextPhase,1
+0,470,NextPhase,1
+0,471,NextPhase,1
+0,472,NextPhase,1
+0,473,PlayCard { card: 25, targets: [4] },4
+0,474,NextPhase,1
+0,475,NextPhase,1
+0,476,NextPhase,1
+0,477,NextPhase,1
+0,478,NextPhase,1
+0,479,NextPhase,1
+0,480,Answer { choice_id: 86, selection: [Card(58), Card(99), Card(44)] },6
+0,481,NextPhase,1
+0,482,NextPhase,1
+0,483,NextPhase,1
+0,484,NextPhase,1
+0,485,PlayCard { card: 9, targets: [4] },4
+0,486,Answer { choice_id: 87, selection: [Pass] },3
+0,487,NextPhase,1
+0,488,Answer { choice_id: 88, selection: [Card(86)] },6
+0,489,NextPhase,1
+0,490,NextPhase,1
+0,491,NextPhase,1
+0,492,NextPhase,1
+0,493,PlayCard { card: 15, targets: [3] },3
+0,494,NextPhase,1
+0,495,Answer { choice_id: 89, selection: [Card(114)] },3
+0,496,NextPhase,1
+0,497,NextPhase,1
+0,498,NextPhase,1
+0,499,NextPhase,1
+0,500,NextPhase,1
+0,501,Answer { choice_id: 90, selection: [Card(67), Card(105), Card(91)] },8
+0,502,NextPhase,1
+0,503,NextPhase,1
+0,504,NextPhase,1
+0,505,NextPhase,1
+0,506,NextPhase,1
+0,507,Answer { choice_id: 91, selection: [Card(118), Card(70)] },8
+0,508,NextPhase,1
+0,509,NextPhase,1
+0,510,NextPhase,1
+0,511,NextPhase,1
+0,512,PlayCard { card: 3, targets: [3] },3
+0,513,NextPhase,1
+0,514,Answer { choice_id: 92, selection: [Card(97)] },3
+0,515,NextPhase,1
+0,516,NextPhase,1
+0,517,NextPhase,1
+0,518,NextPhase,1
+0,519,PlayCard { card: 6, targets: [6] },3
+0,520,Answer { choice_id: 93, selection: [Card(41)] },3
+0,521,NextPhase,1
+0,522,Answer { choice_id: 94, selection: [Card(92), Card(48)] },6
+0,523,NextPhase,1
+0,524,NextPhase,1
+0,525,NextPhase,1
+0,526,NextPhase,1
+0,527,PlayCard { card: 4, targets: [3] },3
+0,528,NextPhase,1
+0,529,NextPhase,1
+0,530,NextPhase,1
+0,531,NextPhase,1
+0,532,NextPhase,1
+0,533,NextPhase,1
+0,534,Answer { choice_id: 95, selection: [Card(96), Card(68)] },5
+0,535,NextPhase,1
+0,536,NextPhase,1
+0,537,NextPhase,1
+0,538,NextPhase,1
+0,539,PlayCard { card: 0, targets: [6] },3
+0,540,NextPhase,1
+0,541,Answer { choice_id: 96, selection: [Card(109), Card(116)] },5
+0,542,NextPhase,1
+0,543,NextPhase,1
+0,544,NextPhase,1
+0,545,NextPhase,1
+0,546,NextPhase,1
+0,547,Answer { choice_id: 97, selection: [Card(95), Card(57), Card(53)] },8
+0,548,NextPhase,1
+0,549,NextPhase,1
+0,550,NextPhase,1
+0,551,NextPhase,1
+0,552,NextPhase,1
+0,553,Answer { choice_id: 98, selection: [Card(122), Card(64)] },5
+0,554,NextPhase,1
+0,555,NextPhase,1
+0,556,NextPhase,1
+0,557,NextPhase,1
+0,558,PlayCard { card: 7, targets: [6] },3
+0,559,NextPhase,1
+0,560,Answer { choice_id: 99, selection: [Card(49)] },3
+0,561,NextPhase,1
+0,562,NextPhase,1
+0,563,NextPhase,1
+0,564,NextPhase,1
+0,565,PlayCard { card: 21, targets: [3] },3
+0,566,NextPhase,1
+0,567,Answer { choice_id: 100, selection: [Card(113), Card(103)] },6
+0,568,NextPhase,1
+0,569,NextPhase,1
+0,570,NextPhase,1
+0,571,NextPhase,1
+0,572,PlayCard { card: 2, targets: [6] },2
+0,573,Answer { choice_id: 101, selection: [Card(36)] },3
+0,574,NextPhase,1
+0,575,Answer { choice_id: 102, selection: [Card(120)] },3
+0,576,NextPhase,1
+0,577,NextPhase,1
+0,578,NextPhase,1
+0,579,NextPhase,1
+0,580,NextPhase,1
+0,581,Answer { choice_id: 103, selection: [Card(78)] },4
+0,582,NextPhase,1
+0,583,NextPhase,1
+0,584,NextPhase,1
+0,585,NextPhase,1
+0,586,PlayCard { card: 11, targets: [6] },2
+0,587,NextPhase,1
+0,588,Answer { choice_id: 104, selection: [Card(63)] },3
+0,589,NextPhase,1
+0,590,NextPhase,1
+0,591,NextPhase,1
+0,592,NextPhase,1
+0,593,NextPhase,1
+0,594,Answer { choice_id: 105, selection: [Card(83), Card(77), Card(45)] },6
+0,595,NextPhase,1
+0,596,NextPhase,1
+0,597,NextPhase,1
+0,598,NextPhase,1
+0,599,PlayCard { card: 14, targets: [6] },3
+1,0,NextPhase,1
+1,1,NextPhase,1
+1,2,NextPhase,1
+1,3,Answer { choice_id: 1, selection: [Card(115), Card(90)] },8
+1,4,NextPhase,1
+1,5,NextPhase,1
+1,6,NextPhase,1
+1,7,NextPhase,1
+1,8,PlayCard { card: 27, targets: [0] },15
+1,9,NextPhase,8
+1,10,Answer { choice_id: 2, selection: [Card(53)] },6
+1,11,NextPhase,1
+1,12,NextPhase,1
+1,13,NextPhase,1
+1,14,NextPhase,1
+1,15,PlayCard { card: 10, targets: [1] },8
+1,16,NextPhase,1
+1,17,Answer { choice_id: 3, selection: [Card(50)] },6
+1,18,NextPhase,1
+1,19,NextPhase,1
+1,20,NextPhase,1
+1,21,NextPhase,1
+1,22,PlayCard { card: 20, targets: [2] },22
+1,23,NextPhase,15
+1,24,Answer { choice_id: 4, selection: [Card(100)] },6
+1,25,NextPhase,1
+1,26,NextPhase,1
+1,27,NextPhase,1
+1,28,NextPhase,1
+1,29,NextPhase,1
+1,30,Answer { choice_id: 5, selection: [Card(87), Card(83)] },8
+1,31,NextPhase,1
+1,32,NextPhase,1
+1,33,NextPhase,1
+1,34,NextPhase,1
+1,35,PlayCard { card: 24, targets: [4] },15
+1,36,Answer { choice_id: 6, selection: [Card(43)] },3
+1,37,NextPhase,8
+1,38,Answer { choice_id: 7, selection: [Card(56)] },6
+1,39,NextPhase,1
+1,40,NextPhase,1
+1,41,NextPhase,1
+1,42,NextPhase,1
+1,43,PlayCard { card: 23, targets: [5] },8
+1,44,Answer { choice_id: 8, selection: [Card(32)] },4
+1,45,NextPhase,1
+1,46,Answer { choice_id: 9, selection: [Card(96)] },6
+1,47,NextPhase,1
+1,48,NextPhase,1
+1,49,NextPhase,1
+1,50,NextPhase,1
+1,51,PlayCard { card: 12, targets: [0] },15
+1,52,NextPhase,8
+1,53,Answer { choice_id: 10, selection: [Card(71)] },6
+1,54,NextPhase,1
+1,55,NextPhase,1
+1,56,NextPhase,1
+1,57,NextPhase,1
+1,58,NextPhase,1
+1,59,Answer { choice_id: 11, selection: [Card(101), Card(119), Card(76), Card(88)] },8
+1,60,NextPhase,1
+1,61,NextPhase,1
+1,62,NextPhase,1
+1,63,NextPhase,1
+1,64,PlayCard { card: 26, targets: [0] },15
+1,65,NextPhase,8
+1,66,Answer { choice_id: 12, selection: [Card(62), Card(70)] },7
+1,67,NextPhase,1
+1,68,NextPhase,1
+1,69,NextPhase,1
+1,70,NextPhase,1
+1,71,NextPhase,1
+1,72,Answer { choice_id: 13, selection: [Card(73), Card(107), Card(82)] },8
+1,73,NextPhase,1
+1,74,NextPhase,1
+1,75,NextPhase,1
+1,76,NextPhase,1
+1,77,PlayCard { card: 18, targets: [4] },15
+1,78,NextPhase,8
+1,79,Answer { choice_id: 14, selection: [Card(89)] },6
+1,80,NextPhase,1
+1,81,NextPhase,1
+1,82,NextPhase,1
+1,83,NextPhase,1
+1,84,NextPhase,1
+1,85,Answer { choice_id: 15, selection: [Card(86), Card(65)] },7
+1,86,NextPhase,1
+1,87,NextPhase,1
+1,88,NextPhase,1
+1,89,NextPhase,1
+1,90,PlayCard { card: 0, targets: [4] },15
+1,91,NextPhase,8
+1,92,NextPhase,1
+1,93,NextPhase,1
+1,94,NextPhase,1
+1,95,NextPhase,1
+1,96,PlayCard { card: 14, targets: [5] },8
+1,97,Answer { choice_id: 16, selection: [Card(31)] },4
+1,98,NextPhase,1
+1,99,Answer { choice_id: 17, selection: [Card(109)] },6
+1,100,NextPhase,1
+1,101,NextPhase,1
+1,102,NextPhase,1
+1,103,NextPhase,1
+1,104,PlayCard { card: 22, targets: [0] },15
+1,105,Answer { choice_id: 18, selection: [Card(45)] },3
+1,106,NextPhase,8
+1,107,Answer { choice_id: 19, selection: [Card(106)] },6
+1,108,NextPhase,1
+1,109,NextPhase,1
+1,110,NextPhase,1
+1,111,NextPhase,1
+1,112,PlayCard { card: 11, targets: [1] },8
+1,113,NextPhase,1
+1,114,Answer { choice_id: 20, selection: [Card(104)] },3
+1,115,NextPhase,1
+1,116,NextPhase,1
+1,117,NextPhase,1
+1,118,NextPhase,1
+1,119,PlayCard { card: 2, targets: [0] },15
+1,120,Answer { choice_id: 21, selection: [Pass] },4
+1,121,Answer { choice_id: 22, selection: [Pass] },3
+1,122,Answer { choice_id: 23, selection: [Pass] },3
+1,123,NextPhase,7
+1,124,Answer { choice_id: 24, selection: [Card(48), Card(98)] },6
+1,125,NextPhase,1
+1,126,NextPhase,1
+1,127,NextPhase,1
+1,128,NextPhase,1
+1,129,NextPhase,1
+1,130,Answer { choice_id: 25, selection: [Card(77), Card(72)] },7
+1,131,NextPhase,1
+1,132,NextPhase,1
+1,133,NextPhase,1
+1,134,NextPhase,1
+1,135,PlayCard { card: 9, targets: [4] },7
+1,136,NextPhase,1
+1,137,Answer { choice_id: 26, selection: [Card(66)] },6
+1,138,NextPhase,1
+1,139,NextPhase,1
+1,140,NextPhase,1
+1,141,NextPhase,1
+1,142,PlayCard { card: 1, targets: [5] },7
+1,143,Answer { choice_id: 27, selection: [Card(39)] },3
+1,144,NextPhase,1
+1,145,Answer { choice_id: 28, selection: [Card(74), Card(85), Card(61)] },6
+1,146,NextPhase,1
+1,147,NextPhase,1
+1,148,NextPhase,1
+1,149,NextPhase,1
+1,150,PlayCard { card: 7, targets: [4] },13
+1,151,Answer { choice_id: 29, selection: [Card(40)] },3
+1,152,NextPhase,7
+1,153,NextPhase,1
+1,154,NextPhase,1
+1,155,NextPhase,1
+1,156,NextPhase,1
+1,157,PlayCard { card: 4, targets: [5] },7
+1,158,Answer { choice_id: 30, selection: [Card(44)] },3
+1,159,NextPhase,1
+1,160,Answer { choice_id: 31, selection: [Card(81)] },6
+1,161,NextPhase,1
+1,162,NextPhase,1
+1,163,NextPhase,1
+1,164,NextPhase,1
+1,165,PlayCard { card: 6, targets: [1] },13
+1,166,NextPhase,7
+1,167,Answer { choice_id: 32, selection: [Card(60)] },6
+1,168,NextPhase,1
+1,169,NextPhase,1
+1,170,NextPhase,1
+1,171,NextPhase,1
+1,172,PlayCard { card: 17, targets: [2] },7
+1,173,NextPhase,1
+1,174,Answer { choice_id: 33, selection: [Card(52), Card(94)] },5
+1,175,NextPhase,1
+1,176,NextPhase,1
+1,177,NextPhase,1
+1,178,NextPhase,1
+1,179,NextPhase,1
+1,180,Answer { choice_id: 34, selection: [Card(84), Card(59), Card(51)] },7
+1,181,NextPhase,1
+1,182,NextPhase,1
+1,183,NextPhase,1
+1,184,NextPhase,1
+1,185,PlayCard { card: 8, targets: [2] },7
+1,186,NextPhase,1
+1,187,Answer { choice_id: 35, selection: [Card(47)] },6
+1,188,NextPhase,1
+1,189,NextPhase,1
+1,190,NextPhase,1
+1,191,NextPhase,1
+1,192,NextPhase,1
+1,193,Answer { choice_id: 36, selection: [Card(105)] },3
+1,194,NextPhase,1
+1,195,NextPhase,1
+1,196,NextPhase,1
+1,197,NextPhase,1
+1,198,PlayCard { card: 13, targets: [4] },13
+1,199,NextPhase,6
+1,200,NextPhase,1
+1,201,NextPhase,1
+1,202,NextPhase,1
+1,203,NextPhase,1
+1,204,NextPhase,1
+1,205,Answer { choice_id: 37, selection: [Card(122), Card(108)] },8
+1,206,NextPhase,1
+1,207,NextPhase,1
+1,208,NextPhase,1
+1,209,NextPhase,1
+1,210,PlayCard { card: 5, targets: [1] },11
+1,211,Answer { choice_id: 38, selection: [Card(30)] },3
+1,212,NextPhase,6
+1,213,Answer { choice_id: 39, selection: [Card(69)] },6
+1,214,NextPhase,1
+1,215,NextPhase,1
+1,216,NextPhase,1
+1,217,NextPhase,1
+1,218,PlayCard { card: 3, targets: [2] },6
+1,219,NextPhase,1
+1,220,NextPhase,1
+1,221,NextPhase,1
+1,222,NextPhase,1
+1,223,NextPhase,1
+1,224,PlayCard { card: 28, targets: [1] },5
+1,225,NextPhase,1
+1,226,Answer { choice_id: 40, selection: [Card(113)] },6
+1,227,NextPhase,1
+1,228,NextPhase,1
+1,229,NextPhase,1
+1,230,NextPhase,1
+1,231,PlayCard { card: 15, targets: [3] },4
+1,232,Answer { choice_id: 41, selection: [Card(42)] },4
+1,233,NextPhase,1
+1,234,NextPhase,1
+1,235,NextPhase,1
+1,236,NextPhase,1
+1,237,NextPhase,1
+1,238,NextPhase,1
+1,239,Answer { choice_id: 42, selection: [Card(78), Card(67)] },8
+1,240,NextPhase,1
+1,241,NextPhase,1
+1,242,NextPhase,1
+1,243,NextPhase,1
+1,244,PlayCard { card: 19, targets: [3] },7
+1,245,Answer { choice_id: 43, selection: [Card(41)] },3
+1,246,NextPhase,4
+1,247,Answer { choice_id: 44, selection: [Card(80)] },6
+1,248,NextPhase,1
+1,249,NextPhase,1
+1,250,NextPhase,1
+1,251,NextPhase,1
+1,252,NextPhase,1
+1,253,NextPhase,1
+1,254,NextPhase,1
+1,255,NextPhase,1
+1,256,NextPhase,1
+1,257,NextPhase,1
+1,258,Answer { choice_id: 45, selection: [Card(54), Card(99)] },8
+1,259,NextPhase,1
+1,260,NextPhase,1
+1,261,NextPhase,1
+1,262,NextPhase,1
+1,263,PlayCard { card: 21, targets: [5] },4
+1,264,Answer { choice_id: 46, selection: [Card(37)] },3
+1,265,NextPhase,1
+1,266,Answer { choice_id: 47, selection: [Card(33)] },6
+1,267,NextPhase,1
+1,268,NextPhase,1
+1,269,NextPhase,1
+1,270,NextPhase,1
+1,271,PlayCard { card: 25, targets: [3] },4
+1,272,NextPhase,1
+1,273,Answer { choice_id: 48, selection: [Card(75)] },6
+1,274,NextPhase,1
+1,275,NextPhase,1
+1,276,NextPhase,1
+1,277,NextPhase,1
+1,278,PlayCard { card: 29, targets: [5] },4
+1,279,NextPhase,1
+1,280,Answer { choice_id: 49, selection: [Card(112), Card(97)] },7
+1,281,NextPhase,1
+1,282,NextPhase,1
+1,283,NextPhase,1
+1,284,NextPhase,1
+1,285,NextPhase,1
+1,286,Answer { choice_id: 50, selection: [Card(118), Card(121)] },7
+1,287,NextPhase,1
+1,288,NextPhase,1
+1,289,NextPhase,1
+1,290,NextPhase,1
+1,291,PlayCard { card: 16, targets: [5] },4
+1,292,NextPhase,1
+1,293,Answer { choice_id: 51, selection: [Card(55)] },6
+1,294,NextPhase,1
+1,295,NextPhase,1
+1,296,NextPhase,1
+1,297,NextPhase,1
+1,298,NextPhase,1
+1,299,Answer { choice_id: 52, selection: [Card(34), Card(49)] },8
+1,300,NextPhase,1
+1,301,NextPhase,1
+1,302,NextPhase,1
+1,303,NextPhase,1
+1,304,NextPhase,1
+1,305,Answer { choice_id: 53, selection: [Card(79), Card(46)] },7
+1,306,NextPhase,1
+1,307,NextPhase,1
+1,308,NextPhase,1
+1,309,NextPhase,1
+1,310,NextPhase,1
+1,311,Answer { choice_id: 54, selection: [Card(116), Card(120), Card(95)] },7
+1,312,NextPhase,1
+1,313,NextPhase,1
+1,314,NextPhase,1
+1,315,NextPhase,1
+1,316,PlayCard { card: 24, targets: [5] },4
+1,317,Answer { choice_id: 55, selection: [Card(38)] },3
+1,318,NextPhase,1
+1,319,Answer { choice_id: 56, selection: [Card(35)] },6
+1,320,NextPhase,1
+1,321,NextPhase,1
+1,322,NextPhase,1
+1,323,NextPhase,1
+1,324,PlayCard { card: 18, targets: [3] },4
+1,325,NextPhase,1
+1,326,Answer { choice_id: 57, selection: [Card(91)] },6
+1,327,NextPhase,1
+1,328,NextPhase,1
+1,329,NextPhase,1
+1,330,NextPhase,1
+1,331,PlayCard { card: 0, targets: [5] },7
+1,332,NextPhase,4
+1,333,Answer { choice_id: 58, selection: [Card(111), Card(123)] },6
+1,334,NextPhase,1
+1,335,NextPhase,1
+1,336,NextPhase,1
+1,337,NextPhase,1
+1,338,PlayCard { card: 2, targets: [3] },4
+1,339,NextPhase,1
+1,340,Answer { choice_id: 59, selection: [Card(57)] },3
+1,341,NextPhase,1
+1,342,NextPhase,1
+1,343,NextPhase,1
+1,344,NextPhase,1
+1,345,NextPhase,1
+1,346,Answer { choice_id: 60, selection: [Card(110), Card(36)] },8
+1,347,NextPhase,1
+1,348,NextPhase,1
+1,349,NextPhase,1
+1,350,NextPhase,1
+1,351,PlayCard { card: 28, targets: [3] },4
+1,352,Answer { choice_id: 61, selection: [Pass] },3
+1,353,NextPhase,1
+1,354,Answer { choice_id: 62, selection: [Card(102)] },6
+1,355,NextPhase,1
+1,356,NextPhase,1
+1,357,NextPhase,1
+1,358,NextPhase,1
+1,359,PlayCard { card: 29, targets: [6] },3
+1,360,Answer { choice_id: 63, selection: [Card(33)] },4
+1,361,NextPhase,1
+1,362,Answer { choice_id: 64, selection: [Card(49)] },3
+1,363,NextPhase,1
+1,364,NextPhase,1
+1,365,NextPhase,1
+1,366,NextPhase,1
+1,367,NextPhase,1
+1,368,Answer { choice_id: 65, selection: [Card(63)] },6
+1,369,NextPhase,1
+1,370,NextPhase,1
+1,371,NextPhase,1
+1,372,NextPhase,1
+1,373,PlayCard { card: 23, targets: [5] },3
+1,374,Answer { choice_id: 66, selection: [Card(40)] },3
+1,375,NextPhase,1
+1,376,Answer { choice_id: 67, selection: [Card(93)] },6
+1,377,NextPhase,1
+1,378,NextPhase,1
+1,379,NextPhase,1
+1,380,NextPhase,1
+1,381,PlayCard { card: 1, targets: [6] },3
+1,382,Answer { choice_id: 68, selection: [Card(37)] },4
+1,383,NextPhase,1
+1,384,NextPhase,1
+1,385,NextPhase,1
+1,386,NextPhase,1
+1,387,NextPhase,1
+1,388,NextPhase,1
+1,389,Answer { choice_id: 69, selection: [Card(66)] },6
+1,390,NextPhase,1
+1,391,NextPhase,1
+1,392,NextPhase,1
+1,393,NextPhase,1
+1,394,NextPhase,1
+1,395,Answer { choice_id: 70, selection: [Card(64), Card(73)] },8
+1,396,NextPhase,1
+1,397,NextPhase,1
+1,398,NextPhase,1
+1,399,NextPhase,1
+1,400,NextPhase,1
+1,401,Answer { choice_id: 71, selection: [Card(61), Card(117)] },5
+1,402,NextPhase,1
+1,403,NextPhase,1
+1,404,NextPhase,1
+1,405,NextPhase,1
+1,406,PlayCard { card: 15, targets: [5] },3
+1,407,Answer { choice_id: 72, selection: [Pass] },3
+1,408,NextPhase,1
+1,409,Answer { choice_id: 73, selection: [Card(44)] },6
+1,410,NextPhase,1
+1,411,NextPhase,1
+1,412,NextPhase,1
+1,413,NextPhase,1
+1,414,NextPhase,1
+1,415,Answer { choice_id: 74, selection: [Card(107), Card(105)] },8
+1,416,NextPhase,1
+1,417,NextPhase,1
+1,418,NextPhase,1
+1,419,NextPhase,1
+1,420,NextPhase,1
+1,421,Answer { choice_id: 75, selection: [Card(99), Card(86)] },8
+1,422,NextPhase,1
+1,423,NextPhase,1
+1,424,NextPhase,1
+1,425,NextPhase,1
+1,426,PlayCard { card: 7, targets: [6] },2
+1,427,NextPhase,1
+1,428,Answer { choice_id: 76, selection: [Card(104)] },6
+1,429,NextPhase,1
+1,430,NextPhase,1
+1,431,NextPhase,1
+1,432,NextPhase,1
+1,433,PlayCard { card: 27, targets: [7] },3
+1,434,Answer { choice_id: 77, selection: [Card(41)] },3
+1,435,NextPhase,2
+1,436,Answer { choice_id: 78, selection: [Card(113), Card(121)] },7
+1,437,NextPhase,1
+1,438,NextPhase,1
+1,439,NextPhase,1
+1,440,NextPhase,1
+1,441,PlayCard { card: 6, targets: [6] },2
+1,442,NextPhase,1
+1,443,NextPhase,1
+1,444,NextPhase,1
+1,445,NextPhase,1
+1,446,NextPhase,1
+1,447,PlayCard { card: 17, targets: [7] },2
+1,448,NextPhase,1
+1,449,Answer { choice_id: 79, selection: [Card(119), Card(112)] },6
+1,450,NextPhase,1
+1,451,NextPhase,1
+1,452,NextPhase,1
+1,453,NextPhase,1
+1,454,NextPhase,1
+1,455,Answer { choice_id: 80, selection: [Card(84), Card(54), Card(81)] },8
+1,456,NextPhase,1
+1,457,NextPhase,1
+1,458,NextPhase,1
+1,459,NextPhase,1
+1,460,NextPhase,1
+1,461,Answer { choice_id: 81, selection: [Card(116), Card(94)] },6
+1,462,NextPhase,1
+1,463,NextPhase,1
+1,464,NextPhase,1
+1,465,NextPhase,1
+1,466,NextPhase,1
+1,467,Answer { choice_id: 82, selection: [Card(72), Card(60)] },7
+1,468,NextPhase,1
+1,469,NextPhase,1
+1,470,NextPhase,1
+1,471,NextPhase,1
+1,472,NextPhase,1
+1,473,Answer { choice_id: 83, selection: [Card(97), Card(103)] },6
+1,474,NextPhase,1
+1,475,NextPhase,1
+1,476,NextPhase,1
+1,477,NextPhase,1
+1,478,NextPhase,1
+1,479,Answer { choice_id: 84, selection: [Card(65), Card(59)] },7
+1,480,NextPhase,1
+1,481,NextPhase,1
+1,482,NextPhase,1
+1,483,NextPhase,1
+1,484,NextPhase,1
+1,485,Answer { choice_id: 85, selection: [Card(122), Card(30)] },6
+1,486,NextPhase,1
+1,487,NextPhase,1
+1,488,NextPhase,1
+1,489,NextPhase,1
+1,490,NextPhase,1
+1,491,Answer { choice_id: 86, selection: [Card(80), Card(48)] },7
+1,492,NextPhase,1
+1,493,NextPhase,1
+1,494,NextPhase,1
+1,495,NextPhase,1
+1,496,NextPhase,1
+1,497,Answer { choice_id: 87, selection: [Card(39), Card(55)] },6
+1,498,NextPhase,1
+1,499,NextPhase,1
+1,500,NextPhase,1
+1,501,NextPhase,1
+1,502,PlayCard { card: 10, targets: [6] },2
+1,503,NextPhase,1
+1,504,Answer { choice_id: 88, selection: [Card(118)] },5
+1,505,NextPhase,1
+1,506,NextPhase,1
+1,507,NextPhase,1
+1,508,NextPhase,1
+1,509,PlayCard { card: 22, targets: [7] },3
+1,510,NextPhase,2
+1,511,Answer { choice_id: 89, selection: [Card(51), Card(85)] },5
+1,512,NextPhase,1
+1,513,NextPhase,1
+1,514,NextPhase,1
+1,515,NextPhase,1
+1,516,NextPhase,1
+1,517,Answer { choice_id: 90, selection: [Card(52), Card(45), Card(114)] },7
+1,518,NextPhase,1
+1,519,NextPhase,1
+1,520,NextPhase,1
+1,521,NextPhase,1
+1,522,PlayCard { card: 3, targets: [7] },2
+1,523,Answer { choice_id: 91, selection: [Card(32)] },3
+1,524,NextPhase,1
+1,525,Answer { choice_id: 92, selection: [Card(78)] },3
+1,526,NextPhase,1
+1,527,NextPhase,1
+1,528,NextPhase,1
+1,529,NextPhase,1
+1,530,NextPhase,1
+1,531,Answer { choice_id: 93, selection: [Card(89)] },4
+1,532,NextPhase,1
+1,533,NextPhase,1
+1,534,NextPhase,1
+1,535,NextPhase,1
+1,536,PlayCard { card: 21, targets: [7] },3
+1,537,NextPhase,2
+1,538,Answer { choice_id: 94, selection: [Card(101)] },3
+1,539,NextPhase,1
+1,540,NextPhase,1
+1,541,NextPhase,1
+1,542,NextPhase,1
+1,543,PlayCard { card: 16, targets: [6] },2
+2,0,NextPhase,1
+2,1,NextPhase,1
+2,2,PlayCard { card: 26, targets: [7] },8
+2,3,NextPhase,1
+2,4,Answer { choice_id: 1, selection: [Card(102)] },6
+2,5,NextPhase,1
+2,6,NextPhase,1
+2,7,NextPhase,1
+2,8,NextPhase,1
+2,9,NextPhase,1
+2,10,Answer { choice_id: 2, selection: [Card(51), Card(40)] },8
+2,11,NextPhase,1
+2,12,NextPhase,1
+2,13,NextPhase,1
+2,14,NextPhase,1
+2,15,PlayCard { card: 1, targets: [1] },22
+2,16,Answer { choice_id: 3, selection: [Card(44)] },3
+2,17,NextPhase,15
+2,18,Answer { choice_id: 4, selection: [Card(35)] },6
+2,19,NextPhase,1
+2,20,NextPhase,1
+2,21,NextPhase,1
+2,22,NextPhase,1
+2,23,PlayCard { card: 15, targets: [2] },8
+2,24,NextPhase,1
+2,25,Answer { choice_id: 5, selection: [Card(80)] },6
+2,26,NextPhase,1
+2,27,NextPhase,1
+2,28,NextPhase,1
+2,29,NextPhase,1
+2,30,PlayCard { card: 7, targets: [3] },8
+2,31,Answer { choice_id: 6, selection: [Card(33)] },4
+2,32,NextPhase,1
+2,33,Answer { choice_id: 7, selection: [Card(107)] },6
+2,34,NextPhase,1
+2,35,NextPhase,1
+2,36,NextPhase,1
+2,37,NextPhase,1
+2,38,PlayCard { card: 17, targets: [4] },8
+2,39,NextPhase,1
+2,40,Answer { choice_id: 8, selection: [Card(106)] },6
+2,41,NextPhase,1
+2,42,NextPhase,1
+2,43,NextPhase,1
+2,44,NextPhase,1
+2,45,PlayCard { card: 23, targets: [5] },15
+2,46,NextPhase,8
+2,47,Answer { choice_id: 9, selection: [Card(53)] },6
+2,48,NextPhase,1
+2,49,NextPhase,1
+2,50,NextPhase,1
+2,51,NextPhase,1
+2,52,PlayCard { card: 28, targets: [6] },8
+2,53,NextPhase,1
+2,54,Answer { choice_id: 10, selection: [Card(121), Card(57)] },7
+2,55,NextPhase,1
+2,56,NextPhase,1
+2,57,NextPhase,1
+2,58,NextPhase,1
+2,59,PlayCard { card: 20, targets: [7] },8
+2,60,Answer { choice_id: 11, selection: [Card(42)] },3
+2,61,NextPhase,1
+2,62,Answer { choice_id: 12, selection: [Card(68)] },6
+2,63,NextPhase,1
+2,64,NextPhase,1
+2,65,NextPhase,1
+2,66,NextPhase,1
+2,67,NextPhase,1
+2,68,Answer { choice_id: 13, selection: [Card(110)] },6
+2,69,NextPhase,1
+2,70,NextPhase,1
+2,71,NextPhase,1
+2,72,NextPhase,1
+2,73,PlayCard { card: 5, targets: [1] },22
+2,74,NextPhase,15
+2,75,Answer { choice_id: 14, selection: [Card(98), Card(21)] },7
+2,76,NextPhase,1
+2,77,NextPhase,1
+2,78,NextPhase,1
+2,79,NextPhase,1
+2,80,NextPhase,1
+2,81,Answer { choice_id: 15, selection: [Card(74)] },6
+2,82,NextPhase,1
+2,83,NextPhase,1
+2,84,NextPhase,1
+2,85,NextPhase,1
+2,86,PlayCard { card: 11, targets: [3] },8
+2,87,Answer { choice_id: 16, selection: [Card(43)] },3
+2,88,NextPhase,1
+2,89,Answer { choice_id: 17, selection: [Card(118), Card(72)] },7
+2,90,NextPhase,1
+2,91,NextPhase,1
+2,92,NextPhase,1
+2,93,NextPhase,1
+2,94,NextPhase,1
+2,95,Answer { choice_id: 18, selection: [Card(69), Card(62), Card(66)] },8
+2,96,NextPhase,1
+2,97,NextPhase,1
+2,98,NextPhase,1
+2,99,NextPhase,1
+2,100,PlayCard { card: 4, targets: [7] },15
+2,101,NextPhase,8
+2,102,Answer { choice_id: 19, selection: [Card(46), Card(54)] },7
+2,103,NextPhase,1
+2,104,NextPhase,1
+2,105,NextPhase,1
+2,106,NextPhase,1
+2,107,PlayCard { card: 24, targets: [0] },8
+2,108,NextPhase,1
+2,109,Answer { choice_id: 20, selection: [Card(64)] },4
+2,110,NextPhase,1
+2,111,NextPhase,1
+2,112,NextPhase,1
+2,113,NextPhase,1
+2,114,NextPhase,1
+2,115,Answer { choice_id: 21, selection: [Card(123), Card(89), Card(91)] },8
+2,116,NextPhase,1
+2,117,NextPhase,1
+2,118,NextPhase,1
+2,119,NextPhase,1
+2,120,NextPhase,1
+2,121,Answer { choice_id: 22, selection: [Card(60), Card(99), Card(93)] },8
+2,122,NextPhase,1
+2,123,NextPhase,1
+2,124,NextPhase,1
+2,125,NextPhase,1
+2,126,PlayCard { card: 0, targets: [1] },15
+2,127,Answer { choice_id: 23, selection: [Card(37)] },3
+2,128,NextPhase,8
+2,129,Answer { choice_id: 24, selection: [Card(75)] },5
+2,130,NextPhase,1
+2,131,NextPhase,1
+2,132,NextPhase,1
+2,133,NextPhase,1
+2,134,NextPhase,1
+2,135,Answer { choice_id: 25, selection: [Card(87)] },6
+2,136,NextPhase,1
+2,137,NextPhase,1
+2,138,NextPhase,1
+2,139,NextPhase,1
+2,140,NextPhase,1
+2,141,Answer { choice_id: 26, selection: [Card(113), Card(122)] },7
+2,142,NextPhase,1
+2,143,NextPhase,1
+2,144,NextPhase,1
+2,145,NextPhase,1
+2,146,PlayCard { card: 8, targets: [4] },8
+2,147,NextPhase,1
+2,148,Answer { choice_id: 27, selection: [Card(100)] },5
+2,149,NextPhase,1
+2,150,NextPhase,1
+2,151,NextPhase,1
+2,152,NextPhase,1
+2,153,PlayCard { card: 22, targets: [5] },8
+2,154,NextPhase,1
+2,155,Answer { choice_id: 28, selection: [Card(50)] },5
+2,156,NextPhase,1
+2,157,NextPhase,1
+2,158,NextPhase,1
+2,159,NextPhase,1
+2,160,PlayCard { card: 14, targets: [0] },15
+2,161,NextPhase,8
+2,162,Answer { choice_id: 29, selection: [Card(103)] },4
+2,163,NextPhase,1
+2,164,NextPhase,1
+2,165,NextPhase,1
+2,166,NextPhase,1
+2,167,NextPhase,1
+2,168,Answer { choice_id: 30, selection: [Card(52), Card(115), Card(114)] },7
+2,169,NextPhase,1
+2,170,NextPhase,1
+2,171,NextPhase,1
+2,172,NextPhase,1
+2,173,PlayCard { card: 3, targets: [0] },8
+2,174,Answer { choice_id: 31, selection: [Card(30)] },3
+2,175,NextPhase,1
+2,176,NextPhase,1
+2,177,NextPhase,1
+2,178,NextPhase,1
+2,179,NextPhase,1
+2,180,PlayCard { card: 16, targets: [1] },22
+2,181,NextPhase,15
+2,182,Answer { choice_id: 32, selection: [Card(61)] },5
+2,183,NextPhase,1
+2,184,NextPhase,1
+2,185,NextPhase,1
+2,186,NextPhase,1
+2,187,NextPhase,1
+2,188,Answer { choice_id: 33, selection: [Card(90), Card(117)] },8
+2,189,NextPhase,1
+2,190,NextPhase,1
+2,191,NextPhase,1
+2,192,NextPhase,1
+2,193,NextPhase,1
+2,194,Answer { choice_id: 34, selection: [Card(119), Card(97), Card(73)] },7
+2,195,NextPhase,1
+2,196,NextPhase,1
+2,197,NextPhase,1
+2,198,NextPhase,1
+2,199,PlayCard { card: 6, targets: [6] },8
+2,200,Answer { choice_id: 35, selection: [Card(32)] },3
+2,201,NextPhase,1
+2,202,Answer { choice_id: 36, selection: [Card(109), Card(49)] },6
+2,203,NextPhase,1
+2,204,NextPhase,1
+2,205,NextPhase,1
+2,206,NextPhase,1
+2,207,NextPhase,1
+2,208,Answer { choice_id: 37, selection: [Card(56)] },5
+2,209,NextPhase,1
+2,210,NextPhase,1
+2,211,NextPhase,1
+2,212,NextPhase,1
+2,213,PlayCard { card: 12, targets: [0] },8
+2,214,NextPhase,1
+2,215,Answer { choice_id: 38, selection: [Card(39)] },4
+2,216,NextPhase,1
+2,217,NextPhase,1
+2,218,NextPhase,1
+2,219,NextPhase,1
+2,220,NextPhase,1
+2,221,Answer { choice_id: 39, selection: [Card(71), Card(111)] },5
+2,222,NextPhase,1
+2,223,NextPhase,1
+2,224,NextPhase,1
+2,225,NextPhase,1
+2,226,NextPhase,1
+2,227,Answer { choice_id: 40, selection: [Card(120), Card(96), Card(76)] },7
+2,228,NextPhase,1
+2,229,NextPhase,1
+2,230,NextPhase,1
+2,231,NextPhase,1
+2,232,PlayCard { card: 9, targets: [1] },15
+2,233,NextPhase,8
+2,234,Answer { choice_id: 41, selection: [Card(116)] },5
+2,235,NextPhase,1
+2,236,NextPhase,1
+2,237,NextPhase,1
+2,238,NextPhase,1
+2,239,NextPhase,1
+2,240,Answer { choice_id: 42, selection: [Card(108), Card(104)] },8
+2,241,NextPhase,1
+2,242,NextPhase,1
+2,243,NextPhase,1
+2,244,NextPhase,1
+2,245,PlayCard { card: 25, targets: [5] },8
+2,246,NextPhase,1
+2,247,Answer { choice_id: 43, selection: [Card(79)] },4
+2,248,NextPhase,1
+2,249,NextPhase,1
+2,250,NextPhase,1
+2,251,NextPhase,1
+2,252,NextPhase,1
+2,253,Answer { choice_id: 44, selection: [Card(95), Card(58), Card(47)] },6
+2,254,NextPhase,1
+2,255,NextPhase,1
+2,256,NextPhase,1
+2,257,NextPhase,1
+2,258,PlayCard { card: 19, targets: [5] },8
+2,259,Answer { choice_id: 45, selection: [Pass] },3
+2,260,Answer { choice_id: 46, selection: [Pass] },3
+2,261,Answer { choice_id: 47, selection: [Pass] },3
+2,262,NextPhase,1
+2,263,Answer { choice_id: 48, selection: [Card(81)] },5
+2,264,NextPhase,1
+2,265,NextPhase,1
+2,266,NextPhase,1
+2,267,NextPhase,1
+2,268,PlayCard { card: 18, targets: [0] },7
+2,269,Answer { choice_id: 49, selection: [Card(36)] },3
+2,270,NextPhase,1
+2,271,Answer { choice_id: 50, selection: [Card(82)] },4
+2,272,NextPhase,1
+2,273,NextPhase,1
+2,274,NextPhase,1
+2,275,NextPhase,1
+2,276,PlayCard { card: 2, targets: [1] },13
+2,277,Answer { choice_id: 51, selection: [Pass] },3
+2,278,Answer { choice_id: 52, selection: [Pass] },3
+2,279,Answer { choice_id: 53, selection: [Pass] },3
+2,280,NextPhase,6
+2,281,NextPhase,1
+2,282,NextPhase,1
+2,283,NextPhase,1
+2,284,NextPhase,1
+2,285,PlayCard { card: 10, targets: [0] },6
+2,286,Answer { choice_id: 54, selection: [Pass] },3
+2,287,Answer { choice_id: 55, selection: [Pass] },3
+2,288,Answer { choice_id: 56, selection: [Pass] },3
+2,289,NextPhase,1
+2,290,Answer { choice_id: 57, selection: [Card(84)] },5
+2,291,NextPhase,1
+2,292,NextPhase,1
+2,293,NextPhase,1
+2,294,NextPhase,1
+2,295,NextPhase,1
+2,296,Answer { choice_id: 58, selection: [Card(94), Card(112)] },8
+2,297,NextPhase,1
+2,298,NextPhase,1
+2,299,NextPhase,1
+2,300,NextPhase,1
+2,301,PlayCard { card: 29, targets: [3] },5
+2,302,NextPhase,1
+2,303,Answer { choice_id: 59, selection: [Card(86)] },4
+2,304,NextPhase,1
+2,305,NextPhase,1
+2,306,NextPhase,1
+2,307,NextPhase,1
+2,308,NextPhase,1
+2,309,Answer { choice_id: 60, selection: [Card(48), Card(34)] },7
+2,310,NextPhase,1
+2,311,NextPhase,1
+2,312,NextPhase,1
+2,313,NextPhase,1
+2,314,PlayCard { card: 27, targets: [2] },5
+2,315,Answer { choice_id: 61, selection: [Card(41)] },3
+2,316,NextPhase,1
+2,317,Answer { choice_id: 62, selection: [Card(70)] },4
+2,318,NextPhase,1
+2,319,NextPhase,1
+2,320,NextPhase,1
+2,321,NextPhase,1
+2,322,NextPhase,1
+2,323,Answer { choice_id: 63, selection: [Card(78)] },5
+2,324,NextPhase,1
+2,325,NextPhase,1
+2,326,NextPhase,1
+2,327,NextPhase,1
+2,328,PlayCard { card: 22, targets: [2] },5
+2,329,NextPhase,1
+2,330,Answer { choice_id: 64, selection: [Card(67), Card(85)] },7
+2,331,NextPhase,1
+2,332,NextPhase,1
+2,333,NextPhase,1
+2,334,NextPhase,1
+2,335,PlayCard { card: 21, targets: [3] },5
+2,336,NextPhase,1
+2,337,Answer { choice_id: 65, selection: [Card(83)] },4
+2,338,NextPhase,1
+2,339,NextPhase,1
+2,340,NextPhase,1
+2,341,NextPhase,1
+2,342,PlayCard { card: 7, targets: [4] },5
+2,343,Answer { choice_id: 66, selection: [Card(31)] },4
+2,344,NextPhase,1
+2,345,Answer { choice_id: 67, selection: [Card(59)] },5
+2,346,NextPhase,1
+2,347,NextPhase,1
+2,348,NextPhase,1
+2,349,NextPhase,1
+2,350,NextPhase,1
+2,351,Answer { choice_id: 68, selection: [Card(55), Card(77)] },6
+2,352,NextPhase,1
+2,353,NextPhase,1
+2,354,NextPhase,1
+2,355,NextPhase,1
+2,356,PlayCard { card: 19, targets: [3] },5
+2,357,NextPhase,1
+2,358,Answer { choice_id: 69, selection: [Card(105), Card(81)] },6
+2,359,NextPhase,1
+2,360,NextPhase,1
+2,361,NextPhase,1
+2,362,NextPhase,1
+2,363,NextPhase,1
+2,364,Answer { choice_id: 70, selection: [Card(88), Card(92), Card(113), Card(70)] },7
+2,365,NextPhase,1
+2,366,NextPhase,1
+2,367,NextPhase,1
+2,368,NextPhase,1
+2,369,PlayCard { card: 28, targets: [3] },5
+2,370,Answer { choice_id: 71, selection: [Card(42)] },3
+2,371,NextPhase,1
+2,372,NextPhase,1
+2,373,NextPhase,1
+2,374,NextPhase,1
+2,375,NextPhase,1
+2,376,NextPhase,1
+2,377,Answer { choice_id: 72, selection: [Card(45), Card(38)] },7
+2,378,NextPhase,1
+2,379,NextPhase,1
+2,380,NextPhase,1
+2,381,NextPhase,1
+2,382,PlayCard { card: 27, targets: [2] },5
+2,383,NextPhase,1
+2,384,Answer { choice_id: 73, selection: [Card(79)] },4
+2,385,NextPhase,1
+2,386,NextPhase,1
+2,387,NextPhase,1
+2,388,NextPhase,1
+2,389,NextPhase,1
+2,390,Answer { choice_id: 74, selection: [Card(74), Card(51), Card(109)] },6
+2,391,NextPhase,1
+2,392,NextPhase,1
+2,393,NextPhase,1
+2,394,NextPhase,1
+2,395,NextPhase,1
+2,396,Answer { choice_id: 75, selection: [Card(106)] },3
+2,397,NextPhase,1
+2,398,NextPhase,1
+2,399,NextPhase,1
+2,400,NextPhase,1
+2,401,NextPhase,1
+2,402,Answer { choice_id: 76, selection: [Card(30), Card(39)] },6
+2,403,NextPhase,1
+2,404,NextPhase,1
+2,405,NextPhase,1
+2,406,NextPhase,1
+2,407,NextPhase,1
+2,408,Answer { choice_id: 77, selection: [Card(84), Card(60)] },7
+2,409,NextPhase,1
+2,410,NextPhase,1
+2,411,NextPhase,1
+2,412,NextPhase,1
+2,413,PlayCard { card: 15, targets: [2] },5
+2,414,Answer { choice_id: 78, selection: [Pass] },3
+2,415,NextPhase,1
+2,416,Answer { choice_id: 79, selection: [Card(71)] },4
+2,417,NextPhase,1
+2,418,NextPhase,1
+2,419,NextPhase,1
+2,420,NextPhase,1
+2,421,NextPhase,1
+2,422,Answer { choice_id: 80, selection: [Card(115), Card(65)] },5
+2,423,NextPhase,1
+2,424,NextPhase,1
+2,425,NextPhase,1
+2,426,NextPhase,1
+2,427,NextPhase,1
+2,428,Answer { choice_id: 81, selection: [Card(123), Card(108)] },6
+2,429,NextPhase,1
+2,430,NextPhase,1
+2,431,NextPhase,1
+2,432,NextPhase,1
+2,433,NextPhase,1
+2,434,Answer { choice_id: 82, selection: [Card(89), Card(86)] },7
+2,435,NextPhase,1
+2,436,NextPhase,1
+2,437,NextPhase,1
+2,438,NextPhase,1
+2,439,PlayCard { card: 4, targets: [3] },4
+2,440,NextPhase,1
+2,441,Answer { choice_id: 83, selection: [Card(95)] },4
+2,442,NextPhase,1
+2,443,NextPhase,1
+2,444,NextPhase,1
+2,445,NextPhase,1
+2,446,NextPhase,1
+2,447,Answer { choice_id: 84, selection: [Card(111), Card(110)] },6
+2,448,NextPhase,1
+2,449,NextPhase,1
+2,450,NextPhase,1
+2,451,NextPhase,1
+2,452,PlayCard { card: 10, targets: [4] },3
+2,453,Answer { choice_id: 85, selection: [Card(32)] },3
+2,454,NextPhase,1
+2,455,Answer { choice_id: 86, selection: [Card(69)] },5
+2,456,NextPhase,1
+2,457,NextPhase,1
+2,458,NextPhase,1
+2,459,NextPhase,1
+2,460,PlayCard { card: 11, targets: [4] },3
+2,461,NextPhase,1
+2,462,Answer { choice_id: 87, selection: [Card(76)] },4
+2,463,NextPhase,1
+2,464,NextPhase,1
+2,465,NextPhase,1
+2,466,NextPhase,1
+2,467,PlayCard { card: 26, targets: [6] },3
+2,468,Answer { choice_id: 88, selection: [Card(37)] },3
+2,469,NextPhase,1
+2,470,Answer { choice_id: 89, selection: [Card(62)] },3
+2,471,NextPhase,1
+2,472,NextPhase,1
+2,473,NextPhase,1
+2,474,NextPhase,1
+2,475,NextPhase,1
+2,476,Answer { choice_id: 90, selection: [Card(61)] },5
+2,477,NextPhase,1
+2,478,NextPhase,1
+2,479,NextPhase,1
+2,480,NextPhase,1
+2,481,PlayCard { card: 18, targets: [4] },3
+2,482,NextPhase,1
+2,483,Answer { choice_id: 91, selection: [Card(102)] },4
+2,484,NextPhase,1
+2,485,NextPhase,1
+2,486,NextPhase,1
+2,487,NextPhase,1
+2,488,NextPhase,1
+2,489,Answer { choice_id: 92, selection: [Card(101), Card(40)] },7
+2,490,NextPhase,1
+2,491,NextPhase,1
+2,492,NextPhase,1
+2,493,NextPhase,1
+2,494,PlayCard { card: 8, targets: [6] },2
+2,495,Answer { choice_id: 93, selection: [Card(33)] },3
+2,496,NextPhase,1
+2,497,Answer { choice_id: 94, selection: [Card(122)] },4
+2,498,NextPhase,1
+2,499,NextPhase,1
+2,500,NextPhase,1
+2,501,NextPhase,1
+2,502,NextPhase,1
+2,503,Answer { choice_id: 95, selection: [Card(117)] },5
+2,504,NextPhase,1
+2,505,NextPhase,1
+2,506,NextPhase,1
+2,507,NextPhase,1
+2,508,NextPhase,1
+2,509,Answer { choice_id: 96, selection: [Card(120), Card(93)] },6
+2,510,NextPhase,1
+2,511,NextPhase,1
+2,512,NextPhase,1
+2,513,NextPhase,1
+2,514,NextPhase,1
+2,515,Answer { choice_id: 97, selection: [Card(100), Card(52)] },7
+2,516,NextPhase,1
+2,517,NextPhase,1
+2,518,NextPhase,1
+2,519,NextPhase,1
+2,520,PlayCard { card: 14, targets: [6] },2
+2,521,Answer { choice_id: 98, selection: [Card(41)] },3
+2,522,NextPhase,1
+2,523,Answer { choice_id: 99, selection: [Card(58)] },4
+2,524,NextPhase,1
+2,525,NextPhase,1
+2,526,NextPhase,1
+2,527,NextPhase,1
+2,528,NextPhase,1
+2,529,Answer { choice_id: 100, selection: [Card(112)] },5
+2,530,NextPhase,1
+2,531,NextPhase,1
+2,532,NextPhase,1
+2,533,NextPhase,1
+2,534,NextPhase,1
+2,535,Answer { choice_id: 101, selection: [Card(57), Card(116)] },6
+2,536,NextPhase,1
+2,537,NextPhase,1
+2,538,NextPhase,1
+2,539,NextPhase,1
+2,540,NextPhase,1
+2,541,Answer { choice_id: 102, selection: [Card(63), Card(72)] },7
+2,542,NextPhase,1
+2,543,NextPhase,1
+2,544,NextPhase,1
+2,545,NextPhase,1
+2,546,PlayCard { card: 5, targets: [6] },2
+2,547,NextPhase,1
+2,548,Answer { choice_id: 103, selection: [Card(99)] },4
+2,549,NextPhase,1
+2,550,NextPhase,1
+2,551,NextPhase,1
+2,552,NextPhase,1
+2,553,NextPhase,1
+2,554,Answer { choice_id: 104, selection: [Card(94), Card(118), Card(103)] },7
+2,555,NextPhase,1
+2,556,NextPhase,1
+2,557,NextPhase,1
+2,558,NextPhase,1
+2,559,PlayCard { card: 0, targets: [6] },2
+2,560,NextPhase,1
+2,561,Answer { choice_id: 105, selection: [Card(64)] },4
+2,562,NextPhase,1
+2,563,NextPhase,1
+2,564,NextPhase,1
+2,565,NextPhase,1
+2,566,PlayCard { card: 16, targets: [7] },3
+2,567,NextPhase,2
+2,568,Answer { choice_id: 106, selection: [Card(80), Card(48)] },5
+2,569,NextPhase,1
+2,570,NextPhase,1
+2,571,NextPhase,1
+2,572,NextPhase,1
+2,573,PlayCard { card: 25, targets: [6] },2

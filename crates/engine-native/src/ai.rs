@@ -54,7 +54,13 @@ impl ContentTuning {
         self.seat_weights
             .iter()
             .find(|(s, _)| *s == seat)
-            .map(|(_, w)| w.clamp(0.1, 10.0))
+            .map(|(_, w)| {
+                if w.is_finite() {
+                    w.clamp(0.1, 10.0)
+                } else {
+                    1.0
+                }
+            })
             .unwrap_or(1.0)
     }
 
@@ -67,7 +73,7 @@ impl ContentTuning {
                 self.skill_threat
                     .iter()
                     .find(|(k, _)| k == s)
-                    .map(|(_, v)| *v)
+                    .map(|(_, v)| if v.is_finite() { *v } else { 1.0 })
             })
             .fold(None, |acc: Option<f64>, v| {
                 Some(acc.map_or(v, |a| a.max(v)))
@@ -77,10 +83,12 @@ impl ContentTuning {
 
     /// 效益结算：`qzCf` 开启时「权重 × 结果」。
     pub fn benefit(&self, weight: f64, value: f64) -> f64 {
-        if self.qz_cf {
+        if self.qz_cf && weight.is_finite() && value.is_finite() {
             weight * value
-        } else {
+        } else if value.is_finite() {
             value
+        } else {
+            0.0
         }
     }
 }
@@ -357,6 +365,19 @@ fn enumerate_candidates_variant(sim: &Engine, seat: u8, variant: u8) -> Vec<Game
             .filter(|p| p.alive && p.seat != seat)
             .map(|p| p.seat)
             .collect();
+        if variant >= 2 {
+            // 主动技候选：合法动作面已做 probe；最多 8 个，避免挤占节点预算。
+            let mut actives = 0usize;
+            for action in sim.legal_actions(seat) {
+                if matches!(action, GameAction::ActivateSkill { .. }) {
+                    candidates.push(action);
+                    actives += 1;
+                    if actives >= 8 {
+                        break;
+                    }
+                }
+            }
+        }
         if variant == 0 {
             for (card, kind) in &input.own_hand_kinds {
                 if *kind == CardKind::Sha {
@@ -462,7 +483,19 @@ fn policy_score(
         } else {
             1.0
         };
-        score -= (8.0 * w * (pa.hp as i64 - pb.hp as i64) as f64).round() as i64;
+        // 技能威胁度只放大「对高威胁敌人的体力伤害」，不改变手牌/装备估值。
+        let threat = if weighted {
+            tuning
+                .map(|t| t.threat_of_skills(pa.skills.iter().copied()))
+                .unwrap_or(1.0)
+                .clamp(0.1, 10.0)
+        } else {
+            1.0
+        };
+        let hp_loss = (pb.hp - pa.hp).max(0) as f64;
+        let hp_gain = (pa.hp - pb.hp).max(0) as f64;
+        score += (8.0 * w * hp_loss * threat).round() as i64;
+        score -= (8.0 * w * hp_gain * threat).round() as i64;
         score -= (w * (pa.hand_count as i64 - pb.hand_count as i64) as f64).round() as i64;
         score -= (2.0 * w * (pa.equips.len() as i64 - pb.equips.len() as i64) as f64).round()
             as i64;
@@ -486,8 +519,9 @@ impl Engine {
         let started: Option<Instant> = None;
         #[cfg(not(target_arch = "wasm32"))]
         let started: Option<Instant> = Some(Instant::now());
-        // 计算与规则推进隔离：全部模拟发生在克隆上
-        let mut sim = self.clone();
+        // 计算与规则推进隔离：全部模拟发生在克隆上（PA02：模拟会话克隆
+        // 不带权威日志/检查点，节点成本不随对局日志长度增长）
+        let mut sim = self.clone_for_simulation();
         // N10 规划信息集（ADR 0774/v29）：未知牌（对手暗手牌+牌库）
         // 确定性重分配——搜索不使用真实暗牌归属，且物理牌集合守恒
         crate::ai::redact_opponent_hands(&mut sim, seat);
@@ -893,4 +927,102 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         cursor += len;
     }
     core.deck = pool[cursor..cursor + deck_len].to_vec();
+}
+
+
+#[cfg(test)]
+mod active_candidate_tests {
+    use super::*;
+
+    #[test]
+    fn variant_two_weights_damage_by_enemy_skill_threat() {
+        let engine = Engine::new(20261028, 3);
+        let base = engine.ai_session(0).view();
+        let tuning = ContentTuning {
+            skill_threat: vec![("仁德".into(), 3.0), ("不臣".into(), 1.0)],
+            ..ContentTuning::default()
+        };
+        let mut high = base.clone();
+        high.players[1].skills = vec!["仁德"];
+        high.players[1].hp -= 1;
+        let mut low = base.clone();
+        low.players[2].skills = vec!["不臣"];
+        low.players[2].hp -= 1;
+        let high_score = policy_score(&base, &high, 0, 2, Some(&tuning));
+        let low_score = policy_score(&base, &low, 0, 2, Some(&tuning));
+        assert!(
+            high_score > low_score,
+            "higher threat damage must score better: high={high_score} low={low_score}"
+        );
+    }
+
+
+    #[test]
+    fn variant_two_can_choose_granted_active_skill() {
+        let mut engine = Engine::new(20261026, 2);
+        let seat: crate::ids::PlayerId = 0;
+        engine.debug_set_turn(seat, crate::event::Phase::Play, 1);
+        engine.debug_set_hp(seat, 1);
+        engine.debug_clear_hand(seat);
+        engine.debug_grant(seat, "不臣");
+        let plan = engine.plan_action(
+            seat,
+            &crate::ai::BoundedPlanner::new(64).with_policy_variant(2),
+        );
+        assert!(
+            matches!(plan.action, GameAction::ActivateSkill { .. }),
+            "variant 2 should choose an available active skill: {:?}",
+            plan.action
+        );
+    }
+
+    #[test]
+    fn variant_zero_does_not_include_active_skill_candidates() {
+        let mut engine = Engine::new(20261027, 2);
+        let seat: crate::ids::PlayerId = 0;
+        engine.debug_set_turn(seat, crate::event::Phase::Play, 1);
+        engine.debug_set_hp(seat, 1);
+        engine.debug_clear_hand(seat);
+        engine.debug_grant(seat, "不臣");
+        let candidates = enumerate_candidates_variant(&engine, seat, 0);
+        assert!(
+            !candidates
+                .iter()
+                .any(|action| matches!(action, GameAction::ActivateSkill { .. })),
+            "variant 0 must keep historical behavior: {candidates:?}"
+        );
+    }
+
+    #[test]
+    fn variant_one_does_not_include_active_skill_candidates() {
+        let mut engine = Engine::new(20261029, 2);
+        let seat: crate::ids::PlayerId = 0;
+        engine.debug_set_turn(seat, crate::event::Phase::Play, 1);
+        engine.debug_set_hp(seat, 1);
+        engine.debug_clear_hand(seat);
+        engine.debug_grant(seat, "不臣");
+        let candidates = enumerate_candidates_variant(&engine, seat, 1);
+        assert!(
+            !candidates
+                .iter()
+                .any(|action| matches!(action, GameAction::ActivateSkill { .. })),
+            "variant 1 must keep historical behavior: {candidates:?}"
+        );
+    }
+
+    #[test]
+    fn variant_two_includes_granted_active_skill_candidates() {
+        let mut engine = Engine::new(20261025, 2);
+        let seat: crate::ids::PlayerId = 0;
+        engine.debug_set_turn(seat, crate::event::Phase::Play, 1);
+        engine.debug_move_named_card_to_hand(seat, "sha");
+        engine.debug_grant(seat, "仁德");
+        let candidates = enumerate_candidates_variant(&engine, seat, 2);
+        assert!(
+            candidates
+                .iter()
+                .any(|action| matches!(action, GameAction::ActivateSkill { .. })),
+            "active skill must be a variant-2 candidate: {candidates:?}"
+        );
+    }
 }

@@ -148,12 +148,14 @@ impl Engine {
     }
 
     /// 非变异校验探针：在克隆上走与正式提交相同的校验路径。
+    /// PA02：探测克隆用模拟会话——不复制宿主日志、不做检查点/哈希，
+    /// 单次探测成本与本局日志长度无关；校验语义（拒绝原因）不变。
     pub fn probe_action(
         &self,
         seat: crate::ids::PlayerId,
         action: &GameAction,
     ) -> Result<(), RejectReason> {
-        let mut probe = self.clone();
+        let mut probe = self.clone_for_simulation();
         match probe.submit(GameCommand {
             actor: seat,
             expected_revision: self.revision(),
