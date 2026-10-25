@@ -100,7 +100,11 @@ impl PlannerPool {
         let mut submitted = 0usize;
         for (idx, seat) in seats.iter().enumerate() {
             let seat = *seat;
-            let sim = engine.clone(); // 任务需 'static：每座位持一份克隆（见模块注释）
+            // PA05：规划克隆不带权威日志（LogEvent 内嵌 Vec 使全量克隆
+            // 的分配次数随日志长度线性增长；实测 4 座 log≈500 时 108 次/克隆、
+            // 8 座 log≈1000 时 386 次/克隆）。PA02 已证模拟会话克隆的规划
+            // 行为与正式克隆逐行一致。
+            let sim = engine.clone_for_simulation(); // 任务需 'static：每座位持一份克隆（见模块注释）
             let planner = planner.clone();
             let tx = result_tx.clone();
             match self.try_submit(move || {

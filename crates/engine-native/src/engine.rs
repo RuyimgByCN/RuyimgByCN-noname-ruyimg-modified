@@ -21,7 +21,9 @@ use crate::snap::{
 use crate::state::{GameMode, GameState, GameStateCore, Outcome, PlayerState, TurnState};
 
 /// 命令动作：宿主可请求的对局操作。
-#[derive(Debug, Clone)]
+/// PA05：`Ord` 使 `legal_actions` 去重键直接用动作本身（替代每候选
+/// 一次 `format!("{action:?}")` 字符串分配）。
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum GameAction {
     /// 出牌阶段主动使用一张牌。
     PlayCard {

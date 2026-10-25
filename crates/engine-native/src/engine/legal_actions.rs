@@ -214,13 +214,14 @@ fn push_action(
     seat: crate::ids::PlayerId,
     action: GameAction,
     out: &mut Vec<GameAction>,
-    dedup: &mut std::collections::BTreeSet<String>,
+    dedup: &mut std::collections::BTreeSet<GameAction>,
 ) {
     if out.len() >= MAX_LEGAL_ACTIONS {
         return;
     }
-    let key = format!("{action:?}");
-    if !dedup.insert(key) {
+    // PA05：动作本体作去重键（GameAction: Ord）——省去每候选一次
+    // `format!` 字符串分配；仅在候选被接受后才克隆入集。
+    if dedup.contains(&action) {
         return;
     }
     // NC12 长程防护（2026-10-19）：候选探测同样在**克隆**上真实 `submit`，若内核在
@@ -245,6 +246,7 @@ fn push_action(
         }
     };
     if legal {
+        dedup.insert(action.clone());
         out.push(action);
     }
 }

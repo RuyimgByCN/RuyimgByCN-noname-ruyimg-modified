@@ -1,0 +1,1 @@
+seats=8 driven=400 clone_allocs=386 legal_actions_allocs=34 hash_allocs=1 view_allocs=3 plan_allocs=74

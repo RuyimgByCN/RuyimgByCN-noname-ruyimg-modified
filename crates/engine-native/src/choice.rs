@@ -18,7 +18,7 @@ pub enum ChoiceKind {
 }
 
 /// 单个可选项。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ChoiceOption {
     /// 确认/使用。
     Confirm,
