@@ -270,6 +270,7 @@ impl MachineSnapshot {
                     .map_err(|_| SnapshotError::UnknownMachine)?
                 } else {
                     crate::rvm_bridge::VmMachine::from_module(*owner, m)
+                        .map_err(|_| SnapshotError::UnknownMachine)?
                 };
                 Ok(Box::new(machine))
             }

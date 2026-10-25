@@ -31,12 +31,25 @@ use crate::snap::MachineSnapshot;
 #[derive(Debug, Clone)]
 pub struct VmSkillProgram {
     /// 已验证字节码模块（装载/编译产物；`logic_hash` 为内容锁锚）。
-    pub module: BytecodeModule,
+    /// PA06：类型即「装载期已校验」——只能经 [`VmSkillProgram::new`]
+    /// 构造，畸形模块装载期拒绝；执行期不再重复静态校验。
+    pub module: rule_vm::VerifiedModule,
     /// 目录 def 名（T8 增量 8：HostContext.skill_id 反查键）。
     pub skill_name: String,
 }
 
 impl VmSkillProgram {
+    /// PA06：装载期校验一次——畸形模块构造即拒。
+    pub fn new(
+        module: BytecodeModule,
+        skill_name: String,
+    ) -> Result<Self, rule_vm::VmError> {
+        Ok(Self {
+            module: rule_vm::VerifiedModule::verify(module)?,
+            skill_name,
+        })
+    }
+
     /// 内容锁锚（模块逻辑哈希）。
     pub fn logic_hash(&self) -> [u8; 32] {
         self.module.logic_hash
@@ -641,14 +654,14 @@ impl VmHost for EngineVmHost<'_> {
 
 impl VmMachine {
     /// 存档重建（非挂起态）：从模块载体字节还原（快照点不会停在
-    /// start→step 中段——此态重建后即待触发执行）。
-    pub(crate) fn from_module(owner: PlayerId, module: BytecodeModule) -> Self {
-        Self {
+    /// start→step 中段——此态重建后即待触发执行）。PA06：装载期
+    /// 校验——恢复载体畸形即拒（等价于原执行期校验的前移）。
+    pub(crate) fn from_module(owner: PlayerId, module: BytecodeModule) -> Result<Self, ()> {
+        let skill_name = module.name.clone();
+        let program = VmSkillProgram::new(module, skill_name).map_err(|_| ())?;
+        Ok(Self {
             owner,
-            program: Arc::new(VmSkillProgram {
-                skill_name: module.name.clone(),
-                module,
-            }),
+            program: Arc::new(program),
             trig: VmTriggerCtx::default(),
             pending_effects: Vec::new(),
             paused: None,
@@ -656,7 +669,7 @@ impl VmMachine {
             settled: false,
             consume: Vec::new(),
             count_hits: false,
-        }
+        })
     }
 
     /// 存档重建（挂起态）：continuation + 选项 + 排队效果还原；内容锁
@@ -677,12 +690,11 @@ impl VmMachine {
             return Err(());
         }
         let pending = dec_effects(&pending_bytes).ok_or(())?;
+        let skill_name = module.name.clone();
+        let program = VmSkillProgram::new(module, skill_name).map_err(|_| ())?;
         Ok(Self {
             owner,
-            program: Arc::new(VmSkillProgram {
-                skill_name: module.name.clone(),
-                module,
-            }),
+            program: Arc::new(program),
             trig: VmTriggerCtx::default(),
             pending_effects: pending,
             paused: Some(VmPaused {

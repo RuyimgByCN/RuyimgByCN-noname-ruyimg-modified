@@ -454,13 +454,14 @@ fn t8_rejection_unmapped_effect_rolls_back() {
     assert_eq!(hp(&e, 1), 4, "体力上限未被改动");
 }
 
-/// 拒收 ②：字节码载体篡改（数据路径注入坏码）——verify_module 拒绝，
-/// 回滚且不 panic。
+/// 拒收 ②：字节码载体篡改（数据路径注入坏码）——PA06 起 verify_module
+/// 在**装载期**（建目录）拒绝：含坏模块的包根本建不出对局，比原
+/// 「首触发时执行期拒绝+回滚」更早；语义变化见台帐 PA06 证据。
 #[test]
-fn t8_rejection_corrupted_bytecode_rolls_back() {
+fn t8_rejection_corrupted_bytecode_rejected_at_load() {
     let pkg = compile_source_named("t8-rvm-bridge", JIUWEI_DSL).expect("DSL 编译");
     let mut module = module_of(&pkg, "hnl_jiuwei_t8");
-    // 破坏码段首字节（verify/执行层拒绝）
+    // 破坏码段首字节（装载期校验拒绝）
     if !module.code.is_empty() {
         module.code[0] ^= 0xFF;
     }
@@ -471,10 +472,17 @@ fn t8_rejection_corrupted_bytecode_rolls_back() {
         trigger: phase_end_trigger(),
         filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     }]);
-    let mut e = engine_setup(&pack, name, 930002);
-    let h0 = hand_len(&e, 1);
-    drive_past_holder_phase_end(&mut e);
-    assert_eq!(hand_len(&e, 1), h0, "坏字节码：无落账（回滚协议）");
+    let err = match Engine::new_with_extensions(930002, 4, &[&pack]) {
+        Ok(_) => panic!("含畸形 VM 模块的包应在装载期（建目录）被拒绝"),
+        Err(e) => e,
+    };
+    assert_eq!(
+        err,
+        engine_native::content::extension::ExtensionError::InvalidVmModule {
+            name: name.to_string()
+        },
+        "装载期以 InvalidVmModule 拒绝"
+    );
 }
 
 /// 拒收 ③：能力越权（caps_mask 置未知位）——check_caps 拒绝，回滚。

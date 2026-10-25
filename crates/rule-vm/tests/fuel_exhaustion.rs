@@ -28,7 +28,7 @@ fn infinite_loop_terminates_on_out_of_fuel() {
     let m = module(code);
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
-    let result = vm.execute(&m, &mut host, 100);
+    let result = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, 100);
     assert!(
         matches!(result, Err(VmError::OutOfFuel)),
         "infinite loop must hit OutOfFuel, got {result:?}"
@@ -45,7 +45,7 @@ fn finite_loop_within_budget_halts() {
     let m = module(code);
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
-    let result = vm.execute(&m, &mut host, 100);
+    let result = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, 100);
     assert!(
         matches!(result, Ok(ExecResult::Halted { .. })),
         "finite program must halt, got {result:?}"
@@ -59,7 +59,7 @@ fn trap_instruction_produces_host_error() {
     let m = module(code);
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
-    let result = vm.execute(&m, &mut host, 100);
+    let result = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, 100);
     assert!(
         result.is_err(),
         "TRAP must produce an error, got {result:?}"
@@ -77,7 +77,7 @@ fn zero_budget_immediate_out_of_fuel() {
     let m = module(code);
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
-    let result = vm.execute(&m, &mut host, 0);
+    let result = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, 0);
     assert!(matches!(result, Err(VmError::OutOfFuel)));
 }
 
@@ -91,9 +91,9 @@ fn fuel_accounting_is_precise() {
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
     let budget = 50u32;
-    let result = vm.execute(&m, &mut host, budget);
+    let result = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, budget);
     assert!(matches!(result, Err(VmError::OutOfFuel)));
     // If we run with budget+1, it still runs out (infinite loop).
-    let result2 = vm.execute(&m, &mut host, budget + 1);
+    let result2 = vm.execute(&rule_vm::VerifiedModule::verify(m.clone()).unwrap(), &mut host, budget + 1);
     assert!(matches!(result2, Err(VmError::OutOfFuel)));
 }

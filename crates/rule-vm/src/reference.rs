@@ -382,6 +382,11 @@ fn take_i32(code: &[u8], cursor: &mut usize) -> Result<i32, VmError> {
 
 #[cfg(test)]
 mod tests {
+
+    /// PA06：测试助手——优化后端只接受装载期已校验模块（参照实现保留自有校验）。
+    fn vmod(m: &BytecodeModule) -> crate::vm::VerifiedModule {
+        crate::vm::VerifiedModule::verify(m.clone()).unwrap()
+    }
     use super::*;
     use crate::bytecode::{assemble, effect_tag, BytecodeModule, Op};
     use crate::{CollectingHost, HostContext};
@@ -424,7 +429,7 @@ mod tests {
         let mut reference = ReferenceVm::new();
 
         let optimized_pause = optimized
-            .execute(&module, &mut optimized_host, 100)
+            .execute(&vmod(&module), &mut optimized_host, 100)
             .unwrap();
         let reference_pause = reference
             .execute(&module, &mut reference_host, 100)
@@ -442,7 +447,7 @@ mod tests {
             panic!("reference backend did not pause");
         };
         let optimized_result = optimized
-            .resume(&module, &mut optimized_host, continuation, 20)
+            .resume(&vmod(&module), &mut optimized_host, continuation, 20)
             .unwrap();
         let reference_result = reference
             .resume(&module, &mut reference_host, reference_continuation, 20)
@@ -476,7 +481,7 @@ mod tests {
         let mut reference = ReferenceVm::new();
 
         let optimized_pause = optimized
-            .execute(&module, &mut optimized_host, 100)
+            .execute(&vmod(&module), &mut optimized_host, 100)
             .unwrap();
         let reference_pause = reference
             .execute(&module, &mut reference_host, 100)
@@ -498,7 +503,7 @@ mod tests {
             panic!("reference backend did not pause");
         };
         let optimized_result = optimized
-            .resume(&module, &mut optimized_host, continuation, 3)
+            .resume(&vmod(&module), &mut optimized_host, continuation, 3)
             .unwrap();
         let reference_result = reference
             .resume(&module, &mut reference_host, reference_continuation, 3)

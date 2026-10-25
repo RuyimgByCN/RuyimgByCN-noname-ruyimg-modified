@@ -1,0 +1,3 @@
+seed=0 steps=213 submit_p50=4625 submit_p90=6667 log_events=682 outcome=Some(Outcome { winner: Player(1) })
+seed=1 steps=159 submit_p50=4625 submit_p90=6791 log_events=504 outcome=Some(Outcome { winner: Player(1) })
+seed=2 steps=163 submit_p50=4500 submit_p90=6833 log_events=538 outcome=Some(Outcome { winner: Player(1) })

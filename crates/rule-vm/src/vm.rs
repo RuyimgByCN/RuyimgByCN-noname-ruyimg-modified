@@ -14,6 +14,29 @@ pub const DEFAULT_FUEL: u32 = 10_000;
 /// Default max operand stack depth.
 pub const DEFAULT_MAX_STACK: usize = 64;
 
+/// PA06：装载期已校验的模块。只能经 [`VerifiedModule::verify`] 构造——
+/// 畸形模块在装载（构造）期拒绝；[`RuleVm::execute`]/[`RuleVm::resume`]
+/// 只接受已校验模块，执行期不再重复 `verify_module`（此前每次执行都做
+/// 全量静态校验，静态核对见台帐 PA06）。`Deref` 仅供只读访问
+/// （快照编码/内容锁哈希等装载期用途）。
+#[derive(Debug, Clone)]
+pub struct VerifiedModule(BytecodeModule);
+
+impl VerifiedModule {
+    /// 校验并封装：畸形模块在此（装载期）拒绝。
+    pub fn verify(module: BytecodeModule) -> Result<Self, VmError> {
+        verify_module(&module)?;
+        Ok(Self(module))
+    }
+}
+
+impl std::ops::Deref for VerifiedModule {
+    type Target = BytecodeModule;
+    fn deref(&self) -> &BytecodeModule {
+        &self.0
+    }
+}
+
 /// Runtime value (integers only — no floats).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub struct Value(pub i32);
@@ -70,14 +93,14 @@ impl RuleVm {
         }
     }
 
-    /// Verify then run module from entry with host.
+    /// Run verified module from entry with host (PA06：校验在装载期
+    /// [`VerifiedModule::verify`] 完成一次，执行期不再重复)。
     pub fn execute(
         &mut self,
-        module: &BytecodeModule,
+        module: &VerifiedModule,
         host: &mut dyn VmHost,
         fuel: u32,
     ) -> Result<ExecResult, VmError> {
-        verify_module(module)?;
         self.check_caps(module, host)?;
         let mut frame = Frame {
             locals: vec![Value(0); module.local_count as usize],
@@ -93,12 +116,11 @@ impl RuleVm {
     /// stack so the resumed body can consume it (e.g. store into a local).
     pub fn resume(
         &mut self,
-        module: &BytecodeModule,
+        module: &VerifiedModule,
         host: &mut dyn VmHost,
         cont: Continuation,
         chosen_token: u32,
     ) -> Result<ExecResult, VmError> {
-        verify_module(module)?;
         if cont.module_hash != module.logic_hash {
             return Err(VmError::InvalidBytecode(
                 "continuation module mismatch".into(),
@@ -750,6 +772,11 @@ pub(crate) fn decode_frame(data: &[u8]) -> Result<Frame, VmError> {
 
 #[cfg(test)]
 mod tests {
+
+    /// PA06：测试助手——按值克隆并装载期校验（执行期不再校验）。
+    fn vmod(m: &BytecodeModule) -> VerifiedModule {
+        VerifiedModule::verify(m.clone()).unwrap()
+    }
     use super::*;
     use crate::bytecode::{assemble, encode_caps, Op};
     use crate::host::{CollectingHost, HostContext};
@@ -779,7 +806,7 @@ mod tests {
         );
         let mut vm = RuleVm::new();
         let mut host = CollectingHost::default();
-        let r = vm.execute(&m, &mut host, 100).unwrap();
+        let r = vm.execute(&vmod(&m), &mut host, 100).unwrap();
         assert!(matches!(r, ExecResult::Halted { .. }));
     }
 
@@ -795,7 +822,7 @@ mod tests {
         let mut vm = RuleVm::new();
         let mut host = CollectingHost::default();
         assert!(matches!(
-            vm.execute(&m, &mut host, 100).unwrap(),
+            vm.execute(&vmod(&m), &mut host, 100).unwrap(),
             ExecResult::Halted { .. }
         ));
         let m = mod_from_ops(
@@ -807,7 +834,7 @@ mod tests {
         let mut vm = RuleVm::new();
         let mut host = CollectingHost::default();
         assert!(matches!(
-            vm.execute(&m, &mut host, 100).unwrap(),
+            vm.execute(&vmod(&m), &mut host, 100).unwrap(),
             ExecResult::Halted { .. }
         ));
     }
@@ -817,10 +844,10 @@ mod tests {
         // JUMP -3 after reading jump offset: pc after JUMP opcode+imm points back
         // Const; Jump(-5) looping — simpler: Jump(0) infinite at same region
         let m = mod_from_ops("loop", &[Op::Jump(-3)], 0, 0);
-        // Jump(-3): after reading opcode at 0, pc=1, read i16, pc=3, then pc = 3 + (-3) = 0
+            // Jump(-3): after reading opcode at 0, pc=1, read i16, pc=3, then pc = 3 + (-3) = 0
         let mut vm = RuleVm::new();
         let mut host = CollectingHost::default();
-        let err = vm.execute(&m, &mut host, 50).unwrap_err();
+        let err = vm.execute(&vmod(&m), &mut host, 50).unwrap_err();
         assert_eq!(err, VmError::OutOfFuel);
     }
 
@@ -847,7 +874,7 @@ mod tests {
             caps: CapabilitySet::standard_skill(),
             ..Default::default()
         };
-        vm.execute(&m, &mut host, 1000).unwrap();
+        vm.execute(&vmod(&m), &mut host, 1000).unwrap();
         assert_eq!(host.effects.len(), 1);
         assert!(matches!(
             &host.effects[0],
@@ -877,7 +904,7 @@ mod tests {
             caps: CapabilitySet::none(),
             ..Default::default()
         };
-        let err = vm.execute(&m, &mut host, 100).unwrap_err();
+        let err = vm.execute(&vmod(&m), &mut host, 100).unwrap_err();
         assert!(matches!(err, VmError::CapabilityDenied(_)));
         let _ = encode_caps;
     }

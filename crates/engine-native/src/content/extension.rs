@@ -32,6 +32,8 @@ pub enum ExtensionError {
     DuplicateGeneral { name: &'static str },
     /// 包内/包间重复技能名。
     DuplicateSkill { name: String },
+    /// VM 模块装载期校验失败（PA06：畸形字节码在建目录时拒绝）。
+    InvalidVmModule { name: String },
 }
 
 /// 扩展提供的额外武将条目。
@@ -64,6 +66,24 @@ impl InitHook {
             InitHook::None => "none",
             InitHook::WuxingNatures => "wuxing_natures",
             InitHook::SwdJiqiHeld => Self::SWD_JIQI_HELD_KEY,
+        }
+    }
+
+    pub fn grants_global_skill(self, behavior: crate::content::host::HostBehavior) -> bool {
+        use crate::content::host::HostBehavior;
+        match self {
+            Self::None => false,
+            Self::WuxingNatures => behavior == HostBehavior::ShengkeCheck,
+            Self::SwdJiqiHeld => matches!(behavior,
+                HostBehavior::SwdQinglongzhiguiHeld
+                    | HostBehavior::SwdZhuquezhizhangHeld
+                    | HostBehavior::SwdBaishouzhihuHeld
+                    | HostBehavior::SwdXuanwuzhihuangHeld
+                    | HostBehavior::SwdHuanglinzhicongHeld
+                    | HostBehavior::SwdShencaojieGuard
+                    | HostBehavior::SwdYuchanSwap
+                    | HostBehavior::SwdShenmiguoWindow
+            ),
         }
     }
 
