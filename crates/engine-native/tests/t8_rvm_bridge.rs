@@ -95,6 +95,11 @@ fn submit(e: &mut Engine, actor: u8, action: GameAction) {
 fn np_settled(e: &mut Engine) {
     let actor = e.turn().current;
     submit(e, actor, GameAction::NextPhase);
+    // VM 挂起（rvm_choice）不代答：PA12④ 修复首答丢失后，这里代答会真的
+    // 续跑落账，吞掉挂起测试要校验的状态；留给调用者显式处理。
+    if e.open_choice().is_some_and(|c| c.spec.prompt == "rvm_choice") {
+        return;
+    }
     if let Some(c) = e.open_choice() {
         let sel: Vec<ChoiceOption> = c
             .spec

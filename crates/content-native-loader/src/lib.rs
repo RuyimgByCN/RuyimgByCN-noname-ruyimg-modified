@@ -262,8 +262,46 @@ pub fn bridge_vm_skill_decls(
                 field: "trigger_index.module",
                 reason: format!("模块 {} 不在 npack modules 内", t.module),
             })?;
+        // 阶段事件（PA12④ 对齐旧线语义）：旧线 `phase_X` = TurnStateChanged
+        // 进入 X 阶段（`phase_end` = 进入结束阶段），`phase_X_end` =
+        // PhaseEnded 离开 X 阶段；原生阶段帧按阶段逐一发 begin/end，故
+        // 落为 PhaseBegin/PhaseEnd + `AtPhase` 阶段门。`phase_prepare`
+        // 原生无准备阶段帧（登记差异，拒装）；`phase_begin`（旧线通用
+        // 阶段开始）暂保持原映射，待逐一核对。
+        let mut phase_gate: Option<engine_native::event::Phase> = None;
         let event = match t.event.as_str() {
-            "phase_end" => EventKind::PhaseEnd,
+            "phase_end" => {
+                phase_gate = Some(engine_native::event::Phase::End);
+                EventKind::PhaseBegin
+            }
+            "phase_judge" => {
+                phase_gate = Some(engine_native::event::Phase::Judge);
+                EventKind::PhaseBegin
+            }
+            "phase_draw" => {
+                phase_gate = Some(engine_native::event::Phase::Draw);
+                EventKind::PhaseBegin
+            }
+            "phase_play" => {
+                phase_gate = Some(engine_native::event::Phase::Play);
+                EventKind::PhaseBegin
+            }
+            "phase_discard" => {
+                phase_gate = Some(engine_native::event::Phase::Discard);
+                EventKind::PhaseBegin
+            }
+            "phase_draw_end" => {
+                phase_gate = Some(engine_native::event::Phase::Draw);
+                EventKind::PhaseEnd
+            }
+            "phase_play_end" => {
+                phase_gate = Some(engine_native::event::Phase::Play);
+                EventKind::PhaseEnd
+            }
+            "phase_discard_end" => {
+                phase_gate = Some(engine_native::event::Phase::Discard);
+                EventKind::PhaseEnd
+            }
             "phase_begin" => EventKind::PhaseBegin,
             "damage" => EventKind::Damage,
             "damage_before" => EventKind::DamageBefore,
@@ -290,6 +328,13 @@ pub fn bridge_vm_skill_decls(
         let Some(filter) = engine_native::rvm_bridge::map_vm_filter(t.filter.as_str()) else {
             deferred_filters.push(t.filter.clone());
             continue;
+        };
+        let filter = match phase_gate {
+            Some(phase) => engine_native::rvm_bridge::VmFilterPolicy::AtPhase {
+                phase,
+                inner: Box::new(filter),
+            },
+            None => filter,
         };
         out.push(engine_native::content::extension::VmSkillDecl {
             name: names::intern(t.module.clone()).to_string(),

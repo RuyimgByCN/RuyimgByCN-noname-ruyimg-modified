@@ -280,6 +280,14 @@ pub enum VmFilterPolicy {
     OwnerTargetedByOtherSha,
     /// 具名组合 filter（T8 余项）。精确策略优先于本变体。
     Named(Arc<crate::rvm_named::NamedProgram>),
+    /// 阶段门（PA12④）：事件携带的阶段须等于 `phase`，再评估 `inner`。
+    /// 装载器用它把 DSL 的 `phase_end`/`phase_draw`/… 落到原生
+    /// `PhaseBegin`/`PhaseEnd`（原生阶段帧按阶段逐一发出，旧线
+    /// `phase_end` 只指「进入结束阶段」——无门会每阶段触发一次）。
+    AtPhase {
+        phase: crate::event::Phase,
+        inner: Box<VmFilterPolicy>,
+    },
 }
 
 /// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
@@ -361,6 +369,16 @@ impl SkillBehavior for VmSkillBehavior {
         // 合取段会让他人事件过闸（炙焚 holder 门同类缺陷）。turn_damage
         // 为本回合「造成」伤害计数（kernel 记在来源侧），与 lsp 一致。
         let trig = trigger_ctx_of(event);
+        if let VmFilterPolicy::AtPhase { phase, inner } = &self.filter {
+            if trig.phase != Some(*phase) {
+                return false;
+            }
+            let gated = VmSkillBehavior {
+                program: self.program.clone(),
+                filter: (**inner).clone(),
+            };
+            return gated.filter(ctx, owner, event);
+        }
         let is_event_player = trig.event_player == Some(owner);
         let holder_state = |s: u8| ctx.state.player(s);
         match self.filter.clone() {
@@ -554,6 +572,8 @@ impl SkillBehavior for VmSkillBehavior {
                         })
                 })
             }
+            // 阶段门已在函数头处理（递归评估 inner）；此处不可达，保守返回 false。
+            VmFilterPolicy::AtPhase { .. } => false,
             VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
                 &prog,
                 ctx,
@@ -873,7 +893,10 @@ impl VmMachine {
                     continuation,
                     options,
                 });
-                self.asked = false;
+                // 本次返回的 WaitChoice 就是问询（机器契约：WaitChoice 后下一
+                // step 读应答）。PA12④ 原型实证：此处若置 false，下一 step 会
+                // 再问一次、首答被丢（恢复路径 restore_paused 早已置 true）。
+                self.asked = true;
                 let options: Vec<ChoiceOption> = self
                     .paused
                     .as_ref()

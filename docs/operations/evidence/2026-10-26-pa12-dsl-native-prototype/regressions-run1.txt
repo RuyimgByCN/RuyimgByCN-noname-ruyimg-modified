@@ -1,0 +1,18 @@
+== engine-native start 2026-10-27 00:02:40 +0800
+== engine-native exit=101 end 2026-10-27 00:03:38 +0800
+engine-native: passed=1562 failed=2 ignored=71
+test t8_vm_skill_choice_suspend_resume_midrestore ... FAILED
+test t8_vm_skill_cross_process_resume ... FAILED
+== content-native-loader start 2026-10-27 00:03:38 +0800
+== content-native-loader exit=0 end 2026-10-27 00:03:42 +0800
+content-native-loader: passed=32 failed=0 ignored=0
+== engine-native-wasm start 2026-10-27 00:03:42 +0800
+== engine-native-wasm exit=0 end 2026-10-27 00:04:09 +0800
+engine-native-wasm: passed=52 failed=0 ignored=0
+== game-server start 2026-10-27 00:04:09 +0800
+== game-server exit=0 end 2026-10-27 00:05:46 +0800
+game-server: passed=358 failed=0 ignored=0
+== engine-core start 2026-10-27 00:05:46 +0800
+== engine-core exit=0 end 2026-10-27 00:06:42 +0800
+engine-core: passed=3838 failed=0 ignored=1
+ALL DONE

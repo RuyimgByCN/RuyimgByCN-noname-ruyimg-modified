@@ -1,0 +1,6 @@
+test pa12_dsl_choice_max_hp_branch ... ok
+test pa12_dsl_choice_recover_branch ... ok
+test pa12_dsl_pause_save_restore_resume_both_branches ... ok
+test pa12_dsl_fires_once_per_turn_at_end_phase_and_first_answer_lands ... ok
+test pa12_dsl_filter_not_fired_when_unique_max ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s

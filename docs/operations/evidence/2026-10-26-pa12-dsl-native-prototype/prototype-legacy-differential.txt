@@ -1,0 +1,3 @@
+test pa12_legacy_pause_options_match_native ... ok
+test pa12_legacy_branch_effects_match_native ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
