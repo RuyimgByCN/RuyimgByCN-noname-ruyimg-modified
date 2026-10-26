@@ -19,7 +19,10 @@ pub const DEFAULT_MAX_STACK: usize = 64;
 /// 只接受已校验模块，执行期不再重复 `verify_module`（此前每次执行都做
 /// 全量静态校验，静态核对见台帐 PA06）。`Deref` 仅供只读访问
 /// （快照编码/内容锁哈希等装载期用途）。
-#[derive(Debug, Clone)]
+///
+/// 序列化与内层 [`BytecodeModule`] 逐字节相同（持有方的快照格式不变）；
+/// 反序列化即装载期校验——快照里的畸形模块在恢复时拒绝，而不是等到首次执行。
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct VerifiedModule(BytecodeModule);
 
 impl VerifiedModule {
@@ -34,6 +37,19 @@ impl std::ops::Deref for VerifiedModule {
     type Target = BytecodeModule;
     fn deref(&self) -> &BytecodeModule {
         &self.0
+    }
+}
+
+impl Serialize for VerifiedModule {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.0.serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for VerifiedModule {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let module = BytecodeModule::deserialize(deserializer)?;
+        Self::verify(module).map_err(serde::de::Error::custom)
     }
 }
 

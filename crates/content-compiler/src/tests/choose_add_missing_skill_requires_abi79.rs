@@ -24,7 +24,7 @@ skill scls_zhanshen(1) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -62,7 +62,7 @@ skill rebaobian(1) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -101,7 +101,7 @@ skill dccunsi(1) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -145,7 +145,7 @@ skill dcwushen(1) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -181,7 +181,7 @@ skill dczhaohan_choose(1) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -223,7 +223,7 @@ skill dcjinjie(1) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -262,7 +262,7 @@ skill dcjue(1) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -303,7 +303,7 @@ skill dczhaowen(1) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -347,7 +347,7 @@ skill stdduanbi(3811377323) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -396,7 +396,7 @@ skill xingshang(1) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -434,7 +434,7 @@ skill nzry_jianxiang(3232965394) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -471,7 +471,7 @@ skill jieming(3579069878) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -511,7 +511,7 @@ skill fangzhu(2335755764) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -584,7 +584,7 @@ skill baonue(3659854073) lord_only {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -648,7 +648,7 @@ skill luanwu(2772376501) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

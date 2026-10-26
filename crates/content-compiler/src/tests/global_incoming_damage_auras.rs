@@ -305,7 +305,7 @@ fn run_compiled_jianxiong() {
         },
         ..Default::default()
     };
-    let r = vm.execute(module, &mut host, 10_000).unwrap();
+    let r = vm.execute(&vmod(module), &mut host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     assert_eq!(host.effects.len(), 1);
 }
@@ -341,7 +341,7 @@ skill fanji(7) {
         ..Default::default()
     };
     let mut vm_enemy = RuleVm::new();
-    let r = vm_enemy.execute(module, &mut enemy_host, 10_000).unwrap();
+    let r = vm_enemy.execute(&vmod(module), &mut enemy_host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     assert_eq!(enemy_host.effects.len(), 1, "enemy source should draw");
 
@@ -351,7 +351,7 @@ skill fanji(7) {
         ..Default::default()
     };
     let mut vm_ally = RuleVm::new();
-    let _ = vm_ally.execute(module, &mut ally_host, 10_000).unwrap();
+    let _ = vm_ally.execute(&vmod(module), &mut ally_host, 10_000).unwrap();
     assert_eq!(ally_host.effects.len(), 0, "ally source should not draw");
 }
 
@@ -382,7 +382,7 @@ skill juexing(8) {
         ..Default::default()
     };
     let mut vm = RuleVm::new();
-    let r = vm.execute(module, &mut host, 10_000).unwrap();
+    let r = vm.execute(&vmod(module), &mut host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     assert_eq!(host.effects.len(), 2);
     assert!(matches!(
@@ -415,7 +415,7 @@ skill wansha(15) locked {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -451,7 +451,7 @@ skill jushou(3729566871) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -490,7 +490,7 @@ skill oldniepan(3136864229) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -529,7 +529,7 @@ skill jianchu(2342849364) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -572,7 +572,7 @@ skill wn_dutan(4152033537) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -645,7 +645,7 @@ skill eu_xiaoguo(2461210777) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -704,7 +704,7 @@ skill anguo(3231604344) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -755,7 +755,7 @@ skill jujun(3855454532) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -827,7 +827,7 @@ skill wangong2(3164390759) locked {
         .find(|module| &module.name == sha_module)
         .unwrap();
     RuleVm::new()
-        .execute(sha_module, &mut host, 10_000)
+        .execute(&vmod(sha_module), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -863,7 +863,7 @@ fn skip_next_play_phase_requires_abi100() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -895,7 +895,7 @@ fn choose_other_draw_or_recover_requires_abi101() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -933,7 +933,7 @@ fn field_equipment_count_and_one_shot_discard_require_abi102() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -980,7 +980,7 @@ skill xiongyi(2476017492) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1039,7 +1039,7 @@ skill hanyong(3661917608) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1146,7 +1146,7 @@ skill nsduijue(4088249173) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert!(matches!(
@@ -1187,7 +1187,7 @@ skill junkjizhi(2783324283) {
         ..Default::default()
     };
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert_eq!(
@@ -1220,7 +1220,7 @@ skill nsdunxing(4203825879) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1258,7 +1258,7 @@ skill zhanshi(11) {
         ..Default::default()
     };
     let mut vm = RuleVm::new();
-    let r = vm.execute(module, &mut host, 10_000).unwrap();
+    let r = vm.execute(&vmod(module), &mut host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     assert_eq!(host.effects.len(), 1);
     match &host.effects[0] {
@@ -1304,7 +1304,7 @@ skill probe(13) {
         ..Default::default()
     };
     let mut vm = RuleVm::new();
-    let r = vm.execute(module, &mut host, 10_000).unwrap();
+    let r = vm.execute(&vmod(module), &mut host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     // Both draw branches (stub=1) plus the emit_note branch fire.
     assert_eq!(host.effects.len(), 3);
@@ -1348,7 +1348,7 @@ skill autoplay(15) {
         ..Default::default()
     };
     let mut vm = RuleVm::new();
-    let r = vm.execute(&pkg.modules[0], &mut host, 10_000).unwrap();
+    let r = vm.execute(&vmod(&pkg.modules[0]), &mut host, 10_000).unwrap();
     assert!(matches!(r, ExecResult::Halted { .. }));
     assert_eq!(host.effects.len(), 1);
     match &host.effects[0] {
@@ -1374,7 +1374,7 @@ skill remove_mounts(16) locked {
     let pkg = compile_source(src).unwrap();
     let mut host = CollectingHost::default();
     let result = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 10_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(result, ExecResult::Halted { .. }));
     assert_eq!(

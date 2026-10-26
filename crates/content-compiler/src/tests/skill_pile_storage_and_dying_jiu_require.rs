@@ -38,10 +38,10 @@ skill chunlao(2555108773) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     RuleVm::new()
-        .execute(&package.modules[1], &mut host, 100)
+        .execute(&vmod(&package.modules[1]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -114,7 +114,7 @@ skill lose(3) {}
         ..Default::default()
     };
     RuleVm::new()
-        .execute(active_module, &mut host, 100)
+        .execute(&vmod(active_module), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -189,7 +189,7 @@ skill lock(3172356775) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(begin_module, &mut begin_host, 100)
+        .execute(&vmod(begin_module), &mut begin_host, 100)
         .unwrap();
     assert!(matches!(
         begin_host.effects.as_slice(),
@@ -259,7 +259,7 @@ skill helper(2) {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ChooseCurrentCardUseEnhancements {
@@ -305,7 +305,7 @@ fn draw_or_discard_add_skill_requires_abi50() {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ChooseDrawOrDiscardAddSkill {
@@ -360,7 +360,7 @@ fn discard_batch_bingliang_and_judge_sha_require_abi51() {
             },
             ..Default::default()
         };
-        RuleVm::new().execute(module, &mut host, 100).unwrap();
+        RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
         effects.extend(host.effects);
     }
     assert!(effects.iter().any(|effect| matches!(
@@ -428,7 +428,7 @@ fn active_unique_category_target_and_count_branch_require_abi52() {
         selected_cards: vec![77],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.first(),
         Some(EffectRequest::DiscardSelectedRecordUniqueCategoryTarget {
@@ -486,7 +486,7 @@ fn remembered_category_and_phase_gift_effects_require_abi53() {
             },
             ..Default::default()
         };
-        RuleVm::new().execute(module, &mut host, 100).unwrap();
+        RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
         effects.extend(host.effects);
     }
     assert!(effects.iter().any(|effect| matches!(
@@ -550,7 +550,7 @@ fn resolved_sha_gift_effect_requires_abi54() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -585,7 +585,7 @@ fn skipped_phase_effects_require_abi55() {
             },
             ..Default::default()
         };
-        RuleVm::new().execute(module, &mut host, 100).unwrap();
+        RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
         effects.extend(host.effects);
     }
     assert!(effects.iter().any(|effect| matches!(
@@ -624,7 +624,7 @@ fn uniform_hand_draw_effect_requires_abi56() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -656,7 +656,7 @@ fn card_user_transfer_and_equipment_damage_reduction_require_abi57() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&chanhui.modules[0], &mut host, 100)
+        .execute(&vmod(&chanhui.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -680,7 +680,7 @@ fn card_user_transfer_and_equipment_damage_reduction_require_abi57() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&jiaojin.modules[0], &mut host, 100)
+        .execute(&vmod(&jiaojin.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -712,7 +712,7 @@ fn turn_history_equipment_choice_and_limited_equipment_gift_require_abi58() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&qieting.modules[0], &mut host, 100)
+        .execute(&vmod(&qieting.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -740,7 +740,7 @@ fn turn_history_equipment_choice_and_limited_equipment_gift_require_abi58() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&xianzhou.modules[0], &mut host, 100)
+        .execute(&vmod(&xianzhou.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -777,7 +777,7 @@ fn weapon_range_damage_choice_requires_abi59() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -811,7 +811,7 @@ fn hand_count_target_draw_or_random_discard_requires_abi60() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -843,7 +843,7 @@ fn current_draw_count_increase_requires_abi61_and_draw_phase() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -946,7 +946,7 @@ skill hanzhan(4071802825) {
         event_cards: vec![11, 12],
         ..Default::default()
     };
-    RuleVm::new().execute(gain_module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(gain_module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::GainHighestRankShaFromEventCards {
@@ -991,7 +991,7 @@ skill jyzongshi(2485328360) {
         event_cards: vec![11, 12],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::GainHandCompareResultCard {
@@ -1039,7 +1039,7 @@ skill qiaoshui3(2260792673) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1077,7 +1077,7 @@ skill qiaoshui(3955213386) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1115,7 +1115,7 @@ skill stdxingfa(2490051933) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1149,7 +1149,7 @@ skill sijian(3832046646) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&compiled.modules[0], &mut host, 100)
+        .execute(&vmod(&compiled.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1228,7 +1228,7 @@ skill redangxian(4137190076) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1272,7 +1272,7 @@ skill godan_yuanyi(3610550580) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1307,7 +1307,7 @@ skill stdzhaoxin(2955343028) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1344,7 +1344,7 @@ skill tydangxian(3099116192) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1383,7 +1383,7 @@ skill scls_qinzheng(1) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

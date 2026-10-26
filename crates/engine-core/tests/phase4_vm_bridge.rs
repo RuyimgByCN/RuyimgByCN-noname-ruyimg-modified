@@ -19,7 +19,7 @@ skill damage_draw(1001) {
 #[test]
 fn dsl_to_vm_to_engine_draw() {
     let pkg = compile_source(DAMAGE_DRAW).unwrap();
-    let module = &pkg.modules[0];
+    let module = rule_vm::VerifiedModule::verify(pkg.modules[0].clone()).unwrap();
 
     let mut tx = Transaction::begin(GameState::empty());
     bootstrap_match(&mut tx, 2, 1, "bootstrap").unwrap();
@@ -27,7 +27,7 @@ fn dsl_to_vm_to_engine_draw() {
     let hand_before = tx.state().hand_count(p2);
 
     let effects =
-        run_module_for_effects(tx.state(), module, 0, p2.raw(), p2.raw(), 1, 0, 0, 10_000).unwrap();
+        run_module_for_effects(tx.state(), &module, 0, p2.raw(), p2.raw(), 1, 0, 0, 10_000).unwrap();
     assert_eq!(effects.len(), 1);
     run_effects(&mut tx, effects).unwrap();
     assert_eq!(tx.state().hand_count(p2), hand_before + 1);

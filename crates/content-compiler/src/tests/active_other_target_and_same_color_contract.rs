@@ -122,7 +122,7 @@ skill temporary(99) {
         query_stub_int: 1,
         ..Default::default()
     };
-    vm.execute(&pkg.modules[0], &mut host, 1_000).unwrap();
+    vm.execute(&vmod(&pkg.modules[0]), &mut host, 1_000).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [rule_api::EffectRequest::RemoveSkill { skill }] if skill.raw() == 9
@@ -162,7 +162,7 @@ skill routing(100) {
         query_stub_int: 9,
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 1_000).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 1_000).unwrap();
     assert!(matches!(
         &host.effects[0],
         rule_api::EffectRequest::MoveCards { cards, to, from }
@@ -223,7 +223,7 @@ skill chooser(102) {
         ..Default::default()
     };
     let paused = RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 1_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 1_000)
         .unwrap();
     assert!(matches!(
         paused,
@@ -259,7 +259,7 @@ skill cooperative(1010) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 1_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 1_000)
         .unwrap();
     assert!(matches!(
         host.effects[0],
@@ -307,7 +307,7 @@ skill draw_take(1011) locked {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 1_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 1_000)
         .unwrap();
     assert!(matches!(
         host.effects[0],
@@ -351,7 +351,7 @@ skill take_equip(1012) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 1_000)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 1_000)
         .unwrap();
     assert!(matches!(
         host.effects[0],
@@ -1095,7 +1095,7 @@ fn discard_target_equipment_draw_weapon_range_requires_abi136_and_target_contrac
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1142,7 +1142,7 @@ fn choose_target_reveal_hand_damage_if_sha_requires_abi137() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1185,7 +1185,7 @@ fn choose_other_give_one_hand_equip_requires_abi138() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1224,7 +1224,7 @@ fn turn_gain_filter_requires_abi139() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1268,7 +1268,7 @@ fn bound_reveal_category_requires_abi140() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1322,7 +1322,7 @@ fn recover_to_max_optional_skill_exchange_requires_abi142() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 10_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 10_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

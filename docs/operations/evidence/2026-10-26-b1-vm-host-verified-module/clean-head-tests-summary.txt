@@ -1,0 +1,85 @@
+== rule-vm start 2026-10-26 19:17:02 +0800
+== rule-vm exit=0 end 2026-10-26 19:17:13 +0800
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/rule_vm-d0dd841a9e445606)
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/fuel_exhaustion.rs (/tmp/b1-head-target/debug/deps/fuel_exhaustion-bbb22eba8d8e6dea)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests rule_vm
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== content-compiler start 2026-10-26 19:17:13 +0800
+== content-compiler exit=0 end 2026-10-26 19:17:24 +0800
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/content_compiler-089a7ee6dfea6706)
+test result: ok. 532 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/fuzz_dsl_parser_replay.rs (/tmp/b1-head-target/debug/deps/fuzz_dsl_parser_replay-82dbcf6ba2091297)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests content_compiler
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== conformance start 2026-10-26 19:17:24 +0800
+== conformance exit=0 end 2026-10-26 19:17:48 +0800
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/conformance-19da6713e8f85e45)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+     Running unittests src/main.rs (/tmp/b1-head-target/debug/deps/conformance-29bf09d6a8a9a7ac)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests conformance
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== devtools start 2026-10-26 19:17:48 +0800
+== devtools exit=0 end 2026-10-26 19:17:48 +0800
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/devtools-881f7bc0e047612e)
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/gwent_runtime.rs (/tmp/b1-head-target/debug/deps/gwent_runtime-ec1dfe5507d297a4)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests devtools
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== engine-native start 2026-10-26 19:17:48 +0800
+== engine-native exit=101 end 2026-10-26 19:18:00 +0800
+error: linking with `cc` failed: exit status: 1
+error: linking with `cc` failed: exit status: 1
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "swd_lxianglong_sha_miss") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_swd_shijianhuisu") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_yanziyaoshui") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "nc08_upstream_gujian_heilonglinpian") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "swd_bingfeng_lock") due to 1 previous error
+error: could not write output to /tmp/b1-head-target/debug/deps/l24_skin_switch_eight-cff2702c37493299.bsgxs2o2i80jcggtuhq59kzzv.0o6xdeh.rcgu.o: No space left on device
+error: could not compile `engine-native` (test "l24_skin_switch_eight") due to 1 previous error
+error: could not compile `engine-native` (test "nc04_vm_fault")
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "g1_huanle")
+error: could not compile `engine-native` (test "nc08_upstream_gujian_gjyuheng") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "nc08_save_restore_four_sources") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+error: could not compile `engine-native` (test "l04_cardpile_eight") due to 1 previous error
+== game-server start 2026-10-26 19:18:00 +0800
+== game-server exit=101 end 2026-10-26 19:18:01 +0800
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetaxrBsrU/full.rmeta`: No space left on device (os error 28)
+error: error writing dependencies to `/tmp/b1-head-target/debug/deps/slab-f84ccea408b4a9f3.d`: No space left on device (os error 28)
+error: could not compile `writeable` (lib)
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetaZMZ6Ls/full.rmeta`: No space left on device (os error 28)
+error: could not compile `slab` (lib) due to 1 previous error
+error: could not compile `httparse` (lib) due to 1 previous error
+error: could not compile `libc` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetaJG4TiA/full.rmeta`: No space left on device (os error 28)
+error: could not compile `bytes` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetaRp8oWM/full.rmeta`: No space left on device (os error 28)
+error: could not compile `futures-task` (lib)
+error: could not compile `memchr` (lib) due to 1 previous error
+error: failed to write /tmp/b1-head-target/debug/deps/rustcpTvfOm/lib.rmeta: No space left on device (os error 28)
+error: could not compile `litemap` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmeta9xtSgp/full.rmeta`: No space left on device (os error 28)
+error: could not compile `tracing-core` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetavBAFgy/full.rmeta`: No space left on device (os error 28)
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmetaMv6ZS1/full.rmeta`: No space left on device (os error 28)
+error: could not compile `zerotrie` (lib) due to 1 previous error
+error: could not compile `typenum` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmeta3XrIbs/full.rmeta`: No space left on device (os error 28)
+error: could not compile `zerovec` (lib) due to 1 previous error
+error: failed to write to `/tmp/b1-head-target/debug/deps/rmeta4ZfzQt/full.rmeta`: No space left on device (os error 28)
+error: could not compile `serde_core` (lib) due to 1 previous error
+error: couldn't create a temp dir: No space left on device (os error 28) at path "/tmp/b1-head-target/debug/deps/rmetazO6Kog"
+error: could not compile `zerocopy` (lib) due to 1 previous error
+== engine-core start 2026-10-26 19:18:01 +0800
+== engine-core exit=1 end 2026-10-26 19:18:01 +0800
+ALL DONE 2026-10-26 19:18:01 +0800

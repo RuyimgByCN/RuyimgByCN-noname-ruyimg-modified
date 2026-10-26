@@ -1,0 +1,6 @@
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/conformance-19da6713e8f85e45)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s
+     Running unittests src/main.rs (/tmp/b1-head-target/debug/deps/conformance-29bf09d6a8a9a7ac)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests conformance
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

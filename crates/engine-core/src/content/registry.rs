@@ -14,7 +14,7 @@ use content_schema::{
     ContentPackage, PackageCardEntry, PackageCharacterEntry, PackageSelectionSpec,
 };
 use engine_api::SkillDefId;
-use rule_vm::BytecodeModule;
+use rule_vm::{BytecodeModule, VerifiedModule};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
@@ -198,8 +198,9 @@ pub struct SkillMetadata {
 /// Match-scoped content registry.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ContentRegistry {
-    /// Module name → bytecode.
-    modules: BTreeMap<String, BytecodeModule>,
+    /// Module name → bytecode（PA06/B1：装载期校验一次并持有已校验模块，
+    /// 执行期不再重复 `verify_module`；序列化格式与裸 `BytecodeModule` 相同）。
+    modules: BTreeMap<String, VerifiedModule>,
     /// Skill definition metadata from packages.
     #[serde(default)]
     package_skills: BTreeMap<u32, SkillMetadata>,

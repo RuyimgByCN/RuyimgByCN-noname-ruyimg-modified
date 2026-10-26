@@ -4,7 +4,7 @@
 //! content packages whose skills burn excessive fuel.
 
 use rule_vm::bytecode::BytecodeModule;
-use rule_vm::{CollectingHost, ExecResult, RuleVm, VmError};
+use rule_vm::{CollectingHost, ExecResult, RuleVm, VerifiedModule, VmError};
 
 /// Fuel profile for a single module execution.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -21,9 +21,18 @@ pub struct FuelProfile {
 
 /// Profile fuel consumption for a single module execution.
 pub fn profile_module(module: &BytecodeModule, fuel_budget: u32) -> FuelProfile {
+    // PA06/B1：装载期校验一次；畸形模块按「未完成」上报（同原执行期 Err 分支）。
+    let Ok(verified) = VerifiedModule::verify(module.clone()) else {
+        return FuelProfile {
+            module_name: module.name.clone(),
+            fuel_budget,
+            fuel_consumed: fuel_budget,
+            completed: false,
+        };
+    };
     let mut vm = RuleVm::new();
     let mut host = CollectingHost::default();
-    let result = vm.execute(module, &mut host, fuel_budget);
+    let result = vm.execute(&verified, &mut host, fuel_budget);
     let (consumed, completed) = match result {
         Ok(ExecResult::Halted { fuel_remaining }) => {
             (fuel_budget.saturating_sub(fuel_remaining), true)

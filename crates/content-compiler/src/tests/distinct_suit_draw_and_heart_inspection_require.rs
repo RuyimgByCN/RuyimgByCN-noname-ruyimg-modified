@@ -543,7 +543,7 @@ fn xinjiangchi_three_way_choice_requires_abi315() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -614,7 +614,7 @@ fn new_reluoyi_full_resolution_requires_abi317() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -664,7 +664,7 @@ fn remoshi_place_and_retrieve_require_abi318() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -710,7 +710,7 @@ fn xinyaoming_target_and_action_choice_require_abi319() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -750,7 +750,7 @@ fn rehuaiyi_staged_resolution_requires_abi320() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -799,7 +799,7 @@ fn reanguo_shared_minimum_flow_and_recast_require_abi321() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -850,7 +850,7 @@ fn distance_hand_discard_or_damage_requires_abi322() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -895,7 +895,7 @@ fn draw_view_two_gain_or_move_equipment_requires_abi323() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -943,7 +943,7 @@ fn resolve_beizhu_requires_abi324_and_exact_active_contract() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1013,7 +1013,7 @@ skill chengzhao_lose(4247003544) {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(win, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(win), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [
@@ -1067,7 +1067,7 @@ skill mbshanjia_nodis(4049419240) locked non_gainable {
         query_stub_int: 2,
         ..Default::default()
     };
-    RuleVm::new().execute(active, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(active), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ResolveMbshanjia {
@@ -1129,7 +1129,7 @@ skill daoji(4263252675) {
         selected_cards: vec![12],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [
@@ -1193,7 +1193,7 @@ skill twdaoji(3856876988) {
         selected_cards: vec![12],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [
@@ -1240,7 +1240,7 @@ skill jiaohua(4264685853) {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ResolveJiaohua {
@@ -1295,7 +1295,7 @@ skill luanqun_effect(3973186966) locked {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ResolveLuanqun {
@@ -1347,7 +1347,7 @@ fn different_color_gift_or_recover_requires_abi330() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

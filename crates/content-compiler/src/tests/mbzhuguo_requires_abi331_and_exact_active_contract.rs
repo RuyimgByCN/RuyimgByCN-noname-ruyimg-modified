@@ -29,7 +29,7 @@ fn mbzhuguo_requires_abi331_and_exact_active_contract() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -69,7 +69,7 @@ fn mbanxian_requires_abi332_and_first_hand_discard_contract() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -115,7 +115,7 @@ fn mbjinzu_requires_abi333_and_emits_active_and_next_sha_stages() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(active, &mut active_host, 100)
+        .execute(&vmod(active), &mut active_host, 100)
         .unwrap();
     assert!(
         matches!(
@@ -153,7 +153,7 @@ fn mbjinzu_requires_abi333_and_emits_active_and_next_sha_stages() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(trigger, &mut trigger_host, 100)
+        .execute(&vmod(trigger), &mut trigger_host, 100)
         .unwrap();
     assert!(matches!(
         trigger_host.effects.as_slice(),
@@ -201,7 +201,7 @@ fn scoped_take_for_rezhiman_requires_abi334_and_precedes_damage_prevention() {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [
@@ -271,7 +271,7 @@ fn first_hp_change_unique_trick_majority_and_reveal_hand_require_abi336() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -346,7 +346,7 @@ fn linked_player_draw_and_shared_turn_filter_require_abi344() {
     assert_eq!(package.trigger_index.len(), 2);
     for module in &package.modules {
         let mut host = CollectingHost::default();
-        RuleVm::new().execute(module, &mut host, 100).unwrap();
+        RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
         assert!(matches!(
             host.effects.as_slice(),
             [EffectRequest::DrawLinkedPlayers { count: 1 }]
@@ -447,7 +447,7 @@ fn reluanwu_and_reweimu_keep_ordered_inherited_semantics_at_abi351() {
         },
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [
@@ -492,7 +492,7 @@ fn pszhonghun_reaches_typed_color_effect_at_abi352() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert_eq!(
         host.effects,
@@ -570,7 +570,7 @@ fn twjiaohua_requires_abi363_and_preserves_draw_event_cards() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -617,7 +617,7 @@ fn twkujian_requires_abi364_and_preserves_selected_cards() {
         selected_cards: vec![101, 102, 103],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ResolveTwkujian {
@@ -657,7 +657,7 @@ fn twruilian_requires_abi365_and_preserves_discard_cards() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -700,7 +700,7 @@ fn twfujian_requires_abi366() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -731,7 +731,7 @@ fn twjianwei_requires_abi367() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -767,7 +767,7 @@ fn twtanfeng_requires_abi368() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -802,7 +802,7 @@ fn twzhibian_requires_abi369() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -835,7 +835,7 @@ fn twyuyan_requires_abi370() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(
         matches!(host.effects.as_slice(), [EffectRequest::ResolveTwyuyan { player, source, card, skill }] if player.raw() == 9 && source.raw() == 7 && card.raw() == 5 && skill.is_none())
@@ -866,7 +866,7 @@ fn twguoyi_requires_abi371() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -902,7 +902,7 @@ fn twchuhai_requires_abi372() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -941,7 +941,7 @@ fn twyizhu_requires_abi373() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -980,7 +980,7 @@ fn twluanchou_requires_abi374() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     let [EffectRequest::ResolveTwluanchou {
         player,
@@ -1028,7 +1028,7 @@ fn twxiawei_requires_abi375() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1065,7 +1065,7 @@ fn twbianfuren_requires_abi376() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1103,7 +1103,7 @@ fn twfeiyi_requires_abi377() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1141,7 +1141,7 @@ fn twchenzhen_requires_abi378() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1184,7 +1184,7 @@ fn twcaoxiu_requires_abi379() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1223,7 +1223,7 @@ fn twniujin_requires_abi391() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1282,7 +1282,7 @@ fn twfuwan_requires_abi393() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1326,7 +1326,7 @@ fn twfuman_requires_abi394_and_preserves_selected_card() {
         selected_cards: vec![101],
         ..Default::default()
     };
-    RuleVm::new().execute(module, &mut host, 100).unwrap();
+    RuleVm::new().execute(&vmod(module), &mut host, 100).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::ResolveTwfuman {
@@ -1367,7 +1367,7 @@ fn cuijin_requires_abi395() {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&package.modules[0], &mut host, 100)
+        .execute(&vmod(&package.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

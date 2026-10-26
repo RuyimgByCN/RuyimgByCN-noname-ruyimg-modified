@@ -508,7 +508,8 @@ impl ContentRegistry {
         let mut local_modules = BTreeSet::new();
 
         for m in &pkg.modules {
-            rule_vm::verify_module(m).map_err(|e| ContentLoadError::Verify(e.to_string()))?;
+            let verified = VerifiedModule::verify(m.clone())
+                .map_err(|e| ContentLoadError::Verify(e.to_string()))?;
             if !local_modules.insert(m.name.clone()) {
                 return Err(ContentLoadError::Conflict(format!(
                     "duplicate module {} in {}/{}",
@@ -522,7 +523,7 @@ impl ContentRegistry {
                     return Err(ContentLoadError::Conflict(key));
                 }
             } else {
-                self.modules.insert(key, m.clone());
+                self.modules.insert(key, verified);
             }
         }
 

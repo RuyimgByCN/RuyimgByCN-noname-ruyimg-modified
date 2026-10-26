@@ -1,0 +1,20 @@
+error: linking with `cc` failed: exit status: 1
+  = note: ld: write() failed, errno=28 (No space left on device) for '/tmp/b1-head-target/debug/deps/nc08_upstream_yanziyaoshui-f61cb7a16a0b25f7'
+error: linking with `cc` failed: exit status: 1
+  = note: ld: write() failed, errno=28 (No space left on device) for '/tmp/b1-head-target/debug/deps/swd_lxianglong_sha_miss-ec5755047a2c18d8'
+error: linking with `cc` failed: exit status: 1
+  = note: ld: write() failed, errno=28 (No space left on device) for '/tmp/b1-head-target/debug/deps/nc08_upstream_swd_shijianhuisu-ea3fea7f156f6c1d'
+error: could not compile `engine-native` (test "swd_lxianglong_sha_miss") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_swd_shijianhuisu") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_yanziyaoshui") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+  = note: ld: write() failed, errno=28 (No space left on device) for '/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_heilonglinpian-8f4154c7c698a7f8'
+error: could not compile `engine-native` (test "nc08_upstream_gujian_heilonglinpian") due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+  = note: ld: write() failed, errno=28 (No space left on device) for '/tmp/b1-head-target/debug/deps/swd_bingfeng_lock-bcbf595d159a3cdd'
+error: could not compile `engine-native` (test "swd_bingfeng_lock") due to 1 previous error
+rustc-LLVM ERROR: IO failure on output stream: No space left on device
+rustc-LLVM ERROR: IO failure on output stream: No space left on device
+error: could not write output to /tmp/b1-head-target/debug/deps/l24_skin_switch_eight-cff2702c37493299.bsgxs2o2i80jcggtuhq59kzzv.0o6xdeh.rcgu.o: No space left on device
+error: could not compile `engine-native` (test "l24_skin_switch_eight") due to 1 previous error
+error: could not compile `engine-native` (test "nc04_vm_fault")

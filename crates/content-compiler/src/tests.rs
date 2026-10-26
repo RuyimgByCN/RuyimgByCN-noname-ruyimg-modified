@@ -4,6 +4,12 @@ use rule_api::{EffectRequest, Suit};
 
 use rule_vm::{CollectingHost, ExecResult, HostContext, RuleVm};
 
+/// PA06/B1：优化后端只接受装载期已校验模块——编译产物在此一次性校验再执行
+/// （同 rule-vm 自测助手 `vmod`）。
+fn vmod(module: &rule_vm::BytecodeModule) -> rule_vm::VerifiedModule {
+    rule_vm::VerifiedModule::verify(module.clone()).expect("compiled module must verify")
+}
+
 fn legacy_effect_tag(tag: u16) -> u8 {
     u8::try_from(tag).expect("legacy HOST_EFFECT tag must fit in one byte")
 }

@@ -135,17 +135,20 @@ impl VmHost for HarnessHost {
     }
 }
 
-fn module_of(pkg: &content_schema::ContentPackage, skill: &str) -> rule_vm::BytecodeModule {
+/// PA06/B1：装载期校验一次（`VerifiedModule`），执行期不再重复 verify。
+fn module_of(pkg: &content_schema::ContentPackage, skill: &str) -> rule_vm::VerifiedModule {
     let trig = pkg
         .trigger_index
         .iter()
         .find(|t| t.module.contains(skill))
         .unwrap_or_else(|| panic!("trigger for {skill} not found"));
-    pkg.modules
+    let module = pkg
+        .modules
         .iter()
         .find(|m| m.name == trig.module)
         .unwrap_or_else(|| panic!("module {} not found", trig.module))
-        .clone()
+        .clone();
+    rule_vm::VerifiedModule::verify(module).expect("装载期校验")
 }
 
 fn owner() -> PlayerId {
@@ -178,7 +181,10 @@ fn main() {
 
     // 模块经 to_bytes/from_bytes 往返（npack 载体形态）后可执行
     let jiuwei = module_of(&pkg, "hnl_jiuwei_t8");
-    let shipped = rule_vm::BytecodeModule::from_bytes(&jiuwei.to_bytes()).expect("字节码往返");
+    let shipped = rule_vm::VerifiedModule::verify(
+        rule_vm::BytecodeModule::from_bytes(&jiuwei.to_bytes()).expect("字节码往返"),
+    )
+    .expect("恢复载体装载期校验");
     assert_eq!(shipped.logic_hash, jiuwei.logic_hash, "往返后 hash 不变");
     println!("② 模块 to_bytes/from_bytes 往返一致（npack 载体可执行）");
 
@@ -277,7 +283,7 @@ fn main() {
     }
     let total_ns = total.elapsed().as_nanos();
     println!(
-        "⑦ 成本（本机初步测量，{} 构建）：酒尾触发一次（含 verify）≈ {} ns 均值（N={N}；解释器量级参考值，非验收口径）",
+        "⑦ 成本（本机初步测量，{} 构建）：酒尾触发一次（装载期已校验，不含 verify）≈ {} ns 均值（N={N}；解释器量级参考值，非验收口径）",
         if cfg!(debug_assertions) { "debug" } else { "release" },
         total_ns / N as u128,
     );

@@ -21,7 +21,7 @@ use engine_api::{
     ENGINE_BUILD_ID,
 };
 use engine_core::{run_guozhan_match, run_identity_match, Engine, MatchConfig};
-use rule_vm::{CollectingHost, ExecResult, HostContext, ReferenceVm, RuleVm};
+use rule_vm::{CollectingHost, ExecResult, HostContext, ReferenceVm, RuleVm, VerifiedModule};
 use serde::{Deserialize, Serialize};
 
 /// One start-game golden vector (bootstrap ruleset, hash command parity).
@@ -219,6 +219,9 @@ fn run_dual_vm_standard() -> Result<(), String> {
         .map_err(|error| format!("compile standard_m1: {error}"))?;
 
     for module in &package.modules {
+        // PA06/B1：优化后端只收装载期已校验模块；参照实现保留自有校验。
+        let verified = VerifiedModule::verify(module.clone())
+            .map_err(|error| format!("{} verify: {error}", module.name))?;
         let context = HostContext {
             skill_id: 1,
             self_id: 1,
@@ -235,7 +238,7 @@ fn run_dual_vm_standard() -> Result<(), String> {
         let mut optimized = RuleVm::new();
         let mut reference = ReferenceVm::new();
         let mut optimized_result = optimized
-            .execute(module, &mut optimized_host, 10_000)
+            .execute(&verified, &mut optimized_host, 10_000)
             .map_err(|error| format!("{} optimized: {error}", module.name))?;
         let mut reference_result = reference
             .execute(module, &mut reference_host, 10_000)
@@ -270,7 +273,7 @@ fn run_dual_vm_standard() -> Result<(), String> {
                 ) => {
                     let chosen = options.first().copied().unwrap_or_default();
                     optimized_result = optimized
-                        .resume(module, &mut optimized_host, optimized_continuation, chosen)
+                        .resume(&verified, &mut optimized_host, optimized_continuation, chosen)
                         .map_err(|error| format!("{} optimized resume: {error}", module.name))?;
                     reference_result = reference
                         .resume(module, &mut reference_host, reference_continuation, chosen)

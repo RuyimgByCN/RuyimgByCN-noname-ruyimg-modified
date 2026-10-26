@@ -275,7 +275,7 @@ fn compile_optional_use_given_equipment_requires_abi227() {
         ..Default::default()
     };
     rule_vm::RuleVm::new()
-        .execute(&package.modules[0], &mut host, 1_000)
+        .execute(&vmod(&package.modules[0]), &mut host, 1_000)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -982,12 +982,12 @@ skill chenlong(2779773800) {
     let ExecResult::Paused {
         continuation,
         options,
-    } = vm.execute(module, &mut host, 1_000).unwrap()
+    } = vm.execute(&vmod(module), &mut host, 1_000).unwrap()
     else {
         panic!("numeric choice did not pause");
     };
     assert_eq!(options, [1, 2]);
-    vm.resume(module, &mut host, continuation, 2).unwrap();
+    vm.resume(&vmod(module), &mut host, continuation, 2).unwrap();
     assert!(matches!(
         host.effects.as_slice(),
         [EffectRequest::LoseHpThenDamageOtherLoseMaxHpIfDying {
@@ -1051,7 +1051,7 @@ skill weiyang(4199352428) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),
@@ -1121,7 +1121,7 @@ skill yinhu(4066124366) {
         ..Default::default()
     };
     RuleVm::new()
-        .execute(&pkg.modules[0], &mut host, 100)
+        .execute(&vmod(&pkg.modules[0]), &mut host, 100)
         .unwrap();
     assert!(matches!(
         host.effects.as_slice(),

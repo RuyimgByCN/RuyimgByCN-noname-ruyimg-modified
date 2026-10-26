@@ -609,7 +609,7 @@ req => req,
 /// choice must use [`run_module`] instead.
 pub fn run_module_for_effects(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     self_id: u32,
     event_player: u32,
@@ -654,7 +654,7 @@ pub struct VmPause {
 /// `ctx` = `[self_id, event_player, event_source, event_card]`.
 pub fn run_module(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     ctx: [u32; 4],
     event_amount: u32,
@@ -666,7 +666,7 @@ pub fn run_module(
 /// Execute a trigger module while preserving every physical card from the domain event.
 pub fn run_module_with_event_cards(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     ctx: [u32; 4],
     event_amount: u32,
@@ -719,7 +719,7 @@ pub fn run_module_with_event_cards(
 /// Execute a module with declaratively selected active-skill card inputs.
 pub fn run_module_with_selected_cards(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     ctx: [u32; 4],
     event_amount: u32,
@@ -741,7 +741,7 @@ pub fn run_module_with_selected_cards(
 /// Execute a module with declaratively selected active-skill card and player inputs.
 pub fn run_module_with_selected_inputs(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     ctx: [u32; 4],
     event_amount: u32,
@@ -785,7 +785,7 @@ pub fn run_module_with_selected_inputs(
 /// and any subsequent pause.
 pub fn resume_module(
     state: &GameState,
-    module: &rule_vm::BytecodeModule,
+    module: &rule_vm::VerifiedModule,
     skill_id: u32,
     ctx: [u32; 4],
     frames: Vec<u8>,

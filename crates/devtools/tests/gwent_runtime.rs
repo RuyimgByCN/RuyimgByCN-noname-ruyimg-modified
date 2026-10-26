@@ -12,7 +12,7 @@ fn hupeng_runtime_executes_without_underflow() {
         .modules
         .iter()
         .filter(|m| m.name.contains("hupeng"))
-        .cloned()
+        .map(|m| rule_vm::VerifiedModule::verify(m.clone()).expect("compiled module verifies"))
         .collect();
     assert!(!modules.is_empty(), "no hupeng module compiled");
     let mut emitted = Vec::new();
@@ -35,7 +35,7 @@ fn hupeng_runtime_executes_without_underflow() {
         .modules
         .iter()
         .filter(|m| m.name.contains("gw_dudayuanshuai1"))
-        .cloned()
+        .map(|m| rule_vm::VerifiedModule::verify(m.clone()).expect("compiled module verifies"))
         .collect();
     let mut cancel_ok = false;
     for module in &dud1_modules {
@@ -60,7 +60,7 @@ fn hupeng_runtime_executes_without_underflow() {
         .modules
         .iter()
         .filter(|m| m.name.contains("gwyewu"))
-        .cloned()
+        .map(|m| rule_vm::VerifiedModule::verify(m.clone()).expect("compiled module verifies"))
         .collect();
     assert!(!gwyewu_modules.is_empty(), "no gwyewu module compiled");
     let mut gwyewu_ok = false;
@@ -86,7 +86,7 @@ fn hupeng_runtime_executes_without_underflow() {
         .modules
         .iter()
         .filter(|m| m.name.contains("gw_dudayuanshuai2"))
-        .cloned()
+        .map(|m| rule_vm::VerifiedModule::verify(m.clone()).expect("compiled module verifies"))
         .collect();
     assert!(!dud2_modules.is_empty(), "no gw_dudayuanshuai2 module compiled");
     let mut dud2_ok = false;

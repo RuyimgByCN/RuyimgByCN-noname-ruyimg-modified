@@ -1,0 +1,6 @@
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/rule_vm-d0dd841a9e445606)
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/fuel_exhaustion.rs (/tmp/b1-head-target/debug/deps/fuel_exhaustion-bbb22eba8d8e6dea)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Doc-tests rule_vm
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

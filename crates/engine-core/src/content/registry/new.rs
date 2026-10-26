@@ -68,7 +68,7 @@ impl ContentRegistry {
     }
 
     /// Module lookup.
-    pub fn module(&self, name: &str) -> Option<&BytecodeModule> {
+    pub fn module(&self, name: &str) -> Option<&VerifiedModule> {
         self.modules.get(name).or_else(|| {
             let mut matches = self.modules.values().filter(|module| module.name == name);
             let first = matches.next();

@@ -1,0 +1,43 @@
+2026-10-26 18:51:58 +0800
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs:800:9
+    |
+786 | /         EffectRequest::ResolveSpshanxiSuoming {
+787 | |             player,
+788 | |             actor,
+789 | |             stage,
+790 | |             skill,
+791 | |         } => {
+    | |_________- matches all the relevant values
+...
+800 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+  --> crates/engine-core/src/hash/effects_draw_cards.rs:25:9
+   |
+13 | /         EffectRequest::ModifyCurrentDamage {
+14 | |             player,
+15 | |             delta,
+16 | |             skill,
+17 | |         } => {
+   | |_________- matches all the relevant values
+...
+25 | /         EffectRequest::ModifyCurrentDamage {
+26 | |             player,
+27 | |             delta,
+28 | |             skill,
+29 | |         } => {
+   | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+   --> crates/engine-core/src/hash/effects_draw_cards.rs:876:13
+    |
+876 |             flipped,
+    |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `engine-core` (lib) generated 94 warnings
+error: could not compile `engine-core` (lib) due to 3 previous errors; 94 warnings emitted
+EXIT=
+2026-10-26 18:52:29 +0800
