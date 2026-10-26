@@ -1,7 +1,7 @@
 # PA08-1 有头 Chrome 基线与 PA07 有头复现（2026-10-26）
 
 - 日期：2026-10-26 06:30–07:40 +08:00
-- 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第一切片（有头 Chrome）＋ [PA07](同上) 的有头复现与缓解判别
+- 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第一切片（有头 Chrome）＋ [PA07](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 的有头复现与缓解判别
 - 源码：`HEAD = 7e28a937` 加未提交工作树；本批代码改动仅 `apps/web-client/scripts/web-frame-latency.mjs`（新增 `--headed` 旗标）；前端测量栈按[帧间隔基线](../2026-10-26-web-frame-latency/README.md)同法重建（wasm-pack 重建 WASM → scratchpad vite 构建，未覆盖仓库 dist）
 - 环境：Mac15,10（M3 Max）内置 **ProMotion 显示器**；有头 Chrome 156.0.8078.48 窗口 1280×800、GPU 默认开启；负载与 headless 基线完全同构（同 seed、同驱动、同 max-steps 1500）
 
