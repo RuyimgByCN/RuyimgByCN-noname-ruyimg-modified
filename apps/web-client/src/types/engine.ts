@@ -250,6 +250,11 @@ export type WorkerRequest =
       packsJson?: string;
       /** 表现层性能采样（`perfProbe.ts`）：开启 Worker 分段计时；缺省关闭。 */
       perf?: boolean;
+      /**
+       * PA07 缓解原型（`latency=sab` URL 门控）：回包 SAB 镜像缓冲。
+       * 需跨源隔离（COOP/COEP）；缺省不传＝纯 postMessage。
+       */
+      latencySab?: SharedArrayBuffer;
     }
   | {
       id: number;

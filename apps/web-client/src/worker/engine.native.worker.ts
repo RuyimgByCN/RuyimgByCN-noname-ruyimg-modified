@@ -17,7 +17,7 @@ import {
   nativeUnsupported,
   type NativeHandle,
 } from "./nativeBackend";
-import { postWithStepTimings, setStepTimingsEnabled, stepBegin } from "./stepTimings";
+import { postWithStepTimings, setSabMirror, setStepTimingsEnabled, stepBegin } from "./stepTimings";
 
 let handle: NativeHandle | null = null;
 
@@ -29,7 +29,10 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
   };
   try {
     await ensureNativeReady();
-    if (msg.type === "init") setStepTimingsEnabled(msg.perf === true);
+    if (msg.type === "init") {
+      setStepTimingsEnabled(msg.perf === true);
+      setSabMirror(msg.latencySab ?? null);
+    }
     stepBegin();
     if (msg.type === "init") {
       // NC12：把 worker 内初始化分段耗时随 init 回包发出（浏览器档位测量读取）

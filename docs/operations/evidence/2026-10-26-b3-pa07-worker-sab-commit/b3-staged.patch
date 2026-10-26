@@ -1,0 +1,129 @@
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+index a96b331b..af484a96 100644
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -250,6 +250,11 @@ export type WorkerRequest =
+       packsJson?: string;
+       /** 表现层性能采样（`perfProbe.ts`）：开启 Worker 分段计时；缺省关闭。 */
+       perf?: boolean;
++      /**
++       * PA07 缓解原型（`latency=sab` URL 门控）：回包 SAB 镜像缓冲。
++       * 需跨源隔离（COOP/COEP）；缺省不传＝纯 postMessage。
++       */
++      latencySab?: SharedArrayBuffer;
+     }
+   | {
+       id: number;
+diff --git a/apps/web-client/src/worker/engine.native.worker.ts b/apps/web-client/src/worker/engine.native.worker.ts
+index 5f2c1ff3..b31bb55f 100644
+--- a/apps/web-client/src/worker/engine.native.worker.ts
++++ b/apps/web-client/src/worker/engine.native.worker.ts
+@@ -17,7 +17,7 @@ import {
+   nativeUnsupported,
+   type NativeHandle,
+ } from "./nativeBackend";
+-import { postWithStepTimings, setStepTimingsEnabled, stepBegin } from "./stepTimings";
++import { postWithStepTimings, setSabMirror, setStepTimingsEnabled, stepBegin } from "./stepTimings";
+ 
+ let handle: NativeHandle | null = null;
+ 
+@@ -29,7 +29,10 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
+   };
+   try {
+     await ensureNativeReady();
+-    if (msg.type === "init") setStepTimingsEnabled(msg.perf === true);
++    if (msg.type === "init") {
++      setStepTimingsEnabled(msg.perf === true);
++      setSabMirror(msg.latencySab ?? null);
++    }
+     stepBegin();
+     if (msg.type === "init") {
+       // NC12：把 worker 内初始化分段耗时随 init 回包发出（浏览器档位测量读取）
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index cb4a3bc0..1842d15a 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -26,6 +26,7 @@ import type {
+   ObserverSnapshot,
+ } from "../types/engine";
+ import init, { NativeEngine } from "./native-pkg/engine_native_wasm.js";
++import { stepMark } from "./stepTimings";
+ 
+ export interface NativeHandle {
+   engine: NativeEngine;
+@@ -745,13 +746,16 @@ export function nativeEnvelope(
+   handle: NativeHandle,
+   result: unknown = null,
+ ): EngineEnvelope {
++  stepMark("envelope_enter");
+   const raw = handle.engine.view_json(handle.observer);
++  stepMark("view_json", raw.length);
+   const view = JSON.parse(raw) as NativeView;
++  stepMark("view_parse");
+   const finished = handle.engine.is_finished();
+   const revision = Number(handle.engine.revision());
+   const snap = nativeObserverToSnapshot(view);
+   snap.revision = revision;
+-  return {
++  const envelope: EngineEnvelope = {
+     result,
+     events: [],
+     choice: readChoice(handle),
+@@ -761,6 +765,8 @@ export function nativeEnvelope(
+     revision,
+     finished,
+   };
++  stepMark("envelope_done");
++  return envelope;
+ }
+ 
+ export type NativeDispatchReq =
+diff --git a/apps/web-client/src/worker/stepTimings.ts b/apps/web-client/src/worker/stepTimings.ts
+index 6612a10c..dc604c02 100644
+--- a/apps/web-client/src/worker/stepTimings.ts
++++ b/apps/web-client/src/worker/stepTimings.ts
+@@ -44,6 +44,36 @@ export function stepMark(
+ const span = (a: number | null, b: number | null): number | null =>
+   a === null || b === null ? null : b - a;
+ 
++// ---- PA07 缓解原型：回包 SAB 镜像（latency=sab URL 门控，默认关闭） ----
++//
++// Chromium 在真实输入后把主线程任务（含 worker postMessage 回包任务）推迟到下一帧
++// 合成之后（transfer ≈ 一个刷新周期）。本镜像把回包 JSON 同步写入主线程创建的
++// SharedArrayBuffer；主线程在 rAF 回调内轮询并提前应用（rAF 不受该任务窗口约束，
++// 理论 input_to_paint p50 ≈ 半个刷新周期）。规则不迁移——只把同一份信封提前反序列化。
++
++const SAB_DATA_OFFSET = 8;
++let sab: SharedArrayBuffer | null = null;
++let sabInts: Int32Array | null = null;
++
++export function setSabMirror(buffer: SharedArrayBuffer | null): void {
++  sab = buffer;
++  sabInts = buffer ? new Int32Array(buffer, 0, 2) : null;
++}
++
++/** 回包镜像写入 SAB（写完 seq 才发布）。超容量静默跳过（postMessage 路径兜底）。 */
++export function mirrorToSab(resp: { id?: number; ok?: boolean; data?: unknown }): void {
++  if (!sab || !sabInts || typeof resp.id !== "number" || !resp.ok) return;
++  try {
++    const bytes = new TextEncoder().encode(JSON.stringify(resp));
++    if (SAB_DATA_OFFSET + bytes.length > sab.byteLength) return;
++    new Uint8Array(sab, SAB_DATA_OFFSET).set(bytes);
++    Atomics.store(sabInts, 1, bytes.length);
++    Atomics.store(sabInts, 0, Atomics.load(sabInts, 0) + 1);
++  } catch {
++    /* 镜像失败不影响 postMessage 主路径 */
++  }
++}
++
+ /**
+  * 发送回包；开启时随后追加分段。`envelope_json_chars` 在回包发出之后计算，
+  * 不计入任何被测段。
+@@ -57,6 +87,7 @@ export function postWithStepTimings(
+     return;
+   }
+   const t0 = performance.now();
++  mirrorToSab(resp);
+   post(resp);
+   const t1 = performance.now();
+   let envelopeChars: number | null = null;

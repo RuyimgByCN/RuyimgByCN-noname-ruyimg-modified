@@ -44,6 +44,36 @@ export function stepMark(
 const span = (a: number | null, b: number | null): number | null =>
   a === null || b === null ? null : b - a;
 
+// ---- PA07 缓解原型：回包 SAB 镜像（latency=sab URL 门控，默认关闭） ----
+//
+// Chromium 在真实输入后把主线程任务（含 worker postMessage 回包任务）推迟到下一帧
+// 合成之后（transfer ≈ 一个刷新周期）。本镜像把回包 JSON 同步写入主线程创建的
+// SharedArrayBuffer；主线程在 rAF 回调内轮询并提前应用（rAF 不受该任务窗口约束，
+// 理论 input_to_paint p50 ≈ 半个刷新周期）。规则不迁移——只把同一份信封提前反序列化。
+
+const SAB_DATA_OFFSET = 8;
+let sab: SharedArrayBuffer | null = null;
+let sabInts: Int32Array | null = null;
+
+export function setSabMirror(buffer: SharedArrayBuffer | null): void {
+  sab = buffer;
+  sabInts = buffer ? new Int32Array(buffer, 0, 2) : null;
+}
+
+/** 回包镜像写入 SAB（写完 seq 才发布）。超容量静默跳过（postMessage 路径兜底）。 */
+export function mirrorToSab(resp: { id?: number; ok?: boolean; data?: unknown }): void {
+  if (!sab || !sabInts || typeof resp.id !== "number" || !resp.ok) return;
+  try {
+    const bytes = new TextEncoder().encode(JSON.stringify(resp));
+    if (SAB_DATA_OFFSET + bytes.length > sab.byteLength) return;
+    new Uint8Array(sab, SAB_DATA_OFFSET).set(bytes);
+    Atomics.store(sabInts, 1, bytes.length);
+    Atomics.store(sabInts, 0, Atomics.load(sabInts, 0) + 1);
+  } catch {
+    /* 镜像失败不影响 postMessage 主路径 */
+  }
+}
+
 /**
  * 发送回包；开启时随后追加分段。`envelope_json_chars` 在回包发出之后计算，
  * 不计入任何被测段。
@@ -57,6 +87,7 @@ export function postWithStepTimings(
     return;
   }
   const t0 = performance.now();
+  mirrorToSab(resp);
   post(resp);
   const t1 = performance.now();
   let envelopeChars: number | null = null;

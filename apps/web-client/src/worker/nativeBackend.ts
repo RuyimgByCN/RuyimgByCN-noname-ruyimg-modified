@@ -26,6 +26,7 @@ import type {
   ObserverSnapshot,
 } from "../types/engine";
 import init, { NativeEngine } from "./native-pkg/engine_native_wasm.js";
+import { stepMark } from "./stepTimings";
 
 export interface NativeHandle {
   engine: NativeEngine;
@@ -745,13 +746,16 @@ export function nativeEnvelope(
   handle: NativeHandle,
   result: unknown = null,
 ): EngineEnvelope {
+  stepMark("envelope_enter");
   const raw = handle.engine.view_json(handle.observer);
+  stepMark("view_json", raw.length);
   const view = JSON.parse(raw) as NativeView;
+  stepMark("view_parse");
   const finished = handle.engine.is_finished();
   const revision = Number(handle.engine.revision());
   const snap = nativeObserverToSnapshot(view);
   snap.revision = revision;
-  return {
+  const envelope: EngineEnvelope = {
     result,
     events: [],
     choice: readChoice(handle),
@@ -761,6 +765,8 @@ export function nativeEnvelope(
     revision,
     finished,
   };
+  stepMark("envelope_done");
+  return envelope;
 }
 
 export type NativeDispatchReq =
