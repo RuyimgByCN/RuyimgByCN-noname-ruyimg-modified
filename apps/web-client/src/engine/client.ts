@@ -17,10 +17,19 @@ import {
   perfWorkerTimings,
   startPerfProbe,
 } from "./perfProbe";
+import { urlParam } from "./autoDrive";
 import type { WorkerStepTimings } from "./perfStats";
 // Vite `?worker` 形式：保证生产构建产出 worker chunk（含 WASM 依赖）
 import NativeEngineWorker from "../worker/engine.native.worker.ts?worker";
 import LegacyEngineWorker from "../worker/engine.worker.ts?worker";
+
+/** PA08-4 压测入口用：读取载荷文本（外链驱动静态服务）。 */
+function fetchText(url: string): Promise<string> {
+  return fetch(url).then((r) => {
+    if (!r.ok) throw new Error(`压测载荷加载失败 ${url}: ${r.status}`);
+    return r.text();
+  });
+}
 
 /**
  * Main-thread client for the engine Worker.
@@ -126,20 +135,44 @@ export class EngineClient {
     return this.seq++;
   }
 
-  start(
+  async start(
     players: number,
     seed: number,
     observer = 1,
     packsJson?: string,
     mode?: "identity",
   ): Promise<EngineEnvelope> {
+    // PA08-4 压测入口（表现层采样族，URL 门控，缺省零影响）：
+    // packsUrl 覆盖扩展载荷；hexUrl 以存档恢复开局（满手牌等大视图场景）。
+    // 载荷由 scripts/web-frame-external.mjs --packs/--hex 提供，避免 URL 长度上限。
+    const packsUrl = urlParam("packsUrl");
+    const hexUrl = urlParam("hexUrl");
+    const packs = packsUrl ? await fetchText(packsUrl) : packsJson;
+    if (hexUrl) {
+      // worker 的 restore 需要既有句柄与观察者：先建标准局，再以存档整体替换。
+      await this.request({
+        id: this.nextId(),
+        type: "start",
+        players,
+        seed,
+        observer,
+        packsJson: packs,
+        mode,
+      });
+      return this.request({
+        id: this.nextId(),
+        type: "restore",
+        hex: await fetchText(hexUrl),
+        packsJson: packs,
+      }) as Promise<EngineEnvelope>;
+    }
     return this.request({
       id: this.nextId(),
       type: "start",
       players,
       seed,
       observer,
-      packsJson,
+      packsJson: packs,
       mode,
     }) as Promise<EngineEnvelope>;
   }

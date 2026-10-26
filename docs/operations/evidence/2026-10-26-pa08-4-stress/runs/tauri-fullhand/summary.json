@@ -1,0 +1,467 @@
+{
+  "config": {
+    "players": 4,
+    "seed": 42,
+    "mode": "identity",
+    "driver": "auto",
+    "steps": 80,
+    "gap_ms": 50,
+    "app": "tauri",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+    "dpr": 2,
+    "viewport": [
+      1280,
+      788
+    ],
+    "href": "http://localhost:5173/#/battle?players=4&seed=42&mode=identity&perf=1&autodrive=auto&steps=80&gap=50&hexUrl=%2Fhex&report=http://localhost:5173/report",
+    "dist": "/tmp/pa08-perf/web-dist"
+  },
+  "run": {
+    "end_state": "finished",
+    "wall_ms": 46776,
+    "final_status": "终局 · 反贼胜 · rev 144"
+  },
+  "frames": {
+    "count": 2814,
+    "p50": 17,
+    "p95": 19,
+    "p99": 27,
+    "max": 63,
+    "mean": 16.727434257285005,
+    "refresh_estimate_ms": 17,
+    "over_8_33_ratio": 0.9847192608386638,
+    "over_16_67_ratio": 0.5469083155650319,
+    "over_1_5x_refresh_ratio": 0.017768301350390904
+  },
+  "long_tasks": {
+    "count": 0,
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "mean": null,
+    "total_ms": 0
+  },
+  "event_timings": {
+    "count": 0,
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null,
+    "mean": null
+  },
+  "click_autostep": {
+    "input_to_send_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "roundtrip_ms": {
+      "count": 1,
+      "p50": 7,
+      "p95": 7,
+      "p99": 7,
+      "max": 7,
+      "mean": 7
+    },
+    "worker_total_ms": {
+      "count": 1,
+      "p50": 5,
+      "p95": 5,
+      "p99": 5,
+      "max": 5,
+      "mean": 5
+    },
+    "dispatch_ms": {
+      "count": 1,
+      "p50": 4,
+      "p95": 4,
+      "p99": 4,
+      "max": 4,
+      "mean": 4
+    },
+    "view_json_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "view_parse_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "adapt_ms": {
+      "count": 1,
+      "p50": 1,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 1
+    },
+    "post_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "transfer_ms": {
+      "count": 1,
+      "p50": 1,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 1
+    },
+    "receive_to_apply_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "apply_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "vue_patch_ms": {
+      "count": 1,
+      "p50": 1,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 1
+    },
+    "patch_to_frame_ms": {
+      "count": 1,
+      "p50": 9,
+      "p95": 9,
+      "p99": 9,
+      "max": 9,
+      "mean": 9
+    },
+    "frame_to_paint_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "input_to_paint_ms": {
+      "count": 1,
+      "p50": 17,
+      "p95": 17,
+      "p99": 17,
+      "max": 17,
+      "mean": 17
+    },
+    "view_json_chars": {
+      "count": 1,
+      "p50": 821,
+      "p95": 821,
+      "p99": 821,
+      "max": 821,
+      "mean": 821
+    },
+    "envelope_json_chars": {
+      "count": 1,
+      "p50": 1442,
+      "p95": 1442,
+      "p99": 1442,
+      "max": 1442,
+      "mean": 1442
+    }
+  },
+  "timer_autostep": {
+    "input_to_send_ms": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    "roundtrip_ms": {
+      "count": 111,
+      "p50": 3,
+      "p95": 10,
+      "p99": 12,
+      "max": 12,
+      "mean": 3.18018018018018
+    },
+    "worker_total_ms": {
+      "count": 111,
+      "p50": 1,
+      "p95": 2,
+      "p99": 2,
+      "max": 3,
+      "mean": 0.6486486486486487
+    },
+    "dispatch_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.22522522522522523
+    },
+    "view_json_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.13513513513513514
+    },
+    "view_parse_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 0,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.02702702702702703
+    },
+    "adapt_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 1,
+      "p99": 2,
+      "max": 2,
+      "mean": 0.26126126126126126
+    },
+    "post_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.14414414414414414
+    },
+    "transfer_ms": {
+      "count": 111,
+      "p50": 2,
+      "p95": 9,
+      "p99": 11,
+      "max": 11,
+      "mean": 2.126126126126126
+    },
+    "receive_to_apply_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 0,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.018018018018018018
+    },
+    "apply_ms": {
+      "count": 111,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.36036036036036034
+    },
+    "vue_patch_ms": {
+      "count": 111,
+      "p50": 2,
+      "p95": 3,
+      "p99": 4,
+      "max": 4,
+      "mean": 1.882882882882883
+    },
+    "patch_to_frame_ms": {
+      "count": 111,
+      "p50": 6,
+      "p95": 16,
+      "p99": 19,
+      "max": 21,
+      "mean": 7.171171171171171
+    },
+    "frame_to_paint_ms": {
+      "count": 111,
+      "p50": 2,
+      "p95": 5,
+      "p99": 6,
+      "max": 6,
+      "mean": 2.72972972972973
+    },
+    "input_to_paint_ms": {
+      "count": 111,
+      "p50": 16,
+      "p95": 21,
+      "p99": 30,
+      "max": 32,
+      "mean": 15.342342342342342
+    },
+    "view_json_chars": {
+      "count": 111,
+      "p50": 953,
+      "p95": 1006,
+      "p99": 1013,
+      "max": 1030,
+      "mean": 949.7747747747748
+    },
+    "envelope_json_chars": {
+      "count": 111,
+      "p50": 1401,
+      "p95": 1839,
+      "p99": 2132,
+      "max": 2143,
+      "mean": 1448.981981981982
+    }
+  },
+  "all_requests": {
+    "input_to_send_ms": {
+      "count": 1,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "roundtrip_ms": {
+      "count": 112,
+      "p50": 3,
+      "p95": 10,
+      "p99": 12,
+      "max": 12,
+      "mean": 3.2142857142857144
+    },
+    "worker_total_ms": {
+      "count": 112,
+      "p50": 1,
+      "p95": 2,
+      "p99": 3,
+      "max": 5,
+      "mean": 0.6875
+    },
+    "dispatch_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 4,
+      "mean": 0.25892857142857145
+    },
+    "view_json_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.13392857142857142
+    },
+    "view_parse_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 0,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.026785714285714284
+    },
+    "adapt_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 1,
+      "p99": 2,
+      "max": 2,
+      "mean": 0.26785714285714285
+    },
+    "post_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.14285714285714285
+    },
+    "transfer_ms": {
+      "count": 112,
+      "p50": 2,
+      "p95": 9,
+      "p99": 11,
+      "max": 11,
+      "mean": 2.1160714285714284
+    },
+    "receive_to_apply_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 0,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.017857142857142856
+    },
+    "apply_ms": {
+      "count": 112,
+      "p50": 0,
+      "p95": 1,
+      "p99": 1,
+      "max": 1,
+      "mean": 0.35714285714285715
+    },
+    "vue_patch_ms": {
+      "count": 112,
+      "p50": 2,
+      "p95": 3,
+      "p99": 4,
+      "max": 4,
+      "mean": 1.875
+    },
+    "patch_to_frame_ms": {
+      "count": 112,
+      "p50": 6,
+      "p95": 16,
+      "p99": 19,
+      "max": 21,
+      "mean": 7.1875
+    },
+    "frame_to_paint_ms": {
+      "count": 112,
+      "p50": 2,
+      "p95": 5,
+      "p99": 6,
+      "max": 6,
+      "mean": 2.705357142857143
+    },
+    "input_to_paint_ms": {
+      "count": 112,
+      "p50": 16,
+      "p95": 21,
+      "p99": 30,
+      "max": 32,
+      "mean": 15.357142857142858
+    },
+    "view_json_chars": {
+      "count": 112,
+      "p50": 943,
+      "p95": 1006,
+      "p99": 1013,
+      "max": 1030,
+      "mean": 948.625
+    },
+    "envelope_json_chars": {
+      "count": 112,
+      "p50": 1401,
+      "p95": 1839,
+      "p99": 2132,
+      "max": 2143,
+      "mean": 1448.919642857143
+    }
+  }
+}

@@ -165,6 +165,16 @@ function driveManual(steps: number, timeoutMs: number): Promise<string> {
 }
 
 /**
+ * SPA hash 路由下 query 可能位于 search 或 hash 内——两处合并读取。
+ * client.start 的 PA08-4 压测入口（packsUrl/hexUrl）与本模块共用此口径。
+ */
+export function urlParam(key: string): string | null {
+  const hashQuery = location.hash.split("?")[1];
+  const hashParams = hashQuery ? new URLSearchParams(hashQuery) : null;
+  return new URLSearchParams(location.search).get(key) ?? hashParams?.get(key) ?? null;
+}
+
+/**
  * 幂等入口：URL 带 autodrive 参数时启动自驱动；由 perfProbe 开启时调用
  * （保证 __nonamePerf 已就位）。重复调用无副作用。
  */
@@ -172,20 +182,13 @@ export function startAutoDrive(): void {
   if (typeof window === "undefined") return;
   const w = window as unknown as { __nonameAutoDriveStarted?: boolean };
   if (w.__nonameAutoDriveStarted) return;
-  // 与 perfProbe.detectEnabled 同口径：path 查询串或 hash 内查询串（hash 路由）。
-  const searchParams = new URLSearchParams(location.search);
-  const hashQuery = location.hash.split("?")[1];
-  const hashParams = hashQuery ? new URLSearchParams(hashQuery) : null;
-  const params = {
-    get: (k: string) => searchParams.get(k) ?? hashParams?.get(k) ?? null,
-  };
-  const mode = params.get("autodrive");
+  const mode = urlParam("autodrive");
   if (!mode) return;
   w.__nonameAutoDriveStarted = true;
-  const reportUrl = params.get("report");
-  const steps = Number(params.get("steps") ?? 1500);
-  const gapMs = Number(params.get("gap") ?? 50);
-  const timeoutMs = Number(params.get("timeout") ?? 120_000);
+  const reportUrl = urlParam("report");
+  const steps = Number(urlParam("steps") ?? 1500);
+  const gapMs = Number(urlParam("gap") ?? 50);
+  const timeoutMs = Number(urlParam("timeout") ?? 120_000);
   void (async () => {
     // 等待战斗页就绪（按钮出现且 perf 数据面可用）
     for (let k = 0; k < 150; k++) {

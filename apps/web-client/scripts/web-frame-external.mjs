@@ -74,6 +74,18 @@ const MIME = {
 };
 
 const mode = String(args.mode ?? "identity");
+// PA08-4 压测载荷：--packs <安装载荷 JSON> / --hex <存档十六进制> 由静态服务在
+// /packs、/hex 提供，页面经 packsUrl/hexUrl 拉取（避免 URL 长度上限）。
+const packsFile = args.packs ? resolve(String(args.packs)) : null;
+const hexFile = args.hex ? resolve(String(args.hex)) : null;
+if (packsFile && !existsSync(packsFile)) {
+  console.error(`--packs 文件不存在：${packsFile}`);
+  process.exit(2);
+}
+if (hexFile && !existsSync(hexFile)) {
+  console.error(`--hex 文件不存在：${hexFile}`);
+  process.exit(2);
+}
 const battleQuery = new URLSearchParams({
   players: String(players),
   seed: String(seed),
@@ -83,12 +95,17 @@ const battleQuery = new URLSearchParams({
   steps: String(steps),
   gap: String(gapMs),
 });
-const battleUrl = `/#/battle?${battleQuery}`;  // SPA hash 路由
 
 let reportData = null;
 const server = createServer((req, res) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  // COOP/COEP 仅在 --coop 显式开启（SAB 缓解原型需要跨源隔离）。
+  // 默认不发：Safari/Firefox 进入 crossOriginIsolated 后 Worker 往返失败
+  //（2026-10-26 实测：整局卡选将，控制台「Worker 往返失败: 选择失败」）；
+  // CDP 驱动（web-frame-latency.mjs）亦不发，保持口径一致。
+  if (args.coop) {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+    res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  }
   if (req.method === "POST" && req.url === "/report") {
     let body = "";
     req.on("data", (c) => (body += c));
@@ -104,6 +121,16 @@ const server = createServer((req, res) => {
     return;
   }
   const path = decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname);
+  if (packsFile && path === "/packs") {
+    res.writeHead(200, { "Content-Type": "application/json" }).end(readFileSync(packsFile));
+    return;
+  }
+  if (hexFile && path === "/hex") {
+    res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" }).end(
+      readFileSync(hexFile, "utf8"),
+    );
+    return;
+  }
   let file = normalize(join(distDir, path));
   if (!file.startsWith(distDir)) {
     res.writeHead(403).end();
@@ -112,33 +139,51 @@ const server = createServer((req, res) => {
   if (!existsSync(file) || statSync(file).isDirectory()) file = join(distDir, "index.html");
   const headers = { "Content-Type": MIME[extname(file)] ?? "application/octet-stream" };
   if (extname(file) === ".html") {
-    // 注入自驱动引导：在 Vue 模块脚本执行前设好 hash 路由（Tauri devUrl 只加载
-    // 根路径；hash-only 的 replace 不换文档，故必须走注入而非重定向页）。
-    const boot = `<script>location.replace(${JSON.stringify(
-      `${battleUrl}&report=http://${req.headers.host}/report`,
-    )})</script>`;
-    const html = readFileSync(file, "utf8").replace("</head>", `${boot}</head>`);
-    res.writeHead(200, headers).end(html);
+    if (path === "/") {
+      // 仅根路径注入自驱动引导（Tauri devUrl 固定加载根路径）。battle 直开时 URL
+      // 已带全部参数：若在此也注入，replace 到「同路径不同 query」会整页重载并
+      // 再次注入＝无限重载循环（path 路由下实测；hash 路由无此问题因 replace 不换文档）。
+      const boot = `<script>location.replace(${JSON.stringify(
+        `${battleUrl}&report=http://${req.headers.host}/report`,
+      )})</script>`;
+      const html = readFileSync(file, "utf8").replace("</head>", `${boot}</head>`);
+      res.writeHead(200, headers).end(html);
+      return;
+    }
+    res.writeHead(200, headers).end(readFileSync(file));
     return;
   }
   res.writeHead(200, headers).end(readFileSync(file));
 });
 await new Promise((r) => server.listen(port, "127.0.0.1", r));
 const base = `http://127.0.0.1:${server.address().port}`;
+// 相对路径（按页面源解析）：Tauri devUrl 是 localhost 而 server 绑 127.0.0.1，
+// 绝对地址会跨源被 WKWebView/CSP 拦截。
+if (packsFile) battleQuery.set("packsUrl", "/packs");
+if (hexFile) battleQuery.set("hexUrl", "/hex");
+// 路由模式随宿主分叉（router.ts：Tauri=hash、浏览器=HTML5 path）——
+// 浏览器收到 /#/battle 会落回大厅路由，必须用 path 形态。
+const battleRoute = app === "tauri" ? "/#/battle" : "/battle";
+const battleUrl = `${battleRoute}?${battleQuery}`;
 const entry = `${base}/`;
 console.error(`serving ${distDir} at ${entry}`);
 
 // ---- 拉起目标 ----
 let child = null;
+const fullBattleUrl = `${base}${battleUrl}&report=${base}/report`;
 if (app === "chrome-headed") {
+  // 直传完整 battle URL（path 路由）：经根路径 + 注入引导会被 hash 形态/解析期
+  // replace 差异坑住，浏览器目标一律直接打开最终 URL。
   child = spawn(
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    ["--no-sandbox", "--no-first-run", `--user-data-dir=/tmp/pa08-external-chrome`, entry],
+    ["--no-sandbox", "--no-first-run", `--user-data-dir=/tmp/pa08-external-chrome`, fullBattleUrl],
     { stdio: "ignore", detached: false },
   );
 } else if (app === "safari" || app === "firefox") {
   const name = app === "safari" ? "Safari" : "Firefox";
-  child = spawn("open", ["-a", name, entry], { stdio: "ignore" });
+  child = spawn("open", ["-a", name, fullBattleUrl], {
+    stdio: "ignore",
+  });
 } else if (app === "tauri") {
   const bin = String(args.binary ?? "");
   if (!bin || !existsSync(bin)) {
