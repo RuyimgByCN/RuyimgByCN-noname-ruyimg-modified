@@ -1,0 +1,28 @@
+{
+ "sab": {
+  "n_clicks": 40,
+  "输入相位(距上一BeginMainFrame,ms)": 1.597,
+  "input→nextBeginMainFrame": 7.548,
+  "input→firstRAF": 7.726,
+  "RAF→该帧StyleAndLayout": 1.929,
+  "input→该帧Presentation(真i2p)": 16.631,
+  "真i2p_p95": 24.317,
+  "该帧Presentation距上一次Presentation(帧数间隔*8.33)": 17.479,
+  "页面口径i2p": 15.755,
+  "页面口径p95": 17.24,
+  "真i2p−页面i2p": 0.951
+ },
+ "base": {
+  "n_clicks": 40,
+  "输入相位(距上一BeginMainFrame,ms)": 0.866,
+  "input→nextBeginMainFrame": 7.57,
+  "input→firstRAF": 7.646,
+  "RAF→该帧StyleAndLayout": 0.017,
+  "input→该帧Presentation(真i2p)": 24.176,
+  "真i2p_p95": 26.001,
+  "该帧Presentation距上一次Presentation(帧数间隔*8.33)": 24.909,
+  "页面口径i2p": 16.395,
+  "页面口径p95": 18.37,
+  "真i2p−页面i2p": 7.631
+ }
+}

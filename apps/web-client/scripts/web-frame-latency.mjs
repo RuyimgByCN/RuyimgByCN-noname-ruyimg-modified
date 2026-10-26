@@ -8,7 +8,7 @@
 //   node --import ./scripts/ts-register.mjs scripts/web-frame-latency.mjs \
 //     --dist <构建目录> --out <输出目录> [--players 4] [--seed 42] [--mode identity|prototype] \
 //     [--driver click|auto] [--max-steps 800] [--gap-ms 50] [--idle-ms 3000] [--chrome <路径>]
-//     [--gpu] [--skip-anims] [--headed] [--coop] [--latency sab]
+//     [--gpu] [--skip-anims] [--headed] [--coop] [--latency sab] [--trace <trace.json>]
 //
 // --headed：有头窗口（真实显示器呈现节奏；GPU 默认开启）。PA08 扩面。
 //
@@ -65,6 +65,8 @@ const skipAnims = args["skip-anims"] === true;
 const headed = args.headed === true;
 // click：每步一次真实鼠标点击「自动一步」；auto：点一次「连续自动」后由页面计时器推进（无输入对照）。
 const driver = String(args.driver ?? "click");
+// --trace：PA07 甄别——驱动段以 CDP Tracing 采集 DevTools trace（ReportEvents 流式），驱动结束写盘。
+const tracePath = args.trace ? String(args.trace) : null;
 const autoTimeoutMs = Number(args["auto-timeout-ms"] ?? 600_000);
 if (driver !== "click" && driver !== "auto") throw new Error(`未知 --driver ${driver}`);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -148,8 +150,18 @@ await new Promise((r, j) => {
 let msgId = 0;
 const pending = new Map();
 const consoleErrors = [];
+const traceEvents = [];
+let tracingDone = null;
 ws.onmessage = (ev) => {
   const m = JSON.parse(ev.data);
+  if (m.method === "Tracing.dataCollected") {
+    traceEvents.push(...(m.params?.value ?? []));
+    return;
+  }
+  if (m.method === "Tracing.tracingComplete") {
+    tracingDone?.();
+    return;
+  }
   if (m.id && pending.has(m.id)) {
     const { res, rej } = pending.get(m.id);
     pending.delete(m.id);
@@ -244,6 +256,19 @@ const startedAt = Date.now();
 let clicks = 0;
 let timeouts = 0;
 let endState = "max_steps";
+if (tracePath) {
+  await send("Tracing.start", {
+    transferMode: "ReportEvents",
+    traceConfig: {
+      includedCategories: [
+        "devtools.timeline",
+        "disabled-by-default-devtools.timeline.frame",
+        "benchmark",
+      ],
+      excludedCategories: ["*"],
+    },
+  });
+}
 async function clickAt(x, y) {
   const at = { x, y, button: "left", clickCount: 1 };
   await send("Input.dispatchMouseEvent", { type: "mouseMoved", x, y });
@@ -397,6 +422,26 @@ console.log(
     }),
 );
 
+if (tracePath) {
+  const done = new Promise((r) => {
+    tracingDone = r;
+    setTimeout(r, 10_000);
+  });
+  await send("Tracing.end").catch(() => {});
+  await done;
+  writeFileSync(tracePath, JSON.stringify({
+    source: "web-frame-latency --trace",
+    browser: browserVersion,
+    headed,
+    driver,
+    latency: String(args.latency ?? ""),
+    players,
+    seed,
+    clicks,
+    events: traceEvents,
+  }));
+  console.error(`trace=${tracePath} events=${traceEvents.length}`);
+}
 ws.close();
 chrome.kill("SIGTERM");
 server.close();
