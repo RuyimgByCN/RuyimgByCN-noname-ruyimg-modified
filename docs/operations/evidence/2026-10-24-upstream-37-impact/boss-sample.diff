@@ -1,0 +1,83 @@
+KEY boss_xiongshou
+--- 
+
++++ 
+
+@@ -5,9 +5,9 @@
+
+ 			trigger: { source: "damageBegin1" },
+ 			forced: true,
+ 			filter(event, player) {
+-				return event.notLink() && event.card && event.card.name == "sha" && event.player.hp < player.hp;
++				return event.notLink() && event.card && event.card.name === "sha" && event.player.hp < player.hp;
+ 			},
+-			content() {
++			async content(event, trigger, player) {
+ 				trigger.num++;
+ 			},
+ 		},
+@@ -18,7 +18,7 @@
+
+ 			filter(event, player) {
+ 				return !player.isTurnedOver();
+ 			},
+-			content() {
++			async content(event, trigger, player) {
+ 				trigger.cancel();
+ 				game.log(player, "取消了翻面");
+ 			},
+
+KEY boss_wuzang
+--- 
+
++++ 
+
+@@ -1,7 +1,7 @@
+
+ boss_wuzang: {
+ 	trigger: { player: "phaseDrawBegin" },
+ 	forced: true,
+-	content() {
++	async content(event, trigger, player) {
+ 		trigger.num += Math.max(5, Math.floor(player.hp / 2)) - 2;
+ 	},
+ 	mod: {
+
+KEY boss_yinzei
+--- 
+
++++ 
+
+@@ -3,9 +3,9 @@
+
+ 	forced: true,
+ 	logTarget: "source",
+ 	filter(event, player) {
+-		return event.source && event.source.isIn() && event.source != player && event.source.countCards("he") && !player.countCards("h");
++		return event.source && event.source.isIn() && event.source !== player && event.source.hasCards("he") && !player.hasCards("h");
+ 	},
+-	content() {
++	async content(event, trigger, player) {
+ 		trigger.source.randomDiscard();
+ 	},
+ },
+
+KEY boss_zhue
+--- 
+
++++ 
+
+@@ -2,10 +2,10 @@
+
+ 	trigger: { global: "damageEnd" },
+ 	forced: true,
+ 	filter(event, player) {
+-		return event.source && event.source.isIn() && event.source != player;
++		return event.source && event.source.isIn() && event.source !== player;
+ 	},
+ 	logTarget: "source",
+-	content() {
++	async content(event, trigger, player) {
+ 		game.asyncDraw([player, trigger.source]);
+ 	},
+ },

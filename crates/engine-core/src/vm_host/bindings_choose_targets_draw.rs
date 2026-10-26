@@ -108,6 +108,19 @@ pub(super) fn bind_effect(
                 skill: engine_api::SkillId::new(host.ctx.skill_id),
             }
         }
+        EffectRequest::ChooseGiveOrRecastOneHand {
+            player,
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+            ..
+        } if host.ctx.skill_id != 0 => EffectRequest::ChooseGiveOrRecastOneHand {
+            player,
+            skill: engine_api::SkillId::new(host.ctx.skill_id),
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+        },
 
         EffectRequest::ChooseRevealHandCardBindCategoryTarget { player, target, .. }
             if host.ctx.skill_id != 0 =>

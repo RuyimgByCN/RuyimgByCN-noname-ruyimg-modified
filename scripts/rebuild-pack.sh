@@ -50,7 +50,7 @@ cargo run -q -p content-cli -- pack \
   --out "/tmp/rebuild_${PKG}.npack.json" \
   --package-id "$PKG" \
   --namespace official \
-  --version 0.1.0 \
+  --version "${PACK_VERSION:-0.1.0}" \
   ${CHARS_ARG:-} \
   ${CARDS_ARG:-} \
   --metadata "/tmp/rebuild_meta_${PKG}.json" \

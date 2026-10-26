@@ -1516,3 +1516,49 @@ pub(crate) fn move_cards(
 ) -> Result<Vec<DomainEvent>, EffectError> {
     move_cards_with_reason(tx, cards, to, from, CardMoveReason::Unspecified)
 }
+
+pub(crate) fn choose_give_or_recast_one_hand(
+    tx: &mut Transaction,
+    player: PlayerId,
+    skill: engine_api::SkillId,
+    require_skill_def: u32,
+    grant_skill_def: u32,
+    grant_mark_def: u32,
+) -> Result<Vec<DomainEvent>, EffectError> {
+    let allowed = originating_skill_is_enabled(tx, player, skill)
+        && tx
+            .state()
+            .players
+            .get(player)
+            .is_some_and(|participant| participant.alive && !participant.dying);
+    let cards: Vec<u32> = tx
+        .state()
+        .hand_cards(player)
+        .into_iter()
+        .map(CardId::raw)
+        .collect();
+    if !allowed || cards.is_empty() {
+        return Ok(Vec::new());
+    }
+    let require_skill_def = tx.state().skills.storage_get(skill, 2).max(require_skill_def);
+    let grant_skill_def = tx.state().skills.storage_get(skill, 3).max(grant_skill_def);
+    let grant_mark_def = tx.state().skills.storage_get(skill, 4).max(grant_mark_def);
+    open_choice(
+        tx,
+        player,
+        1,
+        1,
+        false,
+        cards,
+        ChoiceKind::SelectCards,
+        ContinuationKind::ChooseGiveOrRecastOneHand,
+        vec![
+            player.raw(),
+            skill.raw(),
+            0,
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+        ],
+    )
+}

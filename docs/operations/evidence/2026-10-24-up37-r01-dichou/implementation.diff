@@ -1,0 +1,303 @@
+diff --git a/crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs b/crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs
+index 009395d9..9691147a 100644
+--- a/crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs
++++ b/crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs
+@@ -1306,17 +1306,19 @@ pub(crate) fn resolve_dcdichou_choice(
+             {
+                 return Err(EffectError::Illegal("涤仇结束阶段目标不在候选中".into()));
+             }
++            // 标记已在 action 10 开选择前全量清除；这里只按座位序结算所选
++            // 目标的火焰伤害，不再二次清标记（未选者同样已被清除）。
+             let targets: Vec<_> = tx
+                 .state()
+                 .players
+                 .alive_by_seat()
+                 .into_iter()
+-                .filter(|target| selected.contains(&target.raw()) && mark_count(tx, *target) > 0)
++                .filter(|target| selected.contains(&target.raw()))
+                 .collect();
+             if targets.len() != selections.len() {
+                 return Err(EffectError::Illegal("涤仇结束阶段目标已失效".into()));
+             }
+-            let mut effects = Vec::with_capacity(targets.len() * 2);
++            let mut effects = Vec::with_capacity(targets.len());
+             for target in targets {
+                 effects.push(EffectRequest::DealDamage {
+                     source: player,
+@@ -1325,11 +1327,6 @@ pub(crate) fn resolve_dcdichou_choice(
+                     is_lose_hp: false,
+                     nature: rule_api::damage_nature::FIRE,
+                 });
+-                effects.push(EffectRequest::RemoveMark {
+-                    player: target,
+-                    mark,
+-                    amount: 0,
+-                });
+             }
+             run_effects(tx, effects).map(|_| ())
+         }
+diff --git a/crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs b/crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs
+index b71c2e6d..68a12019 100644
+--- a/crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs
++++ b/crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs
+@@ -1336,16 +1336,55 @@ pub(crate) fn resolve_dcdichou(
+             Ok(Vec::new())
+         }
+         10 => {
+-            let options: Vec<_> = tx
++            // R01：候选 = 当前仍有仇的角色 **加上本回合已移除仇的角色**。
++            let all: Vec<PlayerId> = tx
+                 .state()
+                 .players
+-                .alive_by_seat()
+-                .into_iter()
+-                .filter(|target| dcdichou_mark_count(tx, *target, mark) > 0)
++                .iter_live()
++                .map(|participant| participant.id)
++                .collect();
++            let removed = tx.state().turn.removed_marks.clone();
++            let options: Vec<_> = all
++                .iter()
++                .copied()
++                .filter(|target| {
++                    dcdichou_mark_count(tx, *target, mark) > 0
++                        || removed.contains(&(mark.raw(), *target))
++                })
+                 .collect();
+             if options.is_empty() {
+                 return Ok(Vec::new());
+             }
++            // 选择前先移除**所有**仇标记；候选快照在 payload 中，选择后不再依赖
++            // 残留标记。这样伤害结算时标记已清空，且未选者也被清空。
++            let mut cleared = Vec::new();
++            for target in &all {
++                if dcdichou_mark_count(tx, *target, mark) == 0 {
++                    continue;
++                }
++                let prev = tx
++                    .state()
++                    .players
++                    .get(*target)
++                    .map(|participant| participant.marks.clone())
++                    .unwrap_or_default();
++                tx.journal(crate::transaction::JournalEntry::PlayerMarks {
++                    id: *target,
++                    prev,
++                });
++                if let Some(participant) = tx.state_mut().players.get_mut(*target) {
++                    participant.marks.retain(|(existing, _)| *existing != mark.raw());
++                }
++                cleared.push(DomainEvent::MarkChanged {
++                    player: *target,
++                    mark_def: mark.raw(),
++                    count: 0,
++                });
++            }
++            tx.state_mut()
++                .turn
++                .removed_marks
++                .retain(|(existing, _)| *existing != mark.raw());
+             let mut payload = vec![
+                 RESOLVE_DCDICHOU_CHOICE,
+                 10,
+@@ -1355,7 +1394,7 @@ pub(crate) fn resolve_dcdichou(
+                 options.len() as u32,
+             ];
+             payload.extend(options.iter().map(|target| target.raw()));
+-            open_choice(
++            let mut events = open_choice(
+                 tx,
+                 player,
+                 1,
+@@ -1365,7 +1404,9 @@ pub(crate) fn resolve_dcdichou(
+                 ChoiceKind::SelectTargets,
+                 ContinuationKind::Custom,
+                 payload,
+-            )
++            )?;
++            events.splice(0..0, cleared);
++            Ok(events)
+         }
+         _ => Err(EffectError::ContentFault("涤仇 action 非法".into())),
+     }
+diff --git a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+index 1d01832e..a0764fc7 100644
+--- a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
++++ b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+@@ -145,6 +145,12 @@ pub(crate) fn add_mark(
+         .find(|(m, _)| *m == mark)
+         .map(|(_, c)| *c)
+         .unwrap_or(0);
++    if current > 0 && count <= 0 {
++        tx.state_mut()
++            .turn
++            .removed_marks
++            .insert((mark, player));
++    }
+     let mut events = vec![DomainEvent::MarkChanged {
+         player,
+         mark_def: mark,
+@@ -204,6 +210,12 @@ pub(crate) fn remove_mark(
+         .find(|(m, _)| *m == mark)
+         .map(|(_, c)| *c)
+         .unwrap_or(0);
++    if current > 0 && count <= 0 {
++        tx.state_mut()
++            .turn
++            .removed_marks
++            .insert((mark, player));
++    }
+     let mut events = vec![DomainEvent::MarkChanged {
+         player,
+         mark_def: mark,
+diff --git a/crates/engine-core/src/hash.rs b/crates/engine-core/src/hash.rs
+index 2c16af17..0151ccbf 100644
+--- a/crates/engine-core/src/hash.rs
++++ b/crates/engine-core/src/hash.rs
+@@ -27,6 +27,14 @@ pub fn canonical_state_hash(state: &GameState) -> [u8; 32] {
+         put_u32(&mut h, *k);
+         put_i32(&mut h, *v);
+     }
++    if !state.turn.removed_marks.is_empty() {
++        h.update(b"turn-removed-marks/v1");
++        put_u32(&mut h, state.turn.removed_marks.len() as u32);
++        for (mark, player) in &state.turn.removed_marks {
++            put_u32(&mut h, *mark);
++            put_u32(&mut h, player.raw());
++        }
++    }
+     if !state.turn.lost_cards.is_empty() {
+         h.update(b"turn-lost-cards/v1");
+         put_u32(&mut h, state.turn.lost_cards.len() as u32);
+diff --git a/crates/engine-core/src/state/turn.rs b/crates/engine-core/src/state/turn.rs
+index 63ae0780..bb5d9098 100644
+--- a/crates/engine-core/src/state/turn.rs
++++ b/crates/engine-core/src/state/turn.rs
+@@ -87,6 +87,13 @@ pub struct TurnState {
+     pub phase: Phase,
+     /// Extra turn flags (content); sorted key-value for hash stability.
+     pub flags: Vec<(u32, i32)>,
++    /// Marks removed from a player during this turn, as `(mark_def_raw, player)`.
++    ///
++    /// Used by rules that need "a mark was removed earlier this turn" after the
++    /// stack is gone (涤仇 R01). Cleared at the turn boundary together with the
++    /// per-player counters; empty states serialize/hash exactly as before.
++    #[serde(default, skip_serializing_if = "std::collections::BTreeSet::is_empty")]
++    pub removed_marks: std::collections::BTreeSet<(u32, PlayerId)>,
+     /// First-loss order of physical cards each player lost from hand/equipment this turn.
+     #[serde(default)]
+     pub lost_cards: Vec<(PlayerId, CardId)>,
+@@ -197,6 +204,7 @@ impl Default for TurnState {
+             current: PlayerId::NONE,
+             phase: Phase::Idle,
+             flags: Vec::new(),
++            removed_marks: std::collections::BTreeSet::new(),
+             lost_cards: Vec::new(),
+             discarded_cards: std::collections::BTreeSet::new(),
+             entered_discard_cards: std::collections::BTreeSet::new(),
+@@ -755,6 +763,7 @@ impl TurnState {
+ 
+     /// Clear all per-player card and damage counters at the turn boundary.
+     pub fn clear_per_player_card_counts(&mut self) {
++        self.removed_marks.clear();
+         self.flags.retain(|(key, _)| {
+             !turn_flag::is_card_used_by_player(*key)
+                 && !turn_flag::is_card_action_count_by_player(*key)
+diff --git a/crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs b/crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs
+index d6a1e195..9d23dec2 100644
+--- a/crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs
++++ b/crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs
+@@ -262,3 +262,93 @@ fn dcdichou_resolves_begin_bonus_and_end_fire_damage() {
+     assert_eq!(state.players.get(target).unwrap().hp, hp - 1);
+     assert_eq!(mark_count(&state, target, DCDICHOU), 0);
+ }
++
++/// R01（UP37 `19d86519`）：结束阶段先清**所有**仇标记；本回合已移除仇的角色
++/// 仍在候选中；候选非空时至少选一人；伤害只作用于所选者且按座位序。
++#[test]
++fn dcdichou_end_clears_all_marks_and_offers_history_candidate() {
++    let (mut state, [owner, target, other]) = setup(DCDICHOU);
++    state = run(
++        state,
++        EffectRequest::AddMark {
++            player: target,
++            mark: MarkDefId::new(DCDICHOU),
++            delta: 1,
++        },
++    );
++    state = run(
++        state,
++        EffectRequest::AddMark {
++            player: other,
++            mark: MarkDefId::new(DCDICHOU),
++            delta: 2,
++        },
++    );
++    // 本回合早些时候移除 target 的最后一点仇：历史仍需保留候选资格。
++    state = run(
++        state,
++        EffectRequest::RemoveMark {
++            player: target,
++            mark: MarkDefId::new(DCDICHOU),
++            amount: 0,
++        },
++    );
++    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
++    // 历史必须随状态保存/恢复（跨进程存档路径）。
++    let restored: GameState = serde_json::from_slice(&serde_json::to_vec(&state).unwrap()).unwrap();
++    assert!(restored
++        .turn
++        .removed_marks
++        .contains(&(DCDICHOU, target)));
++    state = restored;
++    state.turn.phase = Phase::End;
++    let hp_target = state.players.get(target).unwrap().hp;
++    let hp_other = state.players.get(other).unwrap().hp;
++    let skill = skill_id(&state, owner, DCDICHOU);
++    state = run(
++        state,
++        EffectRequest::ResolveDcdichou {
++            player: owner,
++            target: PlayerId::NONE,
++            card: CardId::NONE,
++            action: 10,
++            helper_skill_def: SkillDefId::new(DCDICHOU_EFF),
++            skill,
++        },
++    );
++    // 选择前全量清标记（含未选者）。
++    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
++    assert_eq!(mark_count(&state, other, DCDICHOU), 0);
++    assert!(state.turn.removed_marks.is_empty());
++
++    // 候选非空 -> 不能空选。
++    let choice_id = ChoiceId::new(state.resolution.pending_choice_id);
++    let (after_reject, result) = apply_command(
++        state.clone(),
++        Command {
++            actor: owner,
++            expected_revision: ExpectedRevision(state.revision),
++            idempotency_key: IdempotencyKey(41),
++            kind: CommandKind::ResolveChoice {
++                choice_id,
++                selections: vec![],
++                cancelled: false,
++            },
++        },
++    );
++    assert!(
++        matches!(result.result, CommandResult::Rejected { .. }),
++        "空选必须拒绝：{result:?}"
++    );
++    assert_eq!(after_reject.players.get(target).unwrap().hp, hp_target);
++    assert_eq!(after_reject.players.get(other).unwrap().hp, hp_other);
++
++    // 选择挂起时再次序列化/恢复，仍能按原 payload 结算。
++    state = serde_json::from_slice(&serde_json::to_vec(&state).unwrap()).unwrap();
++    // 已在本回合移除仇的 target 仍可被选择并受到 1 点火伤；未选者不受伤。
++    state = choose(state, owner, vec![target.raw()], 42);
++    assert_eq!(state.players.get(target).unwrap().hp, hp_target - 1);
++    assert_eq!(state.players.get(other).unwrap().hp, hp_other);
++    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
++    assert_eq!(mark_count(&state, other, DCDICHOU), 0);
++}

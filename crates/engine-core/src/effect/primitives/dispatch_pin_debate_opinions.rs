@@ -677,7 +677,17 @@ pub(super) fn apply_effect(
             player,
             amount,
             skill,
-        } => choose_other_targets_by_skipped_phase_count_damage(tx, player, amount, skill),
+        } => choose_other_targets_by_skipped_phase_count_damage(tx, player, amount, skill, false),
+
+        EffectRequest::ResolveOlJieDanshou { player, skill } => {
+            resolve_ol_jie_danshou(tx, player, skill)
+        }
+
+        EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+            player,
+            amount,
+            skill,
+        } => choose_other_targets_by_skipped_phase_count_damage(tx, player, amount, skill, true),
 
         EffectRequest::RevealUniformHandDrawSelfChooseOthers { player, skill } => {
             reveal_uniform_hand_draw_self_choose_others(tx, player, skill)

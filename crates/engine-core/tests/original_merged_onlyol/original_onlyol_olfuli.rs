@@ -137,7 +137,8 @@ fn has_olfuli(state: &engine_core::state::GameState, owner: PlayerId) -> bool {
 #[test]
 fn committed_package_exposes_optional_limited_dying_contract_at_abi8() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
-    assert_eq!(package.manifest.rule_vm_abi_version, 688);
+    // N01「胆守」新增 host effect tag 771，包 ABI 提升到 757。
+    assert_eq!(package.manifest.rule_vm_abi_version, 757);
     let trigger = package
         .trigger_index
         .iter()

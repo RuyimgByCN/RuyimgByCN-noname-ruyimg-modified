@@ -1306,17 +1306,19 @@ pub(crate) fn resolve_dcdichou_choice(
             {
                 return Err(EffectError::Illegal("涤仇结束阶段目标不在候选中".into()));
             }
+            // 标记已在 action 10 开选择前全量清除；这里只按座位序结算所选
+            // 目标的火焰伤害，不再二次清标记（未选者同样已被清除）。
             let targets: Vec<_> = tx
                 .state()
                 .players
                 .alive_by_seat()
                 .into_iter()
-                .filter(|target| selected.contains(&target.raw()) && mark_count(tx, *target) > 0)
+                .filter(|target| selected.contains(&target.raw()))
                 .collect();
             if targets.len() != selections.len() {
                 return Err(EffectError::Illegal("涤仇结束阶段目标已失效".into()));
             }
-            let mut effects = Vec::with_capacity(targets.len() * 2);
+            let mut effects = Vec::with_capacity(targets.len());
             for target in targets {
                 effects.push(EffectRequest::DealDamage {
                     source: player,
@@ -1324,11 +1326,6 @@ pub(crate) fn resolve_dcdichou_choice(
                     amount: 1,
                     is_lose_hp: false,
                     nature: rule_api::damage_nature::FIRE,
-                });
-                effects.push(EffectRequest::RemoveMark {
-                    player: target,
-                    mark,
-                    amount: 0,
                 });
             }
             run_effects(tx, effects).map(|_| ())

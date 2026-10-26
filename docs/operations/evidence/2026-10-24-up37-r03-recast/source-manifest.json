@@ -1,0 +1,32 @@
+[
+  {
+    "path": "crates/engine-core/src/query/modifier.rs",
+    "bytes": 41398,
+    "sha256": "589fe73fc2220ad7f04a1291e190863de6fccf2f8c244541cf7132c06903f4d6"
+  },
+  {
+    "path": "crates/engine-core/src/query/card_target_cancelled_for_logical_kind.rs",
+    "bytes": 50579,
+    "sha256": "a4983a0b9b3533f3bd33994bea158844811228748081edf45fb497b99bb7a7f9"
+  },
+  {
+    "path": "crates/engine-core/src/state/turn.rs",
+    "bytes": 61310,
+    "sha256": "090b210a605ec7cd6c1ca36d41f7b78e44ef5e090f2ea247762c3cf6ce29702a"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/remember_card_action.rs",
+    "bytes": 35530,
+    "sha256": "64a14729a4fa2f70852c52eab42715ef78fd096d2906dc66868c665626b88c07"
+  },
+  {
+    "path": "content/original/ported/shiji/yingba.skill",
+    "bytes": 1277,
+    "sha256": "4fa59fff0393fc352bb4ddd1f154ae58ceb9d55ab2056753807fb8bcef8877d7"
+  },
+  {
+    "path": "content/original/ported/shiji/shiji.npack.json",
+    "bytes": 300974,
+    "sha256": "2a1907b49f908c54b1c5f2e3ff76ff8c5e615ee972a6bd025f16af17c48623c4"
+  }
+]

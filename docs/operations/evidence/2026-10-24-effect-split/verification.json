@@ -1,0 +1,173 @@
+{
+  "verified_at": "2026-10-24T04:23:10.489417+00:00",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "rules_version": 322,
+  "archive_version": 105,
+  "host_toolchain": "Cargo 1.95.0 with inherited PATH Homebrew rustc/rustdoc 1.99.1",
+  "wasm_toolchain": "Cargo/rustc 1.95.0; PATH explicitly prefixed with /Users/ruyimg/.cargo/bin",
+  "final_checks": [
+    {
+      "name": "native_and_consumers",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable test --offline -p rule-api -p engine-native -p engine-native-wasm -p content-native-loader -p content-compiler -p rule-vm --no-fail-fast",
+      "exit_code": 0,
+      "log": "final-native-and-consumers.log",
+      "log_sha256": "0e8c8944eff792cc823857eafab2e19a5151c46f424fd5afba7c8abc0dda28d9",
+      "result": "2165 passed; 0 failed; 71 ignored; 341 target results"
+    },
+    {
+      "name": "core_goldens",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable test --offline -p engine-core --test golden_start --test golden_regression --no-fail-fast",
+      "exit_code": 0,
+      "log": "core-goldens.log",
+      "log_sha256": "660f511a298a94875e009be0bcf5813d1b01d7260e1084967f85524ad42f8a35",
+      "result": "6 passed; 0 failed"
+    },
+    {
+      "name": "workspace_check",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable check --offline --workspace --all-targets -j 4",
+      "exit_code": 0,
+      "log": "workspace-check.log",
+      "log_sha256": "131b32c5260bca536f8ccca7f884c96e02dcfa5a5a473a97f40dec675b854c87",
+      "result": "all workspace targets checked; existing warnings retained"
+    },
+    {
+      "name": "wasm_check",
+      "command": "PATH=/Users/ruyimg/.cargo/bin:$PATH cargo +stable check --offline -p engine-native-wasm -p engine-wasm --target wasm32-unknown-unknown",
+      "exit_code": 0,
+      "log": "wasm-check-final.log",
+      "log_sha256": "bb52be652131c1d0f76812e812a56aa9e8eb38069153cdaac1c96e4d01ebdd31",
+      "result": "both native and legacy consumers checked under rustup 1.95.0"
+    },
+    {
+      "name": "rustup_rule_api_test",
+      "command": "PATH=/Users/ruyimg/.cargo/bin:$PATH cargo +stable test --offline -p rule-api",
+      "exit_code": 0,
+      "log": "rule-api-rustup-tests.log",
+      "log_sha256": "923a73335701f1128794c471f958dee3287e2fece0a974d9bbab3e652c7c6f6d",
+      "result": "2 passed; 0 failed; no ignored; supplemental check under rustup 1.95.0"
+    },
+    {
+      "name": "python_full",
+      "command": "python3 -B -m unittest discover -s scripts",
+      "exit_code": 0,
+      "log": "python-tests-final.log",
+      "log_sha256": "8fda90551d8a8cf73a51db26d7d20be1c00a158b3e146b1bb9bda508dc17a6b6",
+      "result": "180 tests; OK; complete rerun after stale document source references fixed"
+    },
+    {
+      "name": "line_guard_unit",
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'",
+      "exit_code": 0,
+      "log": "source-line-unit.log",
+      "log_sha256": "2299339565fdc7c4fedeb54e99b181ba53b821f77194926422cc7df3301ba0ee",
+      "result": "1 test; OK"
+    },
+    {
+      "name": "line_guard",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "log": "source-line-gate.log",
+      "log_sha256": "2c744ef2f983cf8c37b2ac1993ba7856345f857268aeb561fe9fde7e5ef0df59",
+      "result": "8563 maintained files; all <=2000 physical lines"
+    },
+    {
+      "name": "split_audit",
+      "command": "python3 -B scripts/plan_effect_request_split.py --check",
+      "exit_code": 0,
+      "log": "split-audit.log",
+      "log_sha256": "3f1dc4f616c8569e55046fb2296f7e83a0b3ad668bd68d5df7f7bcf6f06cc8f9",
+      "result": "815 variants; 22 functional modules; ordered full-definition hash unchanged"
+    },
+    {
+      "name": "quick_preflight",
+      "command": "python3 -u -B scripts/preflight.py --quick",
+      "exit_code": 0,
+      "log": "preflight-quick-final.log",
+      "log_sha256": "eafc1bf94e08b2dfd14e77f846f90ef758a4b6f55d54ac4a7e3c7234a25dd11c",
+      "result": "18 passed; 2 slow checks skipped; not full preflight"
+    },
+    {
+      "name": "changed_rustfmt",
+      "command": "see independent-review.json: rustfmt.command",
+      "exit_code": 0,
+      "log": "changed-rustfmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "changed Rust source and test only; skip_children=true"
+    },
+    {
+      "name": "host_compiler_probe",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable rustc --offline -p rule-api --lib -- --print sysroot",
+      "exit_code": 0,
+      "log": "host-compiler-probe.log",
+      "log_sha256": "18de84e2e2ab21a96b170e4caa65255f13bf0e98a7d2956d86d4b3f251ca55cf",
+      "result": "inherited PATH selected /opt/homebrew/Cellar/rust/1.99.1"
+    },
+    {
+      "name": "diff_check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "git-diff-check.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "no whitespace errors"
+    }
+  ],
+  "retained_initial_results": [
+    {
+      "name": "initial_python",
+      "command": "python3 -B -m unittest discover -s scripts",
+      "exit_code": 1,
+      "log": "initial-python-tests.log",
+      "log_sha256": "9e402d5ad41e0d57cefe64bf2c0edb823cda707625b9bfe5023722d914f7c42a",
+      "result": "180 tests; 1 failure due to 4 stale construction.rs source ranges; complete rerun is green"
+    },
+    {
+      "name": "initial_quick_preflight",
+      "command": "python3 -u -B scripts/preflight.py --quick",
+      "exit_code": 1,
+      "log": "initial-preflight-quick.log",
+      "log_sha256": "73f11b87c90d7a79dc0b3b2c74ef580ed3745be2e955da557c37feba5122ec43",
+      "result": "stale document source ranges failed"
+    },
+    {
+      "name": "initial_wasm",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable check --offline -p engine-native-wasm --target wasm32-unknown-unknown",
+      "exit_code": 101,
+      "log": "initial-wasm-check.log",
+      "log_sha256": "6b3e06da6d26c6c42ff17b860469785cbeeb4010329b765e181b0a9ac245774e",
+      "result": "Homebrew rustc lacks rustup WASM standard library"
+    },
+    {
+      "name": "initial_legacy_wasm",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable check --offline -p engine-wasm --target wasm32-unknown-unknown",
+      "exit_code": 101,
+      "log": "initial-legacy-wasm-check.log",
+      "log_sha256": "4c22c90b489a3d268e063033a5dbf39e356738616429a7d22bc0f3158093f9e7",
+      "result": "same inherited PATH mismatch"
+    },
+    {
+      "name": "initial_native",
+      "command": "/Users/ruyimg/.cargo/bin/cargo +stable test --offline -p engine-native -p engine-native-wasm -p content-native-loader -p content-compiler -p rule-vm --no-fail-fast",
+      "exit_code": 0,
+      "log": "initial-native-and-consumers.log",
+      "log_sha256": "0d98019299d28058609f34fd3dc34ab4e3013047c31274dedb1e39f414ad23d3",
+      "result": "2163 passed; 0 failed; 71 ignored; superseded by final grouping and added rule-api tests"
+    },
+    {
+      "name": "draft_evidence_quick_preflight",
+      "command": "python3 -u -B scripts/preflight.py --quick",
+      "exit_code": 1,
+      "log": "draft-evidence-preflight.log",
+      "log_sha256": "4284ce402f517a0bd873d136bbd768a27ec8f2ee934fa5eb61f74f875a7e79f1",
+      "result": "new evidence draft repeated old construction.rs range as an active source citation; changed to dated historical prose; final quick run is separate"
+    }
+  ],
+  "not_run": [
+    "71 ignored tests",
+    "full legacy engine-core tests",
+    "full preflight command",
+    "frontend or real Worker/browser product rerun",
+    "GitHub Actions",
+    "desktop installers or mobile devices",
+    "upstream equivalence or performance comparison"
+  ]
+}

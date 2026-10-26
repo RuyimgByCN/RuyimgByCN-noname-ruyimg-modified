@@ -1,0 +1,26 @@
+tree tree=192fd6a107bf48c88ff77183941b954f4bc87540
+== check-all-targets start 2026-10-26 21:31:10 +0800
+== check-all-targets exit=0 end 2026-10-26 21:31:54 +0800
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 44.06s
+== rule-api start 2026-10-26 21:31:54 +0800
+== rule-api exit=0 end 2026-10-26 21:32:15 +0800
+rule-api: passed=2 failed=0 ignored=0
+== rule-vm start 2026-10-26 21:32:15 +0800
+== rule-vm exit=0 end 2026-10-26 21:32:17 +0800
+rule-vm: passed=15 failed=0 ignored=0
+== content-schema start 2026-10-26 21:32:17 +0800
+== content-schema exit=0 end 2026-10-26 21:32:27 +0800
+content-schema: passed=0 failed=0 ignored=0
+== content-compiler start 2026-10-26 21:32:27 +0800
+== content-compiler exit=0 end 2026-10-26 21:32:31 +0800
+content-compiler: passed=541 failed=0 ignored=0
+== engine-native start 2026-10-26 21:32:31 +0800
+== engine-native exit=0 end 2026-10-26 21:33:33 +0800
+engine-native: passed=1559 failed=0 ignored=71
+== game-server start 2026-10-26 21:33:33 +0800
+== game-server exit=0 end 2026-10-26 21:35:57 +0800
+game-server: passed=358 failed=0 ignored=0
+== engine-core start 2026-10-26 21:35:57 +0800
+== engine-core exit=0 end 2026-10-26 21:37:47 +0800
+engine-core: passed=3836 failed=0 ignored=1
+ALL DONE 2026-10-26 21:37:47 +0800

@@ -11,7 +11,7 @@ pub use characters::{
 };
 pub use deck::{
     build_deck_from_config, build_deck_specs, build_standard_deck_specs, guozhan_deck_specs,
-    DeckCardSpec, EquipSlot,
+    card_def_id_for_name, is_recastable_card_def, DeckCardSpec, EquipSlot,
 };
 pub use registry::{
     jianxiong_skill_def, ActiveSkillDef, ContentLoadError, ContentRegistry, LoadedPackageMeta,

@@ -4,6 +4,8 @@
 //! Does **not** expose `GameState` internal layout.
 
 #![deny(missing_docs)]
+// One collection step per ordered effect segment keeps the flat Serde enum stable.
+#![recursion_limit = "2048"]
 
 mod effect;
 mod host;

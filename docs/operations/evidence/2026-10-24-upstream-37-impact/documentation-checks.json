@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-24T18:17:58.707876+08:00",
+  "new_local_links_checked": 46,
+  "failures": [],
+  "existing_documents": [
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before_sha256": "cba104853c3ede194c9cc46ecbc2bd7498c2ebe03d12e3090b98e1bba37019de",
+      "after_sha256": "56d2de8ffb94fc04ba571b8c63a4bf2b9d15eaee6394fb450b9f593934c4a2be",
+      "lost_anchors": []
+    },
+    {
+      "path": "docs/architecture/native-rules-baseline.md",
+      "before_sha256": "17441b97abf82f5c54d9bef770045f9b19b2c4fe2b1f43b50d059aeac4ab1827",
+      "after_sha256": "7fb118853f011703073c0203ea38bdd7f201a5a250847bf2f622002db790734b",
+      "lost_anchors": []
+    },
+    {
+      "path": "docs/migration/upstream-extension-reconstruction.md",
+      "before_sha256": "d2d6d13523a1175b5e0e3d853efc3e9eedea574db03595e07a56dd7bdb9473f2",
+      "after_sha256": "702939b8fcd3d4fa8271b1ce551a9c4056603b6086a3fad03ba81cde3c3155ef",
+      "lost_anchors": []
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-07-n08-cardlist-parity/README.md",
+      "before_sha256": "ab6f8462ff66f4cb95817f95dfc33b927ea54044cbe9ac28f5311d614e05e07e",
+      "after_sha256": "9f79e1477226493ff3aa30cd9daa563d650f3ad0bd72f044702ea638a39072cd",
+      "lost_anchors": []
+    }
+  ],
+  "commit_count": 37,
+  "mapped_work_items": [
+    "UP37-I02",
+    "UP37-I03",
+    "UP37-I04",
+    "UP37-I05",
+    "UP37-N01",
+    "UP37-N02",
+    "UP37-N03",
+    "UP37-N04",
+    "UP37-N05",
+    "UP37-N06",
+    "UP37-N07",
+    "UP37-R01",
+    "UP37-R02",
+    "UP37-R03",
+    "UP37-R04",
+    "UP37-R05",
+    "UP37-R06",
+    "UP37-R07",
+    "UP37-R08",
+    "UP37-R09",
+    "UP37-R10"
+  ],
+  "range_derived_work_items": [
+    "UP37-I01"
+  ],
+  "content_delta_counts": {
+    "character": 6,
+    "skill": 19,
+    "card": 3,
+    "activated_existing_characters": 2
+  },
+  "historical_progress_and_rules_unchanged": true,
+  "catalog_still_frozen": true,
+  "boundary": "New/changed local links and preserved anchors; historical links additionally checked by full preflight."
+}

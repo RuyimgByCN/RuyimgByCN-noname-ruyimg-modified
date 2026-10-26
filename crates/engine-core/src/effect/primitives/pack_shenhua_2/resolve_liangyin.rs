@@ -1336,16 +1336,55 @@ pub(crate) fn resolve_dcdichou(
             Ok(Vec::new())
         }
         10 => {
-            let options: Vec<_> = tx
+            // R01：候选 = 当前仍有仇的角色 **加上本回合已移除仇的角色**。
+            let all: Vec<PlayerId> = tx
                 .state()
                 .players
-                .alive_by_seat()
-                .into_iter()
-                .filter(|target| dcdichou_mark_count(tx, *target, mark) > 0)
+                .iter_live()
+                .map(|participant| participant.id)
+                .collect();
+            let removed = tx.state().turn.removed_marks.clone();
+            let options: Vec<_> = all
+                .iter()
+                .copied()
+                .filter(|target| {
+                    dcdichou_mark_count(tx, *target, mark) > 0
+                        || removed.contains(&(mark.raw(), *target))
+                })
                 .collect();
             if options.is_empty() {
                 return Ok(Vec::new());
             }
+            // 选择前先移除**所有**仇标记；候选快照在 payload 中，选择后不再依赖
+            // 残留标记。这样伤害结算时标记已清空，且未选者也被清空。
+            let mut cleared = Vec::new();
+            for target in &all {
+                if dcdichou_mark_count(tx, *target, mark) == 0 {
+                    continue;
+                }
+                let prev = tx
+                    .state()
+                    .players
+                    .get(*target)
+                    .map(|participant| participant.marks.clone())
+                    .unwrap_or_default();
+                tx.journal(crate::transaction::JournalEntry::PlayerMarks {
+                    id: *target,
+                    prev,
+                });
+                if let Some(participant) = tx.state_mut().players.get_mut(*target) {
+                    participant.marks.retain(|(existing, _)| *existing != mark.raw());
+                }
+                cleared.push(DomainEvent::MarkChanged {
+                    player: *target,
+                    mark_def: mark.raw(),
+                    count: 0,
+                });
+            }
+            tx.state_mut()
+                .turn
+                .removed_marks
+                .retain(|(existing, _)| *existing != mark.raw());
             let mut payload = vec![
                 RESOLVE_DCDICHOU_CHOICE,
                 10,
@@ -1355,7 +1394,7 @@ pub(crate) fn resolve_dcdichou(
                 options.len() as u32,
             ];
             payload.extend(options.iter().map(|target| target.raw()));
-            open_choice(
+            let mut events = open_choice(
                 tx,
                 player,
                 1,
@@ -1365,7 +1404,9 @@ pub(crate) fn resolve_dcdichou(
                 ChoiceKind::SelectTargets,
                 ContinuationKind::Custom,
                 payload,
-            )
+            )?;
+            events.splice(0..0, cleared);
+            Ok(events)
         }
         _ => Err(EffectError::ContentFault("涤仇 action 非法".into())),
     }

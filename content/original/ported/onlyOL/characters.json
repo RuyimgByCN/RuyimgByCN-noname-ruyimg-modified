@@ -1006,5 +1006,26 @@
     ],
     "sex": "male",
     "group": "wu"
+  },
+  {
+    "id": 3125343915,
+    "name_key": "ol_zhuhuan",
+    "max_hp": 4,
+    "skills": [
+      2744558996,
+      2376678765
+    ],
+    "sex": "male",
+    "group": "wu"
+  },
+  {
+    "id": 2606884808,
+    "name_key": "ol_jie_zhuran",
+    "max_hp": 4,
+    "skills": [
+      3750129445
+    ],
+    "sex": "male",
+    "group": "wu"
   }
 ]

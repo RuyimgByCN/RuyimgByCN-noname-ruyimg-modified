@@ -1,0 +1,22 @@
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 18.95s
+     Running unittests src/lib.rs (target/debug/deps/rule_api-738b67a289b3e764)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/effect_wire_compat.rs (target/debug/deps/effect_wire_compat-162f6f9847cfb2c5)
+
+running 2 tests
+test legacy_optional_fields_keep_their_defaults ... ok
+test all_v322_effect_ordinals_fields_and_json_are_compatible ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests rule_api
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

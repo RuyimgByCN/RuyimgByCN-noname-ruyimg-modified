@@ -46,6 +46,7 @@ mod pack_tw_3;
 mod pack_wandianlunsha;
 mod pack_xianding_1;
 mod pack_xianding_2;
+mod ol_jie_danshou;
 
 pub(crate) use guarded_choice::*;
 pub(crate) use pack_bingshi_1::*;
@@ -73,6 +74,7 @@ pub(crate) use pack_tw_3::*;
 pub use pack_wandianlunsha::*;
 pub(crate) use pack_xianding_1::*;
 pub(crate) use pack_xianding_2::*;
+pub(crate) use ol_jie_danshou::*;
 
 /// 卡牌粗类别（0=基本 1=锦囊 2=装备；与 owner_card_category_mask 位一致）。
 pub(crate) fn card_category_of(state: &crate::state::GameState, card: CardId) -> Option<u32> {
@@ -98,6 +100,11 @@ pub fn apply_effect(
     req: EffectRequest,
 ) -> Result<Vec<DomainEvent>, EffectError> {
     match req {
+        EffectRequest::ResolveOlJieDanshou { player, skill } => {
+            crate::effect::primitives::ol_jie_danshou::resolve_ol_jie_danshou(
+                tx, player, skill,
+            )
+        }
         EffectRequest::DrawCards { .. }
         | EffectRequest::DrawCardsFromSkill { .. }
         | EffectRequest::DrawCardsFromBottom { .. }
@@ -578,6 +585,7 @@ pub fn apply_effect(
         | EffectRequest::DiscardTargetEquipmentDrawWeaponRange { .. }
         | EffectRequest::ChooseTargetRevealHandDamageIfSha { .. }
         | EffectRequest::ChooseOtherGiveOneHandEquip { .. }
+        | EffectRequest::ChooseGiveOrRecastOneHand { .. }
         | EffectRequest::ChooseRevealHandCardBindCategoryTarget { .. }
         | EffectRequest::RecoverToMaxThenOptionalExchangeSkill { .. }
         | EffectRequest::DiscardTargetCardGainMount { .. }
@@ -759,6 +767,7 @@ pub fn apply_effect(
         | EffectRequest::ChooseUseShaAfterResolvedGift { .. }
         | EffectRequest::SkipCurrentPhase { .. }
         | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamage { .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
         | EffectRequest::RevealUniformHandDrawSelfChooseOthers { .. }
         | EffectRequest::ChooseCardUserOrAddTarget { .. }
         | EffectRequest::CommitTransferSavedCardUser { .. }

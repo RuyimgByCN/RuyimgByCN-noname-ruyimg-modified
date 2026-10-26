@@ -9,3 +9,6 @@ description = "VM-visible stable IDs, Query/Effect requests, host capabilities (
 engine-api = { workspace = true }
 serde = { workspace = true }
 thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

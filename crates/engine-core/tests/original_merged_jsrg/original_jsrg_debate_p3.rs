@@ -266,8 +266,8 @@ const ONLYOL: &[u8] =
 #[test]
 fn olchaozheng_consumes_p1_debate_primitive() {
     let package = content_schema::ContentPackage::from_json_bytes(ONLYOL).unwrap();
-    // P1 旗舰原语（ABI 653）跨包复用把 onlyOL pin 抬到 653。
-    assert_eq!(package.manifest.rule_vm_abi_version, 688);
+    // P1 旗舰原语（ABI 653）跨包复用；N01 胆守 tag 771 把 onlyOL pin 抬到 757。
+    assert_eq!(package.manifest.rule_vm_abi_version, 757);
     assert!(package.trigger_index.iter().any(|t| {
         t.skill_def_id == OLCHAOZHENG
             && t.event == "phase_prepare"

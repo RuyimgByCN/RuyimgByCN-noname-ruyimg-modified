@@ -536,6 +536,14 @@ pub(super) fn check_modifier(m: &ModifierAst) -> Result<ModifierIr, CompileError
                 message: format!("unknown modifier value source {source}"),
             });
         }
+        if m.target == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+            && (m.mode != "override" || m.value != 1)
+        {
+            return Err(CompileError::Type {
+                pos: m.span.start as usize,
+                message: "平定目标限制只接受 override 1".into(),
+            });
+        }
         let valid_use = if owner_skill_play_phase_fire_limit {
             m.mode == "override" && m.target == "card_distance_unlimited"
         } else if queried_player_mark {

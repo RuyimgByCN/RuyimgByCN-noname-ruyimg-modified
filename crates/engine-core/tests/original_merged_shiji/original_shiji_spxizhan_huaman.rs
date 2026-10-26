@@ -90,7 +90,9 @@ fn submit(state: GameState, actor: PlayerId, kind: CommandKind, key: u64) -> Gam
 #[test]
 fn package_closes_sp_huaman_with_exact_skills() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
-    assert_eq!(package.manifest.rule_vm_abi_version, 502);
+    // 包内 pinghe 新增 give-or-recast（ABI 755），整包最大 ABI 随之提升。
+    // 包内 pinghe 的 give-or-recast 奖励参数升到 ABI 756。
+    assert_eq!(package.manifest.rule_vm_abi_version, 756);
 
     let character = package
         .character_index

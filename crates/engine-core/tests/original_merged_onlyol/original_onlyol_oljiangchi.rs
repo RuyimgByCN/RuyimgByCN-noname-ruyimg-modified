@@ -142,11 +142,14 @@ fn has_skill(state: &GameState, owner: PlayerId, def: u32) -> bool {
 #[test]
 fn package_publishes_complete_ol_caozhang_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
-    assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 190);
-    assert_eq!(package.character_index.len(), 84);
-    assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
-    assert_eq!(package.modules.len(), 30); // 批162 olrenxin +1
+    // N01「胆守」新增 host effect tag 771，包 ABI 提升到 757。
+    assert_eq!(package.manifest.rule_vm_abi_version, 757);
+    // N01 新增 ol_jie_danshou 后 193 个顶层技能。
+    assert_eq!(package.skill_index.len(), 193);
+    // N01 新增 ol_jie_zhuran 后 86 个角色。
+    assert_eq!(package.character_index.len(), 86);
+    assert_eq!(package.trigger_index.len(), 32); // 批162 olrenxin +1；N01 胆守 +1
+    assert_eq!(package.modules.len(), 36); // 批162 olrenxin +1；N01 胆守 trigger+active +2
     let character = package
         .character_index
         .iter()

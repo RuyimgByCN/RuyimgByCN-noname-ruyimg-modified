@@ -639,6 +639,21 @@ pub(in super::super) fn check_effect_stmt(
                 span: *span,
             })
         }
+        "choose_other_targets_by_skipped_phase_count_damage_draw" => {
+            if args.len() != 2 {
+                return Err(CompileError::Type {
+                    pos: span.start as usize,
+                    message:
+                        "choose_other_targets_by_skipped_phase_count_damage_draw(player, amount)"
+                            .into(),
+                });
+            }
+            Ok(StmtIr::EffectChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player: check_expr(&args[0], locals)?,
+                amount: check_expr(&args[1], locals)?,
+                span: *span,
+            })
+        }
         "reveal_uniform_hand_draw_self_choose_others" => {
             if args.len() != 1 {
                 return Err(CompileError::Type {

@@ -1,0 +1,15 @@
+{
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "staged": false,
+  "committed": false,
+  "pushed": false,
+  "changed_files": [
+    "crates/engine-core/src/state/turn.rs",
+    "crates/engine-core/src/hash.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs",
+    "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs",
+    "crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs"
+  ],
+  "note": "仅本批 5 个 engine-core 源文件 + 1 个测试；未改 DSL/包/规则版本常量。"
+}

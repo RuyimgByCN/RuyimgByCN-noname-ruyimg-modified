@@ -1,0 +1,12 @@
+// OL界朱桓「奋励」：手牌数/体力值/装备区牌数为全场最大时，可跳过摸牌/出牌/弃牌阶段。
+skill ol_fenli(2744558996) {
+  trigger phase_draw owner_is_target_tied_max_hand optional {
+    effect skip_current_phase(self);
+  }
+  trigger phase_play owner_is_target_tied_max_hp optional {
+    effect skip_current_phase(self);
+  }
+  trigger phase_discard owner_is_target_tied_max_equip_nonempty optional {
+    effect skip_current_phase(self);
+  }
+}

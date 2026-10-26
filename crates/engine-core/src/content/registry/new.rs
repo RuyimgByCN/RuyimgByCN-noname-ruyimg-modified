@@ -102,6 +102,13 @@ impl ContentRegistry {
         self.package_skills.values()
     }
 
+    /// Whether any loaded package defines the given modifier target.
+    pub fn has_modifier_target(&self, target: crate::query::ModifierTarget) -> bool {
+        self.package_modifiers
+            .iter()
+            .any(|modifier| modifier.target == target)
+    }
+
     /// Loaded immutable card metadata.
     pub fn card_metadata(&self, card_def: engine_api::CardDefId) -> Option<&PackageCardEntry> {
         self.package_cards.get(&card_def.raw())

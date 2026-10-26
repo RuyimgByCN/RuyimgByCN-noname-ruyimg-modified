@@ -1,0 +1,342 @@
+{
+  "captured_at": "2026-10-24T05:39:20.181840+00:00",
+  "build_exit_code": 0,
+  "source_manifest": "source-manifest.json",
+  "outputs": {
+    "apps/web-client/src/worker/native-pkg": {
+      "files": {
+        "engine_native_wasm.d.ts": {
+          "sha256": "832d369c9f5f0cef69b79a4ff50e9020b67b6c57e47645458e46209e50d17701",
+          "bytes": 7894,
+          "mode": 420
+        },
+        "engine_native_wasm_bg.wasm.d.ts": {
+          "sha256": "019f39305da635ec2c550486b111aff19efb015cd59045c62113eb0e1f239fda",
+          "bytes": 2623,
+          "mode": 420
+        },
+        "engine_native_wasm.js": {
+          "sha256": "b26f9858656258fd8fe0ea89c73a88652775ac12ac6c4b926af11b96b225dc51",
+          "bytes": 24441,
+          "mode": 420
+        },
+        "engine_native_wasm_bg.wasm": {
+          "sha256": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+          "bytes": 2678745,
+          "mode": 420
+        },
+        ".gitignore": {
+          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+          "bytes": 1,
+          "mode": 420
+        },
+        "package.json": {
+          "sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+          "bytes": 488,
+          "mode": 420
+        }
+      },
+      "backup": "/tmp/noname-next-effect-validation-20261024/validated-generated/apps/web-client/src/worker/native-pkg"
+    },
+    "apps/web-client/src/wasm-pkg": {
+      "files": {
+        "engine_wasm_bg.wasm": {
+          "sha256": "02774218eee95e1f52ccfdfa4eaf11be208d3c5b7485406aed9b13994ef2499d",
+          "bytes": 15260323,
+          "mode": 420
+        },
+        "engine_wasm.d.ts": {
+          "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+          "bytes": 6751,
+          "mode": 420
+        },
+        ".gitignore": {
+          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+          "bytes": 1,
+          "mode": 420
+        },
+        "package.json": {
+          "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+          "bytes": 352,
+          "mode": 420
+        },
+        "engine_wasm_bg.wasm.d.ts": {
+          "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+          "bytes": 2602,
+          "mode": 420
+        },
+        "engine_wasm.js": {
+          "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+          "bytes": 22554,
+          "mode": 420
+        }
+      },
+      "backup": "/tmp/noname-next-effect-validation-20261024/validated-generated/apps/web-client/src/wasm-pkg"
+    },
+    "apps/web-client/public/pkg": {
+      "files": {
+        "engine_wasm_bg.wasm": {
+          "sha256": "02774218eee95e1f52ccfdfa4eaf11be208d3c5b7485406aed9b13994ef2499d",
+          "bytes": 15260323,
+          "mode": 420
+        },
+        "engine_wasm.d.ts": {
+          "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+          "bytes": 6751,
+          "mode": 420
+        },
+        ".gitignore": {
+          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+          "bytes": 1,
+          "mode": 420
+        },
+        "package.json": {
+          "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+          "bytes": 352,
+          "mode": 420
+        },
+        "engine_wasm_bg.wasm.d.ts": {
+          "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+          "bytes": 2602,
+          "mode": 420
+        },
+        "engine_wasm.js": {
+          "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+          "bytes": 22554,
+          "mode": 420
+        }
+      },
+      "backup": "/tmp/noname-next-effect-validation-20261024/validated-generated/apps/web-client/public/pkg"
+    },
+    "apps/web-client/dist": {
+      "files": {
+        "index.html": {
+          "sha256": "9181ba063c5ae5305b54eeeab3f0126245e3115d3ac744fafc75d8018402aea4",
+          "bytes": 455,
+          "mode": 420
+        },
+        "original/portraits/3366235136.jpg": {
+          "sha256": "cca0efde2641b5ea868e5376b3ca895b4325631a98badd0392d929f9f27eb787",
+          "bytes": 127767,
+          "mode": 420
+        },
+        "original/portraits/3041549837.jpg": {
+          "sha256": "167351ed1bd77fd1a67f9ad2c875b1be55000e077475e9cbdf5f54b87db7b7ca",
+          "bytes": 221768,
+          "mode": 420
+        },
+        "original/portraits/4123573742.jpg": {
+          "sha256": "bbd0b509c84e448c588281f9f225e27f7cfbee73fc933958031be454e807e633",
+          "bytes": 38745,
+          "mode": 420
+        },
+        "original/portraits/8.jpg": {
+          "sha256": "4ec4c5b069d4e36b38851b3b3c3654d5183bd96f5660163b01e9d66dfcedd495",
+          "bytes": 194418,
+          "mode": 420
+        },
+        "original/portraits/9.jpg": {
+          "sha256": "94a3ab74a259cb09ebb4a8268149cf5292eadaebc115dcb2080fd380faedcd1c",
+          "bytes": 232039,
+          "mode": 420
+        },
+        "original/portraits/14.jpg": {
+          "sha256": "4cfb87a67005890c6a1d75caabb214407a6845aa53f4824aa01b0eb76fb3a28e",
+          "bytes": 133329,
+          "mode": 420
+        },
+        "original/portraits/15.jpg": {
+          "sha256": "0c86cf91ed20fbc4b61ff5c0c0ef876c9732afb5f8605c263ca3aec42a1c1f0b",
+          "bytes": 186557,
+          "mode": 420
+        },
+        "original/portraits/17.jpg": {
+          "sha256": "e965b53e0160f83b9713eb322c3c25347934ae4d6924435b8f7bd6d2c2503bc3",
+          "bytes": 128097,
+          "mode": 420
+        },
+        "original/portraits/16.jpg": {
+          "sha256": "f10fbe0c6ddf6f943bb015c08940128464ca7b13b98f4f6adbd17a8be2407ae0",
+          "bytes": 202445,
+          "mode": 420
+        },
+        "original/portraits/12.jpg": {
+          "sha256": "3ac11bdd492d6a0a558516d88f8953d761d7c9369bf8d6d6a0e6040625e4f014",
+          "bytes": 194305,
+          "mode": 420
+        },
+        "original/portraits/13.jpg": {
+          "sha256": "6f1e9aeee9f6451128f1e74dedb3640a166252758b72f7424e6425521d4938ea",
+          "bytes": 154042,
+          "mode": 420
+        },
+        "original/portraits/11.jpg": {
+          "sha256": "914ef72628fd5d010e660a23d4da6132613568fb29ff50265fcf6a8e6491e9cd",
+          "bytes": 175982,
+          "mode": 420
+        },
+        "original/portraits/3561346810.jpg": {
+          "sha256": "8561d8cdffad3df46eab42b81efb865f0d1d0de26b578b64f60b5fb6c2f5600e",
+          "bytes": 181422,
+          "mode": 420
+        },
+        "original/portraits/10.jpg": {
+          "sha256": "b3fa69603ab9420e915d5e9ac115445533a2ddf7cd9d135a4f6f8182449c4b68",
+          "bytes": 149294,
+          "mode": 420
+        },
+        "original/portraits/21.jpg": {
+          "sha256": "399dcd6d454188324a04293b074eaf393ab9c50f40fd53ded55fe450c64eeade",
+          "bytes": 205775,
+          "mode": 420
+        },
+        "original/portraits/4192370611.jpg": {
+          "sha256": "104eedb3628913dd03e2b263fd09cfe25ecc0af732a25d900ff04f4424a08d5a",
+          "bytes": 181203,
+          "mode": 420
+        },
+        "original/portraits/20.jpg": {
+          "sha256": "9bc8b9facb73895b854d68e5bd48f9601d199641269402c7af63009a634f5cc3",
+          "bytes": 177924,
+          "mode": 420
+        },
+        "original/portraits/22.jpg": {
+          "sha256": "a78220ed748f120051cff384721f7350db6938f914d511ab8cd4de466f2a60ba",
+          "bytes": 175150,
+          "mode": 420
+        },
+        "original/portraits/23.jpg": {
+          "sha256": "efcf10a0b1de7d1127428a95ec0eedb622144bc15f5889ab50bacc2da960c2fd",
+          "bytes": 156250,
+          "mode": 420
+        },
+        "original/portraits/4212795236.jpg": {
+          "sha256": "bd6debf34137e2dc2fa80137a9acd23002009e77bb55eb4373332dcf8ec6a902",
+          "bytes": 192986,
+          "mode": 420
+        },
+        "original/portraits/18.jpg": {
+          "sha256": "48c9e8973c793f6eacaaa0e447050c491b810695d623678f42b2601cadf3b378",
+          "bytes": 187054,
+          "mode": 420
+        },
+        "original/portraits/24.jpg": {
+          "sha256": "c93e6db5079d1f25ed241e51821d4783ef502e8f34efdaa15db71a4301add994",
+          "bytes": 195437,
+          "mode": 420
+        },
+        "original/portraits/25.jpg": {
+          "sha256": "6e22c35d821e74fa464b6ad571a1ac7c96e4c90f095d39706e252720a7e41115",
+          "bytes": 221748,
+          "mode": 420
+        },
+        "original/portraits/19.jpg": {
+          "sha256": "2e9e1d49e39458e43aa51996d8f8c5608772e6a7387e3c712eac1df73d66eef0",
+          "bytes": 197449,
+          "mode": 420
+        },
+        "original/portraits/4.jpg": {
+          "sha256": "5a20249a7f74240d2d141e0c04a430228413b945d0680273cd74ffe83a6609c6",
+          "bytes": 154918,
+          "mode": 420
+        },
+        "original/portraits/5.jpg": {
+          "sha256": "b05a730028d125ada9d0c6f45a38c83cbc3eae861fb0733983897f7e016a9d75",
+          "bytes": 168468,
+          "mode": 420
+        },
+        "original/portraits/7.jpg": {
+          "sha256": "2d787ec756f581505fbfaa31671f8ba99e35178fc4ca11c94ecbed5643010993",
+          "bytes": 232410,
+          "mode": 420
+        },
+        "original/portraits/3319399999.jpg": {
+          "sha256": "9825a3192272551e93b58f914237c992bc2ac46f6d016f0c6c4166a4c7b98cbe",
+          "bytes": 35076,
+          "mode": 420
+        },
+        "original/portraits/6.jpg": {
+          "sha256": "d2e8fdbb6d8d2a0f94cb0d7682f84af66360d2a86df1c9444a12565e2acaf68e",
+          "bytes": 175121,
+          "mode": 420
+        },
+        "original/portraits/2.jpg": {
+          "sha256": "c1faba1b8ad343db9eb9305f9c6f8111013516923b14639f345e123a8a8b070e",
+          "bytes": 155428,
+          "mode": 420
+        },
+        "original/portraits/3.jpg": {
+          "sha256": "ec0722db849a35a8e2a274ea0f4c4a592943f7c3a388eecfd01c09a8baedb310",
+          "bytes": 214907,
+          "mode": 420
+        },
+        "original/portraits/1.jpg": {
+          "sha256": "9dbf156f1ab21a5d425acfcde70a57ec3a1ad61630a1374bf2b2fee95e697bc6",
+          "bytes": 225975,
+          "mode": 420
+        },
+        "assets/engine.worker-YdkXdL0d.js": {
+          "sha256": "828e5b544c04ff82b0dd8945ce264a9b30d89d46d1a5ebd7fa554ace938d46b5",
+          "bytes": 9005,
+          "mode": 420
+        },
+        "assets/engine.native.worker-CyhM0As9.js": {
+          "sha256": "67805146b1fe95206d836cf06d8f2f9c45c27300fa699636abfb37a44c54b49e",
+          "bytes": 18115,
+          "mode": 420
+        },
+        "assets/engine_native_wasm_bg-JqZIfyNt.wasm": {
+          "sha256": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+          "bytes": 2678745,
+          "mode": 420
+        },
+        "assets/index-BO27s1xp.css": {
+          "sha256": "128d5baacea54f17a41db4e88cb8cf9fc8ec0841b9f64888fc3e11e6df401e89",
+          "bytes": 27747,
+          "mode": 420
+        },
+        "assets/index-7MEiGs4q.js": {
+          "sha256": "1946d360a90759c6978df1d30eb432ebc954d5b8dd15fcd2e16d4bb987aee229",
+          "bytes": 360991,
+          "mode": 420
+        },
+        "assets/engine_wasm_bg-Cc8-pMSW.wasm": {
+          "sha256": "02774218eee95e1f52ccfdfa4eaf11be208d3c5b7485406aed9b13994ef2499d",
+          "bytes": 15260323,
+          "mode": 420
+        },
+        "pkg/engine_wasm_bg.wasm": {
+          "sha256": "02774218eee95e1f52ccfdfa4eaf11be208d3c5b7485406aed9b13994ef2499d",
+          "bytes": 15260323,
+          "mode": 420
+        },
+        "pkg/engine_wasm.d.ts": {
+          "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+          "bytes": 6751,
+          "mode": 420
+        },
+        "pkg/.gitignore": {
+          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+          "bytes": 1,
+          "mode": 420
+        },
+        "pkg/package.json": {
+          "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+          "bytes": 352,
+          "mode": 420
+        },
+        "pkg/engine_wasm_bg.wasm.d.ts": {
+          "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+          "bytes": 2602,
+          "mode": 420
+        },
+        "pkg/engine_wasm.js": {
+          "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+          "bytes": 22554,
+          "mode": 420
+        }
+      },
+      "backup": "/tmp/noname-next-effect-validation-20261024/validated-generated/apps/web-client/dist"
+    }
+  }
+}

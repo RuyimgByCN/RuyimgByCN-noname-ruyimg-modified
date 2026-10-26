@@ -173,6 +173,9 @@ pub struct ActiveTargetsIr {
     /// Optional exclusive lower bound for selected targets' current HP.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub hp_gt: Option<u8>,
+    /// Optional exclusive lower bound for selected targets' maximum HP.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max_hp_gt: Option<u8>,
     /// Whether selected targets must have more hand cards than the owner.
     #[serde(default)]
     pub hand_gt_owner: bool,

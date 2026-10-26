@@ -1089,6 +1089,14 @@ pub(in super::super) fn decode_request(
             }
             EffectRequest::DrawAllEventTargets { players, count }
         }
+        effect_tag::RESOLVE_OL_JIE_DANSHOU => {
+            let skill = pop(frame)?.0.max(0) as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ResolveOlJieDanshou {
+                player: PlayerId::new(player),
+                skill: engine_api::SkillId::new(skill),
+            }
+        }
         _ => {
             return Err(VmError::Host(format!("unknown effect tag {tag}")));
         }

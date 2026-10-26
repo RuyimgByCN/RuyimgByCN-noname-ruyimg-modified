@@ -504,6 +504,15 @@ pub(in super::super) fn decode_request(
                 skill: engine_api::SkillId::NONE,
             }
         }
+        effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+            let amount = pop(frame)?.0.max(0) as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player: PlayerId::new(player),
+                amount,
+                skill: engine_api::SkillId::NONE,
+            }
+        }
         effect_tag::REVEAL_UNIFORM_HAND_DRAW_SELF_CHOOSE_OTHERS => {
             let player = pop(frame)?.0.max(0) as u32;
             EffectRequest::RevealUniformHandDrawSelfChooseOthers {

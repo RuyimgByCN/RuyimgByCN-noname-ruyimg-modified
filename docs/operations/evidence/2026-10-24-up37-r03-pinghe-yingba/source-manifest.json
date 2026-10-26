@@ -1,0 +1,57 @@
+[
+  {
+    "path": "crates/content-compiler/src/typecheck/expressions.rs",
+    "bytes": 14153,
+    "sha256": "2b512827373155666870b977a6a7fb7563f59e7288bfd107afc05ce887cf034a"
+  },
+  {
+    "path": "crates/content-compiler/src/tests/has_skill_query_u32.rs",
+    "bytes": 647,
+    "sha256": "e34511aa828eb223c85614b88afb7e9e925770372acc9a26980ff9b46a771667"
+  },
+  {
+    "path": "crates/content-compiler/src/tests.rs",
+    "bytes": 903,
+    "sha256": "f259a0889aaf3868d5cfcb1f0856b2727cd79a9c1e1dca6daa0b7f785823e839"
+  },
+  {
+    "path": "content/original/ported/shiji/pinghe.skill",
+    "bytes": 1221,
+    "sha256": "e52be4bc80b2686c52baf766c14b7588a162f5aec11b465c6d452f5c8d73abf9"
+  },
+  {
+    "path": "content/original/ported/shiji/yingba.skill",
+    "bytes": 1175,
+    "sha256": "cfa582135c44b77e5fe6b6e125705a244f09c73c2d90a45e2a4c83a01dcd7862"
+  },
+  {
+    "path": "content/original/ported/shiji/metadata.json",
+    "bytes": 1021,
+    "sha256": "4dba51d040345403dfe6322fafc20226f83e312cd386a0cdad000597ef890304"
+  },
+  {
+    "path": "content/original/ported/shiji/shiji.npack.json",
+    "bytes": 299947,
+    "sha256": "16abd8135ed47acf5cf73aba9a8e06b26ca673608fdf3f890675f91fcc4c6cc4"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_shiji/original_shiji_pinghe_yingba.rs",
+    "bytes": 6952,
+    "sha256": "a811f081a11d9f10c01f0b6d46bd5b7a3e32e10b67a8567aa33e02b179c667bb"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_shiji/original_shiji_zjjuxiang.rs",
+    "bytes": 10227,
+    "sha256": "6f68337873382fa0f16e188a4b1a9565fbe57d1910508375ef95a76a4cd1e933"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_shiji.rs",
+    "bytes": 3253,
+    "sha256": "68880c3fcd2e08863bb56bb7c48d7e2253d2b93415026977db511ad93f23b13f"
+  },
+  {
+    "path": "scripts/rebuild-pack.sh",
+    "bytes": 2359,
+    "sha256": "349f77f73ade4b1bf308d1d09b7a88ddd008fe6e08bfeb42688db66e534f9a07"
+  }
+]

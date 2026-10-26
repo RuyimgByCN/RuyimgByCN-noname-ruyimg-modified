@@ -343,6 +343,9 @@ pub(crate) fn map_mod_target(s: &str, selector: Option<&str>) -> Option<Modifier
         "card_target_cancel_if_other_user_hp_gte_target" => {
             ModifierTarget::CardTargetCancelIfOtherUserHpGteTarget
         }
+        "card_target_cancel_if_other_user_card_use_count_lt_owner_mark" => {
+            ModifierTarget::CardTargetCancelIfOtherUserCardUseCountLtOwnerMark
+        }
         "ignore_armor" => ModifierTarget::IgnoreArmor,
         "armor_effect_disabled" => ModifierTarget::ArmorEffectDisabled,
         "armor_link_gain_cancel" => ModifierTarget::ArmorLinkGainCancel,

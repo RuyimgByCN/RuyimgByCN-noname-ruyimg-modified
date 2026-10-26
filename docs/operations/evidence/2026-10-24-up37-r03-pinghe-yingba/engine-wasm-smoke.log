@@ -1,0 +1,6 @@
+RESULT scenario=old_wasm metric=build_and_start n=2 p50_ns=154516000 p95_ns=154516000 max_ns=154516000 mean_ns=106667604
+RESULT scenario=old_wasm metric=end_phase n=2 p50_ns=15663625 p95_ns=15663625 max_ns=15663625 mean_ns=8018750
+RESULT scenario=old_wasm metric=observer_json n=2 p50_ns=157792 p95_ns=157792 max_ns=157792 mean_ns=100792
+RESULT scenario=old_wasm metric=state_hash_hex n=2 p50_ns=57583 p95_ns=57583 max_ns=57583 mean_ns=40042
+RESULT scenario=old_wasm metric=auto_step n=2 p50_ns=2032417 p95_ns=2032417 max_ns=2032417 mean_ns=1521584
+NOTE 旧线 WASM 档（既有产物）；与新线 wasm 档并列记录，不跨线计算收益。

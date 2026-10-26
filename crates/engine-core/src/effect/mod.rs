@@ -15,6 +15,7 @@ pub(crate) use primitives::resolve_city_consume;
 pub(crate) use primitives::resolve_choose_others_add_mark;
 pub(crate) use primitives::resolve_choose_others_insert_extra_turn;
 pub(crate) use primitives::resolve_twjieqiu_select;
+pub(crate) use primitives::resolve_ol_jie_danshou_choice;
 pub(crate) use primitives::enable_equip_slot;
 pub(crate) use primitives::resolve_register_turn_end_debate;
 pub(crate) use primitives::resolve_distribute_shadow_cards;
@@ -635,6 +636,7 @@ pub fn run_effects(
             | EffectRequest::DiscardTargetEquipmentDrawWeaponRange { skill, .. }
             | EffectRequest::ChooseTargetRevealHandDamageIfSha { skill, .. }
             | EffectRequest::ChooseOtherGiveOneHandEquip { skill, .. }
+            | EffectRequest::ChooseGiveOrRecastOneHand { skill, .. }
             | EffectRequest::ChooseRevealHandCardBindCategoryTarget { skill, .. }
             | EffectRequest::ChooseTargetDrawToMaxHpCap { skill, .. }
             | EffectRequest::ChooseTargetDrawThenOwnerIfBelowMaxHp { skill, .. }

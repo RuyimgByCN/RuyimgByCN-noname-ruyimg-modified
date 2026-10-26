@@ -1,0 +1,34 @@
+[
+  {
+    "name": "frontend-tests",
+    "command": [
+      "/usr/local/bin/node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-24T05:36:37.830888+00:00",
+    "finished_at": "2026-10-24T05:36:38.814026+00:00",
+    "seconds": 0.98,
+    "exit_code": 1,
+    "log": "frontend-tests-initial.log",
+    "original_log_name": "frontend-tests.log",
+    "evidence_note": "Log copied and renamed to preserve the initial run before the complete rerun; original command/exit/timestamps retained."
+  },
+  {
+    "name": "extension-store-smoke",
+    "command": [
+      "/usr/local/bin/node",
+      "scripts/extension-store-smoke.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-24T05:36:38.814545+00:00",
+    "finished_at": "2026-10-24T05:36:39.354279+00:00",
+    "seconds": 0.54,
+    "exit_code": 0,
+    "log": "extension-store-smoke-initial.log",
+    "original_log_name": "extension-store-smoke.log",
+    "evidence_note": "Log copied and renamed to preserve the initial run before the complete rerun; original command/exit/timestamps retained."
+  }
+]

@@ -133,9 +133,11 @@ fn accept_trigger(
 #[test]
 fn package_publishes_optional_hand_lte_trigger_at_abi338() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
-    assert_eq!(package.manifest.rule_vm_abi_version, 688);
-    assert_eq!(package.skill_index.len(), 190);
-    assert_eq!(package.trigger_index.len(), 27); // 批162 olrenxin +1
+    // N01「胆守」新增 host effect tag 771，包 ABI 提升到 757。
+    assert_eq!(package.manifest.rule_vm_abi_version, 757);
+    // N01 新增 ol_jie_danshou 后 193 个顶层技能。
+    assert_eq!(package.skill_index.len(), 193);
+    assert_eq!(package.trigger_index.len(), 32); // 批162 olrenxin +1；N01 胆守 +1
     let trigger = package
         .trigger_index
         .iter()

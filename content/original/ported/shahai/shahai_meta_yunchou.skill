@@ -1,0 +1,181 @@
+// diyjianxiong（奸雄）：锁定技，在身份局中，于你回合内死亡的角色均视为反贼，国战中，于你回合内死亡的角色若与你势力相同则随机改为另一个势力。
+skill diyjianxiong(472480335) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 diyjianxiong（yunchou/skill.js:29）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// diykuanggu（狂骨）：锁定技，当你造成1点伤害后，若你在其攻击范围内，你回复1点体力；否则你摸一张牌。
+skill diykuanggu(1757254698) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 diykuanggu（yunchou/skill.js:108）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// xiongzi（雄姿）：锁定技，你于摸牌阶段额外摸X+1张牌，X为你装备区牌数的一半，向下取整。
+// 实现：`modifier draw_count add 1` + `modifier draw_count add
+// owner_equip_count_half_floor`（两条叠加 = 1 + floor(装备数/2)，
+// clbshuijian 同款值源）。
+// 近似：无（phaseDrawBegin num += 1+floor(e/2) 的 modifier 等价）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（phaseDrawBegin 摸牌增量）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xiongzi(2036505599) locked {
+  modifier draw_count add 1;
+  modifier draw_count add owner_equip_count_half_floor;
+}
+// yaliang（雅量）：每当你对其他角色造成1点伤害后，或受到其他角色造成的1点伤害后，你可与该角色各摸一张牌。
+// 实现：双 trigger `damage owner_is_source` / `damage owner_is_target` optional →
+// 造成方向：draw_cards(event_player, 1) + draw_cards(self, 1)；
+// 受到方向：draw_cards(event_source, 1) + draw_cards(self, 1)。
+// 近似：上游 `event.source !== event.player` 排除自伤，DSL 无该过滤器，自伤方向会双触发（罕见）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 双方各摸一张）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yaliang(2107321786) {
+  trigger damage owner_is_source optional {
+    effect draw_cards(event_player, 1);
+    effect draw_cards(self, 1);
+  }
+  trigger damage owner_is_target optional {
+    effect draw_cards(event_source, 1);
+    effect draw_cards(self, 1);
+  }
+}
+// diy_jiaoxia（郊夏?）：每当你成为红色牌的目标，你可以摸一张牌。
+// 实现：`trigger card_targeted owner_alive_targeted_by_other optional` →
+// draw_cards(self, 1)。
+// 近似：无（红色限定已由第四十六批新过滤器 owner_alive_targeted_by_other_red_card
+// 收紧，2026-08-22 原「不限颜色」近似撤销）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（useCardToBegin 触发摸牌）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill diy_jiaoxia(2916450912) {
+  trigger card_targeted owner_alive_targeted_by_other_red_card optional {
+    effect draw_cards(self, 1);
+  }
+}
+// yiesheng：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill yiesheng(2116783007) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yiesheng（yunchou/skill.js:203）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// guihan（归汉）：限定技，当你进入濒死状态时，可以指定一名男性角色与其各回复1点体力并摸两张牌。
+skill guihan(2092153946) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 guihan（yunchou/skill.js:224）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// luweiyan（围堰）：出牌阶段限一次，你可以将一张非基本牌当作【水攻】使用；结算后你可以视为对其中一个目标使用一张不计入出杀次数的【杀】。
+skill luweiyan(2717232053) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 luweiyan（yunchou/skill.js:278）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// luweiyan2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill luweiyan2(22530046) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 luweiyan2（yunchou/skill.js:297）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// jieyan（劫焰）：出牌阶段限一次，你可以弃置一张红色手牌令场上所有角色受到1点火焰伤害。
+skill jieyan(193830172) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jieyan（yunchou/skill.js:329）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// honglian（红莲）：每当你受到来自其他角色的伤害，可以弃置伤害来源的所有红色牌。
+skill honglian(695664953) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 honglian（yunchou/skill.js:348）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// diychanyuan（缠怨）：锁定技，杀死你的角色失去1点体力上限。
+// 实现：`trigger death owner_is_target_source_alive` forced →
+// change_max_hp(event_source, -1)（击杀者失去 1 点体力上限；
+// rejici2 同款过滤器）。
+// 近似：无（source_alive 守卫兼作上游 source!==undefined 门槛）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（dieBegin source loseMaxHp）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill diychanyuan(3691619122) locked {
+  trigger death owner_is_target_source_alive {
+    effect change_max_hp(event_source, -1);
+  }
+}
+// zonghuo（纵火）：你可弃置一张牌将你即将造成的伤害变为火焰伤害。
+skill zonghuo(2533346847) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zonghuo（yunchou/skill.js:429）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// shaoying（烧营）：每当你造成一次火焰伤害，可指定距离受伤害角色1以内的另一名角色，并亮出牌堆顶的一张牌，若此牌为红色，该角色受到1点火焰伤害。
+skill shaoying(723731950) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shaoying（yunchou/skill.js:458）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// xinfu_qiaosi（巧思）：出牌阶段限一次，你可以投掷一枚六面骰子，亮出牌堆顶的X张牌并获得之。然后，你选择一项：1.交给一名其他角色X张牌。2.弃置X张牌。（X为骰子的点数）
+skill xinfu_qiaosi(2212833858) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xinfu_qiaosi（yunchou/skill.js:489）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// toulianghuanzhu_ai1：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill toulianghuanzhu_ai1(506538271) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 toulianghuanzhu_ai1（card/yunchou/skill.js:5）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// toulianghuanzhu_ai2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill toulianghuanzhu_ai2(1505474741) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 toulianghuanzhu_ai2（card/yunchou/skill.js:6）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// suolianjia（锁链甲）：锁定技，你防止即将受到的属性伤害，当装备时进入连环状态，当卸下时解除连环状态。
+skill suolianjia(1857120648) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 suolianjia（card/yunchou/skill.js:7）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// toulianghuanzhu2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill toulianghuanzhu2(1962739102) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 toulianghuanzhu2（card/yunchou/skill.js:58）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_chenhuodajie：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_chenhuodajie(1005817788) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_chenhuodajie（card/yunchou/skill.js:59）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hujia：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill hujia(1527693983) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hujia 为跨包子技能引用（见包 README 已知跨包引用），
+  // 本包以占位登记；规则面由 standard/hujia 承担，DSL 不重复定义。
+  modifier hand_limit add 0;
+}

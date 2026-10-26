@@ -256,8 +256,7 @@ const skills = {
 			if (player !== trigger.player && player.countCards("h")) {
 				const result = await player
 					.chooseCard({
-						prompt: get.prompt("starbishi"),
-						prompt2: `交给${get.translation(trigger.player)}任意张牌（可不交），若其手牌数与体力值相等会执行出牌阶段。`,
+						prompt: `弼士：是否交给${get.translation(trigger.player)}任意张牌（取消则不交），若其手牌数与体力值相等会执行出牌阶段。`,
 						position: "he",
 						selectCard: [1, Infinity],
 						att: get.attitude(player, trigger.player),
@@ -276,16 +275,16 @@ const skills = {
 					})
 					.forResult();
 				const cards = result.cards;
-				if (cards.length) await player.give(cards, target);
+				if (cards?.length) await player.give(cards, target);
 			}
 			if (target.countCards("h") === target.getHp()) {
 				trigger.phaseList.splice(trigger.num, 0, `phaseUse|${event.name}`);
 				target
 					.when("phaseUseBegin")
 					.filter(evt => evt._extraPhaseReason == event.name)
-					.step(async (event, trigger, player) => {
-						target.addTempSkill(`starbishi_buff`, "phaseChange");
-						target.markAuto("starbishi_buff", player);
+					.step(async (event, trigger, player2) => {
+						player2.addTempSkill(`starbishi_buff`, "phaseChange");
+						player2.markAuto("starbishi_buff", player);
 					});
 			}
 		},
@@ -313,10 +312,11 @@ const skills = {
 							.getHistory("useCard", evt => {
 								return evt.getParent("phaseUse") == event.getParent("phaseUse");
 							})
-							.indexOf(event) === 0
+							.indexOf(trigger) === 0
 					) {
 						trigger.nowuxie = true;
 						trigger.directHit.addArray(game.players);
+						game.log(trigger.card, "不可被响应");
 					}
 					if (get.tag(trigger.card, "damage")) {
 						player.getStorage("starbishi_buff")[0]?.draw();
@@ -2062,21 +2062,31 @@ const skills = {
 		},
 		async content(event, trigger, player) {
 			const target = event.targets[0];
+			if (!target.hasGainableCards(player, "he")) {
+				target.chat("无牌可给");
+				return;
+			}
 			let result = await target
-				.chooseToGive(player, "he", true, [1, Infinity], "allowChooseAll")
-				.set("ai", card => {
-					const { player, target } = get.event();
-					const att = get.attitude(player, target);
-					if (att <= 0) {
-						if (ui.selected.cards.length > 1) {
+				.chooseToGive({
+					target: player,
+					selectCard: [1, Infinity],
+					position: "he",
+					allowChooseAll: true,
+					ai: card => {
+						const { player, target } = get.event();
+						const att = get.attitude(player, target);
+						if (att <= 0) {
+							if (ui.selected.cards.length > 1) {
+								return 0;
+							}
+							return 6 - get.value(card);
+						}
+						if (ui.selected.cards.length) {
 							return 0;
 						}
-						return 6 - get.value(card);
-					}
-					if (ui.selected.cards.length) {
-						return 0;
-					}
-					return 7 - get.value(card);
+						return 7 - get.value(card);
+					},
+					forced: true,
 				})
 				.forResult();
 			if (result?.bool && result.cards?.length) {
@@ -7759,7 +7769,7 @@ const skills = {
 						if (att >= 0) {
 							return 0;
 						}
-						if ((target.storage.dcbihuo_effect || 0) <= -2) {
+						if (target.getStorage("dcbihuo_effect", 0) < -2) {
 							return -att / 10;
 						}
 						return (-att / Math.sqrt(Math.min(5, 1 + target.countCards("h")))) * Math.sqrt(1 + target.hp);
@@ -7772,31 +7782,57 @@ const skills = {
 			const num = event.triggername == "damageEnd" ? 1 : -1;
 			const target = event.targets[0];
 			const effect = event.name + "_effect";
-			if (typeof target.storage[effect] != "number") {
-				target.storage[effect] = 0;
-			}
-			target.storage[effect] += num;
-			target.addTempSkill(effect, { player: "phaseAfter" });
-			target.markSkill(effect);
+			let storage = target.getStorage(effect, 0);
+			storage += num;
+			target.setStorage(effect, storage, true);
+			target.addSkill(effect);
 			await game.delayx();
 		},
 		subSkill: {
 			effect: {
 				charlotte: true,
 				onremove: true,
-				trigger: { player: "phaseDrawBegin2" },
-				filter(event, player) {
-					return typeof player.storage.dcbihuo_effect == "number" && !event.numFixed;
+				mark: true,
+				intro: {
+					content(num = 0) {
+						return "下回合额定摸牌数" + (num >= 0 ? "+" : "") + num;
+					},
 				},
-				forced: true,
-				popup: false,
+				trigger: {
+					player: "phaseBegin",
+				},
+				filter(event, player) {
+					return player.hasStorage("dcbihuo_effect");
+				},
+				silent: true,
 				async content(event, trigger, player) {
-					const num = player.countMark(event.name);
+					const storage = player.getStorage(event.name, 0);
+					player.removeSkill(event.name);
+					player.setStorage("dcbihuo_sha", storage, true);
+					player.addTempSkill("dcbihuo_sha");
+				},
+			},
+			sha: {
+				charlotte: true,
+				onremove: true,
+				mark: true,
+				intro: {
+					content(num = 0) {
+						return "本回合额定摸牌数" + (num >= 0 ? "+" : "") + num;
+					},
+				},
+				trigger: {
+					player: "phaseDrawBegin2",
+				},
+				filter(event, player) {
+					return player.hasStorage("dcbihuo_sha") && !event.numFixed;
+				},
+				silent: true,
+				async content(event, trigger, player) {
+					const num = player.getStorage(event.name, 0);
 					trigger.num += num;
 					game.log(player, "的额定摸牌数", "#g" + (num >= 0 ? "+" : "") + num);
 				},
-				mark: true,
-				intro: { content: num => "额定摸牌数" + (num >= 0 ? "+" : "") + num },
 			},
 		},
 	},

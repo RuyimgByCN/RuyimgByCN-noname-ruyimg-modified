@@ -1224,6 +1224,12 @@ pub enum ContinuationKind {
     /// whose equipment slots will all be disabled (k = equipment count drawn).
     /// payload: `[player, sub, skill]`.
     TwjieqiuSelect = 282,
+    /// N01/R03: choose one hand card, then give it to a target or recast.
+    /// payload: `[player, skill, stage]` (stage0 card; stage1 card + target token).
+    ChooseGiveOrRecastOneHand = 334,
+    /// OL界朱然「胆守」阶段机：0 选项、1 目标、2 目标牌、3 自身弃牌。
+    /// payload: `[stage, player, option?, target?]`.
+    ResolveOlJieDanshou = 335,
 }
 
 /// In-flight resolution / choice barrier (canonical).

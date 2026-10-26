@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-24T18:18:30.253219+08:00",
+  "existing_paths_checked": 47078,
+  "changed_existing_paths": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/migration/upstream-extension-reconstruction.md",
+    "docs/operations/evidence/2026-10-07-n08-cardlist-parity/README.md"
+  ],
+  "unchanged_existing_paths": 47074,
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "new_paths": [
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/README.md",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/boss-sample.diff",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/commit-review.md",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/commits.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/compare-ast.cjs",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/compare-format.cjs",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/content-delta.cjs",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/content-delta.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/current-content.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/documentation-checks.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/format-comparison.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/inventory-checks.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/native-identifiers.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-02-raw.log",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-02.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preflight-full-02.log",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/preservation.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/sync-verify.json",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/sync-verify.log",
+    "docs/operations/evidence/2026-10-24-upstream-37-impact/upstream-scope.json"
+  ],
+  "new_paths_restricted_to_evidence": true,
+  "dependency_paths_checked_against_previous_sync_baseline": 3651,
+  "dependency_changes": [],
+  "latest_product_evidence_files_checked": 1067,
+  "latest_product_evidence_files_changed": [],
+  "upstream_heads": {
+    "noname": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+    "noname-liuli": "8485dbb29ff16f9b258a766b1a17ef75f883aade"
+  },
+  "upstream_worktree_status_unchanged": true,
+  "liuli_dirty_files_checked": 7,
+  "liuli_dirty_files_changed": [],
+  "committed": false,
+  "staged": false
+}

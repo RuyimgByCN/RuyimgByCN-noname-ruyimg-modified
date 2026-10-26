@@ -1,0 +1,282 @@
+TAP version 13
+# Subtest: desktop builds both WASM engines before the frontend, forcing native web output
+ok 1 - desktop builds both WASM engines before the frontend, forcing native web output
+  ---
+  duration_ms: 66.0775
+  ...
+# Subtest: Windows desktop runs pnpm.cmd through a shell
+ok 2 - Windows desktop runs pnpm.cmd through a shell
+  ---
+  duration_ms: 40.388291
+  ...
+# Subtest: a failed native build prevents publishing a frontend with a stale native package
+ok 3 - a failed native build prevents publishing a frontend with a stale native package
+  ---
+  duration_ms: 38.176292
+  ...
+# Subtest: native build creates a missing package from source with portable PATH and argument boundaries
+ok 4 - native build creates a missing package from source with portable PATH and argument boundaries
+  ---
+  duration_ms: 39.4555
+  ...
+# Subtest: native build failure preserves the previous usable package and clears temporary output
+ok 5 - native build failure preserves the previous usable package and clears temporary output
+  ---
+  duration_ms: 36.814041
+  ...
+# Subtest: native Node smoke target remains available without shell interpolation
+ok 6 - native Node smoke target remains available without shell interpolation
+  ---
+  duration_ms: 38.899375
+  ...
+# Subtest: legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+ok 7 - legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+  ---
+  duration_ms: 39.540584
+  ...
+# Subtest: Tauri hooks resolve the actual sibling web client from the desktop crate
+ok 8 - Tauri hooks resolve the actual sibling web client from the desktop crate
+  ---
+  duration_ms: 0.481125
+  ...
+# Subtest: 实测仓库：包清单由实际数据推导，目录项全部可回查
+ok 9 - 实测仓库：包清单由实际数据推导，目录项全部可回查
+  ---
+  duration_ms: 14.129
+  ...
+# Subtest: 目录项与包元数据不一致会被判失败
+ok 10 - 目录项与包元数据不一致会被判失败
+  ---
+  duration_ms: 3.356084
+  ...
+# Subtest: 坏 npack、缺字段与重复包键会被判失败
+ok 11 - 坏 npack、缺字段与重复包键会被判失败
+  ---
+  duration_ms: 3.047792
+  ...
+# Subtest: 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+ok 12 - 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+  ---
+  duration_ms: 0.803917
+  ...
+# Subtest: 空候选是显式空状态，不是错误也不是静默白屏
+ok 13 - 空候选是显式空状态，不是错误也不是静默白屏
+  ---
+  duration_ms: 0.112917
+  ...
+# Subtest: 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+ok 14 - 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+  ---
+  duration_ms: 1.012375
+  ...
+# Subtest: 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+ok 15 - 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+  ---
+  duration_ms: 0.092916
+  ...
+# Subtest: 重新加载中保留旧候选但清掉旧错误
+ok 16 - 重新加载中保留旧候选但清掉旧错误
+  ---
+  duration_ms: 0.073417
+  ...
+# Subtest: 座位投影：只取目标座位，提取原生技能名与 id
+ok 17 - 座位投影：只取目标座位，提取原生技能名与 id
+  ---
+  duration_ms: 0.17925
+  ...
+# Subtest: 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+ok 18 - 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+  ---
+  duration_ms: 0.152917
+  ...
+# Subtest: 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+ok 19 - 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+  ---
+  duration_ms: 0.219625
+  ...
+# Subtest: 选将失败：显示错误、不应用刷新信封、不留下成功态
+ok 20 - 选将失败：显示错误、不应用刷新信封、不留下成功态
+  ---
+  duration_ms: 0.362416
+  ...
+# Subtest: 失败后重试成功：清除错误并进入成功态
+ok 21 - 失败后重试成功：清除错误并进入成功态
+  ---
+  duration_ms: 0.191833
+  ...
+# Subtest: 返回与请求不一致（错座位）不得显示成功
+ok 22 - 返回与请求不一致（错座位）不得显示成功
+  ---
+  duration_ms: 0.089167
+  ...
+# Subtest: 畸形返回（缺刷新信封）不得显示成功
+ok 23 - 畸形返回（缺刷新信封）不得显示成功
+  ---
+  duration_ms: 0.070958
+  ...
+# Subtest: 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+ok 24 - 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+  ---
+  duration_ms: 0.093375
+  ...
+# Subtest: 空候选名在发起请求前就被拒绝
+ok 25 - 空候选名在发起请求前就被拒绝
+  ---
+  duration_ms: 0.432625
+  ...
+# node:internal/modules/run_main:129
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/nativeBackend.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:265:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:933:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:1169:11)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at resolve (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-hook.mjs:58:18)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at Hooks.resolve (node:internal/modules/esm/hooks:304:30)
+#     at handleMessage (node:internal/modules/esm/worker:196:24)
+#     at checkForMessages (node:internal/modules/esm/worker:138:28)
+#     at process.<anonymous> (node:internal/modules/esm/worker:157:5) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+# }
+# Node.js v20.17.0
+# Subtest: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-adapter.test.mjs
+not ok 4 - /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-adapter.test.mjs
+  ---
+  duration_ms: 745.88375
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-adapter.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/run_main:129
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/nativeBackend.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:265:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:933:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:1169:11)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at resolve (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-hook.mjs:58:18)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at Hooks.resolve (node:internal/modules/esm/hooks:304:30)
+#     at MessagePort.handleMessage (node:internal/modules/esm/worker:196:24)
+#     at [nodejs.internal.kHybridDispatch] (node:internal/event_target:820:20)
+#     at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+# }
+# Node.js v20.17.0
+# Subtest: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-general-select.test.mjs
+not ok 5 - /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-general-select.test.mjs
+  ---
+  duration_ms: 738.201
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-general-select.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/run_main:129
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/nativeBackend.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:265:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:933:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:1169:11)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at resolve (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-hook.mjs:58:18)
+#     at nextResolve (node:internal/modules/esm/hooks:866:28)
+#     at Hooks.resolve (node:internal/modules/esm/hooks:304:30)
+#     at MessagePort.handleMessage (node:internal/modules/esm/worker:196:24)
+#     at [nodejs.internal.kHybridDispatch] (node:internal/event_target:820:20)
+#     at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+# }
+# Node.js v20.17.0
+# Subtest: /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-legal-actions.test.mjs
+not ok 6 - /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-legal-actions.test.mjs
+  ---
+  duration_ms: 727.6185
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-legal-actions.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: all discoverable packages install actual versioned data; active set reaches the match
+ok 29 - all discoverable packages install actual versioned data; active set reaches the match
+  ---
+  duration_ms: 13.738792
+  ...
+# Subtest: same-version installation/upgrade preserves installed bytes and refuses invented versions
+ok 30 - same-version installation/upgrade preserves installed bytes and refuses invented versions
+  ---
+  duration_ms: 0.848542
+  ...
+# Subtest: all lifecycle content mutations are blocked during a match
+ok 31 - all lifecycle content mutations are blocked during a match
+  ---
+  duration_ms: 0.276459
+  ...
+# Subtest: save retains original package copy across disable, uninstall and later saves
+ok 32 - save retains original package copy across disable, uninstall and later saves
+  ---
+  duration_ms: 0.347916
+  ...
+# Subtest: revocation rejects a saved package even when its original bytes remain
+ok 33 - revocation rejects a saved package even when its original bytes remain
+  ---
+  duration_ms: 0.389833
+  ...
+# Subtest: missing installed payload, dangling lock and duplicate lock fail without fallback
+ok 34 - missing installed payload, dangling lock and duplicate lock fail without fallback
+  ---
+  duration_ms: 0.195875
+  ...
+# Subtest: legacy metadata-only installs are repaired explicitly by upgrade
+ok 35 - legacy metadata-only installs are repaired explicitly by upgrade
+  ---
+  duration_ms: 0.251375
+  ...
+# Subtest: changed version, fingerprint, missing package and malformed payload reject restore
+ok 36 - changed version, fingerprint, missing package and malformed payload reject restore
+  ---
+  duration_ms: 0.422875
+  ...
+# Subtest: old standard saves without packages remain compatible
+ok 37 - old standard saves without packages remain compatible
+  ---
+  duration_ms: 0.221125
+  ...
+# Subtest: 身份局胜负类型映射
+ok 38 - 身份局胜负类型映射
+  ---
+  duration_ms: 0.429208
+  ...
+# Subtest: 单挑/势力与未建模形态
+ok 39 - 单挑/势力与未建模形态
+  ---
+  duration_ms: 0.066917
+  ...
+# Subtest: 未知形态如实显示原始 JSON（不猜测语义）
+ok 40 - 未知形态如实显示原始 JSON（不猜测语义）
+  ---
+  duration_ms: 0.104292
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 37
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 944.898958

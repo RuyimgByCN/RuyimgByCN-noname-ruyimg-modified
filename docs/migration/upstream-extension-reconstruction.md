@@ -1,12 +1,20 @@
 # 两个上游仓库的全部扩展重构计划
 
-> ## ⚠ **当前值（第 568 轮实测，2026-10-19）**
+<a id="-当前值第-568-轮实测2026-10-19"></a>
+
+> **2026-10-24 客户端接线补记**：正式安装副本→开局/选将→同锁保存恢复与构建/CI 进展见[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)及其交付证据。本轮只补产品链路，不上调任何来源的整包八项验收状态；下面各轮统计保留当时语境。N01 的旧线规则与 onlyOL 包身份更新见[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)，不属于 37 来源整包验收。
+
+> ## ⚠ **最近逐包验收记录（第 568 轮实测，2026-10-19）**
 > **来源 37 个**（8 noname + 29 noname-liuli · 可核对 `ls`）；**转换包 41 个目录**（`packages/extensions/*/`）；
 > **规则 v322 / 存档 v105**；**逐包八项在 32 个映射来源上的状态**见[签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md)
 > （**安装/配置/升级/保存恢复 32/32、组合 11/32、规则差异 0/32（四态实测）、性能 13/32、目标平台仅构建级 ⇒ 完成八项 = 0**）。
-> 下面「2026-10-10 复核（v192）」为**历史语境**；**以本行为准**。
+> 下面「2026-10-10 复核（v192）」为**历史语境**；本轮来源更新没有重跑逐包验收或提升完成状态。
 
 本台账以 archive/upstream/noname 和 archive/upstream/noname-liuli 的 **8 + 29 = 37 个来源实例**为范围。扩展必须能独立安装、启停、更新与卸载；规则、模式、AI、配置、资源及界面功能均在验收内。宿主能力契约见[原生扩展机制](../architecture/native-extensions.md)，最新源码/测试状态见[进度主稿](../architecture/native-progress.md)。本页的卡牌张数只代表切片转换，**不是整包通过**。
+
+<a id="upstream-2026-10-24"></a>
+
+> **2026-10-24 上游增量核对**：noname 本地参考已由 `df2682e6` 快进到 `1a548c95`（37 提交、167 净变化路径）；本项目导入 catalog 已同步到 `1a548c95`（2582 角色 / 6209 技能，既有 `def_id` 0 变化，人工 `ported` DSL 不变；见[I01 证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md#5-up37-i01内容同步到-1a548c95)），规则 v322 / 存档 v105 未变。**目录同步不提升任何来源的整包验收**；两个既有角色（`ol_chitu`/`ol_le_menghuo`）由 `ported` 如实降为 `source_synced`，对应 N05/N06 未完成。`apps/core/extension` 子树前后同为 `08ca9fa98799177f4d214e296b60c4ae63eac8d3`，仍为 8 目录/854 文件；Liuli HEAD 不变，29 目录/413 文件及 7 份本地修改保留。37 来源范围和整包验收状态均不提升。**目录不变不代表依赖规则无影响**：U01 Boss 会读取 boss/versus 模式技能；其余来源按实际本体依赖复核，不能把 noname 的改动直接套用到冻结的 Liuli 版本。移植顺序与规则/新内容差异统一见[UP37 台账](../architecture/native-rules-baseline.md#upstream-2026-10-24)，[37 提交证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md)保存核对范围；“37 提交”与“37 来源实例”分别统计。
 
 ## 当前状态与 E01–E06
 
@@ -23,7 +31,7 @@
 
 ### 后续顺序
 
-跨领域优先级以[进度主稿](../architecture/native-progress.md#后续待做按阻塞关系)为准；已完成的 v60 golden、目录和 tag 修复不再列为扩展前置待办。
+跨领域优先级以[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)为准；已完成的 v60 golden、目录和 tag 修复不再列为扩展前置待办。
 
 1. G0 补全部功能/依赖/资源清单；G1 复用现有装载器收敛剩余适配，逐卡/技能处理登记差异。
 2. G1 用一个真实行为切片验证开放规则、选择/机器状态编码、故障回滚、恢复和完整包生命周期；封闭内置行为表不能代替独立新规则。
@@ -42,8 +50,8 @@
 
 | 来源 | 本地 HEAD | 实际扩展入口 | 当前目录数 / 文件数 | 工作区 |
 |---|---|---|---|---|
-| noname | `df2682e66af9930fe02861a25cb6f2cd2ef6ae36`（2026-10-10 核对；9-23 基线为 `5c02a745`） | [apps/core/extension](../../../archive/upstream/noname/apps/core/extension) | 8 / 854 | 干净 |
-| noname-liuli | `8485dbb29ff16f9b258a766b1a17ef75f883aade` | [noname/extension](../../../archive/upstream/noname-liuli/noname/extension) | 29 / 413 | 7 个文件有本地修改（2026-10-10；9-23 基线时为 50 个）；按工作区字节读取 |
+| noname | `1a548c95acdf8ac1ef44d74473403eda2ac86cf0`（2026-10-24 核对；导入 catalog 已同为 `1a548c95`，9-23 基线为 `5c02a745`；规则 v322／存档 v105） | [apps/core/extension](../../../archive/upstream/noname/apps/core/extension) | 8 / 854 | 干净 |
+| noname-liuli | `8485dbb29ff16f9b258a766b1a17ef75f883aade` | [noname/extension](../../../archive/upstream/noname-liuli/noname/extension) | 29 / 413 | 7 个文件有本地修改（2026-10-24 核对；9-23 基线时为 50 个）；按工作区字节读取 |
 
 合计 **37 个来源实例、34 个不同目录名**；`boss/cardpile/coin` 各有两个版本，均不是逐字节相同。
 目录名去重只用于统计，不意味着语义相同；先对照行为，再合并公共实现并保留来源配置。
@@ -408,7 +416,7 @@ L29  龙血玄黄             3    0.46M       2      0      0         3
 | 157 | U06 swd（法器 · `global` 窗口） | `zhuquezhizhang`（朱雀之璋） | 1 点通过（含行为面），**未发现差异**：**持有者受伤后（`damageEnd`）对来源造成 1 点火伤**（`forced`，无确认询问）——原始伤害 0 号 1 点、反伤 1 号 1 点；**`global` 卡窗口第 3 张验证** | [swd-zhuque](../operations/evidence/2026-10-19-nc08-upstream-swd-zhuque/README.md) |
 | 158 | U06 swd（法器 · `global` 窗口） | `xuanwuzhihuang`（玄武之璜） | 1 点通过（含行为面），**未发现差异**：**已受伤的持有者造成伤害后回复伤害量**（`forced`；前置构造 `hp = maxHp - 2`）；原始伤害 1 号 1 点、持有者 hp **+1**；**`global` 卡窗口第 4 张验证** | [swd-xuanwu](../operations/evidence/2026-10-19-nc08-upstream-swd-xuanwu/README.md) |
 | 159 | U06 swd（法器 · `global` 窗口） | `qinglongzhigui`（青龙之圭） | **1 项未通过**（第 55 项）：**摸 2 生效**（牌堆 196→194 ✅）但**强制弃 1 未发生**（手牌 3→5、应 3→4；**无弃牌询问**）⇒ **已降级**：宿主实现**确实声明两步**（`swd_equipment.rs:298-320`：draw 2 → `WaitChoice` `qinglongzhigui_discard` min1）⇒ 问题为「`WaitChoice` 未在 `open_choice()` 可见」；已排除持有条件/询问形态/阶段未开始/**提示被 `drain` 吞掉**/**登记与读取不同源**（`resolution.rs:383` 写 `res.open_choice`＝`accessors.rs:36` 读，同源） | [swd-qinglong](../operations/evidence/2026-10-19-nc08-upstream-swd-qinglong/README.md) |
-| 160 | U06 swd（法器 · `global` 窗口） | `huanglinzhicong`（黄麟之琮） | **1 项未通过**（第 56 项）：无护甲时 `hujia` **0 → 0**（应 0 → 1）⇒ 窗口未触发；**负例（hujia=2 ⇒ 2）通过但不可信**（窗口不触发时同样通过）⇒ **负例不构成证据**；与第 55 项同属**`phaseBegin` 类**；**决定性探针**：停在 `Judge` 阶段读护甲仍为 **0** ⇒ **`Judge` 的 `begin` 窗口未派发到宿主机器**（系统面，影响器族五件）；**事件层已确认正常**（`kernel/events.rs:753/789` 两处 emit 该事件）⇒ 剩余唯一候选是**派发到宿主机器**的路径；**派发结构**：宿主行为以 `SkillBehavior` 接入目录（`host.rs:145-155` 的 filter→start），**与普通技能同一触发机制** ⇒ 「Phase{begin:true} 未派发」等价于「该事件未进入技能触发通道」，**影响面可能大于器族五件**；**调用点已定位**：filter 在**入队时**（`resolution.rs:301-304`）与**出队后**（`:488`）各调一次，filter=false 则永不入队；`hand_has_kind`（`support.rs:1106`）按 `card_kind` 比对**正确** ⇒ **源码推理与行为面矛盾**，必须**运行时插桩**（`content/host/**` 未跟踪，**受阻**）；**已排除**：`TriggerMeta` 已注册 `EventKind::PhaseBegin`（`metadata/swd.rs:337-350`）、`PhaseBegin` 机制正常（`SwdHyunshen2` 的既有用例通过）⇒ **步骤 6 根因（部分更正）**：初判「`card_kind_host_skills` 无生产调用方」**有误**——grep 漏了装载器 crate；实为 `content-native-loader/src/lib.rs:575` **在桥接期调用**并并入包 `host_skills`，再经 `content/standard.rs:428` 注册入目录 ⇒ **def 存在**；**授予链也已存在**：`engine/construction.rs:468-500` 在 `init_hook == SwdJiqiHeld` 时把「四象五件手持技」**插入全部存活角色的 `core.skills`**，而 swd 包 `init_hook` 正是 `swd_jiqi_held` ⇒ **整链完整而行为面仍不触发**；**剩余仅 2 项未查**（`SkillInstance.enabled`、`catalog.candidates(PhaseBegin)` 是否含该 def）⇒ **只读探针已完成且两项全部通过**：`def_id=238`、`core.skills` **4/4 enabled**、`candidates(PhaseBegin)`（41 项）**包含该 def** ⇒ **整链每环节均验证通过而行为面仍不触发** ⇒ 唯一剩余解释是 **`filter` 运行时的 `event` 实参与静态假设不同**（最可能是 `begin`/`phase` 被帧内改写）⇒ **必须插桩**（`content/host/**`，受阻）⇒ 按牌种声明的手持宿主技能**从未授予**，`core.skills` 无实例 ⇒ filter 从不被调用 ⇒ 窗口永不触发；包级 `pack.host_skills` 则有生产消费（`content/standard.rs:428`）⇒ 差在「按牌种的授予时机」。**修法在未跟踪文件，受阻**；旁证待查：`qinglongzhigui` 的摸 2 另有路径；此前核对（`hand_has_kind` 探针已排除：`card_kind = Huanglinzhicong` 与期望一致（目录名 `swd_swd_huanglinzhicong_73`，双前缀+数字后缀但 kind 正确）⇒ **filter 全部条件成立而仍不触发** ⇒ 只能运行时插桩（**未跟踪，受阻**）；**附带**：卡名命名不规范建议登记数据规范待办 | [swd-huanglin](../operations/evidence/2026-10-18-blocked-fixes/README.md) |
+| 160 | U06 swd（法器 · `global` 窗口） | `huanglinzhicong`（黄麟之琮） | **1 项未通过**（第 56 项）：无护甲时 `hujia` **0 → 0**（应 0 → 1）⇒ 窗口未触发；**负例（hujia=2 ⇒ 2）通过但不可信**（窗口不触发时同样通过）⇒ **负例不构成证据**；与第 55 项同属**`phaseBegin` 类**；**决定性探针**：停在 `Judge` 阶段读护甲仍为 **0** ⇒ **`Judge` 的 `begin` 窗口未派发到宿主机器**（系统面，影响器族五件）；**事件层已确认正常**（`kernel/events.rs:753/789` 两处 emit 该事件）⇒ 剩余唯一候选是**派发到宿主机器**的路径；**派发结构**：宿主行为以 `SkillBehavior` 接入目录（`host.rs:145-155` 的 filter→start），**与普通技能同一触发机制** ⇒ 「Phase{begin:true} 未派发」等价于「该事件未进入技能触发通道」，**影响面可能大于器族五件**；**调用点已定位**：filter 在**入队时**（`resolution.rs:301-304`）与**出队后**（`:488`）各调一次，filter=false 则永不入队；`hand_has_kind`（`support.rs:1106`）按 `card_kind` 比对**正确** ⇒ **源码推理与行为面矛盾**，必须**运行时插桩**（`content/host/**` 未跟踪，**受阻**）；**已排除**：`TriggerMeta` 已注册 `EventKind::PhaseBegin`（`metadata/swd.rs:337-350`）、`PhaseBegin` 机制正常（`SwdHyunshen2` 的既有用例通过）⇒ **步骤 6 根因（部分更正）**：初判「`card_kind_host_skills` 无生产调用方」**有误**——grep 漏了装载器 crate；实为 `content-native-loader/src/lib.rs:575` **在桥接期调用**并并入包 `host_skills`，再经 `content/standard.rs:428` 注册入目录 ⇒ **def 存在**；**授予链也已存在**：当时 `SwdJiqiHeld` 专用分支把「四象五件手持技」**插入全部存活角色的 `core.skills`**（2026-10-24 已泛化，当前入口见 `engine/construction.rs:463-477`），而 swd 包 `init_hook` 正是 `swd_jiqi_held` ⇒ **整链完整而行为面仍不触发**；**剩余仅 2 项未查**（`SkillInstance.enabled`、`catalog.candidates(PhaseBegin)` 是否含该 def）⇒ **只读探针已完成且两项全部通过**：`def_id=238`、`core.skills` **4/4 enabled**、`candidates(PhaseBegin)`（41 项）**包含该 def** ⇒ **整链每环节均验证通过而行为面仍不触发** ⇒ 唯一剩余解释是 **`filter` 运行时的 `event` 实参与静态假设不同**（最可能是 `begin`/`phase` 被帧内改写）⇒ **必须插桩**（`content/host/**`，受阻）⇒ 按牌种声明的手持宿主技能**从未授予**，`core.skills` 无实例 ⇒ filter 从不被调用 ⇒ 窗口永不触发；包级 `pack.host_skills` 则有生产消费（`content/standard.rs:428`）⇒ 差在「按牌种的授予时机」。**修法在未跟踪文件，受阻**；旁证待查：`qinglongzhigui` 的摸 2 另有路径；此前核对（`hand_has_kind` 探针已排除：`card_kind = Huanglinzhicong` 与期望一致（目录名 `swd_swd_huanglinzhicong_73`，双前缀+数字后缀但 kind 正确）⇒ **filter 全部条件成立而仍不触发** ⇒ 只能运行时插桩（**未跟踪，受阻**）；**附带**：卡名命名不规范建议登记数据规范待办 | [swd-huanglin](../operations/evidence/2026-10-18-blocked-fixes/README.md) |
 | 161 | U06 swd（法器 · `global` 窗口） | `zhufangshenshi`（朱fang神石） | 1 点通过（含行为面），**未发现差异**：**使用本卡后摸 1**（`forced`；牌堆 196→195）；**`global` 卡窗口第 7 张验证**；**归结论证**——`useCardAfter` 窗口**正常触发**，而依赖 `Phase{begin:true}` 的两张**未触发** ⇒ 支持「问题特异于 `Phase` 事件」 | [swd-zhufangshenshi](../operations/evidence/2026-10-19-nc08-upstream-swd-zhufangshenshi/README.md) |
 | 162 | **卡名双前缀普查**（桥接层命名） | 231 包内卡名 + 10 包 `card_prefix` | **包内名 0 异常**；**桥接后 3 包双前缀**：`shahai-mtg`（`mtg_`，10/10）、`shahai-swd`（`swd_`，89/90，如 `swd_swd_huanglinzhicong_73`）、`shahai-zhenfa`（`zf_`，3/8）⇒ **不影响 kind 匹配**、**影响按名字查找**（须 `contains`/归一）；建议桥接层去重前缀 + 回归断言；**回归已落地**；**并已修复**：`content-native-loader` 的 `bridge_pack` 加前缀去重（如 `swd_swd_huanglinzhicong_73` → `swd_huanglinzhicong_73`），白名单清空、断言改为「目录名不得双前缀」，19 包 **0 违规**；`hash.rs` 不用卡名 ⇒ 不影响 golden | [prefix-survey](../operations/evidence/2026-10-19-card-name-prefix-survey/README.md) |
 | 163 | **生命周期证据 vs 整包计数**口径核对 | 枚举 `*lifecycle*` 证据目录 | **仅 5 个来源**有生命周期证据（**L04/U01/U03/U05/U07**）；台账「**19/37**」为**登记表机器字段**口径（NC11 已勘正 resolved 24 / open 13），**不是八项验收** ⇒ **不可当完成度**；八项验收 **0 来源**（沿第 397/398 轮） | [g-lifecycle-vs-counted](../operations/evidence/2026-10-19-g-lifecycle-vs-counted/README.md) |

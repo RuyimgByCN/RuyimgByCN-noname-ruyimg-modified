@@ -42,6 +42,9 @@ mod original_shiji_sp_xinpi;
 #[path = "original_merged_shiji/original_shiji_spfenming_chendong.rs"]
 mod original_shiji_spfenming_chendong;
 
+#[path = "original_merged_shiji/original_shiji_pinghe_yingba.rs"]
+mod original_shiji_pinghe_yingba;
+
 #[path = "original_merged_shiji/original_shiji_spjungong_gaolan.rs"]
 mod original_shiji_spjungong_gaolan;
 

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "total_skills": 6108,
+  "total_skills": 6127,
   "source_counts": {
     "bingshi": 86,
     "clan": 89,
-    "collab": 155,
+    "collab": 161,
     "diy": 137,
     "extra": 62,
     "huicui": 254,
@@ -14,13 +14,13 @@
     "newjiang": 101,
     "offline": 3,
     "old": 27,
-    "onlyOL": 185,
+    "onlyOL": 188,
     "refresh": 309,
     "sb": 120,
     "shenhua": 174,
     "shiji": 166,
     "sixiang": 174,
-    "sp": 718,
+    "sp": 728,
     "sp2": 277,
     "standard": 69,
     "sxrm": 51,
@@ -1849,14 +1849,13 @@
       "locked": true,
       "optional_review": false,
       "view_as": false,
-      "modifier": true,
+      "modifier": false,
       "mapped_effects": [
         "draw_cards"
       ],
       "required_surfaces": [
         "choice_or_cost",
         "draw_cards",
-        "intent_modifier",
         "subskill_state"
       ],
       "gaps": [
@@ -1882,11 +1881,12 @@
       "locked": false,
       "optional_review": false,
       "view_as": true,
-      "modifier": false,
+      "modifier": true,
       "mapped_effects": [],
       "required_surfaces": [
         "active_skill",
         "choice_or_cost",
+        "intent_modifier",
         "subskill_state",
         "trigger:phase_end",
         "view_as"
@@ -7263,6 +7263,32 @@
     },
     {
       "source": "collab",
+      "name": "olfangma",
+      "grade": "B",
+      "triggers": [
+        "global:roundStart",
+        "player:useCard1,useCard"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards",
+        "intent_modifier",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "collab",
       "name": "olfengzhu",
       "grade": "D",
       "triggers": [
@@ -7521,6 +7547,32 @@
     },
     {
       "source": "collab",
+      "name": "oljingxian",
+      "grade": "B",
+      "triggers": [
+        "player:useCardAfter",
+        "global:roundEnd"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier",
+        "subskill_state",
+        "trigger:card_used"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "collab",
       "name": "oljuejue",
       "grade": "B",
       "triggers": [
@@ -7578,6 +7630,43 @@
       "capability_hits": [
         "dom",
         "ui_global"
+      ]
+    },
+    {
+      "source": "collab",
+      "name": "oljunzhu",
+      "grade": "D",
+      "triggers": [
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage",
+        "recover_hp",
+        "discard"
+      ],
+      "required_surfaces": [
+        "deal_damage",
+        "discard",
+        "draw_cards",
+        "recover_hp",
+        "subskill_state",
+        "trigger:phase_prepare"
+      ],
+      "gaps": [
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "dom",
+        "dom_element",
+        "nondeterministic_rng",
+        "status_global"
       ]
     },
     {
@@ -7793,6 +7882,36 @@
         "trigger_point_review"
       ],
       "capability_hits": []
+    },
+    {
+      "source": "collab",
+      "name": "olrehuanshi",
+      "grade": "C",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "subskill_state",
+        "view_as"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
     },
     {
       "source": "collab",
@@ -8826,6 +8945,60 @@
       "capability_hits": [
         "ui_global"
       ]
+    },
+    {
+      "source": "collab",
+      "name": "twjuemie",
+      "grade": "B",
+      "triggers": [
+        "global:phaseEnd"
+      ],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "deal_damage",
+        "subskill_state",
+        "trigger:phase_end"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "collab",
+      "name": "twrenfang",
+      "grade": "B",
+      "triggers": [
+        "global:cardsDiscardAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "intent_modifier"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
     },
     {
       "source": "collab",
@@ -19138,7 +19311,7 @@
     {
       "source": "huicui",
       "name": "dczigu",
-      "grade": "C",
+      "grade": "B",
       "triggers": [],
       "active_windows": [
         "phaseUse"
@@ -19158,12 +19331,9 @@
         "gain_cards"
       ],
       "gaps": [
-        "choice_cost_policy",
-        "forbidden_host_rewrite"
+        "choice_cost_policy"
       ],
-      "capability_hits": [
-        "status_global"
-      ]
+      "capability_hits": []
     },
     {
       "source": "huicui",
@@ -20424,19 +20594,17 @@
         "player:useCardToPlayered"
       ],
       "active_windows": [],
-      "locked": true,
+      "locked": false,
       "optional_review": true,
       "view_as": false,
       "modifier": false,
       "mapped_effects": [],
       "required_surfaces": [
-        "choice_or_cost",
-        "subskill_state"
+        "choice_or_cost"
       ],
       "gaps": [
         "choice_cost_policy",
         "effect_or_intent_review",
-        "subskill_state",
         "trigger_point_review"
       ],
       "capability_hits": []
@@ -69567,6 +69735,89 @@
     },
     {
       "source": "onlyOL",
+      "name": "ol_fenli",
+      "grade": "B",
+      "triggers": [
+        "player:phaseDrawBefore"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "onlyOL",
+      "name": "ol_jie_danshou",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage",
+        "gain_cards",
+        "discard"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "deal_damage",
+        "discard",
+        "draw_cards",
+        "gain_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "onlyOL",
+      "name": "ol_pingkou",
+      "grade": "B",
+      "triggers": [
+        "player:phaseEnd"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "deal_damage"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "deal_damage",
+        "draw_cards",
+        "trigger:phase_end"
+      ],
+      "gaps": [
+        "choice_cost_policy"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "onlyOL",
       "name": "ol_yizhong",
       "grade": "C",
       "triggers": [
@@ -99398,7 +99649,7 @@
         "player:useCard,respond"
       ],
       "active_windows": [],
-      "locked": false,
+      "locked": true,
       "optional_review": false,
       "view_as": false,
       "modifier": false,
@@ -103087,6 +103338,30 @@
     },
     {
       "source": "sp",
+      "name": "ol_cailian_skill",
+      "grade": "B",
+      "triggers": [
+        "source:damageBegin1",
+        "global:recoverBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": true,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "intent_modifier",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "sp",
       "name": "ol_piliche",
       "grade": "B",
       "triggers": [
@@ -103782,6 +104057,26 @@
         "status_global",
         "ui_global"
       ]
+    },
+    {
+      "source": "sp",
+      "name": "oldangmo",
+      "grade": "B",
+      "triggers": [
+        "player:useCard2"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
     },
     {
       "source": "sp",
@@ -104743,6 +105038,37 @@
     },
     {
       "source": "sp",
+      "name": "olhuaguang",
+      "grade": "C",
+      "triggers": [
+        "global:roundStart",
+        "player:phaseZhunbeiBegin"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": true,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "choice_or_cost",
+        "subskill_state",
+        "trigger:phase_prepare"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "status_global",
+        "ui_global"
+      ]
+    },
+    {
+      "source": "sp",
       "name": "olhuanfu",
       "grade": "C",
       "triggers": [
@@ -105154,6 +105480,33 @@
       "capability_hits": [
         "dom"
       ]
+    },
+    {
+      "source": "sp",
+      "name": "oljihui",
+      "grade": "B",
+      "triggers": [
+        "global:recoverAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards",
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "draw_cards",
+        "gain_cards",
+        "subskill_state",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "subskill_state"
+      ],
+      "capability_hits": []
     },
     {
       "source": "sp",
@@ -106988,7 +107341,7 @@
     {
       "source": "sp",
       "name": "olshanxi",
-      "grade": "D",
+      "grade": "C",
       "triggers": [],
       "active_windows": [
         "phaseUse"
@@ -107008,7 +107361,6 @@
         "forbidden_host_rewrite"
       ],
       "capability_hits": [
-        "nondeterministic_rng",
         "status_global",
         "ui_global"
       ]
@@ -107076,6 +107428,43 @@
       ],
       "capability_hits": [
         "status_global"
+      ]
+    },
+    {
+      "source": "sp",
+      "name": "olshilun",
+      "grade": "D",
+      "triggers": [
+        "player:changeSkillsBegin,useSkill,logSkillBegin,phaseUseEnd,damageEnd,phaseJieshuBegin"
+      ],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": true,
+      "optional_review": false,
+      "view_as": true,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [
+        "active_skill",
+        "subskill_state",
+        "trigger:damage",
+        "trigger:phase_end",
+        "view_as"
+      ],
+      "gaps": [
+        "effect_or_intent_review",
+        "forbidden_host_rewrite",
+        "subskill_state",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "async_timer",
+        "clock",
+        "dom",
+        "nondeterministic_rng",
+        "status_global",
+        "ui_global"
       ]
     },
     {
@@ -107805,6 +108194,30 @@
     },
     {
       "source": "sp",
+      "name": "olxiaju",
+      "grade": "B",
+      "triggers": [
+        "player:loseAfter",
+        "global:equipAfter,addJudgeAfter,gainAfter,loseAsyncAfter,addToExpansionAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "gain_cards"
+      ],
+      "gaps": [
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "sp",
       "name": "olxianbi",
       "grade": "B",
       "triggers": [
@@ -108229,6 +108642,27 @@
     },
     {
       "source": "sp",
+      "name": "olxuanbai",
+      "grade": "B",
+      "triggers": [
+        "player:enterGame,equipAfter,loseAfter",
+        "global:phaseBefore,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": true,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [],
+      "required_surfaces": [],
+      "gaps": [
+        "effect_or_intent_review",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "sp",
       "name": "olxuanhui",
       "grade": "C",
       "triggers": [
@@ -108377,7 +108811,7 @@
         "player:die"
       ],
       "active_windows": [],
-      "locked": false,
+      "locked": true,
       "optional_review": false,
       "view_as": false,
       "modifier": false,
@@ -108918,6 +109352,37 @@
         "trigger_point_review"
       ],
       "capability_hits": []
+    },
+    {
+      "source": "sp",
+      "name": "olzhuoming",
+      "grade": "C",
+      "triggers": [
+        "source:damageSource",
+        "player:damageEnd",
+        "global:changeSkillsAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards",
+        "trigger:damage"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "forbidden_host_rewrite",
+        "trigger_point_review"
+      ],
+      "capability_hits": [
+        "ui_global"
+      ]
     },
     {
       "source": "sp",
@@ -113623,6 +114088,31 @@
     },
     {
       "source": "sp",
+      "name": "tt_zhiyi",
+      "grade": "B",
+      "triggers": [
+        "global:gainAfter,loseAsyncAfter"
+      ],
+      "active_windows": [],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "draw_cards"
+      ],
+      "required_surfaces": [
+        "choice_or_cost",
+        "draw_cards"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "trigger_point_review"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "sp",
       "name": "tuifeng",
       "grade": "B",
       "triggers": [
@@ -116735,13 +117225,40 @@
     },
     {
       "source": "sp",
+      "name": "zexing",
+      "grade": "B",
+      "triggers": [],
+      "active_windows": [
+        "phaseUse"
+      ],
+      "locked": false,
+      "optional_review": false,
+      "view_as": false,
+      "modifier": false,
+      "mapped_effects": [
+        "gain_cards"
+      ],
+      "required_surfaces": [
+        "active_skill",
+        "choice_or_cost",
+        "gain_cards",
+        "subskill_state"
+      ],
+      "gaps": [
+        "choice_cost_policy",
+        "subskill_state"
+      ],
+      "capability_hits": []
+    },
+    {
+      "source": "sp",
       "name": "zfengshi",
       "grade": "B",
       "triggers": [
         "player:useCardToPlayered"
       ],
       "active_windows": [],
-      "locked": false,
+      "locked": true,
       "optional_review": false,
       "view_as": false,
       "modifier": false,
@@ -118133,7 +118650,7 @@
         "source:damageSource"
       ],
       "active_windows": [],
-      "locked": true,
+      "locked": false,
       "optional_review": false,
       "view_as": false,
       "modifier": false,
@@ -122214,7 +122731,7 @@
         "player:phaseUseBegin"
       ],
       "active_windows": [],
-      "locked": false,
+      "locked": true,
       "optional_review": false,
       "view_as": false,
       "modifier": false,

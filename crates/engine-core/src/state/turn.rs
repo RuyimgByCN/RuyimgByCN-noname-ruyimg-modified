@@ -87,6 +87,13 @@ pub struct TurnState {
     pub phase: Phase,
     /// Extra turn flags (content); sorted key-value for hash stability.
     pub flags: Vec<(u32, i32)>,
+    /// Marks removed from a player during this turn, as `(mark_def_raw, player)`.
+    ///
+    /// Used by rules that need "a mark was removed earlier this turn" after the
+    /// stack is gone (涤仇 R01). Cleared at the turn boundary together with the
+    /// per-player counters; empty states serialize/hash exactly as before.
+    #[serde(default, skip_serializing_if = "std::collections::BTreeSet::is_empty")]
+    pub removed_marks: std::collections::BTreeSet<(u32, PlayerId)>,
     /// First-loss order of physical cards each player lost from hand/equipment this turn.
     #[serde(default)]
     pub lost_cards: Vec<(PlayerId, CardId)>,
@@ -125,10 +132,18 @@ pub struct TurnState {
     #[serde(default, skip_serializing_if = "std::collections::BTreeSet::is_empty")]
     pub hand_limit_exempt_cards: std::collections::BTreeSet<(PlayerId, CardId)>,
     /// Applied damage-event counts by source and target for this turn.
-    #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
+    #[serde(
+        default,
+        with = "pair_map_u32",
+        skip_serializing_if = "std::collections::BTreeMap::is_empty"
+    )]
     pub damage_pair_counts: std::collections::BTreeMap<(PlayerId, PlayerId), u32>,
     /// Card-use counts by user and declared target for this turn.
-    #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
+    #[serde(
+        default,
+        with = "pair_map_u32",
+        skip_serializing_if = "std::collections::BTreeMap::is_empty"
+    )]
     pub card_target_counts: std::collections::BTreeMap<(PlayerId, PlayerId), u32>,
     /// Distinct players whose dying state was entered because of damage from each source this turn.
     #[serde(default, skip_serializing_if = "std::collections::BTreeSet::is_empty")]
@@ -197,6 +212,7 @@ impl Default for TurnState {
             current: PlayerId::NONE,
             phase: Phase::Idle,
             flags: Vec::new(),
+            removed_marks: std::collections::BTreeSet::new(),
             lost_cards: Vec::new(),
             discarded_cards: std::collections::BTreeSet::new(),
             entered_discard_cards: std::collections::BTreeSet::new(),
@@ -393,6 +409,8 @@ pub mod turn_flag {
     /// Round-scoped proactive card-use counter key for one player (resets at round rollover).
     /// Foundation for upstream `player.getRoundHistory("useCard").length`.
     const ROUND_CARD_USED_BY_PLAYER_BASE: u32 = 2900;
+    /// Turn-scoped all-phase card-use counter key for one player (resets when current changes).
+    const TURN_CARD_USED_BY_PLAYER_BASE: u32 = 3000;
 
     /// Per-turn branch mask for XIANDING 柏灵筠「黠策」.
     pub fn xiace_used_by_player(player: PlayerId) -> u32 {
@@ -520,6 +538,11 @@ pub mod turn_flag {
         ROUND_CARD_USED_BY_PLAYER_BASE + player.raw()
     }
 
+    /// Turn-scoped all-phase card-use counter key for one player.
+    pub fn turn_card_used_by_player(player: PlayerId) -> u32 {
+        TURN_CARD_USED_BY_PLAYER_BASE + player.raw()
+    }
+
     /// Play-phase-scoped bitset of effective suits among all cards used by one player.
     pub fn play_phase_card_suit_history_by_player(player: PlayerId) -> u32 {
         PLAY_PHASE_CARD_SUIT_HISTORY_BY_PLAYER_BASE + player.raw()
@@ -643,6 +666,10 @@ pub mod turn_flag {
         (ROUND_CARD_USED_BY_PLAYER_BASE + 1..=ROUND_CARD_USED_BY_PLAYER_BASE + 8).contains(&key)
     }
 
+    pub(super) fn is_turn_card_used_by_player(key: u32) -> bool {
+        (TURN_CARD_USED_BY_PLAYER_BASE + 1..=TURN_CARD_USED_BY_PLAYER_BASE + 8).contains(&key)
+    }
+
     pub(super) fn is_play_phase_card_suit_history(key: u32) -> bool {
         (PLAY_PHASE_CARD_SUIT_HISTORY_BY_PLAYER_BASE + 1
             ..=PLAY_PHASE_CARD_SUIT_HISTORY_BY_PLAYER_BASE + 8)
@@ -755,6 +782,7 @@ impl TurnState {
 
     /// Clear all per-player card and damage counters at the turn boundary.
     pub fn clear_per_player_card_counts(&mut self) {
+        self.removed_marks.clear();
         self.flags.retain(|(key, _)| {
             !turn_flag::is_card_used_by_player(*key)
                 && !turn_flag::is_card_action_count_by_player(*key)
@@ -1067,6 +1095,23 @@ impl TurnState {
             .max(0) as u32
     }
 
+    /// Number of cards used by one player during the current turn (all phases).
+    pub fn turn_card_use_count(&self, player: PlayerId) -> u32 {
+        self.flag(turn_flag::turn_card_used_by_player(player))
+            .max(0) as u32
+    }
+
+    /// Record one card use by `player` for the current turn.
+    pub fn record_turn_card_use(&mut self, player: PlayerId) {
+        let key = turn_flag::turn_card_used_by_player(player);
+        self.set_flag(key, self.flag(key).saturating_add(1));
+    }
+
+    /// Clear turn-scoped card-use counters (current player changed).
+    pub fn clear_turn_card_use_counts(&mut self) {
+        self.flags.retain(|(key, _)| !turn_flag::is_turn_card_used_by_player(*key));
+    }
+
     /// Clear all round-scoped proactive card-use counters (call at round rollover).
     pub fn clear_round_card_use_counts(&mut self) {
         self.flags
@@ -1333,5 +1378,46 @@ impl TurnState {
             .saturating_add(1)
             .max(1);
         self.set_flag(turn_flag::SKIPPED_PHASE_COUNT, next);
+    }
+}
+
+
+/// JSON-friendly encoding for `(u8,u8) -> u32` maps: keys become `"a:b"`.
+/// `serde_json` cannot serialize tuple keys directly, which previously made
+/// non-empty damage/card-target history snapshots fail to encode.
+mod pair_map_u32 {
+    use super::PlayerId;
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
+    use std::collections::BTreeMap;
+
+    pub fn serialize<S: Serializer>(
+        map: &BTreeMap<(PlayerId, PlayerId), u32>,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error> {
+        let mut out = serializer.serialize_map(Some(map.len()))?;
+        for ((a, b), value) in map {
+            serde::ser::SerializeMap::serialize_entry(
+                &mut out,
+                &format!("{}:{}", a.raw(), b.raw()),
+                value,
+            )?;
+        }
+        serde::ser::SerializeMap::end(out)
+    }
+
+    pub fn deserialize<'de, D: Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<BTreeMap<(PlayerId, PlayerId), u32>, D::Error> {
+        let raw = BTreeMap::<String, u32>::deserialize(deserializer)?;
+        raw.into_iter()
+            .map(|(key, value)| {
+                let (a, b) = key
+                    .split_once(':')
+                    .ok_or_else(|| serde::de::Error::custom("invalid pair-map key"))?;
+                let a = a.parse::<u32>().map_err(serde::de::Error::custom)?;
+                let b = b.parse::<u32>().map_err(serde::de::Error::custom)?;
+                Ok(((PlayerId::new(a), PlayerId::new(b)), value))
+            })
+            .collect()
     }
 }

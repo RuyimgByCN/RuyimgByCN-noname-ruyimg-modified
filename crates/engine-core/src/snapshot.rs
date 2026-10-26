@@ -154,6 +154,57 @@ mod tests {
     use super::*;
 
     #[test]
+    fn roundtrip_non_empty_pair_keyed_turn_maps() {
+        let mut state = GameState::empty();
+        let a = engine_api::PlayerId::new(1);
+        let b = engine_api::PlayerId::new(2);
+        state.turn.damage_pair_counts.insert((a, b), 3);
+        state.turn.card_target_counts.insert((b, a), 5);
+        state.group_overrides.insert(a, "qun".into());
+        state.damage_dealt_totals.insert(a, 7);
+        state.card_action_totals.insert(b, 9);
+        state.hand_limit_bonus.insert(1, 2);
+        state.extra_effect_count.insert(2, 3);
+        state.facility_gained_skills.insert(1, vec![2]);
+        state.debate_pinned_opinions.insert(1, vec![engine_api::CardId::new(3)]);
+        state.pending_turn_end_debates.insert(1, vec![2]);
+        state
+            .content_card_tags
+            .insert(engine_api::CardId::new(4), std::collections::BTreeSet::from([5]));
+        state.turn.use_ban_pairs.push((a, b));
+        state
+            .turn
+            .gained_hand_cards
+            .insert((a, engine_api::CardId::new(6)));
+        let snapshot = Snapshot::capture(&state);
+        let bytes = snapshot.to_bytes().expect("pair-keyed maps must encode");
+        let decoded = Snapshot::from_bytes(&bytes).expect("pair-keyed maps must decode");
+        let restored = decoded.restore().expect("hash-restored");
+        assert_eq!(restored.turn.damage_pair_counts.get(&(a, b)), Some(&3));
+        assert_eq!(restored.turn.card_target_counts.get(&(b, a)), Some(&5));
+        assert_eq!(restored.group_overrides.get(&a).map(String::as_str), Some("qun"));
+        assert_eq!(restored.damage_dealt_totals.get(&a), Some(&7));
+        assert_eq!(restored.card_action_totals.get(&b), Some(&9));
+        assert_eq!(restored.hand_limit_bonus.get(&1), Some(&2));
+        assert_eq!(restored.extra_effect_count.get(&2), Some(&3));
+        assert_eq!(restored.facility_gained_skills.get(&1), Some(&vec![2]));
+        assert_eq!(
+            restored.debate_pinned_opinions.get(&1),
+            Some(&vec![engine_api::CardId::new(3)])
+        );
+        assert_eq!(restored.pending_turn_end_debates.get(&1), Some(&vec![2]));
+        assert!(restored
+            .content_card_tags
+            .get(&engine_api::CardId::new(4))
+            .is_some_and(|tags| tags.contains(&5)));
+        assert!(restored.turn.use_ban_pairs.contains(&(a, b)));
+        assert!(restored
+            .turn
+            .gained_hand_cards
+            .contains(&(a, engine_api::CardId::new(6))));
+    }
+
+    #[test]
     fn roundtrip_empty() {
         let s = GameState::empty();
         let snap = Snapshot::capture(&s);

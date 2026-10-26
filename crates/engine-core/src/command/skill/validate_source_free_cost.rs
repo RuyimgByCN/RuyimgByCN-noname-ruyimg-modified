@@ -885,6 +885,7 @@ pub(crate) fn validate_active_targets(
     hp_gt_owner: bool,
     hp_lte_owner: bool,
     hp_gt: Option<u8>,
+    max_hp_gt: Option<u8>,
     hand_gt_owner: bool,
     hand_lte_owner: bool,
     pair_hand_difference_lte_three: bool,
@@ -1044,6 +1045,13 @@ pub(crate) fn validate_active_targets(
         {
             return Err(EffectError::Illegal(
                 "active target hp must exceed the configured threshold".into(),
+            ));
+        }
+        if max_hp_gt
+            .is_some_and(|limit| tx.state().players.get(*target).unwrap().max_hp <= u32::from(limit))
+        {
+            return Err(EffectError::Illegal(
+                "active target max hp must exceed the configured threshold".into(),
             ));
         }
         if hand_gt_owner && tx.state().hand_count(*target) <= tx.state().hand_count(actor) {

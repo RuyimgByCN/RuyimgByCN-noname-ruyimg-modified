@@ -1,0 +1,37 @@
+[
+  {
+    "path": "content/original/ported/onlyOL/ol_fenli.skill",
+    "bytes": 475,
+    "sha256": "a746c9239834461781dfab1d99edae090d624a57e41fec493a6e2d499b4d60f4"
+  },
+  {
+    "path": "content/original/ported/onlyOL/ol_pingkou.skill",
+    "bytes": 498,
+    "sha256": "76211cb38476f51b07b94862552292c7d2012f3e2caea11fdf11df3519f5ce78"
+  },
+  {
+    "path": "content/original/ported/onlyOL/characters.json",
+    "bytes": 18857,
+    "sha256": "53de3fae0332710c27698e4cf0c0d2d93abaf8a80d3c36923c337a4e09ba6a80"
+  },
+  {
+    "path": "content/original/ported/onlyOL/onlyOL.npack.json",
+    "bytes": 294582,
+    "sha256": "e41733a5dd1bc05b9468039865c127ea09887ef7306c9e21492eab8c2a5a19fe"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_onlyol/original_onlyol_n01.rs",
+    "bytes": 1525,
+    "sha256": "bdc87133c4cd44d843a8e6bd256ba933c765e153751a4f6c7887377c1498867f"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_onlyol.rs",
+    "bytes": 1321,
+    "sha256": "62d4dc94f9d14289fe264166946d4d2ec5bba788fb319dcab1920e60b6d4f584"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_qiaoshui.rs",
+    "bytes": 10377,
+    "sha256": "57bff85f0b73e8c6e616000e3b0797a58a49a1d3274d1378c591f382b82b3eda"
+  }
+]

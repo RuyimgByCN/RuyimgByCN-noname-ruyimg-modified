@@ -27,6 +27,14 @@ pub fn canonical_state_hash(state: &GameState) -> [u8; 32] {
         put_u32(&mut h, *k);
         put_i32(&mut h, *v);
     }
+    if !state.turn.removed_marks.is_empty() {
+        h.update(b"turn-removed-marks/v1");
+        put_u32(&mut h, state.turn.removed_marks.len() as u32);
+        for (mark, player) in &state.turn.removed_marks {
+            put_u32(&mut h, *mark);
+            put_u32(&mut h, player.raw());
+        }
+    }
     if !state.turn.lost_cards.is_empty() {
         h.update(b"turn-lost-cards/v1");
         put_u32(&mut h, state.turn.lost_cards.len() as u32);
@@ -874,6 +882,8 @@ fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
         | EffectRequest::ChooseUseShaAfterResolvedGift { .. }
         | EffectRequest::SkipCurrentPhase { .. }
         | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamage { .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
+        | EffectRequest::ResolveOlJieDanshou { .. }
         | EffectRequest::RevealUniformHandDrawSelfChooseOthers { .. }
         | EffectRequest::ChooseCardUserOrAddTarget { .. }
         | EffectRequest::CommitTransferSavedCardUser { .. }
@@ -1385,6 +1395,7 @@ fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
         | EffectRequest::DiscardTargetEquipmentDrawWeaponRange { .. }
         | EffectRequest::ChooseTargetRevealHandDamageIfSha { .. }
         | EffectRequest::ChooseOtherGiveOneHandEquip { .. }
+        | EffectRequest::ChooseGiveOrRecastOneHand { .. }
         | EffectRequest::ChooseRevealHandCardBindCategoryTarget { .. }
         | EffectRequest::RecoverToMaxThenOptionalExchangeSkill { .. }
         | EffectRequest::RevealHandDiscardKind { .. }

@@ -340,7 +340,20 @@ pub(in super::super) fn decode_request(
                     skill: engine_api::SkillId::NONE,
                 }
             }
-            effect_tag::CHOOSE_OTHER_GIVE_ONE_HAND_EQUIP => {
+            effect_tag::CHOOSE_GIVE_OR_RECAST_ONE_HAND => {
+            let grant_mark_def = pop(frame)?.0 as u32;
+            let grant_skill_def = pop(frame)?.0 as u32;
+            let require_skill_def = pop(frame)?.0 as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ChooseGiveOrRecastOneHand {
+                player: PlayerId::new(player),
+                skill: engine_api::SkillId::NONE,
+                require_skill_def,
+                grant_skill_def,
+                grant_mark_def,
+            }
+        }
+        effect_tag::CHOOSE_OTHER_GIVE_ONE_HAND_EQUIP => {
                 let player = pop(frame)?.0.max(0) as u32;
                 EffectRequest::ChooseOtherGiveOneHandEquip {
                     player: PlayerId::new(player),

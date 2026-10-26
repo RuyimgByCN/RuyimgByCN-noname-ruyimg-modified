@@ -1,0 +1,17 @@
+{
+  "verified_at": "2026-10-24T05:47:35.258241+00:00",
+  "baseline_dirty_untracked_paths": 11166,
+  "unchanged_paths": 11165,
+  "intentional_progress_updates": [
+    "docs/architecture/native-progress.md"
+  ],
+  "unexpected_changes": [],
+  "tested_source_manifest_files": 230,
+  "tested_source_drift": [],
+  "original_generated_outputs_restored": true,
+  "backup": "/tmp/noname-next-effect-validation-20261024",
+  "head_unchanged": true,
+  "staged_paths": [],
+  "baseline_patch_bytes": 5213851,
+  "baseline_patch_sha256": "8ff08a5ba22efaf3d3f2e96b5036360e7248e8b5b6eaa62f8e32258e86f508a6"
+}

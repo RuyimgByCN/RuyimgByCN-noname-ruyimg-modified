@@ -1,0 +1,30 @@
+[
+  {
+    "name": "frontend-tests",
+    "command": [
+      "/usr/local/bin/node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-24T05:38:49.171512+00:00",
+    "finished_at": "2026-10-24T05:38:50.111357+00:00",
+    "seconds": 0.94,
+    "exit_code": 0,
+    "log": "frontend-tests.log"
+  },
+  {
+    "name": "extension-store-smoke",
+    "command": [
+      "/usr/local/bin/node",
+      "scripts/extension-store-smoke.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-24T05:38:50.111948+00:00",
+    "finished_at": "2026-10-24T05:38:50.620435+00:00",
+    "seconds": 0.51,
+    "exit_code": 0,
+    "log": "extension-store-smoke.log"
+  }
+]

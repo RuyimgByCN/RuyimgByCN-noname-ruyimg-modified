@@ -262,3 +262,93 @@ fn dcdichou_resolves_begin_bonus_and_end_fire_damage() {
     assert_eq!(state.players.get(target).unwrap().hp, hp - 1);
     assert_eq!(mark_count(&state, target, DCDICHOU), 0);
 }
+
+/// R01（UP37 `19d86519`）：结束阶段先清**所有**仇标记；本回合已移除仇的角色
+/// 仍在候选中；候选非空时至少选一人；伤害只作用于所选者且按座位序。
+#[test]
+fn dcdichou_end_clears_all_marks_and_offers_history_candidate() {
+    let (mut state, [owner, target, other]) = setup(DCDICHOU);
+    state = run(
+        state,
+        EffectRequest::AddMark {
+            player: target,
+            mark: MarkDefId::new(DCDICHOU),
+            delta: 1,
+        },
+    );
+    state = run(
+        state,
+        EffectRequest::AddMark {
+            player: other,
+            mark: MarkDefId::new(DCDICHOU),
+            delta: 2,
+        },
+    );
+    // 本回合早些时候移除 target 的最后一点仇：历史仍需保留候选资格。
+    state = run(
+        state,
+        EffectRequest::RemoveMark {
+            player: target,
+            mark: MarkDefId::new(DCDICHOU),
+            amount: 0,
+        },
+    );
+    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
+    // 历史必须随状态保存/恢复（跨进程存档路径）。
+    let restored: GameState = serde_json::from_slice(&serde_json::to_vec(&state).unwrap()).unwrap();
+    assert!(restored
+        .turn
+        .removed_marks
+        .contains(&(DCDICHOU, target)));
+    state = restored;
+    state.turn.phase = Phase::End;
+    let hp_target = state.players.get(target).unwrap().hp;
+    let hp_other = state.players.get(other).unwrap().hp;
+    let skill = skill_id(&state, owner, DCDICHOU);
+    state = run(
+        state,
+        EffectRequest::ResolveDcdichou {
+            player: owner,
+            target: PlayerId::NONE,
+            card: CardId::NONE,
+            action: 10,
+            helper_skill_def: SkillDefId::new(DCDICHOU_EFF),
+            skill,
+        },
+    );
+    // 选择前全量清标记（含未选者）。
+    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
+    assert_eq!(mark_count(&state, other, DCDICHOU), 0);
+    assert!(state.turn.removed_marks.is_empty());
+
+    // 候选非空 -> 不能空选。
+    let choice_id = ChoiceId::new(state.resolution.pending_choice_id);
+    let (after_reject, result) = apply_command(
+        state.clone(),
+        Command {
+            actor: owner,
+            expected_revision: ExpectedRevision(state.revision),
+            idempotency_key: IdempotencyKey(41),
+            kind: CommandKind::ResolveChoice {
+                choice_id,
+                selections: vec![],
+                cancelled: false,
+            },
+        },
+    );
+    assert!(
+        matches!(result.result, CommandResult::Rejected { .. }),
+        "空选必须拒绝：{result:?}"
+    );
+    assert_eq!(after_reject.players.get(target).unwrap().hp, hp_target);
+    assert_eq!(after_reject.players.get(other).unwrap().hp, hp_other);
+
+    // 选择挂起时再次序列化/恢复，仍能按原 payload 结算。
+    state = serde_json::from_slice(&serde_json::to_vec(&state).unwrap()).unwrap();
+    // 已在本回合移除仇的 target 仍可被选择并受到 1 点火伤；未选者不受伤。
+    state = choose(state, owner, vec![target.raw()], 42);
+    assert_eq!(state.players.get(target).unwrap().hp, hp_target - 1);
+    assert_eq!(state.players.get(other).unwrap().hp, hp_other);
+    assert_eq!(mark_count(&state, target, DCDICHOU), 0);
+    assert_eq!(mark_count(&state, other, DCDICHOU), 0);
+}

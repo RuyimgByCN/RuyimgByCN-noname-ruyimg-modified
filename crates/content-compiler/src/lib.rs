@@ -148,6 +148,7 @@ pub fn compile_source_named(
                 hp_gt_owner: targets.hp_gt_owner,
                 hp_lte_owner: targets.hp_lte_owner,
                 hp_gt: targets.hp_gt,
+                max_hp_gt: targets.max_hp_gt,
                 hand_gt_owner: targets.hand_gt_owner,
                 hand_lte_owner: targets.hand_lte_owner,
                 pair_hand_difference_lte_three: targets.pair_hand_difference_lte_three,

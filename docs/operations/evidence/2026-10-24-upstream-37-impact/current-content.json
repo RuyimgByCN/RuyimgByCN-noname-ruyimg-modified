@@ -1,0 +1,682 @@
+{
+  "catalog_source": {
+    "repository": "archive/upstream/noname/apps/core",
+    "version": "1.11.7",
+    "code_license": "GPL-3.0-only",
+    "asset_license": "preserved_from_core_source; redistribution requires source-license review",
+    "skin_asset_policy": "not_configured",
+    "provenance": {
+      "core": {
+        "category": "core",
+        "root": "archive/upstream/noname/apps/core",
+        "repository": "https://github.com/libnoname/noname.git",
+        "repository_root": "archive/upstream/noname",
+        "head": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+        "dirty": false,
+        "tracked_changes": [],
+        "tracked_change_count": 0,
+        "untracked_count": 0,
+        "redistribution_status": "preserved_from_source_requires_review"
+      },
+      "skin": null
+    }
+  },
+  "catalog_counts": {
+    "packs": 26,
+    "characters": 2576,
+    "migrated_characters": 2576,
+    "skills": 6190,
+    "migrated_skills": 6190,
+    "profiled_skills": 6104,
+    "portraits": 2703,
+    "missing_character_portraits": 45,
+    "static_skins": 0,
+    "dynamic_skins": 0,
+    "substitutes": 79,
+    "skin_aliases": 0,
+    "dynamic_skin_aliases": 0,
+    "unresolved_skill_references": 0
+  },
+  "skills": [
+    {
+      "key": "starbishi",
+      "catalog": [
+        {
+          "id": "sp2:starbishi",
+          "def_id": 2544166903,
+          "label": "ported",
+          "dsl": "content/original/ported/sp2/starbishi.skill",
+          "exists": true,
+          "sha256": "fbb3ec04c8e64085023d68745a8091fa485ed6a4b2e1af94593676ac0dca88db",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "tiqi",
+      "catalog": [
+        {
+          "id": "xianding:tiqi",
+          "def_id": 3367322163,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/tiqi.skill",
+          "exists": true,
+          "sha256": "3a5d1e66389be9c536ee766e937554c6e0fd66d9223605e345fc5e9170a9c145",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "baoshu",
+      "catalog": [
+        {
+          "id": "xianding:baoshu",
+          "def_id": 2293521758,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/baoshu.skill",
+          "exists": true,
+          "sha256": "e5722d56d8b2aaaee87d30911569a0e2d51b9b1435498e6bcc68000ec1b3fdff",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcbihuo",
+      "catalog": [
+        {
+          "id": "sp2:dcbihuo",
+          "def_id": 3679725063,
+          "label": "ported",
+          "dsl": "content/original/ported/sp2/dcbihuo.skill",
+          "exists": true,
+          "sha256": "63e8d0e6e8a860e415fe6499b29a56b6e482247e2b2a2d2fa40ed865d03f4502",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "oljiangwu",
+      "catalog": [
+        {
+          "id": "collab:oljiangwu",
+          "def_id": 3718591883,
+          "label": "ported",
+          "dsl": "content/original/ported/collab/oljiangwu.skill",
+          "exists": true,
+          "sha256": "b006860d3bf81b4555a51628c7f64426e6d53043408635c5eab992539206e938",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "yingba",
+      "catalog": [
+        {
+          "id": "shiji:yingba",
+          "def_id": 2187983153,
+          "label": "ported",
+          "dsl": "content/original/ported/shiji/yingba.skill",
+          "exists": true,
+          "sha256": "0b59ffa8a0c466e76951e0e34069d56fc28eed246bab124ffccab4ee887859cb",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "pinghe",
+      "catalog": [
+        {
+          "id": "shiji:pinghe",
+          "def_id": 2176317369,
+          "label": "ported",
+          "dsl": "content/original/ported/shiji/pinghe.skill",
+          "exists": true,
+          "sha256": "fdc0aeba65631a599f866ba80d2ee6008b3ce1e8dd4393fe40c6693d5377f09f",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "effect_or_intent_review",
+            "forbidden_host_rewrite"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "shenfu",
+      "catalog": [
+        {
+          "id": "onlyOL:shenfu",
+          "def_id": 2862962594,
+          "label": "ported",
+          "dsl": "content/original/ported/onlyOL/shenfu.skill",
+          "exists": true,
+          "sha256": "52104d9f5d03fde56fd659384e069ca04408529cb19ea66896eb9969f4742712",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcdichou",
+      "catalog": [
+        {
+          "id": "xianding:dcdichou",
+          "def_id": 3304378096,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcdichou.skill",
+          "exists": true,
+          "sha256": "581cea4503010dc7c5ac3db3b3bd0d2ad80bb7c7d912973f10c5d2f8e6e0dee5",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "jsrgzonghai",
+      "catalog": [
+        {
+          "id": "jsrg:jsrgzonghai",
+          "def_id": 4226342722,
+          "label": "ported",
+          "dsl": "content/original/ported/jsrg/jsrgzonghai.skill",
+          "exists": true,
+          "sha256": "f2400e86fe41d880f00fe2cf018a5dd0d8bbac8bbc65d3f355f520543db3f05c",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcmingjie",
+      "catalog": [
+        {
+          "id": "xianding:dcmingjie",
+          "def_id": 2317659847,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcmingjie.skill",
+          "exists": true,
+          "sha256": "323fa5369406bd07c6aea63fe982ab0561d1f2fbc066d745adbe0b3872225e75",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcsbjuzhan",
+      "catalog": [
+        {
+          "id": "xianding:dcsbjuzhan",
+          "def_id": 4168266831,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcsbjuzhan.skill",
+          "exists": true,
+          "sha256": "b5eab59e5f7b9a7764a347de596f3482c945deb9d32f43825c11d54a639cb327",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcsbqingshi",
+      "catalog": [
+        {
+          "id": "xianding:dcsbqingshi",
+          "def_id": 2271027796,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcsbqingshi.skill",
+          "exists": true,
+          "sha256": "ffb4010b443d61a57af7fad6e7b9b35d1e2ad54209b2df77a70e4fc2cefc438b",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcsbzaoji",
+      "catalog": [
+        {
+          "id": "xianding:dcsbzaoji",
+          "def_id": 3421915330,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcsbzaoji.skill",
+          "exists": true,
+          "sha256": "f6119c1b8bf8b626e94a0851f41d80e748aa82f9fa0e175596d4408a811a19d2",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "olsbguqu",
+      "catalog": [
+        {
+          "id": "onlyOL:olsbguqu",
+          "def_id": 4204242468,
+          "label": "ported",
+          "dsl": "content/original/ported/onlyOL/olsbguqu.skill",
+          "exists": true,
+          "sha256": "19fe888d5ab578a82b95b81059688663895a9e4300038db468e0d3e85e065831",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcxiangchen",
+      "catalog": [
+        {
+          "id": "xianding:dcxiangchen",
+          "def_id": 2966636636,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcxiangchen.skill",
+          "exists": true,
+          "sha256": "f433c47c37c492f67a95557c773ef6c3ebbc8a1f3d9b1dbd464d2614606e75a4",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dcsbtaozhou",
+      "catalog": [
+        {
+          "id": "xianding:dcsbtaozhou",
+          "def_id": 3069839569,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dcsbtaozhou.skill",
+          "exists": true,
+          "sha256": "5996c29d97ca883a815cef34eeb49315f619c4f09f976df412d38072a4634418",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "jige",
+      "catalog": [
+        {
+          "id": "xianding:jige",
+          "def_id": 4213552979,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/jige.skill",
+          "exists": true,
+          "sha256": "c1eaabe2f92a01382ef1c1f5032ed3dd3103535591e836dfd656bd6af8f689ed",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "subskill_state",
+            "trigger_point_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "zzhenggong",
+      "catalog": [
+        {
+          "id": "yijiang:zzhenggong",
+          "def_id": 2283567045,
+          "label": "ported",
+          "dsl": "content/original/ported/yijiang/zzhenggong.skill",
+          "exists": true,
+          "sha256": "abf2d565a7c6d74ce35bd04316a7d7e4276e03c79019158adde7adf13073d35d",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "choice_cost_policy"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dczigu",
+      "catalog": [
+        {
+          "id": "huicui:dczigu",
+          "def_id": 3889039356,
+          "label": "ported",
+          "dsl": "content/original/ported/huicui/dczigu.skill",
+          "exists": true,
+          "sha256": "86da966db629251ea7662d97e40027e0eeb7047d09337043f3c6473e08d933f2",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "stardangchen",
+      "catalog": [
+        {
+          "id": "sp2:stardangchen",
+          "def_id": 4091538799,
+          "label": "ported",
+          "dsl": "content/original/ported/sp2/stardangchen.skill",
+          "exists": true,
+          "sha256": "f878f37a4941b922524e0aa0575251d7711808770808e5020b5a342745aa2e35",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "potcuifeng",
+      "catalog": [
+        {
+          "id": "bingshi:potcuifeng",
+          "def_id": 2605615634,
+          "label": "ported",
+          "dsl": "content/original/ported/bingshi/potcuifeng.skill",
+          "exists": true,
+          "sha256": "3251dd66be8b2e7b5f125587a698fcd1ca2d0dbddaa94c513c7d0d1280888328",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "potshanxi",
+      "catalog": [
+        {
+          "id": "bingshi:potshanxi",
+          "def_id": 2372417115,
+          "label": "ported",
+          "dsl": "content/original/ported/bingshi/potshanxi.skill",
+          "exists": true,
+          "sha256": "96157df9ced96f578f6ef292b3d40b48d60c5b2f2b702d7110f72137c614e4d4",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gonghuan",
+      "catalog": [
+        {
+          "id": "shiji:gonghuan",
+          "def_id": 3226731259,
+          "label": "ported",
+          "dsl": "content/original/ported/shiji/gonghuan.skill",
+          "exists": true,
+          "sha256": "e205beb086eabcec39b2bb12a2cb5a1d8b4bce320c33e90de5667338ebe1e65a",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "effect_or_intent_review",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "ylyg_zhiba",
+      "catalog": [
+        {
+          "id": "offline:ylyg_zhiba",
+          "def_id": 3770634947,
+          "label": "ported",
+          "dsl": "content/original/ported/offline/ylyg_zhiba.skill",
+          "exists": true,
+          "sha256": "319747c4bc6b8b39aaab703f0bcd6c0a78e1927df9cf2d5af4f20cd1e870d148",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "olsbbingcai",
+      "catalog": [
+        {
+          "id": "onlyOL:olsbbingcai",
+          "def_id": 3619659764,
+          "label": "ported",
+          "dsl": "content/original/ported/onlyOL/olsbbingcai.skill",
+          "exists": true,
+          "sha256": "2a49573f06d26b38b62b6f3f9a52cd6de79bc1fdfe0d6560a819c17016869da3",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "effect_or_intent_review"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "olhuiyun",
+      "catalog": [
+        {
+          "id": "sp:olhuiyun",
+          "def_id": 4044368124,
+          "label": "ported",
+          "dsl": "content/original/ported/sp/olhuiyun.skill",
+          "exists": true,
+          "sha256": "7126182d816fa5433cd432ce57ec1a0d5bfc11833e076752fb34d8d87045fef0",
+          "intentional_noop": false,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "olshanxi",
+      "catalog": [
+        {
+          "id": "sp:olshanxi",
+          "def_id": 3234466303,
+          "label": "ported",
+          "dsl": "content/original/ported/sp/olshanxi.skill",
+          "exists": true,
+          "sha256": "c4ed418e90f80e7cb469077fa50b074e7a8d7738b011fb81a7afe53074daf855",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "forbidden_host_rewrite"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "sxrmzhengsi",
+      "catalog": [
+        {
+          "id": "sxrm:sxrmzhengsi",
+          "def_id": 3539390052,
+          "label": "ported",
+          "dsl": "content/original/ported/sxrm/sxrmzhengsi.skill",
+          "exists": false,
+          "sha256": null,
+          "intentional_noop": false,
+          "profile_gaps": [
+            "forbidden_host_rewrite"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dchuashang",
+      "catalog": [
+        {
+          "id": "xianding:dchuashang",
+          "def_id": 2628928127,
+          "label": "ported",
+          "dsl": "content/original/ported/xianding/dchuashang.skill",
+          "exists": true,
+          "sha256": "31124601d5c882bb36d279dec3f5e01b1aad131c2bfdb250ca5ad89ceecee28b",
+          "intentional_noop": true,
+          "profile_gaps": [
+            "choice_cost_policy",
+            "forbidden_host_rewrite",
+            "subskill_state"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "oljunzhu",
+      "catalog": []
+    },
+    {
+      "key": "olrehuanshi",
+      "catalog": []
+    },
+    {
+      "key": "olfangma",
+      "catalog": []
+    },
+    {
+      "key": "oljingxian",
+      "catalog": []
+    },
+    {
+      "key": "twrenfang",
+      "catalog": []
+    },
+    {
+      "key": "twjuemie",
+      "catalog": []
+    },
+    {
+      "key": "zexing",
+      "catalog": []
+    },
+    {
+      "key": "tt_zhiyi",
+      "catalog": []
+    },
+    {
+      "key": "ol_cailian_skill",
+      "catalog": []
+    },
+    {
+      "key": "olhuaguang",
+      "catalog": []
+    },
+    {
+      "key": "olxuanbai",
+      "catalog": []
+    },
+    {
+      "key": "oldangmo",
+      "catalog": []
+    },
+    {
+      "key": "oljihui",
+      "catalog": []
+    },
+    {
+      "key": "olxiaju",
+      "catalog": []
+    },
+    {
+      "key": "olshilun",
+      "catalog": []
+    },
+    {
+      "key": "olzhuoming",
+      "catalog": []
+    },
+    {
+      "key": "ol_fenli",
+      "catalog": []
+    },
+    {
+      "key": "ol_pingkou",
+      "catalog": []
+    },
+    {
+      "key": "ol_jie_danshou",
+      "catalog": []
+    }
+  ]
+}

@@ -1610,3 +1610,10 @@ pub const JIANZHI_PHASE_END: u16 = 655;
 pub const ADD_FIRST_MISSING_SKILL: u16 = 557;
 /// resolve_rehengjiang(player, actor, action, hand_limit_def, draw_def) — ABI 572
 pub const RESOLVE_REHENGJIANG: u16 = 550;
+/// choose_other_targets_by_skipped_phase_count_damage_draw(player, amount) — ABI 754
+pub const CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW: u16 = 656;
+/// choose_give_or_recast_one_hand(player) — ABI 755
+pub const CHOOSE_GIVE_OR_RECAST_ONE_HAND: u16 = 770;
+
+/// OL界朱然「胆守」复合效果（ABI 757）。
+pub const RESOLVE_OL_JIE_DANSHOU: u16 = 771;

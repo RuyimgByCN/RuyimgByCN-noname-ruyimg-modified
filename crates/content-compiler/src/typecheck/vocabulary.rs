@@ -782,6 +782,7 @@ pub(super) const MOD_TARGETS: &[&str] = &[
     "skip_discard_if_no_sha",
     "skip_discard_phase",
     "restore_skipped_phase",
+    "card_target_cancel_if_other_user_card_use_count_lt_owner_mark",
     "turn_face_down_cancel",
     "turn_over_cancel",
     "discard_phase_includes_equip",

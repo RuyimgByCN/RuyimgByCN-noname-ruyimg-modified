@@ -224,6 +224,7 @@ EffectRequest::ChooseTargetsDraw { .. }
         | EffectRequest::DiscardTargetEquipmentDrawWeaponRange { .. }
         | EffectRequest::ChooseTargetRevealHandDamageIfSha { .. }
         | EffectRequest::ChooseOtherGiveOneHandEquip { .. }
+        | EffectRequest::ChooseGiveOrRecastOneHand { .. }
         | EffectRequest::ChooseRevealHandCardBindCategoryTarget { .. }
         | EffectRequest::RecoverToMaxThenOptionalExchangeSkill { .. }
         | EffectRequest::ChooseTargetDrawToMaxHpCap { .. }
@@ -575,6 +576,7 @@ EffectRequest::ResolveDddJianshuo { .. }
         | EffectRequest::ChooseGainResolvedShaOrShanThenOptionalUseSha { .. }
         | EffectRequest::ChooseGainAllResolvedShaShanThenColorRewards { .. }
         | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamage { .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
         | EffectRequest::RevealUniformHandDrawSelfChooseOthers { .. }
         | EffectRequest::ChooseCardUserOrAddTarget { .. }
         | EffectRequest::ChooseMoveTargetEquipmentOrDraw { .. }

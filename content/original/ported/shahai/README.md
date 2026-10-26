@@ -8,7 +8,7 @@
 
 ## 发布状态
 
-- 全部 332 名武将登记入角色索引，技能语义完整登记（`shahai_meta.skill`，描述取自
+- 全部 332 名武将登记入角色索引，技能语义完整登记（按来源包拆分至 `shahai_meta_*.skill`，轩辕剑另分角色与战斗／卡牌；描述取自
   上游译文原文）。
 - 41 张装备卡按引擎可表达种类（weapon/armor/horse/treasure）注册；跨界包专属卡牌
   种类（法术/随从/地图牌/机巧等）与自定义基本/锦囊牌不可表达，未注册。
@@ -37,8 +37,7 @@
 
 ```bash
 cargo run -q -p content-cli -- pack \
-  content/original/ported/shahai/shahai_impl.skill \
-  content/original/ported/shahai/shahai_meta.skill \
+  content/original/ported/shahai/*.skill \
   --characters content/original/ported/shahai/characters.json \
   --cards content/original/ported/shahai/cards.json \
   --metadata content/original/ported/shahai/metadata.json \

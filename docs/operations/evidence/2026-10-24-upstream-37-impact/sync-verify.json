@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "scripts/sync-original-content.mjs",
+    "--verify-only"
+  ],
+  "exit_code": 1,
+  "duration_seconds": 0.1692359447479248
+}

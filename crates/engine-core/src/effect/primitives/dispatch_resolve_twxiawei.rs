@@ -1046,6 +1046,21 @@ pub(super) fn apply_effect(
             choose_other_give_one_hand_equip(tx, player, skill)
         }
 
+        EffectRequest::ChooseGiveOrRecastOneHand {
+            player,
+            skill,
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+        } => choose_give_or_recast_one_hand(
+            tx,
+            player,
+            skill,
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+        ),
+
         EffectRequest::ChooseRevealHandCardBindCategoryTarget {
             player,
             target,

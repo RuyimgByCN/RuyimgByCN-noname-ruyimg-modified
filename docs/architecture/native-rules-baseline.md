@@ -1,13 +1,66 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
-> ## ⚠ **当前值（第 568 轮实测，2026-10-19）**
+<a id="-当前值第-568-轮实测2026-10-19"></a>
+
+> ## ⚠ **当前版本（2026-10-24 源码复核）**
 > `STANDARD_RULESET_VERSION = 322`（`crates/engine-native/src/content/standard.rs:126`）、
 > `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`）。
-> 下面「2026-10-10 复核」为**历史语境**；**以本行为准**。
+> 下面「2026-10-10 复核」为**历史语境**；本次只审查上游差异，未升级规则或存档。
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：已提交 HEAD 为 v321 / 存档 v105，当前 dirty 工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v322 为最新（工作树）**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#当前核验快照)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：已提交 HEAD 为 v321 / 存档 v105，当前 dirty 工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v322 为最新（工作树）**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
+
+<a id="upstream-2026-10-24"></a>
+
+## 2026-10-24 上游 37 提交差异台账
+
+核对范围为 noname **`df2682e66af9930fe02861a25cb6f2cd2ef6ae36..1a548c95acdf8ac1ef44d74473403eda2ac86cf0`**：37 个提交、167 个净变化路径；noname-next 为 `7e28a93799a9c01794085e911a72a4faa5673883` 加现有未提交修改。本节是该增量的规则差异主账；[逐提交映射及检查证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md)保存本次静态审查快照。编号 `UP37-*` 不混入旧批次缺陷计数。
+
+**来源更新不等于移植完成。** 2026-10-24 后续批次已执行 `node scripts/sync-original-content.mjs`，完成 **UP37-I01 第一阶段**：`content/original/catalog.json` 的来源头更新为 `1a548c95`（**2582 角色 / 6209 技能**），字符树 49 个既有文件变化、画像 +4；catalog 新增 6 角色与 19 技能，**既有 `def_id` 0 变化、0 删除**，`content/original/ported/**` 16617 文件哈希全部不变，`--verify-only` **exit 0**。两处状态变化（`collab:ol_chitu`、`collab:ol_le_menghuo` 由 `ported` → `source_synced`）是因为上游首次为其启用技能、而 ported nPack 仍为空技能表；`def_id` 不变，N05/N06 完成前不视为可玩。上一轮记录的 `legacy-source/bingshi/skill.js: size differs` 是同步前真实差异，原始输出保留在[UP37 证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md)；本轮同步后校验通过，见[同步证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md#5-up37-i01内容同步到-1a548c95)。**没有**改规则代码、包内容锁或 golden；规则 **v322 / 存档 v105** 不变。catalog 的 `ported` 仍包含明确 noop 与近似实现，新增条目目前为 `source_synced`，不能据此宣称规则已覆盖。下述“旧线”指 engine-core + 原始 DSL，“原生”指 engine-native，二者分别验收。
+
+### 规则修正：先修已有行为，再补缺失机制
+
+优先级是本次上游工作的顺序；全项目排序仍见[进度主稿](native-progress.md#delivery-2026-10-24)。P1 表示应优先处理的既有差异或发布前边界，**不表示本轮已在正式原生局复现了同名缺陷**。
+
+| 编号 / 优先级 | 最终上游语义与提交 | 当前证据、需要移植的内容 | 必补回归 / 完成条件 |
+|---|---|---|---|
+| **UP37-R01 / P1** | 威关银屏 **涤仇 `dcdichou`**，`19d86519`：回合末先移除所有仇标记，候选包括本回合先前已移除仇的角色；存在候选时至少选一人，逐个等待火伤结算 | **旧线已修（2026-10-24）**：新增 `turn.removed_marks` 通用历史（`RemoveMark` 归零时记录、回合边界清空、空集合不进 hash）；[候选生成](../../crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs) action 10 合并当前标记与本回合移除历史，选择前全量清标记并 `min=1`；[选择续行](../../crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs) 只按 payload/存活/座位序结算火伤，不再二次清标记。人工 DSL 未改。**原生仍无同名内容注册**，不是 native/上游等价。见[R01 证据](../operations/evidence/2026-10-24-up37-r01-dichou/README.md) | 已覆盖：本回合提前归零仍可选、未选者也清标记、至少一目标、空选拒绝、选择前/后序列化恢复。仍待：多人濒死嵌套的逐目标等待时序、原生内容注册。既有单标记用例保留 |
+| **UP37-R02 / P1（商店上线前）** | 乐诸葛亮 **讲武 `oljiangwu`**，`4f195a50`：远端购买在主机重新核算虎符/免费次数，余额不足不授予战法；首次选择中途离线不能读取空 gainMap | [旧线 DSL](../../content/original/ported/collab/oljiangwu.skill) 目前只是结束阶段摸一张，未实现商店；原生同名商店缺失。因此不是修一个现成余额漏洞，而是建立权威购买与一次提交的规则边界。客户端即时显示不作为扣款依据 | 余额 0/不足/恰好、一次免付、重复与过期购买、首次选择前掉线、扣款与授予之间重启；复用现有命令收据/原内容锁，但不能以房间重试测试代替商店事务验收 |
+| **UP37-R03 / P1（部分完成，2026-10-24）** | 神孙策 **冯河 `pinghe` / 英霸 `yingba`**，`4f195a50`：暂时失效的英霸仍算“拥有”，冯河照常给存活伤害来源加平定 | **旧线已修**：[英霸 DSL](../../content/original/ported/shiji/yingba.skill) 改为目标先失去 1 体力；若仍存活再失去 1 上限并获得平定标记与衍生技，最后自己失去 1 上限，且效果内检查目标上限 > 1。[冯河 DSL](../../content/original/ported/shiji/pinghe.skill) 交牌后以 `has_skill`（含暂时失效的拥有实例）判断，来源存活则授予标记/衍生技；为此修复 `content-compiler` 对 `has_skill(player, <u32>)` 第二参的通用表达式拒绝（ADR 0632 的 DSL 形态此前无法编译）。包升 **0.1.1**，logic hash 与旧 0.1.0 不同；旧局按内容锁应显式拒绝，本批未做旧档恢复实测。**2026-10-24 补交牌/重铸二选一**：新增 `ChooseGiveOrRecastOneHand`（ABI 756），包升 **0.2.4**；重铸走弃一摸一，交牌走 GiveCards；授标已收进「实际交牌给存活目标」分支，重铸不授；补 `hand_limit_base_max_hp`（手牌上限基数=最大体力）与通用 `max_hp_gt` 目标约束（英霸目标 maxHp>1）；移除平定标记错误的手牌上限加成；恢复平定「前 X 张牌不能指定英霸」目标限制（按本回合全阶段用牌数）。**重铸已按可重铸牌过滤（当前标准 `tiesuo`）**；**已更正防伤误读**：选择前 HP 下降来自上限-1 的夹取，伤害 id 在 prevented 列表，未实际扣血；已有断言。**仍未完成**：原生同名技能。见[R03 重铸证据](../operations/evidence/2026-10-24-up37-r03-recast/README.md) | 已覆盖：英霸正常路径、目标上限/体力/标记/技能，冯河有/无英霸两分支与 `has_skill` 编译。仍待：**冯河防伤在真实杀路径到达选择时伤害已提交（`prevented_damage_ids` 仍含 id）的引擎时序缺陷**、英霸被封/被移除、来源死亡、重铸授标分支、恢复后标记一致及原生注册 |
+| **UP37-R04 / P2** | 星董允 **弼士 `starbishi`**，`aab18ef2` + `08b0f659`：取消给牌安全退出；额外出牌阶段记录正确受益者/技能拥有者；以实际 useCard 触发事件判断首张不可响应，伤害牌让原技能拥有者摸牌 | [旧线](../../content/original/ported/sp2/starbishi.skill) 明确 noop；原生同名内容缺失。需要额外阶段、来源绑定、阶段内历史，不是把 `event` 换成 `trigger` 就完成移植 | 自己/别人获得额外阶段，取消/空给牌，首张非伤害牌、第二张伤害牌，多次插入阶段与中途保存恢复 |
+| **UP37-R05 / P2** | 冯妤 **涕泣/宝梳 `tiqi/baoshu`**，`c2c9ae0b` + `19d86519`：空摸牌历史按 0 求和；宝梳明确解除连环并翻正；冯方 **避祸 `dcbihuo`**，`a44934c5`：下回合累计值在 phaseBegin 转成当回合值，避免本回合提前消耗 | 三份 [tiqi](../../content/original/ported/xianding/tiqi.skill)、[baoshu](../../content/original/ported/xianding/baoshu.skill)、[dcbihuo](../../content/original/ported/sp2/dcbihuo.skill) 均为 noop；部分旧注释连技能名/归属也有误，以本次上游定义为准。原生需记录实际摸牌事件、翻面/横置及分回合的待生效状态 | 跳过/零/固定摸牌、额外摸牌阶段、正负抵消、自己回合内受伤后下回合才生效、翻面跳过回合与跨进程恢复 |
+| **UP37-R06 / P2** | **纵害 `jsrgzonghai`、明节 `dcmingjie`、击戈 `jige`**，`2492902c`：禁救绑定真正 dying 祖先事件；明节防伤是一次性技能而非可叠层次数；击戈只取双方手牌区的杀 | [纵害](../../content/original/ported/jsrg/jsrgzonghai.skill)、[击戈](../../content/original/ported/xianding/jige.skill) 为 noop；[明节](../../content/original/ported/xianding/dcmingjie.skill) 为开局摸牌/死亡扣上限近似。不能将上游 JS 崩溃修复写成本项目已解决的规则缺陷 | 嵌套濒死、未获准角色救援、第二次防伤授予与消费、手牌外的杀、双方弃牌差值、救援选择中恢复 |
+| **UP37-R07 / P2** | **举战 `dcsbjuzhan`、自固 `dczigu`、荡尘 `stardangchen`**，`2492902c` + `90b58bb9`：选择弃牌与实际付费分开，虚拟牌携带实体 cards；自固尊重可弃/可获得性；荡尘以正确收牌者计算并处理无可给牌 | 举战/荡尘是 noop；[自固](../../content/original/ported/huicui/dczigu.skill) 仅选择目标摸牌，未实现付费/取装备。需先补完整效果，再采纳取消、不可弃和无目标边界 | 取消不付费、只扣一次、禁弃/禁获得、实体牌归属变化、无牌可给、同目标额外结算；另保留 `mbshanjia/olshanjia` 手动确认需求 |
+| **UP37-R08 / P2** | **谋卫瓘 `dcsbqingshi/dcsbzaoji`、神赋 `shenfu`、顾曲 `olsbguqu`、争功 `zzhenggong`**，`143b746f` + `19d86519` + `0d1ab937` + `2492902c`：取消结果/空 cards/无 currentPhase 防护，清势回调保留事件对象；争功 AI 显式携带态度 | 前四组旧 DSL 为 noop，争功只有从来源取得装备的近似；应在 typed choice/phase 上定义取消与结束行为，不能照搬 JS optional chaining。原生没有同名内容实现 | 取消、目标已离场、无当前回合、回调可续行、获得装备后实际使用、掉线自动选择不重复执行 |
+| **UP37-R09 / P2** | **讨州 `dcsbtaozhou`、相谶 `dcxiangchen`、摧锋 `potcuifeng`**，`a44934c5` + `90b58bb9`：差值≥2时授予自矜不再依赖当前能否用杀；相谶不索取实体牌；摧锋虚拟决斗的子牌明确为空并修正目标/AI布尔值 | 讨州/相谶旧线为 noop；摧锋需随现有占位迁移。先明确无实体牌与目标有效性规则，再接 UI/AI；规则变化不能归类为纯 AI 优化 | 不能对施术者用杀但仍获得自矜、零手牌启动、虚拟牌无子牌、回合/轮次限制、技能授予后的保存恢复 |
+| **UP37-R10 / P3（元数据子集已核验，2026-10-24）** | **AI/显示/元数据**：`2492902c`、`90b58bb9`、`a44934c5`、`c2c9ae0b`、`19d86519`、`673bc921` | 应机牌 AI 移到 `potshanxi_tag`；`gonghuan` 评估后续伤害资源；`ylyg_zhiba/olsbbingcai/olhuiyun/olshanxi/sxrmzhengsi/dcsbtaozhou` 决策；`yongjian` 目标估值避免非有限值；`dchuashang` 保留原牌类型但初始化装备 AI。另有诸葛均姓氏/宗族、TW扶蜀伤害层数、TW柔克期限、吴范技能引用、汉末屯犬重置描述/人名、TW义释提示与荡尘“其他角色”文字 | **已核验**：诸葛均 `names/clans`、吴范技能引用、荡尘最终文字、TW柔克期限、TW义释奖励、汉末屯犬显示名/来源 catalog 回归通过（5 测）（[证据](../operations/evidence/2026-10-24-up37-r10-metadata/README.md)），证明 I01 同步未丢这些元数据。**仍未完成**：其余显示项（TW扶蜀伤害层数）、所有 AI 估值与权威 RNG／有限值／Planner 接入；不能以三条元数据宣称 R10 等价。 |
+
+### 新内容：6 个新 ID、2 个既有角色启用、19 个顶层技能、3 个衍生牌定义
+
+上述数量是三包 character/skill/card 对象的 AST 差集，**不是 8 个已完成角色或新增 8 个扩展来源**。当前六个新 ID 不在本地 catalog；`ol_chitu/ol_le_menghuo` 已有目录条目但 skills 为空。19 个新增顶层技能均没有本地 DSL 文件，也未找到原生/转换包同名注册。依赖复用技能仍须另验，不因名字相同就认为可用。
+
+| 编号 / 顺序 | 内容与最终来源 | 需要的宿主能力与验收 |
+|---|---|---|
+| **UP37-N01 / P2-1（旧线规则完成，2026-10-25）** | OL界朱然 `ol_jie_zhuran` / 胆守 `ol_jie_danshou`，OL界朱桓 `ol_zhuhuan` / 奋励、平寇；`c8d29532` | **规则面完成**：`ol_fenli` 三阶段、`ol_pingkou` 伤害/按实际受伤摸牌；新增胆守四选项、序号弃牌、每阶段一次、`phase_play` 清零，host effect tag **771** / continuation **335**。onlyOL 包 **0.1.4 / ABI 757**，旧 0.1.2 npack 存档。未验收：AI 估值、原生 onlyOL（757>753）、旧 0.1.2 局恢复。见[N01 证据](../operations/evidence/2026-10-24-up37-n01-zhuhuan/README.md) |
+| **UP37-N02 / P2-2** | 唐棠 `tangtang` / `zexing`、`tt_zhiyi`；`3ffbe10e` | 择行展示牌、私有手牌观察/交换、拒绝后重选且同回合目标不重复；知意区分本次获得牌与原有同色牌。先补私有投影与权威选择，再验证旁观/重连不泄露 |
+| **UP37-N03 / P2-3** | TW魔张梁 `tw_dm_zhangliang` / `twrenfang`、`twjuemie`，依赖 `twjianming/relonghun`；`1b10052d` | 使用/打出实体牌真正进入弃牌堆后积标记，手牌/杀上限派生；36 标记付费与施法目标、36 雷伤。验证标记来源去重、无足够目标、伤害链及依赖技能组合 |
+| **UP37-N04 / P2-4** | OL孙寒华 `ol_sunhanhua`；`7c3cc590`：`ol_cailian`、彩莲技能、华光、玄白、荡魔/济惠/霞举 | 可变花色/装备栏的衍生牌、形态切换与技能撤销、每轮首伤/首回复、手牌上限排除、额外结算/目标。牌身份、花色、槽位、形态和次数均须随原锁保存恢复 |
+| **UP37-N05 / P2-5** | OL赤兔 `ol_chitu` 启用；`2dba987d` + `a5ed6a70`：放马、竞先；共享 `sortHandcard(sort, forced)` / `sortHandcardOL` 新强制排序参数 | **手牌顺序参与规则**：禁止普通整理，赤兔移动、被超越牌视为杀、两闪/无限杀、轮末额外回合。先确定权威顺序/合法重排命令/投影/恢复；不能只做客户端拖拽排序 |
+| **UP37-N06 / P2-6** | OL乐孟获 `ol_le_menghuo` 启用；`83539838` + `f1f17061`：菌煮、幻视、`kuratamashiro` 五菇丰登与 `mashiro` 菌子 | 五菌随机展示/依次选取/未选失血、隐匿效果与随机临时技能、按花色每阶段转化。纳入后续修正“候选技能非空才随机获得”；随机流、效果可见性、临时技能与选择续行必须可恢复 |
+| **UP37-N07 / P2-7（复合 UI 后置）** | OL许劭 `ol_xushao` / 世论、濯名；最终以 `102ef4fa` 为准，合并 `217edc4b`、`2dba987d`、`f1f17061`，不重复移植初版 | 6×6 称号连线、倒计时/托管、在线同步与 15 项界面资源；动态授予/转移/一次使用后撤销技能及对应触发时机。先满足 NC02/03/05 的完整 VM 包与选择协议；服务端验证连线/授予结果，客户端仅显示。不得持久化 JS event/DOM 引用或用墙钟替代规则 RNG |
+
+### 模式改写、扩展影响与无需直接搬运的项目
+
+| 编号 / 优先级 | 范围 | 处置与仍需验证的内容 |
+|---|---|---|
+| **UP37-I01 / P1（下一次内容同步前）** | 旧导入快照与来源追踪 | 明确冻结 `df2682e6` 与本次候选 `1a548c95`；准备分包可审查的同步 diff，保留人工 DSL/现有内容锁。先让新角色/元数据/资源差集与 provenance 一致，再逐项开放可执行规则；不能只改 provenance、`ported` 标签或 golden 使校验变绿 |
+| **UP37-I02 / P2（已覆盖模式优先）** | `db773dad` 乱斗、`4195e67b` 挑战、`480980d2` 联机、`60bca279` realtime、`3e72c4b7` 炉石、`3a24b5a5` 对决；后者还为 `game.chooseCharacterDouble()` 补 `return next` | 属于旧 JS Step→Async/导出格式迁移，**不能照搬为 Rust/WASM 构建改动，也未证明全量语义等价**。先比对已有 Boss/剑阁/炉石内容的开局、选将、额外回合/阶段、逐目标伤害及中途保存，再比较随机/状态/事件轨迹。`extension/boss` 实际加载 boss/versus 模式技能，扩展目录不变仍有间接影响 |
+| **UP37-I03 / P2** | `b17a6198` SP 技能、`83931d24` 国战/仙侠卡、`076d1c77` 余下本体、`19d86519` TW precontent 异步化 | 显式 event/player/target、对象参数与 await 顺序改变的是参考适配层；重点留住 lose/gain/after、判定回调、`rexingshuai` 逐个伤害、`lihuo` 恢复牌属性、进入游戏/投降的语义。复核 legacy-analyzer 对新签名的读取、按需修正并完成逐技能回归后才能接受新快照；不是一次全局替换就等价 |
+| **UP37-I04 / P3** | `ad1065b0` 格式/CI、`a15a1e4f` 死注释、`c30c312c/bd563595` 迁移文档、`98d90ce9/1a548c95` changelog | 不移植上游 ESLint/Step 编译与迁移指南为本项目规则。40 份 JS/TS 的格式/注释审查中 34 份归一 AST 相同，其余 6 份为模板文本/空语句等人工复核项，未见新增规则。标准角色目录树不变；`card/standard.js` 字节变化来自死注释删除，归一 AST 相同，不能说它完全没变化 |
+| **UP37-I05 / P3（随对应内容交付）** | `b31df527` 两个周瑜/星董允、`2492902c` TW魔张梁/汉末于毒、`7c3cc590` 彩莲、`83539838` 菌子、`3ffbe10e` 唐棠、`102ef4fa` 许劭界面 | 画像/语音/配套 CSS、asset 清单与角色身份一起迁移；本轮只核对路径和变更归属，没有播放音频或逐图目视验收。图片/音频到位不能上调规则完成度 |
+
+两仓仍为 **8+29=37 来源实例**，noname 扩展子树对象 ID 前后相同；Liuli HEAD 与 7 份本地修改保留。具体来源版本更新在[两仓台账](../migration/upstream-extension-reconstruction.md#upstream-2026-10-24)。**37 个提交与 37 个来源恰好同数，是不同口径。** 本轮没有新增完整来源验收，也没有对新参考版做 native/WASM/真实 WS 差分验证。每个规则项落地后需按影响面补回归；若改原生内核，运行完整 engine-native 测试，并按语义/状态编码影响决定规则和存档版本，保留旧局原锁恢复。
 
 ## 版本约定与历史
 

@@ -678,6 +678,7 @@ impl Parser {
                     let mut hp_lte_owner = false;
                     let mut hp_gt_owner = false;
                     let mut hp_gt = None;
+                    let mut max_hp_gt = None;
                     let mut hand_gt_owner = false;
                     let mut hand_lte_owner = false;
                     let mut pair_hand_difference_lte_three = false;
@@ -781,6 +782,16 @@ impl Parser {
                             TokenKind::Ident(value) if value == "hp_gt_owner" => {
                                 hp_gt_owner = true;
                                 self.bump();
+                            }
+                            TokenKind::Ident(value) if value == "max_hp_gt" => {
+                                if max_hp_gt.is_some() {
+                                    return Err(CompileError::Parse {
+                                        pos: self.pos(),
+                                        message: "duplicate max_hp_gt target constraint".into(),
+                                    });
+                                }
+                                self.bump();
+                                max_hp_gt = Some(self.expect_selection_count()?);
                             }
                             TokenKind::Ident(value) if value == "hp_lte_owner" => {
                                 hp_lte_owner = true;
@@ -949,6 +960,7 @@ impl Parser {
                         hp_gt_owner,
                         hp_lte_owner,
                         hp_gt,
+                        max_hp_gt,
                         hand_gt_owner,
                         hand_lte_owner,
                         pair_hand_difference_lte_three,

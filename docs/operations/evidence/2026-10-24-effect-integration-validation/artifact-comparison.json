@@ -1,0 +1,116 @@
+{
+  "verified_at": "2026-10-24T05:40:36.546497+00:00",
+  "generated_wasm_package_file_count": 18,
+  "all_three_package_directories_identical": true,
+  "directories": {
+    "apps/web-client/src/worker/native-pkg": {
+      "original_files": 6,
+      "rebuilt_files": 6,
+      "all_bytes_identical": true,
+      "same_files": [
+        ".gitignore",
+        "engine_native_wasm.d.ts",
+        "engine_native_wasm.js",
+        "engine_native_wasm_bg.wasm",
+        "engine_native_wasm_bg.wasm.d.ts",
+        "package.json"
+      ],
+      "changed_or_added": [],
+      "removed": []
+    },
+    "apps/web-client/src/wasm-pkg": {
+      "original_files": 6,
+      "rebuilt_files": 6,
+      "all_bytes_identical": true,
+      "same_files": [
+        ".gitignore",
+        "engine_wasm.d.ts",
+        "engine_wasm.js",
+        "engine_wasm_bg.wasm",
+        "engine_wasm_bg.wasm.d.ts",
+        "package.json"
+      ],
+      "changed_or_added": [],
+      "removed": []
+    },
+    "apps/web-client/public/pkg": {
+      "original_files": 6,
+      "rebuilt_files": 6,
+      "all_bytes_identical": true,
+      "same_files": [
+        ".gitignore",
+        "engine_wasm.d.ts",
+        "engine_wasm.js",
+        "engine_wasm_bg.wasm",
+        "engine_wasm_bg.wasm.d.ts",
+        "package.json"
+      ],
+      "changed_or_added": [],
+      "removed": []
+    },
+    "apps/web-client/dist": {
+      "original_files": 46,
+      "rebuilt_files": 45,
+      "all_bytes_identical": false,
+      "same_files": [
+        "original/portraits/1.jpg",
+        "original/portraits/10.jpg",
+        "original/portraits/11.jpg",
+        "original/portraits/12.jpg",
+        "original/portraits/13.jpg",
+        "original/portraits/14.jpg",
+        "original/portraits/15.jpg",
+        "original/portraits/16.jpg",
+        "original/portraits/17.jpg",
+        "original/portraits/18.jpg",
+        "original/portraits/19.jpg",
+        "original/portraits/2.jpg",
+        "original/portraits/20.jpg",
+        "original/portraits/21.jpg",
+        "original/portraits/22.jpg",
+        "original/portraits/23.jpg",
+        "original/portraits/24.jpg",
+        "original/portraits/25.jpg",
+        "original/portraits/3.jpg",
+        "original/portraits/3041549837.jpg",
+        "original/portraits/3319399999.jpg",
+        "original/portraits/3366235136.jpg",
+        "original/portraits/3561346810.jpg",
+        "original/portraits/4.jpg",
+        "original/portraits/4123573742.jpg",
+        "original/portraits/4192370611.jpg",
+        "original/portraits/4212795236.jpg",
+        "original/portraits/5.jpg",
+        "original/portraits/6.jpg",
+        "original/portraits/7.jpg",
+        "original/portraits/8.jpg",
+        "original/portraits/9.jpg",
+        "pkg/.gitignore",
+        "pkg/engine_wasm.d.ts",
+        "pkg/engine_wasm.js",
+        "pkg/engine_wasm_bg.wasm.d.ts",
+        "pkg/package.json"
+      ],
+      "changed_or_added": [
+        "assets/engine.native.worker-CyhM0As9.js",
+        "assets/engine.worker-YdkXdL0d.js",
+        "assets/engine_native_wasm_bg-JqZIfyNt.wasm",
+        "assets/engine_wasm_bg-Cc8-pMSW.wasm",
+        "assets/index-7MEiGs4q.js",
+        "assets/index-BO27s1xp.css",
+        "index.html",
+        "pkg/engine_wasm_bg.wasm"
+      ],
+      "removed": [
+        "assets/engine.native.worker-DOR1X5rj.js",
+        "assets/engine.worker-4Ccz1crH.js",
+        "assets/engine_native_wasm_bg-XcC0yC7Y.wasm",
+        "assets/engine_wasm_bg-Ul3ltE_f.wasm",
+        "assets/index-ClMB-q6q.css",
+        "assets/index-DEGqARlQ.js",
+        "pkg/.gitkeep"
+      ]
+    }
+  },
+  "scope": "same local source/toolchain build; does not prove upstream rule equivalence or performance"
+}

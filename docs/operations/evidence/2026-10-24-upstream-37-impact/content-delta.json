@@ -1,0 +1,229 @@
+[
+  {
+    "path": "apps/core/character/collab/character.js",
+    "added": [
+      {
+        "key": "tw_dm_zhangliang",
+        "line": 88,
+        "source_sha256": "e61389eb80289c33601b8b972ebb8602e6c9f38c807fac4021bbcf4fa4d60ec8"
+      }
+    ],
+    "removed": [],
+    "changed": [
+      {
+        "key": "ol_chitu",
+        "before": {
+          "line": 16,
+          "source_sha256": "e18c47fd93da756e400d5a6c59c1fb7fb673f0e79ca2de4903558186de9cdd80",
+          "skills": "",
+          "isUnseen": true
+        },
+        "after": {
+          "line": 16,
+          "source_sha256": "03062c8a8992d29ea625e6b21bd65233a004fe4e9bc0923a9c16a1ae234f4ccf",
+          "skills": "\"olfangma\", \"oljingxian\"",
+          "isUnseen": false
+        }
+      },
+      {
+        "key": "ol_le_menghuo",
+        "before": {
+          "line": 24,
+          "source_sha256": "548e7a9f9085abcd71862bbda3f5c2b7c2d344454722deb6764e7857ed21d5ab",
+          "skills": "",
+          "isUnseen": true
+        },
+        "after": {
+          "line": 23,
+          "source_sha256": "4d7d90d0e1ba05ba42b9c00528bac7eea8cb4152f94d0019d6309339a53ce279",
+          "skills": "\"oljunzhu\", \"olrehuanshi\"",
+          "isUnseen": false
+        }
+      }
+    ]
+  },
+  {
+    "path": "apps/core/character/collab/skill.js",
+    "added": [
+      {
+        "key": "oljunzhu",
+        "line": 6,
+        "source_sha256": "0f3058e51be344c6030b9ec9a627ac5bb3bc57c9267538c45631fd2fbc15f449"
+      },
+      {
+        "key": "olrehuanshi",
+        "line": 200,
+        "source_sha256": "584ef22290a418ec4770b54a1ed2b2c06bddf1f509906f27572abbe549083691"
+      },
+      {
+        "key": "olfangma",
+        "line": 288,
+        "source_sha256": "5e12ab2798cfb23684ec23e57df4443e7f89049f249f226951d50afa9e3ab53f"
+      },
+      {
+        "key": "oljingxian",
+        "line": 363,
+        "source_sha256": "702a384b0c4a3f43a14ede6453e6a8133a20e52f24d39152db6979b312e6e824"
+      },
+      {
+        "key": "twrenfang",
+        "line": 2414,
+        "source_sha256": "beb9ecc200f71a443d1eae1919a82d2b8ad85eae16c073b047f3475bd498fa61"
+      },
+      {
+        "key": "twjuemie",
+        "line": 2452,
+        "source_sha256": "71b4eac2206dc7708548116cd3455a2758dbc1adfbef3bc1690559779ab4a794"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/collab/card.js",
+    "added": [
+      {
+        "key": "kuratamashiro",
+        "line": 5,
+        "source_sha256": "1ca705bd48e04f09eeafecdf299279159af2d6622d9111646bdf5da127fedcdc"
+      },
+      {
+        "key": "mashiro",
+        "line": 195,
+        "source_sha256": "42a29b710c16408be365f2b6c3770afc5f160ae671ee335c974310f3c855a56e"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/sp/character.js",
+    "added": [
+      {
+        "key": "tangtang",
+        "line": 3,
+        "source_sha256": "a9e371f594dce557ea933760130eccd30d105ebb7ce3198a6fd9d855fc931af6"
+      },
+      {
+        "key": "ol_sunhanhua",
+        "line": 11,
+        "source_sha256": "98ad5ed23d2f1eb78a90cb10ff217d8bac01036ea4f3e3d4edd19d3f2c736406"
+      },
+      {
+        "key": "ol_xushao",
+        "line": 18,
+        "source_sha256": "93e9c3f641d9b2b66a6ab4c28b438c51a6ddf7b6808ad8081564dfe20fbe8aac"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/sp/skill.js",
+    "added": [
+      {
+        "key": "zexing",
+        "line": 6,
+        "source_sha256": "97b8cff691f2311873413f8d917424429bdffc8d11305f6466d42b7776ff3d7f"
+      },
+      {
+        "key": "tt_zhiyi",
+        "line": 170,
+        "source_sha256": "cb98561370cf675707e5cea6e66b4596b5c1a62189224d6559b868280d130fbb"
+      },
+      {
+        "key": "ol_cailian_skill",
+        "line": 199,
+        "source_sha256": "530a47398bda8d05467f75f36fd236ee9d99a2f7304975b0c0f5c0b7d22aaf91"
+      },
+      {
+        "key": "olhuaguang",
+        "line": 231,
+        "source_sha256": "be98ad9018a8400f46bde38e2d6a735ca6df06562f049dc4f254b2709d46d86a"
+      },
+      {
+        "key": "olxuanbai",
+        "line": 339,
+        "source_sha256": "f1aeb7bd528fd5fbec932d5aa064421ad219c9f689cda6b48283977da97d1728"
+      },
+      {
+        "key": "oldangmo",
+        "line": 373,
+        "source_sha256": "b75cb5f0bcbceeaa9f32f80bfebbff751ef7dd868f13f05a9c325befcbe873ac"
+      },
+      {
+        "key": "oljihui",
+        "line": 421,
+        "source_sha256": "4b35aa84b354057498cca075835e32df1427ee7bed250feb18e7bb80aa5219c9"
+      },
+      {
+        "key": "olxiaju",
+        "line": 452,
+        "source_sha256": "a2b116b3f1b12217b80f13f4d248593798351172d6cef643a8f34d521642bffe"
+      },
+      {
+        "key": "olshilun",
+        "line": 501,
+        "source_sha256": "c3750594fd0903e36cc8893c099cb810796c0af41c7455f357b414beca47c57c"
+      },
+      {
+        "key": "olzhuoming",
+        "line": 1645,
+        "source_sha256": "b9e9a56eaec955613bdd422ca8e56f6753a2f4ea40c26e038e3a29a101d8924c"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/sp/card.js",
+    "added": [
+      {
+        "key": "ol_cailian",
+        "line": 5,
+        "source_sha256": "eadeaae38be7490207fb18973a43531aa8bac502b871f963b3fcff49df290f52"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/onlyOL/character.js",
+    "added": [
+      {
+        "key": "ol_jie_zhuran",
+        "line": 58,
+        "source_sha256": "36924340ce24f2fd8a7e13f65f270839dab7f9b418b0be2ca526369307ce6fe5"
+      },
+      {
+        "key": "ol_zhuhuan",
+        "line": 64,
+        "source_sha256": "79a02a822b85b7065a022730cf48a9aca7058188b631d88ceb5d70faa428a136"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  {
+    "path": "apps/core/character/onlyOL/skill.js",
+    "added": [
+      {
+        "key": "ol_fenli",
+        "line": 1717,
+        "source_sha256": "436ab9ebabbe6741699d8104cb9d783dfcfe86049795ab9ee5674f79cf0c93f0"
+      },
+      {
+        "key": "ol_pingkou",
+        "line": 1768,
+        "source_sha256": "a794eb5b4a6de13fc93ef47cb23b9245444c1b5e17186523e85417b343cfbd24"
+      },
+      {
+        "key": "ol_jie_danshou",
+        "line": 1814,
+        "source_sha256": "11b080068c581e8c0cd5dd2f6fa48e80ad72f0aeaed056562503e10d8a828524"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  }
+]

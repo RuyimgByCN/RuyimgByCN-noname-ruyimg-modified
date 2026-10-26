@@ -349,6 +349,11 @@ pub enum ModifierTarget {
     ///
     /// Appended to keep existing serialized enum ordinals stable.
     RestoreSkippedPhase,
+    /// Prevent another player from targeting the owner while that player has used fewer cards
+    /// this turn than the owner's marks of this modifier's skill definition.
+    ///
+    /// Appended to keep existing serialized enum ordinals stable.
+    CardTargetCancelIfOtherUserCardUseCountLtOwnerMark,
     /// Exact cards recorded in this skill instance's policy state ignore distance.
     ///
     /// Appended to keep existing serialized enum ordinals stable.

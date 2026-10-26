@@ -146,6 +146,8 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::DiscardTargetEquipmentDrawWeaponRange
         | ContinuationKind::ChooseTargetRevealHandDamageIfSha
         | ContinuationKind::ChooseOtherGiveOneHandEquip
+        | ContinuationKind::ChooseGiveOrRecastOneHand
+        | ContinuationKind::ResolveOlJieDanshou
         | ContinuationKind::ChooseOtherGiveThenRecover
         | ContinuationKind::GuanxingPick
         | ContinuationKind::RecoverToMaxThenOptionalExchangeSkill

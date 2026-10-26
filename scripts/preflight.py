@@ -45,11 +45,6 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("行数门禁", [PY, "-B", "scripts/check-source-lines.py"], False),
 ]
 
-#: 行数门禁目前预期失败（`crates/rule-api/src/effect.rs` 超限，属既有问题）。
-#: 行数门禁是既有问题；文档引用检查只报告不阻塞（22 处失效引用待清理）。
-EXPECTED_FAILURES = {"行数门禁"}
-
-
 def run(name: str, argv: list[str]) -> tuple[str, int, str]:
     proc = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
     tail = (proc.stderr or proc.stdout).strip().splitlines()
@@ -67,11 +62,8 @@ def main() -> int:
             print(f"⏭  {name}（--quick 跳过）")
             continue
         name, code, tail = run(name, argv)
-        expected = name in EXPECTED_FAILURES
         if code == 0:
             print(f"✅ {name}")
-        elif expected:
-            print(f"⚠️  {name}（预期失败）: {tail}")
         else:
             print(f"❌ {name}: {tail}")
             failures.append(name)
@@ -80,7 +72,7 @@ def main() -> int:
     if failures:
         print(f"preflight 失败 {len(failures)} 项：{', '.join(failures)}", file=sys.stderr)
         return 1
-    print("preflight 全部通过（含预期失败项）✅")
+    print("preflight 全部通过 ✅")
     return 0
 
 

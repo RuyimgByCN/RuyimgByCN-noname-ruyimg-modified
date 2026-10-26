@@ -1,4 +1,7 @@
 use super::*;
+use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_756;
+use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_757;
+use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
 
 impl Assembler {
     pub(super) fn emit_effect_set_draw_phase_from_bottom(
@@ -373,6 +376,30 @@ impl Assembler {
                 self.ops.push(Op::HostEffect(
                     effect_tag::CHOOSE_TARGET_REVEAL_HAND_DAMAGE_IF_SHA,
                 ));
+            }
+            StmtIr::EffectResolveOlJieDanshou { player, skill, span } => {
+                self.mark(*span, "resolve_ol_jie_danshou");
+                self.required_abi = self.required_abi.max(ADDITIVE_RULE_VM_ABI_VERSION_757);
+                self.emit_expr(player)?;
+                self.emit_expr(skill)?;
+                self.ops
+                    .push(Op::HostEffect(effect_tag::RESOLVE_OL_JIE_DANSHOU));
+            }
+            StmtIr::EffectChooseGiveOrRecastOneHand {
+                player,
+                require_skill_def,
+                grant_skill_def,
+                grant_mark_def,
+                span,
+            } => {
+                self.mark(*span, "choose_give_or_recast_one_hand");
+                self.required_abi = self.required_abi.max(ADDITIVE_RULE_VM_ABI_VERSION_756);
+                self.emit_expr(player)?;
+                self.ops.push(Op::ConstU32(*require_skill_def));
+                self.ops.push(Op::ConstU32(*grant_skill_def));
+                self.ops.push(Op::ConstU32(*grant_mark_def));
+                self.ops
+                    .push(Op::HostEffect(effect_tag::CHOOSE_GIVE_OR_RECAST_ONE_HAND));
             }
             StmtIr::EffectChooseOtherGiveOneHandEquip { player, span } => {
                 self.mark(*span, "choose_other_give_one_hand_equip");

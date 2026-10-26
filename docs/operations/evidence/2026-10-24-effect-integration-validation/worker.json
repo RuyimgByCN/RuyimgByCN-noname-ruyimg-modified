@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "--import",
+    "./scripts/ts-register.mjs",
+    "scripts/native-worker-smoke.mjs"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "started_at": "2026-10-24T05:38:49.160795+00:00",
+  "finished_at": "2026-10-24T05:38:49.934112+00:00",
+  "seconds": 0.77,
+  "exit_code": 0,
+  "native_package_sha256": {
+    "engine_native_wasm.d.ts": "832d369c9f5f0cef69b79a4ff50e9020b67b6c57e47645458e46209e50d17701",
+    "engine_native_wasm_bg.wasm.d.ts": "019f39305da635ec2c550486b111aff19efb015cd59045c62113eb0e1f239fda",
+    "engine_native_wasm.js": "b26f9858656258fd8fe0ea89c73a88652775ac12ac6c4b926af11b96b225dc51",
+    "engine_native_wasm_bg.wasm": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+    ".gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "package.json": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+  },
+  "artifact_unchanged_during_test": true
+}

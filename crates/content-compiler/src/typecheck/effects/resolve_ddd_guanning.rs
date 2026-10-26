@@ -1160,6 +1160,44 @@ pub(in super::super) fn check_effect_stmt(
                 span: *span,
             })
         }
+        "resolve_ol_jie_danshou" => {
+            if args.len() != 1 {
+                return Err(CompileError::Type {
+                    pos: span.start as usize,
+                    message: "resolve_ol_jie_danshou(player)".into(),
+                });
+            }
+            Ok(StmtIr::EffectResolveOlJieDanshou {
+                player: check_expr(&args[0], locals)?,
+                skill: ExprIr::SelfSkill,
+                span: *span,
+            })
+        }
+        "choose_give_or_recast_one_hand" => {
+            if args.len() != 1 && args.len() != 4 {
+                return Err(CompileError::Type {
+                    pos: span.start as usize,
+                    message: "choose_give_or_recast_one_hand(player)".into(),
+                });
+            }
+            let (require_skill_def, grant_skill_def, grant_mark_def) = if args.len() == 4 {
+                (
+                    expect_u32(&args[1], span.start as usize)?,
+                    expect_u32(&args[2], span.start as usize)?,
+                    expect_u32(&args[3], span.start as usize)?,
+                )
+            } else {
+                (0, 0, 0)
+            };
+            Ok(StmtIr::EffectChooseGiveOrRecastOneHand {
+                player: check_expr(&args[0], locals)?,
+                require_skill_def,
+                grant_skill_def,
+                grant_mark_def,
+                span: *span,
+            })
+        }
+
         "choose_reveal_hand_card_bind_category_target" => {
             if args.len() != 2 {
                 return Err(CompileError::Type {

@@ -64,6 +64,13 @@ pub(crate) fn card_target_cancelled_for_logical_kind(
                 .for_target(ModifierTarget::CardTargetCancelIfOtherUserHpGteTarget),
         );
     }
+    let mark_cancel_mods = if user != target {
+        state
+            .modifiers
+            .for_target(ModifierTarget::CardTargetCancelIfOtherUserCardUseCountLtOwnerMark)
+    } else {
+        Vec::new()
+    };
     if user != target {
         let distance_mods = state
             .modifiers
@@ -77,8 +84,24 @@ pub(crate) fn card_target_cancelled_for_logical_kind(
             mods.extend(distance_mods);
         }
     }
+    let conditional_veto = mark_cancel_mods.iter().any(|modifier| {
+        modifier.target
+            == ModifierTarget::CardTargetCancelIfOtherUserCardUseCountLtOwnerMark
+            && state.turn.turn_card_use_count(user)
+                < state
+                    .players
+                    .get(target)
+                    .and_then(|player| {
+                        player
+                            .marks
+                            .iter()
+                            .find(|(mark, _)| *mark == modifier.skill_def.raw())
+                            .map(|(_, count)| (*count).max(0) as u32)
+                    })
+                    .unwrap_or(0)
+    });
     let (value, _, vetoed) = apply_int_modifiers_for_state(state, 0, &mods, Some(target));
-    vetoed || value != 0
+    vetoed || value != 0 || conditional_veto
 }
 
 /// Whether source-side armor bypass or target-side armor invalidation suppresses armor effects.

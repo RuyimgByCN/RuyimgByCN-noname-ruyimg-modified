@@ -1,0 +1,3 @@
+test original_xianding_batch14::dcdichou_marks_source_when_owner_targeted_and_draws_against_marked_target ... ok
+test original_xianding_v_guanyinping::dcdichou_end_clears_all_marks_and_offers_history_candidate ... ok
+test original_xianding_v_guanyinping::dcdichou_resolves_begin_bonus_and_end_fire_damage ... ok

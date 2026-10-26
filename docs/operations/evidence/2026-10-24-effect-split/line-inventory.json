@@ -1,0 +1,76 @@
+{
+  "limit": 2000,
+  "files": 8563,
+  "roots": {
+    "crates": 2467,
+    "apps": 113,
+    "packages": 2,
+    "scripts": 79,
+    "content": 5891,
+    "fuzz": 7,
+    "tests": 4
+  },
+  "largest_files": [
+    [
+      "crates/engine-core/tests/original_merged_extra/original_extra_wuhun.rs",
+      1993
+    ],
+    [
+      "crates/engine-core/src/effect/mod.rs",
+      1990
+    ],
+    [
+      "crates/engine-native/tests/t8_rvm_bridge.rs",
+      1971
+    ],
+    [
+      "content/original/ported/shahai/shahai_meta_swd_characters.skill",
+      1956
+    ],
+    [
+      "crates/rule-api/src/effect/general_resolvers.rs",
+      1940
+    ],
+    [
+      "content/original/ported/shahai/shahai_meta_hearth.skill",
+      1934
+    ],
+    [
+      "crates/engine-core/tests/original_merged_modifier/original_modifier_temp_skills.rs",
+      1896
+    ],
+    [
+      "scripts/sync-original-content.mjs",
+      1881
+    ],
+    [
+      "crates/engine-core/tests/original_merged_sp/original_sp_batch_af_dsl.rs",
+      1827
+    ],
+    [
+      "crates/engine-native/src/state.rs",
+      1788
+    ],
+    [
+      "crates/engine-core/src/content/registry/map_filter.rs",
+      1773
+    ],
+    [
+      "crates/engine-native/examples/nc12_bench.rs",
+      1770
+    ],
+    [
+      "crates/engine-native/src/engine/play_card.rs",
+      1767
+    ],
+    [
+      "crates/engine-core/src/hash.rs",
+      1751
+    ],
+    [
+      "crates/engine-native/tests/native_kernel.rs",
+      1731
+    ]
+  ],
+  "over_limit": []
+}

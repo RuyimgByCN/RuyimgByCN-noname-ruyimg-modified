@@ -1,0 +1,20 @@
+{
+  "verified_at": "2026-10-24T04:23:10.489417+00:00",
+  "baseline_dirty_untracked_files": 11099,
+  "unchanged": 11096,
+  "intentional_changes": [
+    "Cargo.lock",
+    "docs/architecture/native-progress.md",
+    "docs/migration/upstream-extension-reconstruction.md"
+  ],
+  "unexpected_changes": [],
+  "independently_reviewed_source_drift": [],
+  "original_cargo_lock_changes_preserved": true,
+  "line_gate_byte_identical_to_head": true,
+  "head_unchanged": true,
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "staged_paths": [],
+  "backup": "/tmp/noname-next-effect-split-20261024",
+  "backup_patch_bytes": 4243107,
+  "backup_patch_sha256": "cac280b44ca9775c82828fb18e80169a115b540d51e2d6da65f90cb2bfa5e35f"
+}

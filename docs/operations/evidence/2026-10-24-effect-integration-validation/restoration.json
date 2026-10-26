@@ -1,0 +1,27 @@
+{
+  "restored_at": "2026-10-24T05:41:43.070746+00:00",
+  "outputs": {
+    "apps/web-client/src/worker/native-pkg": {
+      "restored_to_original": true,
+      "files": 6
+    },
+    "apps/web-client/src/wasm-pkg": {
+      "restored_to_original": true,
+      "files": 6
+    },
+    "apps/web-client/public/pkg": {
+      "restored_to_original": true,
+      "files": 6
+    },
+    "apps/web-client/dist": {
+      "restored_to_original": true,
+      "files": 46
+    }
+  },
+  "baseline_paths": 11166,
+  "baseline_paths_identical_before_progress_update": 11166,
+  "unexpected_changes": [],
+  "validated_generated_backup": "/tmp/noname-next-effect-validation-20261024/validated-generated",
+  "head_unchanged": true,
+  "staged_paths": []
+}

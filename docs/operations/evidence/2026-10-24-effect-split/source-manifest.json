@@ -1,0 +1,157 @@
+{
+  "verified_at": "2026-10-24T04:20:32.862373+00:00",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "rules_version": 322,
+  "archive_version": 105,
+  "files": {
+    "Cargo.lock": {
+      "sha256": "b29dfa5cec9037d5d7dbb176e4f3da67c0f0b9f802ae2e01a34525bddd308187",
+      "physical_lines": 5442
+    },
+    "crates/rule-api/Cargo.toml": {
+      "sha256": "f62fdf5bdb891820070cbffac4b46eef45045c9c5067747d0a7337a7e5166d70",
+      "physical_lines": 14
+    },
+    "crates/rule-api/src/effect.rs": {
+      "sha256": "652a56569e30ece9a83999f2efde1055a4e5dad931e3c335c4cfa877522a0cf6",
+      "physical_lines": 700
+    },
+    "crates/rule-api/src/effect/card_movement.rs": {
+      "sha256": "5cc6c99c832429dff6e2c5163d80f272c904789d5ef8f5c28695d1ecbf75f149",
+      "physical_lines": 1659
+    },
+    "crates/rule-api/src/effect/choices.rs": {
+      "sha256": "4747c7438a625d76051a664d11619f2aaca80ec6f5e097f8147b62c7a10609e7",
+      "physical_lines": 1487
+    },
+    "crates/rule-api/src/effect/clan_generals.rs": {
+      "sha256": "b268b1387d04b130d3ddccfc670874b6ffd7e167b970909479321d8bd085edaa",
+      "physical_lines": 58
+    },
+    "crates/rule-api/src/effect/classic_generals.rs": {
+      "sha256": "a795f0ea82b71d8762d80fa49efaf3e476cade4bb551da30fb4f7003c2c0a317",
+      "physical_lines": 755
+    },
+    "crates/rule-api/src/effect/damage_and_recovery.rs": {
+      "sha256": "0f09ff9fe01e6a8691b468da170f21bffab73540a8709b3d9212f34302454f69",
+      "physical_lines": 1076
+    },
+    "crates/rule-api/src/effect/draw_and_gain.rs": {
+      "sha256": "1dcd4eed988bc9ee4870b011228011b543bed39806b123e3fa3f366652b5387b",
+      "physical_lines": 551
+    },
+    "crates/rule-api/src/effect/events.rs": {
+      "sha256": "cc344998fa1cfa7fb5ff58dee350b04ca0b7d47d39f25c1ae7137bfaece70ae4",
+      "physical_lines": 232
+    },
+    "crates/rule-api/src/effect/extension_generals.rs": {
+      "sha256": "7f0e30fa002f82f06e6f82cf79976de708bdac6defe14e4539a542af6d9e2207",
+      "physical_lines": 499
+    },
+    "crates/rule-api/src/effect/general_resolvers.rs": {
+      "sha256": "19dfd76d688149827390e152265f69244dfa80c8b0f3c962124557ecd7e0b5c2",
+      "physical_lines": 1940
+    },
+    "crates/rule-api/src/effect/jsrg_generals.rs": {
+      "sha256": "e5bda1d64a368cd32880b42f2d13a22be46f8f2a94e56f6d45ec50110d102162",
+      "physical_lines": 84
+    },
+    "crates/rule-api/src/effect/judgment.rs": {
+      "sha256": "201234c2df9d1feddc5856a03732eef02e2837087974b5c6844d64682af91d4c",
+      "physical_lines": 289
+    },
+    "crates/rule-api/src/effect/life_cycle.rs": {
+      "sha256": "0eea14c11992fc62b45d03d8b196b4dbb536f7348c947cfeec5cad8a3cf9d332",
+      "physical_lines": 59
+    },
+    "crates/rule-api/src/effect/mobile_generals.rs": {
+      "sha256": "7cfb254557a23e67e2c95165144ee5f4cc2f9d36912467fac33ccbb39c145e9f",
+      "physical_lines": 464
+    },
+    "crates/rule-api/src/effect/online_generals.rs": {
+      "sha256": "f0c145d14bd9964682bc170e3e61149303e917cda5c56de58b9257b07a7902d3",
+      "physical_lines": 614
+    },
+    "crates/rule-api/src/effect/pot_generals.rs": {
+      "sha256": "399ac54a84adb709ea1acbdf542ce62c2e87943f00741ef18a1b3bba9bd30ad0",
+      "physical_lines": 434
+    },
+    "crates/rule-api/src/effect/remastered_generals.rs": {
+      "sha256": "df06a4099219dc3a34bf4c1f19bd20556d97fb4d87d198ece6d964353c0b0fca",
+      "physical_lines": 667
+    },
+    "crates/rule-api/src/effect/sha_resolution.rs": {
+      "sha256": "36c8d70710e881bd4b0b557438fad1cdb1598ab0c0acbcccc4e9664bcfc430d2",
+      "physical_lines": 173
+    },
+    "crates/rule-api/src/effect/skills_and_marks.rs": {
+      "sha256": "660ac4cdcb162566d3f501f722a24237526dfc565d06ce292b5420aecbfd4e75",
+      "physical_lines": 408
+    },
+    "crates/rule-api/src/effect/sp_generals.rs": {
+      "sha256": "a10a343b34f3be5e6d311e8b0bdf0d1cf22eaaf614db375f970731ac5b88a893",
+      "physical_lines": 485
+    },
+    "crates/rule-api/src/effect/taiwan_generals.rs": {
+      "sha256": "627e3cc8412ad628554f338c858125214122d3841400df1f9a97ab8fda686689",
+      "physical_lines": 714
+    },
+    "crates/rule-api/src/effect/targeting.rs": {
+      "sha256": "a7f1d95886399203d9ba647f2c45c793c7c6567e4f9f213f7b45f288e2d17ae4",
+      "physical_lines": 69
+    },
+    "crates/rule-api/src/effect/turn_flow.rs": {
+      "sha256": "4120aecca0ca6c9a867bb8982477f2422801f0b43585bd13247f2b081be32871",
+      "physical_lines": 264
+    },
+    "crates/rule-api/src/host.rs": {
+      "sha256": "f1faaba77a9cae4bcdb904e6d17eb94f4cc9965982df47980769085243b4754a",
+      "physical_lines": 68
+    },
+    "crates/rule-api/src/lib.rs": {
+      "sha256": "48023111c1fa414fcbf3ff5ac529cf523ad0d2634001d6c7c47df92f864f4392",
+      "physical_lines": 22
+    },
+    "crates/rule-api/src/query.rs": {
+      "sha256": "4ba2a5ee6de2d7634a11a81ff3a9c8f10c43a15bca4c25c4efc5d8d0920e3c21",
+      "physical_lines": 340
+    },
+    "crates/rule-api/tests/effect_wire_compat.rs": {
+      "sha256": "160a9b04f42245788f35a294bdef943ab730f76f8bf68f13a1e3e8987b2614c5",
+      "physical_lines": 187
+    },
+    "crates/rule-api/tests/effect_wire_v322.json": {
+      "sha256": "2700412a1e0b96a8bc01d7f6d13f806606f79e35e81a71dddc2ca2580f336e87",
+      "physical_lines": 817
+    },
+    "scripts/check-source-lines.py": {
+      "sha256": "8f6c043d2e66743c161f23b9dd4ec805040fe3261fcfb7fd6de35521dbdf7a56",
+      "physical_lines": 49
+    },
+    "scripts/plan_effect_request_split.py": {
+      "sha256": "a4a0e58d1ec7d60f27a5708ce3e9b6a29d2bc20ffa9dfcd882c98bf2260ab05e",
+      "physical_lines": 150
+    },
+    "scripts/preflight.py": {
+      "sha256": "d47ccdf2a871656d4cb60a659a4e68f9eaa46a719e86d9ce36d745065f795a5c",
+      "physical_lines": 80
+    },
+    "scripts/test_plan_effect_request_split.py": {
+      "sha256": "c5363610f340af986aaf19b33b87bc8f50ef915b5a6e8cfe6fe4d91f5610fe83",
+      "physical_lines": 161
+    },
+    "scripts/test_preflight.py": {
+      "sha256": "a9c850ff91a0f5fba88772ea4bf71989bdbd735e9540eec6fd86335f52edd619",
+      "physical_lines": 59
+    }
+  },
+  "removed_unused_fragments": [
+    "crates/rule-api/src/effect/choose_other_give_then_recover.rs",
+    "crates/rule-api/src/effect/draw_cards.rs",
+    "crates/rule-api/src/effect/qieyi_phase_start.rs",
+    "crates/rule-api/src/effect/resolve_dcyingtu.rs",
+    "crates/rule-api/src/effect/resolve_houfeng.rs",
+    "crates/rule-api/src/effect/resolve_mass_damage_discard_turn_over.rs",
+    "crates/rule-api/src/effect/resolve_xinyaoming.rs"
+  ]
+}

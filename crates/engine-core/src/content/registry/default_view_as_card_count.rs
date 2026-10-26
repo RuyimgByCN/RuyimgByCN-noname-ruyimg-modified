@@ -255,6 +255,9 @@ pub(crate) fn mod_target_tag(t: ModifierTarget) -> &'static str {
         }
         ModifierTarget::TurnFaceDownCancel => "turn_face_down_cancel",
         ModifierTarget::RestoreSkippedPhase => "restore_skipped_phase",
+        ModifierTarget::CardTargetCancelIfOtherUserCardUseCountLtOwnerMark => {
+            "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+        }
         ModifierTarget::CardDistanceUnlimitedForSkillCardPolicy => {
             "card_distance_unlimited_for_skill_card_policy"
         }

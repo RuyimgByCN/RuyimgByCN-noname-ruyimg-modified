@@ -465,6 +465,7 @@ pub(crate) fn handle_activate_skill(
             targets_spec.hp_gt_owner,
             targets_spec.hp_lte_owner,
             targets_spec.hp_gt,
+            targets_spec.max_hp_gt,
             targets_spec.hand_gt_owner,
             targets_spec.hand_lte_owner,
             targets_spec.pair_hand_difference_lte_three,

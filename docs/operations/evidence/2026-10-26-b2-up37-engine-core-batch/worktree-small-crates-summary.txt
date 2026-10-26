@@ -1,0 +1,7 @@
+2026-10-26 21:21:29 +0800
+EXIT=0
+rule-api: 558/0/0
+rule-vm: 558/0/0
+content-compiler: 558/0/0
+content-schema: 558/0/0
+2026-10-26 21:21:43 +0800

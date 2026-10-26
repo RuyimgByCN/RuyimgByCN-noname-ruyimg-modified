@@ -1,0 +1,9 @@
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:1591
+    if (skill.migration_status !== status) throw new Error(`${skill.id}: migration status mismatch`);
+                                                 ^
+
+Error: onlyOL:ol_fenli: migration status mismatch
+    at verifyCatalog (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:1591:50)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:254:3
+
+Node.js v26.4.0

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "crates/engine-core/src/state/turn.rs",
+    "bytes": 60089,
+    "sha256": "a15b688d333ede593a4f82e0746f2046aec3fd568d6df8249b0b1a4b68daa1a8"
+  },
+  {
+    "path": "crates/engine-core/src/hash.rs",
+    "bytes": 79881,
+    "sha256": "50125dbae61d8a2479f30673663de7dba87638a97cd7eeb066f234ba14c2ab47"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "bytes": 49711,
+    "sha256": "0e4cfc9b585de1e0667db7cc69c03f7f248571a05a0404e5f6f6a4848292e618"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs",
+    "bytes": 52895,
+    "sha256": "f401650eddb16d3be4b449f1dce0f57eb01c275c10569c90ae57f4215702164c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs",
+    "bytes": 52154,
+    "sha256": "c6edd827d79696cfa0c5bf3ee6ce7ed6ac587abac39f22daecdfe0bc86f043de"
+  },
+  {
+    "path": "crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs",
+    "bytes": 10966,
+    "sha256": "f6b7ee11ecc6b6ae24dac07ed3d70d2fa1f9e092c432169421672534484899f0"
+  }
+]

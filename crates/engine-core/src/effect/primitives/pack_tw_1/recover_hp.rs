@@ -145,6 +145,12 @@ pub(crate) fn add_mark(
         .find(|(m, _)| *m == mark)
         .map(|(_, c)| *c)
         .unwrap_or(0);
+    if current > 0 && count <= 0 {
+        tx.state_mut()
+            .turn
+            .removed_marks
+            .insert((mark, player));
+    }
     let mut events = vec![DomainEvent::MarkChanged {
         player,
         mark_def: mark,
@@ -204,6 +210,12 @@ pub(crate) fn remove_mark(
         .find(|(m, _)| *m == mark)
         .map(|(_, c)| *c)
         .unwrap_or(0);
+    if current > 0 && count <= 0 {
+        tx.state_mut()
+            .turn
+            .removed_marks
+            .insert((mark, player));
+    }
     let mut events = vec![DomainEvent::MarkChanged {
         player,
         mark_def: mark,
@@ -1135,6 +1147,9 @@ pub(crate) fn set_turn(
     tx.journal(JournalEntry::TurnCheckpoint);
     if next_phase == Phase::Draw && (current != previous_current || previous_phase != Phase::Draw) {
         tx.state_mut().turn.clear_draw_phase_fixed_count();
+    }
+    if current != previous_current {
+        tx.state_mut().turn.clear_turn_card_use_counts();
     }
     tx.state_mut().turn.current = current;
     tx.state_mut().turn.phase = next_phase;

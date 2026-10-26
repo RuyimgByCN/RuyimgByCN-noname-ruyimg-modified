@@ -310,6 +310,21 @@ pub(super) fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
             put_u32(h, skill.raw());
         }
 
+        EffectRequest::ChooseGiveOrRecastOneHand {
+            player,
+            skill,
+            require_skill_def,
+            grant_skill_def,
+            grant_mark_def,
+        } => {
+            put_u8(h, 187);
+            put_u32(h, player.raw());
+            put_u32(h, skill.raw());
+            put_u32(h, *require_skill_def);
+            put_u32(h, *grant_skill_def);
+            put_u32(h, *grant_mark_def);
+        }
+
         EffectRequest::ChooseRevealHandCardBindCategoryTarget {
             player,
             target,

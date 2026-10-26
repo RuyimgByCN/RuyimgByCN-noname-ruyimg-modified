@@ -7,7 +7,7 @@
       "root": "archive/upstream/noname/apps/core",
       "repository": "https://github.com/libnoname/noname.git",
       "repository_root": "archive/upstream/noname",
-      "head": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
       "dirty": false,
       "tracked_changes": [],
       "tracked_change_count": 0,
@@ -21,16 +21,16 @@
       "name": "legacy-source",
       "source_category": "core",
       "files": 366,
-      "bytes": 15508655,
+      "bytes": 15623344,
       "hardlinked": 0,
       "copied": 366
     },
     {
       "name": "portraits",
       "source_category": "core",
-      "files": 2703,
-      "bytes": 405640029,
-      "hardlinked": 2703,
+      "files": 2707,
+      "bytes": 406385818,
+      "hardlinked": 2707,
       "copied": 0
     }
   ],
@@ -3125,19 +3125,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/guanning.jpg",
-      "size": 132022,
-      "source_category": "core",
-      "source_path": "image/character/guanning.jpg",
-      "sha256": "6595bb5893c4dc03639175dbe07b44a8f18d4b54ee957e7a47e458d80595b1ed"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/guānning.jpg",
       "size": 112608,
       "source_category": "core",
       "source_path": "image/character/guānning.jpg",
       "sha256": "0fce4721c3f8233babc4b0b057bff5967fe14a299412f5cd72bb45d8cbc88f21"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/guanning.jpg",
+      "size": 132022,
+      "source_category": "core",
+      "source_path": "image/character/guanning.jpg",
+      "sha256": "6595bb5893c4dc03639175dbe07b44a8f18d4b54ee957e7a47e458d80595b1ed"
     },
     {
       "kind": "portraits",
@@ -4533,14 +4533,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/hm_yudu.jpg",
-      "size": 298137,
-      "source_category": "core",
-      "source_path": "image/character/hm_yudu.jpg",
-      "sha256": "b67250ecb85c757ddffbd1dc417ac807c93af187038c1331433ab1bd5671c2ef"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/houcheng.jpg",
       "size": 145239,
       "source_category": "core",
@@ -4762,6 +4754,14 @@
       "source_category": "core",
       "source_path": "image/character/huan_zhaoyun.jpg",
       "sha256": "2d005ae570f181d1439a7dfacdf18d7100c1d83f6b2210d03fd8ab286f983e1e"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/huan_zhouyu.jpg",
+      "size": 184205,
+      "source_category": "core",
+      "source_path": "image/character/huan_zhouyu.jpg",
+      "sha256": "f734806e0b1af7804d14857a149ea2e6928e897be019a4db8487614af8d1daae"
     },
     {
       "kind": "portraits",
@@ -10189,6 +10189,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/ol_sb_zhouyu.jpg",
+      "size": 217789,
+      "source_category": "core",
+      "source_path": "image/character/ol_sb_zhouyu.jpg",
+      "sha256": "71599e707dbc003d8ebfd1ddc587c3d5018c90d048112672977e39bdd8b314e2"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/ol_sb_zhugeliang.jpg",
       "size": 258932,
       "source_category": "core",
@@ -15333,6 +15341,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/star_dongyun.jpg",
+      "size": 204130,
+      "source_category": "core",
+      "source_path": "image/character/star_dongyun.jpg",
+      "sha256": "787a564a260ac6ed48779dabe9d7d672ba802dbd5871bf91325625c8bdfaef1c"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/star_dongzhuo.jpg",
       "size": 117390,
       "source_category": "core",
@@ -16437,19 +16453,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/sunshao.jpg",
-      "size": 235734,
-      "source_category": "core",
-      "source_path": "image/character/sunshao.jpg",
-      "sha256": "d8ae6f63bfd2b4ffca039c9d74f87e95ac9c50d09e053c868aa229b001c8a61a"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/sunsháo.jpg",
       "size": 119973,
       "source_category": "core",
       "source_path": "image/character/sunsháo.jpg",
       "sha256": "913b3da6086ed8848ef8767d0647b2db3f4354a5ca9131ba1d576d4abf87a000"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/sunshao.jpg",
+      "size": 235734,
+      "source_category": "core",
+      "source_path": "image/character/sunshao.jpg",
+      "sha256": "d8ae6f63bfd2b4ffca039c9d74f87e95ac9c50d09e053c868aa229b001c8a61a"
     },
     {
       "kind": "portraits",
@@ -16461,19 +16477,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/sunxiu.jpg",
-      "size": 218021,
-      "source_category": "core",
-      "source_path": "image/character/sunxiu.jpg",
-      "sha256": "8b69e5dffc84da7f22ad4bd572bf54fe5606fc47769989262142b40ed0af0ebe"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/sunxiù.jpg",
       "size": 69609,
       "source_category": "core",
       "source_path": "image/character/sunxiù.jpg",
       "sha256": "e6efa859ba2319a359b6bfce769c2610aa84b411ec63ae9ee8612dd76067fe7f"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/sunxiu.jpg",
+      "size": 218021,
+      "source_category": "core",
+      "source_path": "image/character/sunxiu.jpg",
+      "sha256": "8b69e5dffc84da7f22ad4bd572bf54fe5606fc47769989262142b40ed0af0ebe"
     },
     {
       "kind": "portraits",
@@ -16789,6 +16805,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/tangtang.png",
+      "size": 356487,
+      "source_category": "core",
+      "source_path": "image/character/tangtang.png",
+      "sha256": "447c78b5b495c5206c9c4795b7e129c0fd520af65b60bf1ca23994ce4a62e8fd"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/tangzi.jpg",
       "size": 250994,
       "source_category": "core",
@@ -17026,6 +17050,14 @@
       "source_category": "core",
       "source_path": "image/character/tw_dm_quyi.jpg",
       "sha256": "e8ff9574cd1fc222e97626253c507c2d8097e8d53a688c87adf6e28667a0ad9d"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/tw_dm_zhangliang.jpg",
+      "size": 81315,
+      "source_category": "core",
+      "source_path": "image/character/tw_dm_zhangliang.jpg",
+      "sha256": "763d876ab028cb9953e2758cb83a83f7bae73c03f9ded5d503461eca6fde3107"
     },
     {
       "kind": "portraits",
@@ -21061,19 +21093,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zhangyi.jpg",
-      "size": 223876,
-      "source_category": "core",
-      "source_path": "image/character/zhangyi.jpg",
-      "sha256": "e0250c40bdeb220ba43b5c7abcef49b0d795c1e2e6bb6a1b43a7324c4ca37495"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zhangyì.jpg",
       "size": 234560,
       "source_category": "core",
       "source_path": "image/character/zhangyì.jpg",
       "sha256": "43a273f496d5f8c4a0e283da35b332519d3d0caff35df684652cb6ecf4e523a9"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zhangyi.jpg",
+      "size": 223876,
+      "source_category": "core",
+      "source_path": "image/character/zhangyi.jpg",
+      "sha256": "e0250c40bdeb220ba43b5c7abcef49b0d795c1e2e6bb6a1b43a7324c4ca37495"
     },
     {
       "kind": "portraits",
@@ -21133,19 +21165,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zhaoyan.jpg",
-      "size": 155386,
-      "source_category": "core",
-      "source_path": "image/character/zhaoyan.jpg",
-      "sha256": "7d36fe10cb63acfc4f7530c3ce35663be21a8fa872bb645fc65c105bdb5b9017"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zhaoyǎn.jpg",
       "size": 150841,
       "source_category": "core",
       "source_path": "image/character/zhaoyǎn.jpg",
       "sha256": "6b3d048806f08bafe40410779581ff111d7a376c630eb6b733e23475ff7d1eea"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zhaoyan.jpg",
+      "size": 155386,
+      "source_category": "core",
+      "source_path": "image/character/zhaoyan.jpg",
+      "sha256": "7d36fe10cb63acfc4f7530c3ce35663be21a8fa872bb645fc65c105bdb5b9017"
     },
     {
       "kind": "portraits",

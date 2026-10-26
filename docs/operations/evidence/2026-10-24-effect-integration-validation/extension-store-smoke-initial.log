@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: all discoverable packages install actual versioned data; active set reaches the match
+ok 1 - all discoverable packages install actual versioned data; active set reaches the match
+  ---
+  duration_ms: 10.543625
+  ...
+# Subtest: same-version installation/upgrade preserves installed bytes and refuses invented versions
+ok 2 - same-version installation/upgrade preserves installed bytes and refuses invented versions
+  ---
+  duration_ms: 0.806667
+  ...
+# Subtest: all lifecycle content mutations are blocked during a match
+ok 3 - all lifecycle content mutations are blocked during a match
+  ---
+  duration_ms: 0.294541
+  ...
+# Subtest: save retains original package copy across disable, uninstall and later saves
+ok 4 - save retains original package copy across disable, uninstall and later saves
+  ---
+  duration_ms: 0.408792
+  ...
+# Subtest: revocation rejects a saved package even when its original bytes remain
+ok 5 - revocation rejects a saved package even when its original bytes remain
+  ---
+  duration_ms: 0.538
+  ...
+# Subtest: missing installed payload, dangling lock and duplicate lock fail without fallback
+ok 6 - missing installed payload, dangling lock and duplicate lock fail without fallback
+  ---
+  duration_ms: 0.227416
+  ...
+# Subtest: legacy metadata-only installs are repaired explicitly by upgrade
+ok 7 - legacy metadata-only installs are repaired explicitly by upgrade
+  ---
+  duration_ms: 0.272291
+  ...
+# Subtest: changed version, fingerprint, missing package and malformed payload reject restore
+ok 8 - changed version, fingerprint, missing package and malformed payload reject restore
+  ---
+  duration_ms: 0.458958
+  ...
+# Subtest: old standard saves without packages remain compatible
+ok 9 - old standard saves without packages remain compatible
+  ---
+  duration_ms: 0.23525
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19.725292

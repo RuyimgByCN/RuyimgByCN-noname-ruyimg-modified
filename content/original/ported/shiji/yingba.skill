@@ -1,16 +1,25 @@
-// 英霸（神孙策）：出牌阶段限一次，你可令一名体力上限大于 1 的其他角色失去 1 点体力上限，
-// 然后你失去 1 点体力上限。目标若存活则获得一枚“平定”标记。
-// 旧 JavaScript 仅作语义证据；上限变化与标记由权威原语响应。
+// 英霸（神孙策）：出牌阶段限一次，你可令一名体力上限大于 1 的其他角色
+// 失去 1 点体力；若其仍存活，再失去 1 点体力上限并获得“平定”标记与【英霸】
+// 衍生技；然后你失去 1 点体力上限。
+// 旧 JavaScript 仅作语义证据；体力、上限、标记与技能授予由权威原语响应。
+// 目标必须体力上限 > 1：由 active targets max_hp_gt 1 在选择层过滤。
 skill yingba(2187983153) {
-  active play_phase uses_per_turn 1 targets 1 1 other {
-    effect change_max_hp(event_source, -1);
-    effect add_mark(event_source, 3219705664, 1);
-    effect change_max_hp(self, -1);
+  active play_phase uses_per_turn 1 targets 1 1 other max_hp_gt 1 {
+    if 1 < max_hp(event_source) {
+      effect lose_hp(event_source, 1);
+      if 0 < hp(event_source) {
+        effect change_max_hp(event_source, -1);
+        effect add_skill(event_source, 3219705664);
+        effect add_mark(event_source, 3219705664, 1);
+      }
+      effect change_max_hp(self, -1);
+    }
   }
 }
 
-// 平定标记的手牌上限加成：每枚标记 × 拥有【英霸】的存活角色数。
-// 注意：DSL 的 owner_skill_mark 只表达拥有者自身标记数，跨角色计数在此近似为标记数。
+// 平定标记仅登记；上游的“每回合前 X 张牌不能指定英霸角色”目标限制尚未建模。
+// 旧实现曾错误地给手牌上限加标记数，2026-10-24 已移除。
 skill yingba_mark(3219705664) {
-  modifier hand_limit add owner_skill_mark;
+  // 每回合使用的前 X 张牌不能指定拥有英霸的角色（X=平定标记数）。
+  modifier card_target_cancel_if_other_user_card_use_count_lt_owner_mark override 1;
 }

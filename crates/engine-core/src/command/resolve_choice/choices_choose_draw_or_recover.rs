@@ -318,6 +318,16 @@ pub(super) fn resolve_choice(
             resolve_choose_other_give_one_hand_equip(tx, observer, &payload, selections, cancelled)
         }
 
+        ContinuationKind::ChooseGiveOrRecastOneHand => {
+            resolve_choose_give_or_recast_one_hand(tx, observer, &payload, selections, cancelled)
+        }
+
+        ContinuationKind::ResolveOlJieDanshou => {
+            crate::effect::resolve_ol_jie_danshou_choice(
+                tx, observer, &payload, selections, cancelled,
+            )
+        }
+
         ContinuationKind::ChooseOtherGiveThenRecover => {
             resolve_choose_other_give_then_recover(tx, observer, &payload, selections, cancelled)
         }

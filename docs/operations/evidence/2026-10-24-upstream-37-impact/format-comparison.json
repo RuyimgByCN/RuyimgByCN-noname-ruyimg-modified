@@ -1,0 +1,402 @@
+[
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ai/index.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/get/audio.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/get/is.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/get/pinyins/index.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/browser.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/compatible.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/import.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/index.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/loading.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/node.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/onload/default-splash.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/init/onload/index.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/cache/cacheContext.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/element/GameEvent/compilers/StepCompiler.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/element/Player/type.d.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/element/gameEvent.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/experimental/symbol.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/fs/legacy.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/help/about-game.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/help/game-api.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/help/game-controls.ts",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/index.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/init/index.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/skill.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/update.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/library/zhanfa.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ui/create/menu/index.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ui/create/menu/nonameConfig.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ui/create/menu/pages/cardPackMenu.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ui/create/menu/pages/exetensionMenu.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/ui/create/menu/pages/otherMenu.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/util/index.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/util/sandbox/sandbox.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": false
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/util/sandbox/security.js",
+    "equal_without_comments_and_format": false,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "ad1065b0",
+    "path": "apps/core/noname/util/utils.ts",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "a15a1e4f",
+    "path": "apps/core/card/standard.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "a15a1e4f",
+    "path": "apps/core/character/huicui/skill.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "a15a1e4f",
+    "path": "apps/core/character/jsrg/skill.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "a15a1e4f",
+    "path": "apps/core/mode/boss.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  },
+  {
+    "sha": "a15a1e4f",
+    "path": "apps/core/mode/identity.js",
+    "equal_without_comments_and_format": true,
+    "parse_errors": [
+      0,
+      0
+    ],
+    "structural_ast_equal": true
+  }
+]

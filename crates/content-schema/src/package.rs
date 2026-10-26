@@ -482,6 +482,9 @@ pub struct PackageTargetSpec {
     /// Optional exclusive lower bound for selected targets' current HP.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub hp_gt: Option<u8>,
+    /// Optional exclusive lower bound for selected targets' maximum HP.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max_hp_gt: Option<u8>,
     /// Whether selected targets must have more hand cards than the skill owner.
     #[serde(default, skip_serializing_if = "is_false")]
     pub hand_gt_owner: bool,
@@ -1207,6 +1210,10 @@ impl ContentPackage {
                 }
                 if let Some(limit) = targets.hp_gt {
                     h.update(b"active-targets-hp-gt/v1");
+                    h.update(&[limit]);
+                }
+                if let Some(limit) = targets.max_hp_gt {
+                    h.update(b"active-targets-max-hp-gt/v1");
                     h.update(&[limit]);
                 }
                 if targets.can_compare {

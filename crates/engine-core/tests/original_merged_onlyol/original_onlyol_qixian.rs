@@ -80,6 +80,7 @@ fn hand_limit_base_is_seven() {
     let committed = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
     let mut compiled = content_compiler::compile_source_named("onlyOL", &onlyol_sources()).unwrap();
     compiled.character_index = committed.character_index.clone();
+    compiled.manifest.version = committed.manifest.version.clone();
     compiled.manifest.dependencies = committed.manifest.dependencies.clone();
     compiled.manifest.logic_hash = compiled.compute_logic_hash();
     assert_eq!(committed.manifest.logic_hash, compiled.manifest.logic_hash);

@@ -1600,6 +1600,38 @@ macro_rules! variants {
         /// Source span.
         span: Span,
     },
+    /// Choose up to skipped-phase count of other players, damage each, and draw one per actual
+    /// damage. ABI 754.
+    EffectChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+        /// Skill owner and damage source.
+        player: ExprIr,
+        /// Damage dealt to every selected target.
+        amount: ExprIr,
+        /// Source span.
+        span: Span,
+    },
+    /// OL界朱然「胆守」：四选项每阶段各一次，选择目标执行效果后弃置序号张牌。ABI 757.
+    EffectResolveOlJieDanshou {
+        /// Skill owner.
+        player: ExprIr,
+        /// Originating skill instance.
+        skill: ExprIr,
+        /// Source span.
+        span: Span,
+    },
+    /// Choose one hand card, then give it to another living player or recast it. ABI 755.
+    EffectChooseGiveOrRecastOneHand {
+        /// Skill owner.
+        player: ExprIr,
+        /// Required owned skill def (0 = no reward).
+        require_skill_def: u32,
+        /// Skill def granted to the recipient on give (0 = none).
+        grant_skill_def: u32,
+        /// Mark def granted to the recipient on give (0 = none).
+        grant_mark_def: u32,
+        /// Source span.
+        span: Span,
+    },
         ] }
     };
 }

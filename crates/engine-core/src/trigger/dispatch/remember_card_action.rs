@@ -3,6 +3,15 @@
 use super::*;
 
 pub(crate) fn remember_card_action(tx: &mut Transaction, event: &DomainEvent) {
+    if let DomainEvent::CardUsed { player, .. } = event {
+        if player.is_some()
+            && tx.state().content.has_modifier_target(
+                crate::query::ModifierTarget::CardTargetCancelIfOtherUserCardUseCountLtOwnerMark,
+            )
+        {
+            tx.state_mut().turn.record_turn_card_use(*player);
+        }
+    }
     if tx.state().turn.phase != Phase::Discard
         && matches!(
             event,

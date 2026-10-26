@@ -1,0 +1,110 @@
+{
+  "command": [
+    "python3",
+    "-u",
+    "-B",
+    "scripts/preflight.py"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "started_at": "2026-10-24T13:35:37.260988+08:00",
+  "ended_at": "2026-10-24T13:42:09.524198+08:00",
+  "exit_code": 0,
+  "status": "completed",
+  "log": "/tmp/noname-next-effect-validation-20261024/preflight-full.log",
+  "checks": [
+    {
+      "status": "passed",
+      "output": "✅ 本地链接（核心）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 本地链接（全部）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 旧值扫描"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 近 20 轮索引新鲜"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 包→来源映射"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 规则登记表"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 过滤臂↔元数据一致"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 牌名 vs 牌种比较"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 台账账目（移出必留痕）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 相位枚举（REVIEW=0）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 来源覆盖三分"
+    },
+    {
+      "status": "passed",
+      "output": "✅ host 键普查（U05=314）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 卡面覆盖（201/128）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 台账↔枚举一致"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 已登记差异口径（20/54）"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 守卫引用名存在"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 注释计数=台账"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 脚本单测"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 文档 file:line 引用"
+    },
+    {
+      "status": "passed",
+      "output": "✅ 行数门禁"
+    }
+  ],
+  "counts": {
+    "passed": 20,
+    "expected_failure": 0,
+    "failed": 0,
+    "skipped": 0
+  },
+  "checks_total": 20,
+  "script_unittest_details": {
+    "preflight_check": "passed",
+    "individual_test_stdout_stderr_forwarded_by_preflight": false,
+    "discovered_test_cases": 180,
+    "discovery_method": "unittest.defaultTestLoader.discover(\"scripts\").countTestCases(); discovery only; tests were not rerun",
+    "discovered_at": "2026-10-24T13:42:34.840758+08:00"
+  }
+}

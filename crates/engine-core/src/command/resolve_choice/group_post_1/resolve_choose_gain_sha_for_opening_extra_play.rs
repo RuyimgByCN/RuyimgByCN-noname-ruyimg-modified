@@ -819,7 +819,7 @@ pub(crate) fn resolve_choose_other_targets_by_skipped_phase_count_damage(
     selections: &[u32],
     cancelled: bool,
 ) -> Result<(), EffectError> {
-    if payload.len() != 3 {
+    if payload.len() != 3 && payload.len() != 4 {
         return Err(EffectError::EngineFault(
             "bad skipped-phase damage continuation payload".into(),
         ));
@@ -827,6 +827,7 @@ pub(crate) fn resolve_choose_other_targets_by_skipped_phase_count_damage(
     let player = PlayerId::new(payload[0]);
     let amount = payload[1];
     let skill = engine_api::SkillId::new(payload[2]);
+    let draw_per_damage = payload.get(3) == Some(&1);
     let max = tx.state().turn.skipped_phase_count() as usize;
     if observer != player
         || cancelled
@@ -861,20 +862,42 @@ pub(crate) fn resolve_choose_other_targets_by_skipped_phase_count_damage(
         }
         targets.push(target);
     }
-    run_effects(
+    let events = run_effects(
         tx,
         targets
-            .into_iter()
+            .iter()
             .map(|target| EffectRequest::DealDamage {
                 source: player,
-                target,
+                target: *target,
                 amount,
                 is_lose_hp: false,
                 nature: rule_api::damage_nature::NORMAL,
             })
             .collect(),
-    )
-    .map(|_| ())
+    )?;
+    if draw_per_damage {
+        let damaged: std::collections::BTreeSet<u32> = events
+            .iter()
+            .filter_map(|event| match event {
+                engine_api::DomainEvent::DamageDealt { source, target, .. }
+                    if *source == player && targets.contains(target) =>
+                {
+                    Some(target.raw())
+                }
+                _ => None,
+            })
+            .collect();
+        if !damaged.is_empty() {
+            run_effects(
+                tx,
+                vec![EffectRequest::DrawCards {
+                    player,
+                    count: damaged.len() as u32,
+                }],
+            )?;
+        }
+    }
+    Ok(())
 }
 
 pub(crate) fn resolve_choose_other_damage(

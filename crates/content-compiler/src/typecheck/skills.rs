@@ -18,7 +18,19 @@ pub(super) fn check_skill(sk: &SkillAst) -> Result<SkillIr, CompileError> {
             }
             SkillItemAst::Active(a) => actives.push(check_active(a)?),
             SkillItemAst::ViewAs(v) => view_as.push(check_view_as(v)?),
-            SkillItemAst::Modifier(m) => modifiers.push(check_modifier(m)?),
+            SkillItemAst::Modifier(m) => {
+                let modifier = check_modifier(m)?;
+                if modifier.target
+                    == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+                    && (modifier.mode != "override" || modifier.value != 1)
+                {
+                    return Err(CompileError::Type {
+                        pos: m.span.start as usize,
+                        message: "平定目标限制只接受 override 1".into(),
+                    });
+                }
+                modifiers.push(modifier);
+            }
         }
     }
     Ok(SkillIr {

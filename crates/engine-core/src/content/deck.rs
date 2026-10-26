@@ -500,6 +500,15 @@ pub fn guozhan_deck_specs() -> Vec<DeckCardSpec> {
 }
 
 /// Stable def id for a card name (used for guozhan tricks absent from card_index).
+pub fn card_def_id_for_name(name: &str) -> u32 {
+    crc32_def(name)
+}
+
+/// Whether a legacy/standard card definition is recastable (currently 铁索连环).
+pub fn is_recastable_card_def(def: u32) -> bool {
+    def == crc32_def("tiesuo")
+}
+
 fn crc32_def(name: &str) -> u32 {
     let mut hash = 0u32;
     for byte in name.bytes() {

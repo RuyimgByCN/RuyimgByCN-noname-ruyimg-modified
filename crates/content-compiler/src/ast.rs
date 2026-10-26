@@ -138,6 +138,8 @@ pub struct ActiveTargetsAst {
     pub hp_lte_owner: bool,
     /// Optional exclusive lower bound for every selected target's current HP.
     pub hp_gt: Option<u8>,
+    /// Optional exclusive lower bound for every selected target's maximum HP.
+    pub max_hp_gt: Option<u8>,
     /// Whether every selected target must have more hand cards than the owner.
     pub hand_gt_owner: bool,
     /// Whether every selected target must have at most as many hand cards as the owner.

@@ -12,6 +12,48 @@
     "trademark_notes": "本包不授予“三国杀”及相关名称、标识的商标权；相关权利归其权利人所有。",
     "changelog": [
       {
+        "version": "0.2.4",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：平定标记恢复“前 X 张牌不能指定英霸角色”目标限制。"
+      },
+      {
+        "version": "0.2.3",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：移除平定标记错误的手牌上限加成；登记目标限制未建模。"
+      },
+      {
+        "version": "0.2.2",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：英霸目标加 max_hp_gt 1 选择过滤。"
+      },
+      {
+        "version": "0.2.1",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：冯河补 hand_limit_base = maxHp 动态手牌上限。"
+      },
+      {
+        "version": "0.2.0",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：冯河交牌/重铸二选一并把授标收进交牌分支；重铸不再授予平定。"
+      },
+      {
+        "version": "0.1.6",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：冯河交牌加入手牌/重铸二选一（重铸弃一摸一）；仍保留已登记差异：重铸也会授平定、重铸未按【杀】过滤。"
+      },
+      {
+        "version": "0.1.1",
+        "date": "2026-10-24",
+        "author": "noname-next",
+        "description": "R03：英霸先失去体力、存活后再失去体力上限并授予平定标记/衍生技；冯河交牌后按拥有（含暂时失效）的英霸给来源授予标记。重铸分支仍未实现。"
+      },
+      {
         "version": "0.1.0",
         "date": "2026-07-30",
         "author": "noname-next",

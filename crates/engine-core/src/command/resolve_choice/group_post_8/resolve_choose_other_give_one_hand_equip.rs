@@ -1462,3 +1462,192 @@ pub(crate) fn resume_source_free_response(
         None => complete_view_as_response(tx, payload, &[], None),
     }
 }
+
+
+pub(crate) fn resolve_choose_give_or_recast_one_hand(
+    tx: &mut Transaction,
+    observer: PlayerId,
+    payload: &[u32],
+    selections: &[u32],
+    cancelled: bool,
+) -> Result<(), EffectError> {
+    if payload.len() < 6 || selections.len() != 1 || cancelled || observer != PlayerId::new(payload[0])
+    {
+        return Err(EffectError::Illegal(
+            "choose one card/target for give-or-recast".into(),
+        ));
+    }
+    let player = PlayerId::new(payload[0]);
+    let skill = engine_api::SkillId::new(payload[1]);
+    let stage = payload[2];
+    let enabled = tx.state().skills.get(skill).is_some_and(|instance| {
+        instance.owner == player && tx.state().skill_effectively_enabled(instance)
+    });
+    if !enabled || !tx.state().players.get(player).is_some_and(|p| p.alive) {
+        return Err(EffectError::Illegal(
+            "give-or-recast skill context changed".into(),
+        ));
+    }
+    let hand = tx
+        .state()
+        .zones
+        .find(ZoneKind::Hand, player)
+        .ok_or_else(|| EffectError::Illegal("missing hand zone".into()))?;
+    match stage {
+        0 => {
+            let card = CardId::new(selections[0]);
+            if !tx
+                .state()
+                .zones
+                .get(hand)
+                .is_some_and(|zone| zone.cards.contains(&card))
+            {
+                return Err(EffectError::Illegal("chosen card left hand".into()));
+            }
+            let def = tx
+                .state()
+                .cards
+                .get(card)
+                .map(|state| state.def.raw())
+                .unwrap_or(0);
+            let recastable = def != 0
+                && (crate::content::is_recastable_card_def(def)
+                    || tx
+                        .state()
+                        .content
+                        .card_metadata(engine_api::CardDefId::new(def))
+                        .is_some_and(|metadata| metadata.name == "tiesuo"));
+            let mut options = Vec::new();
+            if recastable {
+                options.push(0);
+            }
+            options.extend(
+                tx.state()
+                    .players
+                    .alive_by_seat()
+                    .into_iter()
+                    .filter(|target| *target != player)
+                    .map(PlayerId::raw),
+            );
+            open_choice(
+                tx,
+                player,
+                1,
+                1,
+                false,
+                options,
+                ChoiceKind::Custom,
+                ContinuationKind::ChooseGiveOrRecastOneHand,
+                vec![
+                    player.raw(),
+                    skill.raw(),
+                    1,
+                    card.raw(),
+                    payload[3],
+                    payload[4],
+                    payload[5],
+                ],
+            )?;
+            Ok(())
+        }
+        1 => {
+            if payload.len() != 7 {
+                return Err(EffectError::EngineFault(
+                    "bad give-or-recast card payload".into(),
+                ));
+            }
+            let card = CardId::new(payload[3]);
+            let require_skill_def = payload[4];
+            let grant_skill_def = payload[5];
+            let grant_mark_def = payload[6];
+            if !tx
+                .state()
+                .zones
+                .get(hand)
+                .is_some_and(|zone| zone.cards.contains(&card))
+            {
+                return Err(EffectError::Illegal("chosen card left hand".into()));
+            }
+            if selections[0] == 0 {
+                let recastable = tx
+                    .state()
+                    .cards
+                    .get(card)
+                    .map(|state| state.def.raw())
+                    .is_some_and(|def| {
+                        crate::content::is_recastable_card_def(def)
+                            || tx
+                                .state()
+                                .content
+                                .card_metadata(engine_api::CardDefId::new(def))
+                                .is_some_and(|metadata| metadata.name == "tiesuo")
+                    });
+                if !recastable {
+                    return Err(EffectError::Illegal(
+                        "card is not recastable".into(),
+                    ));
+                }
+                run_effects(
+                    tx,
+                    vec![EffectRequest::RecastCards {
+                        player,
+                        cards: vec![card],
+                    }],
+                )?;
+                return Ok(());
+            }
+            let target = PlayerId::new(selections[0]);
+            if target == player
+                || !tx.state().players.get(target).is_some_and(|p| p.alive)
+            {
+                return Err(EffectError::Illegal("invalid give target".into()));
+            }
+            let to = tx
+                .state()
+                .zones
+                .find(ZoneKind::Hand, target)
+                .ok_or_else(|| EffectError::Illegal("missing target hand zone".into()))?;
+            run_effects(
+                tx,
+                vec![EffectRequest::GiveCards {
+                    cards: vec![card],
+                    to,
+                    from: hand,
+                }],
+            )?;
+            let owns_required = require_skill_def != 0
+                && tx.state().skills.sorted_live().iter().any(|instance| {
+                    instance.owner == player && instance.def.raw() == require_skill_def
+                });
+            if owns_required
+                && tx
+                    .state()
+                    .players
+                    .get(target)
+                    .is_some_and(|participant| participant.alive && !participant.dying)
+            {
+                let mut rewards = Vec::new();
+                if grant_skill_def != 0 {
+                    rewards.push(EffectRequest::AddSkill {
+                        player: target,
+                        skill_def: engine_api::SkillDefId::new(grant_skill_def),
+                    });
+                }
+                if grant_mark_def != 0 {
+                    rewards.push(EffectRequest::AddMark {
+                        player: target,
+                        mark: engine_api::MarkDefId::new(grant_mark_def),
+                        delta: 1,
+                    });
+                }
+                if !rewards.is_empty() {
+                    run_effects(tx, rewards)?;
+                }
+            }
+            Ok(())
+        }
+        _ => Err(EffectError::EngineFault(
+            "bad give-or-recast stage".into(),
+        )),
+    }
+}

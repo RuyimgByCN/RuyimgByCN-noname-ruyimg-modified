@@ -1,0 +1,20 @@
+{
+  "content-compiler": {
+    "targets": 3,
+    "passed": 536,
+    "failed": 0,
+    "ignored": 0
+  },
+  "rule-api": {
+    "targets": 3,
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "rule-vm": {
+    "targets": 3,
+    "passed": 15,
+    "failed": 0,
+    "ignored": 0
+  }
+}

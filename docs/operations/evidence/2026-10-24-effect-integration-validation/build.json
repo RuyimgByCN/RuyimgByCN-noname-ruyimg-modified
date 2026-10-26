@@ -1,0 +1,24 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "apps/web-client",
+    "build:desktop"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "started_at": "2026-10-24T05:36:11.968803+00:00",
+  "environment": {
+    "PATH": "/Users/ruyimg/.cargo/bin:/usr/local/bin:/Users/ruyimg/.local/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/ruyimg/.codex/tmp/arg0-macos/codex-arg0fBmNEQ:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/ruyimg/.dbx/bin:/opt/zerobrew/bin:/opt/zerobrew/sbin:/Users/ruyimg/.zerobrew/bin:/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin:/Users/ruyimg/.kimi-code/bin:/Users/ruyimg/.local/bin:/Users/ruyimg/.grok/bin:/Users/ruyimg/.local/state/fnm_multishells/33915_1792743255773/bin:/Users/ruyimg/.opencode/bin:/Users/ruyimg/Library/Android/sdk/cmdline-tools/latest/bin:/Users/ruyimg/Library/Android/sdk/platform-tools:/Users/ruyimg/.cargo/bin:/Users/ruyimg/.bun/bin:/Users/ruyimg/Documents/maven/apache-maven-3.9.10/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin:/Users/ruyimg/.lmstudio/bin:/Users/ruyimg/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/ruyimg/Library/Application Support/JetBrains/Toolbox/scripts:/Users/ruyimg/.orbstack/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "WASM_PACK_TARGET": "web"
+  },
+  "generated_package_directories_absent_at_start": [
+    "apps/web-client/src/worker/native-pkg",
+    "apps/web-client/src/wasm-pkg",
+    "apps/web-client/public/pkg"
+  ],
+  "cargo_cache_kept": true,
+  "finished_at": "2026-10-24T05:38:57.513298+00:00",
+  "exit_code": 0,
+  "seconds": 165.54
+}

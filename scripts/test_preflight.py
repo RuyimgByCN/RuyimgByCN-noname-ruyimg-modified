@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "scripts" / "preflight.py"
@@ -29,14 +32,22 @@ class PreflightTests(unittest.TestCase):
             if target:
                 self.assertTrue((ROOT / target).exists(), f"{name}: 缺 {target}")
 
-    def test_expected_failures_are_declared_checks(self):
-        names = {name for name, _argv, _slow in self.mod.CHECKS}
-        for name in self.mod.EXPECTED_FAILURES:
-            self.assertIn(name, names, f"预期失败项 {name} 不在检查列表里")
+    def test_line_gate_failure_blocks_preflight(self):
+        def result(name, _argv):
+            return name, int(name == "行数门禁"), "oversized source"
 
-    def test_line_gate_is_the_known_failure(self):
-        # 行数门禁目前因 `crates/rule-api/src/effect.rs` 超限而预期失败
-        self.assertEqual(self.mod.EXPECTED_FAILURES, {"行数门禁"})
+        errors = io.StringIO()
+        with patch.object(self.mod, "run", side_effect=result), \
+                patch.object(self.mod.sys, "argv", [str(SCRIPT)]), \
+                redirect_stdout(io.StringIO()), redirect_stderr(errors):
+            self.assertEqual(self.mod.main(), 1)
+        self.assertIn("preflight 失败 1 项：行数门禁", errors.getvalue())
+
+    def test_all_passing_checks_succeed(self):
+        with patch.object(self.mod, "run", side_effect=lambda name, _argv: (name, 0, "")), \
+                patch.object(self.mod.sys, "argv", [str(SCRIPT)]), \
+                redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+            self.assertEqual(self.mod.main(), 0)
 
     def test_all_checks_use_python_B(self):
         # `-B` 防止脚本生成 __pycache__（本仓库禁止提交缓存）

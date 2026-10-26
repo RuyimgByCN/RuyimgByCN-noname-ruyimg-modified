@@ -1,0 +1,929 @@
+{
+  "captured_at": "2026-10-24T05:38:27.223260+00:00",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "rules_version": 322,
+  "archive_version": 105,
+  "files": {
+    ".github/workflows/ci.yml": {
+      "sha256": "8da0c56702a1bae7b8c9426b33aae5202598d18323c6aff69d9b81015694cbc0",
+      "bytes": 5996
+    },
+    "Cargo.lock": {
+      "sha256": "b29dfa5cec9037d5d7dbb176e4f3da67c0f0b9f802ae2e01a34525bddd308187",
+      "bytes": 128997
+    },
+    "apps/desktop-client/tauri.conf.json": {
+      "sha256": "29763b4f5f7baba1f3d00b0c5916e7051b25936a7885fe2734fca438cc5625d1",
+      "bytes": 1348
+    },
+    "apps/web-client/package.json": {
+      "sha256": "0c8adc61dbc34980378b7b0147917cd297efeaaf282c81a7b9a04c23cb5489c1",
+      "bytes": 1118
+    },
+    "apps/web-client/pnpm-lock.yaml": {
+      "sha256": "13ed626a8a9cf978c0aa24a435508b857479379d8752e3a46258a0c5de330d6f",
+      "bytes": 42184
+    },
+    "apps/web-client/scripts/build-desktop.mjs": {
+      "sha256": "253428f58b72edee713beca2319082fdc026d0a7aebcb45e061fea3d3c6852e4",
+      "bytes": 670
+    },
+    "apps/web-client/scripts/build-native.mjs": {
+      "sha256": "dca82af3c5a31df9edc594a2a152ac978047d4334d9d90c7b28333c0fd518d19",
+      "bytes": 1517
+    },
+    "apps/web-client/scripts/build-pipeline.test.mjs": {
+      "sha256": "cbff2bfdab005616d775c99f1d297ee40aeda867e1467d04176be4ed0ce45825",
+      "bytes": 6546
+    },
+    "apps/web-client/scripts/build-wasm.mjs": {
+      "sha256": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+      "bytes": 2611
+    },
+    "apps/web-client/scripts/extension-inventory.mjs": {
+      "sha256": "1114f3d7a27b5a784f1dcfe86ed93e4efadbc82113c6b7ee112c5abc91abbc27",
+      "bytes": 3216
+    },
+    "apps/web-client/scripts/extension-inventory.test.mjs": {
+      "sha256": "a41f545db8b54c2f4ebb7386d68794327e9bfb210f166c0e04c302d88b35b4d6",
+      "bytes": 4231
+    },
+    "apps/web-client/scripts/extension-store-smoke.mjs": {
+      "sha256": "d5852a91c0021b98ac439472fc89a521c6554439d96595da0a42dd7b04a0fb36",
+      "bytes": 169
+    },
+    "apps/web-client/scripts/general-select-ui.test.mjs": {
+      "sha256": "d07316e44b65ee0962b8cc1fca3ad28f0e657049a70fb14c263afd3e2a5af1da",
+      "bytes": 13459
+    },
+    "apps/web-client/scripts/native-adapter.test.mjs": {
+      "sha256": "b5532421aa0a03d36e405e8f19d4105f7e20dc592ebb075636710d41707e8e77",
+      "bytes": 8784
+    },
+    "apps/web-client/scripts/native-general-select.test.mjs": {
+      "sha256": "bd4f3769db8d967245e52b8ae19a1824a4c2a7729beb4087a763277a256a408f",
+      "bytes": 18196
+    },
+    "apps/web-client/scripts/native-legal-actions.test.mjs": {
+      "sha256": "5493d7717162297127d32e2738c1ddb51a93589392d7163f6f3b0aae15753e04",
+      "bytes": 12597
+    },
+    "apps/web-client/scripts/native-match-content.test.mjs": {
+      "sha256": "769daaca08e977dba98c54bf459f0c50ffa994b09bb958897e8d061cd1fec074",
+      "bytes": 6132
+    },
+    "apps/web-client/scripts/native-worker-smoke.mjs": {
+      "sha256": "be40efe60799a09e74a6738f30b06a1bdf35fe4ae70040eaf14cf86452cf88cf",
+      "bytes": 21465
+    },
+    "apps/web-client/scripts/nc09-browser-disconnect.mjs": {
+      "sha256": "ded77088bf6e3185c53e828fdb6af4f0a2cd87a5b2ab16d182214e29475a87c3",
+      "bytes": 5758
+    },
+    "apps/web-client/scripts/nc09-browser-drive.mjs": {
+      "sha256": "30aa7095ff9149546c6442c335398777cede6bbf84ba714f2799e864a257901a",
+      "bytes": 7758
+    },
+    "apps/web-client/scripts/nc09-browser-online-error.mjs": {
+      "sha256": "b536a5d11b53eebc09d4758c9ff4ffe29d60a55a050797e618b1facb4a485286",
+      "bytes": 4387
+    },
+    "apps/web-client/scripts/nc09-browser-online.mjs": {
+      "sha256": "72ce58db7f6735a852b5bda3910b9f85d400e738a553d72fd831cc469477ec6c",
+      "bytes": 6640
+    },
+    "apps/web-client/scripts/nc09-browser-spectate.mjs": {
+      "sha256": "b25f27b13ac2f5040c28c8bb6b782aadd00767c76f92c39be8eb7e2882fa822e",
+      "bytes": 7583
+    },
+    "apps/web-client/scripts/nc09-identity-fullgame.mjs": {
+      "sha256": "e477acb5a4c246e217981bee49cc034343d9f3d15266cfb0706662a5c731054a",
+      "bytes": 4944
+    },
+    "apps/web-client/scripts/nc12-browser-coldstart.mjs": {
+      "sha256": "723e62d589cb88afd1b860cf98fdbd643ff349d46aee473d1f0035b6d92c4e73",
+      "bytes": 7414
+    },
+    "apps/web-client/scripts/nc12-browser-fullgame.mjs": {
+      "sha256": "a6fd26a7effa8f4ad55a31479958dbe36fc4af3e16f47caf0db8a149772bb28c",
+      "bytes": 4480
+    },
+    "apps/web-client/scripts/nc12-mobile-touch.mjs": {
+      "sha256": "f3ab9530d583df7c19b6491c7a5e05bd1dc46637748b72deaaa531d11695cc24",
+      "bytes": 4675
+    },
+    "apps/web-client/scripts/nc12-online-rtt.mjs": {
+      "sha256": "925d7ec524c93d3fed4a05d94c9b9c3ae2dea170dcc4656c7b12563a2112def2",
+      "bytes": 6473
+    },
+    "apps/web-client/scripts/nc12-wasm-bench.mjs": {
+      "sha256": "7ac87591d0e7d5c9ef8e4a790d90d7206806a02c4c900dd4e7932feb73fd7a12",
+      "bytes": 3975
+    },
+    "apps/web-client/scripts/outcome-text.test.mjs": {
+      "sha256": "1f89ec056c6345065dbddab0a679a703920a3da62b19d14bd83514d86c7e3b57",
+      "bytes": 968
+    },
+    "apps/web-client/scripts/run-tauri.mjs": {
+      "sha256": "c087b8420f39ecc83664cc8aab26a49911c10346a806fe1732e680ea3ba89ad2",
+      "bytes": 686
+    },
+    "apps/web-client/scripts/ts-hook.mjs": {
+      "sha256": "84076931c68d34269e9f80f4b78765478bdf0d7319fc086872c7cf8d91c8a1f3",
+      "bytes": 2970
+    },
+    "apps/web-client/scripts/ts-register.mjs": {
+      "sha256": "e612e75837dfcf9c55fc7cc65cfae7e41377a24402840e8bdcb6db8ef81c37fe",
+      "bytes": 730
+    },
+    "apps/web-client/src/App.vue": {
+      "sha256": "a74d4a5d3d6f04be26de2122bebb3d99678d5a70644a02c24678f409521dc801",
+      "bytes": 815
+    },
+    "apps/web-client/src/components/battle/BattleBoard.vue": {
+      "sha256": "29c9afdd3dcc9503227b8662ff1ccd812d0e483c81b2cca8acef40646ee009f0",
+      "bytes": 14358
+    },
+    "apps/web-client/src/components/battle/GeneralSelectPanel.vue": {
+      "sha256": "a65c2ad5f2700329da5ff49236c10e7d530163adc300e56b0f49a62c685a7667",
+      "bytes": 4508
+    },
+    "apps/web-client/src/components/battle/HandStrip.vue": {
+      "sha256": "5dafe6453f0228f3300a4c0a1a3ca2f7f5a31d4d6c64c82e6ceecdab19606261",
+      "bytes": 4379
+    },
+    "apps/web-client/src/components/battle/SeatCard.vue": {
+      "sha256": "b551ff5689e230218dda17117ce44a3f60b6c783563d707f5277df7bcf940c86",
+      "bytes": 9722
+    },
+    "apps/web-client/src/engine/appearanceStore.ts": {
+      "sha256": "cf3eda691efdcd86ac0890251b4f41c060e039d83ed083cb095f2bd947c7e324",
+      "bytes": 14251
+    },
+    "apps/web-client/src/engine/bundledNativePackages.ts": {
+      "sha256": "8759999294b6fbf4213036af575bd70ee9c8e40777c924af29cf907232a7e72d",
+      "bytes": 7404
+    },
+    "apps/web-client/src/engine/client.ts": {
+      "sha256": "8987b323aa001f5683ccbbed0d3326d5b1f304f685c7c63f785e751469fde0a5",
+      "bytes": 8232
+    },
+    "apps/web-client/src/engine/desktopHost.ts": {
+      "sha256": "5eda0a189488006b10ebf99817514be4537025e7314c934d74d56d20ed601824",
+      "bytes": 1504
+    },
+    "apps/web-client/src/engine/extensionCatalog.ts": {
+      "sha256": "96af49e5056c972eb46464589189b59dee0ecd79cfbd1e12200e2ab4fb830e86",
+      "bytes": 3732
+    },
+    "apps/web-client/src/engine/extensionStore.ts": {
+      "sha256": "dffb5ca674563f8d50e104b0da456be56cd0f7cf631af7448e487b677a0bfe11",
+      "bytes": 11229
+    },
+    "apps/web-client/src/engine/generalSelectModel.ts": {
+      "sha256": "4c8607d805ff642df0ef3b9d315e6d654d43e3fa5317d8f3da2a3fa81da7c58a",
+      "bytes": 12575
+    },
+    "apps/web-client/src/engine/nativeMatchContent.ts": {
+      "sha256": "c83ecbfbafb47fa943d5ecb1d732f95eeb65426a81304b9937961fce9d18fa6f",
+      "bytes": 2872
+    },
+    "apps/web-client/src/engine/networkClient.ts": {
+      "sha256": "277375ee856c26c2f795e293fd18a1c2a85f8501fe4a5860e1b5ade1faa1b5ff",
+      "bytes": 17469
+    },
+    "apps/web-client/src/engine/outcome.ts": {
+      "sha256": "fadf269923dc03380a85c33e30a03873699a8d01437aba0449059abd98e1e067",
+      "bytes": 1346
+    },
+    "apps/web-client/src/engine/viewStore.ts": {
+      "sha256": "7ce61b22c4a849a2b925d1bccac674597cec56c8e9268f0c9dbe1e095ae4de55",
+      "bytes": 5888
+    },
+    "apps/web-client/src/generated/standard-characters.json": {
+      "sha256": "f2d753ef10e5bb6c7319a130d362cc3ca0055a4c43a52bc16a0c98fc4f080b61",
+      "bytes": 4017
+    },
+    "apps/web-client/src/main.ts": {
+      "sha256": "5fcb569c3d8560277a944aed2e604a6445bdb12846d3a4a06ad1ec3d7c48ac43",
+      "bytes": 1344
+    },
+    "apps/web-client/src/router.ts": {
+      "sha256": "b978db5ab44f77defe7f140be6d73582f500de51d0cf6dedbdabe07b4e9f3212",
+      "bytes": 1020
+    },
+    "apps/web-client/src/types/engine.ts": {
+      "sha256": "c08aa0a9bf5ed3aefefcbffea3865ca30400c9859c5eab89f74f7ea2d31afa2d",
+      "bytes": 7583
+    },
+    "apps/web-client/src/views/BattleView.vue": {
+      "sha256": "f11eb28df53a7ef845fdbcd324199ff00774ee841c0435aebf3b66621912847f",
+      "bytes": 41788
+    },
+    "apps/web-client/src/views/CollectionView.vue": {
+      "sha256": "71d00fc11e77a9f14546a2b2f17fa51934cdaa52a525d7fedae6ddf0bd1b6bfb",
+      "bytes": 9575
+    },
+    "apps/web-client/src/views/ExtensionsView.vue": {
+      "sha256": "efa6e53975bf2558625027792a6c2f6e5490d2f6e61c1321829b6cdeaa212dc4",
+      "bytes": 6130
+    },
+    "apps/web-client/src/views/HomeView.vue": {
+      "sha256": "d8f1580669fb5ee23dfd097c0d25c9ad951394888f4857daeb0b6dfeb424c2bf",
+      "bytes": 6499
+    },
+    "apps/web-client/src/views/ReplayView.vue": {
+      "sha256": "93e006eae1cec1b3c05e4fcbf09dc4139ab31ad11ef4b8e8489aa15e5fd577f6",
+      "bytes": 7013
+    },
+    "apps/web-client/src/views/SettingsView.vue": {
+      "sha256": "69b9520dec3821da47481c9cfaf2ac675143959b9bb90bc157adb6d4ddb01058",
+      "bytes": 6890
+    },
+    "apps/web-client/src/vite-env.d.ts": {
+      "sha256": "ac5f86bf808a059bd07f174270d946bfec212ea94316b95644700d1761353f9f",
+      "bytes": 377
+    },
+    "apps/web-client/src/vite-worker.d.ts": {
+      "sha256": "ced0f76174f74c8542a1883418ed6004150f2aac2ae3095d809e631fc0d99009",
+      "bytes": 187
+    },
+    "apps/web-client/src/worker/engine.native.worker.ts": {
+      "sha256": "6bb06c14cd2ce4567008e1f8353352b3b64ec1568bd551f68e5638244a60e729",
+      "bytes": 4487
+    },
+    "apps/web-client/src/worker/engine.worker.ts": {
+      "sha256": "88a0bd496757bdaf81a7cba2a1d05b198a69610ac5fe5e28fcbd77030c029c33",
+      "bytes": 4347
+    },
+    "apps/web-client/src/worker/nativeBackend.ts": {
+      "sha256": "6141bff83657643b82e8c0574d19d9376d4b9f0f354e77d28619db851f3a3375",
+      "bytes": 29813
+    },
+    "crates/rule-api/Cargo.toml": {
+      "sha256": "f62fdf5bdb891820070cbffac4b46eef45045c9c5067747d0a7337a7e5166d70",
+      "bytes": 371
+    },
+    "crates/rule-api/src/effect.rs": {
+      "sha256": "652a56569e30ece9a83999f2efde1055a4e5dad931e3c335c4cfa877522a0cf6",
+      "bytes": 28750
+    },
+    "crates/rule-api/src/effect/card_movement.rs": {
+      "sha256": "5cc6c99c832429dff6e2c5163d80f272c904789d5ef8f5c28695d1ecbf75f149",
+      "bytes": 64296
+    },
+    "crates/rule-api/src/effect/choices.rs": {
+      "sha256": "4747c7438a625d76051a664d11619f2aaca80ec6f5e097f8147b62c7a10609e7",
+      "bytes": 60491
+    },
+    "crates/rule-api/src/effect/clan_generals.rs": {
+      "sha256": "b268b1387d04b130d3ddccfc670874b6ffd7e167b970909479321d8bd085edaa",
+      "bytes": 2135
+    },
+    "crates/rule-api/src/effect/classic_generals.rs": {
+      "sha256": "a795f0ea82b71d8762d80fa49efaf3e476cade4bb551da30fb4f7003c2c0a317",
+      "bytes": 29135
+    },
+    "crates/rule-api/src/effect/damage_and_recovery.rs": {
+      "sha256": "0f09ff9fe01e6a8691b468da170f21bffab73540a8709b3d9212f34302454f69",
+      "bytes": 42893
+    },
+    "crates/rule-api/src/effect/draw_and_gain.rs": {
+      "sha256": "1dcd4eed988bc9ee4870b011228011b543bed39806b123e3fa3f366652b5387b",
+      "bytes": 21333
+    },
+    "crates/rule-api/src/effect/events.rs": {
+      "sha256": "cc344998fa1cfa7fb5ff58dee350b04ca0b7d47d39f25c1ae7137bfaece70ae4",
+      "bytes": 8308
+    },
+    "crates/rule-api/src/effect/extension_generals.rs": {
+      "sha256": "7f0e30fa002f82f06e6f82cf79976de708bdac6defe14e4539a542af6d9e2207",
+      "bytes": 19662
+    },
+    "crates/rule-api/src/effect/general_resolvers.rs": {
+      "sha256": "19dfd76d688149827390e152265f69244dfa80c8b0f3c962124557ecd7e0b5c2",
+      "bytes": 72294
+    },
+    "crates/rule-api/src/effect/jsrg_generals.rs": {
+      "sha256": "e5bda1d64a368cd32880b42f2d13a22be46f8f2a94e56f6d45ec50110d102162",
+      "bytes": 3091
+    },
+    "crates/rule-api/src/effect/judgment.rs": {
+      "sha256": "201234c2df9d1feddc5856a03732eef02e2837087974b5c6844d64682af91d4c",
+      "bytes": 11414
+    },
+    "crates/rule-api/src/effect/life_cycle.rs": {
+      "sha256": "0eea14c11992fc62b45d03d8b196b4dbb536f7348c947cfeec5cad8a3cf9d332",
+      "bytes": 1780
+    },
+    "crates/rule-api/src/effect/mobile_generals.rs": {
+      "sha256": "7cfb254557a23e67e2c95165144ee5f4cc2f9d36912467fac33ccbb39c145e9f",
+      "bytes": 16753
+    },
+    "crates/rule-api/src/effect/online_generals.rs": {
+      "sha256": "f0c145d14bd9964682bc170e3e61149303e917cda5c56de58b9257b07a7902d3",
+      "bytes": 24371
+    },
+    "crates/rule-api/src/effect/pot_generals.rs": {
+      "sha256": "399ac54a84adb709ea1acbdf542ce62c2e87943f00741ef18a1b3bba9bd30ad0",
+      "bytes": 15801
+    },
+    "crates/rule-api/src/effect/remastered_generals.rs": {
+      "sha256": "df06a4099219dc3a34bf4c1f19bd20556d97fb4d87d198ece6d964353c0b0fca",
+      "bytes": 24863
+    },
+    "crates/rule-api/src/effect/sha_resolution.rs": {
+      "sha256": "36c8d70710e881bd4b0b557438fad1cdb1598ab0c0acbcccc4e9664bcfc430d2",
+      "bytes": 6834
+    },
+    "crates/rule-api/src/effect/skills_and_marks.rs": {
+      "sha256": "660ac4cdcb162566d3f501f722a24237526dfc565d06ce292b5420aecbfd4e75",
+      "bytes": 14317
+    },
+    "crates/rule-api/src/effect/sp_generals.rs": {
+      "sha256": "a10a343b34f3be5e6d311e8b0bdf0d1cf22eaaf614db375f970731ac5b88a893",
+      "bytes": 18103
+    },
+    "crates/rule-api/src/effect/taiwan_generals.rs": {
+      "sha256": "627e3cc8412ad628554f338c858125214122d3841400df1f9a97ab8fda686689",
+      "bytes": 25698
+    },
+    "crates/rule-api/src/effect/targeting.rs": {
+      "sha256": "a7f1d95886399203d9ba647f2c45c793c7c6567e4f9f213f7b45f288e2d17ae4",
+      "bytes": 2291
+    },
+    "crates/rule-api/src/effect/turn_flow.rs": {
+      "sha256": "4120aecca0ca6c9a867bb8982477f2422801f0b43585bd13247f2b081be32871",
+      "bytes": 9591
+    },
+    "crates/rule-api/src/host.rs": {
+      "sha256": "f1faaba77a9cae4bcdb904e6d17eb94f4cc9965982df47980769085243b4754a",
+      "bytes": 1807
+    },
+    "crates/rule-api/src/lib.rs": {
+      "sha256": "48023111c1fa414fcbf3ff5ac529cf523ad0d2634001d6c7c47df92f864f4392",
+      "bytes": 613
+    },
+    "crates/rule-api/src/query.rs": {
+      "sha256": "4ba2a5ee6de2d7634a11a81ff3a9c8f10c43a15bca4c25c4efc5d8d0920e3c21",
+      "bytes": 10895
+    },
+    "crates/rule-api/tests/effect_wire_compat.rs": {
+      "sha256": "160a9b04f42245788f35a294bdef943ab730f76f8bf68f13a1e3e8987b2614c5",
+      "bytes": 6148
+    },
+    "crates/rule-api/tests/effect_wire_v322.json": {
+      "sha256": "2700412a1e0b96a8bc01d7f6d13f806606f79e35e81a71dddc2ca2580f336e87",
+      "bytes": 67726
+    },
+    "docs/operations/evidence/2026-10-24-native-extension-delivery/browser-smoke.mjs": {
+      "sha256": "4ba8553b6eae8d8605c1a8eb31d70492e9d02e46e6fa03dee6a6a0c37155109f",
+      "bytes": 4667
+    },
+    "packages/extensions/ai-tuning-upstream-liuli/assets/config.json": {
+      "sha256": "519b00a9f58a1dd7a1bcbc4f4db51d48f06077e78047a5de516762d49ea49e2d",
+      "bytes": 547
+    },
+    "packages/extensions/ai-tuning-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/ai-tuning-upstream-liuli/package.npack.json": {
+      "sha256": "d40fe2021315fe41ef075a0fc94b65531da44b20ec5e1beed1f2f4d6d8c3499b",
+      "bytes": 1569
+    },
+    "packages/extensions/boss-play-upstream-liuli/assets/config.json": {
+      "sha256": "a109c10bcb57b78f79fa09402e3095edf1f3f46dc80501a81a958c99a7772ed9",
+      "bytes": 836
+    },
+    "packages/extensions/boss-play-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/boss-play-upstream-liuli/package.npack.json": {
+      "sha256": "fac9e2792bcbea14b1c4f6387472f7e3d71eab95294079aca001630fa95f90b0",
+      "bytes": 1561
+    },
+    "packages/extensions/boss-play-upstream-noname/assets/config.json": {
+      "sha256": "14ae62ea098ace301669110d489e4a66d2b1eee28f4b8f8c1ebd28f82024ee99",
+      "bytes": 968
+    },
+    "packages/extensions/boss-play-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/boss-play-upstream-noname/package.npack.json": {
+      "sha256": "9aa5821f4522f4497aef202b66458bf6ba4601415ae92c43d514fc62a78a0cae",
+      "bytes": 1559
+    },
+    "packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json": {
+      "sha256": "c6e41b3c5216e634dab41da30788fc5424119379b175623cf596a441948f0df2",
+      "bytes": 1084
+    },
+    "packages/extensions/boss-zhugeliang-upstream-liuli/manifest.json": {
+      "sha256": "61f4ad448d94dccaedf3de8fd9b41c20109a6c8b579ca369aad8584dbae6aeec",
+      "bytes": 77
+    },
+    "packages/extensions/boss-zhugeliang-upstream-liuli/package.npack.json": {
+      "sha256": "e914d3dae6d69c9dcb492a6bfc583179648ce36375506f0aa874992a26c017e4",
+      "bytes": 1585
+    },
+    "packages/extensions/cardpile-upstream-liuli/assets/pile.json": {
+      "sha256": "9701cb8b0bb21470f835e46016be5ebf21117d839752c71b7122dfb93ff3268b",
+      "bytes": 971
+    },
+    "packages/extensions/cardpile-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/cardpile-upstream-liuli/package.npack.json": {
+      "sha256": "e4424b9537794c456aa6c76a9fe647b849d3b838f2bf448d689ba4e84c6ce4bc",
+      "bytes": 1597
+    },
+    "packages/extensions/cardpile-upstream-noname/assets/pile.json": {
+      "sha256": "4a18a5206b3c1abe608aa5cb2cbe8da9c0fb9caf55b452837fcd3067616bc1a2",
+      "bytes": 968
+    },
+    "packages/extensions/cardpile-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/cardpile-upstream-noname/package.npack.json": {
+      "sha256": "ef6a86ece21ae07c7aebd3d5f66493d380fa99a276b8c02151dc8d0732a0a4d6",
+      "bytes": 1600
+    },
+    "packages/extensions/coin-upstream-liuli/assets/config.json": {
+      "sha256": "065c8038f919364cd2f1b22da22ac0417148e2912d241f1c13e57f95f939d770",
+      "bytes": 292
+    },
+    "packages/extensions/coin-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/coin-upstream-liuli/package.npack.json": {
+      "sha256": "9debe60decabea2c6a80f5d49b7180e38e495da6ccee66492197a999c607b13b",
+      "bytes": 1531
+    },
+    "packages/extensions/coin-upstream-noname/assets/config.json": {
+      "sha256": "d9b466ee4393d9a51b6fbfa9f705c80a7139d12516214a395d11ff57286b0eff",
+      "bytes": 142
+    },
+    "packages/extensions/coin-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/coin-upstream-noname/package.npack.json": {
+      "sha256": "7a85e01024438d8512567b54fbf768f60ba33e5bfe5b2cf38d0fa072fec97675",
+      "bytes": 1544
+    },
+    "packages/extensions/d3-upstream-noname/assets/character.json": {
+      "sha256": "b8487caf28b0066c443dfb8646e110b0f133f808299f06f58702d4e43ef5fff2",
+      "bytes": 604
+    },
+    "packages/extensions/d3-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/d3-upstream-noname/package.npack.json": {
+      "sha256": "62cccbb3b3a176e431b721c713e5375738e4857913ba7acdc8eb56c3b036d2e4",
+      "bytes": 1607
+    },
+    "packages/extensions/desktop-adapt-upstream-liuli/assets/config.json": {
+      "sha256": "ec5dce03d4dd49e9a5c41ba0d521dc322b49e9755728e1683264292178fb6df0",
+      "bytes": 173
+    },
+    "packages/extensions/desktop-adapt-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/desktop-adapt-upstream-liuli/package.npack.json": {
+      "sha256": "96aeba7c5dfbce6667715db53408c1af93bca251bd89d1b4e00d6652f31edf48",
+      "bytes": 1587
+    },
+    "packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json": {
+      "sha256": "e30cf92c7a75625eb214123d27759cb01727aac37196dc7eb77a6bbae5b21774",
+      "bytes": 943
+    },
+    "packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json": {
+      "sha256": "de80bea63fbed1aa82298bdd06e8d8a1fb5d0800f08ae84a523c071af0ff5c23",
+      "bytes": 291
+    },
+    "packages/extensions/doomsday-brawl-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/doomsday-brawl-upstream-liuli/package.npack.json": {
+      "sha256": "d6216e52ae9e629d60ea27179dac5685c897db7af759ed7e73f99068949f17e3",
+      "bytes": 2061
+    },
+    "packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json": {
+      "sha256": "2880cfb26f28e2ff59705c6aeb43c0395758d2a7ac9ce0911fd544ab0b627ab6",
+      "bytes": 597
+    },
+    "packages/extensions/douzhuan-xingyi-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/douzhuan-xingyi-upstream-liuli/package.npack.json": {
+      "sha256": "89963573ac9eee473c14ef01eb8cec3bc175c7dddaa8b515696867657d3fda1b",
+      "bytes": 1603
+    },
+    "packages/extensions/drag-read-upstream-liuli/assets/config.json": {
+      "sha256": "8d47a3e67fb189e1b96c104c3bcaff9d81ea10f55691db4d8c4095632560adaf",
+      "bytes": 832
+    },
+    "packages/extensions/drag-read-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/drag-read-upstream-liuli/package.npack.json": {
+      "sha256": "74b0b12b4b322bfb83361a8e4763cd598d9f9c94cc7d00f715a6d3a7461122f1",
+      "bytes": 1561
+    },
+    "packages/extensions/elo-sanction-upstream-liuli/assets/config.json": {
+      "sha256": "b942fbfef4fc04c6457eda574523330bd7d88a6d60f2e9c588ffc44015fb2cf3",
+      "bytes": 236
+    },
+    "packages/extensions/elo-sanction-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/elo-sanction-upstream-liuli/package.npack.json": {
+      "sha256": "936fad46bacf0795617d4ff206ed097d3514b09948b50e99ba0476643b14cfe3",
+      "bytes": 1583
+    },
+    "packages/extensions/epic-cards-upstream-liuli/assets/cards.json": {
+      "sha256": "aa22cfedd7c333b4d6481935a4fc092d0754d1b68152a4d1d24a72943a9cec2d",
+      "bytes": 663
+    },
+    "packages/extensions/epic-cards-upstream-liuli/assets/config.json": {
+      "sha256": "1fe922fdaa652e59396061f8163bfef7e48336e62e64ed332bdb093866a69e1d",
+      "bytes": 460
+    },
+    "packages/extensions/epic-cards-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/epic-cards-upstream-liuli/package.npack.json": {
+      "sha256": "ccba8d3ce25e1ea123a1316c326b708907940e791ee11f4cf206da8dddc70304",
+      "bytes": 2014
+    },
+    "packages/extensions/fool-plugin-upstream-liuli/assets/config.json": {
+      "sha256": "453211f6482f99be21052870b65a9c324868fc0c8076e008703a0a03ad91a365",
+      "bytes": 360
+    },
+    "packages/extensions/fool-plugin-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/fool-plugin-upstream-liuli/package.npack.json": {
+      "sha256": "c8af481abeb643fb0a79a8ff3f7a45f596604ea2a4ea8397fdfb74cd812d0b0f",
+      "bytes": 1578
+    },
+    "packages/extensions/hero-kill-upstream-noname/assets/cards.json": {
+      "sha256": "033a82d0d6de89c05b82c2bc94cf458db7f5e1d2c5d2ddeb21a2548034576fd0",
+      "bytes": 1004
+    },
+    "packages/extensions/hero-kill-upstream-noname/assets/config.json": {
+      "sha256": "e0448a6133a8f57becac630d7ee567a7faddb4f3a8542d61bc4448cb5bff41ae",
+      "bytes": 327
+    },
+    "packages/extensions/hero-kill-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/hero-kill-upstream-noname/package.npack.json": {
+      "sha256": "131efb2f5ee32ccc2c789bb408374c416a432441c3c418828f5ee5d9b7ce074a",
+      "bytes": 2137
+    },
+    "packages/extensions/huanle-upstream-noname/assets/cards.json": {
+      "sha256": "49d48fbe83a8288da8260e287665eef0012d65fe1dea48d5cf72d8fe498bc41b",
+      "bytes": 1358
+    },
+    "packages/extensions/huanle-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/huanle-upstream-noname/package.npack.json": {
+      "sha256": "2a6aeb603492022b5046c64e1897ce11ebca162f4d2155ecb9a92a98bb109fe7",
+      "bytes": 1622
+    },
+    "packages/extensions/longxue-upstream-liuli/assets/cards.json": {
+      "sha256": "ca66fc4d3543f87515ac00053d1750529c714e1ce9d7db5b792aac2a268828c3",
+      "bytes": 1355
+    },
+    "packages/extensions/longxue-upstream-liuli/assets/config.json": {
+      "sha256": "2034c6d1e9d90fc2dbdbbf36fe1d66780d9a61bcb7efed3239b77b3f9fc5b03d",
+      "bytes": 374
+    },
+    "packages/extensions/longxue-upstream-liuli/manifest.json": {
+      "sha256": "61f4ad448d94dccaedf3de8fd9b41c20109a6c8b579ca369aad8584dbae6aeec",
+      "bytes": 77
+    },
+    "packages/extensions/longxue-upstream-liuli/package.npack.json": {
+      "sha256": "a49a0a19caacda145e4af5466c0a56ba4198a6ecf09d40a1c0b580823d2224df",
+      "bytes": 1847
+    },
+    "packages/extensions/mark-supplement-upstream-liuli/assets/cards.json": {
+      "sha256": "d3cd2c014688701b4c55ff2cb0169f916954f5728d7128b6e8821de181bd6f62",
+      "bytes": 1206
+    },
+    "packages/extensions/mark-supplement-upstream-liuli/assets/config.json": {
+      "sha256": "621218511bc4cfcf03a08e2a1e7d03058e5e630711470350f9749ae28fb2676c",
+      "bytes": 349
+    },
+    "packages/extensions/mark-supplement-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/mark-supplement-upstream-liuli/package.npack.json": {
+      "sha256": "e0d15be4c8e7d047755fb17adee458f0b4be81e5446837dcbd115fc84885096b",
+      "bytes": 2254
+    },
+    "packages/extensions/martial-upstream-liuli/assets/config.json": {
+      "sha256": "9328ad142acea6081931d41031d0a7cb8e7aa0392605b428a944f5ac8626459c",
+      "bytes": 383
+    },
+    "packages/extensions/martial-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/martial-upstream-liuli/package.npack.json": {
+      "sha256": "ab04a5bc724c41aee5b20fbb1156a95efe14a60c98e6089a6e20a113e31f85cd",
+      "bytes": 1550
+    },
+    "packages/extensions/omnisearch-upstream-liuli/assets/config.json": {
+      "sha256": "299f4bb830bace159e30b2aecff1d2694d0b24b694f674c5cdaeb8b425c46d79",
+      "bytes": 54
+    },
+    "packages/extensions/omnisearch-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/omnisearch-upstream-liuli/package.npack.json": {
+      "sha256": "b7590f303a793fdf1508ff9827f5f12bcb100cd45a849f20c76aeba35024d991",
+      "bytes": 1568
+    },
+    "packages/extensions/qhly-upstream-liuli/assets/config.json": {
+      "sha256": "4e944aeb17c7f04e56b3ebbf6470e052e9e3be230286067aa41337e82b314134",
+      "bytes": 564
+    },
+    "packages/extensions/qhly-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/qhly-upstream-liuli/package.npack.json": {
+      "sha256": "ab856a709f3e6969fe7c3fbe5eb73952c269d64c14d6fd5e54470826bd6b4a2f",
+      "bytes": 1539
+    },
+    "packages/extensions/select-beautify-upstream-liuli/assets/cards.json": {
+      "sha256": "1dbf6ef08028943b45bb37e966a1170449eee1df049b4c6795249cfb84208373",
+      "bytes": 1148
+    },
+    "packages/extensions/select-beautify-upstream-liuli/assets/config.json": {
+      "sha256": "d36348f767984b54ece4bff83ba8ced8f31163f01199717083b9cfb0c4616aea",
+      "bytes": 361
+    },
+    "packages/extensions/select-beautify-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/select-beautify-upstream-liuli/package.npack.json": {
+      "sha256": "6343cfc7570d9f621fe581796545a965ed706d8bf373c36f3e35ceea16c836cf",
+      "bytes": 2282
+    },
+    "packages/extensions/shaai-ow-upstream-noname/assets/cards.json": {
+      "sha256": "bef0351b5b2f9ea2556a3c231fac052d93c9eee1ccc3e676cf274f5d8e1530aa",
+      "bytes": 13195
+    },
+    "packages/extensions/shaai-ow-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shaai-ow-upstream-noname/package.npack.json": {
+      "sha256": "f9a68b3437ee0149950390c52d58855c014968a7d691bdd72887b76abe8c9d76",
+      "bytes": 1642
+    },
+    "packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json": {
+      "sha256": "22e5ec0a40f53c8c736568a7fab71fe120b90350985aefc1eda5fe324afb42ae",
+      "bytes": 17606
+    },
+    "packages/extensions/shaai-xianjian-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shaai-xianjian-upstream-noname/package.npack.json": {
+      "sha256": "8f9a4fa0f5c29d92a4818b3d28256d38b8d9f8eb6abc739e9d18917be173f6c6",
+      "bytes": 1655
+    },
+    "packages/extensions/shahai-gujian-upstream-noname/assets/cards.json": {
+      "sha256": "1c0619ff5dac140a2fc60179c1d51219cd427bb56a47d5b3f81ba9ff8da19f8a",
+      "bytes": 3519
+    },
+    "packages/extensions/shahai-gujian-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-gujian-upstream-noname/package.npack.json": {
+      "sha256": "77438db5c9b870951408dc19331d7b70cc68827ef23c55e5de3354a0180ea7ee",
+      "bytes": 2299
+    },
+    "packages/extensions/shahai-gwent-upstream-noname/assets/cards.json": {
+      "sha256": "77cc69a43998707336e7edec12f6bd5a3b5bfca9c575345a1b4050f459e5d635",
+      "bytes": 2024
+    },
+    "packages/extensions/shahai-gwent-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-gwent-upstream-noname/package.npack.json": {
+      "sha256": "6928a57145690cd124defc19ba0599572a3992a4195709d1137dd56b7aa1427d",
+      "bytes": 1884
+    },
+    "packages/extensions/shahai-hearth-upstream-noname/assets/cards.json": {
+      "sha256": "a1e7e1392ddd9c6ae038d000729ce1ee0898301d7c66cb2d633de449d3991859",
+      "bytes": 1719
+    },
+    "packages/extensions/shahai-hearth-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-hearth-upstream-noname/package.npack.json": {
+      "sha256": "342368aec3e3804e1f57982e9d80a8665907efeb1b9216546a8652df40cb7b21",
+      "bytes": 1880
+    },
+    "packages/extensions/shahai-mtg-upstream-noname/assets/cards.json": {
+      "sha256": "a6eab61477b2e42609c4f40baf74f106ba41f51b547af65a1d1671e07c389e16",
+      "bytes": 1701
+    },
+    "packages/extensions/shahai-mtg-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-mtg-upstream-noname/package.npack.json": {
+      "sha256": "f946ef5832638d847f2f6157b3204b7061bd062e639ae87f65ec09469130d742",
+      "bytes": 1507
+    },
+    "packages/extensions/shahai-swd-upstream-noname/assets/cards.json": {
+      "sha256": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724",
+      "bytes": 33018
+    },
+    "packages/extensions/shahai-swd-upstream-noname/manifest.json": {
+      "sha256": "0fa639c0388f7dc6c732c492918709156ae13d8c8180753cecfd340f97d31c8b",
+      "bytes": 72
+    },
+    "packages/extensions/shahai-swd-upstream-noname/package.npack.json": {
+      "sha256": "01891b01cbe4286d5b1f163eb0e81edfdc493d2538e40b49f826e7aa7eeb9950",
+      "bytes": 1513
+    },
+    "packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json": {
+      "sha256": "203248269c8e9d3da4869675f6f0d40ab205aa28ee7e7b7732b57884850e8970",
+      "bytes": 2222
+    },
+    "packages/extensions/shahai-yunchou-upstream-noname/assets/character.json": {
+      "sha256": "de7e83eaa86c7820c0d326d4b8f3bd1904deb5b025eece7c3af9e11dca380e80",
+      "bytes": 4440
+    },
+    "packages/extensions/shahai-yunchou-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-yunchou-upstream-noname/package.npack.json": {
+      "sha256": "2824aa3aad2e5cb9e29b4fa15ec4f952c43a5bc483776411872a71c74a97671b",
+      "bytes": 1644
+    },
+    "packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json": {
+      "sha256": "b0188bf48d55f532283c96b7e45b4547b33ffb23b7b47ea423781a567d543655",
+      "bytes": 1380
+    },
+    "packages/extensions/shahai-zhenfa-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shahai-zhenfa-upstream-noname/package.npack.json": {
+      "sha256": "04efbd7485740271ca1113d82a778bee8de24e8e1d3c7e2a2b44201b4af6e6fc",
+      "bytes": 1515
+    },
+    "packages/extensions/shousha-full-upstream-liuli/assets/config.json": {
+      "sha256": "2edf8f8af00b1cd484dd38e547135f334680402a3b12e5bdc6350a7719606e69",
+      "bytes": 39010
+    },
+    "packages/extensions/shousha-full-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/shousha-full-upstream-liuli/package.npack.json": {
+      "sha256": "dcee89ff6556e68a90a3fbdcbbc73e0fe841cfc81c333f527dfa7ab5feea8e2d",
+      "bytes": 1573
+    },
+    "packages/extensions/shousha-mvp-upstream-liuli/assets/config.json": {
+      "sha256": "d1ec92b5b594e9dd09d5b4938188a5fbb1b693b2773347b4e2d04ee63ec69ba2",
+      "bytes": 853
+    },
+    "packages/extensions/shousha-mvp-upstream-liuli/manifest.json": {
+      "sha256": "61f4ad448d94dccaedf3de8fd9b41c20109a6c8b579ca369aad8584dbae6aeec",
+      "bytes": 77
+    },
+    "packages/extensions/shousha-mvp-upstream-liuli/package.npack.json": {
+      "sha256": "b2d9e22803906780e3f9bfd3d480db1ab535f80815664a1fda54e647980fdebb",
+      "bytes": 1577
+    },
+    "packages/extensions/sj-settings-upstream-liuli/assets/config.json": {
+      "sha256": "f54b2032cf1d7d4ab9c0795f48266fab247fc22901188e1fd0c7b7e1226f18e1",
+      "bytes": 214
+    },
+    "packages/extensions/sj-settings-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/sj-settings-upstream-liuli/package.npack.json": {
+      "sha256": "9d4e1b33907a695b6003971bdf9e26d3c3783c7aab89df22f0523aa042f9a344",
+      "bytes": 1580
+    },
+    "packages/extensions/skin-switch-upstream-liuli/assets/config.json": {
+      "sha256": "26b79cd9e4f308fe8e3062ffa87fad7e70bb85aef26960b4b7625c60557f14dc",
+      "bytes": 517
+    },
+    "packages/extensions/skin-switch-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/skin-switch-upstream-liuli/package.npack.json": {
+      "sha256": "9447468da86213fecbce9a6aa946bb42579191d02c40543f0f7890d87f004f15",
+      "bytes": 1564
+    },
+    "packages/extensions/thunder-upstream-liuli/assets/config.json": {
+      "sha256": "de64ace113e18098eed39cbc6dc80389dae83e49e8608c4ce1911d50174eebaa",
+      "bytes": 475
+    },
+    "packages/extensions/thunder-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/thunder-upstream-liuli/package.npack.json": {
+      "sha256": "84521165ed9d5c12c1021c9a5669d514dc151b0dbf57b225af3719254a509f2b",
+      "bytes": 1555
+    },
+    "packages/extensions/update-guard-upstream-liuli/assets/config.json": {
+      "sha256": "2c69b8d7e3619dc7ad5325d242c700374f40bef912be206ea98b7e0552aac389",
+      "bytes": 278
+    },
+    "packages/extensions/update-guard-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/update-guard-upstream-liuli/package.npack.json": {
+      "sha256": "8b67bcd5e1115c5847076b5a7e25345fca5d56b01ef06010a8c6fd1996ff5f57",
+      "bytes": 1579
+    },
+    "packages/extensions/wudian-upstream-noname/assets/cards.json": {
+      "sha256": "7ccf4bb8cba84606949c5d434c7abc6a916d10871aae53a699e0920517823b27",
+      "bytes": 6802
+    },
+    "packages/extensions/wudian-upstream-noname/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/wudian-upstream-noname/package.npack.json": {
+      "sha256": "d508f292ea2788872168d190adc180dd6b28c1b7d14cbd076d1a59170ced3a3a",
+      "bytes": 1841
+    },
+    "packages/extensions/wuxing-upstream-liuli/assets/cards.json": {
+      "sha256": "f24efe7af00ef7921309085252812a399c3bc690e9efb7ab463b125a494453db",
+      "bytes": 612
+    },
+    "packages/extensions/wuxing-upstream-liuli/assets/wuxing.json": {
+      "sha256": "982519af4446fc8d8d802e4d9806807a6f100e188baf47a3a45fbce4f7b6353d",
+      "bytes": 318
+    },
+    "packages/extensions/wuxing-upstream-liuli/manifest.json": {
+      "sha256": "aea2492b9b31bbf87513372980c90a25b6d30249faa149da250f19451fb4697b",
+      "bytes": 80
+    },
+    "packages/extensions/wuxing-upstream-liuli/package.npack.json": {
+      "sha256": "3d24c850026d773be1b5f2820dd50b35b79655880c7f65f75950a6ab50689e18",
+      "bytes": 1935
+    },
+    "scripts/check-source-lines.py": {
+      "sha256": "8f6c043d2e66743c161f23b9dd4ec805040fe3261fcfb7fd6de35521dbdf7a56",
+      "bytes": 1481
+    },
+    "scripts/plan_effect_request_split.py": {
+      "sha256": "a4a0e58d1ec7d60f27a5708ce3e9b6a29d2bc20ffa9dfcd882c98bf2260ab05e",
+      "bytes": 6440
+    },
+    "scripts/preflight.py": {
+      "sha256": "d47ccdf2a871656d4cb60a659a4e68f9eaa46a719e86d9ce36d745065f795a5c",
+      "bytes": 3775
+    },
+    "scripts/test_plan_effect_request_split.py": {
+      "sha256": "c5363610f340af986aaf19b33b87bc8f50ef915b5a6e8cfe6fe4d91f5610fe83",
+      "bytes": 6392
+    },
+    "scripts/test_preflight.py": {
+      "sha256": "a9c850ff91a0f5fba88772ea4bf71989bdbd735e9540eec6fd86335f52edd619",
+      "bytes": 2068
+    }
+  },
+  "previous_effect_split_manifest_matches": true
+}

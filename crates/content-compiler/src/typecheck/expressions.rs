@@ -158,6 +158,12 @@ pub(super) fn check_expr(e: &ExprAst, locals: &[String]) -> Result<ExprIr, Compi
                     } else if name == "mark_count" && i == 1 {
                         let mark = expect_u32(x, 0)?;
                         i32::try_from(mark).map_or(ExprIr::U32(mark), ExprIr::Int)
+                    } else if name == "has_skill" && i == 1 {
+                        // ADR 0632 的 DSL 形态是 `has_skill(player, <skill_def>)`；
+                        // 这里必须按 u32 字面量接收，否则通用表达式检查会以
+                        // “u32 literal is only valid for an identifier argument” 拒绝。
+                        let skill_def = expect_u32(x, 0)?;
+                        i32::try_from(skill_def).map_or(ExprIr::U32(skill_def), ExprIr::Int)
                     } else if name == "skill_pile_count" && i == 1 {
                         let skill_def = expect_u32(x, 0)?;
                         i32::try_from(skill_def).map_or(ExprIr::U32(skill_def), ExprIr::Int)

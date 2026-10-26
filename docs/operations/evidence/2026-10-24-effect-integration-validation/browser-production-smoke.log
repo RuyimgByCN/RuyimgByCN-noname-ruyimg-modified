@@ -1,0 +1,40 @@
+PASS ui_install_actual_copies: 15
+PASS ui_formal_start_and_extension_general: ddd刘冲
+PASS ui_save_frozen_payload: 5023
+PASS ui_restore_after_uninstall_and_resave_original_lock: 15
+PASS ui_identity_with_installed_extensions: started and saved
+PASS ui_missing_payload_fails_and_unfreezes: no standard fallback
+PASS page_errors: 0
+{
+  "origin": "http://127.0.0.1:5481",
+  "results": [
+    {
+      "name": "ui_install_actual_copies",
+      "detail": 15
+    },
+    {
+      "name": "ui_formal_start_and_extension_general",
+      "detail": "ddd刘冲"
+    },
+    {
+      "name": "ui_save_frozen_payload",
+      "detail": 5023
+    },
+    {
+      "name": "ui_restore_after_uninstall_and_resave_original_lock",
+      "detail": 15
+    },
+    {
+      "name": "ui_identity_with_installed_extensions",
+      "detail": "started and saved"
+    },
+    {
+      "name": "ui_missing_payload_fails_and_unfreezes",
+      "detail": "no standard fallback"
+    },
+    {
+      "name": "page_errors",
+      "detail": 0
+    }
+  ]
+}

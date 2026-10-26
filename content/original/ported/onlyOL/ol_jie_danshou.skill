@@ -1,0 +1,16 @@
+// OL界朱然「胆守」：出牌阶段，四个选项每阶段各限一次。
+// 1 弃置一名角色一张手牌/装备；2 获得一名其他角色一张手牌/装备；
+// 3 对一名角色造成 1 点伤害；4 你与其各摸两张。
+// 结算后弃置 X 张牌（X=选项序号，不足则全弃）。
+// 技能私有 storage 键 1..4 记录已用选项，由 phase_play 触发清零；弃置由复合原语完成。
+skill ol_jie_danshou(3750129445) {
+  trigger phase_play owner_is_target {
+    effect storage_set(self_skill, 1, 0);
+    effect storage_set(self_skill, 2, 0);
+    effect storage_set(self_skill, 3, 0);
+    effect storage_set(self_skill, 4, 0);
+  }
+  active play_phase targets 0 0 {
+    effect resolve_ol_jie_danshou(self);
+  }
+}

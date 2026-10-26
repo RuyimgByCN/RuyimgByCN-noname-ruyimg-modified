@@ -1230,6 +1230,16 @@ pub(super) fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
             put_u32(h, *amount);
             put_u32(h, skill.raw());
         }
+        EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+            player,
+            amount,
+            skill,
+        } => {
+            put_u8(h, 106);
+            put_u32(h, player.raw());
+            put_u32(h, *amount);
+            put_u32(h, skill.raw());
+        }
 
         EffectRequest::RevealUniformHandDrawSelfChooseOthers { player, skill } => {
             put_u8(h, 105);

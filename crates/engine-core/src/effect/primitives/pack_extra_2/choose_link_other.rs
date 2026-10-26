@@ -1332,6 +1332,7 @@ pub(crate) fn choose_other_targets_by_skipped_phase_count_damage(
     player: PlayerId,
     amount: u32,
     skill: engine_api::SkillId,
+    draw_per_damage: bool,
 ) -> Result<Vec<DomainEvent>, EffectError> {
     if amount == 0
         || !originating_skill_is_enabled(tx, player, skill)
@@ -1364,7 +1365,13 @@ pub(crate) fn choose_other_targets_by_skipped_phase_count_damage(
         options.into_iter().map(PlayerId::raw).collect(),
         ChoiceKind::SelectTargets,
         ContinuationKind::ChooseOtherTargetsBySkippedPhaseCountDamage,
-        vec![player.raw(), amount, skill.raw()],
+        {
+            let mut payload = vec![player.raw(), amount, skill.raw()];
+            if draw_per_damage {
+                payload.push(1);
+            }
+            payload
+        },
     )
 }
 

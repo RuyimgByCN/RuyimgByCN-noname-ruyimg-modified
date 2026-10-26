@@ -1,0 +1,12 @@
+[
+  {
+    "path": "crates/engine-core/tests/up37_r10_metadata.rs",
+    "bytes": 2018,
+    "sha256": "9fb5ff3c9c532b3ccd10068bdce5b44ab1e7c1ed79ffd40e23e2fc037f8102be"
+  },
+  {
+    "path": "content/original/catalog.json",
+    "bytes": 8471700,
+    "sha256": "638dc8fb74c2fc213cf7cdd987e7c456cfd77069a9343eb6f29b0e9ffc6ed9cc"
+  }
+]

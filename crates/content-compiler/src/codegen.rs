@@ -587,6 +587,8 @@ impl Assembler {
             | StmtIr::EffectDiscardTargetEquipmentDrawWeaponRange { .. }
             | StmtIr::EffectChooseTargetRevealHandDamageIfSha { .. }
             | StmtIr::EffectChooseOtherGiveOneHandEquip { .. }
+            | StmtIr::EffectChooseGiveOrRecastOneHand { .. }
+            | StmtIr::EffectResolveOlJieDanshou { .. }
             | StmtIr::EffectChooseRevealHandCardBindCategoryTarget { .. }
             | StmtIr::EffectRecoverToMaxThenOptionalExchangeSkill { .. }
             | StmtIr::EffectRevealHandDiscardKind { .. }
@@ -720,6 +722,7 @@ impl Assembler {
             | StmtIr::EffectChooseGainResolvedShaOrShanThenOptionalUseSha { .. }
             | StmtIr::EffectSkipCurrentPhase { .. }
             | StmtIr::EffectChooseOtherTargetsBySkippedPhaseCountDamage { .. }
+            | StmtIr::EffectChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
             | StmtIr::EffectRevealUniformHandDrawSelfChooseOthers { .. }
             | StmtIr::EffectChooseCardUserOrAddTarget { .. }
             | StmtIr::EffectChooseDiscardEquipmentReduceCurrentDamage { .. }

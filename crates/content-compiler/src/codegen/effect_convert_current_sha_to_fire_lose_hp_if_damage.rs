@@ -1,4 +1,5 @@
 use super::*;
+use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_754;
 
 impl Assembler {
     pub(super) fn emit_effect_convert_current_sha_to_fire_lose_hp_if_damage(
@@ -424,6 +425,19 @@ impl Assembler {
                 self.emit_expr(amount)?;
                 self.ops.push(Op::HostEffect(
                     effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE,
+                ));
+            }
+            StmtIr::EffectChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player,
+                amount,
+                span,
+            } => {
+                self.mark(*span, "choose_other_targets_by_skipped_phase_count_damage_draw");
+                self.required_abi = self.required_abi.max(ADDITIVE_RULE_VM_ABI_VERSION_754);
+                self.emit_expr(player)?;
+                self.emit_expr(amount)?;
+                self.ops.push(Op::HostEffect(
+                    effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
                 ));
             }
             StmtIr::EffectRevealUniformHandDrawSelfChooseOthers { player, span } => {

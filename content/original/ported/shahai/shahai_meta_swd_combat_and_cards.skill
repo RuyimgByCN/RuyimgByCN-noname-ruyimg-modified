@@ -1,0 +1,1559 @@
+// shoulie（狩猎）：当你使用一张【杀】指定目标后，你可以弃置一张手牌令此【杀】
+// 不可闪避。
+// 实现：`trigger card_used owner_source_sha optional` →
+// discard_hand_equip_count(self, 1) + make_current_card_unrespondable(self,
+// event_card, 4057970364)（natuxing 同款，helper def=本技）。
+// 近似：上游按每个目标的响应询问逐目标发动（shaBegin），此处整张杀一次生效；
+// 所弃之牌未限定手牌（hand_equip 任意）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（普通杀强化触发）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shoulie(4057970364) {
+  trigger card_used owner_source_sha optional {
+    effect discard_hand_equip_count(self, 1);
+    effect make_current_card_unrespondable(self, event_card, 4057970364);
+  }
+}
+// hudun（护盾）：锁定技，当你对其他角色造成伤害后，若你没有护甲，你获得
+// 1 点护甲值。
+// 实现：`trigger damage owner_is_source` forced → add_mark(self, 3, 1)。
+// 近似：「没有护甲」与「目标非己」门槛未建模（DSL 无 != 运算符，含自伤场景
+// 亦触发）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 条件护甲）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hudun(2311509903) locked {
+  trigger damage owner_is_source {
+    effect add_mark(self, 3, 1);
+  }
+}
+// toudan（投弹）：出牌阶段限一次，你可以弃置一张黑桃牌对一名其他角色造成1点火焰伤害，然后你与距离该角色1以内的所有角色各弃置一张牌。
+skill toudan(699721208) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 toudan（swd/skill.js:7999）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// shending（神丁）：锁定技，若你没有宝物牌，视为装备了蓝格怪衣。
+skill shending(561605395) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shending（swd/skill.js:8041）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// poxiao（破霄）：你可以将一张装备牌当【杀】使用；当你没有武器牌时，你的攻击范围+1，【杀】可以额外指定一个目标。
+skill poxiao(338638775) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 poxiao（swd/skill.js:8107）依赖跨界包专属机制
+  // （发现/地图牌/秘术/法力水晶/连击/随从/阵型等，见包 README 可表达性缺口），
+  // DSL 无可移植规则面；原“批量最小近似：结束阶段可选摸一张”为文档占位、
+  // 与上游语义不符，已纠正为诚实 noop（无运行时行为，符合元数据登记意图）。
+  modifier hand_limit add 0;
+}
+// g_hufu_sha：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_hufu_sha(2276008931) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_hufu_sha（card/swd/skill.js:13）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_hufu_shan：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_hufu_shan(162722140) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_hufu_shan（card/swd/skill.js:30）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_hufu_jiu：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_hufu_jiu(2948860683) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_hufu_jiu（card/swd/skill.js:47）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// zhiluxiaohu（指路小狐）：出牌阶段对自己使用，视为对一名随机敌方角色使用一张杀，若此杀造成伤害，你摸一张牌。
+skill zhiluxiaohu(2144056909) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhiluxiaohu（card/swd/skill.js:59）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// zhufangshenshi（祠符）：出牌阶段，对一名其他角色使用，本回合内对其使用卡牌无视距离，结算后摸一张牌。
+skill zhufangshenshi(634075699) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 zhufangshenshi（card/swd/skill.js:70）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_zhufangshenshi：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_zhufangshenshi(2295522571) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_zhufangshenshi（card/swd/skill.js:84）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// huanpodan_skill：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill huanpodan_skill(942977271) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 huanpodan_skill（card/swd/skill.js:95）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// dujian2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill dujian2(4208288595) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 dujian2（card/swd/skill.js:113）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_yuchan_swap：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_yuchan_swap(3325882587) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_yuchan_swap（card/swd/skill.js:114）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_yuchan_equip：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_yuchan_equip(3502533002) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_yuchan_equip（card/swd/skill.js:128）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// yuchanqian_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanqian_equip1(1818111464) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanqian_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanqian_equip2(1809356048) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanqian_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanqian_equip3(1485766959) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanqian_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanqian_equip4(4007149841) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanqian_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanqian_equip5(1994297571) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankun_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankun_equip1(2576246781) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankun_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankun_equip2(2281736286) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankun_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankun_equip3(508803123) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankun_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankun_equip4(523798604) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankun_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankun_equip5(3670297625) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanzhen_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanzhen_equip1(1576473256) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanzhen_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanzhen_equip2(1980632937) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanzhen_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanzhen_equip3(2090845473) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanzhen_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanzhen_equip4(3606389029) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanzhen_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanzhen_equip5(1318486815) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanxun_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanxun_equip1(4238845947) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanxun_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanxun_equip2(898312030) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanxun_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanxun_equip3(1836132549) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanxun_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanxun_equip4(3242622377) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanxun_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanxun_equip5(502354584) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankan_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankan_equip1(1375780509) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankan_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankan_equip2(864969342) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankan_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankan_equip3(909630977) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankan_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankan_equip4(3958470143) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchankan_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchankan_equip5(39241984) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanli_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanli_equip1(3305196463) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanli_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanli_equip2(330959976) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanli_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanli_equip3(3683048299) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanli_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanli_equip4(1924041691) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchanli_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchanli_equip5(2047282877) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchangen_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchangen_equip1(427950671) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchangen_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchangen_equip2(4055825453) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchangen_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchangen_equip3(216351897) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchangen_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchangen_equip4(88804884) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchangen_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchangen_equip5(1358192204) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchandui_equip1（玉蝉·1 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchandui_equip1(199106039) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchandui_equip2（玉蝉·2 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchandui_equip2(2586764663) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchandui_equip3（玉蝉·3 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchandui_equip3(1054086366) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchandui_equip4（玉蝉·4 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchandui_equip4(324792942) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// yuchandui_equip5（玉蝉·5 号位）：出牌阶段限一次，你可以弃置任意张基本牌并摸等量的牌。
+// 实现：`active play_phase uses_per_turn 1` →
+// `discard_basic_draw_equal(self, self_skill)`（ABI 657，Cont 273；上游由
+// g_yuchan_equip 全局技承载，本块为其具名实例）。
+// 近似：上游 40 个变体共享每回合一次的全局发动次数，此处按技能各自限一次。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill yuchandui_equip5(3418872842) {
+  active play_phase uses_per_turn 1 {
+    effect discard_basic_draw_equal(self, self_skill);
+  }
+}
+// lianyaohu_skill：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill lianyaohu_skill(2304664861) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 lianyaohu_skill（card/swd/skill.js:196）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_shencaojie：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_shencaojie(1111893219) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_shencaojie（card/swd/skill.js:224）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_shenmiguo：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_shenmiguo(4190548771) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_shenmiguo（card/swd/skill.js:250）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shenmiguo2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill shenmiguo2(2850592960) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shenmiguo2（card/swd/skill.js:327）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// yuruyi（玉如意）：你有更高的机率摸到好牌。
+skill yuruyi(4152548502) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yuruyi（card/swd/skill.js:328）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shuchui（鼠槌）：出牌阶段限一次，你可以指定一名攻击范围内的角色，依次将手牌中的至多3张杀对该角色使用，若杀造成了伤害，你摸一张牌。
+skill shuchui(1059070528) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shuchui（card/swd/skill.js:366）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shuchui2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill shuchui2(3572939937) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shuchui2（card/swd/skill.js:413）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xuejibingbao（雪肌冰鲍）：出牌阶段对一名角色使用，该角色摸牌阶段摸牌数+1，持续2个回合。
+skill xuejibingbao(4125465128) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xuejibingbao（card/swd/skill.js:426）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// gouhunluo（勾魂锣）：出牌阶段对一名角色使用，在3轮后你的准备阶段令该角色失去1点体力并弃置所有手牌。
+skill gouhunluo(2460524201) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 gouhunluo（card/swd/skill.js:446）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// gouhunluo2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill gouhunluo2(511623268) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 gouhunluo2（card/swd/skill.js:485）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// jiguanyuan（机关鸢）：出牌阶段对一名其他角色使用，你将此牌和一张其它牌置于一名其他角色的武将牌上，然后摸一张牌；该角色于下一结束阶段获得武将牌上的牌。
+skill jiguanyuan(2013679532) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jiguanyuan（card/swd/skill.js:498）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_qinglongzhigui：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_qinglongzhigui(3147656636) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_qinglongzhigui（card/swd/skill.js:513）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_baishouzhihu：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_baishouzhihu(1589877760) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_baishouzhihu（card/swd/skill.js:527）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_zhuquezhizhang：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_zhuquezhizhang(1495793795) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_zhuquezhizhang（card/swd/skill.js:554）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_xuanwuzhihuang：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_xuanwuzhihuang(2357344880) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_xuanwuzhihuang（card/swd/skill.js:572）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_huanglinzhicong：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_huanglinzhicong(1921556794) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_huanglinzhicong（card/swd/skill.js:583）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// g_cangchizhibi：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill g_cangchizhibi(544264706) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 g_cangchizhibi（card/swd/skill.js:595）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// cangchizhibi_equip1（苍鸱之臂）：结束阶段，你可以横置或重置一名角色。
+// 实现：`trigger phase_end owner_is_target optional` →
+// `choose_other_add_mark(self, 2, 1)`（ABI 652；MARK_CHAIN=2 横置）。
+// 近似：仅横置（+1 铁索标记）；上游 link() 为切换语义，「或重置」未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill cangchizhibi_equip1(3833037504) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_mark(self, 2, 1);
+  }
+}
+// cangchizhibi_equip2（苍鸱之臂）：结束阶段，你可以横置或重置一名角色。
+// 实现：`trigger phase_end owner_is_target optional` →
+// `choose_other_add_mark(self, 2, 1)`（ABI 652；MARK_CHAIN=2 横置）。
+// 近似：仅横置（+1 铁索标记）；上游 link() 为切换语义，「或重置」未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill cangchizhibi_equip2(3221942716) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_mark(self, 2, 1);
+  }
+}
+// cangchizhibi_equip3（苍鸱之臂）：结束阶段，你可以横置或重置一名角色。
+// 实现：`trigger phase_end owner_is_target optional` →
+// `choose_other_add_mark(self, 2, 1)`（ABI 652；MARK_CHAIN=2 横置）。
+// 近似：仅横置（+1 铁索标记）；上游 link() 为切换语义，「或重置」未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill cangchizhibi_equip3(360351963) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_mark(self, 2, 1);
+  }
+}
+// cangchizhibi_equip4（苍鸱之臂）：结束阶段，你可以横置或重置一名角色。
+// 实现：`trigger phase_end owner_is_target optional` →
+// `choose_other_add_mark(self, 2, 1)`（ABI 652；MARK_CHAIN=2 横置）。
+// 近似：仅横置（+1 铁索标记）；上游 link() 为切换语义，「或重置」未建模。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill cangchizhibi_equip4(3073555799) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_add_mark(self, 2, 1);
+  }
+}
+// cangchizhibi_equip5（cangchizhibi_equip5）：结束阶段，你可以横置或重置一名角色。
+// 实现：`trigger phase_end owner_alive optional` →
+// choose_other_add_mark(self, 2, 1)（MARK_CHAIN=2 横置；
+// cangchizhibi 族 equip1-4 同款，本块 inherit equip1）。
+// 近似：上游「横置或重置」toggle 语义在固定 delta 原语下仅横置单向
+// （族内既有登记）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（phaseEnd link/unlink）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill cangchizhibi_equip5(2870821660) {
+  trigger phase_end owner_alive optional {
+    effect choose_other_add_mark(self, 2, 1);
+  }
+}
+// huanglinzhicong_equip1（黄麟之琮·1 号位）：结束阶段，若你没有护甲，你可以弃置一张黑色牌
+// 并获得 1 点护甲。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// add_mark(self, 3, 1)（护甲=MARK_HUJIA）。
+// 近似：弃牌颜色约束（黑）与「无护甲」门槛未建模（任意一张/无条件）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill huanglinzhicong_equip1(1078141406) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_mark(self, 3, 1);
+  }
+}
+// huanglinzhicong_equip2（黄麟之琮·2 号位）：结束阶段，若你没有护甲，你可以弃置一张黑色牌
+// 并获得 1 点护甲。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// add_mark(self, 3, 1)（护甲=MARK_HUJIA）。
+// 近似：弃牌颜色约束（黑）与「无护甲」门槛未建模（任意一张/无条件）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill huanglinzhicong_equip2(2625578244) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_mark(self, 3, 1);
+  }
+}
+// huanglinzhicong_equip3（黄麟之琮·3 号位）：结束阶段，若你没有护甲，你可以弃置一张黑色牌
+// 并获得 1 点护甲。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// add_mark(self, 3, 1)（护甲=MARK_HUJIA）。
+// 近似：弃牌颜色约束（黑）与「无护甲」门槛未建模（任意一张/无条件）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill huanglinzhicong_equip3(1787002042) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_mark(self, 3, 1);
+  }
+}
+// huanglinzhicong_equip4（黄麟之琮·4 号位）：结束阶段，若你没有护甲，你可以弃置一张黑色牌
+// 并获得 1 点护甲。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// add_mark(self, 3, 1)（护甲=MARK_HUJIA）。
+// 近似：弃牌颜色约束（黑）与「无护甲」门槛未建模（任意一张/无条件）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill huanglinzhicong_equip4(1313872516) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_mark(self, 3, 1);
+  }
+}
+// huanglinzhicong_equip5（黄麟之琮·5 号位）：结束阶段，若你没有护甲，你可以弃置一张黑色牌
+// 并获得 1 点护甲。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// add_mark(self, 3, 1)（护甲=MARK_HUJIA）。
+// 近似：弃牌颜色约束（黑）与「无护甲」门槛未建模（任意一张/无条件）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill huanglinzhicong_equip5(1082450722) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect add_mark(self, 3, 1);
+  }
+}
+// xuanwuzhihuang_equip1（玄武之璜·1 号位）：结束阶段，你可以弃置一张红色牌并回复 1 点体力。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// recover_hp(self, 1)。
+// 近似：弃牌颜色约束（红）未建模；满血时回复为 no-op 口径一致。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xuanwuzhihuang_equip1(1295768289) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+  }
+}
+// xuanwuzhihuang_equip2（玄武之璜·2 号位）：结束阶段，你可以弃置一张红色牌并回复 1 点体力。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// recover_hp(self, 1)。
+// 近似：弃牌颜色约束（红）未建模；满血时回复为 no-op 口径一致。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xuanwuzhihuang_equip2(724702706) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+  }
+}
+// xuanwuzhihuang_equip3（玄武之璜·3 号位）：结束阶段，你可以弃置一张红色牌并回复 1 点体力。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// recover_hp(self, 1)。
+// 近似：弃牌颜色约束（红）未建模；满血时回复为 no-op 口径一致。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xuanwuzhihuang_equip3(325415004) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+  }
+}
+// xuanwuzhihuang_equip4（玄武之璜·4 号位）：结束阶段，你可以弃置一张红色牌并回复 1 点体力。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// recover_hp(self, 1)。
+// 近似：弃牌颜色约束（红）未建模；满血时回复为 no-op 口径一致。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xuanwuzhihuang_equip4(3382311939) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+  }
+}
+// xuanwuzhihuang_equip5（玄武之璜·5 号位）：结束阶段，你可以弃置一张红色牌并回复 1 点体力。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// recover_hp(self, 1)。
+// 近似：弃牌颜色约束（红）未建模；满血时回复为 no-op 口径一致。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xuanwuzhihuang_equip5(3501823062) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect recover_hp(self, 1);
+  }
+}
+// zhuquezhizhang_equip1（朱雀之璋·1 号位）：结束阶段，你可以弃置一张红色牌并对一名体力值
+// 不小于你的角色造成 1 点火属性伤害。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// choose_other_damage(self, 1)。
+// 近似：弃牌颜色约束（红）、目标体力≥自己门槛、火属性均未建模（普通伤害）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill zhuquezhizhang_equip1(3783960437) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_damage(self, 1);
+  }
+}
+// zhuquezhizhang_equip2（朱雀之璋·2 号位）：结束阶段，你可以弃置一张红色牌并对一名体力值
+// 不小于你的角色造成 1 点火属性伤害。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// choose_other_damage(self, 1)。
+// 近似：弃牌颜色约束（红）、目标体力≥自己门槛、火属性均未建模（普通伤害）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill zhuquezhizhang_equip2(3693632511) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_damage(self, 1);
+  }
+}
+// zhuquezhizhang_equip3（朱雀之璋·3 号位）：结束阶段，你可以弃置一张红色牌并对一名体力值
+// 不小于你的角色造成 1 点火属性伤害。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// choose_other_damage(self, 1)。
+// 近似：弃牌颜色约束（红）、目标体力≥自己门槛、火属性均未建模（普通伤害）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill zhuquezhizhang_equip3(3696097802) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_damage(self, 1);
+  }
+}
+// zhuquezhizhang_equip4（朱雀之璋·4 号位）：结束阶段，你可以弃置一张红色牌并对一名体力值
+// 不小于你的角色造成 1 点火属性伤害。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// choose_other_damage(self, 1)。
+// 近似：弃牌颜色约束（红）、目标体力≥自己门槛、火属性均未建模（普通伤害）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill zhuquezhizhang_equip4(118565755) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_damage(self, 1);
+  }
+}
+// zhuquezhizhang_equip5（朱雀之璋·5 号位）：结束阶段，你可以弃置一张红色牌并对一名体力值
+// 不小于你的角色造成 1 点火属性伤害。
+// 实现：`phase_end owner_is_target optional` → discard_hand_equip_count(self,1) +
+// choose_other_damage(self, 1)。
+// 近似：弃牌颜色约束（红）、目标体力≥自己门槛、火属性均未建模（普通伤害）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill zhuquezhizhang_equip5(252208510) {
+  trigger phase_end owner_is_target optional {
+    effect discard_hand_equip_count(self, 1);
+    effect choose_other_damage(self, 1);
+  }
+}
+// baishouzhihu_equip1（白兽之琥·1 号位）：结束阶段，你可以弃置一名其他角色的一张随机牌。
+// 实现：`phase_end owner_is_target optional` →
+// choose_other_discard_target_card(self, hand_equip)（选其他角色弃其一张）。
+// 近似：上游随机弃置改为选择弃置（无随机原语）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baishouzhihu_equip1(361178907) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}
+// baishouzhihu_equip2（白兽之琥·2 号位）：结束阶段，你可以弃置一名其他角色的一张随机牌。
+// 实现：`phase_end owner_is_target optional` →
+// choose_other_discard_target_card(self, hand_equip)（选其他角色弃其一张）。
+// 近似：上游随机弃置改为选择弃置（无随机原语）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baishouzhihu_equip2(1664497989) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}
+// baishouzhihu_equip3（白兽之琥·3 号位）：结束阶段，你可以弃置一名其他角色的一张随机牌。
+// 实现：`phase_end owner_is_target optional` →
+// choose_other_discard_target_card(self, hand_equip)（选其他角色弃其一张）。
+// 近似：上游随机弃置改为选择弃置（无随机原语）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baishouzhihu_equip3(272985389) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}
+// baishouzhihu_equip4（白兽之琥·4 号位）：结束阶段，你可以弃置一名其他角色的一张随机牌。
+// 实现：`phase_end owner_is_target optional` →
+// choose_other_discard_target_card(self, hand_equip)（选其他角色弃其一张）。
+// 近似：上游随机弃置改为选择弃置（无随机原语）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baishouzhihu_equip4(2554645043) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}
+// baishouzhihu_equip5（白兽之琥·5 号位）：结束阶段，你可以弃置一名其他角色的一张随机牌。
+// 实现：`phase_end owner_is_target optional` →
+// choose_other_discard_target_card(self, hand_equip)（选其他角色弃其一张）。
+// 近似：上游随机弃置改为选择弃置（无随机原语）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baishouzhihu_equip5(21120514) {
+  trigger phase_end owner_is_target optional {
+    effect choose_other_discard_target_card(self, hand_equip);
+  }
+}
+// kunlunjingc（昆仑镜）：出牌阶段限一次，你可以观看牌堆顶的三张牌，然后用一张手牌替换其中的一张。
+skill kunlunjingc(2811013259) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kunlunjingc（card/swd/skill.js:820）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// lianhua（炼化）：出牌阶段限一次，你可以弃置两张炼妖壶中的牌，从牌堆中获得一张与弃置的牌类别均不相同的牌。
+skill lianhua(3780270630) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 lianhua（card/swd/skill.js:863）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shouna（收纳）：出牌阶段限一次，你可以弃置一张手牌，并将一名其他角色的一张手牌置入炼妖壶。
+skill shouna(2036496462) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shouna（card/swd/skill.js:908）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// donghuangzhong（东皇钟）：结束阶段，你可以弃置一张红色手牌，并选择一名角色将一张随机单体延时锦囊置入其判定区。
+skill donghuangzhong(3743057995) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 donghuangzhong（card/swd/skill.js:950）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xuanyuanjian（轩辕剑）：装备时获得1点护甲；每当你即将造成一次伤害，你令此伤害加一并变为雷属性，并在伤害结算后失去1点体力。任何时候，若你体力值不超过2，则立即失去轩辕剑。
+skill xuanyuanjian(259322004) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xuanyuanjian（card/swd/skill.js:1000）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xuanyuanjian2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill xuanyuanjian2(4178557193) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xuanyuanjian2（card/swd/skill.js:1018）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xuanyuanjian3：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill xuanyuanjian3(1220393284) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 xuanyuanjian3（card/swd/skill.js:1033）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// pangufu（盘古斧?）：锁定技，每当你造成一次伤害，受伤角色须弃置一张牌。
+// 实现：`trigger damage owner_is_source` forced →
+// choose_discard_target_card(self, event_player, hand_equip)（目标有牌时；
+// 无牌时原语静默）。
+// 近似：上游要求受伤者有牌才触发，此处以原语静默近似；_notrigger 口径未建模。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 弃牌）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill pangufu(3774868748) locked {
+  trigger damage owner_is_source {
+    effect choose_discard_target_card(self, event_player, hand_equip);
+  }
+}
+// haotianta（昊天塔）：锁定技，任意一名角色进行判定前，你观看牌堆顶的两张牌，并选择一张作为判定结果，此结果不可被更改，也不能触发技能。
+skill haotianta(1969288752) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 haotianta（card/swd/skill.js:1060）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shennongding（神农鼎）：出牌阶段，你可以弃置两张手牌，然后回复 1 点体力。
+// 每阶段限一次。
+// 实现：`active play_phase uses_per_turn 1` → discard_hand_equip_count(self,2)
+// + recover_hp(self, 1)。
+// 近似：弃置范围 hand_equip（上游仅手牌）；「每阶段限一次」按每回合一次近似。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（phaseUse 弃牌回复）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill shennongding(1430535693) {
+  active play_phase uses_per_turn 1 {
+    effect discard_hand_equip_count(self, 2);
+    effect recover_hp(self, 1);
+  }
+}
+// kongdongyin（崆峒印）：令你抵挡一次死亡，将体力回复至1，并摸一张牌，发动后进入弃牌堆。
+skill kongdongyin(1267575004) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kongdongyin（card/swd/skill.js:1172）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// nvwashi（女娲石）：当一名角色濒死时，若你的体力值大于1，你可以失去1点体力并令其回复1点体力。
+// 实现：`trigger dying owner_alive optional` + body `hp(self) > 1` 守卫 →
+// recover_hp(event_player, 1) + lose_hp(self, 1)（先救后损，上游顺序）。
+// 近似：无（濒死者 hp<=0 由 dying 事件域保证）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（global dying recover+loseHp）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill nvwashi(544584365) {
+  trigger dying owner_alive optional {
+    if hp(self) > 1 {
+      effect recover_hp(event_player, 1);
+      effect lose_hp(self, 1);
+    }
+  }
+}
+// kongxin（控心）：出牌阶段限一次，你可以与一名其他角色进行拼点，若你赢，你可以指定另一名角色视为对方对该角色使用一张杀，否则对方可弃置你一张牌。
+skill kongxin(1025754933) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kongxin（card/swd/skill.js:1209）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// kongxin2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill kongxin2(2901789118) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 kongxin2（card/swd/skill.js:1265）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// qinglianxindeng（青莲心灯）：你防止锦囊牌造成的伤害。
+skill qinglianxindeng(1567970863) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 qinglianxindeng（card/swd/skill.js:1287）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// yiluan（意乱）：出牌阶段限一次，你可以令一名有手牌的其他角色进行一次判定，若结果为不为红桃且目标有可用的手牌，目标随机使用一张手牌（随机指定目标）。
+skill yiluan(2308442654) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 yiluan（card/swd/skill.js:1328）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip1（hslingjian_xuanfengzhiren_equip1）：每当你用杀造成一次伤害，受伤害角色随机弃置一张牌。
+skill hslingjian_xuanfengzhiren_equip1(2128572075) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip1（card/swd/skill.js:1368）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip2（hslingjian_xuanfengzhiren_equip2）：每当你受到杀造成的伤害，伤害来源随机弃置一张牌。
+skill hslingjian_xuanfengzhiren_equip2(1559599909) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip2（card/swd/skill.js:1381）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip3（hslingjian_xuanfengzhiren_equip3）：当你于回合外失去牌后，你本回合的防御距离+1。
+skill hslingjian_xuanfengzhiren_equip3(2923699364) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip3（card/swd/skill.js:1391）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip3_dist：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill hslingjian_xuanfengzhiren_equip3_dist(1675389113) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip3_dist（card/swd/skill.js:1401）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip4（hslingjian_xuanfengzhiren_equip4）：当你于回合内失去牌后，你本回合的进攻距离+1。
+skill hslingjian_xuanfengzhiren_equip4(3431893618) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip4（card/swd/skill.js:1408）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip4_dist：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill hslingjian_xuanfengzhiren_equip4_dist(1717809224) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip4_dist（card/swd/skill.js:1418）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xuanfengzhiren_equip5（hslingjian_xuanfengzhiren_equip5）：出牌阶段限一次，你可以弃置一张牌，然后随机弃置一名其他角色的一张牌。
+skill hslingjian_xuanfengzhiren_equip5(1599497737) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xuanfengzhiren_equip5（card/swd/skill.js:1425）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_zhongxinghujia_equip1（hslingjian_zhongxinghujia_equip1）：每当你用杀造成一次伤害，你可以随机装备一件防具牌。
+skill hslingjian_zhongxinghujia_equip1(2521428188) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_zhongxinghujia_equip1（card/swd/skill.js:1455）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// 中兴护甲·斥（equip2）：每当你受到【杀】造成的伤害，你可以弃置伤害来源
+// 的防具牌。
+// 实现：`trigger damage owner_is_target optional` →
+// choose_discard_target_card(self, event_source, equip)。
+// 近似：上游限杀伤害且来源须有防具，此处泛化到任意伤害（弃其一张装备，
+// 原语空装备静默）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（damageEnd 定点弃装）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_zhongxinghujia_equip2(595417402) {
+  trigger damage owner_is_target optional {
+    effect choose_discard_target_card(self, event_source, equip);
+  }
+}
+// 中兴护甲·防（equip3）：锁定技，当你的装备区内有防具牌时，你的防御距离+1。
+// 实现：`distance_to add owner_has_armor_equip`（globalTo +1，装备存在性值源族）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（纯条件距离 modifier）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_zhongxinghujia_equip3(886050816) locked {
+  modifier distance_to add owner_has_armor_equip;
+}
+// 中兴护甲·攻（equip4）：锁定技，当你的装备区内有防具牌时，你的进攻距离+1。
+// 实现：`distance_from add -owner_has_armor_equip`?? —— 上游 globalFrom = distance-1
+// 为「距离-1」（更近），描述「进攻距离+1」指攻击覆盖更远；按上游体实现为
+// distance_from 负向：`modifier distance_from add -owner_has_armor_equip`。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_zhongxinghujia_equip4(581753271) locked {
+  modifier distance_from add -owner_has_armor_equip;
+}
+// hslingjian_zhongxinghujia_equip5（hslingjian_zhongxinghujia_equip5）：出牌阶段限一次，你可以弃置两张牌，然后令一名角色随机装备一件防具。
+skill hslingjian_zhongxinghujia_equip5(2792067634) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_zhongxinghujia_equip5（card/swd/skill.js:1501）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_jinjilengdong_equip1（hslingjian_jinjilengdong_equip1）：每当你用杀造成一次伤害，你可以令目标摸两张牌并翻面。
+// 实现：`trigger damage owner_source_sha optional` →
+// draw_cards(event_player, 2) + turn_over(event_player)（杀伤害目标摸2翻面）。
+// 近似：无（damageEnd 杀伤害等价；_notrigger 口径未建模）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 目标 draw2+turnOver）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_jinjilengdong_equip1(1421340753) {
+  trigger damage owner_source_sha optional {
+    effect draw_cards(event_player, 2);
+    effect turn_over(event_player);
+  }
+}
+// hslingjian_jinjilengdong_equip2（hslingjian_jinjilengdong_equip2）：每当你受到杀造成的伤害，你可以令伤害来源摸两张牌并翻面。
+// 实现：`trigger damage owner_target_sha optional`（本批新过滤器——
+// 受击杀伤害方向，OwnerSourceSha 的镜像）→
+// draw_cards(event_source, 2) + turn_over(event_source)。
+// 近似：上游来源存活守卫在极端场景（来源已死）未建模。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 来源 draw2+turnOver）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_jinjilengdong_equip2(125620555) {
+  trigger damage owner_target_sha optional {
+    effect draw_cards(event_source, 2);
+    effect turn_over(event_source);
+  }
+}
+// hslingjian_jinjilengdong_equip3（hslingjian_jinjilengdong_equip3）：你的武将牌背面朝上时防御距离+2。
+skill hslingjian_jinjilengdong_equip3(3045116172) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_jinjilengdong_equip3（card/swd/skill.js:1576）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_jinjilengdong_equip4（hslingjian_jinjilengdong_equip4）：你的武将牌背面朝上时进攻距离+2。
+skill hslingjian_jinjilengdong_equip4(1363335830) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_jinjilengdong_equip4（card/swd/skill.js:1585）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_jinjilengdong_equip5（hslingjian_jinjilengdong_equip5）：回合结束后，若你的武将牌正面朝上，你可以与一名武将牌正面朝上的其他角色同时翻面，然后各摸两张牌。
+skill hslingjian_jinjilengdong_equip5(1900172373) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_jinjilengdong_equip5（card/swd/skill.js:1594）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_yinmilichang_equip1（hslingjian_yinmilichang_equip1）：每当你用杀造成一次伤害，你可以令一名其他角色获得潜行直到其下一回合开始。
+skill hslingjian_yinmilichang_equip1(1926994594) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_yinmilichang_equip1（card/swd/skill.js:1619）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_yinmilichang_equip2（hslingjian_yinmilichang_equip2）：每当你受到一次伤害，你本回合内获得潜行。
+skill hslingjian_yinmilichang_equip2(1346022888) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_yinmilichang_equip2（card/swd/skill.js:1649）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_yinmilichang_equip3（hslingjian_yinmilichang_equip3）：当你的体力值为1时，你的防御距离+1。
+skill hslingjian_yinmilichang_equip3(1139754595) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_yinmilichang_equip3（card/swd/skill.js:1659）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_yinmilichang_equip4（hslingjian_yinmilichang_equip4）：当你的体力值为1时，你的进攻距离+1。
+skill hslingjian_yinmilichang_equip4(996951785) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_yinmilichang_equip4（card/swd/skill.js:1668）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_yinmilichang_equip5（hslingjian_yinmilichang_equip5）：当你没有手牌时，你不能成为杀或决斗的目标。
+skill hslingjian_yinmilichang_equip5(861591086) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_yinmilichang_equip5（card/swd/skill.js:1677）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xingtigaizao_equip1（形体改造·攻）：每当你用【杀】造成一次伤害，
+// 你摸一张牌。
+// 实现：`trigger damage owner_source_sha` forced → draw_cards(self, 1)。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（damageEnd 杀伤害触发摸牌）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_xingtigaizao_equip1(1593267513) {
+  trigger damage owner_source_sha {
+    effect draw_cards(self, 1);
+  }
+}
+// hslingjian_xingtigaizao_equip2（形体改造·受）：每当你受到杀造成的伤害，你摸一张牌。
+// 实现：`trigger damage owner_target_sha` forced → draw_cards(self, 1)
+// （第四十四批新过滤器——受击杀伤害方向，Damage + owner_is_player + card_is_sha）。
+// 近似：无（damageEnd + event.card.name==="sha" 等价）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 杀伤害摸1）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_xingtigaizao_equip2(503950057) {
+  trigger damage owner_target_sha {
+    effect draw_cards(self, 1);
+  }
+}
+// hslingjian_shengxiuhaojiao_equip1（hslingjian_shengxiuhaojiao_equip1）：有嘲讽的角色不能闪避你的杀。
+skill hslingjian_shengxiuhaojiao_equip1(2397979294) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shengxiuhaojiao_equip1（card/swd/skill.js:1750）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shengxiuhaojiao_equip2（hslingjian_shengxiuhaojiao_equip2）：有嘲讽的角色不能对你使用杀。
+skill hslingjian_shengxiuhaojiao_equip2(3689606525) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shengxiuhaojiao_equip2（card/swd/skill.js:1760）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shengxiuhaojiao_equip3（hslingjian_shengxiuhaojiao_equip3）：若你的手牌数大于你的体力值，你的防御距离+1。
+skill hslingjian_shengxiuhaojiao_equip3(3447266816) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shengxiuhaojiao_equip3（card/swd/skill.js:1769）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shengxiuhaojiao_equip4（hslingjian_shengxiuhaojiao_equip4）：若你的手牌数大于你的体力值，你的进攻距离+1。
+skill hslingjian_shengxiuhaojiao_equip4(211743988) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shengxiuhaojiao_equip4（card/swd/skill.js:1778）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shengxiuhaojiao_equip5（hslingjian_shengxiuhaojiao_equip5）：出牌阶段限一次，你可以弃置两张牌，然后令一名角色获得或解除嘲讽。
+skill hslingjian_shengxiuhaojiao_equip5(1944246609) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shengxiuhaojiao_equip5（card/swd/skill.js:1787）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shijianhuisu_equip1（hslingjian_shijianhuisu_equip1）：当你装备一张防具牌时，你摸一张牌。
+skill hslingjian_shijianhuisu_equip1(3006699733) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shijianhuisu_equip1（card/swd/skill.js:1816）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_shijianhuisu_equip2（hslingjian_shijianhuisu_equip2）：当你装备一张武器牌时，你摸一张牌。
+skill hslingjian_shijianhuisu_equip2(364175207) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shijianhuisu_equip2（card/swd/skill.js:1826）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// 试剑回溯·防（equip3）：锁定技，当你的装备区内没有其他牌时，你的防御距离+1。
+// 实现：`distance_to add owner_equip_count_exactly_one`（装备区仅此一件=无其他牌，
+// 既有值源 owner_equip_count_exactly_one）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（纯条件距离 modifier）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_shijianhuisu_equip3(3366005863) locked {
+  modifier distance_to add owner_equip_count_exactly_one;
+}
+// 试剑回溯·攻（equip4）：锁定技，当你的装备区内没有其他牌时，你的进攻距离+1
+//（上游 globalFrom = distance - 1，同 equip3 镜像）。
+// 实现：`distance_from add -owner_equip_count_exactly_one`。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill hslingjian_shijianhuisu_equip4(4143751073) locked {
+  modifier distance_from add -owner_equip_count_exactly_one;
+}
+// hslingjian_shijianhuisu_equip5（hslingjian_shijianhuisu_equip5）：出牌阶段限一次，你可以弃置一张牌，然后令一名其他角色将其装备区内的牌收回手牌。
+skill hslingjian_shijianhuisu_equip5(3163126308) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_shijianhuisu_equip5（card/swd/skill.js:1854）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// jiguanyaoshu_skill（巧匠）：每当你于回合外失去装备区内的牌，你获得一个随机零件。
+skill jiguanyaoshu_skill(1533450969) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 jiguanyaoshu_skill（card/swd/skill.js:1883）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// lingjianduanzao：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill lingjianduanzao(1970578846) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 lingjianduanzao（card/swd/skill.js:1917）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// _lingjianduanzao（煅造）：出牌阶段，你可以将一张装备牌和一张可煅造的牌合成为一件强化装备，并装备给距离1以内的一名角色。
+skill _lingjianduanzao(4228720474) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 _lingjianduanzao（card/swd/skill.js:2021）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_chaofeng（嘲讽）：锁定技，与你相邻的角色只能选择你为出杀目标。
+skill hslingjian_chaofeng(584638908) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_chaofeng（card/swd/skill.js:2157）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_xingtigaizao（型体改造）：可用于煅造装备；摸一张牌，本回合手牌上限-1。
+skill hslingjian_xingtigaizao(3680016966) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_xingtigaizao（card/swd/skill.js:2191）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// hslingjian_jinjilengdong（紧急冷冻）：可用于煅造装备；令一名武将牌正面朝上的其他角色获得2点护甲并翻面，该角色不能使用卡牌，也不能成为卡牌的目标直到武将牌翻回正面。
+skill hslingjian_jinjilengdong(3384328590) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 hslingjian_jinjilengdong（card/swd/skill.js:2213）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// qinglonglingzhu（青龙灵珠）：每当你造成一次属性伤害，你可以获得对方的一张牌。
+skill qinglonglingzhu(2922619442) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 qinglonglingzhu（card/swd/skill.js:2229）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xingjunyan（凶君炎?）：你的【杀】造成的伤害+1；【杀】对你造成的伤害+1。
+// 实现：`modifier sha_damage add 1` + `modifier sha_damage_taken add 1`
+//（双向 sha 伤害 modifier）。
+// 近似：上游按 damageBegin 事件牌为杀逐次判定，modifier 等价（sha 伤害口径一致）。
+// 修正：原跨界机制注记经 2026-08-21 复核证伪（双向杀伤害 modifier）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xingjunyan(474768951) locked {
+  modifier sha_damage add 1;
+  modifier sha_damage_taken add 1;
+}
+// baihupifeng（白虎披风）：结束阶段，若你的体力值是全场最小的之一，你可以
+// 回复 1 点体力。
+// 实现：`trigger phase_end owner_is_target optional` + body if hp<max →
+// recover_hp(self, 1)。
+// 近似：「全场最小之一」门槛未建模（仅校验已受伤；受伤不保证最小）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（phaseEnd isMinHp 回复）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill baihupifeng(1598904184) {
+  trigger phase_end owner_is_target optional {
+    if hp(self) < max_hp(self) {
+      effect recover_hp(self, 1);
+    }
+  }
+}
+// fengxueren（封雪刃）：你使用杀击中目标后，若目标武将牌正面朝上，你可以防止伤害，然后令目标摸一张牌并翻面。
+skill fengxueren(3425320220) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 fengxueren（card/swd/skill.js:2284）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// chilongya（赤龙牙）：锁定技，你的火属性伤害+1。
+// 实现：`modifier damage_amount(fire) add 1`（火属性伤害+1）。
+// 近似：上游 notLink() 排除铁索传导伤害，DSL 不分传导。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageBegin fire num++）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill chilongya(349089161) locked {
+  modifier damage_amount(fire) add 1;
+}
+// chilongya2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill chilongya2(3102555838) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 chilongya2（card/swd/skill.js:2324）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// chilongfengxue：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill chilongfengxue(2929632489) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 chilongfengxue（card/swd/skill.js:2338）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// shentou（神偷）：出牌阶段，你可以进行一次判定，若结果不为梅花，你获得任意一名角色的一张手牌。
+skill shentou(3836583602) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 shentou（card/swd/skill.js:2347）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// old_longfan：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill old_longfan(3973247401) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 old_longfan（card/swd/skill.js:2403）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// longfan（龙帆）：出牌阶段限一次，你可以进行一次判定，然后按花色执行以下效果。红桃：你回复1点体力；方片：你摸一张牌；梅花：你令一名随机敌方角色随机弃置一张牌；黑桃：无事发生。
+skill longfan(2022395957) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 longfan（card/swd/skill.js:2531）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// touzhi（投掷）：出牌阶段，可弃置一张武器牌令一名角色受到1点伤害，然后该角色获得此武器牌。
+skill touzhi(1307894701) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 touzhi（card/swd/skill.js:2580）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// xixue（吸血）：锁定技，每当你使用【杀】造成 1 点伤害，你回复 1 点体力。
+// 实现：`trigger damage owner_source_sha` forced + body if 未满血 →
+// recover_hp(self, event_amount)（dalian 同型）。
+// 近似：上游按杀伤害点数等量回复（trigger.num），event_amount 等价。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（damageEnd 杀伤害回复）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill xixue(537295572) locked {
+  trigger damage owner_source_sha {
+    if hp(self) < max_hp(self) {
+      effect recover_hp(self, event_amount);
+    }
+  }
+}
+// guangshatianyi（光纱天衣）：锁定技，每当你即将受到伤害，有三分之一的概率令伤害减一。
+skill guangshatianyi(2871442503) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 guangshatianyi（card/swd/skill.js:2627）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// nigong（逆攻）：每当你受到1点伤害，你获得一个逆攻标记，标记数不能超过4。出牌阶段，你可以弃置所有逆攻标记并令对一名其他角色造成标记数一半的伤害（若非整数则向下取整并摸一张牌）。
+skill nigong(3821829383) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 nigong（card/swd/skill.js:2651）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// nigong2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill nigong2(3312396815) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 nigong2（card/swd/skill.js:2676）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// nigong3：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill nigong3(497713513) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 nigong3（card/swd/skill.js:2714）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// sadengjinhuan（萨登荆环）：当你的【杀】被【闪】避后，可以进行一次判定，若结果为红色目标需再打出一张【闪】。
+skill sadengjinhuan(3858569228) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 sadengjinhuan（card/swd/skill.js:2732）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// guiyanfadao（鬼眼法刀）：每当你使用杀命中目标，你可以防止伤害，改为令目标失去1点体力。
+// 实现：`trigger damage_before owner_source_sha optional` →
+// prevent_current_damage() + lose_hp(event_player, 1)（防伤改失去 1，
+// 与伤害点数无关——zhiyuan 同款模板）。
+// 近似：无（shaHit→damage_before 等价；装备技能上下文不迁移）。
+// 修正：原跨界机制注记经 2026-08-22 复核证伪（shaHit unhurt+loseHp）。
+// 旧 JavaScript 只作语义证据，不进入 npack 或运行时。
+skill guiyanfadao(2191743671) {
+  trigger damage_before owner_source_sha optional {
+    effect prevent_current_damage();
+    effect lose_hp(event_player, 1);
+  }
+}
+// guiyanfadao2：上游 translate 无独立 info 条目（子技/衍生），描述见父技。
+skill guiyanfadao2(3561850543) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 guiyanfadao2（card/swd/skill.js:2784）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}
+// tianxianjiu（天仙酒）：出牌阶段对自己使用，你使用的下一张杀造成伤害后可以摸两张牌；濒死阶段，对自己使用，回复1点体力。
+skill tianxianjiu(3187660601) {
+  // INTENTIONAL_EMPTY_NOOP: 上游 tianxianjiu（card/swd/skill.js:2792）依赖跨界包专属机制
+  // （丹药/食物/地图牌/秘术等，见包 README 可表达性缺口），DSL 无可移植规则面；
+  // 原“批量最小近似：结束阶段可选摸一张”为文档占位、与上游语义不符，已纠正为诚实 noop。
+  modifier hand_limit add 0;
+}

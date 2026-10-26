@@ -1,0 +1,5 @@
+     Running unittests src/lib.rs (/tmp/b3-head-target/debug/deps/rule_api-738b67a289b3e764)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/effect_wire_compat.rs (/tmp/b3-head-target/debug/deps/effect_wire_compat-162f6f9847cfb2c5)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

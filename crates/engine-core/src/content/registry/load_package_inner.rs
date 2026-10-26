@@ -767,6 +767,13 @@ impl ContentRegistry {
         }
 
         for m in &pkg.modifier_index {
+            if m.target == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+                && (m.mode != "override" || m.value != 1)
+            {
+                return Err(ContentLoadError::Invalid(
+                    "平定目标限制只接受 override 1".into(),
+                ));
+            }
             if m.target == "card_number"
                 && (m.selector.is_some()
                     || m.mode != "override"

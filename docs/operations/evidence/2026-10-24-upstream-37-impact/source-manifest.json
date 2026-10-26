@@ -1,0 +1,167 @@
+{
+  "at": "2026-10-24T18:09:45.629340+08:00",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "scope": "Current source evidence for this static audit, not a test run manifest",
+  "files": [
+    {
+      "path": "apps/web-client/src/engine/bundledNativePackages.ts",
+      "sha256": "8759999294b6fbf4213036af575bd70ee9c8e40777c924af29cf907232a7e72d"
+    },
+    {
+      "path": "content/original/catalog.json",
+      "sha256": "716b6a8b4b4f907a571160a899662e4a68383ffd7cf320813b04f764c02b4641"
+    },
+    {
+      "path": "content/original/ported/bingshi/potcuifeng.skill",
+      "sha256": "3251dd66be8b2e7b5f125587a698fcd1ca2d0dbddaa94c513c7d0d1280888328"
+    },
+    {
+      "path": "content/original/ported/bingshi/potshanxi.skill",
+      "sha256": "96157df9ced96f578f6ef292b3d40b48d60c5b2f2b702d7110f72137c614e4d4"
+    },
+    {
+      "path": "content/original/ported/collab/oljiangwu.skill",
+      "sha256": "b006860d3bf81b4555a51628c7f64426e6d53043408635c5eab992539206e938"
+    },
+    {
+      "path": "content/original/ported/huicui/dczigu.skill",
+      "sha256": "86da966db629251ea7662d97e40027e0eeb7047d09337043f3c6473e08d933f2"
+    },
+    {
+      "path": "content/original/ported/jsrg/jsrgzonghai.skill",
+      "sha256": "f2400e86fe41d880f00fe2cf018a5dd0d8bbac8bbc65d3f355f520543db3f05c"
+    },
+    {
+      "path": "content/original/ported/offline/ylyg_zhiba.skill",
+      "sha256": "319747c4bc6b8b39aaab703f0bcd6c0a78e1927df9cf2d5af4f20cd1e870d148"
+    },
+    {
+      "path": "content/original/ported/onlyOL/olsbbingcai.skill",
+      "sha256": "2a49573f06d26b38b62b6f3f9a52cd6de79bc1fdfe0d6560a819c17016869da3"
+    },
+    {
+      "path": "content/original/ported/onlyOL/olsbguqu.skill",
+      "sha256": "19fe888d5ab578a82b95b81059688663895a9e4300038db468e0d3e85e065831"
+    },
+    {
+      "path": "content/original/ported/onlyOL/shenfu.skill",
+      "sha256": "52104d9f5d03fde56fd659384e069ca04408529cb19ea66896eb9969f4742712"
+    },
+    {
+      "path": "content/original/ported/shiji/gonghuan.skill",
+      "sha256": "e205beb086eabcec39b2bb12a2cb5a1d8b4bce320c33e90de5667338ebe1e65a"
+    },
+    {
+      "path": "content/original/ported/shiji/pinghe.skill",
+      "sha256": "fdc0aeba65631a599f866ba80d2ee6008b3ce1e8dd4393fe40c6693d5377f09f"
+    },
+    {
+      "path": "content/original/ported/shiji/yingba.skill",
+      "sha256": "0b59ffa8a0c466e76951e0e34069d56fc28eed246bab124ffccab4ee887859cb"
+    },
+    {
+      "path": "content/original/ported/sp/olhuiyun.skill",
+      "sha256": "7126182d816fa5433cd432ce57ec1a0d5bfc11833e076752fb34d8d87045fef0"
+    },
+    {
+      "path": "content/original/ported/sp/olshanxi.skill",
+      "sha256": "c4ed418e90f80e7cb469077fa50b074e7a8d7738b011fb81a7afe53074daf855"
+    },
+    {
+      "path": "content/original/ported/sp2/dcbihuo.skill",
+      "sha256": "63e8d0e6e8a860e415fe6499b29a56b6e482247e2b2a2d2fa40ed865d03f4502"
+    },
+    {
+      "path": "content/original/ported/sp2/starbishi.skill",
+      "sha256": "fbb3ec04c8e64085023d68745a8091fa485ed6a4b2e1af94593676ac0dca88db"
+    },
+    {
+      "path": "content/original/ported/sp2/stardangchen.skill",
+      "sha256": "f878f37a4941b922524e0aa0575251d7711808770808e5020b5a342745aa2e35"
+    },
+    {
+      "path": "content/original/ported/xianding/baoshu.skill",
+      "sha256": "e5722d56d8b2aaaee87d30911569a0e2d51b9b1435498e6bcc68000ec1b3fdff"
+    },
+    {
+      "path": "content/original/ported/xianding/dcdichou.skill",
+      "sha256": "581cea4503010dc7c5ac3db3b3bd0d2ad80bb7c7d912973f10c5d2f8e6e0dee5"
+    },
+    {
+      "path": "content/original/ported/xianding/dchuashang.skill",
+      "sha256": "31124601d5c882bb36d279dec3f5e01b1aad131c2bfdb250ca5ad89ceecee28b"
+    },
+    {
+      "path": "content/original/ported/xianding/dcmingjie.skill",
+      "sha256": "323fa5369406bd07c6aea63fe982ab0561d1f2fbc066d745adbe0b3872225e75"
+    },
+    {
+      "path": "content/original/ported/xianding/dcsbjuzhan.skill",
+      "sha256": "b5eab59e5f7b9a7764a347de596f3482c945deb9d32f43825c11d54a639cb327"
+    },
+    {
+      "path": "content/original/ported/xianding/dcsbqingshi.skill",
+      "sha256": "ffb4010b443d61a57af7fad6e7b9b35d1e2ad54209b2df77a70e4fc2cefc438b"
+    },
+    {
+      "path": "content/original/ported/xianding/dcsbtaozhou.skill",
+      "sha256": "5996c29d97ca883a815cef34eeb49315f619c4f09f976df412d38072a4634418"
+    },
+    {
+      "path": "content/original/ported/xianding/dcsbzaoji.skill",
+      "sha256": "f6119c1b8bf8b626e94a0851f41d80e748aa82f9fa0e175596d4408a811a19d2"
+    },
+    {
+      "path": "content/original/ported/xianding/dcxiangchen.skill",
+      "sha256": "f433c47c37c492f67a95557c773ef6c3ebbc8a1f3d9b1dbd464d2614606e75a4"
+    },
+    {
+      "path": "content/original/ported/xianding/jige.skill",
+      "sha256": "c1eaabe2f92a01382ef1c1f5032ed3dd3103535591e836dfd656bd6af8f689ed"
+    },
+    {
+      "path": "content/original/ported/xianding/tiqi.skill",
+      "sha256": "3a5d1e66389be9c536ee766e937554c6e0fd66d9223605e345fc5e9170a9c145"
+    },
+    {
+      "path": "content/original/ported/yijiang/zzhenggong.skill",
+      "sha256": "abf2d565a7c6d74ce35bd04316a7d7e4276e03c79019158adde7adf13073d35d"
+    },
+    {
+      "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs",
+      "sha256": "2b0477e0acfbcc87347ebdd3949b8c0a3515bf2e31cc49b7e9d5d47b1d0ea6c6"
+    },
+    {
+      "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs",
+      "sha256": "786d55f760dc7042c4c1b71fb3f2a38620ba42453fc20876a017fc0327095fd0"
+    },
+    {
+      "path": "crates/engine-core/tests/original_merged_shiji/original_shiji_shen_sunce.rs",
+      "sha256": "ad43c3efafbb8425c0d0e9b3408eec09ff855ea68734b5604efef24b31d515d1"
+    },
+    {
+      "path": "crates/engine-core/tests/original_merged_xianding/original_xianding_v_guanyinping.rs",
+      "sha256": "0fdfa901eb144e45d4d9921a6824924d98f0d561e258f4c9e2e915f977bcbbe8"
+    },
+    {
+      "path": "crates/engine-native/src/archive.rs",
+      "sha256": "0f148d6f432b2799800ee2327534701eae6fd1f8fbd49fd31bced38b86e8acee"
+    },
+    {
+      "path": "crates/engine-native/src/content/standard.rs",
+      "sha256": "7eb2543b995e1b085469c52a882cbced499a05b35ca39d4b5654bdcb5955eaf6"
+    },
+    {
+      "path": "crates/engine-native/src/content/standard/generals.rs",
+      "sha256": "b0124510d9986c737a85614dba1fc9815e0387c559539612fa40e9390a6e3e88"
+    },
+    {
+      "path": "scripts/preflight.py",
+      "sha256": "d47ccdf2a871656d4cb60a659a4e68f9eaa46a719e86d9ce36d745065f795a5c"
+    },
+    {
+      "path": "scripts/sync-original-content.mjs",
+      "sha256": "cb97853a439ad96a1f4a6174f573d5ca8ded4708b3bf9623372f7888f32cc998"
+    }
+  ]
+}

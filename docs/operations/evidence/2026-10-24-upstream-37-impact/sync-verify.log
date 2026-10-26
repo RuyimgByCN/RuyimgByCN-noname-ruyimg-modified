@@ -1,0 +1,9 @@
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:1513
+    if (sourceInfo.size !== targetInfo.size) throw new Error(`${tree.name}/${relative}: size differs`);
+                                                   ^
+
+Error: legacy-source/bingshi/skill.js: size differs
+    at verifyTree (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:1513:52)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/sync-original-content.mjs:253:51
+
+Node.js v26.4.0

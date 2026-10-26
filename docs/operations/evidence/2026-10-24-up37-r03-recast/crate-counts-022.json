@@ -1,0 +1,14 @@
+{
+  "content-compiler": {
+    "targets": 3,
+    "passed": 536,
+    "failed": 0,
+    "ignored": 0
+  },
+  "content-native-loader": {
+    "targets": 11,
+    "passed": 32,
+    "failed": 0,
+    "ignored": 0
+  }
+}

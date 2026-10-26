@@ -74,6 +74,8 @@ impl ContinuationKind {
             60 => ContinuationKind::ChooseGainResolvedShaOrShanThenOptionalUseSha,
             61 => ContinuationKind::ContinueEnteredDrawPhase,
             62 => ContinuationKind::ChooseOtherTargetsBySkippedPhaseCountDamage,
+            334 => ContinuationKind::ChooseGiveOrRecastOneHand,
+            335 => ContinuationKind::ResolveOlJieDanshou,
             63 => ContinuationKind::ChooseOthersAfterUniformHandReveal,
             64 => ContinuationKind::ChooseCardUserOrAddTarget,
             65 => ContinuationKind::ChooseGiveCardOrAddTarget,

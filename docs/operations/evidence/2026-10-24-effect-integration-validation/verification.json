@@ -1,0 +1,148 @@
+{
+  "verified_at": "2026-10-24T05:47:35.258241+00:00",
+  "source_head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "rules_version": 322,
+  "archive_version": 105,
+  "source_manifest": "source-manifest.json",
+  "checks": [
+    {
+      "name": "full_preflight",
+      "exit_code": 0,
+      "details": "preflight-full.json"
+    },
+    {
+      "name": "clean_generated_build",
+      "exit_code": 0,
+      "details": "build.json"
+    },
+    {
+      "name": "native_worker",
+      "exit_code": 0,
+      "details": "worker.json"
+    },
+    {
+      "name": "browser",
+      "exit_code": 0,
+      "details": "browser.json"
+    },
+    {
+      "name": "frontend-tests",
+      "exit_code": 0,
+      "details": "web-tests.json",
+      "log": "frontend-tests.log"
+    },
+    {
+      "name": "extension-store-smoke",
+      "exit_code": 0,
+      "details": "web-tests.json",
+      "log": "extension-store-smoke.log"
+    }
+  ],
+  "test_totals": {
+    "frontend": {
+      "tests": 61,
+      "pass": 61,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "extension_store": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "worker": {
+      "total": 44,
+      "failed": 0
+    },
+    "browser_pass_checks": 7,
+    "browser_page_errors": 0,
+    "worker_pass_checks": 44,
+    "worker_fail_checks": 0
+  },
+  "initial_frontend_failure_retained": {
+    "details": "web-tests-initial.json",
+    "log": "frontend-tests-initial.log",
+    "cause": "started before clean-build generated native package was deployed; module import failed; all 61 tests rerun after deployment"
+  },
+  "log_sha256": {
+    "source-manifest.json": "6cd3585c0fd300f26d47f1dbc81d52070d1bed0a87607f13677eeec43153c872",
+    "preflight-full.log": "ebe130da01a8be9b078ef2fa89880e92a8dae4afed5455ee3674151be46e4fb3",
+    "native-worker-smoke.log": "9fb9348e61ee12def348b39c6dfe0c5f2d8893cf81a13d858b491bc1009952ea",
+    "web-tests-initial.json": "2fb1a0eccd3c41662535d6a52ffdd29f8418682795000b050255a33e5c22a3af",
+    "frontend-tests-initial.log": "180e9643c1fa2da3159e65d681e4d34ae593904a56c1e8b307034fc426dbaa3c",
+    "web-tests.json": "703c0db899b16ec64ce29c536e14ec8f4c6956cbd02b0e6f638f6e7c6d9563e2",
+    "browser-production-smoke.log": "2381b5acd190b332356704c8c117cf95672c0cdd51711caa6fb091866f7e4e62",
+    "final-recent-index.log": "254646aceffc7311ea9467aed451687e4b372482329e76e729e97bce5784ac8f",
+    "validated-artifacts.json": "a45d32931f67026f1642ec8d13ee9d1d5866b9c031d54e91a39c8429bb6e354d",
+    "test-totals.json": "8d3fc475bdddf551bd4233f636b31e60c3a9fc6c29d71612f85422933625dda1",
+    "preservation.json": "df02fc218e4c366abfde4cfdc7eb95ba741f714af290e4cf56eedaa2beee7afd",
+    "restoration.json": "85174f221e165eb608131c640ac0b13940b64d7807801f6dc5ec0d6504a7b4fe",
+    "extension-store-smoke.log": "db32a6cac3293596a70fb013f0b32cbe32d13dfc737480d74c49bbe7d0f7e70a",
+    "worker.json": "bfb861196df5619fbf9ce46584d80e094fccdc27cec291d5e01e807e99a47869",
+    "final-stale-numbers.log": "3127c8b981f553419d2e026cab76de39354c470f14ca8bf2d02561766f076789",
+    "final-doc-line-refs.log": "05b95c244bd193f6c58f01d21e5ce41913b282bbd4ce2cb6b29a3e484c417a0e",
+    "artifact-comparison.json": "cf3e9d53b7b7be76d19f3fb85d27255cec742f22757b569030483f16747d71fc",
+    "README.md": "80685576c861634fad90439f0649b06c0f0f57fec40de1bd3e3e41a708c8203c",
+    "final-diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "extension-store-smoke-initial.log": "780701c309dcc35ac138652f4856e507191da50e07d027452ac552039b31e8af",
+    "frontend-tests.log": "6cd90822a0e90d49e3bb7c31fa8b235ff11ea4a1cc900119ef82de0c61dbe62e",
+    "final-links-all.log": "205c1fd4b0ce3ce99c869432a226755938c8def794dbb5101a79f35d26d48bfc",
+    "preflight-full.json": "ddf281516ec1853e2c87777e7dfda393c1418a2c37e4b3a756b844796f3e9431",
+    "preview.log": "0489e3b144d64ccacb407485b1a8f4afefd5f3a2a80fde55a05c193257e212a6",
+    "browser-formal-match.png": "74b59da962f5a9703598cea8c9f2d308e0739bf9a1918a6119b4771a512c08dc",
+    "environment.json": "6eb58a0051d71443bfc71e3f3d88aaa03c6d9511265dd5a4491e8b5be40afd97",
+    "browser.json": "d4a2aabd824368e99a678a2c1c177c6a7b7cb52082e5b028250927911222184f",
+    "build.json": "52bfcbf60fad21aa6bd4f5108d9954a95adb4076941b9b36652a01f3b34ac4f7",
+    "build-desktop-clean.log": "638d680ede55a9a153392c0752dab1dff1a187dc8a366c5552a4a1b28790a145"
+  },
+  "not_run": [
+    "GitHub Actions",
+    "native desktop/mobile runtime",
+    "Firefox/Safari",
+    "real cross-machine TLS/WS rooms",
+    "repeat of previous Cargo regression/goldens/ignored tests",
+    "full legacy tests",
+    "upstream equivalence/performance acceptance"
+  ],
+  "artifact_chain_matches": {
+    "worker_native_wasm_matches_rebuild": true,
+    "browser_dist_files_match_validated_dist": true,
+    "both_dist_wasm_files_match_rebuilt_packages": true,
+    "legacy_wasm_browser_load_not_asserted": true
+  },
+  "final_document_checks": [
+    {
+      "name": "links-all",
+      "command": "python3 -B scripts/check_local_links.py --all",
+      "exit_code": 0,
+      "log": "final-links-all.log"
+    },
+    {
+      "name": "doc-line-refs",
+      "command": "python3 -B scripts/check_doc_line_refs.py --strict",
+      "exit_code": 0,
+      "log": "final-doc-line-refs.log"
+    },
+    {
+      "name": "recent-index",
+      "command": "python3 -B scripts/refresh_recent_rounds.py --check",
+      "exit_code": 0,
+      "log": "final-recent-index.log"
+    },
+    {
+      "name": "stale-numbers",
+      "command": "python3 -B scripts/check_stale_numbers.py",
+      "exit_code": 0,
+      "log": "final-stale-numbers.log"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "final-diff-check.log"
+    }
+  ]
+}

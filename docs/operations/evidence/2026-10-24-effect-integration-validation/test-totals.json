@@ -1,0 +1,24 @@
+{
+  "frontend": {
+    "tests": 61,
+    "pass": 61,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "extension_store": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "worker": {
+    "total": 44,
+    "failed": 0
+  },
+  "browser_pass_checks": 7,
+  "browser_page_errors": 0,
+  "worker_pass_checks": 44,
+  "worker_fail_checks": 0
+}
