@@ -20,6 +20,10 @@ const AUTOSTEP_BUTTON = "自动一步";
 const AUTOALL_BUTTON = "连续自动";
 const FINISHED_RE = /终局/;
 
+/** PA08-5：driveAuto 期间采的内存趋势（30s 一次强制 GC 后取值）。 */
+let autoDriveMemorySeries: Array<{ t_ms: number; bytes: number }> = [];
+let startedAtAuto = 0;
+
 function findButton(text: string): HTMLButtonElement | null {
   return (
     Array.from(document.querySelectorAll("button")).find(
@@ -90,7 +94,39 @@ function collect() {
     dpr: window.devicePixelRatio,
     viewport: [window.innerWidth, window.innerHeight],
     href: location.href,
+    // PA08-5 长时内存采样（sampleMemory 在上报前覆写；series 为 driveAuto 周期采样）
+    memory: null as { used: number; total: number; limit: number; api: string } | null,
+    memory_series: [] as Array<{ t_ms: number; bytes: number }>,
   };
+}
+
+/**
+ * PA08-5 长时内存采样：Chrome 旧 performance.memory 已在非跨源隔离页移除——
+ * 优先旧 API，其次跨源隔离下的 measureUserAgentSpecificMemory（会强制 GC）。
+ */
+async function sampleMemory(): Promise<{
+  used: number;
+  total: number;
+  limit: number;
+  api: string;
+} | null> {
+  const perf = performance as unknown as {
+    memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number };
+    measureUserAgentSpecificMemory?: () => Promise<{ bytes: number }>;
+  };
+  try {
+    if (perf.memory) {
+      const m = perf.memory;
+      return { used: m.usedJSHeapSize, total: m.totalJSHeapSize, limit: m.jsHeapSizeLimit, api: "performance.memory" };
+    }
+    if (perf.measureUserAgentSpecificMemory && crossOriginIsolated) {
+      const m = await perf.measureUserAgentSpecificMemory();
+      return { used: m.bytes, total: m.bytes, limit: 0, api: "measureUserAgentSpecificMemory" };
+    }
+  } catch {
+    /* 采样失败不阻断上报 */
+  }
+  return null;
 }
 
 async function report(url: string, payload: unknown) {
@@ -123,14 +159,57 @@ async function driveClick(steps: number, gapMs: number) {
 }
 
 async function driveAuto() {
-  const b = findButton(AUTOALL_BUTTON);
-  if (b) b.click();
-  const deadline = Date.now() + 600_000;
-  while (Date.now() < deadline) {
-    await sleep(1000);
-    if (FINISHED_RE.test(document.body.innerText)) return "finished";
+  // loop=1 + duration=<ms>：终局后点「重新开局」连续多局（PA08-5 长时采样）；
+  // 缺省行为不变——点一次「连续自动」，终局或 600s 兜底返回。
+  const loop = urlParam("loop") === "1";
+  const durationMs = Number(urlParam("duration") ?? 0);
+  const deadline = Date.now() + (durationMs > 0 ? durationMs : 600_000);
+  const finished = () => FINISHED_RE.test(document.body.innerText);
+  // 内存趋势采样：优先同步 legacy performance.memory（跨源隔离下 Chrome 仍提供），
+  // 无则试异步 measureUserAgentSpecificMemory。每 30s 一点，随报告带回。
+  const memorySeries: Array<{ t_ms: number; bytes: number }> = [];
+  const legacyMem = (
+    performance as unknown as { memory?: { usedJSHeapSize: number } }
+  ).memory;
+  const memApi = (
+    performance as unknown as {
+      measureUserAgentSpecificMemory?: () => Promise<{ bytes: number }>;
+    }
+  ).measureUserAgentSpecificMemory;
+  const sampleMem = async () => {
+    if (legacyMem) {
+      memorySeries.push({ t_ms: Date.now() - startedAtAuto, bytes: legacyMem.usedJSHeapSize });
+      return;
+    }
+    if (!memApi || !crossOriginIsolated) return;
+    try {
+      const m = await memApi();
+      memorySeries.push({ t_ms: Date.now() - startedAtAuto, bytes: m.bytes });
+    } catch {
+      /* 采样失败忽略 */
+    }
+  };
+  for (;;) {
+    const b = findButton(AUTOALL_BUTTON);
+    if (b) b.click();
+    let lastMem = 0;
+    while (Date.now() < deadline && !finished()) {
+      await sleep(1000);
+      if (Date.now() - lastMem > 30_000) {
+        lastMem = Date.now();
+        await sampleMem();
+      }
+    }
+    if (!loop || Date.now() >= deadline) {
+      autoDriveMemorySeries = memorySeries;
+      return finished() ? "finished" : "auto_timeout";
+    }
+    const restart = Array.from(document.querySelectorAll("button")).find((x) =>
+      (x.innerText || "").includes("重新开局"),
+    ) as HTMLButtonElement | undefined;
+    restart?.click();
+    await sleep(1500);
   }
-  return "auto_timeout";
 }
 
 function driveManual(steps: number, timeoutMs: number): Promise<string> {
@@ -200,12 +279,15 @@ export function startAutoDrive(): void {
     api?.reset();
     await sleep(300); // 空闲基线由外部脚本按需另采；此处直接开始驱动
     const startedAt = Date.now();
+    startedAtAuto = startedAt;
     let endState = "unknown";
     if (mode === "click") endState = await driveClick(steps, gapMs);
     else if (mode === "auto") endState = await driveAuto();
     else if (mode === "manual") endState = await driveManual(steps, timeoutMs);
     await sleep(600);
     const data = collect();
+    data.memory = await sampleMemory();
+    data.memory_series = autoDriveMemorySeries;
     if (reportUrl) {
       await report(reportUrl, { ...data, end_state: endState, wall_ms: Date.now() - startedAt });
     }

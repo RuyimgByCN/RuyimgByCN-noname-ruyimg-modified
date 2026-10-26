@@ -95,6 +95,14 @@ const battleQuery = new URLSearchParams({
   steps: String(steps),
   gap: String(gapMs),
 });
+// PA08-5 长时：loop=1 连续多局 + duration=<ms> 总时长（auto 档）
+if (args.loop) battleQuery.set("loop", "1");
+if (args.duration) battleQuery.set("duration", String(Number(args.duration)));
+// PA07 缓解原型 A/B：latency=sab（回包 SAB 镜像 + rAF 轮询提前应用；需跨源隔离）
+if (args.latency === "sab") {
+  battleQuery.set("latency", "sab");
+  args.coop = true; // SAB 需要跨源隔离头
+}
 
 let reportData = null;
 const server = createServer((req, res) => {
@@ -244,6 +252,9 @@ const summary = {
     end_state: reportData.end_state,
     wall_ms: reportData.wall_ms,
     final_status: reportData.status,
+    // PA08-5 长时内存采样（页面 performance.memory，Chrome 系；无则 null）
+    memory: reportData.memory ?? null,
+    memory_series: reportData.memory_series ?? [],
   },
   frames: summarizeFrames(frameDeltas(reportData.frames)),
   long_tasks: {
@@ -271,6 +282,7 @@ console.log(
       roundtrip_ms: pick(summarizeInteractions(mainSteps).roundtrip_ms),
       transfer_ms: pick(summarizeInteractions(mainSteps).transfer_ms),
       long_tasks: summary.long_tasks.count,
+      memory_mb: reportData.memory ? Math.round(reportData.memory.used / 1048576) : null,
     }),
 );
 server.close();
