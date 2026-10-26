@@ -88,10 +88,13 @@ export class EngineClient {
         return;
       }
       const msg = ev.data;
-      perfResponseReceived(msg.id);
       const p = this.pending.get(msg.id);
+      // SAB 提前应用后 pending 已删除——此时跳过计时与重复应用
       if (!p) return;
+      perfResponseReceived(msg.id);
       this.pending.delete(msg.id);
+      (globalThis as unknown as { __latencySabDebug?: { settle?: () => void } })
+        .__latencySabDebug?.settle?.();
       if (msg.ok) p.resolve(msg.data);
       else p.reject(new Error(msg.error));
     };
@@ -104,11 +107,105 @@ export class EngineClient {
         type: "init",
         bundle: bundle ?? undefined,
         perf: startPerfProbe(),
+        latencySab: this.initSabMirror(),
       });
     } catch (error) {
       this.dispose();
       throw error;
     }
+  }
+
+  // ---- PA07 缓解原型：回包 SAB 镜像 + rAF 轮询提前应用（latency=sab 门控） ----
+  // Chromium 真实输入后把任务（含 worker postMessage 回包）推迟到下一帧合成后；
+  // rAF 帧回调不受该窗口约束——在帧内轮询 SAB 并提前反序列化同一份信封。
+  // 规则不迁移：只把 postMessage 会送的同一份数据提前送达。
+
+  private sabPollSeq = -1;
+
+  /** latency=sab 且跨源隔离可用时创建 SAB 并启动 rAF 轮询；否则返回 undefined。 */
+  private initSabMirror(): SharedArrayBuffer | undefined {
+    if (urlParam("latency") !== "sab") return undefined;
+    if (!crossOriginIsolated || typeof SharedArrayBuffer === "undefined") return undefined;
+    // rAF 只在有渲染机会时触发；空闲页（无动画）点击后没有新帧 → rAF 沉默，
+    // 推迟的回包任务先到、轮询形同虚设（实测 seq 增长而 early=0）。请求在途
+    // 期间挂一个主线程 keepalive 动画（布局属性，绕开纯合成器动画）保证每
+    // vsync 都有 rAF；由点击处理器（不被推迟）启动。
+    const style = document.createElement("style");
+    style.textContent =
+      ".sab-keepalive{animation:sab-pulse 8ms infinite}@keyframes sab-pulse{50%{margin-left:.5px}}";
+    document.head.appendChild(style);
+    const keepalive = document.createElement("div");
+    keepalive.className = "sab-keepalive";
+    keepalive.style.display = "none";
+    document.body.appendChild(keepalive);
+    const SAB_BYTES = 256 * 1024;
+    const sab = new SharedArrayBuffer(SAB_BYTES);
+    const ints = new Int32Array(sab, 0, 2);
+    Atomics.store(ints, 0, 0);
+    Atomics.store(ints, 1, 0);
+    const decoder = new TextDecoder();
+    const settle = () => {
+      keepalive.style.display = "none";
+    };
+    const stats = { runs: 0, seen: 0, parseErr: 0, miss: 0 };
+    const poll = () => {
+      stats.runs += 1;
+      const seq = Atomics.load(ints, 0);
+      if (seq !== this.sabPollSeq) {
+        stats.seen += 1;
+        this.sabPollSeq = seq;
+        const len = Atomics.load(ints, 1);
+        if (len > 0 && 8 + len <= SAB_BYTES) {
+          try {
+            // TextDecoder 不接受 SharedArrayBuffer 视图——先拷贝到普通缓冲
+            const copy = new Uint8Array(len);
+            copy.set(new Uint8Array(sab, 8, len));
+            const resp = JSON.parse(decoder.decode(copy)) as {
+              id: number;
+              ok: boolean;
+              data?: unknown;
+              error?: string;
+            };
+            const p = this.pending.get(resp.id);
+            if (p) {
+              perfResponseReceived(resp.id);
+              this.pending.delete(resp.id);
+              settle();
+              const dbg = (
+                globalThis as unknown as { __latencySabDebug?: { resolvedEarly: number } }
+              ).__latencySabDebug;
+              if (dbg) dbg.resolvedEarly += 1;
+              if (resp.ok) p.resolve(resp.data);
+              else p.reject(new Error(resp.error ?? "worker error"));
+            } else {
+              stats.miss += 1;
+            }
+          } catch {
+            stats.parseErr += 1;
+          }
+        }
+      }
+      requestAnimationFrame(poll);
+    };
+    requestAnimationFrame(poll);
+    // 诊断探针（latency=sab 门控内）：seq 计数与解析统计，供驱动 A/B 排障
+    (globalThis as unknown as { __latencySabDebug?: unknown }).__latencySabDebug = {
+      seq: () => Atomics.load(ints, 0),
+      raw: () => {
+        const len = Atomics.load(ints, 1);
+        const copy = new Uint8Array(Math.min(len, 120));
+        copy.set(new Uint8Array(sab, 8, copy.length));
+        return { len, head: decoder.decode(copy) };
+      },
+      wake: () => {
+        keepalive.style.display = "block";
+      },
+      settle: settle,
+      stats: stats,
+      resolvedEarly: 0,
+      resolvedByMessage: 0,
+    };
+    return sab;
   }
 
   /** 当前是否使用原生窄壳后端。 */
@@ -127,6 +224,10 @@ export class EngineClient {
     return new Promise((resolve, reject) => {
       this.pending.set(body.id, { resolve, reject });
       perfRequestSent(body.id, body.type);
+      // SAB 模式：请求在途即唤起 keepalive 动画（此处运行在输入处理器内，
+      // 不受输入后任务推迟约束——保证回包前每个 vsync 都有 rAF 可轮询）。
+      (globalThis as unknown as { __latencySabDebug?: { wake?: () => void } })
+        .__latencySabDebug?.wake?.();
       this.worker!.postMessage(body);
     });
   }

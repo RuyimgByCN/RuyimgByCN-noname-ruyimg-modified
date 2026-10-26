@@ -8,7 +8,7 @@
 //   node --import ./scripts/ts-register.mjs scripts/web-frame-latency.mjs \
 //     --dist <构建目录> --out <输出目录> [--players 4] [--seed 42] [--mode identity|prototype] \
 //     [--driver click|auto] [--max-steps 800] [--gap-ms 50] [--idle-ms 3000] [--chrome <路径>]
-//     [--gpu] [--skip-anims] [--headed]
+//     [--gpu] [--skip-anims] [--headed] [--coop] [--latency sab]
 //
 // --headed：有头窗口（真实显示器呈现节奏；GPU 默认开启）。PA08 扩面。
 //
@@ -93,7 +93,13 @@ const server = createServer((req, res) => {
     return;
   }
   if (!existsSync(file) || statSync(file).isDirectory()) file = join(distDir, "index.html");
-  res.writeHead(200, { "Content-Type": MIME[extname(file)] ?? "application/octet-stream" });
+  const headers = { "Content-Type": MIME[extname(file)] ?? "application/octet-stream" };
+  // --coop：跨源隔离头（PA07 SAB 缓解原型 A/B 需要SharedArrayBuffer）
+  if (args.coop) {
+    headers["Cross-Origin-Opener-Policy"] = "same-origin";
+    headers["Cross-Origin-Embedder-Policy"] = "require-corp";
+  }
+  res.writeHead(200, headers);
   res.end(readFileSync(file));
 });
 await new Promise((r) => server.listen(0, "127.0.0.1", r));
@@ -179,8 +185,19 @@ await evalJs(`(() => {
   ${skipAnims ? 'localStorage.setItem("noname-next-skip-anims", "1");' : 'localStorage.removeItem("noname-next-skip-anims");'}
   return true;
 })()`);
-const query = new URLSearchParams({ players: String(players), seed: String(seed), perf: "1" });
+// SAB 探针：新文档级钩子（导航换文档后原型补丁会丢，须 addScriptToEvaluateOnNewDocument）
+await send("Page.addScriptToEvaluateOnNewDocument", {
+  source: `(() => {
+    const w = window; const orig = Worker.prototype.postMessage;
+    Worker.prototype.postMessage = function (msg, ...rest) {
+      try { if (msg && msg.type === "init") w.__initLatencySab = !!msg.latencySab; } catch {}
+      return orig.call(this, msg, ...rest);
+    };
+  })()`,
+}).catch(() => {});const query = new URLSearchParams({ players: String(players), seed: String(seed), perf: "1" });
 if (mode === "identity") query.set("mode", "identity");
+// --latency sab：PA07 缓解原型（回包 SAB 镜像 + rAF 轮询提前应用）
+if (String(args.latency ?? "") === "sab") query.set("latency", "sab");
 await send("Page.navigate", { url: `${base}/battle?${query}` });
 
 const BUTTON = `Array.from(document.querySelectorAll('button')).find((b) => (b.innerText || '').trim() === '自动一步')`;
@@ -193,6 +210,11 @@ for (let k = 0; k < 150 && !ready; k++) {
   })()`).catch(() => false);
 }
 if (!ready) throw new Error("测量失败：战斗页未就绪（无 __nonamePerf 或「自动一步」不可用）");
+// 隔离态探针（--coop/--latency sab 的前提；PA07 A/B 诊断）
+const coi = await evalJs("crossOriginIsolated").catch(() => null);
+console.error(`crossOriginIsolated=${coi}`);
+const sabProbe = await evalJs("window.__initLatencySab ?? 'no-init-seen'").catch(() => "probe-error");
+console.error(`initLatencySab=${sabProbe}`);
 
 // ---- 空闲基线 ----
 await evalJs(`window.__nonamePerf.reset()`);
@@ -347,6 +369,11 @@ const summary = {
   all_requests: summarizeInteractions(data.interactions),
 };
 writeFileSync(join(outDir, "summary.json"), JSON.stringify(summary, null, 2));
+// SAB 调试探针（latency=sab）：seq 是否增长、提前解析计数
+const sabDbg = await evalJs(
+  "window.__latencySabDebug ? {seq: window.__latencySabDebug.seq(), early: window.__latencySabDebug.resolvedEarly} : null",
+).catch(() => null);
+if (sabDbg) console.error(`sabDebug=${JSON.stringify(sabDbg)}`);
 const pick = (s) => (s ? { p50: s.p50, p95: s.p95, p99: s.p99, max: s.max, n: s.count } : null);
 console.log(
   "RESULT scenario=web_frame_latency " +
