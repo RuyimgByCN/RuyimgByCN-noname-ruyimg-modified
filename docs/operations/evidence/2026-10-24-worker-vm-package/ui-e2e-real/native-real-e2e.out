@@ -1,0 +1,9 @@
+HAS_PACKAGE true
+停用 clicked
+disable 完成 true
+激活 clicked
+activate 完成 true
+扫描安装 clicked
+安装扫描完成 true
+UNINSTALL clicked
+UNINSTALL_DONE true

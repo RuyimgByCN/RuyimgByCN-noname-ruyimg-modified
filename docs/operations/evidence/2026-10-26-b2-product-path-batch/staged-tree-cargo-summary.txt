@@ -1,0 +1,31 @@
+tree tree=23426e4559d6b59a22f8ef21787cb3e4451b5573
+== check-all-targets start 2026-10-26 20:55:37 +0800
+== check-all-targets exit=0 end 2026-10-26 20:55:48 +0800
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.96s
+== engine-native-wasm start 2026-10-26 20:55:48 +0800
+== engine-native-wasm exit=0 end 2026-10-26 20:55:54 +0800
+engine-native-wasm: passed=52 failed=0 ignored=0
+== content-runtime start 2026-10-26 20:55:54 +0800
+== content-runtime exit=0 end 2026-10-26 20:57:20 +0800
+content-runtime: passed=34 failed=0 ignored=0
+== engine-protocol start 2026-10-26 20:57:20 +0800
+== engine-protocol exit=0 end 2026-10-26 20:57:21 +0800
+engine-protocol: passed=1 failed=0 ignored=0
+== content-native-loader start 2026-10-26 20:57:21 +0800
+== content-native-loader exit=0 end 2026-10-26 20:57:32 +0800
+content-native-loader: passed=32 failed=0 ignored=0
+== game-server start 2026-10-26 20:57:32 +0800
+== game-server exit=101 end 2026-10-26 20:59:55 +0800
+game-server: passed=357 failed=1 ignored=0
+test onlyol_requires_abi757_and_native_rejects_until_supported ... FAILED
+== engine-native start 2026-10-26 20:59:55 +0800
+== engine-native exit=101 end 2026-10-26 21:00:55 +0800
+engine-native: passed=1552 failed=7 ignored=71
+test xinkuanggu_draws_or_recovers ... FAILED
+test liegong_direct_hit_when_hand_ge_hp ... FAILED
+test skill_mapping_inventory_matches_baseline ... FAILED
+test upstream_xinkuanggu_choice_branches ... FAILED
+test upstream_xinkuanggu_requires_distance_le_one ... FAILED
+test upstream_liegong_second_branch_by_attack_range ... FAILED
+test upstream_liegong_condition_not_met_allows_shan ... FAILED
+ALL DONE 2026-10-26 21:00:55 +0800

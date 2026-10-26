@@ -1,0 +1,34 @@
+{
+  "apps/game-server/src/native.rs": {
+    "sha256": "90cd75804a90e137d901efce2c6da7be36e57f4ba2e3d823c6a9fe10e15ee1da",
+    "lines": 519
+  },
+  "apps/game-server/src/native/frozen.rs": {
+    "sha256": "fa9f8fb6074509478bdb4b9f00302dc81fd65bbe2b6d74853cc4e5f71d1f5847",
+    "lines": 214
+  },
+  "apps/game-server/src/lobby.rs": {
+    "sha256": "212fbfd4200721837cceb6af15877e83d716b26a3d0763a41637be26e04895c7",
+    "lines": 579
+  },
+  "apps/game-server/src/room_native.rs": {
+    "sha256": "89ea448fb1863af8ae9f8e49e57f52b6e76754637072bf13e45fc31cb1323a07",
+    "lines": 598
+  },
+  "apps/game-server/src/room_native_actor.rs": {
+    "sha256": "f54c5f6709372fb0ddd1e9b7657cce92150cd767e1c50f2bbae029c739f7280f",
+    "lines": 695
+  },
+  "apps/game-server/src/native_room_store.rs": {
+    "sha256": "cf5abfb9be3da7b3c45e730c99899382c9a7c88fea7b31a9f11e5e07ab2878c6",
+    "lines": 133
+  },
+  "apps/game-server/tests/native_frozen_packages.rs": {
+    "sha256": "7bdbce7b7633c6f588506764fc9c0ee70a233c3bc1c58d34bba61ccac370c61f",
+    "lines": 269
+  },
+  "apps/game-server/tests/nc09_native_room_session.rs": {
+    "sha256": "e0b3cd6610397ccdee61f62c30cddac24e4d90b77643a67d987ae4ca12add7cd",
+    "lines": 688
+  }
+}

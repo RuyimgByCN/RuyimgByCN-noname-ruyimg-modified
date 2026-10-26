@@ -10,5 +10,10 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 engine-native = { path = "../engine-native" }
 content-native-loader = { path = "../content-native-loader" }
+content-schema = { workspace = true }
 wasm-bindgen = { workspace = true }
 serde_json = { workspace = true }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+content-compiler = { path = "../content-compiler" }

@@ -1,0 +1,103 @@
+TAP version 13
+# Subtest: JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+ok 1 - JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+  ---
+  duration_ms: 1.969791
+  ...
+# Subtest: 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+not ok 2 - 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+  ---
+  duration_ms: 1.29675
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:96:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:112:10)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Subtest: 断线后复用房间密码与最新令牌，重新入房前禁止提交
+not ok 3 - 断线后复用房间密码与最新令牌，重新入房前禁止提交
+  ---
+  duration_ms: 3.294791
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:116:1'
+  failureType: 'testCodeFailure'
+  error: 'f.client.rejoinRoom is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:127:29)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Subtest: 旁观重连仍发送 Spectate，不取得玩家身份
+not ok 4 - 旁观重连仍发送 Spectate，不取得玩家身份
+  ---
+  duration_ms: 0.827791
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:139:1'
+  failureType: 'testCodeFailure'
+  error: 'f.client.rejoinRoom is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:149:29)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Subtest: 入房/快照 send 失败释放 waiter，重复入房不多发请求
+not ok 5 - 入房/快照 send 失败释放 waiter，重复入房不多发请求
+  ---
+  duration_ms: 0.415625
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:155:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    3 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:165:10)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Subtest: dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+not ok 6 - dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+  ---
+  duration_ms: 0.267583
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:170:1'
+  failureType: 'testCodeFailure'
+  error: 'WebSocket 未连接'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    NetworkEngineClient.send (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/networkClient.ts:214:19)
+    NetworkEngineClient.spectate (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/networkClient.ts:91:14)
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:179:27)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Error: Test "入房/快照 send 失败释放 waiter，重复入房不多发请求" at scripts/network-client.test.mjs:155:1 generated asynchronous activity after the test ended. This activity created the error "Error: 已有入房请求" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+# Error: Test "入房/快照 send 失败释放 waiter，重复入房不多发请求" at scripts/network-client.test.mjs:155:1 generated asynchronous activity after the test ended. This activity created the error "Error: 连接已关闭" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+# Error: Test "入房/快照 send 失败释放 waiter，重复入房不多发请求" at scripts/network-client.test.mjs:155:1 generated asynchronous activity after the test ended. This activity created the error "Error: 连接已关闭" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+# Error: Test "dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器" at scripts/network-client.test.mjs:170:1 generated asynchronous activity after the test ended. This activity created the error "Error: 连接已关闭" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+1..6
+# tests 6
+# suites 0
+# pass 1
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 437.886833

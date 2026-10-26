@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+ok 1 - JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+  ---
+  duration_ms: 2.475125
+  ...
+# Subtest: 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+ok 2 - 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+  ---
+  duration_ms: 0.576791
+  ...
+# Subtest: 断线后复用房间密码与最新令牌，重新入房前禁止提交
+ok 3 - 断线后复用房间密码与最新令牌，重新入房前禁止提交
+  ---
+  duration_ms: 3.944459
+  ...
+# Subtest: 旁观重连仍发送 Spectate，不取得玩家身份
+ok 4 - 旁观重连仍发送 Spectate，不取得玩家身份
+  ---
+  duration_ms: 1.680666
+  ...
+# Subtest: 入房/快照 send 失败释放 waiter，重复入房不多发请求
+ok 5 - 入房/快照 send 失败释放 waiter，重复入房不多发请求
+  ---
+  duration_ms: 0.6125
+  ...
+# Subtest: dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+ok 6 - dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+  ---
+  duration_ms: 0.346541
+  ...
+# Subtest: 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+ok 7 - 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+  ---
+  duration_ms: 0.220916
+  ...
+# Subtest: 表现延迟期间断线：旧信封不能覆盖重连提示
+not ok 8 - 表现延迟期间断线：旧信封不能覆盖重连提示
+  ---
+  duration_ms: 51.183667
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:228:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '房间 #7 · rev 2 · 2… · native'
+    - '连接已断开，正在重连…'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '连接已断开，正在重连…'
+  actual: '房间 #7 · rev 2 · 2… · native'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:235:10)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+# Subtest: 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+not ok 9 - 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+  ---
+  duration_ms: 14.502958
+  location: '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:238:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '房间 #7 · rev 2 · 2… · native'
+    - '房间 #7 · rev 3'
+                   ^
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '房间 #7 · rev 3'
+  actual: '房间 #7 · rev 2 · 2… · native'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/network-client.test.mjs:246:10)
+    async Test.run (node:internal/test_runner/test:790:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:517:7)
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 7
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 821.775708

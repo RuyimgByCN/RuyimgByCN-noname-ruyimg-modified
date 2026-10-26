@@ -2,20 +2,20 @@
 
 #[path = "../src/native.rs"]
 mod native;
-#[path = "../src/persist.rs"]
-mod persist;
-#[path = "../src/room.rs"]
-mod room;
-#[path = "../src/session.rs"]
-mod session;
 #[path = "../src/native_room_store.rs"]
 mod native_room_store;
 #[path = "../src/native_view.rs"]
 mod native_view;
+#[path = "../src/persist.rs"]
+mod persist;
+#[path = "../src/room.rs"]
+mod room;
 #[path = "../src/room_native.rs"]
 mod room_native;
 #[path = "../src/room_native_actor.rs"]
 mod room_native_actor;
+#[path = "../src/session.rs"]
+mod session;
 
 use engine_api::{CommandKind, CommandResult, PlayerId as ApiPlayerId};
 use engine_protocol::ClientRole;
@@ -36,9 +36,8 @@ fn session(seed: u64, seats: u8) -> NativeRoomSession {
     let loaded = content
         .load_scoped(Some("upstream-noname"), "shahai-swd")
         .expect("装载");
-    let engine =
-        engine_native::Engine::new_with_extensions(seed, seats as usize, &[&loaded.pack])
-            .expect("建局");
+    let engine = engine_native::Engine::new_with_extensions(seed, seats as usize, &[&loaded.pack])
+        .expect("建局");
     NativeRoomSession::new(engine, seats)
 }
 
@@ -75,7 +74,11 @@ fn nc09_room_commands_and_rejections() {
     let oth = room.join(2, Some(other), None).expect("入座其他座位");
     assert_eq!(oth.member.seat, other);
     let out = room
-        .submit(oth.member.connection_id, &CommandKind::EndPhase {}, room.engine().revision())
+        .submit(
+            oth.member.connection_id,
+            &CommandKind::EndPhase {},
+            room.engine().revision(),
+        )
         .expect("提交");
     match out {
         CommandResult::Rejected { reason } => assert!(
@@ -107,10 +110,122 @@ fn nc09_room_reconnect_keeps_seat() {
     assert_eq!(again.member.seat, a.member.seat, "重连保留座位");
     assert_eq!(again.member.reconnect_token, token, "令牌不变");
     assert_eq!(again.member.connection_id, 99, "连接已换绑");
+    assert!(uuid::Uuid::parse_str(&token).is_ok(), "重连令牌须不可预测");
+    assert!(room.snapshot(1).is_err(), "换绑后旧连接不再拥有座位");
     assert!(
         room.join(100, None, Some("bogus".into())).is_err(),
         "无效令牌必须失败"
     );
+}
+
+fn session_with_choice() -> NativeRoomSession {
+    let mut room = NativeRoomSession::new(engine_native::Engine::new(4242, 4), 4);
+    for seat in 0..4 {
+        room.join(10 + seat as u64, Some(seat), None).unwrap();
+    }
+    for _ in 0..1000 {
+        if room.engine().open_choice().is_some() {
+            for connection in 10..14 {
+                room.reclaim_seat(connection).unwrap();
+            }
+            return room;
+        }
+        let actor = room.engine().turn().current;
+        let player = ApiPlayerId::new(actor as u32 + 1);
+        let action = native_view::legal_actions_for(room.engine(), player)
+            .into_iter()
+            .next()
+            .expect("有可推进动作");
+        let command = action.to_command(player, room.engine().revision());
+        let out = room
+            .submit(10 + actor as u64, &command.kind, room.engine().revision())
+            .unwrap();
+        assert!(matches!(out, CommandResult::Accepted { .. }), "{out:?}");
+    }
+    panic!("固定场景须产生选择");
+}
+
+#[test]
+fn nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions() {
+    let mut room = session_with_choice();
+    let open = room.engine().open_choice().unwrap().clone();
+    let joined = room.join(1, Some(open.observer), None).unwrap();
+    let choice = native_view::choice_for(room.engine(), Some(joined.member.player_id)).unwrap();
+    assert_eq!(
+        choice.options.iter().map(|o| o.token).collect::<Vec<_>>(),
+        (0..open.spec.options.len() as u32).collect::<Vec<_>>()
+    );
+    let action = joined.legal_actions.iter().find(|a| matches!(a,
+        engine_api::LegalAction::ResolveChoice { selections, cancelled: false, .. } if !selections.is_empty()
+    )).expect("有权威选择动作");
+    let command = action.to_command(joined.member.player_id, room.engine().revision());
+    let hash = room.engine().state_hash();
+    room.join(2, Some((open.observer + 1) % 4), None).unwrap();
+    for token in [0, u32::MAX] {
+        assert_eq!(
+            room.submit(
+                2,
+                &CommandKind::ResolveChoice {
+                    choice_id: choice.choice_id,
+                    selections: vec![token],
+                    cancelled: false,
+                },
+                room.engine().revision()
+            )
+            .unwrap(),
+            CommandResult::Rejected {
+                reason: engine_api::RejectReason::InvalidActor,
+            },
+            "非选择者的拒绝不能泄露私有候选边界"
+        );
+        assert_eq!(room.engine().state_hash(), hash);
+    }
+    assert!(
+        room.submit(
+            1,
+            &CommandKind::ResolveChoice {
+                choice_id: choice.choice_id,
+                selections: vec![u32::MAX],
+                cancelled: false,
+            },
+            room.engine().revision()
+        )
+        .is_err(),
+        "越界 token 不得截断成 Tag"
+    );
+    assert_eq!(room.engine().state_hash(), hash);
+    let result = room
+        .submit(1, &command.kind, room.engine().revision())
+        .unwrap();
+    assert!(
+        matches!(result, CommandResult::Accepted { .. }),
+        "权威 token 可原样回传，实际结果: {result:?}"
+    );
+}
+
+#[tokio::test]
+async fn nc09_join_reply_restores_pending_choice_for_its_observer_only() {
+    let room = session_with_choice();
+    let observer = room.engine().open_choice().unwrap().observer;
+    let handle = room_native_actor::spawn_room_native(89, room, 8, 4);
+    for (connection_id, seat) in [(1, observer), (2, (observer + 1) % 4)] {
+        let (tx, _rx) = mpsc::channel(8);
+        let (reply, response) = tokio::sync::oneshot::channel();
+        handle
+            .send(room::RoomMsg::Join {
+                connection_id,
+                display_name: "pending".into(),
+                preferred_seat: Some(seat),
+                reconnect_token: None,
+                password: String::new(),
+                outbound: session::Outbound::new(tx),
+                reply,
+            })
+            .await
+            .unwrap();
+        let joined = response.await.unwrap().unwrap();
+        assert_eq!(joined.choice.is_some(), seat == observer);
+    }
 }
 
 /// 观战：公开投影、无权威动作、不能提交命令。
@@ -172,7 +287,11 @@ fn nc09_room_wal_replay_recovers_identically() {
         let out = room
             .submit(conn, &CommandKind::EndPhase {}, room.engine().revision())
             .expect("提交");
-        if let CommandResult::Accepted { new_revision, state_hash } = out {
+        if let CommandResult::Accepted {
+            new_revision,
+            state_hash,
+        } = out
+        {
             if new_revision > before {
                 persist.record(
                     new_revision,
@@ -184,7 +303,10 @@ fn nc09_room_wal_replay_recovers_identically() {
             }
         }
     }
-    assert!(accepted >= 3, "至少记录 3 条被接受的提交（实际 {accepted}）");
+    assert!(
+        accepted >= 3,
+        "至少记录 3 条被接受的提交（实际 {accepted}）"
+    );
 
     let final_rev = room.engine().revision();
     let final_hash = room.engine().state_hash();
@@ -263,11 +385,7 @@ async fn nc09_room_choose_general_is_room_level() {
 
     // 选一个目录内的扩展武将（swd 前缀）
     let pick = {
-        let candidates = engine_native::Engine::new_with_extensions(
-            20261821,
-            4,
-            &[],
-        );
+        let candidates = engine_native::Engine::new_with_extensions(20261821, 4, &[]);
         let _ = candidates;
         // 用会话内引擎的候选（通过选将接口的候选导出不可得，这里直接挑已知 swd 武将）
         "swd_lingwu".to_string()
@@ -323,14 +441,14 @@ async fn nc09_room_choose_general_is_room_level() {
 #[test]
 fn nc09_session_export_and_restore_roundtrip() {
     let dir = tempfile::tempdir().unwrap();
-    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
     content.import().expect("安装");
     let loaded = content
         .load_scoped(Some("upstream-noname"), "shahai-swd")
         .expect("装载");
     let pack = loaded.pack;
-    let engine =
-        engine_native::Engine::new_with_extensions(20262001, 4, &[&pack]).expect("建局");
+    let engine = engine_native::Engine::new_with_extensions(20262001, 4, &[&pack]).expect("建局");
     let mut session = NativeRoomSession::new_with_packs(engine, vec![pack], 4);
 
     // 两人入座 + 一条命令
@@ -348,7 +466,7 @@ fn nc09_session_export_and_restore_roundtrip() {
             .expect("读回");
     assert_eq!(back.members.len(), 2, "成员应随状态落盘");
     assert!(
-        back.pack_refs.iter().any(|r| r.starts_with("shahai-swd")),
+        back.pack_refs.iter().any(|r| r.contains("shahai-swd")),
         "包引用应落盘：{:?}",
         back.pack_refs
     );
@@ -357,8 +475,7 @@ fn nc09_session_export_and_restore_roundtrip() {
     let reloaded = content
         .load_scoped(Some("upstream-noname"), "shahai-swd")
         .expect("重新装载");
-    let mut restored =
-        NativeRoomSession::from_saved(&back, vec![reloaded.pack]).expect("恢复");
+    let mut restored = NativeRoomSession::from_saved(&back, vec![reloaded.pack]).expect("恢复");
     assert_eq!(
         restored.engine().revision(),
         session.engine().revision(),
@@ -383,7 +500,8 @@ fn nc09_session_export_and_restore_roundtrip() {
 #[tokio::test]
 async fn nc09_room_store_roundtrip_and_restore() {
     let dir = tempfile::tempdir().unwrap();
-    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
     content.import().expect("安装");
     let loaded = content
         .load_scoped(Some("upstream-noname"), "shahai-swd")
@@ -404,24 +522,23 @@ async fn nc09_room_store_roundtrip_and_restore() {
     };
     store.save(&record).expect("落盘");
     assert!(store.dir().join("42.json").exists(), "应生成 42.json");
-    assert!(!store.dir().join("42.json.tmp").exists(), "临时文件应已 rename");
+    assert!(
+        !store.dir().join("42.json.tmp").exists(),
+        "临时文件应已 rename"
+    );
 
     // 读回并按启动路径恢复（重新装载包）
     let loaded = content
         .load_scoped(Some("upstream-noname"), "shahai-swd")
         .expect("重新装载");
     let mut packs = vec![loaded.pack];
-    let mut load_pack = |_ref: &str| -> Result<engine_native::content::extension::ExtensionPack, String> {
-        packs.pop().ok_or_else(|| "包只可装载一次".to_string())
-    };
-    let handle = room_native_actor::restore_room_from_disk(
-        &record,
-        &mut load_pack,
-        8,
-        4,
-        store.clone(),
-    )
-    .expect("恢复房间");
+    let mut load_pack =
+        |_ref: &str| -> Result<engine_native::content::extension::ExtensionPack, String> {
+            packs.pop().ok_or_else(|| "包只可装载一次".to_string())
+        };
+    let handle =
+        room_native_actor::restore_room_from_disk(&record, &mut load_pack, 8, 4, store.clone())
+            .expect("恢复房间");
     assert_eq!(handle.id, 42);
 
     // 恢复后的房间可用：用导出前的令牌重连 → 原座位
@@ -459,12 +576,14 @@ async fn nc09_room_store_is_removed_on_match_end() {
         password_hash: String::new(),
         checksum: String::new(),
         state: room_native::NativeRoomState {
+            command_receipts: Vec::new(),
             snapshot_hex: String::new(),
             max_seats: 4,
             started: true,
             next_token: 3,
             next_dedup: 9,
             pack_refs: Vec::new(),
+            frozen_packages: None,
             members: Vec::new(),
         },
     };
@@ -485,8 +604,16 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
     let store = native_room_store::NativeRoomStore::new(dir.path().join("rooms"));
     let hash = native_room_store::password_hash(5, "secret");
     assert_ne!(hash, "secret", "不得落明文");
-    assert_eq!(hash, native_room_store::password_hash(5, "secret"), "哈希稳定");
-    assert_ne!(hash, native_room_store::password_hash(6, "secret"), "盐=房间号");
+    assert_eq!(
+        hash,
+        native_room_store::password_hash(5, "secret"),
+        "哈希稳定"
+    );
+    assert_ne!(
+        hash,
+        native_room_store::password_hash(6, "secret"),
+        "盐=房间号"
+    );
     assert_eq!(native_room_store::password_hash(5, ""), "", "空密码 → 空串");
 
     let record = native_room_store::StoredRoom {
@@ -494,12 +621,14 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
         password_hash: hash.clone(),
         checksum: String::new(),
         state: room_native::NativeRoomState {
+            command_receipts: Vec::new(),
             snapshot_hex: String::new(),
             max_seats: 4,
             started: false,
             next_token: 1,
             next_dedup: 1,
             pack_refs: Vec::new(),
+            frozen_packages: None,
             members: Vec::new(),
         },
     };
@@ -516,4 +645,46 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
     std::fs::write(store.dir().join("5.json"), tampered).unwrap();
     let err = store.load_all().expect_err("校验和不匹配必须报错");
     assert!(err.contains("校验和"), "{err}");
+}
+
+#[test]
+fn nc09_legacy_state_checksum_survives_optional_frozen_package_field() {
+    let old_state = r#"{"snapshot_hex":"","max_seats":4,"started":true,"next_token":1,"next_dedup":1,"pack_refs":[],"members":[]}"#;
+    let checksum = blake3::hash(old_state.as_bytes()).to_hex().to_string();
+    let state: room_native::NativeRoomState = serde_json::from_str(old_state).unwrap();
+    assert!(state.frozen_packages.is_none());
+    assert_eq!(serde_json::to_string(&state).unwrap(), old_state);
+    let dir = tempfile::tempdir().unwrap();
+    let store = native_room_store::NativeRoomStore::new(dir.path());
+    let record = format!(
+        r#"{{"room_id":88,"password_hash":"","state":{old_state},"checksum":"{checksum}"}}"#
+    );
+    std::fs::write(dir.path().join("88.json"), record).unwrap();
+    let loaded = store.load_all().unwrap();
+    assert_eq!(loaded[0].checksum, checksum);
+}
+
+#[tokio::test]
+async fn nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_written() {
+    let dir = tempfile::tempdir().unwrap();
+    let blocked = dir.path().join("not-a-directory");
+    std::fs::write(&blocked, b"retain this file").unwrap();
+    let store = native_room_store::NativeRoomStore::new(&blocked);
+    let mut room = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
+    room.set_frozen_packages(Vec::new());
+    let record = native_room_store::StoredRoom {
+        room_id: 89,
+        password_hash: String::new(),
+        state: room.export_state(&room.snapshot_hex()),
+        checksum: String::new(),
+    };
+    let result = room_native_actor::restore_room_from_disk(
+        &record,
+        &mut |_| Err("标准局不应装载包".into()),
+        8,
+        4,
+        store,
+    );
+    assert!(result.is_err());
+    assert_eq!(std::fs::read(blocked).unwrap(), b"retain this file");
 }

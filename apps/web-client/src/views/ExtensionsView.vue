@@ -69,10 +69,10 @@ const rows = computed(() =>
       <p class="muted">
         对齐宿主契约：安装 / 启用 / 停用 / 升级 / 回退 / 卸载 / 撤销。当前目录
         {{ EXTENSION_CATALOG.length }} 个 G1 转换包。开局内容锁由启用集构成；对局中冻结变更。
-        窄壳装载入局 API 待内核补齐（见证据目录 API 规格）。
+        安装时保存实际包内容，本地原生对局直接装载；存档保留原局包副本。
       </p>
       <div class="row">
-        <button class="primary" type="button" @click="run(() => { installAndActivateAll(); notice = '已安装并启用全部 15 包'; })">
+        <button class="primary" type="button" @click="run(() => { installAndActivateAll(); notice = `已安装并启用全部 ${EXTENSION_CATALOG.length} 包`; })">
           全部安装并启用
         </button>
         <button type="button" @click="refresh">刷新</button>

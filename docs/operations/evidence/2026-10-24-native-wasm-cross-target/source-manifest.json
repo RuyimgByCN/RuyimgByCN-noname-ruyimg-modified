@@ -1,0 +1,37 @@
+[
+  {
+    "path": "crates/engine-native/tests/nc08_cross_target_real.rs",
+    "bytes": 3609,
+    "sha256": "306aceeb56d6043dc36d5f377f7ad729809e75aef8b318ab2ac313316f501422"
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/cross_target_package.rs",
+    "bytes": 3595,
+    "sha256": "d59fa96024cf0271eea2405768d9d3fefe8581a2a71dcfb4f5e2fcfced095c3f"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-native-wasm-cross-target/wasm-trajectory.mjs",
+    "bytes": 2384,
+    "sha256": "258c5b810a7ebc8f38831b89dbf05478a6c58ee1b99deed6e403ec83be4b81e2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-native-wasm-cross-target/wasm-package-trajectory.mjs",
+    "bytes": 2537,
+    "sha256": "c3749c3a89e7d544ae6e9f1d74e8514d1ebec38e4bdf57e394fe747f72efb5b7"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-native-wasm-cross-target/compare.py",
+    "bytes": 2349,
+    "sha256": "ca32dd4feac5795bd1fcf3850b73848747c03272687d0d3246a94f452054ab1b"
+  },
+  {
+    "path": "scripts/check-native-wasm-cross-target.py",
+    "bytes": 3150,
+    "sha256": "fdb61d569aca6cd2edd5e1ece8e814d77c8288b332491908bf94c7395df0db82"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-native-wasm-cross-target/huanle-packs.json",
+    "bytes": 1801,
+    "sha256": "b387029e58d1dc48afc473eddc1beb9610c6b70bd64447a4ba40797f2273ea98"
+  }
+]

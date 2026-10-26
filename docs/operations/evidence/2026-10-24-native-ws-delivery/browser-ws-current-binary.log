@@ -1,0 +1,7 @@
+PASS production_ui_formal_room_and_private_views: {"room":1,"packs":["installed:{\"namespace\":\"upstream-noname\",\"package_id\":\"shahai-swd\",\"version\":\"1.0.0\",\"logic_hash\":\"31ccea98f28d4ab1be949f5b937004777d139f3a6ac5546e10bf8d1ed18dc37f\",\"content_hash\":\"6844852259fe5d6f7359363a905635312279a77e8522df9df2421e5f9472223e\"}@1","installed:{\"namespace\":\"upstream-noname\",\"package_id\":\"wudian\",\"version\":\"1.0.0\",\"logic_hash\":\"e0d488b68e7faee040a8f98388e8380c527ecc67a9a221a0aee93f3ce409bef7\",\"content_hash\":\"0be5dc96a54db0a36893835a791cd49cf55e65740269d108b3632846215e845e\"}@2"],"handCounts":[4,4,0]}
+PASS real_ws_personalized_state_sync: {"revision":1,"hash":[26,204,46,1,236,224,114,153,52,9,249,190,67,7,38,189,16,46,242,141,10,79,51,50,127,219,34,185,249,41,200,11]}
+PASS real_ws_private_choice_barrier: {"choice":1,"owner":1,"options":6}
+PASS page_reload_reuses_original_room: {"room":1}
+PASS process_restart_disk_restore_and_password_role_rejoin: {"revision":3,"players":2,"spectatorRole":"Spectator"}
+PASS restored_room_continues_over_ws: {"revision":4,"resolvedChoice":1}
+PASS uncaught_page_errors: 0

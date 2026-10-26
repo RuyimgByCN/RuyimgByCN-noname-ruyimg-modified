@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+ok 1 - JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+  ---
+  duration_ms: 3.074
+  ...
+# Subtest: 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+ok 2 - 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+  ---
+  duration_ms: 0.757459
+  ...
+# Subtest: 断线后复用房间密码与最新令牌，重新入房前禁止提交
+ok 3 - 断线后复用房间密码与最新令牌，重新入房前禁止提交
+  ---
+  duration_ms: 4.246542
+  ...
+# Subtest: 旁观重连仍发送 Spectate，不取得玩家身份
+ok 4 - 旁观重连仍发送 Spectate，不取得玩家身份
+  ---
+  duration_ms: 1.025292
+  ...
+# Subtest: 入房/快照 send 失败释放 waiter，重复入房不多发请求
+ok 5 - 入房/快照 send 失败释放 waiter，重复入房不多发请求
+  ---
+  duration_ms: 0.504083
+  ...
+# Subtest: dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+ok 6 - dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+  ---
+  duration_ms: 0.340125
+  ...
+# Subtest: 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+ok 7 - 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+  ---
+  duration_ms: 0.16675
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 576.151791

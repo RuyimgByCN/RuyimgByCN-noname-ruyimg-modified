@@ -22,7 +22,9 @@ fn swd_pack() -> engine_native::content::extension::ExtensionPack {
         repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json"),
     )
     .expect("读 swd 包");
-    content_native_loader::bridge_pack(&json).expect("桥接").pack
+    content_native_loader::bridge_pack(&json)
+        .expect("桥接")
+        .pack
 }
 
 /// 扩展包武将装配：技能集来自武将表（不是 debug_grant）。
@@ -60,7 +62,11 @@ fn assign_general_grants_pack_skills() {
         e.catalog().general_meta(def).unwrap().3 as usize,
         "体力上限按武将设定"
     );
-    assert_eq!(e.debug_hp(0), e.state_core().player(0).max_hp as i32, "装配后回满");
+    assert_eq!(
+        e.debug_hp(0),
+        e.state_core().player(0).max_hp as i32,
+        "装配后回满"
+    );
 }
 
 /// 校验：未知武将/越界座位/终局后装配均被拒且不改状态。
@@ -100,7 +106,8 @@ fn general_candidates_include_pack_generals() {
         .collect();
     assert!(!pack_names.is_empty(), "候选含扩展包武将: {pack_names:?}");
     let target = pack_names[0].to_string();
-    e.assign_general_named(0, &target).expect("按名装配扩展武将");
+    e.assign_general_named(0, &target)
+        .expect("按名装配扩展武将");
     assert_eq!(
         e.catalog()
             .general_meta(e.state_core().player(0).general_slots[0].unwrap())
@@ -134,4 +141,83 @@ fn match_continues_after_selection() {
         ),
         "装配后仍可推进: {out:?}"
     );
+}
+
+fn shared_skill_pack(global: bool) -> engine_native::content::extension::ExtensionPack {
+    let mut data = serde_json::json!({
+        "pack": {"name": "shared-skill-select", "version": 1, "card_prefix": "shared_"},
+        "cards": [{"name":"equipment", "kind":"wuxingpan", "suit":"spade", "rank":5, "equip_skills":["shared_skill"]}],
+        "skills": [{"name":"shared_skill", "mapping": if global { "host:shengke_check" } else { "host:change_card_nature" }}],
+        "generals": [
+            {"name":"shared-general", "faction":"qun", "gender":"male", "hp":4,
+             "skills":[{"name":"shared_skill", "mapping": if global { "host:shengke_check" } else { "host:change_card_nature" }}]},
+            {"name":"plain-general", "faction":"qun", "gender":"male", "hp":4, "skills":[]}
+        ]
+    });
+    if global {
+        data["pack"]["init_hook"] = serde_json::json!("wuxing_natures");
+    }
+    content_native_loader::bridge_pack(&data.to_string())
+        .unwrap()
+        .pack
+}
+
+#[test]
+fn reselect_keeps_global_skill_shared_with_old_general_and_restore() {
+    let pack = shared_skill_pack(true);
+    let mut e = Engine::new_with_extensions(42, 4, &[&pack]).unwrap();
+    let def = e.catalog().skill_by_name("shared_skill").unwrap();
+    assert!(e.state_core().skills.contains_key(&(0, def)), "global init");
+    e.assign_general_named(0, "shared-general").unwrap();
+    let mut restored = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
+    for engine in [&mut e, &mut restored] {
+        engine.assign_general_named(0, "plain-general").unwrap();
+        assert!(
+            engine.state_core().skills.contains_key(&(0, def)),
+            "global source survives old general removal, including restore"
+        );
+    }
+}
+
+#[test]
+fn reselect_keeps_equipment_skill_shared_with_old_general() {
+    let pack = shared_skill_pack(false);
+    let mut e = Engine::new_with_extensions(42, 4, &[&pack]).unwrap();
+    e.assign_general_named(0, "shared-general").unwrap();
+    let card = e.debug_move_named_card_to_hand(0, "shared_equipment_0");
+    e.debug_set_turn(0, engine_native::event::Phase::Play, 1);
+    let result = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard {
+            card,
+            targets: vec![],
+        },
+    });
+    assert!(
+        matches!(result, engine_native::CommandOutcome::Accepted { .. }),
+        "real equipment command: {result:?}"
+    );
+    assert!(e.debug_equips(0).contains(&card));
+    e.assign_general_named(0, "plain-general").unwrap();
+    let def = e.catalog().skill_by_name("shared_skill").unwrap();
+    assert!(e.debug_equips(0).contains(&card));
+    assert!(
+        e.state_core().skills.contains_key(&(0, def)),
+        "equipped source survives old general removal"
+    );
+    // Without a surviving global/equipment source, the former general's skill is revoked.
+    e.debug_remove_equip(0, card);
+    assert!(!e.state_core().skills.contains_key(&(0, def)));
+}
+
+#[test]
+fn identity_lord_selection_preserves_infinite_hp_sentinel() {
+    let mut pack = shared_skill_pack(false);
+    pack.generals[0].max_hp = engine_native::state::INFINITE_HP;
+    let mut e = Engine::try_new_identity_with_extensions(42, 4, &[&pack]).unwrap();
+    e.assign_general_named(0, "shared-general").unwrap();
+    assert_eq!(e.state_core().player(0).max_hp, engine_native::state::INFINITE_HP);
+    assert_eq!(e.state_core().player(0).hp, i32::MAX);
 }

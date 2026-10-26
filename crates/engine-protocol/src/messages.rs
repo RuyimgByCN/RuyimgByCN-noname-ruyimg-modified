@@ -77,6 +77,10 @@ pub enum ClientMessage {
         command: Command,
         /// Idempotency key (required for network).
         idempotency_key: IdempotencyKey,
+        /// True when this is a reconnect replay. A legacy room without a saved
+        /// receipt must reject it instead of executing a possibly-duplicate command.
+        #[serde(default)]
+        replay: bool,
     },
     /// Request full observer snapshot (after gap or reconnect).
     RequestSnapshot {

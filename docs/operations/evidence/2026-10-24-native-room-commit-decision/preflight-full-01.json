@@ -1,0 +1,305 @@
+{
+  "command": [
+    "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+    "-u",
+    "-B",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py"
+  ],
+  "method": "unmodified preflight.main full mode; subprocess.run transparently records original output; no repository script changes",
+  "start": "2026-10-24T16:08:34.290567+08:00",
+  "end": "2026-10-24T16:15:22.567642+08:00",
+  "seconds": 408.274,
+  "source_sha256": "d47ccdf2a871656d4cb60a659a4e68f9eaa46a719e86d9ce36d745065f795a5c",
+  "complete": true,
+  "configured": 20,
+  "executed": 20,
+  "passed": 20,
+  "failed": 0,
+  "skipped": 0,
+  "exit": 0,
+  "checks": [
+    {
+      "index": 1,
+      "name": "本地链接（核心）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py"
+      ],
+      "start": "2026-10-24T16:08:34.296166+08:00",
+      "end": "2026-10-24T16:08:34.556092+08:00",
+      "seconds": 0.26,
+      "exit": 0
+    },
+    {
+      "index": 2,
+      "name": "本地链接（全部）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "start": "2026-10-24T16:08:34.556410+08:00",
+      "end": "2026-10-24T16:08:35.346850+08:00",
+      "seconds": 0.79,
+      "exit": 0
+    },
+    {
+      "index": 3,
+      "name": "旧值扫描",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "start": "2026-10-24T16:08:35.346944+08:00",
+      "end": "2026-10-24T16:08:35.436644+08:00",
+      "seconds": 0.09,
+      "exit": 0
+    },
+    {
+      "index": 4,
+      "name": "近 20 轮索引新鲜",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/refresh_recent_rounds.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:35.436746+08:00",
+      "end": "2026-10-24T16:08:35.469417+08:00",
+      "seconds": 0.033,
+      "exit": 0
+    },
+    {
+      "index": 5,
+      "name": "包→来源映射",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/map_package_sources.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:35.469506+08:00",
+      "end": "2026-10-24T16:08:35.508772+08:00",
+      "seconds": 0.039,
+      "exit": 0
+    },
+    {
+      "index": 6,
+      "name": "规则登记表",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_phase_filters.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:35.508849+08:00",
+      "end": "2026-10-24T16:08:35.536111+08:00",
+      "seconds": 0.027,
+      "exit": 0
+    },
+    {
+      "index": 7,
+      "name": "过滤臂↔元数据一致",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_filter_meta_mismatch.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:08:35.536201+08:00",
+      "end": "2026-10-24T16:08:35.562788+08:00",
+      "seconds": 0.027,
+      "exit": 0
+    },
+    {
+      "index": 8,
+      "name": "牌名 vs 牌种比较",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_card_kind_compare.py"
+      ],
+      "start": "2026-10-24T16:08:35.562879+08:00",
+      "end": "2026-10-24T16:08:35.601332+08:00",
+      "seconds": 0.038,
+      "exit": 0
+    },
+    {
+      "index": 9,
+      "name": "台账账目（移出必留痕）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_ledger_accounting.py"
+      ],
+      "start": "2026-10-24T16:08:35.601415+08:00",
+      "end": "2026-10-24T16:08:35.671395+08:00",
+      "seconds": 0.07,
+      "exit": 0
+    },
+    {
+      "index": 10,
+      "name": "相位枚举（REVIEW=0）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_phase_arms.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:35.671512+08:00",
+      "end": "2026-10-24T16:08:46.609850+08:00",
+      "seconds": 10.938,
+      "exit": 0
+    },
+    {
+      "index": 11,
+      "name": "来源覆盖三分",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_source_coverage.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:46.609945+08:00",
+      "end": "2026-10-24T16:08:46.649516+08:00",
+      "seconds": 0.04,
+      "exit": 0
+    },
+    {
+      "index": 12,
+      "name": "host 键普查（U05=314）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_host_keys.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:46.649612+08:00",
+      "end": "2026-10-24T16:08:46.683893+08:00",
+      "seconds": 0.034,
+      "exit": 0
+    },
+    {
+      "index": 13,
+      "name": "卡面覆盖（201/128）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_card_coverage.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:08:46.684000+08:00",
+      "end": "2026-10-24T16:08:47.483286+08:00",
+      "seconds": 0.799,
+      "exit": 0
+    },
+    {
+      "index": 14,
+      "name": "台账↔枚举一致",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_ledger_consistency.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:08:47.483373+08:00",
+      "end": "2026-10-24T16:10:10.106012+08:00",
+      "seconds": 82.621,
+      "exit": 0
+    },
+    {
+      "index": 15,
+      "name": "已登记差异口径（20/54）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_registered_deviations.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:10:10.106115+08:00",
+      "end": "2026-10-24T16:10:10.160673+08:00",
+      "seconds": 0.055,
+      "exit": 0
+    },
+    {
+      "index": 16,
+      "name": "守卫引用名存在",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_guard_references.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:10:10.160754+08:00",
+      "end": "2026-10-24T16:10:10.191073+08:00",
+      "seconds": 0.03,
+      "exit": 0
+    },
+    {
+      "index": 17,
+      "name": "注释计数=台账",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_comment_counts.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:10:10.191150+08:00",
+      "end": "2026-10-24T16:10:10.221320+08:00",
+      "seconds": 0.03,
+      "exit": 0
+    },
+    {
+      "index": 18,
+      "name": "脚本单测",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts"
+      ],
+      "start": "2026-10-24T16:10:10.221399+08:00",
+      "end": "2026-10-24T16:14:52.870126+08:00",
+      "seconds": 282.647,
+      "exit": 0,
+      "unittest": {
+        "executed": 180,
+        "seconds": 282.488,
+        "ok": true
+      }
+    },
+    {
+      "index": 19,
+      "name": "文档 file:line 引用",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:14:52.877031+08:00",
+      "end": "2026-10-24T16:15:20.769789+08:00",
+      "seconds": 27.893,
+      "exit": 0
+    },
+    {
+      "index": 20,
+      "name": "行数门禁",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "start": "2026-10-24T16:15:20.769935+08:00",
+      "end": "2026-10-24T16:15:22.567438+08:00",
+      "seconds": 1.798,
+      "exit": 0
+    }
+  ]
+}

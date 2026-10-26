@@ -4,7 +4,7 @@
  * - 发现源：EXTENSION_CATALOG（15 包）
  * - 持久化：localStorage（浏览器）/ 同源键（桌面壳共用）
  * - 在局锁定：active 集快照写入 contentLock；卸载不破坏锁内旧局续玩标记
- * - 窄壳装载：开局把 cards.json 数组经 WorkerRequest.packsJson 交给
+ * - 正式装载：安装副本（manifest/卡牌/武将/牌堆）经 WorkerRequest.packsJson 交给
  *   NativeEngine.new_with_packs_json / restore_hex_with_packs_json
  */
 import {
@@ -12,6 +12,7 @@ import {
   extensionKey,
   type ExtensionCatalogEntry,
 } from "./extensionCatalog";
+import { bundledNativePackage, nativePackageFingerprint, nativePackageKey, validateNativePackage } from "./bundledNativePackages";
 
 const STORAGE_KEY = "noname-next.extension-store.v1";
 const SAVE_SLOTS_KEY = "noname-next.native-saves.v1";
@@ -37,10 +38,14 @@ export interface InstalledExtensionRecord {
   updatedAt: string;
   /** 逻辑指纹（防错版） */
   logicFingerprint: string;
+  /** 按版本保留安装时的包字节；不会在开局时回读分发源。 */
+  nativeVersions?: Record<string, string>;
 }
 
 export interface ExtensionStoreSnapshot {
   installed: InstalledExtensionRecord[];
+  /** 撤销记录独立保留，卸载不能重新授权旧局或重装。 */
+  revokedKeys?: string[];
   /** 开局内容锁：启用中的 key 有序列表 */
   contentLock: string[];
   /** 在局冻结：对局中不可卸载改锁（客户端闸） */
@@ -95,6 +100,9 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
   const cat = catalogByKey(key);
   if (!cat) throw new Error(`未知扩展: ${key}`);
   const snap = loadRaw();
+  if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
+  if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
+  const payload = bundledNativePackage(cat);
   const existing = snap.installed.find((r) => r.key === key);
   const t = nowIso();
   if (existing) {
@@ -102,6 +110,10 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
       throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
     }
     existing.updatedAt = t;
+    existing.nativeVersions ??= {};
+    if (existing.version === cat.version && !existing.nativeVersions[cat.version]) {
+      existing.nativeVersions[cat.version] = payload;
+    }
     if (existing.lifecycle === "available") existing.lifecycle = "installed";
   } else {
     snap.installed.push({
@@ -115,6 +127,7 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
       installedAt: t,
       updatedAt: t,
       logicFingerprint: cat.logicFingerprint,
+      nativeVersions: { [cat.version]: payload },
     });
   }
   saveRaw(snap);
@@ -161,6 +174,10 @@ export function upgradeExtension(key: string, toVersion?: string): ExtensionStor
   const rec = snap.installed.find((r) => r.key === key);
   if (!rec || rec.lifecycle === "revoked") throw new Error(`未安装或已撤销: ${key}`);
   const next = toVersion ?? cat.version;
+  if (next !== cat.version) throw new Error(`无可安装的版本 ${next}`);
+  const payload = bundledNativePackage(cat);
+  rec.nativeVersions ??= {};
+  rec.nativeVersions[next] ??= payload;
   if (rec.version !== next) {
     if (!rec.history.includes(rec.version)) rec.history.push(rec.version);
     rec.version = next;
@@ -180,9 +197,15 @@ export function rollbackExtension(key: string, version: string): ExtensionStoreS
   const snap = loadRaw();
   if (snap.matchFrozen) throw new Error("对局中不可回退");
   const rec = snap.installed.find((r) => r.key === key);
-  if (!rec) throw new Error(`未安装: ${key}`);
+  if (!rec || rec.lifecycle === "revoked") throw new Error(`未安装或已撤销: ${key}`);
   if (!rec.history.includes(version)) throw new Error(`无历史版本 ${version}`);
+  if (!rec.nativeVersions?.[version]) throw new Error(`缺少已安装的版本内容 ${version}`);
+  const payload = validateNativePackage(JSON.parse(rec.nativeVersions[version]));
+  if (nativePackageKey(payload) !== key || payload.manifest.version !== version) {
+    throw new Error(`历史包身份或版本不匹配: ${key}`);
+  }
   rec.version = version;
+  rec.logicFingerprint = nativePackageFingerprint(payload).slice(0, 8);
   rec.updatedAt = nowIso();
   saveRaw(snap);
   return snap;
@@ -192,6 +215,10 @@ export function rollbackExtension(key: string, version: string): ExtensionStoreS
 export function uninstallExtension(key: string): ExtensionStoreSnapshot {
   const snap = loadRaw();
   if (snap.matchFrozen) throw new Error("对局中不可卸载");
+  if (snap.installed.some((r) => r.key === key && r.lifecycle === "revoked")) {
+    snap.revokedKeys ??= [];
+    if (!snap.revokedKeys.includes(key)) snap.revokedKeys.push(key);
+  }
   snap.contentLock = snap.contentLock.filter((k) => k !== key);
   snap.installed = snap.installed.filter((r) => r.key !== key);
   saveRaw(snap);
@@ -205,6 +232,8 @@ export function revokeExtension(key: string): ExtensionStoreSnapshot {
   const rec = snap.installed.find((r) => r.key === key);
   if (!rec) throw new Error(`未安装: ${key}`);
   rec.lifecycle = "revoked";
+  snap.revokedKeys ??= [];
+  if (!snap.revokedKeys.includes(key)) snap.revokedKeys.push(key);
   rec.updatedAt = nowIso();
   snap.contentLock = snap.contentLock.filter((k) => k !== key);
   saveRaw(snap);
@@ -253,6 +282,8 @@ export interface NativeSaveSlot {
   lockSeed: string;
   savedAt: string;
   revision: number;
+  /** 完整的固定包副本：当前启用集变化或卸载后仍可恢复旧局。 */
+  packsJson?: string;
 }
 
 export function listNativeSaves(): NativeSaveSlot[] {

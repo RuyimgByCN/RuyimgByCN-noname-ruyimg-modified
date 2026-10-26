@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-24T16:27:02.754312+08:00",
+  "baseline_paths": 46977,
+  "initial_dirty_records": 11357,
+  "unchanged_baseline_paths": 46971,
+  "allowed_changed_baseline_paths": [
+    {
+      "path": "apps/game-server/src/native_room_store.rs",
+      "before": {
+        "sha256": "2d33384b43704cc86c516538dd9231ef9582bd2a0fa9bdddd8ba1e4b3e1a1fc1",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2c0d645accecef9d8f65275c4851cd4e213a50649c126ba34d1c9f1c70963849",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_room_store/tests.rs",
+      "before": {
+        "sha256": "bd706d8555a6cb806d58659a88f5b84643d35071879ea572a398df58187c73c2",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "9c7b75122ac38ba33dc3bb2c13e7e3d0dfaa22ade36873b3a5d403b44aa6d40b",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "before": {
+        "sha256": "7670f9b3a154d6efd5024c8119c7f549ac05a5626dca8528d2d1b9b8bc37bac0",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2b6d6c9ac588445df2b8f08c2f9c4f941dba1b1c97ef82b424789d2d17e35600",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/durability.rs",
+      "before": {
+        "sha256": "5fdb7bb1bd58de3bb6c1991f0d6e933d28523422c51caf32cc07a0d16742f4ec",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "a00687649a97843485692673042a24563c475006724c14d58f46e400b2a445a9",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_durability.rs",
+      "before": {
+        "sha256": "4c84aa0138ff931ea129224eef1373ab78700ba704ce536c4acc84efa2016246",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "37829f95fd0e2f0773f4be62062892b6103a54d53ebab9d1e0c557cbf69ea039",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before": {
+        "sha256": "8ac850f0165dd0ec9c8796d3c62f06832d9302f70b1bbdf17564d273ab8c68d3",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2482c277f64b2684af4d5c3a804bb1d4e6311c22208b53277b17374b5b94f777",
+        "mode": 33188
+      },
+      "allowed": true
+    }
+  ],
+  "unexpected_changed": [],
+  "new_paths": [
+    "apps/game-server/src/native_room_store/commit_tests.rs",
+    "apps/game-server/src/native_room_store/journal.rs",
+    "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/README.md",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-crash-room-smoke.mjs",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-crash-room.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-crash-room.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/capture-preflight.py",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/cargo-counts.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/cargo-regressions.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/cargo-regressions.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/environment.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/final-doc-gates.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/frontend-test.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/frontend-test.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/frontend-typecheck.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/frontend-typecheck.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/native-worker-smoke.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/native-worker-smoke.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/preservation.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/run-validation.py",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/server-build.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/server-build.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/server-compatibility-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/server-compatibility-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/server-incremental.diff",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/store-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/store-first-green.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/store-red.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/store-regression.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-process-crash-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-process-crash-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-regressions-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-regressions-02.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-regressions-03.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-regressions-04.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-uncertain-initial-red.log",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/ws-uncertain-rename-red.log"
+  ],
+  "unexpected_new": [],
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "artifacts": [
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-commit-decision-20261024/artifact-backup/apps/web-client/src/worker/native-pkg"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-commit-decision-20261024/artifact-backup/apps/web-client/src/wasm-pkg"
+    },
+    {
+      "path": "apps/web-client/public/pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-commit-decision-20261024/artifact-backup/apps/web-client/public/pkg"
+    },
+    {
+      "path": "apps/web-client/dist",
+      "files": 46,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-commit-decision-20261024/artifact-backup/apps/web-client/dist"
+    }
+  ],
+  "artifact_comparison_note": "This turn baseline includes all 18 generated files and all 46 original dirty dist files; all separately compared with this turn artifact-backup. This turn did not run WASM/frontend production build.",
+  "source_manifest_files": 1065,
+  "source_changed_after_manifest": []
+}

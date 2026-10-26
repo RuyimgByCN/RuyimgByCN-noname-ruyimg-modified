@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+    "-u",
+    "-B",
+    "scripts/preflight.py"
+  ],
+  "start": "2026-10-24T14:09:28.310931+08:00",
+  "end": "2026-10-24T14:21:04.494791+08:00",
+  "seconds": 696.18,
+  "exit": 1
+}

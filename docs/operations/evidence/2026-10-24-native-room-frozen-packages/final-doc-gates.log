@@ -1,0 +1,36 @@
+Initial whitespace check before final evidence summary 2026-10-24T15:04:36.171805+08:00
+COMMAND git diff --check
+EXIT 0
+
+Final checks after completed evidence/progress updates 2026-10-24T15:05:12.663807+08:00
+
+COMMAND ['python3', '-B', 'scripts/check_local_links.py', '--all']
+检查 1765 个文件，坏链 0
+EXIT 0
+
+COMMAND ['python3', '-B', 'scripts/check_doc_line_refs.py', '--strict']
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 975 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+EXIT 0
+
+COMMAND ['python3', '-B', 'scripts/check_stale_numbers.py']
+残留旧值 0 处
+EXIT 0
+
+COMMAND ['python3', '-B', 'scripts/refresh_recent_rounds.py', '--check']
+索引是最新（20 轮）
+EXIT 0
+
+COMMAND ['python3', '-B', 'scripts/check-source-lines.py']
+Source line limit passed: 8567 files <= 2000 lines
+EXIT 0
+
+COMMAND ['git', 'diff', '--check']
+EXIT 0

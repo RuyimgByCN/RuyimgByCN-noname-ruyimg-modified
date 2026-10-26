@@ -1,0 +1,1103 @@
+--- before/apps/game-server/src/native_room_store/commit_tests.rs
++++ after/apps/game-server/src/native_room_store/commit_tests.rs
+@@ -146,11 +146,9 @@
+         assert!(scan.records.is_empty());
+         assert!(scan.reserved_ids.contains(&7));
+         assert_eq!(scan.issues.len(), 1);
+-        assert!(
+-            store
+-                .save(&record(7, "must not overwrite evidence"))
+-                .is_err()
+-        );
++        assert!(store
++            .save(&record(7, "must not overwrite evidence"))
++            .is_err());
+     }
+ }
+ 
+@@ -257,3 +255,97 @@
+     assert!(store.load_all().unwrap().is_empty());
+     assert_eq!(std::fs::read(external).unwrap(), original);
+ }
++
++#[test]
++fn double_faults_preserve_the_actual_decision_for_read_only_restart() {
++    for has_previous in [false, true] {
++        for primary in [
++            StoreFault::DecisionWrite,
++            StoreFault::DecisionSync,
++            StoreFault::DecisionDirectorySync,
++        ] {
++            for compensation in [
++                StoreFault::PrepareWrite,
++                StoreFault::PrepareSync,
++                StoreFault::PrepareDirectorySync,
++            ] {
++                let dir = tempfile::tempdir().unwrap();
++                let store = NativeRoomStore::new(dir.path());
++                if has_previous {
++                    store.save(&record(7, "previous confirmed")).unwrap();
++                }
++                store
++                    .clone()
++                    .fail_next_write_with_compensation(primary, compensation);
++                let error = store.save_durable(&record(7, "candidate")).unwrap_err();
++                assert!(
++                    error.replacement_visible,
++                    "{primary:?}/{compensation:?}: {error}"
++                );
++                assert!(
++                    error.decision_uncertain,
++                    "{primary:?}/{compensation:?}: {error}"
++                );
++                assert!(error.message.contains("固定撤销决定失败"));
++                let committed = primary == StoreFault::DecisionDirectorySync
++                    && compensation != StoreFault::PrepareDirectorySync;
++                let expected = if committed {
++                    Some("candidate")
++                } else {
++                    has_previous.then_some("previous confirmed")
++                };
++                let candidate_path = dir.path().join("7.json");
++                let candidate_bytes = std::fs::read(&candidate_path).unwrap();
++                let journal_bytes = std::fs::read(journal_path(dir.path())).unwrap();
++                let journal: serde_json::Value = serde_json::from_slice(&journal_bytes).unwrap();
++                assert_eq!(
++                    journal["phase"],
++                    if committed { "Committed" } else { "Prepared" }
++                );
++                for _ in 0..2 {
++                    assert_eq!(
++                        restart_snapshot(dir.path()).as_deref(),
++                        expected,
++                        "has_previous={has_previous}, {primary:?}/{compensation:?}"
++                    );
++                    assert_eq!(std::fs::read(&candidate_path).unwrap(), candidate_bytes);
++                    assert_eq!(
++                        std::fs::read(journal_path(dir.path())).unwrap(),
++                        journal_bytes
++                    );
++                    assert!(NativeRoomStore::new(dir.path())
++                        .scan()
++                        .unwrap()
++                        .reserved_ids
++                        .contains(&7));
++                }
++                assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 2);
++                // 双重故障仅消耗本次计划；后续明确保存仍沿用磁盘确认的前态。
++                store.save(&record(7, "next confirmed")).unwrap();
++                assert_eq!(
++                    restart_snapshot(dir.path()).as_deref(),
++                    Some("next confirmed")
++                );
++            }
++        }
++    }
++}
++
++#[test]
++fn replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "confirmed")).unwrap();
++    store.fail_next_write_with_compensation(
++        StoreFault::DecisionDirectorySync,
++        StoreFault::PrepareWrite,
++    );
++    store.fail_next_write(StoreFault::DecisionDirectorySync);
++    let error = store.save_durable(&record(7, "candidate")).unwrap_err();
++    assert!(error.replacement_visible);
++    assert!(
++        !error.decision_uncertain,
++        "single-fault compensation must remain healthy: {error}"
++    );
++    assert_eq!(restart_snapshot(dir.path()).as_deref(), Some("confirmed"));
++}
+--- before/apps/game-server/src/native_room_store/tests.rs
++++ after/apps/game-server/src/native_room_store/tests.rs
+@@ -14,6 +14,7 @@
+             pack_refs: Vec::new(),
+             frozen_packages: Some(Vec::new()),
+             members: Vec::new(),
++            command_receipts: Vec::new(),
+         },
+     }
+ }
+@@ -208,11 +209,10 @@
+     let scan = store.scan().unwrap();
+     assert_eq!(scan.records.len(), 1);
+     assert_eq!(scan.issues.len(), 2);
+-    assert!(
+-        scan.issues
+-            .iter()
+-            .any(|issue| issue.error.contains("校验和"))
+-    );
++    assert!(scan
++        .issues
++        .iter()
++        .any(|issue| issue.error.contains("校验和")));
+     assert!(dir.path().join("10.json").is_dir());
+ }
+ 
+--- before/apps/game-server/src/native_room_store.rs
++++ after/apps/game-server/src/native_room_store.rs
+@@ -63,6 +63,15 @@
+     DecisionSync,
+     DecisionDirectorySync,
+     InterruptAfterRename,
++    InterruptAfterCompensationFailure,
++}
++
++#[cfg(test)]
++#[derive(Debug, Clone, Copy)]
++struct StoreFaultPlan {
++    primary: StoreFault,
++    compensation: Option<StoreFault>,
++    interrupt_after_compensation: bool,
+ }
+ 
+ /// 落盘记录：会话状态 + 房间级参数（密码）。
+@@ -106,7 +115,7 @@
+ pub struct NativeRoomStore {
+     dir: PathBuf,
+     #[cfg(test)]
+-    fault: std::sync::Arc<std::sync::Mutex<Option<StoreFault>>>,
++    fault: std::sync::Arc<std::sync::Mutex<Option<StoreFaultPlan>>>,
+ }
+ 
+ #[path = "native_room_store/journal.rs"]
+@@ -137,7 +146,35 @@
+ 
+     #[cfg(test)]
+     pub fn fail_next_write(&self, fault: StoreFault) {
+-        *self.fault.lock().unwrap() = Some(fault);
++        let interrupt_after_compensation = fault == StoreFault::InterruptAfterCompensationFailure;
++        *self.fault.lock().unwrap() = Some(StoreFaultPlan {
++            primary: if interrupt_after_compensation {
++                StoreFault::DecisionDirectorySync
++            } else {
++                fault
++            },
++            compensation: interrupt_after_compensation.then_some(StoreFault::PrepareWrite),
++            interrupt_after_compensation,
++        });
++    }
++
++    #[cfg(test)]
++    pub fn fail_next_write_with_compensation(&self, primary: StoreFault, compensation: StoreFault) {
++        assert!(matches!(
++            primary,
++            StoreFault::DecisionWrite
++                | StoreFault::DecisionSync
++                | StoreFault::DecisionDirectorySync
++        ));
++        assert!(matches!(
++            compensation,
++            StoreFault::PrepareWrite | StoreFault::PrepareSync | StoreFault::PrepareDirectorySync
++        ));
++        *self.fault.lock().unwrap() = Some(StoreFaultPlan {
++            primary,
++            compensation: Some(compensation),
++            interrupt_after_compensation: false,
++        });
+     }
+ 
+     /// 兼容调用方：需要分辨提交不确定性的运行期使用 `save_durable`。
+@@ -148,7 +185,9 @@
+     /// 候选写入前固定撤销依据；只有完整候选和提交决定均同步后才返回成功。
+     pub fn save_durable(&self, record: &StoredRoom) -> Result<(), StoreWriteError> {
+         #[cfg(test)]
+-        let fault = self.fault.lock().unwrap().take();
++        let plan = self.fault.lock().unwrap().take();
++        #[cfg(test)]
++        let fault = plan.map(|plan| plan.primary);
+         let mut replacement_visible = false;
+         let mut decision_uncertain = false;
+         let mut record = record.clone();
+@@ -227,8 +266,12 @@
+                     &self.dir,
+                     &prepared,
+                     #[cfg(test)]
+-                    None,
++                    plan.and_then(|plan| plan.compensation),
+                 ) {
++                    #[cfg(test)]
++                    if plan.is_some_and(|plan| plan.interrupt_after_compensation) {
++                        std::process::exit(87);
++                    }
+                     decision_uncertain = true;
+                     return Err(format!("{error}；固定撤销决定失败: {abort_error}"));
+                 }
+--- before/apps/game-server/src/native_ws_e2e/commit_crash.rs
++++ after/apps/game-server/src/native_ws_e2e/commit_crash.rs
+@@ -51,6 +51,20 @@
+     (server, url)
+ }
+ 
++async fn wait_for_exit(child: &mut ChildServer, expected: i32) {
++    let exit = tokio::time::timeout(Duration::from_secs(10), async {
++        loop {
++            if let Some(exit) = child.0.try_wait().unwrap() {
++                break exit;
++            }
++            tokio::time::sleep(Duration::from_millis(20)).await;
++        }
++    })
++    .await
++    .expect("exit exactly inside the requested storage test hook");
++    assert_eq!(exit.code(), Some(expected));
++}
++
+ #[test]
+ fn native_ws_commit_crash_child() {
+     let Some(base) = std::env::var_os(CHILD_ROOT) else {
+@@ -70,11 +84,16 @@
+             while !base.join("arm").exists() {
+                 tokio::time::sleep(Duration::from_millis(20)).await;
+             }
++            let fault = if std::fs::read_to_string(base.join("arm")).unwrap() == "double" {
++                StoreFault::InterruptAfterCompensationFailure
++            } else {
++                StoreFault::InterruptAfterRename
++            };
+             server
+                 .lobby
+                 .native_room_store_for_test()
+                 .unwrap()
+-                .fail_next_write(StoreFault::InterruptAfterRename);
++                .fail_next_write(fault);
+             std::fs::write(base.join("armed"), "ready").unwrap();
+             std::future::pending::<()>().await;
+         })
+@@ -134,17 +153,7 @@
+             idempotency_key: IdempotencyKey(804),
+         })
+         .await;
+-        let exit = tokio::time::timeout(Duration::from_secs(10), async {
+-            loop {
+-                if let Some(exit) = child.0.try_wait().unwrap() {
+-                    break exit;
+-                }
+-                tokio::time::sleep(Duration::from_millis(20)).await;
+-            }
+-        })
+-        .await
+-        .expect("exit exactly inside the post-rename test hook");
+-        assert_eq!(exit.code(), Some(86));
++        wait_for_exit(&mut child, 86).await;
+         let candidate: serde_json::Value =
+             serde_json::from_slice(&std::fs::read(&record_path).unwrap()).unwrap();
+         assert_ne!(candidate["state"]["snapshot_hex"], confirmed["state"]["snapshot_hex"]);
+@@ -170,3 +179,69 @@
+         println!("NATIVE_WS process_exit=86 stage=after_candidate_rename before_reply=true packages=disabled confirmed_revision={} retry_key=804 continued_revision={}", before_a.view.revision, next.view.revision);
+     });
+ }
++
++#[test]
++fn native_extensions_ws_process_exit_after_double_failure_replays_committed_receipt() {
++    let directory = tempfile::tempdir().unwrap();
++    let base = directory.path();
++    let cfg = local_config(base);
++    runtime().block_on(async {
++        let (mut child, url) = start_child(base, 0).await;
++        let mut a = Peer::connect_url(&url).await;
++        a.create().await;
++        let room = a.room;
++        let mut b = Peer::connect_url(&url).await;
++        b.join(room, 1, None).await;
++        let mut spectator = Peer::connect_url(&url).await;
++        spectator.spectate(room).await;
++        let before = super::durability::pending_choice(&mut a, &mut b, &mut spectator).await;
++        let intent = super::durability::answer(&before, a.player);
++        let tokens = [a.token.clone(), b.token.clone(), spectator.token.clone()];
++        std::fs::write(base.join("arm"), "double").unwrap();
++        wait_for_file(&base.join("armed")).await;
++        a.seq += 1;
++        a.send(ClientMessage::SubmitCommand {
++            header: MessageHeader::new(room, a.seq, before.view.revision),
++            command: Command {
++                actor: a.player,
++                expected_revision: ExpectedRevision(before.view.revision),
++                idempotency_key: IdempotencyKey(1004),
++                kind: intent.clone(),
++            },
++            idempotency_key: IdempotencyKey(1004),
++        })
++        .await;
++        wait_for_exit(&mut child, 87).await;
++        let selected = crate::native_room_store::NativeRoomStore::new(&cfg.native_room_store)
++            .load_all().unwrap().pop().unwrap();
++        let expected_a = super::double_failure::saved_state(&cfg, &selected, &tokens[0]);
++        let expected_b = super::double_failure::saved_state(&cfg, &selected, &tokens[1]);
++        let expected_s = super::double_failure::saved_state(&cfg, &selected, &tokens[2]);
++        assert_eq!(expected_a.view.revision, before.view.revision + 1);
++        assert!(expected_a.choice.is_none());
++        drop((a, b, spectator, child));
++        std::fs::remove_file(base.join("arm")).unwrap();
++        disable_packages(&cfg);
++        let (restarted, url) = start_child(base, 1).await;
++        let mut a = Peer::connect_url(&url).await;
++        assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, expected_a);
++        let mut b = Peer::connect_url(&url).await;
++        assert_eq!(b.join(room, 1, Some(tokens[1].clone())).await, expected_b);
++        let mut spectator = Peer::connect_url(&url).await;
++        assert_eq!(spectator.spectate(room).await, expected_s);
++        let (receipt, replayed) = a.submit(a.player, 0, 1004, intent.clone()).await;
++        assert!(matches!(receipt, CommandResult::Accepted { new_revision: 4, .. }));
++        assert_eq!(replayed, expected_a, "a committed request must not execute twice");
++        let (advance, next) = a.submit(a.player, 4, 1005, CommandKind::EndPhase).await;
++        assert!(matches!(advance, CommandResult::Accepted { new_revision: 5, .. }));
++        assert_synchronized(&next, &b.pushed(1005).await, &spectator.pushed(1005).await);
++        drop((a, b, spectator, restarted));
++        let (_second_restart, url) = start_child(base, 1).await;
++        let mut a = Peer::connect_url(&url).await;
++        assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, next);
++        let (again, current) = a.submit(a.player, 0, 1004, intent).await;
++        assert_eq!(again, receipt, "the receipt must survive another command and process restart");
++        assert_eq!(current, next);
++        println!("NATIVE_WS process_exit=87 stage=after_failed_decision_and_failed_compensation before_reply=true authority=Committed packages=disabled recovered_revision=4 retry_key=1004 applied=once second_restart_revision=5");
++    });
++}
+--- before/apps/game-server/src/native_ws_e2e/double_failure.rs
++++ after/apps/game-server/src/native_ws_e2e/double_failure.rs
+@@ -0,0 +1,229 @@
++//! A failed decision and failed compensation must not let stale RAM rewrite the authority.
++
++use super::durability::{
++    answer, decode_snapshot, failed_submit, pending_choice, unchanged_without_success_push,
++};
++use super::*;
++use crate::native_room_store::{NativeRoomStore, StoreFault, StoredRoom};
++
++const RETRY_KEY: u64 = 904;
++
++fn committed(primary: StoreFault, compensation: StoreFault) -> bool {
++    primary == StoreFault::DecisionDirectorySync && compensation != StoreFault::PrepareDirectorySync
++}
++
++pub(super) fn saved_state(cfg: &ServerConfig, record: &StoredRoom, token: &str) -> State {
++    let content = crate::native::NativeContent::open(
++        cfg.native_packages_root.clone(),
++        cfg.native_store_root.clone(),
++    )
++    .unwrap();
++    let (packs, _) = content
++        .load_room_packages(
++            &record.state.pack_refs,
++            record.state.frozen_packages.as_deref(),
++        )
++        .unwrap();
++    let session = crate::room_native::NativeRoomSession::from_saved(&record.state, packs).unwrap();
++    let member = session
++        .members()
++        .find(|member| member.reconnect_token == token)
++        .unwrap();
++    let player = (member.role == ClientRole::Player).then_some(member.player_id);
++    State {
++        view: session.snapshot(member.connection_id).unwrap(),
++        legal: player
++            .map(|id| crate::native_view::legal_actions_for(session.engine(), id))
++            .unwrap_or_default(),
++        choice: crate::native_view::choice_for(session.engine(), player),
++    }
++}
++
++async fn submit_error(peer: &mut Peer, key: u64, kind: CommandKind) {
++    peer.seq += 1;
++    let sequence = peer.seq;
++    peer.send(ClientMessage::SubmitCommand {
++        header: MessageHeader::new(peer.room, sequence, 0),
++        command: Command {
++            actor: peer.player,
++            expected_revision: ExpectedRevision(0),
++            idempotency_key: IdempotencyKey(key),
++            kind,
++        },
++        idempotency_key: IdempotencyKey(key),
++    })
++    .await;
++    let response = peer.until(|message| matches!(message, ServerMessage::Error { .. })
++        || matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)).await;
++    assert!(
++        matches!(response, ServerMessage::Error { .. }),
++        "{response:?}"
++    );
++}
++
++#[test]
++fn native_extensions_ws_double_failure_fences_writes_and_recovers_by_decision() {
++    for primary in [
++        StoreFault::DecisionWrite,
++        StoreFault::DecisionSync,
++        StoreFault::DecisionDirectorySync,
++    ] {
++        for compensation in [
++            StoreFault::PrepareWrite,
++            StoreFault::PrepareSync,
++            StoreFault::PrepareDirectorySync,
++        ] {
++            double_failure_fences_writes_and_recovers_by_decision(primary, compensation);
++        }
++    }
++}
++
++fn double_failure_fences_writes_and_recovers_by_decision(
++    primary: StoreFault,
++    compensation: StoreFault,
++) {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = local_config(directory.path());
++    let decision_committed = committed(primary, compensation);
++    let (room, tokens, selected, intent) = runtime().block_on(async {
++        let server = Server::start(&cfg, 0).await;
++        let mut a = Peer::connect(&server).await;
++        a.create().await;
++        let room = a.room;
++        let mut b = Peer::connect(&server).await;
++        b.join(room, 1, None).await;
++        let mut spectator = Peer::connect(&server).await;
++        spectator.spectate(room).await;
++        let before_a = pending_choice(&mut a, &mut b, &mut spectator).await;
++        let before_b = b.snapshot().await;
++        let before_s = spectator.snapshot().await;
++        let intent = answer(&before_a, a.player);
++        let store = server.lobby.native_room_store_for_test().unwrap();
++        store.fail_next_write_with_compensation(primary, compensation);
++        failed_submit(&mut a, &before_a, RETRY_KEY).await;
++        let record_path = Path::new(&cfg.native_room_store).join(format!("{room}.json"));
++        let journal_path = Path::new(&cfg.native_room_store).join(format!("{room}.json.journal"));
++        let candidate = std::fs::read(&record_path).unwrap();
++        let journal = std::fs::read(&journal_path).unwrap();
++        let selected = NativeRoomStore::new(&cfg.native_room_store)
++            .load_all()
++            .unwrap()
++            .pop()
++            .unwrap();
++        assert_eq!(
++            saved_state(&cfg, &selected, &a.token).view.revision,
++            3 + u64::from(decision_committed)
++        );
++        unchanged_without_success_push(&mut a, &before_a).await;
++        unchanged_without_success_push(&mut b, &before_b).await;
++        unchanged_without_success_push(&mut spectator, &before_s).await;
++        // The old RAM state must never be written over a visible Committed decision.
++        failed_submit(&mut a, &before_a, RETRY_KEY).await;
++        let mut newcomer = Peer::connect(&server).await;
++        newcomer
++            .send(ClientMessage::Spectate { room_id: room })
++            .await;
++        newcomer.error(ErrorCode::Internal).await;
++        assert_eq!(std::fs::read(&record_path).unwrap(), candidate);
++        assert_eq!(std::fs::read(&journal_path).unwrap(), journal);
++        unchanged_without_success_push(&mut a, &before_a).await;
++        let tokens = [a.token.clone(), b.token.clone(), spectator.token.clone()];
++        drop((a, b, spectator, newcomer));
++        server.stop().await;
++        (room, tokens, selected, intent)
++    });
++    disable_packages(&cfg);
++    runtime().block_on(async {
++        let expected_a = saved_state(&cfg, &selected, &tokens[0]);
++        let expected_b = saved_state(&cfg, &selected, &tokens[1]);
++        let expected_s = saved_state(&cfg, &selected, &tokens[2]);
++        let restarted = Server::start(&cfg, 1).await;
++        let mut a = Peer::connect(&restarted).await;
++        assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, expected_a);
++        let mut b = Peer::connect(&restarted).await;
++        assert_eq!(b.join(room, 1, Some(tokens[1].clone())).await, expected_b);
++        let mut spectator = Peer::connect(&restarted).await;
++        assert_eq!(spectator.spectate(room).await, expected_s);
++        let restored = NativeRoomStore::new(&cfg.native_room_store).load_all().unwrap().pop().unwrap();
++        let mut expected_snapshot = decode_snapshot(&serde_json::json!(selected.state.snapshot_hex));
++        expected_snapshot.auth_generation += 1;
++        assert_eq!(decode_snapshot(&serde_json::json!(restored.state.snapshot_hex)), expected_snapshot);
++        assert_eq!(serde_json::to_value(&restored.state.frozen_packages).unwrap(), serde_json::to_value(&selected.state.frozen_packages).unwrap());
++        let (result, after_a) = a.submit(a.player, 0, RETRY_KEY, intent.clone()).await;
++        assert!(matches!(result, CommandResult::Accepted { new_revision: 4, .. }));
++        assert_eq!(after_a.view.revision, 4);
++        if decision_committed {
++            assert_eq!(after_a, expected_a, "committed retries must only replay their receipt");
++        } else {
++            assert_synchronized(&after_a, &b.pushed(RETRY_KEY).await, &spectator.pushed(RETRY_KEY).await);
++        }
++        let (again, replayed) = a.submit(a.player, 0, RETRY_KEY, intent.clone()).await;
++        assert_eq!(again, result);
++        assert_eq!(replayed, after_a);
++        submit_error(&mut a, RETRY_KEY, CommandKind::EndPhase).await;
++        assert_eq!(a.snapshot().await, after_a);
++        let (other_result, _) = b.submit(b.player, 0, RETRY_KEY, intent.clone()).await;
++        assert!(matches!(other_result, CommandResult::Rejected { .. }), "another player cannot replay the owner's receipt");
++        let (advance, next) = a.submit(a.player, 4, RETRY_KEY + 1, CommandKind::EndPhase).await;
++        assert!(matches!(advance, CommandResult::Accepted { new_revision: 5, .. }));
++        assert_synchronized(&next, &b.pushed(RETRY_KEY + 1).await, &spectator.pushed(RETRY_KEY + 1).await);
++        let (old_result, current) = a.submit(a.player, 0, RETRY_KEY, intent).await;
++        assert_eq!(old_result, result, "later commands must not discard the resolved receipt");
++        assert_eq!(current, next);
++        println!("NATIVE_WS double_failure=pass decision={primary:?} compensation={compensation:?} authority={} restart_revision={} same_key=once continued_revision={}", if decision_committed { "Committed" } else { "Prepared" }, expected_a.view.revision, next.view.revision);
++        restarted.stop().await;
++    });
++}
++
++#[test]
++fn native_extensions_ws_double_initial_failure_restores_only_committed_creation() {
++    for primary in [
++        StoreFault::DecisionWrite,
++        StoreFault::DecisionSync,
++        StoreFault::DecisionDirectorySync,
++    ] {
++        for compensation in [
++            StoreFault::PrepareWrite,
++            StoreFault::PrepareSync,
++            StoreFault::PrepareDirectorySync,
++        ] {
++            let directory = tempfile::tempdir().unwrap();
++            let cfg = local_config(directory.path());
++            let decision_committed = committed(primary, compensation);
++            runtime().block_on(async {
++                let server = Server::start(&cfg, 0).await;
++                server
++                    .lobby
++                    .native_room_store_for_test()
++                    .unwrap()
++                    .fail_next_write_with_compensation(primary, compensation);
++                let mut peer = Peer::connect(&server).await;
++                peer.send(ClientMessage::CreateRoom {
++                    players: 2,
++                    seed: SEED,
++                    password: PASSWORD.into(),
++                })
++                .await;
++                peer.error(ErrorCode::Internal).await;
++                assert_eq!(server.lobby.stats().active_rooms, 0);
++                drop(peer);
++                server.stop().await;
++            });
++            runtime().block_on(async {
++                let restarted = Server::start(&cfg, usize::from(decision_committed)).await;
++                let mut peer = Peer::connect(&restarted).await;
++                if decision_committed {
++                    assert_eq!(peer.join(1, 0, None).await.view.revision, 0);
++                } else {
++                    peer.send(ClientMessage::JoinRoom { room_id: 1, password: PASSWORD.into(), preferred_seat: Some(0), reconnect_token: None }).await;
++                    peer.error(ErrorCode::RoomNotFound).await;
++                }
++                let mut next = Peer::connect(&restarted).await;
++                next.create().await;
++                assert_eq!(next.room, 2);
++                println!("NATIVE_WS double_initial_failure=pass decision={primary:?} compensation={compensation:?} restored={} next_room=2", usize::from(decision_committed));
++                restarted.stop().await;
++            });
++        }
++    }
++}
+--- before/apps/game-server/src/native_ws_e2e/durability.rs
++++ after/apps/game-server/src/native_ws_e2e/durability.rs
+@@ -3,7 +3,7 @@
+ use super::*;
+ use crate::native_room_store::StoreFault;
+ 
+-async fn pending_choice(a: &mut Peer, b: &mut Peer, spectator: &mut Peer) -> State {
++pub(super) async fn pending_choice(a: &mut Peer, b: &mut Peer, spectator: &mut Peer) -> State {
+     let mut state = a.snapshot().await;
+     for key in [701, 702, 703] {
+         let before = state.view.revision;
+@@ -22,7 +22,7 @@
+     state
+ }
+ 
+-fn answer(state: &State, player: PlayerId) -> CommandKind {
++pub(super) fn answer(state: &State, player: PlayerId) -> CommandKind {
+     state
+         .legal
+         .iter()
+@@ -40,7 +40,7 @@
+         .kind
+ }
+ 
+-fn decode_snapshot(value: &serde_json::Value) -> engine_native::snap::StateSnapshot {
++pub(super) fn decode_snapshot(value: &serde_json::Value) -> engine_native::snap::StateSnapshot {
+     let hex = value.as_str().unwrap();
+     assert_eq!(hex.len() % 2, 0);
+     let bytes: Vec<_> = (0..hex.len())
+@@ -50,7 +50,7 @@
+     engine_native::archive::decode_archive(&bytes).unwrap()
+ }
+ 
+-async fn failed_submit(peer: &mut Peer, state: &State, key: u64) {
++pub(super) async fn failed_submit(peer: &mut Peer, state: &State, key: u64) {
+     peer.seq += 1;
+     let sequence = peer.seq;
+     peer.send(ClientMessage::SubmitCommand {
+@@ -83,7 +83,7 @@
+     );
+ }
+ 
+-async fn unchanged_without_success_push(peer: &mut Peer, expected: &State) {
++pub(super) async fn unchanged_without_success_push(peer: &mut Peer, expected: &State) {
+     peer.seq += 1;
+     let sequence = peer.seq;
+     peer.send(ClientMessage::RequestSnapshot {
+--- before/apps/game-server/src/native_ws_e2e.rs
++++ after/apps/game-server/src/native_ws_e2e.rs
+@@ -2,6 +2,7 @@
+ 
+ mod durability;
+ mod commit_crash;
++mod double_failure;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+ use engine_api::{
+--- before/apps/game-server/src/room_native/receipts.rs
++++ after/apps/game-server/src/room_native/receipts.rs
+@@ -0,0 +1,209 @@
++//! 接受结果与候选一起保存；连接号或座位重用不能继承其他身份的请求收据。
++
++use super::*;
++use std::collections::BTreeMap;
++
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++pub struct NativeCommandReceipt {
++    pub reconnect_token: String,
++    pub player_id: PlayerId,
++    pub idempotency_key: u64,
++    pub kind: CommandKind,
++    pub result: CommandResult,
++}
++
++#[derive(Clone, Default)]
++pub(super) struct CommandReceipts(BTreeMap<(String, u64), NativeCommandReceipt>);
++
++impl CommandReceipts {
++    pub(super) fn restore(
++        entries: &[NativeCommandReceipt],
++        revision: u64,
++        max_seats: u8,
++    ) -> Result<Self, String> {
++        let mut receipts = Self::default();
++        for entry in entries {
++            if entry.reconnect_token.is_empty()
++                || entry.idempotency_key == 0
++                || entry.player_id.raw() == 0
++                || entry.player_id.raw() > max_seats as u32
++                || !matches!(entry.result, CommandResult::Accepted { new_revision, .. } if new_revision <= revision)
++            {
++                return Err("落盘命令收据身份、键或修订无效".into());
++            }
++            let key = (entry.reconnect_token.clone(), entry.idempotency_key);
++            if receipts.0.insert(key, entry.clone()).is_some() {
++                return Err("落盘命令收据重复".into());
++            }
++        }
++        Ok(receipts)
++    }
++
++    pub(super) fn entries(&self) -> Vec<NativeCommandReceipt> {
++        self.0.values().cloned().collect()
++    }
++}
++
++impl NativeRoomSession {
++    pub(crate) fn command_receipt(
++        &self,
++        connection_id: u64,
++        key: u64,
++        kind: &CommandKind,
++    ) -> Result<Option<CommandResult>, String> {
++        if key == 0 {
++            return Ok(None);
++        }
++        let member = self
++            .members
++            .get(&connection_id)
++            .ok_or("unknown connection")?;
++        let Some(receipt) = self
++            .command_receipts
++            .0
++            .get(&(member.reconnect_token.clone(), key))
++        else {
++            return Ok(None);
++        };
++        if member.role != ClientRole::Player
++            || receipt.player_id != member.player_id
++            || receipt.kind != *kind
++        {
++            return Err("idempotency key conflicts with the saved command receipt".into());
++        }
++        Ok(Some(receipt.result.clone()))
++    }
++
++    pub(crate) fn remember_command(
++        &mut self,
++        connection_id: u64,
++        key: u64,
++        kind: &CommandKind,
++        result: &CommandResult,
++    ) -> Result<(), String> {
++        if key == 0 {
++            return Ok(());
++        }
++        let member = self
++            .members
++            .get(&connection_id)
++            .ok_or("unknown connection")?;
++        if member.role != ClientRole::Player || !matches!(result, CommandResult::Accepted { .. }) {
++            return Err("only accepted player commands have receipts".into());
++        }
++        self.command_receipts.0.insert(
++            (member.reconnect_token.clone(), key),
++            NativeCommandReceipt {
++                reconnect_token: member.reconnect_token.clone(),
++                player_id: member.player_id,
++                idempotency_key: key,
++                kind: kind.clone(),
++                result: result.clone(),
++            },
++        );
++        Ok(())
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    fn accepted(session: &mut NativeRoomSession, key: u64) -> CommandResult {
++        let result = session.submit(1, &CommandKind::EndPhase, 0).unwrap();
++        assert!(matches!(result, CommandResult::Accepted { .. }));
++        session
++            .remember_command(1, key, &CommandKind::EndPhase, &result)
++            .unwrap();
++        result
++    }
++
++    #[test]
++    fn accepted_receipt_survives_restore_and_rebinding_without_executing_again() {
++        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
++        let token = session
++            .join(1, Some(0), None)
++            .unwrap()
++            .member
++            .reconnect_token;
++        let result = accepted(&mut session, 91);
++        let state = session.export_state(&session.snapshot_hex());
++        let mut restored = NativeRoomSession::from_saved(&state, vec![]).unwrap();
++        restored.join(10, Some(0), Some(token)).unwrap();
++        assert_eq!(
++            restored
++                .command_receipt(10, 91, &CommandKind::EndPhase)
++                .unwrap(),
++            Some(result)
++        );
++        assert_eq!(restored.engine().revision(), 1);
++        assert!(restored
++            .command_receipt(
++                10,
++                91,
++                &CommandKind::StartGame {
++                    rng_seed: 4242,
++                    player_count: 2,
++                    ruleset: String::new()
++                }
++            )
++            .is_err());
++    }
++
++    #[test]
++    fn rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it() {
++        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
++        session.join(1, Some(0), None).unwrap();
++        let before = session.checkpoint();
++        accepted(&mut session, 91);
++        session.rollback(before);
++        assert!(session
++            .command_receipt(1, 91, &CommandKind::EndPhase)
++            .unwrap()
++            .is_none());
++        accepted(&mut session, 91);
++        session.reclaim_seat(1);
++        session.join(2, Some(0), None).unwrap();
++        assert!(session
++            .command_receipt(2, 91, &CommandKind::EndPhase)
++            .unwrap()
++            .is_none());
++    }
++
++    #[test]
++    fn malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape() {
++        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
++        session.join(1, Some(0), None).unwrap();
++        let empty = session.export_state(&session.snapshot_hex());
++        assert!(serde_json::to_value(&empty)
++            .unwrap()
++            .get("command_receipts")
++            .is_none());
++        accepted(&mut session, 91);
++        let state = session.export_state(&session.snapshot_hex());
++        for mutation in 0..6 {
++            let mut invalid = state.clone();
++            let receipt = &mut invalid.command_receipts[0];
++            match mutation {
++                0 => receipt.idempotency_key = 0,
++                1 => receipt.reconnect_token.clear(),
++                2 => receipt.player_id = PlayerId::NONE,
++                3 => receipt.player_id = PlayerId::new(3),
++                4 => {
++                    receipt.result = CommandResult::Accepted {
++                        new_revision: 99,
++                        state_hash: [0; 32],
++                    }
++                }
++                5 => invalid
++                    .command_receipts
++                    .push(invalid.command_receipts[0].clone()),
++                _ => unreachable!(),
++            }
++            assert!(
++                NativeRoomSession::from_saved(&invalid, vec![]).is_err(),
++                "mutation {mutation}"
++            );
++        }
++    }
++}
+--- before/apps/game-server/src/room_native.rs
++++ after/apps/game-server/src/room_native.rs
+@@ -16,6 +16,11 @@
+ use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
+ use engine_protocol::ClientRole;
+ use std::collections::HashMap;
++
++#[path = "room_native/receipts.rs"]
++mod receipts;
++use receipts::CommandReceipts;
++pub use receipts::NativeCommandReceipt;
+ 
+ /// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
+ #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+@@ -37,6 +42,9 @@
+     pub frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
+     /// 成员（含重连令牌）。
+     pub members: Vec<NativeMember>,
++    /// 按重连身份固定已接受请求；旧档没有历史收据时保持空集。
++    #[serde(default, skip_serializing_if = "Vec::is_empty")]
++    pub command_receipts: Vec<NativeCommandReceipt>,
+ }
+ 
+ /// hex 编码（小写）。
+@@ -82,6 +90,7 @@
+     started: bool,
+     next_token: u64,
+     next_dedup: u64,
++    command_receipts: CommandReceipts,
+ }
+ 
+ /// IO 提交前保存可变会话；包定义与原局资产在 actor 生命周期内不变。
+@@ -92,6 +101,7 @@
+     started: bool,
+     next_token: u64,
+     next_dedup: u64,
++    command_receipts: CommandReceipts,
+ }
+ 
+ /// 入座/观战结果。
+@@ -114,6 +124,7 @@
+             started: self.started,
+             next_token: self.next_token,
+             next_dedup: self.next_dedup,
++            command_receipts: self.command_receipts.clone(),
+         }
+     }
+ 
+@@ -124,6 +135,7 @@
+         self.started = before.started;
+         self.next_token = before.next_token;
+         self.next_dedup = before.next_dedup;
++        self.command_receipts = before.command_receipts;
+     }
+ 
+     /// 以原生引擎为模板建会话（模板状态即开局状态）。
+@@ -147,6 +159,7 @@
+             started: true, // 原生引擎建局即已开局（赛前大厅阶段未建模，登记待办）
+             next_token: 1,
+             next_dedup: 1,
++            command_receipts: CommandReceipts::default(),
+         }
+     }
+ 
+@@ -309,6 +322,7 @@
+                 .collect(),
+             frozen_packages: self.frozen_packages.clone(),
+             members: self.members.values().cloned().collect(),
++            command_receipts: self.command_receipts.entries(),
+         }
+     }
+ 
+@@ -331,6 +345,8 @@
+         };
+         let mut members = HashMap::new();
+         let mut by_token = HashMap::new();
++        let command_receipts =
++            CommandReceipts::restore(&state.command_receipts, engine.revision(), state.max_seats)?;
+         let mut seats = std::collections::HashSet::new();
+         if state.max_seats as usize != engine.state_core().players.len() {
+             return Err("落盘座位数与引擎不一致".into());
+@@ -361,6 +377,7 @@
+             started: state.started,
+             next_token: state.next_token,
+             next_dedup: state.next_dedup,
++            command_receipts,
+         })
+     }
+ 
+--- before/apps/game-server/src/room_native_actor/durability.rs
++++ after/apps/game-server/src/room_native_actor/durability.rs
+@@ -9,6 +9,7 @@
+     store: Option<NativeRoomStore>,
+     last_sig: Option<String>,
+     uncertain: bool,
++    requires_restart: bool,
+ }
+ 
+ impl RoomDurability {
+@@ -19,6 +20,7 @@
+             store,
+             last_sig: None,
+             uncertain: false,
++            requires_restart: false,
+         }
+     }
+ 
+@@ -26,11 +28,20 @@
+         &mut self,
+         session: &NativeRoomSession,
+     ) -> Result<Option<NativeRoomCheckpoint>, String> {
++        if self.requires_restart {
++            return Err(
++                "native room persistence failed: commit decision unresolved; restart required"
++                    .into(),
++            );
++        }
+         if self.uncertain {
+             // 已替换的候选可能留在磁盘；成功重写 confirmed 状态前禁止继续变更。
+             self.last_sig = None;
+-            self.save(session)
+-                .map_err(|e| format!("native room persistence failed: {e}"))?;
++            if let Err(error) = self.save(session) {
++                self.requires_restart |= error.decision_uncertain;
++                self.uncertain |= error.replacement_visible;
++                return Err(format!("native room persistence failed: {error}"));
++            }
+             self.uncertain = false;
+         }
+         Ok(self.store.as_ref().map(|_| session.checkpoint()))
+@@ -42,6 +53,8 @@
+         before: Option<NativeRoomCheckpoint>,
+     ) -> Result<(), String> {
+         if let Err(error) = self.save(session) {
++            // 双重失败可能已留下 Committed；旧 RAM 不能再作为下一笔写入的依据。
++            self.requires_restart |= error.decision_uncertain;
+             if let Some(before) = before {
+                 session.rollback(before);
+             }
+--- before/apps/game-server/src/room_native_actor.rs
++++ after/apps/game-server/src/room_native_actor.rs
+@@ -168,7 +168,6 @@
+             )
+         })
+         .collect();
+-    let mut idempotency: HashMap<(u32, u64), CommandResult> = HashMap::new();
+     let mut last_revision = session.engine().revision();
+     persist.put_snapshot(
+         last_revision,
+@@ -337,8 +336,8 @@
+                     }
+                 };
+                 // 幂等重放
+-                if idempotency_key.0 != 0 {
+-                    if let Some(prev) = idempotency.get(&(m.player_id.raw(), idempotency_key.0)) {
++                match session.command_receipt(connection_id, idempotency_key.0, &command.kind) {
++                    Ok(Some(prev)) => {
+                         let view = session.snapshot(connection_id).unwrap_or_else(|_| {
+                             crate::native_view::observer_snapshot_for(
+                                 session.engine(),
+@@ -353,7 +352,7 @@
+                                 session.engine().revision(),
+                             ),
+                             idempotency_key,
+-                            result: prev.clone(),
++                            result: prev,
+                             view,
+                             legal_actions: legal_actions_for(session.engine(), m.player_id),
+                             choice: choice_for(session.engine(), Some(m.player_id)),
+@@ -361,6 +360,11 @@
+                         }));
+                         continue;
+                     }
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
++                    Ok(None) => {}
+                 }
+                 // 反冒充：以入座座位为准（协议 actor 不可信）
+                 let expected = if header.revision != 0 {
+@@ -394,6 +398,18 @@
+                     state_hash,
+                 } = &result
+                 {
++                    if let Err(error) = session.remember_command(
++                        connection_id,
++                        idempotency_key.0,
++                        &command.kind,
++                        &result,
++                    ) {
++                        if let Some(before) = checkpoint {
++                            session.rollback(before);
++                        }
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
+                     if let Err(error) = durability.commit(&mut session, checkpoint) {
+                         let _ = reply.send(Err(error));
+                         continue;
+@@ -410,9 +426,6 @@
+                             );
+                         }
+                         last_revision = *new_revision;
+-                    }
+-                    if idempotency_key.0 != 0 {
+-                        idempotency.insert((m.player_id.raw(), idempotency_key.0), result.clone());
+                     }
+                 } else if let Some(before) = checkpoint {
+                     session.rollback(before);
+@@ -516,12 +529,11 @@
+                             let _ = reply.send(Err(error));
+                             continue;
+                         }
+-                        // 选将不推进 revision，覆盖该修订的恢复点并清除旧动作重试缓存。
++                        // 选将不推进 revision，覆盖恢复点并保留已接受请求的收据。
+                         persist.put_snapshot(
+                             revision,
+                             engine_native::archive::encode_archive(&session.engine().save()),
+                         );
+-                        idempotency.clear();
+                         for other in members.values() {
+                             let Some(out) = other.outbound.as_ref() else {
+                                 continue;
+--- before/apps/game-server/tests/nc09_native_room_session.rs
++++ after/apps/game-server/tests/nc09_native_room_session.rs
+@@ -576,6 +576,7 @@
+         password_hash: String::new(),
+         checksum: String::new(),
+         state: room_native::NativeRoomState {
++            command_receipts: Vec::new(),
+             snapshot_hex: String::new(),
+             max_seats: 4,
+             started: true,
+@@ -620,6 +621,7 @@
+         password_hash: hash.clone(),
+         checksum: String::new(),
+         state: room_native::NativeRoomState {
++            command_receipts: Vec::new(),
+             snapshot_hex: String::new(),
+             max_seats: 4,
+             started: false,

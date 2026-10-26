@@ -277,3 +277,35 @@ fn nc10_planner_is_invariant_under_deck_order() {
     assert!(quiescent_total + window_total >= 8, "样本量不足");
     assert!(window_total >= 1, "应至少覆盖 1 个非静止态样本");
 }
+
+#[test]
+fn content_tuning_rejects_non_finite_values() {
+    use engine_native::ai::ContentTuning;
+    let tuning = ContentTuning {
+        seat_weights: vec![(0, f64::NAN), (1, f64::INFINITY), (2, 2.0)],
+        skill_threat: vec![("bad".into(), f64::NAN), ("good".into(), 3.0)],
+        qz_cf: true,
+    };
+    assert_eq!(tuning.weight_of(0), 1.0);
+    assert_eq!(tuning.weight_of(1), 1.0);
+    assert_eq!(tuning.weight_of(2), 2.0);
+    assert_eq!(tuning.threat_of_skills(["bad"]), 1.0);
+    assert_eq!(tuning.threat_of_skills(["good"]), 3.0);
+    assert!(tuning.benefit(f64::NAN, 5.0).is_finite());
+    assert!(tuning.benefit(2.0, f64::INFINITY).is_finite());
+    assert_eq!(tuning.benefit(2.0, 5.0), 10.0);
+}
+
+#[test]
+fn zero_deadline_returns_timed_out_plan_without_blocking() {
+    let engine = Engine::new(20_261_024, 4);
+    let planner = BoundedPlanner::new(usize::MAX / 2).with_deadline_ms(0);
+    let started = std::time::Instant::now();
+    let plan = engine.plan_action(0, &planner);
+    assert!(
+        started.elapsed() < std::time::Duration::from_secs(2),
+        "deadline 0 不应阻塞"
+    );
+    assert!(plan.timed_out, "deadline 0 必须标记 timed_out");
+    assert_eq!(plan.revision, engine.revision());
+}

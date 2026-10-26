@@ -52,23 +52,27 @@ fn nc10_pool_reuses_workers_and_returns_legal_plans() {
 fn nc10_pool_full_degrades_without_losing_plans() {
     let pack = swd_pack();
     let e = Engine::new_with_extensions(20262002, 4, &[&pack]).expect("建局");
-    // 容量 1：占满队列后继续提交必然失败
+    // 先确认唯一工作线程已取走阻塞任务，再填满唯一队列槽，避免依赖调度时机。
     let pool = PlannerPool::new(1, 1);
-    let blocker = std::sync::Arc::new(std::sync::Barrier::new(2));
-    let b2 = blocker.clone();
+    let (started_tx, started_rx) = std::sync::mpsc::channel();
+    let (release_tx, release_rx) = std::sync::mpsc::channel();
     pool.try_submit(move || {
-        b2.wait();
+        started_tx.send(()).expect("通知任务已启动");
+        // 断言 panic 时发送端也会被释放，不能把池的 Drop 卡在 Barrier 上。
+        let _ = release_rx.recv();
     })
     .expect("首个任务应入队");
-    // 该任务已被工作线程取走或占满队列 → 第二次提交应失败（池满）
-    let second = pool.try_submit(|| {});
-    assert_eq!(second, Err(PoolFull), "队列满必须明确返回 PoolFull");
-    blocker.wait();
+    started_rx
+        .recv_timeout(std::time::Duration::from_secs(5))
+        .expect("工作线程应启动首个任务");
+    pool.try_submit(|| {}).expect("填满唯一队列槽");
+    assert_eq!(pool.try_submit(|| {}), Err(PoolFull), "队列满必须明确返回 PoolFull");
 
-    // plan_all 在池满/竞争下仍返回全部座位结果（降级为串行补齐）
+    // 保持工作线程与队列占满，确定性验证串行补齐而非碰运气触发降级。
     let (plans, degraded) = pool.plan_all(&e, &[0, 1, 2, 3], &planner());
     assert_eq!(plans.len(), 4, "降级也不得丢结果");
-    let _ = degraded; // 是否降级取决于竞争，不作硬断言
+    assert!(degraded, "队列已满时必须降级");
+    release_tx.send(()).expect("释放工作线程");
     pool.shutdown();
 }
 

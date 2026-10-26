@@ -1,0 +1,21 @@
+
+> noname-next-web-client@0.1.0 smoke:extensions /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node scripts/extension-store-smoke.mjs
+
+✔ all discoverable packages install actual versioned data; active set reaches the match (10.230833ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (0.823042ms)
+✔ all lifecycle content mutations are blocked during a match (0.376667ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.401791ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.34975ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.205209ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.173792ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (0.382458ms)
+✔ old standard saves without packages remain compatible (0.099041ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16.987125

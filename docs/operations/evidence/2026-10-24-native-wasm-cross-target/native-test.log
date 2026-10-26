@@ -1,0 +1,9 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.02s
+     Running tests/nc08_cross_target_real.rs (target/debug/deps/nc08_cross_target_real-d7dc9df6c2940b8e)
+
+running 1 test
+test native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

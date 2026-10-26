@@ -1,0 +1,7 @@
+{
+  "target/debug/game-server": {
+    "sha256": "df014720e647ae9014a6f1d7bf109e5f5804eaab0088c8bbc74a82c4e9cf103a",
+    "bytes": 78519792
+  },
+  "note": "Current Cargo-built executable used by final 14:28 browser run. Production dist served from preserved external copy; repository dist remains original."
+}

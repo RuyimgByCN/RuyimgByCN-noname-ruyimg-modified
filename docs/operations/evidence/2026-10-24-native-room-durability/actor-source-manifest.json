@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-24T15:35:40.995662+08:00",
+  "files": [
+    {
+      "path": "apps/game-server/src/room_native_actor.rs",
+      "sha256": "98c783cb9dd9e0c1e82c9166334e247d596b09b4906e2cf988ac1e558ebdac12",
+      "physical_lines": 721
+    },
+    {
+      "path": "apps/game-server/src/room_native_actor/durability.rs",
+      "sha256": "9b064a82ed16198a3233d7211c8d17f849a6e221d57148f128d839ebfc682b94",
+      "physical_lines": 79
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "sha256": "3becf6f1e07641d27e1966096363bef9fc233ebbd41bf7eb493038cd1e1985b9",
+      "physical_lines": 632
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_durability.rs",
+      "sha256": "4c84aa0138ff931ea129224eef1373ab78700ba704ce536c4acc84efa2016246",
+      "physical_lines": 464
+    }
+  ]
+}

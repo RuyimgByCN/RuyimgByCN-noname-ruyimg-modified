@@ -38,6 +38,8 @@ pub enum RoomMsg {
         header: MessageHeader,
         command: Command,
         idempotency_key: IdempotencyKey,
+        /// Reconnect replay: legacy rooms without receipts must reject rather than re-execute.
+        replay: bool,
         reply: oneshot::Sender<Result<ServerMessage, String>>,
     },
     /// Snapshot request.
@@ -361,6 +363,7 @@ async fn room_loop(
                 header,
                 mut command,
                 idempotency_key,
+                replay: _,
                 reply,
             } => {
                 let Some(member) = members.get(&connection_id) else {

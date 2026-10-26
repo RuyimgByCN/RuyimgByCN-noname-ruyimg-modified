@@ -1,0 +1,34 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.08s
+     Running tests/nc10_ai_boundary_and_cancel.rs (target/debug/deps/nc10_ai_boundary_and_cancel-26596b591206cee1)
+
+running 6 tests
+test cancelled_planner_marks_plan_cancelled ... ok
+test tiny_budget_marks_exhausted ... ok
+test stale_plan_is_rejected ... ok
+test policy_variants_are_deterministic ... ok
+test hidden_other_hands_do_not_change_seat_input ... ok
+test pool_parallel_matches_sequential_and_records_tail ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/nc10_ai_bounds.rs (target/debug/deps/nc10_ai_bounds-758c9253c5168c0b)
+
+running 5 tests
+test nc10_stale_plan_is_rejected ... ok
+test nc10_planner_is_deterministic ... ok
+test nc10_tiny_budget_still_legal ... ok
+test nc10_planner_is_invariant_under_deck_order ... ok
+test nc10_leak_surface_quantified ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+
+     Running tests/nc10_ai_information_boundary.rs (target/debug/deps/nc10_ai_information_boundary-5815d9dd034d8588)
+
+running 3 tests
+test legal_action_set_is_invariant_under_hidden_information ... ok
+test planner_detects_own_hand_change ... ok
+test planner_is_invariant_under_hidden_information ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+

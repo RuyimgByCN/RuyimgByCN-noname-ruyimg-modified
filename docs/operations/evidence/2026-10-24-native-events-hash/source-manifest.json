@@ -1,0 +1,52 @@
+[
+  {
+    "path": "crates/engine-native/src/view.rs",
+    "bytes": 8613,
+    "sha256": "3768986bdf2b91daa7d17399e5dcfa02c9dd4cfe74289b4e9b203645e044f067"
+  },
+  {
+    "path": "crates/engine-native/src/engine/views.rs",
+    "bytes": 7290,
+    "sha256": "19f4649048d16dac882354d6ffcc07cabc7a6eadc4e02eb35dc9dee2cbca5bd2"
+  },
+  {
+    "path": "crates/engine-native-wasm/src/lib.rs",
+    "bytes": 84972,
+    "sha256": "2468266fb30fc816c2f4050c3cfa2d5ae501fd7333325110bdc1a6f2bc528a20"
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/events_hash_export.rs",
+    "bytes": 2683,
+    "sha256": "b6cf39bc0c59daedc94960cda219c974ed9cde81951ae415886b26edab5d99de"
+  },
+  {
+    "path": "apps/web-client/src/worker/nativeBackend.ts",
+    "bytes": 31563,
+    "sha256": "b264de13be217c110d6ad33ebce58e066d6ce33fd82519d0e10e7c9d20225262"
+  },
+  {
+    "path": "apps/web-client/scripts/native-worker-smoke.mjs",
+    "bytes": 22543,
+    "sha256": "05ac7dc20d70f3def896370c5a9d209e1111c36588c301118fde2905f6b805db"
+  },
+  {
+    "path": "apps/game-server/src/room_native.rs",
+    "bytes": 26620,
+    "sha256": "9a0c1a7c2e3165505972071f98b9b1c9cc4ef2e8811b002ca255dfbb429c517c"
+  },
+  {
+    "path": "apps/game-server/src/room_native_actor.rs",
+    "bytes": 33092,
+    "sha256": "a48512d3e6d95a0f96c3e8525697cc2637b515429d8c1f24ea31252c1d1c5d5a"
+  },
+  {
+    "path": "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+    "bytes": 11493,
+    "sha256": "0f364dece6ed6b6578a067aa11050d95fd2e58fac5db02e352e5a5925bc38ac0"
+  },
+  {
+    "path": "apps/game-server/tests/nc09_native_actor.rs",
+    "bytes": 21629,
+    "sha256": "d171c182a41681dc0b28382456936c827090ed86769a5b93cdc8feaf3c8af4fa"
+  }
+]

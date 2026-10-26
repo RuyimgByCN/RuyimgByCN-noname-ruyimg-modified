@@ -15,9 +15,7 @@ const crate = join(root, "crates/engine-wasm");
 const outDir = join(__dirname, "../src/wasm-pkg");
 const publicDir = join(__dirname, "../public/pkg");
 const rustupBin = join(homedir(), ".cargo/bin");
-const toolEnv = existsSync(join(rustupBin, "cargo"))
-  ? { ...process.env, PATH: `${rustupBin}${delimiter}${process.env.PATH ?? ""}` }
-  : process.env;
+const toolEnv = { ...process.env, PATH: `${rustupBin}${delimiter}${process.env.PATH ?? ""}` };
 
 function has(cmd) {
   const r = spawnSync(cmd, ["--version"], { encoding: "utf8", env: toolEnv });

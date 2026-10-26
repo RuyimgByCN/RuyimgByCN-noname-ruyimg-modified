@@ -106,6 +106,7 @@ async fn submit(
                 kind,
             },
             idempotency_key: IdempotencyKey(idem),
+            replay: false,
             reply: rt,
         })
         .await

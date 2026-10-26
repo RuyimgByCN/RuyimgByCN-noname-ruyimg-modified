@@ -1,0 +1,251 @@
+{
+  "started_at": "2026-10-24T14:28:34.758281+08:00",
+  "ended_at": "2026-10-24T14:29:23.447778+08:00",
+  "interpreter": "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+  "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py",
+  "method": "unmodified preflight.main(), full mode; subprocess.run transparently recorded original stdout/stderr; no repository script changes",
+  "quick": false,
+  "configured_checks": 20,
+  "executed_checks": 14,
+  "passed": 12,
+  "failed": 1,
+  "skipped": 0,
+  "exit_code": 99,
+  "exception": "KeyboardInterrupt()",
+  "summary_log": "/tmp/noname-next-ws-delivery-20261024/preflight-full-rerun.log",
+  "raw_child_outputs_log": "/tmp/noname-next-ws-delivery-20261024/preflight-full-rerun-raw.log",
+  "previous_run": "preflight-full.log retained as original 19/20 failure; standalone scripts-unit-diagnostic.log ran 180 tests OK, original error not reproduced and original traceback unavailable",
+  "checks": [
+    {
+      "index": 1,
+      "name": "本地链接（核心）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py"
+      ],
+      "started_at": "2026-10-24T14:28:34.760940+08:00",
+      "ended_at": "2026-10-24T14:28:34.837648+08:00",
+      "duration_seconds": 0.077,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 14,
+      "stderr_chars": 0
+    },
+    {
+      "index": 2,
+      "name": "本地链接（全部）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "started_at": "2026-10-24T14:28:34.837930+08:00",
+      "ended_at": "2026-10-24T14:28:35.306763+08:00",
+      "duration_seconds": 0.469,
+      "exit_code": 1,
+      "status": "failed",
+      "stdout_chars": 109,
+      "stderr_chars": 0
+    },
+    {
+      "index": 3,
+      "name": "旧值扫描",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "started_at": "2026-10-24T14:28:35.306955+08:00",
+      "ended_at": "2026-10-24T14:28:35.355149+08:00",
+      "duration_seconds": 0.048,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 9,
+      "stderr_chars": 0
+    },
+    {
+      "index": 4,
+      "name": "近 20 轮索引新鲜",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/refresh_recent_rounds.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:35.355383+08:00",
+      "ended_at": "2026-10-24T14:28:35.376978+08:00",
+      "duration_seconds": 0.022,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 12,
+      "stderr_chars": 0
+    },
+    {
+      "index": 5,
+      "name": "包→来源映射",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/map_package_sources.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:35.377190+08:00",
+      "ended_at": "2026-10-24T14:28:35.404002+08:00",
+      "duration_seconds": 0.027,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 71,
+      "stderr_chars": 0
+    },
+    {
+      "index": 6,
+      "name": "规则登记表",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_phase_filters.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:35.404221+08:00",
+      "ended_at": "2026-10-24T14:28:35.428006+08:00",
+      "duration_seconds": 0.024,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 18,
+      "stderr_chars": 0
+    },
+    {
+      "index": 7,
+      "name": "过滤臂↔元数据一致",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_filter_meta_mismatch.py",
+        "--strict"
+      ],
+      "started_at": "2026-10-24T14:28:35.428228+08:00",
+      "ended_at": "2026-10-24T14:28:35.451366+08:00",
+      "duration_seconds": 0.023,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 45,
+      "stderr_chars": 0
+    },
+    {
+      "index": 8,
+      "name": "牌名 vs 牌种比较",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_card_kind_compare.py"
+      ],
+      "started_at": "2026-10-24T14:28:35.451540+08:00",
+      "ended_at": "2026-10-24T14:28:35.479016+08:00",
+      "duration_seconds": 0.028,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 137,
+      "stderr_chars": 0
+    },
+    {
+      "index": 9,
+      "name": "台账账目（移出必留痕）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_ledger_accounting.py"
+      ],
+      "started_at": "2026-10-24T14:28:35.479268+08:00",
+      "ended_at": "2026-10-24T14:28:35.525286+08:00",
+      "duration_seconds": 0.046,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 48,
+      "stderr_chars": 0
+    },
+    {
+      "index": 10,
+      "name": "相位枚举（REVIEW=0）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_phase_arms.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:35.525483+08:00",
+      "ended_at": "2026-10-24T14:28:45.815558+08:00",
+      "duration_seconds": 10.29,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 3069,
+      "stderr_chars": 100
+    },
+    {
+      "index": 11,
+      "name": "来源覆盖三分",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_source_coverage.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:45.815795+08:00",
+      "ended_at": "2026-10-24T14:28:45.897009+08:00",
+      "duration_seconds": 0.081,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 2873,
+      "stderr_chars": 68
+    },
+    {
+      "index": 12,
+      "name": "host 键普查（U05=314）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_host_keys.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:45.897207+08:00",
+      "ended_at": "2026-10-24T14:28:45.929199+08:00",
+      "duration_seconds": 0.032,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 853,
+      "stderr_chars": 22
+    },
+    {
+      "index": 13,
+      "name": "卡面覆盖（201/128）",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/report_card_coverage.py",
+        "--check"
+      ],
+      "started_at": "2026-10-24T14:28:45.929406+08:00",
+      "ended_at": "2026-10-24T14:28:46.317777+08:00",
+      "duration_seconds": 0.388,
+      "exit_code": 0,
+      "status": "passed",
+      "stdout_chars": 385,
+      "stderr_chars": 38
+    }
+  ],
+  "status": "aborted",
+  "complete": false,
+  "completed_checks": 13,
+  "aborted_checks": 1,
+  "not_executed_checks": 6,
+  "interrupted_check": {
+    "index": 14,
+    "name": "台账↔枚举一致",
+    "status": "aborted",
+    "buffered_child_output_available": false
+  },
+  "exit_semantics": "99 is recorder abort after KeyboardInterrupt, not a completed preflight result",
+  "abort_reason": "Root requested stop after known link failure caused by README referring to not-yet-created final-doc-gates.log; await ready before new full 20 run",
+  "annotated_at": "2026-10-24T14:29:45.064249+08:00"
+}

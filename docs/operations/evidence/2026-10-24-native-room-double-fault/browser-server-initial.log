@@ -1,0 +1,2 @@
+2026-10-24T08:52:44.322616Z  WARN game_server::room_native_actor::durability: 原生房间状态未确认持久化 room=1 error=创建房间目录失败: File exists (os error 17)（replacement_visible=false, decision_uncertain=false）
+2026-10-24T08:52:44.365634Z  WARN game_server: client handler error conn=4 error=Internal: room error: native room persistence failed: 创建房间目录失败: File exists (os error 17)（replacement_visible=false, decision_uncertain=false）

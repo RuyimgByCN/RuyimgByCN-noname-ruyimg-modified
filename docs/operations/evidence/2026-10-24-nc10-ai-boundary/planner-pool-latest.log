@@ -1,0 +1,52 @@
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:743:18
+    |
+743 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.28s
+     Running tests/nc10_ai_boundary_and_cancel.rs (target/debug/deps/nc10_ai_boundary_and_cancel-26596b591206cee1)
+
+running 6 tests
+test cancelled_planner_marks_plan_cancelled ... ok
+test tiny_budget_marks_exhausted ... ok
+test stale_plan_is_rejected ... ok
+test hidden_other_hands_do_not_change_seat_input ... ok
+test policy_variants_are_deterministic ... ok
+test pool_parallel_matches_sequential_and_records_tail ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/nc10_planner_pool.rs (target/debug/deps/nc10_planner_pool-a2d29a030e8d1e1c)
+
+running 4 tests
+test nc10_pool_respects_cancellation ... ok
+test nc10_pool_plans_are_revision_guarded ... ok
+test nc10_pool_full_degrades_without_losing_plans ... ok
+test nc10_pool_reuses_workers_and_returns_legal_plans ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

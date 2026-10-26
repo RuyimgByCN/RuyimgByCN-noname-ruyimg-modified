@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-24T15:05:34.732873+08:00",
+  "baseline_paths": 46858,
+  "initial_dirty_records": 11269,
+  "unchanged_baseline_paths": 46850,
+  "allowed_changed_baseline_paths": [
+    {
+      "path": "apps/game-server/src/native.rs",
+      "before": {
+        "sha256": "d233f9dbba100bff3f10a8c77503ced17dc280745659ddaca3e889b717e7ee66",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "90cd75804a90e137d901efce2c6da7be36e57f4ba2e3d823c6a9fe10e15ee1da",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "before": {
+        "sha256": "6e6b435f87862a9d41c9a84f84709a23b8f7480e2edd88a22eaf3d7b74943568",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "0265a3590a071c7c8b9d27eb92cd46a1725eb6e1f22b7a239ea501846b96b0c4",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "before": {
+        "sha256": "8ab1b82446ae3bb42169b02b3e033c51c9f3e2f61bd994b4080eaf70f4b2ae87",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "89ea448fb1863af8ae9f8e49e57f52b6e76754637072bf13e45fc31cb1323a07",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native_actor.rs",
+      "before": {
+        "sha256": "79b14af9b4f8754af6b22a1fe61f7264275d43a98c1d57645895a408d22d1b6a",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "f54c5f6709372fb0ddd1e9b7657cce92150cd767e1c50f2bbae029c739f7280f",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_room_session.rs",
+      "before": {
+        "sha256": "2bc4aac734defae3b833279001b0860897fac60867099492fe0d82c1d042ccfc",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "e0b3cd6610397ccdee61f62c30cddac24e4d90b77643a67d987ae4ca12add7cd",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/lobby.rs",
+      "before": {
+        "sha256": "a7cd5738483cfcbbb49b4d4234a286dae6107cf4add55e8140ddc4ad1acc6847",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "212fbfd4200721837cceb6af15877e83d716b26a3d0763a41637be26e04895c7",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_room_store.rs",
+      "before": {
+        "sha256": "2ddf4b07a222bffba3bfb144679e7dc26c2afb3fccdf88360a1eac854d463770",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "cf5abfb9be3da7b3c45e730c99899382c9a7c88fea7b31a9f11e5e07ab2878c6",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before": {
+        "sha256": "27083d4948bec1d19de68138dab795a983909318e442785e07cf0fecde4d3bf3",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "86ed96ad85dd8f56603c1d322b65ee9e690d7eb69fa0301634b6a7d8f2640251",
+        "mode": 33188
+      },
+      "allowed": true
+    }
+  ],
+  "unexpected_changed": [],
+  "new_paths": [
+    "apps/game-server/src/native/frozen.rs",
+    "apps/game-server/tests/native_frozen_packages.rs",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/README.md",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/backend-frozen-tests-02.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/backend-source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/backend-targeted-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-frozen-room-smoke.mjs",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-frozen-room.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-frozen-room.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/cargo-counts.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/cargo-regressions.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/cargo-regressions.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/environment.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/frontend-test.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/frontend-test.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/frontend-typecheck.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/frontend-typecheck.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/native-worker-smoke.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/native-worker-smoke.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/preservation.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/server-build.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/server-build.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/server-incremental.diff",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/source-line-checks.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/source-lines-unit.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/source-lines.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/ws-frozen-green-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-frozen-packages/ws-frozen-red.log"
+  ],
+  "unexpected_new": [],
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "artifacts": [
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-ws-delivery-20261024/generated-backup/apps/web-client/src/worker/native-pkg"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-ws-delivery-20261024/generated-backup/apps/web-client/src/wasm-pkg"
+    },
+    {
+      "path": "apps/web-client/public/pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-ws-delivery-20261024/generated-backup/apps/web-client/public/pkg"
+    },
+    {
+      "path": "apps/web-client/dist",
+      "files": 46,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-ws-delivery-20261024/generated-backup/apps/web-client/dist"
+    }
+  ],
+  "artifact_comparison_note": "This turn baseline omits ignored generated files. All 18 generated files and all 46 original dirty dist files separately compared with prior-turn full backups already restored before this turn; this turn did not run WASM/frontend production build.",
+  "source_manifest_files": 1054,
+  "source_changed_after_manifest": []
+}

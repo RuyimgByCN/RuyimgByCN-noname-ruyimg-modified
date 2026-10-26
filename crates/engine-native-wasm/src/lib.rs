@@ -8,7 +8,8 @@
 //! 应答，game-server `/native` 同款）、存档十六进制往返（NGSA v65）。
 //!
 //! 扩展包装载：`new_with_packs_json` / `restore_hex_with_packs_json` 接收
-//! cards.json 对象数组，经 C0 装载器桥接后走 `new_with_extensions` /
+//! 安装载荷数组（manifest + cards/characters/pile，兼容旧 cards.json 元素），
+//! 经 C0 装载器桥接后走 `new_with_extensions` /
 //! `restore_with_extensions`。空数组等于标准目录。
 //!
 //! 视图投影为纯只读面，不进权威状态与哈希（ADR 0730）。
@@ -20,21 +21,8 @@ use engine_native::view::{HandView, PlayerView};
 use engine_native::{CommandOutcome, Engine, GameAction};
 use wasm_bindgen::prelude::*;
 
-/// `packs_json` 是 cards.json 对象的 JSON 数组。空数组 = 标准目录。
-fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
-    let value: serde_json::Value =
-        serde_json::from_str(packs_json).map_err(|e| format!("packs JSON: {e}"))?;
-    let arr = value
-        .as_array()
-        .ok_or_else(|| "packs 须为 JSON 数组".to_string())?;
-    let mut out = Vec::with_capacity(arr.len());
-    for item in arr {
-        let text = serde_json::to_string(item).map_err(|e| format!("packs 元素: {e}"))?;
-        let bridged = content_native_loader::bridge_pack(&text).map_err(|e| format!("{e:?}"))?;
-        out.push(bridged.pack);
-    }
-    Ok(out)
-}
+mod installed_packs;
+use installed_packs::packs_from_json;
 
 pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
@@ -46,10 +34,20 @@ pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Eng
     }
 }
 
+pub fn engine_identity_from_packs(
+    players: u8,
+    seed: u64,
+    packs_json: &str,
+) -> Result<Engine, String> {
+    let packs = packs_from_json(packs_json)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    Engine::try_new_identity_with_extensions(seed, players as usize, &refs)
+}
+
 pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    let bytes = hex_decode(hex).map_err(|e| format!("{e:?}"))?;
+    let bytes = hex_decode(hex)?;
     let snapshot =
         engine_native::archive::decode_archive(&bytes).map_err(|e| format!("解码失败: {e:?}"))?;
     if refs.is_empty() {
@@ -77,14 +75,106 @@ pub fn hex_encode(bytes: &[u8]) -> String {
     s
 }
 
-fn hex_decode(s: &str) -> Result<Vec<u8>, JsValue> {
-    (0..s.len())
-        .step_by(2)
-        .map(|i| {
-            u8::from_str_radix(&s[i..i + 2], 16)
-                .map_err(|e| JsValue::from_str(&format!("restore: 非法十六进制: {e}")))
-        })
-        .collect()
+/// 存档十六进制文本上限（2 字符 = 1 字节）。超出时在分配/解码前拒绝，
+/// 避免任意长输入进入 WASM 线性内存。64 MiB 字节对当前 NGSA 载荷有充分余量。
+pub const MAX_ARCHIVE_HEX_CHARS: usize = 64 * 1024 * 1024;
+
+/// 严格十六进制解码：先验证 ASCII/偶数长度/上限，再逐字节解析。
+///
+/// 旧实现按 `s[i..i + 2]` 字符串下标切片；奇数长度、多字节 UTF-8 或非 ASCII
+/// 输入会 panic，WASM 侧表现为 `unreachable` 并破坏后续句柄使用。这里在
+/// 字节层校验，错误只返回文本，不触碰调用方的原引擎。
+fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
+    hex_decode_bounded(s, MAX_ARCHIVE_HEX_CHARS)
+}
+
+fn hex_decode_bounded(s: &str, max_chars: usize) -> Result<Vec<u8>, String> {
+    if s.len() > max_chars {
+        return Err(format!(
+            "restore: 存档文本过长（{} 字符，上限 {max_chars}）",
+            s.len()
+        ));
+    }
+    if !s.is_ascii() {
+        return Err("restore: 非法十六进制：只接受 ASCII 0-9a-fA-F".into());
+    }
+    let bytes = s.as_bytes();
+    if bytes.len() % 2 != 0 {
+        return Err(format!(
+            "restore: 非法十六进制：长度为奇数（{}）",
+            bytes.len()
+        ));
+    }
+    let mut out = Vec::with_capacity(bytes.len() / 2);
+    for (index, pair) in bytes.chunks_exact(2).enumerate() {
+        let hi = hex_nibble(pair[0]).ok_or_else(|| {
+            format!(
+                "restore: 非法十六进制字符 {:?}（字节 {}）",
+                pair[0] as char,
+                index * 2
+            )
+        })?;
+        let lo = hex_nibble(pair[1]).ok_or_else(|| {
+            format!(
+                "restore: 非法十六进制字符 {:?}（字节 {}）",
+                pair[1] as char,
+                index * 2 + 1
+            )
+        })?;
+        out.push((hi << 4) | lo);
+    }
+    Ok(out)
+}
+
+fn hex_nibble(byte: u8) -> Option<u8> {
+    match byte {
+        b'0'..=b'9' => Some(byte - b'0'),
+        b'a'..=b'f' => Some(byte - b'a' + 10),
+        b'A'..=b'F' => Some(byte - b'A' + 10),
+        _ => None,
+    }
+}
+
+#[cfg(test)]
+mod restore_boundary {
+    use super::*;
+
+    #[test]
+    fn rejects_odd_length_before_slicing() {
+        for input in ["0", "abc", "a"] {
+            let error = hex_decode(input).expect_err("奇数长度必须拒绝");
+            assert!(error.contains("奇数"), "{input}: {error}");
+        }
+    }
+
+    #[test]
+    fn rejects_non_ascii_without_panicking() {
+        for input in ["中", "00中0", "0０", "é0"] {
+            let error = hex_decode(input).expect_err("非 ASCII 必须拒绝");
+            assert!(error.contains("ASCII"), "{input}: {error}");
+        }
+    }
+
+    #[test]
+    fn rejects_illegal_ascii_digits() {
+        for input in ["zz", "0g", " 0", "0x"] {
+            let error = hex_decode(input).expect_err("非法字符必须拒绝");
+            assert!(error.contains("非法十六进制字符"), "{input}: {error}");
+        }
+    }
+
+    #[test]
+    fn rejects_oversize_before_allocating() {
+        let error = hex_decode_bounded("0011", 3).expect_err("超限必须拒绝");
+        assert!(error.contains("过长"), "{error}");
+        assert_eq!(hex_decode_bounded("00ff10", 6).unwrap(), vec![0, 255, 16]);
+    }
+
+    #[test]
+    fn accepts_upper_and_lower_case_hex() {
+        assert_eq!(hex_decode("00aF10").unwrap(), vec![0x00, 0xaf, 0x10]);
+        assert_eq!(hex_decode("").unwrap(), Vec::<u8>::new());
+    }
 }
 
 fn err<E: std::fmt::Debug>(e: E) -> JsValue {
@@ -513,16 +603,43 @@ impl NativeEngine {
         }
     }
 
+    /// 权威状态 hash（32 字节 hex）。只读投影，不推进修订号。
+    pub fn state_hash_hex(&self) -> String {
+        hex_encode(&self.inner.state_hash())
+    }
+
+    /// 当前事件日志长度（宿主据此记录已消费位置）。
+    pub fn log_len(&self) -> u32 {
+        self.inner.log().len().min(u32::MAX as usize) as u32
+    }
+
+    /// 自 `start` 起的公开事件码 JSON 数组；不含牌 id 或选项内容。
+    pub fn public_event_codes_json(&self, start: u32) -> String {
+        serde_json::to_string(&self.inner.public_event_codes_from(start as usize))
+            .unwrap_or_else(|_| "[]".into())
+    }
+
     /// 存档十六进制（NGSA v65 字节面）。
     pub fn save_hex(&self) -> String {
         hex_encode(&engine_native::archive::encode_archive(&self.inner.save()))
     }
 
     /// 存档恢复（标准目录）。扩展局须走 [`restore_hex_with_packs_json`]。
+    ///
+    /// 先在局部变量完成解码与恢复，全部成功后才替换当前引擎；任何坏输入
+    /// 都只返回受控错误，原句柄、原局与后续 `save_hex`/命令仍可用。
     pub fn restore_hex(&mut self, hex: &str) -> Result<(), JsValue> {
+        self.restore_hex_checked(hex)
+            .map_err(|e| JsValue::from_str(&e))
+    }
+
+    /// [`restore_hex`] 的宿主可测版本（不构造 `JsValue`）。
+    pub fn restore_hex_checked(&mut self, hex: &str) -> Result<(), String> {
         let bytes = hex_decode(hex)?;
-        let snapshot = engine_native::archive::decode_archive(&bytes).map_err(err)?;
-        self.inner = Engine::restore(&snapshot).map_err(err)?;
+        let snapshot =
+            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
+        let restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
+        self.inner = restored;
         Ok(())
     }
 
@@ -531,17 +648,24 @@ impl NativeEngine {
     /// 与 [`new`] 的区别只在 `GameMode`：身份局由 `Engine::new_identity` 装配
     /// （主公/忠臣/反贼/内奸），胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
     pub fn new_identity(players: u8, seed: u64) -> Result<NativeEngine, JsValue> {
-        if players < 2 {
-            return Err(JsValue::from_str("身份局至少 2 席"));
-        }
+        Self::new_identity_with_packs_json(players, seed, "[]")
+    }
+
+    /// 身份局与扩展一起装载；身份和扩展初始化使用同一规则随机流。
+    pub fn new_identity_with_packs_json(
+        players: u8,
+        seed: u64,
+        packs_json: &str,
+    ) -> Result<NativeEngine, JsValue> {
         Ok(NativeEngine {
-            inner: Engine::new_identity(seed, players as usize),
+            inner: engine_identity_from_packs(players, seed, packs_json)
+                .map_err(|e| JsValue::from_str(&e))?,
             planner_nodes: 64,
             deadline_ms: 50,
         })
     }
 
-    /// 已安装扩展的 cards.json 数组建局。空数组与 [`new`] 相同。
+    /// 已安装扩展载荷数组建局。空数组与 [`new`] 相同。
     pub fn new_with_packs_json(
         players: u8,
         seed: u64,
@@ -556,7 +680,7 @@ impl NativeEngine {
         })
     }
 
-    /// 用同一组 cards.json 恢复扩展局。包集合或版本不符时拒绝，不替换当前对局。
+    /// 用同一组安装载荷恢复扩展局。包集合或版本不符时拒绝，不替换当前对局。
     pub fn restore_hex_with_packs_json(
         &mut self,
         hex: &str,
@@ -877,8 +1001,8 @@ fn omnisearch_debug(source: &str) -> String {
 #[doc(hidden)]
 pub mod test_support {
     pub use super::{
-        assign_general_for, engine_from_archive, engine_from_packs, general_candidates_json_for,
-        hex_encode,
+        assign_general_for, engine_from_archive, engine_from_packs, engine_identity_from_packs,
+        general_candidates_json_for, hex_encode,
     };
 }
 

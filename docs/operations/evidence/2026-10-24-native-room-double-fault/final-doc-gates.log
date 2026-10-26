@@ -1,0 +1,53 @@
+CHECK source line unit
+START 2026-10-24T16:59:56.638986+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_check_source_lines.py']
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+OK
+
+EXIT 0
+CHECK all local links
+START 2026-10-24T16:59:56.699224+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py', '--all']
+检查 1769 个文件，坏链 0
+
+EXIT 0
+CHECK strict doc line refs
+START 2026-10-24T16:59:57.083577+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_doc_line_refs.py', '--strict']
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 975 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+
+EXIT 0
+CHECK stale values
+START 2026-10-24T17:00:03.759109+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_stale_numbers.py']
+残留旧值 0 处
+
+EXIT 0
+CHECK recent rounds
+START 2026-10-24T17:00:03.807469+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/refresh_recent_rounds.py', '--check']
+索引是最新（20 轮）
+
+EXIT 0
+CHECK source lines
+START 2026-10-24T17:00:03.831753+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check-source-lines.py']
+Source line limit passed: 8576 files <= 2000 lines
+
+EXIT 0
+CHECK git diff check
+START 2026-10-24T17:00:05.050935+08:00
+COMMAND ['git', 'diff', '--check']
+
+EXIT 0

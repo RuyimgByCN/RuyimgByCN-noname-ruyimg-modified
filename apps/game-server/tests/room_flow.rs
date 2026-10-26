@@ -73,6 +73,7 @@ async fn two_players_start_and_idempotent_command() {
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(7),
+            replay: false,
             reply: rs,
         })
         .await
@@ -106,6 +107,7 @@ async fn two_players_start_and_idempotent_command() {
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(7),
+            replay: false,
             reply: rs2,
         })
         .await
@@ -170,6 +172,7 @@ async fn phase15_manifest_pinned_and_recovery_preserves_it() {
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(100),
+            replay: false,
             reply: rs,
         })
         .await

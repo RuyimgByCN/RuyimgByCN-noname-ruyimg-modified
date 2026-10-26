@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-24",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "rust": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "nodeBuild": "v26.12.1",
+  "nodeCiParity": "v20.17.0",
+  "validatedDist": "/tmp/noname-next-native-delivery-20261024/validated-dist",
+  "generatedNativeWasmSha256": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+  "generatedNativeWasmSize": 2678745,
+  "browser": "Chrome headless; 1440x1000; production Vite preview at 127.0.0.1:5474; server stopped after test"
+}

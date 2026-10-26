@@ -74,6 +74,7 @@ async fn submit_end_phase(
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(seq),
+            replay: false,
             reply,
         })
         .await
@@ -116,6 +117,7 @@ async fn rolling_upgrade_keeps_matches_on_their_pinned_content() {
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(50),
+            replay: false,
             reply,
         })
         .await
@@ -137,6 +139,7 @@ async fn rolling_upgrade_keeps_matches_on_their_pinned_content() {
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(51),
+            replay: false,
             reply,
         })
         .await

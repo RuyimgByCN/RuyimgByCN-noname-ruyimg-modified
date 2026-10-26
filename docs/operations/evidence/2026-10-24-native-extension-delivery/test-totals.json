@@ -1,0 +1,20 @@
+{
+  "content_native_loader": {
+    "passed": 32,
+    "failed": 0,
+    "ignored": 0,
+    "targets": 11
+  },
+  "engine_native": {
+    "passed": 1547,
+    "failed": 0,
+    "ignored": 71,
+    "targets": 315
+  },
+  "engine_native_wasm": {
+    "passed": 36,
+    "failed": 0,
+    "ignored": 0,
+    "targets": 6
+  }
+}

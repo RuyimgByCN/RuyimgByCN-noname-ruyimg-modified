@@ -59,6 +59,7 @@ async fn submit(
             header: MessageHeader::new(id, seq, cmd.expected_revision.0),
             command: cmd.clone(),
             idempotency_key: cmd.idempotency_key,
+            replay: false,
             reply: rs,
         })
         .await

@@ -1,0 +1,65 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "start": "2026-10-24T15:46:07.185220+08:00",
+    "end": "2026-10-24T15:46:07.513723+08:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "start": "2026-10-24T15:46:07.513820+08:00",
+    "end": "2026-10-24T15:46:27.702999+08:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_stale_numbers.py"
+    ],
+    "start": "2026-10-24T15:46:27.703121+08:00",
+    "end": "2026-10-24T15:46:27.751269+08:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/refresh_recent_rounds.py",
+      "--check"
+    ],
+    "start": "2026-10-24T15:46:27.751370+08:00",
+    "end": "2026-10-24T15:46:27.773248+08:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "start": "2026-10-24T15:46:27.773320+08:00",
+    "end": "2026-10-24T15:46:28.894490+08:00",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "start": "2026-10-24T15:46:28.894586+08:00",
+    "end": "2026-10-24T15:46:28.999655+08:00",
+    "exit": 0
+  }
+]

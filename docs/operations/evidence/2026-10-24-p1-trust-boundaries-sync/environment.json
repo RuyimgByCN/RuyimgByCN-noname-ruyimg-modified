@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-24",
+  "timezone": "Asia/Shanghai (+08:00)",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "worktree": "dirty (protected; see preservation.json)",
+  "ruleset_version": 322,
+  "archive_format_version": 105,
+  "rustc": "1.95.0",
+  "cargo": "1.95.0",
+  "node": "20.17.0 (/usr/local/bin/node); default PATH node 26.4.0 used for sync only",
+  "pnpm": "10.34.3",
+  "python": "3.10.10",
+  "wasm_build": "node apps/web-client/scripts/build-native.mjs (wasm-pack web target)",
+  "upstream_head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+  "upstream_previous": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36"
+}

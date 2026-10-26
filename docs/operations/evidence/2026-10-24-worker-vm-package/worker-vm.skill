@@ -1,0 +1,5 @@
+skill worker_vm_probe(990002) {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}

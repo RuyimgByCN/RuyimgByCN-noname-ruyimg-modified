@@ -1,0 +1,228 @@
+{
+  "date": "2026-10-24T17:00:16.052213+08:00",
+  "baseline_paths": 47024,
+  "initial_dirty_records": 11404,
+  "unchanged_baseline_paths": 47013,
+  "allowed_changed_baseline_paths": [
+    {
+      "path": "apps/game-server/src/native_room_store.rs",
+      "before": {
+        "sha256": "2c0d645accecef9d8f65275c4851cd4e213a50649c126ba34d1c9f1c70963849",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "a0f19b45dfcc93180ac7be4980ea2a6e6ceffb2f5b006fce53353630dc97b589",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_room_store/commit_tests.rs",
+      "before": {
+        "sha256": "dbad5d946182c9cc352b94b4b8a7017d7ab1776457e017a931243b62af75cea0",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "9607bc358cac28012830ad2f2f7b7b98ea395c550fa857b8a978b9e9fa80d7ee",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_room_store/tests.rs",
+      "before": {
+        "sha256": "9c7b75122ac38ba33dc3bb2c13e7e3d0dfaa22ade36873b3a5d403b44aa6d40b",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "7e1bbf1b425a13a4a2c6a54ac3bac30cfe4ca051b1284f7d2008acb361b53f75",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "before": {
+        "sha256": "2b6d6c9ac588445df2b8f08c2f9c4f941dba1b1c97ef82b424789d2d17e35600",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "0f69c24573f46448cd63f73d6734abd03350aee3af9fce612ea4641dce4e78dc",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+      "before": {
+        "sha256": "494fe9b2c4e056ef58d80c67ac835dc1e786fcd79ac26a142497d0039849a66d",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "c3cabbf93e1a1de7a977d4f0edf13ff451e424755e15fab68d63ba8c30fc5718",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/durability.rs",
+      "before": {
+        "sha256": "a00687649a97843485692673042a24563c475006724c14d58f46e400b2a445a9",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "335665aa2084a108a6bb5a87e048d5d2e0280976b1dee79f54fc7d394d6c1119",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "before": {
+        "sha256": "3becf6f1e07641d27e1966096363bef9fc233ebbd41bf7eb493038cd1e1985b9",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "c6327248d61eeb7f1f0914547076fb23ce5a4000e454068c908880c4e3adec52",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native_actor.rs",
+      "before": {
+        "sha256": "98c783cb9dd9e0c1e82c9166334e247d596b09b4906e2cf988ac1e558ebdac12",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "664a5856ef3d0435e6fed0b2ab2005495cf1e7439706cbd89e9776d62841c85a",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native_actor/durability.rs",
+      "before": {
+        "sha256": "9b064a82ed16198a3233d7211c8d17f849a6e221d57148f128d839ebfc682b94",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "7cd6ca97801238234f429c4b94783daf9facc19d77cda2a3314956dcfa178a3c",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_room_session.rs",
+      "before": {
+        "sha256": "e0b3cd6610397ccdee61f62c30cddac24e4d90b77643a67d987ae4ca12add7cd",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "ebabfb66506b6717aae587a5b0620c9c7bbe180708658e35c13dd5b1ff7ba92b",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before": {
+        "sha256": "2482c277f64b2684af4d5c3a804bb1d4e6311c22208b53277b17374b5b94f777",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "10cdabd525e93be0616ce6b2dce4da89e26a6a25bee3f2bbccfc76d8cc699355",
+        "mode": 33188
+      },
+      "allowed": true
+    }
+  ],
+  "unexpected_changed": [],
+  "new_paths": [
+    "apps/game-server/src/native_ws_e2e/double_failure.rs",
+    "apps/game-server/src/room_native/receipts.rs",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/README.md",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-crash-room-smoke.mjs",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-crash-room.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-crash-room.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/capture-preflight.py",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/cargo-counts.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/cargo-regressions.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/cargo-regressions.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/environment.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/final-doc-gates.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/frontend-test.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/frontend-test.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/frontend-typecheck.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/frontend-typecheck.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/native-worker-smoke.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/native-worker-smoke.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/preservation.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/receipt-targeted-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/receipt-targeted-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/run-validation.py",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/server-build.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/server-build.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/server-incremental.diff",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/store-double-faults-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/store-double-faults-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/store-files.json",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/ws-double-full-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/ws-double-initial-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-double-fault/ws-double-red.log"
+  ],
+  "unexpected_new": [],
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "artifacts": [
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-double-fault-20261024/artifact-backup/apps/web-client/src/worker/native-pkg"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-double-fault-20261024/artifact-backup/apps/web-client/src/wasm-pkg"
+    },
+    {
+      "path": "apps/web-client/public/pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-double-fault-20261024/artifact-backup/apps/web-client/public/pkg"
+    },
+    {
+      "path": "apps/web-client/dist",
+      "files": 46,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-double-fault-20261024/artifact-backup/apps/web-client/dist"
+    }
+  ],
+  "artifact_comparison_note": "This turn baseline includes all 18 generated files and all 46 original dirty dist files; all separately compared with this turn artifact-backup. This turn did not run WASM/frontend production build.",
+  "source_manifest_files": 1067,
+  "source_changed_after_manifest": []
+}

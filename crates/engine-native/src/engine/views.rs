@@ -146,6 +146,15 @@ impl Engine {
             .collect()
     }
 
+    /// 从日志下标 `start` 起投影公开事件码（不泄露牌 id/选项内容）。
+    pub fn public_event_codes_from(&self, start: usize) -> Vec<u16> {
+        self.log
+            .iter()
+            .skip(start)
+            .filter_map(crate::view::public_event_code)
+            .collect()
+    }
+
     /// N10：AI 只读视角会话——座位固定，仅暴露可见性投影。
     pub fn ai_session(&self, seat: PlayerId) -> crate::view::AiSession<'_> {
         crate::view::AiSession { engine: self, seat }

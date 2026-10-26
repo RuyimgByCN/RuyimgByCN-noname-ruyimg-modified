@@ -1,0 +1,8 @@
+{
+  "baseline_reconstructed_sha256": "f11eb28df53a7ef845fdbcd324199ff00774ee841c0435aebf3b66621912847f",
+  "local_start_save_restore_slices_unchanged": {
+    "async function saveMatch()": true,
+    "async function connectAndStart()": true
+  },
+  "incremental_diff": "battle-incremental.diff"
+}

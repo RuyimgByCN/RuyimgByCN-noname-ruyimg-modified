@@ -8,12 +8,19 @@ import {
 } from "../engine/appearanceStore";
 import { setDesktopMatchFrozen } from "../engine/desktopHost";
 import {
-  contentLockSummary,
+  listNativeSaves,
   putNativeSave,
   setMatchFrozen,
 } from "../engine/extensionStore";
 import {
+  prepareNativeMatchContent,
+  restoreNativeMatchContent,
+  type NativeMatchContent,
+} from "../engine/nativeMatchContent";
+import {
   NetworkEngineClient,
+  onlineReconnectKey,
+  type OnlineSession,
   type RoomRoster,
 } from "../engine/networkClient";
 import {
@@ -43,6 +50,7 @@ const route = useRoute();
 const router = useRouter();
 const store = createViewStore();
 const localClient = new EngineClient();
+let matchContent: NativeMatchContent | undefined;
 const networkClient = new NetworkEngineClient();
 const selfId = ref(1);
 // NC12 冷启动测量/QA 支持：`?skipAnims=1` 或 `?speed=4` 可在**开局前**设定表现节流
@@ -122,6 +130,9 @@ async function handleEnvelope(env: EngineEnvelope) {
       apply_ms: Math.round((tB - tA) * 100) / 100,
       delay_ms: Math.round((tC - tB) * 100) / 100,
     });
+  if (isOnline.value && (
+    !store.connected || store.revision !== env.revision || store.hash !== env.hash_hex
+  )) return;
   clearEffects(store);
   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
   const hashHint = (env.hash_hex || "").slice(0, 12);
@@ -190,63 +201,73 @@ async function chooseGeneralCandidate(name: string) {
 
 async function connectAndStart() {
   await withBusy(async () => {
-    await setDesktopMatchFrozen(true);
-    setMatchFrozen(true);
-    if (isOnline.value) {
-      const intent = readOnlineIntent();
-      configureOnlineAppearanceCatalog(intent.wsUrl);
-      await connectOnline(intent);
-      return;
+    try {
+      await setDesktopMatchFrozen(true);
+      setMatchFrozen(true);
+      if (isOnline.value) {
+        const intent = readOnlineIntent();
+        configureOnlineAppearanceCatalog(intent.wsUrl);
+        await connectOnline(intent);
+        return;
+      }
+      configureLocalAppearanceCatalog();
+      // NC12 应用侧冷启动拆分（诊断钩子，不参与业务逻辑）：
+      // t0→t1 = worker 连接（含 worker 脚本加载与 init 回包）
+      // t1→t2 = 建局（start 往返）
+      // t2→t3 = 选将候选拉取 + 首帧渲染（下一 tick）
+      nc12Mark("t0_click");
+      await localClient.connect();
+      nc12Mark("t1_worker_ready");
+      store.connected = true;
+      statusLine.value = localClient.isNative()
+        ? "原生 Worker 就绪，开局中…"
+        : "Worker 就绪，开局中…";
+      // 原生座位从 0 起；旧线观察者常为 1。保持 query 兼容，原生路径夹到 [0, players)。
+      if (localClient.isNative()) {
+        selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
+        generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
+      }
+      const content = prepareNativeMatchContent();
+      if (!localClient.isNative() && content.contentLock.length) {
+        throw new Error("已安装扩展的正式开局需要原生后端");
+      }
+      // mode=identity → 身份局（NC09 身份局端到端）；缺省原型模式
+      const env = await localClient.start(
+        players.value,
+        seed.value,
+        selfId.value,
+        content.packsJson,
+        route.query.mode === "identity" ? "identity" : undefined,
+      );
+      matchContent = content;
+      nc12Mark("t2_start_done");
+      // NC12 冷启动优化（2026-10-19，两处）：
+      // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其
+      //    120 ms 表现节流挡住；实测引擎侧仅 0.5 ms + 解析 0.3 ms）；
+      // ② 候选**不阻塞首帧**（面板先 loading 后填充；`loadGeneralCandidates` 自带 loading/失败态）。
+      // 标记写在 **promise 内部**（此前写在 await 之后 → 被其后的 122 ms 表现节流污染，
+      // 无法反映候选真实就绪时刻）
+      const candidates = (localClient.isNative() ? loadGeneralCandidates() : Promise.resolve()).then(
+        (v) => {
+          nc12Mark("t3_candidates_loaded");
+          return v;
+        },
+      );
+      await handleEnvelope(env);
+      await nextTick();
+      nc12Mark("t4_first_frame");
+      await candidates;
+      pushLog(
+        store,
+        `开局 ${players.value} 人 seed=${seed.value}${
+          content.contentLock.length ? ` · 内容锁 ${content.contentLock.length} 包` : ""
+        }`,
+      );
+    } catch (error) {
+      store.connected = false;
+      releaseMatchLocks();
+      throw error;
     }
-    configureLocalAppearanceCatalog();
-    // NC12 应用侧冷启动拆分（诊断钩子，不参与业务逻辑）：
-    // t0→t1 = worker 连接（含 worker 脚本加载与 init 回包）
-    // t1→t2 = 建局（start 往返）
-    // t2→t3 = 选将候选拉取 + 首帧渲染（下一 tick）
-    nc12Mark("t0_click");
-    await localClient.connect();
-    nc12Mark("t1_worker_ready");
-    store.connected = true;
-    statusLine.value = localClient.isNative()
-      ? "原生 Worker 就绪，开局中…"
-      : "Worker 就绪，开局中…";
-    // 原生座位从 0 起；旧线观察者常为 1。保持 query 兼容，原生路径夹到 [0, players)。
-    if (localClient.isNative()) {
-      selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
-      generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
-    }
-    // mode=identity → 身份局（NC09 身份局端到端）；缺省原型模式
-    const env = await localClient.start(
-      players.value,
-      seed.value,
-      selfId.value,
-      undefined,
-      route.query.mode === "identity" ? "identity" : undefined,
-    );
-    nc12Mark("t2_start_done");
-    // NC12 冷启动优化（2026-10-19，两处）：
-    // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其
-    //    120 ms 表现节流挡住；实测引擎侧仅 0.5 ms + 解析 0.3 ms）；
-    // ② 候选**不阻塞首帧**（面板先 loading 后填充；`loadGeneralCandidates` 自带 loading/失败态）。
-    // 标记写在 **promise 内部**（此前写在 await 之后 → 被其后的 122 ms 表现节流污染，
-    // 无法反映候选真实就绪时刻）
-    const candidates = (localClient.isNative() ? loadGeneralCandidates() : Promise.resolve()).then(
-      (v) => {
-        nc12Mark("t3_candidates_loaded");
-        return v;
-      },
-    );
-    await handleEnvelope(env);
-    await nextTick();
-    nc12Mark("t4_first_frame");
-    await candidates;
-    const lock = contentLockSummary();
-    pushLog(
-      store,
-      `开局 ${players.value} 人 seed=${seed.value}${
-        lock.packages.length ? ` · 内容锁 ${lock.packages.length} 包` : ""
-      }`,
-    );
   });
 }
 
@@ -254,8 +275,8 @@ async function saveMatch() {
   await withBusy(async () => {
     if (isOnline.value) throw new Error("联机模式请使用服务端存档");
     if (!localClient.isNative()) throw new Error("存档仅原生后端支持");
+    if (!matchContent) throw new Error("尚未建立对局内容锁");
     const hex = await localClient.saveHex();
-    const lock = contentLockSummary();
     const id = `save-${Date.now()}`;
     putNativeSave({
       id,
@@ -263,8 +284,7 @@ async function saveMatch() {
       hex,
       seed: seed.value,
       players: players.value,
-      contentLock: lock.packages.map((p) => p.key),
-      lockSeed: lock.hashSeed,
+      ...matchContent,
       savedAt: new Date().toISOString(),
       revision: store.revision,
     });
@@ -277,24 +297,21 @@ async function loadLatestSave() {
   await withBusy(async () => {
     if (isOnline.value) throw new Error("联机模式不支持本地读档");
     if (!localClient.isNative()) throw new Error("读档仅原生后端支持");
-    const { listNativeSaves } = await import("../engine/extensionStore");
     const slots = listNativeSaves();
     const slot = slots[0];
     if (!slot) throw new Error("无本地存档");
-    // 内容锁错版拒绝（G5 客户端闸）：锁摘要不一致则拒
-    const lock = contentLockSummary();
-    if (slot.lockSeed && lock.hashSeed !== slot.lockSeed) {
-      throw new Error(
-        `内容锁不匹配：存档 ${slot.lockSeed || "∅"} ≠ 当前 ${lock.hashSeed || "∅"}`,
-      );
-    }
-    const env = await localClient.restoreHex(slot.hex);
+    const content = restoreNativeMatchContent(slot);
+    const env = await localClient.restoreHex(slot.hex, content.packsJson);
+    matchContent = content;
+    players.value = slot.players;
+    seed.value = slot.seed;
     // 读档替换了引擎状态：上一局的选将成功态不能留到读档后的界面。
     generalSelect.value = setGeneralSelectSeat(
       generalSelect.value,
       generalSelect.value.seat,
     );
     await handleEnvelope(env);
+    await loadGeneralCandidates();
     pushLog(store, `读档 ${slot.id} · rev ${slot.revision}`);
   });
 }
@@ -316,19 +333,18 @@ async function connectOnline(intent: OnlineIntent) {
       store.connected = false;
     } else if (state === "reconnected") {
       statusLine.value = "已重连（等待房间状态）";
-      store.connected = true;
-      void networkClient.joinRoom(
-        roomId.value || 1,
-        "",
-        localStorage.getItem(reconnectKey(roomId.value || 1)),
-      )
+      store.connected = false;
+      void networkClient.rejoinRoom()
         .then((s) => {
           selfId.value = s.playerId;
           roomId.value = s.roomId;
+          rememberOnlineSession(intent, s);
+          store.connected = true;
           statusLine.value = `房间 #${s.roomId} · 已重连`;
           return handleEnvelope(s.envelope);
         })
         .catch((error: unknown) => {
+          store.connected = false;
           const message = error instanceof Error ? error.message : String(error);
           statusLine.value = `重连后回房失败：${message}`;
           pushLog(store, `重连后回房失败：${message}`);
@@ -361,7 +377,7 @@ async function connectOnline(intent: OnlineIntent) {
   } else if (intent.action === "spectate") {
     session = await networkClient.spectate(intent.roomId);
   } else {
-    const token = localStorage.getItem(reconnectKey(intent.roomId));
+    const token = localStorage.getItem(onlineReconnectKey(intent.wsUrl, intent.roomId));
     session = await networkClient.joinRoom(
       intent.roomId,
       intent.password,
@@ -371,10 +387,8 @@ async function connectOnline(intent: OnlineIntent) {
 
   roomId.value = session.roomId;
   selfId.value = session.playerId;
-  players.value = intent.players;
-  if (session.role === "Player" && session.reconnectToken) {
-    localStorage.setItem(reconnectKey(session.roomId), session.reconnectToken);
-  }
+  players.value = session.view.seats.length;
+  rememberOnlineSession(intent, session);
   store.connected = true;
   await handleEnvelope(session.envelope);
   pushLog(
@@ -382,6 +396,30 @@ async function connectOnline(intent: OnlineIntent) {
     session.role === "Spectator"
       ? `旁观房间 #${session.roomId}`
       : `加入房间 #${session.roomId} · 座位 ${session.seat + 1}`
+  );
+}
+
+function cancelPendingCommand(): void {
+  networkClient.cancelPendingCommands();
+  statusLine.value = "已取消待确认命令（服务端可能已提交，以权威状态为准）";
+  pushLog(store, "已取消待确认命令；结果可能已提交，等待/刷新后以服务端状态为准");
+}
+
+function rememberOnlineSession(
+  intent: OnlineIntent,
+  session: OnlineSession,
+) {
+  if (session.role === "Player" && session.reconnectToken) {
+    localStorage.setItem(onlineReconnectKey(intent.wsUrl, session.roomId), session.reconnectToken);
+  }
+  // 页面重载恢复当前房间，不能再次执行最初的「创建」意图。
+  sessionStorage.setItem(
+    "noname-next.online-intent",
+    JSON.stringify({
+      ...intent,
+      action: session.role === "Spectator" ? "spectate" : "join",
+      roomId: session.roomId,
+    }),
   );
 }
 
@@ -404,10 +442,6 @@ function readOnlineIntent(): OnlineIntent {
     players: players.value,
     seed: seed.value,
   };
-}
-
-function reconnectKey(id: number): string {
-  return `noname-next.reconnect.${id}`;
 }
 
 function commandClient() {
@@ -472,7 +506,7 @@ const choiceActions = computed(() =>
   )
 );
 
-const canEndPhase = computed(() => store.legalActions.includes("EndPhase"));
+const canEndPhase = computed(() => store.connected && store.legalActions.includes("EndPhase"));
 
 function toggleAuto() {
   if (autoRunning.value) {
@@ -523,7 +557,7 @@ function onKeydown(e: KeyboardEvent) {
     showHotkeys.value = false;
     return;
   }
-  if (store.busy || store.finished) return;
+  if (store.busy || store.finished || !store.connected) return;
   if (e.key === ' ') {
     e.preventDefault();
     if (!isOnline.value) void autoStep();
@@ -538,6 +572,7 @@ function releaseMatchLocks() {
   stopAuto();
   localClient.dispose();
   networkClient.dispose();
+  matchContent = undefined;
   void setDesktopMatchFrozen(false);
   setMatchFrozen(false);
 }
@@ -676,6 +711,14 @@ const turnInfo = computed(() => {
           {{ autoRunning ? "停止自动" : "连续自动" }}
         </button>
         <button
+          v-if="isOnline"
+          type="button"
+          :disabled="!store.busy"
+          @click="cancelPendingCommand"
+        >
+          取消待确认
+        </button>
+        <button
           v-if="!isOnline"
           type="button"
           :disabled="store.busy || !store.connected"
@@ -746,6 +789,7 @@ const turnInfo = computed(() => {
           v-for="(action, index) in choiceActions"
           :key="index"
           type="button"
+          :disabled="store.busy || !store.connected || isSpectator"
           @click="resolveLegalChoice(action)"
         >
           {{ action.ResolveChoice.cancelled ? "取消" : `选择 ${action.ResolveChoice.selections.join(", ") || "空"}` }}
@@ -779,7 +823,7 @@ const turnInfo = computed(() => {
       <BattleBoard
         :view="store.view"
         :self-id="selfId"
-        :legal-actions="store.legalActions"
+        :legal-actions="store.connected && !store.busy ? store.legalActions : []"
         @play-card="playCard"
         @activate-skill="activateSkill"
       />

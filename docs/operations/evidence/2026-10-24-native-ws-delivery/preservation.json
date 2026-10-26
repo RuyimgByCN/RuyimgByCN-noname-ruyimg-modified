@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-24T14:38:10.224868+08:00",
+  "baseline_paths": 46796,
+  "baseline_dirty_status_records": 11196,
+  "unchanged_paths": 46783,
+  "changed_paths": 13,
+  "changed": {
+    "apps/game-server/src/lobby.rs": {
+      "before": {
+        "sha256": "2b4b07164c6fb6b36a41208117dde1f9dd9417993de30e6c6651d45f994cac3a",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "a7cd5738483cfcbbb49b4d4234a286dae6107cf4add55e8140ddc4ad1acc6847",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/src/main.rs": {
+      "before": {
+        "sha256": "d01044b16d5a3ff18772968cc171f162cfe9ac25f29b92ef51016ad65dc91992",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "4e39fe381c78edef1b7c6e0887e3756a81747feb72f98518cedfdc0888c7c67a",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/src/native.rs": {
+      "before": {
+        "sha256": "2aaa2508d24bdab4f2f06e9087df2744ac8139ceb906ef97eda693076d612972",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "d233f9dbba100bff3f10a8c77503ced17dc280745659ddaca3e889b717e7ee66",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/src/native_room_store.rs": {
+      "before": {
+        "sha256": "bd9ed4c9c6102a291f8294862dd9f06ed06873b52e394523148177ad1f3ce578",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2ddf4b07a222bffba3bfb144679e7dc26c2afb3fccdf88360a1eac854d463770",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/src/native_view.rs": {
+      "before": {
+        "sha256": "29f7db355d50befbceb6834d9f37cceab82cda22138b142e919e818529fc5198",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "fd3ea66c35bb3275569bea838707b33e154b5ae7435fd68e33b1827f218b1702",
+        "mode": 33152
+      }
+    },
+    "apps/game-server/src/room_native.rs": {
+      "before": {
+        "sha256": "8dda745ad703910f0dd40ee42b7acc581827403304b97bbe1d93e0449580017e",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "8ab1b82446ae3bb42169b02b3e033c51c9f3e2f61bd994b4080eaf70f4b2ae87",
+        "mode": 33152
+      }
+    },
+    "apps/game-server/src/room_native_actor.rs": {
+      "before": {
+        "sha256": "129bedfb8e2195164b1cb76146b0da1589ab007829fde4501a510be779c7aeb6",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "79b14af9b4f8754af6b22a1fe61f7264275d43a98c1d57645895a408d22d1b6a",
+        "mode": 33152
+      }
+    },
+    "apps/game-server/tests/native_product_path.rs": {
+      "before": {
+        "sha256": "77d4fa4284bbf45388a5f5f2343263ce94e9c63234cd85b2456a16fbb165ed82",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "181e0f6e32954e985f9c5d0185962ced0277921ba75c71eb8a321a171fa5a68a",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/tests/nc09_native_actor.rs": {
+      "before": {
+        "sha256": "5d7f385885106caf6ade551a3c5147fd6aabc8a0bd005f11de06b0119a1414d6",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "e3489fbe4f4c63773be0954c8ad1b1b882d1187534ce4196229c667db0493c94",
+        "mode": 33188
+      }
+    },
+    "apps/game-server/tests/nc09_native_room_session.rs": {
+      "before": {
+        "sha256": "932f9791d63ad791f3f7fd01e9722028eea801d888aad75c57a82efa7201d574",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2bc4aac734defae3b833279001b0860897fac60867099492fe0d82c1d042ccfc",
+        "mode": 33188
+      }
+    },
+    "apps/web-client/src/engine/networkClient.ts": {
+      "before": {
+        "sha256": "277375ee856c26c2f795e293fd18a1c2a85f8501fe4a5860e1b5ade1faa1b5ff",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "b0aac59eb1cc221d84f1400c931ba226b020d4b1f4d2fa7caaf9c6e495d4a262",
+        "mode": 33188
+      }
+    },
+    "apps/web-client/src/views/BattleView.vue": {
+      "before": {
+        "sha256": "f11eb28df53a7ef845fdbcd324199ff00774ee841c0435aebf3b66621912847f",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "58f96df00d01e00ef872dbef828cd8850735d1189db998e29171ecd8db3041e0",
+        "mode": 33188
+      }
+    },
+    "docs/architecture/native-progress.md": {
+      "before": {
+        "sha256": "e3e89be870d118a6290ac5ab2b6834427b4498806d05019e7f56bd9e46259ebb",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "27083d4948bec1d19de68138dab795a983909318e442785e07cf0fecde4d3bf3",
+        "mode": 33188
+      }
+    }
+  },
+  "unexpected": [],
+  "new_paths": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/README.md",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/artifact-restoration.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/backend-choice-diagnostic.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/backend-fixture-fixes.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/backend-initial-targeted.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/battle-incremental.diff",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/battle-preservation.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-current-binary.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-current-binary.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-final.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-initial.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-smoke.mjs",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-regressions-final.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-regressions-final.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-regressions.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-regressions.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-summary-final.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/cargo-summary.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/doc-gates-before-final-summary.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/environment.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/first-pending-choice-browser/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/first-pending-choice-browser/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/first-pending-choice-browser/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/first-pending-choice-browser/browser-ws-final.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/first-pending-choice-browser/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-build.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-envelope-race-green.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-envelope-race-red.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-network-green.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-network-red.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-test.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/frontend-typecheck.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/initial-browser/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/initial-browser/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/initial-browser/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/initial-browser/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/native-worker-smoke.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-final-raw.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-final.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-final.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-rerun-raw.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-rerun.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full-rerun.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preflight-full.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/preservation.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/scripts-unit-diagnostic.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/server-build-final.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/server-executable.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/source-lines-unit.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/source-lines.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/ws-e2e-final-summary.json",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/ws-e2e-targeted-02.log",
+    "docs/operations/evidence/2026-10-24-native-ws-delivery/ws-e2e-targeted-final.log"
+  ],
+  "unexpected_new": [],
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "generated_restoration_record": "artifact-restoration.json",
+  "local_extension_path_record": "battle-preservation.json"
+}

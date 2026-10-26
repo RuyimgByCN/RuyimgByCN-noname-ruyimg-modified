@@ -1,0 +1,9 @@
+COMMAND ['pnpm', 'typecheck']
+START 2026-10-24T16:51:56.453723+08:00
+
+> noname-next-web-client@0.1.0 typecheck /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> vue-tsc --noEmit
+
+
+END 2026-10-24T16:51:58.855301+08:00
+EXIT 0

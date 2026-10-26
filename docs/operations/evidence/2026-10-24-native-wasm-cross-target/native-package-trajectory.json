@@ -1,0 +1,348 @@
+{
+  "direct": [
+    {
+      "codes": [
+        8,
+        8,
+        2
+      ],
+      "hash": "9a917c710c22a5783329b217e25d48baa4452497abf7a4182e7e1742d01ae3ca",
+      "revision": 1
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "c13e082244313b0d5fd6628bebdc3490962526a23373462ea08f1d89c8aa35a0",
+      "revision": 2
+    },
+    {
+      "codes": [
+        8,
+        8,
+        10
+      ],
+      "hash": "412bcaa5197ff687e2decc3a242412a2f6254ac0c32f0c270ece819efb4a797b",
+      "revision": 3
+    },
+    {
+      "codes": [
+        10
+      ],
+      "hash": "4af7a46fe746be60abc827976f423bcdf2a0dd791e333e7acaa89b1d7f6a7b9c",
+      "revision": 4
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "a010bfac9af7a477abc64160ac3fe96af66ce397fd537f62dc069b247b312213",
+      "revision": 5
+    },
+    {
+      "codes": [
+        8,
+        8,
+        8
+      ],
+      "hash": "ab9dd0943ff3ad77abe7baead018c386af74928ca2d3787ab879741b7c7ea542",
+      "revision": 6
+    },
+    {
+      "codes": [
+        8,
+        8,
+        2
+      ],
+      "hash": "16916a64a8aa49b973ecdaa7ed47fe119afcf545d92794070d056d662dd591a1",
+      "revision": 7
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "d88b682377d1fe195a2b8de31e418147e17689ec2ea08df922b252f039f11b99",
+      "revision": 8
+    },
+    {
+      "codes": [
+        8,
+        8,
+        10
+      ],
+      "hash": "1c5cafd669d440ff73444754693497e52c4a55464053bf22ce03cec67ac47783",
+      "revision": 9
+    },
+    {
+      "codes": [
+        10
+      ],
+      "hash": "7837ba267fc70bf85f02711a4759f29732355d2174dbaaa2ef2c0463355dc397",
+      "revision": 10
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "d56d9a6f74208d6bf0e17bb9f7f3cacb0bb920bd731aebd67e5d077ee2082225",
+      "revision": 11
+    },
+    {
+      "codes": [
+        8,
+        8,
+        8
+      ],
+      "hash": "365bb9939c2d33d704dc4bcdafea08afbd677b2795a954f7ead1ad0249ca694b",
+      "revision": 12
+    },
+    {
+      "codes": [
+        8,
+        8,
+        2
+      ],
+      "hash": "21272f8a69a567666a5f8f1520e3b267b0ca0cf151bd16da8a680cc4c8fa2b6a",
+      "revision": 13
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "a1c3f3e39d5fbfbd735e9022d5452be57933daa86d2bed4ffd7e110b1e3153e2",
+      "revision": 14
+    },
+    {
+      "codes": [
+        8,
+        8,
+        10
+      ],
+      "hash": "4fe1cd68d5f9640e7d2bd8c5a9a92f9ce9a0e585f1c4ca2867219ad64568ab66",
+      "revision": 15
+    },
+    {
+      "codes": [
+        10
+      ],
+      "hash": "5152b861db0401e6fa2886c3e33eb0e1f50e70770cfa9e52f858cd91ddb54551",
+      "revision": 16
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "7159a3bd6a5d287357a7ae8f1ce7610228f22c12e55ed15484e9c2f0dbf54032",
+      "revision": 17
+    },
+    {
+      "codes": [
+        8,
+        8,
+        8
+      ],
+      "hash": "13cbf0a357a468deb59c7f0743507b1bf0983b6351007ce417f947938acf8d31",
+      "revision": 18
+    },
+    {
+      "codes": [
+        8,
+        8,
+        2
+      ],
+      "hash": "df85c1d7c3e085b298cdf9b8f333f317814c4038075f71eb9e7851c37b50edbc",
+      "revision": 19
+    },
+    {
+      "codes": [
+        8,
+        8
+      ],
+      "hash": "12ac6844f49be1ed5c68e249def977725d5f798507be00dcbf7576f56356d1cd",
+      "revision": 20
+    }
+  ],
+  "package": "huanle-cards",
+  "players": 1,
+  "restore": {
+    "after": [
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "d56d9a6f74208d6bf0e17bb9f7f3cacb0bb920bd731aebd67e5d077ee2082225",
+        "revision": 11
+      },
+      {
+        "codes": [
+          8,
+          8,
+          8
+        ],
+        "hash": "365bb9939c2d33d704dc4bcdafea08afbd677b2795a954f7ead1ad0249ca694b",
+        "revision": 12
+      },
+      {
+        "codes": [
+          8,
+          8,
+          2
+        ],
+        "hash": "21272f8a69a567666a5f8f1520e3b267b0ca0cf151bd16da8a680cc4c8fa2b6a",
+        "revision": 13
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "a1c3f3e39d5fbfbd735e9022d5452be57933daa86d2bed4ffd7e110b1e3153e2",
+        "revision": 14
+      },
+      {
+        "codes": [
+          8,
+          8,
+          10
+        ],
+        "hash": "4fe1cd68d5f9640e7d2bd8c5a9a92f9ce9a0e585f1c4ca2867219ad64568ab66",
+        "revision": 15
+      },
+      {
+        "codes": [
+          10
+        ],
+        "hash": "5152b861db0401e6fa2886c3e33eb0e1f50e70770cfa9e52f858cd91ddb54551",
+        "revision": 16
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "7159a3bd6a5d287357a7ae8f1ce7610228f22c12e55ed15484e9c2f0dbf54032",
+        "revision": 17
+      },
+      {
+        "codes": [
+          8,
+          8,
+          8
+        ],
+        "hash": "13cbf0a357a468deb59c7f0743507b1bf0983b6351007ce417f947938acf8d31",
+        "revision": 18
+      },
+      {
+        "codes": [
+          8,
+          8,
+          2
+        ],
+        "hash": "df85c1d7c3e085b298cdf9b8f333f317814c4038075f71eb9e7851c37b50edbc",
+        "revision": 19
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "12ac6844f49be1ed5c68e249def977725d5f798507be00dcbf7576f56356d1cd",
+        "revision": 20
+      }
+    ],
+    "before": [
+      {
+        "codes": [
+          8,
+          8,
+          2
+        ],
+        "hash": "9a917c710c22a5783329b217e25d48baa4452497abf7a4182e7e1742d01ae3ca",
+        "revision": 1
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "c13e082244313b0d5fd6628bebdc3490962526a23373462ea08f1d89c8aa35a0",
+        "revision": 2
+      },
+      {
+        "codes": [
+          8,
+          8,
+          10
+        ],
+        "hash": "412bcaa5197ff687e2decc3a242412a2f6254ac0c32f0c270ece819efb4a797b",
+        "revision": 3
+      },
+      {
+        "codes": [
+          10
+        ],
+        "hash": "4af7a46fe746be60abc827976f423bcdf2a0dd791e333e7acaa89b1d7f6a7b9c",
+        "revision": 4
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "a010bfac9af7a477abc64160ac3fe96af66ce397fd537f62dc069b247b312213",
+        "revision": 5
+      },
+      {
+        "codes": [
+          8,
+          8,
+          8
+        ],
+        "hash": "ab9dd0943ff3ad77abe7baead018c386af74928ca2d3787ab879741b7c7ea542",
+        "revision": 6
+      },
+      {
+        "codes": [
+          8,
+          8,
+          2
+        ],
+        "hash": "16916a64a8aa49b973ecdaa7ed47fe119afcf545d92794070d056d662dd591a1",
+        "revision": 7
+      },
+      {
+        "codes": [
+          8,
+          8
+        ],
+        "hash": "d88b682377d1fe195a2b8de31e418147e17689ec2ea08df922b252f039f11b99",
+        "revision": 8
+      },
+      {
+        "codes": [
+          8,
+          8,
+          10
+        ],
+        "hash": "1c5cafd669d440ff73444754693497e52c4a55464053bf22ce03cec67ac47783",
+        "revision": 9
+      },
+      {
+        "codes": [
+          10
+        ],
+        "hash": "7837ba267fc70bf85f02711a4759f29732355d2174dbaaa2ef2c0463355dc397",
+        "revision": 10
+      }
+    ],
+    "midpoint": 10
+  },
+  "seed": 20261025
+}

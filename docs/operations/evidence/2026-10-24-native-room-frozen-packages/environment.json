@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-24T14:54:05.966090+08:00",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "path_prefix": "/Users/ruyimg/.cargo/bin:/usr/local/bin",
+  "versions": {
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "node": "v20.17.0",
+    "pnpm": "10.34.3",
+    "python": "Python 3.12.5"
+  },
+  "default_python": "Python 3.10.10"
+}

@@ -6,9 +6,9 @@
   "identifier": "org.noname.next",
   "build": {
     "features": ["tauri-shell"],
-    "beforeDevCommand": "pnpm --dir web-client dev",
+    "beforeDevCommand": { "script": "pnpm dev", "cwd": "../web-client" },
     "devUrl": "http://localhost:5173",
-    "beforeBuildCommand": "pnpm --dir web-client build:desktop",
+    "beforeBuildCommand": { "script": "pnpm build:desktop", "cwd": "../web-client" },
     "frontendDist": "../web-client/dist"
   },
   "app": {

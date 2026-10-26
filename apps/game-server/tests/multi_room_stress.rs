@@ -73,6 +73,7 @@ async fn exercise_room(room_id: u64, seed: u64) -> Result<u64, String> {
                     kind: CommandKind::EndPhase,
                 },
                 idempotency_key: IdempotencyKey(i),
+                replay: false,
                 reply: rs,
             })
             .await

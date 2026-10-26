@@ -24,3 +24,4 @@ apps/web-client/dist/
 # Python 缓存（脚本单测会生成，不入库）
 __pycache__/
 *.pyc
+apps/game-server/data/

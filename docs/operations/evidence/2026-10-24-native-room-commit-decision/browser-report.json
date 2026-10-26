@@ -1,0 +1,123 @@
+{
+  "results": [
+    {
+      "name": "production_ui_formal_room_and_private_views",
+      "details": {
+        "room": 1,
+        "packs": [
+          "installed:{\"namespace\":\"upstream-noname\",\"package_id\":\"shahai-swd\",\"version\":\"1.0.0\",\"logic_hash\":\"31ccea98f28d4ab1be949f5b937004777d139f3a6ac5546e10bf8d1ed18dc37f\",\"content_hash\":\"6844852259fe5d6f7359363a905635312279a77e8522df9df2421e5f9472223e\"}@1",
+          "installed:{\"namespace\":\"upstream-noname\",\"package_id\":\"wudian\",\"version\":\"1.0.0\",\"logic_hash\":\"e0d488b68e7faee040a8f98388e8380c527ecc67a9a221a0aee93f3ce409bef7\",\"content_hash\":\"0be5dc96a54db0a36893835a791cd49cf55e65740269d108b3632846215e845e\"}@2"
+        ],
+        "handCounts": [
+          4,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "name": "real_ws_personalized_state_sync",
+      "details": {
+        "revision": 1,
+        "hash": [
+          26,
+          204,
+          46,
+          1,
+          236,
+          224,
+          114,
+          153,
+          52,
+          9,
+          249,
+          190,
+          67,
+          7,
+          38,
+          189,
+          16,
+          46,
+          242,
+          141,
+          10,
+          79,
+          51,
+          50,
+          127,
+          219,
+          34,
+          185,
+          249,
+          41,
+          200,
+          11
+        ]
+      }
+    },
+    {
+      "name": "real_ws_private_choice_barrier",
+      "details": {
+        "choice": 1,
+        "owner": 1,
+        "options": 6
+      }
+    },
+    {
+      "name": "page_reload_reuses_original_room",
+      "details": {
+        "room": 1
+      }
+    },
+    {
+      "name": "write_failure_refuses_success_and_fanout",
+      "details": {
+        "revision": 3,
+        "confirmedFile": "unchanged"
+      }
+    },
+    {
+      "name": "sigkill_and_uncommitted_temp_files",
+      "details": {
+        "signal": "SIGKILL",
+        "partialTemp": true,
+        "completeUncommittedTemp": true,
+        "corruptRoom": 999
+      }
+    },
+    {
+      "name": "sigkill_restore_confirmed_choice_and_roles",
+      "details": {
+        "revision": 3,
+        "players": 2,
+        "spectatorRole": "Spectator"
+      }
+    },
+    {
+      "name": "restored_room_continues_over_ws",
+      "details": {
+        "revision": 4,
+        "resolvedChoice": 1
+      }
+    },
+    {
+      "name": "corrupt_room_isolated_and_id_reserved",
+      "details": {
+        "healthyRoom": 1,
+        "newRoom": 1000,
+        "corruptFile": "unchanged",
+        "tempFiles": "unchanged"
+      }
+    },
+    {
+      "name": "uncaught_page_errors",
+      "details": 0
+    }
+  ],
+  "errors": [],
+  "data": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ws-crash-browser-uRlIey",
+  "origin": "http://127.0.0.1:5483",
+  "wsUrl": "ws://127.0.0.1:5484/ws",
+  "browserVersion": "156.0.8078.48",
+  "servedDist": "/tmp/noname-next-ws-delivery-20261024/validated-generated/apps/web-client/dist"
+}

@@ -1,0 +1,21 @@
+     Running unittests src/lib.rs (/tmp/b2-head-target/debug/deps/content_runtime-47de828f7f874c8d)
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/active_catalog.rs (/tmp/b2-head-target/debug/deps/active_catalog-1bced41ec533656e)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/atomic_install.rs (/tmp/b2-head-target/debug/deps/atomic_install-a3d8265618313572)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/c3_dependency_conflict.rs (/tmp/b2-head-target/debug/deps/c3_dependency_conflict-ce9561f9668cc3fd)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/cold_import_all_26.rs (/tmp/b2-head-target/debug/deps/cold_import_all_26-7f2d3f0eda81f757)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.98s
+     Running tests/extension_import.rs (/tmp/b2-head-target/debug/deps/extension_import-74859b7c25ee1a0b)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/offline_npack.rs (/tmp/b2-head-target/debug/deps/offline_npack-bae59958df5d7303)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 27.47s
+     Running tests/signature_trust_chain.rs (/tmp/b2-head-target/debug/deps/signature_trust_chain-b47af5c6a4261dcd)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/standard_npack.rs (/tmp/b2-head-target/debug/deps/standard_npack-f5850d207bcebcb1)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.49s
+     Running tests/uninstall_dependency.rs (/tmp/b2-head-target/debug/deps/uninstall_dependency-9d6392a9f22c2e5b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

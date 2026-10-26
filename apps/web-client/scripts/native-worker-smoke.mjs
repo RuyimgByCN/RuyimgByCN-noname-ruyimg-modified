@@ -229,6 +229,33 @@ function submitCandidate(handle, action) {
   });
 }
 
+// P2：Worker 信封必须提供真实权威 hash 与公开事件码（不再为空占位）。
+const eventProbe = nativeCreate(4, 4242, 0);
+nativeDispatch(eventProbe, { type: "restore", hex: auth.engine.save_hex() });
+const eventEnv = nativeDispatch(eventProbe, { type: "endPhase", actor: 0 });
+const eventCodes = (eventEnv.events ?? [])
+  .map((event) => event?.PublicEvent?.code)
+  .filter((code) => Number.isInteger(code));
+check(
+  "adapter_hash_hex_authoritative",
+  /^[0-9a-f]{64}$/.test(eventEnv.hash_hex) &&
+    eventEnv.hash_hex === eventProbe.engine.state_hash_hex(),
+  `hash=${eventEnv.hash_hex}`,
+);
+check(
+  "adapter_events_authoritative",
+  eventCodes.length > 0 && eventCodes.every((code) => code >= 1 && code <= 10),
+  `codes=${JSON.stringify(eventCodes)}`,
+);
+const observerEnv = nativeEnvelope(eventProbe);
+check(
+  "adapter_observer_does_not_drain_events",
+  Array.isArray(observerEnv.events) &&
+    observerEnv.events.length === 0 &&
+    observerEnv.hash_hex === eventEnv.hash_hex,
+  `events=${observerEnv.events.length} hash=${observerEnv.hash_hex}`,
+);
+
 // 抽样逐项提交：每条候选都在**同一保存点**的新引擎上走前端提交路径，
 // 避免前一条候选改变状态影响后一条。
 const startHex = auth.engine.save_hex();
@@ -339,8 +366,7 @@ let workerResolve = null;
 globalThis.self = {
   postMessage: (resp) => {
     const settle = workerResolve;
-    workerResolve = null;
-    if (settle) settle(resp);
+    if (settle && settle(resp)) workerResolve = null;
   },
 };
 await import(pathToFileURL(join(root, "src/worker/engine.native.worker.ts")).href);
@@ -351,8 +377,11 @@ const workerSend = (msg) =>
       reject(new Error(`worker 回包超时: ${msg.type}`));
     }, 30000);
     workerResolve = (resp) => {
+      // Timing notifications are unsolicited; only the matching reply completes a request.
+      if (resp.id !== msg.id) return false;
       clearTimeout(timer);
       resolve(resp);
+      return true;
     };
     globalThis.self.onmessage({ data: msg });
   });
@@ -361,6 +390,96 @@ try {
   const initReply = await workerSend({ id: 901, type: "init" });
   check("worker_native_init", initReply?.ok === true, JSON.stringify(initReply).slice(0, 200));
 
+  const installed = (dir, key, file) => ({
+    manifest: JSON.parse(readFileSync(join(extRoot, dir, "package.npack.json"), "utf8")).manifest,
+    [key]: JSON.parse(readFileSync(join(extRoot, dir, "assets", file), "utf8")),
+  });
+  const installedPacks = [
+    installed("huanle-upstream-noname", "cards", "cards.json"),
+    installed("d3-upstream-noname", "characters", "character.json"),
+    installed("cardpile-upstream-noname", "pile", "pile.json"),
+  ];
+  const installedJson = JSON.stringify(installedPacks);
+  const started = await workerSend({
+    id: 910, type: "start", players: 4, seed: 17017, observer: 0, packsJson: installedJson,
+  });
+  const expectedInstalled = NativeEngine.new_with_packs_json(4, 17017n, installedJson);
+  const startedArchive = await workerSend({ id: 923, type: "save" });
+  const expectedInstalledView = JSON.parse(expectedInstalled.view_json(0));
+  check(
+    "worker_installed_cards_and_pile_enter_start",
+    started.ok === true && startedArchive.ok === true &&
+      startedArchive.data?.hex === expectedInstalled.save_hex() &&
+      expectedInstalled.cards_with_prefix("hnl_") === 7 && expectedInstalledView.deckCount > view0.deckCount + 7,
+    `deck=${expectedInstalledView.deckCount} standard=${view0.deckCount} error=${started.error ?? ""}`,
+  );
+  const installedCandidates = await workerSend({ id: 911, type: "generalCandidates" });
+  const installedGeneral = installedCandidates.data?.candidates?.find((c) => c.name === "ddd刘冲");
+  check("worker_installed_general_candidate", installedCandidates.ok === true && !!installedGeneral);
+  const selectedInstalled = await workerSend({ id: 912, type: "chooseGeneral", seat: 0, name: "ddd刘冲" });
+  const selectedSkills = selectedInstalled.data?.envelope?.view?.seats[0]?.skills.map((s) => s.name).sort();
+  check(
+    "worker_installed_general_assignment",
+    selectedInstalled.ok === true && JSON.stringify(selectedSkills) === JSON.stringify(["dddjinggou", "dddmoyan"]),
+    JSON.stringify(selectedSkills),
+  );
+  const savedInstalled = await workerSend({ id: 913, type: "save" });
+  const installedHex = savedInstalled.data?.hex;
+  check("worker_installed_save", savedInstalled.ok === true && typeof installedHex === "string");
+  const missing = await workerSend({ id: 914, type: "restore", hex: installedHex, packsJson: "[]" });
+  check("worker_installed_missing_refused", missing.ok === false && /恢复失败/.test(missing.error ?? ""));
+  const wrongInstalled = structuredClone(installedPacks);
+  wrongInstalled[0].manifest.version = "1.0.1";
+  const wrong = await workerSend({
+    id: 915, type: "restore", hex: installedHex, packsJson: JSON.stringify(wrongInstalled),
+  });
+  check("worker_installed_exact_version_refused", wrong.ok === false && /恢复失败/.test(wrong.error ?? ""));
+  const tamperedInstalled = structuredClone(installedPacks);
+  tamperedInstalled[0].cards.cards[0].rank = 10;
+  const tampered = await workerSend({
+    id: 920, type: "restore", hex: installedHex, packsJson: JSON.stringify(tamperedInstalled),
+  });
+  check("worker_installed_changed_asset_refused", tampered.ok === false && /恢复失败/.test(tampered.error ?? ""));
+  const restoredInstalled = await workerSend({
+    id: 916, type: "restore", hex: installedHex, packsJson: installedJson,
+  });
+  check(
+    "worker_installed_same_lock_restore",
+    restoredInstalled.ok === true &&
+      JSON.stringify(restoredInstalled.data?.view) === JSON.stringify(selectedInstalled.data?.envelope?.view),
+    restoredInstalled.error ?? "",
+  );
+  const identityJson = JSON.stringify([
+    ...installedPacks, installed("wuxing-upstream-liuli", "cards", "cards.json"),
+  ]);
+  const identity = await workerSend({
+    id: 917, type: "start", mode: "identity", players: 4, seed: 17017, observer: 0, packsJson: identityJson,
+  });
+  const identityCandidates = await workerSend({ id: 918, type: "generalCandidates" });
+  const expectedIdentity = NativeEngine.new_identity_with_packs_json(4, 17017n, identityJson);
+  const identityArchive = await workerSend({ id: 924, type: "save" });
+  check(
+    "worker_identity_keeps_packs_and_lord_bonus",
+    identity.ok === true && identity.data?.view?.seats[0]?.max_hp === 5 &&
+      identityArchive.ok === true && identityArchive.data?.hex === expectedIdentity.save_hex() &&
+      identityCandidates.data?.candidates?.some((c) => c.name === "ddd刘冲"),
+    `hp=${identity.data?.view?.seats[0]?.max_hp} error=${identity.error ?? ""}`,
+  );
+  const identityPick = await workerSend({ id: 921, type: "chooseGeneral", seat: 0, name: "ddd刘冲" });
+  const identitySeat = identityPick.data?.envelope?.view?.seats[0];
+  check(
+    "worker_identity_selection_keeps_lord_bonus_and_global_skills",
+    identityPick.ok === true && identitySeat?.max_hp === 5 &&
+      ["dddjinggou", "dddmoyan", "wuxing_shengke"].every((name) => identitySeat.skills.some((s) => s.name === name)),
+    `hp=${identitySeat?.max_hp} skills=${JSON.stringify(identitySeat?.skills.map((s) => s.name))}`,
+  );
+  const badIdentity = await workerSend({
+    id: 919, type: "start", mode: "identity", players: 3, seed: 17017, observer: 0, packsJson: installedJson,
+  });
+  check("worker_identity_invalid_seats_refused", badIdentity.ok === false && /4-8/.test(badIdentity.error ?? ""));
+
+  const reset = await workerSend({ id: 922, type: "start", players: 4, seed: 4242, observer: 0 });
+  check("worker_standard_restart", reset.ok === true);
   const candReply = await workerSend({ id: 902, type: "generalCandidates" });
   const candData = candReply?.data;
   check(

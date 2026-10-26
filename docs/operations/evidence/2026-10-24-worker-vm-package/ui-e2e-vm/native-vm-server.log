@@ -1,0 +1,3 @@
+2026-10-25T03:08:58.633652Z  INFO game_server: content ready packages=0 extensions=0 content_lock=a6cd5606ddabd11575f25d991b9410418047ca7c2a91fbf1068c1cd747111415
+2026-10-25T03:08:58.640566Z  INFO game_server: native content ready packages=1
+2026-10-25T03:08:58.646161Z  INFO game_server: game-server listening addr=127.0.0.1:7700

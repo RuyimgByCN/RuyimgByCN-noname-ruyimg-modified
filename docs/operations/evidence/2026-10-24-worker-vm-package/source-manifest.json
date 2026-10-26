@@ -1,0 +1,57 @@
+[
+  {
+    "path": "crates/content-native-loader/src/lib.rs",
+    "bytes": 35701,
+    "sha256": "2270348bb69d079f7034e46365f438bd00a40af482f5c18f9a03038b5777b423"
+  },
+  {
+    "path": "crates/engine-native-wasm/Cargo.toml",
+    "bytes": 626,
+    "sha256": "dc468d8a1fbe5db58d6c55d0bead7c54c42d3dee2fd8ce24134e643debecdbe9"
+  },
+  {
+    "path": "crates/engine-native-wasm/src/installed_packs.rs",
+    "bytes": 4899,
+    "sha256": "882a9971e4ca961ba9a75300620d1b5242bf696260760a758d0c6fe3d6b41320"
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/vm_package_worker.rs",
+    "bytes": 3842,
+    "sha256": "0d8627951464732038fb0f9cab1b9d9f9ad9826026da68b9e01277bee3820954"
+  },
+  {
+    "path": "apps/game-server/src/native.rs",
+    "bytes": 20181,
+    "sha256": "42d19fbd272bdc183fb3c1f7fde8d4e00f4223afbcf83578e5c79e2a36aeed17"
+  },
+  {
+    "path": "apps/game-server/tests/native_product_path.rs",
+    "bytes": 19184,
+    "sha256": "d7092d8d56d9bc307b7fbc2ea06b93193abfc7be85aef11f3cb4370419d08aaf"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-worker-vm-package/worker-vm.skill",
+    "bytes": 108,
+    "sha256": "a93ec24a3353f88a2da7699eea651788c2f36ee5a7ba885a8ce09bef0aa86e6c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-worker-vm-package/characters.json",
+    "bytes": 144,
+    "sha256": "de5785890f1cb6d261f06ed179c8327b0daf9f13d5245e31790b0ee8d6ba8449"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-worker-vm-package/characters-asset.json",
+    "bytes": 464,
+    "sha256": "ae513b156835f7789512a8ca423805d85769459f94f7992f6a3fe6d4212e9e96"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-worker-vm-package/worker-vm.npack.json",
+    "bytes": 1593,
+    "sha256": "40c3f003fa114130142faa1e01522465bcf99a0b15a4a084c41fb17ed7c10bde"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-24-worker-vm-package/wasm-vm-package.mjs",
+    "bytes": 2120,
+    "sha256": "473a1e5f4a39c3f78e75019c1a265cb41e946c772354ec32b399ba1a9644bf0a"
+  }
+]

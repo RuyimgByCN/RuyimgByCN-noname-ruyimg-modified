@@ -1,11 +1,11 @@
 //! Lobby: create/join rooms, connection id allocation.
 
 use crate::config::ServerConfig;
+use crate::native::{NativeGameRequest, NativeGameSummary, NativePackageInfo};
 use crate::room::{spawn_room_with_engine, RoomHandle, RoomMsg};
 use crate::session::{HandlerError, Session};
 use content_runtime::{ActiveAssetInfo, ActiveCatalog, ActiveCatalogPage, ContentLock};
 use engine_core::Engine;
-use crate::native::{NativeGameRequest, NativeGameSummary, NativePackageInfo};
 use engine_protocol::{
     ClientMessage, ErrorCode, MessageHeader, ServerMessage, NETWORK_PROTOCOL_VERSION,
 };
@@ -33,6 +33,8 @@ pub struct Lobby {
     native: std::sync::Arc<crate::native::NativeContent>,
     /// NC09：原生房间落盘存储（`None` = 不落盘）。
     native_room_store: Option<crate::native_room_store::NativeRoomStore>,
+    /// P1：目录单写者锁；随 Lobby 存活，进程退出/崩溃时由 OS 释放。
+    _native_store_lock: Option<crate::native_room_store::StoreWriterLock>,
 }
 
 /// Point-in-time lobby statistics for Prometheus export (§40.2).
@@ -52,7 +54,7 @@ pub struct LobbyStats {
 }
 
 impl Lobby {
-    /// Create lobby.
+    /// Create lobby. 配置了存档目录时先取得排他写者锁，第二写者拒绝启动。
     pub fn new(
         cfg: ServerConfig,
         engine_template: Engine,
@@ -60,9 +62,16 @@ impl Lobby {
         content_catalog: ActiveCatalog,
         content_assets: BTreeMap<(String, String, String), ActiveAssetInfo>,
         native: std::sync::Arc<crate::native::NativeContent>,
-    ) -> Self {
+    ) -> Result<Self, String> {
         let cfg_native_store = cfg.native_room_store.clone();
-        Self {
+        let (native_room_store, native_store_lock) = if cfg_native_store.is_empty() {
+            (None, None)
+        } else {
+            let lock = crate::native_room_store::StoreWriterLock::acquire(&cfg_native_store)?;
+            let store = crate::native_room_store::NativeRoomStore::new(cfg_native_store);
+            (Some(store), Some(lock))
+        };
+        Ok(Self {
             cfg,
             next_conn: AtomicU64::new(1),
             next_room: AtomicU64::new(1),
@@ -76,16 +85,13 @@ impl Lobby {
             content_lock,
             content_catalog,
             content_assets,
-            native_room_store: if cfg_native_store.is_empty() {
-                None
-            } else {
-                Some(crate::native_room_store::NativeRoomStore::new(cfg_native_store))
-            },
+            native_room_store,
+            _native_store_lock: native_store_lock,
             native,
-        }
+        })
     }
 
-    /// NC09 启动恢复：扫描落盘房间并按 `pack_refs` 重新装载包恢复房间。
+    /// NC09 启动恢复：按精确引用校验原局副本，旧精确档补齐已验证副本。
     ///
     /// 返回恢复的房间数。**单个房间恢复失败不阻断启动**，但会记录告警（并保留落盘记录
     /// 以便人工处理）；恢复成功的房间以**原房间号**重新进入房间表，并把 `next_room`
@@ -94,49 +100,89 @@ impl Lobby {
         let Some(store) = self.native_room_store.clone() else {
             return Ok(0);
         };
-        let records = store.load_all()?;
+        let scan = match store.scan() {
+            Ok(scan) => scan,
+            Err(error) => {
+                // 未能扫描旧档时禁止分配房号，避免后续可写时覆盖尚未发现的房间。
+                self.next_room.store(0, Ordering::SeqCst);
+                return Err(error);
+            }
+        };
+        if let Some(max_id) = scan.reserved_ids.last() {
+            let next = max_id.checked_add(1).unwrap_or(0);
+            if next == 0 {
+                self.next_room.store(0, Ordering::SeqCst);
+            } else if self.next_room.load(Ordering::SeqCst) != 0 {
+                self.next_room.fetch_max(next, Ordering::SeqCst);
+            }
+        }
+        for issue in scan.issues {
+            tracing::warn!(path = %issue.path.display(), room = ?issue.room_id, error = %issue.error,
+                uncommitted_temp = issue.uncommitted_temp, "原生房间记录未恢复（保留原文件与房号）");
+        }
+        let records = scan.records;
         if records.is_empty() {
             return Ok(0);
         }
         let mut restored = 0usize;
-        let mut max_id = 0u64;
         for record in &records {
-            max_id = max_id.max(record.room_id);
-            let content = self.native.clone();
-            let namespace = self.cfg.native_room_namespace.clone();
-            let mut load_pack = move |r: &str| -> Result<
-                engine_native::content::extension::ExtensionPack,
-                String,
-            > {
-                // `包名@版本` → 按名在当前命名空间查找并装载
-                let name = r.split('@').next().unwrap_or(r);
-                let installed = content.installed()?;
-                let found = installed
-                    .iter()
-                    .find(|p| p.package_id == name || p.package_id.ends_with(name))
-                    .ok_or_else(|| format!("恢复房间失败：包未安装 {name}"))?;
-                let loaded = content.load_scoped(Some(&namespace), &found.package_id)?;
-                Ok(loaded.pack)
-            };
-            match crate::room_native_actor::restore_room_from_disk(
-                record,
-                &mut load_pack,
-                self.cfg.room_mailbox,
-                self.cfg.snapshot_every,
-                store.clone(),
+            if let Some(last) = record.state.members.iter().map(|m| m.connection_id).max() {
+                self.next_conn
+                    .fetch_max(last.saturating_add(1), Ordering::SeqCst);
+            }
+            let (packs, frozen) = match self.native.load_room_packages(
+                &record.state.pack_refs,
+                record.state.frozen_packages.as_deref(),
             ) {
-                Ok(handle) => {
-                    self.rooms.lock().insert(record.room_id, handle);
-                    restored += 1;
-                    tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
+                Ok(loaded) => loaded,
+                Err(e) => {
+                    tracing::warn!(room = record.room_id, error = %e, "原生房间包恢复失败（保留落盘记录）");
+                    continue;
                 }
+            };
+            let mut prepared = record.clone();
+            prepared.state.frozen_packages = Some(frozen);
+            let session = match crate::room_native::NativeRoomSession::from_saved(
+                &prepared.state,
+                packs,
+            ) {
+                Ok(session) => session,
                 Err(e) => {
                     tracing::warn!(room = record.room_id, error = %e, "原生房间恢复失败（保留落盘记录）");
+                    continue;
                 }
+            };
+            if session.engine().outcome().is_some() {
+                // 终局记录可能因清理失败而留下，不能把已结束的对局重新发布。
+                if let Err(e) = store.remove(record.room_id) {
+                    tracing::warn!(room = record.room_id, error = %e, "原生终局记录清理失败（保留记录）");
+                }
+                continue;
             }
+            if let Err(e) = store.save(&prepared) {
+                tracing::warn!(room = record.room_id, error = %e, "原生房间恢复写入失败（不发布房间）");
+                continue;
+            }
+            let handle = crate::room_native_actor::spawn_room_native_persisted_with_hash(
+                record.room_id,
+                session,
+                self.cfg.room_mailbox,
+                self.cfg.snapshot_every,
+                record.password_hash.clone(),
+                Some(store.clone()),
+            );
+            self.rooms.lock().insert(record.room_id, handle);
+            restored += 1;
+            tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
         }
-        self.next_room.fetch_max(max_id + 1, Ordering::SeqCst);
         Ok(restored)
+    }
+
+    #[cfg(test)]
+    pub(crate) fn native_room_store_for_test(
+        &self,
+    ) -> Option<crate::native_room_store::NativeRoomStore> {
+        self.native_room_store.clone()
     }
 
     /// T6③：列出已安装原生包。
@@ -144,11 +190,33 @@ impl Lobby {
         self.native.installed()
     }
 
-    /// T6③：安装包 → 装载 → 原生建局（CPU 密集，放阻塞线程池）。
-    pub async fn native_game(
+    /// 正式生命周期：重新扫描 drop-in 并安装/升级。
+    pub fn native_import(&self) -> Result<Vec<NativePackageInfo>, String> {
+        self.native.import()
+    }
+
+    /// 正式生命周期：激活指定已安装版本。
+    pub fn native_activate(
         &self,
-        req: NativeGameRequest,
-    ) -> Result<NativeGameSummary, String> {
+        namespace: &str,
+        package_id: &str,
+        version: &str,
+    ) -> Result<(), String> {
+        self.native.activate_version(namespace, package_id, version)
+    }
+
+    /// 正式生命周期：停用（保留安装副本），可再激活。
+    pub fn native_disable(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.native.disable_package(namespace, package_id)
+    }
+
+    /// 正式生命周期：物理卸载所有版本。
+    pub fn native_uninstall(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.native.uninstall_package(namespace, package_id)
+    }
+
+    /// T6③：安装包 → 装载 → 原生建局（CPU 密集，放阻塞线程池）。
+    pub async fn native_game(&self, req: NativeGameRequest) -> Result<NativeGameSummary, String> {
         let native = self.native.clone();
         tokio::task::spawn_blocking(move || crate::native::create_native_game(&native, &req))
             .await
@@ -287,13 +355,24 @@ impl Lobby {
                             "server room capacity",
                         ));
                     }
-                    let id = self.next_room.fetch_add(1, Ordering::Relaxed);
+                    let id = self
+                        .next_room
+                        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |id| {
+                            (id != 0).then(|| id.checked_add(1).unwrap_or(0))
+                        })
+                        .map_err(|_| {
+                            HandlerError::new(
+                                ErrorCode::Internal,
+                                "room storage unavailable or room IDs exhausted",
+                            )
+                        })?;
                     // NC09：后端选择——原生权威房间（显式启用）或旧线房间。
                     // 原生装载失败**明确报错**，不静默回退（避免「已启用」成假象）。
                     let native_handle = crate::room_native_actor::spawn_native_room_if_configured(
                         id,
                         players,
                         seed,
+                        password.clone(),
                         self.cfg.room_mailbox,
                         self.cfg.snapshot_every,
                         &self.native,
@@ -384,6 +463,7 @@ impl Lobby {
                 header,
                 command,
                 idempotency_key,
+                replay,
             } => {
                 let room_id = session
                     .room_id
@@ -414,6 +494,7 @@ impl Lobby {
                         header: MessageHeader::new(room_id, header.conn_seq, header.revision),
                         command,
                         idempotency_key,
+                        replay,
                         reply: tx,
                     })
                     .await
@@ -568,5 +649,60 @@ fn map_room_err(e: &str) -> HandlerError {
         // NC09/NC12：未知房间错误**带上原文**（此前统一成 "room error"，联机排障时看不到原因；
         // 已用 RTT 探针复现过「只看到 room error」的情况，见 2026-10-18-nc12-online-rtt 证据）。
         _ => HandlerError::new(ErrorCode::Internal, format!("room error: {e}")),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::native_room_store::{NativeRoomStore, StoredRoom};
+    use crate::room_native::NativeRoomSession;
+
+    #[tokio::test]
+    async fn finished_saved_room_is_not_published_and_its_id_remains_reserved() {
+        let dir = tempfile::tempdir().unwrap();
+        let cfg = ServerConfig {
+            original_content_root: dir.path().join("original"),
+            content_store_root: dir.path().join("content-store"),
+            extensions_root: dir.path().join("extensions"),
+            native_packages_root: dir.path().join("packages"),
+            native_store_root: dir.path().join("native-store"),
+            native_room_store: dir.path().join("rooms").to_string_lossy().into_owned(),
+            native_rooms: true,
+            ..ServerConfig::default()
+        };
+        for path in [
+            &cfg.original_content_root,
+            &cfg.extensions_root,
+            &cfg.native_packages_root,
+        ] {
+            std::fs::create_dir_all(path).unwrap();
+        }
+        let store = NativeRoomStore::new(&cfg.native_room_store);
+        let mut finished = engine_native::Engine::new(42, 2).save();
+        // 只构造已通过引擎恢复校验的终局存档，测试启动发布而非胜负规则。
+        finished.core.outcome = Some(engine_native::state::Outcome {
+            winner: engine_native::state::Winner::Player(0),
+        });
+        let finished = engine_native::Engine::restore(&finished).unwrap();
+        assert!(finished.outcome().is_some());
+        for (id, engine) in [(3, engine_native::Engine::new(41, 2)), (7, finished)] {
+            let mut session = NativeRoomSession::new(engine, 2);
+            session.set_frozen_packages(Vec::new());
+            store
+                .save(&StoredRoom {
+                    room_id: id,
+                    password_hash: String::new(),
+                    state: session.export_state(&session.snapshot_hex()),
+                    checksum: String::new(),
+                })
+                .unwrap();
+        }
+        let lobby = crate::bootstrap(&cfg);
+        assert_eq!(lobby.restore_native_rooms().unwrap(), 1);
+        let rooms = lobby.rooms.lock();
+        assert!(rooms.contains_key(&3));
+        assert!(!rooms.contains_key(&7));
+        assert_eq!(lobby.next_room.load(Ordering::SeqCst), 8);
     }
 }

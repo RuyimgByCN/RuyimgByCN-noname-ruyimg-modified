@@ -1,0 +1,364 @@
+
+> noname-next-web-client@0.1.0 test /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs --test
+
+TAP version 13
+# Subtest: desktop builds both WASM engines before the frontend, forcing native web output
+ok 1 - desktop builds both WASM engines before the frontend, forcing native web output
+  ---
+  duration_ms: 58.769541
+  ...
+# Subtest: Windows desktop runs pnpm.cmd through a shell
+ok 2 - Windows desktop runs pnpm.cmd through a shell
+  ---
+  duration_ms: 57.917875
+  ...
+# Subtest: a failed native build prevents publishing a frontend with a stale native package
+ok 3 - a failed native build prevents publishing a frontend with a stale native package
+  ---
+  duration_ms: 50.03775
+  ...
+# Subtest: native build creates a missing package from source with portable PATH and argument boundaries
+ok 4 - native build creates a missing package from source with portable PATH and argument boundaries
+  ---
+  duration_ms: 67.436166
+  ...
+# Subtest: native build failure preserves the previous usable package and clears temporary output
+ok 5 - native build failure preserves the previous usable package and clears temporary output
+  ---
+  duration_ms: 54.149666
+  ...
+# Subtest: native Node smoke target remains available without shell interpolation
+ok 6 - native Node smoke target remains available without shell interpolation
+  ---
+  duration_ms: 45.440792
+  ...
+# Subtest: legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+ok 7 - legacy build prepends rustup PATH even when the cargo executable has a Windows suffix
+  ---
+  duration_ms: 42.778916
+  ...
+# Subtest: Tauri hooks resolve the actual sibling web client from the desktop crate
+ok 8 - Tauri hooks resolve the actual sibling web client from the desktop crate
+  ---
+  duration_ms: 0.4205
+  ...
+# Subtest: 实测仓库：包清单由实际数据推导，目录项全部可回查
+ok 9 - 实测仓库：包清单由实际数据推导，目录项全部可回查
+  ---
+  duration_ms: 20.4695
+  ...
+# Subtest: 目录项与包元数据不一致会被判失败
+ok 10 - 目录项与包元数据不一致会被判失败
+  ---
+  duration_ms: 1.795791
+  ...
+# Subtest: 坏 npack、缺字段与重复包键会被判失败
+ok 11 - 坏 npack、缺字段与重复包键会被判失败
+  ---
+  duration_ms: 4.013417
+  ...
+# Subtest: 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+ok 12 - 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入）
+  ---
+  duration_ms: 1.310125
+  ...
+# Subtest: 空候选是显式空状态，不是错误也不是静默白屏
+ok 13 - 空候选是显式空状态，不是错误也不是静默白屏
+  ---
+  duration_ms: 0.26875
+  ...
+# Subtest: 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+ok 14 - 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集
+  ---
+  duration_ms: 1.593
+  ...
+# Subtest: 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+ok 15 - 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示）
+  ---
+  duration_ms: 0.255667
+  ...
+# Subtest: 重新加载中保留旧候选但清掉旧错误
+ok 16 - 重新加载中保留旧候选但清掉旧错误
+  ---
+  duration_ms: 0.091917
+  ...
+# Subtest: 座位投影：只取目标座位，提取原生技能名与 id
+ok 17 - 座位投影：只取目标座位，提取原生技能名与 id
+  ---
+  duration_ms: 0.27825
+  ...
+# Subtest: 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+ok 18 - 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清）
+  ---
+  duration_ms: 0.170375
+  ...
+# Subtest: 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+ok 19 - 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能
+  ---
+  duration_ms: 0.232458
+  ...
+# Subtest: 选将失败：显示错误、不应用刷新信封、不留下成功态
+ok 20 - 选将失败：显示错误、不应用刷新信封、不留下成功态
+  ---
+  duration_ms: 0.47575
+  ...
+# Subtest: 失败后重试成功：清除错误并进入成功态
+ok 21 - 失败后重试成功：清除错误并进入成功态
+  ---
+  duration_ms: 0.252
+  ...
+# Subtest: 返回与请求不一致（错座位）不得显示成功
+ok 22 - 返回与请求不一致（错座位）不得显示成功
+  ---
+  duration_ms: 0.099
+  ...
+# Subtest: 畸形返回（缺刷新信封）不得显示成功
+ok 23 - 畸形返回（缺刷新信封）不得显示成功
+  ---
+  duration_ms: 0.075959
+  ...
+# Subtest: 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+ok 24 - 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误
+  ---
+  duration_ms: 0.098917
+  ...
+# Subtest: 空候选名在发起请求前就被拒绝
+ok 25 - 空候选名在发起请求前就被拒绝
+  ---
+  duration_ms: 0.178792
+  ...
+# Subtest: 反例 1：候选值 42/99 → token 是下标且能回查候选
+ok 26 - 反例 1：候选值 42/99 → token 是下标且能回查候选
+  ---
+  duration_ms: 1.444208
+  ...
+# Subtest: 反例 1 补充：裸数字/字符串候选的 token 同样是下标
+ok 27 - 反例 1 补充：裸数字/字符串候选的 token 同样是下标
+  ---
+  duration_ms: 0.177625
+  ...
+# Subtest: 反例 2：引擎 rejected 显式进入 envelope.result
+ok 28 - 反例 2：引擎 rejected 显式进入 envelope.result
+  ---
+  duration_ms: 0.222833
+  ...
+# Subtest: 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null
+ok 29 - 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null
+  ---
+  duration_ms: 0.126833
+  ...
+# Subtest: 反例 3：ChoiceOption Kind(105) 不被归零
+ok 30 - 反例 3：ChoiceOption Kind(105) 不被归零
+  ---
+  duration_ms: 0.228583
+  ...
+# Subtest: 命令结果解析：非 JSON 或无 outcome 字段不臆造判决
+ok 31 - 命令结果解析：非 JSON 或无 outcome 字段不臆造判决
+  ---
+  duration_ms: 0.060667
+  ...
+# Subtest: choice_id 不匹配时拒绝应答，不触发引擎调用
+ok 32 - choice_id 不匹配时拒绝应答，不触发引擎调用
+  ---
+  duration_ms: 0.125583
+  ...
+# Subtest: 候选解析：内核形态通过，逐项结构化且不改写字段
+ok 33 - 候选解析：内核形态通过，逐项结构化且不改写字段
+  ---
+  duration_ms: 1.461
+  ...
+# Subtest: 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集
+ok 34 - 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集
+  ---
+  duration_ms: 0.525958
+  ...
+# Subtest: 选将返回解析：与请求不一致即报错（错座位/错名字不算成功）
+ok 35 - 选将返回解析：与请求不一致即报错（错座位/错名字不算成功）
+  ---
+  duration_ms: 0.371708
+  ...
+# Subtest: 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级
+ok 36 - 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级
+  ---
+  duration_ms: 0.398917
+  ...
+# Subtest: 选将失败：原始错误文本保留，且不改缓存（状态未变）
+ok 37 - 选将失败：原始错误文本保留，且不改缓存（状态未变）
+  ---
+  duration_ms: 0.595541
+  ...
+# Subtest: 选将成功：技能集可见变化，且 revision 不变时缓存必须失效
+ok 38 - 选将成功：技能集可见变化，且 revision 不变时缓存必须失效
+  ---
+  duration_ms: 0.821209
+  ...
+# Subtest: 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面）
+ok 39 - 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面）
+  ---
+  duration_ms: 0.509875
+  ...
+# Subtest: 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将
+ok 40 - 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将
+  ---
+  duration_ms: 0.191
+  ...
+# Subtest: 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验
+ok 41 - 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验
+  ---
+  duration_ms: 48.149333
+  ...
+# Subtest: 真实 WASM：装配不改 revision，状态变化只体现在 state_hash
+ok 42 - 真实 WASM：装配不改 revision，状态变化只体现在 state_hash
+  ---
+  duration_ms: 0.957542
+  ...
+# Subtest: 真实 WASM：未知武将与越界座位显式报错，且不改状态
+ok 43 - 真实 WASM：未知武将与越界座位显式报错，且不改状态
+  ---
+  duration_ms: 0.657208
+  ...
+# Subtest: 真实 WASM：选将后权威候选重查（缓存不再命中）
+ok 44 - 真实 WASM：选将后权威候选重查（缓存不再命中）
+  ---
+  duration_ms: 5.144625
+  ...
+# Subtest: 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接
+ok 45 - 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接
+  ---
+  duration_ms: 1.231625
+  ...
+# Subtest: 无合成：内核不给 EndPhase/应答候选就不出现
+ok 46 - 无合成：内核不给 EndPhase/应答候选就不出现
+  ---
+  duration_ms: 0.447333
+  ...
+# Subtest: 查询按 (handle, revision) 记忆化，读档后失效
+ok 47 - 查询按 (handle, revision) 记忆化，读档后失效
+  ---
+  duration_ms: 0.313625
+  ...
+# Subtest: 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接
+ok 48 - 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接
+  ---
+  duration_ms: 0.38975
+  ...
+# Subtest: 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见
+ok 49 - 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见
+  ---
+  duration_ms: 0.600209
+  ...
+# Subtest: all discoverable packages install actual versioned data; active set reaches the match
+ok 50 - all discoverable packages install actual versioned data; active set reaches the match
+  ---
+  duration_ms: 22.259083
+  ...
+# Subtest: same-version installation/upgrade preserves installed bytes and refuses invented versions
+ok 51 - same-version installation/upgrade preserves installed bytes and refuses invented versions
+  ---
+  duration_ms: 1.295208
+  ...
+# Subtest: all lifecycle content mutations are blocked during a match
+ok 52 - all lifecycle content mutations are blocked during a match
+  ---
+  duration_ms: 0.805375
+  ...
+# Subtest: save retains original package copy across disable, uninstall and later saves
+ok 53 - save retains original package copy across disable, uninstall and later saves
+  ---
+  duration_ms: 0.939667
+  ...
+# Subtest: revocation rejects a saved package even when its original bytes remain
+ok 54 - revocation rejects a saved package even when its original bytes remain
+  ---
+  duration_ms: 1.151458
+  ...
+# Subtest: missing installed payload, dangling lock and duplicate lock fail without fallback
+ok 55 - missing installed payload, dangling lock and duplicate lock fail without fallback
+  ---
+  duration_ms: 0.530333
+  ...
+# Subtest: legacy metadata-only installs are repaired explicitly by upgrade
+ok 56 - legacy metadata-only installs are repaired explicitly by upgrade
+  ---
+  duration_ms: 0.47175
+  ...
+# Subtest: changed version, fingerprint, missing package and malformed payload reject restore
+ok 57 - changed version, fingerprint, missing package and malformed payload reject restore
+  ---
+  duration_ms: 0.705959
+  ...
+# Subtest: old standard saves without packages remain compatible
+ok 58 - old standard saves without packages remain compatible
+  ---
+  duration_ms: 0.325166
+  ...
+# Subtest: JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+ok 59 - JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成
+  ---
+  duration_ms: 1.594958
+  ...
+# Subtest: 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+ok 60 - 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝
+  ---
+  duration_ms: 0.560334
+  ...
+# Subtest: 断线后复用房间密码与最新令牌，重新入房前禁止提交
+ok 61 - 断线后复用房间密码与最新令牌，重新入房前禁止提交
+  ---
+  duration_ms: 3.889584
+  ...
+# Subtest: 旁观重连仍发送 Spectate，不取得玩家身份
+ok 62 - 旁观重连仍发送 Spectate，不取得玩家身份
+  ---
+  duration_ms: 2.049541
+  ...
+# Subtest: 入房/快照 send 失败释放 waiter，重复入房不多发请求
+ok 63 - 入房/快照 send 失败释放 waiter，重复入房不多发请求
+  ---
+  duration_ms: 0.861917
+  ...
+# Subtest: dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+ok 64 - dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器
+  ---
+  duration_ms: 0.782291
+  ...
+# Subtest: 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+ok 65 - 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务
+  ---
+  duration_ms: 0.306709
+  ...
+# Subtest: 表现延迟期间断线：旧信封不能覆盖重连提示
+ok 66 - 表现延迟期间断线：旧信封不能覆盖重连提示
+  ---
+  duration_ms: 47.332208
+  ...
+# Subtest: 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+ok 67 - 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果
+  ---
+  duration_ms: 14.344125
+  ...
+# Subtest: 身份局胜负类型映射
+ok 68 - 身份局胜负类型映射
+  ---
+  duration_ms: 0.672292
+  ...
+# Subtest: 单挑/势力与未建模形态
+ok 69 - 单挑/势力与未建模形态
+  ---
+  duration_ms: 0.132708
+  ...
+# Subtest: 未知形态如实显示原始 JSON（不猜测语义）
+ok 70 - 未知形态如实显示原始 JSON（不猜测语义）
+  ---
+  duration_ms: 0.131875
+  ...
+1..70
+# tests 70
+# suites 0
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1072.121292

@@ -1,0 +1,46 @@
+START 2026-10-24T14:28:34.758281+08:00
+METHOD unmodified scripts/preflight.py main(), full mode, in-memory subprocess.run raw-output recorder
+START_CHECK 1 本地链接（核心）
+END_CHECK 1 本地链接（核心） exit 0
+✅ 本地链接（核心）
+START_CHECK 2 本地链接（全部）
+END_CHECK 2 本地链接（全部） exit 1
+❌ 本地链接（全部）: 检查 1764 个文件，坏链 1
+START_CHECK 3 旧值扫描
+END_CHECK 3 旧值扫描 exit 0
+✅ 旧值扫描
+START_CHECK 4 近 20 轮索引新鲜
+END_CHECK 4 近 20 轮索引新鲜 exit 0
+✅ 近 20 轮索引新鲜
+START_CHECK 5 包→来源映射
+END_CHECK 5 包→来源映射 exit 0
+✅ 包→来源映射
+START_CHECK 6 规则登记表
+END_CHECK 6 规则登记表 exit 0
+✅ 规则登记表
+START_CHECK 7 过滤臂↔元数据一致
+END_CHECK 7 过滤臂↔元数据一致 exit 0
+✅ 过滤臂↔元数据一致
+START_CHECK 8 牌名 vs 牌种比较
+END_CHECK 8 牌名 vs 牌种比较 exit 0
+✅ 牌名 vs 牌种比较
+START_CHECK 9 台账账目（移出必留痕）
+END_CHECK 9 台账账目（移出必留痕） exit 0
+✅ 台账账目（移出必留痕）
+START_CHECK 10 相位枚举（REVIEW=0）
+END_CHECK 10 相位枚举（REVIEW=0） exit 0
+✅ 相位枚举（REVIEW=0）
+START_CHECK 11 来源覆盖三分
+END_CHECK 11 来源覆盖三分 exit 0
+✅ 来源覆盖三分
+START_CHECK 12 host 键普查（U05=314）
+END_CHECK 12 host 键普查（U05=314） exit 0
+✅ host 键普查（U05=314）
+START_CHECK 13 卡面覆盖（201/128）
+END_CHECK 13 卡面覆盖（201/128） exit 0
+✅ 卡面覆盖（201/128）
+START_CHECK 14 台账↔枚举一致
+END 2026-10-24T14:29:23.447778+08:00
+EXIT 99
+
+ABORTED / INCOMPLETE: stopped by root at check14; 12 passed, 1 known link failure, 1 interrupted, 6 not executed, 0 policy skips. No complete preflight pass claimed.

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
+import NativePackagesPanel from "../components/NativePackagesPanel.vue";
 
 // §30 Accessibility: full profile controls
 
@@ -164,6 +165,7 @@ watch([highContrast, skipAnimations, fontScale, colorBlind, screenReader], () =>
         <li><span class="state-icon" style="color: var(--color-warning)">?</span> 请选择</li>
       </ul>
     </div>
+    <NativePackagesPanel />
   </section>
 </template>
 

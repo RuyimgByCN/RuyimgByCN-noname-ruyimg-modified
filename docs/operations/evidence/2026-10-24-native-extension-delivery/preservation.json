@@ -1,0 +1,8 @@
+{
+  "checked": 11050,
+  "changed": [
+    ".github/workflows/ci.yml"
+  ],
+  "intentionalSharedFile": ".github/workflows/ci.yml",
+  "distRestored": true
+}

@@ -1,0 +1,2638 @@
+{
+  "per_crate": {
+    "content-native-loader": {
+      "passed": 32,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 11
+    },
+    "content-runtime": {
+      "passed": 33,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 10
+    },
+    "engine-native": {
+      "passed": 1547,
+      "failed": 0,
+      "ignored": 71,
+      "targets": 315
+    },
+    "engine-native-wasm": {
+      "passed": 36,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 6
+    },
+    "engine-protocol": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 2
+    },
+    "game-server": {
+      "passed": 131,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 22
+    },
+    "rule-api": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "targets": 3
+    }
+  },
+  "total": {
+    "passed": 1782,
+    "failed": 0,
+    "ignored": 71,
+    "targets": 369
+  },
+  "counting": "Cargo executed unit/integration/doc test results, retaining existing path-based repeated suites and ignored guards",
+  "results": [
+    {
+      "crate": "content-native-loader",
+      "target": "Running unittests src/lib.rs (target/debug/deps/content_native_loader-ac42aa6d58b76773)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/ai_tuning_loader.rs (target/debug/deps/ai_tuning_loader-05df3203c298dc4d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/doomsday_loader.rs (target/debug/deps/doomsday_loader-13d85221ef3874c7)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/epic_cards_loader.rs (target/debug/deps/epic_cards_loader-22b4d062a13defad)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/loader_acceptance.rs (target/debug/deps/loader_acceptance-49e4a11b65696a8d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/qhly_loader.rs (target/debug/deps/qhly_loader-f098749db44e646b)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/rzsh_loader.rs (target/debug/deps/rzsh_loader-c116585d1817958f)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/skin_switch_loader.rs (target/debug/deps/skin_switch_loader-dde85b4949660f28)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/symbol_table_limit.rs (target/debug/deps/symbol_table_limit-94c922965d3b7125)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Running tests/thunder_loader.rs (target/debug/deps/thunder_loader-9d893a5eb5eb7b5a)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running unittests src/lib.rs (target/debug/deps/content_runtime-4e002ec318b117ac)",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/active_catalog.rs (target/debug/deps/active_catalog-e0d831ed1f2ea500)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/atomic_install.rs (target/debug/deps/atomic_install-ab6743122c891977)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/c3_dependency_conflict.rs (target/debug/deps/c3_dependency_conflict-eda1b5ec9b5398ef)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/cold_import_all_26.rs (target/debug/deps/cold_import_all_26-93ea21c699ce369f)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/extension_import.rs (target/debug/deps/extension_import-e2e9b7ac6195cc2b)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/offline_npack.rs (target/debug/deps/offline_npack-7c07a5bc1fbfb47f)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/signature_trust_chain.rs (target/debug/deps/signature_trust_chain-cd174354e08d0adc)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Running tests/standard_npack.rs (target/debug/deps/standard_npack-9b03712d762ea5ff)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running unittests src/lib.rs (target/debug/deps/engine_native-3393e5633f72561f)",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/a0_tag_registry.rs (target/debug/deps/a0_tag_registry-0c24cb83535b8acc)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/ai_content_tuning.rs (target/debug/deps/ai_content_tuning-b8e05b9bf280af1d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/ai_planner.rs (target/debug/deps/ai_planner-04ea8ec35128379f)",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/auth_archive.rs (target/debug/deps/auth_archive-5b7a55e1a3181e6a)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/boss_play_eight.rs (target/debug/deps/boss_play_eight-825363630ecbc981)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/boundary_snapshot.rs (target/debug/deps/boundary_snapshot-4ddca08ce5b02a05)",
+      "passed": 71,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/d5_longxue_mbqianlong.rs (target/debug/deps/d5_longxue_mbqianlong-10defd5aa3455e64)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/e02_c3_lifecycle.rs (target/debug/deps/e02_c3_lifecycle-82caadc1cc68837b)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/epic_rangjie_after_damage.rs (target/debug/deps/epic_rangjie_after_damage-38f8fcfd675b681e)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/epic_reguhuo_viewas.rs (target/debug/deps/epic_reguhuo_viewas-16c70a4dc587d6a7)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/fuzz_corpus_replay.rs (target/debug/deps/fuzz_corpus_replay-70c3accdf333175a)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_cardpile.rs (target/debug/deps/g1_cardpile-1c4d56848b37a0b4)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_d3.rs (target/debug/deps/g1_d3-9e20b3a24b845fd2)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_hearth.rs (target/debug/deps/g1_hearth-3b4251dc755efd91)",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_huanle.rs (target/debug/deps/g1_huanle-dbe1299f1eeca5f0)",
+      "passed": 22,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_gujian.rs (target/debug/deps/g1_shahai_gujian-8efdb5d9459e9fc0)",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_gwent.rs (target/debug/deps/g1_shahai_gwent-e9721c663520dc9a)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_mtg.rs (target/debug/deps/g1_shahai_mtg-abb8f2ea13e03056)",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_swd.rs (target/debug/deps/g1_shahai_swd-ecc847a0659a0275)",
+      "passed": 111,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_yunchou.rs (target/debug/deps/g1_shahai_yunchou-e0855456e584b9c3)",
+      "passed": 25,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_shahai_zhenfa.rs (target/debug/deps/g1_shahai_zhenfa-6bb414bb83a2f8a3)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_wudian.rs (target/debug/deps/g1_wudian-d5d3ce7c06016374)",
+      "passed": 122,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/g1_wuxing.rs (target/debug/deps/g1_wuxing-a28d3a15461e5910)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l01_ai_tuning_eight.rs (target/debug/deps/l01_ai_tuning_eight-524bbd7e073721a4)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l02_sj_eight.rs (target/debug/deps/l02_sj_eight-050d42d001d88dde)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l04_cardpile_eight.rs (target/debug/deps/l04_cardpile_eight-243e3bfffcff818b)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l05_coin_eight.rs (target/debug/deps/l05_coin_eight-0411e19d0d972fb8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l07_omnisearch.rs (target/debug/deps/l07_omnisearch-ddac729802554feb)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l09_qhly_eight.rs (target/debug/deps/l09_qhly_eight-c9f8e44868dfc8a0)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l10_epic_cards_eight.rs (target/debug/deps/l10_epic_cards_eight-b63a0cd543aed40e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l13_shousha_mvp_eight.rs (target/debug/deps/l13_shousha_mvp_eight-d7154622c79853dd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l15_shousha_eight.rs (target/debug/deps/l15_shousha_eight-956367bfe5b356ee)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l16_drag_read_eight.rs (target/debug/deps/l16_drag_read_eight-0ce42f31e3020933)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l17_douzhuan_eight.rs (target/debug/deps/l17_douzhuan_eight-13ab2e0a0a438a5f)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l18_update_guard_eight.rs (target/debug/deps/l18_update_guard_eight-5149ef8f74fabf32)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l19_brawl_batch1.rs (target/debug/deps/l19_brawl_batch1-6c21cc770f7f1a25)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l19_zaibian_batch2.rs (target/debug/deps/l19_zaibian_batch2-f0cb3e0369f04569)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l20_config_mods_batch1.rs (target/debug/deps/l20_config_mods_batch1-538027ba6a477442)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l20_kurou_batch2.rs (target/debug/deps/l20_kurou_batch2-3c5152703581ee46)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l20_liegong_batch3.rs (target/debug/deps/l20_liegong_batch3-31a3205c7fe6adc9)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l21_martial_eight.rs (target/debug/deps/l21_martial_eight-d82d30b765718425)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l22_elo_eight.rs (target/debug/deps/l22_elo_eight-f27d07a341f4b680)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l23_desktop_adapt.rs (target/debug/deps/l23_desktop_adapt-65ec2ce19a6de693)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l24_skin_switch_eight.rs (target/debug/deps/l24_skin_switch_eight-fcdefd6ae6c4fe54)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l26_fool_eight.rs (target/debug/deps/l26_fool_eight-3d958a0e6d70afb6)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l27_jishe_batch5.rs (target/debug/deps/l27_jishe_batch5-dcbe7503d84ca717)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l27_new_meibu_batch3.rs (target/debug/deps/l27_new_meibu_batch3-c68477a1be364bc3)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l27_new_zhixi_batch2.rs (target/debug/deps/l27_new_zhixi_batch2-74dec365ab9b6d7a)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l27_sbzhaxiang_batch4.rs (target/debug/deps/l27_sbzhaxiang_batch4-ff7dca2bdc1226b3)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l27_xiefang_batch1.rs (target/debug/deps/l27_xiefang_batch1-f6facc4399ac41ad)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/l29_longxue_eight.rs (target/debug/deps/l29_longxue_eight-7227517d0ed8d7ef)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/maintenance_guards.rs (target/debug/deps/maintenance_guards-d05e2744866b86ee)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/native_kernel.rs (target/debug/deps/native_kernel-22bd1b8c20fafd06)",
+      "passed": 341,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc01_seat_semantics.rs (target/debug/deps/nc01_seat_semantics-12e12816644d3d60)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc03_ai_consistency.rs (target/debug/deps/nc03_ai_consistency-d5cfff25dd339755)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc03_legal_actions.rs (target/debug/deps/nc03_legal_actions-22806b4e1d9b2eb3)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc04_vm_fault.rs (target/debug/deps/nc04_vm_fault-a9043e745b2d105f)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc04_vm_resume.rs (target/debug/deps/nc04_vm_resume-67a5c66e8452979c)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc05_general_select.rs (target/debug/deps/nc05_general_select-2572b0efcb35725d)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc06_generic_content_state.rs (target/debug/deps/nc06_generic_content_state-2c1d33894662600b)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc07_discard_duplicate_probe.rs (target/debug/deps/nc07_discard_duplicate_probe-3933d2394f23d153)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc07_state_same_source.rs (target/debug/deps/nc07_state_same_source-f3e47b5770ea3591)",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_acceptance_sweep_all_packages.rs (target/debug/deps/nc08_acceptance_sweep_all_packages-caf08e7dd02e98b9)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_acceptance_sweep_small_packages.rs (target/debug/deps/nc08_acceptance_sweep_small_packages-dabd9433ee8149f1)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_card_name_prefix_regression.rs (target/debug/deps/nc08_card_name_prefix_regression-21e7a3151fcca8dd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_card_ownership_partition.rs (target/debug/deps/nc08_card_ownership_partition-2ef18494a744d270)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_composition_acceptance.rs (target/debug/deps/nc08_composition_acceptance-8d76540faadcbcd6)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_composition_pair_matrix.rs (target/debug/deps/nc08_composition_pair_matrix-e23aeb7e829d62d8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_config_acceptance.rs (target/debug/deps/nc08_config_acceptance-cd081d5faa67eafd)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_conversion_gap_regression.rs (target/debug/deps/nc08_conversion_gap_regression-576696e21cf97095)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_dead_host_keys.rs (target/debug/deps/nc08_dead_host_keys-806181c157cf93d1)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_general_pair_matrix.rs (target/debug/deps/nc08_general_pair_matrix-8f8eec8146ebdd50)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_global_cards_active_use_probe.rs (target/debug/deps/nc08_global_cards_active_use_probe-9d72beaccd06b0ed)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_identity_gate_matrix.rs (target/debug/deps/nc08_identity_gate_matrix-3dc8f88509bfbc6e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_loader_card_skills.rs (target/debug/deps/nc08_loader_card_skills-95172c0cdadaaad0)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_manifest_matrix.rs (target/debug/deps/nc08_manifest_matrix-417ac4ab00a9a52e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_phase_end_dispatch_probe.rs (target/debug/deps/nc08_phase_end_dispatch_probe-e15ade8661ceda9a)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_pile_pair_matrix.rs (target/debug/deps/nc08_pile_pair_matrix-9b530dbf4e6e1eed)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_prepare_phase_mapping.rs (target/debug/deps/nc08_prepare_phase_mapping-0d63f2faafa428df)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_registered_defect_guards.rs (target/debug/deps/nc08_registered_defect_guards-49a4aaa5115fddaf)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 50
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_replay_determinism_five_sources.rs (target/debug/deps/nc08_replay_determinism_five_sources-a99b9382a5867257)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_rescue_card_set_survey.rs (target/debug/deps/nc08_rescue_card_set_survey-4241948a54b58da9)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_save_restore_four_sources.rs (target/debug/deps/nc08_save_restore_four_sources-45ae20da10768e94)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_save_restore_matrix.rs (target/debug/deps/nc08_save_restore_matrix-740310c9b0dd231e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_save_restore_pile.rs (target/debug/deps/nc08_save_restore_pile-92ddb183e81bef32)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_skill_mapping_inventory.rs (target/debug/deps/nc08_skill_mapping_inventory-301c22335e1220be)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_skill_pair_matrix.rs (target/debug/deps/nc08_skill_pair_matrix-696c3d1e49b9aa26)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_standard_deck_coverage.rs (target/debug/deps/nc08_standard_deck_coverage-2aae471dfae1478e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_swd_yuchan_family_probe.rs (target/debug/deps/nc08_swd_yuchan_family_probe-507ede1fe2b033fb)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_u08_reachability.rs (target/debug/deps/nc08_u08_reachability-e14e6387f96a84ad)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upgrade_acceptance.rs (target/debug/deps/nc08_upgrade_acceptance-f847744938aba2af)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upgrade_five_sources.rs (target/debug/deps/nc08_upgrade_five_sources-f971d973202729ba)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upgrade_matrix.rs (target/debug/deps/nc08_upgrade_matrix-a44fa90c44151804)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upgrade_skill_mapping.rs (target/debug/deps/nc08_upgrade_skill_mapping-becc95313e69b7c7)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_biyue_yingzi.rs (target/debug/deps/nc08_upstream_biyue_yingzi-b8d25b349c3924b1)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_boss_zhugeliang.rs (target/debug/deps/nc08_upstream_boss_zhugeliang-9c072737a6d18082)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_chunbing.rs (target/debug/deps/nc08_upstream_chunbing-e9eda9719014cab3)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_ciqiu.rs (target/debug/deps/nc08_upstream_ciqiu-2a1b7a274260b2fb)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_duwen.rs (target/debug/deps/nc08_upstream_duwen-087b05555860aff0)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_fanjian.rs (target/debug/deps/nc08_upstream_fanjian-0726a5fb2f04f514)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_fankui.rs (target/debug/deps/nc08_upstream_fankui-aac0d16908ddcd07)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_ganglie.rs (target/debug/deps/nc08_upstream_ganglie-72b9e3b6d606fc67)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_guanxing.rs (target/debug/deps/nc08_upstream_guanxing-e001a6102006c603)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_guicai.rs (target/debug/deps/nc08_upstream_guicai-5afdf4a26f457bed)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_bingpotong.rs (target/debug/deps/nc08_upstream_gujian_bingpotong-eceeb5ad58b0e3e8)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_dinvxuanshuang.rs (target/debug/deps/nc08_upstream_gujian_dinvxuanshuang-c5af85ad4624ece5)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_feibiao.rs (target/debug/deps/nc08_upstream_gujian_feibiao-d23a829aa465e4cd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_food_survey.rs (target/debug/deps/nc08_upstream_gujian_food_survey-5bee9620f8953832)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_gjyuheng.rs (target/debug/deps/nc08_upstream_gujian_gjyuheng-52b7d159006d2a62)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_gudonggeng.rs (target/debug/deps/nc08_upstream_gujian_gudonggeng-8857bc274b8ec1c8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_heilonglinpian.rs (target/debug/deps/nc08_upstream_gujian_heilonglinpian-a788bb6953464d10)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_jinlianzhu.rs (target/debug/deps/nc08_upstream_gujian_jinlianzhu-1d117d37b1fa74dd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_liufengsan.rs (target/debug/deps/nc08_upstream_gujian_liufengsan-ff83963dcc3daa04)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_liutouge.rs (target/debug/deps/nc08_upstream_gujian_liutouge-85b9601a7bac05dc)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_liyutang.rs (target/debug/deps/nc08_upstream_gujian_liyutang-a02607af1f08681e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_longxugou.rs (target/debug/deps/nc08_upstream_gujian_longxugou-f096bba08c6f8bf5)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_luyugeng.rs (target/debug/deps/nc08_upstream_gujian_luyugeng-e2deb82c98cf93b8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_mapodoufu.rs (target/debug/deps/nc08_upstream_gujian_mapodoufu-7d9b67cf42c6879f)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_mianlijinzhen.rs (target/debug/deps/nc08_upstream_gujian_mianlijinzhen-b2ef315eb3b7772b)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_mizhilianou.rs (target/debug/deps/nc08_upstream_gujian_mizhilianou-33c944f68bc0b551)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_molicha.rs (target/debug/deps/nc08_upstream_gujian_molicha-2aa96112f2a6c937)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_mutoumianju.rs (target/debug/deps/nc08_upstream_gujian_mutoumianju-7ef6b39bd87b8b4a)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_qiankunbiao.rs (target/debug/deps/nc08_upstream_gujian_qiankunbiao-07536b3130e1f7bb)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_qingtuan.rs (target/debug/deps/nc08_upstream_gujian_qingtuan-992cf57e18e493e2)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_shatang.rs (target/debug/deps/nc08_upstream_gujian_shatang-52bf39856119d641)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_shenhuofeiya.rs (target/debug/deps/nc08_upstream_gujian_shenhuofeiya-2c1062694e5d6c11)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_shihuifen.rs (target/debug/deps/nc08_upstream_gujian_shihuifen-a6a2e405a39c121d)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_shujinsan.rs (target/debug/deps/nc08_upstream_gujian_shujinsan-94ea4476df722086)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_tanhuadong.rs (target/debug/deps/nc08_upstream_gujian_tanhuadong-de29e5c838a5c9fd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_xiajiao.rs (target/debug/deps/nc08_upstream_gujian_xiajiao-7d6554c1977ade0f)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_yougeng.rs (target/debug/deps/nc08_upstream_gujian_yougeng-14cb59459d974590)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_yuanbaorou.rs (target/debug/deps/nc08_upstream_gujian_yuanbaorou-78eb0192240a5e91)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_yunvyuanshen.rs (target/debug/deps/nc08_upstream_gujian_yunvyuanshen-5c6983236bac660e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_gujian_ziyangdan.rs (target/debug/deps/nc08_upstream_gujian_ziyangdan-f32aa4fa6bd222f7)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_guose.rs (target/debug/deps/nc08_upstream_guose-ef18c090382d2aa7)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_haidao.rs (target/debug/deps/nc08_upstream_haidao-8f9369a73319e473)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_chuansongmen.rs (target/debug/deps/nc08_upstream_hearth_chuansongmen-4abc95902ab9228a)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_dunpaigedang.rs (target/debug/deps/nc08_upstream_hearth_dunpaigedang-423904bf41b47caa)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_jihuocard.rs (target/debug/deps/nc08_upstream_hearth_jihuocard-747a8df4ce163f9e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_linghunzhihuo.rs (target/debug/deps/nc08_upstream_hearth_linghunzhihuo-76ba72d1143d97cd)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_shandianjian.rs (target/debug/deps/nc08_upstream_hearth_shandianjian-f4316436eae3ac71)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_shenenshu.rs (target/debug/deps/nc08_upstream_hearth_shenenshu-5b811ae2a8f15461)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_shijieshu.rs (target/debug/deps/nc08_upstream_hearth_shijieshu-164dbf19d245aa21)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_tanshezhiren.rs (target/debug/deps/nc08_upstream_hearth_tanshezhiren-e2e52e806ec0e287)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_xingjiegoutong.rs (target/debug/deps/nc08_upstream_hearth_xingjiegoutong-b4f35e0cac66d603)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_yuansuhuimie.rs (target/debug/deps/nc08_upstream_hearth_yuansuhuimie-5b432acfc8cc31bb)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_zhaomingdan.rs (target/debug/deps/nc08_upstream_hearth_zhaomingdan-d27d9c4b5f7ae435)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hearth_zhiliaobo.rs (target/debug/deps/nc08_upstream_hearth_zhiliaobo-77f8b0959b7f1f20)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_hujia.rs (target/debug/deps/nc08_upstream_hujia-67433fd6ae8a1a7c)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_identity_start.rs (target/debug/deps/nc08_upstream_identity_start-e40dc036585049e9)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jianxiong.rs (target/debug/deps/nc08_upstream_jianxiong-e9aba61d25120303)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jieyin.rs (target/debug/deps/nc08_upstream_jieyin-b72151cf463435a0)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jijiang.rs (target/debug/deps/nc08_upstream_jijiang-8c1e725db7aab24b)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jijie.rs (target/debug/deps/nc08_upstream_jijie-0c5eee36d0880943)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jijiu.rs (target/debug/deps/nc08_upstream_jijiu-d1ab604ccc9f1ca3)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jiuyuan.rs (target/debug/deps/nc08_upstream_jiuyuan-c7388fe0d5e96bd5)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jiyuan.rs (target/debug/deps/nc08_upstream_jiyuan-dc1e8074bd7a49ec)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_jizhi.rs (target/debug/deps/nc08_upstream_jizhi-ea87f656cc4acff1)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_keji.rs (target/debug/deps/nc08_upstream_keji-16b5035f71030eed)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_kongcheng.rs (target/debug/deps/nc08_upstream_kongcheng-6afd6533f6b3389e)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_kuangfu.rs (target/debug/deps/nc08_upstream_kuangfu-e29f6484380b0aaf)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_kurou.rs (target/debug/deps/nc08_upstream_kurou-18ded2bb3c27ea48)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_kuwu.rs (target/debug/deps/nc08_upstream_kuwu-4442a6518128eb64)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_lianying.rs (target/debug/deps/nc08_upstream_lianying-b8cb7c1767396bd6)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_liegong_xinkuanggu.rs (target/debug/deps/nc08_upstream_liegong_xinkuanggu-ece96d6e997c07cf)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_lijian.rs (target/debug/deps/nc08_upstream_lijian-61d822f3856d0ccb)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_linghunzhihuo.rs (target/debug/deps/nc08_upstream_linghunzhihuo-cb6651c3153f5959)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_lingxue.rs (target/debug/deps/nc08_upstream_lingxue-893c2ce56ed9d551)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_liuli.rs (target/debug/deps/nc08_upstream_liuli-1aac6cd99b2029c1)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_longdan.rs (target/debug/deps/nc08_upstream_longdan-1b57105735dd3023)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_longxue.rs (target/debug/deps/nc08_upstream_longxue-158c89e62f35d59e)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_luoshen.rs (target/debug/deps/nc08_upstream_luoshen-883ba5c557fcc64f)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_luoyi.rs (target/debug/deps/nc08_upstream_luoyi-69cf8d64e5754c6d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mashu.rs (target/debug/deps/nc08_upstream_mashu-eea688a8b35cd90d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_bingheyaosai.rs (target/debug/deps/nc08_upstream_mtg_bingheyaosai-0acce8570005b996)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_feixu.rs (target/debug/deps/nc08_upstream_mtg_feixu-28d1ed2ec703f818)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_haidao.rs (target/debug/deps/nc08_upstream_mtg_haidao-a72f8d0707b8d463)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_lindixiliu.rs (target/debug/deps/nc08_upstream_mtg_lindixiliu-e3451fc3f8e39dd7)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_linzhongjianta.rs (target/debug/deps/nc08_upstream_mtg_linzhongjianta-7804402919daf070)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_longlushanfeng.rs (target/debug/deps/nc08_upstream_mtg_longlushanfeng-f14148efd7c11ea3)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_shamolvzhou.rs (target/debug/deps/nc08_upstream_mtg_shamolvzhou-9a9973afe1bca26d)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_shuimomuxue.rs (target/debug/deps/nc08_upstream_mtg_shuimomuxue-e39c4e2de91e63e0)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_mtg_youlin.rs (target/debug/deps/nc08_upstream_mtg_youlin-2376d231fedfdcc5)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_paoxiao.rs (target/debug/deps/nc08_upstream_paoxiao-643a79523049bf23)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_qianxun.rs (target/debug/deps/nc08_upstream_qianxun-90831317d8976ec3)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_qicai.rs (target/debug/deps/nc08_upstream_qicai-0cdcdbeab7fc63e3)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_qingguo.rs (target/debug/deps/nc08_upstream_qingguo-8fe880a0b0330ed2)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_qingnang.rs (target/debug/deps/nc08_upstream_qingnang-28a7129ef29392a4)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_qixi.rs (target/debug/deps/nc08_upstream_qixi-1826f6ba4e89be2e)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_rangjie.rs (target/debug/deps/nc08_upstream_rangjie-628fd9db52e0ce41)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_rende.rs (target/debug/deps/nc08_upstream_rende-0dab075edaae48f0)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_shengke.rs (target/debug/deps/nc08_upstream_shengke-842d64ec6eb8eef1)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_shushen.rs (target/debug/deps/nc08_upstream_shushen-ff39015c3e5bba6d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_standard_tricks.rs (target/debug/deps/nc08_upstream_standard_tricks-b7dc60db0818d2e9)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_baishouzhihu.rs (target/debug/deps/nc08_upstream_swd_baishouzhihu-3d4554de9f2a9d39)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_cangchizhibi.rs (target/debug/deps/nc08_upstream_swd_cangchizhibi-5bc9899abd02ded4)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_gouhunluo.rs (target/debug/deps/nc08_upstream_swd_gouhunluo-b32b9be07945a483)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_huanglin.rs (target/debug/deps/nc08_upstream_swd_huanglin-4b791cff211923d7)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_hufu.rs (target/debug/deps/nc08_upstream_swd_hufu-120b8db76a3b9862)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_jiguantong.rs (target/debug/deps/nc08_upstream_swd_jiguantong-a77915fc55aa47c0)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_mujiaren.rs (target/debug/deps/nc08_upstream_swd_mujiaren-b73acecca8d2dd7f)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_qinglong.rs (target/debug/deps/nc08_upstream_swd_qinglong-9e49d04cc332a71a)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_shencaojie_reverse.rs (target/debug/deps/nc08_upstream_swd_shencaojie_reverse-4774bd9fdcc49c1f)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_shencaojie_window.rs (target/debug/deps/nc08_upstream_swd_shencaojie_window-74e8954902b0ebd2)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_shenmiguo.rs (target/debug/deps/nc08_upstream_swd_shenmiguo-aff86ddd2d48c7d8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_shijianhuisu.rs (target/debug/deps/nc08_upstream_swd_shijianhuisu-766a9ee3d476d722)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_xuanwu.rs (target/debug/deps/nc08_upstream_swd_xuanwu-0a3f778945ffd076)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_yangpijuan.rs (target/debug/deps/nc08_upstream_swd_yangpijuan-a3f3130e0fec420b)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_zhongxinghujia.rs (target/debug/deps/nc08_upstream_swd_zhongxinghujia-583256c9a027ce51)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_zhufangshenshi.rs (target/debug/deps/nc08_upstream_swd_zhufangshenshi-0b21a014d2852f9e)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_swd_zhuque.rs (target/debug/deps/nc08_upstream_swd_zhuque-2260a174034c90b8)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_tiandu.rs (target/debug/deps/nc08_upstream_tiandu-d2cca8921a3ccf91)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_tianfuzhen.rs (target/debug/deps/nc08_upstream_tianfuzhen-2cea82a047e344a8)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_tieji.rs (target/debug/deps/nc08_upstream_tieji-8fefafbe2e00c6a7)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_tuxi.rs (target/debug/deps/nc08_upstream_tuxi-d759b4c564ee550d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wudian_wangmeizhike.rs (target/debug/deps/nc08_upstream_wudian_wangmeizhike-37557a00b6b47d87)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wudian_youdishenru.rs (target/debug/deps/nc08_upstream_wudian_youdishenru-c440e4d6f4d30111)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wusheng.rs (target/debug/deps/nc08_upstream_wusheng-1062c75e6a50344c)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wushuang.rs (target/debug/deps/nc08_upstream_wushuang-3cec29b92920cbd9)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wuxing_shengke.rs (target/debug/deps/nc08_upstream_wuxing_shengke-eb73200ce2baf3e4)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wuxing_shengke_branches.rs (target/debug/deps/nc08_upstream_wuxing_shengke_branches-4cbb5ca25a983469)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_wuxing_wuxingpan.rs (target/debug/deps/nc08_upstream_wuxing_wuxingpan-463a9ba4ef3f6236)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_xiaoji.rs (target/debug/deps/nc08_upstream_xiaoji-54e92da42a64f932)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_xicai.rs (target/debug/deps/nc08_upstream_xicai-16174929b904a0ac)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_xiuluo.rs (target/debug/deps/nc08_upstream_xiuluo-6599d6cb5a999a1d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yanziyaoshui.rs (target/debug/deps/nc08_upstream_yanziyaoshui-96140a4fcf9d4cb3)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yaowu.rs (target/debug/deps/nc08_upstream_yaowu-35066797dc88f1cc)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yiji.rs (target/debug/deps/nc08_upstream_yiji-c8ea8212bef5d317)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_beige.rs (target/debug/deps/nc08_upstream_yunchou_beige-f737eaa7549b6053)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_chanyuan.rs (target/debug/deps/nc08_upstream_yunchou_chanyuan-29187ca2b060cbaa)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_chenhuodajie.rs (target/debug/deps/nc08_upstream_yunchou_chenhuodajie-f533cd68507f3c53)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_chenhuodajie_window.rs (target/debug/deps/nc08_upstream_yunchou_chenhuodajie_window-9b3bd53a9e1aa139)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_guhuo.rs (target/debug/deps/nc08_upstream_yunchou_guhuo-82c187ad0e4dac56)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_guihan.rs (target/debug/deps/nc08_upstream_yunchou_guihan-1b7ff570d41f4136)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_honglian.rs (target/debug/deps/nc08_upstream_yunchou_honglian-ea8e1698d731d03f)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_huoshan.rs (target/debug/deps/nc08_upstream_yunchou_huoshan-830f7f1548945d36)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_jiaoxia.rs (target/debug/deps/nc08_upstream_yunchou_jiaoxia-1d1e5bd567ddd422)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_jieyan.rs (target/debug/deps/nc08_upstream_yunchou_jieyan-aba23a79b6d30b3b)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_kuanggu.rs (target/debug/deps/nc08_upstream_yunchou_kuanggu-3d933f3f14388dad)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_luweiyan.rs (target/debug/deps/nc08_upstream_yunchou_luweiyan-b13b2b237ed6066d)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_shaoying.rs (target/debug/deps/nc08_upstream_yunchou_shaoying-cf6fc51950df1541)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_toulianghuanzhu.rs (target/debug/deps/nc08_upstream_yunchou_toulianghuanzhu-35a73cc13e85e632)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_unimplemented.rs (target/debug/deps/nc08_upstream_yunchou_unimplemented-8d181121ef151f85)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_xiongzi.rs (target/debug/deps/nc08_upstream_yunchou_xiongzi-9d58674d828504ff)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_yaliang.rs (target/debug/deps/nc08_upstream_yunchou_yaliang-fe9d699104d7b532)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_yiesheng.rs (target/debug/deps/nc08_upstream_yunchou_yiesheng-5f91a89c8c970c28)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_yunchou_zonghuo.rs (target/debug/deps/nc08_upstream_yunchou_zonghuo-edc9e5c3eb714735)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_zhenfa_dizaizhen.rs (target/debug/deps/nc08_upstream_zhenfa_dizaizhen-89cc8179e98667aa)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_zhiheng.rs (target/debug/deps/nc08_upstream_zhiheng-1c6a002869ce29fa)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_zhiyuan.rs (target/debug/deps/nc08_upstream_zhiyuan-6e8ef11b244c5d78)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_upstream_ziyu.rs (target/debug/deps/nc08_upstream_ziyu-825a1add2fb349ab)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc08_zhenfa_mode_gate_survey.rs (target/debug/deps/nc08_zhenfa_mode_gate_survey-0440f502355fabac)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc09_identity_end_to_end.rs (target/debug/deps/nc09_identity_end_to_end-87bbfb9b4a3792cc)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc09_projection_and_errors.rs (target/debug/deps/nc09_projection_and_errors-ea9c0c83bf7e6d02)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc10_ai_boundary_and_cancel.rs (target/debug/deps/nc10_ai_boundary_and_cancel-ac76e0a391cee53a)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc10_ai_bounds.rs (target/debug/deps/nc10_ai_bounds-d2d494ddf69e3e9c)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc10_ai_information_boundary.rs (target/debug/deps/nc10_ai_information_boundary-048cec7e71bfcb20)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc10_planner_pool.rs (target/debug/deps/nc10_planner_pool-27ac078bb42c954d)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc12_ai_strength_baseline.rs (target/debug/deps/nc12_ai_strength_baseline-ca9cd2fdc24d51ad)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc12_dangling_reference_probe.rs (target/debug/deps/nc12_dangling_reference_probe-9539db47a7dae18c)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc12_dangling_reference_repro.rs (target/debug/deps/nc12_dangling_reference_repro-d5568f483c239675)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/nc12_swd_authoritative_stability.rs (target/debug/deps/nc12_swd_authoritative_stability-d2c998a3e71663be)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-68d517335d5e2161)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/standard_catalog_inventory.rs (target/debug/deps/standard_catalog_inventory-e7b8cf7f62f78ebf)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_bingfeng_lock.rs (target/debug/deps/swd_bingfeng_lock-2169aa9d8ec18c99)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_cyqiaoxie_jiguan.rs (target/debug/deps/swd_cyqiaoxie_jiguan-9a6bdc8f04b2eae1)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_gaizao_slot.rs (target/debug/deps/swd_gaizao_slot-dc6c8310c1f430d2)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_gongxin_hand_peek.rs (target/debug/deps/swd_gongxin_hand_peek-74871113f2fa0ecd)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_gxianyin_suit_swap.rs (target/debug/deps/swd_gxianyin_suit_swap-fba28b8e1b06f3c2)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_hutian_deposit.rs (target/debug/deps/swd_hutian_deposit-0b981a027bbed540)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_hxunzhi_wanjian.rs (target/debug/deps/swd_hxunzhi_wanjian-50dd32e473b226c6)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_jifeng_multishot.rs (target/debug/deps/swd_jifeng_multishot-0fae57fb859df28c)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_jikong_thunder_sha.rs (target/debug/deps/swd_jikong_thunder_sha-3bf0b116395c7c8c)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_jilve_top3.rs (target/debug/deps/swd_jilve_top3-01bec529c3e2bba2)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_kunlunjing_rewind.rs (target/debug/deps/swd_kunlunjing_rewind-752adfef341794c6)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_liaoyuan_extra_shan.rs (target/debug/deps/swd_liaoyuan_extra_shan-6723d63dcd8c52e4)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_lingwu_extra_phase.rs (target/debug/deps/swd_lingwu_extra_phase-ea5974119d5a81f7)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_linyun_two_cards_sha.rs (target/debug/deps/swd_linyun_two_cards_sha-bc443cc954c7f960)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_lxianglong_sha_miss.rs (target/debug/deps/swd_lxianglong_sha_miss-d87aabb8b574f2b4)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_mailun_modes.rs (target/debug/deps/swd_mailun_modes-ebb0321c1ff1dde5)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_meihuo_cards_lost.rs (target/debug/deps/swd_meihuo_cards_lost-d67fb944c02b6eed)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_miedao_draw_discard.rs (target/debug/deps/swd_miedao_draw_discard-ec8836dc076de805)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_mohua2_transform.rs (target/debug/deps/swd_mohua2_transform-492a597f6305ad57)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_moyan_multi_fire.rs (target/debug/deps/swd_moyan_multi_fire-e6bd54cc3d1bfffa)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_niepan_ref.rs (target/debug/deps/swd_niepan_ref-49609ea040bb7f94)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_rumeng_phase_skip.rs (target/debug/deps/swd_rumeng_phase_skip-355582bd80e928e9)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_shengong_borrow.rs (target/debug/deps/swd_shengong_borrow-523a6586a1520696)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_shenyan_spread.rs (target/debug/deps/swd_shenyan_spread-0fcf0b13f58a2236)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_shouyin_full_heal.rs (target/debug/deps/swd_shouyin_full_heal-93aab163bd0f7169)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_songci_targets.rs (target/debug/deps/swd_songci_targets-99e2ebec04c51258)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_swdtianshu_gain.rs (target/debug/deps/swd_swdtianshu_gain-937957a82cd9dbe9)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_tianlun_judge.rs (target/debug/deps/swd_tianlun_judge-204a2127a4015969)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_tianxiang_redirect.rs (target/debug/deps/swd_tianxiang_redirect-0f8c58efcbdc98ca)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_xiuluo_judge_clear.rs (target/debug/deps/swd_xiuluo_judge_clear-f0191b98b40cd3bf)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_xuanyuanjian_card.rs (target/debug/deps/swd_xuanyuanjian_card-eb32e1962cce8e91)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_yihua_bounce.rs (target/debug/deps/swd_yihua_bounce-f4bc676204489b6f)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_yishan_recover.rs (target/debug/deps/swd_yishan_recover-abbb6cd03a241080)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_zhenlie_target_exclude.rs (target/debug/deps/swd_zhenlie_target_exclude-57f4ce41db8efb9f)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/swd_zhuhai_end_phase_sha.rs (target/debug/deps/swd_zhuhai_end_phase_sha-6ed40d174b3f274b)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t11_boss_pangtong_niepan.rs (target/debug/deps/t11_boss_pangtong_niepan-e91b573ebe06b2af)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t11_boss_zhugeliang_hlss.rs (target/debug/deps/t11_boss_zhugeliang_hlss-088d311a3ecaa07b)",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t12_dual_diag.rs (target/debug/deps/t12_dual_diag-1c561c8c0e3dfa07)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t12_g2g4_channels.rs (target/debug/deps/t12_g2g4_channels-7f2e74e556dc5196)",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t12_g5_relays.rs (target/debug/deps/t12_g5_relays-0a0340be259f3e33)",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t13_info_isolation.rs (target/debug/deps/t13_info_isolation-d302d4bbd8ff6c8a)",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t8_rvm_bridge.rs (target/debug/deps/t8_rvm_bridge-d705138496a80d8d)",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/t9_d5_surface.rs (target/debug/deps/t9_d5_surface-459441cb0d5db67f)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/u01_d3_moyan.rs (target/debug/deps/u01_d3_moyan-ccb77400c91b042d)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/u03_cardpile_eight.rs (target/debug/deps/u03_cardpile_eight-69075b3f50c69341)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/u04_coin_eight.rs (target/debug/deps/u04_coin_eight-46f109de664f133c)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/u08_hero_kill_batch1.rs (target/debug/deps/u08_hero_kill_batch1-0e5643c192ae0e7d)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/u08_menshen_batch2.rs (target/debug/deps/u08_menshen_batch2-600b3425356281de)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Running tests/view_isolation.rs (target/debug/deps/view_isolation-bf89c8a52593bc54)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Running unittests src/lib.rs (target/debug/deps/engine_native_wasm-81031c7cd04fa000)",
+      "passed": 22,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Running tests/installed_package_payload.rs (target/debug/deps/installed_package_payload-1c08f24ad0d7ab7c)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Running tests/nc03_legal_actions_export.rs (target/debug/deps/nc03_legal_actions_export-f3937a88f79b84dd)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Running tests/nc05_general_select_export.rs (target/debug/deps/nc05_general_select_export-f523ba6a2e81d7f4)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Running tests/nc08_cross_target.rs (target/debug/deps/nc08_cross_target-b90eec441f70b516)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-protocol",
+      "target": "Running unittests src/lib.rs (target/debug/deps/engine_protocol-a5106dd8efc84081)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running unittests src/main.rs (target/debug/deps/game_server-9c237bf84a1be75f)",
+      "passed": 18,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/fault_injection.rs (target/debug/deps/fault_injection-3486277450feda39)",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/long_run_bot.rs (target/debug/deps/long_run_bot-e1a7cfe6388d8c83)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/long_run_memory.rs (target/debug/deps/long_run_memory-f4b4afb4903a676b)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/long_run_soak.rs (target/debug/deps/long_run_soak-a081b956ed959e60)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/m8_rolling_upgrade.rs (target/debug/deps/m8_rolling_upgrade-c711b45fa8388a68)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/multi_room_stress.rs (target/debug/deps/multi_room_stress-9e1950fa74dd9e76)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/native_frozen_packages.rs (target/debug/deps/native_frozen_packages-afcd084fa0a92546)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/native_product_path.rs (target/debug/deps/native_product_path-5a1902f952a92930)",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc02_install_identity.rs (target/debug/deps/nc02_install_identity-7acaec9f504a6a39)",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc05_campaign_profile.rs (target/debug/deps/nc05_campaign_profile-f13e7a591f786a74)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc05_lifecycle_heavy.rs (target/debug/deps/nc05_lifecycle_heavy-5b69067cb0c7c71d)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc05_skin_ui.rs (target/debug/deps/nc05_skin_ui-58ee4ec34a209aff)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc08_command_by_command.rs (target/debug/deps/nc08_command_by_command-b76295ddcfa16a7c)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc08_cross_line.rs (target/debug/deps/nc08_cross_line-5c51686f7c5da936)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc08_install_matrix.rs (target/debug/deps/nc08_install_matrix-e538654f712ed92b)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc09_dual_backend.rs (target/debug/deps/nc09_dual_backend-76af919729f0638c)",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc09_native_actor.rs (target/debug/deps/nc09_native_actor-e51b45b728cf599c)",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc09_native_room_session.rs (target/debug/deps/nc09_native_room_session-808308e7b62b1606)",
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/nc09_native_view_bridge.rs (target/debug/deps/nc09_native_view_bridge-a61f1e229f685015)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/room_flow.rs (target/debug/deps/room_flow-c41f14481b75aae6)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "game-server",
+      "target": "Running tests/tournament_wal_signing.rs (target/debug/deps/tournament_wal_signing-62704b08c3d21e77)",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "rule-api",
+      "target": "Running unittests src/lib.rs (target/debug/deps/rule_api-5ddb6c06cc3ea0a7)",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "rule-api",
+      "target": "Running tests/effect_wire_compat.rs (target/debug/deps/effect_wire_compat-3fc5c34dc0678a3a)",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-native-loader",
+      "target": "Doc-tests content_native_loader",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "content-runtime",
+      "target": "Doc-tests content_runtime",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native",
+      "target": "Doc-tests engine_native",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-native-wasm",
+      "target": "Doc-tests engine_native_wasm",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "engine-protocol",
+      "target": "Doc-tests engine_protocol",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "crate": "rule-api",
+      "target": "Doc-tests rule_api",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "recorded_at": "2026-10-24T14:16:43.125250+08:00",
+  "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server/src/native_ws_e2e.rs",
+  "source_lines": 700,
+  "source_sha256": "6e6b435f87862a9d41c9a84f84709a23b8f7480e2edd88a22eaf3d7b74943568",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--bin",
+    "game-server",
+    "native_ws_e2e",
+    "--",
+    "--nocapture"
+  ],
+  "exit_code": 0,
+  "result": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 16
+  },
+  "raw_log": "/tmp/noname-next-ws-delivery-20261024/ws-e2e-targeted-final.log",
+  "scope": [
+    "real loopback TCP/WebSocket bootstrap/router",
+    "official upstream-noname shahai-swd+wudian content changes live deck and hand",
+    "owner/joiner/spectator private projections and synchronization",
+    "wrong password, authenticated actor override, nonzero stale header and body revisions",
+    "real pending Discard choice option indices, full snapshot and JoinOk restore",
+    "fresh runtime bootstrap after dropping all old runtime actors, token reentry, authoritative ResolveChoice and continued persistence",
+    "missing and valid same-version changed content fail closed and preserve save"
+  ],
+  "not_proven": [
+    "TLS",
+    "cross-machine transport",
+    "operating system process restart"
+  ],
+  "format_check_log": "/tmp/noname-next-ws-delivery-20261024/ws-e2e-format-check-final.log",
+  "line_gate_log": "/tmp/noname-next-ws-delivery-20261024/ws-e2e-line-gate.log",
+  "line_gate_note": "Full gate passed before final two source assertions were added; final owned file count is 700 and below 2000.",
+  "staged": false,
+  "committed": false
+}

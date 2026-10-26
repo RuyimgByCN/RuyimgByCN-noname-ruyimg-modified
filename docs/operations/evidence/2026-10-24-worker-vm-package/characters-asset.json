@@ -1,0 +1,16 @@
+{
+  "source": "evidence",
+  "upstream_path": "worker-vm-fixture",
+  "upstream_commit": "0000000000000000000000000000000000000000",
+  "pack": { "name": "worker-vm", "version": 1, "description": "Worker VM package fixture" },
+  "generals": [
+    {
+      "id": "worker_vm_probe",
+      "name": "worker_vm_probe",
+      "faction": "qun",
+      "hp": 4,
+      "gender": "male",
+      "skills": [ { "name": "worker_vm_probe_phase_end", "title": "探针" } ]
+    }
+  ]
+}

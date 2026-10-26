@@ -36,6 +36,8 @@ impl Engine {
         self.state.resolution.open_choice.as_ref()
     }
 
+    /// 规范状态哈希。PA03：`canonical_hash` 已缓冲化（先拼缓冲再一次
+    /// blake3 update），字节序与逐字段流式写入完全一致。
     pub fn state_hash(&self) -> [u8; 32] {
         canonical_hash(&self.state)
     }

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--bin",
+    "game-server",
+    "native_ws_e2e",
+    "--",
+    "--nocapture"
+  ],
+  "start": "2026-10-24T15:33:13.818211+08:00",
+  "end": "2026-10-24T15:33:17.299012+08:00",
+  "seconds": 3.481,
+  "exit": 0
+}

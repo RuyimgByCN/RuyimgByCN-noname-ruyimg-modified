@@ -4,17 +4,18 @@
 //! `RoomPersist`（`engine_api::Snapshot` 是结构化旧线状态，不能直接装原生归档）；
 //! 且旧线房间还承载锦标赛 WAL 分块签名等**已测试**能力。因此本模块**并行**实现
 //! 原生 actor（复用 [`crate::room_native`] 的会话与持久化面、`RoomMsg` 消息类型、
-//! `Outbound` 广播），不改动旧线房间；由入口按后端选择（下一批接线）。
+//! `Outbound` 广播）；大厅按 `native_rooms` 配置选择原生或旧线房间。
 //!
-//! 覆盖：入座/重连/观战、命令（幂等重放、反冒充、提交前落 WAL）、快照请求、
+//! 覆盖：入座/重连/观战、命令（幂等重放、反冒充、接受后记 WAL）、快照请求、
 //! 断开、名册广播、按 `snapshot_every` 落原生归档快照、WAL 重放恢复。
 
+use crate::native_room_store::{NativeRoomStore, StoredRoom};
+use crate::native_view::{choice_for, legal_actions_for, observer_snapshot_for, RoomRole};
 use crate::persist::RoomPersist;
 use crate::room::{JoinReply, RoomHandle, RoomMsg};
-use crate::native_view::{choice_for, legal_actions_for, observer_snapshot_for, RoomRole};
-use crate::native_room_store::{NativeRoomStore, StoredRoom};
 use crate::room_native::{NativeRoomPersist, NativeRoomSession};
-use engine_api::{CommandKind, CommandResult, ExpectedRevision, IdempotencyKey};
+use crate::session::SendStatus;
+use engine_api::{CommandResult, ExpectedRevision, IdempotencyKey};
 use engine_protocol::{ClientRole, MessageHeader, SeatPresence, ServerMessage};
 use std::collections::HashMap;
 use tokio::sync::{mpsc, oneshot};
@@ -29,50 +30,9 @@ pub fn set_seat_timeout_secs(secs: u64) {
     SEAT_TIMEOUT_SECS.store(secs, std::sync::atomic::Ordering::Relaxed);
 }
 
-/// NC09 落盘：把当前会话状态写入存储（失败只记日志，不影响房间运行）。
-///
-/// 终局处理：比赛已有结果（`outcome().is_some()`）时**删除**落盘记录并停止写入——
-/// 已结束的房间无需跨重启恢复，避免落盘目录只增不减。
-///
-/// `password` 参数此处是**密码哈希**（运行期不持有明文）。
-///
-/// 节流：`last_sig` 记录上次落盘签名（修订号、成员数、开局位、令牌计数）；未变化则**跳过**
-/// 写盘——同一回合内多次调用（如观战入座、重复落盘点）不会重复全量写。
-fn persist_room(
-    store: &Option<NativeRoomStore>,
-    id: u64,
-    password: &str,
-    session: &NativeRoomSession,
-    last_sig: &mut Option<(u64, usize, bool, u64)>,
-) {
-    let Some(store) = store else { return };
-    if session.engine().outcome().is_some() {
-        if let Err(e) = store.remove(id) {
-            tracing::warn!(room = id, error = %e, "原生房间终局清理失败");
-        }
-        return;
-    }
-    let state = session.export_state(&session.snapshot_hex());
-    let sig = (
-        session.engine().revision(),
-        state.members.len(),
-        state.started,
-        state.next_token,
-    );
-    if last_sig.as_ref() == Some(&sig) {
-        return; // 节流：状态未变化
-    }
-    let record = StoredRoom {
-        room_id: id,
-        password_hash: password.to_string(),
-        state,
-        checksum: String::new(),
-    };
-    match store.save(&record) {
-        Ok(()) => *last_sig = Some(sig),
-        Err(e) => tracing::warn!(room = id, error = %e, "原生房间落盘失败"),
-    }
-}
+#[path = "room_native_actor/durability.rs"]
+mod durability;
+use durability::RoomDurability;
 
 /// 原生房间成员（含广播句柄）。
 struct NativeActorMember {
@@ -87,6 +47,39 @@ struct NativeActorMember {
 }
 
 /// 启动原生权威房间 actor（与 `room::spawn_room*` 同签名形态）。
+
+/// A reconnect replay for which the room has no saved receipt cannot prove the
+/// command was not already executed. Reject it instead of risking a duplicate.
+fn legacy_replay_rejection(
+    session: &NativeRoomSession,
+    connection_id: u64,
+    player_id: engine_api::PlayerId,
+    id: u64,
+    conn_seq: u64,
+    idempotency_key: IdempotencyKey,
+) -> Result<ServerMessage, String> {
+    let view = session.snapshot(connection_id).unwrap_or_else(|_| {
+        crate::native_view::observer_snapshot_for(
+            session.engine(),
+            crate::native_view::RoomRole::Player,
+            Some(player_id),
+        )
+    });
+    Ok(ServerMessage::CommandOutcome {
+        header: MessageHeader::new(id, conn_seq, session.engine().revision()),
+        idempotency_key,
+        result: CommandResult::Rejected {
+            reason: engine_api::RejectReason::IllegalAction {
+                code: "legacy_replay_no_receipt".into(),
+            },
+        },
+        view,
+        legal_actions: legal_actions_for(session.engine(), player_id),
+        choice: choice_for(session.engine(), Some(player_id)),
+        public_event_codes: vec![],
+    })
+}
+
 pub fn spawn_room_native(
     id: u64,
     session: NativeRoomSession,
@@ -148,7 +141,10 @@ pub fn spawn_room_native_persisted_with_hash(
 /// `from_saved` 明确报错）。
 pub fn restore_room_from_disk(
     record: &StoredRoom,
-    load_pack: &mut dyn FnMut(&str) -> Result<engine_native::content::extension::ExtensionPack, String>,
+    load_pack: &mut dyn FnMut(
+        &str,
+    )
+        -> Result<engine_native::content::extension::ExtensionPack, String>,
     mailbox: usize,
     snapshot_every: u64,
     store: NativeRoomStore,
@@ -158,6 +154,10 @@ pub fn restore_room_from_disk(
         packs.push(load_pack(r)?);
     }
     let session = NativeRoomSession::from_saved(&record.state, packs)?;
+    if session.engine().outcome().is_some() {
+        return Err("原生房间已结束，不恢复为运行中房间".into());
+    }
+    store.save(record)?;
     // 恢复时把**哈希**带回运行期：入座校验用哈希比对（运行期不再持有明文）
     Ok(spawn_room_native_persisted_with_hash(
         record.room_id,
@@ -177,17 +177,31 @@ async fn native_room_loop(
     room_password: String,
     store: Option<NativeRoomStore>,
 ) {
-    // NC09 缺席座位回收（惰性）：入座满员且新客户端要座位时，回收**最久未活动**且超过
+    // NC09 缺席座位回收（惰性）：入座满员且新客户端要座位时，回收**离线**且超过
     // 该时限的成员（0 = 关闭）。时限来自环境变量 `NONAME_NATIVE_SEAT_TIMEOUT_SECS`
     // （默认 600 秒），由 spawn 侧读取后传入，避免在生产源码里直接读环境变量。
     let seat_timeout_secs = SEAT_TIMEOUT_SECS.load(std::sync::atomic::Ordering::Relaxed);
     let mut persist = NativeRoomPersist::new();
-    // NC09 落盘节流：上次成功落盘的签名
-    let mut last_persist_sig: Option<(u64, usize, bool, u64)> = None;
+    let mut durability = RoomDurability::new(id, room_password.clone(), store);
     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
     let _legacy_wal = RoomPersist::new();
-    let mut members: HashMap<u64, NativeActorMember> = HashMap::new();
-    let mut idempotency: HashMap<u64, CommandResult> = HashMap::new();
+    let mut members: HashMap<u64, NativeActorMember> = session
+        .members()
+        .map(|m| {
+            (
+                m.connection_id,
+                NativeActorMember {
+                    connection_id: m.connection_id,
+                    display_name: "player".into(),
+                    player_id: m.player_id,
+                    seat: m.seat,
+                    role: m.role,
+                    outbound: None,
+                    last_seen: std::time::Instant::now(),
+                },
+            )
+        })
+        .collect();
     let mut last_revision = session.engine().revision();
     persist.put_snapshot(
         last_revision,
@@ -205,8 +219,25 @@ async fn native_room_loop(
                 outbound,
                 reply,
             } => {
-                // NC09 惰性缺席回收：本次入座若会因满员失败，先回收最久未活动的过期成员。
-                if seat_timeout_secs > 0 && reconnect_token.is_none() {
+                if !room_password.is_empty()
+                    && crate::native_room_store::password_hash(id, &pw) != room_password
+                {
+                    let _ = reply.send(Err("unauthorized".into()));
+                    continue;
+                }
+                let mut before = match durability.checkpoint(&session) {
+                    Ok(before) => before,
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                };
+                let mut reclaimed = None;
+                // 回收与新入座同一次提交，失败不能丢失原座位或令牌。
+                if seat_timeout_secs > 0
+                    && reconnect_token.is_none()
+                    && !members.contains_key(&connection_id)
+                {
                     let idle = std::time::Duration::from_secs(seat_timeout_secs);
                     let now = std::time::Instant::now();
                     let occupied = members
@@ -216,40 +247,30 @@ async fn native_room_loop(
                     if occupied >= session.max_seats() as usize {
                         let victim = members
                             .values()
-                            .filter(|m| m.role == ClientRole::Player)
+                            .filter(|m| m.role == ClientRole::Player && m.outbound.is_none())
                             .min_by_key(|m| m.last_seen)
                             .map(|m| (m.connection_id, m.seat, m.last_seen));
                         if let Some((conn, seat, seen)) = victim {
                             if now.duration_since(seen) >= idle {
-                                members.remove(&conn);
+                                if before.is_none() {
+                                    before = Some(session.checkpoint());
+                                }
                                 session.reclaim_seat(conn);
-                                info!(room = id, conn, seat, "原生房间回收缺席座位（惰性超时）");
-                                persist_room(
-                                    &store,
-                                    id,
-                                    &room_password,
-                                    &session,
-                                    &mut last_persist_sig,
-                                );
-                                broadcast_roster_native(
-                                    id,
-                                    &members,
-                                    session.engine().outcome().is_some(),
-                                )
-                                .await;
+                                reclaimed = Some((conn, seat));
                             }
                         }
                     }
                 }
-                // 入座校验：输入密码 → 哈希 → 与运行期哈希比对（磁盘/内存均无明文）
-                if !room_password.is_empty()
-                    && crate::native_room_store::password_hash(id, &pw) != room_password
-                {
-                    let _ = reply.send(Err("unauthorized".into()));
-                    continue;
-                }
                 match session.join(connection_id, preferred_seat, reconnect_token) {
                     Ok(joined) => {
+                        if let Err(error) = durability.commit(&mut session, before) {
+                            let _ = reply.send(Err(error));
+                            continue;
+                        }
+                        if let Some((conn, seat)) = reclaimed {
+                            members.remove(&conn);
+                            info!(room = id, conn, seat, "原生房间回收缺席座位（惰性超时）");
+                        }
                         let m = NativeActorMember {
                             last_seen: std::time::Instant::now(),
                             connection_id,
@@ -265,17 +286,21 @@ async fn native_room_loop(
                             role: joined.member.role,
                             reconnect_token: joined.member.reconnect_token.clone(),
                             view: joined.view,
-                            choice: None,
+                            choice: choice_for(session.engine(), Some(joined.member.player_id)),
                             legal_actions: joined.legal_actions,
                         };
+                        members.retain(|_, old| {
+                            old.player_id != m.player_id || old.role != ClientRole::Player
+                        });
                         members.insert(connection_id, m);
-                        // 名册/令牌变化必须持久化（否则重启后无法凭令牌回到原座位）
-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
-                        broadcast_roster_native(id, &members, session.engine().outcome().is_some())
+                        broadcast_roster_native(id, &mut members, session.engine().outcome().is_some())
                             .await;
                         let _ = reply.send(Ok(reply_payload));
                     }
                     Err(e) => {
+                        if let Some(before) = before {
+                            session.rollback(before);
+                        }
                         let _ = reply.send(Err(e));
                     }
                 }
@@ -286,7 +311,22 @@ async fn native_room_loop(
                 outbound,
                 reply,
             } => {
+                if members.contains_key(&connection_id) {
+                    let _ = reply.send(Err("connection already in room".into()));
+                    continue;
+                }
+                let before = match durability.checkpoint(&session) {
+                    Ok(before) => before,
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                };
                 let spec = session.spectate(connection_id);
+                if let Err(error) = durability.commit(&mut session, before) {
+                    let _ = reply.send(Err(error));
+                    continue;
+                }
                 let m = NativeActorMember {
                     last_seen: std::time::Instant::now(),
                     connection_id,
@@ -297,7 +337,7 @@ async fn native_room_loop(
                     outbound: Some(outbound),
                 };
                 members.insert(connection_id, m);
-                persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
                 let _ = reply.send(Ok(JoinReply {
                     player_id: 0,
                     seat: u8::MAX,
@@ -313,6 +353,7 @@ async fn native_room_loop(
                 header,
                 command,
                 idempotency_key,
+                replay,
                 reply,
             } => {
                 if let Some(m) = members.get_mut(&connection_id) {
@@ -322,9 +363,16 @@ async fn native_room_loop(
                     let _ = reply.send(Err("not in room".into()));
                     continue;
                 };
+                let checkpoint = match durability.checkpoint(&session) {
+                    Ok(before) => before,
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                };
                 // 幂等重放
-                if idempotency_key.0 != 0 {
-                    if let Some(prev) = idempotency.get(&idempotency_key.0) {
+                match session.command_receipt(connection_id, idempotency_key.0, &command.kind) {
+                    Ok(Some(prev)) => {
                         let view = session.snapshot(connection_id).unwrap_or_else(|_| {
                             crate::native_view::observer_snapshot_for(
                                 session.engine(),
@@ -339,7 +387,7 @@ async fn native_room_loop(
                                 session.engine().revision(),
                             ),
                             idempotency_key,
-                            result: prev.clone(),
+                            result: prev,
                             view,
                             legal_actions: legal_actions_for(session.engine(), m.player_id),
                             choice: choice_for(session.engine(), Some(m.player_id)),
@@ -347,17 +395,46 @@ async fn native_room_loop(
                         }));
                         continue;
                     }
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                    Ok(None) => {}
+                }
+                if replay {
+                    let _ = reply.send(legacy_replay_rejection(
+                        &session,
+                        connection_id,
+                        m.player_id,
+                        id,
+                        header.conn_seq,
+                        idempotency_key,
+                    ));
+                    continue;
                 }
                 // 反冒充：以入座座位为准（协议 actor 不可信）
                 let expected = if header.revision != 0 {
                     header.revision
+                } else if command.expected_revision.0 != 0 {
+                    command.expected_revision.0
                 } else {
                     session.engine().revision()
                 };
+                if header.revision != 0
+                    && command.expected_revision.0 != 0
+                    && header.revision != command.expected_revision.0
+                {
+                    let _ = reply.send(Err("conflicting command revisions".into()));
+                    continue;
+                }
                 let before = session.engine().revision();
+                let action = session.action_for(&command.kind).ok();
                 let result = match session.submit(connection_id, &command.kind, expected) {
                     Ok(r) => r,
                     Err(e) => {
+                        if let Some(before) = checkpoint {
+                            session.rollback(before);
+                        }
                         let _ = reply.send(Err(e));
                         continue;
                     }
@@ -367,15 +444,26 @@ async fn native_room_loop(
                     state_hash,
                 } = &result
                 {
+                    if let Err(error) = session.remember_command(
+                        connection_id,
+                        idempotency_key.0,
+                        &command.kind,
+                        &result,
+                    ) {
+                        if let Some(before) = checkpoint {
+                            session.rollback(before);
+                        }
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                    if let Err(error) = durability.commit(&mut session, checkpoint) {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
                     if *new_revision > before {
-                        // 提交前落 WAL（架构 §14.3）
-                        if let CommandKind::EndPhase {} = command.kind {
-                            persist.record(
-                                *new_revision,
-                                m.seat,
-                                engine_native::GameAction::NextPhase,
-                                *state_hash,
-                            );
+                        // 记录已接受的原生动作，保证所有命令都能从快照重放。
+                        if let Some(action) = action {
+                            persist.record(*new_revision, m.seat, action, *state_hash);
                         }
                         if snapshot_every > 0 && *new_revision % snapshot_every == 0 {
                             persist.put_snapshot(
@@ -384,22 +472,14 @@ async fn native_room_loop(
                             );
                         }
                         last_revision = *new_revision;
-                        // NC09 跨重启持久化：接受命令后写盘（原子 rename）
-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
                     }
-                    if idempotency_key.0 != 0 {
-                        idempotency.insert(idempotency_key.0, result.clone());
-                    }
+                } else if let Some(before) = checkpoint {
+                    session.rollback(before);
                 }
-                let view = session
-                    .snapshot(connection_id)
-                    .unwrap_or_else(|_| {
-                        observer_snapshot_for(
-                            session.engine(),
-                            RoomRole::Player,
-                            Some(m.player_id),
-                        )
-                    });
+                let public_event_codes = session.take_public_event_codes();
+                let view = session.snapshot(connection_id).unwrap_or_else(|_| {
+                    observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
+                });
                 let legal = legal_actions_for(session.engine(), m.player_id);
                 let choice = choice_for(session.engine(), Some(m.player_id));
                 let _ = reply.send(Ok(ServerMessage::CommandOutcome {
@@ -409,9 +489,11 @@ async fn native_room_loop(
                     view,
                     legal_actions: legal,
                     choice,
-                    public_event_codes: vec![],
+                    public_event_codes: public_event_codes.clone(),
                 }));
-                // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）
+                // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）。
+                // 发送必须有界：慢客户端的队列满时立即标记/移出广播，绝不 await。
+                let mut stalled = Vec::new();
                 for other in members.values() {
                     if other.connection_id == connection_id {
                         continue;
@@ -440,44 +522,45 @@ async fn native_room_loop(
                             Vec::new()
                         },
                         choice: choice_for(session.engine(), seat),
-                        public_event_codes: vec![],
+                        public_event_codes: public_event_codes.clone(),
                     };
-                    let _ = out.send(&msg).await;
+                    if out.try_send(&msg) == SendStatus::Full {
+                        stalled.push(other.connection_id);
+                    }
                 }
-                broadcast_roster_native(id, &members, session.engine().outcome().is_some()).await;
+                drop_stalled(&mut members, stalled);
+                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
             }
             RoomMsg::Snapshot {
                 connection_id,
                 header,
                 reply,
-            } => {
-                match session.snapshot(connection_id) {
-                    Ok(view) => {
-                        let member = members.get(&connection_id);
-                        let (seat, is_player) = match member {
-                            Some(m) if m.role == ClientRole::Player => (Some(m.player_id), true),
-                            _ => (None, false),
-                        };
-                        let _ = reply.send(Ok(ServerMessage::Snapshot {
-                            header: MessageHeader::new(
-                                id,
-                                header.conn_seq,
-                                session.engine().revision(),
-                            ),
-                            view,
-                            choice: choice_for(session.engine(), seat),
-                            legal_actions: if is_player {
-                                legal_actions_for(session.engine(), seat.expect("player seat"))
-                            } else {
-                                Vec::new()
-                            },
-                        }));
-                    }
-                    Err(e) => {
-                        let _ = reply.send(Err(e));
-                    }
+            } => match session.snapshot(connection_id) {
+                Ok(view) => {
+                    let member = members.get(&connection_id);
+                    let (seat, is_player) = match member {
+                        Some(m) if m.role == ClientRole::Player => (Some(m.player_id), true),
+                        _ => (None, false),
+                    };
+                    let _ = reply.send(Ok(ServerMessage::Snapshot {
+                        header: MessageHeader::new(
+                            id,
+                            header.conn_seq,
+                            session.engine().revision(),
+                        ),
+                        view,
+                        choice: choice_for(session.engine(), seat),
+                        legal_actions: if is_player {
+                            legal_actions_for(session.engine(), seat.expect("player seat"))
+                        } else {
+                            Vec::new()
+                        },
+                    }));
                 }
-            }
+                Err(e) => {
+                    let _ = reply.send(Err(e));
+                }
+            },
             RoomMsg::ChooseGeneral {
                 connection_id,
                 name,
@@ -485,8 +568,25 @@ async fn native_room_loop(
             } => {
                 // 座位以入座座位为准（反冒充）；成功后向全体推送新视图（选将不推进
                 // revision，故推送判据是「操作成功」而不是 revision 变化）。
+                let before = match durability.checkpoint(&session) {
+                    Ok(before) => before,
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                };
                 match session.assign_general(connection_id, &name) {
                     Ok((revision, hash)) => {
+                        if let Err(error) = durability.commit(&mut session, before) {
+                            let _ = reply.send(Err(error));
+                            continue;
+                        }
+                        // 选将不推进 revision，覆盖恢复点并保留已接受请求的收据。
+                        persist.put_snapshot(
+                            revision,
+                            engine_native::archive::encode_archive(&session.engine().save()),
+                        );
+                        let mut stalled = Vec::new();
                         for other in members.values() {
                             let Some(out) = other.outbound.as_ref() else {
                                 continue;
@@ -506,22 +606,24 @@ async fn native_room_loop(
                                 view: observer_snapshot_for(session.engine(), role, seat),
                                 choice: choice_for(session.engine(), seat),
                                 legal_actions: if other.role == ClientRole::Player {
-                                    legal_actions_for(
-                                        session.engine(),
-                                        seat.expect("player seat"),
-                                    )
+                                    legal_actions_for(session.engine(), seat.expect("player seat"))
                                 } else {
                                     Vec::new()
                                 },
                             };
-                            let _ = out.send(&msg).await;
+                            if out.try_send(&msg) == SendStatus::Full {
+                                stalled.push(other.connection_id);
+                            }
                         }
-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                        drop_stalled(&mut members, stalled);
                         let _ = reply.send(Ok(format!(
                             "{{\"revision\":{revision},\"state_hash\":\"{hash}\"}}"
                         )));
                     }
                     Err(e) => {
+                        if let Some(before) = before {
+                            session.rollback(before);
+                        }
                         let _ = reply.send(Err(e));
                     }
                 }
@@ -530,10 +632,15 @@ async fn native_room_loop(
             RoomMsg::Disconnect { connection_id } => {
                 if let Some(m) = members.get_mut(&connection_id) {
                     m.outbound = None;
+                    m.last_seen = std::time::Instant::now();
                     session.disconnect(connection_id);
-                    debug!(room = id, conn = connection_id, "native member disconnected");
+                    debug!(
+                        room = id,
+                        conn = connection_id,
+                        "native member disconnected"
+                    );
                 }
-                broadcast_roster_native(id, &members, session.engine().outcome().is_some()).await;
+                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
             }
             RoomMsg::Recover { reply } => {
                 // NC09：按「快照 + WAL 重放」恢复（内容不符/摘要不符都会明确失败）。
@@ -548,10 +655,21 @@ async fn native_room_loop(
                     let _ = reply.send(Err("无可用于恢复的快照".into()));
                     continue;
                 };
+                let before = match durability.checkpoint(&session) {
+                    Ok(before) => before,
+                    Err(error) => {
+                        let _ = reply.send(Err(error));
+                        continue;
+                    }
+                };
                 match persist.recover(from, &session.pack_refs()) {
                     Ok((engine, replayed)) => {
-                        last_revision = engine.revision();
                         session.replace_engine(engine);
+                        if let Err(error) = durability.commit(&mut session, before) {
+                            let _ = reply.send(Err(error));
+                            continue;
+                        }
+                        last_revision = session.engine().revision();
                         debug!(room = id, from, replayed, "native room recovered");
                         let _ = reply.send(Ok(()));
                     }
@@ -565,11 +683,11 @@ async fn native_room_loop(
     info!(room = id, "native room task exit");
 }
 
-async fn broadcast_roster_native(
+fn roster_message(
     room_id: u64,
     members: &HashMap<u64, NativeActorMember>,
     finished: bool,
-) {
+) -> ServerMessage {
     let mut seats: Vec<SeatPresence> = members
         .values()
         .filter(|m| m.role == ClientRole::Player)
@@ -581,15 +699,52 @@ async fn broadcast_roster_native(
         })
         .collect();
     seats.sort_by_key(|s| s.seat);
-    let msg = ServerMessage::RoomRoster {
+    ServerMessage::RoomRoster {
         room_id,
         seats,
         started: true,
         finished,
-    };
+    }
+}
+
+/// 慢连接移出房间广播（但保留座位/令牌，供重连时恢复）。
+fn drop_stalled(members: &mut HashMap<u64, NativeActorMember>, stalled: Vec<u64>) {
+    for connection_id in stalled {
+        if let Some(m) = members.get_mut(&connection_id) {
+            if m.outbound.take().is_some() {
+                m.last_seen = std::time::Instant::now();
+                tracing::warn!(
+                    conn = connection_id,
+                    "房间广播队列已满，断开慢连接并要求重连同步"
+                );
+            }
+        }
+    }
+}
+
+async fn broadcast_roster_native(
+    room_id: u64,
+    members: &mut HashMap<u64, NativeActorMember>,
+    finished: bool,
+) {
+    let msg = roster_message(room_id, members, finished);
+    let mut stalled = Vec::new();
     for m in members.values() {
         if let Some(out) = &m.outbound {
-            let _ = out.send(&msg).await;
+            if out.try_send(&msg) == SendStatus::Full {
+                stalled.push(m.connection_id);
+            }
+        }
+    }
+    if stalled.is_empty() {
+        return;
+    }
+    drop_stalled(members, stalled);
+    // 已断开的连接不应再出现在名册的 connected=true 中；仅对剩余连接重发。
+    let msg = roster_message(room_id, members, finished);
+    for m in members.values() {
+        if let Some(out) = &m.outbound {
+            let _ = out.try_send(&msg);
         }
     }
 }
@@ -603,6 +758,7 @@ pub fn spawn_native_room_if_configured(
     id: u64,
     players: u8,
     seed: u64,
+    password: String,
     mailbox: usize,
     snapshot_every: u64,
     content: &crate::native::NativeContent,
@@ -615,9 +771,11 @@ pub fn spawn_native_room_if_configured(
         return Ok(None);
     }
     let mut packs = Vec::new();
+    let mut frozen = Vec::new();
     for id in packages {
         let loaded = content.load_scoped(Some(namespace), id)?;
         packs.push(loaded.pack);
+        frozen.push(loaded.frozen);
     }
     let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
     let engine = if refs.is_empty() {
@@ -626,19 +784,26 @@ pub fn spawn_native_room_if_configured(
         engine_native::Engine::new_with_extensions(seed, players as usize, &refs)
             .map_err(|e| format!("原生房间建局失败: {e:?}"))?
     };
-    let session = NativeRoomSession::new(engine, players);
+    let mut session = NativeRoomSession::new_with_packs(engine, packs, players);
+    session.set_frozen_packages(frozen);
+    let hash = crate::native_room_store::password_hash(id, &password);
+    let mut durability = RoomDurability::new(id, hash, store.clone());
+    durability.commit(&mut session, None)?;
     Ok(Some(spawn_room_native_persisted(
         id,
         session,
         mailbox,
         snapshot_every,
-        String::new(),
+        password,
         store,
     )))
 }
 
 /// 供测试构造：把原生会话交给 actor 的便捷入口（`oneshot` 回复通道）。
-pub fn join_reply_channel() -> (oneshot::Sender<Result<JoinReply, String>>, oneshot::Receiver<Result<JoinReply, String>>) {
+pub fn join_reply_channel() -> (
+    oneshot::Sender<Result<JoinReply, String>>,
+    oneshot::Receiver<Result<JoinReply, String>>,
+) {
     oneshot::channel()
 }
 
@@ -658,4 +823,35 @@ pub fn idem(key: u64) -> IdempotencyKey {
 /// 供测试构造期望修订号。
 pub fn expected(revision: u64) -> ExpectedRevision {
     ExpectedRevision(revision)
+}
+
+#[cfg(test)]
+mod replay_tests {
+    use super::*;
+
+    #[test]
+    fn replay_without_receipt_is_rejected_not_executed() {
+        let mut session = NativeRoomSession::new(engine_native::Engine::new(7, 2), 2);
+        session.join(1, Some(0), None).unwrap();
+        let before = session.engine().revision();
+        let message = legacy_replay_rejection(
+            &session,
+            1,
+            engine_api::PlayerId::new(1),
+            9,
+            3,
+            IdempotencyKey(77),
+        )
+        .unwrap();
+        let ServerMessage::CommandOutcome { result, .. } = message else {
+            panic!("expected outcome");
+        };
+        assert!(matches!(
+            result,
+            CommandResult::Rejected {
+                reason: engine_api::RejectReason::IllegalAction { code }
+            } if code == "legacy_replay_no_receipt"
+        ));
+        assert_eq!(session.engine().revision(), before);
+    }
 }

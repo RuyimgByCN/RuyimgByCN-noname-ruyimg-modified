@@ -1,0 +1,21 @@
+     Running unittests src/lib.rs (/tmp/b2-head-target/debug/deps/content_native_loader-c6ebdaa24bb2621c)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/ai_tuning_loader.rs (/tmp/b2-head-target/debug/deps/ai_tuning_loader-126d3ea580b44a7b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/doomsday_loader.rs (/tmp/b2-head-target/debug/deps/doomsday_loader-bf624f84e0af7f99)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/epic_cards_loader.rs (/tmp/b2-head-target/debug/deps/epic_cards_loader-4e5c6018b1d7dc51)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/loader_acceptance.rs (/tmp/b2-head-target/debug/deps/loader_acceptance-aefb31dec1421eaf)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/qhly_loader.rs (/tmp/b2-head-target/debug/deps/qhly_loader-6835f6f43461873b)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/rzsh_loader.rs (/tmp/b2-head-target/debug/deps/rzsh_loader-d63353f4b71a5865)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/skin_switch_loader.rs (/tmp/b2-head-target/debug/deps/skin_switch_loader-a1df66fd92ddecd6)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/symbol_table_limit.rs (/tmp/b2-head-target/debug/deps/symbol_table_limit-32a6e83a1c832ebc)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.92s
+     Running tests/thunder_loader.rs (/tmp/b2-head-target/debug/deps/thunder_loader-8c4b044e76bec016)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

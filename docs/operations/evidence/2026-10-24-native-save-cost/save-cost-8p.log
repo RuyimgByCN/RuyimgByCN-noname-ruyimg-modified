@@ -1,0 +1,16 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `release` profile [optimized] target(s) in 15.35s
+     Running `target/release/examples/save_cost 8 1200`
+sample step=0 save_p50_us=5.4 archive_bytes=2880 players=8 hp=4
+sample step=100 save_p50_us=4.4 archive_bytes=2880 players=8 hp=4
+sample step=200 save_p50_us=4.0 archive_bytes=2880 players=8 hp=4
+sample step=300 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=400 save_p50_us=4.0 archive_bytes=2880 players=8 hp=4
+sample step=500 save_p50_us=4.0 archive_bytes=2880 players=8 hp=4
+sample step=600 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=700 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=800 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=900 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=1000 save_p50_us=3.9 archive_bytes=2880 players=8 hp=4
+sample step=1100 save_p50_us=5.2 archive_bytes=2880 players=8 hp=4
+RESULT players=8 steps=1200 samples=12 save_p50_us=4.0 save_p95_us=5.2 archive_bytes_max=2880 outcome=None

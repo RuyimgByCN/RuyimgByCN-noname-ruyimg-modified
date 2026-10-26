@@ -1,0 +1,178 @@
+{
+  "date": "2026-10-24T15:46:45.306371+08:00",
+  "baseline_paths": 46927,
+  "initial_dirty_records": 11307,
+  "unchanged_baseline_paths": 46921,
+  "allowed_changed_baseline_paths": [
+    {
+      "path": "apps/game-server/src/lobby.rs",
+      "before": {
+        "sha256": "212fbfd4200721837cceb6af15877e83d716b26a3d0763a41637be26e04895c7",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "56bbc027093670fc2c7ac7ff9b02aee512567d1e79d04b768f91a26ebbcd0611",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_room_store.rs",
+      "before": {
+        "sha256": "cf5abfb9be3da7b3c45e730c99899382c9a7c88fea7b31a9f11e5e07ab2878c6",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2d33384b43704cc86c516538dd9231ef9582bd2a0fa9bdddd8ba1e4b3e1a1fc1",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "before": {
+        "sha256": "0265a3590a071c7c8b9d27eb92cd46a1725eb6e1f22b7a239ea501846b96b0c4",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "7670f9b3a154d6efd5024c8119c7f549ac05a5626dca8528d2d1b9b8bc37bac0",
+        "mode": 33188
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "before": {
+        "sha256": "89ea448fb1863af8ae9f8e49e57f52b6e76754637072bf13e45fc31cb1323a07",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "3becf6f1e07641d27e1966096363bef9fc233ebbd41bf7eb493038cd1e1985b9",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "apps/game-server/src/room_native_actor.rs",
+      "before": {
+        "sha256": "f54c5f6709372fb0ddd1e9b7657cce92150cd767e1c50f2bbae029c739f7280f",
+        "mode": 33152
+      },
+      "after": {
+        "sha256": "98c783cb9dd9e0c1e82c9166334e247d596b09b4906e2cf988ac1e558ebdac12",
+        "mode": 33152
+      },
+      "allowed": true
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before": {
+        "sha256": "86ed96ad85dd8f56603c1d322b65ee9e690d7eb69fa0301634b6a7d8f2640251",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "8ac850f0165dd0ec9c8796d3c62f06832d9302f70b1bbdf17564d273ab8c68d3",
+        "mode": 33188
+      },
+      "allowed": true
+    }
+  ],
+  "unexpected_changed": [],
+  "new_paths": [
+    "apps/game-server/src/native_room_store/tests.rs",
+    "apps/game-server/src/native_ws_e2e/durability.rs",
+    "apps/game-server/src/room_native_actor/durability.rs",
+    "apps/game-server/tests/nc09_native_durability.rs",
+    "docs/operations/evidence/2026-10-24-native-room-durability/README.md",
+    "docs/operations/evidence/2026-10-24-native-room-durability/actor-source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/actor-targeted-03.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/actor-targeted-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/actor-write-red.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-crash-room-smoke.mjs",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-crash-room.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-crash-room.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-report.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-server-initial.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-server-restored.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/browser-ws-restored.png",
+    "docs/operations/evidence/2026-10-24-native-room-durability/cargo-counts.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/cargo-regressions.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/cargo-regressions.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/environment.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/final-doc-gates.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/frontend-test.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/frontend-test.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/frontend-typecheck.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/frontend-typecheck.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/lobby-terminal-test.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/lobby-terminal-test.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/native-worker-smoke.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/native-worker-smoke.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/preservation.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/server-build.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/server-build.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/server-incremental.diff",
+    "docs/operations/evidence/2026-10-24-native-room-durability/source-line-checks.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/source-lines-unit.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/source-lines.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/store-compatibility-01.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/store-green-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/store-red.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/windows-storage-design.md",
+    "docs/operations/evidence/2026-10-24-native-room-durability/ws-crash-isolation-first.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/ws-durability-final.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/ws-durability-final.log",
+    "docs/operations/evidence/2026-10-24-native-room-durability/ws-source-manifest.json",
+    "docs/operations/evidence/2026-10-24-native-room-durability/ws-write-red.log"
+  ],
+  "unexpected_new": [],
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "artifacts": [
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-durability-20261024/artifact-backup/apps/web-client/src/worker/native-pkg"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-durability-20261024/artifact-backup/apps/web-client/src/wasm-pkg"
+    },
+    {
+      "path": "apps/web-client/public/pkg",
+      "files": 6,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-durability-20261024/artifact-backup/apps/web-client/public/pkg"
+    },
+    {
+      "path": "apps/web-client/dist",
+      "files": 46,
+      "unchanged": true,
+      "missing": [],
+      "extra": [],
+      "changed": [],
+      "source": "/tmp/noname-next-room-durability-20261024/artifact-backup/apps/web-client/dist"
+    }
+  ],
+  "artifact_comparison_note": "This turn baseline includes all 18 generated files and all 46 original dirty dist files; all separately compared with this turn artifact-backup. This turn did not run WASM/frontend production build.",
+  "source_manifest_files": 1058,
+  "source_changed_after_manifest": []
+}

@@ -1,0 +1,1340 @@
+--- before/apps/game-server/src/native.rs
++++ after/apps/game-server/src/native.rs
+@@ -17,6 +17,10 @@
+ use engine_native::content::extension::ExtensionPack;
+ use engine_native::{CommandOutcome, Engine};
+ use serde::Deserialize;
++
++#[path = "native/frozen.rs"]
++mod frozen;
++pub use frozen::FrozenNativePackage;
+ use std::path::PathBuf;
+ 
+ /// 已安装原生包摘要（列表端点）。
+@@ -65,7 +69,7 @@
+         let report = import_extensions(&self.store, &self.root, &Self::options())
+             .map_err(|e| e.to_string())?;
+         let out: Vec<NativePackageInfo> = report.installed.iter().map(Self::meta_info).collect();
+-        if out.is_empty() {
++        if out.is_empty() && report.skipped.is_empty() {
+             if let Ok(rd) = std::fs::read_dir(&self.root) {
+                 let entries = rd.flatten().count();
+                 if entries > 0 {
+@@ -101,8 +105,6 @@
+         namespace: Option<&str>,
+         package_id: &str,
+     ) -> Result<LoadedPack, String> {
+-        use engine_native::content::extension::{ExtensionDef, ExtensionPack};
+-
+         // ① 内容锁 + 安装副本（load_locked_packages 校验 logic/content 指纹）
+         let lock = self.store.current_lock().map_err(|e| e.to_string())?;
+         let packages = self
+@@ -127,17 +129,35 @@
+                 ))
+             }
+         };
++        let binding = lock
++            .packages
++            .iter()
++            .find(|p| {
++                p.namespace == parsed.manifest.namespace
++                    && p.package_id == parsed.manifest.package_id
++                    && p.version == parsed.manifest.version
++            })
++            .ok_or("安装包不在内容锁中")?;
++        let frozen = self.freeze_binding(binding)?;
++        self.load_frozen(&frozen)
++    }
++
++    fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
++        use engine_native::content::extension::{ExtensionDef, ExtensionPack};
++
++        self.check_not_revoked(&frozen.binding)?;
++        let parsed = frozen.package()?;
+         let ns = parsed.manifest.namespace.clone();
+         let pid = parsed.manifest.package_id.clone();
+ 
+-        // ② 卡牌资源：按 asset_paths 里的相对路径解析到**安装目录**（不读源目录）
+-        let cards = self.read_asset(parsed, "assets/cards.json")?;
+-        let characters = self.read_asset(parsed, "assets/character.json")?;
+-        let pile = self.read_asset(parsed, "assets/pile.json")?;
++        // ② 统一从完整已验证副本读取数据（新局与恢复共用桥接）。
++        let cards = frozen.text_asset("assets/cards.json")?;
++        let characters = frozen.text_asset("assets/character.json")?;
++        let pile = frozen.text_asset("assets/pile.json")?;
+ 
+         let (pack, deferred) = {
+             let outcome =
+-                content_native_loader::bridge_vm_skill_decls(parsed).map_err(|e| e.to_string())?;
++                content_native_loader::bridge_vm_skill_decls(&parsed).map_err(|e| e.to_string())?;
+             let vm_skills = outcome.decls;
+             if let Some(json) = cards.as_ref().or(characters.as_ref()) {
+                 let b: BridgedPack =
+@@ -200,70 +220,22 @@
+             pack.cards.extend(addition.cards);
+         }
+         // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
+-        let binding = lock
+-            .packages
+-            .iter()
+-            .find(|p| {
+-                p.namespace == ns && p.package_id == pid && p.version == parsed.manifest.version
+-            })
+-            .ok_or("安装包不在内容锁中")?;
+         pack.def.name = engine_native::content::names::intern(format!(
+             "installed:{}",
+-            serde_json::to_string(binding).map_err(|e| e.to_string())?
++            serde_json::to_string(&frozen.binding).map_err(|e| e.to_string())?
+         ));
+         Ok(LoadedPack {
+-            package_id: package_id.to_string(),
++            package_id: pid,
+             pack,
+             deferred,
++            frozen: frozen.clone(),
+         })
+     }
+ 
+-    /// 按落盘的精确安装身份恢复，不能把相似包名或新版本当作原包。
++    /// 精确安装版本恢复：停用或升级不会改变原引用，撤销仍拒绝。
+     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+-        let (name, version) = reference.rsplit_once('@').ok_or("无效的原生包引用")?;
+-        let identity = name
+-            .strip_prefix("installed:")
+-            .ok_or("旧原生包引用缺少安装内容锁")?;
+-        let binding: content_runtime::LockedPackage =
+-            serde_json::from_str(identity).map_err(|e| format!("无效的安装内容锁: {e}"))?;
+-        let loaded = self.load_scoped(Some(&binding.namespace), &binding.package_id)?;
+-        if loaded.pack.def.name != name || loaded.pack.def.version.to_string() != version {
+-            return Err(format!(
+-                "恢复房间内容锁不匹配: {}/{}",
+-                binding.namespace, binding.package_id
+-            ));
+-        }
+-        Ok(loaded.pack)
+-    }
+-
+-    fn read_asset(
+-        &self,
+-        package: &content_schema::ContentPackage,
+-        rel: &str,
+-    ) -> Result<Option<String>, String> {
+-        let Some((asset_id, _)) = package
+-            .asset_paths
+-            .iter()
+-            .find(|(_, path)| path.as_str() == rel)
+-        else {
+-            return Ok(None);
+-        };
+-        let asset = self
+-            .store
+-            .resolve_active_asset_info(
+-                &package.manifest.namespace,
+-                &package.manifest.package_id,
+-                asset_id,
+-            )
+-            .map_err(|e| e.to_string())?;
+-        let bytes = std::fs::read(&asset.path)
+-            .map_err(|e| format!("读取安装包数据失败 {:?}: {e}", asset.path))?;
+-        if blake3::hash(&bytes).as_bytes() != &asset.source_hash {
+-            return Err(format!("安装包资产 hash 不匹配: {rel}"));
+-        }
+-        String::from_utf8(bytes)
+-            .map(Some)
+-            .map_err(|e| format!("安装包资产不是 UTF-8: {e}"))
++        let frozen = self.freeze_reference(reference)?;
++        self.load_frozen_reference(reference, &frozen)
+     }
+ }
+ 
+@@ -272,6 +244,8 @@
+     pub package_id: String,
+     pub pack: ExtensionPack,
+     pub deferred: Vec<String>,
++    /// 建局所用的完整已验证包副本，房间持久化保留原内容。
++    pub frozen: FrozenNativePackage,
+ }
+ 
+ /// 原生建局请求。
+--- before/apps/game-server/src/lobby.rs
++++ after/apps/game-server/src/lobby.rs
+@@ -87,7 +87,7 @@
+         }
+     }
+ 
+-    /// NC09 启动恢复：扫描落盘房间并按 `pack_refs` 重新装载包恢复房间。
++    /// NC09 启动恢复：按精确引用校验原局副本，旧精确档补齐已验证副本。
+     ///
+     /// 返回恢复的房间数。**单个房间恢复失败不阻断启动**，但会记录告警（并保留落盘记录
+     /// 以便人工处理）；恢复成功的房间以**原房间号**重新进入房间表，并把 `next_room`
+@@ -108,13 +108,27 @@
+                 self.next_conn
+                     .fetch_max(last.saturating_add(1), Ordering::SeqCst);
+             }
+-            let content = self.native.clone();
+-            let mut load_pack = move |r: &str| -> Result<
++            let (packs, frozen) = match self.native.load_room_packages(
++                &record.state.pack_refs,
++                record.state.frozen_packages.as_deref(),
++            ) {
++                Ok(loaded) => loaded,
++                Err(e) => {
++                    tracing::warn!(room = record.room_id, error = %e, "原生房间包恢复失败（保留落盘记录）");
++                    continue;
++                }
++            };
++            let mut prepared = record.clone();
++            prepared.state.frozen_packages = Some(frozen);
++            let mut packs = packs.into_iter();
++            let mut load_pack = move |_r: &str| -> Result<
+                 engine_native::content::extension::ExtensionPack,
+                 String,
+-            > { content.load_reference(r) };
++            > {
++                packs.next().ok_or_else(|| "原局包副本缺失".into())
++            };
+             match crate::room_native_actor::restore_room_from_disk(
+-                record,
++                &prepared,
+                 &mut load_pack,
+                 self.cfg.room_mailbox,
+                 self.cfg.snapshot_every,
+--- before/apps/game-server/src/room_native.rs
++++ after/apps/game-server/src/room_native.rs
+@@ -30,8 +30,11 @@
+     pub next_token: u64,
+     /// 下一个幂等键序号（延续，避免重放旧命令）。
+     pub next_dedup: u64,
+-    /// 扩展包引用（`包名@版本`；恢复时按此重新装载同内容包）。
++    /// 扩展包精确引用（`installed:内容锁@原生版本`；与原局副本逐一比对）。
+     pub pack_refs: Vec<String>,
++    /// 原局包副本；旧档缺省 None，新局 Some（标准局为空集）。
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
+     /// 成员（含重连令牌）。
+     pub members: Vec<NativeMember>,
+ }
+@@ -72,6 +75,7 @@
+     engine: Engine,
+     /// 建局所用扩展包（Recover 重放需要同内容）。
+     packs: Vec<engine_native::content::extension::ExtensionPack>,
++    frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
+     max_seats: u8,
+     members: HashMap<u64, NativeMember>,
+     by_token: HashMap<String, u64>,
+@@ -106,6 +110,7 @@
+         Self {
+             engine,
+             packs,
++            frozen_packages: None,
+             max_seats,
+             members: HashMap::new(),
+             by_token: HashMap::new(),
+@@ -113,6 +118,11 @@
+             next_token: 1,
+             next_dedup: 1,
+         }
++    }
++
++    /// 固定原局完整包副本；调用方已逐包校验后，在 spawn 前写入。
++    pub fn set_frozen_packages(&mut self, packages: Vec<crate::native::FrozenNativePackage>) {
++        self.frozen_packages = Some(packages);
+     }
+ 
+     /// 只读引擎（测试/宿主查询）。
+@@ -250,7 +260,7 @@
+     /// NC09 跨进程/跨重启持久化：导出可落盘的房间状态。
+     ///
+     /// 内容：引擎归档字节（hex）+ 成员（含**重连令牌**）+ 座位数/开局位/令牌计数
+-    /// + 扩展包引用（`namespace/package_id`）。**不含**连接句柄与 IO 资源。
++    /// + 扩展包引用及原局完整副本。**不含**连接句柄与 IO 资源。
+     pub fn export_state(&self, snapshot_hex: &str) -> NativeRoomState {
+         NativeRoomState {
+             snapshot_hex: snapshot_hex.to_string(),
+@@ -263,6 +273,7 @@
+                 .iter()
+                 .map(|p| format!("{}@{}", p.def.name, p.def.version))
+                 .collect(),
++            frozen_packages: self.frozen_packages.clone(),
+             members: self.members.values().cloned().collect(),
+         }
+     }
+@@ -309,6 +320,7 @@
+         Ok(Self {
+             engine,
+             packs,
++            frozen_packages: state.frozen_packages.clone(),
+             max_seats: state.max_seats,
+             members,
+             by_token,
+--- before/apps/game-server/src/room_native_actor.rs
++++ after/apps/game-server/src/room_native_actor.rs
+@@ -36,7 +36,7 @@
+ ///
+ /// `password` 参数此处是**密码哈希**（运行期不持有明文）。
+ ///
+-/// 节流：`last_sig` 记录上次落盘签名（修订号、成员数、开局位、令牌计数）；未变化则**跳过**
++/// 节流：`last_sig` 记录上次落盘完整状态校验和；未变化则**跳过**
+ /// 写盘——同一回合内多次调用（如观战入座、重复落盘点）不会重复全量写。
+ fn persist_room(
+     store: &Option<NativeRoomStore>,
+@@ -156,6 +156,7 @@
+         packs.push(load_pack(r)?);
+     }
+     let session = NativeRoomSession::from_saved(&record.state, packs)?;
++    store.save(record)?;
+     // 恢复时把**哈希**带回运行期：入座校验用哈希比对（运行期不再持有明文）
+     Ok(spawn_room_native_persisted_with_hash(
+         record.room_id,
+@@ -642,9 +643,11 @@
+         return Ok(None);
+     }
+     let mut packs = Vec::new();
++    let mut frozen = Vec::new();
+     for id in packages {
+         let loaded = content.load_scoped(Some(namespace), id)?;
+         packs.push(loaded.pack);
++        frozen.push(loaded.frozen);
+     }
+     let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
+     let engine = if refs.is_empty() {
+@@ -653,7 +656,8 @@
+         engine_native::Engine::new_with_extensions(seed, players as usize, &refs)
+             .map_err(|e| format!("原生房间建局失败: {e:?}"))?
+     };
+-    let session = NativeRoomSession::new_with_packs(engine, packs, players);
++    let mut session = NativeRoomSession::new_with_packs(engine, packs, players);
++    session.set_frozen_packages(frozen);
+     Ok(Some(spawn_room_native_persisted(
+         id,
+         session,
+--- before/apps/game-server/src/native_room_store.rs
++++ after/apps/game-server/src/native_room_store.rs
+@@ -4,8 +4,8 @@
+ //! - 每条**被接受**的命令后写一次（`snapshot_every` 无关：房间状态小，写放大可接受）；
+ //! - 原子写：先写 `<id>.json.tmp` 再 `rename`（同目录 rename 原子）；
+ //! - 房间密码仅以带房间号盐的哈希随状态落盘；
+-//! - 恢复时按 `pack_refs`（`包名@版本`）**重新装载**同内容包，再 `from_saved`；
+-//!   若包缺失/版本不符，`from_saved` 会明确失败（不静默降级）。
++//! - 新房间把完整原局包副本随状态原子落盘；恢复按 `pack_refs` 校验副本及撤销策略；
++//!   旧精确引用只在原安装版本仍可验证时补齐副本，缺包或错锁保留记录并拒绝。
+ 
+ use crate::room_native::NativeRoomState;
+ use std::collections::HashMap;
+--- before/apps/game-server/src/native_ws_e2e.rs
++++ after/apps/game-server/src/native_ws_e2e.rs
+@@ -311,6 +311,41 @@
+     cfg
+ }
+ 
++fn local_config(base: &Path) -> ServerConfig {
++    let mut cfg = config(base);
++    let source = cfg.native_packages_root.clone();
++    cfg.native_packages_root = base.join("packages");
++    for package in ["shahai-swd-upstream-noname", "wudian-upstream-noname"] {
++        copy_directory(
++            &source.join(package),
++            &cfg.native_packages_root.join(package),
++        );
++    }
++    cfg
++}
++
++fn disable_packages(cfg: &ServerConfig) {
++    for entry in std::fs::read_dir(&cfg.native_packages_root).unwrap() {
++        let path = entry.unwrap().path().join("manifest.json");
++        let mut descriptor: serde_json::Value =
++            serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
++        descriptor["enabled"] = serde_json::json!(false);
++        std::fs::write(path, serde_json::to_vec(&descriptor).unwrap()).unwrap();
++    }
++    let content = super::native::NativeContent::open(
++        cfg.native_packages_root.clone(),
++        cfg.native_store_root.clone(),
++    )
++    .unwrap();
++    content.import().unwrap();
++    assert!(content
++        .load_scoped(Some("upstream-noname"), "shahai-swd")
++        .is_err());
++    let store = content_runtime::PackageStore::open(&cfg.native_store_root).unwrap();
++    assert!(store.current_lock().unwrap().packages.is_empty());
++    std::fs::remove_dir_all(cfg.native_store_root.join("packages")).unwrap();
++}
++
+ fn assert_synchronized(a: &State, b: &State, spectator: &State) {
+     a.assert_player(PlayerId::new(1));
+     b.assert_player(PlayerId::new(2));
+@@ -337,12 +372,13 @@
+ #[test]
+ fn native_extensions_ws_reconnects_after_disk_restart() {
+     let directory = tempfile::tempdir().unwrap();
+-    let cfg = config(directory.path());
++    let cfg = local_config(directory.path());
+     // Dropping each runtime joins its workers before another bootstrap can write the same store.
+-    let (room, tokens, before_a, before_b, before_spectator, saved_hex) = runtime().block_on(async {
++    let (room, tokens, before_a, before_b, before_spectator, saved_hex, initial_hash) = runtime().block_on(async {
+         let server = Server::start(&cfg, 0).await;
+         let mut a = Peer::connect(&server).await;
+         let initial_a = a.create().await;
++        let initial_hash = initial_a.view.state_hash;
+         let content = super::native::NativeContent::open(
+             cfg.native_packages_root.clone(),
+             cfg.native_store_root.clone(),
+@@ -503,61 +539,113 @@
+         b.close().await;
+         spectator.close().await;
+         server.stop().await;
+-        (room, tokens, before_a, before_b, before_spectator, stored[0].state.snapshot_hex.clone())
++        (room, tokens, before_a, before_b, before_spectator, stored[0].state.snapshot_hex.clone(), initial_hash)
+     });
+ 
+-    runtime().block_on(async {
+-        let restarted = Server::start(&cfg, 1).await;
+-        let mut a = Peer::connect(&restarted).await;
+-        assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, before_a);
+-        assert_eq!(a.token, tokens[0]);
+-        let mut b = Peer::connect(&restarted).await;
+-        assert_eq!(b.join(room, 1, Some(tokens[1].clone())).await, before_b);
+-        assert_eq!(b.token, tokens[1]);
+-        let mut spectator = Peer::connect(&restarted).await;
+-        assert_eq!(spectator.spectate(room).await, before_spectator);
+-        let answer = before_a
+-            .legal
+-            .iter()
+-            .find(|action| {
+-                matches!(
+-                    action,
+-                    LegalAction::ResolveChoice {
+-                        cancelled: false,
+-                        ..
+-                    }
+-                )
+-            })
+-            .expect("restored authoritative answer");
+-        let command = answer.to_command(a.player, before_a.view.revision);
+-        let (result, after) = a
+-            .submit(a.player, before_a.view.revision, 105, command.kind)
+-            .await;
+-        assert!(
+-            matches!(result, CommandResult::Accepted { new_revision, .. }
++    disable_packages(&cfg);
++    for phase in ["disabled", "same-version-repacked", "upgraded"] {
++        if phase != "disabled" {
++            upgrade_packages(
++                &cfg,
++                if phase == "upgraded" {
++                    "1.1.0"
++                } else {
++                    "1.0.0"
++                },
++            );
++        }
++        runtime().block_on(async {
++            let restarted = Server::start(&cfg, 1).await;
++            let mut a = Peer::connect(&restarted).await;
++            assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, before_a);
++            assert_eq!(a.token, tokens[0]);
++            let mut b = Peer::connect(&restarted).await;
++            assert_eq!(b.join(room, 1, Some(tokens[1].clone())).await, before_b);
++            assert_eq!(b.token, tokens[1]);
++            let mut spectator = Peer::connect(&restarted).await;
++            assert_eq!(spectator.spectate(room).await, before_spectator);
++            if phase != "upgraded" {
++                println!("NATIVE_WS frozen_restore=pass packages={phase} choice=pending");
++                a.close().await;
++                b.close().await;
++                spectator.close().await;
++                restarted.stop().await;
++                return;
++            }
++
++            let content = super::native::NativeContent::open(
++                cfg.native_packages_root.clone(),
++                cfg.native_store_root.clone(),
++            )
++            .unwrap();
++            let swd = content
++                .load_scoped(Some("upstream-noname"), "shahai-swd")
++                .unwrap();
++            let wudian = content
++                .load_scoped(Some("upstream-noname"), "wudian")
++                .unwrap();
++            assert!(swd.pack.def.name.contains("1.1.0"));
++            let expected =
++                engine_native::Engine::new_with_extensions(SEED, 2, &[&swd.pack, &wudian.pack])
++                    .unwrap();
++            let mut new_game = Peer::connect(&restarted).await;
++            let upgraded_initial = new_game.create().await;
++            assert_ne!(new_game.room, room);
++            assert_eq!(upgraded_initial.view.state_hash, expected.state_hash());
++            assert_ne!(
++                upgraded_initial.view.state_hash, initial_hash,
++                "new rooms must use the changed active version rather than the old frozen copy"
++            );
++            assert_eq!(
++                a.snapshot().await,
++                before_a,
++                "new active content must not change the restored room"
++            );
++            new_game.close().await;
++
++            let answer = before_a
++                .legal
++                .iter()
++                .find(|action| {
++                    matches!(
++                        action,
++                        LegalAction::ResolveChoice {
++                            cancelled: false,
++                            ..
++                        }
++                    )
++                })
++                .expect("restored authoritative answer");
++            let command = answer.to_command(a.player, before_a.view.revision);
++            let (result, after) = a
++                .submit(a.player, before_a.view.revision, 105, command.kind)
++                .await;
++            assert!(
++                matches!(result, CommandResult::Accepted { new_revision, .. }
+         if new_revision > before_a.view.revision)
+-        );
+-        let pushed_b = b.pushed(105).await;
+-        let pushed_spectator = spectator.pushed(105).await;
+-        assert_synchronized(&after, &pushed_b, &pushed_spectator);
+-        assert_ne!(
+-            super::native_room_store::NativeRoomStore::new(&cfg.native_room_store)
+-                .load_all()
+-                .unwrap()[0]
+-                .state
+-                .snapshot_hex,
+-            saved_hex,
+-            "continued WS command must reach disk"
+-        );
+-        println!(
+-            "NATIVE_WS lifecycle=pass real_packages=shahai-swd,wudian revision={} restored=1",
+-            after.view.revision
+-        );
+-        a.close().await;
+-        b.close().await;
+-        spectator.close().await;
+-        restarted.stop().await;
+-    });
++            );
++            let pushed_b = b.pushed(105).await;
++            let pushed_spectator = spectator.pushed(105).await;
++            assert_synchronized(&after, &pushed_b, &pushed_spectator);
++            assert_ne!(
++                super::native_room_store::NativeRoomStore::new(&cfg.native_room_store)
++                    .load_all()
++                    .unwrap()[0]
++                    .state
++                    .snapshot_hex,
++                saved_hex,
++                "continued WS command must reach disk"
++            );
++            println!(
++                "NATIVE_WS lifecycle=pass real_packages=shahai-swd,wudian revision={} restored=1",
++                after.view.revision
++            );
++            a.close().await;
++            b.close().await;
++            spectator.close().await;
++            restarted.stop().await;
++        });
++    }
+ }
+ 
+ fn copy_directory(from: &Path, to: &Path) {
+@@ -573,13 +661,19 @@
+     }
+ }
+ 
+-fn change_same_version_package(root: &Path) {
++fn change_package(root: &Path, version: &str) {
+     let directory = root.join("shahai-swd-upstream-noname");
+     let cards_path = directory.join("assets/cards.json");
+     let mut cards: serde_json::Value =
+         serde_json::from_slice(&std::fs::read(&cards_path).unwrap()).unwrap();
+     let original_rank = cards["cards"][0]["rank"].as_u64().unwrap();
+     cards["cards"][0]["rank"] = serde_json::json!(original_rank % 13 + 1);
++    cards["cards"]
++        .as_array_mut()
++        .unwrap()
++        .push(serde_json::json!({
++            "name": "swd_ws_upgraded_hufu", "kind": "hufu", "suit": "club", "rank": 13
++        }));
+     let cards = serde_json::to_vec_pretty(&cards).unwrap();
+     std::fs::write(cards_path, &cards).unwrap();
+     let manifest_path = directory.join("package.npack.json");
+@@ -587,6 +681,7 @@
+         content_schema::ContentPackage::from_json_bytes(&std::fs::read(&manifest_path).unwrap())
+             .unwrap();
+     assert_eq!(package.manifest.version, "1.0.0");
++    package.manifest.version = version.into();
+     let asset = package
+         .asset_paths
+         .iter()
+@@ -609,46 +704,148 @@
+     std::fs::write(manifest_path, package.to_json_bytes().unwrap()).unwrap();
+ }
+ 
++fn upgrade_packages(cfg: &ServerConfig, version: &str) {
++    let original = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
++    for package in ["shahai-swd-upstream-noname", "wudian-upstream-noname"] {
++        let target = cfg.native_packages_root.join(package);
++        std::fs::remove_dir_all(&target).unwrap();
++        copy_directory(&original.join(package), &target);
++    }
++    change_package(&cfg.native_packages_root, version);
++    let content = super::native::NativeContent::open(
++        cfg.native_packages_root.clone(),
++        cfg.native_store_root.clone(),
++    )
++    .unwrap();
++    content.import().unwrap();
++    let lock = content_runtime::PackageStore::open(&cfg.native_store_root)
++        .unwrap()
++        .current_lock()
++        .unwrap();
++    assert!(lock
++        .packages
++        .iter()
++        .any(|package| package.package_id == "shahai-swd" && package.version == version));
++}
++
+ #[test]
+-fn native_extensions_ws_fails_closed_for_missing_or_changed_content() {
++fn native_extensions_ws_fails_closed_for_invalid_frozen_content() {
+     let directory = tempfile::tempdir().unwrap();
+-    let cfg = config(directory.path());
+-    let (room, token, record_path, record) = runtime().block_on(async {
++    let cfg = local_config(directory.path());
++    let (room, token, record) = runtime().block_on(async {
+         let server = Server::start(&cfg, 0).await;
+         let mut a = Peer::connect(&server).await;
+         a.create().await;
+         let room = a.room;
+         let token = a.token.clone();
+         let record_path = Path::new(&cfg.native_room_store).join(format!("{room}.json"));
+-        let record = std::fs::read(&record_path).unwrap();
++        let record: serde_json::Value =
++            serde_json::from_slice(&std::fs::read(&record_path).unwrap()).unwrap();
++        assert_eq!(
++            record["state"]["frozen_packages"].as_array().unwrap().len(),
++            2
++        );
+         a.close().await;
+         server.stop().await;
+-        (room, token, record_path, record)
++        (room, token, record)
+     });
+ 
+-    for changed in [false, true] {
+-        let base = directory
+-            .path()
+-            .join(if changed { "changed" } else { "missing" });
+-        let mut variant = config(&base);
+-        variant.native_room_store = cfg.native_room_store.clone();
+-        variant.native_packages_root = base.join("packages");
+-        std::fs::create_dir_all(&variant.native_packages_root).unwrap();
+-        if changed {
+-            for source in ["shahai-swd-upstream-noname", "wudian-upstream-noname"] {
+-                copy_directory(
+-                    &cfg.native_packages_root.join(source),
+-                    &variant.native_packages_root.join(source),
+-                );
+-            }
+-            change_same_version_package(&variant.native_packages_root);
+-        }
++    for failure in [
++        "package-tampered",
++        "asset-tampered",
++        "asset-missing",
++        "copy-missing",
++        "wrong-lock",
++        "old-lock-without-copy",
++        "revoked-hash",
++        "revoked-slot",
++    ] {
++        let base = directory.path().join(failure);
++        let has_active = matches!(
++            failure,
++            "package-tampered" | "asset-tampered" | "asset-missing" | "copy-missing" | "wrong-lock"
++        );
++        let mut variant = if has_active {
++            local_config(&base)
++        } else {
++            config(&base)
++        };
++        if !has_active {
++            variant.native_packages_root = base.join("packages");
++            std::fs::create_dir_all(&variant.native_packages_root).unwrap();
++        }
++        let mut damaged = record.clone();
++        let copies = damaged["state"]["frozen_packages"].as_array_mut().unwrap();
++        let binding = copies[0]["binding"].clone();
++        match failure {
++            "package-tampered" => {
++                let json = copies[0]["package_json"].as_str().unwrap().to_owned() + " ";
++                copies[0]["package_json"] = serde_json::json!(json);
++            }
++            "asset-tampered" => {
++                let bytes = copies[0]["assets"]
++                    .as_object_mut()
++                    .unwrap()
++                    .values_mut()
++                    .next()
++                    .unwrap()
++                    .as_array_mut()
++                    .unwrap();
++                bytes[0] = serde_json::json!(bytes[0].as_u64().unwrap() ^ 1);
++            }
++            "asset-missing" => {
++                copies[0]["assets"] = serde_json::json!({});
++            }
++            "copy-missing" => {
++                copies.clear();
++            }
++            "wrong-lock" => {
++                let mut hash = copies[0]["binding"]["content_hash"]
++                    .as_str()
++                    .unwrap()
++                    .to_owned();
++                hash.replace_range(..1, if &hash[..1] == "0" { "1" } else { "0" });
++                copies[0]["binding"]["content_hash"] = serde_json::json!(hash);
++            }
++            "old-lock-without-copy" => {
++                damaged["state"]
++                    .as_object_mut()
++                    .unwrap()
++                    .remove("frozen_packages");
++            }
++            "revoked-hash" | "revoked-slot" => {
++                let store =
++                    content_runtime::PackageStore::open(&variant.native_store_root).unwrap();
++                if failure == "revoked-hash" {
++                    let hash = binding["content_hash"].as_str().unwrap();
++                    store
++                        .revoke_content_hash(hash, "WS frozen regression", true)
++                        .unwrap();
++                } else {
++                    store
++                        .revoke_slot(
++                            binding["namespace"].as_str().unwrap(),
++                            binding["package_id"].as_str().unwrap(),
++                            "WS frozen regression",
++                            true,
++                        )
++                        .unwrap();
++                }
++            }
++            _ => unreachable!(),
++        }
++        let state = serde_json::from_value(damaged["state"].clone()).unwrap();
++        damaged["checksum"] = serde_json::json!(super::native_room_store::state_checksum(&state));
++        let record_path = Path::new(&variant.native_room_store).join(format!("{room}.json"));
++        std::fs::create_dir_all(record_path.parent().unwrap()).unwrap();
++        let bytes = serde_json::to_vec_pretty(&damaged).unwrap();
++        std::fs::write(&record_path, &bytes).unwrap();
+         runtime().block_on(async {
+             let unavailable = Server::start(&variant, 0).await;
+             assert_eq!(
+                 std::fs::read(&record_path).unwrap(),
+-                record,
+-                "failed restore must preserve the save"
++                bytes,
++                "failed restore must preserve the save ({failure})"
+             );
+             let mut peer = Peer::connect(&unavailable).await;
+             peer.send(ClientMessage::JoinRoom {
+@@ -670,29 +867,22 @@
+                 password: PASSWORD.into(),
+             })
+             .await;
+-            if changed {
+-                let _new_state = peer.join_result().await;
++            if has_active {
++                peer.join_result().await;
+                 assert_ne!(
+                     peer.room, room,
+-                    "valid changed content may create a new room, never recover the old save"
++                    "valid active copies may create a new room, never replace a broken frozen save"
+                 );
+             } else {
+                 peer.error(ErrorCode::Internal).await;
+                 assert_eq!(
+                     unavailable.lobby.stats().active_rooms,
+                     0,
+-                    "missing packages cannot silently create a standard room"
++                    "a frozen save must not activate its packages for a new room"
+                 );
+             }
+-            assert_eq!(std::fs::read(&record_path).unwrap(), record);
+-            println!(
+-                "NATIVE_WS fail_closed={} saved_record=preserved",
+-                if changed {
+-                    "same-version-changed"
+-                } else {
+-                    "missing"
+-                }
+-            );
++            assert_eq!(std::fs::read(&record_path).unwrap(), bytes);
++            println!("NATIVE_WS frozen_fail_closed={failure} saved_record=preserved");
+             peer.close().await;
+             unavailable.stop().await;
+         });
+--- before/apps/game-server/tests/nc09_native_room_session.rs
++++ after/apps/game-server/tests/nc09_native_room_session.rs
+@@ -582,6 +582,7 @@
+             next_token: 3,
+             next_dedup: 9,
+             pack_refs: Vec::new(),
++            frozen_packages: None,
+             members: Vec::new(),
+         },
+     };
+@@ -625,6 +626,7 @@
+             next_token: 1,
+             next_dedup: 1,
+             pack_refs: Vec::new(),
++            frozen_packages: None,
+             members: Vec::new(),
+         },
+     };
+@@ -642,3 +644,45 @@
+     let err = store.load_all().expect_err("校验和不匹配必须报错");
+     assert!(err.contains("校验和"), "{err}");
+ }
++
++#[test]
++fn nc09_legacy_state_checksum_survives_optional_frozen_package_field() {
++    let old_state = r#"{"snapshot_hex":"","max_seats":4,"started":true,"next_token":1,"next_dedup":1,"pack_refs":[],"members":[]}"#;
++    let checksum = blake3::hash(old_state.as_bytes()).to_hex().to_string();
++    let state: room_native::NativeRoomState = serde_json::from_str(old_state).unwrap();
++    assert!(state.frozen_packages.is_none());
++    assert_eq!(serde_json::to_string(&state).unwrap(), old_state);
++    let dir = tempfile::tempdir().unwrap();
++    let store = native_room_store::NativeRoomStore::new(dir.path());
++    let record = format!(
++        r#"{{"room_id":88,"password_hash":"","state":{old_state},"checksum":"{checksum}"}}"#
++    );
++    std::fs::write(dir.path().join("88.json"), record).unwrap();
++    let loaded = store.load_all().unwrap();
++    assert_eq!(loaded[0].checksum, checksum);
++}
++
++#[tokio::test]
++async fn nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_written() {
++    let dir = tempfile::tempdir().unwrap();
++    let blocked = dir.path().join("not-a-directory");
++    std::fs::write(&blocked, b"retain this file").unwrap();
++    let store = native_room_store::NativeRoomStore::new(&blocked);
++    let mut room = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
++    room.set_frozen_packages(Vec::new());
++    let record = native_room_store::StoredRoom {
++        room_id: 89,
++        password_hash: String::new(),
++        state: room.export_state(&room.snapshot_hex()),
++        checksum: String::new(),
++    };
++    let result = room_native_actor::restore_room_from_disk(
++        &record,
++        &mut |_| Err("标准局不应装载包".into()),
++        8,
++        4,
++        store,
++    );
++    assert!(result.is_err());
++    assert_eq!(std::fs::read(blocked).unwrap(), b"retain this file");
++}
+--- /dev/null
++++ after/apps/game-server/src/native/frozen.rs
+@@ -0,0 +1,214 @@
++//! 原局包副本：保留原始内容锁与全部声明资产，恢复不依赖当前启用版本。
++
++use super::{ExtensionPack, NativeContent};
++use content_runtime::{content_hash_hex, LockedPackage};
++use content_schema::ContentPackage;
++use std::collections::{BTreeMap, BTreeSet};
++use std::path::{Component, Path};
++
++/// 已安装并验证的原局完整内容；VM 模块包含在原始 package JSON 中。
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++pub struct FrozenNativePackage {
++    pub binding: LockedPackage,
++    pub package_json: String,
++    pub assets: BTreeMap<String, Vec<u8>>,
++}
++
++fn reference_binding(reference: &str) -> Result<LockedPackage, String> {
++    let (name, version) = reference.rsplit_once('@').ok_or("无效的原生包引用")?;
++    version.parse::<u32>().map_err(|_| "无效的原生包版本")?;
++    let identity = name
++        .strip_prefix("installed:")
++        .ok_or("旧原生包引用缺少安装内容锁")?;
++    let binding: LockedPackage =
++        serde_json::from_str(identity).map_err(|e| format!("无效的安装内容锁: {e}"))?;
++    for value in [&binding.namespace, &binding.package_id, &binding.version] {
++        let mut components = Path::new(value).components();
++        if value.is_empty()
++            || value.contains('\\')
++            || !matches!(components.next(), Some(Component::Normal(_)))
++            || components.next().is_some()
++        {
++            return Err("无效的安装包身份".into());
++        }
++    }
++    Ok(binding)
++}
++
++impl FrozenNativePackage {
++    fn parsed_package(&self) -> Result<ContentPackage, String> {
++        if content_hash_hex(self.package_json.as_bytes()) != self.binding.content_hash {
++            return Err("原局包 content hash 不匹配".into());
++        }
++        let package = ContentPackage::from_json_bytes(self.package_json.as_bytes())?;
++        package.validate()?;
++        content_runtime::check_engine_compat(
++            &package.manifest,
++            &content_runtime::tooling_host_versions(),
++        )
++        .map_err(|e| e.to_string())?;
++        let manifest = &package.manifest;
++        if manifest.namespace != self.binding.namespace
++            || manifest.package_id != self.binding.package_id
++            || manifest.version != self.binding.version
++            || blake3::Hash::from(manifest.logic_hash).to_hex().as_str() != self.binding.logic_hash
++        {
++            return Err("原局包身份或 logic hash 不匹配".into());
++        }
++        Ok(package)
++    }
++
++    pub(super) fn package(&self) -> Result<ContentPackage, String> {
++        let package = self.parsed_package()?;
++        let mut declared = BTreeMap::new();
++        if let Some(manifest) = &package.asset_manifest {
++            for entry in &manifest.entries {
++                let relative = package
++                    .asset_paths
++                    .get(&entry.asset_id)
++                    .ok_or("资产路径缺失")?;
++                if entry.source_hash == [0u8; 32] {
++                    return Err(format!("原局包资产 hash 为零: {relative}"));
++                }
++                if let Some((hash, kind)) =
++                    declared.insert(relative, (entry.source_hash, entry.kind))
++                {
++                    if hash != entry.source_hash || kind != entry.kind {
++                        return Err(format!("原局包资产路径冲突: {relative}"));
++                    }
++                }
++                let bytes = self
++                    .assets
++                    .get(relative)
++                    .ok_or_else(|| format!("原局包资产缺失: {relative}"))?;
++                if blake3::hash(bytes).as_bytes() != &entry.source_hash {
++                    return Err(format!("原局包资产 hash 不匹配: {relative}"));
++                }
++            }
++        }
++        if declared.len() != self.assets.len() {
++            return Err("原局包含未声明资产".into());
++        }
++        Ok(package)
++    }
++
++    pub(super) fn text_asset(&self, relative: &str) -> Result<Option<String>, String> {
++        self.assets
++            .get(relative)
++            .map(|bytes| {
++                String::from_utf8(bytes.clone()).map_err(|e| format!("原局包资产不是 UTF-8: {e}"))
++            })
++            .transpose()
++    }
++}
++
++impl NativeContent {
++    pub(super) fn check_not_revoked(&self, binding: &LockedPackage) -> Result<(), String> {
++        let revoked = self.store.read_revoke().map_err(|e| e.to_string())?;
++        if revoked.is_hash_revoked(&binding.content_hash)
++            || revoked.is_slot_revoked(&binding.namespace, &binding.package_id)
++        {
++            return Err(format!(
++                "原局包已撤销: {}/{}@{}",
++                binding.namespace, binding.package_id, binding.version
++            ));
++        }
++        Ok(())
++    }
++
++    pub(super) fn freeze_binding(
++        &self,
++        binding: &LockedPackage,
++    ) -> Result<FrozenNativePackage, String> {
++        self.check_not_revoked(binding)?;
++        let packages_root = self
++            .store
++            .root()
++            .join("packages")
++            .canonicalize()
++            .map_err(|e| e.to_string())?;
++        let root = packages_root
++            .join(format!("{}__{}", binding.namespace, binding.package_id))
++            .join(&binding.version)
++            .canonicalize()
++            .map_err(|e| format!("原局安装包缺失: {e}"))?;
++        if !root.starts_with(&packages_root) {
++            return Err("安装包路径越界".into());
++        }
++        let checked_read = |relative: &str| -> Result<Vec<u8>, String> {
++            let path = root
++                .join(relative)
++                .canonicalize()
++                .map_err(|e| format!("原局包文件缺失 {relative}: {e}"))?;
++            if !path.starts_with(&root) || !path.is_file() {
++                return Err(format!("安装包文件越界: {relative}"));
++            }
++            std::fs::read(path).map_err(|e| e.to_string())
++        };
++        let mut frozen = FrozenNativePackage {
++            binding: binding.clone(),
++            package_json: String::from_utf8(checked_read("package.json")?)
++                .map_err(|e| e.to_string())?,
++            assets: BTreeMap::new(),
++        };
++        let package = frozen.parsed_package()?;
++        for relative in package.asset_paths.values() {
++            frozen
++                .assets
++                .insert(relative.clone(), checked_read(relative)?);
++        }
++        frozen.package()?;
++        Ok(frozen)
++    }
++
++    /// 为旧精确引用补齐原始副本；不把当前启用的新版本当作旧版本。
++    pub fn freeze_reference(&self, reference: &str) -> Result<FrozenNativePackage, String> {
++        let binding = reference_binding(reference)?;
++        let frozen = self.freeze_binding(&binding)?;
++        self.load_frozen_reference(reference, &frozen)?;
++        Ok(frozen)
++    }
++
++    /// 只从原局副本桥接；副本损坏时不退回当前包存储。
++    pub fn load_frozen_reference(
++        &self,
++        reference: &str,
++        frozen: &FrozenNativePackage,
++    ) -> Result<ExtensionPack, String> {
++        if reference_binding(reference)? != frozen.binding {
++            return Err("房间引用与原局包内容锁不匹配".into());
++        }
++        let loaded = self.load_frozen(frozen)?;
++        if format!("{}@{}", loaded.pack.def.name, loaded.pack.def.version) != reference {
++            return Err("房间引用与原局包版本不匹配".into());
++        }
++        Ok(loaded.pack)
++    }
++
++    /// 启动恢复统一入口：新档严格验副本，旧档只迁移精确可验证的安装版本。
++    pub fn load_room_packages(
++        &self,
++        references: &[String],
++        frozen: Option<&[FrozenNativePackage]>,
++    ) -> Result<(Vec<ExtensionPack>, Vec<FrozenNativePackage>), String> {
++        let copies = match frozen {
++            Some(copies) => copies.to_vec(),
++            None => references
++                .iter()
++                .map(|r| self.freeze_reference(r))
++                .collect::<Result<Vec<_>, _>>()?,
++        };
++        if copies.len() != references.len() {
++            return Err("房间引用与原局包副本数量不一致".into());
++        }
++        let mut slots = BTreeSet::new();
++        let mut packs = Vec::with_capacity(copies.len());
++        for (reference, copy) in references.iter().zip(&copies) {
++            if !slots.insert((&copy.binding.namespace, &copy.binding.package_id)) {
++                return Err("原局包槽位重复".into());
++            }
++            packs.push(self.load_frozen_reference(reference, copy)?);
++        }
++        Ok((packs, copies))
++    }
++}
+--- /dev/null
++++ after/apps/game-server/tests/native_frozen_packages.rs
+@@ -0,0 +1,269 @@
++//! 原局完整包副本：原始指纹、VM 与非核心资产，及停用/升级/撤销边界。
++
++#[path = "../src/native.rs"]
++mod native;
++
++use native::{FrozenNativePackage, NativeContent};
++use std::path::Path;
++
++const DSL: &str =
++    "skill frozen_vm(990201) { trigger phase_end owner_is_target { effect recover_hp(self, 1); } }";
++
++fn write_package(root: &Path, version: &str) -> Vec<u8> {
++    let package = content_compiler::compile_source_named("frozen-vm", DSL).unwrap();
++    let mut value = serde_json::to_value(package).unwrap();
++    let resource = b"\0binary asset, retained even without a bridge reader\xff";
++    value["manifest"]["version"] = version.into();
++    value["asset_manifest"] = serde_json::json!({
++        "schema_version": 1, "package_id": "frozen-vm",
++        "total_compressed_size": 0, "total_decoded_size": 0,
++        "entries": [{
++            "asset_id": "frozen-vm:resource", "source_hash": blake3::hash(resource).as_bytes(),
++            "kind": "Data", "image_variants": [], "audio_variants": [],
++            "priority": "Lazy", "depends_on": [], "platforms": []
++        }]
++    });
++    value["asset_paths"] = serde_json::json!({"frozen-vm:resource": "assets/resource.bin"});
++    let mut package: content_schema::ContentPackage = serde_json::from_value(value).unwrap();
++    package.manifest.logic_hash = package.compute_logic_hash();
++    package.manifest.asset_hash = package.compute_asset_hash();
++    // 保留原始空白，不能以反序列化后重录 JSON 的指纹代替内容锁。
++    let mut bytes = package.to_json_bytes().unwrap();
++    bytes.extend_from_slice(b"\n  \n");
++    std::fs::create_dir_all(root.join("assets")).unwrap();
++    std::fs::write(root.join("package.npack.json"), &bytes).unwrap();
++    std::fs::write(root.join("assets/resource.bin"), resource).unwrap();
++    bytes
++}
++
++fn fixture() -> (
++    tempfile::TempDir,
++    NativeContent,
++    String,
++    FrozenNativePackage,
++) {
++    let temp = tempfile::tempdir().unwrap();
++    let sources = temp.path().join("sources");
++    let bytes = write_package(&sources.join("frozen-vm"), "1.0.0");
++    let content = NativeContent::open(sources, temp.path().join("store")).unwrap();
++    content.import().unwrap();
++    let loaded = content.load("frozen-vm").unwrap();
++    assert_eq!(loaded.frozen.package_json.as_bytes(), bytes);
++    let reference = format!("{}@{}", loaded.pack.def.name, loaded.pack.def.version);
++    (temp, content, reference, loaded.frozen)
++}
++
++fn with_rehashed_package(
++    copy: &mut FrozenNativePackage,
++    edit: impl FnOnce(&mut content_schema::ContentPackage),
++) {
++    let mut package =
++        content_schema::ContentPackage::from_json_bytes(copy.package_json.as_bytes()).unwrap();
++    edit(&mut package);
++    copy.package_json = String::from_utf8(package.to_json_bytes().unwrap()).unwrap();
++    copy.binding.content_hash = content_runtime::content_hash_hex(copy.package_json.as_bytes());
++}
++
++fn copy_reference(copy: &FrozenNativePackage) -> String {
++    format!(
++        "installed:{}@1",
++        serde_json::to_string(&copy.binding).unwrap()
++    )
++}
++
++#[test]
++fn frozen_vm_and_binary_assets_restore_without_sources_or_installed_versions() {
++    let (temp, content, reference, frozen) = fixture();
++    let pack = content.load_frozen_reference(&reference, &frozen).unwrap();
++    assert_eq!(pack.vm_skills.len(), 1);
++    let engine = engine_native::Engine::new_with_extensions(4242, 2, &[&pack]).unwrap();
++    let snapshot = engine.save();
++    std::fs::remove_dir_all(temp.path().join("sources")).unwrap();
++    content.import().unwrap();
++    std::fs::remove_dir_all(temp.path().join("store/packages")).unwrap();
++    assert!(content.load("frozen-vm").is_err());
++    assert!(content.load_reference(&reference).is_err());
++    let (packs, retained) = content
++        .load_room_packages(&[reference], Some(&[frozen]))
++        .unwrap();
++    assert_eq!(retained[0].assets.len(), 1);
++    assert_eq!(packs[0].vm_skills.len(), 1);
++    let restored = engine_native::Engine::restore_with_extensions(&snapshot, &[&packs[0]]).unwrap();
++    assert_eq!(restored.state_hash(), engine.state_hash());
++}
++
++#[test]
++fn frozen_copy_rejects_tampering_missing_extra_assets_and_invalid_manifest() {
++    let (_temp, content, reference, frozen) = fixture();
++    let reject = |copy: &FrozenNativePackage| {
++        assert!(content.load_frozen_reference(&reference, copy).is_err());
++    };
++    let mut raw_changed = frozen.clone();
++    raw_changed.package_json.push('\n');
++    reject(&raw_changed);
++    let mut asset_changed = frozen.clone();
++    asset_changed.assets.get_mut("assets/resource.bin").unwrap()[0] ^= 1;
++    reject(&asset_changed);
++    let mut missing = frozen.clone();
++    missing.assets.clear();
++    reject(&missing);
++    let mut extra = frozen.clone();
++    extra.assets.insert("assets/undeclared.bin".into(), vec![0]);
++    reject(&extra);
++    let mut wrong_logic = frozen.clone();
++    wrong_logic.binding.logic_hash = "00".repeat(32);
++    assert!(content
++        .load_frozen_reference(&copy_reference(&wrong_logic), &wrong_logic)
++        .is_err());
++    let mut invalid_manifest = frozen.clone();
++    with_rehashed_package(&mut invalid_manifest, |pkg| {
++        pkg.manifest.logic_hash = [0; 32]
++    });
++    assert!(content
++        .load_frozen_reference(&copy_reference(&invalid_manifest), &invalid_manifest)
++        .is_err());
++    let mut traversal = frozen.clone();
++    with_rehashed_package(&mut traversal, |pkg| {
++        pkg.asset_paths
++            .insert("frozen-vm:resource".into(), "../outside".into());
++        pkg.manifest.asset_hash = pkg.compute_asset_hash();
++    });
++    assert!(content
++        .load_frozen_reference(&copy_reference(&traversal), &traversal)
++        .is_err());
++}
++
++#[test]
++fn room_packages_are_exact_ordered_and_do_not_fallback_to_active_packages() {
++    let (_temp, content, reference, frozen) = fixture();
++    assert!(content
++        .load_room_packages(&[reference.clone()], Some(&[]))
++        .is_err());
++    assert!(content
++        .load_room_packages(&[], Some(&[frozen.clone()]))
++        .is_err());
++    assert!(content
++        .load_room_packages(
++            &[reference.clone(), reference.clone()],
++            Some(&[frozen.clone(), frozen.clone()])
++        )
++        .is_err());
++    let mut wrong = frozen.clone();
++    wrong.binding.namespace = "different-namespace".into();
++    assert!(content
++        .load_room_packages(&[reference.clone()], Some(&[wrong]))
++        .is_err());
++    assert!(content
++        .load_room_packages(&[reference.replace("@1", "@2")], Some(&[frozen]))
++        .is_err());
++    assert!(content
++        .load_room_packages(&["frozen-vm@1".into()], None)
++        .is_err());
++    assert!(content.load_room_packages(&[], None).unwrap().0.is_empty());
++    assert!(content
++        .load_room_packages(&[], Some(&[]))
++        .unwrap()
++        .1
++        .is_empty());
++}
++
++#[test]
++fn legacy_exact_reference_migrates_disabled_old_version_and_upgrade_leaves_original_copy() {
++    let (temp, content, reference, frozen) = fixture();
++    let source = temp.path().join("sources/frozen-vm");
++    std::fs::write(
++        source.join("manifest.json"),
++        br#"{"schema_version":1,"enabled":false}"#,
++    )
++    .unwrap();
++    assert!(content.import().unwrap().is_empty(), "全停用是合法配置");
++    assert!(content.load("frozen-vm").is_err(), "停用包不能开新局");
++    let (old, migrated) = content
++        .load_room_packages(&[reference.clone()], None)
++        .unwrap();
++    assert_eq!(migrated[0].binding, frozen.binding);
++    assert_eq!(old[0].def.name, reference.rsplit_once('@').unwrap().0);
++    std::fs::remove_file(source.join("manifest.json")).unwrap();
++    write_package(&source, "2.0.0");
++    content.import().unwrap();
++    let current = content.load("frozen-vm").unwrap();
++    assert_eq!(current.frozen.binding.version, "2.0.0");
++    assert_ne!(current.frozen.binding, frozen.binding);
++    let (_, migrated_again) = content
++        .load_room_packages(&[reference.clone()], None)
++        .unwrap();
++    assert_eq!(migrated_again[0].binding.version, "1.0.0");
++    let old_root = temp
++        .path()
++        .join("store/packages")
++        .join(format!(
++            "{}__{}",
++            frozen.binding.namespace, frozen.binding.package_id
++        ))
++        .join("1.0.0");
++    std::fs::remove_dir_all(old_root).unwrap();
++    assert!(
++        content
++            .load_room_packages(&[reference.clone()], None)
++            .is_err(),
++        "旧档不得猜新版"
++    );
++    content
++        .load_room_packages(&[reference], Some(&[frozen]))
++        .unwrap();
++}
++
++#[test]
++fn frozen_copies_obey_current_hash_and_slot_revocations() {
++    for by_hash in [true, false] {
++        let (temp, content, reference, frozen) = fixture();
++        let store = content_runtime::PackageStore::open(temp.path().join("store")).unwrap();
++        if by_hash {
++            store
++                .revoke_content_hash(&frozen.binding.content_hash, "test", true)
++                .unwrap();
++        } else {
++            store
++                .revoke_slot(
++                    &frozen.binding.namespace,
++                    &frozen.binding.package_id,
++                    "test",
++                    true,
++                )
++                .unwrap();
++        }
++        assert!(content
++            .load_frozen_reference(&reference, &frozen)
++            .err()
++            .expect("撤销应拒绝")
++            .contains("已撤销"));
++        assert!(content
++            .freeze_reference(&reference)
++            .unwrap_err()
++            .contains("已撤销"));
++    }
++}
++
++#[cfg(unix)]
++#[test]
++fn freezing_installed_assets_rejects_symlinks_outside_package_root() {
++    use std::os::unix::fs::symlink;
++    let (temp, content, reference, frozen) = fixture();
++    let installed = temp
++        .path()
++        .join("store/packages")
++        .join(format!(
++            "{}__{}",
++            frozen.binding.namespace, frozen.binding.package_id
++        ))
++        .join(&frozen.binding.version);
++    let asset = installed.join("assets/resource.bin");
++    let outside = temp.path().join("outside.bin");
++    std::fs::write(&outside, frozen.assets.get("assets/resource.bin").unwrap()).unwrap();
++    std::fs::remove_file(&asset).unwrap();
++    symlink(&outside, &asset).unwrap();
++    assert!(content
++        .freeze_reference(&reference)
++        .unwrap_err()
++        .contains("越界"));
++}

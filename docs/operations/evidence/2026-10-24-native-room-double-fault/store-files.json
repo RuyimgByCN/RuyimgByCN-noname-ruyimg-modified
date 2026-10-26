@@ -1,0 +1,17 @@
+[
+  {
+    "path": "apps/game-server/src/native_room_store.rs",
+    "sha256": "a0f19b45dfcc93180ac7be4980ea2a6e6ceffb2f5b006fce53353630dc97b589",
+    "physical_lines": 508
+  },
+  {
+    "path": "apps/game-server/src/native_room_store/tests.rs",
+    "sha256": "7e1bbf1b425a13a4a2c6a54ac3bac30cfe4ca051b1284f7d2008acb361b53f75",
+    "physical_lines": 264
+  },
+  {
+    "path": "apps/game-server/src/native_room_store/commit_tests.rs",
+    "sha256": "9607bc358cac28012830ad2f2f7b7b98ea395c550fa857b8a978b9e9fa80d7ee",
+    "physical_lines": 351
+  }
+]

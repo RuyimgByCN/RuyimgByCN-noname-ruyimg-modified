@@ -1,0 +1,19 @@
+{
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--bin",
+    "game-server",
+    "lobby::tests::finished_saved_room",
+    "--",
+    "--nocapture"
+  ],
+  "start": "2026-10-24T15:34:23.059973+08:00",
+  "end": "2026-10-24T15:34:26.616048+08:00",
+  "seconds": 3.556,
+  "exit": 0
+}

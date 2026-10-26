@@ -1,0 +1,3 @@
+BEFORE_HAS_PACKAGE true
+CLICK clicked
+AFTER_HAS_DONE true

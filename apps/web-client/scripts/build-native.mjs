@@ -1,9 +1,9 @@
 // 构建 engine-native-wasm（web 目标）并部署到 web-client。
 // 用法：node scripts/build-native.mjs
 // Node 冒烟另用：WASM_PACK_TARGET=nodejs node scripts/build-native.mjs
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { cpSync, rmSync, existsSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { delimiter, join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 
@@ -15,7 +15,7 @@ const target = process.env.WASM_PACK_TARGET || "web";
 const rustupBin = join(homedir(), ".cargo/bin");
 const env = {
   ...process.env,
-  PATH: `${rustupBin}${process.env.PATH ? `:${process.env.PATH}` : ""}`,
+  PATH: `${rustupBin}${delimiter}${process.env.PATH ?? ""}`,
   // 禁止 cargo clean；共用 target 目录
   CARGO_TARGET_DIR: join(root, "target"),
 };
@@ -23,11 +23,15 @@ const env = {
 if (existsSync(tmp)) rmSync(tmp, { recursive: true, force: true });
 mkdirSync(tmp, { recursive: true });
 
-execSync(
-  `wasm-pack build "${crate}" --target ${target} --release --no-opt --out-dir "${tmp}"`,
-  { stdio: "inherit", cwd: root, env },
-);
-rmSync(out, { recursive: true, force: true });
-cpSync(tmp, out, { recursive: true });
-rmSync(tmp, { recursive: true, force: true });
+try {
+  execFileSync(
+    "wasm-pack",
+    ["build", crate, "--target", target, "--release", "--no-opt", "--out-dir", tmp],
+    { stdio: "inherit", cwd: root, env },
+  );
+  rmSync(out, { recursive: true, force: true });
+  cpSync(tmp, out, { recursive: true });
+} finally {
+  rmSync(tmp, { recursive: true, force: true });
+}
 console.log(`native engine pkg (${target}) deployed to ${out}`);

@@ -2,11 +2,11 @@
 //!
 //! 现状：`room.rs` 的 actor 循环绑定旧线 `engine_core::Engine`。本模块把「房间的
 //! 权威面」（引擎、投影、权威动作、开放选择、命令结果、重连）实现为**原生**会话，
-//! 使用 [`crate::native_view`] 的协议映射（唯一映射点），供 actor 循环后续替换接入；
-//! 本模块自身不含 tokio/持久化/广播（下一批接线）。
+//! 使用 [`crate::native_view`] 的协议映射（唯一映射点）；IO 与广播由
+//! [`crate::room_native_actor`] 承接，本模块维护会话、归档与命令重放。
 //!
 //! 与旧线的差异（登记，不隐藏）：命令载荷来自协议 `CommandKind`，本会话只映射
-//! 内核可表达的子集（`PlayCard`/`NextPhase`/`Answer`），其余返回 `Unsupported`
+//! 内核可表达的动作（出牌、阶段、选择、主动技、明将），其余明确报错
 //! 而不是静默忽略。
 
 use crate::native_view::{legal_actions_for, observer_snapshot_for, RoomRole};
@@ -17,6 +17,11 @@ use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
 use engine_protocol::ClientRole;
 use std::collections::HashMap;
 
+#[path = "room_native/receipts.rs"]
+mod receipts;
+use receipts::CommandReceipts;
+pub use receipts::NativeCommandReceipt;
+
 /// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct NativeRoomState {
@@ -26,14 +31,20 @@ pub struct NativeRoomState {
     pub max_seats: u8,
     /// 是否已开局。
     pub started: bool,
-    /// 下一个重连令牌序号（延续，避免令牌复用）。
+    /// 历史入座计数（保留存档字段；重连令牌使用随机 UUID）。
     pub next_token: u64,
     /// 下一个幂等键序号（延续，避免重放旧命令）。
     pub next_dedup: u64,
-    /// 扩展包引用（`包名@版本`；恢复时按此重新装载同内容包）。
+    /// 扩展包精确引用（`installed:内容锁@原生版本`；与原局副本逐一比对）。
     pub pack_refs: Vec<String>,
+    /// 原局包副本；旧档缺省 None，新局 Some（标准局为空集）。
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
     /// 成员（含重连令牌）。
     pub members: Vec<NativeMember>,
+    /// 按重连身份固定已接受请求；旧档没有历史收据时保持空集。
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub command_receipts: Vec<NativeCommandReceipt>,
 }
 
 /// hex 编码（小写）。
@@ -46,9 +57,9 @@ fn hex_decode(text: &str) -> Option<Vec<u8>> {
     if text.len() % 2 != 0 {
         return None;
     }
-    (0..text.len())
-        .step_by(2)
-        .map(|i| u8::from_str_radix(&text[i..i + 2], 16).ok())
+    text.as_bytes()
+        .chunks_exact(2)
+        .map(|pair| u8::from_str_radix(std::str::from_utf8(pair).ok()?, 16).ok())
         .collect()
 }
 
@@ -72,12 +83,29 @@ pub struct NativeRoomSession {
     engine: Engine,
     /// 建局所用扩展包（Recover 重放需要同内容）。
     packs: Vec<engine_native::content::extension::ExtensionPack>,
+    frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
     max_seats: u8,
     members: HashMap<u64, NativeMember>,
     by_token: HashMap<String, u64>,
     started: bool,
     next_token: u64,
     next_dedup: u64,
+    command_receipts: CommandReceipts,
+    /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
+    event_cursor: usize,
+}
+
+/// IO 提交前保存可变会话；包定义与原局资产在 actor 生命周期内不变。
+pub(crate) struct NativeRoomCheckpoint {
+    engine: Engine,
+    members: HashMap<u64, NativeMember>,
+    by_token: HashMap<String, u64>,
+    started: bool,
+    next_token: u64,
+    next_dedup: u64,
+    command_receipts: CommandReceipts,
+    /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
+    event_cursor: usize,
 }
 
 /// 入座/观战结果。
@@ -92,6 +120,30 @@ pub struct NativeJoinReply {
 }
 
 impl NativeRoomSession {
+    pub(crate) fn checkpoint(&self) -> NativeRoomCheckpoint {
+        NativeRoomCheckpoint {
+            engine: self.engine.clone(),
+            members: self.members.clone(),
+            by_token: self.by_token.clone(),
+            started: self.started,
+            next_token: self.next_token,
+            next_dedup: self.next_dedup,
+            command_receipts: self.command_receipts.clone(),
+            event_cursor: self.event_cursor,
+        }
+    }
+
+    pub(crate) fn rollback(&mut self, before: NativeRoomCheckpoint) {
+        self.engine = before.engine;
+        self.members = before.members;
+        self.by_token = before.by_token;
+        self.started = before.started;
+        self.next_token = before.next_token;
+        self.next_dedup = before.next_dedup;
+        self.command_receipts = before.command_receipts;
+        self.event_cursor = before.event_cursor;
+    }
+
     /// 以原生引擎为模板建会话（模板状态即开局状态）。
     pub fn new(engine: Engine, max_seats: u8) -> Self {
         Self::new_with_packs(engine, Vec::new(), max_seats)
@@ -103,21 +155,34 @@ impl NativeRoomSession {
         packs: Vec<engine_native::content::extension::ExtensionPack>,
         max_seats: u8,
     ) -> Self {
+        let event_cursor = engine.log().len();
         Self {
             engine,
             packs,
+            frozen_packages: None,
             max_seats,
             members: HashMap::new(),
             by_token: HashMap::new(),
             started: true, // 原生引擎建局即已开局（赛前大厅阶段未建模，登记待办）
             next_token: 1,
             next_dedup: 1,
+            command_receipts: CommandReceipts::default(),
+            event_cursor,
         }
+    }
+
+    /// 固定原局完整包副本；调用方已逐包校验后，在 spawn 前写入。
+    pub fn set_frozen_packages(&mut self, packages: Vec<crate::native::FrozenNativePackage>) {
+        self.frozen_packages = Some(packages);
     }
 
     /// 只读引擎（测试/宿主查询）。
     pub fn engine(&self) -> &Engine {
         &self.engine
+    }
+
+    pub fn members(&self) -> impl Iterator<Item = &NativeMember> {
+        self.members.values()
     }
 
     /// 建局所用扩展包引用（`Recover` 重放用）。
@@ -127,7 +192,26 @@ impl NativeRoomSession {
 
     /// 用恢复出的引擎替换当前引擎（`Recover` 接线；成员/令牌/座位保持不变）。
     pub fn replace_engine(&mut self, engine: Engine) {
+        // WAL 重放的去重高水位可高于实时计数，下一条命令不能撞到已重放的键。
+        self.next_dedup = self
+            .next_dedup
+            .max(engine.save().last_dedup.saturating_add(1));
+        self.event_cursor = engine.log().len();
         self.engine = engine;
+    }
+
+    /// 取自上一条命令以来新增的公开事件码（只码，不含牌 id/选项）。
+    pub(crate) fn take_public_event_codes(&mut self) -> Vec<u32> {
+        let end = self.engine.log().len();
+        let start = self.event_cursor.min(end);
+        let codes = self
+            .engine
+            .public_event_codes_from(start)
+            .into_iter()
+            .map(u32::from)
+            .collect();
+        self.event_cursor = end;
+        codes
     }
 
     /// 入座（满座或座位被占时返回错误；同令牌为重连）。
@@ -140,6 +224,9 @@ impl NativeRoomSession {
         // 重连：换绑连接、保留座位与令牌
         if let Some(token) = reconnect_token {
             if let Some(old) = self.by_token.get(&token).copied() {
+                if old != connection_id && self.members.contains_key(&connection_id) {
+                    return Err("connection already in room".into());
+                }
                 if let Some(mut m) = self.members.remove(&old) {
                     m.connection_id = connection_id;
                     let reply = self.reply_for(&m);
@@ -150,11 +237,14 @@ impl NativeRoomSession {
             }
             return Err("invalid reconnect token".into());
         }
+        if self.members.contains_key(&connection_id) {
+            return Err("connection already in room".into());
+        }
         let seat = preferred_seat
             .filter(|s| *s < self.max_seats && !self.seat_taken(*s))
             .or_else(|| (0..self.max_seats).find(|s| !self.seat_taken(*s)))
             .ok_or_else(|| "room full".to_string())?;
-        let token = format!("nc09-{}", self.next_token);
+        let token = uuid::Uuid::new_v4().to_string();
         self.next_token += 1;
         let member = NativeMember {
             connection_id,
@@ -202,7 +292,8 @@ impl NativeRoomSession {
 
     pub fn disconnect(&mut self, connection_id: u64) {
         if let Some(m) = self.members.get(&connection_id).cloned() {
-            self.by_token.insert(m.reconnect_token.clone(), connection_id);
+            self.by_token
+                .insert(m.reconnect_token.clone(), connection_id);
         }
     }
 
@@ -239,7 +330,7 @@ impl NativeRoomSession {
     /// NC09 跨进程/跨重启持久化：导出可落盘的房间状态。
     ///
     /// 内容：引擎归档字节（hex）+ 成员（含**重连令牌**）+ 座位数/开局位/令牌计数
-    /// + 扩展包引用（`namespace/package_id`）。**不含**连接句柄与 IO 资源。
+    /// + 扩展包引用及原局完整副本。**不含**连接句柄与 IO 资源。
     pub fn export_state(&self, snapshot_hex: &str) -> NativeRoomState {
         NativeRoomState {
             snapshot_hex: snapshot_hex.to_string(),
@@ -252,7 +343,9 @@ impl NativeRoomSession {
                 .iter()
                 .map(|p| format!("{}@{}", p.def.name, p.def.version))
                 .collect(),
+            frozen_packages: self.frozen_packages.clone(),
             members: self.members.values().cloned().collect(),
+            command_receipts: self.command_receipts.entries(),
         }
     }
 
@@ -275,19 +368,41 @@ impl NativeRoomSession {
         };
         let mut members = HashMap::new();
         let mut by_token = HashMap::new();
-        for m in &state.members {
-            members.insert(m.connection_id, m.clone());
-            by_token.insert(m.reconnect_token.clone(), m.connection_id);
+        let command_receipts =
+            CommandReceipts::restore(&state.command_receipts, engine.revision(), state.max_seats)?;
+        let mut seats = std::collections::HashSet::new();
+        if state.max_seats as usize != engine.state_core().players.len() {
+            return Err("落盘座位数与引擎不一致".into());
         }
+        for m in &state.members {
+            if m.role == ClientRole::Player
+                && (m.seat >= state.max_seats
+                    || m.player_id.raw() != m.seat as u32 + 1
+                    || !seats.insert(m.seat))
+            {
+                return Err("落盘成员座位无效或重复".into());
+            }
+            if members.insert(m.connection_id, m.clone()).is_some()
+                || by_token
+                    .insert(m.reconnect_token.clone(), m.connection_id)
+                    .is_some()
+            {
+                return Err("落盘成员连接或令牌重复".into());
+            }
+        }
+        let event_cursor = engine.log().len();
         Ok(Self {
             engine,
             packs,
+            frozen_packages: state.frozen_packages.clone(),
             max_seats: state.max_seats,
             members,
             by_token,
             started: state.started,
             next_token: state.next_token,
             next_dedup: state.next_dedup,
+            command_receipts,
+            event_cursor,
         })
     }
 
@@ -298,7 +413,10 @@ impl NativeRoomSession {
 
     /// 快照（按角色投影）。
     pub fn snapshot(&self, connection_id: u64) -> Result<ObserverSnapshot, String> {
-        let m = self.members.get(&connection_id).ok_or("unknown connection")?;
+        let m = self
+            .members
+            .get(&connection_id)
+            .ok_or("unknown connection")?;
         Ok(self.snapshot_for(m))
     }
 
@@ -309,57 +427,39 @@ impl NativeRoomSession {
         kind: &CommandKind,
         expected_revision: u64,
     ) -> Result<CommandResult, String> {
-        let m = self.members.get(&connection_id).cloned().ok_or("unknown connection")?;
+        let m = self
+            .members
+            .get(&connection_id)
+            .cloned()
+            .ok_or("unknown connection")?;
         if m.role != ClientRole::Player {
             return Err("spectator cannot submit".into());
         }
-        let action = match kind {
-            CommandKind::PlayCard { card, targets, .. } => GameAction::PlayCard {
-                card: card.raw(),
-                targets: targets
-                    .iter()
-                    .map(|t| t.raw().saturating_sub(1) as u8)
-                    .collect(),
-            },
-            CommandKind::EndPhase {} => GameAction::NextPhase,
-            CommandKind::ResolveChoice {
-                choice_id,
-                selections,
-                cancelled,
-            } => GameAction::Answer {
-                choice_id: choice_id.raw() as u64,
-                selection: if *cancelled {
-                    Vec::new()
-                } else {
-                    selections
-                        .iter()
-                        .map(|s| engine_native::ChoiceOption::Tag(*s as u8))
-                        .collect()
+        if expected_revision != self.engine.revision() {
+            return Ok(CommandResult::Rejected {
+                reason: ApiRejectReason::StaleRevision {
+                    current: self.engine.revision(),
+                    expected: expected_revision,
                 },
-            },
-            // 原生会话**建局即开局**（赛前大厅未建模）。旧线房间协议要求先发
-            // `StartGame`；这里接受它作为「开局确认」，但**参数必须与已建局的
-            // 座位数一致**，否则明确拒绝——不得让不匹配的开局参数被静默吞掉。
-            CommandKind::StartGame {
-                player_count,
-                rng_seed: _,
-                ..
-            } => {
-                let seats = self.engine.state_core().players.len() as u8;
-                if *player_count != seats {
-                    return Err(format!(
-                        "StartGame 座位数 {player_count} 与本局 {seats} 不一致（原生建局即开局）"
-                    ));
-                }
-                return Ok(CommandResult::Accepted {
-                    new_revision: self.engine.revision(),
-                    state_hash: self.engine.state_hash(),
-                });
+            });
+        }
+        if matches!(kind, CommandKind::ResolveChoice { .. })
+            && self.engine.open_choice().map(|choice| choice.observer) != Some(m.seat)
+        {
+            return Ok(CommandResult::Rejected {
+                reason: ApiRejectReason::InvalidActor,
+            });
+        }
+        if let CommandKind::StartGame { player_count, .. } = kind {
+            if *player_count as usize != self.engine.state_core().players.len() {
+                return Err("StartGame 座位数与已创建的原生对局不一致".into());
             }
-            other => {
-                return Err(format!("unsupported command kind for native authority: {other:?}"))
-            }
-        };
+            return Ok(CommandResult::Accepted {
+                new_revision: self.engine.revision(),
+                state_hash: self.engine.state_hash(),
+            });
+        }
+        let action = self.action_for(kind)?;
         let dedup = self.next_dedup;
         self.next_dedup += 1;
         let outcome = self.engine.submit(GameCommand {
@@ -373,15 +473,77 @@ impl NativeRoomSession {
                 new_revision: self.engine.revision(),
                 state_hash,
             },
-            CommandOutcome::Pending { .. } | CommandOutcome::Suspended => {
-                CommandResult::Accepted {
-                    new_revision: self.engine.revision(),
-                    state_hash: self.engine.state_hash(),
-                }
-            }
+            CommandOutcome::Pending { .. } | CommandOutcome::Suspended => CommandResult::Accepted {
+                new_revision: self.engine.revision(),
+                state_hash: self.engine.state_hash(),
+            },
             CommandOutcome::Rejected(reason) => CommandResult::Rejected {
                 reason: map_reject(&reason, self.engine.revision(), expected_revision),
             },
+        })
+    }
+
+    /// 协议 token 是候选下标；提交与 WAL 必须保存同一条原生动作。
+    pub fn action_for(&self, kind: &CommandKind) -> Result<GameAction, String> {
+        Ok(match kind {
+            CommandKind::PlayCard {
+                card,
+                targets,
+                card_targets,
+            } if card_targets.is_empty() => GameAction::PlayCard {
+                card: card.raw(),
+                targets: targets
+                    .iter()
+                    .map(|t| {
+                        t.raw()
+                            .checked_sub(1)
+                            .filter(|s| *s < self.max_seats as u32)
+                            .map(|s| s as u8)
+                            .ok_or_else(|| "目标座位越界".to_string())
+                    })
+                    .collect::<Result<Vec<_>, _>>()?,
+            },
+            CommandKind::EndPhase {} => GameAction::NextPhase,
+            CommandKind::ActivateSkill {
+                skill,
+                targets,
+                card_targets,
+            } if targets.is_empty() && card_targets.is_empty() => GameAction::ActivateSkill {
+                skill: u16::try_from(skill.raw()).map_err(|_| "技能编号越界")?,
+            },
+            CommandKind::RevealGeneral { slot } => GameAction::RevealGeneral { slot: *slot },
+            CommandKind::ResolveChoice {
+                choice_id,
+                selections,
+                cancelled,
+            } => {
+                let open = self.engine.open_choice().ok_or("没有待应答的选择")?;
+                if open.id != choice_id.raw() as u64 || (*cancelled && !selections.is_empty()) {
+                    return Err("选择编号或取消载荷无效".into());
+                }
+                GameAction::Answer {
+                    choice_id: choice_id.raw() as u64,
+                    selection: if *cancelled {
+                        Vec::new()
+                    } else {
+                        selections
+                            .iter()
+                            .map(|s| {
+                                open.spec
+                                    .options
+                                    .get(*s as usize)
+                                    .copied()
+                                    .ok_or_else(|| format!("选择 token 越界: {s}"))
+                            })
+                            .collect::<Result<Vec<_>, _>>()?
+                    },
+                }
+            }
+            other => {
+                return Err(format!(
+                    "unsupported command kind for native authority: {other:?}"
+                ))
+            }
         })
     }
 
@@ -391,14 +553,10 @@ impl NativeRoomSession {
 
     fn snapshot_for(&self, m: &NativeMember) -> ObserverSnapshot {
         match m.role {
-            ClientRole::Player => observer_snapshot_for(
-                &self.engine,
-                RoomRole::Player,
-                Some(m.player_id),
-            ),
-            ClientRole::Spectator => {
-                observer_snapshot_for(&self.engine, RoomRole::Spectator, None)
+            ClientRole::Player => {
+                observer_snapshot_for(&self.engine, RoomRole::Player, Some(m.player_id))
             }
+            ClientRole::Spectator => observer_snapshot_for(&self.engine, RoomRole::Spectator, None),
             ClientRole::Referee => observer_snapshot_for(&self.engine, RoomRole::Referee, None),
         }
     }
@@ -460,7 +618,8 @@ impl NativeRoomPersist {
             .snapshots
             .get(&from_revision)
             .ok_or_else(|| format!("缺少修订 {from_revision} 的快照"))?;
-        let snapshot = engine_native::archive::decode_archive(bytes).map_err(|e| format!("{e:?}"))?;
+        let snapshot =
+            engine_native::archive::decode_archive(bytes).map_err(|e| format!("{e:?}"))?;
         let mut engine = if packs.is_empty() {
             Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
         } else {
@@ -482,9 +641,7 @@ impl NativeRoomPersist {
                 return Err(format!("重放修订 {revision} 被拒绝: {reason:?}"));
             }
             if engine.state_hash() != *hash {
-                return Err(format!(
-                    "重放修订 {revision} 摘要不一致（录像或内容不符）"
-                ));
+                return Err(format!("重放修订 {revision} 摘要不一致（录像或内容不符）"));
             }
             replayed += 1;
         }
@@ -494,7 +651,11 @@ impl NativeRoomPersist {
 
 /// 内核拒绝原因 → 协议拒绝原因（协议枚举较小，未覆盖形态归入 `IllegalAction`
 /// 并带稳定短码；不得把故障伪装成成功）。
-fn map_reject(reason: &engine_native::RejectReason, current: u64, expected: u64) -> ApiRejectReason {
+fn map_reject(
+    reason: &engine_native::RejectReason,
+    current: u64,
+    expected: u64,
+) -> ApiRejectReason {
     use engine_native::RejectReason as R;
     match reason {
         R::NotYourTurn | R::WrongPlayer | R::UnknownActor => ApiRejectReason::InvalidActor,

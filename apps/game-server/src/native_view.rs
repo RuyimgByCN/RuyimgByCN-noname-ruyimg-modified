@@ -35,7 +35,9 @@ pub enum RoomRole {
 fn identity_tag_for(engine: &Engine, viewer: Option<ApiPlayerId>, seat: u8) -> Option<IdentityTag> {
     let roles = engine.state_core().identity_roles()?;
     let role = roles.get(seat as usize)?;
-    let is_self = viewer.map(|v| v.raw().saturating_sub(1) as u8 == seat).unwrap_or(false);
+    let is_self = viewer
+        .map(|v| v.raw().saturating_sub(1) as u8 == seat)
+        .unwrap_or(false);
     let dead = !engine.state_core().player(seat).alive;
     if !(is_self || *role == engine_native::state::Role::Lord || dead) {
         return None;
@@ -120,8 +122,8 @@ pub fn observer_snapshot_for(
 ) -> ObserverSnapshot {
     // 原生视图：Player 用座位投影；观战/裁判用「无座位」投影（不含任何手牌 id）
     let view: PlayerView = match (role, seat) {
-        (RoomRole::Player, Some(p)) => engine.view_for(p.raw() as u8),
-        _ => engine.view_for(u8::MAX),
+        (RoomRole::Player, Some(p)) => engine.view_for(p.raw().saturating_sub(1) as u8),
+        _ => engine.view_spectator(),
     };
     let observer = match role {
         RoomRole::Player => ObserverKind::Player(seat.unwrap_or(ApiPlayerId::NONE)),
@@ -134,10 +136,7 @@ pub fn observer_snapshot_for(
         .map(|cell| SeatView {
             player: ApiPlayerId::new(cell.seat as u32 + 1),
             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
-            character_def: engine
-                .state_core()
-                .player(cell.seat)
-                .general_slots[0]
+            character_def: engine.state_core().player(cell.seat).general_slots[0]
                 .map(|d| d as u32)
                 .unwrap_or(0),
             seat: engine_api::SeatIndex::new(cell.seat),
@@ -168,10 +167,8 @@ pub fn observer_snapshot_for(
                     let enabled = inst.map(|i| i.enabled).unwrap_or(false);
                     let use_count = inst.map(|i| u32::from(i.once_used)).unwrap_or(0);
                     let active = enabled
-                        && engine.is_legal_action(
-                            cell.seat,
-                            &GameAction::ActivateSkill { skill: def },
-                        );
+                        && engine
+                            .is_legal_action(cell.seat, &GameAction::ActivateSkill { skill: def });
                     // 主动形态判定：该实例当前能否被 `ActivateSkill` 接受（`active` 已表达）；
                     // `locked` 取「无主动形态」的保守口径：当前不可主动且未启用主动例外。
                     let locked = !active;
@@ -300,20 +297,26 @@ pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction>
                 choice_id: engine_api::ChoiceId::new(choice_id as u32),
                 selections: selection
                     .iter()
-                    .map(|opt| match opt {
-                        engine_native::ChoiceOption::Pass => u32::MAX,
-                        engine_native::ChoiceOption::Tag(t) => *t as u32,
-                        engine_native::ChoiceOption::Card(c) => *c as u32,
-                        engine_native::ChoiceOption::Player(p) => *p as u32 + 1,
-                        engine_native::ChoiceOption::Kind(k) => *k as u32,
-                        engine_native::ChoiceOption::Confirm => u32::MAX - 1,
+                    .map(|opt| {
+                        engine
+                            .open_choice()?
+                            .spec
+                            .options
+                            .iter()
+                            .position(|candidate| candidate == opt)
+                            .map(|idx| idx as u32)
                     })
-                    .collect(),
+                    .collect::<Option<Vec<_>>>()?,
                 cancelled: selection.is_empty(),
             }),
             // 主动技/明置：协议需要运行时技能实例 id 与目标/牌输入，原生候选未展开
             // 这些形态（NC10 待办），此处不伪造映射。
-            GameAction::ActivateSkill { .. } | GameAction::RevealGeneral { .. } => None,
+            GameAction::ActivateSkill { skill } => Some(LegalAction::ActivateSkill {
+                skill: engine_api::SkillId::new(skill as u32),
+                targets: Vec::new(),
+                card_targets: Vec::new(),
+            }),
+            GameAction::RevealGeneral { .. } => None,
         })
         .collect()
 }

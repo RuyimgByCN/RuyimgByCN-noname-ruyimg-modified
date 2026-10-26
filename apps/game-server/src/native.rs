@@ -2,7 +2,7 @@
 //!
 //! 服务端原生对局生命周期：
 //! 1. 安装包：content-runtime 包存储扫描 drop-in 根并安装（幂等）；
-//! 2. 装载：读取安装后包的 `assets/cards.json`，经 content-native-loader
+//! 2. 装载：验证安装后包的卡牌、武将、牌堆资产，经 content-native-loader
 //!    桥接为 engine-native `ExtensionPack`（符号表上限门在装载器内）；
 //! 3. 原生建局：`Engine::new_with_extensions` 合并目录建局；
 //! 4. 有界 AI 驱动（T13 衔接）：`BoundedPlanner` 逐座规划/应用，
@@ -17,11 +17,16 @@ use engine_native::ai::{ApplyPlanError, BoundedPlanner};
 use engine_native::content::extension::ExtensionPack;
 use engine_native::{CommandOutcome, Engine};
 use serde::Deserialize;
+
+#[path = "native/frozen.rs"]
+mod frozen;
+pub use frozen::FrozenNativePackage;
 use std::path::PathBuf;
 
 /// 已安装原生包摘要（列表端点）。
 #[derive(Debug, Clone, serde::Serialize)]
 pub struct NativePackageInfo {
+    pub namespace: String,
     pub package_id: String,
     pub version: String,
 }
@@ -50,6 +55,7 @@ impl NativeContent {
 
     fn meta_info(m: &InstalledMeta) -> NativePackageInfo {
         NativePackageInfo {
+            namespace: m.namespace.clone(),
             package_id: m.package_id.clone(),
             version: m.version.clone(),
         }
@@ -65,7 +71,7 @@ impl NativeContent {
         let report = import_extensions(&self.store, &self.root, &Self::options())
             .map_err(|e| e.to_string())?;
         let out: Vec<NativePackageInfo> = report.installed.iter().map(Self::meta_info).collect();
-        if out.is_empty() {
+        if out.is_empty() && report.skipped.is_empty() {
             if let Ok(rd) = std::fs::read_dir(&self.root) {
                 let entries = rd.flatten().count();
                 if entries > 0 {
@@ -75,6 +81,75 @@ impl NativeContent {
                     ));
                 }
             }
+        }
+        Ok(out)
+    }
+
+    /// 升级/切换已安装版本：原子更新 active 集并推入回滚历史。
+    pub fn activate_version(
+        &self,
+        namespace: &str,
+        package_id: &str,
+        version: &str,
+    ) -> Result<(), String> {
+        self.store
+            .activate_version(namespace, package_id, version)
+            .map_err(|e| e.to_string())
+    }
+
+    /// 停用包槽（保留安装副本与回滚历史）：内容立即不可装载，可用
+    /// `activate_version` 重新启用。
+    pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.store
+            .deactivate_slot(namespace, package_id)
+            .map_err(|e| e.to_string())
+    }
+
+    /// 重新启用已安装版本。
+    pub fn enable_package(
+        &self,
+        namespace: &str,
+        package_id: &str,
+        version: &str,
+    ) -> Result<(), String> {
+        self.activate_version(namespace, package_id, version)
+    }
+
+    /// 物理卸载包槽（所有版本）：先移除 active 引用并清空回滚历史，再删安装目录；
+    /// 仍有依赖方时在任何改动前失败。
+    pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.store
+            .uninstall_slot(namespace, package_id)
+            .map_err(|e| e.to_string())
+    }
+
+    /// 撤销/停用包槽（所有版本）：内容立即不可装载，且后续安装被拒；
+    /// 保留安装副本用于审计，不做物理删除（卸载语义的停用部分）。
+    pub fn revoke_package(
+        &self,
+        namespace: &str,
+        package_id: &str,
+        reason: &str,
+    ) -> Result<(), String> {
+        self.store
+            .revoke_slot(namespace, package_id, reason, true)
+            .map_err(|e| e.to_string())
+    }
+
+    /// 回滚到上一 active 集（升级失败恢复）。
+    pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+        let active = self.store.rollback().map_err(|e| e.to_string())?;
+        let mut out = Vec::new();
+        for (slot, version) in active.packages {
+            let (namespace, package_id) = slot
+                .split_once('/')
+                .map(|(namespace, package_id)| (namespace.to_string(), package_id.to_string()))
+                .unwrap_or_default();
+            out.push(NativePackageInfo {
+                namespace,
+                package_id,
+                version,
+            });
         }
         Ok(out)
     }
@@ -101,8 +176,6 @@ impl NativeContent {
         namespace: Option<&str>,
         package_id: &str,
     ) -> Result<LoadedPack, String> {
-        use engine_native::content::extension::{ExtensionDef, ExtensionPack};
-
         // ① 内容锁 + 安装副本（load_locked_packages 校验 logic/content 指纹）
         let lock = self.store.current_lock().map_err(|e| e.to_string())?;
         let packages = self
@@ -127,81 +200,110 @@ impl NativeContent {
                 ))
             }
         };
+        let binding = lock
+            .packages
+            .iter()
+            .find(|p| {
+                p.namespace == parsed.manifest.namespace
+                    && p.package_id == parsed.manifest.package_id
+                    && p.version == parsed.manifest.version
+            })
+            .ok_or("安装包不在内容锁中")?;
+        let frozen = self.freeze_binding(binding)?;
+        self.load_frozen(&frozen)
+    }
+
+    fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+        use engine_native::content::extension::{ExtensionDef, ExtensionPack};
+
+        self.check_not_revoked(&frozen.binding)?;
+        let parsed = frozen.package()?;
         let ns = parsed.manifest.namespace.clone();
         let pid = parsed.manifest.package_id.clone();
 
-        // ② 卡牌资源：按 asset_paths 里的相对路径解析到**安装目录**（不读源目录）
-        let cards_path = self
-            .store_asset_path(parsed, "assets/cards.json")
-            .map_err(|e| format!("解析安装资源失败: {e}"))?;
+        // ② 统一从完整已验证副本读取数据（新局与恢复共用桥接）。
+        let cards = frozen.text_asset("assets/cards.json")?;
+        let characters = frozen.text_asset("assets/character.json")?;
+        let pile = frozen.text_asset("assets/pile.json")?;
 
-        let (pack, deferred) = {
-            let outcome = content_native_loader::bridge_vm_skill_decls(parsed)
-                .map_err(|e| e.to_string())?;
-            let vm_skills = outcome.decls;
-            if let Some(cards_path) = cards_path {
-                let json = std::fs::read_to_string(&cards_path)
-                    .map_err(|e| format!("读取安装包数据失败 {cards_path:?}: {e}"))?;
-                let b: BridgedPack =
-                    content_native_loader::bridge_pack(&json).map_err(|e| e.to_string())?;
-                let mut pack = b.pack;
-                // 混合包：VM 声明并入桥接产物（不得因存在 cards.json 丢技能）
-                pack.vm_skills.extend(vm_skills);
-                (pack, b.deferred)
-            } else {
-                // vm-only 包：无卡牌桥接面，元数据取自锁内 manifest。
-                (
-                    ExtensionPack {
-                        def: ExtensionDef {
-                            name: engine_native::content::names::intern(pid.clone()),
-                            version: parsed
-                                .manifest
-                                .version
-                                .split('.')
-                                .next()
-                                .and_then(|v| v.parse::<u32>().ok())
-                                .unwrap_or(0),
-                            description: engine_native::content::names::intern(ns.clone()),
-                        },
-                        generals: Vec::new(),
-                        cards: Vec::new(),
-                        host_skills: Vec::new(),
-                        vm_skills,
-                        init_hook: engine_native::content::extension::InitHook::None,
-                        enabled: true,
+        let outcome =
+            content_native_loader::bridge_vm_skill_decls(&parsed).map_err(|e| e.to_string())?;
+        let vm_skills = outcome.decls;
+        let vm_names: std::collections::BTreeSet<String> =
+            vm_skills.iter().map(|decl| decl.name.clone()).collect();
+        let (mut pack, deferred) = if let Some(json) = cards.as_ref() {
+            let b: BridgedPack =
+                content_native_loader::bridge_pack(json).map_err(|e| e.to_string())?;
+            (b.pack, b.deferred)
+        } else {
+            // vm-only / characters-only 包：元数据取自锁内 manifest。
+            (
+                ExtensionPack {
+                    def: ExtensionDef {
+                        name: engine_native::content::names::intern(pid.clone()),
+                        version: parsed
+                            .manifest
+                            .version
+                            .split('.')
+                            .next()
+                            .and_then(|v| v.parse::<u32>().ok())
+                            .unwrap_or(0),
+                        description: engine_native::content::names::intern(ns.clone()),
                     },
-                    Vec::new(),
-                )
-            }
+                    generals: Vec::new(),
+                    cards: Vec::new(),
+                    host_skills: Vec::new(),
+                    vm_skills: Vec::new(),
+                    init_hook: engine_native::content::extension::InitHook::None,
+                    enabled: true,
+                },
+                Vec::new(),
+            )
         };
+        // 混合包：VM 声明并入桥接产物；characters 独立于 cards，
+        // 并把 VM 模块名视为已解析技能（不产生 host 行为）。
+        pack.vm_skills.extend(vm_skills);
+        if let Some(json) = characters {
+            let generals = content_native_loader::bridge_generals_with_known(&json, &vm_names)
+                .map_err(|e| e.to_string())?;
+            pack.generals.extend(generals.generals);
+            for decl in generals.host_skills {
+                match pack.host_skills.iter().find(|d| d.name == decl.name) {
+                    Some(d) if d.behavior != decl.behavior => {
+                        return Err(format!("重复技能 {}", decl.name));
+                    }
+                    Some(_) => {}
+                    None => pack.host_skills.push(decl),
+                }
+            }
+        }
+        if let Some(json) = pile {
+            let spec = content_native_loader::bridge_pile(&json).map_err(|e| e.to_string())?;
+            let addition = engine_native::content::pile::extension_pack_from_pile(
+                pack.def.clone(),
+                pack.def.name,
+                &spec,
+            )
+            .map_err(|e| format!("pile: {e:?}"))?;
+            pack.cards.extend(addition.cards);
+        }
+        // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
+        pack.def.name = engine_native::content::names::intern(format!(
+            "installed:{}",
+            serde_json::to_string(&frozen.binding).map_err(|e| e.to_string())?
+        ));
         Ok(LoadedPack {
-            package_id: package_id.to_string(),
+            package_id: pid,
             pack,
             deferred,
+            frozen: frozen.clone(),
         })
     }
 
-    /// 包内资产相对路径 → 安装目录中的不可变路径（未登记该路径时返回 None）。
-    fn store_asset_path(
-        &self,
-        package: &content_schema::ContentPackage,
-        rel: &str,
-    ) -> Result<Option<PathBuf>, String> {
-        let Some((asset_id, _)) = package
-            .asset_paths
-            .iter()
-            .find(|(_, path)| path.as_str() == rel)
-        else {
-            return Ok(None);
-        };
-        self.store
-            .resolve_active_asset(
-                &package.manifest.namespace,
-                &package.manifest.package_id,
-                asset_id,
-            )
-            .map(Some)
-            .map_err(|e| e.to_string())
+    /// 精确安装版本恢复：停用或升级不会改变原引用，撤销仍拒绝。
+    pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+        let frozen = self.freeze_reference(reference)?;
+        self.load_frozen_reference(reference, &frozen)
     }
 }
 
@@ -210,6 +312,8 @@ pub struct LoadedPack {
     pub package_id: String,
     pub pack: ExtensionPack,
     pub deferred: Vec<String>,
+    /// 建局所用的完整已验证包副本，房间持久化保留原内容。
+    pub frozen: FrozenNativePackage,
 }
 
 /// 原生建局请求。
@@ -300,9 +404,7 @@ pub fn create_native_game(
     let pack_refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
 
     let base_catalog_cards = Engine::new(1, req.seats as usize).catalog().cards.len();
-    let base_catalog_generals = Engine::new(1, req.seats as usize)
-        .catalog()
-        .general_count();
+    let base_catalog_generals = Engine::new(1, req.seats as usize).catalog().general_count();
     let mut e = Engine::new_with_extensions(req.seed, req.seats as usize, &pack_refs)
         .map_err(|err| format!("原生建局失败: {err:?}"))?;
     let catalog_cards = e.catalog().cards.len();
@@ -411,9 +513,15 @@ fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
     if s.len() % 2 != 0 {
         return Err("存档十六进制长度须为偶数".into());
     }
-    (0..s.len())
-        .step_by(2)
-        .map(|i| u8::from_str_radix(&s[i..i + 2], 16).map_err(|e| format!("非法十六进制: {e}")))
+    s.as_bytes()
+        .chunks_exact(2)
+        .map(|pair| {
+            std::str::from_utf8(pair)
+                .map_err(|e| format!("非法十六进制: {e}"))
+                .and_then(|value| {
+                    u8::from_str_radix(value, 16).map_err(|e| format!("非法十六进制: {e}"))
+                })
+        })
         .collect()
 }
 

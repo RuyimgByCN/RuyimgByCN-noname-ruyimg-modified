@@ -1,0 +1,27 @@
+{
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "-p",
+    "engine-native",
+    "-p",
+    "engine-native-wasm",
+    "-p",
+    "content-native-loader",
+    "-p",
+    "content-runtime",
+    "-p",
+    "engine-protocol",
+    "-p",
+    "rule-api",
+    "--no-fail-fast"
+  ],
+  "start": "2026-10-24T15:36:41.551811+08:00",
+  "end": "2026-10-24T15:39:54.725954+08:00",
+  "seconds": 193.172,
+  "exit": 0
+}

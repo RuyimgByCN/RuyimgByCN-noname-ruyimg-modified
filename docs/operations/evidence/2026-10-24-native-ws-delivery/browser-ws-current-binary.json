@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-ws-delivery/browser-ws-smoke.mjs"
+  ],
+  "start": "2026-10-24T14:28:19.359545+08:00",
+  "end": "2026-10-24T14:28:23.981843+08:00",
+  "seconds": 4.622,
+  "exit": 0,
+  "root_fixture": "/tmp/noname-next-ws-delivery-20261024/browser-final-root",
+  "served_dist": "/private/tmp/noname-next-ws-delivery-20261024/validated-generated/apps/web-client/dist",
+  "note": "Run current Cargo-built binary with validated production dist from preserved external copy; repository generated directories remain restored."
+}

@@ -53,7 +53,7 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         // mode: "identity" → 身份局（NC09 身份局端到端）；缺省为原型模式
         handle =
           msg.mode === "identity"
-            ? nativeCreateIdentity(msg.players, msg.seed, msg.observer)
+            ? nativeCreateIdentity(msg.players, msg.seed, msg.observer, msg.packsJson)
             : msg.packsJson
               ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
               : nativeCreate(msg.players, msg.seed, msg.observer);

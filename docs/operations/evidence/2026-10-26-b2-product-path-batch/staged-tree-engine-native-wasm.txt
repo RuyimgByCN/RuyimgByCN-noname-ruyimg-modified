@@ -1,0 +1,19 @@
+     Running unittests src/lib.rs (/tmp/b2-head-target/debug/deps/engine_native_wasm-2dbb3b4bb371eed4)
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/cross_target_package.rs (/tmp/b2-head-target/debug/deps/cross_target_package-fee64fb9f380acaa)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/events_hash_export.rs (/tmp/b2-head-target/debug/deps/events_hash_export-b3726de9fc30c110)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/installed_package_payload.rs (/tmp/b2-head-target/debug/deps/installed_package_payload-ddd2b5ea51275f33)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc03_legal_actions_export.rs (/tmp/b2-head-target/debug/deps/nc03_legal_actions_export-ebd0e45102df6997)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc05_general_select_export.rs (/tmp/b2-head-target/debug/deps/nc05_general_select_export-72c69afc81d22587)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_cross_target.rs (/tmp/b2-head-target/debug/deps/nc08_cross_target-b7bc1349018b2be8)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/restore_boundary_handle.rs (/tmp/b2-head-target/debug/deps/restore_boundary_handle-f994e85246ee86aa)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/vm_package_worker.rs (/tmp/b2-head-target/debug/deps/vm_package_worker-58e9f0ff2db86bcb)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

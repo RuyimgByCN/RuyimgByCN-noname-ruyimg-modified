@@ -1,0 +1,659 @@
+Original source /Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py
+Interpreter /Library/Frameworks/Python.framework/Versions/3.10/bin/python3
+
+CHECK 1 本地链接（核心）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py']
+STDOUT
+检查 7 个文件，坏链 0
+
+STDERR
+
+EXIT 0
+
+CHECK 2 本地链接（全部）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py', '--all']
+STDOUT
+检查 1765 个文件，坏链 0
+
+STDERR
+
+EXIT 0
+
+CHECK 3 旧值扫描
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_stale_numbers.py']
+STDOUT
+残留旧值 0 处
+
+STDERR
+
+EXIT 0
+
+CHECK 4 近 20 轮索引新鲜
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/refresh_recent_rounds.py', '--check']
+STDOUT
+索引是最新（20 轮）
+
+STDERR
+
+EXIT 0
+
+CHECK 5 包→来源映射
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/map_package_sources.py', '--check']
+STDOUT
+包 41；映射到来源 32；未映射 0
+无包来源 5: ['L08', 'L11', 'L12', 'L14', 'L25']
+映射符合预期
+
+STDERR
+
+EXIT 0
+
+CHECK 6 规则登记表
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_phase_filters.py', '--check']
+STDOUT
+registry 一致（44 条）
+
+STDERR
+
+EXIT 0
+
+CHECK 7 过滤臂↔元数据一致
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_filter_meta_mismatch.py', '--strict']
+STDOUT
+元数据声明 272 项，过滤臂 381 项，矛盾 0 项
+✅ 矛盾均在登记表内（0 项）
+
+STDERR
+
+EXIT 0
+
+CHECK 8 牌名 vs 牌种比较
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_card_kind_compare.py']
+STDOUT
+扫描 2 个目录，命中 1 处 card_kind 相等比较
+  OK XianjianLiguang:200  ctx.catalog.card_kind(*o) != ctx.catalog.card_kind(*c)
+
+✅ 所有 card_kind 相等比较均已登记
+
+STDERR
+
+EXIT 0
+
+CHECK 9 台账账目（移出必留痕）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_ledger_accounting.py']
+STDOUT
+HEAD: 1 个行为 → 当前 1（移出 0、新增 0）
+✅ 移出的每一行都能在注册表里找到
+
+STDERR
+
+EXIT 0
+
+CHECK 10 相位枚举（REVIEW=0）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_phase_arms.py', '--check']
+STDOUT
+behavior	phase	begin	位置	skill	上游trigger	判定
+GujianFoodZiyangdan	End	true	common.rs:631		player: "phaseBegin"	G14(钉死阶段)
+XianjianFenglue	Play	true	xianjian.rs:142		player:'phaseUseBefore'	G15(之前档)
+GujianFoodMapodoufu	End	true	common.rs:616		player: "phaseJieshuBegin"	OK
+GujianFoodXiajiao	Draw	true	common.rs:609		player: "phaseDrawBegin"	OK
+GujianFoodYougeng	Judge	true	common.rs:628		player: "phaseBegin"	OK
+GwentBirinState	Play	false	common.rs:636		player: "phaseUseAfter"	OK
+GwentCiguState	Draw	true	common.rs:640		player: "phaseDrawBegin"	OK
+GwentQinpenState	Discard	false	common.rs:649		player: "phaseDiscardAfter"	OK
+HlssFengqi	Judge	true	common.rs:44		player:['phaseZhunbeiBegin']	OK
+HuanleXuelunyangCard	Judge	true	common.rs:661		player: "phaseBegin"	OK
+MbcmQingzheng	Play	true	common.rs:413	mbcmqingzheng	player: "phaseUseBegin",	OK
+Miedao	Discard	true	common.rs:232	miedao	player:'phaseDrawBegin' | player:'phaseDiscardBegin'	OK
+SwdBaishouzhihuHeld	Discard	false	swd.rs:413		player:'discardEnd'	OK
+SwdDaixing	End	false	swd.rs:30		player:'phaseEnd'	OK
+SwdDaixing2	Judge	true	swd.rs:36		player:'phaseBegin'	OK
+SwdHuajin2	Judge	true	swd.rs:818	swd_huajin2	source:'damageBegin'	OK
+SwdHuanglinzhicongHeld	Judge	true	swd.rs:462		player: "phaseBegin"	OK
+SwdHuanxing	Judge	true	swd.rs:698		player:'phaseBegin'	OK
+SwdHujing	Judge	true	swd.rs:992		player:'phaseBegin'	OK
+SwdHyunshen2	Judge	true	swd.rs:26		player:'phaseBegin'	OK
+SwdLexue	Judge	true	swd.rs:668		player: "phaseBegin"	OK
+SwdQinglongzhiguiHeld	Judge	true	swd.rs:390		player: "phaseBegin"	OK
+SwdReyingzi	Draw	true	swd.rs:654		player:'phaseDrawBegin2'	OK
+SwdZhenjiu2	Judge	true	swd.rs:672	swd_zhenjiu2	player: "phaseBegin"	OK
+WudianGeju	Judge	true	common.rs:693	geju	player:'phaseBegin'	OK
+WudianOwliyong	Draw	true	common.rs:724		player:'phaseDrawBegin'	OK
+WudianXiyang	End	false	common.rs:764		player:'phaseEnd'	OK
+WudianYuedong	Play	false	common.rs:769		player:'phaseUseEnd'	OK
+XianjianChangnian2	End	false	xianjian.rs:117		player:'phaseEnd'	OK
+XianjianHusha	End	false	xianjian.rs:152		player:'phaseEnd'	OK
+XianjianLiguang	End	false	xianjian.rs:182		player:'phaseEnd'	OK
+XianjianLingquan	End	false	xianjian.rs:214		player:'phaseEnd'	OK
+XianjianLonghuo	End	false	xianjian.rs:223		player:'phaseEnd'	OK
+XianjianQianfang	Judge	true	xianjian.rs:236		player:'phaseBegin'	OK
+XianjianShuiyun	End	false	xianjian.rs:367		player:'phaseEnd'	OK
+XianjianXjzhimeng	End	false	xianjian.rs:317		player: "phaseEnd"	OK
+XianjianZhaoyao	Draw	true	xianjian.rs:380		global:'phaseDrawBegin'	OK
+Xiuluo	Judge	true	common.rs:224	swd_xiuluo	player: "phaseZhunbeiBegin"	OK
+YunchouDiyguhuo	Judge	true	common.rs:476		player: "phaseBegin"	OK
+YunchouXiongzi	Draw	true	common.rs:518		player:'phaseDrawBegin'	OK
+Zaibian	Play	true	common.rs:190	zaibian	player:'phaseUseBegin'	OK
+BossBaiyi	Judge	true	common.rs:862		(enable 主动技)	凭空新增触发
+SwdWangchenHeld	End	true	swd.rs:444		player: "phaseDiscardEnd"	相邻相位(可接受)
+SwdXielv	End	true	swd.rs:346		player: "phaseDiscardEnd"	相邻相位(可接受)
+GujianFoodTanhuadong	Play	false	common.rs:625		player: "phaseEnd"	语义选择
+
+STDERR
+
+共 45 个相位钉死臂
+  OK: 39
+  相邻相位(可接受): 2
+  语义选择: 1
+  G14(钉死阶段): 1
+  凭空新增触发: 1
+  G15(之前档): 1
+
+无 REVIEW 行
+
+EXIT 0
+
+CHECK 11 来源覆盖三分
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_source_coverage.py', '--check']
+STDOUT
+source	packages	entries	upstream_path	class
+L03	boss-play-upstream-liuli,boss-zhugeliang-upstream-liuli	2	noname/extension/boss/extension.js	converted
+L06	wuxing-upstream-liuli	3	noname/extension/wuxing/extension.js	converted
+L10	epic-cards-upstream-liuli	2	noname/extension/史诗卡牌/extension.js	converted
+L19	doomsday-brawl-upstream-liuli	6	noname/extension/末日乱斗/extension.js	converted
+L20	mark-supplement-upstream-liuli	6	noname/extension/标记补充/extension.js	converted
+L27	select-beautify-upstream-liuli	14	noname/extension/选将美化/extension.js	converted
+L29	longxue-upstream-liuli	5	noname/extension/龙血玄黄/extension.js	converted
+U01	d3-upstream-noname	1	apps/core/extension/3D精选/	converted
+U05	shaai-ow-upstream-noname,shaai-xianjian-upstream-noname,shahai-gujian-upstream-noname,shahai-gwent-upstream-noname,shahai-hearth-upstream-noname,shahai-mtg-upstream-noname,shahai-swd-upstream-noname,shahai-yunchou-upstream-noname,shahai-zhenfa-upstream-noname	407	extension/杀海拾遗/character/ow/	converted
+U06	huanle-upstream-noname	9	apps/core/extension/欢乐卡牌/	converted
+U07	wudian-upstream-noname	36	apps/core/extension/玩点论杀/	converted
+U08	hero-kill-upstream-noname	10	apps/core/extension/英雄杀/character/skill.js	converted
+L01	ai-tuning-upstream-liuli	0	noname/extension/AI优化/extension.js	installed-empty
+L02	sj-settings-upstream-liuli	0	noname/extension/SJ Settings/extension.js	installed-empty
+L04	cardpile-upstream-liuli	0	noname/extension/cardpile/extension.js	installed-empty
+L05	coin-upstream-liuli	0	noname/extension/coin/extension.js	installed-empty
+L07	omnisearch-upstream-liuli	0		installed-empty
+L09	qhly-upstream-liuli	0	noname/extension/千幻聆音/extension.js	installed-empty
+L13	shousha-mvp-upstream-liuli	0	noname/extension/手杀MVP/extension.js	installed-empty
+L15	shousha-full-upstream-liuli	0	noname/extension/手杀全扩/extension.js	installed-empty
+L16	drag-read-upstream-liuli	0	noname/extension/拖拽读取/extension.js	installed-empty
+L17	douzhuan-xingyi-upstream-liuli	0	noname/extension/斗转星移/extension.js	installed-empty
+L18	update-guard-upstream-liuli	0	noname/extension/更新保护/extension.js	installed-empty
+L21	martial-upstream-liuli	0	noname/extension/武皇争霸/extension.js	installed-empty
+L22	elo-sanction-upstream-liuli	0	noname/extension/段位制裁/extension.js	installed-empty
+L23	desktop-adapt-upstream-liuli	0		installed-empty
+L24	skin-switch-upstream-liuli	0	noname/extension/皮肤切换/extension.js	installed-empty
+L26	fool-plugin-upstream-liuli	0	noname/extension/笨蛋插件/extension.js	installed-empty
+L28	thunder-upstream-liuli	0	noname/extension/雷霆万钧/extension.js	installed-empty
+U02	boss-play-upstream-noname	0	apps/core/extension/boss/extension.js	installed-empty
+U03	cardpile-upstream-noname	0	apps/core/extension/cardpile/extension.js	installed-empty
+U04	coin-upstream-noname	0		installed-empty
+L08		0		no-package
+L11		0		no-package
+L12		0		no-package
+L14		0		no-package
+L25		0		no-package
+
+STDERR
+合计 37 个来源：{'converted': 12, 'installed-empty': 20, 'no-package': 5}
+
+EXIT 0
+
+CHECK 12 host 键普查（U05=314）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_host_keys.py', '--check']
+STDOUT
+shahai-swd-upstream-noname          187
+shaai-xianjian-upstream-noname       75
+shaai-ow-upstream-noname             36
+shahai-yunchou-upstream-noname       16
+shahai-gujian-upstream-noname         0
+shahai-hearth-upstream-noname         0
+shahai-gwent-upstream-noname          0
+shahai-mtg-upstream-noname            0
+shahai-zhenfa-upstream-noname         0
+U05 合计（9 包）                       314
+
+其余含 host 键的包：
+  wudian-upstream-noname             19
+  boss-zhugeliang-upstream-liuli      6
+  mark-supplement-upstream-liuli      6
+  select-beautify-upstream-liuli      6
+  hero-kill-upstream-noname           5
+  doomsday-brawl-upstream-liuli       3
+  longxue-upstream-liuli              3
+  d3-upstream-noname                  2
+  epic-cards-upstream-liuli           2
+  huanle-upstream-noname              2
+  wuxing-upstream-liuli               2
+
+STDERR
+
+全部包合计唯一键数（按包求和）: 370
+
+EXIT 0
+
+CHECK 13 卡面覆盖（201/128）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_card_coverage.py', '--check']
+STDOUT
+子包                          卡数
+shahai-swd-upstream-noname    90
+shahai-gujian-upstream-noname    40
+shahai-yunchou-upstream-noname    23
+shahai-hearth-upstream-noname    17
+shahai-gwent-upstream-noname    21
+shahai-mtg-upstream-noname    10
+合计                         201
+
+唯一 kind             128
+catalog 已登记         128  (100.0%)
+catalog 之外有源码引用   128  (100.0%)
+完全无引用               0
+
+STDERR
+
+⚠ 「有引用」≠「行为正确」；效果正确性需逐张读效果步（本脚本不判断）。
+
+EXIT 0
+
+CHECK 14 台账↔枚举一致
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_ledger_consistency.py', '--strict']
+STDOUT
+台账 1 行；相位枚举 45 行；事件枚举 157 行
+台账与枚举一致 ✅
+
+STDERR
+
+EXIT 0
+
+CHECK 15 已登记差异口径（20/54）
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_registered_deviations.py', '--check']
+STDOUT
+台账 1 行；已登记差异 0 行；未登记 1 行
+✅ 口径一致：1 行 / 已登记 0 行
+
+STDERR
+
+EXIT 0
+
+CHECK 16 守卫引用名存在
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_guard_references.py', '--strict']
+STDOUT
+HostBehavior 533 / EventKind 22 / Phase 5
+守卫引用的名字全部存在（或属于待补能力白名单）✅
+
+STDERR
+
+EXIT 0
+
+CHECK 17 注释计数=台账
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_comment_counts.py', '--strict']
+STDOUT
+台账族计数：{}
+守卫注释里的计数与台账一致 ✅
+
+STDERR
+
+EXIT 0
+
+CHECK 18 脚本单测
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', '-m', 'unittest', 'discover', '-s', 'scripts']
+STDOUT
+ADR 编号检查（scripts/check-adr-index.py）
+- ADR 文件 3（编号文件 2，唯一编号 1）
+- 重复编号 1 组 / 2 个文件
+- 消歧表登记 0 组
+- 标题错号 0
+- 未登记冲突 1，过时登记 0，登记内容不符 0，索引坏链 0
+  [未登记冲突] 0001: 0001-first.md, 0001-second.md
+检查结果：失败 1 项
+{
+ "adr_dir": "docs/adr",
+ "adr_files": 3,
+ "duplicate_files": 2,
+ "duplicate_groups": 1,
+ "duplicates": {
+  "0001": [
+   "0001-first.md",
+   "0001-second.md"
+  ]
+ },
+ "failures": 0,
+ "heading_mismatches": [],
+ "link_missing": [],
+ "numbered_files": 2,
+ "registry_duplicate_groups": 1,
+ "registry_mismatch": [],
+ "registry_missing": [],
+ "registry_stale": [],
+ "unique_numbers": 1
+}
+
+STDERR
+................................................................................../Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+................................................................./Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.................................
+----------------------------------------------------------------------
+Ran 180 tests in 266.796s
+
+OK
+
+EXIT 0
+
+CHECK 19 文档 file:line 引用
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_doc_line_refs.py', '--strict']
+STDOUT
+检查 975 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+
+STDERR
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+
+EXIT 0
+
+CHECK 20 行数门禁
+ARGV ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check-source-lines.py']
+STDOUT
+Source line limit passed: 8571 files <= 2000 lines
+
+STDERR
+
+EXIT 0

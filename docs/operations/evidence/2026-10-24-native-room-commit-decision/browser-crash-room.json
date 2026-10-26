@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "docs/operations/evidence/2026-10-24-native-room-commit-decision/browser-crash-room-smoke.mjs"
+  ],
+  "start": "2026-10-24T16:17:51.140774+08:00",
+  "end": "2026-10-24T16:18:01.061672+08:00",
+  "seconds": 9.921,
+  "exit": 0
+}

@@ -1,0 +1,2149 @@
+--- before/apps/game-server/src/native_room_store.rs
++++ after/apps/game-server/src/native_room_store.rs
+@@ -2,14 +2,60 @@
+ //!
+ //! 设计取舍（登记）：
+ //! - 每条**被接受**的命令后写一次（`snapshot_every` 无关：房间状态小，写放大可接受）；
+-//! - 原子写：先写 `<id>.json.tmp` 再 `rename`（同目录 rename 原子）；
++//! - 同目录独占临时文件、同步文件后替换；Unix 再同步目录，Windows 用 write-through move；
+ //! - 房间密码仅以带房间号盐的哈希随状态落盘；
+ //! - 新房间把完整原局包副本随状态原子落盘；恢复按 `pack_refs` 校验副本及撤销策略；
+ //!   旧精确引用只在原安装版本仍可验证时补齐副本，缺包或错锁保留记录并拒绝。
+ 
+ use crate::room_native::NativeRoomState;
+-use std::collections::HashMap;
++use std::collections::{BTreeSet, HashMap};
++use std::io::Write;
+ use std::path::{Path, PathBuf};
++
++/// rename 后同步失败时，替换已可见但尚不能确认耐久性。
++#[derive(Debug)]
++pub struct StoreWriteError {
++    pub replacement_visible: bool,
++    pub message: String,
++}
++
++impl std::fmt::Display for StoreWriteError {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        write!(
++            f,
++            "{}（replacement_visible={}）",
++            self.message, self.replacement_visible
++        )
++    }
++}
++
++impl std::error::Error for StoreWriteError {}
++
++/// 启动逐文件扫描；问题文件保留，不影响其他完整记录。
++#[derive(Debug, Default)]
++pub struct RoomScan {
++    pub records: Vec<StoredRoom>,
++    pub issues: Vec<RoomScanIssue>,
++    pub reserved_ids: BTreeSet<u64>,
++}
++
++#[derive(Debug)]
++pub struct RoomScanIssue {
++    pub path: PathBuf,
++    pub room_id: Option<u64>,
++    pub error: String,
++    pub uncommitted_temp: bool,
++}
++
++/// 实例级一次故障；生产构建没有故障控制入口。
++#[cfg(test)]
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum StoreFault {
++    PartialWrite,
++    FileSync,
++    Rename,
++    DirectorySync,
++}
+ 
+ /// 落盘记录：会话状态 + 房间级参数（密码）。
+ #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+@@ -51,12 +97,22 @@
+ #[derive(Debug, Clone)]
+ pub struct NativeRoomStore {
+     dir: PathBuf,
+-}
++    #[cfg(test)]
++    fault: std::sync::Arc<std::sync::Mutex<Option<StoreFault>>>,
++}
++
++#[cfg(test)]
++#[path = "native_room_store/tests.rs"]
++mod tests;
+ 
+ impl NativeRoomStore {
+     /// 以目录建存储（目录不存在时按需创建）。
+     pub fn new(dir: impl Into<PathBuf>) -> Self {
+-        Self { dir: dir.into() }
++        Self {
++            dir: dir.into(),
++            #[cfg(test)]
++            fault: Default::default(),
++        }
+     }
+ 
+     /// 目录路径。
+@@ -64,60 +120,170 @@
+         &self.dir
+     }
+ 
+-    /// 原子写入一个房间（先写临时文件再 rename）。
++    #[cfg(test)]
++    pub fn fail_next_write(&self, fault: StoreFault) {
++        *self.fault.lock().unwrap() = Some(fault);
++    }
++
++    /// 兼容调用方：需要分辨提交不确定性的运行期使用 `save_durable`。
+     pub fn save(&self, record: &StoredRoom) -> Result<(), String> {
+-        std::fs::create_dir_all(&self.dir).map_err(|e| format!("创建房间目录失败: {e}"))?;
+-        // 校验和始终按当前状态重算（调用方无需维护）
++        self.save_durable(record).map_err(|e| e.to_string())
++    }
++
++    /// 成功表示平台保存步骤完成；Unix 同步文件/目录，Windows 同步文件并 write-through move。
++    pub fn save_durable(&self, record: &StoredRoom) -> Result<(), StoreWriteError> {
++        #[cfg(test)]
++        let fault = self.fault.lock().unwrap().take();
++        let mut replacement_visible = false;
+         let mut record = record.clone();
+         record.checksum = state_checksum(&record.state);
+         let final_path = self.dir.join(format!("{}.json", record.room_id));
+-        let tmp_path = self.dir.join(format!("{}.json.tmp", record.room_id));
+-        let json = serde_json::to_vec_pretty(&record).map_err(|e| format!("序列化失败: {e}"))?;
+-        std::fs::write(&tmp_path, &json).map_err(|e| format!("写临时文件失败: {e}"))?;
+-        std::fs::rename(&tmp_path, &final_path).map_err(|e| format!("rename 失败: {e}"))?;
+-        Ok(())
+-    }
+-
+-    /// 读取全部房间（按房间号升序）。单文件损坏**明确报错**（不跳过、不静默）。
+-    pub fn load_all(&self) -> Result<Vec<StoredRoom>, String> {
+-        if !self.dir.exists() {
+-            return Ok(Vec::new());
+-        }
+-        let mut out = Vec::new();
+-        let entries = std::fs::read_dir(&self.dir).map_err(|e| format!("读目录失败: {e}"))?;
++        let tmp_path = self.dir.join(format!(
++            "{}.json.{}.tmp",
++            record.room_id,
++            uuid::Uuid::new_v4()
++        ));
++        let mut owns_temp = false;
++        let result = (|| -> Result<(), String> {
++            if record.room_id == 0 {
++                return Err("房间号必须非零".into());
++            }
++            create_directory_durable(&self.dir)?;
++            let json =
++                serde_json::to_vec_pretty(&record).map_err(|e| format!("序列化失败: {e}"))?;
++            let mut file = std::fs::OpenOptions::new()
++                .write(true)
++                .create_new(true)
++                .open(&tmp_path)
++                .map_err(|e| format!("创建独占临时文件失败: {e}"))?;
++            owns_temp = true;
++            #[cfg(test)]
++            if fault == Some(StoreFault::PartialWrite) {
++                file.write_all(&json[..json.len() / 2])
++                    .map_err(|e| format!("写临时文件失败: {e}"))?;
++                return Err("注入：临时文件部分写入失败".into());
++            }
++            file.write_all(&json)
++                .map_err(|e| format!("写临时文件失败: {e}"))?;
++            #[cfg(test)]
++            if fault == Some(StoreFault::FileSync) {
++                return Err("注入：同步临时文件失败".into());
++            }
++            file.sync_all()
++                .map_err(|e| format!("同步临时文件失败: {e}"))?;
++            drop(file);
++            #[cfg(test)]
++            if fault == Some(StoreFault::Rename) {
++                return Err("注入：rename 失败".into());
++            }
++            replace_file(&tmp_path, &final_path, &mut replacement_visible)
++                .map_err(|e| format!("rename 失败: {e}"))?;
++            #[cfg(test)]
++            if fault == Some(StoreFault::DirectorySync) {
++                return Err("注入：rename 后同步目录失败".into());
++            }
++            #[cfg(not(windows))]
++            sync_directory(&self.dir).map_err(|e| format!("同步房间目录失败: {e}"))?;
++            Ok(())
++        })();
++        result.map_err(|mut message| {
++            if owns_temp && !replacement_visible {
++                if let Err(e) = std::fs::remove_file(&tmp_path) {
++                    message.push_str(&format!("；清理本次临时文件失败: {e}"));
++                }
++            }
++            StoreWriteError {
++                replacement_visible,
++                message,
++            }
++        })
++    }
++
++    /// 良档独立返回；损坏、错身份和未提交文件逐项登记并保留占用 ID。
++    pub fn scan(&self) -> Result<RoomScan, String> {
++        let entries = match std::fs::read_dir(&self.dir) {
++            Ok(entries) => entries,
++            Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(RoomScan::default()),
++            Err(e) => return Err(format!("读房间目录失败: {e}")),
++        };
++        let mut out = RoomScan::default();
+         for entry in entries {
+             let entry = entry.map_err(|e| format!("读目录项失败: {e}"))?;
+             let path = entry.path();
+             let name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
+-            if !name.ends_with(".json") || name.ends_with(".tmp") {
++            let Some((room_id, uncommitted_temp, canonical)) = room_filename(name) else {
+                 continue;
+-            }
+-            let text = std::fs::read_to_string(&path)
+-                .map_err(|e| format!("读 {} 失败: {e}", path.display()))?;
+-            let record: StoredRoom = serde_json::from_str(&text)
+-                .map_err(|e| format!("解析 {} 失败: {e}", path.display()))?;
+-            // 校验和验证：非空且不匹配 → 明确报错（不静默接受损坏/篡改的状态）
+-            if !record.checksum.is_empty() {
+-                let expect = state_checksum(&record.state);
+-                if expect != record.checksum {
++            };
++            out.reserved_ids.insert(room_id);
++            if uncommitted_temp {
++                out.issues.push(RoomScanIssue {
++                    path,
++                    room_id: Some(room_id),
++                    uncommitted_temp,
++                    error: "未提交临时文件保留，未作为已提交存档恢复".into(),
++                });
++                continue;
++            }
++            let result = (|| -> Result<StoredRoom, String> {
++                if !canonical || room_id == 0 {
++                    return Err("房间文件名必须为规范的非零房间号.json".into());
++                }
++                if !entry
++                    .file_type()
++                    .map_err(|e| format!("读文件类型失败: {e}"))?
++                    .is_file()
++                {
++                    return Err("房间记录不是普通文件".into());
++                }
++                let bytes = std::fs::read(&path).map_err(|e| format!("读取失败: {e}"))?;
++                let record: StoredRoom =
++                    serde_json::from_slice(&bytes).map_err(|e| format!("解析失败: {e}"))?;
++                out.reserved_ids.insert(record.room_id);
++                if record.room_id != room_id {
+                     return Err(format!(
+-                        "{} 校验和不匹配（期望 {expect}，实际 {}）",
+-                        path.display(),
+-                        record.checksum
++                        "文件名房间号 {room_id} 与记录 {} 不符",
++                        record.room_id
+                     ));
+                 }
+-            }
+-            out.push(record);
+-        }
+-        out.sort_by_key(|r| r.room_id);
++                if !record.checksum.is_empty() && state_checksum(&record.state) != record.checksum {
++                    return Err("校验和不匹配".into());
++                }
++                Ok(record)
++            })();
++            match result {
++                Ok(record) => out.records.push(record),
++                Err(error) => out.issues.push(RoomScanIssue {
++                    path,
++                    room_id: Some(room_id),
++                    error,
++                    uncommitted_temp,
++                }),
++            }
++        }
++        out.records.sort_by_key(|r| r.room_id);
++        out.issues.sort_by(|a, b| a.path.cmp(&b.path));
+         Ok(out)
++    }
++
++    /// 严格读取：坏档明确报错；未提交临时文件仍不作为记录。
++    pub fn load_all(&self) -> Result<Vec<StoredRoom>, String> {
++        let scan = self.scan()?;
++        if let Some(issue) = scan.issues.iter().find(|issue| !issue.uncommitted_temp) {
++            return Err(format!("{}: {}", issue.path.display(), issue.error));
++        }
++        Ok(scan.records)
+     }
+ 
+     /// 删除一个房间的落盘记录（房间关闭/结束时调用）。
+     pub fn remove(&self, room_id: u64) -> Result<(), String> {
+         let path = self.dir.join(format!("{room_id}.json"));
+-        if path.exists() {
+-            std::fs::remove_file(&path).map_err(|e| format!("删除失败: {e}"))?;
++        match std::fs::remove_file(&path) {
++            Ok(()) => {
++                #[cfg(not(windows))]
++                sync_directory(&self.dir).map_err(|e| format!("同步删除失败: {e}"))?;
++            }
++            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
++            Err(e) => return Err(format!("删除失败: {e}")),
+         }
+         Ok(())
+     }
+@@ -131,3 +297,102 @@
+             .collect())
+     }
+ }
++
++fn room_filename(name: &str) -> Option<(u64, bool, bool)> {
++    let (number, temporary) = if let Some(number) = name.strip_suffix(".json") {
++        (number, false)
++    } else if let Some(number) = name.strip_suffix(".json.tmp") {
++        (number, true)
++    } else {
++        let (number, suffix) = name.split_once(".json.")?;
++        uuid::Uuid::parse_str(suffix.strip_suffix(".tmp")?).ok()?;
++        (number, true)
++    };
++    if number.is_empty() || !number.bytes().all(|b| b.is_ascii_digit()) {
++        return None;
++    }
++    let id = number.parse::<u64>().ok()?;
++    Some((id, temporary, number == id.to_string()))
++}
++
++fn create_directory_durable(dir: &Path) -> Result<(), String> {
++    std::fs::create_dir_all(dir).map_err(|e| format!("创建房间目录失败: {e}"))?;
++    // 失败重试也同步祖先：此前 mkdir 可能成功但尚未同步父目录。
++    #[cfg(not(windows))]
++    for path in dir.ancestors() {
++        let path = if path.as_os_str().is_empty() {
++            Path::new(".")
++        } else {
++            path
++        };
++        sync_directory(path).map_err(|e| format!("同步房间目录层级失败: {e}"))?;
++    }
++    Ok(())
++}
++
++#[cfg(not(windows))]
++fn sync_directory(dir: &Path) -> std::io::Result<()> {
++    std::fs::File::open(dir)?.sync_all()
++}
++
++#[cfg(not(windows))]
++fn replace_file(
++    source: &Path,
++    destination: &Path,
++    replacement_visible: &mut bool,
++) -> std::io::Result<()> {
++    std::fs::rename(source, destination)?;
++    *replacement_visible = true;
++    Ok(())
++}
++
++#[cfg(windows)]
++fn replace_file(
++    source: &Path,
++    destination: &Path,
++    replacement_visible: &mut bool,
++) -> std::io::Result<()> {
++    // shortcut: Windows mkdir/unlink 未取得 Unix 目录 fsync 保证；需目标文件系统断电测试后再增强承诺。
++    use std::os::windows::ffi::OsStrExt;
++    fn wide(path: &Path) -> std::io::Result<Vec<u16>> {
++        let mut encoded: Vec<u16> = path.as_os_str().encode_wide().collect();
++        if encoded.contains(&0) {
++            return Err(std::io::Error::new(
++                std::io::ErrorKind::InvalidInput,
++                "路径包含 NUL",
++            ));
++        }
++        encoded.push(0);
++        Ok(encoded)
++    }
++    #[link(name = "kernel32")]
++    unsafe extern "system" {
++        fn MoveFileExW(existing: *const u16, destination: *const u16, flags: u32) -> i32;
++    }
++    let from = wide(&source.canonicalize()?)?;
++    let parent = destination
++        .parent()
++        .filter(|p| !p.as_os_str().is_empty())
++        .unwrap_or(Path::new("."));
++    let name = destination
++        .file_name()
++        .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::InvalidInput, "目标缺少文件名"))?;
++    let to = wide(&parent.canonicalize()?.join(name))?;
++    const MOVEFILE_REPLACE_EXISTING: u32 = 0x1;
++    const MOVEFILE_WRITE_THROUGH: u32 = 0x8;
++    // SAFETY: 两个拥有的 UTF-16 缓冲区以 NUL 结尾，并存活到同步调用返回。
++    if unsafe {
++        MoveFileExW(
++            from.as_ptr(),
++            to.as_ptr(),
++            MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH,
++        )
++    } == 0
++    {
++        let error = std::io::Error::last_os_error();
++        *replacement_visible = !matches!(source.try_exists(), Ok(true));
++        return Err(error);
++    }
++    *replacement_visible = true;
++    Ok(())
++}
+--- before/apps/game-server/src/room_native_actor.rs
++++ after/apps/game-server/src/room_native_actor.rs
+@@ -29,45 +29,9 @@
+     SEAT_TIMEOUT_SECS.store(secs, std::sync::atomic::Ordering::Relaxed);
+ }
+ 
+-/// NC09 落盘：把当前会话状态写入存储（失败只记日志，不影响房间运行）。
+-///
+-/// 终局处理：比赛已有结果（`outcome().is_some()`）时**删除**落盘记录并停止写入——
+-/// 已结束的房间无需跨重启恢复，避免落盘目录只增不减。
+-///
+-/// `password` 参数此处是**密码哈希**（运行期不持有明文）。
+-///
+-/// 节流：`last_sig` 记录上次落盘完整状态校验和；未变化则**跳过**
+-/// 写盘——同一回合内多次调用（如观战入座、重复落盘点）不会重复全量写。
+-fn persist_room(
+-    store: &Option<NativeRoomStore>,
+-    id: u64,
+-    password: &str,
+-    session: &NativeRoomSession,
+-    last_sig: &mut Option<String>,
+-) {
+-    let Some(store) = store else { return };
+-    if session.engine().outcome().is_some() {
+-        if let Err(e) = store.remove(id) {
+-            tracing::warn!(room = id, error = %e, "原生房间终局清理失败");
+-        }
+-        return;
+-    }
+-    let state = session.export_state(&session.snapshot_hex());
+-    let sig = crate::native_room_store::state_checksum(&state);
+-    if last_sig.as_ref() == Some(&sig) {
+-        return; // 节流：状态未变化
+-    }
+-    let record = StoredRoom {
+-        room_id: id,
+-        password_hash: password.to_string(),
+-        state,
+-        checksum: String::new(),
+-    };
+-    match store.save(&record) {
+-        Ok(()) => *last_sig = Some(sig),
+-        Err(e) => tracing::warn!(room = id, error = %e, "原生房间落盘失败"),
+-    }
+-}
++#[path = "room_native_actor/durability.rs"]
++mod durability;
++use durability::RoomDurability;
+ 
+ /// 原生房间成员（含广播句柄）。
+ struct NativeActorMember {
+@@ -156,6 +120,9 @@
+         packs.push(load_pack(r)?);
+     }
+     let session = NativeRoomSession::from_saved(&record.state, packs)?;
++    if session.engine().outcome().is_some() {
++        return Err("原生房间已结束，不恢复为运行中房间".into());
++    }
+     store.save(record)?;
+     // 恢复时把**哈希**带回运行期：入座校验用哈希比对（运行期不再持有明文）
+     Ok(spawn_room_native_persisted_with_hash(
+@@ -181,8 +148,7 @@
+     // （默认 600 秒），由 spawn 侧读取后传入，避免在生产源码里直接读环境变量。
+     let seat_timeout_secs = SEAT_TIMEOUT_SECS.load(std::sync::atomic::Ordering::Relaxed);
+     let mut persist = NativeRoomPersist::new();
+-    // NC09 落盘节流：上次成功落盘的签名
+-    let mut last_persist_sig = None;
++    let mut durability = RoomDurability::new(id, room_password.clone(), store);
+     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
+     let _legacy_wal = RoomPersist::new();
+     let mut members: HashMap<u64, NativeActorMember> = session
+@@ -226,8 +192,19 @@
+                     let _ = reply.send(Err("unauthorized".into()));
+                     continue;
+                 }
+-                // NC09 惰性缺席回收：本次入座若会因满员失败，先回收最久未活动的过期成员。
+-                if seat_timeout_secs > 0 && reconnect_token.is_none() {
++                let mut before = match durability.checkpoint(&session) {
++                    Ok(before) => before,
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
++                };
++                let mut reclaimed = None;
++                // 回收与新入座同一次提交，失败不能丢失原座位或令牌。
++                if seat_timeout_secs > 0
++                    && reconnect_token.is_none()
++                    && !members.contains_key(&connection_id)
++                {
+                     let idle = std::time::Duration::from_secs(seat_timeout_secs);
+                     let now = std::time::Instant::now();
+                     let occupied = members
+@@ -242,28 +219,25 @@
+                             .map(|m| (m.connection_id, m.seat, m.last_seen));
+                         if let Some((conn, seat, seen)) = victim {
+                             if now.duration_since(seen) >= idle {
+-                                members.remove(&conn);
++                                if before.is_none() {
++                                    before = Some(session.checkpoint());
++                                }
+                                 session.reclaim_seat(conn);
+-                                info!(room = id, conn, seat, "原生房间回收缺席座位（惰性超时）");
+-                                persist_room(
+-                                    &store,
+-                                    id,
+-                                    &room_password,
+-                                    &session,
+-                                    &mut last_persist_sig,
+-                                );
+-                                broadcast_roster_native(
+-                                    id,
+-                                    &members,
+-                                    session.engine().outcome().is_some(),
+-                                )
+-                                .await;
++                                reclaimed = Some((conn, seat));
+                             }
+                         }
+                     }
+                 }
+                 match session.join(connection_id, preferred_seat, reconnect_token) {
+                     Ok(joined) => {
++                        if let Err(error) = durability.commit(&mut session, before) {
++                            let _ = reply.send(Err(error));
++                            continue;
++                        }
++                        if let Some((conn, seat)) = reclaimed {
++                            members.remove(&conn);
++                            info!(room = id, conn, seat, "原生房间回收缺席座位（惰性超时）");
++                        }
+                         let m = NativeActorMember {
+                             last_seen: std::time::Instant::now(),
+                             connection_id,
+@@ -286,13 +260,14 @@
+                             old.player_id != m.player_id || old.role != ClientRole::Player
+                         });
+                         members.insert(connection_id, m);
+-                        // 名册/令牌变化必须持久化（否则重启后无法凭令牌回到原座位）
+-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                         broadcast_roster_native(id, &members, session.engine().outcome().is_some())
+                             .await;
+                         let _ = reply.send(Ok(reply_payload));
+                     }
+                     Err(e) => {
++                        if let Some(before) = before {
++                            session.rollback(before);
++                        }
+                         let _ = reply.send(Err(e));
+                     }
+                 }
+@@ -307,7 +282,18 @@
+                     let _ = reply.send(Err("connection already in room".into()));
+                     continue;
+                 }
++                let before = match durability.checkpoint(&session) {
++                    Ok(before) => before,
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
++                };
+                 let spec = session.spectate(connection_id);
++                if let Err(error) = durability.commit(&mut session, before) {
++                    let _ = reply.send(Err(error));
++                    continue;
++                }
+                 let m = NativeActorMember {
+                     last_seen: std::time::Instant::now(),
+                     connection_id,
+@@ -318,7 +304,6 @@
+                     outbound: Some(outbound),
+                 };
+                 members.insert(connection_id, m);
+-                persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                 broadcast_roster_native(id, &members, session.engine().outcome().is_some()).await;
+                 let _ = reply.send(Ok(JoinReply {
+                     player_id: 0,
+@@ -343,6 +328,13 @@
+                 let Some(m) = members.get(&connection_id) else {
+                     let _ = reply.send(Err("not in room".into()));
+                     continue;
++                };
++                let checkpoint = match durability.checkpoint(&session) {
++                    Ok(before) => before,
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
+                 };
+                 // 幂等重放
+                 if idempotency_key.0 != 0 {
+@@ -390,6 +382,9 @@
+                 let result = match session.submit(connection_id, &command.kind, expected) {
+                     Ok(r) => r,
+                     Err(e) => {
++                        if let Some(before) = checkpoint {
++                            session.rollback(before);
++                        }
+                         let _ = reply.send(Err(e));
+                         continue;
+                     }
+@@ -399,6 +394,10 @@
+                     state_hash,
+                 } = &result
+                 {
++                    if let Err(error) = durability.commit(&mut session, checkpoint) {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
+                     if *new_revision > before {
+                         // 记录已接受的原生动作，保证所有命令都能从快照重放。
+                         if let Some(action) = action {
+@@ -411,12 +410,12 @@
+                             );
+                         }
+                         last_revision = *new_revision;
+-                        // NC09 跨重启持久化：接受命令后写盘（原子 rename）
+-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                     }
+                     if idempotency_key.0 != 0 {
+                         idempotency.insert((m.player_id.raw(), idempotency_key.0), result.clone());
+                     }
++                } else if let Some(before) = checkpoint {
++                    session.rollback(before);
+                 }
+                 let view = session.snapshot(connection_id).unwrap_or_else(|_| {
+                     observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
+@@ -504,8 +503,19 @@
+             } => {
+                 // 座位以入座座位为准（反冒充）；成功后向全体推送新视图（选将不推进
+                 // revision，故推送判据是「操作成功」而不是 revision 变化）。
++                let before = match durability.checkpoint(&session) {
++                    Ok(before) => before,
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
++                };
+                 match session.assign_general(connection_id, &name) {
+                     Ok((revision, hash)) => {
++                        if let Err(error) = durability.commit(&mut session, before) {
++                            let _ = reply.send(Err(error));
++                            continue;
++                        }
+                         // 选将不推进 revision，覆盖该修订的恢复点并清除旧动作重试缓存。
+                         persist.put_snapshot(
+                             revision,
+@@ -538,12 +548,14 @@
+                             };
+                             let _ = out.send(&msg).await;
+                         }
+-                        persist_room(&store, id, &room_password, &session, &mut last_persist_sig);
+                         let _ = reply.send(Ok(format!(
+                             "{{\"revision\":{revision},\"state_hash\":\"{hash}\"}}"
+                         )));
+                     }
+                     Err(e) => {
++                        if let Some(before) = before {
++                            session.rollback(before);
++                        }
+                         let _ = reply.send(Err(e));
+                     }
+                 }
+@@ -575,10 +587,21 @@
+                     let _ = reply.send(Err("无可用于恢复的快照".into()));
+                     continue;
+                 };
++                let before = match durability.checkpoint(&session) {
++                    Ok(before) => before,
++                    Err(error) => {
++                        let _ = reply.send(Err(error));
++                        continue;
++                    }
++                };
+                 match persist.recover(from, &session.pack_refs()) {
+                     Ok((engine, replayed)) => {
+-                        last_revision = engine.revision();
+                         session.replace_engine(engine);
++                        if let Err(error) = durability.commit(&mut session, before) {
++                            let _ = reply.send(Err(error));
++                            continue;
++                        }
++                        last_revision = session.engine().revision();
+                         debug!(room = id, from, replayed, "native room recovered");
+                         let _ = reply.send(Ok(()));
+                     }
+@@ -658,6 +681,9 @@
+     };
+     let mut session = NativeRoomSession::new_with_packs(engine, packs, players);
+     session.set_frozen_packages(frozen);
++    let hash = crate::native_room_store::password_hash(id, &password);
++    let mut durability = RoomDurability::new(id, hash, store.clone());
++    durability.commit(&mut session, None)?;
+     Ok(Some(spawn_room_native_persisted(
+         id,
+         session,
+--- before/apps/game-server/src/room_native.rs
++++ after/apps/game-server/src/room_native.rs
+@@ -84,6 +84,16 @@
+     next_dedup: u64,
+ }
+ 
++/// IO 提交前保存可变会话；包定义与原局资产在 actor 生命周期内不变。
++pub(crate) struct NativeRoomCheckpoint {
++    engine: Engine,
++    members: HashMap<u64, NativeMember>,
++    by_token: HashMap<String, u64>,
++    started: bool,
++    next_token: u64,
++    next_dedup: u64,
++}
++
+ /// 入座/观战结果。
+ #[derive(Debug, Clone)]
+ pub struct NativeJoinReply {
+@@ -96,6 +106,26 @@
+ }
+ 
+ impl NativeRoomSession {
++    pub(crate) fn checkpoint(&self) -> NativeRoomCheckpoint {
++        NativeRoomCheckpoint {
++            engine: self.engine.clone(),
++            members: self.members.clone(),
++            by_token: self.by_token.clone(),
++            started: self.started,
++            next_token: self.next_token,
++            next_dedup: self.next_dedup,
++        }
++    }
++
++    pub(crate) fn rollback(&mut self, before: NativeRoomCheckpoint) {
++        self.engine = before.engine;
++        self.members = before.members;
++        self.by_token = before.by_token;
++        self.started = before.started;
++        self.next_token = before.next_token;
++        self.next_dedup = before.next_dedup;
++    }
++
+     /// 以原生引擎为模板建会话（模板状态即开局状态）。
+     pub fn new(engine: Engine, max_seats: u8) -> Self {
+         Self::new_with_packs(engine, Vec::new(), max_seats)
+@@ -141,6 +171,10 @@
+ 
+     /// 用恢复出的引擎替换当前引擎（`Recover` 接线；成员/令牌/座位保持不变）。
+     pub fn replace_engine(&mut self, engine: Engine) {
++        // WAL 重放的去重高水位可高于实时计数，下一条命令不能撞到已重放的键。
++        self.next_dedup = self
++            .next_dedup
++            .max(engine.save().last_dedup.saturating_add(1));
+         self.engine = engine;
+     }
+ 
+--- before/apps/game-server/src/lobby.rs
++++ after/apps/game-server/src/lobby.rs
+@@ -96,14 +96,32 @@
+         let Some(store) = self.native_room_store.clone() else {
+             return Ok(0);
+         };
+-        let records = store.load_all()?;
++        let scan = match store.scan() {
++            Ok(scan) => scan,
++            Err(error) => {
++                // 未能扫描旧档时禁止分配房号，避免后续可写时覆盖尚未发现的房间。
++                self.next_room.store(0, Ordering::SeqCst);
++                return Err(error);
++            }
++        };
++        if let Some(max_id) = scan.reserved_ids.last() {
++            let next = max_id.checked_add(1).unwrap_or(0);
++            if next == 0 {
++                self.next_room.store(0, Ordering::SeqCst);
++            } else if self.next_room.load(Ordering::SeqCst) != 0 {
++                self.next_room.fetch_max(next, Ordering::SeqCst);
++            }
++        }
++        for issue in scan.issues {
++            tracing::warn!(path = %issue.path.display(), room = ?issue.room_id, error = %issue.error,
++                uncommitted_temp = issue.uncommitted_temp, "原生房间记录未恢复（保留原文件与房号）");
++        }
++        let records = scan.records;
+         if records.is_empty() {
+             return Ok(0);
+         }
+         let mut restored = 0usize;
+-        let mut max_id = 0u64;
+         for record in &records {
+-            max_id = max_id.max(record.room_id);
+             if let Some(last) = record.state.members.iter().map(|m| m.connection_id).max() {
+                 self.next_conn
+                     .fetch_max(last.saturating_add(1), Ordering::SeqCst);
+@@ -120,32 +138,47 @@
+             };
+             let mut prepared = record.clone();
+             prepared.state.frozen_packages = Some(frozen);
+-            let mut packs = packs.into_iter();
+-            let mut load_pack = move |_r: &str| -> Result<
+-                engine_native::content::extension::ExtensionPack,
+-                String,
+-            > {
+-                packs.next().ok_or_else(|| "原局包副本缺失".into())
++            let session = match crate::room_native::NativeRoomSession::from_saved(
++                &prepared.state,
++                packs,
++            ) {
++                Ok(session) => session,
++                Err(e) => {
++                    tracing::warn!(room = record.room_id, error = %e, "原生房间恢复失败（保留落盘记录）");
++                    continue;
++                }
+             };
+-            match crate::room_native_actor::restore_room_from_disk(
+-                &prepared,
+-                &mut load_pack,
++            if session.engine().outcome().is_some() {
++                // 终局记录可能因清理失败而留下，不能把已结束的对局重新发布。
++                if let Err(e) = store.remove(record.room_id) {
++                    tracing::warn!(room = record.room_id, error = %e, "原生终局记录清理失败（保留记录）");
++                }
++                continue;
++            }
++            if let Err(e) = store.save(&prepared) {
++                tracing::warn!(room = record.room_id, error = %e, "原生房间恢复写入失败（不发布房间）");
++                continue;
++            }
++            let handle = crate::room_native_actor::spawn_room_native_persisted_with_hash(
++                record.room_id,
++                session,
+                 self.cfg.room_mailbox,
+                 self.cfg.snapshot_every,
+-                store.clone(),
+-            ) {
+-                Ok(handle) => {
+-                    self.rooms.lock().insert(record.room_id, handle);
+-                    restored += 1;
+-                    tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
+-                }
+-                Err(e) => {
+-                    tracing::warn!(room = record.room_id, error = %e, "原生房间恢复失败（保留落盘记录）");
+-                }
+-            }
+-        }
+-        self.next_room.fetch_max(max_id + 1, Ordering::SeqCst);
++                record.password_hash.clone(),
++                Some(store.clone()),
++            );
++            self.rooms.lock().insert(record.room_id, handle);
++            restored += 1;
++            tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
++        }
+         Ok(restored)
++    }
++
++    #[cfg(test)]
++    pub(crate) fn native_room_store_for_test(
++        &self,
++    ) -> Option<crate::native_room_store::NativeRoomStore> {
++        self.native_room_store.clone()
+     }
+ 
+     /// T6③：列出已安装原生包。
+@@ -293,7 +326,17 @@
+                             "server room capacity",
+                         ));
+                     }
+-                    let id = self.next_room.fetch_add(1, Ordering::Relaxed);
++                    let id = self
++                        .next_room
++                        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |id| {
++                            (id != 0).then(|| id.checked_add(1).unwrap_or(0))
++                        })
++                        .map_err(|_| {
++                            HandlerError::new(
++                                ErrorCode::Internal,
++                                "room storage unavailable or room IDs exhausted",
++                            )
++                        })?;
+                     // NC09：后端选择——原生权威房间（显式启用）或旧线房间。
+                     // 原生装载失败**明确报错**，不静默回退（避免「已启用」成假象）。
+                     let native_handle = crate::room_native_actor::spawn_native_room_if_configured(
+@@ -577,3 +620,58 @@
+         _ => HandlerError::new(ErrorCode::Internal, format!("room error: {e}")),
+     }
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::native_room_store::{NativeRoomStore, StoredRoom};
++    use crate::room_native::NativeRoomSession;
++
++    #[tokio::test]
++    async fn finished_saved_room_is_not_published_and_its_id_remains_reserved() {
++        let dir = tempfile::tempdir().unwrap();
++        let cfg = ServerConfig {
++            original_content_root: dir.path().join("original"),
++            content_store_root: dir.path().join("content-store"),
++            extensions_root: dir.path().join("extensions"),
++            native_packages_root: dir.path().join("packages"),
++            native_store_root: dir.path().join("native-store"),
++            native_room_store: dir.path().join("rooms").to_string_lossy().into_owned(),
++            native_rooms: true,
++            ..ServerConfig::default()
++        };
++        for path in [
++            &cfg.original_content_root,
++            &cfg.extensions_root,
++            &cfg.native_packages_root,
++        ] {
++            std::fs::create_dir_all(path).unwrap();
++        }
++        let store = NativeRoomStore::new(&cfg.native_room_store);
++        let mut finished = engine_native::Engine::new(42, 2).save();
++        // 只构造已通过引擎恢复校验的终局存档，测试启动发布而非胜负规则。
++        finished.core.outcome = Some(engine_native::state::Outcome {
++            winner: engine_native::state::Winner::Player(0),
++        });
++        let finished = engine_native::Engine::restore(&finished).unwrap();
++        assert!(finished.outcome().is_some());
++        for (id, engine) in [(3, engine_native::Engine::new(41, 2)), (7, finished)] {
++            let mut session = NativeRoomSession::new(engine, 2);
++            session.set_frozen_packages(Vec::new());
++            store
++                .save(&StoredRoom {
++                    room_id: id,
++                    password_hash: String::new(),
++                    state: session.export_state(&session.snapshot_hex()),
++                    checksum: String::new(),
++                })
++                .unwrap();
++        }
++        let lobby = crate::bootstrap(&cfg);
++        assert_eq!(lobby.restore_native_rooms().unwrap(), 1);
++        let rooms = lobby.rooms.lock();
++        assert!(rooms.contains_key(&3));
++        assert!(!rooms.contains_key(&7));
++        assert_eq!(lobby.next_room.load(Ordering::SeqCst), 8);
++    }
++}
+--- before/apps/game-server/src/native_ws_e2e.rs
++++ after/apps/game-server/src/native_ws_e2e.rs
+@@ -1,4 +1,6 @@
+ //! Production native rooms over loopback TCP/WebSocket, including restart and content locks.
++
++mod durability;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+ use engine_api::{
+--- /dev/null
++++ after/apps/game-server/src/native_room_store/tests.rs
+@@ -0,0 +1,261 @@
++use super::*;
++
++fn record(room_id: u64, snapshot: &str) -> StoredRoom {
++    StoredRoom {
++        room_id,
++        password_hash: "saved-password-hash".into(),
++        checksum: String::new(),
++        state: NativeRoomState {
++            snapshot_hex: snapshot.into(),
++            max_seats: 2,
++            started: true,
++            next_token: 1,
++            next_dedup: 1,
++            pack_refs: Vec::new(),
++            frozen_packages: Some(Vec::new()),
++            members: Vec::new(),
++        },
++    }
++}
++
++#[test]
++fn stale_legacy_temp_never_blocks_new_save() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    std::fs::create_dir(dir.path().join("7.json.tmp")).unwrap();
++    store.save(&record(7, "first")).unwrap();
++    assert_eq!(store.load_all().unwrap()[0].state.snapshot_hex, "first");
++    assert!(dir.path().join("7.json.tmp").is_dir());
++}
++
++#[test]
++fn filename_binding_rejects_record_from_other_room() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "first")).unwrap();
++    std::fs::rename(dir.path().join("7.json"), dir.path().join("8.json")).unwrap();
++    assert!(store.load_all().is_err());
++}
++
++#[test]
++fn pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp() {
++    for fault in [
++        StoreFault::PartialWrite,
++        StoreFault::FileSync,
++        StoreFault::Rename,
++    ] {
++        let dir = tempfile::tempdir().unwrap();
++        let store = NativeRoomStore::new(dir.path());
++        store.save(&record(7, "confirmed")).unwrap();
++        let before = std::fs::read(dir.path().join("7.json")).unwrap();
++        std::fs::write(dir.path().join("7.json.tmp"), b"old incomplete evidence").unwrap();
++        store.clone().fail_next_write(fault);
++        let error = store.save_durable(&record(7, "unconfirmed")).unwrap_err();
++        assert!(!error.replacement_visible, "{fault:?}: {error}");
++        assert_eq!(std::fs::read(dir.path().join("7.json")).unwrap(), before);
++        assert_eq!(
++            std::fs::read(dir.path().join("7.json.tmp")).unwrap(),
++            b"old incomplete evidence"
++        );
++        assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 2);
++        assert_eq!(store.load_all().unwrap()[0].state.snapshot_hex, "confirmed");
++        store.save_durable(&record(7, "retry")).unwrap();
++        assert_eq!(store.load_all().unwrap()[0].state.snapshot_hex, "retry");
++    }
++}
++
++#[test]
++fn post_replace_fault_reports_ambiguous_commit_and_keeps_complete_record() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "confirmed")).unwrap();
++    store.fail_next_write(StoreFault::DirectorySync);
++    let error = store.save_durable(&record(7, "unconfirmed")).unwrap_err();
++    assert!(error.replacement_visible, "{error}");
++    assert_eq!(
++        store.load_all().unwrap()[0].state.snapshot_hex,
++        "unconfirmed"
++    );
++    assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 1);
++    store.save_durable(&record(7, "confirmed")).unwrap();
++    assert_eq!(store.load_all().unwrap()[0].state.snapshot_hex, "confirmed");
++}
++
++#[test]
++fn failed_first_write_never_becomes_a_committed_record() {
++    for fault in [
++        StoreFault::PartialWrite,
++        StoreFault::FileSync,
++        StoreFault::Rename,
++    ] {
++        let dir = tempfile::tempdir().unwrap();
++        let store = NativeRoomStore::new(dir.path());
++        store.fail_next_write(fault);
++        assert!(
++            !store
++                .save_durable(&record(7, "candidate"))
++                .unwrap_err()
++                .replacement_visible
++        );
++        assert!(store.load_all().unwrap().is_empty());
++        assert_eq!(std::fs::read_dir(dir.path()).unwrap().count(), 0);
++    }
++}
++
++#[test]
++fn scan_isolates_bad_records_and_reserves_all_related_room_ids() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "confirmed")).unwrap();
++    std::fs::write(dir.path().join("9.json"), b"{truncated").unwrap();
++    std::fs::write(
++        dir.path().join("10.json"),
++        serde_json::to_vec(&record(11, "wrong identity")).unwrap(),
++    )
++    .unwrap();
++    std::fs::write(dir.path().join("12.json.tmp"), b"{uncommitted").unwrap();
++    let tmp_name = format!("13.json.{}.tmp", uuid::Uuid::new_v4());
++    std::fs::write(
++        dir.path().join(tmp_name),
++        serde_json::to_vec(&record(13, "complete but not committed")).unwrap(),
++    )
++    .unwrap();
++    for name in [
++        "123notroom.json",
++        "x.json",
++        "200.json.not-a-uuid.tmp",
++        "300.json.something",
++        "note.txt",
++    ] {
++        std::fs::write(dir.path().join(name), b"unknown").unwrap();
++    }
++    let scan = store.scan().unwrap();
++    assert_eq!(scan.records.len(), 1);
++    assert_eq!(scan.records[0].room_id, 7);
++    assert_eq!(
++        scan.reserved_ids,
++        [7, 9, 10, 11, 12, 13].into_iter().collect()
++    );
++    assert_eq!(scan.issues.len(), 4);
++    assert_eq!(
++        scan.issues
++            .iter()
++            .filter(|issue| issue.uncommitted_temp)
++            .count(),
++        2
++    );
++    assert!(
++        store.load_all().is_err(),
++        "strict API keeps corruption visible"
++    );
++    assert_eq!(
++        std::fs::read(dir.path().join("9.json")).unwrap(),
++        b"{truncated"
++    );
++}
++
++#[test]
++fn noncanonical_duplicate_id_does_not_silently_override_valid_record() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "confirmed")).unwrap();
++    std::fs::write(
++        dir.path().join("007.json"),
++        serde_json::to_vec(&record(7, "alias")).unwrap(),
++    )
++    .unwrap();
++    let scan = store.scan().unwrap();
++    assert_eq!(scan.records.len(), 1);
++    assert_eq!(scan.records[0].state.snapshot_hex, "confirmed");
++    assert_eq!(scan.issues.len(), 1);
++    assert_eq!(scan.reserved_ids, [7].into_iter().collect());
++    assert!(store.by_id().is_err());
++}
++
++#[test]
++fn nested_new_directory_and_real_directory_creation_failure() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path().join("new/nested/rooms"));
++    store.save_durable(&record(7, "confirmed")).unwrap();
++    assert_eq!(store.load_all().unwrap().len(), 1);
++    let blocker = dir.path().join("blocker");
++    std::fs::write(&blocker, b"preserved").unwrap();
++    let failed = NativeRoomStore::new(blocker.join("rooms"));
++    assert!(
++        !failed
++            .save_durable(&record(7, "candidate"))
++            .unwrap_err()
++            .replacement_visible
++    );
++    assert_eq!(std::fs::read(blocker).unwrap(), b"preserved");
++}
++
++#[test]
++fn invalid_checksum_and_non_file_records_are_isolated_without_deletion() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    store.save(&record(7, "confirmed")).unwrap();
++    let mut damaged = record(9, "damaged");
++    damaged.checksum = "wrong".into();
++    std::fs::write(
++        dir.path().join("9.json"),
++        serde_json::to_vec(&damaged).unwrap(),
++    )
++    .unwrap();
++    std::fs::create_dir(dir.path().join("10.json")).unwrap();
++    let scan = store.scan().unwrap();
++    assert_eq!(scan.records.len(), 1);
++    assert_eq!(scan.issues.len(), 2);
++    assert!(scan
++        .issues
++        .iter()
++        .any(|issue| issue.error.contains("校验和")));
++    assert!(dir.path().join("10.json").is_dir());
++}
++
++#[test]
++fn maximum_id_is_reserved_and_zero_id_is_never_written() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    let temp = format!("{}.json.tmp", u64::MAX);
++    std::fs::write(dir.path().join(temp), b"partial").unwrap();
++    assert!(store.scan().unwrap().reserved_ids.contains(&u64::MAX));
++    assert!(
++        !store
++            .save_durable(&record(0, "invalid"))
++            .unwrap_err()
++            .replacement_visible
++    );
++    assert!(!dir.path().join("0.json").exists());
++}
++
++#[cfg(windows)]
++#[test]
++fn windows_write_through_replace_supports_unicode_and_long_paths() {
++    let dir = tempfile::tempdir().unwrap();
++    let mut root = dir.path().join("房间😀");
++    for _ in 0..6 {
++        root = root.join("long-room-directory-name-for-original-content-lock");
++    }
++    let store = NativeRoomStore::new(&root);
++    store.save_durable(&record(7, "first")).unwrap();
++    store.save_durable(&record(7, "replaced")).unwrap();
++    assert_eq!(store.load_all().unwrap()[0].state.snapshot_hex, "replaced");
++    assert_eq!(std::fs::read_dir(root).unwrap().count(), 1);
++}
++
++#[cfg(windows)]
++#[test]
++fn windows_invalid_or_blocked_destination_preserves_source() {
++    let dir = tempfile::tempdir().unwrap();
++    let source = dir.path().join("source");
++    std::fs::write(&source, b"original").unwrap();
++    let blocked = dir.path().join("destination-directory");
++    std::fs::create_dir(&blocked).unwrap();
++    for destination in [blocked, dir.path().join("bad\0name")] {
++        let mut visible = false;
++        assert!(replace_file(&source, &destination, &mut visible).is_err());
++        assert!(!visible);
++        assert_eq!(std::fs::read(&source).unwrap(), b"original");
++    }
++}
+--- /dev/null
++++ after/apps/game-server/src/native_ws_e2e/durability.rs
+@@ -0,0 +1,384 @@
++//! Durable acknowledgement, failed writes, and abrupt-runtime restart over the production WS path.
++
++use super::*;
++use crate::native_room_store::StoreFault;
++
++async fn pending_choice(a: &mut Peer, b: &mut Peer, spectator: &mut Peer) -> State {
++    let mut state = a.snapshot().await;
++    for key in [701, 702, 703] {
++        let before = state.view.revision;
++        let (result, next) = a.submit(a.player, before, key, CommandKind::EndPhase).await;
++        assert!(
++            matches!(result, CommandResult::Accepted { new_revision, .. } if new_revision > before)
++        );
++        assert_synchronized(&next, &b.pushed(key).await, &spectator.pushed(key).await);
++        state = next;
++    }
++    assert!(state.choice.is_some());
++    assert!(state
++        .legal
++        .iter()
++        .any(|action| matches!(action, LegalAction::ResolveChoice { .. })));
++    state
++}
++
++fn answer(state: &State, player: PlayerId) -> CommandKind {
++    state
++        .legal
++        .iter()
++        .find(|action| {
++            matches!(
++                action,
++                LegalAction::ResolveChoice {
++                    cancelled: false,
++                    ..
++                }
++            )
++        })
++        .expect("pending private answer")
++        .to_command(player, state.view.revision)
++        .kind
++}
++
++async fn failed_submit(peer: &mut Peer, state: &State, key: u64) {
++    peer.seq += 1;
++    let sequence = peer.seq;
++    peer.send(ClientMessage::SubmitCommand {
++        header: MessageHeader::new(peer.room, sequence, state.view.revision),
++        command: Command {
++            actor: peer.player,
++            expected_revision: ExpectedRevision(state.view.revision),
++            idempotency_key: IdempotencyKey(key),
++            kind: answer(state, peer.player),
++        },
++        idempotency_key: IdempotencyKey(key),
++    })
++    .await;
++    let response = peer
++        .until(|message| {
++            matches!(message, ServerMessage::Error { .. })
++                || matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)
++        })
++        .await;
++    assert!(
++        matches!(
++            &response,
++            ServerMessage::Error {
++                code: ErrorCode::Internal,
++                message,
++                ..
++            } if message.contains("native room persistence failed:")
++        ),
++        "a failed durable write must not acknowledge an accepted command: {response:?}"
++    );
++}
++
++async fn unchanged_without_success_push(peer: &mut Peer, expected: &State) {
++    peer.seq += 1;
++    let sequence = peer.seq;
++    peer.send(ClientMessage::RequestSnapshot {
++        header: MessageHeader::new(peer.room, sequence, 0),
++        last_revision: 0,
++    })
++    .await;
++    let message = peer
++        .until(|message| {
++            assert!(
++                !matches!(message, ServerMessage::CommandOutcome {
++                    result: CommandResult::Accepted { new_revision, .. }, ..
++                } if *new_revision > expected.view.revision),
++                "uncommitted transition reached another socket: {message:?}"
++            );
++            matches!(message, ServerMessage::Snapshot { header, .. } if header.conn_seq == sequence)
++        })
++        .await;
++    assert_eq!(State::from_message(message), *expected);
++}
++
++#[test]
++fn native_extensions_ws_write_failure_retries_and_restarts() {
++    for fault in [
++        None,
++        Some(StoreFault::PartialWrite),
++        Some(StoreFault::FileSync),
++        Some(StoreFault::Rename),
++        Some(StoreFault::DirectorySync),
++    ] {
++        write_failure_retries_and_restarts(fault);
++    }
++}
++
++fn write_failure_retries_and_restarts(fault: Option<StoreFault>) {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = local_config(directory.path());
++    let (room, tokens, before_a, before_b, before_spectator) = runtime().block_on(async {
++        let server = Server::start(&cfg, 0).await;
++        let mut a = Peer::connect(&server).await;
++        a.create().await;
++        let room = a.room;
++        let mut b = Peer::connect(&server).await;
++        b.join(room, 1, None).await;
++        let mut spectator = Peer::connect(&server).await;
++        spectator.spectate(room).await;
++        let before_a = pending_choice(&mut a, &mut b, &mut spectator).await;
++        let before_b = b.snapshot().await;
++        let before_spectator = spectator.snapshot().await;
++        let rooms = Path::new(&cfg.native_room_store);
++        let record_name = format!("{room}.json");
++        let saved = std::fs::read(rooms.join(&record_name)).unwrap();
++        let original = directory.path().join("confirmed-rooms");
++        let store = server.lobby.native_room_store_for_test().unwrap();
++        if let Some(fault) = fault {
++            store.fail_next_write(fault);
++        } else {
++            std::fs::rename(rooms, &original).unwrap();
++            std::fs::write(rooms, b"fault: room directory is unavailable").unwrap();
++        }
++
++        failed_submit(&mut a, &before_a, 704).await;
++        unchanged_without_success_push(&mut a, &before_a).await;
++        unchanged_without_success_push(&mut b, &before_b).await;
++        unchanged_without_success_push(&mut spectator, &before_spectator).await;
++        if matches!(fault, Some(StoreFault::DirectorySync)) {
++            assert_ne!(std::fs::read(rooms.join(&record_name)).unwrap(), saved,
++                "after rename the candidate is visible but durability has not been confirmed");
++            store.fail_next_write(StoreFault::Rename);
++            failed_submit(&mut a, &before_a, 704).await;
++            unchanged_without_success_push(&mut a, &before_a).await;
++            unchanged_without_success_push(&mut b, &before_b).await;
++            unchanged_without_success_push(&mut spectator, &before_spectator).await;
++        } else if fault.is_some() {
++            assert_eq!(std::fs::read(rooms.join(&record_name)).unwrap(), saved);
++        } else {
++            assert_eq!(std::fs::read(original.join(&record_name)).unwrap(), saved);
++            std::fs::remove_file(rooms).unwrap();
++            std::fs::rename(&original, rooms).unwrap();
++        }
++        let (result, after_a) = a
++            .submit(a.player, before_a.view.revision, 704, answer(&before_a, a.player))
++            .await;
++        assert!(matches!(result, CommandResult::Accepted { new_revision, .. } if new_revision == before_a.view.revision + 1));
++        let after_b = b.pushed(704).await;
++        let after_spectator = spectator.pushed(704).await;
++        assert_synchronized(&after_a, &after_b, &after_spectator);
++        let disk: serde_json::Value =
++            serde_json::from_slice(&std::fs::read(rooms.join(&record_name)).unwrap()).unwrap();
++        let old: serde_json::Value = serde_json::from_slice(&saved).unwrap();
++        assert_eq!(disk["state"]["frozen_packages"], old["state"]["frozen_packages"]);
++        assert_eq!(disk["state"]["pack_refs"], old["state"]["pack_refs"]);
++        assert_ne!(disk["state"]["snapshot_hex"], old["state"]["snapshot_hex"]);
++        let (repeated, repeated_state) = a
++            .submit(a.player, before_a.view.revision, 704, answer(&before_a, a.player))
++            .await;
++        assert!(matches!(repeated, CommandResult::Accepted { new_revision, .. } if new_revision == after_a.view.revision));
++        assert_eq!(repeated_state, after_a, "successful retry is cached only after durable commit");
++        let tokens = [a.token.clone(), b.token.clone()];
++        // No graceful close: destroying this runtime drops its sockets and all room actors.
++        drop(a);
++        drop(b);
++        drop(spectator);
++        server.stop().await;
++        (room, tokens, after_a, after_b, after_spectator)
++    });
++
++    disable_packages(&cfg);
++    runtime().block_on(async {
++        let restarted = Server::start(&cfg, 1).await;
++        let mut a = Peer::connect(&restarted).await;
++        assert_eq!(a.join(room, 0, Some(tokens[0].clone())).await, before_a);
++        assert_eq!(a.token, tokens[0]);
++        let mut b = Peer::connect(&restarted).await;
++        assert_eq!(b.join(room, 1, Some(tokens[1].clone())).await, before_b);
++        assert_eq!(b.token, tokens[1]);
++        let mut spectator = Peer::connect(&restarted).await;
++        assert_eq!(spectator.spectate(room).await, before_spectator);
++        assert_synchronized(&a.snapshot().await, &b.snapshot().await, &spectator.snapshot().await);
++        let action = before_a.legal.first().expect("restored game can continue").to_command(a.player, before_a.view.revision);
++        let (result, next) = a.submit(a.player, before_a.view.revision, 705, action.kind).await;
++        assert!(matches!(result, CommandResult::Accepted { new_revision, .. } if new_revision > before_a.view.revision));
++        assert_synchronized(&next, &b.pushed(705).await, &spectator.pushed(705).await);
++        println!("NATIVE_WS durability=pass fault={fault:?} retry=same-key revision={} restart=abrupt-runtime continued_revision={} packages=disabled", before_a.view.revision, next.view.revision);
++        restarted.stop().await;
++    });
++}
++
++#[test]
++fn native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps() {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = local_config(directory.path());
++    let (room, token, before, record) = runtime().block_on(async {
++        let server = Server::start(&cfg, 0).await;
++        let mut a = Peer::connect(&server).await;
++        a.create().await;
++        let room = a.room;
++        let mut b = Peer::connect(&server).await;
++        b.join(room, 1, None).await;
++        let mut spectator = Peer::connect(&server).await;
++        spectator.spectate(room).await;
++        let before = pending_choice(&mut a, &mut b, &mut spectator).await;
++        let record: crate::native_room_store::StoredRoom = serde_json::from_slice(
++            &std::fs::read(Path::new(&cfg.native_room_store).join(format!("{room}.json"))).unwrap(),
++        )
++        .unwrap();
++        let mut other = Peer::connect(&server).await;
++        other.create().await;
++        assert_ne!(other.room, room);
++        let token = a.token.clone();
++        drop(a);
++        drop(b);
++        drop(spectator);
++        drop(other);
++        server.stop().await;
++        (room, token, before, record)
++    });
++
++    let rooms = Path::new(&cfg.native_room_store);
++    let content = super::super::native::NativeContent::open(
++        cfg.native_packages_root.clone(),
++        cfg.native_store_root.clone(),
++    )
++    .unwrap();
++    let (packs, _) = content
++        .load_room_packages(
++            &record.state.pack_refs,
++            record.state.frozen_packages.as_deref(),
++        )
++        .unwrap();
++    // A fully valid, newer candidate models a crash after file sync but before atomic rename.
++    let mut candidate =
++        crate::room_native::NativeRoomSession::from_saved(&record.state, packs).unwrap();
++    let owner = record
++        .state
++        .members
++        .iter()
++        .find(|member| member.player_id == PlayerId::new(1))
++        .unwrap();
++    let outcome = candidate
++        .submit(
++            owner.connection_id,
++            &answer(&before, owner.player_id),
++            before.view.revision,
++        )
++        .unwrap();
++    assert!(
++        matches!(outcome, CommandResult::Accepted { new_revision, .. } if new_revision > before.view.revision)
++    );
++    let mut newer = record.clone();
++    newer.state = candidate.export_state(&candidate.snapshot_hex());
++    newer.checksum = crate::native_room_store::state_checksum(&newer.state);
++    let full_temp = serde_json::to_vec_pretty(&newer).unwrap();
++    let complete_path = rooms.join(format!(
++        "{room}.json.00000000-0000-4000-8000-000000000001.tmp"
++    ));
++    std::fs::write(&complete_path, &full_temp).unwrap();
++    let partial_path = rooms.join(format!("{room}.json.tmp"));
++    let partial = b"{\"room_id\":1,\"state\":{\"snapshot_hex\":\"";
++    std::fs::write(&partial_path, partial).unwrap();
++    let corrupt_path = rooms.join("100.json");
++    let corrupt = b"{\"room_id\":100,\"state\":";
++    std::fs::write(&corrupt_path, corrupt).unwrap();
++    let mismatch_path = rooms.join("101.json");
++    let mismatch = serde_json::to_vec_pretty(&record).unwrap();
++    std::fs::write(&mismatch_path, &mismatch).unwrap();
++    let orphan_path = rooms.join("102.json.00000000-0000-4000-8000-000000000102.tmp");
++    let mut orphan = newer;
++    orphan.room_id = 102;
++    let orphan_bytes = serde_json::to_vec_pretty(&orphan).unwrap();
++    std::fs::write(&orphan_path, &orphan_bytes).unwrap();
++    disable_packages(&cfg);
++
++    runtime().block_on(async {
++        let restarted = Server::start(&cfg, 2).await;
++        let mut a = Peer::connect(&restarted).await;
++        assert_eq!(a.join(room, 0, Some(token.clone())).await, before,
++            "a fully valid temp must not replace the last committed choice");
++        assert_eq!(a.token, token);
++        let mut unavailable = Peer::connect(&restarted).await;
++        for unavailable_room in [100, 101, 102] {
++            unavailable.send(ClientMessage::JoinRoom {
++                room_id: unavailable_room,
++                password: PASSWORD.into(),
++                preferred_seat: Some(0),
++                reconnect_token: None,
++            }).await;
++            unavailable.error(ErrorCode::RoomNotFound).await;
++        }
++        for (path, bytes) in [
++            (&complete_path, full_temp.as_slice()),
++            (&partial_path, partial.as_slice()),
++            (&corrupt_path, corrupt.as_slice()),
++            (&mismatch_path, mismatch.as_slice()),
++            (&orphan_path, orphan_bytes.as_slice()),
++        ] {
++            assert_eq!(std::fs::read(path).unwrap(), bytes, "failed/orphaned save remains available for inspection");
++        }
++        let (outcome, continued) = a.submit(a.player, before.view.revision, 704, answer(&before, a.player)).await;
++        assert!(matches!(outcome, CommandResult::Accepted { new_revision, .. } if new_revision > before.view.revision));
++        let mut active = Peer::connect(&restarted).await;
++        active.send(ClientMessage::CreateRoom { players: 2, seed: SEED, password: PASSWORD.into() }).await;
++        active.error(ErrorCode::Internal).await;
++        assert_eq!(restarted.lobby.stats().active_rooms, 2, "disabled packs cannot create a new room");
++        println!("NATIVE_WS crash_recovery=pass healthy_rooms=2 corrupt_rooms=2 orphan_room=102 committed_revision={} continued_revision={}", before.view.revision, continued.view.revision);
++        restarted.stop().await;
++    });
++
++    // Reactivating packages permits a new room, while all damaged and uncommitted IDs remain reserved.
++    upgrade_packages(&cfg, "1.1.0");
++    runtime().block_on(async {
++        let restarted = Server::start(&cfg, 2).await;
++        let mut new = Peer::connect(&restarted).await;
++        new.create().await;
++        assert!(
++            new.room > 102,
++            "new room must not overwrite malformed or uncommitted saves"
++        );
++        assert_eq!(std::fs::read(&corrupt_path).unwrap(), corrupt);
++        assert_eq!(std::fs::read(&mismatch_path).unwrap(), mismatch);
++        assert_eq!(std::fs::read(&orphan_path).unwrap(), orphan_bytes);
++        println!(
++            "NATIVE_WS reserved_ids=pass new_room={} corrupt_and_orphan_bytes=preserved",
++            new.room
++        );
++        restarted.stop().await;
++    });
++}
++
++#[test]
++fn native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe() {
++    for failure in ["unreadable-directory", "exhausted-id"] {
++        let directory = tempfile::tempdir().unwrap();
++        let cfg = local_config(directory.path());
++        let rooms = Path::new(&cfg.native_room_store);
++        if failure == "unreadable-directory" {
++            std::fs::write(rooms, b"fault: not a directory").unwrap();
++        } else {
++            std::fs::create_dir_all(rooms).unwrap();
++            std::fs::write(rooms.join(format!("{}.json", u64::MAX)), b"{invalid").unwrap();
++        }
++        runtime().block_on(async {
++            let lobby = bootstrap(&cfg);
++            let restore = lobby.restore_native_rooms();
++            if failure == "unreadable-directory" {
++                assert!(restore.is_err());
++            } else {
++                assert_eq!(restore.unwrap(), 0);
++            }
++            let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
++            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
++            let url = format!("ws://{}/ws", listener.local_addr().unwrap());
++            let task = tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
++            let server = Server { url, lobby, task };
++            let mut peer = Peer::connect(&server).await;
++            peer.send(ClientMessage::CreateRoom {
++                players: 2,
++                seed: SEED,
++                password: PASSWORD.into(),
++            })
++            .await;
++            peer.error(ErrorCode::Internal).await;
++            assert_eq!(server.lobby.stats().active_rooms, 0);
++            println!("NATIVE_WS recovery_inventory={failure} new_room=refused");
++            server.stop().await;
++        });
++    }
++}
+--- /dev/null
++++ after/apps/game-server/src/room_native_actor/durability.rs
+@@ -0,0 +1,79 @@
++//! 持久化成功才发布候选状态；rename 后同步失败先恢复最后确认状态再允许写入。
++
++use crate::native_room_store::{NativeRoomStore, StoreWriteError, StoredRoom};
++use crate::room_native::{NativeRoomCheckpoint, NativeRoomSession};
++
++pub(super) struct RoomDurability {
++    id: u64,
++    password_hash: String,
++    store: Option<NativeRoomStore>,
++    last_sig: Option<String>,
++    uncertain: bool,
++}
++
++impl RoomDurability {
++    pub(super) fn new(id: u64, password_hash: String, store: Option<NativeRoomStore>) -> Self {
++        Self {
++            id,
++            password_hash,
++            store,
++            last_sig: None,
++            uncertain: false,
++        }
++    }
++
++    pub(super) fn checkpoint(
++        &mut self,
++        session: &NativeRoomSession,
++    ) -> Result<Option<NativeRoomCheckpoint>, String> {
++        if self.uncertain {
++            // 已替换的候选可能留在磁盘；成功重写 confirmed 状态前禁止继续变更。
++            self.last_sig = None;
++            self.save(session)
++                .map_err(|e| format!("native room persistence failed: {e}"))?;
++            self.uncertain = false;
++        }
++        Ok(self.store.as_ref().map(|_| session.checkpoint()))
++    }
++
++    pub(super) fn commit(
++        &mut self,
++        session: &mut NativeRoomSession,
++        before: Option<NativeRoomCheckpoint>,
++    ) -> Result<(), String> {
++        if let Err(error) = self.save(session) {
++            if let Some(before) = before {
++                session.rollback(before);
++            }
++            self.uncertain |= error.replacement_visible;
++            tracing::warn!(room = self.id, error = %error, "原生房间状态未确认持久化");
++            return Err(format!("native room persistence failed: {error}"));
++        }
++        Ok(())
++    }
++
++    fn save(&mut self, session: &NativeRoomSession) -> Result<(), StoreWriteError> {
++        let Some(store) = &self.store else {
++            return Ok(());
++        };
++        let state = session.export_state(&session.snapshot_hex());
++        let sig = crate::native_room_store::state_checksum(&state);
++        if self.last_sig.as_ref() == Some(&sig) {
++            return Ok(());
++        }
++        store.save_durable(&StoredRoom {
++            room_id: self.id,
++            password_hash: self.password_hash.clone(),
++            state,
++            checksum: String::new(),
++        })?;
++        self.last_sig = Some(sig);
++        if session.engine().outcome().is_some() {
++            // 终局先落盘，删除失败时启动扫描仍识别为已结束，不能复活旧快照。
++            if let Err(error) = store.remove(self.id) {
++                tracing::warn!(room = self.id, error = %error, "原生房间终局清理失败（已保存终局）");
++            }
++        }
++        Ok(())
++    }
++}
+--- /dev/null
++++ after/apps/game-server/tests/nc09_native_durability.rs
+@@ -0,0 +1,464 @@
++//! Native actor storage failures must not acknowledge or publish an uncommitted action.
++#[path = "../src/native.rs"]
++mod native;
++#[path = "../src/native_room_store.rs"]
++mod native_room_store;
++#[path = "../src/native_view.rs"]
++mod native_view;
++#[path = "../src/persist.rs"]
++mod persist;
++#[path = "../src/room.rs"]
++mod room;
++#[path = "../src/room_native.rs"]
++mod room_native;
++#[path = "../src/room_native_actor.rs"]
++mod room_native_actor;
++#[path = "../src/session.rs"]
++mod session;
++
++use engine_api::{Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId};
++use engine_protocol::{MessageHeader, ServerMessage};
++use native_room_store::NativeRoomStore;
++use room::RoomMsg;
++use room_native::NativeRoomSession;
++
++async fn join(
++    handle: &room::RoomHandle,
++    conn: u64,
++    token: Option<String>,
++) -> Result<room::JoinReply, String> {
++    let (tx, _rx) = tokio::sync::mpsc::channel(128);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(RoomMsg::Join {
++            connection_id: conn,
++            display_name: format!("p{conn}"),
++            preferred_seat: None,
++            reconnect_token: token,
++            password: String::new(),
++            outbound: session::Outbound::new(tx),
++            reply,
++        })
++        .await?;
++    response.await.unwrap()
++}
++
++async fn end_phase(
++    handle: &room::RoomHandle,
++    conn: u64,
++    key: u64,
++) -> Result<ServerMessage, String> {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(RoomMsg::Submit {
++            connection_id: conn,
++            header: MessageHeader::new(handle.id, key, 0),
++            command: Command {
++                actor: PlayerId::new(1),
++                expected_revision: ExpectedRevision(0),
++                idempotency_key: IdempotencyKey(key),
++                kind: CommandKind::EndPhase {},
++            },
++            idempotency_key: IdempotencyKey(key),
++            reply,
++        })
++        .await?;
++    response.await.unwrap()
++}
++
++async fn snapshot(handle: &room::RoomHandle, conn: u64) -> engine_api::ObserverSnapshot {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(RoomMsg::Snapshot {
++            connection_id: conn,
++            header: MessageHeader::new(handle.id, 0, 0),
++            reply,
++        })
++        .await
++        .unwrap();
++    match response.await.unwrap().unwrap() {
++        ServerMessage::Snapshot { view, .. } => view,
++        other => panic!("{other:?}"),
++    }
++}
++
++#[tokio::test]
++async fn nc09_write_failure_does_not_ack_or_advance_and_same_key_can_retry() {
++    let dir = tempfile::tempdir().unwrap();
++    let root = dir.path().join("rooms");
++    let store = NativeRoomStore::new(&root);
++    let session = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
++    let handle = room_native_actor::spawn_room_native_persisted(
++        10,
++        session,
++        16,
++        5,
++        String::new(),
++        Some(store.clone()),
++    );
++    let joined = join(&handle, 1, None).await.unwrap();
++    let bytes = std::fs::read(root.join("10.json")).unwrap();
++    let original = dir.path().join("rooms-original");
++    std::fs::rename(&root, &original).unwrap();
++    std::fs::write(&root, b"injected parent write failure").unwrap();
++    let failed = end_phase(&handle, 1, 81).await;
++    assert!(
++        failed.is_err(),
++        "storage failure must not acknowledge Accepted: {failed:?}"
++    );
++    assert_eq!(
++        snapshot(&handle, 1).await,
++        joined.view,
++        "failed write changed confirmed memory"
++    );
++    std::fs::remove_file(&root).unwrap();
++    std::fs::rename(&original, &root).unwrap();
++    assert_eq!(std::fs::read(root.join("10.json")).unwrap(), bytes);
++    let accepted = end_phase(&handle, 1, 81).await.unwrap();
++    assert!(matches!(
++        accepted,
++        ServerMessage::CommandOutcome {
++            result: CommandResult::Accepted {
++                new_revision: 1,
++                ..
++            },
++            ..
++        }
++    ));
++    assert_eq!(snapshot(&handle, 1).await.revision, 1);
++    let saved = store.load_all().unwrap().pop().unwrap();
++    assert_eq!(
++        saved.state.next_dedup, 2,
++        "failed action must not consume durable dedup"
++    );
++}
++
++#[tokio::test]
++async fn nc09_all_write_stages_rollback_and_uncertain_commit_blocks_until_reconciled() {
++    use native_room_store::StoreFault;
++    for fault in [
++        StoreFault::PartialWrite,
++        StoreFault::FileSync,
++        StoreFault::Rename,
++        StoreFault::DirectorySync,
++    ] {
++        let dir = tempfile::tempdir().unwrap();
++        let store = NativeRoomStore::new(dir.path());
++        let handle = room_native_actor::spawn_room_native_persisted(
++            20,
++            NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
++            16,
++            5,
++            String::new(),
++            Some(store.clone()),
++        );
++        let joined = join(&handle, 1, None).await.unwrap();
++        let before = std::fs::read(dir.path().join("20.json")).unwrap();
++        store.fail_next_write(fault);
++        let error = end_phase(&handle, 1, 91).await.unwrap_err();
++        assert!(
++            error.starts_with("native room persistence failed:"),
++            "{fault:?}: {error}"
++        );
++        assert_eq!(snapshot(&handle, 1).await, joined.view, "{fault:?}");
++        if fault == StoreFault::DirectorySync {
++            assert_ne!(
++                std::fs::read(dir.path().join("20.json")).unwrap(),
++                before,
++                "rename already replaced the candidate, so disk rollback cannot be claimed"
++            );
++            // Reconciliation itself fails: no later mutation may bypass the uncertainty guard.
++            store.fail_next_write(StoreFault::Rename);
++            assert!(end_phase(&handle, 1, 91).await.is_err());
++            assert_eq!(snapshot(&handle, 1).await, joined.view);
++        } else {
++            assert_eq!(
++                std::fs::read(dir.path().join("20.json")).unwrap(),
++                before,
++                "{fault:?} damaged committed record"
++            );
++        }
++        let accepted = end_phase(&handle, 1, 91).await.unwrap();
++        let hash = match accepted {
++            ServerMessage::CommandOutcome {
++                result:
++                    CommandResult::Accepted {
++                        new_revision: 1,
++                        state_hash,
++                    },
++                ..
++            } => state_hash,
++            other => panic!("{fault:?}: {other:?}"),
++        };
++        let mut reference = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
++        reference.join(1, Some(0), None).unwrap();
++        let expected = reference.submit(1, &CommandKind::EndPhase {}, 0).unwrap();
++        assert_eq!(
++            expected,
++            CommandResult::Accepted {
++                new_revision: 1,
++                state_hash: hash
++            },
++            "failed attempt consumed RNG/engine state"
++        );
++        let saved = store.load_all().unwrap().pop().unwrap();
++        assert_eq!(saved.state.next_dedup, 2);
++        assert_eq!(saved.state.next_token, 2);
++        assert_eq!(snapshot(&handle, 1).await.state_hash, hash);
++        assert!(
++            matches!(
++                end_phase(&handle, 1, 91).await.unwrap(),
++                ServerMessage::CommandOutcome {
++                    result: CommandResult::Accepted {
++                        new_revision: 1,
++                        ..
++                    },
++                    ..
++                }
++            ),
++            "successful retry was applied twice"
++        );
++        println!("NATIVE_ACTOR fault={fault:?} rollback=confirmed retry=once");
++    }
++}
++
++async fn spectate(handle: &room::RoomHandle, conn: u64) -> Result<room::JoinReply, String> {
++    let (tx, _rx) = tokio::sync::mpsc::channel(128);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(RoomMsg::Spectate {
++            connection_id: conn,
++            display_name: "spectator".into(),
++            outbound: session::Outbound::new(tx),
++            reply,
++        })
++        .await?;
++    response.await.unwrap()
++}
++
++#[tokio::test]
++async fn nc09_membership_failures_preserve_seats_tokens_and_reconnect_authority() {
++    use native_room_store::StoreFault;
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    let handle = room_native_actor::spawn_room_native_persisted(
++        30,
++        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
++        16,
++        5,
++        String::new(),
++        Some(store.clone()),
++    );
++    let owner = join(&handle, 1, None).await.unwrap();
++    let before = std::fs::read(dir.path().join("30.json")).unwrap();
++    store.fail_next_write(StoreFault::Rename);
++    assert!(join(&handle, 2, None).await.is_err());
++    assert_eq!(std::fs::read(dir.path().join("30.json")).unwrap(), before);
++    let peer = join(&handle, 2, None).await.unwrap();
++    assert_eq!(peer.seat, 1);
++    let record = store.load_all().unwrap().pop().unwrap();
++    assert_eq!(record.state.members.len(), 2);
++    assert_eq!(
++        record.state.next_token, 3,
++        "failed join consumed a token/seat"
++    );
++    store.fail_next_write(StoreFault::PartialWrite);
++    assert!(join(&handle, 11, Some(owner.reconnect_token.clone()))
++        .await
++        .is_err());
++    assert_eq!(
++        snapshot(&handle, 1).await,
++        owner.view,
++        "failed reconnect revoked the confirmed connection"
++    );
++    let rebound = join(&handle, 11, Some(owner.reconnect_token.clone()))
++        .await
++        .unwrap();
++    assert_eq!(rebound.reconnect_token, owner.reconnect_token);
++    assert_eq!(rebound.seat, owner.seat);
++    let record = store.load_all().unwrap().pop().unwrap();
++    assert!(record.state.members.iter().any(|m| m.connection_id == 11));
++    assert!(!record.state.members.iter().any(|m| m.connection_id == 1));
++    store.fail_next_write(StoreFault::FileSync);
++    assert!(spectate(&handle, 3).await.is_err());
++    assert_eq!(
++        store.load_all().unwrap().pop().unwrap().state.members.len(),
++        2
++    );
++    assert_eq!(
++        spectate(&handle, 3).await.unwrap().role,
++        engine_protocol::ClientRole::Spectator
++    );
++    assert_eq!(
++        store.load_all().unwrap().pop().unwrap().state.members.len(),
++        3
++    );
++}
++
++async fn choose_general(handle: &room::RoomHandle, name: &str) -> Result<String, String> {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(RoomMsg::ChooseGeneral {
++            connection_id: 1,
++            name: name.into(),
++            reply,
++        })
++        .await?;
++    response.await.unwrap()
++}
++
++#[tokio::test]
++async fn nc09_general_failure_does_not_publish_or_replace_recovery_point() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    let engine = engine_native::Engine::new(4242, 2);
++    let name = engine
++        .general_candidates()
++        .into_iter()
++        .filter(|def| *def != 0)
++        .find_map(|def| engine.catalog().general_meta(def).map(|m| m.0.to_owned()))
++        .unwrap();
++    let handle = room_native_actor::spawn_room_native_persisted(
++        40,
++        NativeRoomSession::new(engine, 2),
++        16,
++        5,
++        String::new(),
++        Some(store.clone()),
++    );
++    let owner = join(&handle, 1, None).await.unwrap();
++    let before = std::fs::read(dir.path().join("40.json")).unwrap();
++    store.fail_next_write(native_room_store::StoreFault::Rename);
++    assert!(choose_general(&handle, &name).await.is_err());
++    assert_eq!(snapshot(&handle, 1).await, owner.view);
++    assert_eq!(std::fs::read(dir.path().join("40.json")).unwrap(), before);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(RoomMsg::Recover { reply }).await.unwrap();
++    response.await.unwrap().unwrap();
++    assert_eq!(
++        snapshot(&handle, 1).await,
++        owner.view,
++        "failed selection poisoned the in-memory recovery point"
++    );
++    choose_general(&handle, &name).await.unwrap();
++    let selected = snapshot(&handle, 1).await;
++    assert_eq!(selected.revision, owner.view.revision);
++    assert_ne!(selected.state_hash, owner.view.state_hash);
++    let record = store.load_all().unwrap().pop().unwrap();
++    let restored = NativeRoomSession::from_saved(&record.state, Vec::new()).unwrap();
++    assert_eq!(restored.engine().state_hash(), selected.state_hash);
++}
++
++#[tokio::test]
++async fn nc09_configured_creation_rejects_failed_initial_save() {
++    let dir = tempfile::tempdir().unwrap();
++    let content =
++        native::NativeContent::open(dir.path().join("sources"), dir.path().join("packages"))
++            .unwrap();
++    let store = NativeRoomStore::new(dir.path().join("rooms"));
++    store.fail_next_write(native_room_store::StoreFault::FileSync);
++    let created = room_native_actor::spawn_native_room_if_configured(
++        50,
++        2,
++        4242,
++        String::new(),
++        16,
++        5,
++        &content,
++        true,
++        "test",
++        &[],
++        Some(store.clone()),
++    );
++    assert!(
++        matches!(created,Err(error) if error.starts_with("native room persistence failed:")),
++        "initial persistence failure must not publish a room handle"
++    );
++    assert!(store.load_all().unwrap().is_empty());
++}
++
++async fn recover(handle: &room::RoomHandle) -> Result<(), String> {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(RoomMsg::Recover { reply }).await?;
++    response.await.unwrap()
++}
++
++#[tokio::test]
++async fn nc09_failed_recover_keeps_confirmed_dedup_and_successful_recover_can_continue() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    let handle = room_native_actor::spawn_room_native_persisted(
++        60,
++        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
++        16,
++        0,
++        String::new(),
++        Some(store.clone()),
++    );
++    join(&handle, 1, None).await.unwrap();
++    end_phase(&handle, 1, 11).await.unwrap();
++    let before = snapshot(&handle, 1).await;
++    let saved = std::fs::read(dir.path().join("60.json")).unwrap();
++    store.fail_next_write(native_room_store::StoreFault::Rename);
++    assert!(recover(&handle).await.is_err());
++    assert_eq!(snapshot(&handle, 1).await, before);
++    assert_eq!(std::fs::read(dir.path().join("60.json")).unwrap(), saved);
++    recover(&handle).await.unwrap();
++    assert_eq!(snapshot(&handle, 1).await, before);
++    assert!(
++        matches!(
++            end_phase(&handle, 1, 12).await.unwrap(),
++            ServerMessage::CommandOutcome {
++                result: CommandResult::Accepted {
++                    new_revision: 2,
++                    ..
++                },
++                ..
++            }
++        ),
++        "replayed internal dedup must not collide with the next live command"
++    );
++}
++
++#[tokio::test]
++async fn nc09_failed_lazy_reclaim_keeps_original_seat_and_token() {
++    room_native_actor::set_seat_timeout_secs(1);
++    let dir = tempfile::tempdir().unwrap();
++    let store = NativeRoomStore::new(dir.path());
++    let handle = room_native_actor::spawn_room_native_persisted(
++        70,
++        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
++        16,
++        0,
++        String::new(),
++        Some(store.clone()),
++    );
++    let owner = join(&handle, 1, None).await.unwrap();
++    join(&handle, 2, None).await.unwrap();
++    handle
++        .send(RoomMsg::Disconnect { connection_id: 1 })
++        .await
++        .unwrap();
++    tokio::time::sleep(std::time::Duration::from_millis(1100)).await;
++    let before = std::fs::read(dir.path().join("70.json")).unwrap();
++    store.fail_next_write(native_room_store::StoreFault::Rename);
++    assert!(join(&handle, 3, None).await.is_err());
++    assert_eq!(std::fs::read(dir.path().join("70.json")).unwrap(), before);
++    let rebound = join(&handle, 11, Some(owner.reconnect_token.clone()))
++        .await
++        .unwrap();
++    assert_eq!(rebound.seat, owner.seat);
++    assert_eq!(rebound.reconnect_token, owner.reconnect_token);
++    handle
++        .send(RoomMsg::Disconnect { connection_id: 11 })
++        .await
++        .unwrap();
++    tokio::time::sleep(std::time::Duration::from_millis(1100)).await;
++    let replacement = join(&handle, 3, None).await.unwrap();
++    assert_eq!(replacement.seat, owner.seat);
++    assert_ne!(replacement.reconnect_token, owner.reconnect_token);
++    assert!(join(&handle, 12, Some(owner.reconnect_token))
++        .await
++        .is_err());
++    room_native_actor::set_seat_timeout_secs(600);
++}

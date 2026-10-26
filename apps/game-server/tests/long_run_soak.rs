@@ -90,6 +90,7 @@ async fn submit_end_phase(
                 kind: CommandKind::EndPhase,
             },
             idempotency_key: IdempotencyKey(seq),
+            replay: false,
             reply: rs,
         })
         .await

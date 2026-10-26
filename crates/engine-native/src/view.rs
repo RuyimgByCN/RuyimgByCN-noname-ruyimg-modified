@@ -10,6 +10,7 @@ use crate::ids::{CardId, PlayerId};
 use crate::state::Role;
 use crate::GameAction;
 use crate::state::{Winner};
+use crate::machine::LogEvent;
 
 /// 手牌可见性：仅本人可见具体牌，他人只见数量。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -199,5 +200,23 @@ impl<'a> AiSession<'a> {
     /// 本轮剩余配额（未设置配额返回 None）。
     pub fn quota_remaining(&self) -> Option<u32> {
         self.engine.seat_quota_remaining(self.seat)
+    }
+}
+
+/// 公开事件粗粒度码（与旧线 `public_codes` / 前端 `PublicEvent` 标签一致）。
+///
+/// 只按**事件种类**投影，不携带牌 id、选项内容或暗牌信息；因此可以直接
+/// 提供给所有观察者。未知/内部事件返回 `None`，不伪造“对局开始/结束”。
+pub fn public_event_code(event: &LogEvent) -> Option<u16> {
+    match event {
+        LogEvent::CardsDrawn { .. } => Some(2),
+        LogEvent::CardPlayed { .. } | LogEvent::CardResponded { .. } => Some(3),
+        LogEvent::DamageDealt { .. } | LogEvent::DamagePrevented { .. } => Some(4),
+        LogEvent::HpRecovered { .. } => Some(5),
+        LogEvent::DyingEntered { .. } | LogEvent::DyingSaved { .. } => Some(6),
+        LogEvent::PlayerDied { .. } => Some(7),
+        LogEvent::PhaseChanged { .. } | LogEvent::TurnEnded { .. } => Some(8),
+        LogEvent::ChoiceOpened { .. } | LogEvent::ChoiceAnswered { .. } => Some(10),
+        _ => None,
     }
 }

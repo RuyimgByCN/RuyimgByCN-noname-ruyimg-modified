@@ -1,0 +1,331 @@
+START 2026-10-24T14:28:34.758281+08:00
+
+===== CHECK 1: 本地链接（核心） =====
+START 2026-10-24T14:28:34.760940+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py']
+STDOUT BEGIN
+检查 7 个文件，坏链 0
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:34.837648+08:00
+EXIT 0
+
+===== CHECK 2: 本地链接（全部） =====
+START 2026-10-24T14:28:34.837930+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py', '--all']
+STDOUT BEGIN
+坏链: docs/operations/evidence/2026-10-24-native-ws-delivery/README.md -> final-doc-gates.log
+检查 1764 个文件，坏链 1
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.306763+08:00
+EXIT 1
+
+===== CHECK 3: 旧值扫描 =====
+START 2026-10-24T14:28:35.306955+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_stale_numbers.py']
+STDOUT BEGIN
+残留旧值 0 处
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.355149+08:00
+EXIT 0
+
+===== CHECK 4: 近 20 轮索引新鲜 =====
+START 2026-10-24T14:28:35.355383+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/refresh_recent_rounds.py', '--check']
+STDOUT BEGIN
+索引是最新（20 轮）
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.376978+08:00
+EXIT 0
+
+===== CHECK 5: 包→来源映射 =====
+START 2026-10-24T14:28:35.377190+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/map_package_sources.py', '--check']
+STDOUT BEGIN
+包 41；映射到来源 32；未映射 0
+无包来源 5: ['L08', 'L11', 'L12', 'L14', 'L25']
+映射符合预期
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.404002+08:00
+EXIT 0
+
+===== CHECK 6: 规则登记表 =====
+START 2026-10-24T14:28:35.404221+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_phase_filters.py', '--check']
+STDOUT BEGIN
+registry 一致（44 条）
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.428006+08:00
+EXIT 0
+
+===== CHECK 7: 过滤臂↔元数据一致 =====
+START 2026-10-24T14:28:35.428228+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_filter_meta_mismatch.py', '--strict']
+STDOUT BEGIN
+元数据声明 272 项，过滤臂 381 项，矛盾 0 项
+✅ 矛盾均在登记表内（0 项）
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.451366+08:00
+EXIT 0
+
+===== CHECK 8: 牌名 vs 牌种比较 =====
+START 2026-10-24T14:28:35.451540+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_card_kind_compare.py']
+STDOUT BEGIN
+扫描 2 个目录，命中 1 处 card_kind 相等比较
+  OK XianjianLiguang:200  ctx.catalog.card_kind(*o) != ctx.catalog.card_kind(*c)
+
+✅ 所有 card_kind 相等比较均已登记
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.479016+08:00
+EXIT 0
+
+===== CHECK 9: 台账账目（移出必留痕） =====
+START 2026-10-24T14:28:35.479268+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_ledger_accounting.py']
+STDOUT BEGIN
+HEAD: 1 个行为 → 当前 1（移出 0、新增 0）
+✅ 移出的每一行都能在注册表里找到
+
+STDOUT END
+STDERR BEGIN
+
+STDERR END
+END 2026-10-24T14:28:35.525286+08:00
+EXIT 0
+
+===== CHECK 10: 相位枚举（REVIEW=0） =====
+START 2026-10-24T14:28:35.525483+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_phase_arms.py', '--check']
+STDOUT BEGIN
+behavior	phase	begin	位置	skill	上游trigger	判定
+GujianFoodZiyangdan	End	true	common.rs:631		player: "phaseBegin"	G14(钉死阶段)
+XianjianFenglue	Play	true	xianjian.rs:142		player:'phaseUseBefore'	G15(之前档)
+GujianFoodMapodoufu	End	true	common.rs:616		player: "phaseJieshuBegin"	OK
+GujianFoodXiajiao	Draw	true	common.rs:609		player: "phaseDrawBegin"	OK
+GujianFoodYougeng	Judge	true	common.rs:628		player: "phaseBegin"	OK
+GwentBirinState	Play	false	common.rs:636		player: "phaseUseAfter"	OK
+GwentCiguState	Draw	true	common.rs:640		player: "phaseDrawBegin"	OK
+GwentQinpenState	Discard	false	common.rs:649		player: "phaseDiscardAfter"	OK
+HlssFengqi	Judge	true	common.rs:44		player:['phaseZhunbeiBegin']	OK
+HuanleXuelunyangCard	Judge	true	common.rs:661		player: "phaseBegin"	OK
+MbcmQingzheng	Play	true	common.rs:413	mbcmqingzheng	player: "phaseUseBegin",	OK
+Miedao	Discard	true	common.rs:232	miedao	player:'phaseDrawBegin' | player:'phaseDiscardBegin'	OK
+SwdBaishouzhihuHeld	Discard	false	swd.rs:413		player:'discardEnd'	OK
+SwdDaixing	End	false	swd.rs:30		player:'phaseEnd'	OK
+SwdDaixing2	Judge	true	swd.rs:36		player:'phaseBegin'	OK
+SwdHuajin2	Judge	true	swd.rs:818	swd_huajin2	source:'damageBegin'	OK
+SwdHuanglinzhicongHeld	Judge	true	swd.rs:462		player: "phaseBegin"	OK
+SwdHuanxing	Judge	true	swd.rs:698		player:'phaseBegin'	OK
+SwdHujing	Judge	true	swd.rs:992		player:'phaseBegin'	OK
+SwdHyunshen2	Judge	true	swd.rs:26		player:'phaseBegin'	OK
+SwdLexue	Judge	true	swd.rs:668		player: "phaseBegin"	OK
+SwdQinglongzhiguiHeld	Judge	true	swd.rs:390		player: "phaseBegin"	OK
+SwdReyingzi	Draw	true	swd.rs:654		player:'phaseDrawBegin2'	OK
+SwdZhenjiu2	Judge	true	swd.rs:672	swd_zhenjiu2	player: "phaseBegin"	OK
+WudianGeju	Judge	true	common.rs:693	geju	player:'phaseBegin'	OK
+WudianOwliyong	Draw	true	common.rs:724		player:'phaseDrawBegin'	OK
+WudianXiyang	End	false	common.rs:764		player:'phaseEnd'	OK
+WudianYuedong	Play	false	common.rs:769		player:'phaseUseEnd'	OK
+XianjianChangnian2	End	false	xianjian.rs:117		player:'phaseEnd'	OK
+XianjianHusha	End	false	xianjian.rs:152		player:'phaseEnd'	OK
+XianjianLiguang	End	false	xianjian.rs:182		player:'phaseEnd'	OK
+XianjianLingquan	End	false	xianjian.rs:214		player:'phaseEnd'	OK
+XianjianLonghuo	End	false	xianjian.rs:223		player:'phaseEnd'	OK
+XianjianQianfang	Judge	true	xianjian.rs:236		player:'phaseBegin'	OK
+XianjianShuiyun	End	false	xianjian.rs:367		player:'phaseEnd'	OK
+XianjianXjzhimeng	End	false	xianjian.rs:317		player: "phaseEnd"	OK
+XianjianZhaoyao	Draw	true	xianjian.rs:380		global:'phaseDrawBegin'	OK
+Xiuluo	Judge	true	common.rs:224	swd_xiuluo	player: "phaseZhunbeiBegin"	OK
+YunchouDiyguhuo	Judge	true	common.rs:476		player: "phaseBegin"	OK
+YunchouXiongzi	Draw	true	common.rs:518		player:'phaseDrawBegin'	OK
+Zaibian	Play	true	common.rs:190	zaibian	player:'phaseUseBegin'	OK
+BossBaiyi	Judge	true	common.rs:862		(enable 主动技)	凭空新增触发
+SwdWangchenHeld	End	true	swd.rs:444		player: "phaseDiscardEnd"	相邻相位(可接受)
+SwdXielv	End	true	swd.rs:346		player: "phaseDiscardEnd"	相邻相位(可接受)
+GujianFoodTanhuadong	Play	false	common.rs:625		player: "phaseEnd"	语义选择
+
+STDOUT END
+STDERR BEGIN
+
+共 45 个相位钉死臂
+  OK: 39
+  相邻相位(可接受): 2
+  语义选择: 1
+  G14(钉死阶段): 1
+  凭空新增触发: 1
+  G15(之前档): 1
+
+无 REVIEW 行
+
+STDERR END
+END 2026-10-24T14:28:45.815558+08:00
+EXIT 0
+
+===== CHECK 11: 来源覆盖三分 =====
+START 2026-10-24T14:28:45.815795+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_source_coverage.py', '--check']
+STDOUT BEGIN
+source	packages	entries	upstream_path	class
+L03	boss-play-upstream-liuli,boss-zhugeliang-upstream-liuli	2	noname/extension/boss/extension.js	converted
+L06	wuxing-upstream-liuli	3	noname/extension/wuxing/extension.js	converted
+L10	epic-cards-upstream-liuli	2	noname/extension/史诗卡牌/extension.js	converted
+L19	doomsday-brawl-upstream-liuli	6	noname/extension/末日乱斗/extension.js	converted
+L20	mark-supplement-upstream-liuli	6	noname/extension/标记补充/extension.js	converted
+L27	select-beautify-upstream-liuli	14	noname/extension/选将美化/extension.js	converted
+L29	longxue-upstream-liuli	5	noname/extension/龙血玄黄/extension.js	converted
+U01	d3-upstream-noname	1	apps/core/extension/3D精选/	converted
+U05	shaai-ow-upstream-noname,shaai-xianjian-upstream-noname,shahai-gujian-upstream-noname,shahai-gwent-upstream-noname,shahai-hearth-upstream-noname,shahai-mtg-upstream-noname,shahai-swd-upstream-noname,shahai-yunchou-upstream-noname,shahai-zhenfa-upstream-noname	407	extension/杀海拾遗/character/ow/	converted
+U06	huanle-upstream-noname	9	apps/core/extension/欢乐卡牌/	converted
+U07	wudian-upstream-noname	36	apps/core/extension/玩点论杀/	converted
+U08	hero-kill-upstream-noname	10	apps/core/extension/英雄杀/character/skill.js	converted
+L01	ai-tuning-upstream-liuli	0	noname/extension/AI优化/extension.js	installed-empty
+L02	sj-settings-upstream-liuli	0	noname/extension/SJ Settings/extension.js	installed-empty
+L04	cardpile-upstream-liuli	0	noname/extension/cardpile/extension.js	installed-empty
+L05	coin-upstream-liuli	0	noname/extension/coin/extension.js	installed-empty
+L07	omnisearch-upstream-liuli	0		installed-empty
+L09	qhly-upstream-liuli	0	noname/extension/千幻聆音/extension.js	installed-empty
+L13	shousha-mvp-upstream-liuli	0	noname/extension/手杀MVP/extension.js	installed-empty
+L15	shousha-full-upstream-liuli	0	noname/extension/手杀全扩/extension.js	installed-empty
+L16	drag-read-upstream-liuli	0	noname/extension/拖拽读取/extension.js	installed-empty
+L17	douzhuan-xingyi-upstream-liuli	0	noname/extension/斗转星移/extension.js	installed-empty
+L18	update-guard-upstream-liuli	0	noname/extension/更新保护/extension.js	installed-empty
+L21	martial-upstream-liuli	0	noname/extension/武皇争霸/extension.js	installed-empty
+L22	elo-sanction-upstream-liuli	0	noname/extension/段位制裁/extension.js	installed-empty
+L23	desktop-adapt-upstream-liuli	0		installed-empty
+L24	skin-switch-upstream-liuli	0	noname/extension/皮肤切换/extension.js	installed-empty
+L26	fool-plugin-upstream-liuli	0	noname/extension/笨蛋插件/extension.js	installed-empty
+L28	thunder-upstream-liuli	0	noname/extension/雷霆万钧/extension.js	installed-empty
+U02	boss-play-upstream-noname	0	apps/core/extension/boss/extension.js	installed-empty
+U03	cardpile-upstream-noname	0	apps/core/extension/cardpile/extension.js	installed-empty
+U04	coin-upstream-noname	0		installed-empty
+L08		0		no-package
+L11		0		no-package
+L12		0		no-package
+L14		0		no-package
+L25		0		no-package
+
+STDOUT END
+STDERR BEGIN
+合计 37 个来源：{'converted': 12, 'installed-empty': 20, 'no-package': 5}
+
+STDERR END
+END 2026-10-24T14:28:45.897009+08:00
+EXIT 0
+
+===== CHECK 12: host 键普查（U05=314） =====
+START 2026-10-24T14:28:45.897207+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_host_keys.py', '--check']
+STDOUT BEGIN
+shahai-swd-upstream-noname          187
+shaai-xianjian-upstream-noname       75
+shaai-ow-upstream-noname             36
+shahai-yunchou-upstream-noname       16
+shahai-gujian-upstream-noname         0
+shahai-hearth-upstream-noname         0
+shahai-gwent-upstream-noname          0
+shahai-mtg-upstream-noname            0
+shahai-zhenfa-upstream-noname         0
+U05 合计（9 包）                       314
+
+其余含 host 键的包：
+  wudian-upstream-noname             19
+  boss-zhugeliang-upstream-liuli      6
+  mark-supplement-upstream-liuli      6
+  select-beautify-upstream-liuli      6
+  hero-kill-upstream-noname           5
+  doomsday-brawl-upstream-liuli       3
+  longxue-upstream-liuli              3
+  d3-upstream-noname                  2
+  epic-cards-upstream-liuli           2
+  huanle-upstream-noname              2
+  wuxing-upstream-liuli               2
+
+STDOUT END
+STDERR BEGIN
+
+全部包合计唯一键数（按包求和）: 370
+
+STDERR END
+END 2026-10-24T14:28:45.929199+08:00
+EXIT 0
+
+===== CHECK 13: 卡面覆盖（201/128） =====
+START 2026-10-24T14:28:45.929406+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/report_card_coverage.py', '--check']
+STDOUT BEGIN
+子包                          卡数
+shahai-swd-upstream-noname    90
+shahai-gujian-upstream-noname    40
+shahai-yunchou-upstream-noname    23
+shahai-hearth-upstream-noname    17
+shahai-gwent-upstream-noname    21
+shahai-mtg-upstream-noname    10
+合计                         201
+
+唯一 kind             128
+catalog 已登记         128  (100.0%)
+catalog 之外有源码引用   128  (100.0%)
+完全无引用               0
+
+STDOUT END
+STDERR BEGIN
+
+⚠ 「有引用」≠「行为正确」；效果正确性需逐张读效果步（本脚本不判断）。
+
+STDERR END
+END 2026-10-24T14:28:46.317777+08:00
+EXIT 0
+
+===== CHECK 14: 台账↔枚举一致 =====
+START 2026-10-24T14:28:46.317951+08:00
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_ledger_consistency.py', '--strict']
+Traceback (most recent call last):
+  File "<stdin>", line 33, in <module>
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py", line 64, in main
+    name, code, tail = run(name, argv)
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py", line 49, in run
+    proc = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
+  File "<stdin>", line 21, in recorded_run
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 505, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 1154, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 2005, in _communicate
+    ready = selector.select(timeout)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/selectors.py", line 416, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt
+
+ABORTED / INCOMPLETE: stopped by root at check14; 12 passed, 1 known link failure, 1 interrupted, 6 not executed, 0 policy skips. No complete preflight pass claimed.

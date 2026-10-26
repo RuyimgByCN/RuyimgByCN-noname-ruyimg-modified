@@ -1,0 +1,17 @@
+[
+  {
+    "path": "crates/engine-native/tests/nc10_ai_information_boundary.rs",
+    "bytes": 8984,
+    "sha256": "157796b1f01eb1b4b6de82f2c7fc5561d3891443af7ceb628bea266557628699"
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_ai_bounds.rs",
+    "bytes": 11254,
+    "sha256": "44dd86685290fb34c6dace98c8b1df1d75c826fde16cb89d399da88ad80eab55"
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_ai_boundary_and_cancel.rs",
+    "bytes": 9623,
+    "sha256": "f6a6ca09123ccd8d7e4e773af340e539cb5718f111adab5218c7e42479d36af1"
+  }
+]

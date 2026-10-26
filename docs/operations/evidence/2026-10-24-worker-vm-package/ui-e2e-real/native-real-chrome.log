@@ -1,0 +1,114 @@
+[1025/105913.771887:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+[1025/105913.772234:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+[60624:96019801:1025/105913.945477:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:208] open /Users/ruyimg/Library/Application Support/Google/Chrome/Crashpad/settings.dat: Operation not permitted (1)
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/3b5e7cd8-41ab-4492-b12d-f6f0dbde2d59
+Trying to load the allocator multiple times. This is *not* supported.
+[60632:96019872:1025/105914.209627:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.209987:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.210047:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.210128:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.210210:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.210347:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105914.285941:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.332978:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.357179:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.400117:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.426874:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.468220:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.500492:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.547412:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60632:96019872:1025/105916.643158:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[60750:96021130:1025/105933.096623:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake-all --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[60750:96021130:1025/105933.097231:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.0.1, arch: arm64, System uptime (seconds): 995324, parent pid: 60624
+[60750:96021130:1025/105933.099790:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/ruyimg/Library/Application Support/Google/GoogleUpdater): 80345952256B (74.828GiB) / 994631127040B (926.322GiB)
+[60750:96021130:1025/105933.099863:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/): 80345952256B (74.828GiB) / 994631127040B (926.322GiB)
+[60750:96021130:1025/105933.099947:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60752:96021134:1025/105933.110198:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --crash-handler --database=/Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/Crashpad --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=157.0.8089.0 --handshake-fd=4 --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[60752:96021134:1025/105933.111087:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.0.1, arch: arm64, System uptime (seconds): 995324, parent pid: 1
+[60752:96021134:1025/105933.113684:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/ruyimg/Library/Application Support/Google/GoogleUpdater): 80345944064B (74.828GiB) / 994631127040B (926.322GiB)
+[60752:96021134:1025/105933.113735:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/): 80345944064B (74.828GiB) / 994631127040B (926.322GiB)
+[60752:96021134:1025/105933.113811:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60750:96021130:1025/105933.114257:VERBOSE1:chrome/updater/crash_reporter.cc:123] Crash handler launched and ready.
+[60750:96021130:1025/105933.114918:VERBOSE1:chrome/updater/crash_client.cc:109] Found 0 completed crash reports
+[60750:96021130:1025/105933.114987:VERBOSE1:chrome/updater/crash_client.cc:132] Found 0 pending crash reports
+[60750:96021130:1025/105933.115134:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/RLZ/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115158:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115176:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.2.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115199:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/consentOptions/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115218:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/Chrome for Testing/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115244:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.1.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115268:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115295:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.3.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115310:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115323:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.4/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115343:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115381:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115402:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115421:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2023.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115479:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/ChromeForTesting/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115501:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2023.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115522:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115543:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/Chrome-headless/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115557:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115578:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115611:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.4/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115640:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.1/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115660:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115680:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.2/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115695:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.1.3/Crashpad/settings.dat: No such file or directory (2)
+[60750:96021130:1025/105933.115712:VERBOSE1:chrome/updater/updater.cc:107] Crash reporting initialized.
+[60750:96021142:1025/105933.116029:VERBOSE1:chrome/updater/app/app_wakeall.cc:58] Launching `/Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake`
+[60753:96021148:1025/105933.125284:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[60753:96021148:1025/105933.125994:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.0.1, arch: arm64, System uptime (seconds): 995324, parent pid: 60750
+[60753:96021148:1025/105933.128243:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/ruyimg/Library/Application Support/Google/GoogleUpdater): 80345935872B (74.828GiB) / 994631127040B (926.322GiB)
+[60753:96021148:1025/105933.128304:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/): 80345935872B (74.828GiB) / 994631127040B (926.322GiB)
+[60753:96021148:1025/105933.128389:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60755:96021152:1025/105933.137705:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --crash-handler --database=/Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/Crashpad --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=157.0.8089.0 --handshake-fd=4 --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[60755:96021152:1025/105933.138175:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.0.1, arch: arm64, System uptime (seconds): 995324, parent pid: 1
+[60755:96021152:1025/105933.140098:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/ruyimg/Library/Application Support/Google/GoogleUpdater): 80345931776B (74.828GiB) / 994631127040B (926.322GiB)
+[60755:96021152:1025/105933.140130:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/): 80345931776B (74.828GiB) / 994631127040B (926.322GiB)
+[60755:96021152:1025/105933.140182:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60753:96021148:1025/105933.140609:VERBOSE1:chrome/updater/crash_reporter.cc:123] Crash handler launched and ready.
+[60753:96021148:1025/105933.141209:VERBOSE1:chrome/updater/crash_client.cc:109] Found 0 completed crash reports
+[60753:96021148:1025/105933.141287:VERBOSE1:chrome/updater/crash_client.cc:132] Found 0 pending crash reports
+[60753:96021148:1025/105933.141472:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/RLZ/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141505:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141525:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.2.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141540:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/consentOptions/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141563:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/Chrome for Testing/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141584:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.1.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141600:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141616:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.3.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141668:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141685:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.4/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141699:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141713:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141728:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141751:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2023.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.141964:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/ChromeForTesting/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142010:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2023.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142029:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.2.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142046:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/Chrome-headless/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142074:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142091:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142106:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.4/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142119:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.3.1/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142132:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2024.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142145:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2026.1.2/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142173:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/ruyimg/Library/Application Support/Google/AndroidStudio2025.1.3/Crashpad/settings.dat: No such file or directory (2)
+[60753:96021148:1025/105933.142198:VERBOSE1:chrome/updater/updater.cc:107] Crash reporting initialized.
+[60753:96021148:1025/105933.142457:VERBOSE1:chrome/updater/ipc/update_service_internal_proxy_mojo.cc:61] Run
+[60632:96019872:1025/105933.350496:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[60753:96021148:1025/105950.703007:VERBOSE1:chrome/updater/app/app.cc:52] Shutdown: 0
+[60753:96021148:1025/105950.703370:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60753:96021148:1025/105950.703405:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--wake) returned 0.
+[60750:96021142:1025/105950.812198:VERBOSE1:chrome/updater/app/app_wakeall.cc:68] `/Users/ruyimg/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake` exited 0
+[60750:96021130:1025/105950.812366:VERBOSE1:chrome/updater/app/app.cc:52] Shutdown: 0
+[60750:96021130:1025/105950.812689:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60750:96021130:1025/105950.812730:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--wake-all) returned 0.
+[60755:96021152:1025/110000.721854:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60755:96021152:1025/110000.721963:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--crash-handler) returned 0.
+[60752:96021134:1025/110000.724251:VERBOSE1:chrome/updater/event_history.cc:239] Failed to write history event: logging not initialized
+[60752:96021134:1025/110000.724354:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--crash-handler) returned 0.

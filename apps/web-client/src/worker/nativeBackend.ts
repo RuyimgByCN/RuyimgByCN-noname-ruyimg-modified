@@ -10,7 +10,7 @@
  * `ResolveChoice`——候选的合法性定义只有内核一处。
  *
  * 扩展包装载：`NativeEngine.new_with_packs_json` /
- * `restore_hex_with_packs_json` 接收 cards.json 对象数组。空数组等于标准目录。
+ * `restore_hex_with_packs_json` 接收安装载荷数组（兼容 cards.json 元素）。空数组等于标准目录。
  * 管理面元数据仍由 extensionStore 保存；开局把包 JSON 经 packsJson 传入。
  *
  * 选将（NC05）：`generalCandidates()` / `chooseGeneral(seat, name)` 走正式选将
@@ -32,6 +32,8 @@ export interface NativeHandle {
   engine: NativeEngine;
   seed: number;
   players: number;
+  /** 已消费的 native LogEvent 长度；命令信封只投影此后的公开事件码。 */
+  eventCursor: number;
   observer: number;
 }
 
@@ -96,6 +98,7 @@ export function nativeCreate(
     engine: new NativeEngine(players, BigInt(seed)),
     seed,
     players,
+    eventCursor: 0,
     observer,
   };
 }
@@ -110,16 +113,20 @@ export function nativeCreateIdentity(
   players: number,
   seed: number,
   observer = 0,
+  packsJson?: string,
 ): NativeHandle {
   return {
-    engine: NativeEngine.new_identity(players, BigInt(seed)),
+    engine: packsJson === undefined
+      ? NativeEngine.new_identity(players, BigInt(seed))
+      : NativeEngine.new_identity_with_packs_json(players, BigInt(seed), packsJson),
     seed,
     players,
+    eventCursor: 0,
     observer,
   };
 }
 
-/** 已安装扩展的 cards.json 数组建局。空数组与 nativeCreate 相同。 */
+/** 已安装扩展载荷数组建局。空数组与 nativeCreate 相同。 */
 export function nativeCreateWithPacks(
   players: number,
   seed: number,
@@ -130,6 +137,7 @@ export function nativeCreateWithPacks(
     engine: NativeEngine.new_with_packs_json(players, BigInt(seed), packsJson),
     seed,
     players,
+    eventCursor: 0,
     observer,
   };
 }
@@ -755,18 +763,56 @@ export function nativeEnvelope(
   const revision = Number(handle.engine.revision());
   const snap = nativeObserverToSnapshot(view);
   snap.revision = revision;
+  // 兼容旧测试桩：真实生成包一定带这两个导出；缺失时退回空占位，
+  // 生产路径由 native-worker-smoke 对真实 WASM 断言非空。
+  const exposesAuthority =
+    typeof handle.engine.state_hash_hex === "function" &&
+    typeof handle.engine.log_len === "function" &&
+    typeof handle.engine.public_event_codes_json === "function";
   const envelope: EngineEnvelope = {
     result,
-    events: [],
+    events: exposesAuthority && result !== null ? readPublicEvents(handle) : [],
     choice: readChoice(handle),
     view: snap,
     legal_actions: authoritativeLegalActions(handle),
-    hash_hex: "",
+    hash_hex: exposesAuthority ? handle.engine.state_hash_hex() : "",
     revision,
     finished,
   };
   stepMark("envelope_done");
   return envelope;
+}
+
+const PUBLIC_EVENT_LABELS: Record<number, string> = {
+  1: "对局开始",
+  2: "摸牌",
+  3: "使用卡牌",
+  4: "造成伤害",
+  5: "回复体力",
+  6: "进入濒死",
+  7: "玩家阵亡",
+  8: "回合推进",
+  9: "对局结束",
+  10: "等待选择",
+};
+
+/** 读取自上次信封以来的真实公开事件码；不含暗牌/选项内容。 */
+function readPublicEvents(handle: NativeHandle): EngineEnvelope["events"] {
+  const end = Number(handle.engine.log_len());
+  if (handle.eventCursor > end) handle.eventCursor = end;
+  const start = handle.eventCursor;
+  const raw = handle.engine.public_event_codes_json(start);
+  handle.eventCursor = end;
+  let codes: number[] = [];
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (Array.isArray(parsed)) codes = parsed.map(Number).filter(Number.isFinite);
+  } catch {
+    codes = [];
+  }
+  return codes.map((code) => ({
+    PublicEvent: { code, label: PUBLIC_EVENT_LABELS[code] ?? `事件 ${code}` },
+  }));
 }
 
 export type NativeDispatchReq =
@@ -872,7 +918,9 @@ export function nativeDispatch(
       } else {
         handle.engine.restore_hex(req.hex);
       }
-      // 读档会把引擎换成另一份状态（修订号可能相同），候选缓存必须失效。
+      // 读档会把引擎换成另一份状态（修订号可能相同），候选缓存必须失效；
+      // 恢复后的引擎从空日志开始，事件游标同步归零。
+      handle.eventCursor = 0;
       invalidateLegalActions(handle);
       return nativeEnvelope(handle);
     }

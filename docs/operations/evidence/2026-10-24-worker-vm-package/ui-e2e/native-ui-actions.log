@@ -1,0 +1,4 @@
+/native/packages/disable {"namespace":"community","package_id":"browser-probe","version":"0.1.0"}
+/native/packages/activate {"namespace":"community","package_id":"browser-probe","version":"0.1.0"}
+/native/packages/import {}
+/native/packages/uninstall {"namespace":"community","package_id":"browser-probe","version":"0.1.0"}

@@ -1,0 +1,19 @@
+{
+  "head_before": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "head_after": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "index_staged_changes": 0,
+  "status_entries_before": 127,
+  "status_entries_after": 191,
+  "backup": "/Users/ruyimg/Documents/Claude/sanguosha/.worktree-backups/noname-next-2026-10-24-round (HEAD/status + rsync worktree)",
+  "staged": false,
+  "committed": false,
+  "pushed": false,
+  "notes": "新增 27 个内容目录路径（49 个 legacy 文件 + catalog/manifest/matrix）、服务端 3 个改动模块 + 3 个测试、WASM 1 个测试、前端 1 个测试与本证据目录；无删除既有文件（shahai 拆分是先前工作）。 另加 R01 证据目录与 engine-core 5 源文件/1 测试（见 R01 preservation）。",
+  "final_checks": {
+    "git_diff_cached_empty": true,
+    "local_links_bad": 0,
+    "stale_numbers": 0,
+    "source_line_files": 8578,
+    "preflight_final_02_exit": 0
+  }
+}

@@ -1,0 +1,139 @@
+--- baseline/apps/web-client/src/views/BattleView.vue
++++ current/apps/web-client/src/views/BattleView.vue
+@@ -19,6 +19,8 @@
+ } from "../engine/nativeMatchContent";
+ import {
+   NetworkEngineClient,
++  onlineReconnectKey,
++  type OnlineSession,
+   type RoomRoster,
+ } from "../engine/networkClient";
+ import {
+@@ -128,6 +130,9 @@
+       apply_ms: Math.round((tB - tA) * 100) / 100,
+       delay_ms: Math.round((tC - tB) * 100) / 100,
+     });
++  if (isOnline.value && (
++    !store.connected || store.revision !== env.revision || store.hash !== env.hash_hex
++  )) return;
+   clearEffects(store);
+   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
+   const hashHint = (env.hash_hex || "").slice(0, 12);
+@@ -328,19 +333,18 @@
+       store.connected = false;
+     } else if (state === "reconnected") {
+       statusLine.value = "已重连（等待房间状态）";
+-      store.connected = true;
+-      void networkClient.joinRoom(
+-        roomId.value || 1,
+-        "",
+-        localStorage.getItem(reconnectKey(roomId.value || 1)),
+-      )
++      store.connected = false;
++      void networkClient.rejoinRoom()
+         .then((s) => {
+           selfId.value = s.playerId;
+           roomId.value = s.roomId;
++          rememberOnlineSession(intent, s);
++          store.connected = true;
+           statusLine.value = `房间 #${s.roomId} · 已重连`;
+           return handleEnvelope(s.envelope);
+         })
+         .catch((error: unknown) => {
++          store.connected = false;
+           const message = error instanceof Error ? error.message : String(error);
+           statusLine.value = `重连后回房失败：${message}`;
+           pushLog(store, `重连后回房失败：${message}`);
+@@ -373,7 +377,7 @@
+   } else if (intent.action === "spectate") {
+     session = await networkClient.spectate(intent.roomId);
+   } else {
+-    const token = localStorage.getItem(reconnectKey(intent.roomId));
++    const token = localStorage.getItem(onlineReconnectKey(intent.wsUrl, intent.roomId));
+     session = await networkClient.joinRoom(
+       intent.roomId,
+       intent.password,
+@@ -383,10 +387,8 @@
+ 
+   roomId.value = session.roomId;
+   selfId.value = session.playerId;
+-  players.value = intent.players;
+-  if (session.role === "Player" && session.reconnectToken) {
+-    localStorage.setItem(reconnectKey(session.roomId), session.reconnectToken);
+-  }
++  players.value = session.view.seats.length;
++  rememberOnlineSession(intent, session);
+   store.connected = true;
+   await handleEnvelope(session.envelope);
+   pushLog(
+@@ -394,6 +396,24 @@
+     session.role === "Spectator"
+       ? `旁观房间 #${session.roomId}`
+       : `加入房间 #${session.roomId} · 座位 ${session.seat + 1}`
++  );
++}
++
++function rememberOnlineSession(
++  intent: OnlineIntent,
++  session: OnlineSession,
++) {
++  if (session.role === "Player" && session.reconnectToken) {
++    localStorage.setItem(onlineReconnectKey(intent.wsUrl, session.roomId), session.reconnectToken);
++  }
++  // 页面重载恢复当前房间，不能再次执行最初的「创建」意图。
++  sessionStorage.setItem(
++    "noname-next.online-intent",
++    JSON.stringify({
++      ...intent,
++      action: session.role === "Spectator" ? "spectate" : "join",
++      roomId: session.roomId,
++    }),
+   );
+ }
+ 
+@@ -416,10 +436,6 @@
+     players: players.value,
+     seed: seed.value,
+   };
+-}
+-
+-function reconnectKey(id: number): string {
+-  return `noname-next.reconnect.${id}`;
+ }
+ 
+ function commandClient() {
+@@ -484,7 +500,7 @@
+   )
+ );
+ 
+-const canEndPhase = computed(() => store.legalActions.includes("EndPhase"));
++const canEndPhase = computed(() => store.connected && store.legalActions.includes("EndPhase"));
+ 
+ function toggleAuto() {
+   if (autoRunning.value) {
+@@ -535,7 +551,7 @@
+     showHotkeys.value = false;
+     return;
+   }
+-  if (store.busy || store.finished) return;
++  if (store.busy || store.finished || !store.connected) return;
+   if (e.key === ' ') {
+     e.preventDefault();
+     if (!isOnline.value) void autoStep();
+@@ -759,6 +775,7 @@
+           v-for="(action, index) in choiceActions"
+           :key="index"
+           type="button"
++          :disabled="store.busy || !store.connected || isSpectator"
+           @click="resolveLegalChoice(action)"
+         >
+           {{ action.ResolveChoice.cancelled ? "取消" : `选择 ${action.ResolveChoice.selections.join(", ") || "空"}` }}
+@@ -792,7 +809,7 @@
+       <BattleBoard
+         :view="store.view"
+         :self-id="selfId"
+-        :legal-actions="store.legalActions"
++        :legal-actions="store.connected && !store.busy ? store.legalActions : []"
+         @play-card="playCard"
+         @activate-skill="activateSkill"
+       />

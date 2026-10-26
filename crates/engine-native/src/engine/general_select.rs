@@ -27,13 +27,9 @@ impl Engine {
     /// 产品入口：把武将 `general` 装配到 `seat`（正式选将）。
     ///
     /// 校验：座位在范围内、武将存在于目录、对局未结束。装配语义与建局一致
-    /// （清空该座位既有技能 → 写入主将槽 → 按武将技能集与体力上限重装）。
+    /// （撤销旧武将技能 → 写入主将槽 → 按武将技能集与体力上限重装）。
     /// 返回 `Err(RejectReason)` 表示不可装配（不改变状态）。
-    pub fn assign_general(
-        &mut self,
-        seat: PlayerId,
-        general: u16,
-    ) -> Result<(), RejectReason> {
+    pub fn assign_general(&mut self, seat: PlayerId, general: u16) -> Result<(), RejectReason> {
         if self.outcome().is_some() {
             return Err(RejectReason::MatchOver);
         }
@@ -43,24 +39,43 @@ impl Engine {
         if self.catalog().general_meta(general).is_none() {
             return Err(RejectReason::NoSuchGeneral);
         }
-        // 清旧技 → 写主将槽 → 按武将技能集与体力上限重装（与建局/国战
-        // 明置共用 `apply_general_assembly`，授予语义不分叉）。
+        // Only revoke the old generals' skills: extension-global and equipment grants survive selection.
         let removed: Vec<crate::ids::SkillDefId> = self
             .state_core()
-            .skills
-            .keys()
-            .filter(|(owner, _)| *owner == seat)
-            .map(|(_, def)| *def)
+            .player(seat)
+            .general_slots
+            .iter()
+            .flatten()
+            .filter_map(|def| self.catalog().general_meta(*def))
+            .flat_map(|meta| meta.2)
+            .filter_map(|name| self.catalog().skill_by_name(name))
             .collect();
         for def in removed {
-            self.state_core_mut().skills.remove(&(seat, def));
+            let name = self.catalog().skills[def as usize].name;
+            let still_provided = self.catalog().extension_global_skills.contains(&def)
+                || self.state_core().player(seat).equips.iter().any(|card| {
+                    self.catalog().cards[*card as usize]
+                        .equip_skills
+                        .contains(&name)
+                });
+            if !still_provided {
+                self.state_core_mut().skills.remove(&(seat, def));
+            }
         }
         self.state_core_mut().player_mut(seat).general_slots[0] = Some(general);
         self.state_core_mut().player_mut(seat).general_slots[1] = None;
         self.state_core_mut().player_mut(seat).revealed_generals = [true, false];
         let catalog = self.catalog().clone();
         crate::engine::apply_general_assembly(self.state_core_mut(), &catalog, seat, 0);
+        let lord = self
+            .state_core()
+            .identity_roles()
+            .and_then(|roles| roles.get(seat as usize))
+            == Some(&crate::state::Role::Lord);
         let p = self.state_core_mut().player_mut(seat);
+        if lord && p.max_hp != crate::state::INFINITE_HP {
+            p.max_hp += 1;
+        }
         p.hp = p.max_hp as i32;
         p.alive = true;
         p.dying = false;
@@ -68,11 +83,7 @@ impl Engine {
     }
 
     /// 按**名字**装配（便捷入口；名字不在目录时返回 `NoSuchGeneral`）。
-    pub fn assign_general_named(
-        &mut self,
-        seat: PlayerId,
-        name: &str,
-    ) -> Result<(), RejectReason> {
+    pub fn assign_general_named(&mut self, seat: PlayerId, name: &str) -> Result<(), RejectReason> {
         let def = (0..self.catalog().general_count() as u16)
             .find(|d| {
                 self.catalog()

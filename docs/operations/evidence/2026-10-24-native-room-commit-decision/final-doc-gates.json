@@ -1,0 +1,99 @@
+{
+  "passed": 7,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "source line unit",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "start": "2026-10-24T16:26:36.607601+08:00",
+      "end": "2026-10-24T16:26:36.716179+08:00",
+      "seconds": 0.109,
+      "exit": 0
+    },
+    {
+      "name": "all local links",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "start": "2026-10-24T16:26:36.716220+08:00",
+      "end": "2026-10-24T16:26:37.866314+08:00",
+      "seconds": 1.15,
+      "exit": 0
+    },
+    {
+      "name": "strict doc line refs",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T16:26:37.866351+08:00",
+      "end": "2026-10-24T16:26:47.179272+08:00",
+      "seconds": 9.313,
+      "exit": 0
+    },
+    {
+      "name": "stale values",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "start": "2026-10-24T16:26:47.179335+08:00",
+      "end": "2026-10-24T16:26:47.230864+08:00",
+      "seconds": 0.052,
+      "exit": 0
+    },
+    {
+      "name": "recent rounds",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/refresh_recent_rounds.py",
+        "--check"
+      ],
+      "start": "2026-10-24T16:26:47.230900+08:00",
+      "end": "2026-10-24T16:26:47.256827+08:00",
+      "seconds": 0.026,
+      "exit": 0
+    },
+    {
+      "name": "source lines",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "start": "2026-10-24T16:26:47.256888+08:00",
+      "end": "2026-10-24T16:26:48.982831+08:00",
+      "seconds": 1.726,
+      "exit": 0
+    },
+    {
+      "name": "git diff check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-24T16:26:48.982866+08:00",
+      "end": "2026-10-24T16:26:50.118493+08:00",
+      "seconds": 1.136,
+      "exit": 0
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "upstream_range": {
+    "from": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+    "to": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+    "commits": 37,
+    "net_paths": 167
+  },
+  "imported_trees": {
+    "legacy-source": {
+      "files": 366,
+      "changed": 49,
+      "added": 0,
+      "removed": 0
+    },
+    "portraits": {
+      "files": 2707,
+      "added": 4
+    }
+  },
+  "imported_changes": {
+    "legacy_files": [
+      "content/original/legacy-source/character/bingshi/skill.js",
+      "content/original/legacy-source/character/collab/card.js",
+      "content/original/legacy-source/character/collab/character.js",
+      "content/original/legacy-source/character/collab/characterTitle.js",
+      "content/original/legacy-source/character/collab/skill.js",
+      "content/original/legacy-source/character/collab/sort.js",
+      "content/original/legacy-source/character/collab/translate.js",
+      "content/original/legacy-source/character/collab/voices.js",
+      "content/original/legacy-source/character/diy/skill.js",
+      "content/original/legacy-source/character/huicui/character.js",
+      "content/original/legacy-source/character/huicui/skill.js",
+      "content/original/legacy-source/character/jsrg/skill.js",
+      "content/original/legacy-source/character/jsrg/translate.js",
+      "content/original/legacy-source/character/mobile/skill.js",
+      "content/original/legacy-source/character/offline/character.js",
+      "content/original/legacy-source/character/offline/skill/extra_offline.js",
+      "content/original/legacy-source/character/offline/skill/offline_guansuo.js",
+      "content/original/legacy-source/character/offline/skill/offline_hanmo.js",
+      "content/original/legacy-source/character/offline/skill/offline_wenxindiaolong.js",
+      "content/original/legacy-source/character/offline/skill/offline_yanling.js",
+      "content/original/legacy-source/character/offline/translate.js",
+      "content/original/legacy-source/character/onlyOL/character.js",
+      "content/original/legacy-source/character/onlyOL/characterTitle.js",
+      "content/original/legacy-source/character/onlyOL/skill.js",
+      "content/original/legacy-source/character/onlyOL/sort.js",
+      "content/original/legacy-source/character/onlyOL/translate.js",
+      "content/original/legacy-source/character/onlyOL/voices.js",
+      "content/original/legacy-source/character/rank.js",
+      "content/original/legacy-source/character/refresh/skill.js",
+      "content/original/legacy-source/character/replace.js",
+      "content/original/legacy-source/character/sb/skill.js",
+      "content/original/legacy-source/character/shiji/skill.js",
+      "content/original/legacy-source/character/sixiang/skill.js",
+      "content/original/legacy-source/character/sp/card.js",
+      "content/original/legacy-source/character/sp/character.js",
+      "content/original/legacy-source/character/sp/characterTitle.js",
+      "content/original/legacy-source/character/sp/skill.js",
+      "content/original/legacy-source/character/sp/sort.js",
+      "content/original/legacy-source/character/sp/translate.js",
+      "content/original/legacy-source/character/sp2/skill.js",
+      "content/original/legacy-source/character/sp2/translate.js",
+      "content/original/legacy-source/character/sp2/voices.js",
+      "content/original/legacy-source/character/sxrm/skill.js",
+      "content/original/legacy-source/character/tw/skill.js",
+      "content/original/legacy-source/character/tw/translate.js",
+      "content/original/legacy-source/character/tw/voices.js",
+      "content/original/legacy-source/character/xianding/skill.js",
+      "content/original/legacy-source/character/xianding/translate.js",
+      "content/original/legacy-source/character/yijiang/skill.js"
+    ],
+    "catalog_characters_added": [
+      "collab:tw_dm_zhangliang",
+      "onlyOL:ol_jie_zhuran",
+      "onlyOL:ol_zhuhuan",
+      "sp:ol_sunhanhua",
+      "sp:ol_xushao",
+      "sp:tangtang"
+    ],
+    "catalog_skills_added": [
+      "collab:olfangma",
+      "collab:oljingxian",
+      "collab:oljunzhu",
+      "collab:olrehuanshi",
+      "collab:twjuemie",
+      "collab:twrenfang",
+      "onlyOL:ol_fenli",
+      "onlyOL:ol_jie_danshou",
+      "onlyOL:ol_pingkou",
+      "sp:ol_cailian_skill",
+      "sp:oldangmo",
+      "sp:olhuaguang",
+      "sp:oljihui",
+      "sp:olshilun",
+      "sp:olxiaju",
+      "sp:olxuanbai",
+      "sp:olzhuoming",
+      "sp:tt_zhiyi",
+      "sp:zexing"
+    ],
+    "catalog_def_id_changed": [],
+    "catalog_removed": [],
+    "status_changed": [
+      {
+        "id": "collab:ol_chitu",
+        "before": "ported",
+        "after": "source_synced"
+      },
+      {
+        "id": "collab:ol_le_menghuo",
+        "before": "ported",
+        "after": "source_synced"
+      }
+    ]
+  },
+  "expected_new_content": {
+    "characters": 6,
+    "enabled_existing_characters": 2,
+    "top_level_skills": 19,
+    "derived_cards": [
+      "collab:kuratamashiro",
+      "collab:mashiro",
+      "sp:ol_cailian"
+    ]
+  },
+  "preserved": {
+    "manual_ported_dsl": "content/original/ported unchanged (16617 files hash-equal)",
+    "existing_def_ids": "no def_id changed",
+    "old_content_locks": "no package npack or standard package changed by sync"
+  },
+  "checks": {
+    "sync_verify_only_exit": 0,
+    "ported_diff_exit": 0
+  }
+}

@@ -34,11 +34,15 @@ fn t63_import_load_build_and_drive_with_extension() {
     );
 
     let loaded = content.load("huanle-cards").expect("装载");
-    assert_eq!(loaded.pack.card_count(), 7, "与 G1 装载口径一致（含伴随技）");
+    assert_eq!(
+        loaded.pack.card_count(),
+        7,
+        "与 G1 装载口径一致（含伴随技）"
+    );
 
     let req = NativeGameRequest {
         packages: vec!["huanle-cards".into()],
-generals: Vec::new(),
+        generals: Vec::new(),
         seed: 7301,
         seats: 3,
         max_steps: 600,
@@ -48,7 +52,8 @@ generals: Vec::new(),
     };
     let summary = create_native_game(&content, &req).expect("建局+驱动");
     assert_eq!(
-        summary.catalog_cards, summary.base_catalog_cards + 7,
+        summary.catalog_cards,
+        summary.base_catalog_cards + 7,
         "扩展牌应并入目录"
     );
     assert!(summary.steps > 0, "驱动器应有推进");
@@ -83,7 +88,7 @@ fn t13_generals_package_loads_via_native_path() {
 
     let req = NativeGameRequest {
         packages: vec!["wudian".into()],
-generals: Vec::new(),
+        generals: Vec::new(),
         seed: 4242,
         seats: 4,
         max_steps: 0,
@@ -121,8 +126,7 @@ skill hnl_jiuwei_t8(990001) {
   }
 }
 ";
-    let pkg = content_compiler::compile_source_named("t8-disk-vm", JIUWEI_DSL)
-        .expect("DSL 编译");
+    let pkg = content_compiler::compile_source_named("t8-disk-vm", JIUWEI_DSL).expect("DSL 编译");
     let npack_json = serde_json::to_string(&pkg).expect("npack 序列化");
 
     // drop-in 目录：仅 package.npack.json（vm-only 包，无 cards.json）
@@ -132,8 +136,7 @@ skill hnl_jiuwei_t8(990001) {
     std::fs::write(dropin.join("package.npack.json"), npack_json).unwrap();
 
     let content =
-        NativeContent::open(dir.path().to_path_buf(), dir.path().join("store"))
-            .expect("open");
+        NativeContent::open(dir.path().to_path_buf(), dir.path().join("store")).expect("open");
     let installed = content.import().expect("安装编译包");
     assert!(
         installed.iter().any(|p| p.package_id == "t8-disk-vm"),
@@ -146,8 +149,7 @@ skill hnl_jiuwei_t8(990001) {
 
     // 建局 → 授技 → 推进到持有者阶段结束：VM 效果落账（hp 2→3）
     let mut e =
-        engine_native::Engine::new_with_extensions(920001, 4, &[&loaded.pack])
-            .expect("建局");
+        engine_native::Engine::new_with_extensions(920001, 4, &[&loaded.pack]).expect("建局");
     e.debug_grant(1, "hnl_jiuwei_t8_phase_end");
     e.debug_set_hp(1, 2);
     let mut converged = false;
@@ -221,7 +223,7 @@ fn t63_standard_only_build_and_drive() {
         NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
     let req = NativeGameRequest {
         packages: vec![],
-generals: Vec::new(),
+        generals: Vec::new(),
         seed: 7302,
         seats: 3,
         max_steps: 300,
@@ -290,4 +292,211 @@ fn t63_load_unknown_package_errors_cleanly() {
         Ok(_) => panic!("未安装包装载应报错"),
     };
     assert!(err.contains("包未安装"), "错误应指明未安装: {err}");
+}
+
+#[test]
+fn native_character_only_installed_package_enters_match() {
+    let dir = tempfile::tempdir().unwrap();
+    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).unwrap();
+    content.import().unwrap();
+    let loaded = content
+        .load("d3-select")
+        .expect("仅 character.json 的正式包");
+    assert_eq!(loaded.pack.generals.len(), 1);
+    assert_eq!(loaded.pack.host_skills.len(), 2);
+    assert!(loaded.pack.cards.is_empty());
+    let mut engine = engine_native::Engine::new_with_extensions(4242, 4, &[&loaded.pack]).unwrap();
+    let name = loaded.pack.generals[0].name;
+    engine
+        .assign_general_named(0, name)
+        .expect("正式武将可选入局");
+    let slot = engine.state_core().players[0].general_slots[0].unwrap();
+    assert_eq!(engine.catalog().general_meta(slot).unwrap().0, name);
+    assert_eq!(engine.state_core().players[0].hp, 4);
+}
+
+#[test]
+fn native_pile_only_installed_package_adds_physical_draw_cards() {
+    let dir = tempfile::tempdir().unwrap();
+    let content = NativeContent::open(repo_packages_root(), dir.path().join("store")).unwrap();
+    content.import().unwrap();
+    let json = std::fs::read_to_string(
+        repo_packages_root().join("cardpile-upstream-noname/assets/pile.json"),
+    )
+    .unwrap();
+    let spec = content_native_loader::bridge_pile(&json).unwrap();
+    let expected: usize = spec
+        .entries
+        .iter()
+        .flat_map(|entry| entry.counts.iter().map(|(_, count)| *count as usize))
+        .sum();
+    assert!(
+        content.load("cardpile").is_err(),
+        "双来源同 id 必须要求命名空间"
+    );
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "cardpile")
+        .expect("仅 pile.json 的正式包");
+    assert_eq!(loaded.pack.cards.len(), expected);
+    assert!(expected > 0);
+    let base = engine_native::Engine::new(4242, 4).catalog().cards.len();
+    let engine = engine_native::Engine::new_with_extensions(4242, 4, &[&loaded.pack]).unwrap();
+    let physical = engine.state_core().deck.iter().chain(
+        engine
+            .state_core()
+            .players
+            .iter()
+            .flat_map(|player| player.hand.iter()),
+    );
+    assert_eq!(
+        physical.filter(|card| **card as usize >= base).count(),
+        expected,
+        "扩展实体牌必须进入可抽取牌堆或已发手牌，而不只加入目录"
+    );
+    let reference = format!("{}@{}", loaded.pack.def.name, loaded.pack.def.version);
+    let snapshot = engine_native::archive::decode_archive(&engine_native::archive::encode_archive(
+        &engine.save(),
+    ))
+    .unwrap();
+    let reloaded = content.load_reference(&reference).unwrap();
+    let restored = engine_native::Engine::restore_with_extensions(&snapshot, &[&reloaded]).unwrap();
+    assert_eq!(restored.state_hash(), engine.state_hash());
+    assert_eq!(restored.catalog().cards.len(), base + expected);
+}
+
+#[test]
+fn native_installed_asset_tampering_rejects_load_and_restore() {
+    let dir = tempfile::tempdir().unwrap();
+    let store = dir.path().join("store");
+    let content = NativeContent::open(repo_packages_root(), store.clone()).unwrap();
+    content.import().unwrap();
+    let packages = vec!["huanle-cards".to_string()];
+    let (bytes, _) = save_fresh_match(&content, &packages, 4242, 4).unwrap();
+    let loaded = content.load("huanle-cards").unwrap();
+    let reference = format!("{}@{}", loaded.pack.def.name, loaded.pack.def.version);
+    let asset = store.join("packages/upstream-noname__huanle-cards/1.0.0/assets/cards.json");
+    let mut data = std::fs::read(&asset).unwrap();
+    data.push(b'\n');
+    std::fs::write(&asset, data).unwrap();
+    let error = content
+        .load("huanle-cards")
+        .err()
+        .expect("篡改资产必须拒绝");
+    assert!(error.contains("hash 不匹配"), "{error}");
+    assert!(
+        content.load_reference(&reference).is_err(),
+        "房间内容锁不能绕过资产校验"
+    );
+    assert!(
+        restore_match(&content, &packages, &bytes).is_err(),
+        "存档恢复不能绕过资产校验"
+    );
+}
+
+/// 服务端正式安装路径：npack（模块）+ `assets/character.json`（武将引用 VM 模块）
+/// → 安装 → 桥接 → 建局 → 选将 → VM 技能真实触发。
+#[test]
+fn vm_package_with_characters_installs_loads_and_runs() {
+    const DSL: &str = "\
+skill vm_probe(990003) {
+  trigger phase_end owner_is_target {
+    effect draw_cards(self, 1);
+  }
+}
+";
+    let pkg = content_compiler::compile_source_named("server-vm-char", DSL).expect("compile");
+    let characters = serde_json::json!({
+            "source": "test",
+            "upstream_path": "server-vm-char",
+            "upstream_commit": "0000000000000000000000000000000000000000",
+            "pack": { "name": "server-vm-char", "version": 1, "description": "test" },
+            "generals": [{
+                "id": "vm_probe",
+                "name": "vm_probe",
+                "faction": "qun",
+                "hp": 4,
+                "gender": "male",
+                "skills": [{ "name": "vm_probe_phase_end", "title": "探针" }]
+            }]
+        })
+        .to_string();
+    let character_bytes = characters.as_bytes();
+    let mut npack = serde_json::to_value(&pkg).unwrap();
+    npack["asset_manifest"] = serde_json::json!({
+        "schema_version": 1,
+        "package_id": "server-vm-char",
+        "total_compressed_size": 0,
+        "total_decoded_size": 0,
+        "entries": [{
+            "asset_id": "server-vm-char:characters",
+            "source_hash": blake3::hash(character_bytes).as_bytes(),
+            "kind": "Data", "image_variants": [], "audio_variants": [],
+            "priority": "Lazy", "depends_on": [], "platforms": []
+        }]
+    });
+    npack["asset_paths"] = serde_json::json!({
+        "server-vm-char:characters": "assets/character.json"
+    });
+    let mut package: content_schema::ContentPackage = serde_json::from_value(npack).unwrap();
+    package.manifest.logic_hash = package.compute_logic_hash();
+    package.manifest.asset_hash = package.compute_asset_hash();
+    let npack = package.to_json_bytes().unwrap();
+    let dir = tempfile::tempdir().unwrap();
+    let dropin = dir.path().join("server-vm-char");
+    std::fs::create_dir_all(dropin.join("assets")).unwrap();
+    std::fs::write(dropin.join("package.npack.json"), &npack).unwrap();
+    std::fs::write(dropin.join("assets/character.json"), character_bytes).unwrap();
+
+    let content =
+        NativeContent::open(dir.path().to_path_buf(), dir.path().join("store")).expect("open");
+    let installed = content.import().expect("安装");
+    assert!(installed.iter().any(|p| p.package_id == "server-vm-char"));
+    let loaded = content.load("server-vm-char").expect("装载");
+    assert_eq!(loaded.pack.vm_skills.len(), 1);
+    assert_eq!(loaded.pack.generals.len(), 1);
+    assert_eq!(
+        loaded.pack.generals[0].skills,
+        vec![engine_native::content::names::intern("vm_probe_phase_end".to_string())]
+    );
+
+    let mut engine =
+        engine_native::Engine::new_with_extensions(990_003, 4, &[&loaded.pack]).expect("建局");
+    engine
+        .assign_general_named(0, "vm_probe")
+        .expect("选将");
+    let hand_before = engine.view_for(0).players[0].hand_count;
+    let mut converged = false;
+    for _ in 0..80 {
+        if engine.view_for(0).players[0].hand_count > hand_before {
+            converged = true;
+            break;
+        }
+        if engine.outcome().is_some() {
+            break;
+        }
+        if let Some(choice) = engine.open_choice() {
+            let selection = choice
+                .spec
+                .options
+                .iter()
+                .take(choice.spec.min as usize)
+                .cloned()
+                .collect();
+            let actor = choice.observer;
+            let choice_id = choice.id;
+            let _ = engine.submit(engine_native::GameCommand {
+                actor,
+                expected_revision: engine.revision(),
+                dedup_id: 30_000 + u64::from(engine.revision()),
+                action: engine_native::GameAction::Answer {
+                    choice_id,
+                    selection,
+                },
+            });
+        } else {
+            let actor = engine.turn().current;
+            submit_next_phase(&mut engine, actor);
+        }
+    }
+    assert!(converged, "服务端安装的 VM 武将技能应在 phase_end 摸牌");
 }

@@ -1,0 +1,15 @@
+    Finished `release` profile [optimized] target(s) in 0.19s
+     Running `target/release/examples/save_cost 4 1200`
+sample step=0 save_p50_us=3.9 archive_bytes=1888 players=4 hp=4
+sample step=100 save_p50_us=4.4 archive_bytes=1888 players=4 hp=4
+sample step=200 save_p50_us=2.8 archive_bytes=1888 players=4 hp=4
+sample step=300 save_p50_us=2.8 archive_bytes=1888 players=4 hp=4
+sample step=400 save_p50_us=2.7 archive_bytes=1888 players=4 hp=4
+sample step=500 save_p50_us=2.7 archive_bytes=1888 players=4 hp=4
+sample step=600 save_p50_us=2.6 archive_bytes=1888 players=4 hp=4
+sample step=700 save_p50_us=2.6 archive_bytes=1888 players=4 hp=4
+sample step=800 save_p50_us=3.1 archive_bytes=1888 players=4 hp=4
+sample step=900 save_p50_us=2.7 archive_bytes=1888 players=4 hp=4
+sample step=1000 save_p50_us=2.7 archive_bytes=1888 players=4 hp=4
+sample step=1100 save_p50_us=2.6 archive_bytes=1888 players=4 hp=4
+RESULT players=4 steps=1200 samples=12 save_p50_us=2.7 save_p95_us=3.9 archive_bytes_max=1888 outcome=None

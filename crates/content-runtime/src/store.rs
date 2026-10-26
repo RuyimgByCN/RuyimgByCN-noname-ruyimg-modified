@@ -464,6 +464,62 @@ impl PackageStore {
         Ok(prev)
     }
 
+    /// Deactivate a package slot without deleting installed versions.
+    ///
+    /// Used for disable/enable: later `activate_version` can re-enable it. Fails
+    /// before mutation when another active package still depends on the slot.
+    pub fn deactivate_slot(
+        &self,
+        namespace: &str,
+        package_id: &str,
+    ) -> Result<(), RuntimeError> {
+        let active = self.read_active()?;
+        let key = ActiveSet::slot_key(namespace, package_id);
+        if !active.packages.contains_key(&key) {
+            return Ok(());
+        }
+        let mut next = active.clone();
+        next.packages.remove(&key);
+        self.packages_for_active(&next)?;
+        let mut history = self.read_history()?;
+        history.push(active);
+        if history.len() > MAX_HISTORY {
+            history.remove(0);
+        }
+        self.write_active(&next)?;
+        self.write_history(&history)?;
+        Ok(())
+    }
+
+    /// Physically uninstall every installed version of a package slot.
+    ///
+    /// Active references are removed first (and rollback history is cleared so a
+    /// later rollback cannot resurrect a deleted directory). Dependents that still
+    /// require the slot make this fail before any mutation. Removing the on-disk
+    /// versions happens after the active set is durable; a crash between the two
+    /// leaves only harmless orphan directories.
+    pub fn uninstall_slot(
+        &self,
+        namespace: &str,
+        package_id: &str,
+    ) -> Result<(), RuntimeError> {
+        let mut active = self.read_active()?;
+        let key = ActiveSet::slot_key(namespace, package_id);
+        let was_active = active.packages.remove(&key).is_some();
+        if was_active {
+            self.packages_for_active(&active)?;
+            self.write_active(&active)?;
+            self.write_history(&Vec::new())?;
+        }
+        let dir = self
+            .packages_dir()
+            .join(format!("{namespace}__{package_id}"));
+        if dir.exists() {
+            fs::remove_dir_all(dir)?;
+        }
+        Ok(())
+    }
+
     /// Revoke by content hash and optionally deactivate matching actives.
     pub fn revoke_content_hash(
         &self,

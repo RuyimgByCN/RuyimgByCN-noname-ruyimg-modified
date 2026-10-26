@@ -23,14 +23,21 @@ function transpile(url) {
 
 /** 异步装载钩子（module.register 路径，Node ≥20.6）。 */
 export async function load(url, context, nextLoad) {
+  if (url.endsWith(".json")) return jsonModule(url);
   if (!url.endsWith(".ts")) return nextLoad(url, context);
   return { format: "module", source: transpile(url), shortCircuit: true };
 }
 
 /** 同步装载钩子（module.registerHooks 路径，Node ≥22.15/23.5）。 */
 export function loadSync(url, context, nextLoad) {
+  if (url.endsWith(".json")) return jsonModule(url);
   if (!url.endsWith(".ts")) return nextLoad(url, context);
   return { format: "module", source: transpile(url), shortCircuit: true };
+}
+
+function jsonModule(url) {
+  const value = JSON.parse(readFileSync(fileURLToPath(url), "utf8"));
+  return { format: "module", source: `export default ${JSON.stringify(value)};`, shortCircuit: true };
 }
 
 /**

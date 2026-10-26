@@ -50,7 +50,13 @@ async fn main() {
         .init();
 
     let cfg = ServerConfig::from_env();
-    let lobby = bootstrap(&cfg);
+    let lobby = match try_bootstrap(&cfg) {
+        Ok(lobby) => lobby,
+        Err(error) => {
+            tracing::error!(error = %error, "服务端启动失败");
+            std::process::exit(1);
+        }
+    };
 
     // NC09：启动时恢复落盘的原生房间（存储目录为空/未启用时为空操作）
     match lobby.restore_native_rooms() {
@@ -67,11 +73,18 @@ async fn main() {
     axum::serve(listener, app).await.expect("serve");
 }
 
+/// 测试便捷入口：装配失败直接 panic（含目录已有另一个写者）。
+fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
+    try_bootstrap(cfg).expect("bootstrap")
+}
+
 /// 装配服务端运行所需的一切（扩展导入、内容锁、目录/资产索引、原生内容、Lobby）。
 ///
 /// **从 `main()` 抽出**：便于测试用临时目录构造 Lobby 并在 `127.0.0.1:0` 上起真实监听。
-fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
-    let store = PackageStore::open(&cfg.content_store_root).expect("open content store");
+/// 生产 main 使用本函数以获得**可报告的启动失败**（尤其存档目录第二写者）。
+fn try_bootstrap(cfg: &ServerConfig) -> Result<Arc<Lobby>, String> {
+    let store = PackageStore::open(&cfg.content_store_root)
+        .map_err(|e| format!("打开内容存储失败: {e}"))?;
     let report = import_extensions(
         &store,
         &cfg.extensions_root,
@@ -82,15 +95,15 @@ fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
             host: content_runtime::tooling_host_versions(),
         },
     )
-    .expect("import extensions");
-    let engine_template =
-        Engine::from_content_lock(&store, &report.content_lock).expect("load active content lock");
+    .map_err(|e| format!("导入扩展失败: {e}"))?;
+    let engine_template = Engine::from_content_lock(&store, &report.content_lock)
+        .map_err(|e| format!("装载内容锁失败: {e}"))?;
     let (content_lock, content_catalog) = store
         .load_active_catalog()
-        .expect("load active content catalog");
+        .map_err(|e| format!("装载目录失败: {e}"))?;
     let content_assets = store
         .load_active_asset_index()
-        .expect("load active content assets");
+        .map_err(|e| format!("装载资源索引失败: {e}"))?;
     assert_eq!(
         content_lock, report.content_lock,
         "active content changed during startup"
@@ -107,7 +120,7 @@ fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
         cfg.native_packages_root.clone(),
         cfg.native_store_root.clone(),
     )
-    .expect("open native content");
+    .map_err(|e| format!("打开原生内容存储失败: {e}"))?;
     let native_packages = native_content.import().unwrap_or_else(|e| {
         warn!(error = %e, "native package import failed; /native paths degraded");
         Vec::new()
@@ -123,8 +136,8 @@ fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
         content_catalog,
         content_assets,
         Arc::new(native_content),
-    ));
-    lobby
+    )?);
+    Ok(lobby)
 }
 
 /// 构造 HTTP/WS 路由（**从 `main` 抽出**，便于测试在 `127.0.0.1:0` 上起真实监听）。
@@ -139,6 +152,10 @@ fn build_router(lobby: Arc<Lobby>, original_content: ServeDir) -> Router {
             get(package_asset_handler),
         )
         .route("/native/packages", get(native_packages_handler))
+        .route("/native/packages/import", post(native_import_handler))
+        .route("/native/packages/activate", post(native_activate_handler))
+        .route("/native/packages/disable", post(native_disable_handler))
+        .route("/native/packages/uninstall", post(native_uninstall_handler))
         .route("/native/games", post(native_games_handler))
         .route("/native/matches", post(native_matches_handler))
         .route("/native/matches/restore", post(native_restore_handler))
@@ -164,6 +181,59 @@ async fn content_catalog_handler(
     Query(query): Query<ContentCatalogQuery>,
 ) -> axum::Json<content_runtime::ActiveCatalogPage> {
     axum::Json(lobby.content_catalog_page(query.offset, query.limit))
+}
+
+#[derive(Debug, Deserialize)]
+struct NativePackageBody {
+    namespace: String,
+    package_id: String,
+    #[serde(default)]
+    version: String,
+}
+
+async fn native_import_handler(
+    State(lobby): State<Arc<Lobby>>,
+) -> Result<Json<Vec<native::NativePackageInfo>>, (StatusCode, String)> {
+    lobby
+        .native_import()
+        .map(Json)
+        .map_err(|e| (StatusCode::BAD_REQUEST, e))
+}
+
+async fn native_activate_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(body): Json<NativePackageBody>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    if body.namespace.is_empty()
+        || body.package_id.is_empty()
+        || body.version.is_empty()
+    {
+        return Err((StatusCode::BAD_REQUEST, "namespace/package_id/version required".into()));
+    }
+    lobby
+        .native_activate(&body.namespace, &body.package_id, &body.version)
+        .map(|_| StatusCode::NO_CONTENT)
+        .map_err(|e| (StatusCode::BAD_REQUEST, e))
+}
+
+async fn native_disable_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(body): Json<NativePackageBody>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    lobby
+        .native_disable(&body.namespace, &body.package_id)
+        .map(|_| StatusCode::NO_CONTENT)
+        .map_err(|e| (StatusCode::BAD_REQUEST, e))
+}
+
+async fn native_uninstall_handler(
+    State(lobby): State<Arc<Lobby>>,
+    Json(body): Json<NativePackageBody>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    lobby
+        .native_uninstall(&body.namespace, &body.package_id)
+        .map(|_| StatusCode::NO_CONTENT)
+        .map_err(|e| (StatusCode::BAD_REQUEST, e))
 }
 
 /// T6③：列出已安装原生包。
@@ -385,21 +455,64 @@ async fn ws_handler(ws: WebSocketUpgrade, State(lobby): State<Arc<Lobby>>) -> im
     ws.on_upgrade(move |socket| handle_socket(socket, lobby))
 }
 
+/// 每连接出站队列上限。满载表示客户端不再读取，房间广播必须立刻放弃
+/// 该连接，而不是等待整个房间 actor。
+const OUTBOUND_QUEUE: usize = 64;
+/// 单条 WebSocket 文本消息的写超时。超时后主动断开，客户端重连时重新同步。
+const WRITER_SEND_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+
+/// 测试专用：给 writer 每条消息前加延迟，让慢客户端队列在可控时间内饱和。
+/// 生产构建没有这个开关（`cfg(test)` 编译期移除），也不从环境变量读取。
+#[cfg(test)]
+pub(crate) static TEST_WRITER_DELAY_MS: std::sync::atomic::AtomicU64 =
+    std::sync::atomic::AtomicU64::new(0);
+
+/// 测试专用：覆盖每连接出站队列容量（0 = 用生产默认值）。
+#[cfg(test)]
+pub(crate) static TEST_OUTBOUND_QUEUE: std::sync::atomic::AtomicUsize =
+    std::sync::atomic::AtomicUsize::new(0);
+
 async fn handle_socket(socket: WebSocket, lobby: Arc<Lobby>) {
     let (mut sink, mut stream) = socket.split();
-    let (tx, mut rx) = mpsc::channel::<String>(64);
+    #[cfg(test)]
+    let queue_capacity = match TEST_OUTBOUND_QUEUE.load(std::sync::atomic::Ordering::Relaxed) {
+        0 => OUTBOUND_QUEUE,
+        configured => configured,
+    };
+    #[cfg(not(test))]
+    let queue_capacity = OUTBOUND_QUEUE;
+    let (tx, mut rx) = mpsc::channel::<String>(queue_capacity);
     let conn_id = lobby.alloc_connection_id();
-
-    // Writer task
-    let writer = tokio::spawn(async move {
-        while let Some(text) = rx.recv().await {
-            if sink.send(Message::Text(text.into())).await.is_err() {
-                break;
-            }
-        }
-    });
-
     let outbound = Outbound::new(tx.clone());
+
+    // Writer task：socket 写入加超时；慢/断客户端标记后由 session 读循环退出。
+    let writer = {
+        let writer_slow = outbound.slow_marker();
+        tokio::spawn(async move {
+            while let Some(text) = rx.recv().await {
+                #[cfg(test)]
+                {
+                    let delay = TEST_WRITER_DELAY_MS.load(std::sync::atomic::Ordering::Relaxed);
+                    if delay > 0 {
+                        tokio::time::sleep(std::time::Duration::from_millis(delay)).await;
+                    }
+                }
+                match tokio::time::timeout(
+                    WRITER_SEND_TIMEOUT,
+                    sink.send(Message::Text(text.into())),
+                )
+                .await
+                {
+                    Ok(Ok(())) => {}
+                    Ok(Err(_)) | Err(_) => {
+                        let _ = writer_slow.send(true);
+                        break;
+                    }
+                }
+            }
+        })
+    };
+
     let _ = outbound
         .send(&ServerMessage::Welcome {
             connection_id: conn_id,
@@ -417,9 +530,21 @@ async fn handle_socket(socket: WebSocket, lobby: Arc<Lobby>) {
         reconnect_token: None,
         last_conn_seq: 0,
         outbound: outbound.clone(),
+        slow: outbound.slow_signal(),
     };
 
-    while let Some(Ok(msg)) = stream.next().await {
+    loop {
+        let message = tokio::select! {
+            changed = session.slow.changed() => {
+                if changed.is_err() || *session.slow.borrow() {
+                    warn!(conn = conn_id, "慢连接被断开，等待客户端重连同步");
+                    break;
+                }
+                continue;
+            }
+            message = stream.next() => message,
+        };
+        let Some(Ok(msg)) = message else { break };
         let text = match msg {
             Message::Text(t) => t.to_string(),
             Message::Binary(b) => match String::from_utf8(b.to_vec()) {
@@ -489,6 +614,7 @@ mod net_smoke {
         cfg.extensions_root = base.join("ext");
         cfg.native_packages_root = base.join("np");
         cfg.native_store_root = base.join("ns");
+        cfg.native_room_store = base.join("rooms").to_string_lossy().into_owned();
         for d in [
             &cfg.original_content_root,
             &cfg.content_store_root,
@@ -499,6 +625,66 @@ mod net_smoke {
             let _ = std::fs::create_dir_all(d);
         }
         cfg
+    }
+
+    const LOCK_CHILD_DIR: &str = "NONAME_TEST_STORE_LOCK_DIR";
+
+    #[test]
+    fn store_writer_lock_child() {
+        let Some(dir) = std::env::var_os(LOCK_CHILD_DIR) else {
+            return;
+        };
+        let dir = std::path::PathBuf::from(dir);
+        let _lock = crate::native_room_store::StoreWriterLock::acquire(&dir)
+            .expect("child acquires store lock");
+        std::fs::write(dir.join("ready"), b"1").unwrap();
+        while !dir.join("stop").exists() {
+            std::thread::sleep(std::time::Duration::from_millis(20));
+        }
+    }
+
+    #[test]
+    fn second_process_is_rejected_and_abnormal_exit_releases_lock() {
+        use std::process::{Command as ProcessCommand, Stdio};
+        let dir = tempfile::tempdir().unwrap();
+        let ready = dir.path().join("ready");
+        let mut child = ProcessCommand::new(std::env::current_exe().unwrap())
+            .args(["--exact", "net_smoke::store_writer_lock_child", "--nocapture"])
+            .env(LOCK_CHILD_DIR, dir.path())
+            .stdin(Stdio::null())
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .spawn()
+            .unwrap();
+        let deadline = std::time::Instant::now() + std::time::Duration::from_secs(20);
+        while !ready.exists() {
+            assert!(
+                std::time::Instant::now() < deadline,
+                "child did not acquire the lock in time"
+            );
+            std::thread::sleep(std::time::Duration::from_millis(20));
+        }
+        match crate::native_room_store::StoreWriterLock::acquire(dir.path()) {
+            Ok(_) => panic!("另一进程持锁时本进程必须拒绝"),
+            Err(error) => assert!(error.contains("写者"), "{error}"),
+        }
+        // SIGKILL/终止进程：不执行 Drop，锁只能由 OS 释放。
+        child.kill().unwrap();
+        child.wait().unwrap();
+        let _lock = crate::native_room_store::StoreWriterLock::acquire(dir.path())
+            .expect("写者异常退出后必须可重启");
+    }
+
+    #[test]
+    fn second_bootstrap_on_same_store_is_rejected_and_releases_after_drop() {
+        let cfg = test_cfg("store-lock");
+        let first = bootstrap(&cfg);
+        match try_bootstrap(&cfg) {
+            Ok(_) => panic!("同目录第二写者必须拒绝启动"),
+            Err(error) => assert!(error.contains("写者"), "{error}"),
+        }
+        drop(first);
+        let _restarted = try_bootstrap(&cfg).expect("第一个写者退出后应可重启");
     }
 
     #[test]
@@ -739,7 +925,8 @@ mod net_smoke {
                         kind: CommandKind::EndPhase,
                     },
                     idempotency_key: IdempotencyKey(1),
-                })
+                replay: false,
+})
                 .expect("encode submit")
                 .into(),
             ))
@@ -946,7 +1133,8 @@ mod net_smoke {
                             header: MessageHeader::new(room_id, seq, rev),
                             command: cmd.clone(),
                             idempotency_key: IdempotencyKey(seq),
-                        })
+                        replay: false,
+})
                         .expect("enc submit")
                         .into(),
                     ))
@@ -1119,7 +1307,8 @@ mod net_smoke {
                         kind: CommandKind::EndPhase,
                     },
                     idempotency_key: IdempotencyKey(1),
-                })
+                replay: false,
+})
                 .expect("enc submit")
                 .into(),
             ))
@@ -1243,7 +1432,8 @@ mod net_smoke {
                         kind: CommandKind::EndPhase,
                     },
                     idempotency_key: IdempotencyKey(1),
-                })
+                replay: false,
+})
                 .expect("enc submit")
                 .into(),
             ))
@@ -1359,7 +1549,8 @@ mod net_smoke {
                         kind: CommandKind::EndPhase,
                     },
                     idempotency_key: IdempotencyKey(seq),
-                })
+                replay: false,
+})
                 .expect("enc submit")
                 .into(),
             ))
@@ -1439,4 +1630,144 @@ mod net_smoke {
             server.abort();
         });
     }
+}
+
+#[cfg(test)]
+mod native_ws_e2e;
+
+#[cfg(test)]
+mod native_lifecycle_http_tests {
+    use super::{
+        native_disable_handler, native_import_handler, native_uninstall_handler, NativePackageBody,
+    };
+    use axum::extract::State;
+    use axum::Json;
+    use std::collections::BTreeMap;
+    use std::sync::Arc;
+
+    fn config() -> crate::config::ServerConfig {
+        let mut config = crate::config::ServerConfig::default();
+        config.native_room_store.clear();
+        config
+    }
+
+    fn package_bytes() -> Vec<u8> {
+        let source = "skill http_lifecycle_probe(990020) { trigger phase_end owner_is_target { effect draw_cards(self, 1); } }";
+        let mut package =
+            content_compiler::compile_source_named("http-lifecycle-probe", source).unwrap();
+        package.manifest.version = "0.1.0".into();
+        package.manifest.logic_hash = package.compute_logic_hash();
+        package.manifest.asset_hash = package.compute_asset_hash();
+        package.to_json_bytes().unwrap()
+    }
+
+    #[tokio::test]
+    async fn http_handlers_wire_import_disable_uninstall_to_store() {
+        let dir = tempfile::tempdir().unwrap();
+        let dropin = dir.path().join("http-lifecycle-probe");
+        std::fs::create_dir_all(&dropin).unwrap();
+        std::fs::write(dropin.join("package.npack.json"), package_bytes()).unwrap();
+        let native = Arc::new(
+            crate::native::NativeContent::open(dir.path().to_path_buf(), dir.path().join("store"))
+                .unwrap(),
+        );
+        native.import().unwrap();
+        let loaded = native.load("http-lifecycle-probe").unwrap();
+        let namespace = loaded.frozen.binding.namespace.clone();
+        let lobby = Arc::new(
+            crate::lobby::Lobby::new(
+                config(),
+                engine_core::Engine::new(),
+                content_runtime::ContentLock::empty(),
+                content_runtime::ActiveCatalog::default(),
+                BTreeMap::new(),
+                native.clone(),
+            )
+            .unwrap(),
+        );
+
+        let imported = native_import_handler(State(lobby.clone())).await.unwrap();
+        assert!(imported.0.iter().any(|p| p.package_id == "http-lifecycle-probe"));
+
+        let body = || Json(NativePackageBody {
+            namespace: namespace.clone(),
+            package_id: "http-lifecycle-probe".into(),
+            version: "0.1.0".into(),
+        });
+        native_disable_handler(State(lobby.clone()), body()).await.unwrap();
+        assert!(native.load("http-lifecycle-probe").is_err());
+        native_uninstall_handler(State(lobby.clone()), body()).await.unwrap();
+        assert!(lobby
+            .native_packages()
+            .unwrap()
+            .iter()
+            .all(|p| p.package_id != "http-lifecycle-probe"));
+    }
+    #[tokio::test]
+    async fn real_http_route_lists_and_disables_package() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let dir = tempfile::tempdir().unwrap();
+        let dropin = dir.path().join("http-route-probe");
+        std::fs::create_dir_all(&dropin).unwrap();
+        std::fs::write(dropin.join("package.npack.json"), package_bytes()).unwrap();
+        let native = Arc::new(
+            crate::native::NativeContent::open(dir.path().to_path_buf(), dir.path().join("store"))
+                .unwrap(),
+        );
+        native.import().unwrap();
+        let loaded = native.load("http-lifecycle-probe").unwrap();
+        let namespace = loaded.frozen.binding.namespace.clone();
+        let lobby = Arc::new(
+            crate::lobby::Lobby::new(
+                config(),
+                engine_core::Engine::new(),
+                content_runtime::ContentLock::empty(),
+                content_runtime::ActiveCatalog::default(),
+                BTreeMap::new(),
+                native.clone(),
+            )
+            .unwrap(),
+        );
+        let original = tempfile::tempdir().unwrap();
+        let router = super::build_router(lobby, tower_http::services::ServeDir::new(original.path()));
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        tokio::spawn(async move {
+            axum::serve(listener, router).await.unwrap();
+        });
+
+        let mut stream = tokio::net::TcpStream::connect(addr).await.unwrap();
+        stream
+            .write_all(b"GET /native/packages HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
+            .await
+            .unwrap();
+        let mut response = Vec::new();
+        stream.read_to_end(&mut response).await.unwrap();
+        let text = String::from_utf8_lossy(&response);
+        assert!(text.starts_with("HTTP/1.1 200"), "{text}");
+        assert!(text.contains("http-lifecycle-probe"), "{text}");
+
+        let body = serde_json::json!({
+            "namespace": namespace,
+            "package_id": "http-lifecycle-probe",
+            "version": "0.1.0"
+        })
+        .to_string();
+        let request = format!(
+            "POST /native/packages/disable HTTP/1.1\r\nHost: localhost\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+            body.len(),
+            body
+        );
+        let mut stream = tokio::net::TcpStream::connect(addr).await.unwrap();
+        stream.write_all(request.as_bytes()).await.unwrap();
+        let mut response = Vec::new();
+        stream.read_to_end(&mut response).await.unwrap();
+        assert!(
+            String::from_utf8_lossy(&response).starts_with("HTTP/1.1 204"),
+            "{}",
+            String::from_utf8_lossy(&response)
+        );
+        assert!(native.load("http-lifecycle-probe").is_err());
+    }
+
 }

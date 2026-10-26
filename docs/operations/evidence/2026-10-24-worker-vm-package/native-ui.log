@@ -1,0 +1,3150 @@
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:3:5
+  |
+3 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:743:18
+    |
+743 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+  --> crates/engine-core/src/effect/mod.rs:10:5
+   |
+10 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_other_skill,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+11 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+   |                                ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `primitives::enable_equip_slot`
+  --> crates/engine-core/src/effect/mod.rs:18:16
+   |
+18 | pub(crate) use primitives::enable_equip_slot;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_xinfu_qiai`
+  --> crates/engine-core/src/effect/mod.rs:21:16
+   |
+21 | pub(crate) use primitives::resolve_xinfu_qiai;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_twxiongjun`
+  --> crates/engine-core/src/effect/mod.rs:59:16
+   |
+59 | pub(crate) use primitives::resolve_twxiongjun;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_yixiang`
+  --> crates/engine-core/src/effect/mod.rs:60:16
+   |
+60 | pub(crate) use primitives::resolve_yixiang;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_qiangyong`
+  --> crates/engine-core/src/effect/mod.rs:61:16
+   |
+61 | pub(crate) use primitives::resolve_qiangyong;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_duoduan`
+  --> crates/engine-core/src/effect/mod.rs:63:16
+   |
+63 | pub(crate) use primitives::resolve_duoduan;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_reliangyin`
+  --> crates/engine-core/src/effect/mod.rs:67:16
+   |
+67 | pub(crate) use primitives::resolve_reliangyin;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `commit_hand_compare`
+  --> crates/engine-core/src/effect/mod.rs:72:26
+   |
+72 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+   |                          ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   --> crates/engine-core/src/effect/mod.rs:142:31
+    |
+142 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, twchengpu_field_cards,
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^
+...
+203 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZHENLIANG_DAMAGE,
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_choose_give_two_different_colors_or_recover.rs:1389:9
+     |
+1389 |     let skill = engine_api::SkillId::new(payload[2]);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+  --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:90:9
+   |
+90 |     let skill = engine_api::SkillId::new(*skill);
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:235:17
+    |
+235 |             let skill = engine_api::SkillId::new(*skill);
+    |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_dctingxian.rs:199:13
+    |
+199 |         let target = PlayerId::new(payload[3]);
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_dctingxian.rs:675:9
+    |
+675 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:103:9
+    |
+103 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:160:9
+    |
+160 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:344:5
+    |
+344 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:348:5
+    |
+348 |     skill: engine_api::SkillId,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:405:9
+    |
+405 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:575:9
+    |
+575 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:655:9
+    |
+655 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:702:9
+    |
+702 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:894:9
+    |
+894 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:948:9
+    |
+948 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:1158:9
+     |
+1158 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:1346:9
+     |
+1346 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:1383:9
+     |
+1383 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:1460:9
+     |
+1460 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+  --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_kuizhu_damage.rs:14:9
+   |
+14 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `pile_zone`
+    --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs:1443:9
+     |
+1443 |     let pile_zone = tx
+     |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+
+warning: unused variable: `phase`
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:352:9
+    |
+352 |     let phase = *payload.get(2).unwrap_or(&0);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:354:9
+    |
+354 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:652:21
+    |
+652 |                 let mut next_payload = vec![
+    |                     ----^^^^^^^^^^^^
+    |                     |
+    |                     help: remove this `mut`
+
+warning: unused variable: `count`
+  --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_dckuizhen.rs:83:9
+   |
+83 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: unused variable: `draw`
+   --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_dckuizhen.rs:273:17
+    |
+273 |             let draw = tx
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/open_equipment_pair_choice.rs:625:9
+    |
+625 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_olzhijie.rs:1013:9
+     |
+1013 |     let target = payload[5];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_olzhijie.rs:1059:9
+     |
+1059 |     let target = payload[6];
+     |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `kind`
+    --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_olzhijie.rs:1119:9
+     |
+1119 |     let kind = payload[4];
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+
+warning: unused variable: `mode`
+  --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_houfeng_choice.rs:19:9
+   |
+19 |     let mode = payload[3] as u8;
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_houfeng_choice.rs:698:9
+    |
+698 |     let skill = engine_api::SkillId::new(payload[4]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `actor`
+   --> crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twniujin_custom.rs:513:9
+    |
+513 |     let actor = PlayerId::new(payload[1]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+
+warning: unreachable pattern
+   --> crates/engine-core/src/content/registry/default_view_as_card_count.rs:499:9
+    |
+474 |         ModifierValueSource::OwnerSkillPileCount => {
+    |         ---------------------------------------- matches all the relevant values
+...
+499 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_count",
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/begin_choose_compare_selected_hand_card.rs:496:5
+    |
+496 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_potzhouyu_choice.rs:442:9
+    |
+442 |     let mut options: Vec<_> = tx
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_potzhouyu_choice.rs:1266:5
+     |
+1266 |     skill: engine_api::SkillId,
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:414:9
+    |
+414 |     let skill = engine_api::SkillId::new(skill_raw);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:633:9
+    |
+633 |     let skill = engine_api::SkillId::new(skill_raw);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `count`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:809:5
+    |
+809 |     count: u32,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_twmitu_round.rs:926:9
+    |
+926 |     let mut payload = vec![
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_twmitu_round.rs:1404:17
+     |
+1404 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `player`
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:61:5
+   |
+61 |     player: PlayerId,
+   |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `dodger`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:553:5
+    |
+553 |     dodger: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:615:17
+    |
+615 |             let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+    |                 ----^^^^^
+    |                 |
+    |                 help: remove this `mut`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs:325:5
+    |
+325 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs:727:9
+    |
+727 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs:1048:5
+     |
+1048 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `card`
+   --> crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_jijian_kind_choice.rs:943:5
+    |
+943 |     card: CardId,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:590:9
+    |
+590 |     let mut effects = vec![EffectRequest::RevealCards {
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `view`
+   --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:515:5
+    |
+515 |     view: Vec<CardId>,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+    |
+559 |     let skill = engine_api::SkillId::new(*skill);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:1371:18
+     |
+1371 |     let [player, skill] = payload else {
+     |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_refresh/choose_gain_target_card_alternate_zone_then_target_draw.rs:534:9
+    |
+534 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/reveal_hand_to_player.rs:924:5
+    |
+924 |     mut targets: Vec<PlayerId>,
+    |     ----^^^^^^^
+    |     |
+    |     help: remove this `mut`
+
+warning: unused variable: `target`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/reveal_hand_to_player.rs:1341:5
+     |
+1341 |     target: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_1/reveal_hand_to_player.rs:1492:5
+     |
+1492 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:500:5
+    |
+500 |     target: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:619:5
+    |
+619 |     target: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `targets`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:776:5
+    |
+776 |     targets: &[PlayerId],
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:550:52
+    |
+550 | pub(crate) fn turn_discard_count(tx: &Transaction, player: PlayerId) -> u32 {
+    |                                                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `value`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:998:23
+    |
+998 |                 .map(|value| vec![card])
+    |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:1336:9
+     |
+1336 |     let mut events = run_effects(
+     |         ----^^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: unused variable: `kongsheng_def`
+ --> crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs:8:5
+  |
+8 |     kongsheng_def: engine_api::SkillDefId,
+  |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+
+warning: unused variable: `source`
+   --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs:155:5
+    |
+155 |     source: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+
+warning: variable does not need to be mutable
+    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs:1173:17
+     |
+1173 |             let mut events = add_skill(tx, target, engine_api::SkillDefId::new(def))?;
+     |                 ----^^^^^^
+     |                 |
+     |                 help: remove this `mut`
+
+warning: unused variable: `action`
+  --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:15:5
+   |
+15 |     action: u8,
+   |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:1051:5
+     |
+1051 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_tw_1/resolve_twtanfeng.rs:516:24
+    |
+516 |     let [player, _sub, skill] = payload else {
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+    --> crates/engine-core/src/effect/primitives/pack_xianding_2/resolve_dc_sb_zhangxiu.rs:1242:5
+     |
+1242 |     player: PlayerId,
+     |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `player`
+  --> crates/engine-core/src/effect/primitives/dispatch_draw_cards.rs:21:49
+   |
+21 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+   |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+
+warning: unused variable: `skill`
+    --> crates/engine-core/src/effect/primitives/dispatch_resolve_twxiawei.rs:1386:13
+     |
+1386 |             skill,
+     |             ^^^^^ help: try ignoring the field: `skill: _`
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian.rs:1052:9
+     |
+1045 | /         EffectRequest::ResolveQiaobian {
+1046 | |             player,
+1047 | |             phase,
+1048 | |             stage,
+1049 | |             skill,
+1050 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+     | |_________- matches all the relevant values
+1051 |           // ponytail: 巧变（ABI 559）由 C 段（omp）实现中，stub 保持编译通过。
+1052 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian.rs:1106:9
+     |
+1106 |         EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+     |
+note: multiple earlier patterns match some of the same values
+    --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian.rs:1106:9
+     |
+1095 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, target),
+     |           --------------------------------------------- matches some of the same values
+1096 |
+1097 | /         EffectRequest::ResolveJuzhan {
+1098 | |             player,
+1099 | |             source,
+1100 | |             card,
+...    |
+1103 | |             skill,
+1104 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+     | |_________- matches some of the same values
+1105 |           // ponytail: 并行会话中间态（ban-use-pairs / 拒战）stub 保持编译通过。
+1106 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } => Ok(Vec::new()),
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1053:15
+     |
+ 934 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               -------------------------------------------- matches all the relevant values
+...
+1053 |             | EffectRequest::ResolveOllinjie { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1054:15
+     |
+ 937 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               -------------------------------------------------- matches all the relevant values
+...
+1054 |             | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1055:15
+     |
+ 938 |             | EffectRequest::GainTargetHandCard { skill, .. }
+     |               ----------------------------------------------- matches all the relevant values
+...
+1055 |             | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+    --> crates/engine-core/src/effect/mod.rs:1087:15
+     |
+1086 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               -------------------------------------------------------- matches all the relevant values
+1087 |             | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs:708:9
+    |
+690 | /         EffectRequest::ResolveRechuhai {
+691 | |             player,
+692 | |             target,
+693 | |             card,
+...   |
+696 | |             skill,
+697 | |         } => {
+    | |_________- matches all the relevant values
+...
+708 |           EffectRequest::ResolveRechuhai { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs:732:9
+    |
+714 | /         EffectRequest::ResolveXiongshu {
+715 | |             player,
+716 | |             target,
+717 | |             card,
+...   |
+720 | |             skill,
+721 | |         } => {
+    | |_________- matches all the relevant values
+...
+732 |           EffectRequest::ResolveXiongshu { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs:781:9
+    |
+767 | /         EffectRequest::ResolveSpshanxi {
+768 | |             player,
+769 | |             target,
+770 | |             stage,
+771 | |             skill,
+772 | |         } => {
+    | |_________- matches all the relevant values
+...
+781 |           EffectRequest::ResolveSpshanxi { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs:800:9
+    |
+786 | /         EffectRequest::ResolveSpshanxiSuoming {
+787 | |             player,
+788 | |             actor,
+789 | |             stage,
+790 | |             skill,
+791 | |         } => {
+    | |_________- matches all the relevant values
+...
+800 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+  --> crates/engine-core/src/hash/effects_draw_cards.rs:25:9
+   |
+13 | /         EffectRequest::ModifyCurrentDamage {
+14 | |             player,
+15 | |             delta,
+16 | |             skill,
+17 | |         } => {
+   | |_________- matches all the relevant values
+...
+25 | /         EffectRequest::ModifyCurrentDamage {
+26 | |             player,
+27 | |             delta,
+28 | |             skill,
+29 | |         } => {
+   | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+   --> crates/engine-core/src/hash/effects_draw_cards.rs:876:13
+    |
+876 |             flipped,
+    |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+warning: function `validate_sha_target` is never used
+    --> crates/engine-core/src/command/play/skill_card_target_spec_with_options.rs:1034:15
+     |
+1034 | pub(crate) fn validate_sha_target(
+     |               ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `wuxie_tokens` is never used
+   --> crates/engine-core/src/command/play/open_sha_response_step.rs:966:15
+    |
+966 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: PlayerId) -> Vec<u32> {
+    |               ^^^^^^^^^^^^
+
+warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:39:7
+   |
+39 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:61:7
+   |
+61 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:63:7
+   |
+63 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:77:7
+   |
+77 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `suit_from_tag` is never used
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:140:15
+    |
+140 | pub(crate) fn suit_from_tag(tag: u32) -> engine_api::Suit {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mingren_color_mask` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:353:15
+    |
+353 | pub(crate) fn mingren_color_mask(
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `kongsheng_pile_cards_by_def` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:779:15
+    |
+779 | pub(crate) fn kongsheng_pile_cards_by_def(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+  --> crates/engine-core/src/effect/primitives/pack_shiji.rs:27:18
+   |
+27 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+   |                  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `resolve_rechuhai_choice` is never used
+    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs:1233:15
+     |
+1233 | pub(crate) fn resolve_rechuhai_choice(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused `Result` that must be used
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/open_equipment_pair_choice.rs:990:13
+    |
+990 |             crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+990 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+    |             +++++++
+
+warning: `engine-core` (lib) generated 106 warnings (run `cargo fix --lib -p engine-core` to apply 82 suggestions)
+warning: unused variable: `c`
+   --> crates/engine-ai/src/fork_strategy.rs:166:78
+    |
+166 |         self.snapshot_bytes.len() as u64 + self.applied_commands.iter().map(|c| 100).sum::<u64>()
+    |                                                                              ^ help: if this is intentional, prefix it with an underscore: `_c`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `ForkMeta` is never constructed
+  --> crates/engine-ai/src/fork.rs:69:12
+   |
+69 | pub struct ForkMeta {
+   |            ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `assert_no_foreign_hand_faces` is never used
+  --> crates/engine-ai/src/info_set.rs:56:8
+   |
+56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)
+   Compiling game-server v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server)
+warning: constant `WAL_BLOCK_DOMAIN` is never used
+  --> apps/game-server/tests/../src/persist.rs:32:7
+   |
+32 | const WAL_BLOCK_DOMAIN: &[u8] = b"noname-next/wal-block/v1";
+   |       ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `compute_hash` is never used
+  --> apps/game-server/tests/../src/persist.rs:58:12
+   |
+56 | impl WalBlock {
+   | ------------- method in this implementation
+57 |     /// Compute the canonical hash of a block (excluding the `block_hash` field).
+58 |     pub fn compute_hash(&self) -> [u8; 32] {
+   |            ^^^^^^^^^^^^
+
+warning: fields `blocks`, `block_signatures`, and `result_record` are never read
+   --> apps/game-server/tests/../src/persist.rs:124:5
+    |
+114 | pub struct RoomPersist {
+    |            ----------- fields in this struct
+...
+124 |     blocks: Vec<WalBlock>,
+    |     ^^^^^^
+125 |     /// Signatures for each block (parallel to `blocks`).
+126 |     block_signatures: Vec<WalBlockSignature>,
+    |     ^^^^^^^^^^^^^^^^
+127 |     /// Final result record (set when match completes).
+128 |     result_record: Option<MatchResultRecord>,
+    |     ^^^^^^^^^^^^^
+    |
+    = note: `RoomPersist` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: constant `DEFAULT_BLOCK_SIZE` is never used
+   --> apps/game-server/tests/../src/persist.rs:132:11
+    |
+132 | pub const DEFAULT_BLOCK_SIZE: usize = 16;
+    |           ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/tests/../src/persist.rs:198:12
+    |
+134 | impl RoomPersist {
+    | ---------------- associated items in this implementation
+...
+198 |     pub fn build_blocks(&self, block_size: usize) -> Vec<WalBlock> {
+    |            ^^^^^^^^^^^^
+...
+224 |     pub fn seal_blocks(&mut self, blocks: Vec<WalBlock>, key: &str, key_id: &str) {
+    |            ^^^^^^^^^^^
+...
+236 |     pub fn wal_root_hash(&self) -> [u8; 32] {
+    |            ^^^^^^^^^^^^^
+...
+244 |     pub fn blocks(&self) -> &[WalBlock] {
+    |            ^^^^^^
+...
+249 |     pub fn block_signatures(&self) -> &[WalBlockSignature] {
+    |            ^^^^^^^^^^^^^^^^
+...
+257 |     pub fn finalize_result(
+    |            ^^^^^^^^^^^^^^^
+...
+284 |     pub fn result_record(&self) -> Option<&MatchResultRecord> {
+    |            ^^^^^^^^^^^^^
+...
+293 |     pub fn verify_block_chain(blocks: &[WalBlock]) -> Result<(), usize> {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+308 |     pub fn verify_block_signatures(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `sign_block_hash` is never used
+   --> apps/game-server/tests/../src/persist.rs:331:4
+    |
+331 | fn sign_block_hash(block_hash: &[u8; 32], key_arr: &[u8; 32], key_id: &str) -> WalBlockSignature {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `key_bytes` is never used
+   --> apps/game-server/tests/../src/persist.rs:345:4
+    |
+345 | fn key_bytes(key: &str) -> [u8; 32] {
+    |    ^^^^^^^^^
+
+warning: struct `ServerConfig` is never constructed
+ --> apps/game-server/tests/../src/config.rs:7:12
+  |
+7 | pub struct ServerConfig {
+  |            ^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `from_env` is never used
+  --> apps/game-server/tests/../src/config.rs:68:12
+   |
+66 | impl ServerConfig {
+   | ----------------- associated function in this implementation
+67 |     /// Load from environment with defaults.
+68 |     pub fn from_env() -> Self {
+   |            ^^^^^^^^
+
+warning: constant `WAL_BLOCK_DOMAIN` is never used
+  --> apps/game-server/tests/../src/persist.rs:32:7
+   |
+32 | const WAL_BLOCK_DOMAIN: &[u8] = b"noname-next/wal-block/v1";
+   |       ^^^^^^^^^^^^^^^^
+
+warning: variants `Spectate`, `Snapshot`, `ChooseGeneral`, and `Disconnect` are never constructed
+  --> apps/game-server/tests/../src/room.rs:29:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variants in this enum
+...
+29 |     Spectate {
+   |     ^^^^^^^^
+...
+44 |     Snapshot {
+   |     ^^^^^^^^
+...
+51 |     ChooseGeneral {
+   |     ^^^^^^^^^^^^^
+...
+57 |     Disconnect { connection_id: u64 },
+   |     ^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: fields `reconnect_token`, `choice`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:75:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+...
+75 |     pub reconnect_token: String,
+   |         ^^^^^^^^^^^^^^^
+...
+79 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+80 |     /// Personalized legal actions.
+81 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `id` is never read
+  --> apps/game-server/tests/../src/room.rs:99:9
+   |
+97 | pub struct RoomHandle {
+   |            ---------- field in this struct
+98 |     /// Room id.
+99 |     pub id: u64,
+   |         ^^
+   |
+   = note: `RoomHandle` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: associated function `new` is never used
+   --> apps/game-server/tests/../src/room.rs:105:12
+    |
+103 | impl RoomHandle {
+    | --------------- associated function in this implementation
+104 |     /// 由房间 actor 构造（原生 actor 复用同一 handle 类型）。
+105 |     pub fn new(id: u64, tx: mpsc::Sender<RoomMsg>) -> Self {
+    |            ^^^
+
+warning: method `slow_marker` is never used
+  --> apps/game-server/tests/../src/session.rs:43:12
+   |
+28 | impl Outbound {
+   | ------------- method in this implementation
+...
+43 |     pub fn slow_marker(&self) -> watch::Sender<bool> {
+   |            ^^^^^^^^^^^
+
+warning: struct `Session` is never constructed
+  --> apps/game-server/tests/../src/session.rs:78:12
+   |
+78 | pub struct Session {
+   |            ^^^^^^^
+
+warning: struct `HandlerError` is never constructed
+   --> apps/game-server/tests/../src/session.rs:133:12
+    |
+133 | pub struct HandlerError {
+    |            ^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> apps/game-server/tests/../src/session.rs:142:12
+    |
+140 | impl HandlerError {
+    | ----------------- associated function in this implementation
+141 |     /// Construct.
+142 |     pub fn new(code: engine_protocol::ErrorCode, message: impl Into<String>) -> Self {
+    |            ^^^
+
+warning: variants `Spectate`, `ChooseGeneral`, and `Disconnect` are never constructed
+  --> apps/game-server/tests/../src/room.rs:29:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variants in this enum
+...
+29 |     Spectate {
+   |     ^^^^^^^^
+...
+51 |     ChooseGeneral {
+   |     ^^^^^^^^^^^^^
+...
+57 |     Disconnect { connection_id: u64 },
+   |     ^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: fields `seat`, `role`, `reconnect_token`, `view`, `choice`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:71:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+...
+71 |     pub seat: u8,
+   |         ^^^^
+72 |     /// Role.
+73 |     pub role: ClientRole,
+   |         ^^^^
+74 |     /// Token.
+75 |     pub reconnect_token: String,
+   |         ^^^^^^^^^^^^^^^
+76 |     /// Initial view.
+77 |     pub view: engine_api::ObserverSnapshot,
+   |         ^^^^
+78 |     /// Personalized pending choice.
+79 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+80 |     /// Personalized legal actions.
+81 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: `game-server` (test "fault_injection") generated 7 warnings
+warning: `game-server` (test "room_flow") generated 17 warnings (6 duplicates)
+warning: `game-server` (test "long_run_bot") generated 17 warnings (15 duplicates)
+warning: `game-server` (test "multi_room_stress") generated 17 warnings (17 duplicates)
+warning: `game-server` (test "long_run_memory") generated 17 warnings (17 duplicates)
+warning: `game-server` (test "long_run_soak") generated 17 warnings (17 duplicates)
+warning: unused import: `ClientRole`
+  --> apps/game-server/tests/m8_rolling_upgrade.rs:20:23
+   |
+20 | use engine_protocol::{ClientRole, MessageHeader, ServerMessage};
+   |                       ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `spawn_room` is never used
+   --> apps/game-server/tests/../src/room.rs:119:8
+    |
+119 | pub fn spawn_room(
+    |        ^^^^^^^^^^
+
+warning: constant `DEFAULT_BLOCK_SIZE` is never used
+   --> apps/game-server/tests/../src/persist.rs:132:11
+    |
+132 | pub const DEFAULT_BLOCK_SIZE: usize = 16;
+    |           ^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `result_record` is never used
+   --> apps/game-server/tests/../src/persist.rs:284:12
+    |
+134 | impl RoomPersist {
+    | ---------------- method in this implementation
+...
+284 |     pub fn result_record(&self) -> Option<&MatchResultRecord> {
+    |            ^^^^^^^^^^^^^
+
+warning: `game-server` (test "m8_rolling_upgrade") generated 19 warnings (17 duplicates) (run `cargo fix --test "m8_rolling_upgrade" -p game-server` to apply 1 suggestion)
+warning: `game-server` (test "tournament_wal_signing") generated 2 warnings
+warning: unused import: `lock::StoreWriterLock`
+  --> apps/game-server/tests/../src/native_room_store.rs:17:9
+   |
+17 | pub use lock::StoreWriterLock;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `package_id`, `deferred`, and `frozen` are never read
+   --> apps/game-server/tests/../src/native.rs:312:9
+    |
+311 | pub struct LoadedPack {
+    |            ---------- fields in this struct
+312 |     pub package_id: String,
+    |         ^^^^^^^^^^
+313 |     pub pack: ExtensionPack,
+314 |     pub deferred: Vec<String>,
+    |         ^^^^^^^^
+315 |     /// 建局所用的完整已验证包副本，房间持久化保留原内容。
+316 |     pub frozen: FrozenNativePackage,
+    |         ^^^^^^
+
+warning: struct `NativeGameRequest` is never constructed
+   --> apps/game-server/tests/../src/native.rs:321:12
+    |
+321 | pub struct NativeGameRequest {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `default_planner_nodes` is never used
+   --> apps/game-server/tests/../src/native.rs:347:4
+    |
+347 | fn default_planner_nodes() -> usize {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `default_planner_lookahead` is never used
+   --> apps/game-server/tests/../src/native.rs:351:4
+    |
+351 | fn default_planner_lookahead() -> u8 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `default_max_steps` is never used
+   --> apps/game-server/tests/../src/native.rs:355:4
+    |
+355 | fn default_max_steps() -> u64 {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeGameSummary` is never constructed
+   --> apps/game-server/tests/../src/native.rs:361:12
+    |
+361 | pub struct NativeGameSummary {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `create_native_game` is never used
+   --> apps/game-server/tests/../src/native.rs:393:8
+    |
+393 | pub fn create_native_game(
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `load_refs` is never used
+   --> apps/game-server/tests/../src/native.rs:469:4
+    |
+469 | fn load_refs<'a>(
+    |    ^^^^^^^^^
+
+warning: struct `NativeMatchArchive` is never constructed
+   --> apps/game-server/tests/../src/native.rs:482:12
+    |
+482 | pub struct NativeMatchArchive {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeRestoreRequest` is never constructed
+   --> apps/game-server/tests/../src/native.rs:490:12
+    |
+490 | pub struct NativeRestoreRequest {
+    |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeRestoreSummary` is never constructed
+   --> apps/game-server/tests/../src/native.rs:498:12
+    |
+498 | pub struct NativeRestoreSummary {
+    |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `hex_encode` is never used
+   --> apps/game-server/tests/../src/native.rs:502:4
+    |
+502 | fn hex_encode(bytes: &[u8]) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `hex_decode` is never used
+   --> apps/game-server/tests/../src/native.rs:512:4
+    |
+512 | fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
+    |    ^^^^^^^^^^
+
+warning: function `save_fresh_match` is never used
+   --> apps/game-server/tests/../src/native.rs:529:8
+    |
+529 | pub fn save_fresh_match(
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `restore_match` is never used
+   --> apps/game-server/tests/../src/native.rs:546:8
+    |
+546 | pub fn restore_match(
+    |        ^^^^^^^^^^^^^
+
+warning: function `open_native_match` is never used
+   --> apps/game-server/tests/../src/native.rs:565:8
+    |
+565 | pub fn open_native_match(
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `restore_native_match` is never used
+   --> apps/game-server/tests/../src/native.rs:580:8
+    |
+580 | pub fn restore_native_match(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `reference_binding` is never used
+  --> apps/game-server/tests/../src/native/frozen.rs:17:4
+   |
+17 | fn reference_binding(reference: &str) -> Result<LockedPackage, String> {
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used
+   --> apps/game-server/tests/../src/native/frozen.rs:165:12
+    |
+105 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+165 |     pub fn freeze_reference(&self, reference: &str) -> Result<FrozenNativePackage, String> {
+    |            ^^^^^^^^^^^^^^^^
+...
+173 |     pub fn load_frozen_reference(
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+189 |     pub fn load_room_packages(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> apps/game-server/examples/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `frozen` is never read
+   --> apps/game-server/examples/../src/native.rs:316:9
+    |
+311 | pub struct LoadedPack {
+    |            ---------- field in this struct
+...
+316 |     pub frozen: FrozenNativePackage,
+    |         ^^^^^^
+
+warning: function `load_refs` is never used
+   --> apps/game-server/examples/../src/native.rs:469:4
+    |
+469 | fn load_refs<'a>(
+    |    ^^^^^^^^^
+
+warning: struct `NativeMatchArchive` is never constructed
+   --> apps/game-server/examples/../src/native.rs:482:12
+    |
+482 | pub struct NativeMatchArchive {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeRestoreRequest` is never constructed
+   --> apps/game-server/examples/../src/native.rs:490:12
+    |
+490 | pub struct NativeRestoreRequest {
+    |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeRestoreSummary` is never constructed
+   --> apps/game-server/examples/../src/native.rs:498:12
+    |
+498 | pub struct NativeRestoreSummary {
+    |            ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `hex_encode` is never used
+   --> apps/game-server/examples/../src/native.rs:502:4
+    |
+502 | fn hex_encode(bytes: &[u8]) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `hex_decode` is never used
+   --> apps/game-server/examples/../src/native.rs:512:4
+    |
+512 | fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
+    |    ^^^^^^^^^^
+
+warning: function `save_fresh_match` is never used
+   --> apps/game-server/examples/../src/native.rs:529:8
+    |
+529 | pub fn save_fresh_match(
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `restore_match` is never used
+   --> apps/game-server/examples/../src/native.rs:546:8
+    |
+546 | pub fn restore_match(
+    |        ^^^^^^^^^^^^^
+
+warning: function `open_native_match` is never used
+   --> apps/game-server/examples/../src/native.rs:565:8
+    |
+565 | pub fn open_native_match(
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `restore_native_match` is never used
+   --> apps/game-server/examples/../src/native.rs:580:8
+    |
+580 | pub fn restore_native_match(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `reference_binding` is never used
+  --> apps/game-server/examples/../src/native/frozen.rs:17:4
+   |
+17 | fn reference_binding(reference: &str) -> Result<LockedPackage, String> {
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used
+   --> apps/game-server/examples/../src/native/frozen.rs:165:12
+    |
+105 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+165 |     pub fn freeze_reference(&self, reference: &str) -> Result<FrozenNativePackage, String> {
+    |            ^^^^^^^^^^^^^^^^
+...
+173 |     pub fn load_frozen_reference(
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+189 |     pub fn load_room_packages(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `package_id` and `deferred` are never read
+   --> apps/game-server/tests/../src/native.rs:312:9
+    |
+311 | pub struct LoadedPack {
+    |            ---------- fields in this struct
+312 |     pub package_id: String,
+    |         ^^^^^^^^^^
+313 |     pub pack: ExtensionPack,
+314 |     pub deferred: Vec<String>,
+    |         ^^^^^^^^
+
+warning: constant `PACK` is never used
+  --> apps/game-server/tests/nc05_lifecycle_heavy.rs:21:7
+   |
+21 | const PACK: &str = "shahai-swd-upstream-noname";
+   |       ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: field `frozen` is never read
+   --> apps/game-server/tests/../src/native.rs:316:9
+    |
+311 | pub struct LoadedPack {
+    |            ---------- field in this struct
+...
+316 |     pub frozen: FrozenNativePackage,
+    |         ^^^^^^
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `load_reference` is never used
+   --> apps/game-server/tests/../src/native.rs:304:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ method in this implementation
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `Referee` is never constructed
+  --> apps/game-server/tests/../src/native_view.rs:31:5
+   |
+25 | pub enum RoomRole {
+   |          -------- variant in this enum
+...
+31 |     Referee,
+   |     ^^^^^^^
+   |
+   = note: `RoomRole` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `choice_for` is never used
+   --> apps/game-server/tests/../src/native_view.rs:236:8
+    |
+236 | pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_api::ChoiceRequest> {
+    |        ^^^^^^^^^^
+
+warning: fields `deferred` and `frozen` are never read
+   --> apps/game-server/tests/../src/native.rs:314:9
+    |
+311 | pub struct LoadedPack {
+    |            ---------- fields in this struct
+...
+314 |     pub deferred: Vec<String>,
+    |         ^^^^^^^^
+315 |     /// 建局所用的完整已验证包副本，房间持久化保留原内容。
+316 |     pub frozen: FrozenNativePackage,
+    |         ^^^^^^
+
+warning: methods `activate_version`, `disable_package`, `enable_package`, `uninstall_package`, `revoke_package`, and `rollback` are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `load_room_packages` is never used
+   --> apps/game-server/tests/../src/native/frozen.rs:189:12
+    |
+105 | impl NativeContent {
+    | ------------------ method in this implementation
+...
+189 |     pub fn load_room_packages(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `StreamExt`
+   --> apps/game-server/src/main.rs:833:37
+    |
+833 |         use futures_util::{SinkExt, StreamExt};
+    |                                     ^^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CommandKind`, `Command`, and `ExpectedRevision`
+   --> apps/game-server/src/main.rs:980:26
+    |
+980 |         use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId};
+    |                          ^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: field `room_id` is never read
+  --> apps/game-server/tests/../src/native_room_store.rs:50:9
+   |
+48 | pub struct RoomScanIssue {
+   |            ------------- field in this struct
+49 |     pub path: PathBuf,
+50 |     pub room_id: Option<u64>,
+   |         ^^^^^^^
+   |
+   = note: `RoomScanIssue` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: method `dir` is never used
+   --> apps/game-server/tests/../src/native_room_store.rs:147:12
+    |
+136 | impl NativeRoomStore {
+    | -------------------- method in this implementation
+...
+147 |     pub fn dir(&self) -> &Path {
+    |            ^^^
+
+warning: variants `ChooseGeneral` and `Disconnect` are never constructed
+  --> apps/game-server/tests/../src/room.rs:51:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variants in this enum
+...
+51 |     ChooseGeneral {
+   |     ^^^^^^^^^^^^^
+...
+57 |     Disconnect { connection_id: u64 },
+   |     ^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: fields `player_id`, `view`, and `choice` are never read
+  --> apps/game-server/tests/../src/room.rs:69:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+68 |     /// Player id (0 spectator).
+69 |     pub player_id: u32,
+   |         ^^^^^^^^^
+...
+77 |     pub view: engine_api::ObserverSnapshot,
+   |         ^^^^
+78 |     /// Personalized pending choice.
+79 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: struct `Member` is never constructed
+  --> apps/game-server/tests/../src/room.rs:84:8
+   |
+84 | struct Member {
+   |        ^^^^^^
+
+warning: function `spawn_room_with_engine` is never used
+   --> apps/game-server/tests/../src/room.rs:139:8
+    |
+139 | pub fn spawn_room_with_engine(
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `room_loop` is never used
+   --> apps/game-server/tests/../src/room.rs:161:10
+    |
+161 | async fn room_loop(
+    |          ^^^^^^^^^
+
+warning: function `project_for` is never used
+   --> apps/game-server/tests/../src/room.rs:519:4
+    |
+519 | fn project_for(
+    |    ^^^^^^^^^^^
+
+warning: function `legal_for` is never used
+   --> apps/game-server/tests/../src/room.rs:531:4
+    |
+531 | fn legal_for(
+    |    ^^^^^^^^^
+
+warning: function `choice_for` is never used
+   --> apps/game-server/tests/../src/room.rs:543:4
+    |
+543 | fn choice_for(
+    |    ^^^^^^^^^^
+
+warning: function `public_codes` is never used
+   --> apps/game-server/tests/../src/room.rs:557:4
+    |
+557 | fn public_codes(events: &[engine_api::DomainEvent]) -> Vec<u32> {
+    |    ^^^^^^^^^^^^
+
+warning: function `fanout_after_command` is never used
+   --> apps/game-server/tests/../src/room.rs:578:10
+    |
+578 | async fn fanout_after_command(
+    |          ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `broadcast_roster` is never used
+   --> apps/game-server/tests/../src/room.rs:609:10
+    |
+609 | async fn broadcast_roster(
+    |          ^^^^^^^^^^^^^^^^
+
+warning: function `hex_manifest` is never used
+   --> apps/game-server/tests/../src/room.rs:640:4
+    |
+640 | fn hex_manifest(h: &engine_api::MatchManifestHash) -> String {
+    |    ^^^^^^^^^^^^
+
+warning: method `set_frozen_packages` is never used
+   --> apps/game-server/tests/../src/room_native.rs:175:12
+    |
+122 | impl NativeRoomSession {
+    | ---------------------- method in this implementation
+...
+175 |     pub fn set_frozen_packages(&mut self, packages: Vec<crate::native::FrozenNativePackage>) {
+    |            ^^^^^^^^^^^^^^^^^^^
+
+warning: function `set_seat_timeout_secs` is never used
+  --> apps/game-server/tests/../src/room_native_actor.rs:29:8
+   |
+29 | pub fn set_seat_timeout_secs(secs: u64) {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `restore_room_from_disk` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:109:8
+    |
+109 | pub fn restore_room_from_disk(
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_native_room_if_configured` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:712:8
+    |
+712 | pub fn spawn_native_room_if_configured(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `join_reply_channel` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:758:8
+    |
+758 | pub fn join_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `submit_reply_channel` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:766:8
+    |
+766 | pub fn submit_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `idem` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:774:8
+    |
+774 | pub fn idem(key: u64) -> IdempotencyKey {
+    |        ^^^^
+
+warning: function `expected` is never used
+   --> apps/game-server/tests/../src/room_native_actor.rs:779:8
+    |
+779 | pub fn expected(revision: u64) -> ExpectedRevision {
+    |        ^^^^^^^^
+
+warning: methods `slow_marker` and `send` are never used
+  --> apps/game-server/tests/../src/session.rs:43:12
+   |
+28 | impl Outbound {
+   | ------------- methods in this implementation
+...
+43 |     pub fn slow_marker(&self) -> watch::Sender<bool> {
+   |            ^^^^^^^^^^^
+...
+64 |     pub async fn send(&self, msg: &ServerMessage) -> bool {
+   |                  ^^^^
+
+warning: variants `Submit`, `Snapshot`, and `Disconnect` are never constructed
+  --> apps/game-server/tests/../src/room.rs:36:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variants in this enum
+...
+36 |     Submit {
+   |     ^^^^^^
+...
+44 |     Snapshot {
+   |     ^^^^^^^^
+...
+57 |     Disconnect { connection_id: u64 },
+   |     ^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: fields `player_id`, `reconnect_token`, `view`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:69:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+68 |     /// Player id (0 spectator).
+69 |     pub player_id: u32,
+   |         ^^^^^^^^^
+...
+75 |     pub reconnect_token: String,
+   |         ^^^^^^^^^^^^^^^
+76 |     /// Initial view.
+77 |     pub view: engine_api::ObserverSnapshot,
+   |         ^^^^
+...
+81 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `role`, `choice`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:73:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+...
+73 |     pub role: ClientRole,
+   |         ^^^^
+...
+79 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+80 |     /// Personalized legal actions.
+81 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: unused import: `StreamExt`
+   --> apps/game-server/src/main.rs:984:37
+    |
+984 |         use futures_util::{SinkExt, StreamExt};
+    |                                     ^^^^^^^^^
+
+warning: value assigned to `rev` is never read
+    --> apps/game-server/src/main.rs:1296:27
+     |
+1296 |             let mut rev = 0u64;
+     |                           ^^^^
+     |
+     = help: maybe it is overwritten before being read?
+     = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `legal` is never read
+    --> apps/game-server/src/main.rs:1297:47
+     |
+1297 |             let mut legal: Vec<LegalAction> = Vec::new();
+     |                                               ^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: function `bootstrap` is never used
+  --> apps/game-server/src/main.rs:77:4
+   |
+77 | fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
+   |    ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_cmds_per_sec` is never read
+  --> apps/game-server/src/config.rs:17:9
+   |
+ 7 | pub struct ServerConfig {
+   |            ------------ field in this struct
+...
+17 |     pub max_cmds_per_sec: u32,
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `ServerConfig` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `dir`, `load_all`, and `by_id` are never used
+   --> apps/game-server/src/native_room_store.rs:147:12
+    |
+136 | impl NativeRoomStore {
+    | -------------------- methods in this implementation
+...
+147 |     pub fn dir(&self) -> &Path {
+    |            ^^^
+...
+381 |     pub fn load_all(&self) -> Result<Vec<StoredRoom>, String> {
+    |            ^^^^^^^^
+...
+406 |     pub fn by_id(&self) -> Result<HashMap<u64, StoredRoom>, String> {
+    |            ^^^^^
+
+warning: field `path` is never read
+  --> apps/game-server/src/native_room_store/lock.rs:18:5
+   |
+17 | pub struct StoreWriterLock {
+   |            --------------- field in this struct
+18 |     path: PathBuf,
+   |     ^^^^
+   |
+   = note: `StoreWriterLock` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: method `path` is never used
+  --> apps/game-server/src/native_room_store/lock.rs:43:12
+   |
+22 | impl StoreWriterLock {
+   | -------------------- method in this implementation
+...
+43 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `enable_package`, `revoke_package`, `rollback`, and `load_reference` are never used
+   --> apps/game-server/src/native.rs:109:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> apps/game-server/src/room_native.rs:148:12
+    |
+122 | impl NativeRoomSession {
+    | ---------------------- associated function in this implementation
+...
+148 |     pub fn new(engine: Engine, max_seats: u8) -> Self {
+    |            ^^^
+
+warning: function `set_seat_timeout_secs` is never used
+  --> apps/game-server/src/room_native_actor.rs:29:8
+   |
+29 | pub fn set_seat_timeout_secs(secs: u64) {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_room_native` is never used
+  --> apps/game-server/src/room_native_actor.rs:50:8
+   |
+50 | pub fn spawn_room_native(
+   |        ^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_room_native_with_password` is never used
+  --> apps/game-server/src/room_native_actor.rs:60:8
+   |
+60 | pub fn spawn_room_native_with_password(
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `restore_room_from_disk` is never used
+   --> apps/game-server/src/room_native_actor.rs:109:8
+    |
+109 | pub fn restore_room_from_disk(
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `join_reply_channel` is never used
+   --> apps/game-server/src/room_native_actor.rs:758:8
+    |
+758 | pub fn join_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `submit_reply_channel` is never used
+   --> apps/game-server/src/room_native_actor.rs:766:8
+    |
+766 | pub fn submit_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `idem` is never used
+   --> apps/game-server/src/room_native_actor.rs:774:8
+    |
+774 | pub fn idem(key: u64) -> IdempotencyKey {
+    |        ^^^^
+
+warning: function `expected` is never used
+   --> apps/game-server/src/room_native_actor.rs:779:8
+    |
+779 | pub fn expected(revision: u64) -> ExpectedRevision {
+    |        ^^^^^^^^
+
+warning: struct `OutboxMessage` is never constructed
+  --> apps/game-server/src/outbox.rs:15:12
+   |
+15 | pub struct OutboxMessage {
+   |            ^^^^^^^^^^^^^
+
+warning: enum `OutboxKind` is never used
+  --> apps/game-server/src/outbox.rs:33:10
+   |
+33 | pub enum OutboxKind {
+   |          ^^^^^^^^^^
+
+warning: struct `DurableOutbox` is never constructed
+  --> apps/game-server/src/outbox.rs:48:12
+   |
+48 | pub struct DurableOutbox {
+   |            ^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/src/outbox.rs:61:12
+    |
+ 59 | impl DurableOutbox {
+    | ------------------ associated items in this implementation
+ 60 |     /// Create a new empty outbox.
+ 61 |     pub fn new() -> Self {
+    |            ^^^
+...
+ 66 |     pub fn enqueue(&mut self, match_id: u64, kind: OutboxKind, payload: impl Into<String>) -> u64 {
+    |            ^^^^^^^
+...
+ 81 |     pub fn pending(&self) -> &[OutboxMessage] {
+    |            ^^^^^^^
+...
+ 86 |     pub fn mark_delivered(&mut self, message_id: u64) {
+    |            ^^^^^^^^^^^^^^
+...
+ 96 |     pub fn mark_failed(&mut self, message_id: u64) {
+    |            ^^^^^^^^^^^
+...
+103 |     pub fn retry_failed(&mut self) -> usize {
+    |            ^^^^^^^^^^^^
+...
+108 |     pub fn is_delivered(&self, message_id: u64) -> bool {
+    |            ^^^^^^^^^^^^
+...
+113 |     pub fn pending_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^
+...
+118 |     pub fn delivered_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^
+...
+123 |     pub fn drain_delivered(&mut self) -> Vec<OutboxMessage> {
+    |            ^^^^^^^^^^^^^^^
+
+warning: constant `WAL_BLOCK_DOMAIN` is never used
+  --> apps/game-server/src/persist.rs:32:7
+   |
+32 | const WAL_BLOCK_DOMAIN: &[u8] = b"noname-next/wal-block/v1";
+   |       ^^^^^^^^^^^^^^^^
+
+warning: method `compute_hash` is never used
+  --> apps/game-server/src/persist.rs:58:12
+   |
+56 | impl WalBlock {
+   | ------------- method in this implementation
+57 |     /// Compute the canonical hash of a block (excluding the `block_hash` field).
+58 |     pub fn compute_hash(&self) -> [u8; 32] {
+   |            ^^^^^^^^^^^^
+
+warning: fields `blocks`, `block_signatures`, and `result_record` are never read
+   --> apps/game-server/src/persist.rs:124:5
+    |
+114 | pub struct RoomPersist {
+    |            ----------- fields in this struct
+...
+124 |     blocks: Vec<WalBlock>,
+    |     ^^^^^^
+125 |     /// Signatures for each block (parallel to `blocks`).
+126 |     block_signatures: Vec<WalBlockSignature>,
+    |     ^^^^^^^^^^^^^^^^
+127 |     /// Final result record (set when match completes).
+128 |     result_record: Option<MatchResultRecord>,
+    |     ^^^^^^^^^^^^^
+    |
+    = note: `RoomPersist` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: constant `DEFAULT_BLOCK_SIZE` is never used
+   --> apps/game-server/src/persist.rs:132:11
+    |
+132 | pub const DEFAULT_BLOCK_SIZE: usize = 16;
+    |           ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/src/persist.rs:198:12
+    |
+134 | impl RoomPersist {
+    | ---------------- associated items in this implementation
+...
+198 |     pub fn build_blocks(&self, block_size: usize) -> Vec<WalBlock> {
+    |            ^^^^^^^^^^^^
+...
+224 |     pub fn seal_blocks(&mut self, blocks: Vec<WalBlock>, key: &str, key_id: &str) {
+    |            ^^^^^^^^^^^
+...
+236 |     pub fn wal_root_hash(&self) -> [u8; 32] {
+    |            ^^^^^^^^^^^^^
+...
+244 |     pub fn blocks(&self) -> &[WalBlock] {
+    |            ^^^^^^
+...
+249 |     pub fn block_signatures(&self) -> &[WalBlockSignature] {
+    |            ^^^^^^^^^^^^^^^^
+...
+257 |     pub fn finalize_result(
+    |            ^^^^^^^^^^^^^^^
+...
+284 |     pub fn result_record(&self) -> Option<&MatchResultRecord> {
+    |            ^^^^^^^^^^^^^
+...
+293 |     pub fn verify_block_chain(blocks: &[WalBlock]) -> Result<(), usize> {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+308 |     pub fn verify_block_signatures(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `sign_block_hash` is never used
+   --> apps/game-server/src/persist.rs:331:4
+    |
+331 | fn sign_block_hash(block_hash: &[u8; 32], key_arr: &[u8; 32], key_id: &str) -> WalBlockSignature {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `key_bytes` is never used
+   --> apps/game-server/src/persist.rs:345:4
+    |
+345 | fn key_bytes(key: &str) -> [u8; 32] {
+    |    ^^^^^^^^^
+
+warning: function `recover_engine` is never used
+   --> apps/game-server/src/persist.rs:362:8
+    |
+362 | pub fn recover_engine(persist: &RoomPersist) -> Result<engine_core::Engine, String> {
+    |        ^^^^^^^^^^^^^^
+
+warning: variant `ChooseGeneral` is never constructed
+  --> apps/game-server/src/room.rs:51:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variant in this enum
+...
+51 |     ChooseGeneral {
+   |     ^^^^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: field `id` is never read
+  --> apps/game-server/src/room.rs:99:9
+   |
+97 | pub struct RoomHandle {
+   |            ---------- field in this struct
+98 |     /// Room id.
+99 |     pub id: u64,
+   |         ^^
+   |
+   = note: `RoomHandle` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `spawn_room` is never used
+   --> apps/game-server/src/room.rs:119:8
+    |
+119 | pub fn spawn_room(
+    |        ^^^^^^^^^^
+
+warning: method `dir` is never used
+   --> apps/game-server/src/native_room_store.rs:147:12
+    |
+136 | impl NativeRoomStore {
+    | -------------------- method in this implementation
+...
+147 |     pub fn dir(&self) -> &Path {
+    |            ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `retry_failed` is never used
+   --> apps/game-server/src/outbox.rs:103:12
+    |
+ 59 | impl DurableOutbox {
+    | ------------------ method in this implementation
+...
+103 |     pub fn retry_failed(&mut self) -> usize {
+    |            ^^^^^^^^^^^^
+
+warning: `game-server` (test "native_product_path") generated 10 warnings (8 duplicates)
+warning: `game-server` (test "native_upgrade_rollback") generated 17 warnings (16 duplicates)
+warning: `game-server` (test "nc09_native_view_bridge") generated 22 warnings (20 duplicates)
+warning: `game-server` (test "nc02_install_identity") generated 20 warnings (19 duplicates)
+warning: `game-server` (example "policy_eval") generated 14 warnings
+warning: `game-server` (test "nc05_campaign_profile") generated 20 warnings
+warning: `game-server` (test "nc05_skin_ui") generated 20 warnings (19 duplicates)
+warning: `game-server` (test "nc05_lifecycle_heavy") generated 12 warnings (9 duplicates)
+warning: `game-server` (test "native_frozen_packages") generated 18 warnings (16 duplicates)
+warning: `game-server` (test "nc09_dual_backend") generated 56 warnings (32 duplicates) (run `cargo fix --test "nc09_dual_backend" -p game-server` to apply 1 suggestion)
+warning: `game-server` (test "nc09_native_actor") generated 50 warnings (48 duplicates)
+warning: `game-server` (test "nc09_native_room_session") generated 41 warnings (39 duplicates)
+warning: `game-server` (bin "game-server") generated 30 warnings
+warning: `game-server` (bin "game-server" test) generated 26 warnings (19 duplicates) (run `cargo fix --bin "game-server" -p game-server --tests` to apply 2 suggestions)
+warning: struct `NativePackageInfo` is never constructed
+  --> apps/game-server/tests/../src/native.rs:28:12
+   |
+28 | pub struct NativePackageInfo {
+   |            ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `NativeContent` is never constructed
+  --> apps/game-server/tests/../src/native.rs:35:12
+   |
+35 | pub struct NativeContent {
+   |            ^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/tests/../src/native.rs:42:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ associated items in this implementation
+ 41 |     /// 打开服务（存储目录不存在则初始化）。
+ 42 |     pub fn open(root: PathBuf, store_root: PathBuf) -> Result<Self, String> {
+    |            ^^^^
+...
+ 47 |     fn options() -> InstallOptions {
+    |        ^^^^^^^
+...
+ 56 |     fn meta_info(m: &InstalledMeta) -> NativePackageInfo {
+    |        ^^^^^^^^^
+...
+ 70 |     pub fn import(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+174 |     pub fn load_scoped(
+    |            ^^^^^^^^^^^
+...
+216 |     fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    |        ^^^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: struct `LoadedPack` is never constructed
+   --> apps/game-server/tests/../src/native.rs:311:12
+    |
+311 | pub struct LoadedPack {
+    |            ^^^^^^^^^^
+
+warning: struct `FrozenNativePackage` is never constructed
+  --> apps/game-server/tests/../src/native/frozen.rs:11:12
+   |
+11 | pub struct FrozenNativePackage {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: methods `parsed_package`, `package`, and `text_asset` are never used
+  --> apps/game-server/tests/../src/native/frozen.rs:39:8
+   |
+38 | impl FrozenNativePackage {
+   | ------------------------ methods in this implementation
+39 |     fn parsed_package(&self) -> Result<ContentPackage, String> {
+   |        ^^^^^^^^^^^^^^
+...
+61 |     pub(super) fn package(&self) -> Result<ContentPackage, String> {
+   |                   ^^^^^^^
+...
+95 |     pub(super) fn text_asset(&self, relative: &str) -> Result<Option<String>, String> {
+   |                   ^^^^^^^^^^
+
+warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used
+   --> apps/game-server/tests/../src/native/frozen.rs:106:19
+    |
+105 | impl NativeContent {
+    | ------------------ methods in this implementation
+106 |     pub(super) fn check_not_revoked(&self, binding: &LockedPackage) -> Result<(), String> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+119 |     pub(super) fn freeze_binding(
+    |                   ^^^^^^^^^^^^^^
+...
+165 |     pub fn freeze_reference(&self, reference: &str) -> Result<FrozenNativePackage, String> {
+    |            ^^^^^^^^^^^^^^^^
+...
+173 |     pub fn load_frozen_reference(
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+189 |     pub fn load_room_packages(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: struct `NativePackageInfo` is never constructed
+  --> apps/game-server/examples/../src/native.rs:28:12
+   |
+28 | pub struct NativePackageInfo {
+   |            ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `NativeContent` is never constructed
+  --> apps/game-server/examples/../src/native.rs:35:12
+   |
+35 | pub struct NativeContent {
+   |            ^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/examples/../src/native.rs:42:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ associated items in this implementation
+ 41 |     /// 打开服务（存储目录不存在则初始化）。
+ 42 |     pub fn open(root: PathBuf, store_root: PathBuf) -> Result<Self, String> {
+    |            ^^^^
+...
+ 47 |     fn options() -> InstallOptions {
+    |        ^^^^^^^
+...
+ 56 |     fn meta_info(m: &InstalledMeta) -> NativePackageInfo {
+    |        ^^^^^^^^^
+...
+ 70 |     pub fn import(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+174 |     pub fn load_scoped(
+    |            ^^^^^^^^^^^
+...
+216 |     fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    |        ^^^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: struct `LoadedPack` is never constructed
+   --> apps/game-server/examples/../src/native.rs:311:12
+    |
+311 | pub struct LoadedPack {
+    |            ^^^^^^^^^^
+
+warning: struct `NativeGameRequest` is never constructed
+   --> apps/game-server/examples/../src/native.rs:321:12
+    |
+321 | pub struct NativeGameRequest {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `default_planner_nodes` is never used
+   --> apps/game-server/examples/../src/native.rs:347:4
+    |
+347 | fn default_planner_nodes() -> usize {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `default_planner_lookahead` is never used
+   --> apps/game-server/examples/../src/native.rs:351:4
+    |
+351 | fn default_planner_lookahead() -> u8 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `default_max_steps` is never used
+   --> apps/game-server/examples/../src/native.rs:355:4
+    |
+355 | fn default_max_steps() -> u64 {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: struct `NativeGameSummary` is never constructed
+   --> apps/game-server/examples/../src/native.rs:361:12
+    |
+361 | pub struct NativeGameSummary {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `create_native_game` is never used
+   --> apps/game-server/examples/../src/native.rs:393:8
+    |
+393 | pub fn create_native_game(
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: struct `FrozenNativePackage` is never constructed
+  --> apps/game-server/examples/../src/native/frozen.rs:11:12
+   |
+11 | pub struct FrozenNativePackage {
+   |            ^^^^^^^^^^^^^^^^^^^
+
+warning: methods `parsed_package`, `package`, and `text_asset` are never used
+  --> apps/game-server/examples/../src/native/frozen.rs:39:8
+   |
+38 | impl FrozenNativePackage {
+   | ------------------------ methods in this implementation
+39 |     fn parsed_package(&self) -> Result<ContentPackage, String> {
+   |        ^^^^^^^^^^^^^^
+...
+61 |     pub(super) fn package(&self) -> Result<ContentPackage, String> {
+   |                   ^^^^^^^
+...
+95 |     pub(super) fn text_asset(&self, relative: &str) -> Result<Option<String>, String> {
+   |                   ^^^^^^^^^^
+
+warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used
+   --> apps/game-server/examples/../src/native/frozen.rs:106:19
+    |
+105 | impl NativeContent {
+    | ------------------ methods in this implementation
+106 |     pub(super) fn check_not_revoked(&self, binding: &LockedPackage) -> Result<(), String> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+119 |     pub(super) fn freeze_binding(
+    |                   ^^^^^^^^^^^^^^
+...
+165 |     pub fn freeze_reference(&self, reference: &str) -> Result<FrozenNativePackage, String> {
+    |            ^^^^^^^^^^^^^^^^
+...
+173 |     pub fn load_frozen_reference(
+    |            ^^^^^^^^^^^^^^^^^^^^^
+...
+189 |     pub fn load_room_packages(
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+174 |     pub fn load_scoped(
+    |            ^^^^^^^^^^^
+...
+216 |     fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    |        ^^^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: multiple methods are never used
+   --> apps/game-server/tests/../src/native.rs:89:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+174 |     pub fn load_scoped(
+    |            ^^^^^^^^^^^
+...
+216 |     fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    |        ^^^^^^^^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `game-server` (example "policy_head2head") generated 24 warnings (11 duplicates)
+warning: field `root` is never read
+  --> apps/game-server/tests/../src/native.rs:37:5
+   |
+35 | pub struct NativeContent {
+   |            ------------- field in this struct
+36 |     store: PackageStore,
+37 |     root: PathBuf,
+   |     ^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/tests/../src/native.rs:47:8
+    |
+ 40 | impl NativeContent {
+    | ------------------ associated items in this implementation
+...
+ 47 |     fn options() -> InstallOptions {
+    |        ^^^^^^^
+...
+ 56 |     fn meta_info(m: &InstalledMeta) -> NativePackageInfo {
+    |        ^^^^^^^^^
+...
+ 70 |     pub fn import(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^
+...
+ 89 |     pub fn activate_version(
+    |            ^^^^^^^^^^^^^^^^
+...
+102 |     pub fn disable_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+304 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: fields `player_id`, `choice`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:69:9
+   |
+67 | pub struct JoinReply {
+   |            --------- fields in this struct
+68 |     /// Player id (0 spectator).
+69 |     pub player_id: u32,
+   |         ^^^^^^^^^
+...
+79 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+80 |     /// Personalized legal actions.
+81 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `spawn_room_native` is never used
+  --> apps/game-server/tests/../src/room_native_actor.rs:50:8
+   |
+50 | pub fn spawn_room_native(
+   |        ^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_room_native_with_password` is never used
+  --> apps/game-server/tests/../src/room_native_actor.rs:60:8
+   |
+60 | pub fn spawn_room_native_with_password(
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `game-server` (test "nc08_install_matrix") generated 22 warnings (21 duplicates)
+warning: `game-server` (test "native_onlyol_general") generated 22 warnings (21 duplicates)
+warning: `game-server` (test "nc08_cross_line") generated 24 warnings (17 duplicates)
+warning: `game-server` (test "nc09_native_durability") generated 55 warnings (50 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 12.83s
+     Running unittests src/main.rs (target/debug/deps/game_server-381a7a01d3650e42)
+
+running 69 tests
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_lifecycle_http_tests::http_handlers_wire_import_disable_uninstall_to_store ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... 
+running 1 test
+ok
+test native_ws_e2e::commit_crash::native_ws_commit_crash_child ... ok
+
+running 1 test
+test lobby::tests::finished_saved_room_is_not_published_and_its_id_remains_reserved ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_ws_e2e::durability::native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+
+running 1 test
+
+running 1 test
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test net_smoke::health_over_real_tcp ... ok
+test net_smoke::second_bootstrap_on_same_store_is_rejected_and_releases_after_drop ... ok
+test net_smoke::second_process_is_rejected_and_abnormal_exit_releases_lock ... ok
+test net_smoke::store_writer_lock_child ... ok
+test net_smoke::websocket_creates_joins_and_submits_over_wire ... ok
+test net_smoke::websocket_multi_room_isolation ... ok
+test native_ws_e2e::commit_crash::native_extensions_ws_process_exit_after_rename_uses_previous_confirmation ... ok
+
+running 1 test
+test net_smoke::websocket_reconnect_restores_seat_and_revision ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test net_smoke::websocket_welcome_and_error_roundtrip ... ok
+test outbox::tests::dedup_prevents_double_delivery ... ok
+test outbox::tests::drain_delivered_clears_history ... ok
+test outbox::tests::enqueue_and_deliver ... ok
+test outbox::tests::failed_message_stays_pending ... ok
+test outbox::tests::multiple_matches_isolated ... ok
+test outbox::tests::ordering_preserved ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test net_smoke::websocket_submit_before_match_start_returns_error ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test tests::etag_matching_accepts_lists_and_weak_validators ... ok
+test native_ws_e2e::durability::native_extensions_ws_uncertain_initial_save_is_not_restored_as_a_room ... ok
+test net_smoke::websocket_plays_match_to_completion ... ok
+test native_ws_e2e::commit_crash::native_extensions_ws_process_exit_after_double_failure_replays_committed_receipt ... ok
+test native_ws_e2e::durability::native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps ... ok
+test native_ws_e2e::native_extensions_ws_fails_closed_for_invalid_frozen_content ... ok
+test native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands ... ok
+test native_ws_e2e::native_extensions_ws_reconnects_after_disk_restart ... ok
+test native_ws_e2e::double_failure::native_extensions_ws_double_initial_failure_restores_only_committed_creation ... ok
+test native_ws_e2e::durability::native_extensions_ws_restart_after_uncertain_rename_restores_only_confirmed_choice ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+test native_ws_e2e::durability::native_extensions_ws_write_failure_retries_and_restarts ... ok
+test native_ws_e2e::double_failure::native_extensions_ws_double_failure_fences_writes_and_recovers_by_decision ... ok
+
+test result: ok. 69 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 38.28s
+
+     Running tests/fault_injection.rs (target/debug/deps/fault_injection-24f33074002c3c51)
+
+running 11 tests
+test wal_write_failure_recovers_to_empty ... ok
+test content_package_missing_falls_back ... ok
+test snapshot_corruption_detected ... ok
+test snapshot_manifest_hash_tamper_rejected ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test duplicate_command_idempotent ... ok
+test wal_truncation_recovers_to_last_durable ... ok
+test wal_corruption_hash_mismatch_detected ... ok
+test node_restart_full_wal_replay ... ok
+test snapshot_truncated_bytes_clean_error ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/long_run_bot.rs (target/debug/deps/long_run_bot-d33dad5a98c15977)
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test bot_runs_matches_to_completion ... ok
+test bot_drives_matches_long_run ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.04s
+
+     Running tests/long_run_memory.rs (target/debug/deps/long_run_memory-bae73ed6f4fb3a68)
+
+running 5 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test thirty_consecutive_matches_do_not_leak_heap ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.40s
+
+     Running tests/long_run_soak.rs (target/debug/deps/long_run_soak-bf562d91e011f492)
+
+running 5 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test soak_8_rooms_25_rounds ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.67s
+
+     Running tests/m8_rolling_upgrade.rs (target/debug/deps/m8_rolling_upgrade-965bf4e4d3794e31)
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test rolling_upgrade_keeps_matches_on_their_pinned_content ... ok
+test different_content_locks_do_not_collide ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/multi_room_stress.rs (target/debug/deps/multi_room_stress-bfcd8d36b8399e08)
+
+running 7 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_mailbox_is_bounded ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test rooms_with_different_seeds_are_isolated ... ok
+test stress_10_concurrent_rooms ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/native_frozen_packages.rs (target/debug/deps/native_frozen_packages-aff4465804ab89f3)
+
+running 6 tests
+test room_packages_are_exact_ordered_and_do_not_fallback_to_active_packages ... ok
+test freezing_installed_assets_rejects_symlinks_outside_package_root ... ok
+test frozen_copy_rejects_tampering_missing_extra_assets_and_invalid_manifest ... ok
+test frozen_vm_and_binary_assets_restore_without_sources_or_installed_versions ... ok
+test legacy_exact_reference_migrates_disabled_old_version_and_upgrade_leaves_original_copy ... ok
+test frozen_copies_obey_current_hash_and_slot_revocations ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/native_onlyol_general.rs (target/debug/deps/native_onlyol_general-342021d29430d1d9)
+
+running 1 test
+test onlyol_requires_abi754_and_native_rejects_until_supported ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/native_product_path.rs (target/debug/deps/native_product_path-da2814b8750d48f4)
+
+running 10 tests
+test t63_load_unknown_package_errors_cleanly ... ok
+test vm_package_with_characters_installs_loads_and_runs ... ok
+test t8_native_disk_path_vm_package_end_to_end ... ok
+test t63_standard_only_build_and_drive ... ok
+test native_character_only_installed_package_enters_match ... ok
+test native_pile_only_installed_package_adds_physical_draw_cards ... ok
+test t13_generals_package_loads_via_native_path ... ok
+test t63_import_load_build_and_drive_with_extension ... ok
+test native_installed_asset_tampering_rejects_load_and_restore ... ok
+test t13_installed_extension_enters_match_and_restores ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/native_upgrade_rollback.rs (target/debug/deps/native_upgrade_rollback-f7383d247a5c0a21)
+
+running 4 tests
+test disable_then_enable_keeps_installed_copy ... ok
+test physical_uninstall_removes_active_slot_and_versions ... ok
+test activate_new_version_then_rollback ... ok
+test content_lock_rejects_restoring_after_package_upgrade ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc02_install_identity.rs (target/debug/deps/nc02_install_identity-9cfb9d036ef64b54)
+
+running 7 tests
+test nc02_corrupt_installed_copy_fails_clearly ... ok
+test nc02_loads_installed_copy_after_source_removed ... ok
+test nc02_source_mutation_does_not_change_execution_content ... ok
+test nc02_mixed_package_keeps_cards_and_vm_skills ... ok
+test nc02_repeated_loads_are_stable ... ok
+test nc02_upgrade_does_not_rewrite_pinned_lock ... ok
+test nc02_same_id_different_namespace_requires_explicit_selection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/nc05_campaign_profile.rs (target/debug/deps/nc05_campaign_profile-991fbfa02853c925)
+
+running 2 tests
+test nc05_campaign_profile_rejects_wrong_content ... ok
+test nc05_campaign_profile_lifecycle ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/nc05_lifecycle_heavy.rs (target/debug/deps/nc05_lifecycle_heavy-8107426e0ec3936e)
+
+running 1 test
+test nc05_heavy_rules_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+     Running tests/nc05_skin_ui.rs (target/debug/deps/nc05_skin_ui-fb32a49eb6438f60)
+
+running 2 tests
+test nc05_skin_with_rules_pack_coexists ... ok
+test nc05_skin_ui_asset_separation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/nc08_command_by_command.rs (target/debug/deps/nc08_command_by_command-70c0af6d03e34e38)
+
+running 1 test
+test nc08_command_by_command_first_divergence_is_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/nc08_cross_line.rs (target/debug/deps/nc08_cross_line-d7f65f306f5cd874)
+
+running 2 tests
+test nc08_cross_line_identity_start_alignment ... ok
+test nc08_cross_line_divergence_report ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/nc08_install_matrix.rs (target/debug/deps/nc08_install_matrix-b7cac4bb203d6842)
+
+running 2 tests
+test symlinked_package_dir_is_rejected_explicitly ... ok
+test install_matrix_over_package_dirs ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/nc09_dual_backend.rs (target/debug/deps/nc09_dual_backend-55a1f585d1914f2b)
+
+running 44 tests
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test nc09_native_backend_enforces_room_password ... ok
+test nc09_native_backend_rejects_illegal_command ... ok
+test nc09_native_backend_recover_matches_live_state ... ok
+test nc09_native_backend_replies_carry_actions_and_fanout ... ok
+test nc09_native_backend_session_semantics ... ok
+test nc09_native_backend_startgame_is_confirmation_only ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test nc09_native_rooms_are_isolated_and_mailbox_bounded ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.82s
+
+     Running tests/nc09_native_actor.rs (target/debug/deps/nc09_native_actor-bf32a88a4773fd84)
+
+running 43 tests
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test native_command_outcome_carries_public_event_codes ... ok
+test nc09_backend_selection_is_explicit ... ok
+test nc09_native_actor_join_command_snapshot ... ok
+test slow_observer_queue_full_does_not_block_room_actor ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test nc09_configured_actor_keeps_password_packages_general_and_seat_ownership ... ok
+test nc09_actor_reclaims_idle_seat_lazily ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.39s
+
+     Running tests/nc09_native_durability.rs (target/debug/deps/nc09_native_durability-87a5d3068296c801)
+
+running 44 tests
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test nc09_configured_creation_rejects_failed_initial_save ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test nc09_write_failure_does_not_ack_or_advance_and_same_key_can_retry ... ok
+test nc09_general_failure_does_not_publish_or_replace_recovery_point ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test nc09_failed_recover_keeps_confirmed_dedup_and_successful_recover_can_continue ... ok
+test nc09_membership_failures_preserve_seats_tokens_and_reconnect_authority ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test nc09_all_write_stages_rollback_and_uncertain_commit_blocks_until_reconciled ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test nc09_failed_lazy_reclaim_keeps_original_seat_and_token ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.50s
+
+     Running tests/nc09_native_room_session.rs (target/debug/deps/nc09_native_room_session-d5f612310bbc2760)
+
+running 52 tests
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test nc09_join_reply_restores_pending_choice_for_its_observer_only ... ok
+test nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test nc09_legacy_state_checksum_survives_optional_frozen_package_field ... ok
+test nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_written ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test nc09_room_store_hashes_password_and_verifies_checksum ... ok
+test nc09_room_store_is_removed_on_match_end ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test nc09_room_spectator_is_public_only ... ok
+test nc09_room_reconnect_keeps_seat ... ok
+test nc09_room_commands_and_rejections ... ok
+test nc09_room_join_and_projections ... ok
+test nc09_room_snapshot_matches_engine ... ok
+test nc09_room_choose_general_is_room_level ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test nc09_session_export_and_restore_roundtrip ... ok
+test nc09_room_store_roundtrip_and_restore ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test nc09_room_wal_replay_recovers_identically ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.12s
+
+     Running tests/nc09_native_view_bridge.rs (target/debug/deps/nc09_native_view_bridge-c1119d315eb0a687)
+
+running 5 tests
+test nc09_bridge_maps_skill_view_from_instances ... ok
+test nc09_bridge_maps_character_identity_cards_and_outcome ... ok
+test nc09_bridge_out_of_range_seat_is_empty ... ok
+test nc09_bridge_hides_hand_contents ... ok
+test nc09_bridge_legal_actions_are_authoritative ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/room_flow.rs (target/debug/deps/room_flow-fa3d9a9244b06c74)
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test phase15_manifest_pinned_and_recovery_preserves_it ... ok
+test two_players_start_and_idempotent_command ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/tournament_wal_signing.rs (target/debug/deps/tournament_wal_signing-21c3cf5b3c1a62e9)
+
+running 10 tests
+test empty_wal_produces_zero_root ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test block_chain_tamper_detected ... ok
+test block_hashes_are_deterministic ... ok
+test block_chain_hashes_verify ... ok
+test result_record_carries_root_and_outcome ... ok
+test entry_tamper_breaks_block_hash ... ok
+test block_signatures_verify ... ok
+test independent_verifier_attestation ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+

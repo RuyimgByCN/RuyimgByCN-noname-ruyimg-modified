@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/usr/local/bin/node",
+    "--import",
+    "./scripts/ts-register.mjs",
+    "scripts/native-worker-smoke.mjs"
+  ],
+  "start": "2026-10-24T16:08:57.400454+08:00",
+  "end": "2026-10-24T16:08:58.292327+08:00",
+  "seconds": 0.892,
+  "exit": 0
+}

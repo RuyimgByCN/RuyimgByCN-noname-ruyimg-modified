@@ -1,0 +1,87 @@
+[
+  {
+    "path": "apps/game-server/src/main.rs",
+    "bytes": 61481,
+    "sha256": "aaa36e4d95d98ea5536db1e7193e0fdb0a7c49c8bfd149cd369130bbf891149b"
+  },
+  {
+    "path": "apps/game-server/src/session.rs",
+    "bytes": 4722,
+    "sha256": "5dc3f6e5955a3c35a6c8cafbcd8a11a5b472e019b8ba1e58b83a5dbb52f5f762"
+  },
+  {
+    "path": "apps/game-server/src/lobby.rs",
+    "bytes": 27398,
+    "sha256": "ce6d97577ab372ecb7f6a0d2e6508b27ce33c4a6f7a581fafbd1e6ce66e3e913"
+  },
+  {
+    "path": "apps/game-server/src/room_native_actor.rs",
+    "bytes": 32976,
+    "sha256": "8b0362e617321d7ff0d1aa749894b3f2de6cf6627ece43cf933ccd7ff8b22c2d"
+  },
+  {
+    "path": "apps/game-server/src/native_room_store.rs",
+    "bytes": 18966,
+    "sha256": "843c4e03e5317c507f167df21cb2e76ff01ad91652392a6c7bbfd5e386d52e4c"
+  },
+  {
+    "path": "apps/game-server/src/native_room_store/lock.rs",
+    "bytes": 5583,
+    "sha256": "e43b5ce001154af0c4095e88595e4483154fbb5f51f6573b10c358540ddb9bed"
+  },
+  {
+    "path": "apps/game-server/src/native_ws_e2e.rs",
+    "bytes": 37491,
+    "sha256": "14dec41df2196ffb08ccc5058de46e6cda47648b42bcef6220388da73286f3cc"
+  },
+  {
+    "path": "apps/game-server/src/native_ws_e2e/durability.rs",
+    "bytes": 24666,
+    "sha256": "8c31ef76f538685f2b7218c791923c29d0b79999a7702153eb98db594d0e4d11"
+  },
+  {
+    "path": "apps/game-server/tests/nc09_native_actor.rs",
+    "bytes": 20620,
+    "sha256": "e1eafc2c242c567f4943bff5258e72b2b942077e71a98948e368194827eccd79"
+  },
+  {
+    "path": "crates/engine-native-wasm/src/lib.rs",
+    "bytes": 84324,
+    "sha256": "cd860ed779f09e5e8b01aca2f44ab44869c58227d1bb7ed617e1877aa3f62fef"
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/restore_boundary_handle.rs",
+    "bytes": 3116,
+    "sha256": "a63b5549519f5323470d158ffba73101bd34bc36a3c4726d2dd47b9b6be35412"
+  },
+  {
+    "path": "apps/web-client/src/engine/networkClient.ts",
+    "bytes": 21055,
+    "sha256": "3c9b3c08afd8796a4c129ffe83cd9d2338f07ce3bbb74184173805feebe1fa31"
+  },
+  {
+    "path": "apps/web-client/scripts/network-client.test.mjs",
+    "bytes": 13037,
+    "sha256": "14d22bff60f803e123bdcc4aebc8ecdc508dce94127451a0f594970a0d5213bf"
+  },
+  {
+    "path": "content/original/catalog.json",
+    "bytes": 8471700,
+    "sha256": "638dc8fb74c2fc213cf7cdd987e7c456cfd77069a9343eb6f29b0e9ffc6ed9cc"
+  },
+  {
+    "path": "content/original/asset-manifest.json",
+    "bytes": 747822,
+    "sha256": "3b504beaabfd64f9719b12409e142a0e7d9999b7704ddedcf0b63d6f6b0d4fbe"
+  },
+  {
+    "path": "content/original/skill-capability-matrix.json",
+    "bytes": 3516854,
+    "sha256": "fe88412a97c32c6b4b0aa0bbc7cbaf799fa5ffcc132a0077e3e0f94bfff92bbd"
+  },
+  {
+    "path": "content/original/skill-capability-matrix.md",
+    "bytes": 1486,
+    "sha256": "87197b04074425fe29c6e9b20b7a34bad6d5a24b7030a264723f5c44345f6853"
+  }
+]
