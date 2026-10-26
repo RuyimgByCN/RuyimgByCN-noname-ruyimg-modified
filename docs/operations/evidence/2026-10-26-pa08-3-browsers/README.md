@@ -1,6 +1,6 @@
 # PA08-3 Safari / Firefox / Chrome 有头整局基线（2026-10-26）
 
-- 日期：2026-10-26 13:00–15:30 +08:00
+- 日期：2026-10-26；数据文件落盘 13:16–13:16、首次提交 13:18（cf987ab0）+08:00（原记「2026-10-26 13:00–15:30 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第三切片（浏览器三引擎）
 - 源码：`HEAD = 18edc033` 加未提交工作树（驱动修复见 §3）；采样与驱动同[ WKWebView 批](../2026-10-26-pa08-2-wkwebview/README.md)（autodrive + 外链驱动 `web-frame-external.mjs`）
 - 环境：Mac15,10（M3 Max，ProMotion）；Chrome 156 / Firefox（正式版）/ Safari（正式版），窗口 ~1280×800，driver=auto（页面内点一次「连续自动」后由应用计时器推进），4 座身份局 seed 42，steps 1500 上限

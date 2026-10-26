@@ -1,8 +1,8 @@
 # PA05 分配归因与热点改造：池克隆去日志化 + 惰性段检查点 + 保守快拒（2026-10-26）
 
-- 日期：2026-10-26 04:50–06:10 +08:00（收尾批 05:40–06:10）
+- 日期：2026-10-26；数据文件落盘 03:45–04:02、首次提交 03:46（037529c8）+08:00；收尾批提交 04:03（2bcd6088）（原记「2026-10-26 04:50–06:10 +08:00（收尾批 05:40–06:10）」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA05](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)；PA02 残余（growth 末/首比）一并复核
-- 源码：`HEAD = 7e28a937` 加未提交工作树；本批改动 `engine-native/src/engine.rs`（GameAction Ord）、`choice.rs`（ChoiceOption Ord）、`engine/legal_actions.rs`（去重键去字符串化）、`ai_pool.rs`（池克隆去日志化）。规则 **v322**、存档 **v105** 未变
+- 源码：`HEAD = 3eb67194` 加未提交工作树（原记 7e28a937；按提交历史更正为本批提交的父提交）；本批改动 `engine-native/src/engine.rs`（GameAction Ord）、`choice.rs`（ChoiceOption Ord）、`engine/legal_actions.rs`（去重键去字符串化）、`ai_pool.rs`（池克隆去日志化）。规则 **v322**、存档 **v105** 未变
 - 测量：scratch archbench 新增 `allocbench`（隔离操作分配计数）与 `clonebench`（池路径量化）；growth 前后同程序同会话
 
 **一句话结论**：归因显示**最大分配热点是 `Engine::clone` 的日志复制**（`LogEvent` 内嵌 Vec——每事件一条堆分配；4 座 log≈509 时 198 次/克隆、8 座 log≈1021 时 386 次/克隆），命中生产路径 **ai_pool 每座位克隆**：改用 `clone_for_simulation`（日志从空开始）后**每轮规划 792→36 次（4 座 −95%）、3088→96 次（8 座 −97%）**；`legal_actions` 去重键去字符串化（`GameAction: Ord`）。**growth 同负载每步分配持平（184/275，无回归但未降）**——该负载不经过池路径，剩余分配为探针克隆/提交克隆的结构性成本（非变异校验入口是 legal_actions.rs 头注已登记的 NC12 待办）。PA05 按台帐完成条件判为**部分完成**，如实登记。

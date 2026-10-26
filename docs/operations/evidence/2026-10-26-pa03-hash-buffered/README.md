@@ -1,8 +1,8 @@
 # PA03 状态哈希：缓冲后一次哈希（字节恒等）与记忆化方案评估（2026-10-26）
 
-- 日期：2026-10-26 03:25–04:00 +08:00
+- 日期：2026-10-26；数据文件落盘 03:02–03:02、首次提交 03:02（3cfbb66a）+08:00（原记「2026-10-26 03:25–04:00 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA03](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)；「前」数据见[内核复核（2026-10-25）表 C](../2026-10-25-native-arch-perf-review/README.md) 与[哈希微基准](../2026-10-25-native-arch-perf-review/hash-microbench/)
-- 源码：`HEAD = 7e28a937` 加未提交工作树；本批改动 `crates/engine-native/src/engine/hash.rs`（唯一源码文件）
+- 源码：`HEAD = bca6370e` 加未提交工作树（原记 7e28a937；按提交历史更正为本批提交的父提交）；本批改动 `crates/engine-native/src/engine/hash.rs`（唯一源码文件）
 - 测量程序：同 archbench（thin LTO/16cu release、独立 target）；「前」= 同会话 PA01+PA02 二进制（`growth-pre-pa03-*` 即 [PA02 证据](../2026-10-26-pa02-ai-sim-session-split/README.md)的 `growth-after3-*`），「后」= 本批
 
 **一句话结论**：`canonical_hash` 改为先拼 `Vec` 缓冲再一次 blake3 update——**字节序与原逐字段流式写入完全一致**（全部 golden 与跨目标对照不改期望值即通过），哈希 p50 约减半（4 座 5.43→2.49 µs、8 座 8.73→4.15 µs），提交 p50 −44%～−45%，且提交成本随日志档走平（4 座档间比 1.02、8 座 0.99）。**边界缓存（记忆化）方案已实现并实测后撤销**：状态原地修改面（`core_mut`/`state_core_mut`/公开变体 API/调试入口）远多于整 struct 写回点，18 个测试暴露缓存陈旧；且 growth 只测 submit（每命令本就需要一次哈希），记忆化在该负载下几乎不可见——按台帐「内部改为缓冲后一次哈希**或**分区增量」的内部选项收口。

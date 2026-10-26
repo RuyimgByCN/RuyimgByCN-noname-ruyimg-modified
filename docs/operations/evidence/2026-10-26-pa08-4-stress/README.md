@@ -1,6 +1,6 @@
 # PA08-4 大扩展包 / 满手牌压力场景（2026-10-26）
 
-- 日期：2026-10-26 14:00–16:10 +08:00
+- 日期：2026-10-26；数据文件落盘 13:16–13:16、首次提交 13:18（cf987ab0）+08:00（原记「2026-10-26 14:00–16:10 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第四切片（大内容压力）＋ [PA10](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 增量化裁决依据
 - 源码：`HEAD = 18edc033` 加未提交工作树。新增压测入口（全部 URL 门控、缺省零影响）：
   - `client.start()` 读 `packsUrl`/`hexUrl`（[autoDrive.urlParam](../../../../apps/web-client/src/engine/autoDrive.ts) 同口径）——`packsUrl` 覆盖扩展载荷；`hexUrl` 先建标准局再以存档整体替换（worker 的 restore 需既有句柄与观察者）。

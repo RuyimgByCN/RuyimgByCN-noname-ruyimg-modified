@@ -2,7 +2,7 @@
 
 - 日期：2026-10-26 06:30–07:40 +08:00
 - 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第一切片（有头 Chrome）＋ [PA07](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 的有头复现与缓解判别
-- 源码：`HEAD = 7e28a937` 加未提交工作树；本批代码改动仅 `apps/web-client/scripts/web-frame-latency.mjs`（新增 `--headed` 旗标）；前端测量栈按[帧间隔基线](../2026-10-26-web-frame-latency/README.md)同法重建（wasm-pack 重建 WASM → scratchpad vite 构建，未覆盖仓库 dist）
+- 源码：`HEAD = 2bcd6088` 加未提交工作树（原记 7e28a937；按提交历史更正为本批提交的父提交）；本批代码改动仅 `apps/web-client/scripts/web-frame-latency.mjs`（新增 `--headed` 旗标）；前端测量栈按[帧间隔基线](../2026-10-26-web-frame-latency/README.md)同法重建（wasm-pack 重建 WASM → scratchpad vite 构建，未覆盖仓库 dist）
 - 环境：Mac15,10（M3 Max）内置 **ProMotion 显示器**；有头 Chrome 156.0.8078.48 窗口 1280×800、GPU 默认开启；负载与 headless 基线完全同构（同 seed、同驱动、同 max-steps 1500）
 
 **一句话结论**：有头 120 Hz 下（帧 p50 **8.3 ms**），「真实点击后回包推迟约一刷新周期」**复现**：click 档 `transfer` p50 **7.6–7.8 ms ≈ 8.33 ms 一帧**（auto 档仅 1.5–1.7 ms），`input_to_paint` p50 **16.4–16.5 ms ≈ 两帧**——与 headless 60 Hz 的现象（16 ms/33 ms）完全同构，且**随刷新率缩放**。微基准进一步证明该推迟是**输入后任务窗口对所有主线程任务的一视同仁**（worker postMessage ≡ MessageChannel），任何任务型投递通道都无法突破；唯一非任务出口是 **rAF 帧回调内轮询 SAB**（缓解原型方向）。

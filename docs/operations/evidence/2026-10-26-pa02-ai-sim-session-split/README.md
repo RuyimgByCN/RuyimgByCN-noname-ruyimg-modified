@@ -1,8 +1,8 @@
 # PA02 AI 模拟与权威会话分离：模拟提交不再付权威会话成本（2026-10-26）
 
-- 日期：2026-10-26 02:15–03:20 +08:00
+- 日期：2026-10-26；数据文件落盘 02:34–02:34、首次提交 02:36（bca6370e）+08:00（原记「2026-10-26 02:15–03:20 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA02](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)；「前」数据与测量程序见[内核性能结构复核（2026-10-25）](../2026-10-25-native-arch-perf-review/README.md)表 B
-- 源码：`HEAD = 7e28a93799a9c01794085e911a72a4faa5673883` 加未提交工作树；本批改动 `crates/engine-native/src/engine.rs`、`engine/commands.rs`、`engine/legal_actions.rs`、`engine/construction.rs`、`engine/snapshot.rs`、`ai.rs`。规则 **v322**、存档 **v105** 未变（新增 `Engine.simulation` 为会话字段，与 `time_slice` 同类，不入状态/哈希/快照）
+- 源码：`HEAD = 8319a3fb` 加未提交工作树（原记 7e28a937；按提交历史更正为本批提交的父提交）；本批改动 `crates/engine-native/src/engine.rs`、`engine/commands.rs`、`engine/legal_actions.rs`、`engine/construction.rs`、`engine/snapshot.rs`、`ai.rs`。规则 **v322**、存档 **v105** 未变（新增 `Engine.simulation` 为会话字段，与 `time_slice` 同类，不入状态/哈希/快照）
 - 测量程序：同[复核证据](../2026-10-25-native-arch-perf-review/archbench/) 的 archbench（path 依赖本仓库、thin LTO/16cu release、独立 CARGO_TARGET_DIR）；A/B 行为探针与归因子命令为 scratch 副本新增（见 §4）
 
 **一句话结论**：模拟会话与权威会话分离落地——`plan_action` 的模拟克隆不再携带/复制宿主日志，模拟提交不再做段检查点、状态哈希与日志写入，`probe_action` 探测克隆同享该路径。固定种子下 4/8 座各 722/1718 步 `(seed,step,action,nodes)` 序列改动前后**逐行一致**；8 座每节点 p50 首档 17.4→6.1 µs、末档 45.2→7.8 µs，每步分配 1136→274 次。**growth 末/首比未达 ≤1.2**（8 座 1.27、4 座 1.55），但两组判别实验证明残余增长与权威日志无关、与进程堆无关，是**晚期状态固有的结算复杂度**，不属于会话耦合——已登记为 PA05 归因范畴的残余。

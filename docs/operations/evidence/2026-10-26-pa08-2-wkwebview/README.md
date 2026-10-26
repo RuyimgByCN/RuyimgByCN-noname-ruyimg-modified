@@ -1,6 +1,6 @@
 # PA08-2 Tauri 桌面 WKWebView 基线（2026-10-26）
 
-- 日期：2026-10-26 09:20–11:20 +08:00
+- 日期：2026-10-26；数据文件落盘 11:04–11:04、首次提交 11:10（18edc033）+08:00（原记「2026-10-26 09:20–11:20 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA08](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 扩面第二切片（Tauri 桌面）；同时给出 [PA07](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) 在 WKWebView 档的复现判定
 - 源码：`HEAD = 32a40d90` 加未提交工作树；测量栈＝[headless 基线](../2026-10-26-web-frame-latency/README.md)同款（perfProbe/perfStats/stepTimings，`perf=1` URL 门控），外链驱动 `apps/web-client/scripts/web-frame-external.mjs`（本批入库）
 - 环境：Mac15,10（M3 Max，内置 ProMotion 显示器）；Tauri 2 debug 构建 `noname-next-desktop`（`--features tauri-shell`，devUrl 模式加载本机静态服务），WKWebView 窗口 1280×820；负载与 Chrome 基线同构（4 座身份局、seed 42、steps 1500 上限）

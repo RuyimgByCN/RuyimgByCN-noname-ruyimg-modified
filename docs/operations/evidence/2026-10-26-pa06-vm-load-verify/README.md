@@ -1,8 +1,8 @@
 # PA06 rule-vm 重复校验：装载期一次校验，执行期零重复（2026-10-26）
 
-- 日期：2026-10-26 04:05–04:45 +08:00
+- 日期：2026-10-26；数据文件落盘 03:30–03:30、首次提交 03:31（3eb67194）+08:00（原记「2026-10-26 04:05–04:45 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA06](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)；问题来源为静态核对（`RuleVm::execute`/`resume` 每次调用都执行 `verify_module`）
-- 源码：`HEAD = 7e28a937` 加未提交工作树；本批改动 `crates/rule-vm/src/vm.rs`、`rule-vm/src/lib.rs`、`rule-vm/src/reference.rs`、`rule-vm/tests/fuel_exhaustion.rs`、`engine-native/src/rvm_bridge.rs`、`engine-native/src/content/standard.rs`、`engine-native/src/content/extension.rs`、`engine-native/src/snap/restore.rs`、`engine-native/tests/t8_rvm_bridge.rs`。规则 **v322**、存档 **v105** 未变
+- 源码：`HEAD = 3cfbb66a` 加未提交工作树（原记 7e28a937；按提交历史更正为本批提交的父提交）；本批改动 `crates/rule-vm/src/vm.rs`、`rule-vm/src/lib.rs`、`rule-vm/src/reference.rs`、`rule-vm/tests/fuel_exhaustion.rs`、`engine-native/src/rvm_bridge.rs`、`engine-native/src/content/standard.rs`、`engine-native/src/content/extension.rs`、`engine-native/src/snap/restore.rs`、`engine-native/tests/t8_rvm_bridge.rs`。规则 **v322**、存档 **v105** 未变
 - 测量：scratch archbench 新增 `vmmicro`/`vmbench` 子命令（同 thin LTO/16cu release），同机同会话
 
 **一句话结论**：`RuleVm::execute`/`resume` 只接受装载期已校验的 `VerifiedModule`（新类型，只能经 `verify` 构造），执行期不再重复静态校验；微基准显示**每次 VM 触发的解释器工作量减半**（verify 41ns + execute 42ns → 42ns，移除 49%），装载期每模块一次性 +41ns。**行为语义变化（已同步测试与登记）**：畸形 VM 模块的拒绝时机从「首次触发（执行期+回滚）」提前到「建目录/恢复（装载期）」——t8 拒收矩阵②改为断言装载期 `InvalidVmModule` 拒绝。
