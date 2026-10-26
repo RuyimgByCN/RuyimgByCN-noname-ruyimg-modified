@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import type { ChoiceRequest, EngineEnvelope, LegalAction, ObserverSnapshot } from "../types/engine";
+import { perfEnvelopeApplied, perfEnvelopeApplying } from "./perfProbe";
 
 /** Presentation timeline event (not state truth). */
 export interface PresentationEvent {
@@ -66,6 +67,13 @@ export function createViewStore(): ViewState {
 let effectId = 1;
 
 export function applyEnvelope(store: ViewState, env: EngineEnvelope) {
+  // 表现层性能采样（默认关闭时立即返回）：记录应用信封、DOM 刷新与下一帧时刻。
+  perfEnvelopeApplying();
+  applyEnvelopeState(store, env);
+  perfEnvelopeApplied();
+}
+
+function applyEnvelopeState(store: ViewState, env: EngineEnvelope) {
   store.revision = env.revision;
   store.hash = env.hash_hex;
   store.finished = env.finished;

@@ -243,7 +243,14 @@ export interface ChooseGeneralPayload {
 }
 
 export type WorkerRequest =
-  | { id: number; type: "init"; bundle?: ContentBundle; packsJson?: string }
+  | {
+      id: number;
+      type: "init";
+      bundle?: ContentBundle;
+      packsJson?: string;
+      /** 表现层性能采样（`perfProbe.ts`）：开启 Worker 分段计时；缺省关闭。 */
+      perf?: boolean;
+    }
   | {
       id: number;
       type: "start";

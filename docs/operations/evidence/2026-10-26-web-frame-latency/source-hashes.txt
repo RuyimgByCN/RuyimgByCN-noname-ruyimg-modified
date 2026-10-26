@@ -1,0 +1,12 @@
+# 源码与产物摘要（sha256），2026-10-26 00:05 最终重跑前
+HEAD 7e28a93799a9c01794085e911a72a4faa5673883（工作树未提交）
+b5d3f5469c924c3faa73844d90b5d2bae23ea10c90287883e38647edd7254ca1  apps/web-client/src/engine/perfProbe.ts
+8e5e3bc6045bfadb285a8a7716cf61ff054078d743f766fb6636d65e4c14b390  apps/web-client/src/engine/perfStats.ts
+c3c62fcfd1a4d7a1acb14913526845703797410bd05a6ab02b7f341fe27a28b9  apps/web-client/src/engine/viewStore.ts
+974e3509e5df9146ae5429e4db180dcf0f84218845165c806daa7b707a731aa0  apps/web-client/src/engine/client.ts
+6796d10fe14f592ba0e01f4214be4fe845c9cf4256fea115bf267d1e809b86ce  apps/web-client/src/worker/stepTimings.ts
+0392ab9bbca44359eb352bcb8839ae858ab7302479bd1e4d3477a09984404cd4  apps/web-client/src/worker/nativeBackend.ts
+810a03757e3303c056d58c9b0b8680f503e7f0db9132f13f1179ffef756d4ea4  apps/web-client/src/worker/engine.native.worker.ts
+466037eb86414c0b541fe6073c8dc7dc0f9b41a15de7cbbd04420d11abb62b97  apps/web-client/scripts/web-frame-latency.mjs
+b2ea07bf43a5c9e2089403bee9c04807d7d7a61ed99f3f3d358b4c4c79f9d845  engine_native_wasm_bg.wasm（scratchpad 重建，wasm-pack 0.15.0 --release --no-opt）
+ab7914548ad176c0638fdab76041fada4f3fd1fe796e8f4dd97d05eaa0555aa1  apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm（仓库内现有产物，10-25 02:45 构建，早于 engine-native ai.rs 的最新改动；本次未使用、未覆盖）

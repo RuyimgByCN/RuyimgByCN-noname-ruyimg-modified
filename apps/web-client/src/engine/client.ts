@@ -11,6 +11,13 @@ import type {
   WorkerResponse,
 } from "../types/engine";
 import { desktopContentBundle, isTauriShell } from "./desktopHost";
+import {
+  perfRequestSent,
+  perfResponseReceived,
+  perfWorkerTimings,
+  startPerfProbe,
+} from "./perfProbe";
+import type { WorkerStepTimings } from "./perfStats";
 // Vite `?worker` 形式：保证生产构建产出 worker chunk（含 WASM 依赖）
 import NativeEngineWorker from "../worker/engine.native.worker.ts?worker";
 import LegacyEngineWorker from "../worker/engine.worker.ts?worker";
@@ -66,7 +73,13 @@ export class EngineClient {
         ).__nativeCandidateTimings.push(maybe.timings);
         return;
       }
+      if (maybe?.type === "step_timings" && maybe.timings) {
+        const step = ev.data as unknown as { id: number; timings: WorkerStepTimings };
+        perfWorkerTimings(step.id, step.timings);
+        return;
+      }
       const msg = ev.data;
+      perfResponseReceived(msg.id);
       const p = this.pending.get(msg.id);
       if (!p) return;
       this.pending.delete(msg.id);
@@ -81,6 +94,7 @@ export class EngineClient {
         id: this.nextId(),
         type: "init",
         bundle: bundle ?? undefined,
+        perf: startPerfProbe(),
       });
     } catch (error) {
       this.dispose();
@@ -103,6 +117,7 @@ export class EngineClient {
     if (!this.worker) return Promise.reject(new Error("worker not connected"));
     return new Promise((resolve, reject) => {
       this.pending.set(body.id, { resolve, reject });
+      perfRequestSent(body.id, body.type);
       this.worker!.postMessage(body);
     });
   }

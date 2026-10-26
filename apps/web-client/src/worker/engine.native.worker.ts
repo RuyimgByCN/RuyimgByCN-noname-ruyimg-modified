@@ -17,16 +17,20 @@ import {
   nativeUnsupported,
   type NativeHandle,
 } from "./nativeBackend";
+import { postWithStepTimings, setStepTimingsEnabled, stepBegin } from "./stepTimings";
 
 let handle: NativeHandle | null = null;
 
 self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
   const msg = ev.data;
+  // 表现层性能采样：开启时回包后追加分段（见 stepTimings.ts）；关闭时即原样 postMessage。
   const reply = (resp: WorkerResponse) => {
-    (self as DedicatedWorkerGlobalScope).postMessage(resp);
+    postWithStepTimings((m) => (self as DedicatedWorkerGlobalScope).postMessage(m), resp);
   };
   try {
     await ensureNativeReady();
+    if (msg.type === "init") setStepTimingsEnabled(msg.perf === true);
+    stepBegin();
     if (msg.type === "init") {
       // NC12：把 worker 内初始化分段耗时随 init 回包发出（浏览器档位测量读取）
       const timings = nativeInitTimings();
