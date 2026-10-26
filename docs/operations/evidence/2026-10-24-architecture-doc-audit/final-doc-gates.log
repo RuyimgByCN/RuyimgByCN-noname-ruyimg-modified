@@ -1,0 +1,48 @@
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_local_links.py', '--all']
+START 2026-10-24T17:24:09.256106+08:00
+检查 1770 个文件，坏链 0
+
+END 2026-10-24T17:24:09.983426+08:00
+EXIT 0
+
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_doc_line_refs.py', '--strict']
+START 2026-10-24T17:24:09.260094+08:00
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 996 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+
+END 2026-10-24T17:24:18.130519+08:00
+EXIT 0
+
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/check_stale_numbers.py']
+START 2026-10-24T17:24:09.263183+08:00
+残留旧值 0 处
+
+END 2026-10-24T17:24:09.350540+08:00
+EXIT 0
+
+COMMAND ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', 'scripts/refresh_recent_rounds.py', '--check']
+START 2026-10-24T17:24:09.259598+08:00
+索引是最新（20 轮）
+
+END 2026-10-24T17:24:09.295397+08:00
+EXIT 0
+
+COMMAND ['git', 'diff', '--check']
+START 2026-10-24T17:24:09.257286+08:00
+docs/architecture/native-progress-history.md:384: new blank line at EOF.
+
+END 2026-10-24T17:24:09.456972+08:00
+EXIT 2
+
+COMMAND ['git', 'diff', '--check']
+START 2026-10-24T17:24:39.142345+08:00
+
+END 2026-10-24T17:24:39.504770+08:00
+EXIT 0

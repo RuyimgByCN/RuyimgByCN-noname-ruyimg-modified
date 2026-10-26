@@ -1,0 +1,19 @@
+[package]
+name = "archbench"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+engine-native = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native" }
+content-compiler = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler" }
+content-schema = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema" }
+rule-vm = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm" }
+rule-api = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api" }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 16
+debug = false
+
+[workspace]

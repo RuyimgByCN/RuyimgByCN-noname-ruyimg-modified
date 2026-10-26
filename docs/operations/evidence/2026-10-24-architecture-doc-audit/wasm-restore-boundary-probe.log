@@ -1,0 +1,32 @@
+CASE valid_roundtrip
+COMMAND ['/usr/local/bin/node', '/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs', 'valid_roundtrip']
+EXIT 0
+STDOUT
+{"case":"valid_roundtrip","input":"existing valid archive","archive_sha256":"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e","restore":{"accepted":true},"after":{"readable":true,"archive_unchanged":false,"revision":"0","all_seat_views_unchanged":true,"authority_hash":"not exported by NativeEngine","before_bytes":1888,"after_bytes":1888,"first_differing_byte":1813,"payload_differing_bytes":[1813],"checksum_differing_bytes":[1856,1857,1858,1859,1860,1861,1862,1863,1864,1865,1866,1867,1868,1869,1870,1871,1872,1873,1874,1875,1876,1877,1878,1879,1880,1881,1882,1883,1884,1885,1886,1887],"first_difference_values":{"before":0,"after":1}}}
+
+STDERR
+
+CASE odd_length
+COMMAND ['/usr/local/bin/node', '/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs', 'odd_length']
+EXIT 0
+STDOUT
+{"case":"odd_length","input":"0","archive_sha256":"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e","restore":{"accepted":false,"type":"RuntimeError","message":"RuntimeError: unreachable"},"after":{"readable":false,"type":"Error","message":"Error: recursive use of an object detected which would lead to unsafe aliasing in rust"}}
+
+STDERR
+
+CASE non_ascii
+COMMAND ['/usr/local/bin/node', '/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs', 'non_ascii']
+EXIT 0
+STDOUT
+{"case":"non_ascii","input":"中","archive_sha256":"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e","restore":{"accepted":false,"type":"RuntimeError","message":"RuntimeError: unreachable"},"after":{"readable":false,"type":"Error","message":"Error: recursive use of an object detected which would lead to unsafe aliasing in rust"}}
+
+STDERR
+
+CASE invalid_ascii
+COMMAND ['/usr/local/bin/node', '/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs', 'invalid_ascii']
+EXIT 0
+STDOUT
+{"case":"invalid_ascii","input":"gg","archive_sha256":"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e","restore":{"accepted":false,"type":"string","message":"restore: 非法十六进制: invalid digit found in string"},"after":{"readable":true,"archive_unchanged":true,"revision":"0","all_seat_views_unchanged":true,"authority_hash":"not exported by NativeEngine","before_bytes":1888,"after_bytes":1888,"first_differing_byte":null,"payload_differing_bytes":[],"checksum_differing_bytes":[],"first_difference_values":null}}
+
+STDERR
+

@@ -1,0 +1,39 @@
+# 2026-10-25 23:38:51 +0800 Apple M3 Max rustc 1.95.0 (59807616e 2026-04-14) noname-next HEAD 7e28a937 + dirty tree; rules v322 / archive v105; profile release thin-LTO cu16
+23:38  up 12 days,  1:08, 3 users, load averages: 8.72 12.58 20.62
+# scale: 未持有触发技能 N 对每命令耗时的影响（4 座，3 局，planner budget=32）
+N	catalog_skills	steps	events	submit_p50	submit_p95	submit_total_ms	plan_p50	plan_p95	plan_total_ms
+N=0 skill_instances=5
+0	215	818	2115	8750	16250	7.30	25709	85000	29.34
+N=500 skill_instances=5
+500	715	818	2115	10542	24875	9.16	28041	95042	32.17
+N=2000 skill_instances=5
+2000	2215	818	2115	15417	64458	16.71	34875	170583	46.55
+N=6000 skill_instances=5
+6000	6215	818	2115	29750	186500	37.04	53834	417417	86.65
+# scale: 未持有触发技能 N 对每命令耗时的影响（8 座，3 局，planner budget=32）
+N	catalog_skills	steps	events	submit_p50	submit_p95	submit_total_ms	plan_p50	plan_p95	plan_total_ms
+N=0 skill_instances=11
+0	215	1467	4355	13333	24416	19.36	49625	210041	112.84
+N=500 skill_instances=11
+500	715	1467	4355	16125	34041	24.33	53417	249958	128.07
+N=2000 skill_instances=11
+2000	2215	1467	4355	23959	78292	42.72	61916	456167	189.69
+N=6000 skill_instances=11
+6000	6215	1467	4355	44417	214500	95.56	87625	1149291	419.21
+# growth: 对局推进时的成本（4 座，planner budget=64，3 局，标准目录）
+log_len_bucket	steps	clone_p50	hash_p50	fmt_p50	plan_p50	nodes_p50	plan_ns_per_node_p50	plan_allocs_p50	plan_KB_p50	submit_p50	submit_allocs_p50	submit_KB_p50
+0-189	223	1683	5491	91	16792	1	14597	168	41	8417	24	5
+189-379	220	3833	5550	83	22250	1	19000	307	77	8459	22	5
+379-568	205	5825	5575	83	25458	1	24042	440	113	8500	23	6
+568-758	74	8450	5775	91	33417	1	31125	581	150	8875	23	6
+TOTAL steps=722 plan_ms=25.6 submit_ms=6.4 allocs_per_step=539 max_log_len=758
+# growth: 对局推进时的成本（8 座，planner budget=64，3 局，标准目录）
+log_len_bucket	steps	clone_p50	hash_p50	fmt_p50	plan_p50	nodes_p50	plan_ns_per_node_p50	plan_allocs_p50	plan_KB_p50	submit_p50	submit_allocs_p50	submit_KB_p50
+0-383	458	2950	8600	83	24916	1	18807	309	81	11958	32	9
+383-766	451	7433	8875	83	35541	1	30083	572	152	12375	33	10
+766-1149	447	11966	9058	91	42958	1	38458	834	227	12583	29	10
+1149-1532	362	15783	9050	91	49750	1	46875	1068	291	12542	26	10
+TOTAL steps=1718 plan_ms=103.4 submit_ms=20.9 allocs_per_step=1136 max_log_len=1532
+size_of GameStateCore=776 PlayerState=512 TurnState=248 GameState=1048 Engine=2184
+rule_api::EffectRequest=96 EventData=56 LogEvent=48
+skills_instances_8p_start=0

@@ -1,0 +1,9 @@
+{
+  "source": "docs/architecture/native-progress.md",
+  "destination": "docs/architecture/native-progress-history.md",
+  "section": "delivery-2026-10-24-history",
+  "moved_bytes": 24273,
+  "moved_sha256": "1bd4d01fabfc3ca6494c5c53d9f05bd99264f300d1a0471a2485ebcd5af6dc27",
+  "verbatim": true,
+  "old_round_body_preserved": true
+}

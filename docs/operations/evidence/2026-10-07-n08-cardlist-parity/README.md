@@ -1,7 +1,7 @@
 # P2/N08 上游标准牌表逐张对照（2026-10-07）
 
 主稿 P2/N08「牌表逐张对照」切片：上游 `card/standard.js` `list` 块
-（`archive/upstream/noname/apps/core/card/standard.js:5153` 起）实测
+（[第 5153 行起的固定副本](https://github.com/libnoname/noname/blob/df2682e66af9930fe02861a25cb6f2cd2ef6ae36/apps/core/card/standard.js#L5153)；2026-10-24 将旧工作区行号固定到更新前版本，保留本次历史牌表）实测
 **108 张物理牌、32 牌种**，与原生 `standard_catalog()` 80 张声明表
 （21 类功能）逐张对照。纯对照建账切片——零代码/零版本影响。
 

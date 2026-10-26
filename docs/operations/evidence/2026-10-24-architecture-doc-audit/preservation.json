@@ -1,0 +1,108 @@
+{
+  "at": "2026-10-24T17:25:34.581485+08:00",
+  "baseline_paths": 47064,
+  "backup_directory": "/tmp/noname-next-architecture-doc-audit-20261024",
+  "changed_existing_paths": [
+    {
+      "path": "docs/architecture/architecture-evolution-plan.md",
+      "before": {
+        "sha256": "afc71a66ede99f775ebbf57b839c5932918af9520c62181e0de81de7250de5d8",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "9844e29a4185ad81375a98591aea51d50fdca8d7f03552f1e766986c6fbaf163",
+        "mode": 33188
+      }
+    },
+    {
+      "path": "docs/architecture/native-progress-history.md",
+      "before": {
+        "sha256": "1f84154b5d888703e7f169d36df6b224319765b79af802abbbcd93c5947a1d06",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "9ce28effcad69531258c43d79b4c889d1b4df8b73b7a59616e1fb10595ddf779",
+        "mode": 33188
+      }
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "before": {
+        "sha256": "10cdabd525e93be0616ce6b2dce4da89e26a6a25bee3f2bbccfc76d8cc699355",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "cba104853c3ede194c9cc46ecbc2bd7498c2ebe03d12e3090b98e1bba37019de",
+        "mode": 33188
+      }
+    },
+    {
+      "path": "docs/architecture/overview.md",
+      "before": {
+        "sha256": "7eee471193f81571eacdbfeaae46a7fd9c65be634c45b75c3fdd5d93167d796a",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "2bee46b655ea0695451aeeab2a853445f893bb941cb79f7f7f7fcb418abde2c7",
+        "mode": 33188
+      }
+    },
+    {
+      "path": "docs/operations/self-check-guide.md",
+      "before": {
+        "sha256": "d27c2aa552f36c364d5dc8dd2f53c99b8c23e9c6c119cf40cbe84b0989525f76",
+        "mode": 33188
+      },
+      "after": {
+        "sha256": "e042746f949263df4ec17e4f304583287889ea4b578e1e8bed0e2d8bcb02d49d",
+        "mode": 33188
+      }
+    }
+  ],
+  "unchanged_existing_paths": 47059,
+  "unexpected_changes": [],
+  "new_untracked_paths": [
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/README.md",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/adr-index.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/adr-index.log",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/documentation-changes.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/final-doc-gates.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/final-doc-gates.log",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/history-move.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/preflight-full-01-raw.log",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/preflight-full-01.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/preflight-full-01.log",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/preservation.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/wasm-restore-boundary-probe.json",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/wasm-restore-boundary-probe.log",
+    "docs/operations/evidence/2026-10-24-architecture-doc-audit/wasm-restore-boundary-probe.mjs"
+  ],
+  "unexpected_new_paths": [],
+  "head_unchanged": true,
+  "index_unchanged": true,
+  "generated_and_dirty_dist": [
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "file_count": 6,
+      "unchanged": true
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "file_count": 6,
+      "unchanged": true
+    },
+    {
+      "path": "apps/web-client/public/pkg",
+      "file_count": 6,
+      "unchanged": true
+    },
+    {
+      "path": "apps/web-client/dist",
+      "file_count": 46,
+      "unchanged": true
+    }
+  ],
+  "previous_product_manifest": "docs/operations/evidence/2026-10-24-native-room-double-fault/source-manifest.json",
+  "previous_product_manifest_files": 1067,
+  "product_files_changed": []
+}

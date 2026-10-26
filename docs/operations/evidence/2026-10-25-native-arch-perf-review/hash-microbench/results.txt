@@ -1,0 +1,8 @@
+2026-10-26 00:15:21 +0800
+ 0:15  up 12 days,  1:44, 2 users, load averages: 8.36 12.59 12.40
+[pure] blake3 = { version = "=1.8.5" , features = ["pure"] }
+bytes=3780 updates=900 small_updates_ns=11096 buffered_ns=6377
+[simd] blake3 = { version = "=1.8.5"  }
+bytes=3780 updates=900 small_updates_ns=11047 buffered_ns=7714
+[neon] blake3 = { version = "=1.8.5", features = ["neon"]  }
+bytes=3780 updates=900 small_updates_ns=10953 buffered_ns=6739

@@ -1,0 +1,77 @@
+{
+  "started_at": "2026-10-24T17:12:34.828413+08:00",
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "head": "7e28a93799a9c01794085e911a72a4faa5673883",
+  "node": "v20.17.0",
+  "generated_artifacts_rebuilt": false,
+  "sha256": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "b26f9858656258fd8fe0ea89c73a88652775ac12ac6c4b926af11b96b225dc51",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+    "crates/engine-native-wasm/src/lib.rs": "dcf63df771769984d7f34988d0ab642f80f4a3f828ab4d02ee79eaec2874dc4b",
+    "crates/engine-native/src/engine/snapshot.rs": "5de04b2ff65046ec85f60714b27611770767af5d24b5d835e8fbd0da5758df83",
+    "crates/engine-native/src/archive/state_encode.rs": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e"
+  },
+  "cases": [
+    {
+      "case": "valid_roundtrip",
+      "command": [
+        "/usr/local/bin/node",
+        "/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs",
+        "valid_roundtrip"
+      ],
+      "started_at": "2026-10-24T17:12:34.895462+08:00",
+      "seconds": 0.126,
+      "exit_code": 0,
+      "stdout": "{\"case\":\"valid_roundtrip\",\"input\":\"existing valid archive\",\"archive_sha256\":\"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e\",\"restore\":{\"accepted\":true},\"after\":{\"readable\":true,\"archive_unchanged\":false,\"revision\":\"0\",\"all_seat_views_unchanged\":true,\"authority_hash\":\"not exported by NativeEngine\",\"before_bytes\":1888,\"after_bytes\":1888,\"first_differing_byte\":1813,\"payload_differing_bytes\":[1813],\"checksum_differing_bytes\":[1856,1857,1858,1859,1860,1861,1862,1863,1864,1865,1866,1867,1868,1869,1870,1871,1872,1873,1874,1875,1876,1877,1878,1879,1880,1881,1882,1883,1884,1885,1886,1887],\"first_difference_values\":{\"before\":0,\"after\":1}}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "odd_length",
+      "command": [
+        "/usr/local/bin/node",
+        "/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs",
+        "odd_length"
+      ],
+      "started_at": "2026-10-24T17:12:35.021891+08:00",
+      "seconds": 0.056,
+      "exit_code": 0,
+      "stdout": "{\"case\":\"odd_length\",\"input\":\"0\",\"archive_sha256\":\"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e\",\"restore\":{\"accepted\":false,\"type\":\"RuntimeError\",\"message\":\"RuntimeError: unreachable\"},\"after\":{\"readable\":false,\"type\":\"Error\",\"message\":\"Error: recursive use of an object detected which would lead to unsafe aliasing in rust\"}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "non_ascii",
+      "command": [
+        "/usr/local/bin/node",
+        "/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs",
+        "non_ascii"
+      ],
+      "started_at": "2026-10-24T17:12:35.078207+08:00",
+      "seconds": 0.055,
+      "exit_code": 0,
+      "stdout": "{\"case\":\"non_ascii\",\"input\":\"中\",\"archive_sha256\":\"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e\",\"restore\":{\"accepted\":false,\"type\":\"RuntimeError\",\"message\":\"RuntimeError: unreachable\"},\"after\":{\"readable\":false,\"type\":\"Error\",\"message\":\"Error: recursive use of an object detected which would lead to unsafe aliasing in rust\"}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "invalid_ascii",
+      "command": [
+        "/usr/local/bin/node",
+        "/tmp/noname-next-architecture-doc-audit-20261024/wasm-restore-boundary-probe.mjs",
+        "invalid_ascii"
+      ],
+      "started_at": "2026-10-24T17:12:35.133228+08:00",
+      "seconds": 0.056,
+      "exit_code": 0,
+      "stdout": "{\"case\":\"invalid_ascii\",\"input\":\"gg\",\"archive_sha256\":\"214602fd1eaa146adf83846d1434f695d30628abc31993033ffe5082758d9c4e\",\"restore\":{\"accepted\":false,\"type\":\"string\",\"message\":\"restore: 非法十六进制: invalid digit found in string\"},\"after\":{\"readable\":true,\"archive_unchanged\":true,\"revision\":\"0\",\"all_seat_views_unchanged\":true,\"authority_hash\":\"not exported by NativeEngine\",\"before_bytes\":1888,\"after_bytes\":1888,\"first_differing_byte\":null,\"payload_differing_bytes\":[],\"checksum_differing_bytes\":[],\"first_difference_values\":null}}\n",
+      "stderr": ""
+    }
+  ],
+  "finished_at": "2026-10-24T17:12:35.188947+08:00",
+  "sha256_after": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "b26f9858656258fd8fe0ea89c73a88652775ac12ac6c4b926af11b96b225dc51",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "feb4b21f10f8debd95fc59f7fdaa029da209e01c94703a8fcbd61a546c4f2966",
+    "crates/engine-native-wasm/src/lib.rs": "dcf63df771769984d7f34988d0ab642f80f4a3f828ab4d02ee79eaec2874dc4b",
+    "crates/engine-native/src/engine/snapshot.rs": "5de04b2ff65046ec85f60714b27611770767af5d24b5d835e8fbd0da5758df83",
+    "crates/engine-native/src/archive/state_encode.rs": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e"
+  },
+  "files_unchanged": true
+}

@@ -10,6 +10,8 @@
 |---|---|
 | [架构索引](docs/architecture/overview.md) | 当前模块路径与阅读顺序 |
 | [重写进度](docs/architecture/native-progress.md) | 最新源码/测试快照、已完成范围、失败项和待办 |
+| [原生架构收敛执行方案](docs/architecture/native-convergence-plan.md) | 已采纳的完整目标、NC01–NC12 与六阶段验收门槛 |
+| [Agent 完整执行提示词](docs/operations/native-convergence-agent-prompt.md) | 交接整个方案，按主稿记录实施状态与证据 |
 | [原生覆盖清单](docs/native-coverage-manifest.md) | 机制、场景与 golden 登记 |
 | [玩法规则基准](docs/architecture/native-rules-baseline.md) | 规则版本、上游差异与语义边界 |
 | [两仓扩展台账](docs/migration/upstream-extension-reconstruction.md) | 37 来源的功能清单、迁移路线和逐包验收 |
@@ -22,10 +24,11 @@
 
 | 路径 | 职责 |
 |---|---|
-| crates/engine-native | 新原生内核及切片；仍需正式客户端/服务端接入 |
-| crates/content-native-loader | 已有生产包数据桥接；部分 G1 样本已复用，正式产品接线待验收 |
+| crates/engine-native、engine-native-wasm | 原生规则内核与 WebAssembly 边界；入口关系见架构索引，验收状态见主稿 |
+| crates/content-native-loader、content-runtime | 原生内容装配与 PackageStore 包生命周期 |
 | packages/extensions | 已转换的独立包样本与卡牌子包 |
-| crates/engine-core、engine-api、rule-api | 现有产品规则和接口、迁移对照 |
+| crates/engine-core、engine-api | 旧产品规则和接口、迁移对照 |
+| crates/rule-api、rule-vm | 规则宿主契约与字节码执行 |
 | crates/engine-ai、engine-wasm | 现有 AI 与 WebAssembly 路径 |
 | apps/web-client、apps/desktop-client、apps/game-server | 现有客户端和服务端 |
 | content、extensions | 旧线内容、DSL、包工具与资源，不能直接算原生规则验收 |

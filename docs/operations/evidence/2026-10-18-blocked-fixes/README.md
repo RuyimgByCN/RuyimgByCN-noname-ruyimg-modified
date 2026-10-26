@@ -1511,7 +1511,7 @@ crates/content-native-loader/src/lib.rs:575   for decl in card_kind_host_skills(
 **修正后的下一步**：核对**「手持牌技能」进入/离开手牌时是否 `core.skills.insert`**
 （若无 ⇒ 与先前结论方向一致，但**断点位置不同**：不在声明，而在**实例授予**）。
 
-## ✅ **授予链也已存在**（同日）：`construction.rs:468-500`
+## ✅ **授予链也已存在**（同日）：`construction.rs`（2026-10-18 快照第 468–500 行；2026-10-24 当前授技入口见 `engine/construction.rs:463-477`）
 
 ```rust
 // G1 swd 器族手持技初始化钩子（卡牌面补切批⑩）：四象五件手持触发技授予全部存活角色
@@ -1643,7 +1643,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 | 包数据 `cards.json` | 3 张 `chenhuodajie` 条目**均无 `skills` 字段** |
 | `bridge_pack`（**已跟踪**） | 仅支持 **`cards[].equip_skills`**（`lib.rs:567-572`），**不支持 `cards[].skills`** |
 | 宿主键表 | `host:chenhuodajie_card` **存在**（`keys.rs:862`） |
-| 授予路径 | `ChenhuodajieCard` **不在** `construction.rs:468-500` 的授予清单、也**不在** `card_kind_host_skills` |
+| 授予路径 | `ChenhuodajieCard` **不在** `construction.rs`（2026-10-18 快照第 468–500 行；2026-10-24 当前授技入口见 `engine/construction.rs:463-477`） 的授予清单、也**不在** `card_kind_host_skills` |
 
 ⇒ **非装备牌的 `global` 子技能没有任何声明通道** ⇒ `host:chenhuodajie_card` **永远不会被实例化**
 ⇒ `damageEnd` 窗口无法触发（与第 57 项不同：57 是**元数据/过滤器矛盾**，53 是**缺声明通道**）。

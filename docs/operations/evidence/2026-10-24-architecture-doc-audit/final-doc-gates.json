@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-24T17:25:18.707182+08:00",
+  "checks": 5,
+  "passed": 5,
+  "failed": 0,
+  "attempts": [
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "start": "2026-10-24T17:24:09.256106+08:00",
+      "end": "2026-10-24T17:24:09.983426+08:00",
+      "seconds": 0.727,
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "start": "2026-10-24T17:24:09.260094+08:00",
+      "end": "2026-10-24T17:24:18.130519+08:00",
+      "seconds": 8.871,
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "start": "2026-10-24T17:24:09.263183+08:00",
+      "end": "2026-10-24T17:24:09.350540+08:00",
+      "seconds": 0.088,
+      "exit": 0
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+        "-B",
+        "scripts/refresh_recent_rounds.py",
+        "--check"
+      ],
+      "start": "2026-10-24T17:24:09.259598+08:00",
+      "end": "2026-10-24T17:24:09.295397+08:00",
+      "seconds": 0.036,
+      "exit": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-24T17:24:09.257286+08:00",
+      "end": "2026-10-24T17:24:09.456972+08:00",
+      "seconds": 0.2,
+      "exit": 2
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "start": "2026-10-24T17:24:39.142345+08:00",
+      "end": "2026-10-24T17:24:39.504770+08:00",
+      "seconds": 0.363,
+      "exit": 0
+    }
+  ],
+  "repair": "Initial git diff --check rejected newly appended history EOF blank lines; added an end-of-original-block comment after the untouched archived text; diff recheck passed. Earlier four checks did not change semantically."
+}

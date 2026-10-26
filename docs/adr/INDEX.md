@@ -150,3 +150,5 @@
 - [0781 可变座位环原语（swapSeat）](0781-mutable-seat-ring.md) —— GameStateCore.seat_ring 显式座位环，座位语义全经环访问器；存档 v46；长蛇阵换座/破阵诀随机重排落地
 - [0782 扩展执行后端与旧 JS 兼容范围（D2/T8 定案）](0782-extension-backend-and-legacy-js-scope.md) —— 旧 JS 不承诺零改动运行；内置 HostBehavior + 扩展包 rule-vm 分层；QuickJS 兼容层不立项、WASM 暂缓；草稿未证明项转 T8 集成验收
 - [0783 Boss 关卡流程子系统（D4）](0783-boss-stage-flow-subsystem.md) —— 十殿还人/隐藏链八技/翼轮次/bianshen 换 Boss 进原生流程面；与 D5 龙血·ylyg*、映种、庞统外部技划界；实现分 B0–B4
+- [0784 桌面端原生执行引擎原型（PA09 草案）](0784-desktop-native-engine-prototype.md) —— 草案：引擎在 Tauri Rust 进程原生运行、沿用 Worker 协议语义，以 PA08 数据为对照组；原型未落地，是否切换默认由用户拍板。
+- [0785 原生 GPU 牌桌原型（PA11 草案）](0785-wgpu-table-prototype.md) —— 草案：PA08 实测 DOM 余量充足、性能动机不成立，原型若做只做单场景 wgpu 对照；投入由用户拍板，拍板前不立项。

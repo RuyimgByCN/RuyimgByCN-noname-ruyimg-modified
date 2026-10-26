@@ -1,0 +1,1386 @@
+{
+  "at": "2026-10-24T17:25:20.962826+08:00",
+  "changed_existing_documents": [
+    {
+      "path": "docs/architecture/native-progress.md",
+      "reason": "Current capability summary and prioritized audit; old status labeled historical",
+      "before_sha256": "10cdabd525e93be0616ce6b2dce4da89e26a6a25bee3f2bbccfc76d8cc699355",
+      "after_sha256": "cba104853c3ede194c9cc46ecbc2bd7498c2ebe03d12e3090b98e1bba37019de",
+      "before_lines": 2168,
+      "after_lines": 2166,
+      "inbound_links": [
+        {
+          "file": "docs/native-coverage-manifest.md",
+          "target": "architecture/native-progress.md"
+        },
+        {
+          "file": "docs/native-coverage-manifest.md",
+          "target": "architecture/native-progress.md#当前核验快照"
+        },
+        {
+          "file": "docs/native-coverage-manifest.md",
+          "target": "architecture/native-progress.md"
+        },
+        {
+          "file": "docs/native-coverage-manifest.md",
+          "target": "architecture/native-progress.md"
+        },
+        {
+          "file": "docs/native-coverage-manifest.md",
+          "target": "architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0724-native-n08-content-expansion.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0703-native-kernel-first-batch.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0703-native-kernel-first-batch.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0779-native-symbol-table-limit.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0773-native-p2-n09-n12-load-evidence.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0707-native-structure-slice-matrix.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0707-native-structure-slice-matrix.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0707-native-structure-slice-matrix.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0777-native-c0-native-loader.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0781-mutable-seat-ring.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0783-boss-stage-flow-subsystem.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0704-native-snapshot-command-boundary.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0704-native-snapshot-command-boundary.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0774-native-p1-defect-table-closeout.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0708-native-rule-source-alignment.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0708-native-rule-source-alignment.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0708-native-rule-source-alignment.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0715-native-choice-binding-validation.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0775-native-p2-n08-n05n06-closeout.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0714-native-guidao-tiandu-semantics-n04d.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0714-native-guidao-tiandu-semantics-n04d.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0772-native-p2-n10-policy-planner.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0768-native-p1-gap-closeout.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0768-native-p1-gap-closeout.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0769-native-n11-general-assembly-kof.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0713-native-judge-grouping-version4.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0732-native-n10-ai-session-bounded-pool.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0782-extension-backend-and-legacy-js-scope.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0767-native-n12-driver-complete.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0780-card-instance-mod-primitive.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0705-native-semantics-nullify-identity.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/INDEX.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/INDEX.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/INDEX.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0771-native-p2-n05-n06-composite-acceptance.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0710-native-restore-checkpoint-abort.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0710-native-restore-checkpoint-abort.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0733-native-n11-auth-bytes-archive.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0711-native-judge-order-alignment.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0711-native-judge-order-alignment.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0764-native-stage2-host-prototypes.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0706-native-zone-conservation-restore-matrix.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0706-native-zone-conservation-restore-matrix.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0741-native-n10-native-table-latency.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0712-native-first-official-skills.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0712-native-first-official-skills.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0709-native-segment-abort-versioning.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0709-native-segment-abort-versioning.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0770-native-n08-six-skills.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0735-native-n12-cross-process-archive.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0763-native-n08-snatch-lianying-jijiang.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0731-native-n10-choice-event-visibility.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/adr/0719-native-checkpoint-hierarchy-guidao-equip.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/content-sdk/phase4-dsl-vm.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/content-sdk/phase4-dsl-vm.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/operations/phase16-replay-snapshot-manifest.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase18-tournament-wal-signing.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase27-config-driven-deck.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase12-content-vm.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase19-native-baseline.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase15-manifest-persistence.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase19-replay-capsule.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase30-trick-card-effects.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase29-dsl-lsp.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase26-device-tiers.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase23-licensing.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase22-devtools.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase20-resource-pipeline.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/self-check-guide.md",
+          "target": "../architecture/native-progress.md#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/operations/self-check-guide.md",
+          "target": "../architecture/native-progress.md#effect-split-2026-10-24"
+        },
+        {
+          "file": "docs/operations/phase10-release.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase14-manifest-records.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase11-conformance.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase13-modifiers.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase21-accessibility.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase17-test-perf-infrastructure.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase17-test-perf-infrastructure.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/phase17-test-perf-infrastructure.md",
+          "target": "../architecture/native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-o3-runtime-baseline/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-sipu-v232/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-ws-delivery/README.md",
+          "target": "../../../architecture/native-progress.md#native-ws-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-policy-quality/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t12-yunchou-generals-b1/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-frame-latency/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-luanchang-v218/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-shujing-v220/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-info-isolation/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-buchun-v240/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-heiwuchang-v256/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-lueying-v194/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-qiongqi-futai-v212/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment9-filters/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-yanling-v241/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-hundun-wuzang-v209/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-kuangxiao-v235/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t12-jiguanshu-v198/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-shenen-v238/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-12-t21-test-warnings-gate/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zhuyin-v208/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-session-handover/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-session-handover/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-modeboss-closeout/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-qinguangwang-v276/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-nianshou-v248/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t9-cardstats/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-futai2-v214/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-cross-platform/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-13-t6-3-native-product-path/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-yinjian-v255/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t15-2-hand-limit-bonus-hash/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-plan-pool/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xiangliu-yashou-v221/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t12-jiguanyaoshu-v197/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-minwan-v219/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-24-review-fixes/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t12-yunchou-generals-b17/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t19-zhenfa-v200/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t4-upstream-review/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-worker-native-first-slice/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zhenji-v262/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-liubei-v261/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-23-native-review-17/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-22-n09-n12-load/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-stage-v207/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-luocha-v254/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-ruizhi-v250/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xunyou-v231/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-18-nc03-adapter/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-taowu-nitai-v217/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-shouyi-v251/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-18-nc11-docs-convergence/README.md",
+          "target": "../../../architecture/native-progress.md#native-convergence"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t18-jiguanshu-primitive-v199/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zhangchunhua-v260/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-13-t11-boss-taishanwang-v268/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-guojia-v259/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-mengpo-v270/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-hidechain-disposition/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-juehong-v244/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-13-t11-boss-bianchengwang-v267/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t9-lx-trace-survey/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xingqiu-v239/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-nbianshen-v249/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-o2-build-efficiency/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-22-native-review/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xingxia-v242/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-yandu-v213/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-round252-verification/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-06-native-progress-audit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t12-jiguanfeng-v195/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-16-todo-register/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-rvm-bridge-increment1/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t6-loader-pile/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-architecture-doc-audit/README.md",
+          "target": "../../../architecture/native-progress.md#architecture-audit-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-effect-split/README.md",
+          "target": "../../../architecture/native-progress.md#effect-split-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zhangjiao-v264/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-room-frozen-packages/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-12-d1-d2-decisions/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-entries-v243/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t10-jiguantong-v193/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-16-o5-profiling/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-taotie-v215/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-16-d4-d8-decisions/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-open-decisions/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-22-native-review-13/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-mingxingzhu-v245/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-juyuan-v226/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-24-native-progress-audit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-yecha-v253/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zirun-v247/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-shen2-closeout/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment14-bte-filters/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-versus-substitute-v206/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-jingjue-v252/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-effect-integration-validation/README.md",
+          "target": "../../../architecture/native-progress.md#effect-integration-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t16-doc-audit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t16-doc-audit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-mobile-viewport-sim/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-18-architecture-audit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-progress-check/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-progress-check/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t13-native-wasm-shell/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment16-damage-front-filters/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-lingqu-v237/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-shenyi-v233/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-fentian-v236/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t14-doc-naming-kof-session/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-bianshen3-yanjiu-survey/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-bifang-v227/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-wuguanwang-v265/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-storm-rebuttal/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-o4-wasm-delivery/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-19-network-sim/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-yanluowang-v271/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-hujia-v204/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-honglianx-v228/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-duqu-v223/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-pangtong-v277/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment17-tied-max-filters/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-07-e03-mianju-eval/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-pingdengwang-v272/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment15-param-filters/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-room-durability/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-releiji-v234/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-todo-handoff/README.md",
+          "target": "../../../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-todo-handoff/README.md",
+          "target": "../../../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t12-jiguanyuan-v196/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-dushiwang-v273/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-fanjian-v203/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-23-native-review-14/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zaoyi-v246/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t8-increment8-skillid/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-18-nc08-source-coverage/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-cangmu-jicai-v216/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-14-t11-boss-chujiangwang-v275/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-qiongqi-zhue-v211/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-zhouyu-v263/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-23-native-upstream-review-16/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-extension-delivery/README.md",
+          "target": "../../../architecture/native-progress.md#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-standard-diff-v202/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-yanyu-v229/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-bianshen-survey/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t2-t3-residual-cleanup/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t2-t3-residual-cleanup/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t2-t3-residual-cleanup/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-23-native-review-15/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t6-2-symbol-table-limit/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-jiushou-v222/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-bingxian-v224/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-13-t11-boss-zhuanlunwang-v269/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xushi-v225/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-16-t15-3-v117-transplant/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t19b-swapseat-v201/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-12-progress-check/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-07-progress-check/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-07-progress-check/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-doc-cleanup/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-fengdong-v230/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-16-o4-wasm-opt/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-room-double-fault/README.md",
+          "target": "../../../architecture/native-progress.md#native-room-double-fault-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-xiangde-yinzei-v210/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-songdiwang-v266/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t15-abi-reconcile/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-mamian-v256/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-24-native-room-commit-decision/README.md",
+          "target": "../../../architecture/native-progress.md#native-room-commit-2026-10-24"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-t5-workspace-verification/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-juece-v257/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-doudizhu-binglin-v205/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-11-t11-boss-dongzhuo-v258/README.md",
+          "target": "../../../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/architecture/overview.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/overview.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-extensions.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/legacy-reference.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/legacy-reference.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/legacy-reference.md",
+          "target": "native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md#性能优化核验后的待办2026-09-24"
+        },
+        {
+          "file": "docs/architecture/architecture-evolution-plan.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress.md#当前核验快照"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/architecture/native-progress-history.md",
+          "target": "native-progress.md"
+        },
+        {
+          "file": "docs/architecture/native-progress-history.md",
+          "target": "native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/architecture/native-progress-history.md",
+          "target": "native-progress.md#architecture-audit-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/native-convergence-plan.md",
+          "target": "native-progress.md#native-convergence"
+        },
+        {
+          "file": "docs/architecture/native-convergence-plan.md",
+          "target": "native-progress.md#native-convergence"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#native-room-durability-2026-10-24"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#native-convergence"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "#architecture-audit-2026-10-24"
+        },
+        {
+          "file": "docs/migration/phase9-legacy.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-1.11.5-delta.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-1.11.5-delta.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md#delivery-2026-10-24"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md#后续待做按阻塞关系"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress.md#native-convergence"
+        },
+        {
+          "file": "docs/migration/content-registry-arc-split.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "docs/migration/mode-content-compatibility.md",
+          "target": "../architecture/native-progress.md"
+        },
+        {
+          "file": "README.md",
+          "target": "docs/architecture/native-progress.md"
+        },
+        {
+          "file": "README.md",
+          "target": "docs/architecture/native-progress.md"
+        },
+        {
+          "file": "README.md",
+          "target": "docs/architecture/native-progress.md"
+        },
+        {
+          "file": "noname-performance-architecture.md",
+          "target": "docs/architecture/native-progress.md"
+        }
+      ]
+    },
+    {
+      "path": "docs/architecture/native-progress-history.md",
+      "reason": "Verbatim October 24 delivery history moved from progress",
+      "before_sha256": "1f84154b5d888703e7f169d36df6b224319765b79af802abbbcd93c5947a1d06",
+      "after_sha256": "9ce28effcad69531258c43d79b4c889d1b4df8b73b7a59616e1fb10595ddf779",
+      "before_lines": 319,
+      "after_lines": 387,
+      "inbound_links": [
+        {
+          "file": "docs/operations/evidence/2026-10-10-progress-check/README.md",
+          "target": "../../../architecture/native-progress-history.md"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-10-todo-handoff/README.md",
+          "target": "../../../architecture/native-progress-history.md#2026-10-10-整理前的待做表原文"
+        },
+        {
+          "file": "docs/architecture/overview.md",
+          "target": "native-progress-history.md"
+        },
+        {
+          "file": "docs/architecture/native-rules-baseline.md",
+          "target": "native-progress-history.md#p2--n08n11-规则对齐批次流水2026-10-07--10-08"
+        },
+        {
+          "file": "docs/architecture/native-progress-history.md",
+          "target": "native-progress-history.md#p2--n08n11-规则对齐批次流水2026-10-07--10-08"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "native-progress-history.md#delivery-2026-10-24-history"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "native-progress-history.md"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "native-progress-history.md#2026-10-10-hostrs-截断事故恢复记录"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "native-progress-history.md#2026-10-10-整理前的待做表原文"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "native-progress-history.md"
+        },
+        {
+          "file": "docs/migration/upstream-extension-reconstruction.md",
+          "target": "../architecture/native-progress-history.md#2026-10-10-整理前的待做表原文"
+        }
+      ]
+    },
+    {
+      "path": "docs/architecture/overview.md",
+      "reason": "Actual native Worker and WS routes plus NC plan navigation",
+      "before_sha256": "7eee471193f81571eacdbfeaae46a7fd9c65be634c45b75c3fdd5d93167d796a",
+      "after_sha256": "2bee46b655ea0695451aeeab2a853445f893bb941cb79f7f7f7fcb418abde2c7",
+      "before_lines": 31,
+      "after_lines": 36,
+      "inbound_links": [
+        {
+          "file": "docs/architecture/legacy-reference.md",
+          "target": "overview.md"
+        },
+        {
+          "file": "README.md",
+          "target": "docs/architecture/overview.md"
+        }
+      ]
+    },
+    {
+      "path": "docs/architecture/architecture-evolution-plan.md",
+      "reason": "Outdated tasks replaced by NC scope; historical S table retained",
+      "before_sha256": "afc71a66ede99f775ebbf57b839c5932918af9520c62181e0de81de7250de5d8",
+      "after_sha256": "9844e29a4185ad81375a98591aea51d50fdca8d7f03552f1e766986c6fbaf163",
+      "before_lines": 252,
+      "after_lines": 254,
+      "inbound_links": [
+        {
+          "file": "docs/adr/0777-native-c0-native-loader.md",
+          "target": "../architecture/architecture-evolution-plan.md"
+        },
+        {
+          "file": "docs/adr/0778-native-c0-pack-data-keys.md",
+          "target": "../architecture/architecture-evolution-plan.md"
+        },
+        {
+          "file": "docs/adr/0782-extension-backend-and-legacy-js-scope.md",
+          "target": "../architecture/architecture-evolution-plan.md#c1-扩展执行后端选择"
+        },
+        {
+          "file": "docs/adr/0782-extension-backend-and-legacy-js-scope.md",
+          "target": "../architecture/architecture-evolution-plan.md#c1-扩展执行后端选择"
+        },
+        {
+          "file": "docs/operations/evidence/2026-09-24-review-fixes/README.md",
+          "target": "../../../architecture/architecture-evolution-plan.md#c0-生产侧装载器与名称所有权"
+        },
+        {
+          "file": "docs/operations/evidence/2026-10-07-progress-check/README.md",
+          "target": "../../../architecture/architecture-evolution-plan.md"
+        },
+        {
+          "file": "docs/architecture/overview.md",
+          "target": "architecture-evolution-plan.md"
+        },
+        {
+          "file": "docs/architecture/native-convergence-plan.md",
+          "target": "architecture-evolution-plan.md"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "architecture-evolution-plan.md#c1-扩展执行后端选择"
+        }
+      ]
+    },
+    {
+      "path": "docs/operations/self-check-guide.md",
+      "reason": "Full links and fail-preserving checks; stale duplicate numbers removed",
+      "before_sha256": "d27c2aa552f36c364d5dc8dd2f53c99b8c23e9c6c119cf40cbe84b0989525f76",
+      "after_sha256": "e042746f949263df4ec17e4f304583287889ea4b578e1e8bed0e2d8bcb02d49d",
+      "before_lines": 73,
+      "after_lines": 68,
+      "inbound_links": [
+        {
+          "file": "docs/operations/evidence/2026-10-19-session-handover/README.md",
+          "target": "../../self-check-guide.md"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "../operations/self-check-guide.md"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "../operations/self-check-guide.md"
+        },
+        {
+          "file": "docs/architecture/native-progress.md",
+          "target": "../operations/self-check-guide.md"
+        }
+      ]
+    }
+  ],
+  "deleted_documents": [],
+  "historical_S_table_unchanged": true,
+  "history_move": {
+    "source": "docs/architecture/native-progress.md",
+    "destination": "docs/architecture/native-progress-history.md",
+    "section": "delivery-2026-10-24-history",
+    "moved_bytes": 24273,
+    "moved_sha256": "1bd4d01fabfc3ca6494c5c53d9f05bd99264f300d1a0471a2485ebcd5af6dc27",
+    "verbatim": true,
+    "old_round_body_preserved": true
+  },
+  "consumers_preserved": [
+    "scripts/refresh_recent_rounds.py",
+    "scripts/check_comment_counts.py",
+    "scripts/check_stale_numbers.py"
+  ],
+  "incoming_anchor_checks": {
+    "method": "Markdown headings plus explicit anchors; changed-document inbound links only; pre-existing missing anchors are separate",
+    "previously_missing": [],
+    "currently_missing": [],
+    "introduced_missing": []
+  },
+  "changed_document_outbound_missing_anchors": []
+}

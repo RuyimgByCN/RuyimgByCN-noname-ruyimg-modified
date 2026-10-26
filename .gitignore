@@ -25,3 +25,4 @@ apps/web-client/dist/
 __pycache__/
 *.pyc
 apps/game-server/data/
+/data/
