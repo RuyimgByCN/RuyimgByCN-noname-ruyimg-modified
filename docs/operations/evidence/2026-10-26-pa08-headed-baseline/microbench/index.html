@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset="utf-8"></head><body style="margin:0">
+<button id="btn" style="position:fixed;left:40px;top:40px;width:220px;height:64px;font-size:20px">PING</button>
+<script>
+"use strict";
+// PA07 判别微基准（第 4 版）：点击后四通道投递延迟对比。
+//  pm = worker postMessage（任务）；mc = MessageChannel（任务）；
+//  rafpoll = rAF 帧回调内轮询 SAB（非任务，拟议缓解）；
+//  raf = 点击后首个 rAF 时间（帧边界参考）。
+const CAP = 64 * 1024;
+const sab = new SharedArrayBuffer(CAP + 8);
+const i32 = new Int32Array(sab);
+const u8 = new Uint8Array(sab, 8);
+const res = { pm: [], mc: [], rafpoll: [], raf: [], err: [], cur: 0 };
+const workerSrc = [
+  "let seq, buf;",
+  "self.onmessage = function (e) {",
+  "  if (e.data && e.data.sab) {",
+  "    seq = new Int32Array(e.data.sab, 0, 2);",
+  "    buf = new Uint8Array(e.data.sab, 8);",
+  "    Atomics.store(seq, 1, 12345);",
+  "    return;",
+  "  }",
+  "  const n = e.data.n, t0 = e.data.t0, pad = e.data.pad;",
+  "  postMessage({ kind: 'pm', n: n, t0: t0, pad: pad });",
+  "  const s = JSON.stringify({ kind: 'sab', n: n, t0: t0, pad: pad });",
+  "  const bytes = new TextEncoder().encode(s);",
+  "  buf.fill(0);",
+  "  if (bytes.length <= " + CAP + ") buf.set(bytes, 0);",
+  "  Atomics.store(seq, 0, n);",
+  "  Atomics.notify(seq, 0, 1);",
+  "  postMessage({ kind: 'dbg', n: n, stored: Atomics.load(seq, 0), bl: seq.buffer.byteLength });",
+  "};",
+].join("\n");
+const w = new Worker(URL.createObjectURL(new Blob([workerSrc], { type: "text/javascript" })));
+w.onerror = function (e) { res.err.push("worker: " + (e.message || "?")); };
+w.onmessage = function (e) {
+  if (e.data && e.data.kind === "pm") res.pm.push(performance.now() - e.data.t0);
+  if (e.data && e.data.kind === "dbg") { res.dbg = res.dbg || []; if (res.dbg.length < 5) res.dbg.push(e.data); res.dbgN = (res.dbgN || 0) + 1; }
+};
+w.postMessage({ sab: sab });
+const mc = new MessageChannel();
+mc.port1.onmessage = function (e) { res.mc.push(performance.now() - e.data.t0); };
+mc.port1.start();
+let lastN = 0;
+function pollSab() {
+  const cur = Atomics.load(i32, 0);
+  if (cur === lastN) return;
+  lastN = cur;
+  res.cur = cur;
+  let end = CAP;
+  while (end > 0 && u8[end - 1] === 0) end--;
+  const s = new TextDecoder().decode(u8.subarray(0, end));
+  try {
+    const o = JSON.parse(s);
+    res.rafpoll.push(performance.now() - o.t0);
+  } catch (err) { res.err.push("parse:" + s.slice(0, 30)); }
+}
+const anim = document.createElement("div");
+anim.style.cssText = "position:fixed;left:300px;top:40px;width:40px;height:40px;background:#3a6";
+document.body.appendChild(anim);
+const pad = "x".repeat(2048);
+let n = 0;
+document.getElementById("btn").addEventListener("click", function () {
+  const t0 = performance.now();
+  n += 1;
+  mc.port2.postMessage({ t0: t0 });
+  w.postMessage({ n: n, t0: t0, pad: pad });
+  requestAnimationFrame(function () { res.raf.push(performance.now() - t0); });
+});
+(function tick() {
+  res.ticks = (res.ticks || 0) + 1;
+  res.pollCur = Atomics.load(i32, 0);
+  anim.style.left = (300 + 40 * Math.sin(performance.now() / 200)) + "px";
+  pollSab();
+  requestAnimationFrame(tick);
+})();
+window.__micro = {
+  res: res,
+  report: function () { res.init = Atomics.load(i32, 1); res.isolated = crossOriginIsolated; res.mainBL = sab.byteLength; res.reportCur = Atomics.load(i32, 0); return JSON.stringify(res); },
+};
+</script></body></html>
