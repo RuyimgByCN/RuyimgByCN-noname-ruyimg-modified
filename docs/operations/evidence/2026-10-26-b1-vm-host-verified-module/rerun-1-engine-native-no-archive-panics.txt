@@ -1,0 +1,19 @@
+  38 读上游 standard/skill.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  13 读上游 yunchou/skill.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   7 读上游: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   4 读上游 swd/card.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   3 unknown skill fz_xinkuanggu
+   3 unknown skill fz_liegong
+   2 读上游 extra.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   1 读上游龙血玄黄: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   1 读上游方案 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/斗转星移/data/inputPlan/空白
+   1 读上游 sb/skill.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   1 读上游 refresh/skill.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   1 读上游 gujian/card.js: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+   1 读上游 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/笨蛋插件/extension.js
+   1 读上游 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/武皇争霸/extension.js
+   1 读上游 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/更新保护/extension.js
+   1 读上游 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/拖拽读取/extension.js
+   1 读上游 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js
+   1 读 /private/tmp/b1-head/crates/engine-native/../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js 失败：No such file or directory (os error 2)
+   1 assertion `left == right` failed: 总技能数应为基线 94

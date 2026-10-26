@@ -1,0 +1,655 @@
+     Running unittests src/lib.rs (/tmp/b1-head-target/debug/deps/engine_native-7d1be85d6c1acfe4)
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/a0_tag_registry.rs (/tmp/b1-head-target/debug/deps/a0_tag_registry-b3b3605909743b35)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/ai_content_tuning.rs (/tmp/b1-head-target/debug/deps/ai_content_tuning-cabfa35eb2cd6476)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/ai_planner.rs (/tmp/b1-head-target/debug/deps/ai_planner-15e066a154ee02c6)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+     Running tests/auth_archive.rs (/tmp/b1-head-target/debug/deps/auth_archive-a388cb125d6784ba)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/boss_play_eight.rs (/tmp/b1-head-target/debug/deps/boss_play_eight-df2c4bc6cdc977d3)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/boundary_snapshot.rs (/tmp/b1-head-target/debug/deps/boundary_snapshot-82c0b392ec595da0)
+test result: ok. 71 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/d5_longxue_mbqianlong.rs (/tmp/b1-head-target/debug/deps/d5_longxue_mbqianlong-a1b818bdf51dcbd1)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/e02_c3_lifecycle.rs (/tmp/b1-head-target/debug/deps/e02_c3_lifecycle-0f05bd8f9dfee1a0)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/epic_rangjie_after_damage.rs (/tmp/b1-head-target/debug/deps/epic_rangjie_after_damage-6d7de3b35a7f626f)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/epic_reguhuo_viewas.rs (/tmp/b1-head-target/debug/deps/epic_reguhuo_viewas-530e9916847ae811)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/fuzz_corpus_replay.rs (/tmp/b1-head-target/debug/deps/fuzz_corpus_replay-d453506f23c1f229)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/g1_cardpile.rs (/tmp/b1-head-target/debug/deps/g1_cardpile-a7bdc467031b496c)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests/g1_d3.rs (/tmp/b1-head-target/debug/deps/g1_d3-01138fc75b9e3b7d)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests/g1_hearth.rs (/tmp/b1-head-target/debug/deps/g1_hearth-88333f0c89863b73)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+     Running tests/g1_huanle.rs (/tmp/b1-head-target/debug/deps/g1_huanle-ca814bd64e1ba40b)
+test result: ok. 22 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.50s
+     Running tests/g1_shahai_gujian.rs (/tmp/b1-head-target/debug/deps/g1_shahai_gujian-94a1872a29f4f695)
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+     Running tests/g1_shahai_gwent.rs (/tmp/b1-head-target/debug/deps/g1_shahai_gwent-4bff41dee26e7c25)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+     Running tests/g1_shahai_mtg.rs (/tmp/b1-head-target/debug/deps/g1_shahai_mtg-3aeb3cec7cfd3fd9)
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+     Running tests/g1_shahai_swd.rs (/tmp/b1-head-target/debug/deps/g1_shahai_swd-850c2be74926da1a)
+test result: ok. 111 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.07s
+     Running tests/g1_shahai_yunchou.rs (/tmp/b1-head-target/debug/deps/g1_shahai_yunchou-2b71e7258d990d71)
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+     Running tests/g1_shahai_zhenfa.rs (/tmp/b1-head-target/debug/deps/g1_shahai_zhenfa-4e5eb4571502e660)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+     Running tests/g1_wudian.rs (/tmp/b1-head-target/debug/deps/g1_wudian-bc6ac808be6465bc)
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.40s
+     Running tests/g1_wuxing.rs (/tmp/b1-head-target/debug/deps/g1_wuxing-64b0c92a303f8cf4)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests/l01_ai_tuning_eight.rs (/tmp/b1-head-target/debug/deps/l01_ai_tuning_eight-d310a9b35b2fd39b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests/l02_sj_eight.rs (/tmp/b1-head-target/debug/deps/l02_sj_eight-c340ffb61791a3bc)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests/l04_cardpile_eight.rs (/tmp/b1-head-target/debug/deps/l04_cardpile_eight-95920403c7615562)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests/l05_coin_eight.rs (/tmp/b1-head-target/debug/deps/l05_coin_eight-775d2344c9877f60)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l07_omnisearch.rs (/tmp/b1-head-target/debug/deps/l07_omnisearch-4f0ae31bed06a70c)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l09_qhly_eight.rs (/tmp/b1-head-target/debug/deps/l09_qhly_eight-0e0898ceba2e59c8)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l10_epic_cards_eight.rs (/tmp/b1-head-target/debug/deps/l10_epic_cards_eight-79c967ed34cdbce3)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/l13_shousha_mvp_eight.rs (/tmp/b1-head-target/debug/deps/l13_shousha_mvp_eight-7b35ee6cd74cbfc1)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l15_shousha_eight.rs (/tmp/b1-head-target/debug/deps/l15_shousha_eight-ebd41e19304dca17)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests/l16_drag_read_eight.rs (/tmp/b1-head-target/debug/deps/l16_drag_read_eight-bb048fd642eea981)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests/l17_douzhuan_eight.rs (/tmp/b1-head-target/debug/deps/l17_douzhuan_eight-2b87b490b9841d0e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l18_update_guard_eight.rs (/tmp/b1-head-target/debug/deps/l18_update_guard_eight-6b6790330877e132)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests/l19_brawl_batch1.rs (/tmp/b1-head-target/debug/deps/l19_brawl_batch1-1c6a56c65c3de773)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/l19_zaibian_batch2.rs (/tmp/b1-head-target/debug/deps/l19_zaibian_batch2-859ac2ab993a528b)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l20_config_mods_batch1.rs (/tmp/b1-head-target/debug/deps/l20_config_mods_batch1-ae635ea6c8b2141a)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/l20_kurou_batch2.rs (/tmp/b1-head-target/debug/deps/l20_kurou_batch2-9037685373098b14)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l20_liegong_batch3.rs (/tmp/b1-head-target/debug/deps/l20_liegong_batch3-ffda15c364fc302b)
+test xinkuanggu_draws_or_recovers ... FAILED
+test liegong_direct_hit_when_hand_ge_hp ... FAILED
+thread 'xinkuanggu_draws_or_recovers' (103150994) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_xinkuanggu
+thread 'liegong_direct_hit_when_hand_ge_hp' (103150993) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_liegong
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l21_martial_eight.rs (/tmp/b1-head-target/debug/deps/l21_martial_eight-25c3debaa189296d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/l22_elo_eight.rs (/tmp/b1-head-target/debug/deps/l22_elo_eight-b9fc545249656b9e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+     Running tests/l23_desktop_adapt.rs (/tmp/b1-head-target/debug/deps/l23_desktop_adapt-fbda977802dfc729)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/l24_skin_switch_eight.rs (/tmp/b1-head-target/debug/deps/l24_skin_switch_eight-cff2702c37493299)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/l26_fool_eight.rs (/tmp/b1-head-target/debug/deps/l26_fool_eight-58b81a16d6ce916e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/l27_jishe_batch5.rs (/tmp/b1-head-target/debug/deps/l27_jishe_batch5-ac4ef496cb563073)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l27_new_meibu_batch3.rs (/tmp/b1-head-target/debug/deps/l27_new_meibu_batch3-9cfbdc249a922372)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l27_new_zhixi_batch2.rs (/tmp/b1-head-target/debug/deps/l27_new_zhixi_batch2-d816ac5e1c7af3ae)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l27_sbzhaxiang_batch4.rs (/tmp/b1-head-target/debug/deps/l27_sbzhaxiang_batch4-90bb7cf943149150)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/l27_xiefang_batch1.rs (/tmp/b1-head-target/debug/deps/l27_xiefang_batch1-234fce24dce0610e)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/l29_longxue_eight.rs (/tmp/b1-head-target/debug/deps/l29_longxue_eight-acf05c93afbc866b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+     Running tests/maintenance_guards.rs (/tmp/b1-head-target/debug/deps/maintenance_guards-b2acfcc8631498a5)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+     Running tests/native_kernel.rs (/tmp/b1-head-target/debug/deps/native_kernel-291388fb2e63abe0)
+test result: ok. 341 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.07s
+     Running tests/nc01_seat_semantics.rs (/tmp/b1-head-target/debug/deps/nc01_seat_semantics-1b2dee0b3dbb8eee)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc03_ai_consistency.rs (/tmp/b1-head-target/debug/deps/nc03_ai_consistency-6c1b43a3f6fb1793)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc03_legal_actions.rs (/tmp/b1-head-target/debug/deps/nc03_legal_actions-03d2f01f9e1b049c)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc04_vm_fault.rs (/tmp/b1-head-target/debug/deps/nc04_vm_fault-9c05ad2773c93a4f)
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc04_vm_resume.rs (/tmp/b1-head-target/debug/deps/nc04_vm_resume-81e8a659b5dc4193)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc05_general_select.rs (/tmp/b1-head-target/debug/deps/nc05_general_select-cc8ea8fddb1d5cdd)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc06_generic_content_state.rs (/tmp/b1-head-target/debug/deps/nc06_generic_content_state-0aa80e24c3e70137)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc07_discard_duplicate_probe.rs (/tmp/b1-head-target/debug/deps/nc07_discard_duplicate_probe-1ebeab886f39a837)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc07_state_same_source.rs (/tmp/b1-head-target/debug/deps/nc07_state_same_source-ea6cc6b60f202f2a)
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_acceptance_sweep_all_packages.rs (/tmp/b1-head-target/debug/deps/nc08_acceptance_sweep_all_packages-aa2997f7f5c854de)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+     Running tests/nc08_acceptance_sweep_small_packages.rs (/tmp/b1-head-target/debug/deps/nc08_acceptance_sweep_small_packages-ae13725c485231be)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc08_card_name_prefix_regression.rs (/tmp/b1-head-target/debug/deps/nc08_card_name_prefix_regression-95298f11de51de90)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_card_ownership_partition.rs (/tmp/b1-head-target/debug/deps/nc08_card_ownership_partition-bbce5ceb5a7c2b77)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_composition_acceptance.rs (/tmp/b1-head-target/debug/deps/nc08_composition_acceptance-9bfcefcd3e5c8a64)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_composition_pair_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_composition_pair_matrix-d4ffc39ab964305f)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+     Running tests/nc08_config_acceptance.rs (/tmp/b1-head-target/debug/deps/nc08_config_acceptance-1dbb7e2da497ef33)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_conversion_gap_regression.rs (/tmp/b1-head-target/debug/deps/nc08_conversion_gap_regression-86c37e49e2557746)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_dead_host_keys.rs (/tmp/b1-head-target/debug/deps/nc08_dead_host_keys-5b1cad62c4f9240a)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_general_pair_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_general_pair_matrix-09664d27828fcf4a)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_global_cards_active_use_probe.rs (/tmp/b1-head-target/debug/deps/nc08_global_cards_active_use_probe-7ffd8e6f25c322c7)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc08_identity_gate_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_identity_gate_matrix-923e81efcfd6344c)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_loader_card_skills.rs (/tmp/b1-head-target/debug/deps/nc08_loader_card_skills-77e14fe7ff4b4168)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_manifest_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_manifest_matrix-730f59510d7a6c1e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_phase_end_dispatch_probe.rs (/tmp/b1-head-target/debug/deps/nc08_phase_end_dispatch_probe-0cf2b9184c2304e8)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_pile_pair_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_pile_pair_matrix-c1acfd38d5fa4af7)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_prepare_phase_mapping.rs (/tmp/b1-head-target/debug/deps/nc08_prepare_phase_mapping-ba096004ce29edf9)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_registered_defect_guards.rs (/tmp/b1-head-target/debug/deps/nc08_registered_defect_guards-a761f01b665f3b0b)
+test result: ok. 0 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_replay_determinism_five_sources.rs (/tmp/b1-head-target/debug/deps/nc08_replay_determinism_five_sources-3983acbbb395ff1a)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc08_rescue_card_set_survey.rs (/tmp/b1-head-target/debug/deps/nc08_rescue_card_set_survey-edcabd09c8f91e51)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_save_restore_four_sources.rs (/tmp/b1-head-target/debug/deps/nc08_save_restore_four_sources-07b34e0d93633f04)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_save_restore_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_save_restore_matrix-3414b4c9bfd18462)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc08_save_restore_pile.rs (/tmp/b1-head-target/debug/deps/nc08_save_restore_pile-ed6660b243f6df3b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_skill_mapping_inventory.rs (/tmp/b1-head-target/debug/deps/nc08_skill_mapping_inventory-a7dc2d32ed6e4f55)
+test skill_mapping_inventory_matches_baseline ... FAILED
+thread 'skill_mapping_inventory_matches_baseline' (103151535) panicked at crates/engine-native/tests/nc08_skill_mapping_inventory.rs:65:5:
+assertion `left == right` failed: 总技能数应为基线 94
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_skill_pair_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_skill_pair_matrix-da34c5e0f59602ba)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+     Running tests/nc08_standard_deck_coverage.rs (/tmp/b1-head-target/debug/deps/nc08_standard_deck_coverage-4281b10dfe3f83df)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_swd_yuchan_family_probe.rs (/tmp/b1-head-target/debug/deps/nc08_swd_yuchan_family_probe-f15e285720424532)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_u08_reachability.rs (/tmp/b1-head-target/debug/deps/nc08_u08_reachability-ee2baecda2ebf5c0)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upgrade_acceptance.rs (/tmp/b1-head-target/debug/deps/nc08_upgrade_acceptance-fc9dce64d4b75a86)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upgrade_five_sources.rs (/tmp/b1-head-target/debug/deps/nc08_upgrade_five_sources-78303504171ab257)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_upgrade_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_upgrade_matrix-c3c62f8db72f8f2c)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc08_upgrade_skill_mapping.rs (/tmp/b1-head-target/debug/deps/nc08_upgrade_skill_mapping-678be2089754fa72)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_biyue_yingzi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_biyue_yingzi-69db2c6c141e7a44)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_boss_zhugeliang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_boss_zhugeliang-41142e481d39402e)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_chunbing.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_chunbing-e45abd0f456fdc57)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_ciqiu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_ciqiu-9238af28bb5eab03)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_duwen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_duwen-8a4b1978d2983e3d)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_fanjian.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_fanjian-35640daa4d38c384)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_fankui.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_fankui-55a0db7d61ab0e6f)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_ganglie.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_ganglie-114f1a3bfab32bf1)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_guanxing.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_guanxing-22682e3da3b2c72e)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_guicai.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_guicai-c7bfbb55c553ede6)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_bingpotong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_bingpotong-595fc15aaa507dce)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_dinvxuanshuang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_dinvxuanshuang-3109f58c4936a538)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_gujian_feibiao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_feibiao-b8e762f2669dfbe7)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_food_survey.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_food_survey-cb9df2dcfa9b465d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_gjyuheng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_gjyuheng-98c30cb52b72b52a)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_gudonggeng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_gudonggeng-e415b7fa3f1e85bf)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_heilonglinpian.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_heilonglinpian-8f4154c7c698a7f8)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_jinlianzhu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_jinlianzhu-3b0c1b7b81b6462d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_liufengsan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_liufengsan-1357351367285148)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_liutouge.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_liutouge-8e5e67355c938c9b)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_liyutang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_liyutang-23fc942249589178)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_longxugou.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_longxugou-32807d0b358ea546)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_luyugeng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_luyugeng-d25737643b509b93)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_mapodoufu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_mapodoufu-8f9aac6038fbcfdb)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_gujian_mianlijinzhen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_mianlijinzhen-cbf60f8388bb5fc5)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_mizhilianou.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_mizhilianou-7a6ebfce6ff769aa)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_gujian_molicha.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_molicha-1c39c4d7050c7282)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_mutoumianju.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_mutoumianju-a817f02127faadf5)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_gujian_qiankunbiao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_qiankunbiao-460d8ecf8b7087b0)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_qingtuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_qingtuan-a36dda74bcecd75f)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_shatang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_shatang-e6afb925254d9410)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_shenhuofeiya.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_shenhuofeiya-23bbae8b96c8ca70)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_shihuifen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_shihuifen-2b79fd547376fd98)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_gujian_shujinsan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_shujinsan-a504009b6c3b05ac)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_tanhuadong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_tanhuadong-621e7307f602fc4e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_xiajiao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_xiajiao-7cf673add9976c0e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_gujian_yougeng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_yougeng-6129be264cabafa9)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests/nc08_upstream_gujian_yuanbaorou.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_yuanbaorou-c2667880c9319c80)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_yunvyuanshen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_yunvyuanshen-90bf7b336a68838d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_gujian_ziyangdan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_gujian_ziyangdan-cd09bb9ae63a6fce)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_guose.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_guose-909d1b62e29f1d14)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_haidao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_haidao-ab555b56141a3618)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_chuansongmen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_chuansongmen-5a0e9e299b6370a7)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_dunpaigedang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_dunpaigedang-ac286f9069e848c7)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_jihuocard.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_jihuocard-03e5272688502ea2)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_hearth_linghunzhihuo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_linghunzhihuo-55c769e1d65d0a56)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_shandianjian.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_shandianjian-b58039c6dfb6f281)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_shenenshu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_shenenshu-164239554d556423)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_hearth_shijieshu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_shijieshu-81e72629ab80f008)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_hearth_tanshezhiren.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_tanshezhiren-eecea30784ff3b97)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_xingjiegoutong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_xingjiegoutong-107dd0c9d97f79f6)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_yuansuhuimie.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_yuansuhuimie-413118f98c45fab0)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_zhaomingdan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_zhaomingdan-f5b30d577114b17d)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hearth_zhiliaobo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hearth_zhiliaobo-8ee68a6b5b233083)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_hujia.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_hujia-a096b5543723aff6)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_identity_start.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_identity_start-48af0a85a7e4065b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jianxiong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jianxiong-e731c08fa98efa0b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jieyin.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jieyin-8726b9fe93577bf0)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jijiang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jijiang-d3008376b7f7fd4d)
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jijie.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jijie-a683e9134fc3d28b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_jijiu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jijiu-2bbe9f7a19e1680b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jiuyuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jiuyuan-b01beb8156bb44b9)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_jiyuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jiyuan-d5cd484013304774)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_jizhi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_jizhi-eeba4ecc0197e56b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_keji.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_keji-22fa4a3816914898)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_kongcheng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_kongcheng-73baaf574c94c7f3)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_kuangfu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_kuangfu-a9ada15b3f7d4a02)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_kurou.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_kurou-1513162b4a27ba45)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_kuwu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_kuwu-7277c21375fc1c33)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_lianying.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_lianying-997ef0c562cccfe5)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_liegong_xinkuanggu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_liegong_xinkuanggu-8a11f8412baff468)
+test upstream_liegong_condition_not_met_allows_shan ... FAILED
+test upstream_liegong_second_branch_by_attack_range ... FAILED
+test upstream_xinkuanggu_choice_branches ... FAILED
+test upstream_xinkuanggu_requires_distance_le_one ... FAILED
+thread 'upstream_liegong_condition_not_met_allows_shan' (103151793) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_liegong
+thread 'upstream_liegong_second_branch_by_attack_range' (103151794) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_liegong
+thread 'upstream_xinkuanggu_choice_branches' (103151795) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_xinkuanggu
+thread 'upstream_xinkuanggu_requires_distance_le_one' (103151796) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill fz_xinkuanggu
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_lijian.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_lijian-31213b0ad6398d95)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_linghunzhihuo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_linghunzhihuo-5ef733012a9ff15d)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_lingxue.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_lingxue-7a346422486557b0)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_liuli.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_liuli-04a44cafc65c1f3f)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_longdan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_longdan-d631e2de642ff29f)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_longxue.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_longxue-0263c40dfd832fa2)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_luoshen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_luoshen-4bc01f9883176577)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_luoyi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_luoyi-cc83aeecb6d4ecad)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_mashu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mashu-8600ac72e12ee2cf)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_mtg_bingheyaosai.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_bingheyaosai-d328db5d4808d551)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_mtg_feixu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_feixu-6f3a7752e21f207b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_mtg_haidao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_haidao-160dc9a587a0deff)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_mtg_lindixiliu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_lindixiliu-1517e3eed30e2a87)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_mtg_linzhongjianta.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_linzhongjianta-1afacf76cf2803f3)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_mtg_longlushanfeng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_longlushanfeng-42a9f66e7a29c963)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_mtg_shamolvzhou.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_shamolvzhou-f465f417f84d93f1)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_mtg_shuimomuxue.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_shuimomuxue-4b2930ebccd5aef0)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_mtg_youlin.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_mtg_youlin-709d80e0c780a9c2)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_paoxiao.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_paoxiao-41d4589c0c66fa28)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_qianxun.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_qianxun-f54527a9c114a418)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_qicai.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_qicai-7c27924ff0e5f9c0)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_qingguo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_qingguo-b78d788093062ade)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_qingnang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_qingnang-0c60c9036945ba95)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_qixi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_qixi-4b2b4ad108f96d80)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_rangjie.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_rangjie-11b20d65147b1110)
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_rende.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_rende-54a7073d77ac8aab)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_shengke.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_shengke-9876596a43af383d)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_shushen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_shushen-db07941aadcb919c)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_standard_tricks.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_standard_tricks-0876bd4f4ca529f7)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_baishouzhihu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_baishouzhihu-3c90b198fed9ce1e)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_cangchizhibi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_cangchizhibi-68d2b251bcda3704)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_gouhunluo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_gouhunluo-a99b16d735000f42)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_huanglin.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_huanglin-65a58834b8dcb502)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_hufu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_hufu-3fb51eb52004e124)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_jiguantong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_jiguantong-a23c1afa88c1a940)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_mujiaren.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_mujiaren-5c607addd3e65b12)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_qinglong.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_qinglong-833f3ba9792af810)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_shencaojie_reverse.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_shencaojie_reverse-96fb63ebe53ba8a6)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_shencaojie_window.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_shencaojie_window-48a18f6556712965)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_swd_shenmiguo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_shenmiguo-a04f2e28ddefbc79)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_swd_shijianhuisu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_shijianhuisu-ea3fea7f156f6c1d)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_xuanwu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_xuanwu-5d7d4a276611f4aa)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_yangpijuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_yangpijuan-143f36eda5fb2a74)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_zhongxinghujia.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_zhongxinghujia-a650a921f26bf223)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/nc08_upstream_swd_zhufangshenshi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_zhufangshenshi-b218c0ed0d53efcf)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_swd_zhuque.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_swd_zhuque-dcc09ef6c99ef99c)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_tiandu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_tiandu-c811e7a559565266)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_tianfuzhen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_tianfuzhen-0cb0efa788d390c0)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_tieji.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_tieji-47c7f894fef9f473)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_tuxi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_tuxi-20afa7bc42f8118b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_wudian_wangmeizhike.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wudian_wangmeizhike-bce31919d8488ff4)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_wudian_youdishenru.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wudian_youdishenru-48a297c66b10dbd8)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_wusheng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wusheng-fa72b5050205961e)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_wushuang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wushuang-51915f5fca6ec4c1)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_wuxing_shengke.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wuxing_shengke-8b62756c131779c9)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_wuxing_shengke_branches.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wuxing_shengke_branches-0c9f1a03e7f84032)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_wuxing_wuxingpan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_wuxing_wuxingpan-7b2a8fdffada829e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_xiaoji.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_xiaoji-1d9a6685aed039eb)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_xicai.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_xicai-1eac8c927ca03b89)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_xiuluo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_xiuluo-f5674354143b79c0)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yanziyaoshui.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yanziyaoshui-f61cb7a16a0b25f7)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_yaowu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yaowu-487f18a2f4ab69e2)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yiji.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yiji-13e037e9d69a6fbe)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_beige.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_beige-c9ca12345e6ed0ef)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_chanyuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_chanyuan-98e19cbdddcb5ffd)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_chenhuodajie.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_chenhuodajie-b0b57e650d0d0d54)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_chenhuodajie_window.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_chenhuodajie_window-3e5fb1a5eb6c7c1a)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_guhuo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_guhuo-5c1c783a6d66c45e)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc08_upstream_yunchou_guihan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_guihan-fcfcef58e8e45f95)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_yunchou_honglian.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_honglian-d622b90900b4df1b)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_huoshan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_huoshan-2e81aa668e069850)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_jiaoxia.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_jiaoxia-08139dbbf9a60c2c)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_jieyan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_jieyan-6c2c798924fd926f)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_kuanggu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_kuanggu-47d1007643f6d658)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_luweiyan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_luweiyan-de9103291e174412)
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_yunchou_shaoying.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_shaoying-89eced009b9ed958)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_toulianghuanzhu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_toulianghuanzhu-9dce2381b1549466)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_unimplemented.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_unimplemented-1221507350e797cc)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_yunchou_xiongzi.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_xiongzi-6632e369d59b4d2d)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_yunchou_yaliang.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_yaliang-5d6ecbf4ba0d7382)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_upstream_yunchou_yiesheng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_yiesheng-7b096aa72c80800c)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_yunchou_zonghuo.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_yunchou_zonghuo-c91f135ed73e42b6)
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc08_upstream_zhenfa_dizaizhen.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_zhenfa_dizaizhen-bb14834b65038aba)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_zhiheng.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_zhiheng-1c50aa6c6cf23265)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_zhiyuan.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_zhiyuan-47511979a2087f49)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_upstream_ziyu.rs (/tmp/b1-head-target/debug/deps/nc08_upstream_ziyu-ab7c472c1522b78e)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_zhenfa_mode_gate_survey.rs (/tmp/b1-head-target/debug/deps/nc08_zhenfa_mode_gate_survey-db160cc1d90e3b73)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc09_identity_end_to_end.rs (/tmp/b1-head-target/debug/deps/nc09_identity_end_to_end-8c5e81c5cf19a7c9)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+     Running tests/nc09_projection_and_errors.rs (/tmp/b1-head-target/debug/deps/nc09_projection_and_errors-0fef8545ff5b7020)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc10_ai_boundary_and_cancel.rs (/tmp/b1-head-target/debug/deps/nc10_ai_boundary_and_cancel-26596b591206cee1)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+     Running tests/nc10_ai_bounds.rs (/tmp/b1-head-target/debug/deps/nc10_ai_bounds-758c9253c5168c0b)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+     Running tests/nc10_ai_information_boundary.rs (/tmp/b1-head-target/debug/deps/nc10_ai_information_boundary-5815d9dd034d8588)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+     Running tests/nc10_planner_pool.rs (/tmp/b1-head-target/debug/deps/nc10_planner_pool-a2d29a030e8d1e1c)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc12_ai_strength_baseline.rs (/tmp/b1-head-target/debug/deps/nc12_ai_strength_baseline-15846c8efca94318)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.16s
+     Running tests/nc12_dangling_reference_probe.rs (/tmp/b1-head-target/debug/deps/nc12_dangling_reference_probe-faac9a55e469da30)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc12_dangling_reference_repro.rs (/tmp/b1-head-target/debug/deps/nc12_dangling_reference_repro-bb7eabf6f3c15edc)
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/nc12_swd_authoritative_stability.rs (/tmp/b1-head-target/debug/deps/nc12_swd_authoritative_stability-d5c648209ebe6d30)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+     Running tests/pa01_catalog_index_equivalence.rs (/tmp/b1-head-target/debug/deps/pa01_catalog_index_equivalence-dbc4faacabf169c1)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/pa08_fullhand_dump.rs (/tmp/b1-head-target/debug/deps/pa08_fullhand_dump-60aeee64227e7cda)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/replay_scenarios.rs (/tmp/b1-head-target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/standard_catalog_inventory.rs (/tmp/b1-head-target/debug/deps/standard_catalog_inventory-c8359cd55da9dc3d)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/swd_bingfeng_lock.rs (/tmp/b1-head-target/debug/deps/swd_bingfeng_lock-bcbf595d159a3cdd)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_cyqiaoxie_jiguan.rs (/tmp/b1-head-target/debug/deps/swd_cyqiaoxie_jiguan-b9aaf2b2ff3f8432)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_gaizao_slot.rs (/tmp/b1-head-target/debug/deps/swd_gaizao_slot-d5c43791c5cf63e6)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_gongxin_hand_peek.rs (/tmp/b1-head-target/debug/deps/swd_gongxin_hand_peek-641db2d1d28d84cb)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_gxianyin_suit_swap.rs (/tmp/b1-head-target/debug/deps/swd_gxianyin_suit_swap-872bdc9df8ce7f10)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_hutian_deposit.rs (/tmp/b1-head-target/debug/deps/swd_hutian_deposit-de086b1c153efb6f)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_hxunzhi_wanjian.rs (/tmp/b1-head-target/debug/deps/swd_hxunzhi_wanjian-07da177d9f7150fb)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_jifeng_multishot.rs (/tmp/b1-head-target/debug/deps/swd_jifeng_multishot-d18146aacb3ea272)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+     Running tests/swd_jikong_thunder_sha.rs (/tmp/b1-head-target/debug/deps/swd_jikong_thunder_sha-07b41bcfa3ba7fcb)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_jilve_top3.rs (/tmp/b1-head-target/debug/deps/swd_jilve_top3-b62b888808470ffd)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_kunlunjing_rewind.rs (/tmp/b1-head-target/debug/deps/swd_kunlunjing_rewind-e7001689f121c4a0)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_liaoyuan_extra_shan.rs (/tmp/b1-head-target/debug/deps/swd_liaoyuan_extra_shan-37bddb4c98ef7bd7)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_lingwu_extra_phase.rs (/tmp/b1-head-target/debug/deps/swd_lingwu_extra_phase-48c47abe7729095c)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_linyun_two_cards_sha.rs (/tmp/b1-head-target/debug/deps/swd_linyun_two_cards_sha-c146b1498dacb791)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_lxianglong_sha_miss.rs (/tmp/b1-head-target/debug/deps/swd_lxianglong_sha_miss-ec5755047a2c18d8)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_mailun_modes.rs (/tmp/b1-head-target/debug/deps/swd_mailun_modes-bf247d07bdeaa270)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/swd_meihuo_cards_lost.rs (/tmp/b1-head-target/debug/deps/swd_meihuo_cards_lost-0abf2cbdafbaa096)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/swd_miedao_draw_discard.rs (/tmp/b1-head-target/debug/deps/swd_miedao_draw_discard-f3a99aeef70efbea)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_mohua2_transform.rs (/tmp/b1-head-target/debug/deps/swd_mohua2_transform-d2832e88e624fb69)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_moyan_multi_fire.rs (/tmp/b1-head-target/debug/deps/swd_moyan_multi_fire-a3f14f254d3d1cd4)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_niepan_ref.rs (/tmp/b1-head-target/debug/deps/swd_niepan_ref-5db30a135217fac1)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_rumeng_phase_skip.rs (/tmp/b1-head-target/debug/deps/swd_rumeng_phase_skip-7bbe4c4f5a2d89d4)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_shengong_borrow.rs (/tmp/b1-head-target/debug/deps/swd_shengong_borrow-b111f898f9706b66)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_shenyan_spread.rs (/tmp/b1-head-target/debug/deps/swd_shenyan_spread-ef7bce9fe1a10391)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_shouyin_full_heal.rs (/tmp/b1-head-target/debug/deps/swd_shouyin_full_heal-e1b94192471a01d0)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_songci_targets.rs (/tmp/b1-head-target/debug/deps/swd_songci_targets-6f268f046a023ce3)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_swdtianshu_gain.rs (/tmp/b1-head-target/debug/deps/swd_swdtianshu_gain-84f8ce08899a9271)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_tianlun_judge.rs (/tmp/b1-head-target/debug/deps/swd_tianlun_judge-b5b30033e8e0cce9)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_tianxiang_redirect.rs (/tmp/b1-head-target/debug/deps/swd_tianxiang_redirect-d288eaf659a90e57)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_xiuluo_judge_clear.rs (/tmp/b1-head-target/debug/deps/swd_xiuluo_judge_clear-9ad1a00927dd2ccb)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_xuanyuanjian_card.rs (/tmp/b1-head-target/debug/deps/swd_xuanyuanjian_card-b0fb864f251c3e1c)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_yihua_bounce.rs (/tmp/b1-head-target/debug/deps/swd_yihua_bounce-aab519f4c66d640a)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_yishan_recover.rs (/tmp/b1-head-target/debug/deps/swd_yishan_recover-722a61c7c3d5d717)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_zhenlie_target_exclude.rs (/tmp/b1-head-target/debug/deps/swd_zhenlie_target_exclude-0611c2fe179867ac)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/swd_zhuhai_end_phase_sha.rs (/tmp/b1-head-target/debug/deps/swd_zhuhai_end_phase_sha-665daa435f77176f)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/t11_boss_pangtong_niepan.rs (/tmp/b1-head-target/debug/deps/t11_boss_pangtong_niepan-5684937df5474f96)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/t11_boss_zhugeliang_hlss.rs (/tmp/b1-head-target/debug/deps/t11_boss_zhugeliang_hlss-3d77c7ea5c781ad1)
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/t12_dual_diag.rs (/tmp/b1-head-target/debug/deps/t12_dual_diag-820cb12d270ef9fc)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+     Running tests/t12_g2g4_channels.rs (/tmp/b1-head-target/debug/deps/t12_g2g4_channels-516ce0944c77eb89)
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+     Running tests/t12_g5_relays.rs (/tmp/b1-head-target/debug/deps/t12_g5_relays-db17b379e7088fa2)
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.79s
+     Running tests/t13_info_isolation.rs (/tmp/b1-head-target/debug/deps/t13_info_isolation-563a13cbeab313ed)
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+     Running tests/t8_rvm_bridge.rs (/tmp/b1-head-target/debug/deps/t8_rvm_bridge-300d93cbd858a500)
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/t9_d5_surface.rs (/tmp/b1-head-target/debug/deps/t9_d5_surface-f7cc5b5965f527e0)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/u01_d3_moyan.rs (/tmp/b1-head-target/debug/deps/u01_d3_moyan-bb8be527ceb5f687)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+     Running tests/u03_cardpile_eight.rs (/tmp/b1-head-target/debug/deps/u03_cardpile_eight-dc558dbfb78f5d4b)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/u04_coin_eight.rs (/tmp/b1-head-target/debug/deps/u04_coin_eight-ac1267a2933b74e3)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/u08_hero_kill_batch1.rs (/tmp/b1-head-target/debug/deps/u08_hero_kill_batch1-698a1491c5d592dd)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/u08_menshen_batch2.rs (/tmp/b1-head-target/debug/deps/u08_menshen_batch2-5ca5a1403488a542)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/view_isolation.rs (/tmp/b1-head-target/debug/deps/view_isolation-4a85346562778c72)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+   Doc-tests engine_native
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

@@ -1,11 +1,11 @@
 # B1 旧线编译恢复：registry 装载期持有 `VerifiedModule`，同步 PA06 全部调用方（2026-10-26）
 
-- 执行时间：2026-10-26 **18:48:18 → 19:44:20 +0800**（均为实际 `date '+%F %T %z'` 输出；时段早于本批提交）
+- 执行时间：首批 2026-10-26 **18:48:18 → 19:44:20 +0800**（提交 `f49e9f89` 19:46:38）；补跑批 **19:57:42 → 20:15:09 +0800**（磁盘释放→三大套件→失败归因；均为实际 `date '+%F %T %z'` 输出，时段早于各自提交）
 - 工作包：[台帐「当前阻断」B1](../../../architecture/native-remaining-ledger.md#当前阻断2026-10-26-扫描按优先级)（P0），根因为 [PA06](../2026-10-26-pa06-vm-load-verify/README.md)（`3eb67194`）把 `rule_vm::RuleVm::execute`/`resume` 改为只收 `VerifiedModule` 但未同步 rule-vm/engine-native 之外的调用方
 - 源码基准：`HEAD = afdc39ab5f5df38b25f81e455a6fb9109774c039`（开工时 `git rev-parse HEAD` 实值）；工作树另有 **327** 项他人未提交改动（`git status --short | wc -l`），其中与本批同文件的只有 `vm_host.rs`、`registry/load_package_inner.rs`、`registry/new.rs`、`content-compiler/src/tests.rs` 四个，且 hunk 区域不重叠（见 §4）。cargo **1.95.0**。规则 **v322**、存档 **v105** 未变，golden 未重录
 - 执行者：ZCode A 道
 
-**一句话结论**：干净 HEAD 上 `cargo check --offline --workspace` 由 **3 个 E0308 失败 → 通过**；`--all-targets` 上 PA06 遗留的 **216 处**裸 `BytecodeModule` 调用点全部同步（engine-core 3、content-compiler 测试 205、示例 8）并连带修正 conformance 2、devtools 1+4、engine-core phase4 测试 1。旧线 registry 原本就在装载期 `verify_module` 后再 `insert(m.clone())`——本批只是把校验结果持有为 `VerifiedModule`，**没有回退 PA06 的装载期校验语义**，执行期仍零重复校验。**未完成**：engine-core / game-server / engine-native 三个全量套件在干净 HEAD 导出上被**磁盘耗尽**（可用 130 MB）打断，需释放空间后补跑（§3.3）。另发现一个独立于 B1 的既有缺陷：两个已提交的 engine-core 测试二进制 `include_str!` 了**未跟踪**的 `content/original/ported/shahai/shahai_meta_*.skill`，干净 HEAD 本身就编不过这两个测试（§3.2，已登记为台帐 B4）。
+**一句话结论**：干净 HEAD 上 `cargo check --offline --workspace` 由 **3 个 E0308 失败 → 通过**；`--all-targets` 上 PA06 遗留的 **216 处**裸 `BytecodeModule` 调用点全部同步（engine-core 3、content-compiler 测试 205、示例 8）并连带修正 conformance 2、devtools 1+4、engine-core phase4 测试 1。旧线 registry 原本就在装载期 `verify_module` 后再 `insert(m.clone())`——本批只是把校验结果持有为 `VerifiedModule`，**没有回退 PA06 的装载期校验语义**，执行期仍零重复校验。首批时三个全量套件被**磁盘耗尽**打断（§3.3）；用户裁决释放磁盘后已在干净 HEAD `f49e9f89` 导出上补跑完成（§6）：engine-core **3779 / 0 / 1**、game-server **115 / 0 / 0**、engine-native **1546 / 7 / 71**——7 个失败全部归因为已提交测试依赖**未提交**的 `packages/extensions/mark-supplement-upstream-liuli` 包数据（补入工作树版数据即 7/7 通过，§6.3，登记为台帐 B5），与本批无关。另发现一个独立于 B1 的既有缺陷：两个已提交的 engine-core 测试二进制 `include_str!` 了**未跟踪**的 `content/original/ported/shahai/shahai_meta_*.skill`，干净 HEAD 本身就编不过这两个测试（§3.2，已登记为台帐 B4）。
 
 ## 1 复现（干净 HEAD，独立目录与独立 target）
 
@@ -53,9 +53,9 @@ cd /tmp/b1-head && CARGO_TARGET_DIR=/tmp/b1-head-target cargo check --offline -p
 | `cargo test --offline -p content-compiler --no-fail-fast` | **532 + 1 + 0 passed / 0 failed**（[原始](clean-head-content-compiler.txt)） |
 | `cargo test --offline -p conformance --no-fail-fast` | **4 + 0 + 0 passed / 0 failed**（[原始](clean-head-conformance.txt)） |
 | `cargo test --offline -p devtools --no-fail-fast` | **13 + 1 + 0 passed / 0 failed**（[原始](clean-head-devtools.txt)） |
-| `cargo test --offline -p engine-native --no-fail-fast` | **未完成**：构建期磁盘耗尽（`No space left on device`、多处 `linking with cc failed`，[原始](clean-head-engine-native-diskfull.txt)） |
-| `cargo test --offline -p game-server --no-fail-fast` | **未完成**：依赖 crate 写 rmeta 即 `No space left on device`（[原始](clean-head-game-server-diskfull.txt)） |
-| `cargo test --offline -p engine-core --no-fail-fast` | **未开始**（exit 1，同因） |
+| `cargo test --offline -p engine-native --no-fail-fast` | 首批：构建期磁盘耗尽（`No space left on device`、多处 `linking with cc failed`，[原始](clean-head-engine-native-diskfull.txt)）→ **补跑见 §6：1546 / 7 / 71** |
+| `cargo test --offline -p game-server --no-fail-fast` | 首批：依赖 crate 写 rmeta 即 `No space left on device`（[原始](clean-head-game-server-diskfull.txt)）→ **补跑见 §6：115 / 0 / 0** |
+| `cargo test --offline -p engine-core --no-fail-fast` | 首批：未开始（exit 1，同因）→ **补跑见 §6：3779 / 0 / 1** |
 
 七个套件的起止时间与逐段结果见[汇总](clean-head-tests-summary.txt)（19:17:02–19:18:01）。为让两个 shahai 测试二进制能编译，运行测试前把工作树中 9 个**未跟踪**的 `shahai_meta_*.skill` 复制进了导出目录——这是导出目录相对干净 HEAD 的**唯一偏离**，且只影响那两个二进制。
 
@@ -92,7 +92,33 @@ cd /tmp/b1-head && CARGO_TARGET_DIR=/tmp/b1-head-target cargo check --offline -p
 - 代码 22 个文件：以干净导出生成的补丁 `git apply --cached`，暂存内容与补丁逐字相同；四个与他人共享的文件只暂存本批 hunk，他人 hunk 留在工作树未暂存。
 - 台帐 `native-remaining-ledger.md` 与进度稿 `native-progress.md`：工作树里**已含 2026-10-26 17:10 扫描的未提交更新**（含整个「当前阻断」小节与 PA05–PA11 状态行），本批回填（B1/B4 行、PA06 状态、头部与优先级表一句）与之落在同一表格行内，无法按块拆分，故这两个文件按当前完整内容提交（仓库惯例：台帐/进度稿随代码批提交，参见 `3eb67194`）。此举不回退、不覆盖任何人的内容，只是把 17:10 扫描的文档状态一并入库；如原扫描者另有待补内容，直接在新 HEAD 上继续。
 
+## 6 补跑（干净 HEAD `f49e9f89`，2026-10-26 19:57–20:15）
+
+### 6.1 磁盘释放（用户裁决「两者都清」）
+
+19:57:42 `df`：可用 7.5 GiB（首批自用临时目录已删）；`pgrep -x cargo` 为空、`lsof -d cwd` 无进程位于 `/tmp/scpx-*`。19:58:00 起 `rm -rf /tmp/scpx-*`（19:58:16 完成）与 `rm -rf noname-next/target`（118 GB，20:00:22 完成）→ 可用 **157 GiB**。共享 target 被删意味着其他会话下一次 cargo 全量重编（用户已知）。
+
+### 6.2 导出与偏离
+
+`git rev-parse HEAD` = `f49e9f897e162b347ee1b82a33fd98fac5a79f68`（首批提交）；`git archive HEAD` → `/tmp/b1-head`，`CARGO_TARGET_DIR=/tmp/b1-head-target`。相对干净 HEAD 的偏离只有两类**未跟踪数据**：① 9 个 `content/original/ported/shahai/shahai_meta_*.skill`（同首批，B4）；② `/tmp/archive → /Users/ruyimg/Documents/Claude/sanguosha/archive` 软链——engine-native 有 82 个测试以 `crates/engine-native/../../../archive/upstream/...` 读上游源码，`archive/` 整体不在 git 中（`git ls-files archive` 为 0），首轮未软链时这 82 个全部 `读上游 …: NotFound`（[原始计数](rerun-1-engine-native-no-archive-panics.txt)），软链后消失。两者都不是代码，与工作树运行时的数据一致。
+
+### 6.3 结果（[第一轮汇总](rerun-1-summary.txt)、[第二轮汇总](rerun-2-summary.txt)）
+
+| 命令 | 结果 |
+|---|---|
+| `cargo check --offline --workspace`（20:01:09–20:01:45） | **EXIT 0，Finished**（[原始](rerun-check-workspace.txt)） |
+| `cargo test --offline -p game-server --no-fail-fast`（20:03:06–20:04:15） | **115 passed / 0 failed / 0 ignored**，exit 0（[逐二进制](rerun-game-server.txt)） |
+| `cargo test --offline -p engine-core --no-fail-fast`（20:08:39–20:09:31） | **3779 passed / 0 failed / 1 ignored**，exit 0（[逐二进制](rerun-engine-core.txt)；含 B4 两个二进制，靠补入的 9 个 shahai 文件编译） |
+| `cargo test --offline -p engine-native --no-fail-fast`（20:08:04–20:08:39，已软链 archive） | **1546 passed / 7 failed / 71 ignored**，exit 101（[逐二进制与失败明细](rerun-engine-native.txt)） |
+
+**7 个失败的归因（全部与 B1 无关）**：`l20_liegong_batch3::{xinkuanggu_draws_or_recovers, liegong_direct_hit_when_hand_ge_hp}`（测试文件最后提交 `d5788bb9` 10-21）、`nc08_upstream_liegong_xinkuanggu::{upstream_liegong_condition_not_met_allows_shan, upstream_liegong_second_branch_by_attack_range, upstream_xinkuanggu_choice_branches, upstream_xinkuanggu_requires_distance_le_one}`（`6c252f02` 10-18）、`nc08_skill_mapping_inventory::skill_mapping_inventory_matches_baseline`（`7708d9b7` 10-20，断言「总技能数应为基线 94」）。panic 均为 `debug_grant` 的 `unknown skill fz_xinkuanggu/fz_liegong`：这两个技能的宿主实现在 HEAD 源码里（`content/host/{behavior,constants,keys}.rs`、`kernel/sha/step.rs`，均不脏），但测试装载的包数据 `packages/extensions/mark-supplement-upstream-liuli/assets/cards.json` 在 **HEAD 版本中 0 处** `fz_liegong|fz_xinkuanggu`，工作树版本（`M`，未提交）2 处；`package.npack.json` 同为 `M`。**复现证明**：把工作树版两个文件复制进导出后重跑这三个二进制 → **2 + 1 + 4 = 7/7 通过**。归 B2「已登记完成但未提交」家族，登记为台帐 **B5**；本批不代为提交该包数据（需原执行者核对双哈希与证据）。
+
+### 6.4 结论
+
+B1 完成条件逐项：干净 HEAD `cargo check --offline --workspace` 通过 ✔；`cargo test -p engine-core` 全量 3779/0/1 ✔；`-p game-server` 全量 115/0/0 ✔；`-p engine-native` 全量 1546/7/71，7 失败为既有未提交数据缺口（B5）而非本批引入 ✔（归因已复现）。台帐 B1 → **定向通过**。
+
 ## 时间戳
 
 - 开工：`2026-10-26 18:48:18 +0800`
-- 结束：`2026-10-26 19:44:20 +0800`（其后立即提交；工作树 `--all-targets` 19:41:16 完成后未再改代码）
+- 结束：`2026-10-26 19:44:20 +0800`（其后立即提交 `f49e9f89`；工作树 `--all-targets` 19:41:16 完成后未再改代码）
+- 补跑批：开工 `2026-10-26 19:57:42 +0800`，结束 `2026-10-26 20:15:09 +0800`（只跑测试与归因，未改代码；其后提交证据与台帐）

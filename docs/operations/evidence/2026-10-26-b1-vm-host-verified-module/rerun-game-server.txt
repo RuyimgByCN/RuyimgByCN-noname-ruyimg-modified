@@ -1,0 +1,42 @@
+     Running unittests src/main.rs (/tmp/b1-head-target/debug/deps/game_server-381a7a01d3650e42)
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+     Running tests/fault_injection.rs (/tmp/b1-head-target/debug/deps/fault_injection-24f33074002c3c51)
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/long_run_bot.rs (/tmp/b1-head-target/debug/deps/long_run_bot-d33dad5a98c15977)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+     Running tests/long_run_memory.rs (/tmp/b1-head-target/debug/deps/long_run_memory-bae73ed6f4fb3a68)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.30s
+     Running tests/long_run_soak.rs (/tmp/b1-head-target/debug/deps/long_run_soak-bf562d91e011f492)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.66s
+     Running tests/m8_rolling_upgrade.rs (/tmp/b1-head-target/debug/deps/m8_rolling_upgrade-965bf4e4d3794e31)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+     Running tests/multi_room_stress.rs (/tmp/b1-head-target/debug/deps/multi_room_stress-bfcd8d36b8399e08)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+     Running tests/native_product_path.rs (/tmp/b1-head-target/debug/deps/native_product_path-da2814b8750d48f4)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests/nc02_install_identity.rs (/tmp/b1-head-target/debug/deps/nc02_install_identity-9cfb9d036ef64b54)
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+     Running tests/nc05_campaign_profile.rs (/tmp/b1-head-target/debug/deps/nc05_campaign_profile-991fbfa02853c925)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+     Running tests/nc05_lifecycle_heavy.rs (/tmp/b1-head-target/debug/deps/nc05_lifecycle_heavy-8107426e0ec3936e)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+     Running tests/nc05_skin_ui.rs (/tmp/b1-head-target/debug/deps/nc05_skin_ui-fb32a49eb6438f60)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+     Running tests/nc08_command_by_command.rs (/tmp/b1-head-target/debug/deps/nc08_command_by_command-70c0af6d03e34e38)
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+     Running tests/nc08_cross_line.rs (/tmp/b1-head-target/debug/deps/nc08_cross_line-d7f65f306f5cd874)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests/nc08_install_matrix.rs (/tmp/b1-head-target/debug/deps/nc08_install_matrix-b7cac4bb203d6842)
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+     Running tests/nc09_dual_backend.rs (/tmp/b1-head-target/debug/deps/nc09_dual_backend-55a1f585d1914f2b)
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.55s
+     Running tests/nc09_native_actor.rs (/tmp/b1-head-target/debug/deps/nc09_native_actor-bf32a88a4773fd84)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.53s
+     Running tests/nc09_native_room_session.rs (/tmp/b1-head-target/debug/deps/nc09_native_room_session-d5f612310bbc2760)
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+     Running tests/nc09_native_view_bridge.rs (/tmp/b1-head-target/debug/deps/nc09_native_view_bridge-c1119d315eb0a687)
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+     Running tests/room_flow.rs (/tmp/b1-head-target/debug/deps/room_flow-fa3d9a9244b06c74)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+     Running tests/tournament_wal_signing.rs (/tmp/b1-head-target/debug/deps/tournament_wal_signing-21c3cf5b3c1a62e9)
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
