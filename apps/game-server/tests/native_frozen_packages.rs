@@ -9,8 +9,18 @@ use std::path::Path;
 const DSL: &str =
     "skill frozen_vm(990201) { trigger phase_end owner_is_target { effect recover_hp(self, 1); } }";
 
-fn write_package(root: &Path, version: &str) -> Vec<u8> {
-    let package = content_compiler::compile_source_named("frozen-vm", DSL).unwrap();
+fn write_package(root: &Path, version: &str, source: &str) -> Vec<u8> {
+    let package = content_compiler::compile_source_named("frozen-vm", source).unwrap();
+    let characters = serde_json::to_vec(&serde_json::json!({
+        "source": "test", "upstream_path": "frozen-vm",
+        "upstream_commit": "0000000000000000000000000000000000000000",
+        "pack": { "name": "frozen-vm", "version": 1, "description": "test" },
+        "generals": [{
+            "id": "frozen_probe", "name": "frozen_probe", "faction": "qun", "hp": 4,
+            "gender": "male", "skills": [{ "name": package.trigger_index[0].module }]
+        }]
+    }))
+    .unwrap();
     let mut value = serde_json::to_value(package).unwrap();
     let resource = b"\0binary asset, retained even without a bridge reader\xff";
     value["manifest"]["version"] = version.into();
@@ -21,9 +31,16 @@ fn write_package(root: &Path, version: &str) -> Vec<u8> {
             "asset_id": "frozen-vm:resource", "source_hash": blake3::hash(resource).as_bytes(),
             "kind": "Data", "image_variants": [], "audio_variants": [],
             "priority": "Lazy", "depends_on": [], "platforms": []
+        }, {
+            "asset_id": "frozen-vm:characters", "source_hash": blake3::hash(&characters).as_bytes(),
+            "kind": "Data", "image_variants": [], "audio_variants": [],
+            "priority": "Lazy", "depends_on": [], "platforms": []
         }]
     });
-    value["asset_paths"] = serde_json::json!({"frozen-vm:resource": "assets/resource.bin"});
+    value["asset_paths"] = serde_json::json!({
+        "frozen-vm:resource": "assets/resource.bin",
+        "frozen-vm:characters": "assets/character.json"
+    });
     let mut package: content_schema::ContentPackage = serde_json::from_value(value).unwrap();
     package.manifest.logic_hash = package.compute_logic_hash();
     package.manifest.asset_hash = package.compute_asset_hash();
@@ -33,6 +50,7 @@ fn write_package(root: &Path, version: &str) -> Vec<u8> {
     std::fs::create_dir_all(root.join("assets")).unwrap();
     std::fs::write(root.join("package.npack.json"), &bytes).unwrap();
     std::fs::write(root.join("assets/resource.bin"), resource).unwrap();
+    std::fs::write(root.join("assets/character.json"), characters).unwrap();
     bytes
 }
 
@@ -44,7 +62,7 @@ fn fixture() -> (
 ) {
     let temp = tempfile::tempdir().unwrap();
     let sources = temp.path().join("sources");
-    let bytes = write_package(&sources.join("frozen-vm"), "1.0.0");
+    let bytes = write_package(&sources.join("frozen-vm"), "1.0.0", DSL);
     let content = NativeContent::open(sources, temp.path().join("store")).unwrap();
     content.import().unwrap();
     let loaded = content.load("frozen-vm").unwrap();
@@ -86,10 +104,124 @@ fn frozen_vm_and_binary_assets_restore_without_sources_or_installed_versions() {
     let (packs, retained) = content
         .load_room_packages(&[reference], Some(&[frozen]))
         .unwrap();
-    assert_eq!(retained[0].assets.len(), 1);
+    assert_eq!(retained[0].assets.len(), 2);
     assert_eq!(packs[0].vm_skills.len(), 1);
     let restored = engine_native::Engine::restore_with_extensions(&snapshot, &[&packs[0]]).unwrap();
     assert_eq!(restored.state_hash(), engine.state_hash());
+}
+
+#[test]
+fn vm_character_survives_upgrade_rollback_and_uninstall_via_frozen_copy() {
+    let (temp, content, reference, frozen) = fixture();
+    let original = content.load("frozen-vm").unwrap();
+    let mut engine =
+        engine_native::Engine::new_with_extensions(990_003, 4, &[&original.pack]).unwrap();
+    engine.assign_general_named(0, "frozen_probe").unwrap();
+    assert!(engine.view_for(0).players[0]
+        .skills
+        .contains(&"frozen_vm_phase_end"));
+    engine.debug_set_hp(0, 2);
+    let snapshot = engine.save();
+
+    let upgraded_dsl = DSL.replace("recover_hp(self, 1)", "recover_hp(self, 2)");
+    write_package(
+        &temp.path().join("sources/frozen-vm"),
+        "2.0.0",
+        &upgraded_dsl,
+    );
+    content.import().unwrap();
+    let upgraded = content.load("frozen-vm").unwrap();
+    assert_eq!(upgraded.frozen.binding.version, "2.0.0");
+    assert_ne!(
+        upgraded.frozen.binding.logic_hash,
+        frozen.binding.logic_hash
+    );
+    assert!(matches!(
+        engine_native::Engine::restore_with_extensions(&snapshot, &[&upgraded.pack]),
+        Err(engine_native::SnapshotError::RuleVersionMismatch { .. })
+    ));
+    let mut upgraded_engine =
+        engine_native::Engine::new_with_extensions(990_003, 4, &[&upgraded.pack]).unwrap();
+    upgraded_engine
+        .assign_general_named(0, "frozen_probe")
+        .unwrap();
+    upgraded_engine.debug_set_hp(0, 2);
+    advance_until_recovery(&mut upgraded_engine, 4);
+    let (upgrade_packs, _) = content
+        .load_room_packages(&[reference.clone()], Some(&[frozen.clone()]))
+        .unwrap();
+    let mut during_upgrade =
+        engine_native::Engine::restore_with_extensions(&snapshot, &[&upgrade_packs[0]]).unwrap();
+    content.rollback().unwrap();
+    let rolled_back = content.load("frozen-vm").unwrap();
+    assert_eq!(rolled_back.frozen.binding, frozen.binding);
+    let mut after_rollback =
+        engine_native::Engine::restore_with_extensions(&snapshot, &[&rolled_back.pack]).unwrap();
+
+    content
+        .uninstall_package(&frozen.binding.namespace, "frozen-vm")
+        .unwrap();
+    assert!(content.load("frozen-vm").is_err());
+    assert!(content
+        .load_room_packages(&[reference.clone()], None)
+        .is_err());
+    let (packs, retained) = content
+        .load_room_packages(&[reference], Some(&[frozen.clone()]))
+        .unwrap();
+    assert_eq!(retained[0].binding, frozen.binding);
+    let mut restored =
+        engine_native::Engine::restore_with_extensions(&snapshot, &[&packs[0]]).unwrap();
+
+    for branch in [
+        &mut engine,
+        &mut during_upgrade,
+        &mut after_rollback,
+        &mut restored,
+    ] {
+        advance_until_recovery(branch, 3);
+    }
+    assert_eq!(during_upgrade.state_hash(), engine.state_hash());
+    assert_eq!(after_rollback.state_hash(), engine.state_hash());
+    assert_eq!(restored.state_hash(), engine.state_hash());
+}
+
+fn advance_until_recovery(engine: &mut engine_native::Engine, expected_hp: i32) {
+    for step in 0..80u64 {
+        if engine.view_for(0).players[0].hp == expected_hp {
+            assert_eq!(engine.turn().current, 0);
+            assert_eq!(engine.turn().phase, engine_native::Phase::End);
+            return;
+        }
+        let (actor, action) = if let Some(choice) = engine.open_choice() {
+            let selection = choice
+                .spec
+                .options
+                .iter()
+                .take(choice.spec.min as usize)
+                .cloned()
+                .collect();
+            (
+                choice.observer,
+                engine_native::GameAction::Answer {
+                    choice_id: choice.id,
+                    selection,
+                },
+            )
+        } else {
+            (engine.turn().current, engine_native::GameAction::NextPhase)
+        };
+        let result = engine.submit(engine_native::GameCommand {
+            actor,
+            expected_revision: engine.revision(),
+            dedup_id: 30_000 + step,
+            action,
+        });
+        assert!(
+            !matches!(result, engine_native::CommandOutcome::Rejected(_)),
+            "{result:?}"
+        );
+    }
+    panic!("VM 技能未在结束阶段回复至 {expected_hp} 点体力");
 }
 
 #[test]
@@ -184,7 +316,7 @@ fn legacy_exact_reference_migrates_disabled_old_version_and_upgrade_leaves_origi
     assert_eq!(migrated[0].binding, frozen.binding);
     assert_eq!(old[0].def.name, reference.rsplit_once('@').unwrap().0);
     std::fs::remove_file(source.join("manifest.json")).unwrap();
-    write_package(&source, "2.0.0");
+    write_package(&source, "2.0.0", DSL);
     content.import().unwrap();
     let current = content.load("frozen-vm").unwrap();
     assert_eq!(current.frozen.binding.version, "2.0.0");

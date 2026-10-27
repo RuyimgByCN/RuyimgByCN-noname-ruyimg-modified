@@ -1,0 +1,10 @@
+ M docs/architecture/native-dsl-migration-plan.md
+ M docs/architecture/native-progress.md
+ M docs/architecture/native-remaining-ledger.md
+ M docs/operations/evidence/2026-10-26-b2-docs-batch4/README.md
+ M docs/operations/evidence/2026-10-26-b2-docs-time-corrections/README.md
+ M docs/operations/evidence/2026-10-27-pa12-batch2-phase-events/README.md
+ M docs/operations/evidence/2026-10-27-pa12-batch3-filter-predicates/README.md
+ M docs/operations/evidence/2026-10-27-pa12-batch5-n01-first-step/README.md
+?? docs/operations/evidence/2026-10-27-nc02-vm-frozen-lifecycle/
+?? docs/operations/evidence/2026-10-27-rule-vm-effect-tag-656/
