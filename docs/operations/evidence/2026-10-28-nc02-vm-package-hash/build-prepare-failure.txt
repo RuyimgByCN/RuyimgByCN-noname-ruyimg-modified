@@ -1,0 +1,1 @@
+exit 1: zsh special variable path shadowed PATH before copying candidate; no build attempted

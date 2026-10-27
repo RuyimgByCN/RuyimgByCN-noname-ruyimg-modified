@@ -86,6 +86,8 @@
 
 **本轮验证（2026-10-24 19:00 前后 +08:00）**：`engine-native` **1547/0/71**、`game-server` **328/0/0**（23 个 target），前端 `pnpm test` 与 typecheck 通过，重建原生 WASM 后 Worker 冒烟 **44/44**；真生成包坏存档探针全部受控拒绝，`sync-original-content --verify-only` **exit 0**。完整命令、退出码、失败经过与保护记录见[P1／I01 证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md)。上一轮首跑 preflight 的 18/20 与 `bingshi/skill.js` 差异保留在[历史证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md#本轮验证)。HEAD/index 不变，未暂存、未提交。
 
+**NC02（2026-10-28）**：Worker 完整 VM 包已核对包内声明摘要；旧的摘要不匹配包及其旧档拒绝。模块入口未被当前摘要绑定，已实证同摘要不同结算，仍待修复；签名、实际资源绑定及 VM 安装入口未闭环（[证据](../operations/evidence/2026-10-28-nc02-vm-package-hash/README.md)）。
+
 ## 历史执行登记与轮次索引
 
 以下是按日期保存的历史正文；“当前”“本轮”“待做”均指各区块当时快照。部分正文仍由既有门禁读取，保留其标记和引用，不用旧轮次状态覆盖上方最新结论。

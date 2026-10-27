@@ -565,8 +565,19 @@ try {
     packsJson: JSON.stringify([badVmPackage]),
   });
   check("worker_vm_unmapped_general_skill_refused", badVm.ok === false && /missing_vm_skill/.test(badVm.error ?? ""), badVm.error ?? "");
+  const tamperedVmPackage = structuredClone(vmPackage);
+  tamperedVmPackage.trigger_index[0].event = "phase_draw";
+  const tamperedVmPacks = JSON.stringify([tamperedVmPackage]);
+  const badVmHash = await workerSend({ id: 960, type: "start", players: 4, seed: 42, observer: 0, packsJson: tamperedVmPacks });
+  check("worker_vm_changed_trigger_hash_refused", badVmHash.ok === false && /logic_hash mismatch/.test(badVmHash.error ?? ""), badVmHash.error ?? "");
   const vmPacks = JSON.stringify([vmPackage]);
   const vmStart = await workerSend({ id: 951, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmPacks });
+  const beforeBadRestore = await workerSend({ id: 961, type: "save" });
+  const badVmRestore = await workerSend({ id: 962, type: "restore", hex: beforeBadRestore.data?.hex, packsJson: tamperedVmPacks });
+  const afterBadRestore = await workerSend({ id: 963, type: "save" });
+  check("worker_vm_changed_trigger_restore_refused_without_mutation", badVmRestore.ok === false &&
+    /logic_hash mismatch/.test(badVmRestore.error ?? "") && beforeBadRestore.data?.hex === afterBadRestore.data?.hex,
+    badVmRestore.error ?? "");
   const vmPick = await workerSend({ id: 952, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
   let vmEnv = vmPick.data?.envelope;
   const vmSkill = vmPackage.trigger_index[0].module;

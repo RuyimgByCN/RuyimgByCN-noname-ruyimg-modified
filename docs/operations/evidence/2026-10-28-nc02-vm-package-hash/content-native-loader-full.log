@@ -1,0 +1,100 @@
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized] target(s) in 1.32s
+     Running unittests src/lib.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/content_native_loader-da30d831cf592d70)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ai_tuning_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/ai_tuning_loader-0a2e3b5d0e1b5f00)
+
+running 3 tests
+test benefit_applies_weight_only_when_enabled ... ok
+test weight_resolution_follows_ckqz ... ok
+test parses_modes_and_tables ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/doomsday_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/doomsday_loader-39f21c1744d0cad5)
+
+running 3 tests
+test zaibian_draw_counts_identities ... ok
+test identity_chain_follows_upstream_gates ... ok
+test wujinmoshi_bonuses_apply_to_human_seat_only ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/epic_cards_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/epic_cards_loader-f99b00685e849cda)
+
+running 3 tests
+test parses_config_and_presentation_flags ... ok
+test shichangshi_plan_tracks_external_dependency ... ok
+test rejects_bad_scale_and_missing_fields ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/loader_acceptance.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/loader_acceptance-ae71ef7e42d2bf58)
+
+running 3 tests
+test bridge_pile_parses_installed_cardpile_asset ... ok
+test bridge_pile_rejects_bad_data ... ok
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/qhly_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/qhly_loader-fc849773683169ba)
+
+running 7 tests
+test hp_loss_gates_phase_end_switch ... ok
+test erases_extension_and_checks_bans ... ok
+test only_hp_rules_participate ... ok
+test filters_skin_list_by_hide_and_lock ... ok
+test resolves_real_name_and_gz_fallback ... ok
+test random_skin_filters_banned_and_terms ... ok
+test parses_config_and_auto_switch_flag ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rzsh_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/rzsh_loader-737693035fdbb34f)
+
+running 3 tests
+test picks_are_deterministic_and_wrap ... ok
+test roman_covers_one_to_six ... ok
+test text_tables_match_upstream_counts ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/skin_switch_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/skin_switch_loader-48a6cc70d041b6e9)
+
+running 6 tests
+test damage_transform_is_once_per_avatar ... ok
+test lowhp_triggers_only_on_new_low ... ok
+test group_nature_and_change_detection ... ok
+test reapply_backoff_follows_upstream_schedule ... ok
+test resolves_transform_targets ... ok
+test parses_config_and_saved_positions ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/symbol_table_limit.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/symbol_table_limit-23eee49c4a62cf2f)
+
+running 1 test
+test bridge_rejected_at_symbol_table_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s
+
+     Running tests/thunder_loader.rs (/tmp/noname-nc02-hash-target.7t7SQR/debug/deps/thunder_loader-bd15ea88113a7b19)
+
+running 3 tests
+test mark_labels_follow_shh_new_switch ... ok
+test replace_plan_pairs_parallel_tables ... ok
+test parses_config_and_speed_bounds ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests content_native_loader
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

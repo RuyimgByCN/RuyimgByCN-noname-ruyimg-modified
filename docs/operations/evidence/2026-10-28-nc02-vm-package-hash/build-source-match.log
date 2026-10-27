@@ -1,0 +1,4 @@
+MATCH crates/engine-native-wasm/src/installed_packs.rs
+MATCH crates/engine-native-wasm/tests/vm_package_integrity.rs
+MATCH crates/engine-native-wasm/tests/vm_package_worker.rs
+MATCH apps/web-client/scripts/native-worker-smoke.mjs

@@ -47,6 +47,9 @@ fn vm_only_npack_loads_skills_and_generals() {
     assert!(error.contains("missing_vm_skill"), "{error}");
     let mut no_triggers = npack.clone();
     no_triggers["trigger_index"] = json!([]);
+    let no_trigger_package: content_schema::ContentPackage =
+        serde_json::from_value(no_triggers.clone()).unwrap();
+    no_triggers["manifest"]["logic_hash"] = json!(no_trigger_package.compute_logic_hash());
     let error = engine_from_packs(4, 42, &json!([no_triggers]).to_string())
         .err()
         .expect("未桥接的模块不能静默丢失武将技能");

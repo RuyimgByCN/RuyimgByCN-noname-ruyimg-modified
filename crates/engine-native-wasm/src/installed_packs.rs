@@ -41,6 +41,7 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     let vm_decls = if item.get("modules").is_some() {
         let package: content_schema::ContentPackage =
             serde_json::from_value(item.clone()).map_err(|e| format!("npack: {e}"))?;
+        package.validate().map_err(|e| format!("npack: {e}"))?;
         content_native_loader::bridge_vm_skill_decls(&package)
             .map_err(|e| e.to_string())?
             .decls
