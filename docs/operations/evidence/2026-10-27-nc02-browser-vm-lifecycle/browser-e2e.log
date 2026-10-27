@@ -1,0 +1,13 @@
+PASS browser_installed_vm_fixture: official/vm-fixture@0.1.0
+PASS server_vm_general_game: steps=289 finished=true
+PASS server_same_package_restore
+PASS browser_停用: disable 完成
+PASS disabled_package_refuses_restore: HTTP 400
+PASS browser_激活: activate 完成
+PASS reactivated_package_restore
+PASS browser_扫描安装: 安装扫描完成
+PASS browser_卸载: uninstall 完成
+PASS uninstalled_package_refuses_restore: HTTP 400
+PASS browser_扫描安装: 安装扫描完成
+PASS reinstalled_same_package_restore
+PASS browser_exceptions: 0
