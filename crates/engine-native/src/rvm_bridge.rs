@@ -657,10 +657,17 @@ impl SkillBehavior for VmSkillBehavior {
     }
 
     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
-        let (consume, count_hits) = match &self.filter {
-            VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
-            _ => (Vec::new(), false),
-        };
+        // 阶段门（PA12 批②）包裹的内层 Named 元数据须透传：批③b 实证
+        // `phase_begin owner_alive_once_per_round`（AtPhase(Named)）的 once
+        // consume 在此被 `_ =>` 吞掉——限次滤名每回合重复开闸。
+        fn named_meta(f: &VmFilterPolicy) -> (Vec<(String, u8)>, bool) {
+            match f {
+                VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
+                VmFilterPolicy::AtPhase { inner, .. } => named_meta(inner),
+                _ => (Vec::new(), false),
+            }
+        }
+        let (consume, count_hits) = named_meta(&self.filter);
         Box::new(VmMachine {
             owner,
             program: self.program.clone(),
