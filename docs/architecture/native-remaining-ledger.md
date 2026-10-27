@@ -15,7 +15,7 @@
 | NC05 可独立发布的扩展宿主 | 未完成 | 三类真实案例全生命周期；混合包、依赖、卸载、旧锁恢复 | NC02/NC04 | 进度主稿 |
 | NC06 核心与内容私有状态分离 | 部分 | 已修非空二元键 Snapshot 编码，直接回归两张地图 + 技能 storage 往返；私有字段编码/解码/校验/hash 收敛仍需更多真实内容试点 | NC07 | [保存成本](../operations/evidence/2026-10-24-native-save-cost/README.md) |
 | NC07 状态定义与持久化同源 | 部分 | 手工字段登记仍扩张；版本/归档/迁移策略未统一 | NC06 | 进度主稿 |
-| NC08 规则对照与原生验收门禁 | 部分 | 1 人标准 40 步、huanle 20 步已对照；多座位/选将/随机/私有选择/37 来源未覆盖 | NC01 | [跨目标](../operations/evidence/2026-10-24-native-wasm-cross-target/README.md) |
+| NC08 规则对照与原生验收门禁 | 部分 | 1 人标准与 huanle 已对照；四/八座选将、随机发牌、私有选择与挂起恢复各 80 步跨 native/WASM 对照通过；多模式、上游差分及 37 来源仍未覆盖 | NC01 | [跨目标](../operations/evidence/2026-10-24-native-wasm-cross-target/README.md)、[多座位](../operations/evidence/2026-10-27-nc08-multiseat-wasm/README.md) |
 | NC09 原生客户端与联机闭环 | 部分 | 慢 WS/重连/单写者、跨刷新持久化、UI 取消、旧档不确定提示已做；桌面/移动目标平台、完整产品 UI 全流程未验收；客户端本地内置包安装入口（`apps/web-client/src/engine/bundledNativePackages.ts`，未提交在途文件）仍拒绝含 VM 模块的包，服务端 `/native/packages` 与浏览器面板路径已由 NC02 打通 | NC03 | [P1](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md) |
 | NC10 AI 信息边界与有界排程 | 部分 | 合法座位、有界排程、长驻池复用/降级/取消/过期、p50/p95/p99 尾延迟基线、主动技候选与技能威胁度加权均已有测试；非静止手牌身份自省与质量基线未做 | NC09 | [AI 边界](../operations/evidence/2026-10-24-nc10-ai-boundary/README.md)、[R10](../operations/evidence/2026-10-24-up37-r10-metadata/README.md) |
 | NC11 验收数据与文档收敛 | 部分 | 本文与 progress/baseline/ledger 已互链；失效引用与历史证据仍需逐批清理 | 全部 | 本文 |
