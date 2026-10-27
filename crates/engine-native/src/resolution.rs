@@ -110,6 +110,12 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
         // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
         // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
         EventKind::Death => Stage::BeforeTriggers,
+        // 阶段开始前置窗口（PA12 批⑤-2，计划 §2 K）：PhaseBegin 触发的
+        // 技能（VM/宿主）须在阶段入场行为（commit_phase→begin_*：摸牌等）
+        // **之前**执行——「阶段开始时可跳过/改写本阶段」类技能（奋励
+        // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
+        // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
+        EventKind::PhaseBegin => Stage::BeforeTriggers,
         _ => Stage::Commit,
     };
     res.stack.push(Frame {
@@ -163,6 +169,10 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::Death, Stage::BeforeTriggers) => Stage::AfterTriggers,
         (EventKind::Death, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::Death, Stage::Intrinsic) => Stage::Done,
+        // PA12 批⑤-2：PhaseBegin 前置窗（技能跑位）→ Commit（入场行为
+        // begin_*）→ AfterTriggers → Intrinsic → Done。
+        (EventKind::PhaseBegin, Stage::BeforeTriggers) => Stage::Commit,
+        (EventKind::PhaseBegin, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::PhaseBegin, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
         (EventKind::PhaseEnd, Stage::AfterTriggers) => Stage::Intrinsic,
@@ -286,6 +296,12 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
         let before_kind = match &f.data {
             EventData::TurnOverBefore { .. } => EventKind::TurnOverBefore,
             EventData::Death { .. } => EventKind::Death,
+            // PA12 批⑤-2（§2 K）：PhaseBegin 前置窗按帧自身 kind 查——
+            // 阶段开始类技能（奋励 skip 系）在入场行为之前派发；after 段
+            // 静默（上方列表）防同技重复入队。宿主 PhaseBegin 技能的执行
+            // 点随此前移到 begin_* 之前（上游 phaseBegin 语义），全量回归
+            // 把关、规则基准登记。
+            EventData::Phase { begin: true, .. } => EventKind::PhaseBegin,
             _ => EventKind::DamageBefore,
         };
         (f.data.clone(), if before { before_kind } else { f.kind })
@@ -307,6 +323,16 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
             continue;
         }
         let qctx = QueryCtx { state: core, catalog };
+        // PA12 批⑤-2：PhaseBegin 前置窗只前移 VM 技能——宿主技保持在
+        // 入场行为之后的原执行点（61 个宿主 PhaseBegin 技能与 golden 的
+        // 行为不变；全量回归实测：不过滤时 16 个宿主技能/golden 失败）。
+        // 前置窗（before=true）：PhaseBegin 只前移 VM 技能（宿主技保持
+        // 原执行点——61 个宿主 PhaseBegin 技能与 golden 行为不变；全量实测
+        // 不过滤时 16 项失败）；after 段（before=false）：VM 技能已在前置
+        // 窗跑过，跳过防重复入队，宿主技照常派发。
+        if kind == EventKind::PhaseBegin && def.behavior.is_vm_skill() != before {
+            continue;
+        }
         if !def.behavior.filter(&qctx, *owner, &event) {
             continue;
         }

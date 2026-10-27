@@ -1221,6 +1221,12 @@ pub trait SkillBehavior: Send + Sync {
         None
     }
 
+    /// PA12 批⑤-2（§2 K）：VM 桥技能探针——PhaseBegin 前置窗只前移 VM 技能
+    ///（宿主技保持原执行点，行为与 golden 不变）。
+    fn is_vm_skill(&self) -> bool {
+        false
+    }
+
     /// G1 规则宿主：宿主原语行为标识（非宿主行为返回 None）。
     /// 供恢复期校验快照中的扩展机器定义键与行为标签。
     fn as_host_behavior(&self) -> Option<crate::content::host::HostBehavior> {

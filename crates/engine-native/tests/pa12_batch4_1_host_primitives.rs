@@ -237,12 +237,9 @@ fn pa12_batch4_3_damage_rewrite_window() {
     assert_eq!(e2.debug_hp(2), hp2 - 2, "modify +1：1 伤变 2");
 }
 
-/// 批⑤首步勘察（红灯实证转登记）：奋励三窗口（onlyOL 真实 npack）可装载可桥接
-/// （SkipCurrentPhase 允许面+装载旗标接线），但**实测 VM 机器对 PhaseBegin 的
-/// 执行窗晚于该阶段入场行为**（Draw 窗确认门打开时摸牌已完成，手牌 3≠1）——
-/// skip 置旗标对当前阶段无效。时序缺陷登记迁移计划 §2 K（需前置窗调度，与
-/// game_started 开局帧同族内核缺口）；本测试只锁「三窗口可装载桥接」面，
-/// 时序修复后在此补整局断言（见计划 §3 批⑤）。
+/// 批⑤-2：奋励三窗口（onlyOL 真实 npack）整局——PhaseBegin 前置窗（§2 K 修复）
+/// 后，VM 机器在阶段入场行为**之前**执行：Draw 窗确认 → 置 skip_draw 旗标 →
+/// begin_draw 跳过摸牌（手牌不 +2）。修复前的红灯实测见批⑤首步证据 §3。
 #[test]
 fn pa12_batch5_fenli_bridges_with_skip_wiring() {
     let pkg_json = std::fs::read_to_string(
@@ -256,11 +253,53 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
     assert_eq!(pkg.trigger_index.len(), 3, "奋励三窗口");
     let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
     assert_eq!(out.decls.len(), 3, "三模块全部可承载（skip_current_phase 已接允许面）");
-    // 允许面：SkipCurrentPhase 通过 accept
-    use rule_api::{EffectRequest, PlayerId};
-    assert!(engine_native::rvm_ops::accept_effect(
-        &EffectRequest::SkipCurrentPhase { player: PlayerId::new(1) },
-        4
-    )
-    .is_ok());
+    let pack = ExtensionPack {
+        def: ExtensionDef { name: "onlyol-fenli", version: 1, description: "批⑤-2 奋励" },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: out.decls,
+        init_hook: InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(998_101, 4, &[&pack]).expect("建局");
+    for d in pack.vm_skills.iter() {
+        e.debug_grant(1, &d.name);
+    }
+    // 奋励·摸牌窗口条件：并列最大手牌——清他人手牌，1 号 1 张
+    for p in [0u8, 2, 3] { e.debug_clear_hand(p); }
+    e.debug_clear_hand(1);
+    e.debug_place(1, "sha");
+    // 推进到 1 号回合摸牌窗口
+    let mut confirmed = false;
+    let mut e2e_hand_at_confirm = std::cell::Cell::new(0usize);
+    for _ in 0..400 {
+        if e.outcome().is_some() { break; }
+        if let Some(c) = e.open_choice().cloned() {
+            if c.spec.prompt == "trigger_confirm" && e.turn().current == 1 && e.turn().phase == Phase::Draw {
+                // 确认时手牌应仍为 1（前置窗：摸牌未发生）
+                let hand_at_confirm = hand_len(&e, 1);
+                e2e_hand_at_confirm.set(hand_at_confirm);
+                submit(&mut e, c.observer, GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![c.spec.options.iter().find(|o| matches!(o, ChoiceOption::Confirm)).copied().unwrap()],
+                });
+                confirmed = true;
+                continue;
+            }
+            let sel: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+            let sel = if sel.is_empty() { vec![c.spec.options[0].clone()] } else { sel };
+            submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            continue;
+        }
+        if confirmed && e.turn().phase != Phase::Draw { break; }
+        let cur = e.turn().current;
+        submit(&mut e, cur, GameAction::NextPhase);
+    }
+    assert!(confirmed, "摸牌窗口应开确认门");
+    // 前置窗 + skip 生效判据：确认门开于 Draw（入场行为之前），确认后摸牌被
+    // 跳过（手牌与确认时相同、相位已越过 Draw、旗标被消费清零）。
+    assert!(e.turn().phase != Phase::Draw, "确认后已越过摸牌阶段");
+    assert!(!e.state_core().turn.skip_draw_phase, "skip 旗标被 begin_draw 消费");
+    assert_eq!(hand_len(&e, 1), e2e_hand_at_confirm.get(), "摸牌被跳过：手牌与确认时一致");
 }

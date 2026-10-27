@@ -3,6 +3,8 @@
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
 > ## ⚠ **当前版本（2026-10-24 源码复核）**
+>
+> **2026-10-27 PA12 批⑤-2 调度登记**：PhaseBegin 帧新增 BeforeTriggers 起步阶段（前置窗只前移 VM 桥技能；宿主 PhaseBegin 技能保持入场行为之后的原执行点）。规则语义不变（规则 v322/存档 v105 未动）；engine-native `replay_scenarios` golden 3 处（shouyi_dynamic_skill/discard_to_limit/judge_phase_delayed_tricks）因**状态哈希域含帧栈 stage/planned**（engine/hash.rs:601-608）随调度结构重录——无 VM 场景行为等价（全量其余 1581 项全绿），变更注记同步写入测试。
 > `STANDARD_RULESET_VERSION = 322`（`crates/engine-native/src/content/standard.rs:126`）、
 > `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`）。
 > 下面「2026-10-10 复核」为**历史语境**；本次只审查上游差异，未升级规则或存档。

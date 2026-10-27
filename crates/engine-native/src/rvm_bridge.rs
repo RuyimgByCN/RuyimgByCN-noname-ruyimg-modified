@@ -396,6 +396,10 @@ pub struct VmSkillBehavior {
 }
 
 impl SkillBehavior for VmSkillBehavior {
+    fn is_vm_skill(&self) -> bool {
+        true
+    }
+
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         // 增量 13 语义收敛：`owner_is_target_*` 家族的权威语义（编译器
         // lsp 权威描述 "the skill owner is the event player and …"）是

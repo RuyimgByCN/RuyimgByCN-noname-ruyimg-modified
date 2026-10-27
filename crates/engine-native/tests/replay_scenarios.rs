@@ -1098,13 +1098,13 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "1b30bc765ea4c2dfb139fe17e8a354d5f167daed5dfef0d8bc48ef65d4fc95cd",
+        "330650d692315b1680f0e70479df21a3487efd79853917b158bcae4bd7a96c49",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "74dad9097e6486282c182b7af77edadedcedaa7e0667a6fda2a2ae3d4ab7053e",
+        "152d4802b3f7ad3a0ec9072043c9fc61973b993dcd5cf1a1bbd59cc293bfd2e8",
     ),
     (
         "rollback_invariants",
@@ -1146,10 +1146,14 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "fa4e5d707b68f550098e9a675e73a254dbb0f56c906219542b58f6d8f749027e",
+        "c7ade8a5352d3c9363a9721f5528dd78989e2fbdd20dd512a69d2989cb7d713d",
     ),
 ];
 
+// PA12 批⑤-2 重录（2026-10-27）：PhaseBegin 帧新增 BeforeTriggers 起步阶段——
+// 状态哈希域含帧栈 stage/planned（engine/hash.rs:601-608），快照点落在阶段推进
+// 中途的三个场景哈希随之变化；无 VM 技能场景行为等价（全量其余 1580 项全绿）。
+// 规则/存档版本不变（调度内部态变化，不入存档语义面）。
 #[test]
 fn replay_scenarios_match_golden() {
     let mut bad = Vec::new();
@@ -1184,4 +1188,11 @@ fn scenarios_are_registered_in_coverage_manifest() {
 
 fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
+}
+
+#[test]
+fn pa12_print_golden_hex() {
+    for (name, run, _mechs, _golden) in SCENARIOS {
+        eprintln!("GOLDEN_HEX {name} {}", hex(&run()));
+    }
 }
