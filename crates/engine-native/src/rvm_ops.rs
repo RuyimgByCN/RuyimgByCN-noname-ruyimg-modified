@@ -91,6 +91,12 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         EffectRequest::TurnOver { player } => {
             ok_player(*player, "TurnOver")?;
         }
+        // PA12 批④-3：伤害改写对——只在 DamageBefore 前置窗口内合法
+        //（当前帧即伤害帧；宿主技同口径直写 DamageData）。
+        EffectRequest::PreventDamage { .. } => {}
+        EffectRequest::ModifyCurrentDamage { player, .. } => {
+            ok_player(*player, "ModifyCurrentDamage")?;
+        }
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
         // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
         // 拒绝。
@@ -487,6 +493,26 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             };
             let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
             discard_some(ctx, p, cards);
+        }
+        // PA12 批④-3：DSL `prevent_current_damage()` / `modify_current_damage(self, ±N)`
+        //（旧线：damage_id=0 绑定当前前置窗口伤害帧）。与宿主技 v187/v126 同法
+        // 直写 DamageData；非伤害窗口（current_damage 取不到）静默空操作。
+        EffectRequest::PreventDamage { .. } => {
+            if let Ok(d) = ctx.current_damage() {
+                let id = ctx.current_frame_id();
+                let _ = id;
+                if d.amount > 0 {
+                    ctx.current_damage_mut().prevented = true;
+                }
+            }
+        }
+        EffectRequest::ModifyCurrentDamage { player: _, delta, .. } => {
+            if let Ok(d) = ctx.current_damage() {
+                if d.amount > 0 && delta != 0 {
+                    let next = (d.amount as i32).saturating_add(delta).max(0) as u32;
+                    ctx.current_damage_mut().amount = next;
+                }
+            }
         }
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N>0 字面）——
         // 与 DiscardFromHandEquip 同口径（手牌优先确定性首 N、装备补足、

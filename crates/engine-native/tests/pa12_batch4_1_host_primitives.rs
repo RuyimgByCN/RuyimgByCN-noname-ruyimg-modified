@@ -52,6 +52,8 @@ fn settle(e: &mut Engine, confirm: bool) {
 
 const NSXUEZHU: &str = include_str!("../../../content/original/ported/diy/nsxuezhu.skill");
 const XIAOMIAN: &str = include_str!("../../../content/original/ported/collab/xiaomian.skill");
+const DCCIBEI: &str = include_str!("../../../content/original/ported/collab/dccibei.skill");
+const KOTAROU: &str = include_str!("../../../content/original/ported/key/kotarou_rewrite_damage.skill");
 
 fn pack_for(source: &str, id: &str) -> ExtensionPack {
     let pkg = compile_source_named(id, source).expect("编译 ported .skill");
@@ -203,4 +205,34 @@ fn pa12_batch4_2_accept_rejects_zero_count() {
         skill: SkillId::NONE,
     };
     assert!(engine_native::rvm_ops::accept_effect(&req1, 4).is_ok());
+}
+
+/// 批④-3：刺背（dccibei，`damage_before owner_is_source optional` 防止本次伤害+摸 5）
+/// 与 kotarou 改写（`damage_before owner_is_source` 伤害 +1）——DamageBefore 前置
+/// 窗口内直写当前伤害帧（宿主技 v187/v126 同法）。
+#[test]
+fn pa12_batch4_3_damage_rewrite_window() {
+    // ① prevent：0 号（持技）对 1 号造成 1 伤 → 确认 → 伤害被防止（hp 不变）+ 摸 5
+    let pack = pack_for(DCCIBEI, "collab-dccibei");
+    let name = pack.vm_skills[0].name.clone();
+    let mut e = Engine::new_with_extensions(997_001, 4, &[&pack]).expect("建局");
+    e.debug_grant(0, &name);
+    let hp1 = e.debug_hp(1);
+    let h0 = hand_len(&e, 0);
+    e.debug_deal_damage(Some(0u8.into()), 1u8.into(), 1, DamageNature::Normal);
+    settle(&mut e, true); // optional 确认
+    drain_plain(&mut e);
+    assert_eq!(e.debug_hp(1), hp1, "防止：目标 hp 不变");
+    assert_eq!(hand_len(&e, 0), h0 + 5, "刺背摸 5");
+
+    // ② modify +1：持有者来源的伤害 +1（2 号 hp 扣 2）
+    let pack2 = pack_for(KOTAROU, "collab-kotarou");
+    let name2 = pack2.vm_skills[0].name.clone();
+    let mut e2 = Engine::new_with_extensions(997_002, 4, &[&pack2]).expect("建局");
+    e2.debug_grant(0, &name2);
+    let hp2 = e2.debug_hp(2);
+    e2.debug_deal_damage(Some(0u8.into()), 2u8.into(), 1, DamageNature::Normal);
+    settle(&mut e2, true);
+    drain_plain(&mut e2);
+    assert_eq!(e2.debug_hp(2), hp2 - 2, "modify +1：1 伤变 2");
 }
