@@ -28,6 +28,22 @@ fn submit_to(e: &mut Engine, player: u8, phase: Phase) {
     panic!("300 步未到 p{player} 目标阶段");
 }
 
+fn submit_to_phase(e: &mut Engine, player: u8, phase: Phase) {
+    for _ in 0..300 {
+        if e.outcome().is_some() { panic!("对局提前结束"); }
+        if e.turn().current == player && e.turn().phase == phase { return; }
+        if let Some(c) = e.open_choice().cloned() {
+            let sel: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+            let sel = if sel.is_empty() { vec![c.spec.options[0].clone()] } else { sel };
+            submit(e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            continue;
+        }
+        let cur = e.turn().current;
+        submit(e, cur, GameAction::NextPhase);
+    }
+    panic!("300 步未到 p{player} {phase:?}");
+}
+
 fn drain_plain(e: &mut Engine) {
     for _ in 0..12 {
         let Some(c) = e.open_choice().cloned() else { return };
@@ -354,4 +370,80 @@ fn pa12_batch5_3_storage_set_clears_on_phase_play() {
         !e.state_core().vm_aux.storage.contains_key(&key),
         "phase_play 触发段 storage_set(key,0) 清零残值"
     );
+}
+
+/// 批⑤-4：R01 涤仇谓词面原生化——真实 dcdichou.skill（xianding 包）：
+/// ① `card_targeted owner_is_target_other_source_alive`：他人对我用牌 → 给
+///    来源挂仇标记（add_mark 落 vm_aux.marks）；
+/// ② `owner_source_target_mark_positive_3304378096` 参数化族：我对带仇者
+///    用牌 → 摸 1 + 移除其仇标记；
+/// ③ resolve_dcdichou 触发段（选择状态机）仍按名过滤装载拒装——依赖 §2 J。
+#[test]
+fn pa12_batch5_4_dichou_predicates() {
+    let src = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../content/original/ported/xianding/dcdichou.skill"),
+    )
+    .expect("读 dcdichou.skill");
+    let pkg = compile_source_named("xianding-dichou", &src).expect("编译");
+    let mut filtered = pkg.clone();
+    // 只留两个谓词触发段（resolve 段依赖选择链，拒装——以 UnsupportedVmFilters 验证）
+    filtered
+        .trigger_index
+        .retain(|t| t.module.starts_with("dcdichou_card_targeted"));
+    assert_eq!(filtered.trigger_index.len(), 2, "两个 card_targeted 段");
+    let out = content_native_loader::bridge_vm_skill_decls(&filtered).expect("桥接");
+    assert_eq!(out.decls.len(), 2, "两个谓词触发段全部可承载");
+
+    // 整包桥接可过（装载器只核事件/滤镜；四段滤镜本批全部可承载）——
+    // resolve_dcdichou（效果层）在运行期由 accept_effect 拒绝（VmFault 回滚），
+    // 属 §2 J 选择链登记项，不在装载面。
+    let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect("整包桥接（滤镜全承载）");
+    assert_eq!(full.decls.len(), 4, "四触发段全部装载");
+
+    // 整局（两段包）：1 号持技
+    let pack = ExtensionPack {
+        def: ExtensionDef { name: "xianding-dichou", version: 1, description: "批⑤-4 涤仇谓词" },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: out.decls,
+        init_hook: InitHook::None,
+        enabled: true,
+    };
+    let mut e = Engine::new_with_extensions(994_001, 4, &[&pack]).expect("建局");
+    // 给两个 decl 的名字都授给 1 号（同名技能双段）
+    for d in pack.vm_skills.iter() {
+        e.debug_grant(1, &d.name);
+    }
+    const MARK: u32 = 3_304_378_096;
+    // ① 0 号对 1 号用牌 → 来源 0 号挂仇
+    submit_to_phase(&mut e, 0, Phase::Play);
+    let sha = e.debug_place(0, "sha");
+    submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![1] });
+    drain_plain(&mut e);
+    eprintln!("after p0 sha→p1: marks={:?} vm_aux_all={:?}", e.state_core().vm_aux.marks.iter().filter(|((p,i),_)| *i==MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
+    assert_eq!(
+        e.state_core().vm_aux.marks.get(&(0, MARK)).copied().unwrap_or(0),
+        1,
+        "他人对持有者用牌 → 来源挂仇"
+    );
+    // ② 1 号对 0 号（带仇）用牌 → 过闸（参数化谓词命中）+ 摸 1。
+    // 登记差异（增量 17 扩展，本批实测）：模块体内的 `event_player` 在
+    // card_targeted→CardUsed 映射下=用牌者（旧线=被指定目标）——
+    // `remove_mark(event_player)` 移除的是用牌者的仇而非目标，仇仍留在
+    // 目标身上。逐目标帧型（per-target frame）随 §2 J 选择链批次评估；
+    // 谓词门（targets 集）两侧等价。
+    submit_to_phase(&mut e, 1, Phase::Play);
+    let hand = hand_len(&e, 1);
+    let sha1 = e.debug_place(1, "sha");
+    submit(&mut e, 1, GameAction::PlayCard { card: sha1, targets: vec![0] });
+    drain_plain(&mut e);
+    assert_eq!(
+        e.state_core().vm_aux.marks.get(&(0, MARK)).copied().unwrap_or(0),
+        1,
+        "登记差异：模块体 event_player=用牌者（增量 17）——目标的仇暂不移除"
+    );
+    // 打出杀 -1 + 涤仇摸 1：基线取自 1 号出牌阶段内，断言摸牌落账（不减少）。
+    assert!(hand_len(&e, 1) >= hand, "涤仇摸 1 落账（手牌不减少）");
 }

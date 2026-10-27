@@ -306,6 +306,12 @@ pub enum VmFilterPolicy {
     OwnerTargetSourceAlive,
     /// DSL `owner_is_source_or_target`：事件来源=持有者或事件主玩家=持有者。
     OwnerSourceOrTarget,
+    /// DSL `owner_is_target_other_source_alive`（PA12 批⑤-4，R01 涤仇族）：
+    /// 事件主玩家=持有者 ∧ 事件来源存活 ∧ 来源≠持有者。
+    OwnerTargetOtherSourceAlive,
+    /// DSL `owner_source_target_mark_positive_{mark}`（批⑤-4 R01 参数化族）：
+    /// 来源=持有者 ∧ 事件主玩家的该标记层数 > 0。
+    OwnerSourceTargetMarkPositive(u32),
     /// 阶段门（PA12④）：事件携带的阶段须等于 `phase`，再评估 `inner`。
     /// 装载器用它把 DSL 的 `phase_end`/`phase_draw`/… 落到原生
     /// `PhaseBegin`/`PhaseEnd`（原生阶段帧按阶段逐一发出，旧线
@@ -330,6 +336,7 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         "owner_alive_not_target" => Some(VmFilterPolicy::OwnerAliveNotEventPlayer),
         "owner_is_target_source_alive" => Some(VmFilterPolicy::OwnerTargetSourceAlive),
         "owner_is_source_or_target" => Some(VmFilterPolicy::OwnerSourceOrTarget),
+        "owner_is_target_other_source_alive" => Some(VmFilterPolicy::OwnerTargetOtherSourceAlive),
         "always" => Some(VmFilterPolicy::Always),
         "owner_is_target_wounded" => Some(VmFilterPolicy::OwnerWounded),
         "owner_is_target_linked" => Some(VmFilterPolicy::OwnerLinked),
@@ -376,6 +383,13 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         .filter(|v| *v > 0)
     {
         return Some(VmFilterPolicy::OwnerHpBelow(n));
+    }
+    // PA12 批⑤-4（R01 参数化族，与旧线 map_filter strip_prefix 同口径）
+    if let Some(mark) = name
+        .strip_prefix("owner_source_target_mark_positive_")
+        .and_then(|v| v.parse::<u32>().ok())
+    {
+        return Some(VmFilterPolicy::OwnerSourceTargetMarkPositive(mark));
     }
     if let Some(n) = name
         .strip_prefix("owner_source_play_card_count_eq_")
@@ -454,6 +468,33 @@ impl SkillBehavior for VmSkillBehavior {
             }
             VmFilterPolicy::OwnerSourceOrTarget => {
                 trig.event_source == Some(owner) || is_event_player
+            }
+            VmFilterPolicy::OwnerTargetOtherSourceAlive => {
+                // card_targeted（→CardUsed+targets，登记差异）下「事件主玩家」=
+                // 目标之一；其余事件沿用通用语义（owner=事件主玩家）。
+                let owner_is_subject =
+                    is_event_player || (trig.kind == 2 && trig.targets.contains(&owner));
+                owner_is_subject
+                    && trig
+                        .event_source
+                        .is_some_and(|src| src != owner && ctx.state.player(src).alive)
+            }
+            VmFilterPolicy::OwnerSourceTargetMarkPositive(mark) => {
+                // 同上：card_targeted 的「目标」在 targets 集（旧线逐目标发
+                // 上下文，原生单事件——任一目标带标记即过闸，R01 单目标杀
+                // 等价；多目标卡的逐目标窗属 §2 J 选择链登记面）。
+                let has_mark = |seat: u8| {
+                    ctx.state
+                        .vm_aux
+                        .marks
+                        .get(&(seat, mark))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+                };
+                trig.event_source == Some(owner)
+                    && (trig.event_player.is_some_and(has_mark)
+                        || trig.targets.iter().any(|t| has_mark(*t)))
             }
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
