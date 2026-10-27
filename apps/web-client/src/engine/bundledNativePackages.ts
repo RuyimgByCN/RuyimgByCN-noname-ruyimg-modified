@@ -66,7 +66,8 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
   const payload = value as NativePackagePayload | null;
   const manifest = payload?.manifest;
   if (!manifest || ![manifest.namespace, manifest.package_id, manifest.version]
-    .every((value) => typeof value === "string" && value.length > 0)
+    .every((value) => typeof value === "string" && value.trim().length > 0
+      && value !== "." && value !== ".." && !value.includes("/") && !value.includes("\\"))
     || !Array.isArray(manifest.logic_hash) || manifest.logic_hash.length !== 32
     || !manifest.logic_hash.every((n) => Number.isInteger(n) && n >= 0 && n <= 255)) {
     throw new Error("扩展包身份或逻辑指纹无效");

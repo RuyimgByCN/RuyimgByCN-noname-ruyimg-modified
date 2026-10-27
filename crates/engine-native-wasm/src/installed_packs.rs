@@ -8,8 +8,10 @@ fn required<'a>(value: &'a Value, field: &str) -> Result<&'a str, String> {
     value
         .get(field)
         .and_then(Value::as_str)
-        .filter(|s| !s.trim().is_empty())
-        .ok_or_else(|| format!("manifest.{field} 须为非空字符串"))
+        .filter(|s| {
+            !s.trim().is_empty() && *s != "." && *s != ".." && !s.contains('/') && !s.contains('\\')
+        })
+        .ok_or_else(|| format!("manifest.{field} 须为有效的身份字段"))
 }
 
 fn json(value: &Value) -> String {

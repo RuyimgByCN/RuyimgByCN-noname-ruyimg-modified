@@ -461,6 +461,26 @@ try {
       afterDuplicate.ok === true && afterDuplicate.data?.hex === installedHex,
     JSON.stringify([duplicateStart.error, duplicateIdentity.error, duplicateRestore.error]),
   );
+  const unsafePacks = structuredClone(installedPacks);
+  unsafePacks[0].manifest.namespace = "name/child";
+  const unsafeJson = JSON.stringify(unsafePacks);
+  const unsafeStart = await workerSend({
+    id: 929, type: "start", players: 4, seed: 17017, observer: 0, packsJson: unsafeJson,
+  });
+  const unsafeIdentity = await workerSend({
+    id: 930, type: "start", mode: "identity", players: 4, seed: 17017, observer: 0, packsJson: unsafeJson,
+  });
+  const unsafeRestore = await workerSend({
+    id: 931, type: "restore", hex: installedHex, packsJson: unsafeJson,
+  });
+  const afterUnsafe = await workerSend({ id: 932, type: "save" });
+  check(
+    "worker_invalid_identity_refused_without_changing_match",
+    [unsafeStart, unsafeIdentity, unsafeRestore].every((reply) =>
+      reply.ok === false && /manifest\.namespace/.test(reply.error ?? "")) &&
+      afterUnsafe.ok === true && afterUnsafe.data?.hex === installedHex,
+    JSON.stringify([unsafeStart.error, unsafeIdentity.error, unsafeRestore.error]),
+  );
   const restoredInstalled = await workerSend({
     id: 916, type: "restore", hex: installedHex, packsJson: installedJson,
   });

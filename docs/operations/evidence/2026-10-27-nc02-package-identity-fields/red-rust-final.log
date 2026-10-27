@@ -1,0 +1,162 @@
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:743:18
+    |
+743 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native-wasm v0.1.0 (/tmp/noname-nc02-identity-red.rAnPKB/crates/engine-native-wasm)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:180:4
+    |
+180 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:703:4
+    |
+703 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:764:4
+    |
+764 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:826:4
+    |
+826 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:835:4
+    |
+835 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:861:4
+    |
+861 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:870:4
+    |
+870 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:909:4
+    |
+909 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:918:4
+    |
+918 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:926:4
+    |
+926 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:934:4
+    |
+934 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:942:4
+    |
+942 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:950:4
+    |
+950 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:958:4
+    |
+958 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:966:4
+    |
+966 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:974:4
+    |
+974 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:982:4
+    |
+982 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:990:4
+    |
+990 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.82s
+     Running tests/installed_package_payload.rs (/tmp/noname-nc02-identity-red.rAnPKB/target-independent/debug/deps/installed_package_payload-7021b3c97d9955fc)
+
+running 1 test
+test invalid_installed_identity_fields_are_rejected_before_start_and_restore ... FAILED
+
+failures:
+
+---- invalid_installed_identity_fields_are_rejected_before_start_and_restore stdout ----
+
+thread 'invalid_installed_identity_fields_are_rejected_before_start_and_restore' (108287872) panicked at crates/engine-native-wasm/tests/installed_package_payload.rs:232:5:
+accepted invalid identities: ["restore did not validate namespace=\".\"", "start accepted namespace=\".\"", "start+restore namespace=\".\"", "identity accepted namespace=\".\"", "identity+restore namespace=\".\"", "restore did not validate namespace=\"..\"", "start accepted namespace=\"..\"", "start+restore namespace=\"..\"", "identity accepted namespace=\"..\"", "identity+restore namespace=\"..\"", "restore did not validate namespace=\"name/child\"", "start accepted namespace=\"name/child\"", "start+restore namespace=\"name/child\"", "identity accepted namespace=\"name/child\"", "identity+restore namespace=\"name/child\"", "restore did not validate namespace=\"name\\\\child\"", "start accepted namespace=\"name\\\\child\"", "start+restore namespace=\"name\\\\child\"", "identity accepted namespace=\"name\\\\child\"", "identity+restore namespace=\"name\\\\child\"", "restore did not validate package_id=\".\"", "start accepted package_id=\".\"", "start+restore package_id=\".\"", "identity accepted package_id=\".\"", "identity+restore package_id=\".\"", "restore did not validate package_id=\"..\"", "start accepted package_id=\"..\"", "start+restore package_id=\"..\"", "identity accepted package_id=\"..\"", "identity+restore package_id=\"..\"", "restore did not validate package_id=\"name/child\"", "start accepted package_id=\"name/child\"", "start+restore package_id=\"name/child\"", "identity accepted package_id=\"name/child\"", "identity+restore package_id=\"name/child\"", "restore did not validate package_id=\"name\\\\child\"", "start accepted package_id=\"name\\\\child\"", "start+restore package_id=\"name\\\\child\"", "identity accepted package_id=\"name\\\\child\"", "identity+restore package_id=\"name\\\\child\"", "restore did not validate version=\".\"", "start accepted version=\".\"", "start+restore version=\".\"", "identity accepted version=\".\"", "identity+restore version=\".\"", "restore did not validate version=\"..\"", "start accepted version=\"..\"", "start+restore version=\"..\"", "identity accepted version=\"..\"", "identity+restore version=\"..\"", "restore did not validate version=\"name/child\"", "start accepted version=\"name/child\"", "start+restore version=\"name/child\"", "identity accepted version=\"name/child\"", "identity+restore version=\"name/child\"", "restore did not validate version=\"name\\\\child\"", "start accepted version=\"name\\\\child\"", "start+restore version=\"name\\\\child\"", "identity accepted version=\"name\\\\child\"", "identity+restore version=\"name\\\\child\""]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    invalid_installed_identity_fields_are_rejected_before_start_and_restore
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `-p engine-native-wasm --test installed_package_payload`

@@ -192,3 +192,45 @@ fn same_package_id_in_different_namespaces_remains_allowed() {
         .iter()
         .any(|card| card.name.starts_with("hnl_")));
 }
+
+#[test]
+fn invalid_installed_identity_fields_are_rejected_before_start_and_restore() {
+    let good = installed("d3-upstream-noname", "characters", "assets/character.json");
+    let valid_packs = json!([good.clone()]).to_string();
+    let valid = engine_from_packs(4, 42, &valid_packs).unwrap();
+    let valid_save = hex_encode(&engine_native::archive::encode_archive(&valid.save()));
+    let mut accepted = Vec::new();
+    for field in ["namespace", "package_id", "version"] {
+        for bad in [".", "..", "name/child", "name\\child", "   "] {
+            let mut item = good.clone();
+            item["manifest"][field] = json!(bad);
+            let packs = json!([item]).to_string();
+            if !engine_from_archive(&valid_save, &packs)
+                .err()
+                .is_some_and(|error| error.contains(field))
+            {
+                accepted.push(format!("restore did not validate {field}={bad:?}"));
+            }
+            for (entry, result) in [
+                ("start", engine_from_packs(4, 42, &packs)),
+                ("identity", engine_identity_from_packs(4, 42, &packs)),
+            ] {
+                match result {
+                    Ok(engine) => {
+                        accepted.push(format!("{entry} accepted {field}={bad:?}"));
+                        let saved =
+                            hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+                        if engine_from_archive(&saved, &packs).is_ok() {
+                            accepted.push(format!("{entry}+restore {field}={bad:?}"));
+                        }
+                    }
+                    Err(error) => assert!(error.contains(field), "{error}"),
+                }
+            }
+        }
+    }
+    assert!(
+        accepted.is_empty(),
+        "accepted invalid identities: {accepted:?}"
+    );
+}

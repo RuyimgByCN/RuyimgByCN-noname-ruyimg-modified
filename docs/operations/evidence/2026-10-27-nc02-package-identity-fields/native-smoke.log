@@ -1,0 +1,58 @@
+
+> noname-next-web-client@0.1.0 smoke:native /private/tmp/noname-nc02-identity-red.rAnPKB/apps/web-client
+> node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs
+
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1921
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+PASS extension_package_inventory | packs=41 dirs=41 no_npack=0
+PASS extension_catalog_consistent | catalog=15 uncovered=26
+PASS pack_enters_match | hnl_=7
+PASS missing_pack_refused
+PASS same_pack_restore
+PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 11753449270702291365, catalog: 11737545934517934778 }
+PASS adapter_choice_token_roundtrip | choice=2 options=5 label=card:113 token=0 submission=[0] outcome=accepted value_as_token_refused=true
+PASS legal_actions_shape | seat=0 revision=2 n=6
+PASS legal_actions_revision_matches_engine | json=2 engine=2
+PASS legal_actions_non_empty | n=6 kinds=["PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","EndPhase"]
+PASS adapter_passes_kernel_actions_verbatim | adapter=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"] kernel=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"]
+PASS adapter_hash_hex_authoritative | hash=3aeda224aa497f65395634cb4d5823d367861a9d15e6e62b860ad645e84e363b
+PASS adapter_events_authoritative | codes=[8,8,10]
+PASS adapter_observer_does_not_drain_events | events=0 hash=3aeda224aa497f65395634cb4d5823d367861a9d15e6e62b860ad645e84e363b
+PASS legal_actions_sampled_all_accepted | sampled=6 refused=[]
+PASS forged_card_rejected_with_reason | result={"finished":false,"outcome":"rejected","reason":"CardNotInHand","revision":2}
+PASS legal_actions_seat_boundary_refused | legal_actions: 座位越界（9 ≥ 4）
+PASS general_candidates_from_catalog | count=93 before_skills=[]
+PASS choose_general_changes_skills | name=样例·张角组合 skills=["天妒","鬼道"]
+PASS choose_general_assignment_shape | seat=0 revision=0 hash=02200e45239e…
+PASS choose_general_unknown_refused | Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral
+PASS choose_general_seat_boundary_refused | Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）
+PASS worker_native_init | {"id":901,"ok":true,"data":"native ready"}
+PASS worker_installed_cards_and_pile_enter_start | deck=228 standard=108 error=
+PASS worker_installed_general_candidate
+PASS worker_installed_general_assignment | ["dddjinggou","dddmoyan"]
+PASS worker_installed_save
+PASS worker_installed_missing_refused
+PASS worker_installed_exact_version_refused
+PASS worker_installed_changed_asset_refused
+PASS worker_duplicate_slot_refused_without_changing_match | ["packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select"]
+PASS worker_invalid_identity_refused_without_changing_match | ["packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段"]
+PASS worker_installed_same_lock_restore
+PASS worker_identity_keeps_packs_and_lord_bonus | hp=5 error=
+PASS worker_identity_selection_keeps_lord_bonus_and_global_skills | hp=5 skills=["dddjinggou","dddmoyan","wuxing_shengke"]
+PASS worker_identity_invalid_seats_refused
+PASS worker_vm_unmapped_general_skill_refused | packs[0]: 包数据字段 generals[].skills[].name 非法: VM 包的武将技能 missing_vm_skill 未映射
+PASS worker_vm_general_owns_module | vm_fixture_phase_end_phase_end
+PASS worker_vm_effect_at_end_phase | delta=1 restored=true replayed=true
+PASS worker_vm_same_package_restore_and_replay | delta=1 restored=true replayed=true
+PASS worker_standard_restart
+PASS worker_general_candidates | count=93 error=
+PASS worker_choose_general_reply | name=样例·张角组合 skills=["天妒","鬼道"] hash=02200e45239e…
+PASS worker_choose_general_unknown_refused | reply={"id":904,"ok":false,"error":"Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral"}
+PASS worker_choose_general_seat_refused | reply={"id":905,"ok":false,"error":"Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）"}
+{"total":53,"failed":0}

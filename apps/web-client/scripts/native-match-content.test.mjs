@@ -6,6 +6,7 @@ import {
   uninstallExtension, upgradeExtension, putNativeSave, listNativeSaves,
 } from "../src/engine/extensionStore.ts";
 import { EXTENSION_CATALOG, extensionKey } from "../src/engine/extensionCatalog.ts";
+import { validateNativePackage } from "../src/engine/bundledNativePackages.ts";
 import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
 
 const storage = new Map();
@@ -176,4 +177,23 @@ test("same-version copies tolerate JSON formatting and object key order", () => 
   upgradeExtension(key);
   assert.equal(readExtensionStore().installed[0].nativeVersions[record.version], saved);
   assert.deepEqual(JSON.parse(prepareNativeMatchContent().packsJson), JSON.parse(content.packsJson));
+});
+
+test("unsafe identity fields cannot enter the browser content lock", () => {
+  const content = installActive();
+  const original = JSON.parse(content.packsJson)[0];
+  const accepted = [];
+  for (const field of ["namespace", "package_id", "version"]) {
+    for (const bad of [".", "..", "name/child", "name\\child", "   "]) {
+      const pack = structuredClone(original);
+      pack.manifest[field] = bad;
+      try {
+        validateNativePackage(pack);
+        accepted.push(`${field}=${JSON.stringify(bad)}`);
+      } catch (error) {
+        assert.match(String(error), /身份|无效/);
+      }
+    }
+  }
+  assert.deepEqual(accepted, []);
 });
