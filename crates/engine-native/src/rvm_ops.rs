@@ -91,6 +91,15 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         EffectRequest::TurnOver { player } => {
             ok_player(*player, "TurnOver")?;
         }
+        // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
+        // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
+        // 拒绝。
+        EffectRequest::DiscardHandEquipCount { player, count, .. } => {
+            ok_player(*player, "DiscardHandEquipCount")?;
+            if *count == 0 {
+                return Err(reject("DiscardHandEquipCount 选牌首发未接"));
+            }
+        }
         EffectRequest::AddSkill { player, .. }
         | EffectRequest::EnterDying { player }
         | EffectRequest::DiscardAllOwnJudge { player, .. }
@@ -478,6 +487,34 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             };
             let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
             discard_some(ctx, p, cards);
+        }
+        // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N>0 字面）——
+        // 与 DiscardFromHandEquip 同口径（手牌优先确定性首 N、装备补足、
+        // 数量不足尽弃）；N=0 选牌首发在 accept 阶段拒绝。
+        EffectRequest::DiscardHandEquipCount { player, count, .. } => {
+            let count = count.max(1); // N=0 已在 accept 拒绝，防御取正
+            if let (Some(p), false) = (seat_of(player, seats), count == 0) {
+                let mut left = count as usize;
+                let mut cards = Vec::new();
+                while left > 0 {
+                    let pick = ctx
+                        .core
+                        .player(p)
+                        .hand
+                        .first()
+                        .copied()
+                        .or_else(|| ctx.core.player(p).equips.first().copied());
+                    let Some(c) = pick else { break };
+                    if ctx.core.player(p).hand.first() == Some(&c) {
+                        ctx.take_hand_card(p, c);
+                    } else {
+                        ctx.take_owned_card(p, c);
+                    }
+                    cards.push(c);
+                    left -= 1;
+                }
+                discard_some(ctx, p, cards);
+            }
         }
         // PA12 批④-1：DSL `turn_over(player)`——经内核翻面提交落点
         // （神裔守卫、急冻解除、TurnOvered 事件同口径）。

@@ -10,19 +10,48 @@ use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
 use engine_native::event::{DamageNature, Phase};
 use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 
+fn hand_len(e: &Engine, p: u8) -> usize {
+    e.state_core().player(p).hand.len()
+}
+
+fn submit_to(e: &mut Engine, player: u8, phase: Phase) {
+    for i in 0..300 {
+        if e.turn().current == player && e.turn().phase == phase {
+            return;
+        }
+        assert!(e.outcome().is_none(), "对局提前结束");
+        if false { eprintln!("step#{i} cur={} phase={:?} open={:?}", e.turn().current, e.turn().phase, e.open_choice().map(|c|(&c.spec.prompt, c.spec.min, c.spec.max, c.observer, c.spec.options.iter().filter(|o|matches!(o,ChoiceOption::Card(_))).count()))); }
+        settle(e, false);
+        let cur = e.turn().current;
+        submit(e, cur, GameAction::NextPhase);
+    }
+    panic!("300 步未到 p{player} 目标阶段");
+}
+
+fn drain_plain(e: &mut Engine) {
+    for _ in 0..12 {
+        let Some(c) = e.open_choice().cloned() else { return };
+        let sel: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+        let sel = if sel.is_empty() { vec![c.spec.options[0].clone()] } else { sel };
+        submit(e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+    }
+}
+
 fn settle(e: &mut Engine, confirm: bool) {
     for _ in 0..10 {
         let Some(c) = e.open_choice().cloned() else { break };
         let sel = if confirm && c.spec.prompt == "trigger_confirm" {
             vec![c.spec.options.iter().find(|o| matches!(o, ChoiceOption::Confirm)).copied().unwrap_or(c.spec.options[0])]
         } else {
-            vec![c.spec.options[0].clone()]
+            let cards: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+            if cards.is_empty() { vec![c.spec.options[0].clone()] } else { cards }
         };
         submit(e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
     }
 }
 
 const NSXUEZHU: &str = include_str!("../../../content/original/ported/diy/nsxuezhu.skill");
+const XIAOMIAN: &str = include_str!("../../../content/original/ported/collab/xiaomian.skill");
 
 fn pack_for(source: &str, id: &str) -> ExtensionPack {
     let pkg = compile_source_named(id, source).expect("编译 ported .skill");
@@ -45,7 +74,7 @@ fn pack_for(source: &str, id: &str) -> ExtensionPack {
 
 fn submit(e: &mut Engine, actor: u8, action: GameAction) {
     let rev = e.revision();
-    let _ = e.submit(GameCommand {
+    let out = e.submit(GameCommand {
         actor,
         expected_revision: rev,
         dedup_id: (std::time::SystemTime::now()
@@ -55,6 +84,7 @@ fn submit(e: &mut Engine, actor: u8, action: GameAction) {
             | 1,
         action,
     });
+    let _ = &out;
 }
 
 /// 雪堕（diy，`damage owner_is_source_or_target` → 摸 1 + 翻面）：持有者受到
@@ -114,4 +144,63 @@ fn pa12_batch4_1_turn_over_toggles_face() {
         Some(false),
         "1 号回合到达时已由跳过路径翻回正面"
     );
+}
+
+/// 批④-2：消面（xiaomian，`card_used owner_alive optional` 摸 1 后弃 1 手/装备）
+/// 与 蜜柿彗（mia_shihui，`phase_end owner_is_target` 回 1 后弃 1）——
+/// `discard_hand_equip_count` 字面 N=1 落账；N=0 选牌首发拒绝。
+#[test]
+fn pa12_batch4_2_discard_hand_equip_count() {
+    // ① 消面：自己用牌 → 确认 → 摸 1 → 弃 1（手牌首张）
+    let pack = pack_for(XIAOMIAN, "shenhua-xiaomian");
+    let name = pack.vm_skills[0].name.clone();
+    let mut e = Engine::new_with_extensions(996_001, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, &name);
+    submit_to(&mut e, 1, Phase::Play);
+    let card = e.debug_place(1, "sha");
+    let base = hand_len(&e, 1);
+    submit(&mut e, 1, GameAction::PlayCard { card, targets: vec![0] });
+    let mut confirmed = false;
+    for _ in 0..10 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.spec.prompt == "trigger_confirm" {
+            submit(&mut e, c.observer, GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![c.spec.options.iter().find(|o| matches!(o, ChoiceOption::Confirm)).copied().unwrap()],
+            });
+            confirmed = true;
+            break;
+        }
+        let sel: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+        let sel = if sel.is_empty() { vec![c.spec.options[0].clone()] } else { sel };
+        submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+    }
+    assert!(confirmed, "optional 确认门");
+    drain_plain(&mut e);
+    // 手牌净变化：-1（打出杀）+1（摸 1）-1（弃 1）= base-1
+    assert_eq!(hand_len(&e, 1), base - 1, "消面：摸 1 后弃 1（净 -1）");
+
+    // N=0（选牌首发）的允许面拒绝断言见 pa12_batch4_2_accept_rejects_zero_count；
+    // 编译器对 count 字面 0 的态度（拒绝/放行）留批④选牌链接入时一并验收。
+}
+
+/// 装载/允许面映射断言（N=0 拒绝）。
+#[test]
+fn pa12_batch4_2_accept_rejects_zero_count() {
+    use rule_api::{EffectRequest, PlayerId, SkillId};
+    let req = EffectRequest::DiscardHandEquipCount {
+        player: PlayerId::new(1),
+        count: 0,
+        skill: SkillId::NONE,
+    };
+    assert!(
+        engine_native::rvm_ops::accept_effect(&req, 4).is_err(),
+        "N=0 选牌首发应拒绝"
+    );
+    let req1 = EffectRequest::DiscardHandEquipCount {
+        player: PlayerId::new(1),
+        count: 1,
+        skill: SkillId::NONE,
+    };
+    assert!(engine_native::rvm_ops::accept_effect(&req1, 4).is_ok());
 }
