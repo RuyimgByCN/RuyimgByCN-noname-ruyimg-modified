@@ -1,0 +1,21 @@
+PASS formal_content_lock_loaded: official/vm-fixture
+PASS ui_selected_vm_general: seat=1 module=vm_fixture_phase_end_phase_end
+STEP 0 {"choice":false,"hand":"手牌 4\n身份未知","status":"选将 P1 · vm_fixture · 0d0892b49b77…"}
+STEP 1 {"choice":false,"hand":"手牌 4\n身份未知","status":"rev 1 · 10c7fa2d44bb… · native"}
+STEP 2 {"choice":false,"hand":"手牌 4\n身份未知","status":"rev 2 · 8b90cbe61333… · native"}
+STEP 3 {"choice":true,"hand":"手牌 4\n身份未知","status":"rev 3 · 7a46bef99d3a… · native"}
+STEP 4 {"choice":false,"hand":"手牌 4\n身份未知","status":"rev 4 · 0df2da1eb1df… · native"}
+STEP 5 {"choice":false,"hand":"手牌 4\n身份未知","status":"rev 5 · f1bfd676e1e6… · native"}
+STEP 6 {"phase":"Judge","turn":"► 第 1 轮 · P1","choice":false,"hand":"手牌 4\n身份未知","status":"rev 6 · 0b0bbfeec6ab… · native"}
+STEP 7 {"phase":"Draw","turn":"► 第 1 轮 · P1","choice":false,"hand":"手牌 6\n身份未知","status":"rev 7 · a204286b16d2… · native"}
+STEP 8 {"phase":"Play","turn":"► 第 1 轮 · P1","choice":false,"hand":"手牌 6\n身份未知","status":"rev 8 · 6c07a30cd7b7… · native"}
+STEP 9 {"phase":"Play","turn":"► 第 1 轮 · P1","choice":true,"hand":"手牌 5\n身份未知","status":"rev 9 · a6ce81d5735a… · native"}
+STEP 10 {"phase":"Play","turn":"► 第 1 轮 · P1","choice":false,"hand":"手牌 5\n身份未知","status":"rev 10 · ec0b08fcee94… · native"}
+STEP 11 {"phase":"Discard","turn":"► 第 1 轮 · P1","choice":true,"hand":"手牌 5\n身份未知","status":"rev 11 · ada4baf90c52… · native"}
+STEP 12 {"phase":"Discard","turn":"► 第 1 轮 · P1","choice":false,"hand":"手牌 4\n身份未知","status":"rev 12 · baf3b7b23369… · native"}
+PASS ui_save_contains_vm_copy: phase=Discard hand=4 hash=baf3b7b23369e6d459971b816f22b5df7f02799a01c978af24bf21e0f7fa24c0
+END_EVENTS [{"PublicEvent":{"code":8,"label":"回合推进"}},{"PublicEvent":{"code":2,"label":"摸牌"}},{"PublicEvent":{"code":8,"label":"回合推进"}}]
+PASS ui_vm_end_effect: phase=Discard->End hand=4->5 hash=d04f0194c4c2b973108e3a9b1a33ae823bc456b13c5c5682abd3b9f30209fdd7
+PASS ui_restore_replay_same_hash: d04f0194c4c2b973108e3a9b1a33ae823bc456b13c5c5682abd3b9f30209fdd7
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc02-browser-vm-JRJwqg origin=http://127.0.0.1:59207
