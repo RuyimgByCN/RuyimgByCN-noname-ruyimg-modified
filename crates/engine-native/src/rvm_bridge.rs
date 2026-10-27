@@ -119,6 +119,14 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             kind: 3,
             ..VmTriggerCtx::default()
         },
+        // 杀被闪避（PA12 批②）：来源=杀的使用者、事件主玩家=闪避的目标。
+        EventData::ShaDodged { card, source, target } => VmTriggerCtx {
+            event_player: Some(*target),
+            event_source: Some(*source),
+            event_card: Some(*card),
+            kind: 8,
+            ..VmTriggerCtx::default()
+        },
         EventData::CardUsed(u) => VmTriggerCtx {
             event_player: Some(u.player),
             // 旧线 CardUsed 的 TriggerContext.source = 用牌者；原生此前未填

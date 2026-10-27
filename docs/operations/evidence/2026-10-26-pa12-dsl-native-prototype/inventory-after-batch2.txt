@@ -1,0 +1,106 @@
+=== 事件名（DSL trigger）计数 vs 装载器映射 ===
+  phase_end                759  mapped
+  damage                   486  mapped
+  card_used                425  mapped
+  phase_prepare            227  UNMAPPED→拒装
+  card_targeted            220  mapped
+  damage_before            190  mapped
+  phase_play               137  mapped
+  cards_moved              134  mapped
+  dying                    118  mapped
+  turn_ended               111  mapped
+  game_started              96  UNMAPPED→拒装
+  phase_begin               90  mapped
+  phase_play_end            85  mapped
+  phase_any_end             80  UNMAPPED→拒装
+  phase_draw                67  mapped
+  death                     66  mapped
+  player                    43  UNMAPPED→拒装
+  hp_lost                   42  mapped
+  hp_recovered              39  mapped
+  phase_discard             37  mapped
+  hand_compare_finished     37  UNMAPPED→拒装
+  skill_added               36  UNMAPPED→拒装
+  card_resolved             35  UNMAPPED→拒装
+  card_responded            33  mapped
+  phase_discard_end         29  mapped
+  global                    23  UNMAPPED→拒装
+  phase_judge               21  mapped
+  cards_drawn               18  mapped
+  phase_draw_end            16  mapped
+  sha_resolved              15  UNMAPPED→拒装
+  sha_dodged                15  mapped
+  dying_after               13  mapped
+  judgment_resolved          9  UNMAPPED→拒装
+  round_started              9  UNMAPPED→拒装
+  character_state_changed     8  UNMAPPED→拒装
+  debate_resolved            8  UNMAPPED→拒装
+  max_hp_changed             7  UNMAPPED→拒装
+  duel_resolved              6  UNMAPPED→拒装
+  source                     5  UNMAPPED→拒装
+  target                     5  UNMAPPED→拒装
+  damage_prevented           4  UNMAPPED→拒装
+  debate_started             4  UNMAPPED→拒装
+  cards_given                4  UNMAPPED→拒装
+  recover_before             2  UNMAPPED→拒装
+  equip_slot_disabled        2  UNMAPPED→拒装
+  hand_compare_started       2  UNMAPPED→拒装
+  round_ended                1  UNMAPPED→拒装
+  phase_any_skipped          1  UNMAPPED→拒装
+  phase_draw_skipped         1  UNMAPPED→拒装
+
+=== 滤镜：原生精确/参数化命中 vs 推迟（前 12 推迟名）===
+  native_filter hits: 2403
+  deferred total: 1418 distinct: 707
+    owner_source_sha                                             76
+    owner_alive_not_target                                       65
+    owner_is_target_once                                         60
+    owner_alive_once_per_round                                   38
+    phase                                                        34
+    owner_source                                                 20
+    use                                                          16
+    owner_is_target_source_alive                                 14
+    owner_is_source_or_target                                    13
+    damage                                                       12
+    owner_source_fire_sha                                        10
+    owner_hand_below_lost_hp_after_relevant_change               10
+
+=== 效果：基础变体（原生 accept_effect 已允许）vs 宿主解析族（需逐个移植）===
+  basic=2782  host-resolve=2307  distinct host-resolve names=719
+    basic:DrawCards                                              1759
+    basic:DealDamage                                             225
+    basic:RecoverHp                                              185
+    basic:AddMark                                                165
+    basic:RemoveSkill                                            150
+    basic:AddSkill                                               114
+    basic:ChangeMaxHp                                            100
+    host-resolve:discard_selected                                96
+    host-resolve:discard_hand_equip_count                        91
+    host-resolve:choose_other_damage                             68
+
+=== 文件级「全原生承载」近似：1056/7614 技能（事件已映射∧滤镜命中∧效果全基础∧无主动技）===
+  包	技能数	近似可直接原生
+  shahai	1096	17
+  offline	851	310
+  sp	728	39
+  xianding	534	14
+  mobile	441	55
+  tw	407	5
+  refresh	320	47
+  sp2	290	15
+  yijiang	281	70
+  key	261	17
+  huicui	255	98
+  shenhua	201	37
+  onlyOL	193	3
+  jsrg	181	5
+  sixiang	181	54
+  shiji	180	27
+  collab	156	49
+  diy	147	3
+  sb	124	0
+  yxs	111	91
+  bingshi	105	1
+  newjiang	105	22
+  yingbian	96	10
+  clan	90	27

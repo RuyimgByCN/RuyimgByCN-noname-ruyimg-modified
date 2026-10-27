@@ -308,7 +308,16 @@ pub fn bridge_vm_skill_decls(
                 phase_gate = Some(engine_native::event::Phase::Discard);
                 EventKind::PhaseEnd
             }
-            "phase_begin" => EventKind::PhaseBegin,
+            // 旧线 `phase_begin` = DomainEvent::TurnBegan（回合开始，每回合一次）；
+            // 原生以首个阶段 Judge 的 begin 帧表示回合开始（宿主技能同惯例，
+            // kernel/phase.rs）。登记差异：construction 置 turn_opened=true，
+            // 第一个回合的 Judge begin 帧不发出——首回合不触发（PA12 批②）。
+            "phase_begin" => {
+                phase_gate = Some(engine_native::event::Phase::Judge);
+                EventKind::PhaseBegin
+            }
+            // 杀被目标闪避（原生有独立帧 EventData::ShaDodged{card,source,target}）。
+            "sha_dodged" => EventKind::ShaDodged,
             "damage" => EventKind::Damage,
             "damage_before" => EventKind::DamageBefore,
             "card_used" => EventKind::CardUsed,

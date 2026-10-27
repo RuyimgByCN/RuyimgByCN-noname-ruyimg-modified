@@ -151,3 +151,37 @@ fn pa12_legacy_clanqingli_requery_is_stale_draws_five() {
         .iter()
         .all(|e| format!("{e:?}").starts_with("DrawCards")));
 }
+
+/// PA12 批②差分：五脉（`phase_begin owner_is_target optional` 摸 1）与蹙国
+/// （`sha_dodged owner_is_source` 摸 1）的模块本体在旧线各产出一次 DrawCards——
+/// 与原生整局（`pa12_batch2_phase_events.rs`）落账一致；触发时机（旧线 TurnBegan /
+/// ShaDodged 域事件 vs 原生 Judge begin 帧 / ShaDodged 帧）由两侧各自的事件面保证。
+#[test]
+fn pa12_legacy_batch2_modules_draw_one() {
+    for (id, src) in [
+        ("key-wumai", include_str!("../../../content/original/ported/key/liyingxia_wumai.skill")),
+        ("newjiang-cuguo", include_str!("../../../content/original/ported/newjiang/cuguo.skill")),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let name = pkg.trigger_index[0].module.clone();
+        let module = tx.state().content.module(&name).cloned().expect("模块");
+        let owner = PlayerId::new(1);
+        let out = engine_core::vm_host::run_module(
+            tx.state(),
+            &module,
+            0,
+            [owner.raw(), owner.raw(), owner.raw(), 0],
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), 1, "{id} 单效果");
+        assert!(format!("{:?}", out.effects[0]).starts_with("DrawCards"), "{id} 摸牌");
+    }
+}
