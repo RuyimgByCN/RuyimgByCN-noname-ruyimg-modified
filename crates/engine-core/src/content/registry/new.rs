@@ -85,10 +85,11 @@ impl ContentRegistry {
         &self.packages
     }
 
-    pub(crate) fn validate_snapshot_effect_abi(&self) -> Result<(), String> {
+    pub(crate) fn validate_snapshot_modules(&self) -> Result<(), String> {
         use rule_vm::bytecode::effect_tag;
 
         for (key, module) in &self.modules {
+            content_schema::validate_vm_module_hash(module)?;
             let old = rule_vm::module_uses_effect_tag(module, effect_tag::GAIN_OTHER_SKILL_PILE_CARDS)
                 .map_err(|e| e.to_string())?;
             let new = rule_vm::module_uses_effect_tag(

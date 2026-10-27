@@ -1,0 +1,19 @@
+   Compiling content-runtime v0.1.0 (/private/tmp/noname-nc02-module-red.c3SKME/crates/content-runtime)
+    Finished `test` profile [unoptimized] target(s) in 0.23s
+     Running tests/nc02_vm_module_hash.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc02_vm_module_hash-d5dca26cb6958269)
+
+running 1 test
+
+thread 'signed_invalid_module_is_rejected_without_changing_active_content' (108775638) panicked at crates/content-runtime/tests/nc02_vm_module_hash.rs:33:5:
+unexpected install result: Ok(InstallResult { meta: InstalledMeta { namespace: "official", package_id: "vm-fixture", version: "0.1.1", logic_hash: "fe1bc261fc649bd6a904285df13fb26b2287d2d809c324a8422198e1ca983621", content_hash: "18fdd2af67e36d4905a198fd641126ef8df0d3425091a7b65173d65a11dde32f", signed: true, key_id: Some("test"), extension_root: None }, store_path: "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/.tmpX9CupL/packages/official__vm-fixture/0.1.1/package.json", content_lock: Some(ContentLock { packages: [LockedPackage { namespace: "official", package_id: "vm-fixture", version: "0.1.1", logic_hash: "fe1bc261fc649bd6a904285df13fb26b2287d2d809c324a8422198e1ca983621", content_hash: "18fdd2af67e36d4905a198fd641126ef8df0d3425091a7b65173d65a11dde32f" }], lock_hash: "d795b6a956ea5fdca617633e6de5d77847e66a896fa34d8b6580abe7b2360553" }) })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test signed_invalid_module_is_rejected_without_changing_active_content ... FAILED
+
+failures:
+
+failures:
+    signed_invalid_module_is_rejected_without_changing_active_content
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p content-runtime --test nc02_vm_module_hash`

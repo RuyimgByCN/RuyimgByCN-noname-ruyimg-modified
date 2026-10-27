@@ -745,6 +745,21 @@ pub struct ContentPackage {
     pub compiler_version: String,
 }
 
+/// Verify the existing fingerprint of a VM module against its semantic fields.
+pub fn validate_vm_module_hash(module: &BytecodeModule) -> Result<(), String> {
+    let expected = BytecodeModule::compute_logic_hash(
+        &module.name,
+        &module.code,
+        module.local_count,
+        module.caps_mask,
+        module.entry_pc,
+    );
+    if module.logic_hash != expected {
+        return Err(format!("module {}: logic_hash mismatch", module.name));
+    }
+    Ok(())
+}
+
 impl ContentPackage {
     /// Reject packages whose effect tags cannot be interpreted under their declared ABI.
     pub fn validate_vm_effect_abi(&self) -> Result<(), String> {
@@ -807,6 +822,7 @@ impl ContentPackage {
         if self.manifest.asset_hash != self.compute_asset_hash() {
             return Err("asset_hash mismatch".into());
         }
+        self.modules.iter().try_for_each(validate_vm_module_hash)?;
 
         let mut dependency_slots = std::collections::BTreeSet::new();
         for dependency in &self.manifest.dependencies {

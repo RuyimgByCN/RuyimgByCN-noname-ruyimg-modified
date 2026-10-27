@@ -284,7 +284,13 @@ mod tests {
             asset_paths: Default::default(),
             compiler_version: "t".into(),
         };
-        pkg.modules[0].logic_hash = *blake3::hash(&pkg.modules[0].code).as_bytes();
+        pkg.modules[0].logic_hash = BytecodeModule::compute_logic_hash(
+            &pkg.modules[0].name,
+            &pkg.modules[0].code,
+            pkg.modules[0].local_count,
+            pkg.modules[0].caps_mask,
+            pkg.modules[0].entry_pc,
+        );
         pkg.manifest.logic_hash = pkg.compute_logic_hash();
         pkg.to_json_bytes().unwrap()
     }

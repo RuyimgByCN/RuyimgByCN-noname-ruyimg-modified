@@ -578,6 +578,19 @@ try {
   check("worker_vm_changed_trigger_restore_refused_without_mutation", badVmRestore.ok === false &&
     /logic_hash mismatch/.test(badVmRestore.error ?? "") && beforeBadRestore.data?.hex === afterBadRestore.data?.hex,
     badVmRestore.error ?? "");
+  const badModule = structuredClone(vmPackage);
+  badModule.modules[0].local_count += 1;
+  const badModulePacks = JSON.stringify([badModule]);
+  const badModuleReplies = [
+    await workerSend({ id: 964, type: "start", players: 4, seed: 42, observer: 0, packsJson: badModulePacks }),
+    await workerSend({ id: 965, type: "start", mode: "identity", players: 4, seed: 42, observer: 0, packsJson: badModulePacks }),
+    await workerSend({ id: 966, type: "restore", hex: beforeBadRestore.data?.hex, packsJson: badModulePacks }),
+  ];
+  const afterBadModule = await workerSend({ id: 967, type: "save" });
+  check("worker_vm_changed_module_hash_refused_without_mutation",
+    badModuleReplies.every((reply) => reply.ok === false && /module .*logic_hash mismatch/.test(reply.error ?? "")) &&
+      afterBadModule.ok === true && afterBadModule.data?.hex === beforeBadRestore.data?.hex,
+    JSON.stringify(badModuleReplies.map((reply) => reply.error)));
   const vmPick = await workerSend({ id: 952, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
   let vmEnv = vmPick.data?.envelope;
   const vmSkill = vmPackage.trigger_index[0].module;

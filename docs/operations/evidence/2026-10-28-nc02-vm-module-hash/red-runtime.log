@@ -1,0 +1,24 @@
+   Compiling libc v0.2.186
+   Compiling errno v0.3.14
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling tempfile v3.27.0
+   Compiling content-runtime v0.1.0 (/private/tmp/noname-nc02-module-red.c3SKME/crates/content-runtime)
+    Finished `test` profile [unoptimized] target(s) in 1.29s
+     Running tests/nc02_vm_module_hash.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc02_vm_module_hash-d5dca26cb6958269)
+
+running 1 test
+
+thread 'signed_invalid_module_is_rejected_without_changing_active_content' (108774548) panicked at crates/content-runtime/tests/nc02_vm_module_hash.rs:20:51:
+called `Result::unwrap()` on an `Err` value: Invalid("package declares assets but no asset source root was provided")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test signed_invalid_module_is_rejected_without_changing_active_content ... FAILED
+
+failures:
+
+failures:
+    signed_invalid_module_is_rejected_without_changing_active_content
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p content-runtime --test nc02_vm_module_hash`

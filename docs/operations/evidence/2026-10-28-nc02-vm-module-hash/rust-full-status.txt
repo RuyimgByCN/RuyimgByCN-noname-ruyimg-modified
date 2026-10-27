@@ -1,0 +1,9 @@
+engine-native exit 0
+engine-native-wasm exit 0
+content-native-loader exit 0
+content-runtime exit 0
+engine-core exit 0
+game-server exit 0
+content-compiler exit 0
+content-schema exit 0
+engine-ai exit 0

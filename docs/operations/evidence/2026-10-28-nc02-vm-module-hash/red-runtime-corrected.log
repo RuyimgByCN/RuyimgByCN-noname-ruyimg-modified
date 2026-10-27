@@ -1,0 +1,20 @@
+   Compiling content-runtime v0.1.0 (/private/tmp/noname-nc02-module-red.c3SKME/crates/content-runtime)
+    Finished `test` profile [unoptimized] target(s) in 0.25s
+     Running tests/nc02_vm_module_hash.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc02_vm_module_hash-d5dca26cb6958269)
+
+running 1 test
+
+thread 'signed_invalid_module_is_rejected_without_changing_active_content' (108775361) panicked at crates/content-runtime/tests/nc02_vm_module_hash.rs:33:5:
+assertion failed: matches!(result, Err(RuntimeError::Package(ref error)) if
+    error.contains("logic_hash mismatch"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test signed_invalid_module_is_rejected_without_changing_active_content ... FAILED
+
+failures:
+
+failures:
+    signed_invalid_module_is_rejected_without_changing_active_content
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p content-runtime --test nc02_vm_module_hash`

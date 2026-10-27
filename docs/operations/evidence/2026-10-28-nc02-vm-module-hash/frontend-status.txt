@@ -1,0 +1,2 @@
+frontend test exit 0
+frontend typecheck exit 0

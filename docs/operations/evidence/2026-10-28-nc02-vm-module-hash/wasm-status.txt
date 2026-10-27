@@ -1,0 +1,2 @@
+wasm build exit 0
+worker smoke exit 0

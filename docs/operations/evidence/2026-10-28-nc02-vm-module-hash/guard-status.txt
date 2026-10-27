@@ -1,0 +1,8 @@
+source unit exit 0
+source lines exit 0
+ADR exit 0
+rustfmt new tests exit 0
+local links exit 0
+final local links exit 0
+post-header local links exit 0
+final documentation links exit 0

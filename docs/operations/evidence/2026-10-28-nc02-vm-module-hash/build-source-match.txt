@@ -1,0 +1,11 @@
+MATCH crates/content-native-loader/src/lib.rs
+MATCH crates/content-runtime/src/channel.rs
+MATCH crates/content-runtime/tests/atomic_install.rs
+MATCH crates/content-schema/src/package.rs
+MATCH crates/engine-core/src/content/registry/load_package_inner.rs
+MATCH crates/engine-core/src/content/registry/new.rs
+MATCH crates/engine-core/src/snapshot.rs
+MATCH crates/content-runtime/tests/nc02_vm_module_hash.rs
+MATCH crates/engine-core/tests/nc02_vm_module_hash.rs
+MATCH crates/engine-native-wasm/tests/vm_module_hash.rs
+MATCH apps/web-client/scripts/native-worker-smoke.mjs

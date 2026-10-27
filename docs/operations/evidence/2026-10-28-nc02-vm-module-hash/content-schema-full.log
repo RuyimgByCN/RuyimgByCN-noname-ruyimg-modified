@@ -1,0 +1,14 @@
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+    Finished `test` profile [unoptimized] target(s) in 5.87s
+     Running unittests src/lib.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/content_schema-790a10272aee50cd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests content_schema
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

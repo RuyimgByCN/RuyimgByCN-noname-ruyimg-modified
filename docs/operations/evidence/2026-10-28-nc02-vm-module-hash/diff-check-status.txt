@@ -1,0 +1,2 @@
+all staged whitespace check exit 2
+source and docs whitespace check exit 0

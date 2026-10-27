@@ -14,6 +14,10 @@ impl ContentRegistry {
                 pkg.manifest.namespace, pkg.manifest.package_id, pkg.manifest.version
             )));
         }
+        pkg.modules
+            .iter()
+            .try_for_each(content_schema::validate_vm_module_hash)
+            .map_err(ContentLoadError::Invalid)?;
         if self
             .packages
             .iter()

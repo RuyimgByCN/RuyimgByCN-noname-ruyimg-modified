@@ -260,6 +260,13 @@ pub fn bridge_vm_skill_decls(
         field: "manifest.rule_vm_abi_version",
         reason,
     })?;
+    pkg.modules
+        .iter()
+        .try_for_each(content_schema::validate_vm_module_hash)
+        .map_err(|reason| BridgeError::InvalidField {
+            field: "modules[].logic_hash",
+            reason,
+        })?;
     content_runtime::check_engine_compat(&pkg.manifest, &content_runtime::tooling_host_versions())
         .map_err(|error| BridgeError::InvalidField {
             field: "manifest.rule_vm_abi_version",
