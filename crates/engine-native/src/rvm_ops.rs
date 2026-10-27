@@ -100,6 +100,9 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         EffectRequest::SkipCurrentPhase { player } => {
             ok_player(*player, "SkipCurrentPhase")?;
         }
+        // PA12 批⑤-3：DSL `storage_set(self_skill, key, value)`——技能实例
+        // 私有存储（上游 player.storage.<skill>[key]）。
+        EffectRequest::StorageSet { .. } => {}
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
         // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
         // 拒绝。
@@ -496,6 +499,21 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             };
             let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
             discard_some(ctx, p, cards);
+        }
+        // PA12 批⑤-3：StorageSet——键 "{executing}#{key}" 落 vm_aux.storage
+        //（VM 桥无实例 id，按执行中技能名；清零=技能自带 phase_play 触发段
+        // 发 StorageSet(key,0)，旧线 DSL 同款，无需额外内核钩）。
+        EffectRequest::StorageSet {
+            skill: _,
+            key,
+            value,
+        } => {
+            let k = format!("{executing}#{key}");
+            if value == 0 {
+                ctx.core.vm_aux.storage.remove(&k);
+            } else {
+                ctx.core.vm_aux.storage.insert(k, value);
+            }
         }
         // PA12 批⑤（D 道原生化首步）：DSL `skip_current_phase(self)`——按
         // 当前阶段置既有跳过旗标（摸牌=turn.skip_draw_phase、出牌=

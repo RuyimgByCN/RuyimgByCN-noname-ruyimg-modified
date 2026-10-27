@@ -107,6 +107,11 @@ pub(super) fn enc_vm_aux(w: &mut W, a: &crate::state::VmAux) {
         w.u8(*p);
         w.u32(*n);
     }
+    w.len(a.storage.len());
+    for (key, value) in &a.storage {
+        w.str(key);
+        w.u32(*value);
+    }
 }
 
 pub(super) fn dec_string(r: &mut R<'_>) -> Result<String, ArchiveError> {
@@ -170,6 +175,12 @@ pub(super) fn dec_vm_aux(r: &mut R<'_>) -> Result<crate::state::VmAux, ArchiveEr
         let n = r.u32()?;
         drawn.insert(p, n);
     }
+    let mut storage = std::collections::BTreeMap::new();
+    for _ in 0..r.len()? {
+        let key = dec_string(r)?;
+        let value = r.u32()?;
+        storage.insert(key, value);
+    }
     Ok(crate::state::VmAux {
         marks,
         piles,
@@ -178,5 +189,6 @@ pub(super) fn dec_vm_aux(r: &mut R<'_>) -> Result<crate::state::VmAux, ArchiveEr
         flags,
         hits,
         drawn,
+        storage,
     })
 }

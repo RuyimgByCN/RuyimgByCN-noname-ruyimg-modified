@@ -31,7 +31,7 @@
 2. **阶段/事件帧补齐**（B + C 中原生已有事件）：`game_started`、`phase_prepare`（含原生准备帧决定）、`phase_begin` 核对、`hand_compare_finished`、`skill_added`、`max_hp_changed`。每个事件：一条含真实 ported 技能的原生整局测试 + 旧线差分。
 3. **滤镜 Top-20**（D）：按频次实现，每个一条桥测；并把 `once`/`once_per_round` 落到原生限次机制。
 4. **宿主解析原语 by 包**（E；④-1/②/③ 三原语族已接入）：下一优先 N=0 选牌首发链（VM 交互选牌，discard 族与 ChooseDiscardEquipmentPreventCurrentDamage 同链）、choose_other_damage（48）/choose_use_virtual_sha（33）选择挂起族；仍按包整包推进时改选 sp/mobile（技能级重盘：sp 142/mobile 106 个 ef 阻塞）（盘点：yxs 91/111、huicui 69/255、sixiang 45/181、yijiang 55/281、clan 25/90），每包按「整包八项验收」（37 来源台账 G0–G5）记录。
-5. **N01/R01/R03 原生化**（PA12③；首步已完成 2026-10-27：N01 tag 清单 + SkipCurrentPhase 接线 + §2 K 时序缺陷发现，[证据](../operations/evidence/2026-10-27-pa12-batch5-n01-first-step/README.md)）：下一子批=修 §2 K 前置窗调度→fenli 整局断言回填→jie_danshou（STORAGE_SET+771）/pingkou（656 选择链）→R01/R03→升 `RULE_VM_ABI_VERSION` 整包重装。注：按模块过滤装载可绕过整包 ABI 门（fenli 三模块实测）。
+5. **N01/R01/R03 原生化**（PA12③；进度：⑤首步 tag 清单+skip 接线、⑤-2 §2 K 前置窗修复+fenli 整局、⑤-3 STORAGE_SET 写路径+jie_danshou 依赖面确认——[首步](../operations/evidence/2026-10-27-pa12-batch5-n01-first-step/README.md)/[⑤-2](../operations/evidence/2026-10-27-pa12-batch5-2-phasebegin-window/README.md)/[⑤-3](../operations/evidence/2026-10-27-pa12-batch5-3-storage-set/README.md)）：jie_danshou 主体与 pingkou 同依赖「批⑥ 主动技桥 + §2 J 选择窗挂起」——建议合并为单批并先立 ADR（VM 桥两层提交协议扩展）；之后 R01/R03（宿主原语路线不受阻）→升 `RULE_VM_ABI_VERSION` 整包重装。注：按模块过滤装载可绕过整包 ABI 门（fenli 实测）。
 6. **主动技桥**（G）：另立 ADR（影响 PlayCard 候选与 UI 选择协议）。
 
 ## 4 每技能验收口径（原型已示范，作为模板）

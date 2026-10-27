@@ -303,3 +303,55 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
     assert!(!e.state_core().turn.skip_draw_phase, "skip 旗标被 begin_draw 消费");
     assert_eq!(hand_len(&e, 1), e2e_hand_at_confirm.get(), "摸牌被跳过：手牌与确认时一致");
 }
+
+/// 批⑤-3：StorageSet 写路径——界朱然·丹守的 phase_play 触发段（真实 onlyOL
+/// npack：`storage_set(self_skill, 1..4, 0)`）出牌阶段开始时清零四键。
+/// vm_aux.storage 键 "{技能名}#{key}"；value=0 删除。jie_danshou 主动技段
+/// （RESOLVE_OL_JIE_DANSHOU 771）依赖 §2 J 效果级选择窗挂起+批⑥ 主动技桥，
+/// 登记批⑤后续（见证据 §3）。
+#[test]
+fn pa12_batch5_3_storage_set_clears_on_phase_play() {
+    let pkg_json = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../content/original/ported/onlyOL/onlyOL.npack.json"),
+    )
+    .expect("读 onlyOL npack");
+    let mut pkg: content_schema::ContentPackage = serde_json::from_str(&pkg_json).expect("解析");
+    pkg.trigger_index
+        .retain(|t| t.module.contains("ol_jie_danshou_phase_play"));
+    assert_eq!(pkg.trigger_index.len(), 1);
+    let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
+    let pack = ExtensionPack {
+        def: ExtensionDef { name: "onlyol-danshou", version: 1, description: "批⑤-3 storage_set" },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: out.decls,
+        init_hook: InitHook::None,
+        enabled: true,
+    };
+    let name = pack.vm_skills[0].name.clone();
+    let mut e = Engine::new_with_extensions(999_001, 4, &[&pack]).expect("建局");
+    e.debug_grant(1, &name);
+    // 预置脏 storage（模拟上一回合残值）——直接写 vm_aux 同键
+    let key = format!("{name}#2");
+    e.state_core_mut().vm_aux.storage.insert(key.clone(), 1);
+    // 推进到 1 号出牌阶段开始（PhaseBegin 前置窗执行触发段→清零四键）
+    for _ in 0..300 {
+        if e.outcome().is_some() { break; }
+        if e.turn().current == 1 && e.turn().phase == Phase::Play { break; }
+        if let Some(c) = e.open_choice().cloned() {
+            let sel: Vec<ChoiceOption> = c.spec.options.iter().filter(|o| matches!(o, ChoiceOption::Card(_))).copied().take(c.spec.min.max(1)).collect();
+            let sel = if sel.is_empty() { vec![c.spec.options[0].clone()] } else { sel };
+            submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+            continue;
+        }
+        let cur = e.turn().current;
+        submit(&mut e, cur, GameAction::NextPhase);
+    }
+    assert!(e.turn().current == 1 && e.turn().phase == Phase::Play, "到达 1 号出牌阶段");
+    assert!(
+        !e.state_core().vm_aux.storage.contains_key(&key),
+        "phase_play 触发段 storage_set(key,0) 清零残值"
+    );
+}

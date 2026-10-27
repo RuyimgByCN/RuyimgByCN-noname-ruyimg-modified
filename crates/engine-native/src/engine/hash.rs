@@ -79,6 +79,11 @@ pub(super) fn push_vm_aux(h: &mut HashSink, a: &crate::state::VmAux) {
         push_u8(h, *p);
         push_u32(h, *n);
     }
+    push_u32(h, a.storage.len() as u32);
+    for (key, value) in &a.storage {
+        push_static_owned(h, key);
+        push_u32(h, *value);
+    }
 }
 
 pub(super) fn push_static_owned(h: &mut HashSink, s: &str) {

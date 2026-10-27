@@ -1,0 +1,40 @@
+== engine-native start 2026-10-27 16:42:38 +0800
+== engine-native exit=101 end 2026-10-27 16:44:36 +0800
+engine-native: passed=1483 failed=100 ignored=71
+test machine_snapshot_tags_unique_and_roundtrip ... FAILED
+test auth_tokens_do_not_survive_archive ... FAILED
+test session_layer_reconnect_out_of_order_and_dedup ... FAILED
+test snapshot_archive_roundtrip_rest_and_window ... FAILED
+test archive::archive_hardening_rejects_unknown_kind_and_trailing_bytes ... FAILED
+test archive::archive_choice_kind_tian_du_gain_roundtrip ... FAILED
+test archive::archive_choice_kind_duel_sha_roundtrip ... FAILED
+test archive::archive_rejects_unknown_prompt_and_v1_bytes ... FAILED
+== content-native-loader start 2026-10-27 16:44:36 +0800
+== content-native-loader exit=0 end 2026-10-27 16:44:42 +0800
+content-native-loader: passed=32 failed=0 ignored=0
+== engine-native-wasm start 2026-10-27 16:44:42 +0800
+== engine-native-wasm exit=101 end 2026-10-27 16:44:51 +0800
+engine-native-wasm: passed=44 failed=8 ignored=0
+test pack_roundtrip::huanle_pack_json_enters_wasm_helper ... FAILED
+test pack_roundtrip::wuxing_pack_json_enters_wasm_helper ... FAILED
+test pack_roundtrip::installed_pack_enters_new_match_and_restore ... FAILED
+test restore_starts_with_empty_log_and_keeps_state_hash ... FAILED
+test identity_preserves_roles_lord_bonus_and_extension_init_hooks ... FAILED
+test installed_assets_enter_catalog_select_and_same_lock_restore ... FAILED
+test nc08_wasm_restore_matches_native_restore ... FAILED
+test valid_archive_roundtrip_still_works_after_rejections ... FAILED
+== game-server start 2026-10-27 16:44:51 +0800
+== game-server exit=101 end 2026-10-27 16:46:27 +0800
+game-server: passed=330 failed=29 ignored=0
+test lobby::tests::finished_saved_room_is_not_published_and_its_id_remains_reserved ... FAILED
+test native_ws_e2e::commit_crash::native_ws_commit_crash_child ... FAILED
+test native_ws_e2e::commit_crash::native_extensions_ws_process_exit_after_double_failure_replays_committed_receipt ... FAILED
+test native_ws_e2e::double_failure::native_extensions_ws_double_failure_fences_writes_and_recovers_by_decision ... FAILED
+test native_ws_e2e::durability::native_extensions_ws_restart_after_uncertain_rename_restores_only_confirmed_choice ... FAILED
+test native_ws_e2e::durability::native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps ... FAILED
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... FAILED
+test native_ws_e2e::native_extensions_ws_reconnects_after_disk_restart ... FAILED
+== engine-core start 2026-10-27 16:46:27 +0800
+== engine-core exit=0 end 2026-10-27 16:47:21 +0800
+engine-core: passed=3841 failed=0 ignored=1
+ALL DONE

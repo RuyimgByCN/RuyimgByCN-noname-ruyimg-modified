@@ -826,6 +826,10 @@ pub struct VmAux {
     pub flags: BTreeMap<(u8, String), u32>,
     /// 本回合各技能已触发的伤害次数（first/second damage）。
     pub hits: BTreeMap<(u8, String), u32>,
+    /// 技能私有存储（PA12 批⑤-3）：键 "技能名#storage_key"（VM 桥无实例
+    /// id，按执行中技能名；上游 player.storage.<skill>[key] 同语义——
+    /// phase_play 触发段发 StorageSet(key,0) 清零）。
+    pub storage: BTreeMap<String, u32>,
     /// 本回合摸入的张数。
     pub drawn: BTreeMap<u8, u32>,
 }
@@ -839,6 +843,7 @@ impl VmAux {
             && self.flags.is_empty()
             && self.hits.is_empty()
             && self.drawn.is_empty()
+            && self.storage.is_empty()
     }
 
     /// 换回合：丢掉回合范围的 once、丢失史、命中与摸牌计数。
