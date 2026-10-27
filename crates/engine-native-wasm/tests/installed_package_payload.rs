@@ -234,3 +234,119 @@ fn invalid_installed_identity_fields_are_rejected_before_start_and_restore() {
         "accepted invalid identities: {accepted:?}"
     );
 }
+
+#[test]
+fn installed_dependency_lock_is_checked_on_start_and_restore() {
+    let base = installed("huanle-upstream-noname", "cards", "assets/cards.json");
+    let mut dependent = installed("d3-upstream-noname", "characters", "assets/character.json");
+    let required = json!({
+        "namespace": base["manifest"]["namespace"],
+        "package_id": base["manifest"]["package_id"],
+        "version": base["manifest"]["version"],
+        "logic_hash": base["manifest"]["logic_hash"]
+    });
+    dependent["manifest"]["dependencies"] = json!([required]);
+    let good = json!([dependent.clone(), base.clone()]).to_string();
+    let valid = engine_from_packs(4, 42, &good).unwrap();
+    let saved = hex_encode(&engine_native::archive::encode_archive(&valid.save()));
+    assert_eq!(
+        engine_from_archive(&saved, &good).unwrap().state_hash(),
+        valid.state_hash()
+    );
+    assert!(engine_identity_from_packs(4, 42, &good).is_ok());
+    for hash in [Value::Null, json!(vec![0; 32])] {
+        let mut wildcard = dependent.clone();
+        if hash.is_null() {
+            wildcard["manifest"]["dependencies"][0]
+                .as_object_mut()
+                .unwrap()
+                .remove("logic_hash");
+        } else {
+            wildcard["manifest"]["dependencies"][0]["logic_hash"] = hash;
+        }
+        assert!(engine_from_packs(4, 42, &json!([wildcard, base]).to_string()).is_ok());
+    }
+
+    let mut cycle_base = base.clone();
+    cycle_base["manifest"]["dependencies"] = json!([{
+        "namespace": dependent["manifest"]["namespace"],
+        "package_id": dependent["manifest"]["package_id"],
+        "version": dependent["manifest"]["version"]
+    }]);
+    assert!(engine_from_packs(4, 42, &json!([dependent.clone(), cycle_base]).to_string()).is_ok());
+
+    let mut cases = Vec::new();
+    cases.push(("missing", json!([dependent.clone()])));
+    for (label, field, value) in [
+        ("namespace", "namespace", json!("different")),
+        ("version", "version", json!("wrong")),
+        ("hash", "logic_hash", json!(vec![17; 32])),
+        ("bad hash", "logic_hash", json!([1, 2])),
+        ("bad id", "package_id", json!("../bad")),
+    ] {
+        let mut bad = dependent.clone();
+        bad["manifest"]["dependencies"][0][field] = value;
+        cases.push((label, json!([bad, base.clone()])));
+    }
+    let mut duplicate = dependent.clone();
+    duplicate["manifest"]["dependencies"] = json!([required, required]);
+    cases.push(("duplicate", json!([duplicate, base.clone()])));
+    let mut self_dep = dependent.clone();
+    self_dep["manifest"]["dependencies"][0]["namespace"] =
+        dependent["manifest"]["namespace"].clone();
+    self_dep["manifest"]["dependencies"][0]["package_id"] =
+        dependent["manifest"]["package_id"].clone();
+    cases.push(("self", json!([self_dep, base.clone()])));
+    let mut invalid = dependent.clone();
+    invalid["manifest"]["dependencies"] = Value::Null;
+    cases.push(("not an array", json!([invalid, base])));
+
+    let mut accepted = Vec::new();
+    let mut old_saves = Vec::new();
+    for (label, values) in cases {
+        let packs = values.to_string();
+        for (entry, result) in [
+            ("start", engine_from_packs(4, 42, &packs)),
+            ("identity", engine_identity_from_packs(4, 42, &packs)),
+        ] {
+            match result {
+                Ok(engine) => {
+                    accepted.push(format!("{label}/{entry}"));
+                    let old_save =
+                        hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+                    if entry == "start" {
+                        old_saves.push(json!({"case": label, "packs": packs, "hex": old_save}));
+                    }
+                    if engine_from_archive(&old_save, &packs).is_ok() {
+                        accepted.push(format!("{label}/{entry}/old-save-restore"));
+                    }
+                }
+                Err(error) => assert!(error.contains("依赖"), "{label}: {error}"),
+            }
+        }
+        let error = engine_from_archive(&saved, &packs).err().unwrap();
+        if !error.contains("依赖") {
+            accepted.push(format!("{label}/restore-not-validated: {error}"));
+        }
+    }
+    if let Some(path) = std::env::var_os("NC02_DEPENDENCY_OLD_SAVES_OUTPUT") {
+        std::fs::write(path, serde_json::to_vec_pretty(&old_saves).unwrap()).unwrap();
+    }
+    if let Some(path) = std::env::var_os("NC02_DEPENDENCY_OLD_SAVES_INPUT") {
+        let saves: Vec<Value> = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        assert_eq!(saves.len(), 9);
+        for save in saves {
+            let error = engine_from_archive(
+                save["hex"].as_str().unwrap(),
+                save["packs"].as_str().unwrap(),
+            )
+            .err()
+            .unwrap();
+            assert!(error.contains("依赖"), "{}: {error}", save["case"]);
+        }
+    }
+    assert!(
+        accepted.is_empty(),
+        "invalid dependency locks accepted: {accepted:?}"
+    );
+}

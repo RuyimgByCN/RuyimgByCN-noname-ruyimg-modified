@@ -38,6 +38,7 @@ export interface NativePackagePayload {
     package_id: string;
     version: string;
     logic_hash: number[];
+    dependencies?: Array<{ namespace: string; package_id: string; version: string; logic_hash?: number[] }>;
   };
   cards?: unknown;
   characters?: unknown;
@@ -62,15 +63,38 @@ const bundled: Record<string, { package: { modules: unknown[] }; payload: unknow
   "wuxing-upstream-liuli": { package: package14, payload: { manifest: package14.manifest, cards: data14_cards } },
 };
 
+function validIdentity(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0
+    && value !== "." && value !== ".." && !value.includes("/") && !value.includes("\\");
+}
+
+function validHash(value: unknown): value is number[] {
+  return Array.isArray(value) && value.length === 32
+    && value.every((n) => Number.isInteger(n) && n >= 0 && n <= 255);
+}
+
 export function validateNativePackage(value: unknown): NativePackagePayload {
   const payload = value as NativePackagePayload | null;
   const manifest = payload?.manifest;
-  if (!manifest || ![manifest.namespace, manifest.package_id, manifest.version]
-    .every((value) => typeof value === "string" && value.trim().length > 0
-      && value !== "." && value !== ".." && !value.includes("/") && !value.includes("\\"))
-    || !Array.isArray(manifest.logic_hash) || manifest.logic_hash.length !== 32
-    || !manifest.logic_hash.every((n) => Number.isInteger(n) && n >= 0 && n <= 255)) {
+  if (!manifest || ![manifest.namespace, manifest.package_id, manifest.version].every(validIdentity)
+    || !validHash(manifest.logic_hash)) {
     throw new Error("扩展包身份或逻辑指纹无效");
+  }
+  if (manifest.dependencies !== undefined) {
+    if (!Array.isArray(manifest.dependencies)) throw new Error("扩展包依赖格式无效");
+    const seen = new Set<string>();
+    for (const dependency of manifest.dependencies) {
+      if (!dependency || typeof dependency !== "object" || Array.isArray(dependency)
+        || ![dependency.namespace, dependency.package_id, dependency.version].every(validIdentity)
+        || (dependency.logic_hash !== undefined && !validHash(dependency.logic_hash))) {
+        throw new Error("扩展包依赖格式无效");
+      }
+      const key = `${dependency.namespace}/${dependency.package_id}`;
+      if (seen.has(key) || key === `${manifest.namespace}/${manifest.package_id}`) {
+        throw new Error(`扩展包依赖重复或指向自身: ${key}`);
+      }
+      seen.add(key);
+    }
   }
   const assets = [payload?.cards, payload?.characters, payload?.pile].filter((v) => v !== undefined);
   if (!assets.length || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))) {

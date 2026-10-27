@@ -490,6 +490,41 @@ try {
       JSON.stringify(restoredInstalled.data?.view) === JSON.stringify(selectedInstalled.data?.envelope?.view),
     restoredInstalled.error ?? "",
   );
+  const dependencyPacks = structuredClone(installedPacks.slice(0, 2));
+  const baseManifest = dependencyPacks[0].manifest;
+  dependencyPacks[1].manifest.dependencies = [{ namespace: baseManifest.namespace,
+    package_id: baseManifest.package_id, version: baseManifest.version, logic_hash: [...baseManifest.logic_hash] }];
+  const dependencyJson = JSON.stringify(dependencyPacks);
+  const dependencyStart = await workerSend({ id: 933, type: "start", players: 4, seed: 17017, observer: 0, packsJson: dependencyJson });
+  const dependencySave = await workerSend({ id: 934, type: "save" });
+  const dependencyRestore = await workerSend({ id: 935, type: "restore", hex: dependencySave.data?.hex, packsJson: dependencyJson });
+  const restoredDependencySave = await workerSend({ id: 946, type: "save" });
+  check("worker_dependency_valid_start_and_restore", dependencyStart.ok === true && dependencySave.ok === true && dependencyRestore.ok === true && restoredDependencySave.ok === true);
+  const badDependencies = [];
+  badDependencies.push([dependencyPacks[1]]);
+  const wrongDependencyVersion = structuredClone(dependencyPacks);
+  wrongDependencyVersion[1].manifest.dependencies[0].version = "wrong";
+  badDependencies.push(wrongDependencyVersion);
+  const wrongDependencyHash = structuredClone(dependencyPacks);
+  wrongDependencyHash[1].manifest.dependencies[0].logic_hash[0] ^= 1;
+  badDependencies.push(wrongDependencyHash);
+  const dependencyErrors = [];
+  for (const [index, bad] of badDependencies.entries()) {
+    const packsJson = JSON.stringify(bad);
+    for (const request of [
+      { type: "start", players: 4, seed: 17017, observer: 0 },
+      { type: "start", mode: "identity", players: 4, seed: 17017, observer: 0 },
+      { type: "restore", hex: dependencySave.data?.hex },
+    ]) dependencyErrors.push(await workerSend({ id: 936 + index * 3 + dependencyErrors.length % 3, ...request, packsJson }));
+  }
+  const afterDependency = await workerSend({ id: 945, type: "save" });
+  check("worker_dependency_refused_without_changing_match",
+    dependencyErrors.every((reply) => reply.ok === false && /依赖/.test(reply.error ?? "")) &&
+      afterDependency.ok === true && afterDependency.data?.hex === restoredDependencySave.data?.hex,
+    JSON.stringify({ errors: dependencyErrors.map((reply) => reply.error),
+      immediateRestorePreservesBytes: restoredDependencySave.data?.hex === dependencySave.data?.hex,
+      rejectedCommandsPreserveBytes: afterDependency.data?.hex === restoredDependencySave.data?.hex }));
+
   const identityJson = JSON.stringify([
     ...installedPacks, installed("wuxing-upstream-liuli", "cards", "cards.json"),
   ]);

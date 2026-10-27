@@ -197,3 +197,71 @@ test("unsafe identity fields cannot enter the browser content lock", () => {
   }
   assert.deepEqual(accepted, []);
 });
+
+test("package dependencies are checked for match start and frozen save restore", () => {
+  const baseKey = key;
+  const dependentKey = extensionKey(EXTENSION_CATALOG.find((entry) => entry.dir === "d3-upstream-noname"));
+  for (const name of [baseKey, dependentKey]) { installExtension(name); activateExtension(name); }
+  const original = readExtensionStore();
+  const baseRecord = original.installed.find((record) => record.key === baseKey);
+  const depRecord = original.installed.find((record) => record.key === dependentKey);
+  const base = JSON.parse(baseRecord.nativeVersions[baseRecord.version]);
+  const dependent = JSON.parse(depRecord.nativeVersions[depRecord.version]);
+  const required = { namespace: base.manifest.namespace, package_id: base.manifest.package_id,
+    version: base.manifest.version, logic_hash: base.manifest.logic_hash };
+  dependent.manifest.dependencies = [required];
+
+  const storeFor = (packs) => ({
+    installed: packs.map((pack) => {
+      const m = pack.manifest;
+      return { key: `${m.namespace}/${m.package_id}`, version: m.version, lifecycle: "active",
+        logicFingerprint: m.logic_hash.slice(0, 4).map((n) => n.toString(16).padStart(2, "0")).join(""),
+        nativeVersions: { [m.version]: JSON.stringify(pack) } };
+    }),
+    contentLock: packs.map((pack) => `${pack.manifest.namespace}/${pack.manifest.package_id}`),
+    matchFrozen: false,
+  });
+  const saveFor = (packs) => ({
+    packsJson: JSON.stringify(packs),
+    contentLock: packs.map((p) => `${p.manifest.namespace}/${p.manifest.package_id}`),
+    lockSeed: packs.map((p) => `${p.manifest.namespace}/${p.manifest.package_id}@${p.manifest.version}:${p.manifest.logic_hash.map((n) => n.toString(16).padStart(2, "0")).join("")}`).join("|"),
+  });
+  const valid = [dependent, base];
+  assert.deepEqual(prepareNativeMatchContent(storeFor(valid)), saveFor(valid));
+  assert.deepEqual(restoreNativeMatchContent(saveFor(valid), { installed: [], contentLock: [], matchFrozen: false }), saveFor(valid));
+  for (const hash of [undefined, Array(32).fill(0)]) {
+    const wild = structuredClone(dependent);
+    if (hash === undefined) delete wild.manifest.dependencies[0].logic_hash;
+    else wild.manifest.dependencies[0].logic_hash = hash;
+    assert.deepEqual(prepareNativeMatchContent(storeFor([wild, base])), saveFor([wild, base]));
+  }
+  const cycleBase = structuredClone(base);
+  cycleBase.manifest.dependencies = [{ namespace: dependent.manifest.namespace,
+    package_id: dependent.manifest.package_id, version: dependent.manifest.version }];
+  assert.deepEqual(prepareNativeMatchContent(storeFor([dependent, cycleBase])), saveFor([dependent, cycleBase]));
+  const cases = [["missing", [dependent]]];
+  for (const [label, field, value] of [
+    ["namespace", "namespace", "different"], ["version", "version", "wrong"],
+    ["hash", "logic_hash", Array(32).fill(17)], ["bad hash", "logic_hash", [1, 2]],
+    ["bad id", "package_id", "../bad"],
+  ]) {
+    const bad = structuredClone(dependent); bad.manifest.dependencies[0][field] = value;
+    cases.push([label, [bad, base]]);
+  }
+  const duplicate = structuredClone(dependent); duplicate.manifest.dependencies.push(required);
+  cases.push(["duplicate", [duplicate, base]]);
+  const self = structuredClone(dependent);
+  Object.assign(self.manifest.dependencies[0], { namespace: dependent.manifest.namespace, package_id: dependent.manifest.package_id });
+  cases.push(["self", [self, base]]);
+  const invalid = structuredClone(dependent); invalid.manifest.dependencies = null;
+  cases.push(["not an array", [invalid, base]]);
+  const accepted = [];
+  for (const [label, packs] of cases) for (const [entry, run] of [
+    ["start", () => prepareNativeMatchContent(storeFor(packs))],
+    ["restore", () => restoreNativeMatchContent(saveFor(packs), { installed: [], contentLock: [], matchFrozen: false })],
+  ]) {
+    try { run(); accepted.push(`${label}/${entry}`); }
+    catch (error) { assert.match(String(error), /依赖/, label); }
+  }
+  assert.deepEqual(accepted, []);
+});

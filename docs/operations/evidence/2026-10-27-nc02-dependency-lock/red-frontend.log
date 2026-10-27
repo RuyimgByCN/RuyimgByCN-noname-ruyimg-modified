@@ -1,0 +1,75 @@
+✔ all discoverable packages install actual versioned data; active set reaches the match (14.34425ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (1.125ms)
+✔ all lifecycle content mutations are blocked during a match (0.279292ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.338541ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.256375ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.197959ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (1.410417ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (0.7195ms)
+✔ old standard saves without packages remain compatible (0.098625ms)
+✔ same-version logic fingerprint conflict rejects installation atomically (0.361209ms)
+✔ same-version logic fingerprint conflict rejects upgrade atomically (0.282791ms)
+✔ same-version asset content conflict rejects installation atomically (1.126375ms)
+✔ same-version asset content conflict rejects upgrade atomically (0.231958ms)
+✔ same-version copies tolerate JSON formatting and object key order (0.369791ms)
+✔ unsafe identity fields cannot enter the browser content lock (0.436125ms)
+✖ package dependencies are checked for match start and frozen save restore (2.4415ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 15
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 406.529708
+
+✖ failing tests:
+
+test at scripts/native-match-content.test.mjs:201:1
+✖ package dependencies are checked for match start and frozen save restore (2.4415ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'missing/start',
+  +   'missing/restore',
+  +   'namespace/start',
+  +   'namespace/restore',
+  +   'version/start',
+  +   'version/restore',
+  +   'hash/start',
+  +   'hash/restore',
+  +   'bad hash/start',
+  +   'bad hash/restore',
+  +   'bad id/start',
+  +   'bad id/restore',
+  +   'duplicate/start',
+  +   'duplicate/restore',
+  +   'self/start',
+  +   'self/restore',
+  +   'not an array/start',
+  +   'not an array/restore'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///private/tmp/noname-nc02-dependency-red.BeVCzK/apps/web-client/scripts/native-match-content.test.mjs:262:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+      'missing/start',      'missing/restore',
+      'namespace/start',    'namespace/restore',
+      'version/start',      'version/restore',
+      'hash/start',         'hash/restore',
+      'bad hash/start',     'bad hash/restore',
+      'bad id/start',       'bad id/restore',
+      'duplicate/start',    'duplicate/restore',
+      'self/start',         'self/restore',
+      'not an array/start', 'not an array/restore'
+    ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

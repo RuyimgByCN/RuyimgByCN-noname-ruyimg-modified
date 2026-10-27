@@ -19,6 +19,18 @@ export interface NativeMatchContent {
 function snapshot(packs: NativePackagePayload[]): NativeMatchContent {
   const contentLock = packs.map(nativePackageKey);
   if (new Set(contentLock).size !== contentLock.length) throw new Error("内容锁包含重复扩展");
+  const installed = new Map(packs.map((pack) => [nativePackageKey(pack), pack]));
+  for (const pack of packs) for (const dependency of pack.manifest.dependencies ?? []) {
+    const key = `${dependency.namespace}/${dependency.package_id}`;
+    const target = installed.get(key);
+    if (!target) throw new Error(`扩展包缺少依赖: ${key}@${dependency.version}`);
+    const expected = dependency.logic_hash;
+    if (target.manifest.version !== dependency.version
+      || (expected?.some((n) => n !== 0)
+        && expected.some((n, i) => n !== target.manifest.logic_hash[i]))) {
+      throw new Error(`扩展包依赖版本或指纹不匹配: ${key}@${dependency.version}`);
+    }
+  }
   return {
     packsJson: packs.length ? JSON.stringify(packs) : undefined,
     contentLock,
