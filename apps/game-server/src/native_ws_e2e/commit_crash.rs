@@ -256,3 +256,186 @@ fn native_extensions_ws_process_exit_after_double_failure_replays_committed_rece
         println!("NATIVE_WS process_exit=87 stage=after_failed_decision_and_failed_compensation before_reply=true authority=Committed packages=disabled recovered_revision=4 retry_key=1004 applied=once second_restart_revision=5");
     });
 }
+
+#[test]
+fn native_vm_frozen_room_recovers_after_process_exit_and_uninstall() {
+    use crate::room::RoomMsg;
+    use crate::session::Outbound;
+
+    let directory = tempfile::tempdir().unwrap();
+    let base = directory.path();
+    let mut cfg = config(base);
+    cfg.native_packages_root = base.join("packages");
+    let dropin = cfg.native_packages_root.join("vm-fixture");
+    std::fs::create_dir_all(dropin.join("assets")).unwrap();
+    let fixture =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../web-client/scripts/fixtures/vm-trigger");
+    std::fs::copy(
+        fixture.join("package.npack.json"),
+        dropin.join("package.npack.json"),
+    )
+    .unwrap();
+    std::fs::copy(
+        fixture.join("character.json"),
+        dropin.join("assets/character.json"),
+    )
+    .unwrap();
+    let content = crate::native::NativeContent::open(
+        cfg.native_packages_root.clone(),
+        cfg.native_store_root.clone(),
+    )
+    .unwrap();
+    content.import().unwrap();
+    let room = 42;
+    let connection = 71;
+    let store = crate::native_room_store::NativeRoomStore::new(&cfg.native_room_store);
+    let (token, before) = runtime().block_on(async {
+        let handle = crate::room_native_actor::spawn_native_room_if_configured(
+            room,
+            2,
+            SEED,
+            PASSWORD.into(),
+            cfg.room_mailbox,
+            cfg.snapshot_every,
+            &content,
+            true,
+            "official",
+            &["vm-fixture".into()],
+            Some(store.clone()),
+        )
+        .unwrap()
+        .unwrap();
+        let (outbound, _rx) = tokio::sync::mpsc::channel(64);
+        let (reply, result) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Join {
+                connection_id: connection,
+                display_name: "probe".into(),
+                preferred_seat: Some(0),
+                reconnect_token: None,
+                password: PASSWORD.into(),
+                outbound: Outbound::new(outbound),
+                reply,
+            })
+            .await
+            .unwrap();
+        let joined = result.await.unwrap().unwrap();
+        let (reply, result) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::ChooseGeneral {
+                connection_id: connection,
+                name: "vm_fixture".into(),
+                reply,
+            })
+            .await
+            .unwrap();
+        result.await.unwrap().unwrap();
+        let (reply, result) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Snapshot {
+                connection_id: connection,
+                header: MessageHeader::new(room, 1, 0),
+                reply,
+            })
+            .await
+            .unwrap();
+        let mut state = State::from_message(result.await.unwrap().unwrap());
+        assert!(!state.view.seats[0].skills.is_empty());
+        for key in [701, 702, 703] {
+            let (reply, result) = tokio::sync::oneshot::channel();
+            let revision = state.view.revision;
+            handle
+                .send(RoomMsg::Submit {
+                    connection_id: connection,
+                    header: MessageHeader::new(room, key, revision),
+                    command: Command {
+                        actor: PlayerId::new(1),
+                        expected_revision: ExpectedRevision(revision),
+                        idempotency_key: IdempotencyKey(key),
+                        kind: CommandKind::EndPhase,
+                    },
+                    idempotency_key: IdempotencyKey(key),
+                    replay: false,
+                    reply,
+                })
+                .await
+                .unwrap();
+            let message = result.await.unwrap().unwrap();
+            assert!(matches!(
+                &message,
+                ServerMessage::CommandOutcome {
+                    result: CommandResult::Accepted { .. },
+                    ..
+                }
+            ));
+            state = State::from_message(message);
+        }
+        assert!(state.choice.is_some(), "save while discard choice is open");
+        (joined.reconnect_token, state)
+    });
+    let saved = store.load_all().unwrap().pop().unwrap();
+    assert_eq!(saved.room_id, room);
+    assert_eq!(saved.state.frozen_packages.as_ref().unwrap().len(), 1);
+
+    runtime().block_on(async {
+        let (first, url) = start_child(base, 1).await;
+        let mut peer = Peer::connect_url(&url).await;
+        assert_eq!(peer.join(room, 0, Some(token.clone())).await, before);
+        drop((peer, first));
+
+        std::fs::write(
+            dropin.join("manifest.json"),
+            br#"{"schema_version":1,"enabled":false}"#,
+        )
+        .unwrap();
+        content.uninstall_package("official", "vm-fixture").unwrap();
+        assert!(content.load_scoped(Some("official"), "vm-fixture").is_err());
+        assert!(content
+            .installed()
+            .unwrap()
+            .iter()
+            .all(|p| p.package_id != "vm-fixture"));
+
+        let (restarted, url) = start_child(base, 1).await;
+        assert!(content
+            .installed()
+            .unwrap()
+            .iter()
+            .all(|p| p.package_id != "vm-fixture"));
+        assert!(content
+            .load_scoped(Some("official"), "vm-fixture")
+            .is_err());
+        let mut peer = Peer::connect_url(&url).await;
+        assert_eq!(peer.join(room, 0, Some(token)).await, before);
+        let kind = super::durability::answer(&before, peer.player);
+        let discarded = match &kind {
+            CommandKind::ResolveChoice { selections, .. } => selections.len() as u32,
+            _ => unreachable!(),
+        };
+        let hand_before = before.view.seats[0].hand_count;
+        let (result, after_discard) = peer
+            .submit(peer.player, before.view.revision, 704, kind)
+            .await;
+        assert!(matches!(result, CommandResult::Accepted { .. }));
+        assert_eq!(after_discard.view.phase, engine_api::TurnPhaseTag::Discard);
+        assert_eq!(
+            after_discard.view.seats[0].hand_count,
+            hand_before - discarded
+        );
+        let (result, end) = peer
+            .submit(peer.player, after_discard.view.revision, 705, CommandKind::EndPhase)
+            .await;
+        assert!(matches!(result, CommandResult::Accepted { .. }));
+        assert_eq!(end.view.phase, engine_api::TurnPhaseTag::End);
+        assert_eq!(
+            end.view.seats[0].hand_count,
+            after_discard.view.seats[0].hand_count + 1
+        );
+        assert_eq!(
+            end.view.seats[0].skills[0].def,
+            before.view.seats[0].skills[0].def
+        );
+        println!("NATIVE_VM frozen_room process_restart=2 uninstalled=true pending_choice=restored discard={discarded} end_phase_vm_draw=1 revision={}", end.view.revision);
+        drop((peer, restarted));
+    });
+}

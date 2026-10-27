@@ -1,0 +1,4 @@
+content_native_loader passed=32 failed=0 ignored=0 measured=0
+engine_native passed=1584 failed=0 ignored=71 measured=0
+engine_native_wasm passed=52 failed=0 ignored=0 measured=0
+game_server passed=360 failed=0 ignored=0 measured=0
