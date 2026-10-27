@@ -1,0 +1,38 @@
+PA12 批④-1 技能级重盘（2026-10-27，turn_over 已移入承载集）
+pkg          ok   ef   fl   ev active
+sp          518  142  120   70     24
+mobile      266  106   37   28     47
+xianding    403   86   69   21     21
+shahai      935   84   24    4     60
+yijiang     127   84   51   19     50
+tw          305   73   51   27     15
+shenhua      86   70   50   23     25
+bingshi      23   65   38   29     16
+shiji        54   65   46   15     43
+offline     452   64   91  144    137
+refresh     228   53   48   25     18
+sixiang      96   44   43   12     23
+key         182   42   18   16     17
+sp2         220   40   33    9     12
+
+宿主解析原语 Top-20（按技能数）
+   80  discard_hand_equip_count
+   48  choose_other_damage
+   47  prevent_current_damage
+   33  choose_use_virtual_sha
+   32  modify_current_damage
+   23  discard_selected
+   22  storage_set
+   22  remove_skill_by_def
+   19  add_skill_until_turn_end
+   19  gain_discard_card_by_kind
+   18  choose_other_discard_target_card
+   17  choose_other_draw_or_recover
+   17  choose_target_draw
+   16  skip_current_phase
+   16  choose_discard_target_card
+   15  take_one_card
+   15  choose_add_or_remove_current_card_target
+   14  choose_other_give_one_hand_equip
+   12  gain_card_by_kind
+   12  discard_one_hand_or_equip

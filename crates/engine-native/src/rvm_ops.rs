@@ -88,6 +88,9 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
                 return Err(reject("Discard 零量"));
             }
         }
+        EffectRequest::TurnOver { player } => {
+            ok_player(*player, "TurnOver")?;
+        }
         EffectRequest::AddSkill { player, .. }
         | EffectRequest::EnterDying { player }
         | EffectRequest::DiscardAllOwnJudge { player, .. }
@@ -475,6 +478,18 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             };
             let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
             discard_some(ctx, p, cards);
+        }
+        // PA12 批④-1：DSL `turn_over(player)`——经内核翻面提交落点
+        // （神裔守卫、急冻解除、TurnOvered 事件同口径）。
+        EffectRequest::TurnOver { player } => {
+            if let Some(p) = seat_of(player, seats) {
+                // 与 DealDamage 同法：发射 TurnOverBefore 子事件帧，由内核
+                // Commit 段执行翻面（神裔守卫/急冻解除/TurnOvered 同口径）。
+                ctx.emit(EventData::TurnOverBefore {
+                    player: p,
+                    cancelled: false,
+                });
+            }
         }
         EffectRequest::EnterDying { player } => {
             let Some(p) = seat_of(player, seats) else {
