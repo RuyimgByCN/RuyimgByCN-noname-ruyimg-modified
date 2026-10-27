@@ -236,3 +236,31 @@ fn pa12_batch4_3_damage_rewrite_window() {
     drain_plain(&mut e2);
     assert_eq!(e2.debug_hp(2), hp2 - 2, "modify +1：1 伤变 2");
 }
+
+/// 批⑤首步勘察（红灯实证转登记）：奋励三窗口（onlyOL 真实 npack）可装载可桥接
+/// （SkipCurrentPhase 允许面+装载旗标接线），但**实测 VM 机器对 PhaseBegin 的
+/// 执行窗晚于该阶段入场行为**（Draw 窗确认门打开时摸牌已完成，手牌 3≠1）——
+/// skip 置旗标对当前阶段无效。时序缺陷登记迁移计划 §2 K（需前置窗调度，与
+/// game_started 开局帧同族内核缺口）；本测试只锁「三窗口可装载桥接」面，
+/// 时序修复后在此补整局断言（见计划 §3 批⑤）。
+#[test]
+fn pa12_batch5_fenli_bridges_with_skip_wiring() {
+    let pkg_json = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../content/original/ported/onlyOL/onlyOL.npack.json"),
+    )
+    .expect("读 onlyOL npack");
+    let mut pkg: content_schema::ContentPackage =
+        serde_json::from_str(&pkg_json).expect("解析 npack");
+    pkg.trigger_index.retain(|t| t.module.contains("ol_fenli_phase"));
+    assert_eq!(pkg.trigger_index.len(), 3, "奋励三窗口");
+    let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
+    assert_eq!(out.decls.len(), 3, "三模块全部可承载（skip_current_phase 已接允许面）");
+    // 允许面：SkipCurrentPhase 通过 accept
+    use rule_api::{EffectRequest, PlayerId};
+    assert!(engine_native::rvm_ops::accept_effect(
+        &EffectRequest::SkipCurrentPhase { player: PlayerId::new(1) },
+        4
+    )
+    .is_ok());
+}

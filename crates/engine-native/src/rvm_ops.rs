@@ -97,6 +97,9 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         EffectRequest::ModifyCurrentDamage { player, .. } => {
             ok_player(*player, "ModifyCurrentDamage")?;
         }
+        EffectRequest::SkipCurrentPhase { player } => {
+            ok_player(*player, "SkipCurrentPhase")?;
+        }
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
         // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
         // 拒绝。
@@ -493,6 +496,25 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             };
             let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
             discard_some(ctx, p, cards);
+        }
+        // PA12 批⑤（D 道原生化首步）：DSL `skip_current_phase(self)`——按
+        // 当前阶段置既有跳过旗标（摸牌=turn.skip_draw_phase、出牌=
+        // turn.skip_play_phase【摸牌阶段末消费，同乐不思蜀】、弃牌=本人
+        // player.skip_discard_phase【弃牌开始即跳，同入梦】）；判定/结束
+        // 阶段无旗标，静默空操作（旧线对 fenli 三窗口只用到摸/出/弃）。
+        EffectRequest::SkipCurrentPhase { player } => {
+            if let Some(p) = seat_of(player, seats) {
+                if p == ctx.core.turn.current {
+                    match ctx.core.turn.phase {
+                        Phase::Draw => ctx.core.turn.skip_draw_phase = true,
+                        Phase::Play => ctx.core.turn.skip_play_phase = true,
+                        Phase::Discard => {
+                            ctx.core.player_mut(p).skip_discard_phase = true;
+                        }
+                        _ => {}
+                    }
+                }
+            }
         }
         // PA12 批④-3：DSL `prevent_current_damage()` / `modify_current_damage(self, ±N)`
         //（旧线：damage_id=0 绑定当前前置窗口伤害帧）。与宿主技 v187/v126 同法
