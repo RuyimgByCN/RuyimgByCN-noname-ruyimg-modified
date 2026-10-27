@@ -1,0 +1,70 @@
+Diff in /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/installed_packs.rs:61:
+     };
+     // characters 资产独立于 cards 存在：VM-only 包也需要武将。
+     if let Some(characters) = item.get("characters") {
+-        let vm_modules = item.get("modules").and_then(Value::as_array).is_some_and(|v| !v.is_empty());
++        let vm_modules = item
++            .get("modules")
++            .and_then(Value::as_array)
++            .is_some_and(|v| !v.is_empty());
+         let generals = if vm_modules {
+             content_native_loader::bridge_generals_with_known(&json(characters), &vm_names)
+         } else {
+Diff in /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/installed_packs.rs:68:
+             content_native_loader::bridge_generals(&json(characters))
+-        }.map_err(|e| e.to_string())?;
++        }
++        .map_err(|e| e.to_string())?;
+         pack.generals.extend(generals.generals);
+         for decl in generals.host_skills {
+             match pack.host_skills.iter().find(|d| d.name == decl.name) {
+Diff in /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/installed_packs.rs:106:
+     let mut slots = BTreeSet::new();
+     for (index, item) in arr.iter().enumerate() {
+         if let Some(manifest) = item.get("manifest") {
+-            let namespace = required(manifest, "namespace")
+-                .map_err(|e| format!("packs[{index}]: {e}"))?;
+-            let package_id = required(manifest, "package_id")
+-                .map_err(|e| format!("packs[{index}]: {e}"))?;
++            let namespace =
++                required(manifest, "namespace").map_err(|e| format!("packs[{index}]: {e}"))?;
++            let package_id =
++                required(manifest, "package_id").map_err(|e| format!("packs[{index}]: {e}"))?;
+             required(manifest, "version").map_err(|e| format!("packs[{index}]: {e}"))?;
+             if !slots.insert((namespace, package_id)) {
+-                return Err(format!("packs[{index}]: 重复包槽位 {namespace}/{package_id}"));
++                return Err(format!(
++                    "packs[{index}]: 重复包槽位 {namespace}/{package_id}"
++                ));
+             }
+         }
+     }
+Diff in /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/tests/installed_package_payload.rs:164:
+         let duplicate = json!([good.clone(), second]).to_string();
+         for (entry, error) in [
+             ("start", engine_from_packs(4, 42, &duplicate).err()),
+-            ("identity", engine_identity_from_packs(4, 42, &duplicate).err()),
++            (
++                "identity",
++                engine_identity_from_packs(4, 42, &duplicate).err(),
++            ),
+             ("restore", engine_from_archive(&saved, &duplicate).err()),
+         ] {
+-            let error = error.unwrap_or_else(|| panic!("{entry} accepted a duplicate package slot"));
++            let error =
++                error.unwrap_or_else(|| panic!("{entry} accepted a duplicate package slot"));
+             assert!(error.contains("重复包槽位"), "{error}");
+         }
+     }
+Diff in /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/tests/installed_package_payload.rs:182:
+     let packs = json!([first, second]).to_string();
+     let engine = engine_from_packs(4, 42, &packs).expect("different namespaces are distinct slots");
+     assert!(general_candidates_json_for(&engine).contains("ddd刘冲"));
+-    assert!(engine.catalog().cards.iter().any(|card| card.name.starts_with("hnl_")));
++    assert!(engine
++        .catalog()
++        .cards
++        .iter()
++        .any(|card| card.name.starts_with("hnl_")));
+ }
+ 

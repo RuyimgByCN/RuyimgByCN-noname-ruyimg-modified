@@ -440,6 +440,27 @@ try {
     id: 920, type: "restore", hex: installedHex, packsJson: JSON.stringify(tamperedInstalled),
   });
   check("worker_installed_changed_asset_refused", tampered.ok === false && /恢复失败/.test(tampered.error ?? ""));
+  const duplicateVersion = structuredClone(installedPacks[1]);
+  duplicateVersion.manifest.version = "2.0.0";
+  duplicateVersion.characters.generals = [];
+  const duplicateJson = JSON.stringify([...installedPacks, duplicateVersion]);
+  const duplicateStart = await workerSend({
+    id: 925, type: "start", players: 4, seed: 17017, observer: 0, packsJson: duplicateJson,
+  });
+  const duplicateIdentity = await workerSend({
+    id: 926, type: "start", mode: "identity", players: 4, seed: 17017, observer: 0, packsJson: duplicateJson,
+  });
+  const duplicateRestore = await workerSend({
+    id: 927, type: "restore", hex: installedHex, packsJson: duplicateJson,
+  });
+  const afterDuplicate = await workerSend({ id: 928, type: "save" });
+  check(
+    "worker_duplicate_slot_refused_without_changing_match",
+    [duplicateStart, duplicateIdentity, duplicateRestore].every((reply) =>
+      reply.ok === false && /重复包槽位/.test(reply.error ?? "")) &&
+      afterDuplicate.ok === true && afterDuplicate.data?.hex === installedHex,
+    JSON.stringify([duplicateStart.error, duplicateIdentity.error, duplicateRestore.error]),
+  );
   const restoredInstalled = await workerSend({
     id: 916, type: "restore", hex: installedHex, packsJson: installedJson,
   });

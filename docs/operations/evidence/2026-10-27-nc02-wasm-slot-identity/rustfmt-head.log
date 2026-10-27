@@ -1,0 +1,20 @@
+Diff in /private/tmp/noname-nc02-slot-head-installed-packs.rs:61:
+     };
+     // characters 资产独立于 cards 存在：VM-only 包也需要武将。
+     if let Some(characters) = item.get("characters") {
+-        let vm_modules = item.get("modules").and_then(Value::as_array).is_some_and(|v| !v.is_empty());
++        let vm_modules = item
++            .get("modules")
++            .and_then(Value::as_array)
++            .is_some_and(|v| !v.is_empty());
+         let generals = if vm_modules {
+             content_native_loader::bridge_generals_with_known(&json(characters), &vm_names)
+         } else {
+Diff in /private/tmp/noname-nc02-slot-head-installed-packs.rs:68:
+             content_native_loader::bridge_generals(&json(characters))
+-        }.map_err(|e| e.to_string())?;
++        }
++        .map_err(|e| e.to_string())?;
+         pack.generals.extend(generals.generals);
+         for decl in generals.host_skills {
+             match pack.host_skills.iter().find(|d| d.name == decl.name) {

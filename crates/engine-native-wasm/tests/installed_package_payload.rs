@@ -147,3 +147,48 @@ fn malformed_installed_payloads_are_not_silently_skipped() {
     }
     assert!(engine_from_packs(4, 42, &json!([good.clone(), good]).to_string()).is_err());
 }
+
+#[test]
+fn duplicate_installed_slots_are_rejected_on_start_and_restore() {
+    let good = installed("d3-upstream-noname", "characters", "assets/character.json");
+    let single = json!([good.clone()]).to_string();
+    let engine = engine_from_packs(4, 42, &single).unwrap();
+    let saved = hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+
+    let mut new_version = good.clone();
+    new_version["manifest"]["version"] = json!("2.0.0");
+    new_version["characters"]["generals"] = json!([]);
+    let mut new_bytes = good.clone();
+    new_bytes["characters"]["generals"] = json!([]);
+    for second in [new_version, new_bytes, good.clone()] {
+        let duplicate = json!([good.clone(), second]).to_string();
+        for (entry, error) in [
+            ("start", engine_from_packs(4, 42, &duplicate).err()),
+            (
+                "identity",
+                engine_identity_from_packs(4, 42, &duplicate).err(),
+            ),
+            ("restore", engine_from_archive(&saved, &duplicate).err()),
+        ] {
+            let error =
+                error.unwrap_or_else(|| panic!("{entry} accepted a duplicate package slot"));
+            assert!(error.contains("重复包槽位"), "{error}");
+        }
+    }
+}
+
+#[test]
+fn same_package_id_in_different_namespaces_remains_allowed() {
+    let first = installed("d3-upstream-noname", "characters", "assets/character.json");
+    let mut second = installed("huanle-upstream-noname", "cards", "assets/cards.json");
+    second["manifest"]["namespace"] = json!("another-namespace");
+    second["manifest"]["package_id"] = first["manifest"]["package_id"].clone();
+    let packs = json!([first, second]).to_string();
+    let engine = engine_from_packs(4, 42, &packs).expect("different namespaces are distinct slots");
+    assert!(general_candidates_json_for(&engine).contains("ddd刘冲"));
+    assert!(engine
+        .catalog()
+        .cards
+        .iter()
+        .any(|card| card.name.starts_with("hnl_")));
+}
