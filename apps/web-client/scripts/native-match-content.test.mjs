@@ -136,3 +136,44 @@ test("old standard saves without packages remain compatible", () => {
     contentLock: [], lockSeed: "", packsJson: undefined,
   });
 });
+
+for (const [changed, change] of [
+  ["logic fingerprint", (p) => { p.manifest.logic_hash[0] ^= 1; }],
+  ["asset content", (p) => { p.cards.cards[0].name += "-changed"; }],
+]) {
+  for (const [name, action] of [
+    ["installation", () => installExtension(key)],
+    ["upgrade", () => upgradeExtension(key)],
+  ]) test(`same-version ${changed} conflict rejects ${name} atomically`, () => {
+    storage.clear();
+    installActive();
+    const snap = readExtensionStore();
+    const record = snap.installed[0];
+    const old = JSON.parse(record.nativeVersions[record.version]);
+    change(old);
+    record.nativeVersions[record.version] = JSON.stringify(old);
+    record.logicFingerprint = old.manifest.logic_hash.slice(0, 4)
+      .map((n) => n.toString(16).padStart(2, "0")).join("");
+    storage.set(storeKey, JSON.stringify(snap));
+    const before = storage.get(storeKey);
+    const original = prepareNativeMatchContent();
+    assert.throws(action, /同版本.*内容|版本.*冲突/);
+    assert.equal(storage.get(storeKey), before);
+    assert.deepEqual(prepareNativeMatchContent(), original);
+  });
+}
+
+test("same-version copies tolerate JSON formatting and object key order", () => {
+  const content = installActive();
+  const snap = readExtensionStore();
+  const record = snap.installed[0];
+  const old = JSON.parse(record.nativeVersions[record.version]);
+  const reordered = Object.fromEntries(Object.entries(old).reverse());
+  const saved = JSON.stringify(reordered, null, 2);
+  record.nativeVersions[record.version] = saved;
+  storage.set(storeKey, JSON.stringify(snap));
+  installExtension(key);
+  upgradeExtension(key);
+  assert.equal(readExtensionStore().installed[0].nativeVersions[record.version], saved);
+  assert.deepEqual(JSON.parse(prepareNativeMatchContent().packsJson), JSON.parse(content.packsJson));
+});

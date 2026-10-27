@@ -1,0 +1,84 @@
+✔ all discoverable packages install actual versioned data; active set reaches the match (15.477875ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (2.133167ms)
+✔ all lifecycle content mutations are blocked during a match (0.7555ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.825ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.600333ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.413333ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.386917ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (0.861375ms)
+✔ old standard saves without packages remain compatible (0.146417ms)
+✖ same-version logic fingerprint conflict rejects installation atomically (0.588375ms)
+✖ same-version logic fingerprint conflict rejects upgrade atomically (0.192083ms)
+✖ same-version asset content conflict rejects installation atomically (0.163333ms)
+✖ same-version asset content conflict rejects upgrade atomically (0.148209ms)
+✔ same-version copies tolerate JSON formatting and object key order (0.269916ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 10
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 333.834541
+
+✖ failing tests:
+
+test at scripts/native-match-content.test.mjs:147:6
+✖ same-version logic fingerprint conflict rejects installation atomically (0.588375ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/tmp/noname-nc02-version-red.cRfhdp/apps/web-client/scripts/native-match-content.test.mjs:160:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /同版本.*内容|版本.*冲突/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at scripts/native-match-content.test.mjs:147:6
+✖ same-version logic fingerprint conflict rejects upgrade atomically (0.192083ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/tmp/noname-nc02-version-red.cRfhdp/apps/web-client/scripts/native-match-content.test.mjs:160:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /同版本.*内容|版本.*冲突/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at scripts/native-match-content.test.mjs:147:6
+✖ same-version asset content conflict rejects installation atomically (0.163333ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/tmp/noname-nc02-version-red.cRfhdp/apps/web-client/scripts/native-match-content.test.mjs:160:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /同版本.*内容|版本.*冲突/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at scripts/native-match-content.test.mjs:147:6
+✖ same-version asset content conflict rejects upgrade atomically (0.148209ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/tmp/noname-nc02-version-red.cRfhdp/apps/web-client/scripts/native-match-content.test.mjs:160:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /同版本.*内容|版本.*冲突/,
+    operator: 'throws',
+    diff: 'simple'
+  }

@@ -80,6 +80,16 @@ function catalogByKey(key: string): ExtensionCatalogEntry | undefined {
   return EXTENSION_CATALOG.find((e) => extensionKey(e) === key);
 }
 
+function checkVersionCopy(versions: Record<string, string> | undefined, version: string, payload: string): void {
+  const existing = versions?.[version];
+  if (existing === undefined) return;
+  const canonical = (json: string) => JSON.stringify(JSON.parse(json), (_key, value: unknown) => {
+    if (value === null || typeof value !== "object" || Array.isArray(value)) return value;
+    return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
+  });
+  if (canonical(existing) !== canonical(payload)) throw new Error(`同版本包内容冲突: ${version}`);
+}
+
 export function listCatalog(): ExtensionCatalogEntry[] {
   return EXTENSION_CATALOG.slice();
 }
@@ -109,6 +119,7 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
     if (existing.lifecycle === "revoked") {
       throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
     }
+    checkVersionCopy(existing.nativeVersions, cat.version, payload);
     existing.updatedAt = t;
     existing.nativeVersions ??= {};
     if (existing.version === cat.version && !existing.nativeVersions[cat.version]) {
@@ -176,6 +187,7 @@ export function upgradeExtension(key: string, toVersion?: string): ExtensionStor
   const next = toVersion ?? cat.version;
   if (next !== cat.version) throw new Error(`无可安装的版本 ${next}`);
   const payload = bundledNativePackage(cat);
+  checkVersionCopy(rec.nativeVersions, next, payload);
   rec.nativeVersions ??= {};
   rec.nativeVersions[next] ??= payload;
   if (rec.version !== next) {
