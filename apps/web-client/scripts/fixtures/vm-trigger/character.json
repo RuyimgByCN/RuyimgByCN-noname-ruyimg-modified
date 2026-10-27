@@ -1,0 +1,1 @@
+{"generals":[{"faction":"qun","gender":"male","hp":4,"id":"vm_fixture","name":"vm_fixture","skills":[{"name":"vm_fixture_phase_end_phase_end","title":"夹具"}]}],"pack":{"description":"NC02 E2E","name":"vm-fixture","version":1},"source":"test","upstream_commit":"0000000000000000000000000000000000000000","upstream_path":"vm-fixture"}

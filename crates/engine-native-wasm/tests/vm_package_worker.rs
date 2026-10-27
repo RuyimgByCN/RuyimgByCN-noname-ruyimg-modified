@@ -2,7 +2,8 @@
 //! 否则服务端可执行的 VM 包在客户端会被“缺少 cards/characters/pile”拒绝。
 
 use engine_native_wasm::test_support::{
-    assign_general_for, engine_from_packs, general_candidates_json_for,
+    assign_general_for, engine_from_archive, engine_from_packs, general_candidates_json_for,
+    hex_encode,
 };
 use serde_json::json;
 
@@ -21,6 +22,7 @@ skill worker_phase_end(991001) {
 #[test]
 fn vm_only_npack_loads_skills_and_generals() {
     let package = content_compiler::compile_source_named("worker-vm", DSL).expect("compile");
+    let vm_skill = package.trigger_index[0].module.clone();
     let mut npack = serde_json::to_value(&package).unwrap();
     let characters = json!({
         "source": "test",
@@ -33,10 +35,22 @@ fn vm_only_npack_loads_skills_and_generals() {
             "faction": "qun",
             "hp": 4,
             "gender": "male",
-            "skills": [{ "name": "worker_vm_probe_phase_end", "title": "探针" }]
+            "skills": [{ "name": vm_skill, "title": "探针" }]
         }]
     });
     npack["characters"] = characters;
+    let mut broken = npack.clone();
+    broken["characters"]["generals"][0]["skills"][0]["name"] = json!("missing_vm_skill");
+    let error = engine_from_packs(4, 42, &json!([broken]).to_string())
+        .err()
+        .expect("未解析的 VM 武将技能必须拒绝");
+    assert!(error.contains("missing_vm_skill"), "{error}");
+    let mut no_triggers = npack.clone();
+    no_triggers["trigger_index"] = json!([]);
+    let error = engine_from_packs(4, 42, &json!([no_triggers]).to_string())
+        .err()
+        .expect("未桥接的模块不能静默丢失武将技能");
+    assert!(error.contains(&vm_skill), "{error}");
     let payload = json!([npack]).to_string();
     let mut engine = engine_from_packs(4, 42, &payload).expect("Worker 应接受完整 npack");
     assert!(
@@ -51,14 +65,24 @@ fn vm_only_npack_loads_skills_and_generals() {
         "characters 资产应进入 Worker 选将目录"
     );
     assign_general_for(&mut engine, 0, "worker_vm_probe").expect("assign VM general");
+    assert!(engine.view_for(0).players[0].skills.contains(&vm_skill.as_str()));
+    engine.debug_set_hp(0, 3);
+    let hex = hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+    let mut restored = engine_from_archive(&hex, &payload).expect("按原包恢复");
 
-    // 不只是目录：Worker 安装载荷里的 VM 技能要能经武将真实触发（phase_end 摸 1）。
-    let hand_before = engine.view_for(0).players[0].hand_count;
-    let mut converged = false;
+    // 普通摸牌不能证明技能触发；仅在结束阶段观察到回复才算通过。
+    for branch in [&mut engine, &mut restored] {
+        advance_until_vm_recovery(branch);
+    }
+    assert_eq!(engine.state_hash(), restored.state_hash());
+}
+
+fn advance_until_vm_recovery(engine: &mut engine_native::Engine) {
     for step in 0..80u64 {
-        if engine.view_for(0).players[0].hand_count > hand_before {
-            converged = true;
-            break;
+        if engine.view_for(0).players[0].hp == 4 {
+            assert_eq!(engine.turn().current, 0);
+            assert_eq!(engine.turn().phase, engine_native::Phase::End);
+            return;
         }
         if engine.outcome().is_some() {
             break;
@@ -68,26 +92,28 @@ fn vm_only_npack_loads_skills_and_generals() {
             let selection = choice.spec.options.iter().take(take).cloned().collect();
             let actor = choice.observer;
             let choice_id = choice.id;
-            let _ = engine.submit(engine_native::GameCommand {
+            let result = engine.submit(engine_native::GameCommand {
                 actor,
                 expected_revision: engine.revision(),
-                dedup_id: 10_000 + step,
+                dedup_id: 20_000 + step,
                 action: engine_native::GameAction::Answer {
                     choice_id,
                     selection,
                 },
             });
+            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
         } else {
             let actor = engine.turn().current;
-            let _ = engine.submit(engine_native::GameCommand {
+            let result = engine.submit(engine_native::GameCommand {
                 actor,
                 expected_revision: engine.revision(),
                 dedup_id: 20_000 + step,
                 action: engine_native::GameAction::NextPhase,
             });
+            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
         }
     }
-    assert!(converged, "Worker 安装载荷的 VM 技能应在 phase_end 回复 1 点体力");
+    panic!("Worker 安装载荷的 VM 技能未在结束阶段回复 1 点体力");
 }
 
 #[test]

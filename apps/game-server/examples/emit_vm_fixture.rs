@@ -25,7 +25,7 @@ skill vm_fixture_phase_end(990031) {
             "faction": "qun",
             "hp": 4,
             "gender": "male",
-            "skills": [{ "name": "vm_fixture_phase_end", "title": "夹具" }]
+            "skills": [{ "name": package.trigger_index[0].module, "title": "夹具" }]
         }]
     });
     let character_bytes = serde_json::to_vec(&characters).unwrap();

@@ -9,7 +9,7 @@
 //! 符号表计数为进程级共享读数，故全部断言合并在单个测试内顺序执行，
 //! 避免并行测试 intern 造成的误报。
 
-use content_native_loader::{bridge_generals, bridge_pack, ensure_host_api_compatible, BridgeError};
+use content_native_loader::{bridge_generals, bridge_generals_with_known, bridge_pack, ensure_host_api_compatible, BridgeError};
 use engine_native::catalog::{CardKind, Faction};
 use engine_native::content::extension::{ExtensionPack, ExtensionRegistry, InitHook};
 use engine_native::content::host::{HostBehavior, GJ_JINLIANZHU_KEY, GW_QINPEN_STATE_KEY};
@@ -121,6 +121,16 @@ fn loader_acceptance_bounded_names_and_clear_errors() {
     assert_eq!(gens.mapped_skill_keys, ["dm_draw"]);
     assert_eq!(gens.unmapped_skills, 1);
     assert_eq!(gens.host_skills.len(), 1);
+
+    let known = std::collections::BTreeSet::from(["dm_later".to_string()]);
+    let complete = bridge_generals_with_known(DEMO_JSON, &known).expect("已知 VM 技能");
+    assert_eq!(complete.unmapped_skills, 0);
+    assert!(complete.generals[0].skills.contains(&"dm_later"));
+    let missing = std::collections::BTreeSet::from(["another_vm_skill".to_string()]);
+    let error = err(bridge_generals_with_known(DEMO_JSON, &missing));
+    assert!(error.to_string().contains("dm_later"), "{error}");
+    let error = err(bridge_generals_with_known(DEMO_JSON, &std::collections::BTreeSet::new()));
+    assert!(error.to_string().contains("dm_later"), "{error}");
 
     let hooked = with_pack(r#""cards": []"#).replace(
         r#""card_prefix": "er_""#,

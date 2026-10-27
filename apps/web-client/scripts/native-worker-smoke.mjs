@@ -478,6 +478,52 @@ try {
   });
   check("worker_identity_invalid_seats_refused", badIdentity.ok === false && /4-8/.test(badIdentity.error ?? ""));
 
+  // 由 game-server 的 emit_vm_fixture 示例生成：真实 npack + 武将资产。
+  const vmFixtureDir = join(root, "scripts/fixtures/vm-trigger");
+  const vmPackage = JSON.parse(readFileSync(join(vmFixtureDir, "package.npack.json"), "utf8"));
+  vmPackage.characters = JSON.parse(readFileSync(join(vmFixtureDir, "character.json"), "utf8"));
+  const badVmPackage = structuredClone(vmPackage);
+  badVmPackage.characters.generals[0].skills[0].name = "missing_vm_skill";
+  const badVm = await workerSend({
+    id: 950, type: "start", players: 4, seed: 42, observer: 0,
+    packsJson: JSON.stringify([badVmPackage]),
+  });
+  check("worker_vm_unmapped_general_skill_refused", badVm.ok === false && /missing_vm_skill/.test(badVm.error ?? ""), badVm.error ?? "");
+  const vmPacks = JSON.stringify([vmPackage]);
+  const vmStart = await workerSend({ id: 951, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmPacks });
+  const vmPick = await workerSend({ id: 952, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
+  let vmEnv = vmPick.data?.envelope;
+  const vmSkill = vmPackage.trigger_index[0].module;
+  check("worker_vm_general_owns_module", vmStart.ok === true && vmPick.ok === true &&
+    vmEnv?.view?.seats[0]?.skills.some((skill) => skill.name === vmSkill), vmSkill);
+  let vmTriggered = false;
+  let vmRestoreMatches = false;
+  let vmDetails = "";
+  for (let step = 0; step < 80 && vmEnv && !vmTriggered; step++) {
+    const before = vmEnv;
+    const atDiscard = before.view.current_player === 0 && before.view.phase === "Discard";
+    const save = atDiscard ? await workerSend({ id: 1000 + step * 4, type: "save" }) : null;
+    const command = before.choice
+      ? { type: "autoStep" }
+      : { type: "endPhase", actor: before.view.current_player };
+    const advanced = await workerSend({ id: 1001 + step * 4, ...command });
+    if (!advanced.ok || advanced.data?.result?.outcome === "rejected") {
+      vmDetails = advanced.error ?? JSON.stringify(advanced.data?.result);
+      break;
+    }
+    vmEnv = advanced.data;
+    if (atDiscard && vmEnv.view.current_player === 0 && vmEnv.view.phase === "End") {
+      const delta = vmEnv.view.seats[0].hand_count - before.view.seats[0].hand_count;
+      vmTriggered = delta === 1;
+      const restored = await workerSend({ id: 1002 + step * 4, type: "restore", hex: save?.data?.hex, packsJson: vmPacks });
+      const replayed = await workerSend({ id: 1003 + step * 4, ...command });
+      vmRestoreMatches = restored.ok === true && replayed.ok === true && replayed.data?.hash_hex === vmEnv.hash_hex;
+      vmDetails = `delta=${delta} restored=${restored.ok} replayed=${replayed.ok}`;
+    }
+  }
+  check("worker_vm_effect_at_end_phase", vmTriggered, vmDetails);
+  check("worker_vm_same_package_restore_and_replay", vmRestoreMatches, vmDetails);
+
   const reset = await workerSend({ id: 922, type: "start", players: 4, seed: 4242, observer: 0 });
   check("worker_standard_restart", reset.ok === true);
   const candReply = await workerSend({ id: 902, type: "generalCandidates" });

@@ -1,0 +1,319 @@
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:743:18
+    |
+743 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:180:4
+    |
+180 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:703:4
+    |
+703 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:764:4
+    |
+764 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:826:4
+    |
+826 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:835:4
+    |
+835 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:861:4
+    |
+861 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:870:4
+    |
+870 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:909:4
+    |
+909 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:918:4
+    |
+918 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:926:4
+    |
+926 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:934:4
+    |
+934 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:942:4
+    |
+942 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:950:4
+    |
+950 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:958:4
+    |
+958 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:966:4
+    |
+966 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:974:4
+    |
+974 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:982:4
+    |
+982 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:990:4
+    |
+990 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+   Compiling engine-native-wasm v0.1.0 (/private/tmp/noname-nc02-clean.49rGKC/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running tests/vm_package_worker.rs (/tmp/noname-nc02-target.EU22fu/debug/deps/vm_package_worker-74c301ce8156f69a)
+
+running 1 test
+step=0 turn=0 phase=Judge hp=3 pending=false
+next=Accepted { state_hash: [33, 48, 2, 22, 46, 180, 196, 70, 117, 63, 176, 94, 126, 101, 98, 82, 177, 74, 94, 248, 179, 146, 168, 141, 138, 167, 227, 225, 99, 56, 86, 194] }
+step=1 turn=0 phase=Draw hp=3 pending=false
+next=Accepted { state_hash: [2, 221, 190, 202, 190, 8, 58, 242, 109, 10, 218, 6, 25, 9, 121, 201, 7, 5, 167, 68, 113, 125, 113, 105, 123, 82, 231, 93, 38, 86, 177, 33] }
+step=2 turn=0 phase=Play hp=3 pending=false
+next=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "discard_to_limit", options: [Card(42), Card(96), Card(122), Card(114), Card(115), Card(33)], min: 3, max: 3, allow_cancel: false } } }
+step=3 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=4 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=5 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=6 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=7 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=8 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=9 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=10 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=11 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=12 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=13 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=14 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=15 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=16 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=17 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=18 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=19 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=20 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=21 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=22 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=23 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=24 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=25 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=26 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=27 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=28 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=29 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=30 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=31 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=32 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=33 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=34 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=35 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=36 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=37 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=38 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=39 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=40 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=41 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=42 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=43 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=44 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=45 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=46 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=47 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=48 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=49 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=50 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=51 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=52 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=53 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=54 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=55 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=56 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=57 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=58 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=59 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=60 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=61 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=62 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=63 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=64 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=65 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=66 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=67 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=68 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=69 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=70 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=71 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=72 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=73 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=74 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=75 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=76 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=77 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=78 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+step=79 turn=0 phase=Discard hp=3 pending=true
+answer=Rejected(DuplicateCommand)
+
+thread 'vm_only_npack_loads_skills_and_generals' (108053127) panicked at crates/engine-native-wasm/tests/vm_package_worker.rs:105:5:
+Worker 安装载荷的 VM 技能未在结束阶段回复 1 点体力
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test vm_only_npack_loads_skills_and_generals ... FAILED
+
+failures:
+
+failures:
+    vm_only_npack_loads_skills_and_generals
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native-wasm --test vm_package_worker`

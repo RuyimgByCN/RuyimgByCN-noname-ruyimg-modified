@@ -9,7 +9,7 @@
 | 编号 | 当前状态 | 剩余与完成条件 | 依赖 | 证据 |
 |---|---|---|---|---|
 | NC01 座位与触发语义 | 部分 | 多座位选将/随机/私有选择/触发顺序全矩阵；完成需逐模式开局、触发顺序、RNG、恢复轨迹 | NC08 | 进度主稿 |
-| NC02 安装包身份与执行内容一致 | **完成（2026-10-25）** | 完整 VM 包正式安装/选将/开局/停用启用/升级回滚/停用式卸载/物理卸载/旧档错版拒绝/冻结副本原锁恢复；第三方免客户端重编译；真实服务端+浏览器同链 E2E | NC03/NC04 | [Worker VM](../operations/evidence/2026-10-24-worker-vm-package/README.md)、[VM E2E](../operations/evidence/2026-10-24-worker-vm-package/ui-e2e-vm/README.md) |
+| NC02 安装包身份与执行内容一致 | **部分（2026-10-27 复核）** | 原 VM E2E 夹具技能引用错误；已修正并以真实 Worker 验证触发/同包恢复、未解析引用拒绝。仍需正确夹具重跑真实服务端+浏览器同链与生命周期验收，并补跨包 VM 依赖 | NC03/NC04 | [本批复核](../operations/evidence/2026-10-27-nc02-vm-trigger-proof/README.md)、[原 VM E2E](../operations/evidence/2026-10-24-worker-vm-package/ui-e2e-vm/README.md) |
 | NC03 统一原生产品 API | 部分 | Worker 真实事件/hash 已做；坏档、慢连接、重连已做；仍需产品 UI 全流程与错误码覆盖 | NC01 | [P1](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md) |
 | NC04 VM 故障与事务语义 | 部分 | 未映射事件（如 `cards_given`）阻断完整 shiji；VM 故障/回滚/恢复矩阵未全 | NC02 | [Worker VM](../operations/evidence/2026-10-24-worker-vm-package/README.md) |
 | NC05 可独立发布的扩展宿主 | 未完成 | 三类真实案例全生命周期；混合包、依赖、卸载、旧锁恢复 | NC02/NC04 | 进度主稿 |

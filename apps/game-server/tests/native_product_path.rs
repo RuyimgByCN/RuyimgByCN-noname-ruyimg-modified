@@ -400,7 +400,7 @@ fn vm_package_with_characters_installs_loads_and_runs() {
     const DSL: &str = "\
 skill vm_probe(990003) {
   trigger phase_end owner_is_target {
-    effect draw_cards(self, 1);
+    effect recover_hp(self, 1);
   }
 }
 ";
@@ -440,6 +440,24 @@ skill vm_probe(990003) {
     let mut package: content_schema::ContentPackage = serde_json::from_value(npack).unwrap();
     package.manifest.logic_hash = package.compute_logic_hash();
     package.manifest.asset_hash = package.compute_asset_hash();
+
+    // 真实安装副本的资产哈希也要匹配：只改变引用名并重算资产哈希。
+    let bad_characters = characters.replace("vm_probe_phase_end", "missing_vm_skill");
+    let mut bad_package = serde_json::to_value(&package).unwrap();
+    bad_package["asset_manifest"]["entries"][0]["source_hash"] =
+        serde_json::json!(blake3::hash(bad_characters.as_bytes()).as_bytes());
+    let mut bad_package: content_schema::ContentPackage = serde_json::from_value(bad_package).unwrap();
+    bad_package.manifest.asset_hash = bad_package.compute_asset_hash();
+    let bad_dir = tempfile::tempdir().unwrap();
+    let bad_dropin = bad_dir.path().join("server-vm-char");
+    std::fs::create_dir_all(bad_dropin.join("assets")).unwrap();
+    std::fs::write(bad_dropin.join("package.npack.json"), bad_package.to_json_bytes().unwrap()).unwrap();
+    std::fs::write(bad_dropin.join("assets/character.json"), bad_characters).unwrap();
+    let bad_content = NativeContent::open(bad_dir.path().to_path_buf(), bad_dir.path().join("store")).unwrap();
+    bad_content.import().expect("验证过的包可安装");
+    let error = bad_content.load("server-vm-char").err().expect("未解析技能必须拒绝装载");
+    assert!(error.contains("missing_vm_skill"), "{error}");
+
     let npack = package.to_json_bytes().unwrap();
     let dir = tempfile::tempdir().unwrap();
     let dropin = dir.path().join("server-vm-char");
@@ -464,12 +482,22 @@ skill vm_probe(990003) {
     engine
         .assign_general_named(0, "vm_probe")
         .expect("选将");
-    let hand_before = engine.view_for(0).players[0].hand_count;
-    let mut converged = false;
-    for _ in 0..80 {
-        if engine.view_for(0).players[0].hand_count > hand_before {
-            converged = true;
-            break;
+    assert!(engine.view_for(0).players[0].skills.contains(&"vm_probe_phase_end"));
+    engine.debug_set_hp(0, 3);
+    let mut restored = engine_native::Engine::restore_with_extensions(&engine.save(), &[&loaded.pack])
+        .expect("按原包恢复");
+    for branch in [&mut engine, &mut restored] {
+        advance_until_vm_recovery(branch);
+    }
+    assert_eq!(engine.state_hash(), restored.state_hash());
+}
+
+fn advance_until_vm_recovery(engine: &mut engine_native::Engine) {
+    for step in 0..80u64 {
+        if engine.view_for(0).players[0].hp == 4 {
+            assert_eq!(engine.turn().current, 0);
+            assert_eq!(engine.turn().phase, engine_native::Phase::End);
+            return;
         }
         if engine.outcome().is_some() {
             break;
@@ -484,19 +512,26 @@ skill vm_probe(990003) {
                 .collect();
             let actor = choice.observer;
             let choice_id = choice.id;
-            let _ = engine.submit(engine_native::GameCommand {
+            let result = engine.submit(engine_native::GameCommand {
                 actor,
                 expected_revision: engine.revision(),
-                dedup_id: 30_000 + u64::from(engine.revision()),
+                dedup_id: 30_000 + step,
                 action: engine_native::GameAction::Answer {
                     choice_id,
                     selection,
                 },
             });
+            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
         } else {
             let actor = engine.turn().current;
-            submit_next_phase(&mut engine, actor);
+            let result = engine.submit(engine_native::GameCommand {
+                actor,
+                expected_revision: engine.revision(),
+                dedup_id: 30_000 + step,
+                action: engine_native::GameAction::NextPhase,
+            });
+            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
         }
     }
-    assert!(converged, "服务端安装的 VM 武将技能应在 phase_end 摸牌");
+    panic!("服务端安装的 VM 武将技能未在结束阶段回复 1 点体力");
 }

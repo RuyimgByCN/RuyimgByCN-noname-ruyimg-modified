@@ -61,11 +61,12 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     };
     // characters 资产独立于 cards 存在：VM-only 包也需要武将。
     if let Some(characters) = item.get("characters") {
-        let generals = content_native_loader::bridge_generals_with_known(
-            &json(characters),
-            &vm_names,
-        )
-        .map_err(|e| e.to_string())?;
+        let vm_modules = item.get("modules").and_then(Value::as_array).is_some_and(|v| !v.is_empty());
+        let generals = if vm_modules {
+            content_native_loader::bridge_generals_with_known(&json(characters), &vm_names)
+        } else {
+            content_native_loader::bridge_generals(&json(characters))
+        }.map_err(|e| e.to_string())?;
         pack.generals.extend(generals.generals);
         for decl in generals.host_skills {
             match pack.host_skills.iter().find(|d| d.name == decl.name) {

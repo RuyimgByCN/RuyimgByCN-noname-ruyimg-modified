@@ -693,7 +693,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
     // generals 缺省为空：卡牌包合法；同文件声明的武将经同一 pack 段装载。
     // 武将命中的宿主技能声明追加在伴随技能与 skills 数组之后（次序决定
     // 目录技能编号，属确定性规则的一部分）。
-    let generals_out = bridge_generals_inner(&parsed, false, &BTreeSet::new())?;
+    let generals_out = bridge_generals_inner(&parsed, false, &BTreeSet::new(), false)?;
     for decl in generals_out.host_skills {
         match host_skills.iter().find(|d| d.name == decl.name) {
             Some(d) if d.behavior != decl.behavior => {
@@ -723,12 +723,13 @@ pub fn bridge_generals(json: &str) -> Result<BridgedGenerals, BridgeError> {
     ensure_symbol_capacity()?;
     let parsed = parse_json(json)?;
     ensure_host_api_compatible(&parsed)?;
-    bridge_generals_inner(&parsed, true, &BTreeSet::new())
+    bridge_generals_inner(&parsed, true, &BTreeSet::new(), false)
 }
 
 /// 与 [`bridge_generals`] 相同，但把 `known_vm_skills` 中的 VM 模块名视为
 /// 已解析技能：它们不产生 host 行为，只进入武将技能列表。用于完整 npack
-/// （模块 + characters 资产）的 Worker／服务端安装路径。
+/// （模块 + characters 资产）的 Worker／服务端安装路径。含 VM 技能的包
+/// 必须拒绝无法解析的武将技能，避免安装成功后静默丢失技能。
 pub fn bridge_generals_with_known(
     json: &str,
     known_vm_skills: &BTreeSet<String>,
@@ -736,7 +737,7 @@ pub fn bridge_generals_with_known(
     ensure_symbol_capacity()?;
     let parsed = parse_json(json)?;
     ensure_host_api_compatible(&parsed)?;
-    bridge_generals_inner(&parsed, true, known_vm_skills)
+    bridge_generals_inner(&parsed, true, known_vm_skills, true)
 }
 
 /// `require_generals`：独立入口必需；全量入口（bridge_pack）对纯卡牌包
@@ -745,6 +746,7 @@ fn bridge_generals_inner(
     parsed: &Value,
     require_generals: bool,
     known_vm_skills: &BTreeSet<String>,
+    reject_unmapped: bool,
 ) -> Result<BridgedGenerals, BridgeError> {
     let generals_json = if require_generals {
         req_array(&parsed, "generals", "generals")?
@@ -783,6 +785,12 @@ fn bridge_generals_inner(
                 }
                 MappedSkill::Deferred if known_vm_skills.contains(key) => {
                     skills.push(names::intern(key.to_string()));
+                }
+                MappedSkill::Deferred if reject_unmapped => {
+                    return Err(invalid(
+                        "generals[].skills[].name",
+                        format!("VM 包的武将技能 {key} 未映射"),
+                    ));
                 }
                 MappedSkill::Deferred => unmapped += 1,
             }

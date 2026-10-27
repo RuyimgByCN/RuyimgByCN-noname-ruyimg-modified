@@ -264,8 +264,11 @@ impl NativeContent {
         // 并把 VM 模块名视为已解析技能（不产生 host 行为）。
         pack.vm_skills.extend(vm_skills);
         if let Some(json) = characters {
-            let generals = content_native_loader::bridge_generals_with_known(&json, &vm_names)
-                .map_err(|e| e.to_string())?;
+            let generals = if parsed.modules.is_empty() {
+                content_native_loader::bridge_generals(&json)
+            } else {
+                content_native_loader::bridge_generals_with_known(&json, &vm_names)
+            }.map_err(|e| e.to_string())?;
             pack.generals.extend(generals.generals);
             for decl in generals.host_skills {
                 match pack.host_skills.iter().find(|d| d.name == decl.name) {
