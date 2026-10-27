@@ -1,0 +1,26 @@
+   Compiling libc v0.2.186
+   Compiling rule-vm v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/content-schema)
+   Compiling errno v0.3.14
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling tempfile v3.27.0
+   Compiling content-runtime v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/content-runtime)
+    Finished `test` profile [unoptimized] target(s) in 8.16s
+     Running tests/nc04_vm_control_flow.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/nc04_vm_control_flow-3ac3fe94e835d5b8)
+
+running 1 test
+
+thread 'signed_invalid_upgrade_does_not_replace_active_package' (108990761) panicked at crates/content-runtime/tests/nc04_vm_control_flow.rs:47:9:
+"jump": Ok(InstallResult { meta: InstalledMeta { namespace: "official", package_id: "nc04_control", version: "0.1.1", logic_hash: "ec0b31db1e062774e04b2c01a50928c9ce23e9bbe1bd33321dccd23d4f9ca70b", content_hash: "b62c89ff9739f2e72d75dfd39eb390331045e01d586bbaa13aefea1a6cab34aa", signed: true, key_id: Some("test"), extension_root: None }, store_path: "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/.tmpsZZK05/packages/official__nc04_control/0.1.1/package.json", content_lock: Some(ContentLock { packages: [LockedPackage { namespace: "official", package_id: "nc04_control", version: "0.1.1", logic_hash: "ec0b31db1e062774e04b2c01a50928c9ce23e9bbe1bd33321dccd23d4f9ca70b", content_hash: "b62c89ff9739f2e72d75dfd39eb390331045e01d586bbaa13aefea1a6cab34aa" }], lock_hash: "e124aa68ed5e7efa2eb0d707882a15ce8970476f58b8725414fe3c29a235a7f2" }) })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test signed_invalid_upgrade_does_not_replace_active_package ... FAILED
+
+failures:
+
+failures:
+    signed_invalid_upgrade_does_not_replace_active_package
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p content-runtime --test nc04_vm_control_flow`

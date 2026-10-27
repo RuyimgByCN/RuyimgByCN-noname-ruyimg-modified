@@ -1,0 +1,11 @@
+match Cargo.lock
+match apps/web-client/scripts/native-worker-smoke.mjs
+match apps/web-client/scripts/fixtures/vm-control-flow/old-native-saves.json
+match crates/content-schema/src/package.rs
+match crates/engine-native-wasm/Cargo.toml
+match crates/engine-native-wasm/tests/nc04_vm_control_flow.rs
+match crates/engine-core/tests/nc04_vm_control_flow.rs
+match crates/rule-vm/src/reference.rs
+match crates/rule-vm/src/verify.rs
+match crates/rule-vm/src/vm.rs
+match crates/rule-vm/tests/control_flow_boundaries.rs

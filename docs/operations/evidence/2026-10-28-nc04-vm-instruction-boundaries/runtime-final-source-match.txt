@@ -1,0 +1,6 @@
+match crates/rule-vm/src/verify.rs
+match crates/rule-vm/src/vm.rs
+match crates/rule-vm/src/reference.rs
+match crates/content-schema/src/package.rs
+match crates/content-runtime/tests/nc04_vm_control_flow.rs
+match apps/web-client/scripts/fixtures/vm-control-flow/old-native-saves.json

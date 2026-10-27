@@ -10,10 +10,17 @@ pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
 
 /// Verify a module and detect an effect tag at an instruction boundary.
 pub fn module_uses_effect_tag(module: &BytecodeModule, tag: u16) -> Result<bool, VmError> {
-    verify_and_find_effect(module, Some(tag))
+    verify_and_find_effect(module, Some(tag)).map(|(found, _)| found)
 }
 
-fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Result<bool, VmError> {
+pub(crate) fn verify_resume_points(module: &BytecodeModule) -> Result<Vec<u32>, VmError> {
+    verify_and_find_effect(module, None).map(|(_, points)| points)
+}
+
+fn verify_and_find_effect(
+    module: &BytecodeModule,
+    effect: Option<u16>,
+) -> Result<(bool, Vec<u32>), VmError> {
     if module.code.is_empty() {
         return Err(VmError::InvalidBytecode("empty code".into()));
     }
@@ -29,8 +36,12 @@ fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Resul
     let mut stack: i32 = 0;
     let mut max_seen = 0i32;
     let mut found = false;
+    let mut boundaries = vec![false; code.len()];
+    let mut jumps = Vec::new();
+    let mut resume_points = Vec::new();
 
     while i < code.len() {
+        boundaries[i] = true;
         let opc = code[i];
         i += 1;
         match opc {
@@ -91,11 +102,12 @@ fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Resul
                     stack -= 1;
                 }
                 let target = i as i32 + off as i32;
-                if target < 0 || target as usize > code.len() {
+                if target < 0 || target as usize >= code.len() {
                     return Err(VmError::InvalidBytecode(format!(
                         "jump target {target} out of range"
                     )));
                 }
+                jumps.push(target as usize);
             }
             op::HOST_EFFECT | op::HOST_QUERY => {
                 if i >= code.len() {
@@ -132,11 +144,13 @@ fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Resul
                 // Pops `count` option tokens, pushes 1 chosen token on resume.
                 stack -= count;
                 stack += 1;
+                resume_points.push(i as u32);
             }
             op::HOST_CHOICE_RANGE => {
                 // Pops inclusive min/max bounds, pushes one chosen token on resume.
                 stack -= 2;
                 stack += 1;
+                resume_points.push(i as u32);
             }
             op::HOST_SELF
             | op::HOST_EVENT_PLAYER
@@ -164,7 +178,19 @@ fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Resul
             )));
         }
     }
-    Ok(found)
+    if !boundaries[module.entry_pc as usize] {
+        return Err(VmError::InvalidBytecode(format!(
+            "entry_pc {} is not an instruction boundary",
+            module.entry_pc
+        )));
+    }
+    if let Some(target) = jumps.into_iter().find(|target| !boundaries[*target]) {
+        return Err(VmError::InvalidBytecode(format!(
+            "jump target {target} is not an instruction boundary"
+        )));
+    }
+    resume_points.retain(|pc| (*pc as usize) < code.len());
+    Ok((found, resume_points))
 }
 
 #[cfg(test)]

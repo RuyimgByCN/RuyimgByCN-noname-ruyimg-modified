@@ -1,0 +1,284 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:180:4
+    |
+180 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:703:4
+    |
+703 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:764:4
+    |
+764 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:826:4
+    |
+826 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:835:4
+    |
+835 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:861:4
+    |
+861 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:870:4
+    |
+870 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:909:4
+    |
+909 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:918:4
+    |
+918 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:926:4
+    |
+926 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:934:4
+    |
+934 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:942:4
+    |
+942 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:950:4
+    |
+950 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:958:4
+    |
+958 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:966:4
+    |
+966 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:974:4
+    |
+974 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:982:4
+    |
+982 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:990:4
+    |
+990 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+warning: `engine-native-wasm` (lib) generated 18 warnings
+warning: duplicated attribute
+    --> crates/engine-native-wasm/src/lib.rs:1436:5
+     |
+1436 |     #[test]
+     |     ^^^^^^^
+     |
+     = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: `engine-native-wasm` (lib test) generated 2 warnings (1 duplicate)
+    Finished `test` profile [unoptimized] target(s) in 1.44s
+     Running unittests src/lib.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/engine_native_wasm-5adf005ffa25901b)
+
+running 27 tests
+test pack_roundtrip::fool_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::coin_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::desktop_adapt_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::liuli_coin_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::martial_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::elo_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::drag_read_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::douzhuan_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::boss_play_pack_json_enters_wasm_helper ... ok
+test restore_boundary::accepts_upper_and_lower_case_hex ... ok
+test restore_boundary::rejects_illegal_ascii_digits ... ok
+test restore_boundary::rejects_non_ascii_without_panicking ... ok
+test pack_roundtrip::liuli_cardpile_pack_json_enters_wasm_helper ... ok
+test restore_boundary::rejects_odd_length_before_slicing ... ok
+test pack_roundtrip::sj_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::update_guard_pack_json_enters_wasm_helper ... ok
+test restore_boundary::rejects_oversize_before_allocating ... ok
+test winner_protocol_tests::identity_outcomes_map_to_protocol_shapes ... ok
+test pack_roundtrip::shousha_mvp_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::shousha_mvp_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::cardpile_pack_json_enters_wasm_helper ... ok
+test winner_protocol_tests::single_and_group_and_none_and_unmodelled ... ok
+test pack_roundtrip::installed_pack_enters_new_match_and_restore ... ok
+test pack_roundtrip::huanle_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::wuxing_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::omnisearch_pack_json_enters_wasm_helper ... ok
+test pack_roundtrip::shousha_pack_json_enters_wasm_helper ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/cross_target_multiseat.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/cross_target_multiseat-9a32772fe1e842ac)
+
+running 1 test
+test vm_and_installed_package_match_multiseat_restore_trajectories ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/cross_target_package.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/cross_target_package-0fbda9882d1243e3)
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/events_hash_export.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/events_hash_export-5fe2c9c9ece016cc)
+
+running 3 tests
+test malformed_restore_does_not_drain_or_replay_events ... ok
+test state_hash_and_public_events_are_exported ... ok
+test restore_starts_with_empty_log_and_keeps_state_hash ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/installed_package_payload.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/installed_package_payload-615f0e1223013b50)
+
+running 7 tests
+test malformed_installed_payloads_are_not_silently_skipped ... ok
+test duplicate_installed_slots_are_rejected_on_start_and_restore ... ok
+test same_package_id_in_different_namespaces_remains_allowed ... ok
+test identity_preserves_roles_lord_bonus_and_extension_init_hooks ... ok
+test invalid_installed_identity_fields_are_rejected_before_start_and_restore ... ok
+test installed_assets_enter_catalog_select_and_same_lock_restore ... ok
+test installed_dependency_lock_is_checked_on_start_and_restore ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc03_legal_actions_export.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc03_legal_actions_export-aa8608ea705423ab)
+
+running 5 tests
+test open_choice_candidates_round_trip_option_indices ... ok
+test every_projected_action_is_submittable ... ok
+test forged_actions_are_rejected_by_kernel ... ok
+test export_surface_exists_and_returns_kernel_actions ... ok
+test candidates_are_not_hand_padding_nor_truncated_at_eight ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc04_vm_control_flow.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc04_vm_control_flow-13202817058c743e)
+
+running 1 test
+test module_targets_are_checked_before_normal_identity_and_restore ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc05_general_select_export.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc05_general_select_export-ace9f5efa75ad994)
+
+running 2 tests
+test nc05_assign_general_export_is_authoritative ... ok
+test nc05_candidates_export_lists_generals ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_cross_target.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/nc08_cross_target-41dcd1a4baefc4cd)
+
+running 4 tests
+test nc08_native_and_wasm_agree_after_steps ... ok
+test nc08_native_and_wasm_agree_on_archive_bytes ... ok
+test nc08_gate_can_fail_on_controlled_mutations ... ok
+test nc08_wasm_restore_matches_native_restore ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/restore_boundary_handle.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/restore_boundary_handle-d0c5f92de9a272ae)
+
+running 4 tests
+test engine_from_archive_reports_errors_instead_of_panicking ... ok
+test valid_archive_roundtrip_still_works_after_rejections ... ok
+test truncated_archive_is_rejected_and_original_match_continues ... ok
+test malformed_hex_is_rejected_without_invalidating_handle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/vm_module_hash.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/vm_module_hash-ec1f43e90a10d204)
+
+running 1 test
+test changed_module_fields_cannot_bypass_package_and_worker_validation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/vm_package_integrity.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/vm_package_integrity-42f362fa4b2d307b)
+
+running 1 test
+test full_vm_package_hash_is_checked_before_start_and_restore ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/vm_package_worker.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/vm_package_worker-a6ee50ec8b91e6df)
+
+running 4 tests
+test npack_without_payload_or_modules_still_refused ... ok
+test characters_only_payload_still_loads_general_with_builtin_skill ... ok
+test vm_only_npack_loads_skills_and_generals ... ok
+test onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+   Doc-tests engine_native_wasm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

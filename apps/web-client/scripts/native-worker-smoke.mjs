@@ -591,6 +591,19 @@ try {
     badModuleReplies.every((reply) => reply.ok === false && /module .*logic_hash mismatch/.test(reply.error ?? "")) &&
       afterBadModule.ok === true && afterBadModule.data?.hex === beforeBadRestore.data?.hex,
     JSON.stringify(badModuleReplies.map((reply) => reply.error)));
+  const invalidControlSaves = JSON.parse(readFileSync(join(root, "scripts/fixtures/vm-control-flow/old-native-saves.json"), "utf8"));
+  for (const [index, invalid] of invalidControlSaves.entries()) {
+    const replies = [
+      await workerSend({ id: 968 + index * 4, type: "start", players: 4, seed: 42, observer: 0, packsJson: invalid.packs }),
+      await workerSend({ id: 969 + index * 4, type: "start", mode: "identity", players: 4, seed: 42, observer: 0, packsJson: invalid.packs }),
+      await workerSend({ id: 970 + index * 4, type: "restore", hex: invalid.hex, packsJson: invalid.packs }),
+    ];
+    const after = await workerSend({ id: 971 + index * 4, type: "save" });
+    check(`worker_vm_${invalid.case}_invalid_control_flow_refused`,
+      replies.every((reply) => reply.ok === false && /instruction boundary/.test(reply.error ?? "")) &&
+        after.ok === true && after.data?.hex === beforeBadRestore.data?.hex,
+      JSON.stringify(replies.map((reply) => reply.error)));
+  }
   const vmPick = await workerSend({ id: 952, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
   let vmEnv = vmPick.data?.envelope;
   const vmSkill = vmPackage.trigger_index[0].module;

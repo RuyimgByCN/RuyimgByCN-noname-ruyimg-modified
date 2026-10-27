@@ -1,0 +1,12 @@
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+    Finished `test` profile [unoptimized] target(s) in 0.95s
+     Running tests/control_flow_boundaries.rs (/tmp/noname-nc02-module-target.4tirGv/debug/deps/control_flow_boundaries-91b39b9d750395e1)
+
+running 4 tests
+test rejects_interior_jump_even_when_it_hides_a_gated_effect ... ok
+test rejects_entry_and_both_jump_forms_inside_immediates_or_past_end ... ok
+test rejects_forged_resume_pc_before_it_can_execute_hidden_immediates ... ok
+test valid_instruction_targets_and_choice_resume_remain_usable ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

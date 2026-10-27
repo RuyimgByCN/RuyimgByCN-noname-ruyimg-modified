@@ -1149,6 +1149,7 @@ dependencies = [
  "content-native-loader",
  "content-schema",
  "engine-native",
+ "rule-vm",
  "serde_json",
  "wasm-bindgen",
 ]

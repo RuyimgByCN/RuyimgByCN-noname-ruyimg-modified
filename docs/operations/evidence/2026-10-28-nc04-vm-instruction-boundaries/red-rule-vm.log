@@ -1,0 +1,32 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde_core v1.0.228
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling constant_time_eq v0.4.2
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling arrayref v0.3.9
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling cc v1.2.66
+   Compiling blake3 v1.8.5
+   Compiling syn v2.0.118
+   Compiling thiserror-impl v2.0.18
+   Compiling serde_derive v1.0.228
+   Compiling engine-api v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/engine-api)
+   Compiling rule-api v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/rule-vm)
+error[E0026]: variant `Paused` does not have a field named `c`
+   --> crates/rule-vm/tests/control_flow_boundaries.rs:186:34
+    |
+186 |     let ExecResult::Paused { mut c, .. } = reference.execute(&m, &mut host2, 100).unwrap() else {
+    |                                  ^ variant `Paused` does not have this field
+
+For more information about this error, try `rustc --explain E0026`.
+error: could not compile `rule-vm` (test "control_flow_boundaries") due to 1 previous error

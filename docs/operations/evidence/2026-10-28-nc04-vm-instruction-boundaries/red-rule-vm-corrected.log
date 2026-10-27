@@ -1,0 +1,33 @@
+   Compiling rule-vm v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/rule-vm)
+    Finished `test` profile [unoptimized] target(s) in 0.31s
+     Running tests/control_flow_boundaries.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/control_flow_boundaries-91b39b9d750395e1)
+
+running 4 tests
+
+thread 'rejects_entry_and_both_jump_forms_inside_immediates_or_past_end' (108863677) panicked at crates/rule-vm/tests/control_flow_boundaries.rs:100:5:
+malformed targets accepted: ["entry", "conditional", "end", "backward"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test valid_instruction_targets_and_choice_resume_remain_usable ... ok
+pre-fix: optimized resume emitted [ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player: PlayerId(0), amount: 7, skill: SkillId(0) }]
+test rejects_entry_and_both_jump_forms_inside_immediates_or_past_end ... pre-fix: tag 772 absent from scan but emitted by both interpreters
+FAILED
+pre-fix: reference resume emitted [ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player: PlayerId(0), amount: 7, skill: SkillId(0) }]
+
+thread 'rejects_interior_jump_even_when_it_hides_a_gated_effect' (108863679) panicked at crates/rule-vm/tests/control_flow_boundaries.rs:54:5:
+jump into an immediate was accepted
+
+thread 'rejects_forged_resume_pc_before_it_can_execute_hidden_immediates' (108863678) panicked at crates/rule-vm/tests/control_flow_boundaries.rs:198:5:
+forged continuation accepted by at least one interpreter
+test rejects_interior_jump_even_when_it_hides_a_gated_effect ... FAILED
+test rejects_forged_resume_pc_before_it_can_execute_hidden_immediates ... FAILED
+
+failures:
+
+failures:
+    rejects_entry_and_both_jump_forms_inside_immediates_or_past_end
+    rejects_forged_resume_pc_before_it_can_execute_hidden_immediates
+    rejects_interior_jump_even_when_it_hides_a_gated_effect
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rule-vm --test control_flow_boundaries`

@@ -4,7 +4,7 @@ mod effects;
 
 use crate::bytecode::{effect_tag, op, query_tag, relation_code, BytecodeModule};
 use crate::host::VmHost;
-use crate::verify::verify_module;
+use crate::verify::verify_resume_points;
 use crate::{Continuation, VmError};
 use rule_api::{DrawTargetScope, EffectRequest, PlayerId, QueryRequest, QueryResponse};
 use serde::{Deserialize, Serialize};
@@ -23,13 +23,13 @@ pub const DEFAULT_MAX_STACK: usize = 64;
 /// 序列化与内层 [`BytecodeModule`] 逐字节相同（持有方的快照格式不变）；
 /// 反序列化即装载期校验——快照里的畸形模块在恢复时拒绝，而不是等到首次执行。
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct VerifiedModule(BytecodeModule);
+pub struct VerifiedModule(BytecodeModule, Vec<u32>);
 
 impl VerifiedModule {
     /// 校验并封装：畸形模块在此（装载期）拒绝。
     pub fn verify(module: BytecodeModule) -> Result<Self, VmError> {
-        verify_module(&module)?;
-        Ok(Self(module))
+        let resume_points = verify_resume_points(&module)?;
+        Ok(Self(module, resume_points))
     }
 }
 
@@ -140,6 +140,11 @@ impl RuleVm {
         if cont.module_hash != module.logic_hash {
             return Err(VmError::InvalidBytecode(
                 "continuation module mismatch".into(),
+            ));
+        }
+        if !module.1.contains(&cont.pc) {
+            return Err(VmError::InvalidBytecode(
+                "continuation pc is not a choice resume point".into(),
             ));
         }
         let mut frame = decode_frame(&cont.frames)?;

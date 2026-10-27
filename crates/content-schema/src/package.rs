@@ -776,13 +776,12 @@ impl ContentPackage {
                     module.name
                 ));
             }
-            if abi < 758
-                && rule_vm::module_uses_effect_tag(
-                    module,
-                    effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
-                )
-                .map_err(|e| format!("module {}: {e}", module.name))?
-            {
+            let uses_772 = rule_vm::module_uses_effect_tag(
+                module,
+                effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
+            )
+            .map_err(|e| format!("module {}: {e}", module.name))?;
+            if abi < 758 && uses_772 {
                 return Err(format!("module {} uses effect 772 below ABI 758", module.name));
             }
         }

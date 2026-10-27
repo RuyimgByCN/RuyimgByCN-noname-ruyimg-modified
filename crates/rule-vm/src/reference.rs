@@ -2,7 +2,7 @@
 
 use crate::bytecode::{caps, op, BytecodeModule};
 use crate::host::VmHost;
-use crate::verify::verify_module;
+use crate::verify::{verify_module, verify_resume_points};
 use crate::vm::{decode_frame, encode_frame, ExecResult, Frame, RuleVm, Value};
 use crate::{Continuation, VmError};
 
@@ -46,11 +46,16 @@ impl ReferenceVm {
         continuation: Continuation,
         chosen_token: u32,
     ) -> Result<ExecResult, VmError> {
-        verify_module(module)?;
+        let resume_points = verify_resume_points(module)?;
         check_caps(module, host)?;
         if continuation.module_hash != module.logic_hash {
             return Err(VmError::InvalidBytecode(
                 "continuation module mismatch".into(),
+            ));
+        }
+        if !resume_points.contains(&continuation.pc) {
+            return Err(VmError::InvalidBytecode(
+                "continuation pc is not a choice resume point".into(),
             ));
         }
         let mut frame = decode_frame(&continuation.frames)?;

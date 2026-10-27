@@ -1,0 +1,11 @@
+   Compiling rule-vm v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/content-schema)
+   Compiling content-runtime v0.1.0 (/tmp/noname-nc04-boundary-red.GwmPuX/crates/content-runtime)
+    Finished `test` profile [unoptimized] target(s) in 7.90s
+     Running tests/nc04_vm_control_flow.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/nc04_vm_control_flow-3ac3fe94e835d5b8)
+
+running 1 test
+test signed_invalid_upgrade_does_not_replace_active_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

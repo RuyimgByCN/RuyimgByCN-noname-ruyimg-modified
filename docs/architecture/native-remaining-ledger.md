@@ -110,3 +110,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC02 进展（2026-10-28）**：Worker 完整 VM 包声明摘要校验已加，旧的错误摘要包／档拒绝；模块入口等元数据仍可同摘要改变结算，签名、资源字节与 VM 安装入口仍待完成（[证据](../operations/evidence/2026-10-28-nc02-vm-package-hash/README.md)）。NC02 保持部分。
 
 **NC02 后续（2026-10-28）**：现有模块指纹已在安装、桥接及旧线快照恢复时校验，指纹不一致的旧档明确拒绝；自洽重算的快照、`max_stack`、资源绑定与 VM 安装仍待处理。状态仍为部分（[证据](../operations/evidence/2026-10-28-nc02-vm-module-hash/README.md)）。
+
+**NC04 进展（2026-10-28）**：VM 入口、跳转和续行位置增加指令边界校验，异常包及旧档拒绝；续行来源认证和其余故障矩阵仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-vm-instruction-boundaries/README.md)）。
