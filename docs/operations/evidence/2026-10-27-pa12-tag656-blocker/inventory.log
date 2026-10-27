@@ -1,0 +1,4 @@
+duplicate 656 GAIN_OTHER_SKILL_PILE_CARDS,CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW
+tag 772 constants: []
+sp package_version 0.1.0 abi 745 module yingshi_die_death code [83, 84, 17, 121, 243, 125, 191, 90, 144, 2, 1]
+onlyOL package_version 0.1.4 abi 757 module ol_pingkou_phase_end code [83, 16, 1, 0, 0, 0, 90, 144, 2, 1]
