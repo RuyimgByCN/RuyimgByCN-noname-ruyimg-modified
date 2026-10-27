@@ -174,6 +174,9 @@ pub enum BridgeError {
     HostVersionMismatch { declared: u64, current: u32 },
     /// 名称符号表已达总量上限（ADR 0779）：拒绝装载而非无界增长。
     SymbolTableLimit { limit: usize },
+    /// 包声明了原生桥接尚不承载的 DSL 滤镜（PA12 批①：装载期拒绝——
+    /// 此前静默跳过会让技能「装上但不触发」）。
+    UnsupportedVmFilters { filters: Vec<String> },
 }
 
 impl std::fmt::Display for BridgeError {
@@ -196,6 +199,9 @@ impl std::fmt::Display for BridgeError {
                 f,
                 "包声明的引擎 API 版本 {declared} 与运行时 {current} 不符"
             ),
+            BridgeError::UnsupportedVmFilters { filters } => {
+                write!(f, "VM 技能滤镜原生不承载（整包拒装）: {}", filters.join(", "))
+            }
             BridgeError::SymbolTableLimit { limit } => {
                 write!(f, "名称符号表已达总量上限 {limit}，拒绝装载（ADR 0779）")
             }
@@ -237,13 +243,13 @@ fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
 /// T8 增量 3/6：npack 内 rule-vm 触发模块 → engine-native `VmSkillDecl`
 ///（数据驱动装载：DSL→编译 npack→装载器→引擎，不重编译）。事件名严
 /// 格映射（phase_end/phase_begin/damage/card_used/death）；未知事件名
-/// 拒装。filter 走 `map_vm_filter`：精确策略、参数化族、具名编译；
-/// 无法编译的名称跳过入 `deferred_filters`（不恒真）。
+/// 拒装。filter 走 `map_vm_filter`：精确策略、参数化族、具名编译；无法
+/// 承载的名称**装载期拒绝整包**并列出（PA12 批①；此前跳过入 deferred
+/// 会让技能静默不触发）。
+#[derive(Debug)]
 pub struct VmBridgeOutcome {
     /// 可装载声明。
     pub decls: Vec<engine_native::content::extension::VmSkillDecl>,
-    /// 被跳过的 filter 名（不可承载的具名组合 filter）。
-    pub deferred_filters: Vec<String>,
 }
 
 pub fn bridge_vm_skill_decls(
@@ -252,7 +258,7 @@ pub fn bridge_vm_skill_decls(
     use engine_native::event::{EventKind, Timing};
     ensure_symbol_capacity()?;
     let mut out = Vec::new();
-    let mut deferred_filters = Vec::new();
+    let mut unsupported: Vec<String> = Vec::new();
     for t in &pkg.trigger_index {
         let module = pkg
             .modules
@@ -326,7 +332,9 @@ pub fn bridge_vm_skill_decls(
             }
         };
         let Some(filter) = engine_native::rvm_bridge::map_vm_filter(t.filter.as_str()) else {
-            deferred_filters.push(t.filter.clone());
+            if !unsupported.contains(&t.filter) {
+                unsupported.push(t.filter.clone());
+            }
             continue;
         };
         let filter = match phase_gate {
@@ -349,10 +357,13 @@ pub fn bridge_vm_skill_decls(
             filter,
         });
     }
-    Ok(VmBridgeOutcome {
-        decls: out,
-        deferred_filters,
-    })
+    if !unsupported.is_empty() {
+        unsupported.sort();
+        return Err(BridgeError::UnsupportedVmFilters {
+            filters: unsupported,
+        });
+    }
+    Ok(VmBridgeOutcome { decls: out })
 }
 
 fn ensure_symbol_capacity() -> Result<(), BridgeError> {

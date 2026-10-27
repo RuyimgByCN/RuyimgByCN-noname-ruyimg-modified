@@ -106,3 +106,48 @@ fn pa12_legacy_branch_effects_match_native() {
         );
     }
 }
+
+/// PA12 批①差分：清励（`loop 5 { if hand<max_hp { if hand<5 { draw 1 } } }`）在旧线
+/// 同样一次摸 5——两线 VM 宿主都在模块 Halt 后落账，模块内再查询看到执行前手牌，
+/// 条件恒真。与原生 `pa12_batch1_owner_alive_triggers_on_others_end_phase` 的 5 张一致；
+/// 这是 ported DSL 的保真度问题（上游：摸至体力上限、至多 5），登记于迁移计划 §2 H。
+#[test]
+fn pa12_legacy_clanqingli_requery_is_stale_draws_five() {
+    const CLANQINGLI: &str =
+        include_str!("../../../content/original/ported/clan/clanqingli.skill");
+    let pkg = content_compiler::compile_source_named("clan-qingli", CLANQINGLI).expect("编译");
+    let mut tx = Transaction::begin(GameState::empty());
+    bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+    std::sync::Arc::make_mut(&mut tx.state_mut().content)
+        .load_package(&pkg)
+        .expect("装载");
+    let name = pkg.trigger_index[0].module.clone();
+    let module = tx.state().content.module(&name).cloned().expect("模块");
+    let owner = PlayerId::new(1);
+    tx.state_mut().players.get_mut(owner).unwrap().max_hp = 9; // 手牌清空：0 < max 且 < 5
+    for card in tx.state().hand_cards(owner) {
+        let zone = tx.state().cards.get(card).expect("牌存在").zone;
+        tx.state_mut()
+            .zones
+            .get_mut(zone)
+            .expect("手牌区")
+            .cards
+            .retain(|c| *c != card);
+    }
+    assert_eq!(tx.state().hand_count(owner), 0);
+    let out = engine_core::vm_host::run_module(
+        tx.state(),
+        &module,
+        0,
+        [owner.raw(), owner.raw(), owner.raw(), 0],
+        0,
+        10_000,
+    )
+    .expect("执行");
+    assert!(out.paused.is_none());
+    assert_eq!(out.effects.len(), 5, "再查询陈旧：loop 5 全部命中，摸 5");
+    assert!(out
+        .effects
+        .iter()
+        .all(|e| format!("{e:?}").starts_with("DrawCards")));
+}

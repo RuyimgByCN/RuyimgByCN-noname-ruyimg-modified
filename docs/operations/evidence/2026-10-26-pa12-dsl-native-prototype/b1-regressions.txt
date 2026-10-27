@@ -1,0 +1,16 @@
+== engine-native start 2026-10-27 09:29:04 +0800
+== engine-native exit=0 end 2026-10-27 09:29:59 +0800
+engine-native: passed=1567 failed=0 ignored=71
+== content-native-loader start 2026-10-27 09:29:59 +0800
+== content-native-loader exit=0 end 2026-10-27 09:30:02 +0800
+content-native-loader: passed=32 failed=0 ignored=0
+== engine-native-wasm start 2026-10-27 09:30:02 +0800
+== engine-native-wasm exit=0 end 2026-10-27 09:30:07 +0800
+engine-native-wasm: passed=52 failed=0 ignored=0
+== game-server start 2026-10-27 09:30:07 +0800
+== game-server exit=0 end 2026-10-27 09:31:40 +0800
+game-server: passed=358 failed=0 ignored=0
+== engine-core start 2026-10-27 09:31:40 +0800
+== engine-core exit=0 end 2026-10-27 09:32:37 +0800
+engine-core: passed=3839 failed=0 ignored=1
+ALL DONE

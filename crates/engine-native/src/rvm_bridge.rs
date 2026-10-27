@@ -121,6 +121,9 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         },
         EventData::CardUsed(u) => VmTriggerCtx {
             event_player: Some(u.player),
+            // 旧线 CardUsed 的 TriggerContext.source = 用牌者；原生此前未填
+            // 导致 `owner_is_source` 对用牌事件恒假（PA12 批①）。
+            event_source: Some(u.player),
             event_card: Some(u.card),
             targets: u.targets.clone(),
             use_as: u.use_as,
@@ -191,6 +194,9 @@ pub enum VmFilterPolicy {
     /// DSL `owner_is_target`：事件主玩家=持有者。
     #[default]
     OwnerIsTarget,
+    /// DSL `owner_alive`：持有者存活即过闸（**不含**事件主玩家合取——
+    /// 他人结束阶段等场合也触发；PA12 批①，样本=清励）。旧线语义同。
+    OwnerAlive,
     /// DSL `owner_source`：事件来源=持有者。
     OwnerIsSource,
     /// DSL `always`：无条件。
@@ -294,7 +300,10 @@ pub enum VmFilterPolicy {
 pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
     let exact = match name {
         "owner_is_target" => Some(VmFilterPolicy::OwnerIsTarget),
-        "owner_source" => Some(VmFilterPolicy::OwnerIsSource),
+        // PA12 批①：旧线 DSL 实际拼写为 owner_is_source（inventory 206 处），
+        // 与既有 owner_source 同义（事件来源=持有者）。
+        "owner_source" | "owner_is_source" => Some(VmFilterPolicy::OwnerIsSource),
+        "owner_alive" => Some(VmFilterPolicy::OwnerAlive),
         "always" => Some(VmFilterPolicy::Always),
         "owner_is_target_wounded" => Some(VmFilterPolicy::OwnerWounded),
         "owner_is_target_linked" => Some(VmFilterPolicy::OwnerLinked),
@@ -383,6 +392,7 @@ impl SkillBehavior for VmSkillBehavior {
         let holder_state = |s: u8| ctx.state.player(s);
         match self.filter.clone() {
             VmFilterPolicy::OwnerIsTarget => is_event_player,
+            VmFilterPolicy::OwnerAlive => ctx.state.player(owner).alive,
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
             VmFilterPolicy::OwnerWounded => {

@@ -25,11 +25,6 @@ fn load_via_loader() -> ExtensionPack {
         rule_vm::RULE_VM_ABI_VERSION
     );
     let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("正式桥接路径");
-    assert!(
-        out.deferred_filters.is_empty(),
-        "滤名应全部可承载（实际跳过 {:?}）",
-        out.deferred_filters
-    );
     assert_eq!(out.decls.len(), 1, "单技能包应产出 1 条 VM 技能声明");
     ExtensionPack {
         def: ExtensionDef {

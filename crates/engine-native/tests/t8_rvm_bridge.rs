@@ -387,10 +387,6 @@ fn t8_vm_skill_loader_bridge_end_to_end() {
     let pkg = compile_source_named("t8-rvm-bridge-loader", JIUWEI_DSL).expect("DSL 编译");
     let outcome =
         content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
-    assert!(
-        outcome.deferred_filters.is_empty(),
-        "基样本无具名组合 filter"
-    );
     let decls = outcome.decls;
     assert_eq!(decls.len(), 1, "触发索引 1 项→1 声明");
     // 声明名=模块名（编译器按 技能_事件 命名模块；符号表 intern）。
@@ -629,18 +625,18 @@ fn t8_vm_skill_filter_always() {
     assert!(hand_len(&e, 1) > h0, "always：他人阶段结束即触发");
 }
 
-/// 装载器：无法编译的 filter 名跳过，不阻断同包其余技能。
+/// 装载器：无法承载的 filter 名**装载期拒绝整包**并列出名称（PA12 批①；
+/// 此前静默跳过会让技能装上但不触发）。
 #[test]
-fn t8_vm_skill_loader_skips_named_filters() {
+fn t8_vm_skill_loader_rejects_unsupported_filters() {
     let mut pkg = compile_source_named("t8-rvm-bridge", NAMED_FILTER_DSL).expect("DSL 编译");
     pkg.trigger_index[0].filter = "not_a_real_filter".to_string();
-    let outcome =
-        content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
-    assert!(outcome.decls.is_empty(), "未知 filter 不产出声明");
-    assert_eq!(
-        outcome.deferred_filters,
-        vec!["not_a_real_filter".to_string()],
-    );
+    match content_native_loader::bridge_vm_skill_decls(&pkg) {
+        Err(content_native_loader::BridgeError::UnsupportedVmFilters { filters }) => {
+            assert_eq!(filters, vec!["not_a_real_filter".to_string()]);
+        }
+        other => panic!("应拒装不承载滤镜，实际 {other:?}"),
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -985,7 +981,7 @@ fn t8_filter_family_owner_gate_and_predicates() {
 }
 
 /// 增量 13 装载器映射正向锁面：词表中已承载的 11 个具名组合 filter 逐
-/// 名映射到对应策略，deferred_filters 为空（映射遗漏会落 deferred）。
+/// 名映射到对应策略（映射遗漏现在会装载期拒装）。
 #[test]
 fn t8_loader_maps_all_carried_named_filters() {
     use engine_native::rvm_bridge::VmFilterPolicy as P;
@@ -1088,11 +1084,6 @@ fn t8_loader_maps_all_carried_named_filters() {
     }
     let pkg = compile_source_named("t8-rvm-bridge", &dsl).expect("DSL 编译");
     let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
-    assert!(
-        outcome.deferred_filters.is_empty(),
-        "已承载具名 filter 不得落 deferred: {:?}",
-        outcome.deferred_filters
-    );
     assert_eq!(outcome.decls.len(), 19, "词表内 19 名全产出声明");
     for (tag, _, want) in named.iter() {
         let decl = outcome
@@ -1424,11 +1415,6 @@ skill hnl_pz_d(990016) {
 ";
     let pkg = compile_source_named("t8-rvm-bridge", dsl).expect("DSL 编译");
     let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
-    assert!(
-        outcome.deferred_filters.is_empty(),
-        "参数化族不得落 deferred: {:?}",
-        outcome.deferred_filters
-    );
     let want = [
         ("hnl_pz_a", P::OwnerHpBelow(2)),
         ("hnl_pz_b", P::OwnerPlayCountEq(2)),
@@ -1679,11 +1665,6 @@ fn t8_filter_targeted_by_other_sha() {
 fn install_dsl(dsl: &str) -> ExtensionPack {
     let pkg = compile_source_named("t8-rvm-bridge", dsl).expect("DSL 编译");
     let outcome = content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器");
-    assert!(
-        outcome.deferred_filters.is_empty(),
-        "不应跳过: {:?}",
-        outcome.deferred_filters
-    );
     assert!(!outcome.decls.is_empty(), "装载器应产出声明");
     pack_with(outcome.decls)
 }
