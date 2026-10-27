@@ -9,7 +9,7 @@ const ONLYOL: &[u8] =
     include_bytes!("../../../content/original/ported/onlyOL/onlyOL.npack.json");
 
 #[test]
-fn onlyol_requires_abi757_and_native_rejects_until_supported() {
+fn onlyol_requires_abi758_and_native_rejects_until_supported() {
     let characters = serde_json::json!({
         "source": "test",
         "upstream_path": "onlyOL",
@@ -52,9 +52,9 @@ fn onlyol_requires_abi757_and_native_rejects_until_supported() {
 
     let content =
         NativeContent::open(dir.path().to_path_buf(), dir.path().join("store")).expect("open");
-    let error = content.import().expect_err("native host 753 must reject ABI 757 package");
+    let error = content.import().expect_err("native host 753 must reject ABI 758 package");
     assert!(
-        error.contains("rule_vm_abi host=753 package=757"),
+        error.contains("rule_vm_abi host=753 package=758"),
         "unexpected import error: {error}"
     );
 }

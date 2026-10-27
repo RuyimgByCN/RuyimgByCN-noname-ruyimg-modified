@@ -1,0 +1,7 @@
+crates/rule-vm/src/verify.rs
+crates/rule-vm/src/lib.rs
+crates/rule-vm/src/bytecode/effect_tag.rs
+crates/content-compiler/src/abi_versions.rs
+crates/content-compiler/src/codegen/effect_convert_current_sha_to_fire_lose_hp_if_damage.rs
+crates/content-schema/src/package.rs
+crates/content-native-loader/src/lib.rs

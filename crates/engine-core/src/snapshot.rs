@@ -63,6 +63,9 @@ pub enum SnapshotError {
     /// Choice metadata does not match the canonical continuation state.
     #[error("pending choice does not match snapshot resolution state")]
     ChoiceMismatch,
+    /// A frozen module cannot be interpreted safely under its recorded VM ABI.
+    #[error("snapshot content compatibility: {0}")]
+    ContentCompatibility(String),
 }
 
 impl Snapshot {
@@ -100,6 +103,8 @@ impl Snapshot {
         if hash != self.state_hash {
             return Err(SnapshotError::HashMismatch);
         }
+        self.state.content.validate_snapshot_effect_abi()
+            .map_err(SnapshotError::ContentCompatibility)?;
         if let Some(choice) = &self.pending_choice {
             let resolution = &self.state.resolution;
             if resolution.pending_choice_id != choice.choice_id.raw()

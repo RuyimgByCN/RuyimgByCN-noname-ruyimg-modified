@@ -5,6 +5,15 @@ use crate::VmError;
 
 /// Verify module structure, jump targets, and stack depth bound.
 pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
+    verify_and_find_effect(module, None).map(|_| ())
+}
+
+/// Verify a module and detect an effect tag at an instruction boundary.
+pub fn module_uses_effect_tag(module: &BytecodeModule, tag: u16) -> Result<bool, VmError> {
+    verify_and_find_effect(module, Some(tag))
+}
+
+fn verify_and_find_effect(module: &BytecodeModule, effect: Option<u16>) -> Result<bool, VmError> {
     if module.code.is_empty() {
         return Err(VmError::InvalidBytecode("empty code".into()));
     }
@@ -19,6 +28,7 @@ pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
     let mut i = 0usize;
     let mut stack: i32 = 0;
     let mut max_seen = 0i32;
+    let mut found = false;
 
     while i < code.len() {
         let opc = code[i];
@@ -91,6 +101,9 @@ pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
                 if i >= code.len() {
                     return Err(VmError::InvalidBytecode("truncated host tag".into()));
                 }
+                if opc == op::HOST_EFFECT && effect == Some(u16::from(code[i])) {
+                    found = true;
+                }
                 i += 1;
                 // Conservative: host ops may pop many; require non-negative after max pop 3
                 stack -= 3;
@@ -103,6 +116,9 @@ pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
                     return Err(VmError::InvalidBytecode(
                         "truncated extended host tag".into(),
                     ));
+                }
+                if effect == Some(u16::from_le_bytes([code[i], code[i + 1]])) {
+                    found = true;
                 }
                 i += 2;
                 stack -= 3;
@@ -148,7 +164,7 @@ pub fn verify_module(module: &BytecodeModule) -> Result<(), VmError> {
             )));
         }
     }
-    Ok(())
+    Ok(found)
 }
 
 #[cfg(test)]
@@ -184,5 +200,28 @@ mod tests {
             caps_mask: 0,
         };
         assert!(verify_module(&m).is_ok());
+    }
+
+    #[test]
+    fn finds_effect_tags_only_at_instruction_boundaries() {
+        let mut m = BytecodeModule {
+            name: "effect-tags".into(),
+            code: assemble(&[
+                Op::ConstI32(i32::from_le_bytes([op::HOST_EFFECT_EXT, 0x90, 0x02, 0])),
+                Op::Pop,
+                Op::Halt,
+            ]),
+            local_count: 0,
+            max_stack: 4,
+            entry_pc: 0,
+            logic_hash: [0; 32],
+            caps_mask: 0,
+        };
+        assert!(!module_uses_effect_tag(&m, 656).unwrap());
+        m.code = assemble(&[Op::HostEffect(656), Op::HostEffect(772), Op::Halt]);
+        assert!(module_uses_effect_tag(&m, 656).unwrap());
+        assert!(module_uses_effect_tag(&m, 772).unwrap());
+        m.code = vec![op::HOST_EFFECT_EXT, 0x90];
+        assert!(module_uses_effect_tag(&m, 656).is_err());
     }
 }

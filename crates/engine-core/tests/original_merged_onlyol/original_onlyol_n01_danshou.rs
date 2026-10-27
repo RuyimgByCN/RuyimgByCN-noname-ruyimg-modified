@@ -704,8 +704,8 @@ fn danshou_new_and_old_npack_versions_keep_identity() {
     const OLD_PACKAGE: &[u8] =
         include_bytes!("../../../../docs/operations/evidence/2026-10-24-up37-n01-zhuhuan/onlyOL-0.1.2.npack.json");
     let new = content_schema::ContentPackage::from_json_bytes(NEW_PACKAGE).unwrap();
-    assert_eq!(new.manifest.version, "0.1.4");
-    assert_eq!(new.manifest.rule_vm_abi_version, 757);
+    assert_eq!(new.manifest.version, "0.1.5");
+    assert_eq!(new.manifest.rule_vm_abi_version, 758);
     assert!(new
         .character_index
         .iter()

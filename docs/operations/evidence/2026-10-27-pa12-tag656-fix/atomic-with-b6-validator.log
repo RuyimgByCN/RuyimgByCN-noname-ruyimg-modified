@@ -1,0 +1,28 @@
+HEAD ac83af136731715ef91d955543a10a01fa880f0a
+command: cargo test --offline -p content-runtime --test atomic_install -- --nocapture
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/atomic_install.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-atomic-head-v124597c/target-independent/debug/deps/atomic_install-41901f92f93b1078)
+
+running 7 tests
+test lock_empty_stable ... ok
+test bad_signature_rejected ... ok
+test staging_gc_clears_orphan ... ok
+test unsigned_rejected_unless_allowed ... ok
+test revoke_blocks_activate ... ok
+test activation_requires_exact_dependencies ... ok
+test signed_install_activate_rollback ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

@@ -11,9 +11,9 @@ skill skipped_draw(990301) {
 "#;
 
 #[test]
-fn skipped_damage_draw_compiles_at_abi754_and_emits_target_choice() {
+fn skipped_damage_draw_compiles_at_abi758_and_emits_target_choice() {
     let package = compile_source_named("skipped-draw", GOOD).expect("compile");
-    assert!(package.manifest.rule_vm_abi_version >= 754);
+    assert_eq!(package.manifest.rule_vm_abi_version, 758);
     assert!(package
         .trigger_index
         .iter()

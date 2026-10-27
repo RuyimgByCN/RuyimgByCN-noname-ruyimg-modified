@@ -15,7 +15,7 @@ mod vm;
 pub use bytecode::{assemble, encode_caps, op, BytecodeModule, Op, MODULE_MAGIC, MODULE_VERSION};
 pub use host::{CollectingHost, HostCall, HostContext, VmHost};
 pub use reference::ReferenceVm;
-pub use verify::verify_module;
+pub use verify::{module_uses_effect_tag, verify_module};
 pub use vm::{ExecResult, Frame, RuleVm, Value, VerifiedModule, DEFAULT_FUEL, DEFAULT_MAX_STACK};
 
 use serde::{Deserialize, Serialize};

@@ -1,0 +1,8 @@
+cargo/rustc process check: empty
+external target exists before: False
+command: cargo clean
+     Removed 721936 files, 140.0GiB total
+command: cargo clean --target-dir /private/tmp/noname-next-cargo-target
+     Removed 0 files
+workspace target exists after: False
+external target exists after: False

@@ -37,7 +37,9 @@
 | E 段 | 562–599 | 本 agent（Hermes 会话，负责 standard/newjiang/clan/onlyOL/key/extra/yijiang 等未认领包；559-561 已被其他 agent 占用） |
 | 第二溢出段 | 600–699 | 原编号段全部耗尽后，继续按本表逐号串行领取 |
 
-ABI-MAX: 753
+ABI-MAX: 758
+
+> 2026-10-27：用户授权将平寇效果编号改为 772，并要求包最低 ABI 758；此领取不提升全局原生宿主 ABI，宿主仍为 753。
 
 > 2026-10-10 账面对齐（进度主稿 T15①）：735–753 批原语均已在
 > content-compiler（additive 常量 726…753，缺 743 与领取表一致）与
@@ -53,6 +55,7 @@ ABI-MAX: 753
 
 | ABI | 原语 / 技能 | 领取者 | 日期 | 备注 |
 |---|---|---|---|---|
+| 758 | 平寇 `choose_other_targets_by_skipped_phase_count_damage_draw`：修复与英逝共用 tag 656 的冲突，改用 tag 772；754–757 且含 656 的包拒绝 | Codex | 2026-10-27 | 仅领取包最低 ABI；全局宿主 ABI 仍为 753 |
 | 353 | `zj_duanbing`：回合对历史 + 近距【闪】数（`choose_add_current_sha_target_within_distance` 等） | B (Codex) | 2026-08-01 | 已在 `version.rs` 与 content-compiler 落地 |
 | 354 | `spniluan`：转化【杀】未造成伤害时退还本次使用次数（`refund_use_count_if_no_damage`） | B (Codex) | 2026-08-01 | 复用既有单次【杀】伤害追踪与 `hand_equip_expansion` 来源区 |
 | 355 | `twdaoji`：可获得手牌/装备目标约束与 TW 盗戟结算（`has_gainable_hand_equip`、`resolve_tw_daoji`） | B (Codex) | 2026-08-01 | 复用既有 `daoji` 选牌、获得与强制使用管线 |

@@ -24,7 +24,7 @@ skill jianxiong(1) {
 
 mod active_other_target_and_same_color_contract;
 mod choose_add_missing_skill_requires_abi79;
-mod choose_skipped_damage_draw_requires_abi754;
+mod choose_skipped_damage_draw_requires_abi758;
 mod max_hp_gt_target_constraint;
 mod yingba_mark_target_restriction_modifier;
 mod ddd_zhouchu_contract_requires_abi618;

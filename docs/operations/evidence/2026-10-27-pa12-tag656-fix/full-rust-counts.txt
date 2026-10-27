@@ -1,0 +1,10 @@
+package	passed	failed	ignored	test targets
+content-compiler	541	0	0	3
+content-native-loader	32	0	0	11
+content-runtime	29	5	0	11
+content-schema	0	0	0	2
+engine-core	3841	2	1	176
+engine-native	1588	0	72	326
+engine-native-wasm	58	0	0	11
+game-server	360	0	0	25
+rule-vm	17	0	0	4

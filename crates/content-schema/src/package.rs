@@ -746,6 +746,34 @@ pub struct ContentPackage {
 }
 
 impl ContentPackage {
+    /// Reject packages whose effect tags cannot be interpreted under their declared ABI.
+    pub fn validate_vm_effect_abi(&self) -> Result<(), String> {
+        use rule_vm::bytecode::effect_tag;
+
+        let abi = self.manifest.rule_vm_abi_version;
+        for module in &self.modules {
+            if (754..=757).contains(&abi)
+                && rule_vm::module_uses_effect_tag(module, effect_tag::GAIN_OTHER_SKILL_PILE_CARDS)
+                    .map_err(|e| format!("module {}: {e}", module.name))?
+            {
+                return Err(format!(
+                    "module {} uses ambiguous effect 656 with ABI {abi}",
+                    module.name
+                ));
+            }
+            if abi < 758
+                && rule_vm::module_uses_effect_tag(
+                    module,
+                    effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
+                )
+                .map_err(|e| format!("module {}: {e}", module.name))?
+            {
+                return Err(format!("module {} uses effect 772 below ABI 758", module.name));
+            }
+        }
+        Ok(())
+    }
+
     /// Presentation-only skin overlays contributed by this package.
     pub fn skin_index(&self) -> &PackageSkinIndex {
         &self.skin_index
@@ -758,6 +786,7 @@ impl ContentPackage {
 
     /// Validate package identity, hashes, dependencies, and presentation references.
     pub fn validate(&self) -> Result<(), String> {
+        self.validate_vm_effect_abi()?;
         for (label, value) in [
             ("namespace", self.manifest.namespace.as_str()),
             ("package_id", self.manifest.package_id.as_str()),

@@ -1,0 +1,4 @@
+command: node scripts/sync-original-content.mjs --verify-only
+original content verified:
+  legacy-source: 366 files, 14.9 MiB, 0 linked, 366 copied
+  portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied

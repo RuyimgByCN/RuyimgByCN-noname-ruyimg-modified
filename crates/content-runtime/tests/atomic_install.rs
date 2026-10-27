@@ -2,14 +2,14 @@
 
 use content_runtime::{sign_package, ContentLock, InstallOptions, PackageStore, RuntimeError};
 use content_schema::{ContentPackage, PackageDependency, PackageManifest};
-use rule_vm::BytecodeModule;
+use rule_vm::{bytecode::op, BytecodeModule};
 
 fn sample_package(version: &str, package_id: &str) -> Vec<u8> {
     let mut pkg = ContentPackage {
         manifest: PackageManifest::new("core", package_id, version),
         modules: vec![BytecodeModule {
             name: "m".into(),
-            code: vec![0x01, 0x02, version.as_bytes()[0]],
+            code: vec![op::HALT],
             local_count: 4,
             max_stack: 16,
             entry_pc: 0,

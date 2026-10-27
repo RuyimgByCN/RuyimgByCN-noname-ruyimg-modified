@@ -135,6 +135,27 @@ fn npack_without_payload_or_modules_still_refused() {
 }
 
 #[test]
+fn onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore() {
+    let old = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/onlyOL-0.1.4.npack.json");
+    let new = include_bytes!("../../../content/original/ported/onlyOL/onlyOL.npack.json");
+    let old_archive = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/native-v322.ngsa");
+    for (bytes, expected) in [
+        (old.as_slice(), "ambiguous effect 656"),
+        (new.as_slice(), "rule_vm_abi host=753 package=758"),
+    ] {
+        let mut package = content_schema::ContentPackage::from_json_bytes(bytes).unwrap();
+        // Isolate the package check from unrelated dependency installation.
+        package.manifest.dependencies.clear();
+        package.manifest.logic_hash = package.compute_logic_hash();
+        let payload = json!([package]).to_string();
+        let start_error = engine_from_packs(4, 42, &payload).err().unwrap();
+        assert!(start_error.contains(expected), "{start_error}");
+        let restore_error = engine_from_archive(&hex_encode(old_archive), &payload).err().unwrap();
+        assert!(restore_error.contains(expected), "{restore_error}");
+    }
+}
+
+#[test]
 fn characters_only_payload_still_loads_general_with_builtin_skill() {
     let characters = json!({
         "source": "test",

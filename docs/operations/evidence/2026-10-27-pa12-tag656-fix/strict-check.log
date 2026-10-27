@@ -1,0 +1,60 @@
+clean HEAD 727cf5ae1e35ac6a54291edafbb089fe8eec633f; RUSTFLAGS=-D warnings
+command: cargo check --offline -p engine-native --all-targets
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v2.0.1
+   Compiling serde v1.0.228
+    Checking cfg-if v1.0.4
+   Compiling thiserror v2.0.18
+    Checking constant_time_eq v0.4.2
+    Checking arrayref v0.3.9
+    Checking arrayvec v0.7.8
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+    Checking memchr v2.8.3
+    Checking itoa v1.0.18
+   Compiling libc v0.2.186
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+    Checking bitflags v2.13.0
+    Checking once_cell v1.21.4
+    Checking fastrand v2.4.1
+   Compiling cc v1.2.66
+   Compiling syn v2.0.118
+    Checking errno v0.3.14
+   Compiling blake3 v1.8.5
+    Checking tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+    Checking engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/engine-api)
+    Checking licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/licensing-schema)
+    Checking resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/resource-schema)
+    Checking rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/rule-api)
+    Checking rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/rule-vm)
+    Checking content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/content-schema)
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/engine-native)
+    Checking content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/content-compiler)
+error: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `-D unused-imports` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+    Checking content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-check-jinavp2z/checkout/crates/content-native-loader)
+error: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `-D dead-code` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: could not compile `content-compiler` (lib) due to 2 previous errors

@@ -173,6 +173,9 @@ pub struct LoadedPackageMeta {
     pub version: String,
     /// Logic hash hex.
     pub logic_hash: [u8; 32],
+    /// Declared VM ABI, absent in snapshots made before the effect-656 repair.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rule_vm_abi_version: Option<u32>,
 }
 
 /// Loaded skill-level metadata.

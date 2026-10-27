@@ -85,6 +85,32 @@ impl ContentRegistry {
         &self.packages
     }
 
+    pub(crate) fn validate_snapshot_effect_abi(&self) -> Result<(), String> {
+        use rule_vm::bytecode::effect_tag;
+
+        for (key, module) in &self.modules {
+            let old = rule_vm::module_uses_effect_tag(module, effect_tag::GAIN_OTHER_SKILL_PILE_CARDS)
+                .map_err(|e| e.to_string())?;
+            let new = rule_vm::module_uses_effect_tag(
+                module,
+                effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
+            )
+            .map_err(|e| e.to_string())?;
+            if !old && !new {
+                continue;
+            }
+            let abi = self.packages.iter().find_map(|package| {
+                (package_module_key(&package.namespace, &package.package_id, &module.name) == *key)
+                    .then_some(package.rule_vm_abi_version)
+                    .flatten()
+            }).ok_or_else(|| format!("module {key} has no recorded VM ABI"))?;
+            if (old && (754..=757).contains(&abi)) || (new && abi < 758) {
+                return Err(format!("module {key} has incompatible effect tag for ABI {abi}"));
+            }
+        }
+        Ok(())
+    }
+
     /// Skill metadata, if declared by a loaded package.
     pub fn skill_metadata(&self, skill_def: SkillDefId) -> Option<&SkillMetadata> {
         self.package_skills.get(&skill_def.raw())

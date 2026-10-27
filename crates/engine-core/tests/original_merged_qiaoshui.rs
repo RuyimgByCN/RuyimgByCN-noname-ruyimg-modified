@@ -167,7 +167,7 @@ fn packages_publish_both_complete_jianyong_variants() {
     let yijiang = content_schema::ContentPackage::from_json_bytes(YIJIANG).unwrap();
     let onlyol = content_schema::ContentPackage::from_json_bytes(ONLYOL).unwrap();
     assert_eq!(yijiang.manifest.rule_vm_abi_version, 637);
-    assert_eq!(onlyol.manifest.rule_vm_abi_version, 757);
+    assert_eq!(onlyol.manifest.rule_vm_abi_version, 758);
     assert_eq!(yijiang.skill_index.len(), 281);
     assert_eq!(onlyol.skill_index.len(), 193);
     assert_eq!(

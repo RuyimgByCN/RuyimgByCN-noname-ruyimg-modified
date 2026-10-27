@@ -1,0 +1,46 @@
+git archive HEAD: ac83af136731715ef91d955543a10a01fa880f0a; overlay four B6 source files with fresh mtimes
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-atomic-head-v124597c/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-atomic-head-v124597c/crates/content-schema)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-atomic-head-v124597c/crates/content-runtime)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.46s
+     Running tests/atomic_install.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa12-b6-atomic-head-v124597c/target-independent/debug/deps/atomic_install-41901f92f93b1078)
+
+running 7 tests
+test lock_empty_stable ... ok
+
+thread 'bad_signature_rejected' (108605541) panicked at crates/content-runtime/tests/atomic_install.rs:149:5:
+assertion failed: matches!(err, RuntimeError::Signature(_))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'revoke_blocks_activate' (108605543) panicked at crates/content-runtime/tests/atomic_install.rs:105:54:
+called `Result::unwrap()` on an `Err` value: Package("module m: invalid bytecode: unknown opcode 0x2")
+test staging_gc_clears_orphan ... ok
+
+thread 'unsigned_rejected_unless_allowed' (108605546) panicked at crates/content-runtime/tests/atomic_install.rs:84:5:
+assertion failed: matches!(err, RuntimeError::UnsignedNotAllowed)
+
+thread 'signed_install_activate_rollback' (108605544) panicked at crates/content-runtime/tests/atomic_install.rs:49:54:
+called `Result::unwrap()` on an `Err` value: Package("module m: invalid bytecode: unknown opcode 0x2")
+
+thread 'activation_requires_exact_dependencies' (108605540) panicked at crates/content-runtime/tests/atomic_install.rs:171:5:
+assertion failed: matches!(store.install(&dependent, None, &opts),
+    Err(RuntimeError::Invalid(message)) if
+    message.contains("missing dependency"))
+test unsigned_rejected_unless_allowed ... FAILED
+test activation_requires_exact_dependencies ... FAILED
+test bad_signature_rejected ... FAILED
+test revoke_blocks_activate ... FAILED
+test signed_install_activate_rollback ... FAILED
+
+failures:
+
+failures:
+    activation_requires_exact_dependencies
+    bad_signature_rejected
+    revoke_blocks_activate
+    signed_install_activate_rollback
+    unsigned_rejected_unless_allowed
+
+test result: FAILED. 2 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p content-runtime --test atomic_install`

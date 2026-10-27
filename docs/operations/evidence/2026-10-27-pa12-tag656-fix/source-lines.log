@@ -1,0 +1,2 @@
+command: python3 -B scripts/check-source-lines.py
+Source line limit passed: 8626 files <= 2000 lines

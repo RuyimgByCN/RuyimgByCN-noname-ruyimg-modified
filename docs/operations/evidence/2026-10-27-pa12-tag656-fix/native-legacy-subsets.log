@@ -1,0 +1,52 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:296:9
+    |
+296 |     let mut e2e_hand_at_confirm = std::cell::Cell::new(0usize);
+    |         ----^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:435:107
+    |
+435 | ....vm_aux.marks.iter().filter(|((p,i),_)| *i==MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_p`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "pa12_batch4_1_host_primitives") generated 2 warnings (run `cargo fix --test "pa12_batch4_1_host_primitives" -p engine-native` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.96s
+     Running tests/pa12_batch4_1_host_primitives.rs (target/debug/deps/pa12_batch4_1_host_primitives-b878ad2536dbb056)
+
+running 7 tests
+test pa12_batch4_2_accept_rejects_zero_count ... ok
+after p0 sha→p1: marks=[((0, 3304378096), 1)] vm_aux_all=1
+test pa12_batch4_3_damage_rewrite_window ... ok
+test pa12_batch4_2_discard_hand_equip_count ... ok
+test pa12_batch5_4_dichou_predicates ... ok
+test pa12_batch4_1_turn_over_toggles_face ... ok
+test pa12_batch5_3_storage_set_clears_on_phase_play ... ok
+test pa12_batch5_fenli_bridges_with_skip_wiring ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

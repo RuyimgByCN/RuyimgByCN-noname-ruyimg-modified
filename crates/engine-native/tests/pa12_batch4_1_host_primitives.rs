@@ -253,7 +253,7 @@ fn pa12_batch4_3_damage_rewrite_window() {
     assert_eq!(e2.debug_hp(2), hp2 - 2, "modify +1：1 伤变 2");
 }
 
-/// 批⑤-2：奋励三窗口（onlyOL 真实 npack）整局——PhaseBegin 前置窗（§2 K 修复）
+/// 批⑤-2：奋励三窗口（从真实 DSL 编译的子包）整局——PhaseBegin 前置窗（§2 K 修复）
 /// 后，VM 机器在阶段入场行为**之前**执行：Draw 窗确认 → 置 skip_draw 旗标 →
 /// begin_draw 跳过摸牌（手牌不 +2）。修复前的红灯实测见批⑤首步证据 §3。
 #[test]
@@ -263,9 +263,14 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
             .join("../../content/original/ported/onlyOL/onlyOL.npack.json"),
     )
     .expect("读 onlyOL npack");
-    let mut pkg: content_schema::ContentPackage =
+    let original: content_schema::ContentPackage =
         serde_json::from_str(&pkg_json).expect("解析 npack");
-    pkg.trigger_index.retain(|t| t.module.contains("ol_fenli_phase"));
+    let pkg = compile_source_named("onlyol-fenli-subset", include_str!(
+        "../../../content/original/ported/onlyOL/ol_fenli.skill"
+    )).expect("编译真实奋励 DSL");
+    for module in &pkg.modules {
+        assert_eq!(module.code, original.modules.iter().find(|m| m.name == module.name).unwrap().code);
+    }
     assert_eq!(pkg.trigger_index.len(), 3, "奋励三窗口");
     let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
     assert_eq!(out.decls.len(), 3, "三模块全部可承载（skip_current_phase 已接允许面）");
@@ -321,7 +326,7 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
 }
 
 /// 批⑤-3：StorageSet 写路径——界朱然·丹守的 phase_play 触发段（真实 onlyOL
-/// npack：`storage_set(self_skill, 1..4, 0)`）出牌阶段开始时清零四键。
+/// DSL 触发子包：`storage_set(self_skill, 1..4, 0)`）出牌阶段开始时清零四键。
 /// vm_aux.storage 键 "{技能名}#{key}"；value=0 删除。jie_danshou 主动技段
 /// （RESOLVE_OL_JIE_DANSHOU 771）依赖 §2 J 效果级选择窗挂起+批⑥ 主动技桥，
 /// 登记批⑤后续（见证据 §3）。
@@ -332,9 +337,14 @@ fn pa12_batch5_3_storage_set_clears_on_phase_play() {
             .join("../../content/original/ported/onlyOL/onlyOL.npack.json"),
     )
     .expect("读 onlyOL npack");
-    let mut pkg: content_schema::ContentPackage = serde_json::from_str(&pkg_json).expect("解析");
-    pkg.trigger_index
-        .retain(|t| t.module.contains("ol_jie_danshou_phase_play"));
+    let original: content_schema::ContentPackage = serde_json::from_str(&pkg_json).expect("解析");
+    let source = include_str!("../../../content/original/ported/onlyOL/ol_jie_danshou.skill");
+    let active = "  active play_phase targets 0 0 {\n    effect resolve_ol_jie_danshou(self);\n  }\n";
+    assert!(source.contains(active));
+    let pkg = compile_source_named("onlyol-danshou-trigger", &source.replace(active, "")).expect("编译真实触发段");
+    for module in &pkg.modules {
+        assert_eq!(module.code, original.modules.iter().find(|m| m.name == module.name).unwrap().code);
+    }
     assert_eq!(pkg.trigger_index.len(), 1);
     let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
     let pack = ExtensionPack {

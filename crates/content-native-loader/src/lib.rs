@@ -256,6 +256,15 @@ pub fn bridge_vm_skill_decls(
     pkg: &content_schema::ContentPackage,
 ) -> Result<VmBridgeOutcome, BridgeError> {
     use engine_native::event::{EventKind, Timing};
+    pkg.validate_vm_effect_abi().map_err(|reason| BridgeError::InvalidField {
+        field: "manifest.rule_vm_abi_version",
+        reason,
+    })?;
+    content_runtime::check_engine_compat(&pkg.manifest, &content_runtime::tooling_host_versions())
+        .map_err(|error| BridgeError::InvalidField {
+            field: "manifest.rule_vm_abi_version",
+            reason: error.to_string(),
+        })?;
     ensure_symbol_capacity()?;
     let mut out = Vec::new();
     let mut unsupported: Vec<String> = Vec::new();

@@ -156,8 +156,8 @@ fn accept_olqingxi(
 #[test]
 fn package_publishes_complete_ol_caoxiu_at_abi293() {
     let package = content_schema::ContentPackage::from_json_bytes(PACKAGE).unwrap();
-    // N01「胆守」新增 host effect tag 771，包 ABI 提升到 757。
-    assert_eq!(package.manifest.rule_vm_abi_version, 757);
+    // 平寇 effect tag 656 冲突修复后，包最低 ABI 为 758。
+    assert_eq!(package.manifest.rule_vm_abi_version, 758);
     // N01 新增 ol_jie_danshou 后 193 个顶层技能。
     assert_eq!(package.skill_index.len(), 193);
     // N01 新增 ol_jie_zhuran 后 86 个角色。

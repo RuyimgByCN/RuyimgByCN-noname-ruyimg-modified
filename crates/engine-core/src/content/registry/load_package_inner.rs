@@ -7,6 +7,7 @@ impl ContentRegistry {
         &mut self,
         pkg: &ContentPackage,
     ) -> Result<(), ContentLoadError> {
+        pkg.validate_vm_effect_abi().map_err(ContentLoadError::Invalid)?;
         if pkg.manifest.logic_hash != pkg.compute_logic_hash() {
             return Err(ContentLoadError::Invalid(format!(
                 "logic hash mismatch for {}/{}@{}",
@@ -1185,6 +1186,7 @@ impl ContentRegistry {
             package_id: pkg.manifest.package_id.clone(),
             version: pkg.manifest.version.clone(),
             logic_hash: pkg.manifest.logic_hash,
+            rule_vm_abi_version: Some(pkg.manifest.rule_vm_abi_version),
         });
         self.packages.sort_by(|a, b| {
             (&a.namespace, &a.package_id, &a.version).cmp(&(
