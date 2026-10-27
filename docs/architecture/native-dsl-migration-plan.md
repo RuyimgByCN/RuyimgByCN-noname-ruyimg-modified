@@ -15,15 +15,17 @@
 | A 命名对不上（零语义成本） | **批① 已完成（2026-10-27，[证据](../operations/evidence/2026-10-27-pa12-batch1-vocabulary/README.md)）**：`owner_alive` 新策略、`owner_is_source` 别名、`CardUsed` 补 `event_source`（旧线 source=用牌者，此前 `owner_is_source` 对用牌事件恒假）、不承载滤名装载期拒绝 | 剩余：`owner_source_sha`（76）等语义近似名 | 装载器别名/新增精确策略；每个补一条桥测 |
 | B 阶段帧 | **批② 部分完成（2026-10-27）**：`phase_begin` 已核清并修正——旧线=`TurnBegan`（回合开始），原映「任一阶段开始帧」（每回合 5 次）改为 `PhaseBegin`+`AtPhase(Judge)`（原生宿主同惯例：Judge begin=回合开始）；**登记差异：construction 置 `turn_opened=true`，第一回合的 Judge begin 帧不发出——首回合（座位 0 第一回合）回合开始类技能不触发**（修复需改 TurnState 初值→进 golden 哈希，须版本门禁）。仍缺：`phase_prepare`（227，原生 `Phase` 无 Prepare——需加阶段枚举，内核决定）、`phase_any_end`（80） | `phase_prepare`、`phase_any_end` | 逐个核对+映射，每个一条真实技能整局测试 |
 | C 事件名未映射 | **批② 已映射 `sha_dodged`（15，原生 `EventData::ShaDodged{card,source,target}` + 新增 `trigger_ctx_of` 臂：来源=杀使用者；`owner_is_source` 滤名已可承载）**。仍缺（原生无帧，需按[eventdata 接线清单]新增事件种）：`game_started`（96——需开局帧+**开局调度点**：construction 不跑 resolution 循环）、`hand_compare_finished`（37，拼点无原生帧）、`skill_added`（36，搭档滤镜 `owner_skill_added_self_*` 本身未承载）、`card_resolved`（35）、`global`（23）、`sha_resolved`（15）、`judgment_resolved`（9）、`round_started`（9）、`max_hp_changed`（7，machine.rs 明注无此事件种）、`debate_*`、`duel_resolved`、`cards_given`（4） | 上表 | 新事件种=九处接线（新事件种九处接线（本仓 LoseHp/DyingSaved 等先例）同法），与 NC04 未映射事件合并排批 |
-| D 滤镜语义（需实现） | 推迟→技能静默不触发（当前装载器行为，**危险**：包装上了但不响） | `owner_source_sha`（76）、`owner_alive_not_target`（65）、`owner_is_target_once`（60）、`owner_alive_once_per_round`（38）、`phase`（34）… | 先把「推迟」改成**装载期拒绝或显式告警**，再按频次实现为精确策略/具名程序（`rvm_named`） |
+| D 滤镜语义（需实现） | **批③已完成六无状态谓词**（owner_source_sha/owner_alive_not_target/owner_is_target_source_alive/owner_is_source_or_target/owner_source_fire_sha/owner_source_ordinary_trick；批① 已把「推迟」改为装载期拒绝）并修复 event_targets 桥接缺陷（HOST_EVENT_TARGET_COUNT 恒 0） | 剩余：`owner_is_target_once`（60）、`owner_alive_once_per_round`（38）等限次系——**勘正：`vm_aux.once`（座位×键×范围）机制已在、具名程序可承载**，留限次窗口与旧线 turn_fires 对齐的语义验收子批；`phase/use/damage`（34/16/12）为注释噪声（脚本下批跳过 // 行） | 按频次实现为精确策略/具名程序（`rvm_named`） |
 | E 宿主解析原语 | 719 个 `resolve_*/choose_*` 名，每个对应旧线一段 Rust 状态机 | `discard_selected`（96）、`discard_hand_equip_count`（91）、`choose_other_damage`（68）… | 按包就绪率与频次排批；每个原语=原生 `accept_effect` 变体 + 内核臂 + 差分测试；ABI 号沿用 `ABI-COORDINATION.md` 领取（tag 空间已至 771） |
 | F ABI/版本门 | `RULE_VM_ABI_VERSION` 753 < 部分包要求（onlyOL 757） | onlyOL/N01 | 宿主实现 754–757 对应原语后升号重打包（兼容判据对 host 单调） |
+| I（批③发现）HOST_EVENT_CARD_COUNT 恒 0 | EngineVmHost.event_cards 未覆写（默认空切片）；event_targets 已在批③修复 | `event_card_count` 系技能待接线 | 与 game_started 开局帧一并评估 |
 | H 再查询陈旧（批①发现） | 两线 VM 宿主都在模块 Halt 后落账，模块内 `hand_count` 等再查询看到执行前状态——「loop 内摸至 X」类 DSL 恒按循环上限执行（清励实证：两线同摸 5） | `clanqingli`（清励，摸至体力上限至多 5） | 需要「循环内即时落账」宿主原语或改写 DSL（先算张数再一次性摸）；逐技能排查同模式 |
 | G 主动技/view_as | `active`/视作转化不走触发桥 | 偏置：sp 728 技能中大量主动技 | 需原生主动技桥（`active` → PlayCard 候选 + 选牌/选人） |
 
 ## 3 批次（每批独立验收、独立提交；**启动批量迁移前先请用户确认**）
 
 1. **桥接词汇对齐（已完成 2026-10-27）**：别名 `owner_is_source`、新增 `owner_alive`、`CardUsed` 补事件来源、不承载滤名装载期拒绝（`UnsupportedVmFilters`）；滤镜命中 1,463→2,403（+940），近似可直接原生 579→1,054。[批①证据](../operations/evidence/2026-10-27-pa12-batch1-vocabulary/README.md)
+1b. **滤镜谓词批③（已完成 2026-10-27）**：六无状态谓词 + event_targets 缺陷修复；滤镜命中 2,457→2,644、推迟 1,364→1,177、近似可直接原生 1,059→1,098（批③修正盘点脚本交替名计数后的基数）。[批③证据](../operations/evidence/2026-10-27-pa12-batch3-filter-predicates/README.md)
 2. **阶段/事件帧补齐**（B + C 中原生已有事件）：`game_started`、`phase_prepare`（含原生准备帧决定）、`phase_begin` 核对、`hand_compare_finished`、`skill_added`、`max_hp_changed`。每个事件：一条含真实 ported 技能的原生整局测试 + 旧线差分。
 3. **滤镜 Top-20**（D）：按频次实现，每个一条桥测；并把 `once`/`once_per_round` 落到原生限次机制。
 4. **宿主解析原语 by 包**（E）：先选就绪率高、技能数中等的包整包推进（盘点：yxs 91/111、huicui 69/255、sixiang 45/181、yijiang 55/281、clan 25/90），每包按「整包八项验收」（37 来源台账 G0–G5）记录。

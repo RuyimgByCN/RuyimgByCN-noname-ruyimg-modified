@@ -4,8 +4,13 @@
 """
 import re, pathlib, collections, json
 rb = open("crates/engine-native/src/rvm_bridge.rs").read()
-filters_exact = set(re.findall(r'"([a-z0-9_]+)"\s*=>\s*Some\(VmFilterPolicy', rb))
-param_prefixes = ["owner_is_target_hp_below_", "owner_source_play_card_count_eq_"]
+# 交替名（"a" | "b" => Some(..)）逐名计入：抓整行后解析全部引号名
+filters_exact = set()
+for _line in rb.splitlines():
+    if "=> Some(VmFilterPolicy" in _line:
+        for _m in re.finditer(r'"([a-z0-9_]+)"', _line):
+            filters_exact.add(_m.group(1))
+param_prefixes = ["owner_is_target_hp_below_", "owner_source_play_card_count_eq_", "owner_skill_added_self_", "owner_hp_below_"]
 loader = open("crates/content-native-loader/src/lib.rs").read()
 events_mapped = set(re.findall(r'"([a-z_]+)" =>', loader.split("let event = match t.event.as_str()")[1].split("other =>")[0]))
 acc = open("crates/engine-native/src/rvm_ops.rs").read()

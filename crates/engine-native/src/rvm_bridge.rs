@@ -294,6 +294,18 @@ pub enum VmFilterPolicy {
     OwnerTargetedByOtherSha,
     /// 具名组合 filter（T8 余项）。精确策略优先于本变体。
     Named(Arc<crate::rvm_named::NamedProgram>),
+    /// DSL `owner_source_sha`：来源=持有者且事件牌为杀族（PA12 批③）。
+    OwnerSourceSha,
+    /// DSL `owner_source_fire_sha`：CardUsed 且来源=持有者、杀族、火属性。
+    OwnerSourceFireSha,
+    /// DSL `owner_source_ordinary_trick`：来源=持有者且事件牌为普通锦囊。
+    OwnerSourceOrdinaryTrick,
+    /// DSL `owner_alive_not_target`：持有者存活且事件主玩家≠持有者。
+    OwnerAliveNotEventPlayer,
+    /// DSL `owner_is_target_source_alive`：事件主玩家=持有者且事件来源存活。
+    OwnerTargetSourceAlive,
+    /// DSL `owner_is_source_or_target`：事件来源=持有者或事件主玩家=持有者。
+    OwnerSourceOrTarget,
     /// 阶段门（PA12④）：事件携带的阶段须等于 `phase`，再评估 `inner`。
     /// 装载器用它把 DSL 的 `phase_end`/`phase_draw`/… 落到原生
     /// `PhaseBegin`/`PhaseEnd`（原生阶段帧按阶段逐一发出，旧线
@@ -312,6 +324,12 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         // 与既有 owner_source 同义（事件来源=持有者）。
         "owner_source" | "owner_is_source" => Some(VmFilterPolicy::OwnerIsSource),
         "owner_alive" => Some(VmFilterPolicy::OwnerAlive),
+        "owner_source_sha" => Some(VmFilterPolicy::OwnerSourceSha),
+        "owner_source_fire_sha" => Some(VmFilterPolicy::OwnerSourceFireSha),
+        "owner_source_ordinary_trick" => Some(VmFilterPolicy::OwnerSourceOrdinaryTrick),
+        "owner_alive_not_target" => Some(VmFilterPolicy::OwnerAliveNotEventPlayer),
+        "owner_is_target_source_alive" => Some(VmFilterPolicy::OwnerTargetSourceAlive),
+        "owner_is_source_or_target" => Some(VmFilterPolicy::OwnerSourceOrTarget),
         "always" => Some(VmFilterPolicy::Always),
         "owner_is_target_wounded" => Some(VmFilterPolicy::OwnerWounded),
         "owner_is_target_linked" => Some(VmFilterPolicy::OwnerLinked),
@@ -401,6 +419,38 @@ impl SkillBehavior for VmSkillBehavior {
         match self.filter.clone() {
             VmFilterPolicy::OwnerIsTarget => is_event_player,
             VmFilterPolicy::OwnerAlive => ctx.state.player(owner).alive,
+            VmFilterPolicy::OwnerSourceSha => {
+                trig.event_source == Some(owner)
+                    && trig
+                        .event_card
+                        .is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())
+            }
+            VmFilterPolicy::OwnerSourceFireSha => {
+                trig.kind == 2
+                    && trig.event_source == Some(owner)
+                    && trig
+                        .event_card
+                        .is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())
+                    && trig.nature == Some(crate::event::DamageNature::Fire)
+            }
+            VmFilterPolicy::OwnerSourceOrdinaryTrick => {
+                trig.event_source == Some(owner)
+                    && trig
+                        .event_card
+                        .is_some_and(|c| kind_is_ordinary_trick(ctx.catalog.card_kind(c)))
+            }
+            VmFilterPolicy::OwnerAliveNotEventPlayer => {
+                ctx.state.player(owner).alive && trig.event_player != Some(owner)
+            }
+            VmFilterPolicy::OwnerTargetSourceAlive => {
+                is_event_player
+                    && trig
+                        .event_source
+                        .is_some_and(|src| ctx.state.player(src).alive)
+            }
+            VmFilterPolicy::OwnerSourceOrTarget => {
+                trig.event_source == Some(owner) || is_event_player
+            }
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::Always => true,
             VmFilterPolicy::OwnerWounded => {
@@ -660,6 +710,9 @@ fn to_rule_pid(p: PlayerId) -> rule_api::PlayerId {
 /// 内核只读查询 + 排队效果的 VmHost 适配器。
 struct EngineVmHost<'a> {
     ctx: HostContext,
+    /// 事件目标集（CardUsed 载荷；PA12 批③：HOST_EVENT_TARGET_COUNT 此前恒读
+    /// 默认空切片=0——旧线经 run_module_with_event_cards 传入同集）。
+    targets: Vec<u32>,
     seats: u8,
     core: &'a crate::state::GameStateCore,
     catalog: &'a crate::catalog::Catalog,
@@ -675,6 +728,10 @@ impl VmHost for EngineVmHost<'_> {
 
     fn context(&self) -> HostContext {
         self.ctx
+    }
+
+    fn event_targets(&self) -> &[u32] {
+        &self.targets
     }
 
     fn emit_effect(&mut self, req: EffectRequest) -> Result<(), HostTrap> {
@@ -842,7 +899,14 @@ impl VmMachine {
     ) -> Flow {
         let seats = ctx.core.players.len() as u8;
         let outcome = {
+            let targets = self
+                .trig
+                .targets
+                .iter()
+                .map(|t| to_rule_pid(*t).raw())
+                .collect::<Vec<_>>();
             let mut host = EngineVmHost {
+                targets,
                 ctx: HostContext {
                     // T8 增量 8：skill_id 经目录反查回填（查不到保持 0=NONE）。
                     skill_id: ctx

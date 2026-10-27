@@ -185,3 +185,36 @@ fn pa12_legacy_batch2_modules_draw_one() {
         assert!(format!("{:?}", out.effects[0]).starts_with("DrawCards"), "{id} 摸牌");
     }
 }
+
+/// PA12 批③差分：抚（普通锦囊后摸 1）与军略（受伤/造成伤害 +标记=伤害值）模块本体
+/// 在旧线的效果面——与原生整局（`pa12_batch3_filter_predicates.rs`）一致；谓词
+/// （owner_source_ordinary_trick / owner_is_source_or_target）由各自事件面保证。
+#[test]
+fn pa12_legacy_batch3_modules() {
+    for (id, src, want_prefix, amount_arg) in [
+        ("collab-natufu", include_str!("../../../content/original/ported/collab/natufu.skill"), "DrawCards", 1),
+        ("extra-junlve", include_str!("../../../content/original/ported/extra/nzry_junlve.skill"), "AddMark", 1),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let name = pkg.trigger_index[0].module.clone();
+        let module = tx.state().content.module(&name).cloned().expect("模块");
+        let owner = PlayerId::new(1);
+        let out = engine_core::vm_host::run_module(
+            tx.state(),
+            &module,
+            0,
+            [owner.raw(), owner.raw(), owner.raw(), 0],
+            amount_arg,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), 1, "{id} 单效果");
+        assert!(format!("{:?}", out.effects[0]).starts_with(want_prefix), "{id} {want_prefix}");
+    }
+}
