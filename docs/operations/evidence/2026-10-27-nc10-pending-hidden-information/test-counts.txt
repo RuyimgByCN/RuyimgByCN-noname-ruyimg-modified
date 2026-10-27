@@ -1,0 +1,4 @@
+engine-native suites=325 passed/failed/ignored=(1587, 0, 72)
+content-native-loader suites=10 passed/failed/ignored=(32, 0, 0)
+engine-native-wasm suites=10 passed/failed/ignored=(57, 0, 0)
+game-server suites=25 passed/failed/ignored=(360, 0, 0)

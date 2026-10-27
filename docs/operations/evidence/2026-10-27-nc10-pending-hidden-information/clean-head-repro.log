@@ -1,0 +1,59 @@
+warning: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rule-vm` (lib) generated 1 warning
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:743:18
+    |
+743 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-duel-baseline.vSpGrp/source/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.15s
+     Running tests/nc10_pending_duel_privacy.rs (/tmp/nc10-duel-baseline.vSpGrp/target/debug/deps/nc10_pending_duel_privacy-1e920be97cf63de5)
+
+running 4 tests
+test pending_duel_timing ... ignored, manual same-machine latency sampling
+
+thread 'duel_planning_does_not_depend_on_opponent_hidden_card' (108462854) panicked at crates/engine-native/tests/nc10_pending_duel_privacy.rs:177:13:
+assertion `left == right` failed: variant=0 budget=48: hidden-card substitution changed the pending duel decision: Plan { seat: 0, revision: 18, action: Answer { choice_id: 6, selection: [Card(8)] }, nodes_used: 5, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } vs Plan { seat: 0, revision: 18, action: Answer { choice_id: 6, selection: [Pass] }, nodes_used: 10, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+  left: Answer { choice_id: 6, selection: [Card(8)] }
+ right: Answer { choice_id: 6, selection: [Pass] }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test duel_planning_does_not_depend_on_opponent_hidden_card ... FAILED
+
+thread 'redaction_preserves_duel_machine_and_referenced_cards' (108462855) panicked at crates/engine-native/tests/nc10_pending_duel_privacy.rs:215:5:
+assertion `left == right` failed
+  left: [192, 120, 85, 198]
+ right: [17, 120, 85, 198]
+test redaction_preserves_duel_machine_and_referenced_cards ... FAILED
+test uninspected_special_zones_are_not_reassigned ... ok
+
+failures:
+
+failures:
+    duel_planning_does_not_depend_on_opponent_hidden_card
+    redaction_preserves_duel_machine_and_referenced_cards
+
+test result: FAILED. 1 passed; 2 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p engine-native --test nc10_pending_duel_privacy`

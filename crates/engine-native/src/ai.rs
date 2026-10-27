@@ -715,7 +715,12 @@ impl Engine {
         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
-            self.legal_actions(seat)
+            let fallback = if can_redact_suspended_duel(self, seat) {
+                &sim
+            } else {
+                self
+            };
+            fallback.legal_actions(seat)
                 .into_iter()
                 .next()
                 .unwrap_or(GameAction::NextPhase)
@@ -807,14 +812,125 @@ pub fn redact_last_state() -> (bool, u64, u64, bool) {
     )
 }
 
+// shortcut: 只覆盖引用可完整核对的单帧决斗；其他机器需先完成引用自省。
+fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
+    use crate::choice::{ChoiceKind, ChoiceOption};
+    use crate::event::{EventData, Stage};
+    use crate::resolution::Slot;
+    use crate::snap::MachineSnapshot;
+
+    let core = e.state_core();
+    let Some(player) = core.players.get(seat as usize) else {
+        return false;
+    };
+    let res = e.resolution();
+    let ([frame], [park], Some(choice)) = (
+        res.stack.as_slice(),
+        res.parks.as_slice(),
+        res.open_choice.as_ref(),
+    ) else {
+        return false;
+    };
+    let EventData::CardUsed(used) = &frame.data else {
+        return false;
+    };
+    if frame.stage != Stage::Intrinsic
+        || !frame.queue.is_empty()
+        || park.slot != (Slot::Intrinsic { frame: frame.id })
+        || park.resume_depth != 1
+        || res.answer.is_some()
+        || choice.observer != seat
+        || choice.spec.kind != ChoiceKind::RespondCard
+        || choice.spec.prompt != "duel_sha"
+        || choice.spec.min != 1
+        || choice.spec.max != 1
+        || choice.spec.allow_cancel
+        || !core.table.contains(&used.card)
+        || !choice.spec.options.iter().all(|option| match option {
+            ChoiceOption::Pass => true,
+            ChoiceOption::Card(card) => player.hand.contains(card),
+            _ => false,
+        })
+    {
+        return false;
+    }
+    let MachineSnapshot::NullifyWindow {
+        card,
+        source,
+        nullified: false,
+        queue,
+        asked: false,
+        window_open: false,
+        effect: Some(effect),
+        ..
+    } = park.machine.snapshot()
+    else {
+        return false;
+    };
+    if card != used.card || source != used.player || !queue.is_empty() {
+        return false;
+    }
+    let MachineSnapshot::Duel {
+        card: duel_card,
+        source: duel_source,
+        target,
+        on_target,
+        asked: true,
+        ..
+    } = *effect
+    else {
+        return false;
+    };
+    if duel_card != card
+        || duel_source != source
+        || used.targets.as_slice() != [target]
+        || seat != if on_target { target } else { source }
+    {
+        return false;
+    }
+
+    // 这些状态可引用或持有手牌外的实体；未完成通用自省时保留原有处理。
+    if !core.vm_aux.is_empty()
+        || !core.turn.huanxia_track.is_empty()
+        || !core.turn.kunlunjing_snapshot.is_empty()
+        || core.turn.luanjian_card.is_some()
+        || core.turn.qizuo_copy.is_some()
+        || core.players.iter().any(|p| {
+            !p.zhucheng.is_empty()
+                || !p.lianyaohu_store.is_empty()
+                || !p.sxianjing_traps.is_empty()
+                || p.ctianfu_card.is_some()
+                || !p.jiguanyuan_cards.is_empty()
+                || !p.yishan_lost.is_empty()
+                || !p.hutian_hold.is_empty()
+                || !p.card_mods.is_empty()
+        })
+    {
+        return false;
+    }
+    // 元数据所引用的牌也必须已在不会重写的区域。
+    let fixed = |card: &u32| {
+        core.discard.contains(card)
+            || core.table.contains(card)
+            || player.hand.contains(card)
+            || core.players.iter().any(|p| {
+                p.equips.contains(card) || p.judge.contains(card) || p.off_court.contains(card)
+            })
+    };
+    core.declared_kinds
+        .keys()
+        .chain(core.declared_slots.keys())
+        .chain(core.card_natures.keys())
+        .all(fixed)
+}
+
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
     // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
     // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
     // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
-    // monkey.rs「被拦截的桃应在使用者手牌」）。故只在**静止态**重分配：
-    // 栈空、无挂起机器、无开放选择。非静止态跳过（对手手牌仍不进入 AI 输入视图
-    // `PolicyInput`；模拟过程中的信息泄漏面登记为 NC10 待办）。
+    // monkey.rs「被拦截的桃应在使用者手牌」）。静止态可重分配；非静止态
+    // 仅对已核对所有引用的决斗窗口重分配，其余泄漏面仍登记为 NC10 待办。
     let quiescent = {
         let res = e.resolution();
         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
@@ -833,10 +949,10 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             std::sync::atomic::Ordering::Relaxed,
         );
     }
-    if !quiescent {
+    if !quiescent && !can_redact_suspended_duel(e, seat) {
         // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
         // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
-        // 对手手牌的身份遮蔽在该窗口仍不可做（会改写被引用的实体牌 id → panic），
+        // 对手手牌的身份遮蔽在未核对引用的窗口仍不可做（会改写被引用的实体牌 id → panic），
         // 登记为待办（需机器自省保引用重分配）。
         let n = e.state_core().deck.len();
         if n >= 2 {

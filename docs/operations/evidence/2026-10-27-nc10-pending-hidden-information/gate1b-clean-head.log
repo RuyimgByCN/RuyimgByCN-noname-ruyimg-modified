@@ -1,0 +1,16 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Checking rule-vm v0.1.0 (/private/tmp/nc10-duel-baseline.vSpGrp/source/crates/rule-vm)
+error: unreachable pattern
+   --> crates/rule-vm/src/vm/effects/resolve_qixing.rs:768:9
+    |
+507 |         effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW => {
+    |         ------------------------------------------------------------------- matches all the relevant values
+...
+768 |         effect_tag::GAIN_OTHER_SKILL_PILE_CARDS => {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `-D unreachable-patterns` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unreachable_patterns)]`
+
+error: could not compile `rule-vm` (lib) due to 1 previous error
