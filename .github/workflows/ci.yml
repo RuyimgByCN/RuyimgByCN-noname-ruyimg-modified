@@ -60,7 +60,9 @@ jobs:
       - name: Gate 3 — cross-target hash (Native vs WASM)
         run: bash scripts/cross-target-hash.sh
       - name: Gate 4 — original content sync verify
-        run: node scripts/sync-original-content.mjs --verify-only
+        run: |
+          node --test scripts/test_original_content_order.mjs
+          node scripts/sync-original-content.mjs --verify-only
 
   # 独立于源码行数/旧线门禁：从本次源码重建 native-pkg 后验正式 Worker 与前端。
   native-web:

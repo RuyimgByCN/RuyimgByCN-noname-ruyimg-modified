@@ -17,6 +17,7 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import ts from "../apps/web-client/node_modules/typescript/lib/typescript.js";
+import { compareContentNames, compareFileNames, listFiles } from "./original-content-order.mjs";
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
@@ -535,8 +536,8 @@ async function buildCatalog(packs, treeResults) {
     // New helpers should still be allocated with stableDefId before first publication.
   }
 
-  characters.sort((a, b) => a.id.localeCompare(b.id));
-  skills.sort((a, b) => a.id.localeCompare(b.id));
+  characters.sort((a, b) => compareContentNames(a.id, b.id));
+  skills.sort((a, b) => compareContentNames(a.id, b.id));
   assertUniqueDefIds("character", characters);
   assertUniqueDefIds("skill", skills);
   for (const skill of skills) skill.referenced_by.sort();
@@ -893,7 +894,7 @@ async function coreCharacterSubstitutes(packs) {
       }
     }
   }
-  rows.sort((a, b) => a.id.localeCompare(b.id));
+  rows.sort((a, b) => compareContentNames(a.id, b.id));
   return rows;
 }
 
@@ -928,7 +929,7 @@ async function staticSkinAliases() {
       ...(parsed.omitted.length ? { omitted_non_literal_fields: parsed.omitted } : {}),
     });
   }
-  return [...byCharacter.values()].sort((a, b) => a.id.localeCompare(b.id));
+  return [...byCharacter.values()].sort((a, b) => compareContentNames(a.id, b.id));
 }
 
 async function dynamicSkinCatalog() {
@@ -976,7 +977,7 @@ async function dynamicSkinCatalog() {
       });
     }
   }
-  skins.sort((a, b) => a.id.localeCompare(b.id));
+  skins.sort((a, b) => compareContentNames(a.id, b.id));
 
   const aliasesByCharacter = new Map();
   const extendObject = findVariableObject(sourceFile, "dynamicSkinExtend");
@@ -1010,7 +1011,7 @@ async function dynamicSkinCatalog() {
   }
   return {
     skins,
-    aliases: [...aliasesByCharacter.values()].sort((a, b) => a.id.localeCompare(b.id)),
+    aliases: [...aliasesByCharacter.values()].sort((a, b) => compareContentNames(a.id, b.id)),
   };
 }
 
@@ -1250,7 +1251,7 @@ async function portraitAssetFor(character) {
 function collectResourceReferences(value) {
   const references = new Map();
   visit(value, []);
-  return [...references.values()].sort((a, b) => a.field.localeCompare(b.field));
+  return [...references.values()].sort((a, b) => compareContentNames(a.field, b.field));
 
   function visit(current, keys) {
     if (Array.isArray(current)) {
@@ -1358,7 +1359,7 @@ async function verifyManagedSkinFiles() {
       expected.push(managedFile.target.slice("skins/".length));
     }
   }
-  expected.sort();
+  expected.sort(compareFileNames);
   const skinTargetRoot = path.join(legacySourceRoot, "skins");
   const actual = (await fileExists(skinTargetRoot)) ? await listFiles(skinTargetRoot) : [];
   if (expected.join("\0") !== actual.join("\0")) {
@@ -1684,22 +1685,6 @@ async function verifyCatalog(results) {
     }
     await stat(path.join(repoRoot, "apps/web-client/public", character.portrait));
   }
-}
-
-async function listFiles(root) {
-  const files = [];
-  async function visit(directory, prefix = "") {
-    const entries = await readdir(directory, { withFileTypes: true });
-    entries.sort((a, b) => a.name.localeCompare(b.name));
-    for (const entry of entries) {
-      const relative = path.join(prefix, entry.name);
-      const absolute = path.join(directory, entry.name);
-      if (entry.isDirectory()) await visit(absolute, relative);
-      else if (entry.isFile()) files.push(relative);
-    }
-  }
-  await visit(root);
-  return files;
 }
 
 async function sha256(file) {

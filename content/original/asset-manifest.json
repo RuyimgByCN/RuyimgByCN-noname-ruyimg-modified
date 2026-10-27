@@ -1653,14 +1653,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_jiangwei_shadow.jpg",
-      "size": 66232,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_jiangwei_shadow.jpg",
-      "sha256": "fd33d1fa9c288e6abc2609157aa4f930fafd9b153ca0b7f4e9e0c18dcb681345"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_jiangwei.jpg",
       "size": 65794,
       "source_category": "core",
@@ -1669,11 +1661,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_jiaxu_shadow.jpg",
-      "size": 146226,
+      "path": "portraits/dc_sb_jiangwei_shadow.jpg",
+      "size": 66232,
       "source_category": "core",
-      "source_path": "image/character/dc_sb_jiaxu_shadow.jpg",
-      "sha256": "50de0a52c2e78332576da2eb5c35333309eda1ee6ca269a46cd7a49349cad65e"
+      "source_path": "image/character/dc_sb_jiangwei_shadow.jpg",
+      "sha256": "fd33d1fa9c288e6abc2609157aa4f930fafd9b153ca0b7f4e9e0c18dcb681345"
     },
     {
       "kind": "portraits",
@@ -1682,6 +1674,14 @@
       "source_category": "core",
       "source_path": "image/character/dc_sb_jiaxu.jpg",
       "sha256": "71c23d287b970030d8f5958b88a9afbbf8e3ffc2fa9aaa57cd590981f4f9f425"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_jiaxu_shadow.jpg",
+      "size": 146226,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_jiaxu_shadow.jpg",
+      "sha256": "50de0a52c2e78332576da2eb5c35333309eda1ee6ca269a46cd7a49349cad65e"
     },
     {
       "kind": "portraits",
@@ -1717,14 +1717,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_lusu_shadow.jpg",
-      "size": 156019,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_lusu_shadow.jpg",
-      "sha256": "f2f5543c7165c366b250c3831d3e0375894037634234ac3dda915ab397691203"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_lusu.jpg",
       "size": 170210,
       "source_category": "core",
@@ -1733,11 +1725,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_luxun_shadow.jpg",
-      "size": 170968,
+      "path": "portraits/dc_sb_lusu_shadow.jpg",
+      "size": 156019,
       "source_category": "core",
-      "source_path": "image/character/dc_sb_luxun_shadow.jpg",
-      "sha256": "fff23c713d59118aa9b0cf23f0167e42a68a69092df009ed543ef9b99bf811d8"
+      "source_path": "image/character/dc_sb_lusu_shadow.jpg",
+      "sha256": "f2f5543c7165c366b250c3831d3e0375894037634234ac3dda915ab397691203"
     },
     {
       "kind": "portraits",
@@ -1746,6 +1738,14 @@
       "source_category": "core",
       "source_path": "image/character/dc_sb_luxun.jpg",
       "sha256": "4e5580805d396ec478fbf41f8d9ae4a74c9253252d1d65febbedfc01d79a1667"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_luxun_shadow.jpg",
+      "size": 170968,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_luxun_shadow.jpg",
+      "sha256": "fff23c713d59118aa9b0cf23f0167e42a68a69092df009ed543ef9b99bf811d8"
     },
     {
       "kind": "portraits",
@@ -1765,14 +1765,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_pangtong_shadow.jpg",
-      "size": 39035,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_pangtong_shadow.jpg",
-      "sha256": "4609f0b56f247f016e428fdc68d34a5e80a732a5c9343139be8c0e01cc80e7bf"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_pangtong.jpg",
       "size": 38776,
       "source_category": "core",
@@ -1781,11 +1773,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_simayi_shadow.jpg",
-      "size": 106863,
+      "path": "portraits/dc_sb_pangtong_shadow.jpg",
+      "size": 39035,
       "source_category": "core",
-      "source_path": "image/character/dc_sb_simayi_shadow.jpg",
-      "sha256": "855386499fd5413d0b43260efa4b86123a55a6427b174e6e7d74882c24b5350b"
+      "source_path": "image/character/dc_sb_pangtong_shadow.jpg",
+      "sha256": "4609f0b56f247f016e428fdc68d34a5e80a732a5c9343139be8c0e01cc80e7bf"
     },
     {
       "kind": "portraits",
@@ -1794,6 +1786,14 @@
       "source_category": "core",
       "source_path": "image/character/dc_sb_simayi.jpg",
       "sha256": "8ba0bcdaa63c8f6447fa72e9e2fd0ce01798220dfdf6dcb3b7c7929710729edf"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_simayi_shadow.jpg",
+      "size": 106863,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_simayi_shadow.jpg",
+      "sha256": "855386499fd5413d0b43260efa4b86123a55a6427b174e6e7d74882c24b5350b"
     },
     {
       "kind": "portraits",
@@ -1813,19 +1813,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_xunyu_shadow.jpg",
-      "size": 143053,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_xunyu_shadow.jpg",
-      "sha256": "53756b1dc42c6ba760676890884ba04ea8a7713e697d3f2fdee8d65ee0017f25"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_xunyu.jpg",
       "size": 167224,
       "source_category": "core",
       "source_path": "image/character/dc_sb_xunyu.jpg",
       "sha256": "8abb72a84c1401ecefaf9be384fccb7201e9af61a0dfcb6b64b732e5709daa5b"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_xunyu_shadow.jpg",
+      "size": 143053,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_xunyu_shadow.jpg",
+      "sha256": "53756b1dc42c6ba760676890884ba04ea8a7713e697d3f2fdee8d65ee0017f25"
     },
     {
       "kind": "portraits",
@@ -1861,19 +1861,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_zhouyu_shadow.jpg",
-      "size": 159230,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_zhouyu_shadow.jpg",
-      "sha256": "206f976571d28d7450f8ae8173347a90b28ef66d8b428e9a17248274cc47c1db"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_zhouyu.jpg",
       "size": 192905,
       "source_category": "core",
       "source_path": "image/character/dc_sb_zhouyu.jpg",
       "sha256": "24c1b6bd2312132ab0eb76b4ad83d8834780e51cafa926f2f080c4d9ac5211a9"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_zhouyu_shadow.jpg",
+      "size": 159230,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_zhouyu_shadow.jpg",
+      "sha256": "206f976571d28d7450f8ae8173347a90b28ef66d8b428e9a17248274cc47c1db"
     },
     {
       "kind": "portraits",
@@ -1885,19 +1885,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_sb_zhugeliang_shadow.jpg",
-      "size": 188879,
-      "source_category": "core",
-      "source_path": "image/character/dc_sb_zhugeliang_shadow.jpg",
-      "sha256": "367b8659a8a79244b7bab3049eb967cca6bb963d3c3bc4c7177fd086b1ac8cc5"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_sb_zhugeliang.jpg",
       "size": 183745,
       "source_category": "core",
       "source_path": "image/character/dc_sb_zhugeliang.jpg",
       "sha256": "b5fd911c8bbc1bfa86d81db8766898c7e7472e71051e3aa7ccc87ded1c935699"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_sb_zhugeliang_shadow.jpg",
+      "size": 188879,
+      "source_category": "core",
+      "source_path": "image/character/dc_sb_zhugeliang_shadow.jpg",
+      "sha256": "367b8659a8a79244b7bab3049eb967cca6bb963d3c3bc4c7177fd086b1ac8cc5"
     },
     {
       "kind": "portraits",
@@ -2277,19 +2277,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/dc_zhaoyǎn.jpg",
-      "size": 99526,
-      "source_category": "core",
-      "source_path": "image/character/dc_zhaoyǎn.jpg",
-      "sha256": "6caae19d549db878fffc7cdbfadf572a3ff99dfb1f8899ebf748903a385ea2cd"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/dc_zhaoyun.jpg",
       "size": 128168,
       "source_category": "core",
       "source_path": "image/character/dc_zhaoyun.jpg",
       "sha256": "21c577ca1e3f3312defb9b7b0a7193ff070eb5f665791a8d16ef771e79007664"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/dc_zhaoyǎn.jpg",
+      "size": 99526,
+      "source_category": "core",
+      "source_path": "image/character/dc_zhaoyǎn.jpg",
+      "sha256": "6caae19d549db878fffc7cdbfadf572a3ff99dfb1f8899ebf748903a385ea2cd"
     },
     {
       "kind": "portraits",
@@ -2749,19 +2749,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/eu_kaisa.jpg",
-      "size": 66011,
-      "source_category": "core",
-      "source_path": "image/character/eu_kaisa.jpg",
-      "sha256": "905243b8c136bf3a2f81d3ebf083e1d1890d9849ac11432e852eaeb1e3142e1b"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/eu_Macrinus.jpg",
       "size": 56353,
       "source_category": "core",
       "source_path": "image/character/eu_Macrinus.jpg",
       "sha256": "bd8be9224e8643c5305968869b7bfdadbe297a1ba325b1829f2b16114c65abb1"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/eu_kaisa.jpg",
+      "size": 66011,
+      "source_category": "core",
+      "source_path": "image/character/eu_kaisa.jpg",
+      "sha256": "905243b8c136bf3a2f81d3ebf083e1d1890d9849ac11432e852eaeb1e3142e1b"
     },
     {
       "kind": "portraits",
@@ -3125,14 +3125,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/guānning.jpg",
-      "size": 112608,
-      "source_category": "core",
-      "source_path": "image/character/guānning.jpg",
-      "sha256": "0fce4721c3f8233babc4b0b057bff5967fe14a299412f5cd72bb45d8cbc88f21"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/guanning.jpg",
       "size": 132022,
       "source_category": "core",
@@ -3274,6 +3266,14 @@
       "source_category": "core",
       "source_path": "image/character/guyong.jpg",
       "sha256": "488042015a9b6ecd123126cef317842faad2c6b7fb9b767b450b90bbdd69d92b"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/guānning.jpg",
+      "size": 112608,
+      "source_category": "core",
+      "source_path": "image/character/guānning.jpg",
+      "sha256": "0fce4721c3f8233babc4b0b057bff5967fe14a299412f5cd72bb45d8cbc88f21"
     },
     {
       "kind": "portraits",
@@ -4589,19 +4589,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/huan_caoang_shadow.jpg",
-      "size": 119347,
-      "source_category": "core",
-      "source_path": "image/character/huan_caoang_shadow.jpg",
-      "sha256": "24359ee10d37515075656447acbed59e4e700fbc38d7aa838e88382f3a590f32"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/huan_caoang.jpg",
       "size": 136256,
       "source_category": "core",
       "source_path": "image/character/huan_caoang.jpg",
       "sha256": "829d0c62400e9eafd01ffc1270073f1916388f0d2ed46e1b87dff9395107494f"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/huan_caoang_shadow.jpg",
+      "size": 119347,
+      "source_category": "core",
+      "source_path": "image/character/huan_caoang_shadow.jpg",
+      "sha256": "24359ee10d37515075656447acbed59e4e700fbc38d7aa838e88382f3a590f32"
     },
     {
       "kind": "portraits",
@@ -4709,19 +4709,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/huan_sunce_shadow.jpg",
-      "size": 116092,
-      "source_category": "core",
-      "source_path": "image/character/huan_sunce_shadow.jpg",
-      "sha256": "5c7016c4a495f2097fff68d3fee62b5e10023ca942ef468c13934377701f8955"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/huan_sunce.jpg",
       "size": 108042,
       "source_category": "core",
       "source_path": "image/character/huan_sunce.jpg",
       "sha256": "22eb59452f2450424d8c180520409a64a5f0a048a2b7f519540181a05cd53e8a"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/huan_sunce_shadow.jpg",
+      "size": 116092,
+      "source_category": "core",
+      "source_path": "image/character/huan_sunce_shadow.jpg",
+      "sha256": "5c7016c4a495f2097fff68d3fee62b5e10023ca942ef468c13934377701f8955"
     },
     {
       "kind": "portraits",
@@ -4773,19 +4773,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/huan_zhugeliang_shadow.jpg",
-      "size": 169308,
-      "source_category": "core",
-      "source_path": "image/character/huan_zhugeliang_shadow.jpg",
-      "sha256": "30ef574408e2a8087c54cf79a36e43290d36c2a1491c272eff3db0a106ec4a6f"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/huan_zhugeliang.jpg",
       "size": 134480,
       "source_category": "core",
       "source_path": "image/character/huan_zhugeliang.jpg",
       "sha256": "4d2350f375b2275a1bdc5a8a9bc6f9aec37ceff95d7a51bb8251afdc62f3d27f"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/huan_zhugeliang_shadow.jpg",
+      "size": 169308,
+      "source_category": "core",
+      "source_path": "image/character/huan_zhugeliang_shadow.jpg",
+      "sha256": "30ef574408e2a8087c54cf79a36e43290d36c2a1491c272eff3db0a106ec4a6f"
     },
     {
       "kind": "portraits",
@@ -7269,19 +7269,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/liuxiecaojie_shadow.jpg",
-      "size": 160447,
-      "source_category": "core",
-      "source_path": "image/character/liuxiecaojie_shadow.jpg",
-      "sha256": "c70ac072de85b5aca0ed152b8fa4436c7c4f125a7078c576281ae7610507aff6"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/liuxiecaojie.jpg",
       "size": 168523,
       "source_category": "core",
       "source_path": "image/character/liuxiecaojie.jpg",
       "sha256": "667aeb372e8db09982ee8659f0fa30b2c90cac165612835bc7a14b4193f8d533"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/liuxiecaojie_shadow.jpg",
+      "size": 160447,
+      "source_category": "core",
+      "source_path": "image/character/liuxiecaojie_shadow.jpg",
+      "sha256": "c70ac072de85b5aca0ed152b8fa4436c7c4f125a7078c576281ae7610507aff6"
     },
     {
       "kind": "portraits",
@@ -7589,19 +7589,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/lx_caomao_shadow.jpg",
-      "size": 165257,
-      "source_category": "core",
-      "source_path": "image/character/lx_caomao_shadow.jpg",
-      "sha256": "29a1f78d1206a62810c279f3b884d8aa329ef7794f8f56572c401ad6555a5c40"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/lx_caomao.jpg",
       "size": 128994,
       "source_category": "core",
       "source_path": "image/character/lx_caomao.jpg",
       "sha256": "4df3e3f41714e04d78db51ec83b453d002c05b360841d8c7be75b2696de0d398"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/lx_caomao_shadow.jpg",
+      "size": 165257,
+      "source_category": "core",
+      "source_path": "image/character/lx_caomao_shadow.jpg",
+      "sha256": "29a1f78d1206a62810c279f3b884d8aa329ef7794f8f56572c401ad6555a5c40"
     },
     {
       "kind": "portraits",
@@ -7653,19 +7653,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/lx_simazhao_shadow.jpg",
-      "size": 151013,
-      "source_category": "core",
-      "source_path": "image/character/lx_simazhao_shadow.jpg",
-      "sha256": "fd2375f5f12895fa80c4e6f6d6d6b143bdbd6cdad80e948f63c6f3eed482e86b"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/lx_simazhao.jpg",
       "size": 108153,
       "source_category": "core",
       "source_path": "image/character/lx_simazhao.jpg",
       "sha256": "f7ce7cbd4698a55e86db5dc969ee66191c9f404467a1501d98d5f54c7b6cc5d9"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/lx_simazhao_shadow.jpg",
+      "size": 151013,
+      "source_category": "core",
+      "source_path": "image/character/lx_simazhao_shadow.jpg",
+      "sha256": "fd2375f5f12895fa80c4e6f6d6d6b143bdbd6cdad80e948f63c6f3eed482e86b"
     },
     {
       "kind": "portraits",
@@ -7861,6 +7861,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/mb_caomao.jpg",
+      "size": 152577,
+      "source_category": "core",
+      "source_path": "image/character/mb_caomao.jpg",
+      "sha256": "46cfe8b7e48219ae2609598ac8924083c61a87e48218765ebc8955a354660f6c"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/mb_caomao_dead.jpg",
       "size": 49283,
       "source_category": "core",
@@ -7874,14 +7882,6 @@
       "source_category": "core",
       "source_path": "image/character/mb_caomao_shadow.jpg",
       "sha256": "b0c87439ce8a6d9a64bba3240d493978be5a70f2f3fa0e999fdd64151ebb2498"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/mb_caomao.jpg",
-      "size": 152577,
-      "source_category": "core",
-      "source_path": "image/character/mb_caomao.jpg",
-      "sha256": "46cfe8b7e48219ae2609598ac8924083c61a87e48218765ebc8955a354660f6c"
     },
     {
       "kind": "portraits",
@@ -7938,6 +7938,14 @@
       "source_category": "core",
       "source_path": "image/character/mb_chitu.jpg",
       "sha256": "fd24a6ef509601396351b10b3c81ba9a54efaa755b8dd9519e13279f10da92a1"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/mb_cuilingyi.jpg",
+      "size": 72538,
+      "source_category": "core",
+      "source_path": "image/character/mb_cuilingyi.jpg",
+      "sha256": "caec7ed8339f28bd4d75054bae8191feab4046646d784d4cb9e0caf92a9c60af"
     },
     {
       "kind": "portraits",
@@ -8002,14 +8010,6 @@
       "source_category": "core",
       "source_path": "image/character/mb_cuilingyi_xiuge3.jpg",
       "sha256": "65c31b5ec217c41c467a5e471e6f9d92c1118268fa4a55cb5741c97c0b7c2be2"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/mb_cuilingyi.jpg",
-      "size": 72538,
-      "source_category": "core",
-      "source_path": "image/character/mb_cuilingyi.jpg",
-      "sha256": "caec7ed8339f28bd4d75054bae8191feab4046646d784d4cb9e0caf92a9c60af"
     },
     {
       "kind": "portraits",
@@ -8301,6 +8301,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/mb_zerong.jpg",
+      "size": 45128,
+      "source_category": "core",
+      "source_path": "image/character/mb_zerong.jpg",
+      "sha256": "7b329dc6ffa56d9dd69312722b41dab494dfa7a55f919f7babd8e5b112bf7927"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/mb_zerong_all.jpg",
       "size": 52745,
       "source_category": "core",
@@ -8322,14 +8330,6 @@
       "source_category": "core",
       "source_path": "image/character/mb_zerong_red.jpg",
       "sha256": "b722a1718150acda85d9d8526840f2fe949f88a1832d8af868127e2a355e94fb"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/mb_zerong.jpg",
-      "size": 45128,
-      "source_category": "core",
-      "source_path": "image/character/mb_zerong.jpg",
-      "sha256": "7b329dc6ffa56d9dd69312722b41dab494dfa7a55f919f7babd8e5b112bf7927"
     },
     {
       "kind": "portraits",
@@ -8605,6 +8605,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/noname.jpg",
+      "size": 109448,
+      "source_category": "core",
+      "source_path": "image/character/noname.jpg",
+      "sha256": "30a40bd5fd85fdf9e00b3bc14336a436414b99010c9206c45bde3724423840ba"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/noname_machao.png",
       "size": 20350,
       "source_category": "core",
@@ -8618,14 +8626,6 @@
       "source_category": "core",
       "source_path": "image/character/noname_sunce.png",
       "sha256": "1618d106862a4f93f9713dd7f84b1c299bd062b4935a36da3a2429259813d0fe"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/noname.jpg",
-      "size": 109448,
-      "source_category": "core",
-      "source_path": "image/character/noname.jpg",
-      "sha256": "30a40bd5fd85fdf9e00b3bc14336a436414b99010c9206c45bde3724423840ba"
     },
     {
       "kind": "portraits",
@@ -8837,6 +8837,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/ns_nanhua.jpg",
+      "size": 131192,
+      "source_category": "core",
+      "source_path": "image/character/ns_nanhua.jpg",
+      "sha256": "5d4e4309cadfb303f2bcca7a347ff3e579728e16ab3274e34aecf974c7c253b4"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/ns_nanhua_left.jpg",
       "size": 34072,
       "source_category": "core",
@@ -8850,14 +8858,6 @@
       "source_category": "core",
       "source_path": "image/character/ns_nanhua_right.jpg",
       "sha256": "60b1359b6883541bdfcd6106a9941e5bfd4d1c8cb7048d7d57a9fded385ae9b5"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ns_nanhua.jpg",
-      "size": 131192,
-      "source_category": "core",
-      "source_path": "image/character/ns_nanhua.jpg",
-      "sha256": "5d4e4309cadfb303f2bcca7a347ff3e579728e16ab3274e34aecf974c7c253b4"
     },
     {
       "kind": "portraits",
@@ -9917,6 +9917,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/ol_re_nianshou.jpg",
+      "size": 140011,
+      "source_category": "core",
+      "source_path": "image/character/ol_re_nianshou.jpg",
+      "sha256": "75607cdbb26cb79ed883e7bc034a01d3954d1c9edb9e18a86621ec20bfda9821"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/ol_re_nianshou_level1.jpg",
       "size": 55665,
       "source_category": "core",
@@ -9930,14 +9938,6 @@
       "source_category": "core",
       "source_path": "image/character/ol_re_nianshou_level2.jpg",
       "sha256": "2474c1af1735926fbf2727a24ade4dda59dd67c8c60637b5bbe9bf6de7393118"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ol_re_nianshou.jpg",
-      "size": 140011,
-      "source_category": "core",
-      "source_path": "image/character/ol_re_nianshou.jpg",
-      "sha256": "75607cdbb26cb79ed883e7bc034a01d3954d1c9edb9e18a86621ec20bfda9821"
     },
     {
       "kind": "portraits",
@@ -9981,6 +9981,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/ol_sb_dongzhuo.jpg",
+      "size": 114211,
+      "source_category": "core",
+      "source_path": "image/character/ol_sb_dongzhuo.jpg",
+      "sha256": "d7423875714c747caafae997c83d874ca3e19e87ed003dc2290dace4f7139945"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/ol_sb_dongzhuo_shadow1.jpg",
       "size": 106561,
       "source_category": "core",
@@ -9994,14 +10002,6 @@
       "source_category": "core",
       "source_path": "image/character/ol_sb_dongzhuo_shadow2.jpg",
       "sha256": "3b33df961a1ba4e9f334961a4e29d1fa04f2eb9aba72f59c22abc05fdcbaabde"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ol_sb_dongzhuo.jpg",
-      "size": 114211,
-      "source_category": "core",
-      "source_path": "image/character/ol_sb_dongzhuo.jpg",
-      "sha256": "d7423875714c747caafae997c83d874ca3e19e87ed003dc2290dace4f7139945"
     },
     {
       "kind": "portraits",
@@ -10141,19 +10141,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/ol_sb_yuanshao_shadow.jpg",
-      "size": 115990,
-      "source_category": "core",
-      "source_path": "image/character/ol_sb_yuanshao_shadow.jpg",
-      "sha256": "5ae14723555b9e3aabc42a4ff537a0d03d2988b002f4619ea8e335e50180a1e5"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/ol_sb_yuanshao.jpg",
       "size": 123886,
       "source_category": "core",
       "source_path": "image/character/ol_sb_yuanshao.jpg",
       "sha256": "bb0daf630671161381fe8c6bb428f68798150a66bab3cbc5a4c338c18f5ed4ec"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ol_sb_yuanshao_shadow.jpg",
+      "size": 115990,
+      "source_category": "core",
+      "source_path": "image/character/ol_sb_yuanshao_shadow.jpg",
+      "sha256": "5ae14723555b9e3aabc42a4ff537a0d03d2988b002f4619ea8e335e50180a1e5"
     },
     {
       "kind": "portraits",
@@ -10165,19 +10165,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/ol_sb_zhangrang_shadow.jpg",
-      "size": 168138,
-      "source_category": "core",
-      "source_path": "image/character/ol_sb_zhangrang_shadow.jpg",
-      "sha256": "c2625f79e07ae74a35bb482f8641cc02a0b0d5bda7237c8a6eca09f86c153366"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/ol_sb_zhangrang.jpg",
       "size": 185833,
       "source_category": "core",
       "source_path": "image/character/ol_sb_zhangrang.jpg",
       "sha256": "4991eaedaf9a4d01d83fba7318f9872167910a23d747999265b43594ae8a5d8a"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ol_sb_zhangrang_shadow.jpg",
+      "size": 168138,
+      "source_category": "core",
+      "source_path": "image/character/ol_sb_zhangrang_shadow.jpg",
+      "sha256": "c2625f79e07ae74a35bb482f8641cc02a0b0d5bda7237c8a6eca09f86c153366"
     },
     {
       "kind": "portraits",
@@ -11525,6 +11525,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/pot_taishici.jpg",
+      "size": 123359,
+      "source_category": "core",
+      "source_path": "image/character/pot_taishici.jpg",
+      "sha256": "ec6e96f3ccc3b0ee44a38b097ee374645b6ede9954f5fe0488dd6df018da5d1d"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/pot_taishici_shadow1.jpg",
       "size": 116776,
       "source_category": "core",
@@ -11557,11 +11565,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/pot_taishici.jpg",
-      "size": 123359,
+      "path": "portraits/pot_weiyan.jpg",
+      "size": 66907,
       "source_category": "core",
-      "source_path": "image/character/pot_taishici.jpg",
-      "sha256": "ec6e96f3ccc3b0ee44a38b097ee374645b6ede9954f5fe0488dd6df018da5d1d"
+      "source_path": "image/character/pot_weiyan.jpg",
+      "sha256": "ecfbdfc7a3b896eff1bdd0e2d543dcb843fe54db3681c5deb3a4790889c72282"
     },
     {
       "kind": "portraits",
@@ -11581,14 +11589,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/pot_weiyan.jpg",
-      "size": 66907,
-      "source_category": "core",
-      "source_path": "image/character/pot_weiyan.jpg",
-      "sha256": "ecfbdfc7a3b896eff1bdd0e2d543dcb843fe54db3681c5deb3a4790889c72282"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/pot_xiaoqiao.jpg",
       "size": 163398,
       "source_category": "core",
@@ -11605,19 +11605,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/pot_yuji_shadow.jpg",
-      "size": 124575,
-      "source_category": "core",
-      "source_path": "image/character/pot_yuji_shadow.jpg",
-      "sha256": "a759b4623ee7abdffcb16d9678b57ea0ba09bd72f26fc1903fc5296b60126dfd"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/pot_yuji.jpg",
       "size": 143572,
       "source_category": "core",
       "source_path": "image/character/pot_yuji.jpg",
       "sha256": "085d61b3db1e22dfa49e5ad3758627ca4135273ef315a76b0a867d13c08eca4f"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/pot_yuji_shadow.jpg",
+      "size": 124575,
+      "source_category": "core",
+      "source_path": "image/character/pot_yuji_shadow.jpg",
+      "sha256": "a759b4623ee7abdffcb16d9678b57ea0ba09bd72f26fc1903fc5296b60126dfd"
     },
     {
       "kind": "portraits",
@@ -11637,14 +11637,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/pot_zhouyu_shadow.jpg",
-      "size": 380808,
-      "source_category": "core",
-      "source_path": "image/character/pot_zhouyu_shadow.jpg",
-      "sha256": "4a5612b20b0618459526d15d4c06249b09f87081258949723d53e33f4c0d5694"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/pot_zhouyu.jpg",
       "size": 278998,
       "source_category": "core",
@@ -11653,11 +11645,83 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/pot_zhouyu_shadow.jpg",
+      "size": 380808,
+      "source_category": "core",
+      "source_path": "image/character/pot_zhouyu_shadow.jpg",
+      "sha256": "4a5612b20b0618459526d15d4c06249b09f87081258949723d53e33f4c0d5694"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/prp_zhugeliang.jpg",
       "size": 88036,
       "source_category": "core",
       "source_path": "image/character/prp_zhugeliang.jpg",
       "sha256": "86eb6ffb46ce4c790c3c8207444b957f05d6df8ec227cd5a07f1ba68918adeed"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps1059_guojia.jpg",
+      "size": 36139,
+      "source_category": "core",
+      "source_path": "image/character/ps1059_guojia.jpg",
+      "sha256": "a9c36517fd9ec0ff8a64857f825d38f809def365454efa7c4cc9fe792b977777"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps1062_zhouyu.jpg",
+      "size": 34489,
+      "source_category": "core",
+      "source_path": "image/character/ps1062_zhouyu.jpg",
+      "sha256": "457241682e232d5f410606483b6fb3123f60e38f2815dbf1d21810c80f0e18ac"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2063_zhaoyun.jpg",
+      "size": 28233,
+      "source_category": "core",
+      "source_path": "image/character/ps2063_zhaoyun.jpg",
+      "sha256": "a6b6803cd637d99f58dedce9303cf3374f7356ec165818bca097bdfcc6ed80dd"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2066_zhugeliang.jpg",
+      "size": 42851,
+      "source_category": "core",
+      "source_path": "image/character/ps2066_zhugeliang.jpg",
+      "sha256": "7305271d8cd5445c392e185a4c5afe4ad33a11ac38817bd1b649dec875eaa2e8"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2067_zhaoyun.jpg",
+      "size": 43028,
+      "source_category": "core",
+      "source_path": "image/character/ps2067_zhaoyun.jpg",
+      "sha256": "e4f179dd0112f6c99f06a26b9c6b9d6547fd9a20af6d7b20fde9888d3eceb973"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2068_simayi.jpg",
+      "size": 39502,
+      "source_category": "core",
+      "source_path": "image/character/ps2068_simayi.jpg",
+      "sha256": "00fca5da00d2604db76fcdef73765d527981f3b4ed6a7906af570b5c1baf6edb"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2070_guojia.jpg",
+      "size": 35338,
+      "source_category": "core",
+      "source_path": "image/character/ps2070_guojia.jpg",
+      "sha256": "0d4e198e43382aff9b465a2bd60b256d38a602307b0b382008e594821046e9e7"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/ps2080_zhouyu.jpg",
+      "size": 29042,
+      "source_category": "core",
+      "source_path": "image/character/ps2080_zhouyu.jpg",
+      "sha256": "c58136191065b23c13a24633f8444a7e8c5b4272da070685af59a284d9183f19"
     },
     {
       "kind": "portraits",
@@ -11898,70 +11962,6 @@
       "source_category": "core",
       "source_path": "image/character/ps_zhugeliang.jpg",
       "sha256": "84c3e3df4a4d0842577ff9711c06a63f9ab9ada96f57cd6d671c51fcdc8dc783"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps1059_guojia.jpg",
-      "size": 36139,
-      "source_category": "core",
-      "source_path": "image/character/ps1059_guojia.jpg",
-      "sha256": "a9c36517fd9ec0ff8a64857f825d38f809def365454efa7c4cc9fe792b977777"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps1062_zhouyu.jpg",
-      "size": 34489,
-      "source_category": "core",
-      "source_path": "image/character/ps1062_zhouyu.jpg",
-      "sha256": "457241682e232d5f410606483b6fb3123f60e38f2815dbf1d21810c80f0e18ac"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2063_zhaoyun.jpg",
-      "size": 28233,
-      "source_category": "core",
-      "source_path": "image/character/ps2063_zhaoyun.jpg",
-      "sha256": "a6b6803cd637d99f58dedce9303cf3374f7356ec165818bca097bdfcc6ed80dd"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2066_zhugeliang.jpg",
-      "size": 42851,
-      "source_category": "core",
-      "source_path": "image/character/ps2066_zhugeliang.jpg",
-      "sha256": "7305271d8cd5445c392e185a4c5afe4ad33a11ac38817bd1b649dec875eaa2e8"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2067_zhaoyun.jpg",
-      "size": 43028,
-      "source_category": "core",
-      "source_path": "image/character/ps2067_zhaoyun.jpg",
-      "sha256": "e4f179dd0112f6c99f06a26b9c6b9d6547fd9a20af6d7b20fde9888d3eceb973"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2068_simayi.jpg",
-      "size": 39502,
-      "source_category": "core",
-      "source_path": "image/character/ps2068_simayi.jpg",
-      "sha256": "00fca5da00d2604db76fcdef73765d527981f3b4ed6a7906af570b5c1baf6edb"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2070_guojia.jpg",
-      "size": 35338,
-      "source_category": "core",
-      "source_path": "image/character/ps2070_guojia.jpg",
-      "sha256": "0d4e198e43382aff9b465a2bd60b256d38a602307b0b382008e594821046e9e7"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/ps2080_zhouyu.jpg",
-      "size": 29042,
-      "source_category": "core",
-      "source_path": "image/character/ps2080_zhouyu.jpg",
-      "sha256": "c58136191065b23c13a24633f8444a7e8c5b4272da070685af59a284d9183f19"
     },
     {
       "kind": "portraits",
@@ -13949,14 +13949,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_bilan_dead.jpg",
-      "size": 117542,
-      "source_category": "core",
-      "source_path": "image/character/scs_bilan_dead.jpg",
-      "sha256": "c163697dca2c10ce162b7a08c97568bcfbf2973445cf5fdd459de524c5cc2029"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/scs_bilan.jpg",
       "size": 129878,
       "source_category": "core",
@@ -13965,11 +13957,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_duangui_dead.jpg",
-      "size": 113432,
+      "path": "portraits/scs_bilan_dead.jpg",
+      "size": 117542,
       "source_category": "core",
-      "source_path": "image/character/scs_duangui_dead.jpg",
-      "sha256": "68283debff2c812b5e19c44ca300977ff358b9c8eac3196f39af0519024049ea"
+      "source_path": "image/character/scs_bilan_dead.jpg",
+      "sha256": "c163697dca2c10ce162b7a08c97568bcfbf2973445cf5fdd459de524c5cc2029"
     },
     {
       "kind": "portraits",
@@ -13981,11 +13973,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_gaowang_dead.jpg",
-      "size": 116041,
+      "path": "portraits/scs_duangui_dead.jpg",
+      "size": 113432,
       "source_category": "core",
-      "source_path": "image/character/scs_gaowang_dead.jpg",
-      "sha256": "a1aabd6f74717133c469c1edf8c7d8400f3755ebbed8219fff310860c2dda1c6"
+      "source_path": "image/character/scs_duangui_dead.jpg",
+      "sha256": "68283debff2c812b5e19c44ca300977ff358b9c8eac3196f39af0519024049ea"
     },
     {
       "kind": "portraits",
@@ -13997,11 +13989,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_guosheng_dead.jpg",
-      "size": 121212,
+      "path": "portraits/scs_gaowang_dead.jpg",
+      "size": 116041,
       "source_category": "core",
-      "source_path": "image/character/scs_guosheng_dead.jpg",
-      "sha256": "3cf901e5e73aa688bd4c760b095940172c5983806be91599a6866e01a9cabca8"
+      "source_path": "image/character/scs_gaowang_dead.jpg",
+      "sha256": "a1aabd6f74717133c469c1edf8c7d8400f3755ebbed8219fff310860c2dda1c6"
     },
     {
       "kind": "portraits",
@@ -14013,11 +14005,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_hankui_dead.jpg",
-      "size": 115648,
+      "path": "portraits/scs_guosheng_dead.jpg",
+      "size": 121212,
       "source_category": "core",
-      "source_path": "image/character/scs_hankui_dead.jpg",
-      "sha256": "09babea878a279ef6d2aa93d8a537032a9bff1f0b071cae97038bc8edb111070"
+      "source_path": "image/character/scs_guosheng_dead.jpg",
+      "sha256": "3cf901e5e73aa688bd4c760b095940172c5983806be91599a6866e01a9cabca8"
     },
     {
       "kind": "portraits",
@@ -14029,11 +14021,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_lisong_dead.jpg",
-      "size": 110030,
+      "path": "portraits/scs_hankui_dead.jpg",
+      "size": 115648,
       "source_category": "core",
-      "source_path": "image/character/scs_lisong_dead.jpg",
-      "sha256": "24c1ed4f21e1e19376ba75f62e4f61ae4f8afa423d10e532aafd5bafb2aac822"
+      "source_path": "image/character/scs_hankui_dead.jpg",
+      "sha256": "09babea878a279ef6d2aa93d8a537032a9bff1f0b071cae97038bc8edb111070"
     },
     {
       "kind": "portraits",
@@ -14045,11 +14037,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_sunzhang_dead.jpg",
-      "size": 144161,
+      "path": "portraits/scs_lisong_dead.jpg",
+      "size": 110030,
       "source_category": "core",
-      "source_path": "image/character/scs_sunzhang_dead.jpg",
-      "sha256": "e770d71ef191f5960731f47a11ba027e9726c57e703faf00feaa6b0555c1c05e"
+      "source_path": "image/character/scs_lisong_dead.jpg",
+      "sha256": "24c1ed4f21e1e19376ba75f62e4f61ae4f8afa423d10e532aafd5bafb2aac822"
     },
     {
       "kind": "portraits",
@@ -14061,11 +14053,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_xiayun_dead.jpg",
-      "size": 121365,
+      "path": "portraits/scs_sunzhang_dead.jpg",
+      "size": 144161,
       "source_category": "core",
-      "source_path": "image/character/scs_xiayun_dead.jpg",
-      "sha256": "7813750c5bcd72c38e2fcccd165634c75584f83c12d771fec5329e9bd806d1a9"
+      "source_path": "image/character/scs_sunzhang_dead.jpg",
+      "sha256": "e770d71ef191f5960731f47a11ba027e9726c57e703faf00feaa6b0555c1c05e"
     },
     {
       "kind": "portraits",
@@ -14077,11 +14069,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_zhangrang_dead.jpg",
-      "size": 149530,
+      "path": "portraits/scs_xiayun_dead.jpg",
+      "size": 121365,
       "source_category": "core",
-      "source_path": "image/character/scs_zhangrang_dead.jpg",
-      "sha256": "d9ae6d0eefcd197c463ddd27f9ef338d480053e7c2aff8a058a49112708aac52"
+      "source_path": "image/character/scs_xiayun_dead.jpg",
+      "sha256": "7813750c5bcd72c38e2fcccd165634c75584f83c12d771fec5329e9bd806d1a9"
     },
     {
       "kind": "portraits",
@@ -14093,11 +14085,11 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/scs_zhaozhong_dead.jpg",
-      "size": 116554,
+      "path": "portraits/scs_zhangrang_dead.jpg",
+      "size": 149530,
       "source_category": "core",
-      "source_path": "image/character/scs_zhaozhong_dead.jpg",
-      "sha256": "9ec85eb9222b01aad0a6994cc66b981dfac55cee21443fac1932c5c629eed269"
+      "source_path": "image/character/scs_zhangrang_dead.jpg",
+      "sha256": "d9ae6d0eefcd197c463ddd27f9ef338d480053e7c2aff8a058a49112708aac52"
     },
     {
       "kind": "portraits",
@@ -14106,6 +14098,14 @@
       "source_category": "core",
       "source_path": "image/character/scs_zhaozhong.jpg",
       "sha256": "780d97720bcca08e339cee1bed5e64b25bba9fe40b5bf2f992c72dd751e72f15"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/scs_zhaozhong_dead.jpg",
+      "size": 116554,
+      "source_category": "core",
+      "source_path": "image/character/scs_zhaozhong_dead.jpg",
+      "sha256": "9ec85eb9222b01aad0a6994cc66b981dfac55cee21443fac1932c5c629eed269"
     },
     {
       "kind": "portraits",
@@ -14445,19 +14445,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/shichangshi_dead.jpg",
-      "size": 181117,
-      "source_category": "core",
-      "source_path": "image/character/shichangshi_dead.jpg",
-      "sha256": "719dcb527e33e39b6df0aee858c8b7bf72c741ee8db70157b9cad5164ece7727"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/shichangshi.jpg",
       "size": 206978,
       "source_category": "core",
       "source_path": "image/character/shichangshi.jpg",
       "sha256": "c1fdfffca3ed4fe910e4eddff0681b051c91a0e277dcc17196b51389cac7fa11"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/shichangshi_dead.jpg",
+      "size": 181117,
+      "source_category": "core",
+      "source_path": "image/character/shichangshi_dead.jpg",
+      "sha256": "719dcb527e33e39b6df0aee858c8b7bf72c741ee8db70157b9cad5164ece7727"
     },
     {
       "kind": "portraits",
@@ -15021,19 +15021,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/sp_ol_caocao_shadow.jpg",
-      "size": 139390,
-      "source_category": "core",
-      "source_path": "image/character/sp_ol_caocao_shadow.jpg",
-      "sha256": "911bfb2474fbd58ce35120eb343d82f9519d9ae9451f5b93eb7da596c41514d5"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/sp_ol_caocao.jpg",
       "size": 126977,
       "source_category": "core",
       "source_path": "image/character/sp_ol_caocao.jpg",
       "sha256": "a0f0ac6ba5d70ebac7a7a842b5cf560666a5c0f9e6f521a836784b8a769f2492"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/sp_ol_caocao_shadow.jpg",
+      "size": 139390,
+      "source_category": "core",
+      "source_path": "image/character/sp_ol_caocao_shadow.jpg",
+      "sha256": "911bfb2474fbd58ce35120eb343d82f9519d9ae9451f5b93eb7da596c41514d5"
     },
     {
       "kind": "portraits",
@@ -16453,19 +16453,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/sunsháo.jpg",
-      "size": 119973,
-      "source_category": "core",
-      "source_path": "image/character/sunsháo.jpg",
-      "sha256": "913b3da6086ed8848ef8767d0647b2db3f4354a5ca9131ba1d576d4abf87a000"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/sunshao.jpg",
       "size": 235734,
       "source_category": "core",
       "source_path": "image/character/sunshao.jpg",
       "sha256": "d8ae6f63bfd2b4ffca039c9d74f87e95ac9c50d09e053c868aa229b001c8a61a"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/sunsháo.jpg",
+      "size": 119973,
+      "source_category": "core",
+      "source_path": "image/character/sunsháo.jpg",
+      "sha256": "913b3da6086ed8848ef8767d0647b2db3f4354a5ca9131ba1d576d4abf87a000"
     },
     {
       "kind": "portraits",
@@ -16477,19 +16477,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/sunxiù.jpg",
-      "size": 69609,
-      "source_category": "core",
-      "source_path": "image/character/sunxiù.jpg",
-      "sha256": "e6efa859ba2319a359b6bfce769c2610aa84b411ec63ae9ee8612dd76067fe7f"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/sunxiu.jpg",
       "size": 218021,
       "source_category": "core",
       "source_path": "image/character/sunxiu.jpg",
       "sha256": "8b69e5dffc84da7f22ad4bd572bf54fe5606fc47769989262142b40ed0af0ebe"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/sunxiù.jpg",
+      "size": 69609,
+      "source_category": "core",
+      "source_path": "image/character/sunxiù.jpg",
+      "sha256": "e6efa859ba2319a359b6bfce769c2610aa84b411ec63ae9ee8612dd76067fe7f"
     },
     {
       "kind": "portraits",
@@ -16773,19 +16773,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/taipingsangong_ultimate.jpg",
-      "size": 318063,
-      "source_category": "core",
-      "source_path": "image/character/taipingsangong_ultimate.jpg",
-      "sha256": "bb76f8fd95a2fa4cf1fa595f1bac811697c5692c300af7f3e2c8c81a74172f80"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/taipingsangong.jpg",
       "size": 338154,
       "source_category": "core",
       "source_path": "image/character/taipingsangong.jpg",
       "sha256": "5b1a8b1153c34a2871d663fa745427a9ffce4e882635dd8fd23818189eda6c8d"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/taipingsangong_ultimate.jpg",
+      "size": 318063,
+      "source_category": "core",
+      "source_path": "image/character/taipingsangong_ultimate.jpg",
+      "sha256": "bb76f8fd95a2fa4cf1fa595f1bac811697c5692c300af7f3e2c8c81a74172f80"
     },
     {
       "kind": "portraits",
@@ -18077,19 +18077,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/v_guanyinping_shadow.jpg",
-      "size": 165456,
-      "source_category": "core",
-      "source_path": "image/character/v_guanyinping_shadow.jpg",
-      "sha256": "89d8a3e579c30192e00f4b237cfb38ff89a9854a53a130790968eb399cf98974"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/v_guanyinping.jpg",
       "size": 141931,
       "source_category": "core",
       "source_path": "image/character/v_guanyinping.jpg",
       "sha256": "96c863b7a0639140149f6214dbb78224a93b702405d99207aff3be7847f506cc"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/v_guanyinping_shadow.jpg",
+      "size": 165456,
+      "source_category": "core",
+      "source_path": "image/character/v_guanyinping_shadow.jpg",
+      "sha256": "89d8a3e579c30192e00f4b237cfb38ff89a9854a53a130790968eb399cf98974"
     },
     {
       "kind": "portraits",
@@ -18141,19 +18141,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/v_sunshangxiang_shadow.jpg",
-      "size": 78851,
-      "source_category": "core",
-      "source_path": "image/character/v_sunshangxiang_shadow.jpg",
-      "sha256": "8dd52581b8d9b7cd1d6f788e5dfc0c869f8f49eb39c1161b6c5aafbffb1ef502"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/v_sunshangxiang.jpg",
       "size": 78534,
       "source_category": "core",
       "source_path": "image/character/v_sunshangxiang.jpg",
       "sha256": "8c5bbd76c7a8cf2ee1586bcfd60d854b457b957ae63f4daa5f182647053e1ae3"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/v_sunshangxiang_shadow.jpg",
+      "size": 78851,
+      "source_category": "core",
+      "source_path": "image/character/v_sunshangxiang_shadow.jpg",
+      "sha256": "8dd52581b8d9b7cd1d6f788e5dfc0c869f8f49eb39c1161b6c5aafbffb1ef502"
     },
     {
       "kind": "portraits",
@@ -18165,19 +18165,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/v_zhangxingcai_shadow.jpg",
-      "size": 144527,
-      "source_category": "core",
-      "source_path": "image/character/v_zhangxingcai_shadow.jpg",
-      "sha256": "ba03a4ddf6a4980fb4e0b82ce45f399be90e90de998a370ecd6229c7d80b9b49"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/v_zhangxingcai.jpg",
       "size": 163515,
       "source_category": "core",
       "source_path": "image/character/v_zhangxingcai.jpg",
       "sha256": "bfa7e0675ebf17f04fb5e9a0c6baa57562a5415813ccca4ef23d97cfc6fb7c38"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/v_zhangxingcai_shadow.jpg",
+      "size": 144527,
+      "source_category": "core",
+      "source_path": "image/character/v_zhangxingcai_shadow.jpg",
+      "sha256": "ba03a4ddf6a4980fb4e0b82ce45f399be90e90de998a370ecd6229c7d80b9b49"
     },
     {
       "kind": "portraits",
@@ -20109,19 +20109,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/yj_sb_guojia_shadow.jpg",
-      "size": 138649,
-      "source_category": "core",
-      "source_path": "image/character/yj_sb_guojia_shadow.jpg",
-      "sha256": "305b18f41dd098d55f9b2c61eaf19d8cc76857d0dd3e006bbc5e0877c96a4126"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/yj_sb_guojia.jpg",
       "size": 141001,
       "source_category": "core",
       "source_path": "image/character/yj_sb_guojia.jpg",
       "sha256": "a069013814c5dca3f7d2429addcdcd38ca50f30453e48f5977578373c960f012"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/yj_sb_guojia_shadow.jpg",
+      "size": 138649,
+      "source_category": "core",
+      "source_path": "image/character/yj_sb_guojia_shadow.jpg",
+      "sha256": "305b18f41dd098d55f9b2c61eaf19d8cc76857d0dd3e006bbc5e0877c96a4126"
     },
     {
       "kind": "portraits",
@@ -20445,6 +20445,14 @@
     },
     {
       "kind": "portraits",
+      "path": "portraits/yuanshaoyuanshu.jpg",
+      "size": 283160,
+      "source_category": "core",
+      "source_path": "image/character/yuanshaoyuanshu.jpg",
+      "sha256": "e51309ca205d96482ff769c2d990468fa2393dfe72b257f5a07833283dbaf932"
+    },
+    {
+      "kind": "portraits",
       "path": "portraits/yuanshaoyuanshu_shao.jpg",
       "size": 97025,
       "source_category": "core",
@@ -20458,14 +20466,6 @@
       "source_category": "core",
       "source_path": "image/character/yuanshaoyuanshu_shu.jpg",
       "sha256": "c0d88fa5804d78d9f2e74bea692e369c33004c7ee0193840b53e55438155a9cb"
-    },
-    {
-      "kind": "portraits",
-      "path": "portraits/yuanshaoyuanshu.jpg",
-      "size": 283160,
-      "source_category": "core",
-      "source_path": "image/character/yuanshaoyuanshu.jpg",
-      "sha256": "e51309ca205d96482ff769c2d990468fa2393dfe72b257f5a07833283dbaf932"
     },
     {
       "kind": "portraits",
@@ -20637,19 +20637,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/yujin_yujin.jpg",
-      "size": 211853,
-      "source_category": "core",
-      "source_path": "image/character/yujin_yujin.jpg",
-      "sha256": "52261a938040209b88e5f50e22468901e0534c3db6620e7168903e6b532b444c"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/yujin.jpg",
       "size": 211664,
       "source_category": "core",
       "source_path": "image/character/yujin.jpg",
       "sha256": "01812ae50a16b98e146615b596f5f73181e9e3da45c3b5590f4d2fddb83d9f42"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/yujin_yujin.jpg",
+      "size": 211853,
+      "source_category": "core",
+      "source_path": "image/character/yujin_yujin.jpg",
+      "sha256": "52261a938040209b88e5f50e22468901e0534c3db6620e7168903e6b532b444c"
     },
     {
       "kind": "portraits",
@@ -20757,19 +20757,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zc26_sp_xushi_shadow.jpg",
-      "size": 68253,
-      "source_category": "core",
-      "source_path": "image/character/zc26_sp_xushi_shadow.jpg",
-      "sha256": "9fc88fb7edcea735165b07ad436043aa948c34f63895f1d170356e82440f23d6"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zc26_sp_xushi.jpg",
       "size": 65908,
       "source_category": "core",
       "source_path": "image/character/zc26_sp_xushi.jpg",
       "sha256": "f3865e3e490649c317c392bd5cc60637a830ca0f7ba2158f271fdccf41a0ac70"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zc26_sp_xushi_shadow.jpg",
+      "size": 68253,
+      "source_category": "core",
+      "source_path": "image/character/zc26_sp_xushi_shadow.jpg",
+      "sha256": "9fc88fb7edcea735165b07ad436043aa948c34f63895f1d170356e82440f23d6"
     },
     {
       "kind": "portraits",
@@ -21093,14 +21093,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zhangyì.jpg",
-      "size": 234560,
-      "source_category": "core",
-      "source_path": "image/character/zhangyì.jpg",
-      "sha256": "43a273f496d5f8c4a0e283da35b332519d3d0caff35df684652cb6ecf4e523a9"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zhangyi.jpg",
       "size": 223876,
       "source_category": "core",
@@ -21114,6 +21106,14 @@
       "source_category": "core",
       "source_path": "image/character/zhangyu.jpg",
       "sha256": "36c73862210dacf3f09fdf157ddf7fd7f049aa230af6a40fbfded1ca7573c782"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zhangyì.jpg",
+      "size": 234560,
+      "source_category": "core",
+      "source_path": "image/character/zhangyì.jpg",
+      "sha256": "43a273f496d5f8c4a0e283da35b332519d3d0caff35df684652cb6ecf4e523a9"
     },
     {
       "kind": "portraits",
@@ -21165,14 +21165,6 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zhaoyǎn.jpg",
-      "size": 150841,
-      "source_category": "core",
-      "source_path": "image/character/zhaoyǎn.jpg",
-      "sha256": "6b3d048806f08bafe40410779581ff111d7a376c630eb6b733e23475ff7d1eea"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zhaoyan.jpg",
       "size": 155386,
       "source_category": "core",
@@ -21186,6 +21178,14 @@
       "source_category": "core",
       "source_path": "image/character/zhaoyun.jpg",
       "sha256": "3ac11bdd492d6a0a558516d88f8953d761d7c9369bf8d6d6a0e6040625e4f014"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zhaoyǎn.jpg",
+      "size": 150841,
+      "source_category": "core",
+      "source_path": "image/character/zhaoyǎn.jpg",
+      "sha256": "6b3d048806f08bafe40410779581ff111d7a376c630eb6b733e23475ff7d1eea"
     },
     {
       "kind": "portraits",
@@ -21421,19 +21421,19 @@
     },
     {
       "kind": "portraits",
-      "path": "portraits/zhuji_shadow.jpg",
-      "size": 33123,
-      "source_category": "core",
-      "source_path": "image/character/zhuji_shadow.jpg",
-      "sha256": "b9f13e059ee18bf64840fc6c9f7ee0f5cbacb4686eec2706eac8f8b55d3146a5"
-    },
-    {
-      "kind": "portraits",
       "path": "portraits/zhuji.jpg",
       "size": 44350,
       "source_category": "core",
       "source_path": "image/character/zhuji.jpg",
       "sha256": "cc1cc3b1b44a80dac4b292070304f10d29da10b8c72831c89864bb82a61765aa"
+    },
+    {
+      "kind": "portraits",
+      "path": "portraits/zhuji_shadow.jpg",
+      "size": 33123,
+      "source_category": "core",
+      "source_path": "image/character/zhuji_shadow.jpg",
+      "sha256": "b9f13e059ee18bf64840fc6c9f7ee0f5cbacb4686eec2706eac8f8b55d3146a5"
     },
     {
       "kind": "portraits",

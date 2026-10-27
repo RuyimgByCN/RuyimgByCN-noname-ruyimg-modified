@@ -52,7 +52,7 @@
 
 | 编号 | 状态 | 剩余 |
 |---|---|---|
-| I01 内容/目录同步 | 已同步 + `--verify-only` 通过（**注意：2026-10-26 B2 批③核对发现 `sync-original-content.mjs --verify-only` 的 `listFiles` 用 `localeCompare` 排序，结果随区域设置变化——en-US 下报 `asset manifest entries mismatch`，`LANG=zh_CN.UTF-8` 下 exit 0；2707 条画像条目逐文件一致，内容无误**） | 分包差异审计、旧局内容锁反例；**脚本待改为区域无关排序（码点/`Intl.Collator("und")`）并重录 manifest 顺序**，否则验证结果取决于执行者区域 |
+| I01 内容/目录同步 | 内容已同步；排序修复**定向通过（2026-10-27）**：多区域校验通过，画像清单只重排；[证据](../operations/evidence/2026-10-27-up37-i01-stable-order/README.md) | 分包差异审计、旧局内容锁反例；可选皮肤完整来源集成验证 |
 | I02 资源/画像 | 部分 | 4 张新画像已入；语音/皮肤/别名缺 |
 | I03 配置/依赖 | 部分 | 新内容依赖/配置/交互未全 |
 | I04 兼容/旧锁 | 未完成 | 旧 0.1.x/0.2.x 存档拒绝与恢复矩阵 |

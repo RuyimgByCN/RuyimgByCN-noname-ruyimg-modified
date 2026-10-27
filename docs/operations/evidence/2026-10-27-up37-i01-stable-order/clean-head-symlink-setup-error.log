@@ -1,0 +1,14 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-i01-head.RoVZc1/noname-next/scripts/sync-original-content.mjs:1851
+      else reject(new Error(
+                  ^
+
+Error: git exited 128: fatal: ../../../../../../../../private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-i01-head.RoVZc1/archive/upstream/noname/apps/core: '../../../../../../../../private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-i01-head.RoVZc1/archive/upstream/noname/apps/core' is outside repository at '/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname'
+    at ChildProcess.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-i01-head.RoVZc1/noname-next/scripts/sync-original-content.mjs:1851:19)
+    at ChildProcess.wrapper (node:events:639:12)
+    at ChildProcess.emit (node:events:514:20)
+    at maybeClose (node:internal/child_process:1156:16)
+    at Socket.<anonymous> (node:internal/child_process:526:11)
+    at Socket.emit (node:events:514:20)
+    at Pipe.<anonymous> (node:net:362:12)
+
+Node.js v26.12.1

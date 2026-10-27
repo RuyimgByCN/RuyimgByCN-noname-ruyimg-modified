@@ -1,0 +1,10 @@
+en_US.UTF-8 und en-US -1
+en_US.UTF-8 en-US en-US -1
+zh_CN.UTF-8 und zh-CN 1
+zh_CN.UTF-8 en-US en-US -1
+tr_TR.UTF-8 und tr-TR -1
+tr_TR.UTF-8 en-US en-US -1
+node v20.17.0 en_US.UTF-8 und en-US -1
+node v20.17.0 en_US.UTF-8 en-US en-US -1
+node v20.17.0 zh_CN.UTF-8 und zh-CN 1
+node v20.17.0 zh_CN.UTF-8 en-US en-US -1
