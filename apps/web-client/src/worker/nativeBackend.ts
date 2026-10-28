@@ -919,16 +919,29 @@ export function nativeDispatch(
     case "save":
       return { kind: "save", hex: handle.engine.save_hex() };
     case "restore": {
-      if (req.packsJson !== undefined) {
-        handle.engine.restore_hex_with_packs_json(req.hex, req.packsJson);
-      } else {
-        handle.engine.restore_hex(req.hex);
+      const restore = (engine: NativeEngine) => {
+        if (req.packsJson !== undefined) {
+          engine.restore_hex_with_packs_json(req.hex, req.packsJson);
+        } else {
+          engine.restore_hex(req.hex);
+        }
+      };
+      // 先在临时引擎验证整个信封，保留原句柄及其规划设置。
+      // shortcut: 读档会解码两次，具备原子交换的窄壳接口时再优化。
+      const candidate = new NativeEngine(1, 0n);
+      let envelope: EngineEnvelope;
+      try {
+        restore(candidate);
+        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 });
+      } finally {
+        candidate.free();
       }
+      restore(handle.engine);
       // 读档会把引擎换成另一份状态（修订号可能相同），候选缓存必须失效；
       // 恢复后的引擎从空日志开始，事件游标同步归零。
       handle.eventCursor = 0;
       invalidateLegalActions(handle);
-      return nativeEnvelope(handle);
+      return envelope;
     }
     case "status":
       return {

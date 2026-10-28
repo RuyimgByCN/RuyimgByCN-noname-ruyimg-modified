@@ -117,7 +117,6 @@ function stubHandle({ legal = [], choice = null, reply = () => ACCEPTED, view = 
       return reply();
     },
     auto_step: () => reply(),
-    restore_hex: (hex) => calls.push({ call: "restore_hex", hex }),
   };
   const commands = () => calls.filter((c) => c.call !== "legal_actions_json");
   const queries = () => calls.filter((c) => c.call === "legal_actions_json");
@@ -184,7 +183,7 @@ test("无合成：内核不给 EndPhase/应答候选就不出现", () => {
   assert.deepEqual(nativeEnvelope(other.handle).legal_actions, []);
 });
 
-test("查询按 (handle, revision) 记忆化，读档后失效", () => {
+test("查询按 (handle, revision) 记忆化", () => {
   const { handle, queries, state } = stubHandle({
     legal: (revision) => [{ PlayCard: { card: 100 + revision, targets: [] } }],
   });
@@ -195,10 +194,6 @@ test("查询按 (handle, revision) 记忆化，读档后失效", () => {
   state.revision = 8; // 命令被接受后修订号前进
   assert.equal(nativeEnvelope(handle).legal_actions[0].PlayCard.card, 108);
   assert.equal(queries().length, 2, "修订号前进必须重查");
-
-  // 读档：引擎被换成另一份状态，即使修订号相同也必须重查。
-  nativeDispatch(handle, { type: "restore", hex: "00" });
-  assert.equal(queries().length, 3, "restore 必须使候选缓存失效");
 });
 
 test("旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接", () => {

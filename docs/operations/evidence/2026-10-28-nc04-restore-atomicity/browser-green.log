@@ -1,0 +1,5 @@
+PASS production_worker_thread | target=worker chunk=engine.native.worker-D42hp9Sm.js
+PASS failed_restore_preserves_save | with and without packs
+PASS valid_restore_matches_state_hash
+PASS browser_and_worker_errors | 0
+RESULT 4 passed / 0 failed

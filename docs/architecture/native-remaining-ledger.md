@@ -136,3 +136,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC03／NC04 后续（2026-10-28）**：本地 Worker 与 WASM 已拒绝整数回绕及非选择者代答；联机身份、其余产品场景和 B7 恢复缺陷仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-wasm-actor-bounds/README.md)）。
 
 **NC04 后续（2026-10-28）**：本地 Worker 新局首个信封失败时保留原局并释放候选；恢复等其他故障路径和 B7 仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-start-atomicity/README.md)）。
+
+**NC04 后续（2026-10-28）**：本地 Worker 读档先验证投影，失败保留原局、游标及缓存；双次解码已测并登记，联机及 B7 等仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-restore-atomicity/README.md)）。

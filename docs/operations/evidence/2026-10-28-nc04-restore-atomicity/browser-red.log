@@ -1,0 +1,16 @@
+PASS production_worker_thread | target=worker chunk=engine.native.worker-DDjihZTw.js
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: old save replaced: {}
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc04-restore-atomicity/browser-worker.mjs:153:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v26.12.1
