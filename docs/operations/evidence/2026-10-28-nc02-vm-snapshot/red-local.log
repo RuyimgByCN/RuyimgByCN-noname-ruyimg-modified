@@ -1,0 +1,39 @@
+✖ complete VM-only package survives match preparation and frozen save restoration (0.576666ms)
+✖ VM payload must have an array of modules and does not excuse malformed assets (0.296416ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 388.425
+
+✖ failing tests:
+
+test at scripts/native-vm-snapshot.test.mjs:21:1
+✖ complete VM-only package survives match preparation and frozen save restoration (0.576666ms)
+  Error: 扩展包缺少可装载的卡牌、武将或牌堆数据
+      at validateNativePackage (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/bundledNativePackages.ts:83:15)
+      at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/nativeMatchContent.ts:36:25
+      at Array.map (<anonymous>)
+      at prepareNativeMatchContent (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/nativeMatchContent.ts:29:37)
+      at TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-vm-snapshot.test.mjs:25:19)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at scripts/native-vm-snapshot.test.mjs:35:1
+✖ VM payload must have an array of modules and does not excuse malformed assets (0.296416ms)
+  Error: 扩展包缺少可装载的卡牌、武将或牌堆数据
+      at validateNativePackage (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/bundledNativePackages.ts:83:15)
+      at TestContext.<anonymous> (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-vm-snapshot.test.mjs:37:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+exit 1

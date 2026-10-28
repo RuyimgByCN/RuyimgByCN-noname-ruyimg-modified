@@ -1,0 +1,12 @@
+✔ complete VM-only package survives match preparation and frozen save restoration (1.719583ms)
+✔ VM payload must have an array of modules and does not excuse malformed assets (0.354958ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.435291
+
+exit 0

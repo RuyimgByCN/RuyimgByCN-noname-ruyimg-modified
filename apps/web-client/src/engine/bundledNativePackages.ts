@@ -43,6 +43,7 @@ export interface NativePackagePayload {
   cards?: unknown;
   characters?: unknown;
   pile?: unknown;
+  modules?: unknown;
 }
 
 const bundled: Record<string, { package: { modules: unknown[] }; payload: unknown }> = {
@@ -96,9 +97,13 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
       seen.add(key);
     }
   }
+  if (payload?.modules !== undefined && !Array.isArray(payload.modules)) {
+    throw new Error("扩展包 VM 模块格式无效");
+  }
   const assets = [payload?.cards, payload?.characters, payload?.pile].filter((v) => v !== undefined);
-  if (!assets.length || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))) {
-    throw new Error("扩展包缺少可装载的卡牌、武将或牌堆数据");
+  if ((!assets.length && payload?.modules === undefined)
+    || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))) {
+    throw new Error("扩展包缺少可装载的卡牌、武将、牌堆或 VM 数据");
   }
   return payload!;
 }

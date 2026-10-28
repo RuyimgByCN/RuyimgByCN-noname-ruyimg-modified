@@ -557,6 +557,38 @@ try {
   // 由 game-server 的 emit_vm_fixture 示例生成：真实 npack + 武将资产。
   const vmFixtureDir = join(root, "scripts/fixtures/vm-trigger");
   const vmPackage = JSON.parse(readFileSync(join(vmFixtureDir, "package.npack.json"), "utf8"));
+  const { prepareNativeMatchContent, restoreNativeMatchContent } = await import(
+    pathToFileURL(join(root, "src/engine/nativeMatchContent.ts")).href
+  );
+  const vmManifest = vmPackage.manifest;
+  const vmKey = `${vmManifest.namespace}/${vmManifest.package_id}`;
+  const vmStore = {
+    installed: [{ key: vmKey, version: vmManifest.version, lifecycle: "active",
+      logicFingerprint: vmManifest.logic_hash.slice(0, 4).map((n) => n.toString(16).padStart(2, "0")).join(""),
+      nativeVersions: { [vmManifest.version]: JSON.stringify(vmPackage) } }],
+    contentLock: [vmKey], matchFrozen: false,
+  };
+  const vmOnlyContent = prepareNativeMatchContent(vmStore);
+  const vmOnlyStart = await workerSend({ id: 11000, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmOnlyContent.packsJson });
+  const vmOnlySave = await workerSend({ id: 11001, type: "save" });
+  const vmOnlyIdentity = await workerSend({ id: 11002, type: "start", mode: "identity", players: 4, seed: 42, observer: 0, packsJson: vmOnlyContent.packsJson });
+  const vmOnlyFrozen = restoreNativeMatchContent(vmOnlyContent, { installed: [], contentLock: [], matchFrozen: false });
+  const vmOnlyRestore = await workerSend({ id: 11003, type: "restore", hex: vmOnlySave.data?.hex, packsJson: vmOnlyFrozen.packsJson });
+  const vmOnlyAfterRestore = await workerSend({ id: 11004, type: "save" });
+  check("worker_vm_only_prepared_start_identity_and_restore",
+    vmOnlyStart.ok === true && vmOnlySave.ok === true && vmOnlyIdentity.ok === true && vmOnlyRestore.ok === true &&
+      vmOnlyAfterRestore.ok === true && vmOnlyRestore.data?.hash_hex === vmOnlyStart.data?.hash_hex,
+    `start=${vmOnlyStart.ok} identity=${vmOnlyIdentity.ok} restore=${vmOnlyRestore.ok} hash=${vmOnlyRestore.data?.hash_hex}`);
+  const corruptVmOnly = structuredClone(vmPackage);
+  corruptVmOnly.modules[0].local_count += 1;
+  const corruptVmOnlyJson = JSON.stringify([corruptVmOnly]);
+  const corruptVmOnlyStart = await workerSend({ id: 11005, type: "start", players: 4, seed: 42, observer: 0, packsJson: corruptVmOnlyJson });
+  const corruptVmOnlyRestore = await workerSend({ id: 11006, type: "restore", hex: vmOnlySave.data?.hex, packsJson: corruptVmOnlyJson });
+  const vmOnlyAfterReject = await workerSend({ id: 11007, type: "save" });
+  check("worker_vm_only_corrupt_module_refused_without_mutation",
+    [corruptVmOnlyStart, corruptVmOnlyRestore].every((reply) => reply.ok === false && /module .*logic_hash mismatch/.test(reply.error ?? "")) &&
+      vmOnlyAfterReject.data?.hex === vmOnlyAfterRestore.data?.hex,
+    JSON.stringify([corruptVmOnlyStart.error, corruptVmOnlyRestore.error]));
   vmPackage.characters = JSON.parse(readFileSync(join(vmFixtureDir, "character.json"), "utf8"));
   const badVmPackage = structuredClone(vmPackage);
   badVmPackage.characters.generals[0].skills[0].name = "missing_vm_skill";

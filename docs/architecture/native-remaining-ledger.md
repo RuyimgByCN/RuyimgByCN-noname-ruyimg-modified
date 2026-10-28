@@ -122,3 +122,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC10 后续（2026-10-28）**：静止态模拟已保护公开及本人部分技能牌区；敌方陷阱／VM 牌堆仍可能重复或泄漏，需安全重分配。NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-skill-pile-conservation/README.md)）。
 
 **NC10 后续（2026-10-28）**：无 VM 的静止态单张敌方陷阱已补模拟守恒、引用同步和同视图遮蔽；多张、VM 与挂起状态等仍待处理，NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-single-hidden-trap/README.md)）。
+
+**NC02 后续（2026-10-28）**：已有 VM 包副本可通过前端开局／恢复校验，浏览器与 Worker 已验；安装入口、资源绑定和跨包真实规则引用仍待完成，NC02 保持部分（[证据](../operations/evidence/2026-10-28-nc02-vm-snapshot/README.md)）。

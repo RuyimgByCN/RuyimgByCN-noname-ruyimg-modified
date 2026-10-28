@@ -1,0 +1,8 @@
+PASS vm_only_product_start: key=official/vm-fixture hash=03b4099f5f84890c6a3f8ca750c52c3fd5138a2ef9c0e99c76360f139365473a
+PASS vm_only_saved_copy
+PASS vm_only_product_restore: hash=03b4099f5f84890c6a3f8ca750c52c3fd5138a2ef9c0e99c76360f139365473a
+PASS tampered_restore_rejected_without_mutation
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc02-browser-vm-H4NYd8 origin=http://127.0.0.1:53347
+
+exit 0

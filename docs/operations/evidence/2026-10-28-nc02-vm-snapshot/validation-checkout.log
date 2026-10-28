@@ -1,0 +1,11 @@
+Warning: you are leaving 1 commit behind, not connected to
+any of your branches:
+
+  7bd077ca NC02 VM snapshot validation
+
+If you want to keep it by creating a new branch, this may be a good time
+to do so with:
+
+ git branch <new-branch-name> 7bd077ca
+
+HEAD is now at 488d5205 NC02 VM snapshot validation
