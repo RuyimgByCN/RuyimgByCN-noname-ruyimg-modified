@@ -1,0 +1,4 @@
+PASS seat_zero: {"view":{"current":0,"phase":"Judge","round":1},"player":"► 第 1 轮 · P0","phase":"判定"}
+PASS other_seat: {"view":{"current":1,"phase":"Judge","round":1},"player":"► 第 1 轮 · P1","phase":"判定"}
+PASS end_phase: {"view":{"current":0,"phase":"End","round":1},"player":"► 第 1 轮 · P0","phase":"结束"}
+RESULT pass=3 fail=0 exceptions=0

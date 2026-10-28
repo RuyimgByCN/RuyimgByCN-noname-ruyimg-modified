@@ -615,10 +615,12 @@ watch(
 );
 
 const PHASE_LABELS: Record<string, string> = {
+  Prepare: "准备",
   Draw: "摸牌",
   Play: "出牌",
   Discard: "弃牌",
   Judge: "判定",
+  End: "结束",
 };
 
 const matchOutcome = computed(() => {
@@ -649,7 +651,9 @@ function returnToLobby() {
 }
 
 const turnInfo = computed(() => {
-  if (store.view && store.view.current_player !== 0 && store.view.phase !== "Idle") {
+  if (store.view && store.view.phase !== "Idle" && (
+    store.view.current_player !== 0 || store.view.seats.some((seat) => seat.player === 0)
+  )) {
     return {
       currentPlayer: store.view.current_player,
       phase: store.view.phase,
