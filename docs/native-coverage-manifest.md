@@ -1,7 +1,7 @@
 # 原生重写统一规则覆盖清单
 
 - 状态：活文档，登记**机制级**证据与未对齐边界。当前进度和待办只在 [进度主稿](architecture/native-progress.md) 维护；扩展逐包状态见 [重构台账](migration/upstream-extension-reconstruction.md)。本表历史条目不自动代表最新整包验收。
-- **版本与验证口径（2026-10-17 复核；2026-10-18 NC11 勘正）**：源码实测 `STANDARD_RULESET_VERSION = 322`（工作树 `crates/engine-native/src/content/standard.rs:126`；已提交 HEAD 为 321）、`ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`），仍在开发；扩展切片的逐技回归（如 swd/ow/xianjian 各批）登记在[两仓台账](migration/upstream-extension-reconstruction.md)与各批证据，本表只登记机制键与 golden 场景；当前测试结论与最近一次全绿只在[进度主稿](architecture/native-progress.md#当前核验快照)维护，本表不复制。[第 48 轮 v59](operations/evidence/2026-09-23-native-review-48/README.md)（原生 335 项、全工作区 4,901 项）与 v28/238 项的[第 16 轮](operations/evidence/2026-09-23-native-upstream-review-16/README.md)均为历史快照。规则版本变更见 [玩法基准](architecture/native-rules-baseline.md)。
+- **版本与验证口径（2026-10-17 复核；2026-10-18 NC11 勘正）**：当时源码实测 `STANDARD_RULESET_VERSION = 322`（工作树；已提交 HEAD 为 321）、`ARCHIVE_FORMAT_VERSION = 105`，仍在开发。此后规则版本已多次升号，当前值只看[规则基准](architecture/native-rules-baseline.md)头部（2026-10-28 补注）；扩展切片的逐技回归（如 swd/ow/xianjian 各批）登记在[两仓台账](migration/upstream-extension-reconstruction.md)与各批证据，本表只登记机制键与 golden 场景；当前测试结论与最近一次全绿只在[进度主稿](architecture/native-progress.md#当前核验快照)维护，本表不复制。[第 48 轮 v59](operations/evidence/2026-09-23-native-review-48/README.md)（原生 335 项、全工作区 4,901 项）与 v28/238 项的[第 16 轮](operations/evidence/2026-09-23-native-upstream-review-16/README.md)均为历史快照。规则版本变更见 [玩法基准](architecture/native-rules-baseline.md)。
   测试通过、实现符合声明与官方版本等价分别举证；原稿“引擎全部完成”不再作为验收结论。
 - 用途：区分每条规则机制的**已验证 / 近似 / 缺失 / 行为差异**四类状态，
   并给出可执行证据的位置；新内容迁移以此为登记入口。

@@ -1,0 +1,47 @@
+date: 2026-10-28 16:28:53 +0800  HEAD: ec672a1d3c413d39c9972ee02118ae92a21223ee
+spec sha256: 41e451284907eb69f73ec8e7b5b151c160bc4e67fc3a6136435bc4aaa2b1bc35
+$ git diff --stat -- docs
+ docs/architecture/native-progress.md               | 12 +++++++++--
+ docs/architecture/native-remaining-ledger.md       | 24 ++++++++++++++--------
+ docs/architecture/native-rules-baseline.md         |  7 ++++---
+ docs/native-coverage-manifest.md                   |  2 +-
+ docs/operations/native-convergence-agent-prompt.md | 16 ++++++++-------
+ 5 files changed, 40 insertions(+), 21 deletions(-)
+$ latest mtime of non-docs changed files (scan started 16:22:02; this batch edits docs only)
+13:50:34  apps/game-server/tests/nc09_native_view_bridge.rs
+13:48:29  apps/web-client/scripts/native-adapter.test.mjs
+13:49:52  apps/web-client/scripts/native-worker-smoke.mjs
+13:43:48  apps/web-client/src/worker/nativeBackend.ts
+13:42:00  crates/engine-native-wasm/src/lib.rs
+13:47:54  crates/engine-native-wasm/tests/nc03_view_projection.rs
+13:15:39  crates/engine-native/src/archive/machine_decode.rs
+13:19:19  crates/engine-native/src/archive/machine_encode.rs
+13:26:41  crates/engine-native/src/content/standard.rs
+13:16:06  crates/engine-native/src/engine/hash.rs
+13:26:17  crates/engine-native/src/rvm_bridge.rs
+13:19:08  crates/engine-native/src/snap/machine_validation.rs
+13:17:28  crates/engine-native/src/snap/restore.rs
+13:14:50  crates/engine-native/src/snap/types.rs
+13:20:04  crates/engine-native/tests/a0_tag_registry.rs
+13:25:20  crates/engine-native/tests/nc04_vm_resume.rs
+14:22:48  crates/engine-native/tests/nc08_trigger_order_counterexample.rs
+13:21:35  crates/engine-native/tests/pa12_tag656_version.rs
+13:27:03  crates/engine-native/tests/replay_scenarios.rs
+$ spec relative link check
+38 links checked; 0 broken
+$ python3 -B scripts/check_local_links.py --all
+检查 1865 个文件，坏链 0
+exit: 0
+$ python3 -B scripts/check-adr-index.py
+检查结果：通过
+exit: 0
+$ python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+OK
+exit: 0
+$ python3 -B scripts/check-source-lines.py
+Source line limit passed: 8653 files <= 2000 lines
+exit: 0
+$ git diff --check
+exit: 0
+$ git diff --no-index --check /dev/null docs/operations/evidence/2026-10-28-status-scan/README.md
+exit: 1 (1 = new file)

@@ -1,0 +1,10 @@
+### cargo test --offline -p engine-native --no-fail-fast  16:23:14
+exit: 0  16:23:50
+### cargo test --offline -p engine-native-wasm --no-fail-fast  16:23:50
+exit: 0  16:23:51
+### cargo test --offline -p game-server --no-fail-fast  16:23:51
+exit: 0  16:25:14
+### pnpm test 16:25:14
+exit: 0
+### pnpm typecheck
+exit: 0  16:25:16

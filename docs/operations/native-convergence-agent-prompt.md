@@ -7,11 +7,13 @@
 
 先读取并遵守 /Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md 及适用的更深层规范，然后按顺序读取：
 1. docs/architecture/native-convergence-plan.md（完整目标、NC01–NC12、六阶段与验收门槛）
-2. docs/architecture/native-progress.md（唯一当前状态和工作包登记）
-3. docs/migration/upstream-extension-reconstruction.md（两仓全部37来源、E01–E06/G0–G5）
-4. docs/architecture/native-extensions.md、docs/architecture/native-rules-baseline.md、docs/native-coverage-manifest.md
-5. noname-performance-architecture.md（平台与性能标准）
-6. docs/operations/evidence/2026-10-18-architecture-audit/README.md（审查快照、完整日志和反例；不是当前状态保证）
+2. docs/architecture/native-progress.md（当前基准与优先级）和 docs/architecture/native-remaining-ledger.md（2026-10-24 起的统一剩余台账：阻断、NC/PA/UP37 各行与进展登记）
+3. docs/operations/evidence/2026-10-28-user-decisions/README.md（已授权的版本、协议与修复范围；授权不等于验收）
+4. /Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md（实施约束与验收检查表；位于 Git 仓库外）
+5. docs/migration/upstream-extension-reconstruction.md（两仓全部37来源、E01–E06/G0–G5）
+6. docs/architecture/native-extensions.md、docs/architecture/native-rules-baseline.md、docs/native-coverage-manifest.md
+7. noname-performance-architecture.md（平台与性能标准）
+8. docs/operations/evidence/2026-10-18-architecture-audit/README.md（审查快照、完整日志和反例；不是当前状态保证）
 
 先检查当前HEAD、工作区修改、源码、包产物、测试及已有实现。审查后可能已有并行修复，已完成部分要验证复用，不重复重写。保留所有既有修改和未跟踪文件，不通过reset/clean/stash丢弃工作，不为凑干净工作树提交别人的改动；遵守本地Git政策，不push或新增remote。结构查询优先CodeGraph；不可用时定位文件读取，不以旧文档代替源码。
 
@@ -31,11 +33,11 @@
 
 按影响面运行方案第5节和仓库要求的检查：行数门禁及其单测、原生全量、相关包测试、Gate 1b、workspace、前端型别、从当前源码重建的WASM、真实客户端/服务端、native/WASM跨目标、跨进程恢复和上游对照。旧线和原生线分开统计。性能须同设备同工具链同负载测前后，不能预设收益。编译成功、定向通过、全Rust通过、测试文件存在均不能代替产品/平台/规则等价验收。
 
-当前状态、失败项、NC工作包与下一步只更新native-progress；来源状态只更新扩展台账；规则差异只更新规则基准；原始命令与输出写入有日期的evidence目录。升级已有登记流程为功能→生产入口→案例→版本/平台结果→剩余项的证据关系，不能通过匹配“八项整包”文字自动认证完成。清理过宽完成声明、重复当前数字、ADR标识和链接，保留历史语境及机器消费者。
+当前状态、失败项、NC工作包与下一步只更新native-progress与剩余台账；来源状态只更新扩展台账；规则差异只更新规则基准；原始命令与输出写入有日期的evidence目录。升级已有登记流程为功能→生产入口→案例→版本/平台结果→剩余项的证据关系，不能通过匹配“八项整包”文字自动认证完成。清理过宽完成声明、重复当前数字、ADR标识和链接，保留历史语境及机器消费者。
 
 每轮记录日期、HEAD及dirty指纹、规则/格式版本、工具链/设备、命令、通过/失败/忽略和证据。区分已实现、已修反例、已加回归、定向通过、全量通过、平台通过及上游等价。
 
-在授权范围内自主推进，不反复询问是否继续。发现真正缺少设备、素材、凭据、权限或不可自行决定的产品语义时，及时明确所需输入和未验收门槛，同时继续完成所有不依赖该输入的工作；依赖该输入的部分保持待办，不擅自补造答案、缩小范围或把阻碍写成完成。若必须交接或跨上下文，保存精确完成/剩余清单和下一步，续接后继续执行，不以已经投入很多工作作为完成依据。
+在授权范围内自主推进，不反复询问是否继续。新立ADR、改协议（含VM提交与选择/命令协议）、升规则版本/存档格式/ABI之前，先查裁决登记与剩余台账：已授权的按登记范围实施，超出范围的先向用户提交方案并取得明确答复；同一版本号只能被一批占用，被占用后另一批须重新确认。发现真正缺少设备、素材、凭据、权限或不可自行决定的产品语义时，及时明确所需输入和未验收门槛，同时继续完成所有不依赖该输入的工作；依赖该输入的部分保持待办，不擅自补造答案、缩小范围或把阻碍写成完成。若必须交接或跨上下文，保存精确完成/剩余清单和下一步，续接后继续执行，不以已经投入很多工作作为完成依据。
 
 最终必须逐项报告NC01–NC12、六阶段和37来源的结果及证据，列出仍未完成/未验证项。只有方案全部门槛真实通过，才可声明“全部完成”；否则明确整体尚未完成，并说明已经完成的部分和真正剩余阻碍。现在开始检查工作区并执行。
 ```

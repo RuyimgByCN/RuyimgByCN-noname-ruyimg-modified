@@ -63,7 +63,7 @@
 | `cargo test --offline -p engine-native --test nc04_vm_resume` | **9/0/0**（含变异验证回合，见 mutation.log） |
 | `cargo test --offline -p engine-native --test replay_scenarios` | **3/0/0**（14 golden 重录后） |
 | `cargo check --offline --workspace --all-targets` | 通过（存量警告不变，Gate 1b 他人未提交改动口径照旧） |
-| `cargo test --offline -p engine-native --no-fail-fast` | 见 [native-full-summary.txt](native-full-summary.txt)（全量日志 /tmp/b7-native-full.log） |
+| `cargo test --offline -p engine-native --no-fail-fast` | 见 [native-full-summary.txt](native-full-summary.txt)（全量日志原记 `/tmp/b7-native-full.log`，该临时文件已不存在；同目录 [native-full.log](native-full.log) 含 331 个测试二进制结果，2026-10-28 16:22 扫描补注） |
 | `cargo test --offline -p game-server` | 见 [game-server-summary.txt](game-server-summary.txt) |
 | `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'`；`python3 -B scripts/check-source-lines.py`；`python3 -B scripts/check_local_links.py --all`；`python3 -B scripts/check-adr-index.py` | 见 [gates.log](gates.log) |
 

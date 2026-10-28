@@ -1,0 +1,3 @@
+worktree diff sha256 at scan start (tracked files): 8bb9ebaf68cb8cdfed7867baae4b5239a713384795308352838dcef0a0633c71
+HEAD: ec672a1d3c413d39c9972ee02118ae92a21223ee
+scan start: 2026-10-28 16:22:02 +0800

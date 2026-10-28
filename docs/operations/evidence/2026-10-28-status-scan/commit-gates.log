@@ -1,0 +1,34 @@
+### 2026-10-28 17:39:26 +0800 pre-commit gates on worktree (HEAD ec672a1d)
+### code files newest mtime:
+14:22:48 crates/engine-native/tests/nc08_trigger_order_counterexample.rs
+### python3 -B -m unittest discover -s scripts -p test_check_source_lines.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+OK
+exit: 0
+### python3 -B scripts/check-source-lines.py
+Source line limit passed: 8653 files <= 2000 lines
+exit: 0
+### python3 -B scripts/check_local_links.py --all
+检查 1865 个文件，坏链 0
+exit: 0
+### python3 -B scripts/check-adr-index.py
+- 标题错号 0
+- 未登记冲突 0，过时登记 0，登记内容不符 0，索引坏链 0
+检查结果：通过
+exit: 0
+### git diff --check
+exit: 0
+
+### 2026-10-28 17:43:14 +0800 batch 5 gates after backfill (HEAD 103b7499)
+### python3 -B scripts/check-source-lines.py
+Source line limit passed: 8653 files <= 2000 lines
+### python3 -B scripts/check_local_links.py --all
+检查 1865 个文件，坏链 0
+exit: 0
+### python3 -B scripts/check-adr-index.py
+检查结果：通过
+### git diff --check
+exit: 0
