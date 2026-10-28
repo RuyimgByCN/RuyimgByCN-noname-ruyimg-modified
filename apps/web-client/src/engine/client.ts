@@ -13,6 +13,7 @@ import type {
 import { desktopContentBundle, isTauriShell } from "./desktopHost";
 import {
   perfRequestSent,
+  perfRequestFailed,
   perfResponseReceived,
   perfWorkerTimings,
   startPerfProbe,
@@ -228,7 +229,17 @@ export class EngineClient {
       // 不受输入后任务推迟约束——保证回包前每个 vsync 都有 rAF 可轮询）。
       (globalThis as unknown as { __latencySabDebug?: { wake?: () => void } })
         .__latencySabDebug?.wake?.();
-      this.worker!.postMessage(body);
+      try {
+        this.worker!.postMessage(body);
+      } catch (error) {
+        this.pending.delete(body.id);
+        perfRequestFailed(body.id);
+        if (this.pending.size === 0) {
+          (globalThis as unknown as { __latencySabDebug?: { settle?: () => void } })
+            .__latencySabDebug?.settle?.();
+        }
+        reject(error);
+      }
     });
   }
 
@@ -292,7 +303,7 @@ export class EngineClient {
       type: "playCard",
       actor,
       card,
-      targets,
+      targets: [...targets],
     }) as Promise<EngineEnvelope>;
   }
 
@@ -307,8 +318,8 @@ export class EngineClient {
       type: "activateSkill",
       actor,
       skill,
-      targets,
-      cardTargets,
+      targets: [...targets],
+      cardTargets: [...cardTargets],
     }) as Promise<EngineEnvelope>;
   }
 
@@ -325,7 +336,7 @@ export class EngineClient {
       actor,
       skill,
       cardKind,
-      targets,
+      targets: [...targets],
       equipSlot,
     }) as Promise<EngineEnvelope>;
   }
@@ -341,7 +352,7 @@ export class EngineClient {
       type: "resolveChoice",
       actor,
       choiceId,
-      selections,
+      selections: [...selections],
       cancelled,
     }) as Promise<EngineEnvelope>;
   }

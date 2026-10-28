@@ -140,3 +140,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC04 后续（2026-10-28）**：本地 Worker 读档先验证投影，失败保留原局、游标及缓存；双次解码已测并登记，联机及 B7 等仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-restore-atomicity/README.md)）。
 
 **NC03／NC04 后续（2026-10-28）**：本地原生命令拒绝已显示原因、避免成功日志并停止连续自动；响应式数组无法传 Worker、挂起续行及联机等仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-local-rejection-ui/README.md)）。
+
+**NC03／NC04 后续（2026-10-28）**：本地动作响应式数组已可发送 Worker，同步发送失败清理请求与采样；真实手牌投影、联机及 B7 等仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-worker-clone/README.md)）。

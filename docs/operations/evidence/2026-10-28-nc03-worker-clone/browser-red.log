@@ -1,0 +1,4 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+FAIL reactive_play_reaches_worker: reply=null; alert=Failed to execute 'postMessage' on 'Worker': [object Object] could not be cloned.
+PASS continuous_auto_rejection: injected nested InvalidChoice visible; no subsequent steps
+RESULT pass=2 fail=1 exceptions=0

@@ -1,0 +1,14 @@
+(node:72456) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (15.944459ms)
+✔ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (11.552375ms)
+✔ 其他请求在途时发送失败不提前结束 SAB 唤醒 (10.460708ms)
+✔ 性能探针丢弃未发送请求，保留成功请求 (0.500709ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 374.69925

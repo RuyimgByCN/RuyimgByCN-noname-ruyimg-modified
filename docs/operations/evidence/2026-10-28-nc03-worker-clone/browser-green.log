@@ -1,0 +1,4 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+PASS reactive_play_reaches_worker: real Worker reason=WrongPhase; projection injected, no array unwrapping
+PASS continuous_auto_rejection: injected nested InvalidChoice visible; no subsequent steps
+RESULT pass=3 fail=0 exceptions=0

@@ -1,0 +1,75 @@
+(node:72455) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (15.64425ms)
+✖ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (11.113541ms)
+✖ 其他请求在途时发送失败不提前结束 SAB 唤醒 (9.150334ms)
+✖ 性能探针丢弃未发送请求，保留成功请求 (0.473708ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 367.617542
+
+✖ failing tests:
+
+test at scripts/nc03-worker-clone.test.mjs:40:1
+✖ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (15.64425ms)
+  DataCloneError: [object Array] could not be cloned.
+      at new DOMException (node:internal/per_context/domexception:79:18)
+      at structuredClone (node:internal/worker/js_transferable:126:26)
+      at Object.postMessage (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:28:17)
+      at eval (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:22:24), <anonymous>:191:25)
+      at new Promise (<anonymous>)
+      at EngineClient.request (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:22:24), <anonymous>:184:16)
+      at EngineClient.playCard (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:22:24), <anonymous>:240:21)
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:45:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+
+test at scripts/nc03-worker-clone.test.mjs:59:1
+✖ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (11.113541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:72:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-worker-clone.test.mjs:83:1
+✖ 其他请求在途时发送失败不提前结束 SAB 唤醒 (9.150334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:96:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-worker-clone.test.mjs:103:1
+✖ 性能探针丢弃未发送请求，保留成功请求 (0.473708ms)
+  TypeError [Error]: perf.perfRequestFailed is not a function
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:116:8)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

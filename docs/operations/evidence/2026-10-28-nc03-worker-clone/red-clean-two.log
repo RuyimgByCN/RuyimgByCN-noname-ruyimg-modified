@@ -1,0 +1,43 @@
+✖ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (42.551458ms)
+✖ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (13.453458ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 321.951792
+
+✖ failing tests:
+
+test at scripts/nc03-worker-clone.test.mjs:39:1
+✖ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (42.551458ms)
+  DataCloneError: [object Array] could not be cloned.
+      at new DOMException (node:internal/per_context/domexception:79:18)
+      at structuredClone (node:internal/worker/js_transferable:126:26)
+      at Object.postMessage (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:27:17)
+      at eval (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:21:24), <anonymous>:191:25)
+      at new Promise (<anonymous>)
+      at EngineClient.request (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:21:24), <anonymous>:184:16)
+      at EngineClient.playCard (eval at fixture (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:21:24), <anonymous>:240:21)
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:44:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+
+test at scripts/nc03-worker-clone.test.mjs:58:1
+✖ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (13.453458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///private/tmp/nc03-clone-clean.ClKMek/apps/web-client/scripts/nc03-worker-clone.test.mjs:71:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

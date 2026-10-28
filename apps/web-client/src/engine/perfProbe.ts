@@ -167,6 +167,13 @@ export function perfRequestSent(id: number, type: string): void {
   orphanWorker.delete(id);
 }
 
+/** 未能发出的请求不计入性能样本。 */
+export function perfRequestFailed(id: number): void {
+  if (!enabled) return;
+  marks.delete(id);
+  orphanWorker.delete(id);
+}
+
 /** 回包到达主线程（`onmessage` 入口）。 */
 export function perfResponseReceived(id: number): void {
   if (!enabled) return;
