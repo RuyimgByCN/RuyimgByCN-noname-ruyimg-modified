@@ -152,4 +152,4 @@
 - [0783 Boss 关卡流程子系统（D4）](0783-boss-stage-flow-subsystem.md) —— 十殿还人/隐藏链八技/翼轮次/bianshen 换 Boss 进原生流程面；与 D5 龙血·ylyg*、映种、庞统外部技划界；实现分 B0–B4
 - [0784 桌面端原生执行引擎原型（PA09 草案）](0784-desktop-native-engine-prototype.md) —— 草案：引擎在 Tauri Rust 进程原生运行、沿用 Worker 协议语义，以 PA08 数据为对照组；原型未落地，是否切换默认由用户拍板。
 - [0785 原生 GPU 牌桌原型（PA11 草案）](0785-wgpu-table-prototype.md) —— 草案：PA08 实测 DOM 余量充足、性能动机不成立，原型若做只做单场景 wgpu 对照；投入由用户拍板，拍板前不立项。
-- [0786 VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥ 草案）](0786-vm-effect-choice-window-and-active-bridge.md) —— 草案：提交期挂起（commit_effect 开窗 + MachineSnapshot::Rvm 追加提交期字段 + 复用 Answer 通道）与 active_index→ActivateSkill 桥；J1/J2 分批建议。VM 提交协议、选择/命令协议与任何升号实施前须分别请示（裁决⑤）。
+- [0786 VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥ 草案）](0786-vm-effect-choice-window-and-active-bridge.md) —— J1 已采纳（2026-10-28，未实施），J2 仍为草案：提交期挂起（commit_effect 开窗 + MachineSnapshot::Rvm 追加提交期字段 + 复用 Answer 通道）与 active_index→ActivateSkill 桥；J1/J2 分批建议。VM 提交协议、选择/命令协议与任何升号实施前须分别请示（裁决⑤）。
