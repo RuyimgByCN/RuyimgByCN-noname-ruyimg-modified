@@ -17,6 +17,7 @@
  * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
+import { publicEventLabel } from "../engine/publicEvents";
 import type {
   EngineEnvelope,
   GeneralAssignment,
@@ -783,19 +784,6 @@ export function nativeEnvelope(
   return envelope;
 }
 
-const PUBLIC_EVENT_LABELS: Record<number, string> = {
-  1: "对局开始",
-  2: "摸牌",
-  3: "使用卡牌",
-  4: "造成伤害",
-  5: "回复体力",
-  6: "进入濒死",
-  7: "玩家阵亡",
-  8: "回合推进",
-  9: "对局结束",
-  10: "等待选择",
-};
-
 /** 读取自上次信封以来的真实公开事件码；不含暗牌/选项内容。 */
 function readPublicEvents(handle: NativeHandle): EngineEnvelope["events"] {
   const end = Number(handle.engine.log_len());
@@ -811,7 +799,7 @@ function readPublicEvents(handle: NativeHandle): EngineEnvelope["events"] {
     codes = [];
   }
   return codes.map((code) => ({
-    PublicEvent: { code, label: PUBLIC_EVENT_LABELS[code] ?? `事件 ${code}` },
+    PublicEvent: { code, label: publicEventLabel(code) },
   }));
 }
 

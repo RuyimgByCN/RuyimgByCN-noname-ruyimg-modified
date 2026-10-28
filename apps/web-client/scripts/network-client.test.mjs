@@ -453,3 +453,25 @@ test("旧房间无回执的重放拒绝显示为结果不确定", async (t) => {
   });
   await assert.rejects(command, /结果不确定/);
 });
+
+test("联机公开事件与本地一致地展示粗粒度语义", async (t) => {
+  const { client, connect } = fixture(t);
+  const socket = await connect();
+  const joined = client.joinRoom(7);
+  join(socket);
+  await joined;
+  const envelopes = [];
+  client.onEnvelope((envelope) => envelopes.push(envelope));
+  socket.receive("CommandOutcome", {
+    view: view(2), choice: null, legal_actions: [], result: { Accepted: {} },
+    idempotency_key: 99, public_event_codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 99],
+  });
+  const labels = [
+    "对局开始", "摸牌", "使用或响应牌", "伤害结算", "回复体力", "濒死状态变化",
+    "玩家阵亡", "阶段或回合推进", "对局结束", "选择状态变化", "事件 99",
+  ];
+  assert.deepEqual(envelopes.at(-1).events.map((event) => event.PublicEvent.label), labels);
+  const store = createViewStore();
+  applyEnvelope(store, envelopes.at(-1));
+  assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+});

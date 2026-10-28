@@ -1,3 +1,4 @@
+import { publicEventLabel } from "./publicEvents";
 import type {
   ChoiceRequest,
   EngineEnvelope,
@@ -729,7 +730,7 @@ function envelopeFromView(
   return {
     result,
     events: publicEventCodes.map((code) => ({
-      PublicEvent: { code, label: PUBLIC_EVENT_LABELS[code] ?? `事件 ${code}` },
+      PublicEvent: { code, label: publicEventLabel(code) },
     })),
     choice,
     view,
@@ -762,16 +763,3 @@ function commandRejection(result: unknown): string | null {
   }
   return `命令被拒绝：${JSON.stringify(rejected)}`;
 }
-
-const PUBLIC_EVENT_LABELS: Record<number, string> = {
-  1: "对局开始",
-  2: "摸牌",
-  3: "使用卡牌",
-  4: "造成伤害",
-  5: "回复体力",
-  6: "进入濒死",
-  7: "玩家阵亡",
-  8: "回合推进",
-  9: "对局结束",
-  10: "等待选择",
-};

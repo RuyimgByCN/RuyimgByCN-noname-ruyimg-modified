@@ -1,0 +1,11 @@
+✔ 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择 (1.649541ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (12.172917ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 341.124667
+exit 0

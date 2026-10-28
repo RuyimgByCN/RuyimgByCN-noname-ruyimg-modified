@@ -1,0 +1,3 @@
+PASS real_worker_phase_event_and_dom: code=8 label=阶段或回合推进
+PASS browser_exceptions: 0
+exit 0

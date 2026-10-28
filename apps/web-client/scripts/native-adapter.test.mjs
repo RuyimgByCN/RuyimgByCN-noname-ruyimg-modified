@@ -6,6 +6,7 @@
 // 运行：pnpm --dir apps/web-client test（node --test，直接转译 src 下的 TS）
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { applyEnvelope, createViewStore } from "../src/engine/viewStore.ts";
 
 import {
   commandOutcome,
@@ -257,4 +258,22 @@ test("choice_id 不匹配时拒绝应答，不触发引擎调用", () => {
     /choice 8 不匹配/,
   );
   assert.deepEqual(commands(), []);
+});
+
+test("原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择", () => {
+  const { handle } = stubHandle();
+  const codes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 99];
+  handle.eventCursor = 0;
+  handle.engine.state_hash_hex = () => "00";
+  handle.engine.log_len = () => codes.length;
+  handle.engine.public_event_codes_json = () => JSON.stringify(codes);
+  const envelope = nativeEnvelope(handle, { outcome: "accepted" });
+  const labels = [
+    "对局开始", "摸牌", "使用或响应牌", "伤害结算", "回复体力", "濒死状态变化",
+    "玩家阵亡", "阶段或回合推进", "对局结束", "选择状态变化", "事件 99",
+  ];
+  assert.deepEqual(envelope.events.map((event) => event.PublicEvent.label), labels);
+  const store = createViewStore();
+  applyEnvelope(store, envelope);
+  assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
 });
