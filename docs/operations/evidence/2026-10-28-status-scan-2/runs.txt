@@ -1,0 +1,25 @@
+### cargo test --offline -p engine-native --no-fail-fast 23:15:28
+exit: 0 23:16:07
+### cargo test --offline -p engine-native-wasm --no-fail-fast 23:16:07
+exit: 0 23:16:08
+### cargo test --offline -p content-native-loader --no-fail-fast 23:16:08
+exit: 0 23:16:10
+### cargo test --offline -p content-compiler --no-fail-fast 23:16:10
+exit: 0 23:16:11
+### cargo test --offline -p rule-vm --no-fail-fast 23:16:11
+exit: 0 23:16:11
+### cargo test --offline -p game-server --no-fail-fast 23:16:11
+exit: 0 23:17:39
+### cargo check --offline --workspace --all-targets 23:17:39
+exit: 0 23:17:40
+### RUSTFLAGS=-D warnings CARGO_TARGET_DIR=<scratch> cargo check --offline -p engine-native --all-targets (Gate 1b) 23:17:40
+exit: 101 23:18:01
+### pnpm --dir apps/web-client test 23:18:01
+exit: 0 23:18:02
+### pnpm --dir apps/web-client typecheck 23:18:02
+exit: 0 23:18:03
+### pnpm --dir apps/web-client build:native 23:18:03
+exit: 0 23:18:04
+### pnpm --dir apps/web-client smoke:native 23:18:04
+exit: 0 23:18:04
+ALL DONE 23:18:04

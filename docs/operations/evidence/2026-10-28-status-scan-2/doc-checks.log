@@ -1,0 +1,18 @@
+### 2026-10-28 23:20:53 +0800 doc checks after corrections (HEAD d7b46ea6)
+### python3 -B -m unittest discover -s scripts -p test_check_source_lines.py
+OK
+### python3 -B scripts/check-source-lines.py
+Source line limit passed: 8657 files <= 2000 lines
+### python3 -B scripts/check_local_links.py --all
+检查 1871 个文件，坏链 0
+### python3 -B scripts/check-adr-index.py
+检查结果：通过
+### python3 -B scripts/check_doc_line_refs.py
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 1030 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+### git diff --check
+exit: 0
+### non-doc files changed (expect none)
+(end)
+### 2026-10-28 23:21:37 +0800 spec (outside repo) markdown links: NONAME_NEXT_AGENT_SPEC.md 41 links, 0 missing
