@@ -134,3 +134,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC04 后续（2026-10-28）**：非法 VM 回答及恢复后故障的回滚、同键重试已验；另发现挂起存档恢复丢失技能身份等信息并导致状态差异（B7，规则修复待裁决），NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-choice-retry/README.md)）。
 
 **NC03／NC04 后续（2026-10-28）**：本地 Worker 与 WASM 已拒绝整数回绕及非选择者代答；联机身份、其余产品场景和 B7 恢复缺陷仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-wasm-actor-bounds/README.md)）。
+
+**NC04 后续（2026-10-28）**：本地 Worker 新局首个信封失败时保留原局并释放候选；恢复等其他故障路径和 B7 仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-start-atomicity/README.md)）。

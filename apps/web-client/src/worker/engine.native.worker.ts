@@ -51,13 +51,21 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
     switch (msg.type) {
       case "start": {
         // mode: "identity" → 身份局（NC09 身份局端到端）；缺省为原型模式
-        handle =
+        const next =
           msg.mode === "identity"
             ? nativeCreateIdentity(msg.players, msg.seed, msg.observer, msg.packsJson)
             : msg.packsJson
               ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
               : nativeCreate(msg.players, msg.seed, msg.observer);
-        reply({ id: msg.id, ok: true, data: nativeEnvelope(handle) });
+        let data: ReturnType<typeof nativeEnvelope>;
+        try {
+          data = nativeEnvelope(next);
+        } catch (error) {
+          next.engine.free();
+          throw error;
+        }
+        handle = next;
+        reply({ id: msg.id, ok: true, data });
         return;
       }
       case "endPhase":

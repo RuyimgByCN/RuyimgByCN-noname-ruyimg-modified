@@ -1,0 +1,17 @@
+vite v6.4.3 building for production...
+
+(!) outDir /tmp/nc04-start-dist.GKhsPv is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+transforming...
+✓ 110 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/index.html                                       0.46 kB │ gzip:     0.31 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/engine.worker-YdkXdL0d.js                 9.01 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/engine.native.worker-DDjihZTw.js         20.17 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/engine_native_wasm_bg-D2JNnKVz.wasm   3,284.48 kB │ gzip:   955.37 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/engine_wasm_bg-Cc8-pMSW.wasm         15,260.32 kB │ gzip: 3,366.88 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/index-C55-foHY.css                       27.75 kB │ gzip:     5.95 kB
+../../../../../../../../tmp/nc04-start-dist.GKhsPv/assets/index-D6hefvAs.js                       386.37 kB │ gzip:   103.27 kB
+✓ built in 1.37s

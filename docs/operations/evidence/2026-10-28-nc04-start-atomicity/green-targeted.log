@@ -1,0 +1,10 @@
+✔ 新局视图失败时保留原局，合法新局仍可替换 (13.576333ms)
+✔ 其他新局信封错误也保留原局并释放新引擎 (0.772875ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 323.8355

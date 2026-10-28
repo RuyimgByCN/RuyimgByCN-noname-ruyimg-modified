@@ -2233,3 +2233,5 @@ _playpackconfig`** 为乘数 → `getn` 缩放 → **`dn` 补充公式** → **�
 
 
 **NC03／NC04 后续（2026-10-28）**：本地 Worker 与 WASM 已拒绝整数回绕及非选择者代答；联机身份、其余产品场景和 B7 恢复缺陷仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-wasm-actor-bounds/README.md)）。
+
+**NC04 后续（2026-10-28）**：本地 Worker 新局首个信封失败时保留原局并释放候选；恢复等其他故障路径和 B7 仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-start-atomicity/README.md)）。
