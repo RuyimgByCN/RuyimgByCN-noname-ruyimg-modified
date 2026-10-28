@@ -1,0 +1,39 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 1.22s
+     Running tests/nc10_duel_nullify_privacy.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/nc10_duel_nullify_privacy-756a9332786a51fe)
+
+running 5 tests
+test nullify_timing ... ignored, manual same-machine latency sampling
+test special_zones_remain_conservative ... ok
+test redaction_preserves_window_and_produces_restorable_equal_hidden_zones ... ok
+test both_answers_can_resume_redacted_window_after_restore ... ok
+test planning_uses_only_observers_information ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc10_pending_duel_privacy.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/nc10_pending_duel_privacy-b7ce363063acfab4)
+
+running 4 tests
+test pending_duel_timing ... ignored, manual same-machine latency sampling
+test uninspected_special_zones_are_not_reassigned ... ok
+test redaction_preserves_duel_machine_and_referenced_cards ... ok
+test duel_planning_does_not_depend_on_opponent_hidden_card ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s

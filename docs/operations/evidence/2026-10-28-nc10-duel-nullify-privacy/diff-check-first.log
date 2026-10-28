@@ -1,0 +1,5 @@
+docs/operations/evidence/2026-10-28-nc10-duel-nullify-privacy/action-search.log:28: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-duel-nullify-privacy/latency-after.log:26: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-duel-nullify-privacy/search.log:30: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-duel-nullify-privacy/targeted.log:40: new blank line at EOF.
+git diff --cached --check: exit 2

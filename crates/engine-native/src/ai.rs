@@ -812,7 +812,7 @@ pub fn redact_last_state() -> (bool, u64, u64, bool) {
     )
 }
 
-// shortcut: 只覆盖引用可完整核对的单帧决斗；其他机器需先完成引用自省。
+// shortcut: 只覆盖引用可完整核对的单帧决斗及其无懈窗口；其他机器需先完成引用自省。
 fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
     use crate::choice::{ChoiceKind, ChoiceOption};
     use crate::event::{EventData, Stage};
@@ -840,8 +840,6 @@ fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
         || park.resume_depth != 1
         || res.answer.is_some()
         || choice.observer != seat
-        || choice.spec.kind != ChoiceKind::RespondCard
-        || choice.spec.prompt != "duel_sha"
         || choice.spec.min != 1
         || choice.spec.max != 1
         || choice.spec.allow_cancel
@@ -857,35 +855,60 @@ fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
     let MachineSnapshot::NullifyWindow {
         card,
         source,
-        nullified: false,
+        nullified,
         queue,
-        asked: false,
-        window_open: false,
+        asked,
+        window_open,
+        owns_disposal,
         effect: Some(effect),
-        ..
     } = park.machine.snapshot()
     else {
         return false;
     };
-    if card != used.card || source != used.player || !queue.is_empty() {
-        return false;
-    }
     let MachineSnapshot::Duel {
         card: duel_card,
         source: duel_source,
         target,
         on_target,
-        asked: true,
-        ..
+        asked: duel_asked,
+        second_pending,
     } = *effect
     else {
         return false;
     };
-    if duel_card != card
+    if card != used.card
+        || source != used.player
+        || duel_card != card
         || duel_source != source
         || used.targets.as_slice() != [target]
-        || seat != if on_target { target } else { source }
     {
+        return false;
+    }
+    let duel_response = choice.spec.kind == ChoiceKind::RespondCard
+        && choice.spec.prompt == "duel_sha"
+        && !nullified
+        && queue.is_empty()
+        && !asked
+        && !window_open
+        && duel_asked
+        && seat == if on_target { target } else { source };
+    let duel_nullify = choice.spec.kind == ChoiceKind::Confirm
+        && choice.spec.prompt == "nullify_window"
+        && !nullified
+        && owns_disposal
+        && queue.first() == Some(&seat)
+        && asked
+        && window_open
+        && on_target
+        && !duel_asked
+        && !second_pending
+        && choice.spec.options.iter().any(|option| matches!(option, ChoiceOption::Card(_)))
+        && choice.spec.options.iter().all(|option| match option {
+            ChoiceOption::Pass => true,
+            ChoiceOption::Card(card) => e.catalog().card_kind(*card) == CardKind::Nullify,
+            _ => false,
+        });
+    if !duel_response && !duel_nullify {
         return false;
     }
 
@@ -930,7 +953,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
     // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
     // monkey.rs「被拦截的桃应在使用者手牌」）。静止态可重分配；非静止态
-    // 仅对已核对所有引用的决斗窗口重分配，其余泄漏面仍登记为 NC10 待办。
+    // 仅对已核对所有引用的决斗及其无懈窗口重分配，其余泄漏面仍登记为 NC10 待办。
     let quiescent = {
         let res = e.resolution();
         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()

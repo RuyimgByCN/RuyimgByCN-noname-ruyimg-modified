@@ -1,0 +1,27 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 0.29s
+     Running tests/nc10_duel_nullify_privacy.rs (/tmp/noname-nc04-boundary-target.Qd5mZZ/debug/deps/nc10_duel_nullify_privacy-756a9332786a51fe)
+
+running 1 test
+FOUND seed=46 duel=58 target=1 observer=2 other=0 hand=0 old=75/Le deck=3 new=88/LeiSha variant=1 p=Plan { seat: 2, revision: 3, action: Answer { choice_id: 1, selection: [Pass] }, nodes_used: 14, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } q=Plan { seat: 2, revision: 3, action: Answer { choice_id: 1, selection: [Card(71)] }, nodes_used: 14, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+choice=Some(OpenChoice { id: 1, observer: 2, spec: ChoiceSpec { kind: Confirm, prompt: "nullify_window", options: [Pass, Card(71)], min: 1, max: 1, allow_cancel: false } }) stack=[Frame { id: 6, parent: None, kind: CardUsed, data: CardUsed(CardUseData { card: 58, player: 0, targets: [1], nature: Normal, use_as: None, cancelled: false }), stage: Intrinsic, queue: [], planned: false, intrinsic_done: false }] parks=[NullifyWindow { card: 58, source: 0, nullified: false, queue: [2, 3], asked: true, window_open: true, owns_disposal: true, effect: Some(Duel { card: 58, source: 0, target: 1, on_target: true, asked: false, second_pending: false }) }]
+test find_natural_counterexample ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s

@@ -112,3 +112,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC02 后续（2026-10-28）**：现有模块指纹已在安装、桥接及旧线快照恢复时校验，指纹不一致的旧档明确拒绝；自洽重算的快照、`max_stack`、资源绑定与 VM 安装仍待处理。状态仍为部分（[证据](../operations/evidence/2026-10-28-nc02-vm-module-hash/README.md)）。
 
 **NC04 进展（2026-10-28）**：VM 入口、跳转和续行位置增加指令边界校验，异常包及旧档拒绝；续行来源认证和其余故障矩阵仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-vm-instruction-boundaries/README.md)）。
+
+**NC10 进展（2026-10-28）**：决斗首个无懈窗口增加受控暗牌脱敏；其他窗口、特殊牌区和 AI 质量基线仍待验收，NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-duel-nullify-privacy/README.md)）。
