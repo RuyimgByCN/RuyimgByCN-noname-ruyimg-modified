@@ -1,0 +1,63 @@
+date: 2026-10-28 12:50:37 +0800
+HEAD: ec672a1d3c413d39c9972ee02118ae92a21223ee
+spec v1.1 sha256: 4f65eba1c712f66a1a1002ad96a360acd9db9d20d19d74afa2261b8b3366d021
+spec v1.2 sha256: 21b19dbb23f1f5eb80e5abfba0a3168ef6f5074cb6e595910ba2ffe857bf0e97
+spec lines: v1.1      389 -> v1.2      381
+$ spec relative link check (from workspace root)
+NONAME_NEXT_AGENT_SPEC.md: 32 links checked; 0 broken
+top-level sections: 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
+GT ids: GT-001,GT-002,GT-003,GT-004,GT-005,GT-006,GT-007,GT-008,GT-009,GT-010,GT-011,GT-012,GT-013,GT-014
+$ python3 -B scripts/check_local_links.py --all
+坏链: docs/operations/evidence/2026-10-28-agent-spec-review-v1.2/README.md -> checks.log
+坏链: docs/operations/evidence/2026-10-28-agent-spec-review-v1.2/README.md -> checks.log
+检查 1861 个文件，坏链 2
+exit: 1
+$ python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+Ran 1 test in 0.007s
+
+OK
+exit: 0
+$ python3 -B scripts/check-source-lines.py
+Source line limit passed: 8651 files <= 2000 lines
+exit: 0
+$ git diff --check
+exit: 0
+$ git diff --no-index --check <v1.1> ../NONAME_NEXT_AGENT_SPEC.md
+exit: 1 (1 = content differs; whitespace errors would be listed above)
+$ git diff --no-index --check /dev/null <new README>
+exit: 1 (1 = new file; whitespace errors would be listed above)
+
+# Rerun after copying checks.log into the evidence directory (the 2 broken links above were this file not yet present)
+$ python3 -B scripts/check_local_links.py --all
+检查 1861 个文件，坏链 0
+exit: 0
+$ python3 -B scripts/check-adr-index.py
+- 未登记冲突 0，过时登记 0，登记内容不符 0，索引坏链 0
+检查结果：通过
+exit: 0
+
+# Registration batch (user approved), 2026-10-28 12:55:33 +0800, HEAD ec672a1d3c413d39c9972ee02118ae92a21223ee
+spec sha256: 0407623f75a13fde5aac35ee3abf5400e20bddbc1315d2cd5529ff2c5f737d24
+$ git diff --stat
+ docs/architecture/native-progress.md         | 2 ++
+ docs/architecture/native-remaining-ledger.md | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+$ spec relative link check (from workspace root)
+NONAME_NEXT_AGENT_SPEC.md: 32 links checked; 0 broken
+stale '未登记' claims in spec: 0
+$ python3 -B scripts/check_local_links.py --all
+检查 1861 个文件，坏链 0
+exit: 0
+$ python3 -B scripts/check-adr-index.py
+检查结果：通过
+exit: 0
+$ python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+OK
+exit: 0
+$ python3 -B scripts/check-source-lines.py
+Source line limit passed: 8651 files <= 2000 lines
+exit: 0
+$ git diff --check
+exit: 0
+$ git diff --no-index --check /dev/null <evidence README>
+exit: 1 (1 = new file; whitespace errors would be listed above)

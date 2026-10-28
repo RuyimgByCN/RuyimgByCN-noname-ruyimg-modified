@@ -1,0 +1,67 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde v1.0.228
+   Compiling constant_time_eq v0.4.2
+   Compiling cfg-if v1.0.4
+   Compiling thiserror v2.0.18
+   Compiling arrayref v0.3.9
+   Compiling arrayvec v0.7.8
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling cc v1.2.66
+   Compiling blake3 v1.8.5
+   Compiling syn v2.0.118
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling noname-architecture-review v0.0.0 (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-architecture-review-coe5ceiu)
+    Finished `test` profile [unoptimized] target(s) in 19.64s
+     Running tests/state_hash.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-architecture-review-coe5ceiu/target/debug/deps/state_hash-eb786478978c1ec1)
+
+running 1 test
+jar orders [8, 80] and [80, 8]: equal state hash, different choice options [Card(8), Card(80)] / [Card(80), Card(8)]
+test different_jar_pile_orders_share_hash_but_produce_different_options ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/vm_restore.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-architecture-review-coe5ceiu/target/debug/deps/vm_restore-7ed2f0443b3fc0fb)
+
+running 5 tests
+test nc04_pause_resume_completes ... ok
+original storage: {"nc04_storage_skill#7": 11}
+restored storage: {"nc04-storage-module#7": 11, "nc04_storage_skill#7": 11}
+
+thread 'nc04_vm_restore_uses_declared_skill_for_storage' (110976744) panicked at tests/vm_restore.rs:402:5:
+assertion `left == right` failed
+  left: {"nc04_storage_skill#7": 11}
+ right: {"nc04-storage-module#7": 11, "nc04_storage_skill#7": 11}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc04_vm_restore_uses_declared_skill_for_storage ... FAILED
+test nc04_invalid_vm_answers_preserve_retry_across_archive ... ok
+test nc04_fault_after_resume_rolls_back ... ok
+test nc04_vm_fault_after_archive_restores_choice_and_allows_retry ... ok
+
+failures:
+
+failures:
+    nc04_vm_restore_uses_declared_skill_for_storage
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test vm_restore`
+error: 1 target failed:
+    `--test vm_restore`

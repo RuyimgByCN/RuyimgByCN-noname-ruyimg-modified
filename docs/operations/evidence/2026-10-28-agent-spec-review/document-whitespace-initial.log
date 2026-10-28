@@ -1,0 +1,10 @@
+/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md:3: trailing whitespace.
++> 文档版本：v1.1（现有仓库实施约束，审查后修订）  
+/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md:5: trailing whitespace.
++> 状态：已按当前仓库审查修订；**文档更新不表示缺陷已修复或产品已验收**  
+/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md:177: trailing whitespace.
++**内置与已转换内容：Rust `HostBehavior`。** 保留原生执行路径，不要求为形式统一把所有官方技能改成解释执行。  
+/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md:178: trailing whitespace.
++**独立发布内容：现有 DSL／类型化效果 → npack／rule-vm。** 复用编译器、校验器及可保存字节码续行，逐项补齐选择、状态、规则修饰器和模式等真实需求；加载与执行失败必须可定位。  
+/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md:365: trailing whitespace.
++**GT-007 跨端一致**：native 与 WASM 执行同一测试向量，完整规范状态、摘要、事件、选择、RNG 与恢复轨迹一致。  
