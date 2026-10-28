@@ -1,0 +1,337 @@
+    Checking engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+    Checking content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+warning: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc08_upstream_duwen.rs:98:46
+   |
+98 |         e.open_choice().map(|c| c.spec.prompt.clone())
+   |                                              ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_duwen") generated 1 warning (run `cargo fix --test "nc08_upstream_duwen" -p engine-native` to apply 1 suggestion)
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_identity_gate_matrix.rs:99:13
+   |
+99 |         let mut e = match engine_native::Engine::new_with_extensions(71, 4, &[&pack_v1]) {
+   |             ----^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_identity_gate_matrix") generated 1 warning (run `cargo fix --test "nc08_identity_gate_matrix" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_swd_shencaojie_window.rs:28:35
+   |
+28 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_swd_shencaojie_window") generated 1 warning (run `cargo fix --test "nc08_upstream_swd_shencaojie_window" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_haidao.rs:120:46
+    |
+120 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_haidao") generated 1 warning (run `cargo fix --test "nc08_upstream_haidao" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_rescue_card_set_survey.rs:12:35
+   |
+12 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `drive_to_quiescence` is never used
+  --> crates/engine-native/tests/nc08_upstream_lingxue.rs:47:4
+   |
+47 | fn drive_to_quiescence(e: &mut Engine) {
+   |    ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lingxue.rs:134:46
+    |
+134 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_rescue_card_set_survey") generated 1 warning (run `cargo fix --test "nc08_rescue_card_set_survey" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_lingxue") generated 2 warnings (run `cargo fix --test "nc08_upstream_lingxue" -p engine-native` to apply 1 suggestion)
+warning: unused import: `std::collections::BTreeSet`
+ --> crates/engine-native/tests/nc08_standard_deck_coverage.rs:9:5
+  |
+9 | use std::collections::BTreeSet;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_standard_deck_coverage") generated 1 warning (run `cargo fix --test "nc08_standard_deck_coverage" -p engine-native` to apply 1 suggestion)
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/nc08_upstream_mashu.rs:101:13
+    |
+101 |         let mut e2 = Engine::new(20268302, 4);
+    |             ----^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_mashu") generated 1 warning (run `cargo fix --test "nc08_upstream_mashu" -p engine-native` to apply 1 suggestion)
+warning: unused import: `Phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_baishouzhihu.rs:30:84
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                                                                    ^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_swd_baishouzhihu") generated 1 warning (run `cargo fix --test "nc08_upstream_swd_baishouzhihu" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_rangjie.rs:44:35
+   |
+44 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_rangjie") generated 1 warning (run `cargo fix --test "nc08_upstream_rangjie" -p engine-native` to apply 1 suggestion)
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:296:9
+    |
+296 |     let mut e2e_hand_at_confirm = std::cell::Cell::new(0usize);
+    |         ----^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:435:107
+    |
+435 | ....vm_aux.marks.iter().filter(|((p,i),_)| *i==MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_p`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "pa12_batch4_1_host_primitives") generated 2 warnings (run `cargo fix --test "pa12_batch4_1_host_primitives" -p engine-native` to apply 2 suggestions)
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_five_sources.rs:91:9
+   |
+91 |     let mut e = engine_native::Engine::new_with_extensions(47, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upgrade_five_sources") generated 1 warning (run `cargo fix --test "nc08_upgrade_five_sources" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc12_dangling_reference_repro.rs:40:53
+   |
+40 |         e.open_choice().map(|c| (c.id, c.spec.prompt.clone())),
+   |                                                     ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc12_dangling_reference_repro") generated 1 warning (run `cargo fix --test "nc12_dangling_reference_repro" -p engine-native` to apply 1 suggestion)
+warning: unused variable: `base`
+   --> crates/engine-native/tests/pa12_batch3_filter_predicates.rs:222:9
+    |
+222 |     let base = hand_len(&e, 1);
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_base`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "pa12_batch3_filter_predicates") generated 1 warning (run `cargo fix --test "pa12_batch3_filter_predicates" -p engine-native` to apply 1 suggestion)
+warning: unused macro definition: `g14_guard`
+   --> crates/engine-native/tests/nc08_registered_defect_guards.rs:127:14
+    |
+127 | macro_rules! g14_guard {
+    |              ^^^^^^^^^
+    |
+    = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_registered_defect_guards") generated 1 warning
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_yunchou_toulianghuanzhu.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:32:35
+   |
+32 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `answer` is never used
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:50:4
+   |
+50 | fn answer(e: &mut Engine, pick: Vec<ChoiceOption>) {
+   |    ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:174:45
+    |
+174 |         found.as_ref().map(|c| c.spec.prompt.clone()),
+    |                                             ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_yunchou_toulianghuanzhu") generated 1 warning (run `cargo fix --test "nc08_upstream_yunchou_toulianghuanzhu" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_xiuluo") generated 3 warnings (run `cargo fix --test "nc08_upstream_xiuluo" -p engine-native` to apply 2 suggestions)
+warning: unused variable: `other_loss`
+  --> crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs:49:21
+   |
+49 |     let (self_gain, other_loss) = {
+   |                     ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_other_loss`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_gujian_liutouge") generated 1 warning (run `cargo fix --test "nc08_upstream_gujian_liutouge" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:37:35
+   |
+37 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `place_by_prefix` is never used
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:88:4
+   |
+88 | fn place_by_prefix(e: &mut Engine, prefix: &str, player: u8) -> engine_native::CardId {
+   |    ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_ganglie") generated 2 warnings (run `cargo fix --test "nc08_upstream_ganglie" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/pa08_fullhand_dump.rs:14:35
+   |
+14 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "pa08_fullhand_dump") generated 1 warning (run `cargo fix --test "pa08_fullhand_dump" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lianying.rs:124:46
+    |
+124 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_lianying") generated 1 warning (run `cargo fix --test "nc08_upstream_lianying" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_zhiyuan.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_hearth_shandianjian.rs:37:21
+   |
+37 | use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_zhiyuan") generated 1 warning (run `cargo fix --test "nc08_upstream_zhiyuan" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_hearth_shandianjian") generated 1 warning (run `cargo fix --test "nc08_upstream_hearth_shandianjian" -p engine-native` to apply 1 suggestion)
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_config_acceptance.rs:59:9
+   |
+59 |     let mut on = content_native_loader::bridge_pack(&json).expect("桥接").pack;
+   |         ----^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_config_acceptance") generated 1 warning (run `cargo fix --test "nc08_config_acceptance" -p engine-native` to apply 1 suggestion)
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_matrix.rs:80:9
+   |
+80 |     let mut e = engine_native::Engine::new_with_extensions(59, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upgrade_matrix") generated 1 warning (run `cargo fix --test "nc08_upgrade_matrix" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc12_ai_strength_baseline.rs:12:21
+   |
+12 | use engine_native::{CommandOutcome, Engine, GameCommand};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc12_ai_strength_baseline") generated 1 warning (run `cargo fix --test "nc12_ai_strength_baseline" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_jizhi.rs:121:46
+    |
+121 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_jizhi") generated 1 warning (run `cargo fix --test "nc08_upstream_jizhi" -p engine-native` to apply 1 suggestion)
+warning: unused import: `Phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_qinglong.rs:24:68
+   |
+24 | use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
+   |                                                                    ^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `advance_to_phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_qinglong.rs:25:19
+   |
+25 | use nc08_common::{advance_to_phase, drain, next_dedup};
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: `engine-native` (test "nc08_upstream_swd_qinglong") generated 2 warnings (run `cargo fix --test "nc08_upstream_swd_qinglong" -p engine-native` to apply 2 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 27.54s

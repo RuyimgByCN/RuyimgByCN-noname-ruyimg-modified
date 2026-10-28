@@ -1,0 +1,27 @@
+[PlayerState] encoded in archive but never referenced in hash.rs: 9
+    card_mods
+    chaofeng_active
+    jiguanyuan_cards
+    jileng_active
+    nigong_lv
+    xingtigaizao_count
+    xuehuang_used
+    xuejibingbao
+    yinmi_active
+[TurnState] encoded in archive but never referenced in hash.rs: 1
+    minwan_targets
+--- rule-path uses (evidence of semantic relevance):
+crates/engine-native/src/engine/play_sha.rs:1
+crates/engine-native/src/engine/play_card.rs:9
+crates/engine-native/src/kernel/damage.rs:4
+crates/engine-native/src/content/host/step.rs:1
+crates/engine-native/src/kernel/phase.rs:5
+crates/engine-native/src/content/host/step/swd_status.rs:3
+crates/engine-native/src/kernel/events.rs:5
+crates/engine-native/src/content/host/step/swd_equipment.rs:4
+crates/engine-native/src/kernel/phase/draw.rs:3
+crates/engine-native/src/content/host/step/swd_card_effects.rs:9
+crates/engine-native/src/content/host/activation/swd_skills.rs:1
+crates/engine-native/src/content/host/activation/swd_artifacts.rs:1
+crates/engine-native/src/content/host/support.rs:1
+crates/engine-native/src/content/host/filtering/swd.rs:1

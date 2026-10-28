@@ -1,0 +1,58 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.68s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+
+running 3 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios_match_golden ... FAILED
+test pa12_print_golden_hex ... ok
+
+failures:
+
+---- replay_scenarios_match_golden stdout ----
+
+thread 'replay_scenarios_match_golden' (586783) panicked at crates/engine-native/tests/replay_scenarios.rs:1174:5:
+golden mismatches:
+sha_dodge_then_damage actual=a8e75c6e602919eecb753cf8d64a37eeaa1df5d3087a56440d48a42c9ef83f94 expected=fdc04c9802691ede3ba191130269f8ba5da127841dd95f9852717dd98bf0bc5b
+death_terminal_single actual=fb726795e7b3d4a46bf8d49486b6bc8ca21583d4b5cd8aea995b40c93b32d1cd expected=6b694f94cb57afd761a44681e4859c434af2e9e26d86f118f5ed765cacfd1fa4
+sancai_nested_chain actual=a95e6f3cd87432501afda038719384f47eb4704ffb82e73332ab9acae8d42c89 expected=59aeac4d2434a56c0703b23e0ce0e286ff1155373a246443f2278fbbaadfa329
+yishang_redirect actual=371d3d37381e0a76de3b4c6f89c46e9b0fe4d161272293ac5ae7803b9c3285c7 expected=273fddac66502e87716692e417555f6012b379c57acd74601386ccc855eda926
+suidun_window_matrix actual=b3097895f5f9d9087f191972cf5dd18edebc7b88db6344f9da86c1b5a25d1521 expected=282e5b86739c32068b0b473629feee25e264de7000583cbfd7981468f7c0a440
+shouyi_dynamic_skill actual=0df4d477d37d9e4998c2ccb347e64e75cbd2d14c74567da01fbe9dac481b0f6c expected=a69dd72b09eca5352abd22f2bf95a3475e9cd75eb103718033edd98bd09c9863
+discard_to_limit actual=207a1f6cf1121c241f3a07c144f258c67e9761e7788502ccec3aa8a9ac946e84 expected=d22fb2b2255224bc943ea54c9a365c6f0d41285519e54b2b15fe1cfa43bc51f9
+rollback_invariants actual=be209c95ec159c79fcff6315b80f27ad106e0440eeff927b8f95bb56138fac5d expected=5fa482cf58816a7cd119881fce74c9d4335bcfa27b6c15622431ad0eaf2cf46f
+equip_distance_matrix actual=3bd1735318f725d856ba00a8df44e6cde2709c7765b3f7cff081f2dc85e03e56 expected=26bad6cb8fc252a9736db205c9fe805e763a5f16678bed5475f174ff9457a178
+chain_fire_propagation actual=2a58933145fa5258f662b29295d555fd4fc1a6c49f3781f43fe202997fabf65e expected=f521fe21bd5aea4f9b0606798af9251f3dc6f30136cf83548136a6853785978e
+aoe_response_queue actual=99aa57d7dbf915ef89b058941f3536b824724c315c41ccff06402602574b879d expected=0a7032774993353caedb2c812c55a338262fea1785bf3c606b0503c253917fbd
+duel_alternating_response actual=7abf253fd5299afe259e765515a2bce392d290cbc89e46a543c2423cd4ca8ae8 expected=da61365c5b3324fa5e8b66875d7ebbc2ca1df462ca66c49b4051d449ffce3eb9
+nullify_chain_on_savage actual=b4882b100bae4c2e89745cafd0cae36db97432e6031098d2b460bc247117a030 expected=7b87ee912264f8db790ac4d715fcdaa2b98bf0e63679757e39b3e173479930f2
+judge_phase_delayed_tricks actual=7677c09d70bea2baecb63fa0efbbec5ca341db8efc49a3728ba98a4b73654f3b expected=fb723f8d9ead7ff625f7fa26d9f46d095f099f2b4a58ef95104b75c7a29af91f
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    replay_scenarios_match_golden
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test replay_scenarios`
+error: 1 target failed:
+    `-p engine-native --test replay_scenarios`

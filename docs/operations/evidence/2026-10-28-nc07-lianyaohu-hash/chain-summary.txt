@@ -1,0 +1,14 @@
+=== gate1b start 20:24:35
+gate1b EXIT=101
+=== wasm start 20:24:58
+wasm EXIT=0
+=== game-server start 20:25:03
+game-server EXIT=0
+=== workspace check start 20:26:28
+workspace-check EXIT=0
+=== done 20:26:58
+=== build:native start 20:30:07
+build:native EXIT=0
+smoke:native EXIT=0
+web-test EXIT=0
+typecheck EXIT=0

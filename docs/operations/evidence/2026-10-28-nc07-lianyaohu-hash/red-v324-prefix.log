@@ -1,0 +1,52 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.36s
+     Running tests/nc07_lianyaohu_hash.rs (target/debug/deps/nc07_lianyaohu_hash-15f3df844c52be09)
+
+running 2 tests
+test v324_and_earlier_archives_are_rejected_by_rule_version ... FAILED
+test different_jar_orders_have_different_hashes_and_trajectories ... FAILED
+
+failures:
+
+---- v324_and_earlier_archives_are_rejected_by_rule_version stdout ----
+
+thread 'v324_and_earlier_archives_are_rejected_by_rule_version' (577738) panicked at crates/engine-native/tests/nc07_lianyaohu_hash.rs:135:9:
+assertion failed: matches!(Engine::restore(&snap),
+    Err(SnapshotError::RuleVersionMismatch { snapshot, catalog }) if snapshot
+    == version && catalog == 325)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- different_jar_orders_have_different_hashes_and_trajectories stdout ----
+
+thread 'different_jar_orders_have_different_hashes_and_trajectories' (577737) panicked at crates/engine-native/tests/nc07_lianyaohu_hash.rs:91:5:
+assertion `left != right` failed
+  left: [164, 202, 16, 3, 192, 25, 10, 255, 239, 191, 85, 242, 208, 111, 93, 22, 7, 197, 48, 86, 181, 104, 168, 197, 122, 211, 199, 99, 251, 116, 145, 70]
+ right: [164, 202, 16, 3, 192, 25, 10, 255, 239, 191, 85, 242, 208, 111, 93, 22, 7, 197, 48, 86, 181, 104, 168, 197, 122, 211, 199, 99, 251, 116, 145, 70]
+
+
+failures:
+    different_jar_orders_have_different_hashes_and_trajectories
+    v324_and_earlier_archives_are_rejected_by_rule_version
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc07_lianyaohu_hash`
+error: 1 target failed:
+    `-p engine-native --test nc07_lianyaohu_hash`

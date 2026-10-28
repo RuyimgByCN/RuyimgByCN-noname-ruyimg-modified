@@ -1,0 +1,7 @@
+== check_local_links --all
+检查 1866 个文件，坏链 0
+== check-adr-index
+- 未登记冲突 0，过时登记 0，登记内容不符 0，索引坏链 0
+检查结果：通过
+== git diff --check (tracked)
+diff --check: clean

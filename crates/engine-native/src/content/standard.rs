@@ -129,7 +129,11 @@ use crate::snap::{
 /// 与 once/hits 键、故障身份偏离未中断执行。旧（v323 及更早）存档按
 /// 版本策略拒绝：普通档 RuleVersionMismatch；含旧格式 Rvm 机的档在
 /// 解码期即失败（不能可靠恢复）。存档格式 v105 与全局原生 ABI 不变。
-pub const STANDARD_RULESET_VERSION: u64 = 324;
+/// v325：NC07——炼妖壶壶仓 `lianyaohu_store` 顺序进入规范摘要（紧随
+/// 筑城牌区，无条件写入长度与牌序）。此前两种壶序的存档摘要相同，但炼
+/// 化选项与丢弃序按壶序生成（GT-012 反例）。v324 及更早存档按版本策略
+/// 拒绝（RuleVersionMismatch）；存档格式 v105 与全局原生 ABI 753 不变。
+pub const STANDARD_RULESET_VERSION: u64 = 325;
 
 mod names;
 pub use names::*;

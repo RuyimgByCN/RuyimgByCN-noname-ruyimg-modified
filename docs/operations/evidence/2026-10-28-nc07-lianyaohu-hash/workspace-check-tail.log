@@ -1,0 +1,41 @@
+# cargo check --offline --workspace --all-targets（全量输出     6234 行；warning 行 867，error 行 0；exit 0。只保留末尾 40 行，同 16:22 扫描口径）
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+174 |     pub fn load_scoped(
+    |            ^^^^^^^^^^^
+...
+216 |     fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    |        ^^^^^^^^^^^
+...
+307 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_jizhi.rs:121:46
+    |
+121 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `game-server` (test "nc08_cross_line") generated 24 warnings (22 duplicates)
+warning: `engine-native` (test "nc08_upstream_jizhi") generated 1 warning (run `cargo fix --test "nc08_upstream_jizhi" -p engine-native` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 29.71s

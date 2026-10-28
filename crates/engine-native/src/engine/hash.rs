@@ -221,6 +221,12 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
         for c in &p.zhucheng {
             push_u32(&mut h, *c);
         }
+        // NC07（规则 v325）：炼妖壶壶仓顺序入摘要——炼化选项与丢弃序按壶序
+        // 生成，此前两种壶序摘要相同（GT-012 反例）。
+        push_u32(&mut h, p.lianyaohu_store.len() as u32);
+        for c in &p.lianyaohu_store {
+            push_u32(&mut h, *c);
+        }
         push_u8(&mut h, p.paotai_lv);
         push_u8(&mut h, p.baolei_mode);
         // 暴雪/急冻（U05 ow 美，规则 v127）
