@@ -1,0 +1,4 @@
+FAIL native_rejected_end_phase: reason=NotYourTurn; status=rev 6 · a6ab6a0d326b… · native; alert=null
+FAIL rejected_play_does_not_log_success: reason=WrongPhase; alert=null; false_log=true
+FAIL continuous_auto_rejection: alert=null; running=true; subsequent_replies=10
+RESULT pass=0 fail=3 exceptions=0

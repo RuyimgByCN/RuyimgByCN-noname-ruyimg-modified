@@ -43,7 +43,7 @@ import {
 import BattleBoard from "../components/battle/BattleBoard.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
-import { outcomeText } from "../engine/outcome";
+import { nativeCommandError, outcomeText } from "../engine/outcome";
 import { nextTick } from "vue";
 
 const route = useRoute();
@@ -142,6 +142,14 @@ async function handleEnvelope(env: EngineEnvelope) {
         localClient.isNative() ? " · native" : ""
       }`;
   syncGeneralSelectProjection();
+}
+
+async function handleCommandEnvelope(env: EngineEnvelope) {
+  await handleEnvelope(env);
+  if (!isOnline.value && localClient.isNative()) {
+    const error = nativeCommandError(env.result);
+    if (error) throw new Error(error);
+  }
 }
 
 /** 选将面板的座位投影跟随主视图更新（开局/读档/动作后都能看到技能刷新）。 */
@@ -451,22 +459,24 @@ function commandClient() {
 async function endPhase() {
   await withBusy(async () => {
     const env = await commandClient().endPhase(selfId.value);
-    await handleEnvelope(env);
+    await handleCommandEnvelope(env);
   });
 }
 
 async function autoStep() {
-  await withBusy(async () => {
+  const succeeded = await withBusy(async () => {
     if (isOnline.value) throw new Error("联机模式不提供客户端自动步进");
     const env = await localClient.autoStep();
-    await handleEnvelope(env);
+    await handleCommandEnvelope(env);
+    return true;
   });
+  if (!succeeded) stopAuto();
 }
 
 async function playCard(cardId: number, targets: number[]) {
   await withBusy(async () => {
     const env = await commandClient().playCard(selfId.value, cardId, targets);
-    await handleEnvelope(env);
+    await handleCommandEnvelope(env);
     pushLog(store, `出牌 #${cardId}${targets.length > 0 ? ` → P${targets[0]}` : ""}`);
   });
 }
@@ -479,7 +489,7 @@ async function activateSkill(skillId: number, targets: number[], cardTargets: nu
       targets,
       cardTargets
     );
-    await handleEnvelope(env);
+    await handleCommandEnvelope(env);
     pushLog(
       store,
       `发动技能 #${skillId}${targets.length > 0 ? ` → P${targets[0]}` : ""}`
@@ -495,7 +505,7 @@ async function resolveLegalChoice(action: Extract<LegalAction, { ResolveChoice: 
       action.ResolveChoice.selections,
       action.ResolveChoice.cancelled
     );
-    await handleEnvelope(env);
+    await handleCommandEnvelope(env);
   });
 }
 

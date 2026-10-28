@@ -1,0 +1,10 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:36
+  throw new Error(`timed out: ${description}`);
+        ^
+
+Error: timed out: rejected play response
+    at wait (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:36:9)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:146:3
+
+Node.js v26.12.1

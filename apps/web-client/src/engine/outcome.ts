@@ -28,3 +28,43 @@ export function outcomeText(outcome: unknown): string {
   }
   return `已结束（${JSON.stringify(outcome)}）`;
 }
+
+/** 原生窄壳命令及自动步进结果的可见错误。 */
+export function nativeCommandError(result: unknown): string | null {
+  if (!result || typeof result !== "object") return "命令结果无法读取";
+  let value = result as Record<string, unknown>;
+  if (value.kind === "plan" && typeof value.error === "string") {
+    const reason = value.error === "stale" ? "局面已变化，请重试"
+      : value.error === "cancelled" ? "已取消" : value.error;
+    return `自动操作失败：${reason}`;
+  }
+  if (value.kind === "plan" || value.kind === "answer") {
+    try {
+      const nested = typeof value.outcome === "string" ? JSON.parse(value.outcome) : null;
+      if (!nested || typeof nested !== "object" || Array.isArray(nested)) {
+        return "自动操作结果无法读取";
+      }
+      value = nested as Record<string, unknown>;
+    } catch {
+      return "自动操作结果无法读取";
+    }
+  }
+  if (value.done === true) return null;
+  if (value.outcome === "accepted" || value.outcome === "pending") return null;
+  if (value.outcome === "suspended") return "操作已暂停，暂无法继续结算";
+  if (value.outcome !== "rejected") return "命令结果无法读取";
+  const reasons: Record<string, string> = {
+    ChoicePending: "请先完成当前选择",
+    NoSuchChoice: "当前选择已失效",
+    InvalidChoice: "选择无效",
+    NotYourTurn: "还没有轮到该玩家",
+    WrongPhase: "当前阶段不能执行此操作",
+    CardNotInHand: "这张牌不在手牌中",
+    IllegalTargets: "目标不合法",
+    WrongPlayer: "当前玩家无权处理此选择",
+    StaleRevision: "局面已变化，请重试",
+    MatchOver: "对局已结束",
+  };
+  const reason = typeof value.reason === "string" && value.reason ? value.reason : "原因未知";
+  return `操作被拒绝：${reasons[reason] ?? reason}`;
+}

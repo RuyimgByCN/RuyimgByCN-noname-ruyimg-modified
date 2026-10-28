@@ -1,0 +1,11 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+PLAY DIAGNOSTIC {"recentRequests":[{"id":8,"type":"autoStep"},{"id":9,"type":"autoStep"},{"id":10,"type":"endPhase"},{"id":11,"type":"playCard"}],"recentReplies":[{"type":"autoStep","ok":true,"result":{"kind":"answer","outcome":"{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":4}"}},{"type":"autoStep","ok":true,"result":{"finished":false,"kind":"plan","outcome":"{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":5}","seat":0}},{"type":"autoStep","ok":true,"result":{"finished":false,"kind":"plan","outcome":"{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":6}","seat":0}},{"type":"endPhase","ok":true,"result":{"finished":false,"outcome":"rejected","reason":"NotYourTurn","revision":6}}],"actionBar":null,"alert":"Failed to execute 'postMessage' on 'Worker': [object Object] could not be cloned."}
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:36
+  throw new Error(`timed out: ${description}`);
+        ^
+
+Error: timed out: rejected play response
+    at wait (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:36:9)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-nc03-local-rejection-ui/browser-rejections.mjs:153:3
+
+Node.js v26.12.1

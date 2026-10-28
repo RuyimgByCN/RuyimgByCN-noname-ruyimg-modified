@@ -1,0 +1,3 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+PASS continuous_auto_rejection: injected nested InvalidChoice visible; no subsequent steps
+RESULT pass=2 fail=0 exceptions=0

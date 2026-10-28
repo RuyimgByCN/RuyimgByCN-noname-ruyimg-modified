@@ -1,0 +1,4 @@
+PASS native_rejected_end_phase: real Worker NotYourTurn shown; revision/hash unchanged
+PASS rejected_play_does_not_log_success: real Worker reason=WrongPhase; card projection injected
+PASS continuous_auto_rejection: injected nested InvalidChoice visible; no subsequent steps
+RESULT pass=3 fail=0 exceptions=0

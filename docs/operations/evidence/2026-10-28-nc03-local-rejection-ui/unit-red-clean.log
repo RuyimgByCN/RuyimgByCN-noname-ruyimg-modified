@@ -1,0 +1,37 @@
+✔ 身份局胜负类型映射 (0.362042ms)
+✔ 单挑/势力与未建模形态 (0.063833ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.058083ms)
+✖ 原生命令的拒绝原因可显示，未知原因保留 (0.090541ms)
+✖ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.06525ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 257.375875
+
+✖ failing tests:
+
+test at scripts/outcome-text.test.mjs:24:1
+✖ 原生命令的拒绝原因可显示，未知原因保留 (0.090541ms)
+  TypeError [Error]: outcome.nativeCommandError is not a function
+      at TestContext.<anonymous> (file:///private/tmp/nc03-rejection-clean.iH2U3T/apps/web-client/scripts/outcome-text.test.mjs:25:24)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at scripts/outcome-text.test.mjs:34:1
+✖ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.06525ms)
+  TypeError [Error]: outcome.nativeCommandError is not a function
+      at TestContext.<anonymous> (file:///private/tmp/nc03-rejection-clean.iH2U3T/apps/web-client/scripts/outcome-text.test.mjs:36:24)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
