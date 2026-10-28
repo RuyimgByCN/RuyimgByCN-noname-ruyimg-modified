@@ -121,6 +121,8 @@
 
 **NC03／NC09 本地投影（2026-10-28，ZCode）**：本地 `view_json` 补观察者过滤的 `identity` 与可见牌面 `cards`（裁决⑥⑦），Worker 复用既有 SeatView/CardView 字段——身份不再恒 null、牌面不再全占位（此前 UI 的 `def != null` 渲染门导致本人手牌/全场装备/判定/弃牌不渲染）；Worker/WS 消息结构、规则与存档版本不变。WASM 身份矩阵/牌面键集/恢复隐私 2 测 + Worker 纯函数 2 测 + 真实 Worker smoke 2 检查 + 服务端 def 跨入口锚定；wasm 68/0、前端 116/0、smoke 64/0、game-server 360/0。服务端 suit/rank/公开区牌面与 kind 粒度收敛、产品渲染整体验收待办（[证据](../operations/evidence/2026-10-28-nc03-view-projection/README.md)）。
 
+**NC08／NC09 复核项取证（2026-10-28，ZCode）**：触发全序复核启动——反例探针实证原生确定性全序无排序询问（兼补 GT-002 锁面）并与上游 chooseControl 对照，A（维持+差分统计）/B（OpenChoice 玩家选序）两方案待裁决；选择窗超时方案骨架成稿（宿主计时+显式命令+复用去重，命令扩展须授权）。两项零语义/命令/版本变化（[证据](../operations/evidence/2026-10-28-nc08-nc09-review-items/README.md)）。
+
 ## 历史执行登记与轮次索引
 
 以下是按日期保存的历史正文；“当前”“本轮”“待做”均指各区块当时快照。部分正文仍由既有门禁读取，保留其标记和引用，不用旧轮次状态覆盖上方最新结论。
