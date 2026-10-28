@@ -541,6 +541,15 @@ try {
       identityCandidates.data?.candidates?.some((c) => c.name === "ddd刘冲"),
     `hp=${identity.data?.view?.seats[0]?.max_hp} error=${identity.error ?? ""}`,
   );
+  // NC03/NC09 裁决⑥（GT-013）：观察者过滤的 identity 经真实 Worker 下发——
+  // 主公（0 号，max_hp=5）公开、其余存活者对本观察者隐藏（不再恒 null 占位）。
+  const identitySeats = identity.data?.view?.seats ?? [];
+  check(
+    "worker_identity_projection_filtered_not_placeholder",
+    identitySeats[0]?.identity === "Lord" &&
+      identitySeats.slice(1).every((seat) => seat.identity === null),
+    `seats=${JSON.stringify(identitySeats.map((seat) => seat.identity))}`,
+  );
   const identityPick = await workerSend({ id: 921, type: "chooseGeneral", seat: 0, name: "ddd刘冲" });
   const identitySeat = identityPick.data?.envelope?.view?.seats[0];
   check(
@@ -575,6 +584,17 @@ try {
   const vmOnlyFrozen = restoreNativeMatchContent(vmOnlyContent, { installed: [], contentLock: [], matchFrozen: false });
   const vmOnlyRestore = await workerSend({ id: 11003, type: "restore", hex: vmOnlySave.data?.hex, packsJson: vmOnlyFrozen.packsJson });
   const vmOnlyAfterRestore = await workerSend({ id: 11004, type: "save" });
+  // NC03 裁决⑦（GT-013）：本人手牌带真实牌面（def/suit 非占位）；他人手牌
+  // 不出现在 known_cards。
+  const vmOnlyView = vmOnlyStart.data?.view;
+  const vmOnlyHand = (vmOnlyView?.known_cards ?? []).filter((c) => c.zone === "Hand");
+  check(
+    "worker_visible_hand_faces_not_placeholder",
+    vmOnlyHand.length > 0 &&
+      vmOnlyHand.every((c) => c.owner === 0 && c.def != null && c.suit != null && c.rank != null) &&
+      (vmOnlyView?.known_cards ?? []).every((c) => !(c.zone === "Hand" && c.owner !== 0)),
+    `hand=${JSON.stringify(vmOnlyHand.slice(0, 3))}`,
+  );
   check("worker_vm_only_prepared_start_identity_and_restore",
     vmOnlyStart.ok === true && vmOnlySave.ok === true && vmOnlyIdentity.ok === true && vmOnlyRestore.ok === true &&
       vmOnlyAfterRestore.ok === true && vmOnlyRestore.data?.hash_hex === vmOnlyStart.data?.hash_hex,

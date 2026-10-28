@@ -12,6 +12,7 @@ import {
   commandOutcome,
   nativeDispatch,
   nativeEnvelope,
+  nativeObserverToSnapshot,
   optionLabel,
   optionValue,
   parseCommandResult,
@@ -276,4 +277,94 @@ test("原生公开事件按粗粒度展示，不把防止伤害或完成选择�
   const store = createViewStore();
   applyEnvelope(store, envelope);
   assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+});
+
+// ---------------------------------------------------------------------------
+// NC03/NC09（GT-013，裁决⑥⑦）：view_json 身份与可见牌面适配。
+// ---------------------------------------------------------------------------
+test("identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null", () => {
+  const snapshot = nativeObserverToSnapshot({
+    seat: 0,
+    players: [
+      {
+        seat: 0, alive: true, hp: 5, maxHp: 5,
+        hand: { own: [11] }, handCount: 1, equips: [], judge: [],
+        turnedOver: false, skills: [], revealedGenerals: [],
+        identity: "Lord",
+      },
+      {
+        seat: 1, alive: true, hp: 4, maxHp: 4,
+        hand: { hidden: true }, handCount: 3, equips: [40], judge: [],
+        turnedOver: false, skills: [], revealedGenerals: [],
+        identity: null,
+      },
+    ],
+    deckCount: 90,
+    discard: [55],
+    table: [66],
+    turn: 0,
+    phase: "play",
+    round: 1,
+    outcome: null,
+  });
+  assert.equal(snapshot.seats[0].identity, "Lord");
+  assert.equal(snapshot.seats[1].identity, null);
+});
+
+test("可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位", () => {
+  const face = (def, suit, rank, kind) => ({ def, suit, rank, kind });
+  const snapshot = nativeObserverToSnapshot({
+    seat: 0,
+    players: [
+      {
+        seat: 0, alive: true, hp: 5, maxHp: 5,
+        hand: { own: [11, 12] }, handCount: 2, equips: [31], judge: [44],
+        turnedOver: false, skills: [], revealedGenerals: [],
+        identity: "Lord",
+      },
+      {
+        seat: 1, alive: true, hp: 4, maxHp: 4,
+        hand: { hidden: true }, handCount: 3, equips: [40], judge: [47],
+        turnedOver: false, skills: [], revealedGenerals: [],
+        identity: null,
+      },
+    ],
+    cards: {
+      "11": face(0, "Spade", 7, "Sha"),
+      "12": face(2, "Heart", 12, "Shan"),
+      "31": face(10, "Club", 1, "Other"),
+      "44": face(30, "Spade", 6, "Other"),
+      "40": face(12, "Diamond", 13, "Other"),
+      "47": face(31, "Club", 4, "Other"),
+      "55": face(20, "Heart", 11, "Other"),
+      "66": face(0, "Spade", 8, "Sha"),
+    },
+    deckCount: 90,
+    discard: [55],
+    table: [66],
+    turn: 0,
+    phase: "play",
+    round: 1,
+    outcome: null,
+  });
+  const byId = new Map(snapshot.known_cards.map((c) => [c.id, c]));
+  // 授权字段非占位（GT-013）：def/suit/rank 有值。
+  assert.deepEqual(byId.get(11), {
+    id: 11, def: 0, suit: "Spade", rank: 7, owner: 0, zone: "Hand", kind: "Sha",
+  });
+  assert.equal(byId.get(12).rank, 12);
+  // 全场装备/判定（公开）带 owner 归属。
+  assert.deepEqual(
+    { ...byId.get(40), id: 40 },
+    { id: 40, def: 12, suit: "Diamond", rank: 13, owner: 1, zone: "Equip", kind: "Other" },
+  );
+  assert.equal(byId.get(47).zone, "Judge");
+  assert.equal(byId.get(47).owner, 1);
+  // 弃牌/处理区无 owner。
+  assert.equal(byId.get(55).zone, "DiscardPile");
+  assert.equal(byId.get(55).owner, null);
+  assert.equal(byId.get(66).zone, "Processing");
+  // 他人手牌 id（本就不在 view_json 的 own 列表）不进 known_cards。
+  assert.equal(snapshot.known_cards.length, 8);
+  assert(!snapshot.known_cards.some((c) => c.zone === "Hand" && c.owner === 1));
 });

@@ -151,6 +151,13 @@ fn nc09_bridge_maps_character_identity_cards_and_outcome() {
         snap.known_cards.iter().all(|c| c.zone == engine_api::CardZoneTag::Hand),
         "known_cards 仅含手牌区"
     );
+    // GT-013 跨入口 def 口径：服务端 CardView.def = 目录牌种序号
+    // （kind_code_u32），与本地 WASM view_json 的 cards.def 同式——同局
+    // 面两入口对同一张牌给出同一 def（NC03/NC09 裁决⑦对照锚点）。
+    for card in &snap.known_cards {
+        let kind = e.catalog().card_kind(card.id.0 as u32);
+        assert_eq!(card.def, Some(kind as u16 as u32), "def=牌种序号: id={}", card.id.0);
+    }
     // 观战者：无身份（非本人/非主公/未死亡者）、无 known_cards
     let spec = observer_snapshot_for(&e, RoomRole::Spectator, None);
     assert!(spec.known_cards.is_empty(), "观战者无 known_cards");

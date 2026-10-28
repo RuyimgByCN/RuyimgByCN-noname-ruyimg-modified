@@ -322,8 +322,68 @@ pub fn legal_actions_json_for(engine: &Engine, seat: u8) -> Result<String, Strin
     .to_string())
 }
 
+/// 身份可见字符串（NC03/NC09 裁决⑥：观察者过滤后的 identity 随座位对象
+/// 下发——本人/主公/已死亡可见，其余存活者 null；命名与协议 `IdentityTag`
+/// 及前端 `SeatView.identity` 联合一致）。
+fn identity_json(role: Option<engine_native::state::Role>) -> serde_json::Value {
+    match role {
+        None => serde_json::Value::Null,
+        Some(engine_native::state::Role::Lord) => serde_json::json!("Lord"),
+        Some(engine_native::state::Role::Loyalist) => serde_json::json!("Loyalist"),
+        Some(engine_native::state::Role::Rebel) => serde_json::json!("Rebel"),
+        Some(engine_native::state::Role::Traitor) => serde_json::json!("Renegade"),
+    }
+}
+
+/// 牌面花色字符串（与前端 `CardView.suit` 联合一致）。
+fn suit_json(suit: engine_native::catalog::Suit) -> &'static str {
+    use engine_native::catalog::Suit;
+    match suit {
+        Suit::Spade => "Spade",
+        Suit::Heart => "Heart",
+        Suit::Club => "Club",
+        Suit::Diamond => "Diamond",
+    }
+}
+
+/// 牌面公开规则类别（与服务端 `native_view.rs` 的 `kind_tag` 同映射——
+/// 跨入口同契约：已建模六类直映，其余 `Other` 不猜测）。
+fn kind_tag_json(kind: engine_native::catalog::CardKind) -> &'static str {
+    use engine_native::catalog::CardKind as K;
+    match kind {
+        K::Sha => "Sha",
+        K::Tao => "Tao",
+        K::Shan => "Shan",
+        K::Jiu => "Jiu",
+        K::FireSha => "ShaFire",
+        K::LeiSha => "ShaThunder",
+        _ => "Other",
+    }
+}
+
 /// 座位视图投影（`PlayerView` 手写 JSON；视图为只读投影不进哈希）。
-fn view_to_json(v: &PlayerView) -> serde_json::Value {
+/// NC03/NC09 裁决⑥⑦（2026-10-28）：座位对象附带观察者过滤的 `identity`；
+/// 顶层 `cards` 为**观察者可见牌**（本人手牌 + 全场装备/判定 + 弃牌/处理区，
+/// 即 `visible_card_ids`）附真实牌面（def/suit/rank/kind）——他人手牌与
+/// 牌堆 id 不在其中。仅扩展本地 `view_json` 内容，Worker/WS 消息结构不变。
+fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
+    let catalog = engine.catalog();
+    let faces = v
+        .visible_card_ids()
+        .into_iter()
+        .map(|id| {
+            let def = &catalog.cards[id as usize];
+            (
+                id.to_string(),
+                serde_json::json!({
+                    "def": def.kind as u16 as u32,
+                    "suit": suit_json(def.suit),
+                    "rank": def.rank,
+                    "kind": kind_tag_json(def.kind),
+                }),
+            )
+        })
+        .collect::<serde_json::Map<_, _>>();
     serde_json::json!({
         "seat": v.seat,
         "players": v.players.iter().map(|p| serde_json::json!({
@@ -341,10 +401,12 @@ fn view_to_json(v: &PlayerView) -> serde_json::Value {
             "turnedOver": p.turned_over,
             "skills": p.skills,
             "revealedGenerals": p.revealed_generals,
+            "identity": identity_json(p.role),
         })).collect::<Vec<_>>(),
         "deckCount": v.deck_count,
         "discard": v.discard,
         "table": v.table,
+        "cards": faces,
         "turn": v.turn,
         "phase": phase_name(v.phase),
         "round": v.round,
@@ -406,7 +468,7 @@ impl NativeEngine {
         if seat as usize >= seats {
             return Err(JsValue::from_str("view: 座位越界"));
         }
-        Ok(view_to_json(&self.inner.view_for(seat)).to_string())
+        Ok(view_to_json(&self.inner, &self.inner.view_for(seat)).to_string())
     }
 
     /// 当前开放选择的座位可见 JSON（N10 选择可见性口径：观察者本人含

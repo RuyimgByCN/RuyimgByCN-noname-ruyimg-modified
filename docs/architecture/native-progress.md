@@ -119,6 +119,8 @@
 
 **B7 修复（2026-10-28，ZCode）**：VM 挂起存档恢复不再丢失声明技能名、触发语境、限次与命中——`MachineSnapshot::Rvm` 四字段入档并进规范摘要，恢复不从模块名重建；规则 **v323→v324**（裁决⑧，本批占用 v324，NC07 批须重新确认），旧档双通道拒绝（普通档版本拒绝／含旧 Rvm 机档解码失败），存档 v105 与 ABI 753 不变。14 场 golden 版本回退探针后重录；GT-011 shortcut 非空断言替换为精确相等并新增存储键/once/hits/故障身份回归（变异验证全抓缺陷）。engine-native 1617/0/73、game-server 360/0/0、engine-native-wasm 66/0/0、wasm 重建+typecheck+smoke:native 62/0。NC04 阻断面收窄；非挂起 Rvm 机恢复路径同参数化但无实例可回归（[证据](../operations/evidence/2026-10-28-b7-vm-suspend-restore/README.md)）。
 
+**NC03／NC09 本地投影（2026-10-28，ZCode）**：本地 `view_json` 补观察者过滤的 `identity` 与可见牌面 `cards`（裁决⑥⑦），Worker 复用既有 SeatView/CardView 字段——身份不再恒 null、牌面不再全占位（此前 UI 的 `def != null` 渲染门导致本人手牌/全场装备/判定/弃牌不渲染）；Worker/WS 消息结构、规则与存档版本不变。WASM 身份矩阵/牌面键集/恢复隐私 2 测 + Worker 纯函数 2 测 + 真实 Worker smoke 2 检查 + 服务端 def 跨入口锚定；wasm 68/0、前端 116/0、smoke 64/0、game-server 360/0。服务端 suit/rank/公开区牌面与 kind 粒度收敛、产品渲染整体验收待办（[证据](../operations/evidence/2026-10-28-nc03-view-projection/README.md)）。
+
 ## 历史执行登记与轮次索引
 
 以下是按日期保存的历史正文；“当前”“本轮”“待做”均指各区块当时快照。部分正文仍由既有门禁读取，保留其标记和引用，不用旧轮次状态覆盖上方最新结论。
