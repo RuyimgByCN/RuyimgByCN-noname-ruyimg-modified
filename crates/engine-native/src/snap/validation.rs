@@ -81,6 +81,15 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
             check_pid(*source, b)?;
             check_pid(*target, b)?;
         }
+        EventData::CardsGiven {
+            giver,
+            recipient,
+            cards,
+        } => {
+            check_pid(*giver, b)?;
+            check_pid(*recipient, b)?;
+            check_cards(cards, b)?;
+        }
         EventData::CardsLost {
             player,
             cards,

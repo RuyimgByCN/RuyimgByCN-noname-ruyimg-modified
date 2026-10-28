@@ -342,6 +342,8 @@ pub fn bridge_vm_skill_decls(
             "card_targeted" => EventKind::CardUsed,
             "card_responded" => EventKind::CardResponded,
             "cards_moved" => EventKind::CardsMoved,
+            // 给牌（NC04）：give_hand_card 共享原语发射的逐张帧。
+            "cards_given" => EventKind::CardsGiven,
             "cards_drawn" => EventKind::CardsDrawn,
             "dying" => EventKind::Dying,
             "dying_after" => EventKind::DyingSaved,

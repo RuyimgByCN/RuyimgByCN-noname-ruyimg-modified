@@ -176,6 +176,20 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             enc_pid(w, player);
             enc_opt_pid(w, source);
         }
+        EventData::CardsGiven {
+            giver,
+            recipient,
+            cards,
+        } => {
+            // 给牌触发帧（NC04 未映射事件批，tag 20 表尾追加）
+            w.u8(20);
+            enc_pid(w, giver);
+            enc_pid(w, recipient);
+            w.len(cards.len());
+            for c in cards {
+                w.u32(*c);
+            }
+        }
     }
 }
 
@@ -349,6 +363,16 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
                 card,
                 source,
                 target,
+            }
+        }
+        20 => {
+            let giver = dec_pid(r)?;
+            let recipient = dec_pid(r)?;
+            let cards = r.vec(|r| r.u32())?;
+            EventData::CardsGiven {
+                giver,
+                recipient,
+                cards,
             }
         }
         t => return Err(ArchiveError::BadTag("event_data", t)),

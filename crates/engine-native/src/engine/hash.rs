@@ -1637,6 +1637,20 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
             push_u8(h, *player);
             push_u8(h, source.map(|k| k + 1).unwrap_or(0));
         }
+        EventData::CardsGiven {
+            giver,
+            recipient,
+            cards,
+        } => {
+            // NC04 未映射事件批（判别 24）
+            push_u8(h, 24);
+            push_u8(h, *giver);
+            push_u8(h, *recipient);
+            push_u32(h, cards.len() as u32);
+            for c in cards {
+                push_u32(h, *c);
+            }
+        }
         EventData::SkillToggled {
             player,
             skill,

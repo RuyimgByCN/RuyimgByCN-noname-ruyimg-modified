@@ -132,6 +132,7 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
         DyingSaved => 19,
         CardsLost => 20,
         ShaDodged => 21,
+        CardsGiven => 22,
     };
     w.u8(t);
 }
@@ -161,6 +162,7 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         19 => DyingSaved,
         20 => CardsLost,
         21 => ShaDodged,
+        22 => CardsGiven,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }

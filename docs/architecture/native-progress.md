@@ -131,6 +131,8 @@
 
 **PA12 §2 J + 批⑥ ADR 草案（2026-10-28，ZCode）**：[ADR 0786 草案](../adr/0786-vm-effect-choice-window-and-active-bridge.md)按裁决⑤成稿——效果级选择窗=提交期挂起（不扩字节码面、复用 Answer 通道）；主动技桥=active_index 经装载器入目录并复用 ActivateSkill 命令；J1/J2 分批建议与门禁（规则升号、RULE_VM_ABI_VERSION、存档尾部追加）已列。未实施，协议与升号另请示。
 
+**NC04 `cards_given` 接入（2026-10-28 22:00–22:20，ZCode）**：给牌触发帧接入原生——`give_hand_card` 发 `EventData::CardsGiven`（主玩家=recipient、来源=giver；逐张帧，与 CardsLost/CardsMoved 同口径），九处接线（枚举/发帧/archive kind 22·data 20/hash 判别 24/校验/trigger_ctx kind 9/滤镜/装载映射）。红→绿 4/0（DSL 过桥、仁德真实触发、方向负例、optional 窗存读档）；sancai 单场 golden NOEMIT 探针归因后重录，规则 v325/存档 v105/ABI 753 不变（**v326 补授权待裁决**：事件 id 计数入哈希域，按 v312 先例应升版）。真实 shiji 下一阻断=ABI 756 与其余事件/滤镜。engine-native **1624/0/73**、wasm 68/0、loader 32/0、game-server 362/0、smoke 72/0、前端 123/0（[证据](../operations/evidence/2026-10-28-nc04-cards-given/README.md)）。
+
 **NC08 方案 A 差分统计（2026-10-28 21:31–21:50，ZCode）**：只统计不改语义——[scan.py](../operations/evidence/2026-10-28-nc08-plan-a-statistics/scan.py) 复刻上游 arrangeTrigger 判据与 `_priority` 公式静态扫描 37 来源扩展面：1986 触发技 / 700 武将中，「同武将同事件同有效优先级、均非 silent、均有翻译」的玩家询问命中组仅 **9 组/9 对**（杀海 6、3D精选 2、英雄杀 1；5 组同监听域、5 组含锁定技），宽松全集 11 组中 1 组被优先级差（swd_kangnalishi）、1 组被无翻译（diy_caocao 的 hujia）排除。口径为上界（未执行 filter）、只含武将自带技。A／B 裁决数据已备（[证据](../operations/evidence/2026-10-28-nc08-plan-a-statistics/README.md)）。
 
 ## 历史执行登记与轮次索引

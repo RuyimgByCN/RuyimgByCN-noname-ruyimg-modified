@@ -1,0 +1,54 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.87s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+
+running 3 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+GOLDEN_HEX sha_dodge_then_damage 999b53d022480dbdfd21cefc5651a7d2c312f4b297b582d1f15da4f49aa29ad5
+GOLDEN_HEX death_terminal_single 8abe0289616095906d6cfc98c589803b5d3af433d8ccc236cbbfad44ed6737bc
+GOLDEN_HEX sancai_nested_chain 7e0083a3a709099036defed8bc27a7626a50860c17f96a517feecd538af4e4c1
+GOLDEN_HEX yishang_redirect aac4058b4c25872c6cdb42770de81c8060146d9dc5e092d95c12b77f79a6eb06
+GOLDEN_HEX suidun_window_matrix 19686ddf1f1e8bedb125d785778b2f1fb440d9d3778d85bceb954d22d6d8f720
+GOLDEN_HEX shouyi_dynamic_skill b0dee86e7d75d24b7811e3da879ab5b7ed8c5be87cbc0b1a045a95c0d171273a
+GOLDEN_HEX discard_to_limit 249dd5dcc24a029d8cf5d839216a9680e7005347537be190415bdc640d375317
+GOLDEN_HEX rollback_invariants f9a1637fc25a7b1f1eb18e142995898d39301f133a1862fbc77fa270a11b8fe5
+GOLDEN_HEX equip_distance_matrix 978f3b956945ae2b9ec566239d028bbc63d4a0f3b3dd2b5d6ecc8aabbbd1fb93
+GOLDEN_HEX chain_fire_propagation a125a5c6e9f22bc5094b4a762a0933f91878fad0777fc9758aef4543f0e493cb
+GOLDEN_HEX aoe_response_queue 32d2b5c590b508ab72239f5488dd2d3e65bb6afe82ef9285caa01d958852d6d5
+GOLDEN_HEX duel_alternating_response aeaedd725819804510188a85db853951a5da07118cca5f8cf7ce168ac8513b1e
+GOLDEN_HEX nullify_chain_on_savage 2e8a8d686983834c9c07b29faf8f1f346434f200351496117839b044f488712a
+
+thread 'replay_scenarios_match_golden' (832652) panicked at crates/engine-native/tests/replay_scenarios.rs:1182:5:
+golden mismatches:
+sancai_nested_chain actual=7e0083a3a709099036defed8bc27a7626a50860c17f96a517feecd538af4e4c1 expected=8f4c5aed29661c7ad174520eaaa1876117442727eeed6f631722de324b8da74a
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test replay_scenarios_match_golden ... FAILED
+GOLDEN_HEX judge_phase_delayed_tricks 8d9b6a86ec0c9e10bb521092006f4a6970c616001901d7cbb4b5637e2350f72e
+test pa12_print_golden_hex ... ok
+
+failures:
+
+failures:
+    replay_scenarios_match_golden
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test replay_scenarios`

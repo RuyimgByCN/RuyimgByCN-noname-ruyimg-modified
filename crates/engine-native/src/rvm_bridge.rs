@@ -81,7 +81,7 @@ struct VmTriggerCtx {
     moved_from: Option<PlayerId>,
     /// 阶段开始/结束。
     begin: Option<bool>,
-    /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出。
+    /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出 9 给牌。
     kind: u8,
 }
 
@@ -125,6 +125,19 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_source: Some(*source),
             event_card: Some(*card),
             kind: 8,
+            ..VmTriggerCtx::default()
+        },
+        // 给牌（NC04）：事件主玩家=recipient、来源=giver（旧线 dispatch
+        // TriggerContext{player: recipient, source: giver} 同口径）。
+        EventData::CardsGiven {
+            giver,
+            recipient,
+            cards,
+        } => VmTriggerCtx {
+            event_player: Some(*recipient),
+            event_source: Some(*giver),
+            event_amount: cards.len() as u32,
+            kind: 9,
             ..VmTriggerCtx::default()
         },
         EventData::CardUsed(u) => VmTriggerCtx {
@@ -207,6 +220,10 @@ pub enum VmFilterPolicy {
     OwnerAlive,
     /// DSL `owner_source`：事件来源=持有者。
     OwnerIsSource,
+    /// DSL `owner_alive_gave_cards_to_other_alive`（cards_given 触发窗）：
+    /// 持有者=给牌者（来源）、双方存活、给牌者≠接受者、张数>0——旧线
+    /// `TriggerFilter::OwnerAliveGaveCardsToOtherAlive` 同谓词。
+    OwnerAliveGaveCardsToOtherAlive,
     /// DSL `always`：无条件。
     Always,
     /// DSL `owner_is_target_wounded`：事件主玩家=持有者，且持有者已受伤
@@ -329,6 +346,9 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         // PA12 批①：旧线 DSL 实际拼写为 owner_is_source（inventory 206 处），
         // 与既有 owner_source 同义（事件来源=持有者）。
         "owner_source" | "owner_is_source" => Some(VmFilterPolicy::OwnerIsSource),
+        "owner_alive_gave_cards_to_other_alive" => {
+            Some(VmFilterPolicy::OwnerAliveGaveCardsToOtherAlive)
+        }
         "owner_alive" => Some(VmFilterPolicy::OwnerAlive),
         "owner_source_sha" => Some(VmFilterPolicy::OwnerSourceSha),
         "owner_source_fire_sha" => Some(VmFilterPolicy::OwnerSourceFireSha),
@@ -497,6 +517,15 @@ impl SkillBehavior for VmSkillBehavior {
                         || trig.targets.iter().any(|t| has_mark(*t)))
             }
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
+            VmFilterPolicy::OwnerAliveGaveCardsToOtherAlive => {
+                ctx.state.player(owner).alive
+                    && trig.kind == 9
+                    && trig.event_source == Some(owner)
+                    && trig
+                        .event_player
+                        .is_some_and(|p| ctx.state.player(p).alive && p != owner)
+                    && trig.event_amount > 0
+            }
             VmFilterPolicy::Always => true,
             VmFilterPolicy::OwnerWounded => {
                 is_event_player

@@ -1,0 +1,41 @@
+# cargo check --offline --workspace --all-targets（全量     6234 行；warning 行 867，error 行 0；exit 0。只保留末尾 40 行，同 16:22 扫描口径）
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+120 |     pub fn uninstall_package(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+    |            ^^^^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+158 |     pub fn installed(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `role`, `choice`, and `legal_actions` are never read
+  --> apps/game-server/tests/../src/room.rs:75:9
+   |
+69 | pub struct JoinReply {
+   |            --------- fields in this struct
+...
+75 |     pub role: ClientRole,
+   |         ^^^^
+...
+81 |     pub choice: Option<engine_api::ChoiceRequest>,
+   |         ^^^^^^
+82 |     /// Personalized legal actions.
+83 |     pub legal_actions: Vec<engine_api::LegalAction>,
+   |         ^^^^^^^^^^^^^
+   |
+   = note: `JoinReply` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: `game-server` (test "nc09_native_actor") generated 52 warnings (50 duplicates)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 39.45s

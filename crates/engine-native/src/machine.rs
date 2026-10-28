@@ -509,6 +509,13 @@ impl<'a> Ctx<'a> {
             from,
             to,
         });
+        // NC04：给牌触发帧（DSL `cards_given`）——事件主玩家=recipient、
+        // 来源=giver（旧线 dispatch 同口径）；逐张与 CardsLost/CardsMoved 同口径。
+        self.emit(EventData::CardsGiven {
+            giver: from,
+            recipient: to,
+            cards: vec![card],
+        });
         self.out.push(LogEvent::CardsGiven {
             from,
             to,

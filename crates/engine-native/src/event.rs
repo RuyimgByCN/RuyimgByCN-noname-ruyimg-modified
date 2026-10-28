@@ -38,6 +38,9 @@ pub enum EventKind {
     /// 杀被闪避（swd 批 141，规则 v316 同批）：目标成功闪避【杀】时发射
     /// （上游 `shaMiss` 触发窗；用于李香龙等「杀被闪后反击」类技能）。
     ShaDodged,
+    /// 手牌直接给予另一角色（NC04 未映射事件批）：`give_hand_card` 共享
+    /// 原语发射；DSL `cards_given` 触发窗（旧线 EventKind 同名同义）。
+    CardsGiven,
 }
 
 /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
@@ -177,6 +180,16 @@ pub enum EventData {
         source: PlayerId,
         target: PlayerId,
     },
+    /// 手牌直接给予（NC04 未映射事件批）：`giver` 交出、`recipient` 收入，
+    /// 与旧线 `DomainEvent::CardsGiven` 同形（giver≠recipient 且非空才发）。
+    /// 触发上下文：事件主玩家=recipient、来源=giver（旧线 dispatch 同口径）。
+    /// 帧为逐张（`give_hand_card` 单牌原语，与 CardsLost/CardsMoved 同口径；
+    /// 旧线 give_cards 批量单事件——多张给牌触发次数不同，登记差异）。
+    CardsGiven {
+        giver: PlayerId,
+        recipient: PlayerId,
+        cards: Vec<CardId>,
+    },
     /// 失去体力（逐技对照批三 v77）：直接扣减体力——不经护甲、不触发
     /// 伤害类窗口/铁索/伤害来源技；体力 ≤0 进入濒死（上游 loseHp）。
     LoseHp {
@@ -210,6 +223,7 @@ impl EventData {
             EventData::CardsDiscarded { .. } => EventKind::CardsDiscarded,
             EventData::CardsLost { .. } => EventKind::CardsLost,
             EventData::ShaDodged { .. } => EventKind::ShaDodged,
+            EventData::CardsGiven { .. } => EventKind::CardsGiven,
             EventData::TurnOverBefore { .. } => EventKind::TurnOverBefore,
             EventData::TurnOvered { .. } => EventKind::TurnOvered,
             EventData::LoseHp { .. } => EventKind::LoseHp,

@@ -1,0 +1,29 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.38s
+     Running tests/nc04_cards_given_event.rs (target/debug/deps/nc04_cards_given_event-67ba8e5583519b23)
+
+running 4 tests
+test cards_given_dsl_package_bridges_to_native_event ... ok
+test probe_on_recipient_side_does_not_trigger ... ok
+test rende_give_triggers_cards_given_probe_for_recipient ... ok
+test optional_probe_confirms_and_restores_across_save ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1080,7 +1080,7 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "8f4c5aed29661c7ad174520eaaa1876117442727eeed6f631722de324b8da74a",
+        "7e0083a3a709099036defed8bc27a7626a50860c17f96a517feecd538af4e4c1",
     ),
     (
         "yishang_redirect",
@@ -1150,6 +1150,10 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
     ),
 ];
 
+// NC04 cards_given（2026-10-28）：give_hand_card 新增给牌触发帧后，仅
+// sancai_nested_chain（14 场中唯一含给牌的场景）位移；NOEMIT 探针（临时
+// 停发新帧）14 场全绿——位移唯一来源是新帧的事件 id 计数进入规范摘要
+// （hash.rs next_event_id），无行为变化；规则/存档版本不变。
 // NC07（2026-10-28）：用户授权 v324→v325；炼妖壶壶仓 lianyaohu_store
 // 顺序进入规范摘要（无条件写入长度与牌序，标准 14 场壶仓全空，仅多出
 // 每玩家 4 字节零长度）。三步探针：修复+v325 全位移（本批重录值）；
