@@ -2245,3 +2245,5 @@ _playpackconfig`** 为乘数 → `getn` 缩放 → **`dn` 补充公式** → **�
 **NC03／NC09 后续（2026-10-28）**：本地原生 0 座回合栏和阶段中文标签已补，旧线零哨兵回退保留；手牌投影、完整联机及目标平台等仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc03-turn-banner/README.md)）。
 
 **NC04 后续（2026-10-28）**：本地 Worker 故障及关闭已结束等待并提示结果未知；静默失效、结果核对与 B7 等仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-worker-failure/README.md)）。
+
+**用户裁决（2026-10-28）**：炼妖壶摘要升至 v324、PA12 两项设计与 ADR 起草、本地身份及可见牌面投影、B7 独立修复均已授权；各自版本与协议边界见[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)，授权不等于验收完成。
