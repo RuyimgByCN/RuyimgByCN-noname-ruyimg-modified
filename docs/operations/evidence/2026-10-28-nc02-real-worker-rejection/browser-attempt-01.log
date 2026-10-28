@@ -1,0 +1,11 @@
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/nc02-real-worker-rejection.mjs:54
+  throw new Error(`timed out: ${description}`);
+        ^
+
+Error: timed out: dedicated worker target
+    at wait (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/nc02-real-worker-rejection.mjs:54:9)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/nc02-real-worker-rejection.mjs:122:24
+
+Node.js v26.12.1
+
+exit 1

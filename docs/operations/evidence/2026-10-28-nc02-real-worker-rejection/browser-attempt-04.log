@@ -1,0 +1,11 @@
+PASS production_worker_thread | target=worker chunk=engine.native.worker-BxaLpEAb.js
+PASS valid_vm_start_choose_and_save
+PASS tampered_package_hash | standard/identity/restore rejected; active save unchanged
+PASS tampered_module_hash | standard/identity/restore rejected; active save unchanged
+PASS invalid_jump_old_save | standard/identity/restore rejected; active save unchanged
+PASS invalid_entry_old_save | standard/identity/restore rejected; active save unchanged
+PASS valid_vm_effect_and_restore_replay
+PASS browser_and_worker_errors | 0
+RESULT 8 passed / 0 failed; origin=http://127.0.0.1:54719; profile=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc02-real-worker-kTIvxI
+
+exit 0

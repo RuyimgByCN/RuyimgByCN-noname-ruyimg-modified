@@ -114,3 +114,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC04 进展（2026-10-28）**：VM 入口、跳转和续行位置增加指令边界校验，异常包及旧档拒绝；续行来源认证和其余故障矩阵仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-vm-instruction-boundaries/README.md)）。
 
 **NC10 进展（2026-10-28）**：决斗首个无懈窗口增加受控暗牌脱敏；其他窗口、特殊牌区和 AI 质量基线仍待验收，NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-duel-nullify-privacy/README.md)）。
+
+**NC02／NC04 浏览器补验（2026-10-28）**：真实 Worker 已验证异常 VM 包与旧档拒绝且不改原局；VM 安装、资源绑定、续行来源及其他故障矩阵仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc02-real-worker-rejection/README.md)）。
