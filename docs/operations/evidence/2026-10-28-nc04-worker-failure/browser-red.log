@@ -1,0 +1,5 @@
+FAIL error_visible: busy=true; alert=null; meta={"fault":"error","handler":"undefined","hasProperty":false}; eventSeen=false
+FAIL error_retry: request remains pending
+FAIL messageerror_visible: busy=true; alert=null; meta={"fault":"messageerror","handler":"undefined","hasProperty":false}; eventSeen=true
+FAIL messageerror_retry: request remains pending
+RESULT pass=0 fail=4 unexpected_exceptions=0

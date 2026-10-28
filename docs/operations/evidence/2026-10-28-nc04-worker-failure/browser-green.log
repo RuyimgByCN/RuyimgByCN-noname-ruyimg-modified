@@ -1,0 +1,5 @@
+PASS error_visible: Worker 发生错误，操作结果未知；请先确认当前局面
+PASS error_retry: real Worker revision 0 -> 1
+PASS messageerror_visible: Worker 回包无法读取，操作结果未知；请先确认当前局面
+PASS messageerror_retry: real Worker revision 0 -> 1
+RESULT pass=4 fail=0 unexpected_exceptions=0

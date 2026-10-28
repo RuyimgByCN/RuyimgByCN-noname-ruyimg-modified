@@ -65,6 +65,7 @@ export class EngineClient {
       : new LegacyEngineWorker();
     this.worker = worker;
     worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
+      if (this.worker !== worker) return;
       // NC12 诊断钩子：worker 初始化分段耗时（fetch/instantiate）随 init 回包上报，
       // 供浏览器档位测量读取（`window.__nativeInitTimings`）。不参与任何业务逻辑。
       const maybe = ev.data as unknown as { type?: string; timings?: unknown };
@@ -99,9 +100,16 @@ export class EngineClient {
       if (msg.ok) p.resolve(msg.data);
       else p.reject(new Error(msg.error));
     };
+    // shortcut: 静默失效仍会等待，补齐结果核对与超时后升级。
     worker.onerror = (e) => {
+      if (this.worker !== worker) return;
       console.error("engine worker error", e);
+      this.rejectPending(new Error("Worker 发生错误，操作结果未知；请先确认当前局面"));
     };
+    worker.addEventListener("messageerror", () => {
+      if (this.worker !== worker) return;
+      this.rejectPending(new Error("Worker 回包无法读取，操作结果未知；请先确认当前局面"));
+    });
     try {
       await this.request({
         id: this.nextId(),
@@ -111,7 +119,7 @@ export class EngineClient {
         latencySab: this.initSabMirror(),
       });
     } catch (error) {
-      this.dispose();
+      if (this.worker === worker) this.dispose();
       throw error;
     }
   }
@@ -215,9 +223,21 @@ export class EngineClient {
   }
 
   dispose() {
-    this.worker?.terminate();
+    const worker = this.worker;
     this.worker = null;
+    worker?.terminate();
+    this.rejectPending(new Error("Worker 已关闭，操作结果未知；请先确认当前局面"));
+  }
+
+  private rejectPending(error: Error) {
+    if (this.pending.size === 0) return;
+    for (const [id, pending] of this.pending) {
+      perfRequestFailed(id);
+      pending.reject(error);
+    }
     this.pending.clear();
+    (globalThis as unknown as { __latencySabDebug?: { settle?: () => void } })
+      .__latencySabDebug?.settle?.();
   }
 
   private request(body: WorkerRequest): Promise<unknown> {

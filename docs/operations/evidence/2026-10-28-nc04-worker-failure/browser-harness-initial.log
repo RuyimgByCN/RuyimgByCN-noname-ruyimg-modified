@@ -1,0 +1,5 @@
+PASS error_visible: Worker 发生错误，操作结果未知；请先确认当前局面
+PASS error_retry: real Worker revision 0 -> 1
+FAIL messageerror_visible: busy=true; alert=null
+FAIL messageerror_retry: request remains pending
+RESULT pass=2 fail=2 unexpected_exceptions=0

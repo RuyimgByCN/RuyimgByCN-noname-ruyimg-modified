@@ -167,7 +167,7 @@ export function perfRequestSent(id: number, type: string): void {
   orphanWorker.delete(id);
 }
 
-/** 未能发出的请求不计入性能样本。 */
+/** 未能获得回包的请求不计入性能样本。 */
 export function perfRequestFailed(id: number): void {
   if (!enabled) return;
   marks.delete(id);
