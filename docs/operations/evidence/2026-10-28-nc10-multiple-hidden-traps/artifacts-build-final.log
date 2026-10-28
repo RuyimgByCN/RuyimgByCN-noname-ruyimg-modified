@@ -1,0 +1,6 @@
+   Compiling engine-native v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-native-wasm)
+   Compiling game-server v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/apps/game-server)
+    Finished `test` profile [unoptimized] target(s) in 27.89s
+exit 0

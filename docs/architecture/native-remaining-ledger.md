@@ -126,3 +126,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC02 后续（2026-10-28）**：已有 VM 包副本可通过前端开局／恢复校验，浏览器与 Worker 已验；安装入口、资源绑定和跨包真实规则引用仍待完成，NC02 保持部分（[证据](../operations/evidence/2026-10-28-nc02-vm-snapshot/README.md)）。
 
 **NC08 后续（2026-10-28）**：四／八座身份局原生与 WASM 的私有选择、恢复及 80 步轨迹已对照；WASM 身份投影仍缺，其他模式和上游差分待验，NC08 保持部分（[证据](../operations/evidence/2026-10-28-nc08-identity-wasm/README.md)）。
+
+**NC10 后续（2026-10-28）**：无 VM 的静止态多持有者陷阱已补实体守恒、花色约束和隐藏身份遮蔽；VM、挂起状态及 AI 质量仍待处理，NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-multiple-hidden-traps/README.md)）。

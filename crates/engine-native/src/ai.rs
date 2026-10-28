@@ -716,7 +716,7 @@ impl Engine {
         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
             let fallback = if can_redact_suspended_duel(self, seat)
-                || single_hidden_trap_owner(self, seat).is_some()
+                || can_redact_hidden_traps(self, seat)
             {
                 &sim
             } else {
@@ -949,36 +949,23 @@ fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
         .all(fixed)
 }
 
-// shortcut: 仅无 VM 的单张陷阱且无 VM 牌堆；其他情形需先完成通用自省。
-fn single_hidden_trap_owner(e: &Engine, seat: u8) -> Option<usize> {
+// shortcut: 仅无 VM 的静止态陷阱；其他情形需先完成通用自省。
+fn can_redact_hidden_traps(e: &Engine, seat: u8) -> bool {
     let core = e.state_core();
     let res = e.resolution();
-    if e.is_suspended()
-        || !res.stack.is_empty()
-        || !res.parks.is_empty()
-        || res.open_choice.is_some()
-        || res.answer.is_some()
-        || core.vm_aux.piles.values().any(|pile| !pile.is_empty())
-    {
-        return None;
-    }
-    let mut owners = core
-        .players
-        .iter()
-        .enumerate()
-        .filter(|(_, p)| !p.sxianjing_traps.is_empty());
-    let (owner, player) = owners.next()?;
-    if owner == seat as usize || player.sxianjing_traps.len() != 1 || owners.next().is_some() {
-        return None;
-    }
-    if e.catalog()
-        .skills
-        .iter()
-        .any(|skill| skill.behavior.is_vm_skill())
-    {
-        return None;
-    }
-    Some(owner)
+    !e.is_suspended()
+        && res.stack.is_empty()
+        && res.parks.is_empty()
+        && res.open_choice.is_none()
+        && res.answer.is_none()
+        && core.vm_aux.piles.values().all(|pile| pile.is_empty())
+        && core.players.iter().enumerate().any(|(owner, player)| {
+            owner != seat as usize && !player.sxianjing_traps.is_empty()
+        })
+        && !e.catalog()
+            .skills
+            .iter()
+            .any(|skill| skill.behavior.is_vm_skill())
 }
 
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
@@ -1032,7 +1019,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
-    let trap_owner = single_hidden_trap_owner(e, seat);
+    let redact_traps = can_redact_hidden_traps(e, seat);
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
@@ -1063,7 +1050,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
                 visible.extend(p.sxianjing_traps.iter().copied());
             }
         }
-        // shortcut: 其他对手陷阱与 VM 牌堆尚未保护，完成可见性和引用自省后重分配。
+        // shortcut: VM 牌堆与非静止态陷阱尚未保护，完成可见性和引用自省后重分配。
         for ((owner, _), pile) in &core.vm_aux.piles {
             if *owner == seat {
                 visible.extend(pile.iter().copied());
@@ -1072,7 +1059,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         visible.extend(core.table.iter().copied());
         // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
         // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
-        if trap_owner.is_none() {
+        if !redact_traps {
             for (c, _) in core.turn.huanxia_track.iter() {
                 visible.insert(*c);
             }
@@ -1103,16 +1090,62 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         let j = ((rng_state >> 33) as usize) % (k + 1);
         pool.swap(j, k);
     }
-    let need = hand_lens.iter().sum::<usize>() + deck_len + usize::from(trap_owner.is_some());
+    let mut trap_owners: Vec<usize> = if redact_traps {
+        opponents
+            .iter()
+            .copied()
+            .filter(|i| !e.state_core().players[*i].sxianjing_traps.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+    trap_owners.sort_by_key(|i| {
+        std::cmp::Reverse(e.state_core().players[*i].sxianjing_traps.len())
+    });
+    let trap_count: usize = trap_owners
+        .iter()
+        .map(|i| e.state_core().players[*i].sxianjing_traps.len())
+        .sum();
+    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count;
     assert!(
         pool.len() >= need,
         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
         pool.len()
     );
+    // 先满足每位陷阱持有者的不同花色约束；优先剩余最多的花色，避免抢占稀缺花色。
+    if trap_owners
+        .iter()
+        .any(|i| e.state_core().players[*i].sxianjing_traps.len() > 1)
+    {
+        let mut counts = [0usize; 4];
+        for card in &pool {
+            counts[e.catalog().cards[*card as usize].suit as usize] += 1;
+        }
+        let mut cursor = 0;
+        for owner in &trap_owners {
+            let mut used = [false; 4];
+            for _ in &e.state_core().players[*owner].sxianjing_traps {
+                let suit = (0..4)
+                    .filter(|i| !used[*i] && counts[*i] > 0)
+                    .max_by_key(|i| counts[*i])
+                    .or_else(|| (0..4).filter(|i| counts[*i] > 0).max_by_key(|i| counts[*i]))
+                    .expect("filled pool has enough cards");
+                let index = (cursor..pool.len())
+                    .find(|i| e.catalog().cards[pool[*i] as usize].suit as usize == suit)
+                    .expect("suit count matches pool");
+                pool.swap(cursor, index);
+                cursor += 1;
+                counts[suit] -= 1;
+                used[suit] = true;
+            }
+        }
+    }
     // 牌引用按同一个重分配映射更新，避免指向错误的实体。
-    let remap: Vec<CardId> = if let Some(owner) = trap_owner {
+    let remap: Vec<CardId> = if redact_traps {
         let mut remap: Vec<CardId> = (0..e.catalog().cards.len() as CardId).collect();
-        let old = std::iter::once(e.state_core().players[owner].sxianjing_traps[0])
+        let old = trap_owners
+            .iter()
+            .flat_map(|i| e.state_core().players[*i].sxianjing_traps.iter().copied())
             .chain(
                 opponents
                     .iter()
@@ -1128,9 +1161,13 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     };
     let core = e.core_mut();
     let mut cursor = 0usize;
-    if let Some(owner) = trap_owner {
-        core.players[owner].sxianjing_traps[0] = pool[cursor];
-        cursor += 1;
+    if redact_traps {
+        for &owner in &trap_owners {
+            for trap in &mut core.players[owner].sxianjing_traps {
+                *trap = pool[cursor];
+                cursor += 1;
+            }
+        }
     }
     for (&i, &len) in opponents.iter().zip(hand_lens.iter()) {
         core.players[i].hand = pool[cursor..cursor + len].to_vec();

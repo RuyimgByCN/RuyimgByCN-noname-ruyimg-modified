@@ -1,0 +1,6 @@
+declared: 96 pairs; previously_equal_now_different=0; baseline_different=0; final_different=0
+flag: 96 pairs; previously_equal_now_different=0; baseline_different=0; final_different=0
+history: 96 pairs; previously_equal_now_different=0; baseline_different=6; final_different=0
+lost: 96 pairs; previously_equal_now_different=0; baseline_different=0; final_different=0
+nature: 96 pairs; previously_equal_now_different=0; baseline_different=0; final_different=0
+storage: 96 pairs; previously_equal_now_different=0; baseline_different=0; final_different=0

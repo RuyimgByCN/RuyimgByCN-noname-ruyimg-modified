@@ -1,0 +1,160 @@
+   Compiling unicode-ident v1.0.24
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling cfg-if v1.0.4
+   Compiling itoa v1.0.18
+   Compiling serde_core v1.0.228
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling libc v0.2.186
+   Compiling arrayref v0.3.9
+   Compiling zmij v1.0.21
+   Compiling arrayvec v0.7.8
+   Compiling constant_time_eq v0.4.2
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling once_cell v1.21.4
+   Compiling cc v1.2.66
+   Compiling getrandom v0.4.3
+   Compiling bitflags v2.13.0
+   Compiling rustix v1.1.4
+   Compiling fastrand v2.4.1
+   Compiling smallvec v1.15.2
+   Compiling bytes v1.12.1
+   Compiling pin-project-lite v0.2.17
+   Compiling parking_lot_core v0.9.12
+   Compiling scopeguard v1.2.0
+   Compiling version_check v0.9.5
+   Compiling futures-core v0.3.32
+   Compiling stable_deref_trait v1.2.1
+   Compiling log v0.4.33
+   Compiling lock_api v0.4.14
+   Compiling getrandom v0.3.4
+   Compiling zerocopy v0.8.54
+   Compiling typenum v1.20.1
+   Compiling httparse v1.10.1
+   Compiling tracing-core v0.1.36
+   Compiling generic-array v0.14.7
+   Compiling futures-sink v0.3.32
+   Compiling writeable v0.6.3
+   Compiling futures-task v0.3.32
+   Compiling http v1.4.2
+   Compiling errno v0.3.14
+   Compiling mio v1.2.1
+   Compiling signal-hook-registry v1.4.8
+   Compiling syn v2.0.118
+   Compiling socket2 v0.6.4
+   Compiling parking_lot v0.12.5
+   Compiling cpufeatures v0.2.17
+   Compiling blake3 v1.8.5
+   Compiling rand_core v0.9.5
+   Compiling litemap v0.8.2
+   Compiling slab v0.4.12
+   Compiling data-encoding v2.11.0
+   Compiling http-body v1.0.1
+   Compiling utf8_iter v1.0.4
+   Compiling icu_normalizer_data v2.2.0
+   Compiling percent-encoding v2.3.2
+   Compiling tower-service v0.3.3
+   Compiling icu_properties_data v2.2.0
+   Compiling unicase v2.9.0
+   Compiling tower-layer v0.3.3
+   Compiling mime v0.3.17
+   Compiling httpdate v1.0.3
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling mime_guess v2.0.5
+   Compiling tempfile v3.27.0
+   Compiling form_urlencoded v1.2.2
+   Compiling http-body-util v0.1.3
+   Compiling futures-channel v0.3.32
+   Compiling sha1 v0.10.7
+   Compiling atomic-waker v1.1.2
+   Compiling regex-syntax v0.8.11
+   Compiling crossbeam-utils v0.8.22
+   Compiling sync_wrapper v1.0.2
+   Compiling lazy_static v1.5.0
+   Compiling ryu v1.0.23
+   Compiling tracing-log v0.2.0
+   Compiling thread_local v1.1.10
+   Compiling matchit v0.8.4
+   Compiling utf-8 v0.7.6
+   Compiling base64 v0.22.1
+   Compiling http-range-header v0.4.2
+   Compiling sharded-slab v0.1.7
+   Compiling serde_path_to_error v0.1.20
+   Compiling hashbrown v0.14.5
+   Compiling nu-ansi-term v0.50.3
+   Compiling uuid v1.23.4
+   Compiling wasm-bindgen-shared v0.2.126
+   Compiling rustversion v1.0.23
+   Compiling bumpalo v3.20.3
+   Compiling dashmap v6.2.1
+   Compiling regex-automata v0.4.15
+   Compiling wasm-bindgen v0.2.126
+   Compiling ppv-lite86 v0.2.21
+   Compiling synstructure v0.13.2
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling rand_chacha v0.9.0
+   Compiling thiserror-impl v2.0.18
+   Compiling serde_derive v1.0.228
+   Compiling zerovec-derive v0.11.3
+   Compiling displaydoc v0.2.6
+   Compiling tokio-macros v2.7.0
+   Compiling futures-macro v0.3.32
+   Compiling tracing-attributes v0.1.31
+   Compiling rand v0.9.4
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling matchers v0.2.0
+   Compiling futures-util v0.3.32
+   Compiling tokio v1.52.3
+   Compiling zerofrom v0.1.8
+   Compiling tracing v0.1.44
+   Compiling tungstenite v0.29.0
+   Compiling tungstenite v0.26.2
+   Compiling yoke v0.8.3
+   Compiling axum-core v0.5.6
+   Compiling tracing-subscriber v0.3.23
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling icu_collections v2.2.0
+   Compiling icu_locale_core v2.2.0
+   Compiling wasm-bindgen-macro v0.2.126
+   Compiling engine-api v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/licensing-schema)
+   Compiling serde_urlencoded v0.7.1
+   Compiling icu_provider v2.2.0
+   Compiling icu_normalizer v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+   Compiling rule-api v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/rule-api)
+   Compiling engine-protocol v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-protocol)
+   Compiling hyper v1.10.1
+   Compiling tokio-tungstenite v0.29.0
+   Compiling tower v0.5.3
+   Compiling tokio-util v0.7.18
+   Compiling tokio-tungstenite v0.26.2
+   Compiling tower-http v0.6.11
+   Compiling hyper-util v0.1.20
+   Compiling axum v0.8.9
+   Compiling rule-vm v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-schema)
+   Compiling engine-native v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-native-loader)
+   Compiling engine-core v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-core)
+   Compiling engine-native-wasm v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-native-wasm)
+   Compiling engine-ai v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-ai)
+   Compiling game-server v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/apps/game-server)
+    Finished `test` profile [unoptimized] target(s) in 53.74s
+exit 0

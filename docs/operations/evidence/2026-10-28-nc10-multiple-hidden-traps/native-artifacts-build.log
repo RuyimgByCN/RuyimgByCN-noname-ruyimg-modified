@@ -1,0 +1,26 @@
+   Compiling serde_core v1.0.228
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling libc v0.2.186
+   Compiling once_cell v1.21.4
+   Compiling syn v2.0.118
+   Compiling errno v0.3.14
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling tempfile v3.27.0
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling engine-api v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-schema)
+   Compiling engine-native v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/tmp/nc10-multitrap-clean.DmowPj/crates/content-native-loader)
+    Finished `test` profile [unoptimized] target(s) in 37.12s
+exit 0
