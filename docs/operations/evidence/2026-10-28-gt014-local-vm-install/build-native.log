@@ -1,0 +1,140 @@
+
+> noname-next-web-client@0.1.0 build:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node scripts/build-native.mjs
+
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:180:4
+    |
+180 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:788:4
+    |
+788 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:849:4
+    |
+849 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:911:4
+    |
+911 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:920:4
+    |
+920 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:946:4
+    |
+946 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:955:4
+    |
+955 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:994:4
+    |
+994 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+
+warning: function `sj_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1003:4
+     |
+1003 | fn sj_apply(config_json: &str, commands: &str) -> String {
+     |    ^^^^^^^^
+
+
+warning: function `shousha_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1011:4
+     |
+1011 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+
+warning: function `shousha_mvp_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1019:4
+     |
+1019 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^
+
+
+warning: function `douzhuan_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1027:4
+     |
+1027 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^
+
+
+warning: function `update_guard_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1035:4
+     |
+1035 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^^
+
+
+warning: function `drag_read_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1043:4
+     |
+1043 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+
+warning: function `boss_play_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1051:4
+     |
+1051 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+
+warning: function `fool_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1059:4
+     |
+1059 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^
+
+
+warning: function `martial_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1067:4
+     |
+1067 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+
+warning: function `omnisearch_debug` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1075:4
+     |
+1075 | fn omnisearch_debug(source: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^
+
+
+    Finished `release` profile [optimized] target(s) in 0.06s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+[INFO]: ✨   Done in 0.36s
+[INFO]: 📦   Your wasm pkg is ready to publish at /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/.native-pkg-tmp.
+native engine pkg (web) deployed to /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg

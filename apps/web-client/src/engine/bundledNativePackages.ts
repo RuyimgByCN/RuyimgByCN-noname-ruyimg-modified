@@ -44,6 +44,8 @@ export interface NativePackagePayload {
   characters?: unknown;
   pile?: unknown;
   modules?: unknown;
+  skill_index?: unknown;
+  trigger_index?: unknown;
 }
 
 const bundled: Record<string, { package: { modules: unknown[] }; payload: unknown }> = {
@@ -100,12 +102,71 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
   if (payload?.modules !== undefined && !Array.isArray(payload.modules)) {
     throw new Error("扩展包 VM 模块格式无效");
   }
+  if (payload?.modules !== undefined) validateVmModules(payload);
   const assets = [payload?.cards, payload?.characters, payload?.pile].filter((v) => v !== undefined);
   if ((!assets.length && payload?.modules === undefined)
     || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))) {
     throw new Error("扩展包缺少可装载的卡牌、武将、牌堆或 VM 数据");
   }
   return payload!;
+}
+
+function nonNegativeInt(value: unknown): value is number {
+  return Number.isInteger(value) && (value as number) >= 0;
+}
+
+/**
+ * VM 模块与索引的结构校验：镜像 rule-vm 装载期的形状与 `entry_pc` 界限
+ * （`verify.rs`：`entry_pc >= code.len()` 拒绝），让坏副本在安装入口即被拒。
+ * 字节码语义、模块/包 logic_hash 与 ABI 窗口仍由开局时同一 Rust 校验器裁决，
+ * 客户端不复刻规范序列化以免与内核漂移。
+ */
+function validateVmModules(payload: NativePackagePayload): void {
+  const modules = payload.modules as unknown[];
+  const codeLength = new Map<string, number>();
+  for (const module of modules) {
+    const m = module as Record<string, unknown> | null;
+    if (!m || typeof m !== "object" || Array.isArray(m)) throw new Error("扩展包 VM 模块格式无效");
+    if (!validIdentity(m.name) || codeLength.has(m.name)) throw new Error("扩展包 VM 模块名缺失或重复");
+    const code = m.code;
+    if (!Array.isArray(code) || !code.length
+      || !code.every((b) => Number.isInteger(b) && (b as number) >= 0 && (b as number) <= 255)) {
+      throw new Error(`扩展包 VM 模块字节码无效: ${m.name}`);
+    }
+    if (![m.local_count, m.max_stack, m.entry_pc, m.caps_mask].every(nonNegativeInt)
+      || (m.entry_pc as number) >= code.length) {
+      throw new Error(`扩展包 VM 模块入口或预算字段无效: ${m.name}`);
+    }
+    if (!validHash(m.logic_hash)) throw new Error(`扩展包 VM 模块指纹格式无效: ${m.name}`);
+    codeLength.set(m.name, code.length);
+  }
+  const skills = new Set<number>();
+  const skillIndex = payload.skill_index;
+  if (skillIndex !== undefined) {
+    if (!Array.isArray(skillIndex)) throw new Error("扩展包技能索引格式无效");
+    for (const entry of skillIndex) {
+      const e = entry as Record<string, unknown> | null;
+      if (!e || typeof e !== "object" || !nonNegativeInt(e.skill_def_id) || !validIdentity(e.name)
+        || skills.has(e.skill_def_id)) {
+        throw new Error("扩展包技能索引条目无效或重复");
+      }
+      skills.add(e.skill_def_id);
+    }
+  }
+  const triggerIndex = payload.trigger_index;
+  if (triggerIndex !== undefined) {
+    if (!Array.isArray(triggerIndex)) throw new Error("扩展包触发索引格式无效");
+    for (const entry of triggerIndex) {
+      const e = entry as Record<string, unknown> | null;
+      if (!e || typeof e !== "object" || typeof e.module !== "string" || !codeLength.has(e.module)) {
+        throw new Error("扩展包触发索引引用了不存在的 VM 模块");
+      }
+      if (!nonNegativeInt(e.entry_pc) || e.entry_pc >= codeLength.get(e.module)!
+        || !nonNegativeInt(e.skill_def_id) || (skillIndex !== undefined && !skills.has(e.skill_def_id))) {
+        throw new Error(`扩展包触发索引入口或技能引用无效: ${e.module}`);
+      }
+    }
+  }
 }
 
 export function nativePackageKey(payload: NativePackagePayload): string {
@@ -119,10 +180,11 @@ export function nativePackageFingerprint(payload: NativePackagePayload): string 
 export function bundledNativePackage(entry: ExtensionCatalogEntry): string {
   const source = bundled[entry.dir];
   if (!source) throw new Error(`无可安装包数据: ${entry.dir}`);
-  if (!Array.isArray(source.package.modules) || source.package.modules.length) {
-    throw new Error(`此客户端尚不支持安装含 VM 模块的包: ${entry.dir}`);
-  }
-  const payload = validateNativePackage(source.payload);
+  if (!Array.isArray(source.package.modules)) throw new Error(`扩展包 VM 模块格式无效: ${entry.dir}`);
+  // 含 VM 模块的包须整包装入（Worker 按完整 npack 桥接技能声明），并与导入
+  // 入口走同一套结构校验；无模块的包维持「manifest + 资产」载荷不变。
+  const raw = source.package.modules.length ? { ...source.package, ...source.payload as object } : source.payload;
+  const payload = validateNativePackage(raw);
   if (nativePackageKey(payload) !== `${entry.namespace}/${entry.packageId}`
     || payload.manifest.version !== entry.version
     || !nativePackageFingerprint(payload).startsWith(entry.logicFingerprint)) {

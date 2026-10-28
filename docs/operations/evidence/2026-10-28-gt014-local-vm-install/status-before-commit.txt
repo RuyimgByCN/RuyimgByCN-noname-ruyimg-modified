@@ -1,0 +1,9 @@
+ M apps/game-server/examples/emit_vm_fixture.rs
+ M apps/web-client/scripts/native-worker-smoke.mjs
+ M apps/web-client/src/engine/bundledNativePackages.ts
+ M apps/web-client/src/engine/extensionStore.ts
+ M apps/web-client/src/views/ExtensionsView.vue
+?? apps/game-server/tests/gt014_vm_import_parity.rs
+?? apps/web-client/scripts/fixtures/vm-trigger-v2/
+?? apps/web-client/scripts/native-vm-install.test.mjs
+?? docs/operations/evidence/2026-10-28-gt014-local-vm-install/

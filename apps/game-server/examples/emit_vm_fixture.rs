@@ -1,18 +1,25 @@
 //! 开发夹具：生成一个含 VM 技能与武将的完整原生包，供真实服务端 E2E 使用。
 //!
-//! 用法：cargo run -p game-server --example emit_vm_fixture -- /tmp/vm-fixture
+//! 用法：cargo run -p game-server --example emit_vm_fixture -- /tmp/vm-fixture [版本] [摸牌数]
+//! 缺省 `0.1.0 1` 与 `apps/web-client/scripts/fixtures/vm-trigger` 逐字节一致；
+//! GT-014 的升级/回退夹具用 `0.1.1 2`（同包身份、新版本、阶段结束摸 2 张）。
 
 fn main() {
-    let root = std::env::args().nth(1).expect("output dir");
-    let source = r#"
-skill vm_fixture_phase_end(990031) {
-  trigger phase_end owner_is_target {
-    effect draw_cards(self, 1);
-  }
-}
-"#;
-    let mut package = content_compiler::compile_source_named("vm-fixture", source).unwrap();
-    package.manifest.version = "0.1.0".into();
+    let mut args = std::env::args().skip(1);
+    let root = args.next().expect("output dir");
+    let version = args.next().unwrap_or_else(|| "0.1.0".into());
+    let draw: u32 = args.next().map(|v| v.parse().expect("draw count")).unwrap_or(1);
+    let source = format!(
+        r#"
+skill vm_fixture_phase_end(990031) {{
+  trigger phase_end owner_is_target {{
+    effect draw_cards(self, {draw});
+  }}
+}}
+"#
+    );
+    let mut package = content_compiler::compile_source_named("vm-fixture", &source).unwrap();
+    package.manifest.version = version;
     package.manifest.logic_hash = package.compute_logic_hash();
     let characters = serde_json::json!({
         "source": "test",

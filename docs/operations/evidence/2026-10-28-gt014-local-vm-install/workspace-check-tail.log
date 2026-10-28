@@ -1,0 +1,41 @@
+# cargo check --offline --workspace --all-targets（全量     6255 行；warning 行 869，error 行 0；exit 0。只保留末尾 40 行，同 16:22 扫描口径。此次 869 条中 +2 来自新测试目标经 #[path] 引入 native.rs 的 dead_code（已加 allow，复跑见 gt014-targeted-recheck.log））
+509 |         let mut make = |st: &mut GameState, group: &str| {
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/mode/guozhan.rs:542:13
+    |
+542 |         let mut make = |st: &mut GameState, group: &str| {
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: `engine-core` (lib test) generated 109 warnings (107 duplicates) (run `cargo fix --lib -p engine-core --tests` to apply 2 suggestions)
+warning: `content-compiler` (lib test) generated 2 warnings (2 duplicates)
+warning: methods `enable_package`, `revoke_package`, `rollback`, `load`, and `load_reference` are never used
+   --> apps/game-server/tests/../src/native.rs:109:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+168 |     pub fn load(&self, package_id: &str) -> Result<LoadedPack, String> {
+    |            ^^^^
+...
+307 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPack, String> {
+    |            ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `game-server` (test "gt014_vm_import_parity") generated 20 warnings (19 duplicates)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.78s

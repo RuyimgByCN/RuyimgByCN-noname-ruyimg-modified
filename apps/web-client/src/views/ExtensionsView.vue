@@ -8,6 +8,7 @@ import {
   activateExtension,
   contentLockSummary,
   deactivateExtension,
+  importExtensionPackage,
   installAndActivateAll,
   installExtension,
   readExtensionStore,
@@ -21,6 +22,7 @@ import {
 const snap = ref<ExtensionStoreSnapshot>(readExtensionStore());
 const error = ref("");
 const notice = ref("");
+const importText = ref("");
 
 function refresh() {
   snap.value = readExtensionStore();
@@ -35,6 +37,31 @@ function run(fn: () => void) {
     refresh();
   } catch (e) {
     error.value = e instanceof Error ? e.message : String(e);
+  }
+}
+
+/** 正式导入入口：粘贴或选择作者产物（完整 npack JSON，可含 VM 模块）。 */
+function importFromText() {
+  run(() => {
+    const text = importText.value;
+    importExtensionPackage(text);
+    const manifest = (JSON.parse(text) as { manifest: { namespace: string; package_id: string; version: string } }).manifest;
+    notice.value = `已导入 ${manifest.namespace}/${manifest.package_id} @ ${manifest.version}`;
+    importText.value = "";
+  });
+}
+
+async function importFromFile(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    importText.value = await file.text();
+    importFromText();
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : String(e);
+  } finally {
+    input.value = "";
   }
 }
 
@@ -53,13 +80,18 @@ function statusLabel(key: string): string {
 
 const lock = computed(() => contentLockSummary(snap.value));
 
-const rows = computed(() =>
-  EXTENSION_CATALOG.map((e) => {
+const rows = computed(() => {
+  const catalogRows = EXTENSION_CATALOG.map((e) => {
     const key = extensionKey(e);
     const r = record(key);
-    return { ...e, key, record: r, status: statusLabel(key) };
-  }),
-);
+    return { title: e.title, version: e.version, key, record: r, status: statusLabel(key), imported: false };
+  });
+  const catalogKeys = new Set(catalogRows.map((row) => row.key));
+  const importedRows = snap.value.installed
+    .filter((r) => !catalogKeys.has(r.key))
+    .map((r) => ({ title: `${r.packageId}（导入）`, version: r.version, key: r.key, record: r, status: statusLabel(r.key), imported: true }));
+  return [...catalogRows, ...importedRows];
+});
 </script>
 
 <template>
@@ -80,6 +112,29 @@ const rows = computed(() =>
       <p v-if="notice" class="ok" role="status">{{ notice }}</p>
       <p v-if="error" class="error" role="alert">{{ error }}</p>
       <p v-if="snap.matchFrozen" class="warn" role="status">对局进行中 · 内容锁已冻结</p>
+    </section>
+
+    <section class="panel">
+      <h2>导入扩展包</h2>
+      <p class="muted">
+        正式导入入口：粘贴或选择作者产物（完整 npack JSON，可含 VM 模块与卡牌/武将/牌堆资产）。
+        同包新版本按升级处理并保留旧版本副本；同版本内容冲突、已撤销、对局冻结或结构校验失败时拒绝且不改写已安装内容。
+      </p>
+      <textarea
+        v-model="importText"
+        class="import-box"
+        rows="4"
+        spellcheck="false"
+        aria-label="扩展包 JSON"
+        placeholder='{"manifest": {...}, "modules": [...], ...}'
+      ></textarea>
+      <div class="row">
+        <button class="primary" type="button" :disabled="!importText.trim() || snap.matchFrozen" @click="importFromText">导入</button>
+        <label>
+          选择文件
+          <input type="file" accept=".json,application/json" aria-label="选择扩展包文件" :disabled="snap.matchFrozen" @change="importFromFile" />
+        </label>
+      </div>
     </section>
 
     <section class="panel">
@@ -109,7 +164,7 @@ const rows = computed(() =>
           <span class="mono">{{ row.record?.version ?? row.version }}</span>
           <span>{{ row.status }}</span>
           <span class="actions">
-            <button type="button" :disabled="!!row.record && row.record.lifecycle !== 'revoked'" @click="run(() => installExtension(row.key))">
+            <button type="button" :disabled="row.imported || (!!row.record && row.record.lifecycle !== 'revoked')" @click="run(() => installExtension(row.key))">
               安装
             </button>
             <button type="button" :disabled="!row.record || row.record.lifecycle === 'active' || row.record.lifecycle === 'revoked'" @click="run(() => activateExtension(row.key))">
@@ -118,7 +173,7 @@ const rows = computed(() =>
             <button type="button" :disabled="!row.record || row.record.lifecycle !== 'active'" @click="run(() => deactivateExtension(row.key))">
               停用
             </button>
-            <button type="button" :disabled="!row.record || row.record.lifecycle === 'revoked'" @click="run(() => upgradeExtension(row.key))">
+            <button type="button" :disabled="row.imported || !row.record || row.record.lifecycle === 'revoked'" :title="row.imported ? '导入包请导入新版本包以升级' : ''" @click="run(() => upgradeExtension(row.key))">
               升级
             </button>
             <button
@@ -149,6 +204,7 @@ const rows = computed(() =>
 .warn { color: var(--color-warning, #c90); }
 .error { color: var(--danger, #e55); }
 .mono { font-family: var(--mono, ui-monospace, monospace); font-size: 0.85em; word-break: break-all; }
+.import-box { width: 100%; box-sizing: border-box; font-family: var(--mono, ui-monospace, monospace); font-size: 0.8em; margin-bottom: 0.5rem; }
 .lock-list { margin: 0.4rem 0 0; padding-left: 1.2rem; line-height: 1.6; }
 .table { display: flex; flex-direction: column; gap: 0.35rem; }
 .thead, .trow {

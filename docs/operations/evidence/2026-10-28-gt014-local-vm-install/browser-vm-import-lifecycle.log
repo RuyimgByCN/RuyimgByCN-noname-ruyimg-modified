@@ -1,0 +1,13 @@
+PASS ui_import_installs_vm_package: official/vm-fixture@0.1.0 status=已安装
+PASS ui_activate_enters_content_lock
+PASS formal_content_lock_loaded: official/vm-fixture
+PASS ui_selected_vm_general: seat=1 module=vm_fixture_phase_end_phase_end
+PASS ui_save_contains_installed_copy: hand=4 hash=e6dce1b25700c784d240aaddcc2ec9f25cd6715eb8b70921dec75d874b9e3f25
+PASS ui_vm_end_effect: hand=4->5 hash=b2b056a80e0c9fe17523fe9198f23512b2e45909c6ba22b315cff6e2c8e42c12
+PASS ui_restore_replay_same_hash: b2b056a80e0c9fe17523fe9198f23512b2e45909c6ba22b315cff6e2c8e42c12
+PASS ui_import_upgrade_keeps_history_and_old_copy
+PASS ui_rollback_to_previous_version
+PASS ui_rejected_imports_leave_store_untouched
+PASS ui_disable_and_uninstall
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/gt014-browser-vm-rUvZDk origin=http://127.0.0.1:50702

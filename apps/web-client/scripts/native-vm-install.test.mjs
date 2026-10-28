@@ -1,0 +1,170 @@
+// GT-014（NC02／NC05／NC09）：含 VM 模块的作者产物经本地正式导入入口完成生命周期，
+// 并补齐包校验与错误分支（失败不改写已安装内容）。真实 Worker 触发与存读档见
+// native-worker-smoke.mjs 的 GT-014 段；服务端同包行为见 game-server 的 gt014 测试。
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { beforeEach, test } from "node:test";
+import {
+  activateExtension, deactivateExtension, importExtensionPackage, installExtension,
+  readExtensionStore, revokeExtension, rollbackExtension, setMatchFrozen,
+  uninstallExtension, upgradeExtension,
+} from "../src/engine/extensionStore.ts";
+import { EXTENSION_CATALOG, extensionKey } from "../src/engine/extensionCatalog.ts";
+import { validateNativePackage } from "../src/engine/bundledNativePackages.ts";
+import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
+
+const storage = new Map();
+globalThis.localStorage = {
+  getItem: (key) => storage.get(key) ?? null,
+  setItem: (key, value) => storage.set(key, String(value)),
+  removeItem: (key) => storage.delete(key),
+};
+const storeKey = "noname-next.extension-store.v1";
+const fixture = (dir) => JSON.parse(readFileSync(new URL(`./fixtures/${dir}/package.npack.json`, import.meta.url), "utf8"));
+const v1 = fixture("vm-trigger");
+const v2 = fixture("vm-trigger-v2");
+const vmKey = `${v1.manifest.namespace}/${v1.manifest.package_id}`;
+beforeEach(() => storage.clear());
+
+function record() {
+  return readExtensionStore().installed.find((r) => r.key === vmKey);
+}
+
+/** 断言一次导入被拒绝，且存储逐字不变。 */
+function rejects(input, pattern) {
+  const before = storage.get(storeKey) ?? null;
+  assert.throws(() => importExtensionPackage(typeof input === "string" ? input : JSON.stringify(input)), pattern);
+  assert.equal(storage.get(storeKey) ?? null, before);
+}
+
+test("fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint", () => {
+  assert.ok(v1.modules.length > 0 && v2.modules.length > 0);
+  assert.equal(`${v2.manifest.namespace}/${v2.manifest.package_id}`, vmKey);
+  assert.equal(v1.manifest.version, "0.1.0");
+  assert.equal(v2.manifest.version, "0.1.1");
+  assert.equal(v1.modules[0].name, v2.modules[0].name);
+  assert.notDeepEqual(v1.modules[0].code, v2.modules[0].code);
+  assert.notDeepEqual(v1.manifest.logic_hash, v2.manifest.logic_hash);
+  assert.equal(validateNativePackage(v1), v1);
+  assert.equal(validateNativePackage(v2), v2);
+});
+
+test("formal import installs a VM package with its modules and reaches the match", () => {
+  importExtensionPackage(JSON.stringify(v1));
+  const rec = record();
+  assert.ok(rec);
+  assert.equal(rec.lifecycle, "installed");
+  assert.equal(rec.version, "0.1.0");
+  assert.deepEqual(rec.history, ["0.1.0"]);
+  assert.equal(rec.dir, "imported");
+  assert.equal(rec.namespace, v1.manifest.namespace);
+  assert.equal(rec.packageId, v1.manifest.package_id);
+  assert.match(rec.logicFingerprint, /^[a-f0-9]{8}$/);
+  const stored = JSON.parse(rec.nativeVersions["0.1.0"]);
+  assert.deepEqual(stored, v1);
+  assert.ok(stored.modules.length === 1 && stored.trigger_index.length === 1);
+  // 未启用不进内容锁；启用后正式开局读取的正是安装副本。
+  assert.deepEqual(prepareNativeMatchContent().contentLock, []);
+  activateExtension(vmKey);
+  const content = prepareNativeMatchContent();
+  assert.deepEqual(content.contentLock, [vmKey]);
+  assert.deepEqual(JSON.parse(content.packsJson), [v1]);
+  assert.ok(content.lockSeed.startsWith(`${vmKey}@0.1.0:`));
+  // 同版本重复导入幂等（内容一致）。
+  importExtensionPackage(JSON.stringify(v1));
+  assert.equal(record().lifecycle, "active");
+  assert.deepEqual(record().history, ["0.1.0"]);
+});
+
+test("import rejects malformed packages without touching installed content", () => {
+  importExtensionPackage(JSON.stringify(v1));
+  activateExtension(vmKey);
+  const mutate = (fn) => { const bad = structuredClone(v1); fn(bad); return bad; };
+  rejects("{not json", /合法 JSON/);
+  rejects(mutate((p) => { delete p.manifest; }), /身份或逻辑指纹无效/);
+  rejects(mutate((p) => { p.manifest.package_id = "../x"; }), /身份或逻辑指纹无效/);
+  rejects(mutate((p) => { p.manifest.logic_hash = p.manifest.logic_hash.slice(1); }), /身份或逻辑指纹无效/);
+  rejects(mutate((p) => { p.modules = {}; }), /VM 模块格式无效/);
+  rejects(mutate((p) => { p.modules = [null]; }), /VM 模块格式无效/);
+  rejects(mutate((p) => { delete p.modules[0].name; }), /模块名缺失或重复/);
+  rejects(mutate((p) => { p.modules.push(structuredClone(p.modules[0])); }), /模块名缺失或重复/);
+  rejects(mutate((p) => { p.modules[0].code = []; }), /字节码无效/);
+  rejects(mutate((p) => { p.modules[0].code = [256]; }), /字节码无效/);
+  rejects(mutate((p) => { p.modules[0].entry_pc = p.modules[0].code.length; }), /入口或预算字段无效/);
+  rejects(mutate((p) => { p.modules[0].local_count = -1; }), /入口或预算字段无效/);
+  rejects(mutate((p) => { p.modules[0].logic_hash = [1, 2, 3]; }), /模块指纹格式无效/);
+  rejects(mutate((p) => { p.trigger_index[0].module = "ghost"; }), /不存在的 VM 模块/);
+  rejects(mutate((p) => { p.trigger_index[0].entry_pc = 999; }), /触发索引入口或技能引用无效/);
+  rejects(mutate((p) => { p.trigger_index[0].skill_def_id = 424242; }), /触发索引入口或技能引用无效/);
+  rejects(mutate((p) => { p.skill_index.push(structuredClone(p.skill_index[0])); }), /技能索引条目无效或重复/);
+  rejects(mutate((p) => { p.trigger_index = "x"; }), /触发索引格式无效/);
+  // 同版本内容冲突：不覆盖已安装副本。
+  rejects(mutate((p) => { p.modules[0].caps_mask += 1; }), /同版本包内容冲突/);
+  assert.deepEqual(JSON.parse(record().nativeVersions["0.1.0"]), v1);
+  assert.equal(record().lifecycle, "active");
+});
+
+test("import upgrades to a new version, keeps the old copy, and rolls back", () => {
+  importExtensionPackage(JSON.stringify(v1));
+  activateExtension(vmKey);
+  const content1 = prepareNativeMatchContent();
+  importExtensionPackage(JSON.stringify(v2));
+  const rec = record();
+  assert.equal(rec.version, "0.1.1");
+  assert.equal(rec.lifecycle, "active");
+  assert.deepEqual(rec.history, ["0.1.0", "0.1.1"]);
+  assert.deepEqual(JSON.parse(rec.nativeVersions["0.1.0"]), v1);
+  assert.deepEqual(JSON.parse(rec.nativeVersions["0.1.1"]), v2);
+  const content2 = prepareNativeMatchContent();
+  assert.deepEqual(JSON.parse(content2.packsJson), [v2]);
+  assert.notEqual(content2.lockSeed, content1.lockSeed);
+  // 升级只影响后续建局：旧局存档按其冻结副本恢复。
+  assert.deepEqual(restoreNativeMatchContent(content1), content1);
+  // 目录式升级对导入包不适用，错误信息指向导入新版本。
+  assert.throws(() => upgradeExtension(vmKey), /导入包没有内置目录版本/);
+  rollbackExtension(vmKey, "0.1.0");
+  assert.equal(record().version, "0.1.0");
+  assert.deepEqual(JSON.parse(prepareNativeMatchContent().packsJson), [v1]);
+  assert.throws(() => rollbackExtension(vmKey, "9.9.9"), /无历史版本/);
+});
+
+test("disable, uninstall and revoke affect new matches and saved matches as the contract requires", () => {
+  importExtensionPackage(JSON.stringify(v1));
+  activateExtension(vmKey);
+  const content = prepareNativeMatchContent();
+  deactivateExtension(vmKey);
+  assert.equal(record().lifecycle, "disabled");
+  assert.deepEqual(prepareNativeMatchContent().contentLock, []);
+  assert.deepEqual(restoreNativeMatchContent(content), content);
+  activateExtension(vmKey);
+  uninstallExtension(vmKey);
+  assert.equal(record(), undefined);
+  assert.deepEqual(prepareNativeMatchContent().contentLock, []);
+  // 卸载后旧档仍按冻结副本恢复；重新导入可再次使用。
+  assert.deepEqual(restoreNativeMatchContent(content), content);
+  importExtensionPackage(JSON.stringify(v1));
+  activateExtension(vmKey);
+  revokeExtension(vmKey);
+  assert.throws(() => restoreNativeMatchContent(content), /已撤销/);
+  rejects(v1, /已撤销包不可重装/);
+  assert.throws(() => activateExtension(vmKey), /已撤销/);
+});
+
+test("import is blocked while a match is frozen", () => {
+  setMatchFrozen(true);
+  rejects(v1, /对局中/);
+  setMatchFrozen(false);
+  importExtensionPackage(JSON.stringify(v1));
+  assert.ok(record());
+});
+
+test("catalog packages without VM modules keep their manifest+asset payload", () => {
+  for (const entry of EXTENSION_CATALOG) {
+    const key = extensionKey(entry);
+    installExtension(key);
+    const rec = readExtensionStore().installed.find((r) => r.key === key);
+    const payload = JSON.parse(rec.nativeVersions[entry.version]);
+    assert.equal(payload.modules, undefined, key);
+    assert.ok(payload.cards || payload.characters || payload.pile, key);
+  }
+});

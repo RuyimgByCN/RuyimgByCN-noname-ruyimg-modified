@@ -564,24 +564,44 @@ try {
   check("worker_identity_invalid_seats_refused", badIdentity.ok === false && /4-8/.test(badIdentity.error ?? ""));
 
   // 由 game-server 的 emit_vm_fixture 示例生成：真实 npack + 武将资产。
-  const vmFixtureDir = join(root, "scripts/fixtures/vm-trigger");
-  const vmPackage = JSON.parse(readFileSync(join(vmFixtureDir, "package.npack.json"), "utf8"));
+  // GT-014：作者产物经本地正式导入入口安装并启用（不再手工预置 store）；
+  // 之后的开局、存读档、触发与升级/回退/停用/卸载都只读取安装副本。
+  const loadVmFixture = (dir) => {
+    const pack = JSON.parse(readFileSync(join(root, "scripts/fixtures", dir, "package.npack.json"), "utf8"));
+    pack.characters = JSON.parse(readFileSync(join(root, "scripts/fixtures", dir, "character.json"), "utf8"));
+    return pack;
+  };
+  const vmPackage = loadVmFixture("vm-trigger");
+  const vmPackageV2 = loadVmFixture("vm-trigger-v2");
+  const vmStorage = new Map();
+  globalThis.localStorage = {
+    getItem: (key) => vmStorage.get(key) ?? null,
+    setItem: (key, value) => vmStorage.set(key, String(value)),
+    removeItem: (key) => vmStorage.delete(key),
+  };
   const { prepareNativeMatchContent, restoreNativeMatchContent } = await import(
     pathToFileURL(join(root, "src/engine/nativeMatchContent.ts")).href
   );
+  const {
+    activateExtension, deactivateExtension, importExtensionPackage, readExtensionStore,
+    rollbackExtension, uninstallExtension,
+  } = await import(pathToFileURL(join(root, "src/engine/extensionStore.ts")).href);
   const vmManifest = vmPackage.manifest;
   const vmKey = `${vmManifest.namespace}/${vmManifest.package_id}`;
-  const vmStore = {
-    installed: [{ key: vmKey, version: vmManifest.version, lifecycle: "active",
-      logicFingerprint: vmManifest.logic_hash.slice(0, 4).map((n) => n.toString(16).padStart(2, "0")).join(""),
-      nativeVersions: { [vmManifest.version]: JSON.stringify(vmPackage) } }],
-    contentLock: [vmKey], matchFrozen: false,
-  };
-  const vmOnlyContent = prepareNativeMatchContent(vmStore);
-  const vmOnlyStart = await workerSend({ id: 11000, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmOnlyContent.packsJson });
+  const emptyStore = { installed: [], contentLock: [], matchFrozen: false };
+  const vmRecord = () => readExtensionStore().installed.find((r) => r.key === vmKey);
+  importExtensionPackage(JSON.stringify(vmPackage));
+  activateExtension(vmKey);
+  const vmContent = prepareNativeMatchContent();
+  check("worker_vm_formal_import_installed_copy_reaches_match",
+    JSON.stringify(JSON.parse(vmContent.packsJson)) === JSON.stringify([vmPackage]) &&
+      vmRecord()?.lifecycle === "active" && vmRecord()?.dir === "imported" && vmRecord()?.version === "0.1.0",
+    JSON.stringify(vmRecord() && { lifecycle: vmRecord().lifecycle, dir: vmRecord().dir, version: vmRecord().version }));
+  const vmPacks = vmContent.packsJson;
+  const vmOnlyStart = await workerSend({ id: 11000, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmPacks });
   const vmOnlySave = await workerSend({ id: 11001, type: "save" });
-  const vmOnlyIdentity = await workerSend({ id: 11002, type: "start", mode: "identity", players: 4, seed: 42, observer: 0, packsJson: vmOnlyContent.packsJson });
-  const vmOnlyFrozen = restoreNativeMatchContent(vmOnlyContent, { installed: [], contentLock: [], matchFrozen: false });
+  const vmOnlyIdentity = await workerSend({ id: 11002, type: "start", mode: "identity", players: 4, seed: 42, observer: 0, packsJson: vmPacks });
+  const vmOnlyFrozen = restoreNativeMatchContent(vmContent, emptyStore);
   const vmOnlyRestore = await workerSend({ id: 11003, type: "restore", hex: vmOnlySave.data?.hex, packsJson: vmOnlyFrozen.packsJson });
   const vmOnlyAfterRestore = await workerSend({ id: 11004, type: "save" });
   // NC03 裁决⑦（GT-013）：本人手牌带真实牌面（def/suit 非占位）；他人手牌
@@ -595,7 +615,7 @@ try {
       (vmOnlyView?.known_cards ?? []).every((c) => !(c.zone === "Hand" && c.owner !== 0)),
     `hand=${JSON.stringify(vmOnlyHand.slice(0, 3))}`,
   );
-  check("worker_vm_only_prepared_start_identity_and_restore",
+  check("worker_vm_formal_install_start_identity_and_restore",
     vmOnlyStart.ok === true && vmOnlySave.ok === true && vmOnlyIdentity.ok === true && vmOnlyRestore.ok === true &&
       vmOnlyAfterRestore.ok === true && vmOnlyRestore.data?.hash_hex === vmOnlyStart.data?.hash_hex,
     `start=${vmOnlyStart.ok} identity=${vmOnlyIdentity.ok} restore=${vmOnlyRestore.ok} hash=${vmOnlyRestore.data?.hash_hex}`);
@@ -609,7 +629,6 @@ try {
     [corruptVmOnlyStart, corruptVmOnlyRestore].every((reply) => reply.ok === false && /module .*logic_hash mismatch/.test(reply.error ?? "")) &&
       vmOnlyAfterReject.data?.hex === vmOnlyAfterRestore.data?.hex,
     JSON.stringify([corruptVmOnlyStart.error, corruptVmOnlyRestore.error]));
-  vmPackage.characters = JSON.parse(readFileSync(join(vmFixtureDir, "character.json"), "utf8"));
   const badVmPackage = structuredClone(vmPackage);
   badVmPackage.characters.generals[0].skills[0].name = "missing_vm_skill";
   const badVm = await workerSend({
@@ -622,7 +641,6 @@ try {
   const tamperedVmPacks = JSON.stringify([tamperedVmPackage]);
   const badVmHash = await workerSend({ id: 960, type: "start", players: 4, seed: 42, observer: 0, packsJson: tamperedVmPacks });
   check("worker_vm_changed_trigger_hash_refused", badVmHash.ok === false && /logic_hash mismatch/.test(badVmHash.error ?? ""), badVmHash.error ?? "");
-  const vmPacks = JSON.stringify([vmPackage]);
   const vmStart = await workerSend({ id: 951, type: "start", players: 4, seed: 42, observer: 0, packsJson: vmPacks });
   const beforeBadRestore = await workerSend({ id: 961, type: "save" });
   const badVmRestore = await workerSend({ id: 962, type: "restore", hex: beforeBadRestore.data?.hex, packsJson: tamperedVmPacks });
@@ -656,38 +674,85 @@ try {
         after.ok === true && after.data?.hex === beforeBadRestore.data?.hex,
       JSON.stringify(replies.map((reply) => reply.error)));
   }
-  const vmPick = await workerSend({ id: 952, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
-  let vmEnv = vmPick.data?.envelope;
   const vmSkill = vmPackage.trigger_index[0].module;
-  check("worker_vm_general_owns_module", vmStart.ok === true && vmPick.ok === true &&
-    vmEnv?.view?.seats[0]?.skills.some((skill) => skill.name === vmSkill), vmSkill);
-  let vmTriggered = false;
-  let vmRestoreMatches = false;
-  let vmDetails = "";
-  for (let step = 0; step < 80 && vmEnv && !vmTriggered; step++) {
-    const before = vmEnv;
-    const atDiscard = before.view.current_player === 0 && before.view.phase === "Discard";
-    const save = atDiscard ? await workerSend({ id: 1000 + step * 4, type: "save" }) : null;
-    const command = before.choice
-      ? { type: "autoStep" }
-      : { type: "endPhase", actor: before.view.current_player };
-    const advanced = await workerSend({ id: 1001 + step * 4, ...command });
-    if (!advanced.ok || advanced.data?.result?.outcome === "rejected") {
-      vmDetails = advanced.error ?? JSON.stringify(advanced.data?.result);
-      break;
+  /**
+   * 以安装副本开局、装配夹具武将，推进到 P0 弃牌→结束阶段：返回阶段结束时的
+   * 手牌增量（v0.1.0 摸 1、v0.1.1 摸 2）、弃牌阶段存档与结束时哈希，供恢复重放对照。
+   */
+  const runVmTrigger = async (packsJson, idBase) => {
+    const started = await workerSend({ id: idBase, type: "start", players: 4, seed: 42, observer: 0, packsJson });
+    const pick = await workerSend({ id: idBase + 1, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
+    let env = pick.data?.envelope;
+    const owns = started.ok === true && pick.ok === true && env?.view?.seats[0]?.skills.some((skill) => skill.name === vmSkill);
+    const out = { owns, delta: null, saveHex: null, endHash: null, command: null, detail: "" };
+    for (let step = 0; step < 80 && env && out.delta === null; step++) {
+      const before = env;
+      const atDiscard = before.view.current_player === 0 && before.view.phase === "Discard";
+      const save = atDiscard ? await workerSend({ id: idBase + 10 + step * 2, type: "save" }) : null;
+      const command = before.choice ? { type: "autoStep" } : { type: "endPhase", actor: before.view.current_player };
+      const advanced = await workerSend({ id: idBase + 11 + step * 2, ...command });
+      if (!advanced.ok || advanced.data?.result?.outcome === "rejected") {
+        out.detail = advanced.error ?? JSON.stringify(advanced.data?.result);
+        break;
+      }
+      env = advanced.data;
+      if (atDiscard && env.view.current_player === 0 && env.view.phase === "End") {
+        out.delta = env.view.seats[0].hand_count - before.view.seats[0].hand_count;
+        out.saveHex = save?.data?.hex ?? null;
+        out.endHash = env.hash_hex;
+        out.command = command;
+        out.detail = `delta=${out.delta}`;
+      }
     }
-    vmEnv = advanced.data;
-    if (atDiscard && vmEnv.view.current_player === 0 && vmEnv.view.phase === "End") {
-      const delta = vmEnv.view.seats[0].hand_count - before.view.seats[0].hand_count;
-      vmTriggered = delta === 1;
-      const restored = await workerSend({ id: 1002 + step * 4, type: "restore", hex: save?.data?.hex, packsJson: vmPacks });
-      const replayed = await workerSend({ id: 1003 + step * 4, ...command });
-      vmRestoreMatches = restored.ok === true && replayed.ok === true && replayed.data?.hash_hex === vmEnv.hash_hex;
-      vmDetails = `delta=${delta} restored=${restored.ok} replayed=${replayed.ok}`;
-    }
-  }
-  check("worker_vm_effect_at_end_phase", vmTriggered, vmDetails);
-  check("worker_vm_same_package_restore_and_replay", vmRestoreMatches, vmDetails);
+    return out;
+  };
+  /** 用指定包副本恢复弃牌阶段存档并重放同一命令，返回是否得到同一结束哈希。 */
+  const replayFromSave = async (run, packsJson, idBase) => {
+    const restored = await workerSend({ id: idBase, type: "restore", hex: run.saveHex, packsJson });
+    const replayed = await workerSend({ id: idBase + 1, ...run.command });
+    return { ok: restored.ok === true && replayed.ok === true && replayed.data?.hash_hex === run.endHash,
+      detail: `restored=${restored.ok} replayed=${replayed.ok} ${restored.error ?? ""} ${replayed.error ?? ""}` };
+  };
+  const vmRunV1 = await runVmTrigger(vmPacks, 12000);
+  check("worker_vm_general_owns_module", vmRunV1.owns, vmSkill);
+  check("worker_vm_effect_at_end_phase", vmRunV1.delta === 1, vmRunV1.detail);
+  const vmReplayV1 = vmRunV1.saveHex ? await replayFromSave(vmRunV1, vmPacks, 12300) : { ok: false, detail: "no discard save" };
+  check("worker_vm_same_package_restore_and_replay", vmReplayV1.ok, vmReplayV1.detail);
+
+  // GT-014 升级/回退/停用/卸载（真实 Worker）：升级只影响后续建局，旧局按冻结副本恢复。
+  importExtensionPackage(JSON.stringify(vmPackageV2));
+  const vmContentV2 = prepareNativeMatchContent();
+  check("worker_vm_import_upgrade_keeps_history_and_old_copy",
+    vmRecord()?.version === "0.1.1" && vmRecord()?.lifecycle === "active" &&
+      JSON.stringify(vmRecord()?.history) === JSON.stringify(["0.1.0", "0.1.1"]) &&
+      JSON.stringify(JSON.parse(vmRecord()?.nativeVersions["0.1.0"] ?? "null")) === JSON.stringify(vmPackage) &&
+      JSON.stringify(JSON.parse(vmContentV2.packsJson)) === JSON.stringify([vmPackageV2]) && vmContentV2.lockSeed !== vmContent.lockSeed,
+    JSON.stringify({ version: vmRecord()?.version, history: vmRecord()?.history }));
+  const vmRunV2 = await runVmTrigger(vmContentV2.packsJson, 12400);
+  check("worker_vm_upgrade_new_match_uses_new_version", vmRunV2.owns && vmRunV2.delta === 2, vmRunV2.detail);
+  const frozenV1 = restoreNativeMatchContent(vmContent);
+  const vmReplayOld = vmRunV1.saveHex ? await replayFromSave(vmRunV1, frozenV1.packsJson, 12700) : { ok: false, detail: "no discard save" };
+  check("worker_vm_old_save_keeps_frozen_old_version_after_upgrade",
+    JSON.stringify(JSON.parse(frozenV1.packsJson)) === JSON.stringify([vmPackage]) && vmReplayOld.ok, vmReplayOld.detail);
+  const staleRestore = await workerSend({ id: 12710, type: "restore", hex: vmRunV1.saveHex, packsJson: vmContentV2.packsJson });
+  check("worker_vm_old_save_with_new_version_copy_refused", staleRestore.ok === false && /RuleVersionMismatch/.test(staleRestore.error ?? ""), staleRestore.error ?? "");
+  rollbackExtension(vmKey, "0.1.0");
+  check("worker_vm_rollback_restores_old_version_for_new_matches",
+    vmRecord()?.version === "0.1.0" && JSON.stringify(JSON.parse(prepareNativeMatchContent().packsJson)) === JSON.stringify([vmPackage]),
+    vmRecord()?.version ?? "");
+  deactivateExtension(vmKey);
+  const disabledContent = prepareNativeMatchContent();
+  const disabledStart = await workerSend({ id: 12720, type: "start", players: 4, seed: 42, observer: 0, packsJson: disabledContent.packsJson ?? "[]" });
+  const disabledPick = await workerSend({ id: 12721, type: "chooseGeneral", seat: 0, name: "vm_fixture" });
+  check("worker_vm_disabled_absent_from_new_match_but_old_save_restores",
+    vmRecord()?.lifecycle === "disabled" && disabledContent.contentLock.length === 0 && disabledStart.ok === true &&
+      disabledPick.ok === false && /NoSuchGeneral/.test(disabledPick.error ?? "") &&
+      (await replayFromSave(vmRunV1, restoreNativeMatchContent(vmContent).packsJson, 12730)).ok,
+    disabledPick.error ?? "");
+  uninstallExtension(vmKey);
+  const uninstalledReplay = await replayFromSave(vmRunV1, restoreNativeMatchContent(vmContent).packsJson, 12740);
+  check("worker_vm_uninstalled_old_save_restores_from_frozen_copy",
+    vmRecord() === undefined && prepareNativeMatchContent().contentLock.length === 0 && uninstalledReplay.ok, uninstalledReplay.detail);
 
   const reset = await workerSend({ id: 922, type: "start", players: 4, seed: 4242, observer: 0 });
   check("worker_standard_restart", reset.ok === true);

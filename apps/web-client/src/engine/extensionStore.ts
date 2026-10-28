@@ -1,7 +1,8 @@
 /**
  * 扩展包生命周期客户端存储（对齐宿主契约：安装/启停/升级/卸载）。
  *
- * - 发现源：EXTENSION_CATALOG（15 包）
+ * - 发现源：EXTENSION_CATALOG（15 包）；另有正式导入入口 importExtensionPackage
+ *   （作者产物完整 npack JSON，可含 VM 模块，无需重编译客户端）
  * - 持久化：localStorage（浏览器）/ 同源键（桌面壳共用）
  * - 在局锁定：active 集快照写入 contentLock；卸载不破坏锁内旧局续玩标记
  * - 正式装载：安装副本（manifest/卡牌/武将/牌堆）经 WorkerRequest.packsJson 交给
@@ -145,6 +146,66 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
   return snap;
 }
 
+/**
+ * 正式导入：作者产物（完整 npack JSON，可含 VM 模块与卡牌/武将/牌堆资产）经
+ * 校验后装入本地存储，不依赖内置目录、不要求重编译客户端。
+ * - 同包同版本重复导入须内容一致，否则拒绝（不覆盖已安装副本）；
+ * - 同包其他版本按升级/切换处理：导入版本成为当前版本，先前版本进 history，
+ *   其安装副本保留供回退与旧局恢复；
+ * - 任何校验失败都不改写存储；已撤销的包不可重装；对局冻结期间不可导入。
+ * 字节码语义、模块/包 logic_hash 与 ABI 由开局时的 Rust 校验器裁决。
+ */
+export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
+  const snap = loadRaw();
+  if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(json);
+  } catch {
+    throw new Error("扩展包不是合法 JSON");
+  }
+  const payload = validateNativePackage(parsed);
+  const key = nativePackageKey(payload);
+  const version = payload.manifest.version;
+  if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
+  const canonical = JSON.stringify(payload);
+  const fingerprint = nativePackageFingerprint(payload).slice(0, 8);
+  const existing = snap.installed.find((r) => r.key === key);
+  const t = nowIso();
+  if (existing) {
+    if (existing.lifecycle === "revoked") {
+      throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
+    }
+    checkVersionCopy(existing.nativeVersions, version, canonical);
+    existing.nativeVersions ??= {};
+    existing.nativeVersions[version] ??= canonical;
+    if (existing.version !== version) {
+      if (!existing.history.includes(existing.version)) existing.history.push(existing.version);
+      existing.version = version;
+      if (!existing.history.includes(version)) existing.history.push(version);
+    }
+    existing.logicFingerprint = fingerprint;
+    existing.updatedAt = t;
+    if (existing.lifecycle === "available") existing.lifecycle = "installed";
+  } else {
+    snap.installed.push({
+      key,
+      dir: "imported",
+      packageId: payload.manifest.package_id,
+      namespace: payload.manifest.namespace,
+      version,
+      history: [version],
+      lifecycle: "installed",
+      installedAt: t,
+      updatedAt: t,
+      logicFingerprint: fingerprint,
+      nativeVersions: { [version]: canonical },
+    });
+  }
+  saveRaw(snap);
+  return snap;
+}
+
 /** 启用：进入 contentLock（依赖图简化为单包；冲突同 packageId 异命名空间并存允许）。 */
 export function activateExtension(key: string): ExtensionStoreSnapshot {
   const snap = loadRaw();
@@ -179,8 +240,13 @@ export function deactivateExtension(key: string): ExtensionStoreSnapshot {
  */
 export function upgradeExtension(key: string, toVersion?: string): ExtensionStoreSnapshot {
   const cat = catalogByKey(key);
-  if (!cat) throw new Error(`未知扩展: ${key}`);
   const snap = loadRaw();
+  if (!cat) {
+    if (snap.installed.some((r) => r.key === key)) {
+      throw new Error(`导入包没有内置目录版本，请导入新版本包以升级: ${key}`);
+    }
+    throw new Error(`未知扩展: ${key}`);
+  }
   if (snap.matchFrozen) throw new Error("对局中不可升级（避免内容锁漂移）");
   const rec = snap.installed.find((r) => r.key === key);
   if (!rec || rec.lifecycle === "revoked") throw new Error(`未安装或已撤销: ${key}`);
