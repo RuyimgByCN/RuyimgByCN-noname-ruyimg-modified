@@ -1,0 +1,570 @@
+{
+ "report": {
+  "sources": [
+   {
+    "source": "3D精选",
+    "repo": "apps",
+    "files": 14,
+    "skills": 68,
+    "skills_with_trigger": 68,
+    "generals": 31,
+    "translates": 185,
+    "hit_groups": 2,
+    "hit_generals": 2
+   },
+   {
+    "source": "boss",
+    "repo": "apps",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "cardpile",
+    "repo": "apps",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "coin",
+    "repo": "apps",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "杀海拾遗",
+    "repo": "apps",
+    "files": 108,
+    "skills": 714,
+    "skills_with_trigger": 714,
+    "generals": 368,
+    "translates": 2552,
+    "hit_groups": 6,
+    "hit_generals": 6
+   },
+   {
+    "source": "欢乐卡牌",
+    "repo": "apps",
+    "files": 7,
+    "skills": 5,
+    "skills_with_trigger": 5,
+    "generals": 5,
+    "translates": 13,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "玩点论杀",
+    "repo": "apps",
+    "files": 18,
+    "skills": 16,
+    "skills_with_trigger": 16,
+    "generals": 9,
+    "translates": 57,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "英雄杀",
+    "repo": "apps",
+    "files": 9,
+    "skills": 72,
+    "skills_with_trigger": 72,
+    "generals": 43,
+    "translates": 244,
+    "hit_groups": 1,
+    "hit_generals": 1
+   },
+   {
+    "source": "AI优化",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 37,
+    "skills_with_trigger": 37,
+    "generals": 0,
+    "translates": 6,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "SJ Settings",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "boss",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "cardpile",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "coin",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "wuxing",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 1,
+    "skills_with_trigger": 1,
+    "generals": 1,
+    "translates": 18,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "全能搜索",
+    "repo": "noname-liuli",
+    "files": 7,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 1,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "十周年UI",
+    "repo": "noname-liuli",
+    "files": 20,
+    "skills": 306,
+    "skills_with_trigger": 306,
+    "generals": 0,
+    "translates": 15,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "千幻聆音",
+    "repo": "noname-liuli",
+    "files": 13,
+    "skills": 8,
+    "skills_with_trigger": 8,
+    "generals": 236,
+    "translates": 1,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "史诗卡牌",
+    "repo": "noname-liuli",
+    "files": 4,
+    "skills": 6,
+    "skills_with_trigger": 6,
+    "generals": 0,
+    "translates": 8,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "太虚幻境",
+    "repo": "noname-liuli",
+    "files": 18,
+    "skills": 243,
+    "skills_with_trigger": 243,
+    "generals": 5,
+    "translates": 179,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "如真似幻",
+    "repo": "noname-liuli",
+    "files": 11,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "手杀MVP",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 1,
+    "skills_with_trigger": 1,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "手杀ui",
+    "repo": "noname-liuli",
+    "files": 15,
+    "skills": 53,
+    "skills_with_trigger": 53,
+    "generals": 0,
+    "translates": 24,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "手杀全扩",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "拖拽读取",
+    "repo": "noname-liuli",
+    "files": 8,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "斗转星移",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "更新保护",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 5,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "末日乱斗",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 42,
+    "skills_with_trigger": 42,
+    "generals": 0,
+    "translates": 50,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "标记补充",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 77,
+    "skills_with_trigger": 77,
+    "generals": 0,
+    "translates": 68,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "武皇争霸",
+    "repo": "noname-liuli",
+    "files": 2,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 8,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "段位制裁",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 5,
+    "skills_with_trigger": 5,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "电脑适配",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 1,
+    "skills_with_trigger": 1,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "皮肤切换",
+    "repo": "noname-liuli",
+    "files": 42,
+    "skills": 22,
+    "skills_with_trigger": 22,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "祖安武将",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 243,
+    "skills_with_trigger": 243,
+    "generals": 0,
+    "translates": 47,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "笨蛋插件",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "选将美化",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 39,
+    "skills_with_trigger": 39,
+    "generals": 0,
+    "translates": 1,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "雷霆万钧",
+    "repo": "noname-liuli",
+    "files": 1,
+    "skills": 25,
+    "skills_with_trigger": 25,
+    "generals": 1,
+    "translates": 88,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "龙血玄黄",
+    "repo": "noname-liuli",
+    "files": 3,
+    "skills": 2,
+    "skills_with_trigger": 2,
+    "generals": 0,
+    "translates": 3,
+    "hit_groups": 0,
+    "hit_generals": 0
+   }
+  ],
+  "totals": {
+   "sources_scanned": 37,
+   "skills_total": 1986,
+   "skills_with_trigger_total": 1986,
+   "generals_total": 700,
+   "hit_groups": 9,
+   "hit_generals": 9,
+   "same_scope_groups": 5,
+   "forced_involving_groups": 5,
+   "pairs": 9
+  }
+ },
+ "hits": [
+  {
+   "source": "3D精选",
+   "general": "ddd_xujing",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "dddshijian",
+    "dddxuyu"
+   ],
+   "scope_of": {
+    "dddshijian": "global",
+    "dddxuyu": "player"
+   },
+   "same_scope": false,
+   "any_forced": false
+  },
+  {
+   "source": "3D精选",
+   "general": "ddd_liuhong",
+   "event": "phaseBefore",
+   "priority": 0,
+   "skills": [
+    "dddfuzong",
+    "dddshixing"
+   ],
+   "scope_of": {
+    "dddfuzong": "global",
+    "dddshixing": "global"
+   },
+   "same_scope": true,
+   "any_forced": true
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "ow_baolei",
+   "event": "phaseEnd",
+   "priority": 0,
+   "skills": [
+    "bshaowei",
+    "zhencha"
+   ],
+   "scope_of": {
+    "bshaowei": "player",
+    "zhencha": "player"
+   },
+   "same_scope": true,
+   "any_forced": false
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "swd_tuobayuer",
+   "event": "useCard",
+   "priority": 0,
+   "skills": [
+    "poyue",
+    "swdliuhong"
+   ],
+   "scope_of": {
+    "poyue": "player",
+    "swdliuhong": "player"
+   },
+   "same_scope": true,
+   "any_forced": true
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "pal_xuejian",
+   "event": "loseEnd",
+   "priority": 0,
+   "skills": [
+    "duci",
+    "xshuangren"
+   ],
+   "scope_of": {
+    "duci": "player",
+    "xshuangren": "player"
+   },
+   "same_scope": true,
+   "any_forced": false
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "pal_zixuan",
+   "event": "phaseEnd",
+   "priority": 0,
+   "skills": [
+    "shuiyun",
+    "wangyou"
+   ],
+   "scope_of": {
+    "shuiyun": "player",
+    "wangyou": "global"
+   },
+   "same_scope": false,
+   "any_forced": false
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "pal_leiyuange",
+   "event": "damageBegin",
+   "priority": 0,
+   "skills": [
+    "song",
+    "ya"
+   ],
+   "scope_of": {
+    "song": "source",
+    "ya": "player"
+   },
+   "same_scope": false,
+   "any_forced": true
+  },
+  {
+   "source": "杀海拾遗",
+   "general": "pal_xiaoman",
+   "event": "phaseEnd",
+   "priority": 0,
+   "skills": [
+    "lingquan",
+    "shenwu"
+   ],
+   "scope_of": {
+    "lingquan": "player",
+    "shenwu": "global"
+   },
+   "same_scope": false,
+   "any_forced": true
+  },
+  {
+   "source": "英雄杀",
+   "general": "yxs_lanlinwang",
+   "event": "damageEnd",
+   "priority": 0,
+   "skills": [
+    "guimian",
+    "lyuxue"
+   ],
+   "scope_of": {
+    "guimian": "source",
+    "lyuxue": "source"
+   },
+   "same_scope": true,
+   "any_forced": true
+  }
+ ]
+}

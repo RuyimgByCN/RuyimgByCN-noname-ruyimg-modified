@@ -1,0 +1,24 @@
+宽松（同武将同事件 ≥2 技，忽略优先级/silent/翻译）→ arrangeTrigger 判据逐组判定：
+HIT 3D精选 | ddd_xujing | useCardAfter | eff_prio=0 | ['dddshijian', 'dddxuyu']
+HIT 3D精选 | ddd_liuhong | phaseBefore | eff_prio=0 | ['dddfuzong', 'dddshixing']
+HIT 杀海拾遗 | ow_baolei | phaseEnd | eff_prio=0 | ['bshaowei', 'zhencha']
+HIT 杀海拾遗 | swd_tuobayuer | useCard | eff_prio=0 | ['poyue', 'swdliuhong']
+HIT 杀海拾遗 | pal_xuejian | loseEnd | eff_prio=0 | ['duci', 'xshuangren']
+HIT 杀海拾遗 | pal_zixuan | phaseEnd | eff_prio=0 | ['shuiyun', 'wangyou']
+HIT 杀海拾遗 | pal_leiyuange | damageBegin | eff_prio=0 | ['song', 'ya']
+HIT 杀海拾遗 | pal_xiaoman | phaseEnd | eff_prio=0 | ['lingquan', 'shenwu']
+HIT 英雄杀 | yxs_lanlinwang | damageEnd | eff_prio=0 | ['guimian', 'lyuxue']
+（silent 或无翻译的技能在进入上表前已被排除；同优先级但被排除的组见 scan-output 的宽松明细）
+
+宽松全集（同武将同事件 ≥2 技，不做任何排除）：
+    3D精选 | ddd_xujing | useCardAfter | 等优先 | dddshijian[ok] dddxuyu[ok]
+    3D精选 | ddd_liuhong | phaseBefore | 等优先 | dddshixing[ok] dddfuzong[ok]
+    杀海拾遗 | diy_caocao | damageEnd | 等优先 | xicai[ok] hujia[no-translate]
+    杀海拾遗 | ow_baolei | phaseEnd | 等优先 | zhencha[ok] bshaowei[ok]
+    杀海拾遗 | swd_tuobayuer | useCard | 等优先 | swdliuhong[ok] poyue[ok]
+    杀海拾遗 | swd_kangnalishi | damageBefore | 优先级不同 | yinguo[prio=6.0] xuying[ok]
+    杀海拾遗 | pal_xuejian | loseEnd | 等优先 | xshuangren[ok] duci[ok]
+    杀海拾遗 | pal_zixuan | phaseEnd | 等优先 | shuiyun[ok] wangyou[ok]
+    杀海拾遗 | pal_leiyuange | damageBegin | 等优先 | ya[ok] song[ok]
+    杀海拾遗 | pal_xiaoman | phaseEnd | 等优先 | shenwu[ok] lingquan[ok]
+    英雄杀 | yxs_lanlinwang | damageEnd | 等优先 | guimian[ok] lyuxue[ok]

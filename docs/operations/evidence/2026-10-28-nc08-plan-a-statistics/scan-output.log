@@ -1,0 +1,48 @@
+apps/3D精选: files=14 skills=68(trigger=68) generals=31 hit_groups=2
+apps/boss: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+apps/cardpile: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+apps/coin: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+apps/杀海拾遗: files=108 skills=714(trigger=714) generals=368 hit_groups=6
+apps/欢乐卡牌: files=7 skills=5(trigger=5) generals=5 hit_groups=0
+apps/玩点论杀: files=18 skills=16(trigger=16) generals=9 hit_groups=0
+apps/英雄杀: files=9 skills=72(trigger=72) generals=43 hit_groups=1
+noname-liuli/AI优化: files=1 skills=37(trigger=37) generals=0 hit_groups=0
+noname-liuli/SJ Settings: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/boss: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/cardpile: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/coin: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/wuxing: files=1 skills=1(trigger=1) generals=1 hit_groups=0
+noname-liuli/全能搜索: files=7 skills=0(trigger=0) generals=1 hit_groups=0
+noname-liuli/十周年UI: files=20 skills=306(trigger=306) generals=0 hit_groups=0
+noname-liuli/千幻聆音: files=13 skills=8(trigger=8) generals=236 hit_groups=0
+noname-liuli/史诗卡牌: files=4 skills=6(trigger=6) generals=0 hit_groups=0
+noname-liuli/太虚幻境: files=18 skills=243(trigger=243) generals=5 hit_groups=0
+noname-liuli/如真似幻: files=11 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/手杀MVP: files=1 skills=1(trigger=1) generals=0 hit_groups=0
+noname-liuli/手杀ui: files=15 skills=53(trigger=53) generals=0 hit_groups=0
+noname-liuli/手杀全扩: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/拖拽读取: files=8 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/斗转星移: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/更新保护: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/末日乱斗: files=1 skills=42(trigger=42) generals=0 hit_groups=0
+noname-liuli/标记补充: files=1 skills=77(trigger=77) generals=0 hit_groups=0
+noname-liuli/武皇争霸: files=2 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/段位制裁: files=1 skills=5(trigger=5) generals=0 hit_groups=0
+noname-liuli/电脑适配: files=1 skills=1(trigger=1) generals=0 hit_groups=0
+noname-liuli/皮肤切换: files=42 skills=22(trigger=22) generals=0 hit_groups=0
+noname-liuli/祖安武将: files=1 skills=243(trigger=243) generals=0 hit_groups=0
+noname-liuli/笨蛋插件: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/选将美化: files=1 skills=39(trigger=39) generals=0 hit_groups=0
+noname-liuli/雷霆万钧: files=1 skills=25(trigger=25) generals=1 hit_groups=0
+noname-liuli/龙血玄黄: files=3 skills=2(trigger=2) generals=0 hit_groups=0
+{
+ "sources_scanned": 37,
+ "skills_total": 1986,
+ "skills_with_trigger_total": 1986,
+ "generals_total": 700,
+ "hit_groups": 9,
+ "hit_generals": 9,
+ "same_scope_groups": 5,
+ "forced_involving_groups": 5,
+ "pairs": 9
+}
