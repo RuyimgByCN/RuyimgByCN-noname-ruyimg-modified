@@ -1,0 +1,72 @@
+✖ 座位和人数在进入 WASM 及选将前拒绝整数截断 (0.768792ms)
+✖ 牌和技能 ID 在进入 WASM 前拒绝整数截断 (0.1845ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 300.722958
+
+✖ failing tests:
+
+test at scripts/nc03-native-input-bounds.test.mjs:27:1
+✖ 座位和人数在进入 WASM 及选将前拒绝整数截断 (0.768792ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /native: players 非法整数/. Input:
+
+  "TypeError: Cannot read properties of undefined (reading 'nativeengine_new')"
+
+      at TestContext.<anonymous> (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:34:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: TypeError: Cannot read properties of undefined (reading 'nativeengine_new')
+        at new NativeEngine (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js:207:26)
+        at nativeCreate (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/src/worker/nativeBackend.ts:63:17)
+        at file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:30:30
+        at file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:34:27
+        at getActual (node:assert:580:5)
+        at strict.throws (node:assert:728:24)
+        at TestContext.<anonymous> (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:34:14)
+        at Test.runInAsyncScope (node:async_hooks:226:14)
+        at Test.run (node:internal/test_runner/test:1402:25)
+        at Test.start (node:internal/test_runner/test:1262:17),
+    expected: /native: players 非法整数/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-native-input-bounds.test.mjs:53:1
+✖ 牌和技能 ID 在进入 WASM 前拒绝整数截断 (0.1845ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /native: card 非法整数/. Input:
+
+  'Error: unexpected WASM call'
+
+      at TestContext.<anonymous> (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:55:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: unexpected WASM call
+        at Object.unreachable (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:11:35)
+        at nativeDispatch (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/src/worker/nativeBackend.ts:594:39)
+        at file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:56:13
+        at getActual (node:assert:580:5)
+        at strict.throws (node:assert:728:24)
+        at TestContext.<anonymous> (file:///private/tmp/nc03-actor-clean.ovnavc/apps/web-client/scripts/nc03-native-input-bounds.test.mjs:55:12)
+        at Test.runInAsyncScope (node:async_hooks:226:14)
+        at Test.run (node:internal/test_runner/test:1402:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+        at Test.postRun (node:internal/test_runner/test:1542:19),
+    expected: /native: card 非法整数/,
+    operator: 'throws',
+    diff: 'simple'
+  }

@@ -18,7 +18,7 @@ use engine_native::ai::BoundedPlanner;
 use engine_native::content::extension::ExtensionPack;
 use engine_native::event::Phase;
 use engine_native::view::{HandView, PlayerView};
-use engine_native::{CommandOutcome, Engine, GameAction};
+use engine_native::{CommandOutcome, Engine, GameAction, RejectReason};
 use wasm_bindgen::prelude::*;
 
 mod installed_packs;
@@ -202,6 +202,10 @@ fn outcome_json(engine: &Engine, out: &CommandOutcome) -> String {
         "reason": reason,
     })
     .to_string()
+}
+
+fn rejected(engine: &Engine, reason: RejectReason) -> String {
+    outcome_json(engine, &CommandOutcome::Rejected(reason))
 }
 
 fn phase_name(phase: Phase) -> &'static str {
@@ -451,8 +455,11 @@ impl NativeEngine {
 
     /// 阶段推进（当前回合玩家）。
     pub fn next_phase(&mut self, actor: u32) -> Result<String, JsValue> {
+        let Ok(actor) = u8::try_from(actor) else {
+            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+        };
         let out = self.inner.submit(engine_native::GameCommand {
-            actor: actor as u8,
+            actor,
             expected_revision: self.inner.revision(),
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::NextPhase,
@@ -467,13 +474,19 @@ impl NativeEngine {
         card: u32,
         targets: Vec<u32>,
     ) -> Result<String, JsValue> {
+        let Ok(actor) = u8::try_from(actor) else {
+            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+        };
+        let Ok(targets) = targets.into_iter().map(u8::try_from).collect() else {
+            return Ok(rejected(&self.inner, RejectReason::IllegalTargets));
+        };
         let out = self.inner.submit(engine_native::GameCommand {
-            actor: actor as u8,
+            actor,
             expected_revision: self.inner.revision(),
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::PlayCard {
                 card,
-                targets: targets.into_iter().map(|t| t as u8).collect(),
+                targets,
             },
         });
         Ok(outcome_json(&self.inner, &out))
@@ -496,8 +509,11 @@ impl NativeEngine {
     /// 内核 `GameAction::ActivateSkill` 不接受目标：技能内部的选择走开放
     /// 选择应答，因此窄壳也不接目标参数（前端传目标即协议误用）。
     pub fn activate_skill(&mut self, actor: u32, skill: u16) -> Result<String, JsValue> {
+        let Ok(actor) = u8::try_from(actor) else {
+            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+        };
         let out = self.inner.submit(engine_native::GameCommand {
-            actor: actor as u8,
+            actor,
             expected_revision: self.inner.revision(),
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::ActivateSkill { skill },
@@ -514,9 +530,18 @@ impl NativeEngine {
         choice_id: u64,
         selection: Vec<u32>,
     ) -> Result<String, JsValue> {
+        let Ok(actor) = u8::try_from(observer) else {
+            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+        };
+        if actor as usize >= self.inner.state_core().players.len() {
+            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+        }
         let Some(c) = self.inner.open_choice() else {
             return Err(JsValue::from_str("answer: 无开放选择"));
         };
+        if c.observer != actor {
+            return Ok(rejected(&self.inner, RejectReason::WrongPlayer));
+        }
         if c.id != choice_id {
             return Err(JsValue::from_str("answer: choice_id 不匹配"));
         }
@@ -528,9 +553,8 @@ impl NativeEngine {
             let _ = idx;
             sel.push(o.clone());
         }
-        let obs = c.observer;
         let out = self.inner.submit(engine_native::GameCommand {
-            actor: obs,
+            actor,
             expected_revision: self.inner.revision(),
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::Answer {
@@ -538,7 +562,6 @@ impl NativeEngine {
                 selection: sel,
             },
         });
-        let _ = observer;
         Ok(outcome_json(&self.inner, &out))
     }
 

@@ -40,6 +40,14 @@ export interface NativeHandle {
 
 let ready: Promise<void> | null = null;
 
+/** wasm-bindgen 会截断整数；必须先在 JS 边界拒绝不可表示的值。 */
+function unsigned(value: number, max: number, field: string): number {
+  if (!Number.isInteger(value) || value < 0 || value > max) {
+    throw new Error(`native: ${field} 非法整数 ${value}`);
+  }
+  return value;
+}
+
 /** 浏览器/Worker 侧必须先初始化 wasm（web 目标）。 */
 /// NC12 冷启动拆分（worker 内计时；`performance` 在 worker 上下文可用）：
 /// 记录 **fetch**（下载 .wasm）与 **instantiate**（编译+实例化）两段耗时，
@@ -95,6 +103,8 @@ export function nativeCreate(
   seed: number,
   observer = 0,
 ): NativeHandle {
+  unsigned(players, 255, "players");
+  unsigned(observer, 255, "observer");
   return {
     engine: new NativeEngine(players, BigInt(seed)),
     seed,
@@ -116,6 +126,8 @@ export function nativeCreateIdentity(
   observer = 0,
   packsJson?: string,
 ): NativeHandle {
+  unsigned(players, 255, "players");
+  unsigned(observer, 255, "observer");
   return {
     engine: packsJson === undefined
       ? NativeEngine.new_identity(players, BigInt(seed))
@@ -134,6 +146,8 @@ export function nativeCreateWithPacks(
   observer: number,
   packsJson: string,
 ): NativeHandle {
+  unsigned(players, 255, "players");
+  unsigned(observer, 255, "observer");
   return {
     engine: NativeEngine.new_with_packs_json(players, BigInt(seed), packsJson),
     seed,
@@ -696,6 +710,7 @@ export function chooseGeneral(
   seat: number,
   name: string,
 ): GeneralAssignment {
+  unsigned(seat, 255, "seat");
   const exports = requireGeneralSelectExports(handle);
   let raw: string;
   try {
@@ -833,18 +848,20 @@ export function nativeDispatch(
 ): EngineEnvelope | { kind: "save"; hex: string } | { kind: "status"; revision: number; finished: boolean } {
   switch (req.type) {
     case "endPhase": {
-      const out = handle.engine.next_phase(req.actor ?? handle.observer);
+      const out = handle.engine.next_phase(unsigned(req.actor ?? handle.observer, 255, "actor"));
       return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "playCard": {
       const out = handle.engine.play_card(
-        req.actor,
-        req.card,
-        new Uint32Array(req.targets),
+        unsigned(req.actor, 255, "actor"),
+        unsigned(req.card, 0xffffffff, "card"),
+        new Uint32Array(req.targets.map((target) => unsigned(target, 255, "target"))),
       );
       return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "activateSkill": {
+      unsigned(req.actor, 255, "actor");
+      unsigned(req.skill, 0xffff, "skill");
       // 内核 `GameAction::ActivateSkill` 只有技能 id：技能内部的目标/牌选择走
       // 开放选择应答。窄壳因此不接目标；传了目标即协议误用，显式报错而不是
       // 悄悄丢掉调用方的选择。
@@ -861,6 +878,7 @@ export function nativeDispatch(
       return nativeEnvelope(handle, parseCommandResult(out));
     }
     case "resolveChoice": {
+      unsigned(req.actor, 255, "actor");
       const choice = readChoiceJson(handle, req.actor);
       if (!choice || Number(choice.id) !== req.choiceId) {
         throw new Error(`native: choice ${req.choiceId} 不匹配/不存在`);
