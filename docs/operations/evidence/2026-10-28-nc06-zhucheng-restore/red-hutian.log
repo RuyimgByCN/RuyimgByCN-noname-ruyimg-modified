@@ -1,0 +1,41 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-nc06-zhucheng-red.6uDpbP/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 0.39s
+     Running tests/swd_hutian_deposit.rs (/tmp/noname-nc06-zhucheng-red.6uDpbP/target/debug/deps/swd_hutian_deposit-1f39eaa69787ef20)
+
+running 1 test
+
+thread 'hutian_deposits_shields_and_returns' (110026231) panicked at crates/engine-native/tests/swd_hutian_deposit.rs:154:73:
+护天寄存恢复: IdOutOfBounds { what: "card_missing_from_all_zones", got: 46 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test hutian_deposits_shields_and_returns ... FAILED
+
+failures:
+
+failures:
+    hutian_deposits_shields_and_returns
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test swd_hutian_deposit`
+
+exit 101

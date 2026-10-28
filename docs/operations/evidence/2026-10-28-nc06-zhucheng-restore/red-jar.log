@@ -1,0 +1,52 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-nc06-zhucheng-red.6uDpbP/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 1.67s
+     Running tests/g1_shahai_swd.rs (/tmp/noname-nc06-zhucheng-red.6uDpbP/target/debug/deps/g1_shahai_swd-48d42c183a04dd36)
+
+running 10 tests
+
+thread 'swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing' (110026309) panicked at crates/engine-native/tests/g1_shahai_swd/swd_cards_equip5_b33_lianyaohu_hujing.rs:116:73:
+壶仓存档恢复: IdOutOfBounds { what: "card_missing_from_all_zones", got: 40 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b39_sifeizhenmian_yiluan ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing ... FAILED
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b42_yuchan_autoviewas ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b36_kongdongyin_death_cancel ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b35_kunlunjingc_donghuangzhong ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b34_qiankundai_shennongding_nvwashi ... ok
+
+failures:
+
+failures:
+    swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing
+
+test result: FAILED. 9 passed; 1 failed; 0 ignored; 0 measured; 101 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `-p engine-native --test g1_shahai_swd`
+
+exit 101

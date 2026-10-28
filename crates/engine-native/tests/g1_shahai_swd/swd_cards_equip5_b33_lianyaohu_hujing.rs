@@ -113,6 +113,10 @@ fn swd_cards_equip5_b33_lianyaohu_hujing() {
         e.state_core().player(0).lianyaohu_store.contains(&taken),
         "收纳：目标首张手牌入壶仓"
     );
+    let restored = Engine::restore_with_extensions(&e.save(), &[&pack]).expect("壶仓存档恢复");
+    assert_eq!(restored.state_core().player(0).lianyaohu_store, vec![taken]);
+    assert_eq!(restored.state_hash(), e.state_hash());
+    e = restored;
     assert_eq!(hand_len_w(&e, 0), 0, "收纳：成本已弃");
     assert_eq!(hand_len_w(&e, 1), 1, "收纳：p1 剩 1");
 

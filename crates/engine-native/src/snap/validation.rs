@@ -394,6 +394,12 @@ pub fn validate_card_ownership(
         for c in &p.off_court {
             mark(&mut seen, b, *c)?;
         }
+        // These skill piles own cards; fields such as yishan_lost only reference them.
+        for pile in [&p.zhucheng, &p.lianyaohu_store, &p.sxianjing_traps, &p.hutian_hold] {
+            for c in pile {
+                mark(&mut seen, b, *c)?;
+            }
+        }
     }
     for c in &core.deck {
         mark(&mut seen, b, *c)?;

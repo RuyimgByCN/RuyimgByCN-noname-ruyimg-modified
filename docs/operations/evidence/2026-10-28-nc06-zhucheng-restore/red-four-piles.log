@@ -1,0 +1,49 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-nc06-zhucheng-red.6uDpbP/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 0.34s
+     Running tests/nc06_zhucheng_restore.rs (/tmp/noname-nc06-zhucheng-red.6uDpbP/target/debug/deps/nc06_zhucheng_restore-853ad9ac7438d8fd)
+
+running 4 tests
+test non_owning_card_references_are_not_counted_twice ... ok
+
+thread 'skill_pile_rejects_duplicate_missing_and_unknown_cards' (110025865) panicked at crates/engine-native/tests/nc06_zhucheng_restore.rs:52:10:
+corrupted card ownership must fail
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'skill_pile_archive_restores_and_continues' (110025864) panicked at crates/engine-native/tests/nc06_zhucheng_restore.rs:122:77:
+called `Result::unwrap()` on an `Err` value: IdOutOfBounds { what: "card_missing_from_all_zones", got: 84 }
+test skill_pile_archive_restores_and_continues ... FAILED
+test skill_pile_rejects_duplicate_missing_and_unknown_cards ... FAILED
+
+thread 'all_owned_piles_are_counted_once' (110025862) panicked at crates/engine-native/tests/nc06_zhucheng_restore.rs:100:5:
+ownership checks: ["zhucheng/valid", "zhucheng/duplicate", "zhucheng/unknown", "lianyaohu/valid", "lianyaohu/duplicate", "lianyaohu/unknown", "sxianjing/valid", "sxianjing/duplicate", "sxianjing/unknown", "hutian/valid", "hutian/duplicate", "hutian/unknown"]
+test all_owned_piles_are_counted_once ... FAILED
+
+failures:
+
+failures:
+    all_owned_piles_are_counted_once
+    skill_pile_archive_restores_and_continues
+    skill_pile_rejects_duplicate_missing_and_unknown_cards
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc06_zhucheng_restore`
+
+exit 101

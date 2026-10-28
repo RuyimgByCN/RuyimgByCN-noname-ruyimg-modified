@@ -66,16 +66,21 @@ fn swd_deferred_sxianjing_trap_cycle() {
         vec![spade_trap],
         "陷阱：置入一张陷阱牌"
     );
+    let restored = Engine::restore_with_extensions(&e.save(), &[&pack]).expect("陷阱存档恢复");
+    assert_eq!(restored.state_core().player(1).sxianjing_traps, vec![spade_trap]);
+    assert_eq!(restored.state_hash(), e.state_hash());
+    e = restored;
 
     // 场景二：0 号回合用黑桃杀指定 1 号 → 触发陷阱（陷阱直接置入）。
     advance_to_play(&mut e, 0);
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    e.state_core_mut().players[1].sxianjing_traps = vec![spade_trap];
+    assert_eq!(e.state_core().players[1].sxianjing_traps, vec![spade_trap]);
     let spade_sha = (0..n)
         .find(|c| {
-            e.catalog().cards[*c as usize].suit == Suit::Spade
+            *c != spade_trap
+                && e.catalog().cards[*c as usize].suit == Suit::Spade
                 && e.catalog().cards[*c as usize].kind == CardKind::Sha
         })
         .expect("黑桃杀");
@@ -119,9 +124,10 @@ fn swd_deferred_sxianjing_trap_cycle() {
     assert!(e.debug_hand(1).contains(&give), "陷阱：获得使用者一张牌");
 
     // 受伤取回：直接置入陷阱后受伤 → 取回。
-    e.state_core_mut().players[1]
-        .sxianjing_traps
-        .push(spade_trap);
+    let core = e.state_core_mut();
+    let pos = core.discard.iter().position(|card| *card == spade_trap).unwrap();
+    core.discard.remove(pos);
+    core.players[1].sxianjing_traps.push(spade_trap);
     let _ = e.debug_deal_damage(None, 1, 1, DamageNature::Normal);
     assert!(
         e.state_core().player(1).sxianjing_traps.is_empty(),

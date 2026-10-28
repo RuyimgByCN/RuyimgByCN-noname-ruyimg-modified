@@ -1,0 +1,158 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 1.34s
+     Running tests/g1_shahai_swd.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/g1_shahai_swd-48d42c183a04dd36)
+
+running 111 tests
+test guaili::swd_generals_b71_guaili_fuyan_wuxie_guanhu ... ok
+test gtiandao::swd_deferred_gtiandao_rewrites_judge_with_any_he ... ok
+test guxing::swd_deferred_guxing_all_hand_sha_and_draw ... ok
+test cyxianjiang::swd_generals_b89_cyxianjiang ... ok
+test datong::swd_generals_b18_datong_draw ... ok
+test cyxianjiang::swd_cyxianjiang_compares_card_name_not_kind ... ok
+test fengming::swd_generals_b73_fengming_xiaomoyu_touxi ... ok
+test five::swd_generals_b19_five_damage_line_skills ... ok
+test heihuo::swd_deferred_b92_heihuo_fzhenwei_dunxing ... ok
+test funiao::swd_deferred_b93_funiao_ningxian_yaotong ... ok
+test daixing::swd_deferred_daixing_hujia_cycle ... ok
+test hlingbo::swd_generals_b72_hlingbo_miles_xueyi ... ok
+test bingjian::swd_generals_b74_bingjian_shending_guiyan ... ok
+test duanyue::swd_generals_b24_duanyue_tuzhen_luomei_xingdian ... ok
+test huajin::swd_deferred_b99_huajin_minjing ... ok
+test huangyu::swd_generals_b76_huangyu_xianyin_pojian ... ok
+test huanjian::swd_generals_b70_huanjian_weida_xuying ... ok
+test hyunshen::swd_deferred_hyunshen_counter_draw_and_distance ... ok
+test huodan::swd_generals_b85_huodan ... ok
+test jiefen::swd_jiefen_is_once_per_play_phase ... ok
+test huanxing::swd_generals_b87_huanxing ... ok
+test huanyin::swd_deferred_huanyin_judge_cancel_or_draw ... ok
+test huanhun::swd_deferred_b96_huanhun_lqingcheng ... ok
+test jiying::swd_generals_b61_jiying_mufeng_wangchen ... ok
+test huanxia::swd_generals_b27_huanxia_viewas_reclaim ... ok
+test jiefen::swd_generals_b20_jiefen_multistep ... ok
+test hwendao::swd_generals_b77_hwendao_lingfeng_tianhuo ... ok
+test jinlin::swd_deferred_jinlin_limited_hujia_and_phase_ticks ... ok
+test jiying::swd_mufeng_uses_discover_not_draw ... ok
+test jqimou::swd_generals_b91_jqimou_jianji_toudan ... ok
+test lanzhi::swd_deferred_lanzhi_heals_le_own_hp_damaged ... ok
+test kbolan::swd_deferred_b98_kbolan_aojian ... ok
+test juxi::swd_deferred_juxi_damage_or_recover ... ok
+test lexue::swd_generals_b83_lexue_zhenjiu_lmazui ... ok
+test lianwu::swd_generals_b63_lianwu_yuchen_duishi_xielei ... ok
+test lianda::swd_generals_b64_lianda_suiyan_duanxing_polang_youyin ... ok
+test lingxian::swd_deferred_lingxian_draws_with_far_target ... ok
+test lingshi::swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit ... ok
+test lingxin::swd_generals_b69_lingxin_yueren ... ok
+test liuhong::swd_generals_b21_liuhong_mojian_daofa ... ok
+test luanji::swd_generals_b81_luanji_guozao_reyingzi ... ok
+test ljifeng::swd_generals_b68_ljifeng_duanyi_yinyue ... ok
+test mingfu::swd_generals_b88_mingfu ... ok
+test nlianji::swd_deferred_nlianji_compare_reward_and_damage ... ok
+test pingxu::swd_generals_b23_pingxu_huanling_builtin_four_full ... ok
+test poxiao::swd_generals_b79_poxiao ... ok
+test poyue::swd_generals_b28_poyue_black_range_red_free_direct ... ok
+test pozhen::swd_deferred_b94_pozhen_guiyan2 ... ok
+test pozhou::swd_deferred_pozhou_seal_cycle ... ok
+test shehun::swd_deferred_shehun_suit_match_damage ... ok
+test rexue::swd_deferred_rexue_and_liuli ... ok
+test shangxi::swd_generals_b75_shangxi_huajian_xingzhui ... ok
+test sliufeng::swd_generals_b80_sliufeng ... ok
+test shoulie::swd_deferred_b95_shoulie_busi ... ok
+test shengshou::swd_generals_b84_shengshou_jiang ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b34_qiankundai_shennongding_nvwashi ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b35_kunlunjingc_donghuangzhong ... ok
+test swd_extra_cards_disposition_guard::swd_extra_cards_disposition_guard ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b36_kongdongyin_death_cancel ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b39_sifeizhenmian_yiluan ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_window_machines_b62 ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_yuchan_b45_swap_rotation ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_equip5_b44_yuruyi_draw_window ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b42_yuchan_autoviewas ... ok
+test swd_extra_cards_disposition_guard::swd_chilongya_amplifies_fire_damage ... ok
+test swd_extra_cards_disposition_guard::swd_caoyao_heals_wounded_in_range ... ok
+test swd_extra_cards_disposition_guard::swd_fengxueren_flip_or_damage ... ok
+test swd_extra_cards_disposition_guard::swd_daihuo_xiayun_distance_pair ... ok
+test swd_extra_cards_disposition_guard::swd_guiyoujie_delayed_black_loss ... ok
+test swd_extra_cards_disposition_guard::swd_hufu_self_dying_only ... ok
+test swd_extra_cards_disposition_guard::swd_liuxinghuoyu_discard2_or_fire ... ok
+test swd_extra_cards_disposition_guard::swd_shentou_active_steal_with_club_judge ... ok
+test swd_extra_cards_disposition_guard::swd_tianxianjiu_ameisha_and_self_rescue ... ok
+test swd_extra_cards_disposition_guard::swd_yangpijuan_discover_from_deck ... ok
+test swd_extra_cards_disposition_guard::swd_xingjunyan_amp_and_qinglonglingzhu_steal ... ok
+test swd_extra_cards_disposition_guard::swd_xixue_lifesteal_on_sha_damage ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_cards_alignment_guard_b29 ... ok
+test swd_extra_cards_disposition_guard::swd_yufulu_give_weapon_and_damage ... ok
+test swd_extra_cards_disposition_guard::swd_zhufangshenshi_distance_waiver ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_cards_basic_b32_xuejibingbao_fengyinzhidan ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin ... ok
+test swd_extra_cards_disposition_guard::swd_real_host_full_lifecycle ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_shan_respond_no_damage ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanshu_attaches_card_mods_and_roundtrips ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_discovers_equip_and_marks_target ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_full_slots_rejected ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_gain_compensates_lost_equip ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_same_target_rejected_while_pending ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_pending_then_gain_at_phase_end ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_jinjilengdong_freeze_and_unfreeze ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_chaofeng_yinmi_xingtigaizao ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_langeguaiyi_longfan_suit_branches ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_xuanfeng_and_shijianhuisu ... ok
+test sxianjing::swd_deferred_sxianjing_trap_cycle ... ok
+test tiebi::swd_generals_b18_tiebi_and_datong ... ok
+test wanjun::swd_generals_b66_wanjun_senluo_huopu ... ok
+test xielv::swd_generals_b25_xielv_zhuyu ... ok
+test xuanying::swd_generals_b90_xuanying_lieren ... ok
+test xuanzhou::swd_deferred_b97_xuanzhou_yinguo ... ok
+test xuehuang::swd_generals_b26_xuehuang_limited_virtual_firesha ... ok
+test yeying::swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying ... ok
+test yijue::swd_generals_b86_yijue_dangping ... ok
+test yudun::swd_generals_b82_yudun_zhanxing ... ok
+test yunchou::swd_generals_b78_yunchou ... ok
+test zhanlu::swd_generals_b65_zhanlu_susheng_xianghui_huiqi ... ok
+test yulin::swd_generals_b22_yulin_ningshuang_gongshen ... ok
+
+test result: ok. 111 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.92s
+
+     Running tests/nc06_zhucheng_restore.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/nc06_zhucheng_restore-853ad9ac7438d8fd)
+
+running 4 tests
+test non_owning_card_references_are_not_counted_twice ... ok
+test skill_pile_archive_restores_and_continues ... ok
+test skill_pile_rejects_duplicate_missing_and_unknown_cards ... ok
+test all_owned_piles_are_counted_once ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/swd_hutian_deposit.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/swd_hutian_deposit-1f39eaa69787ef20)
+
+running 4 tests
+test hutian_returns_on_owner_death ... ok
+test hutian_target_filter_and_decline ... ok
+test hutian_state_roundtrip ... ok
+test hutian_deposits_shields_and_returns ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+exit 0

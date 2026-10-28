@@ -147,6 +147,14 @@ fn hutian_deposits_shields_and_returns() {
     assert_eq!(e.state_core().player(0).hutian_deposit, Some(1));
     assert_eq!(e.state_core().player(1).hutian_hold.len(), 2, "寄存 2 张");
     assert_eq!(e.debug_hp(1), 2, "体力低于寄存数 → 回复至 2");
+    let json = std::fs::read_to_string(
+        repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json"),
+    ).unwrap();
+    let pack = content_native_loader::bridge_pack(&json).unwrap().pack;
+    let restored = Engine::restore_with_extensions(&e.save(), &[&pack]).expect("护天寄存恢复");
+    assert_eq!(restored.state_core().player(1).hutian_hold, vec![c1, c2]);
+    assert_eq!(restored.state_hash(), e.state_hash());
+    e = restored;
     // 护体：1 号再受 1 点伤害 → 体力降至 2（寄存数）为上限 → 实际 0 伤
     let hp1 = e.debug_hp(1);
     let out = e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
@@ -269,17 +277,19 @@ fn hutian_returns_on_owner_death() {
 #[test]
 fn hutian_state_roundtrip() {
     let mut e = swd_engine(108004);
+    let held;
     {
         let core = e.state_core_mut();
+        held = vec![core.deck.pop().unwrap(), core.deck.pop().unwrap()];
         core.players[0].hutian_deposit = Some(2);
         core.players[0].hutian_just_given = true;
         core.players[2].hutian_owner = Some(0);
-        core.players[2].hutian_hold = vec![7, 8];
+        core.players[2].hutian_hold = held.clone();
     }
     let snap = e.save();
     assert_eq!(snap.core.players[0].hutian_deposit, Some(2));
     assert!(snap.core.players[0].hutian_just_given);
-    assert_eq!(snap.core.players[2].hutian_hold, vec![7, 8]);
+    assert_eq!(snap.core.players[2].hutian_hold, held);
     assert_eq!(snap.core.players[2].hutian_owner, Some(0));
     let json = std::fs::read_to_string(
         repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json"),
@@ -289,5 +299,5 @@ fn hutian_state_roundtrip() {
     let restored = Engine::restore_with_extensions(&snap, &[&pack]).expect("恢复");
     assert_eq!(restored.state_core().player(0).hutian_deposit, Some(2));
     assert!(restored.state_core().player(0).hutian_just_given);
-    assert_eq!(restored.state_core().player(2).hutian_hold, vec![7, 8]);
+    assert_eq!(restored.state_core().player(2).hutian_hold, held);
 }

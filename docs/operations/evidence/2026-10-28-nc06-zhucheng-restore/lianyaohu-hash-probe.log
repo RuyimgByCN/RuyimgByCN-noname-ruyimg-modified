@@ -1,0 +1,29 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-nc06-zhucheng-red.6uDpbP/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 1.92s
+     Running tests/nc06_jar_hash_probe.rs (/tmp/noname-nc06-trap-repro.cVCWZ0/debug/deps/nc06_jar_hash_probe-2d3da03b14260012)
+
+running 1 test
+jar orders [8, 80] and [80, 8]: equal state hash, different choice options [Card(8), Card(80)] / [Card(80), Card(8)]
+test different_jar_pile_orders_share_hash_but_produce_different_options ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+exit 0
