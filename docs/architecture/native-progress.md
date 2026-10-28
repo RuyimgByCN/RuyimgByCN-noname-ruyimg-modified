@@ -129,6 +129,8 @@
 
 **GT-014 本地 VM 正式安装（2026-10-28 20:45–21:30，ZCode）**：正式导入入口 `importExtensionPackage`（完整 npack JSON 含 VM 模块，无需重编译）+ `validateVmModules` 结构校验 + 扩展页导入 UI；`bundledNativePackage` 改为整包装入（内置 15 包载荷不变有守护）；`emit_vm_fixture` 参数化并新增 v0.1.1 夹具（摸 2 张，升级/回退有可观察差异）。全生命周期经正式入口验证：安装→启用→开局→真实触发（Δ1）→存读档→导入升级（新局 Δ2、旧档冻结 Δ1 重放同哈希、旧档配新副本被 `RuleVersionMismatch` 拒）→回退→停用→卸载。smoke **72/0**（+8 检查）、前端 **123/0**（+7 测）、headless Chrome 产品路径 **12/12**（0 异常）、game-server **362/0/0**（含同包核对 2 测：变异集两端一致拒绝、失败导入保留旧版）；不改规则／存档／ABI／协议。待授权：导入期深层哈希校验（Worker 校验请求＝协议改动）、本地验签；待做：混合包/跨包依赖导入、真实第三方产物（[证据](../operations/evidence/2026-10-28-gt014-local-vm-install/README.md)）。
 
+**PA12 §2 J + 批⑥ ADR 草案（2026-10-28，ZCode）**：[ADR 0786 草案](../adr/0786-vm-effect-choice-window-and-active-bridge.md)按裁决⑤成稿——效果级选择窗=提交期挂起（不扩字节码面、复用 Answer 通道）；主动技桥=active_index 经装载器入目录并复用 ActivateSkill 命令；J1/J2 分批建议与门禁（规则升号、RULE_VM_ABI_VERSION、存档尾部追加）已列。未实施，协议与升号另请示。
+
 **NC08 方案 A 差分统计（2026-10-28 21:31–21:50，ZCode）**：只统计不改语义——[scan.py](../operations/evidence/2026-10-28-nc08-plan-a-statistics/scan.py) 复刻上游 arrangeTrigger 判据与 `_priority` 公式静态扫描 37 来源扩展面：1986 触发技 / 700 武将中，「同武将同事件同有效优先级、均非 silent、均有翻译」的玩家询问命中组仅 **9 组/9 对**（杀海 6、3D精选 2、英雄杀 1；5 组同监听域、5 组含锁定技），宽松全集 11 组中 1 组被优先级差（swd_kangnalishi）、1 组被无翻译（diy_caocao 的 hujia）排除。口径为上界（未执行 filter）、只含武将自带技。A／B 裁决数据已备（[证据](../operations/evidence/2026-10-28-nc08-plan-a-statistics/README.md)）。
 
 ## 历史执行登记与轮次索引

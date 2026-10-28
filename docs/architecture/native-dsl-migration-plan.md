@@ -23,7 +23,7 @@
 | L（批⑤-4 实测登记）card_targeted 模块体 event_player=用牌者 | 增量 17（单 CardUsed+targets）下谓词门经 targets 集补正，但模块体 `HOST_EVENT_PLAYER` 读到用牌者（旧线逐目标 ctx=目标）——`remove_mark(event_player)` 等效果面指向错误玩家 | R01 涤仇消仇段等一切 card_targeted 模块体引用 event_player 的效果 | per-target 帧型或 HostContext 逐目标注入，随 §2 J 选择链批次评估（多目标卡须逐目标窗） |
 | K（批⑤首步发现；**批⑤-2 已修复**：BeforeTriggers 起步 + VM-only 前移 + after 段 VM 跳过，宿主技原执行点保持，golden 3 处结构性重录——[证据](../operations/evidence/2026-10-27-pa12-batch5-2-phasebegin-window/README.md)）VM PhaseBegin 执行窗 | `commit_phase` 先 emit `Phase{begin:true}` 再同段执行 `begin_*`（摸牌等）——VM 机器实测在入场行为之后才跑（奋励摸牌窗确认时已摸 2）；`skip_current_phase` 旗标接线已入（批⑤首步）但对当前阶段无效 | fenli 三窗口（skip 系）、一切「阶段开始时可跳过/改写本阶段」的 VM 技能 | 前置窗调度（BeforeTriggers 起步）或 PhaseBegin 专用前置帧——内核调度改动，与 game_started 开局帧同族；批⑤下一子批先修时序 |
 | I（批③发现）HOST_EVENT_CARD_COUNT 恒 0 | EngineVmHost.event_cards 未覆写（默认空切片）；event_targets 已在批③修复 | `event_card_count` 系技能待接线 | 与 game_started 开局帧一并评估 |
-| J（批④-4 勘察登记）效果级选择窗缺失 | 旧线 `discard_hand_equip_count` N>0 实为「开窗选恰好 N 张、续行按所选弃置」（N=0 空操作；rule-api 文档注释「VM 首发开选牌」对本 DSL 原语不适用）；原生 VM 桥两层提交协议无「效果落地开窗挂起」的挂起点，批④-2 以确定性首 N 近似（玩家总选前 N 张时等价） | `discard_hand_equip_count`（80 技能）及其它「选哪几张/选谁」效果 | **效果级选择窗挂起基建**（连带 ChooseDiscardEquipmentPreventCurrentDamage、choose_other_damage 48、choose_use_virtual_sha 33 全族）——批④剩余的核心基建，落地前逐技能登记确定性近似差异 |
+| J（批④-4 勘察登记）效果级选择窗缺失 | 旧线 `discard_hand_equip_count` N>0 实为「开窗选恰好 N 张、续行按所选弃置」（N=0 空操作；rule-api 文档注释「VM 首发开选牌」对本 DSL 原语不适用）；原生 VM 桥两层提交协议无「效果落地开窗挂起」的挂起点，批④-2 以确定性首 N 近似（玩家总选前 N 张时等价） | `discard_hand_equip_count`（80 技能）及其它「选哪几张/选谁」效果 | **效果级选择窗挂起基建**（连带 ChooseDiscardEquipmentPreventCurrentDamage、choose_other_damage 48、choose_use_virtual_sha 33 全族）——批④剩余的核心基建，落地前逐技能登记确定性近似差异；设计与授权边界已成稿（[ADR 0786 草案](../adr/0786-vm-effect-choice-window-and-active-bridge.md)，2026-10-28，未实施） |
 | H 再查询陈旧（批①发现） | 两线 VM 宿主都在模块 Halt 后落账，模块内 `hand_count` 等再查询看到执行前状态——「loop 内摸至 X」类 DSL 恒按循环上限执行（清励实证：两线同摸 5） | `clanqingli`（清励，摸至体力上限至多 5） | 需要「循环内即时落账」宿主原语或改写 DSL（先算张数再一次性摸）；逐技能排查同模式 |
 | G 主动技/view_as | `active`/视作转化不走触发桥 | 偏置：sp 728 技能中大量主动技 | 需原生主动技桥（`active` → PlayCard 候选 + 选牌/选人） |
 
@@ -35,7 +35,7 @@
 3. **滤镜 Top-20**（D）：按频次实现，每个一条桥测；并把 `once`/`once_per_round` 落到原生限次机制。
 4. **宿主解析原语 by 包**（E；④-1/②/③ 三原语族已接入）：下一优先 N=0 选牌首发链（VM 交互选牌，discard 族与 ChooseDiscardEquipmentPreventCurrentDamage 同链）、choose_other_damage（48）/choose_use_virtual_sha（33）选择挂起族；仍按包整包推进时改选 sp/mobile（技能级重盘：sp 142/mobile 106 个 ef 阻塞）（盘点：yxs 91/111、huicui 69/255、sixiang 45/181、yijiang 55/281、clan 25/90），每包按「整包八项验收」（37 来源台账 G0–G5）记录。
 5. **N01/R01/R03 原生化**（PA12③；进度：⑤首步 tag 清单+skip 接线、⑤-2 §2 K 前置窗修复+fenli 整局、⑤-3 STORAGE_SET 写路径+jie_danshou 依赖面确认、⑤-4 R01 谓词面（两滤名+参数化族+L 差异登记）——[首步](../operations/evidence/2026-10-27-pa12-batch5-n01-first-step/README.md)/[⑤-2](../operations/evidence/2026-10-27-pa12-batch5-2-phasebegin-window/README.md)/[⑤-3](../operations/evidence/2026-10-27-pa12-batch5-3-storage-set/README.md)）：jie_danshou 主体与 pingkou 同依赖「批⑥ 主动技桥 + §2 J 选择窗挂起」——建议合并为单批并先立 ADR（VM 桥两层提交协议扩展）；之后 R01/R03（宿主原语路线不受阻）→升 `RULE_VM_ABI_VERSION` 整包重装。注：正式装载入口检查整包 ABI；奋励可用真实 DSL 编译子包并核对原字节码做定向测试，不能视为整包通过。
-6. **主动技桥**（G）：另立 ADR（影响 PlayCard 候选与 UI 选择协议）。
+6. **主动技桥**（G）：ADR 已立草案（[0786](../adr/0786-vm-effect-choice-window-and-active-bridge.md)：active_index→VmActiveDecl→复用 ActivateSkill 通道，与 §2 J 合并 J2 批；未实施，协议/升号另请示）。
 
 ## 4 每技能验收口径（原型已示范，作为模板）
 
