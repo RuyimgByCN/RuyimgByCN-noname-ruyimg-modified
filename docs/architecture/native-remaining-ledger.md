@@ -130,3 +130,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC10 后续（2026-10-28）**：无 VM 的静止态多持有者陷阱已补实体守恒、花色约束和隐藏身份遮蔽；VM、挂起状态及 AI 质量仍待处理，NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-multiple-hidden-traps/README.md)）。
 
 **NC03／NC09 后续（2026-10-28）**：本地与联机的粗粒度事件共用中性文案，真实 Worker 阶段事件及两条适配链路已验；详细事件和完整产品场景仍待完成（[证据](../operations/evidence/2026-10-28-nc03-public-event-labels/README.md)）。
+
+**NC04 后续（2026-10-28）**：非法 VM 回答及恢复后故障的回滚、同键重试已验；另发现挂起存档恢复丢失技能身份等信息并导致状态差异（B7，规则修复待裁决），NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-choice-retry/README.md)）。

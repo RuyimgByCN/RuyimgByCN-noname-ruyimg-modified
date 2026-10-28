@@ -1,0 +1,2 @@
+crates/engine-native/tests/nc04_vm_resume.rs matches HEAD: True fc9606b40ad676e9cd96fb07898224304f419fd74d99c2d8fdf3a68c0a43257b
+crates/engine-native/src/engine/apply_command.rs matches HEAD: True 7d3808d725c3e3e2920b1c40821f9a03ae0e05ef72f913393c9e8a89f3f02eaf

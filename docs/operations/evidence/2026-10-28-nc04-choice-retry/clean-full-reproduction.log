@@ -1,0 +1,418 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayref v0.3.9
+   Compiling thiserror v2.0.18
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling libc v0.2.186
+   Compiling cc v1.2.66
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling bitflags v2.13.0
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.4.1
+   Compiling blake3 v1.8.5
+   Compiling errno v0.3.14
+   Compiling syn v2.0.118
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling engine-api v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/content-schema)
+   Compiling engine-native v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/content-compiler)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling content-native-loader v0.1.0 (/tmp/nc04-choice-clean.Ebv8TY/crates/content-native-loader)
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_hearth_shandianjian.rs:37:21
+   |
+37 | use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_matrix.rs:80:9
+   |
+80 |     let mut e = engine_native::Engine::new_with_extensions(59, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_config_acceptance.rs:59:9
+   |
+59 |     let mut on = content_native_loader::bridge_pack(&json).expect("桥接").pack;
+   |         ----^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc12_dangling_reference_repro.rs:40:53
+   |
+40 |         e.open_choice().map(|c| (c.id, c.spec.prompt.clone())),
+   |                                                     ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_config_acceptance") generated 1 warning (run `cargo fix --test "nc08_config_acceptance" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upgrade_matrix") generated 1 warning (run `cargo fix --test "nc08_upgrade_matrix" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_hearth_shandianjian") generated 1 warning (run `cargo fix --test "nc08_upstream_hearth_shandianjian" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc12_dangling_reference_repro") generated 1 warning (run `cargo fix --test "nc12_dangling_reference_repro" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_zhiyuan.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:32:35
+   |
+32 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `answer` is never used
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:50:4
+   |
+50 | fn answer(e: &mut Engine, pick: Vec<ChoiceOption>) {
+   |    ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:174:45
+    |
+174 |         found.as_ref().map(|c| c.spec.prompt.clone()),
+    |                                             ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_zhiyuan") generated 1 warning (run `cargo fix --test "nc08_upstream_zhiyuan" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_xiuluo") generated 3 warnings (run `cargo fix --test "nc08_upstream_xiuluo" -p engine-native` to apply 2 suggestions)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/pa08_fullhand_dump.rs:14:35
+   |
+14 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_five_sources.rs:91:9
+   |
+91 |     let mut e = engine_native::Engine::new_with_extensions(47, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "pa08_fullhand_dump") generated 1 warning (run `cargo fix --test "pa08_fullhand_dump" -p engine-native` to apply 1 suggestion)
+warning: unused import: `std::collections::BTreeSet`
+ --> crates/engine-native/tests/nc08_standard_deck_coverage.rs:9:5
+  |
+9 | use std::collections::BTreeSet;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upgrade_five_sources") generated 1 warning (run `cargo fix --test "nc08_upgrade_five_sources" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_haidao.rs:120:46
+    |
+120 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_standard_deck_coverage") generated 1 warning (run `cargo fix --test "nc08_standard_deck_coverage" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_haidao") generated 1 warning (run `cargo fix --test "nc08_upstream_haidao" -p engine-native` to apply 1 suggestion)
+warning: unused macro definition: `g14_guard`
+   --> crates/engine-native/tests/nc08_registered_defect_guards.rs:127:14
+    |
+127 | macro_rules! g14_guard {
+    |              ^^^^^^^^^
+    |
+    = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_registered_defect_guards") generated 1 warning
+warning: function `drive_to_quiescence` is never used
+  --> crates/engine-native/tests/nc08_upstream_lingxue.rs:47:4
+   |
+47 | fn drive_to_quiescence(e: &mut Engine) {
+   |    ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lingxue.rs:134:46
+    |
+134 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lianying.rs:124:46
+    |
+124 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_lingxue") generated 2 warnings (run `cargo fix --test "nc08_upstream_lingxue" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_lianying") generated 1 warning (run `cargo fix --test "nc08_upstream_lianying" -p engine-native` to apply 1 suggestion)
+warning: unused variable: `base`
+   --> crates/engine-native/tests/pa12_batch3_filter_predicates.rs:222:9
+    |
+222 |     let base = hand_len(&e, 1);
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_base`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc08_upstream_duwen.rs:98:46
+   |
+98 |         e.open_choice().map(|c| c.spec.prompt.clone())
+   |                                              ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `#[warn(noop_method_call)]` on by default
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_swd_shencaojie_window.rs:28:35
+   |
+28 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_identity_gate_matrix.rs:99:13
+   |
+99 |         let mut e = match engine_native::Engine::new_with_extensions(71, 4, &[&pack_v1]) {
+   |             ----^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_baishouzhihu.rs:30:84
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                                                                    ^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_duwen") generated 1 warning (run `cargo fix --test "nc08_upstream_duwen" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "pa12_batch3_filter_predicates") generated 1 warning (run `cargo fix --test "pa12_batch3_filter_predicates" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_swd_shencaojie_window") generated 1 warning (run `cargo fix --test "nc08_upstream_swd_shencaojie_window" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc12_ai_strength_baseline.rs:12:21
+   |
+12 | use engine_native::{CommandOutcome, Engine, GameCommand};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_identity_gate_matrix") generated 1 warning (run `cargo fix --test "nc08_identity_gate_matrix" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_swd_baishouzhihu") generated 1 warning (run `cargo fix --test "nc08_upstream_swd_baishouzhihu" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc12_ai_strength_baseline") generated 1 warning (run `cargo fix --test "nc12_ai_strength_baseline" -p engine-native` to apply 1 suggestion)
+warning: unused variable: `other_loss`
+  --> crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs:49:21
+   |
+49 |     let (self_gain, other_loss) = {
+   |                     ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_other_loss`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_gujian_liutouge") generated 1 warning (run `cargo fix --test "nc08_upstream_gujian_liutouge" -p engine-native` to apply 1 suggestion)
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_jizhi.rs:121:46
+    |
+121 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "nc08_upstream_jizhi") generated 1 warning (run `cargo fix --test "nc08_upstream_jizhi" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:37:35
+   |
+37 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `place_by_prefix` is never used
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:88:4
+   |
+88 | fn place_by_prefix(e: &mut Engine, prefix: &str, player: u8) -> engine_native::CardId {
+   |    ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_ganglie") generated 2 warnings (run `cargo fix --test "nc08_upstream_ganglie" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_yunchou_toulianghuanzhu.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_rangjie.rs:44:35
+   |
+44 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_upstream_yunchou_toulianghuanzhu") generated 1 warning (run `cargo fix --test "nc08_upstream_yunchou_toulianghuanzhu" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_rangjie") generated 1 warning (run `cargo fix --test "nc08_upstream_rangjie" -p engine-native` to apply 1 suggestion)
+warning: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_rescue_card_set_survey.rs:12:35
+   |
+12 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/nc08_upstream_mashu.rs:101:13
+    |
+101 |         let mut e2 = Engine::new(20268302, 4);
+    |             ----^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08_rescue_card_set_survey") generated 1 warning (run `cargo fix --test "nc08_rescue_card_set_survey" -p engine-native` to apply 1 suggestion)
+warning: `engine-native` (test "nc08_upstream_mashu") generated 1 warning (run `cargo fix --test "nc08_upstream_mashu" -p engine-native` to apply 1 suggestion)
+warning: stripping debug info with `rust-objcopy` failed: exit status: 1
+  |
+  = note: LLVM ERROR: IO failure on output stream: No space left on device
+
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/examples/rustclhaXps/symbols.o" "<2 object files omitted>" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/libcontent_native_loader-2e8c5b21d091f013.rlib" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{libcontent_runtime-4da7ef079596eada,libcontent_schema-ae42877aba48f66e,liblicensing_schema-4750f8b024672ef2,libresource_schema-95ca4b1e732e893a,libserde_json-acda6ed0e6878c23,libmemchr-80d5db52bd209e51,libitoa-396d1c3a11c3940c,libzmij-10f8c2a77a389d00}.rlib" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/libengine_native-29d421facef5b68d.rlib" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{librule_vm-ec59ab7c24fe0112,libthiserror-bfe0871db56e1185,librule_api-3108c89978826b40,libengine_api-66f8788dee2ae582,libserde-0781cc5067456d95,libserde_core-2ce9413e9282a780,libblake3-6d5907b38a660c41,libconstant_time_eq-aff3d3e329004671,libcfg_if-4c52863c42ecff60,libarrayvec-2195d06a6aba15a3,libarrayref-723df360e6701b21}.rlib" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/examples/nc12_pool_bench-872afecaeaccfa60" "-Wl,-dead_strip" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libstd-f7394d8dadbee1bf.rlib[4](std-f7394d8dadbee1bf.std.dfa21a03f581504-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-8416be3d04446165.rlib[4](panic_unwind-8416be3d04446165.panic_unwind.c302ac8acebdad05-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libobject-46d73b61450b8f15.rlib[4](object-46d73b61450b8f15.object.f15ffb7369d61b29-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-d607e8445d4a664c.rlib[4](addr2line-d607e8445d4a664c.addr2line.99a36d866f165aa-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libgimli-e842b5436322e838.rlib[4](gimli-e842b5436322e838.gimli.49ef1bb9534c8384-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-401d60f611c4e92b.rlib[4](rustc_demangle-401d60f611c4e92b.rustc_demangle.fc4a386dbdb65535-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-1b9963450e36566a.rlib[4](hashbrown-1b9963450e36566a.hashbrown.e6f20465eb978899-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-b9b433755b02ac05.rlib[4](miniz_oxide-b9b433755b02ac05.miniz_oxide.8f94216cf63a442e-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libadler2-96ddc8b63e413e7a.rlib[4](adler2-96ddc8b63e413e7a.adler2.a54973058d303387-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/liballoc-9184000d1cead90d.rlib[4](alloc-9184000d1cead90d.alloc.28eff7a44361f3d9-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcore-2eb50225bea3fab6.rlib[4](core-2eb50225bea3fab6.core.6d4585c07e7ffcab-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[20](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.016.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[218](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.214.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: write() failed, errno=28 (No space left on device) for '/tmp/nc04-choice-clean-full-target.HZCxby/debug/examples/nc12_pool_bench-872afecaeaccfa60'
+          clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/rustcetuoda/symbols.o" "<2 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libtest-*,libgetopts-*,librustc_std_workspace_std-*}.rlib" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/libengine_native-29d421facef5b68d.rlib" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{librule_vm-ec59ab7c24fe0112,libthiserror-bfe0871db56e1185,librule_api-3108c89978826b40,libengine_api-66f8788dee2ae582,libserde-0781cc5067456d95,libserde_core-2ce9413e9282a780,libblake3-6d5907b38a660c41,libconstant_time_eq-aff3d3e329004671,libcfg_if-4c52863c42ecff60,libarrayvec-2195d06a6aba15a3,libarrayref-723df360e6701b21}.rlib" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/nc08_upstream_jiyuan-6d8c4e3e8cbf8c0c" "-Wl,-dead_strip" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libtest-7754dd19544ec0be.rlib[4](test-7754dd19544ec0be.test.917ce2d9f59c1a7-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libgetopts-4ed2cfb603a34605.rlib[4](getopts-4ed2cfb603a34605.getopts.b5c0950d40d50d7e-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libstd-f7394d8dadbee1bf.rlib[4](std-f7394d8dadbee1bf.std.dfa21a03f581504-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-8416be3d04446165.rlib[4](panic_unwind-8416be3d04446165.panic_unwind.c302ac8acebdad05-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libobject-46d73b61450b8f15.rlib[4](object-46d73b61450b8f15.object.f15ffb7369d61b29-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-d607e8445d4a664c.rlib[4](addr2line-d607e8445d4a664c.addr2line.99a36d866f165aa-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libgimli-e842b5436322e838.rlib[4](gimli-e842b5436322e838.gimli.49ef1bb9534c8384-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-401d60f611c4e92b.rlib[4](rustc_demangle-401d60f611c4e92b.rustc_demangle.fc4a386dbdb65535-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-1b9963450e36566a.rlib[4](hashbrown-1b9963450e36566a.hashbrown.e6f20465eb978899-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-b9b433755b02ac05.rlib[4](miniz_oxide-b9b433755b02ac05.miniz_oxide.8f94216cf63a442e-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libadler2-96ddc8b63e413e7a.rlib[4](adler2-96ddc8b63e413e7a.adler2.a54973058d303387-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/liballoc-9184000d1cead90d.rlib[4](alloc-9184000d1cead90d.alloc.28eff7a44361f3d9-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcore-2eb50225bea3fab6.rlib[4](core-2eb50225bea3fab6.core.6d4585c07e7ffcab-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[20](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.016.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[218](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.214.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: write() failed, errno=28 (No space left on device) for '/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/nc08_upstream_jiyuan-6d8c4e3e8cbf8c0c'
+          clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/rustcPD5Wgt/symbols.o" "<10 object files omitted>" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/libtempfile-33722278a990e68d.rlib" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{libgetrandom-bdcea4f4ef7e6bba,libfastrand-66cb912c482ceab7,libonce_cell-128798854997dc63,librustix-4c68307fcfa3967b,libbitflags-add8f04529f5c332,liberrno-5584a21420c96ea5,liblibc-6893157ebee33779}.rlib" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/libcontent_native_loader-2e8c5b21d091f013.rlib" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libtest-*,libgetopts-*,librustc_std_workspace_std-*}.rlib" "/private/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{libengine_native-29d421facef5b68d,libcontent_runtime-4da7ef079596eada}.rlib" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/{libcontent_schema-ae42877aba48f66e,liblicensing_schema-4750f8b024672ef2,libresource_schema-95ca4b1e732e893a,libserde_json-acda6ed0e6878c23,libmemchr-80d5db52bd209e51,libitoa-396d1c3a11c3940c,libzmij-10f8c2a77a389d00,librule_vm-ec59ab7c24fe0112,libthiserror-bfe0871db56e1185,librule_api-3108c89978826b40,libengine_api-66f8788dee2ae582,libblake3-6d5907b38a660c41,libconstant_time_eq-aff3d3e329004671,libcfg_if-4c52863c42ecff60,libarrayvec-2195d06a6aba15a3,libarrayref-723df360e6701b21,libserde-0781cc5067456d95,libserde_core-2ce9413e9282a780}.rlib" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-liconv" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/g1_huanle-1f93c4a411761e1f" "-Wl,-dead_strip" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libtest-7754dd19544ec0be.rlib[4](test-7754dd19544ec0be.test.917ce2d9f59c1a7-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libgetopts-4ed2cfb603a34605.rlib[4](getopts-4ed2cfb603a34605.getopts.b5c0950d40d50d7e-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libstd-f7394d8dadbee1bf.rlib[4](std-f7394d8dadbee1bf.std.dfa21a03f581504-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-8416be3d04446165.rlib[4](panic_unwind-8416be3d04446165.panic_unwind.c302ac8acebdad05-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libobject-46d73b61450b8f15.rlib[4](object-46d73b61450b8f15.object.f15ffb7369d61b29-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-d607e8445d4a664c.rlib[4](addr2line-d607e8445d4a664c.addr2line.99a36d866f165aa-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libgimli-e842b5436322e838.rlib[4](gimli-e842b5436322e838.gimli.49ef1bb9534c8384-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-401d60f611c4e92b.rlib[4](rustc_demangle-401d60f611c4e92b.rustc_demangle.fc4a386dbdb65535-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-1b9963450e36566a.rlib[4](hashbrown-1b9963450e36566a.hashbrown.e6f20465eb978899-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-b9b433755b02ac05.rlib[4](miniz_oxide-b9b433755b02ac05.miniz_oxide.8f94216cf63a442e-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libadler2-96ddc8b63e413e7a.rlib[4](adler2-96ddc8b63e413e7a.adler2.a54973058d303387-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/liballoc-9184000d1cead90d.rlib[4](alloc-9184000d1cead90d.alloc.28eff7a44361f3d9-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcore-2eb50225bea3fab6.rlib[4](core-2eb50225bea3fab6.core.6d4585c07e7ffcab-cgu.0.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[20](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.016.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: warning: object file (/opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-cfc77b6779354625.rlib[218](compiler_builtins-cfc77b6779354625.compiler_builtins.fcd0926429619848-cgu.214.rcgu.o)) was built for newer 'macOS' version (27.0) than being linked (11.0)
+          ld: write() failed, errno=28 (No space left on device) for '/tmp/nc04-choice-clean-full-target.HZCxby/debug/deps/g1_huanle-1f93c4a411761e1f'
+          clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+error: could not compile `engine-native` (example "nc12_pool_bench") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `engine-native` (test "g1_huanle") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_jiyuan") due to 1 previous error
+warning: `engine-native` (test "nc08_upstream_tieji") generated 1 warning (1 duplicate)
+warning: `engine-native` (test "nc08_upstream_gujian_mapodoufu") generated 1 warning
+exit 101
