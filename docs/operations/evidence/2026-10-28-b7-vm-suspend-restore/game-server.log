@@ -1,0 +1,499 @@
+
+running 73 tests
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_lifecycle_http_tests::real_http_route_lists_and_disables_package ... ok
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_lifecycle_http_tests::http_handlers_wire_import_disable_uninstall_to_store ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test lobby::tests::finished_saved_room_is_not_published_and_its_id_remains_reserved ... ok
+test native_ws_e2e::commit_crash::native_ws_commit_crash_child ... ok
+
+running 1 test
+
+running 1 test
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+
+running 1 test
+test native_ws_e2e::durability::native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe ... ok
+
+running 1 test
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test native_ws_e2e::commit_crash::native_vm_frozen_room_recovers_after_process_exit_and_uninstall ... ok
+
+running 1 test
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+
+running 1 test
+test native_ws_e2e::native_ws_replay_without_receipt_is_rejected ... ok
+test net_smoke::health_over_real_tcp ... ok
+test net_smoke::second_bootstrap_on_same_store_is_rejected_and_releases_after_drop ... ok
+test net_smoke::second_process_is_rejected_and_abnormal_exit_releases_lock ... ok
+test net_smoke::store_writer_lock_child ... ok
+test net_smoke::websocket_creates_joins_and_submits_over_wire ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test net_smoke::websocket_multi_room_isolation ... ok
+test net_smoke::websocket_reconnect_restores_seat_and_revision ... ok
+test net_smoke::websocket_submit_before_match_start_returns_error ... ok
+test native_ws_e2e::commit_crash::native_extensions_ws_process_exit_after_rename_uses_previous_confirmation ... ok
+test outbox::tests::dedup_prevents_double_delivery ... ok
+test outbox::tests::drain_delivered_clears_history ... ok
+test outbox::tests::enqueue_and_deliver ... ok
+test outbox::tests::failed_message_stays_pending ... ok
+test outbox::tests::multiple_matches_isolated ... ok
+test net_smoke::websocket_welcome_and_error_roundtrip ... ok
+test outbox::tests::ordering_preserved ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test room_native_actor::replay_tests::replay_without_receipt_is_rejected_not_executed ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test tests::etag_matching_accepts_lists_and_weak_validators ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_ws_e2e::durability::native_extensions_ws_uncertain_initial_save_is_not_restored_as_a_room ... ok
+
+running 1 test
+test net_smoke::websocket_plays_match_to_completion ... ok
+test native_ws_e2e::commit_crash::native_extensions_ws_process_exit_after_double_failure_replays_committed_receipt ... ok
+test native_ws_e2e::native_extensions_ws_fails_closed_for_invalid_frozen_content ... ok
+test native_ws_e2e::durability::native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps ... ok
+test native_ws_e2e::double_failure::native_extensions_ws_double_initial_failure_restores_only_committed_creation ... ok
+test native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands ... ok
+test native_ws_e2e::native_extensions_ws_reconnects_after_disk_restart ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+test native_ws_e2e::durability::native_extensions_ws_restart_after_uncertain_rename_restores_only_confirmed_choice ... ok
+test native_ws_e2e::durability::native_extensions_ws_write_failure_retries_and_restarts ... ok
+test native_ws_e2e::double_failure::native_extensions_ws_double_failure_fences_writes_and_recovers_by_decision ... ok
+
+test result: ok. 73 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 35.01s
+
+
+running 11 tests
+test wal_write_failure_recovers_to_empty ... ok
+test content_package_missing_falls_back ... ok
+test snapshot_corruption_detected ... ok
+test snapshot_manifest_hash_tamper_rejected ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test snapshot_truncated_bytes_clean_error ... ok
+test duplicate_command_idempotent ... ok
+test wal_truncation_recovers_to_last_durable ... ok
+test wal_corruption_hash_mismatch_detected ... ok
+test node_restart_full_wal_replay ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test bot_runs_matches_to_completion ... ok
+test bot_drives_matches_long_run ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.03s
+
+
+running 5 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test thirty_consecutive_matches_do_not_leak_heap ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.36s
+
+
+running 5 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test soak_8_rooms_25_rounds ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.74s
+
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test rolling_upgrade_keeps_matches_on_their_pinned_content ... ok
+test different_content_locks_do_not_collide ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+
+running 7 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test room_mailbox_is_bounded ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test rooms_with_different_seeds_are_isolated ... ok
+test stress_10_concurrent_rooms ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+
+running 7 tests
+test room_packages_are_exact_ordered_and_do_not_fallback_to_active_packages ... ok
+test freezing_installed_assets_rejects_symlinks_outside_package_root ... ok
+test frozen_copy_rejects_tampering_missing_extra_assets_and_invalid_manifest ... ok
+test frozen_vm_and_binary_assets_restore_without_sources_or_installed_versions ... ok
+test frozen_copies_obey_current_hash_and_slot_revocations ... ok
+test legacy_exact_reference_migrates_disabled_old_version_and_upgrade_leaves_original_copy ... ok
+test vm_character_survives_upgrade_rollback_and_uninstall_via_frozen_copy ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 1 test
+test onlyol_requires_abi758_and_native_rejects_until_supported ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 10 tests
+test t63_load_unknown_package_errors_cleanly ... ok
+test t8_native_disk_path_vm_package_end_to_end ... ok
+test t63_standard_only_build_and_drive ... ok
+test vm_package_with_characters_installs_loads_and_runs ... ok
+test native_character_only_installed_package_enters_match ... ok
+test native_pile_only_installed_package_adds_physical_draw_cards ... ok
+test t13_generals_package_loads_via_native_path ... ok
+test t63_import_load_build_and_drive_with_extension ... ok
+test native_installed_asset_tampering_rejects_load_and_restore ... ok
+test t13_installed_extension_enters_match_and_restores ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+
+running 4 tests
+test disable_then_enable_keeps_installed_copy ... ok
+test physical_uninstall_removes_active_slot_and_versions ... ok
+test content_lock_rejects_restoring_after_package_upgrade ... ok
+test activate_new_version_then_rollback ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 7 tests
+test nc02_corrupt_installed_copy_fails_clearly ... ok
+test nc02_loads_installed_copy_after_source_removed ... ok
+test nc02_source_mutation_does_not_change_execution_content ... ok
+test nc02_mixed_package_keeps_cards_and_vm_skills ... ok
+test nc02_repeated_loads_are_stable ... ok
+test nc02_upgrade_does_not_rewrite_pinned_lock ... ok
+test nc02_same_id_different_namespace_requires_explicit_selection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+
+running 2 tests
+test nc05_campaign_profile_rejects_wrong_content ... ok
+test nc05_campaign_profile_lifecycle ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+
+running 1 test
+test nc05_heavy_rules_lifecycle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+
+running 2 tests
+test nc05_skin_with_rules_pack_coexists ... ok
+test nc05_skin_ui_asset_separation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+
+running 1 test
+test nc08_command_by_command_first_divergence_is_registered ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 2 tests
+test nc08_cross_line_identity_start_alignment ... ok
+test nc08_cross_line_divergence_report ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 2 tests
+test symlinked_package_dir_is_rejected_explicitly ... ok
+test install_matrix_over_package_dirs ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+
+running 45 tests
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test room_native_actor::replay_tests::replay_without_receipt_is_rejected_not_executed ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test nc09_native_backend_recover_matches_live_state ... ok
+test nc09_native_backend_enforces_room_password ... ok
+test nc09_native_backend_rejects_illegal_command ... ok
+test nc09_native_backend_replies_carry_actions_and_fanout ... ok
+test nc09_native_backend_startgame_is_confirmation_only ... ok
+test nc09_native_backend_session_semantics ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test nc09_native_rooms_are_isolated_and_mailbox_bounded ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.77s
+
+
+running 44 tests
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test room_native_actor::replay_tests::replay_without_receipt_is_rejected_not_executed ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test native_command_outcome_carries_public_event_codes ... ok
+test nc09_backend_selection_is_explicit ... ok
+test nc09_native_actor_join_command_snapshot ... ok
+test slow_observer_queue_full_does_not_block_room_actor ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test nc09_configured_actor_keeps_password_packages_general_and_seat_ownership ... ok
+test nc09_actor_reclaims_idle_seat_lazily ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.12s
+
+
+running 45 tests
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test nc09_configured_creation_rejects_failed_initial_save ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test room_native_actor::replay_tests::replay_without_receipt_is_rejected_not_executed ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test nc09_general_failure_does_not_publish_or_replace_recovery_point ... ok
+test nc09_write_failure_does_not_ack_or_advance_and_same_key_can_retry ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test nc09_failed_recover_keeps_confirmed_dedup_and_successful_recover_can_continue ... ok
+test nc09_membership_failures_preserve_seats_tokens_and_reconnect_authority ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test nc09_all_write_stages_rollback_and_uncertain_commit_blocks_until_reconciled ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test nc09_failed_lazy_reclaim_keeps_original_seat_and_token ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.08s
+
+
+running 53 tests
+test native_room_store::journal::tests::valid_checksum_does_not_bypass_version_identity_or_previous_validation ... ok
+test native_room_store::lock::tests::empty_lock_content_does_not_block_reacquire ... ok
+test native_room_store::lock::tests::different_directories_are_independent ... ok
+test native_room_store::lock::tests::lock_file_is_not_a_room_record ... ok
+test native_room_store::lock::tests::second_writer_is_rejected_until_first_is_dropped ... ok
+test native_room_store::commit_tests::symlink_journal_is_not_a_recovery_authority_and_cleanup_is_idempotent ... ok
+test native_room_store::tests::filename_binding_rejects_record_from_other_room ... ok
+test native_room_store::commit_tests::removing_journal_before_terminal_body_never_exposes_its_previous_game ... ok
+test native_room_store::commit_tests::prepared_recovery_is_read_only_and_accepts_neither_candidate_nor_corruption ... ok
+test native_room_store::commit_tests::legacy_without_journal_migrates_and_pending_migration_recovers_original_bytes ... ok
+test native_room_store::commit_tests::replacing_a_double_fault_plan_with_a_single_fault_does_not_leak_compensation ... ok
+test native_room_store::tests::maximum_id_is_reserved_and_zero_id_is_never_written ... ok
+test native_room_store::tests::invalid_checksum_and_non_file_records_are_isolated_without_deletion ... ok
+test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... ok
+test native_room_store::commit_tests::stale_prepared_journal_cannot_rewind_a_later_committed_generation ... ok
+test nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions ... ok
+test nc09_join_reply_restores_pending_choice_for_its_observer_only ... ok
+test native_room_store::tests::noncanonical_duplicate_id_does_not_silently_override_valid_record ... ok
+test nc09_legacy_state_checksum_survives_optional_frozen_package_field ... ok
+test nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_written ... ok
+test native_room_store::tests::nested_new_directory_and_real_directory_creation_failure ... ok
+test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... ok
+test native_room_store::commit_tests::missing_or_malformed_journal_cannot_downgrade_new_records_to_legacy ... ok
+test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... ok
+test native_room_store::tests::post_replace_failure_restarts_from_confirmed_record_without_repair ... ok
+test nc09_room_store_hashes_password_and_verifies_checksum ... ok
+test nc09_room_store_is_removed_on_match_end ... ok
+test native_room_store::commit_tests::committed_record_must_match_every_byte_and_cannot_fall_back_if_missing ... ok
+test native_room_store::tests::pre_replace_faults_preserve_committed_bytes_and_clean_only_own_temp ... ok
+test native_room_store::commit_tests::first_rename_and_decision_failures_preserve_proven_absence ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test room_native::receipts::tests::accepted_receipt_survives_restore_and_rebinding_without_executing_again ... ok
+test room_native::receipts::tests::malformed_receipts_fail_restore_and_old_empty_state_keeps_its_json_shape ... ok
+test room_native::receipts::tests::receipts_are_bounded_and_keep_newest_revisions ... ok
+test room_native::receipts::tests::restore_prunes_receipts_above_cap ... ok
+test room_native::receipts::tests::rollback_drops_candidate_receipt_and_reclaimed_seat_does_not_inherit_it ... ok
+test room_native_actor::replay_tests::replay_without_receipt_is_rejected_not_executed ... ok
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test native_room_store::commit_tests::every_journal_fault_keeps_the_confirmed_record_across_two_restarts ... ok
+test nc09_room_join_and_projections ... ok
+test nc09_room_snapshot_matches_engine ... ok
+test nc09_room_choose_general_is_room_level ... ok
+test nc09_room_reconnect_keeps_seat ... ok
+test nc09_room_commands_and_rejections ... ok
+test nc09_room_spectator_is_public_only ... ok
+test nc09_session_export_and_restore_roundtrip ... ok
+test nc09_room_store_roundtrip_and_restore ... ok
+test native_room_store::commit_tests::consecutive_failures_never_overwrite_the_only_undo_authority ... ok
+test nc09_room_wal_replay_recovers_identically ... ok
+test native_room_store::commit_tests::double_faults_preserve_the_actual_decision_for_read_only_restart ... ok
+test native_room_store::tests::multi_room_save_and_load_cost_is_measured_and_bounded ... ok
+
+test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.89s
+
+
+running 5 tests
+test nc09_bridge_maps_skill_view_from_instances ... ok
+test nc09_bridge_maps_character_identity_cards_and_outcome ... ok
+test nc09_bridge_out_of_range_seat_is_empty ... ok
+test nc09_bridge_hides_hand_contents ... ok
+test nc09_bridge_legal_actions_are_authoritative ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+
+running 6 tests
+test session::tests::closed_writer_reports_closed_without_slow_mark ... ok
+test session::tests::full_queue_marks_slow_instead_of_waiting ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test phase15_manifest_pinned_and_recovery_preserves_it ... ok
+test two_players_start_and_idempotent_command ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 10 tests
+test empty_wal_produces_zero_root ... ok
+test block_chain_tamper_detected ... ok
+test entry_tamper_breaks_block_hash ... ok
+test persist::tests::wal_manifest_mismatch_is_rejected ... ok
+test block_chain_hashes_verify ... ok
+test block_hashes_are_deterministic ... ok
+test block_signatures_verify ... ok
+test persist::tests::wal_and_snapshot_recover_preserves_manifest ... ok
+test independent_verifier_attestation ... ok
+test result_record_carries_root_and_outcome ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

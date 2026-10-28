@@ -695,10 +695,32 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 }
                 _ => return Err(ArchiveError::BadTag("Rvm.paused", 255)),
             };
+            // B7（规则 v324）：技能身份/触发语境/限次/命中旗标（尾部追加；
+            // v324 前的旧档在此读完即止 → UnexpectedEof，不能可靠恢复）。
+            let skill_name_bytes = r.bytes()?;
+            let skill_name = std::str::from_utf8(skill_name_bytes)
+                .map_err(|_| ArchiveError::BadTag("Rvm.skill_name", 0))?
+                .to_string();
+            let event = dec_event_data(r)?;
+            let n_consume = r.u32()? as usize;
+            let mut consume = Vec::with_capacity(n_consume.min(1024));
+            for _ in 0..n_consume {
+                let key_bytes = r.bytes()?;
+                let key = std::str::from_utf8(key_bytes)
+                    .map_err(|_| ArchiveError::BadTag("Rvm.consume_key", 0))?
+                    .to_string();
+                let scope = r.u8()?;
+                consume.push((key, scope));
+            }
+            let count_hits = r.boolean()?;
             MachineSnapshot::Rvm {
                 owner,
                 module,
                 paused,
+                skill_name,
+                event,
+                consume,
+                count_hits,
             }
         }
         64 => {

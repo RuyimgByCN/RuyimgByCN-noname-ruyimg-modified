@@ -123,7 +123,13 @@ use crate::snap::{
 /// v61：E03 翻面原语——PlayerState 朝向状态（face_down）与
 /// TurnOverBefore/TurnOvered 事件对；欢乐卡牌【漩涡面具】（装备者武将牌
 /// 不能被翻面，TurnOverBefore 强制取消）。
-pub const STANDARD_RULESET_VERSION: u64 = 323;
+/// v324：B7——rule-vm 挂起机快照补齐声明技能名、触发事件原文、限次
+/// 清单与命中计数旗标（归档尾部追加并进入规范摘要）。此前恢复从模块
+/// 名重建技能名并把触发语境/限次/命中重置为默认，续行的 STORAGE_SET
+/// 与 once/hits 键、故障身份偏离未中断执行。旧（v323 及更早）存档按
+/// 版本策略拒绝：普通档 RuleVersionMismatch；含旧格式 Rvm 机的档在
+/// 解码期即失败（不能可靠恢复）。存档格式 v105 与全局原生 ABI 不变。
+pub const STANDARD_RULESET_VERSION: u64 = 324;
 
 mod names;
 pub use names::*;

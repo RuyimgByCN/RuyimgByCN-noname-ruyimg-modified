@@ -1,0 +1,19 @@
+test b7_suspended_vm_v323_archive_is_rejected ... ok
+test b7_plain_v323_archive_is_rejected_by_rule_version ... ok
+test nc04_vm_restore_preserves_hit_counting ... ok
+test nc04_pause_resume_completes ... ok
+test nc04_vm_restore_preserves_once_consume ... ok
+test nc04_vm_restore_uses_declared_skill_for_storage ... ok
+test nc04_invalid_vm_answers_preserve_retry_across_archive ... ok
+test nc04_fault_after_resume_rolls_back ... ok
+test nc04_vm_fault_after_archive_restores_choice_and_allows_retry ... ok
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+# 变异验证（2026-10-28）
+临时把 restore_paused 退回 v323 缺陷行为（技能名从模块名重建、consume/count_hits 重置），
+仅此一处的变异使四个身份回归全部失败，失败形态与 B7 反例一致：
+- nc04_vm_restore_uses_declared_skill_for_storage: left={"nc04_storage_skill#7":11} right={"nc04-storage-module#7":11,"nc04_storage_skill#7":11}
+- nc04_vm_restore_preserves_once_consume: left=[] right=[(1,"nc04_once_skill",2)]
+- nc04_vm_restore_preserves_hit_counting: left=None right=Some(1)
+- nc04_vm_fault_after_archive_restores_choice_and_allows_retry: left="nc04-restored-fault"
+其余 5 测（含旧档拒绝两项）不受该变异影响。修复代码还原后 9/9 通过（上方日志）。

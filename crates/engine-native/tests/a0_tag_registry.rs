@@ -196,6 +196,14 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
                 owner: 0,
                 module: Vec::new(),
                 paused: None,
+                skill_name: "a0_rvm".to_string(),
+                event: engine_native::EventData::Phase {
+                    player: 0,
+                    phase: engine_native::Phase::End,
+                    begin: true,
+                },
+                consume: Vec::new(),
+                count_hits: false,
             },
         ),
     ]

@@ -348,8 +348,9 @@ fn nc04_vm_fault_after_archive_restores_choice_and_allows_retry() {
             });
             match out {
                 CommandOutcome::Rejected(RejectReason::VmFault { skill, detail }) => {
-                    // shortcut: restored skill identity differs; require equality after snapshot repair.
-                    assert!(!skill.is_empty());
+                    // B7 已修：恢复后的故障身份与原局逐字一致（声明技能名
+                    // 入快照，不再从模块名 nc04-restored-fault 重建）。
+                    assert_eq!(skill, "nc04_restored_fault");
                     assert!(detail.contains("Host") || detail.contains("host"), "{detail}");
                 }
                 other => panic!("续跑应报告 VM 故障: {other:?}"),
@@ -362,4 +363,256 @@ fn nc04_vm_fault_after_archive_restores_choice_and_allows_retry() {
         }
     }
     assert_eq!(original.state_hash(), restored.state_hash());
+}
+
+// ---------------------------------------------------------------------------
+// B7（规则 v324）：VM 挂起恢复的技能身份/触发语境/限次/命中一致性。
+// GT-011：HOST_CHOICE 后编码、跨恢复再执行 STORAGE_SET/once/hits，上述
+// 字段与未中断执行一致；旧档按版本策略拒绝。
+// ---------------------------------------------------------------------------
+
+use engine_native::event::DamageNature;
+use std::sync::Arc;
+
+/// HOST_CHOICE 后 STORAGE_SET(key=7, value=11)。
+fn choice_then_storage() -> Vec<u8> {
+    let mut c = vec![op::CONST_U32];
+    c.extend_from_slice(&0u32.to_le_bytes());
+    c.push(op::CONST_U32);
+    c.extend_from_slice(&1u32.to_le_bytes());
+    c.push(op::HOST_CHOICE);
+    c.push(2);
+    c.push(op::CONST_U32);
+    c.extend_from_slice(&0u32.to_le_bytes());
+    c.push(op::CONST_U32);
+    c.extend_from_slice(&7u32.to_le_bytes());
+    c.push(op::CONST_U32);
+    c.extend_from_slice(&11u32.to_le_bytes());
+    c.push(op::HOST_EFFECT_EXT);
+    c.extend_from_slice(&649u16.to_le_bytes());
+    c.push(op::HALT);
+    c
+}
+
+/// B7 反例回归：恢复后续跑的 STORAGE_SET 以**声明技能名**为键。
+/// 缺陷态（v323）：恢复局额外写出 `{模块名#7: 11}`——快照只带模块字节，
+/// 技能名从模块名重建。
+#[test]
+fn nc04_vm_restore_uses_declared_skill_for_storage() {
+    let pack = pack("nc04-storage-module", choice_then_storage(), "nc04_storage_skill");
+    let mut original = Engine::new_with_extensions(20261045, 4, &[&pack]).unwrap();
+    original.debug_grant(1, "nc04_storage_skill");
+    let choice = pending_vm_choice(&mut original);
+    let snapshot = engine_native::archive::decode_archive(
+        &engine_native::archive::encode_archive(&original.save()),
+    ).unwrap();
+    let mut restored = Engine::restore_with_extensions(&snapshot, &[&pack]).unwrap();
+    let dedup = next_dedup();
+    for e in [&mut original, &mut restored] {
+        let out = e.submit(GameCommand {
+            actor: choice.observer,
+            expected_revision: e.revision(),
+            dedup_id: dedup,
+            action: GameAction::Answer {
+                choice_id: choice.id,
+                selection: vec![engine_native::ChoiceOption::Tag(1)],
+            },
+        });
+        assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    }
+    // 存储键 = 声明技能名（非模块名 nc04-storage-module），且双局逐字一致。
+    assert_eq!(
+        original.save().core.vm_aux.storage,
+        restored.save().core.vm_aux.storage,
+    );
+    assert_eq!(
+        restored.save().core.vm_aux.storage.keys().collect::<Vec<_>>(),
+        vec!["nc04_storage_skill#7"],
+    );
+    // 完整轨迹：核心状态、结算快照与哈希一致。
+    assert_eq!(original.state_hash(), restored.state_hash());
+    assert_eq!(original.save().core, restored.save().core);
+    assert_eq!(original.save().resolution, restored.save().resolution);
+}
+
+/// B7 反例回归：挂起恢复后续跑的限次消费不丢失。
+/// `owner_alive_once_per_round` 携带 consume=[(空键, 2)]——Halted 时写
+/// once[(owner, 技能名, 2)]。缺陷态（v323）：恢复机 consume 被重置，
+/// once 不落账。
+#[test]
+fn nc04_vm_restore_preserves_once_consume() {
+    let policy = engine_native::rvm_bridge::VmFilterPolicy::Named(Arc::new(
+        engine_native::rvm_named::compile_named("owner_alive_once_per_round").expect("滤名编译"),
+    ));
+    let decl = VmSkillDecl {
+        name: "nc04_once_skill".to_string(),
+        module: module("nc04-once-module", choice_then_halt()),
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::PhaseEnd,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: policy,
+    };
+    let pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc04-once-module".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc04".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut original = Engine::new_with_extensions(20261047, 4, &[&pack]).unwrap();
+    // 先推进到 1 号弃牌阶段再授技——否则此前各阶段尾就会首次触发并被
+    // drain 代答消耗限次（once_per_round 全场只此一次）。
+    for _ in 0..40 {
+        if original.turn().current == 1 && original.turn().phase == engine_native::Phase::Discard {
+            break;
+        }
+        let actor = original.turn().current;
+        let _ = original.submit(GameCommand {
+            actor,
+            expected_revision: original.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut original);
+    }
+    original.debug_grant(1, "nc04_once_skill");
+    let choice = pending_vm_choice(&mut original);
+    let snapshot = engine_native::archive::decode_archive(
+        &engine_native::archive::encode_archive(&original.save()),
+    ).unwrap();
+    let mut restored = Engine::restore_with_extensions(&snapshot, &[&pack]).unwrap();
+    let dedup = next_dedup();
+    for e in [&mut original, &mut restored] {
+        let out = e.submit(GameCommand {
+            actor: choice.observer,
+            expected_revision: e.revision(),
+            dedup_id: dedup,
+            action: GameAction::Answer {
+                choice_id: choice.id,
+                selection: vec![engine_native::ChoiceOption::Tag(0)],
+            },
+        });
+        assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    }
+    // once 落账且以声明技能名为键，双局一致。
+    let expected_once = vec![(
+        1u8,
+        "nc04_once_skill".to_string(),
+        2u8,
+    )];
+    let collect = |e: &Engine| -> Vec<(u8, String, u8)> {
+        e.save()
+            .core
+            .vm_aux
+            .once
+            .iter()
+            .map(|(p, k, s)| (*p, k.clone(), *s))
+            .collect()
+    };
+    assert_eq!(collect(&original), expected_once, "原局限次落账");
+    assert_eq!(collect(&restored), expected_once, "恢复局限次落账不丢失");
+    assert_eq!(original.state_hash(), restored.state_hash());
+}
+
+/// B7 反例回归：伤害触发的命中计数跨恢复保留。
+/// `owner_alive_first` 携带 count_hits=true——kind==1（伤害）Halted 时
+/// hits[(owner, 技能名)] += 1。缺陷态（v323）：恢复机旗标被重置，命中
+/// 不计数。
+#[test]
+fn nc04_vm_restore_preserves_hit_counting() {
+    let policy = engine_native::rvm_bridge::VmFilterPolicy::Named(Arc::new(
+        engine_native::rvm_named::compile_named("owner_alive_first").expect("滤名编译"),
+    ));
+    let decl = VmSkillDecl {
+        name: "nc04_hits_skill".to_string(),
+        module: module("nc04-hits-module", choice_then_halt()),
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::Damage,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: policy,
+    };
+    let pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc04-hits-module".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc04".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut original = Engine::new_with_extensions(20261048, 4, &[&pack]).unwrap();
+    original.debug_grant(1, "nc04_hits_skill");
+    // 伤害触发 → VM 挂起于 HOST_CHOICE。
+    let _ = original.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    let choice = original
+        .open_choice()
+        .cloned()
+        .filter(|c| c.spec.prompt == "rvm_choice")
+        .expect("伤害触发后 VM 应挂起");
+    let snapshot = engine_native::archive::decode_archive(
+        &engine_native::archive::encode_archive(&original.save()),
+    ).unwrap();
+    let mut restored = Engine::restore_with_extensions(&snapshot, &[&pack]).unwrap();
+    let dedup = next_dedup();
+    for e in [&mut original, &mut restored] {
+        let out = e.submit(GameCommand {
+            actor: choice.observer,
+            expected_revision: e.revision(),
+            dedup_id: dedup,
+            action: GameAction::Answer {
+                choice_id: choice.id,
+                selection: vec![engine_native::ChoiceOption::Tag(0)],
+            },
+        });
+        assert!(matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }), "{out:?}");
+    }
+    let hits = |e: &Engine| e.save().core.vm_aux.hits.clone();
+    assert_eq!(hits(&original).get(&(1, "nc04_hits_skill".to_string())), Some(&1), "原局命中计数");
+    assert_eq!(hits(&restored).get(&(1, "nc04_hits_skill".to_string())), Some(&1), "恢复局命中计数保留");
+    assert_eq!(original.state_hash(), restored.state_hash());
+}
+
+/// 旧档拒绝（版本策略）：v323 普通档解码成功但按规则版本拒绝恢复。
+#[test]
+fn b7_plain_v323_archive_is_rejected_by_rule_version() {
+    let old = include_bytes!(
+        "../../../docs/operations/evidence/2026-10-28-b7-vm-suspend-restore/native-v323.ngsa"
+    );
+    let snapshot = engine_native::archive::decode_archive(old).unwrap();
+    assert_eq!(snapshot.ruleset_version, 323);
+    assert!(matches!(
+        Engine::restore(&snapshot),
+        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 324 })
+    ));
+}
+
+/// 旧档拒绝（不可靠恢复）：v323 含挂起 VM 机的档用旧 Rvm 编码，新解码
+/// 器无法读出技能身份字段——解码即失败，不存在半恢复。
+#[test]
+fn b7_suspended_vm_v323_archive_is_rejected() {
+    let old = include_bytes!(
+        "../../../docs/operations/evidence/2026-10-28-b7-vm-suspend-restore/vm-suspended-v323.ngsa"
+    );
+    assert!(
+        engine_native::archive::decode_archive(old).is_err(),
+        "旧格式挂起 VM 档不能解码（B7 前的 Rvm 编码不含技能身份字段）"
+    );
 }

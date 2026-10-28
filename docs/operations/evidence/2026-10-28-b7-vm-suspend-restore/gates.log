@@ -1,0 +1,19 @@
+Ran 1 test in 0.004s
+
+OK
+=== source-lines ===
+Source line limit passed: 8651 files <= 2000 lines
+=== local-links ===
+检查 1862 个文件，坏链 0
+=== adr-index ===
+- 标题错号 0
+- 未登记冲突 0，过时登记 0，登记内容不符 0，索引坏链 0
+检查结果：通过
+=== wasm 产品链路（2026-10-28，从本批源码重建）===
+pnpm --dir apps/web-client build:native   exit 0
+pnpm --dir apps/web-client typecheck      exit 0（0 错）
+pnpm --dir apps/web-client smoke:native   exit 0（total=62 failed=0，见 smoke-native.log）
+engine-native-wasm cargo test             66/0/0（16 二进制，见 wasm.log）
+=== 复跑（文档回填后）===
+检查 1862 个文件，坏链 0
+检查结果：通过

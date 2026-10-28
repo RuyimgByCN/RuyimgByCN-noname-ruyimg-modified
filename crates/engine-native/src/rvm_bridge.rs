@@ -717,6 +717,7 @@ impl SkillBehavior for VmSkillBehavior {
             owner,
             program: self.program.clone(),
             trig: trigger_ctx_of(event),
+            event: event.clone(),
             pending_effects: Vec::new(),
             paused: None,
             asked: false,
@@ -736,12 +737,15 @@ pub struct VmPaused {
 
 /// VM 技能机器：可挂起（HOST_CHOICE）——挂起期间排队效果保留（原型
 /// 同款「Paused 层保留至续跑后落账」），存档快照携带模块字节+挂起态+
-/// 排队效果（增量 2）。
+/// 排队效果（增量 2）；B7（规则 v324）起另携带声明技能名、触发事件
+/// 原文、限次清单与命中旗标，恢复不再从模块名重建或重置这些字段。
 #[derive(Debug, Clone)]
 pub struct VmMachine {
     owner: PlayerId,
     program: Arc<VmSkillProgram>,
     trig: VmTriggerCtx,
+    /// 触发事件原文（快照载体：恢复时经 `trigger_ctx_of` 重派生 trig）。
+    event: EventData,
     /// 排队未落账效果（Halted 提交 / Paused 保留 / Err 丢弃）。
     pending_effects: Vec<EffectRequest>,
     /// 挂起态（含已捕获 continuation 与选项）。
@@ -749,7 +753,7 @@ pub struct VmMachine {
     /// 挂起询问已答（下一步续跑）。
     asked: bool,
     settled: bool,
-    /// Halted 时写入 once。挂起恢复后续跑不再次消费（登记差异：清单不入快照）。
+    /// Halted 时写入 once（快照携带：挂起恢复后续跑不丢限次消费）。
     consume: Vec<(String, u8)>,
     count_hits: bool,
 }
@@ -803,24 +807,39 @@ impl VmMachine {
     /// 存档重建（非挂起态）：从模块载体字节还原（快照点不会停在
     /// start→step 中段——此态重建后即待触发执行）。PA06：装载期
     /// 校验——恢复载体畸形即拒（等价于原执行期校验的前移）。
-    pub(crate) fn from_module(owner: PlayerId, module: BytecodeModule) -> Result<Self, ()> {
-        let skill_name = module.name.clone();
+    /// B7（规则 v324）：技能身份/触发语境/限次/命中旗标从快照还原，
+    /// 不再从模块名重建或重置。
+    pub(crate) fn from_module(
+        owner: PlayerId,
+        module: BytecodeModule,
+        skill_name: String,
+        event: EventData,
+        consume: Vec<(String, u8)>,
+        count_hits: bool,
+    ) -> Result<Self, ()> {
+        if skill_name.is_empty() {
+            return Err(());
+        }
         let program = VmSkillProgram::new(module, skill_name).map_err(|_| ())?;
         Ok(Self {
             owner,
             program: Arc::new(program),
-            trig: VmTriggerCtx::default(),
+            trig: trigger_ctx_of(&event),
+            event,
             pending_effects: Vec::new(),
             paused: None,
             asked: false,
             settled: false,
-            consume: Vec::new(),
-            count_hits: false,
+            consume,
+            count_hits,
         })
     }
 
     /// 存档重建（挂起态）：continuation + 选项 + 排队效果还原；内容锁
     /// 核对（continuation 绑定模块 logic_hash，换模块续跑被拒）。
+    /// B7（规则 v324）：声明技能名、触发事件、限次清单与命中旗标一并
+    /// 从快照还原——此前技能名取模块名、触发语境重置为默认，续行的
+    /// STORAGE_SET/once/hits 键与故障身份偏离未中断执行。
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn restore_paused(
         owner: PlayerId,
@@ -832,17 +851,24 @@ impl VmMachine {
         module_hash: [u8; 32],
         options: Vec<u32>,
         pending_bytes: Vec<u8>,
+        skill_name: String,
+        event: EventData,
+        consume: Vec<(String, u8)>,
+        count_hits: bool,
     ) -> Result<Self, ()> {
         if module.logic_hash != module_hash {
             return Err(());
         }
+        if skill_name.is_empty() {
+            return Err(());
+        }
         let pending = dec_effects(&pending_bytes).ok_or(())?;
-        let skill_name = module.name.clone();
         let program = VmSkillProgram::new(module, skill_name).map_err(|_| ())?;
         Ok(Self {
             owner,
             program: Arc::new(program),
-            trig: VmTriggerCtx::default(),
+            trig: trigger_ctx_of(&event),
+            event,
             pending_effects: pending,
             paused: Some(VmPaused {
                 continuation: Continuation {
@@ -858,8 +884,8 @@ impl VmMachine {
             // 应答即续跑，不重问。
             asked: true,
             settled: false,
-            consume: Vec::new(),
-            count_hits: false,
+            consume,
+            count_hits,
         })
     }
 }
@@ -894,6 +920,10 @@ impl SkillMachine for VmMachine {
                     b
                 },
             }),
+            skill_name: self.program.skill_name.clone(),
+            event: self.event.clone(),
+            consume: self.consume.clone(),
+            count_hits: self.count_hits,
         }
     }
 

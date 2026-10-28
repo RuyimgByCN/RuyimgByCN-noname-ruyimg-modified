@@ -5,12 +5,13 @@
 > ## ⚠ **当前版本（2026-10-27 PA12 B6）**
 >
 > 英逝与平寇的 VM 效果标签冲突修复：英逝保留 656，平寇改为 772（最低 ABI 758）；用户授权原生规则 **v322→v323**，存档格式保持 **v105**，全局原生 ABI 保持 **753**。v322 原生旧档按规则版本拒绝；旧线没有 ABI 记录且含 656 的快照拒绝恢复，新建英逝快照可恢复。标准 14 场不含该技能，v322 回退探针确认原 golden 全通过，v323 重录只反映版本入摘要。完整边界见[B6 证据](../operations/evidence/2026-10-27-pa12-tag656-fix/README.md)。
+> **B7（2026-10-28）VM 挂起恢复语义修正**：rule-vm 挂起机快照补齐声明技能名、触发事件原文、限次清单与命中计数旗标并纳入规范摘要——此前恢复从模块名重建技能名、触发语境/限次/命中重置为默认，续行的 STORAGE_SET/once/hits 键与故障身份偏离未中断执行。用户授权原生规则 **v323→v324**（裁决⑧，先于 NC07 炼妖壶批占用 v324），存档格式保持 **v105**、全局原生 ABI 保持 **753**。旧（v323 及更早）存档拒绝：普通档 `RuleVersionMismatch`；含旧格式 Rvm 机的档在解码期失败。标准 14 场无 VM 技能，版本回退探针 14 场全绿，v324 重录只反映版本入摘要。完整边界见[B7 证据](../operations/evidence/2026-10-28-b7-vm-suspend-restore/README.md)。
 > **2026-10-27 PA12 批⑤-2 调度登记**：PhaseBegin 帧新增 BeforeTriggers 起步阶段（前置窗只前移 VM 桥技能；宿主 PhaseBegin 技能保持入场行为之后的原执行点）。规则语义不变（规则 v322/存档 v105 未动）；engine-native `replay_scenarios` golden 3 处（shouyi_dynamic_skill/discard_to_limit/judge_phase_delayed_tricks）因**状态哈希域含帧栈 stage/planned**（engine/hash.rs:601-608）随调度结构重录——无 VM 场景行为等价（全量其余 1581 项全绿），变更注记同步写入测试。
 > `STANDARD_RULESET_VERSION = 323`（`crates/engine-native/src/content/standard.rs:126`）、
 > `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`）。
 > 下面「2026-10-10 复核」为**历史语境**；本次只审查上游差异，未升级规则或存档。
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v323 为最新**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v324 为最新**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 

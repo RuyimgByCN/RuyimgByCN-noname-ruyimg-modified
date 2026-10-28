@@ -1,0 +1,5 @@
+# cargo test --offline -p engine-native --no-fail-fast（2026-10-28，本批源码）
+# 完整日志 /tmp/b7-native-full.log（331 个测试二进制）
+binaries=331 passed=1617 failed=0 ignored=73
+# 基线（2026-10-28 11:30 扫描）为 1612/0/73；+5 = 本批 nc04_vm_resume 新增回归。
+# 无编译错误（error[ 计数 0）。

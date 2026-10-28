@@ -252,6 +252,10 @@ impl MachineSnapshot {
                 owner,
                 module,
                 paused,
+                skill_name,
+                event,
+                consume,
+                count_hits,
             } => {
                 let m = rule_vm::BytecodeModule::from_bytes(module)
                     .map_err(|_| SnapshotError::UnknownMachine)?;
@@ -266,11 +270,22 @@ impl MachineSnapshot {
                         p.module_hash,
                         std::mem::take(&mut p.options),
                         std::mem::take(&mut p.pending),
+                        skill_name.clone(),
+                        event.clone(),
+                        consume.clone(),
+                        *count_hits,
                     )
                     .map_err(|_| SnapshotError::UnknownMachine)?
                 } else {
-                    crate::rvm_bridge::VmMachine::from_module(*owner, m)
-                        .map_err(|_| SnapshotError::UnknownMachine)?
+                    crate::rvm_bridge::VmMachine::from_module(
+                        *owner,
+                        m,
+                        skill_name.clone(),
+                        event.clone(),
+                        consume.clone(),
+                        *count_hits,
+                    )
+                    .map_err(|_| SnapshotError::UnknownMachine)?
                 };
                 Ok(Box::new(machine))
             }

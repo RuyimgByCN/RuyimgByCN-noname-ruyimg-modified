@@ -887,6 +887,10 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
             owner,
             module,
             paused,
+            skill_name,
+            event,
+            consume,
+            count_hits,
         } => {
             push_u8(h, 82);
             push_u8(h, *owner);
@@ -910,6 +914,18 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
                 }
                 None => push_u8(h, 0),
             }
+            // B7（规则 v324）：技能身份/触发语境/限次/命中旗标入摘要——
+            // 此前两个仅声明技能名或限次清单不同的挂起机得到相同摘要。
+            push_u32(h, skill_name.len() as u32);
+            h.update(skill_name.as_bytes());
+            push_event_data(h, event);
+            push_u32(h, consume.len() as u32);
+            for (key, scope) in consume {
+                push_u32(h, key.len() as u32);
+                h.update(key.as_bytes());
+                push_u8(h, *scope);
+            }
+            push_u8(h, *count_hits as u8);
         }
         M::BossBuchun {
             owner,

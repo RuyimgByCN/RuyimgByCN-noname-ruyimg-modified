@@ -634,10 +634,21 @@ pub enum MachineSnapshot {
     /// T8 增量 2：rule-vm 技能机（数据驱动扩展包技能）。快照自包含：
     /// 模块载体字节（from_bytes 还原并验证）+ 挂起态（continuation/
     /// 选项/排队效果——排队效果保留至续跑后落账）。
+    /// B7（规则 v324）：声明技能名、触发事件原文、限次清单与命中计数
+    /// 旗标入快照——此前恢复从模块名重建技能名并把这些字段重置为默认，
+    /// 续行 STORAGE_SET/once/hits 的键与未中断执行不一致。
     Rvm {
         owner: PlayerId,
         module: Vec<u8>,
         paused: Option<RvmPaused>,
+        /// 声明技能名（目录 def 名；与模块名独立保存，恢复不再从模块名重建）。
+        skill_name: String,
+        /// 触发事件原文（恢复时经 `trigger_ctx_of` 重派生触发上下文）。
+        event: crate::event::EventData,
+        /// Halted 时写入 once 的 (键, 范围) 清单（空键表示用技能名）。
+        consume: Vec<(String, u8)>,
+        /// 命中计数旗标（伤害触发 Halted 时递增 `vm_aux.hits`）。
+        count_hits: bool,
     },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询

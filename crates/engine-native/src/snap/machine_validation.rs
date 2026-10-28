@@ -374,10 +374,23 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             owner,
             module,
             paused,
+            skill_name,
+            consume,
+            ..
         } => {
             check_pid(*owner, b)?;
             if rule_vm::BytecodeModule::from_bytes(module).is_err() {
                 return Err(SnapshotError::UnknownMachine);
+            }
+            // B7：技能身份字段不可空（空名档视为损坏拒绝）；scope 值域
+            // 为编译器词表产出的 1=turn/2=round/3=game，越界视为损坏。
+            if skill_name.is_empty() {
+                return Err(SnapshotError::UnknownMachine);
+            }
+            for (_key, scope) in consume {
+                if *scope > 3 {
+                    return Err(SnapshotError::UnknownMachine);
+                }
             }
             if let Some(p) = paused {
                 if p.module_hash

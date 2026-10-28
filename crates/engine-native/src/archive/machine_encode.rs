@@ -246,6 +246,10 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             owner,
             module,
             paused,
+            skill_name,
+            event,
+            consume,
+            count_hits,
         } => {
             w.u8(82);
             enc_pid(w, owner);
@@ -266,6 +270,16 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 }
                 None => w.u8(0),
             }
+            // B7（规则 v324）：技能身份/触发语境/限次/命中旗标（尾部追加——
+            // 旧格式存档在此读完即止，新解码器读到 EOF 拒绝）。
+            w.bytes(skill_name.as_bytes());
+            enc_event_data(w, event);
+            w.u32(consume.len() as u32);
+            for (key, scope) in consume {
+                w.bytes(key.as_bytes());
+                w.u8(*scope);
+            }
+            w.boolean(*count_hits);
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);
