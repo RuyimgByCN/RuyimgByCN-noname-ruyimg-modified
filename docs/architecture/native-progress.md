@@ -65,7 +65,7 @@
 | 8 / P2 / NC08、NC12 | 跨目标规则一致验收 | **标准 1 人局 40 命令 + 正式安装包 `huanle-cards` 20 命令真实 native/WASM 逐步轨迹与中途恢复已对照通过（2026-10-24）**：[证据](../operations/evidence/2026-10-24-native-wasm-cross-target/README.md)。四/八座 80 步含选将、私有选择及挂起恢复的跨目标样本已通过（[证据](../operations/evidence/2026-10-27-nc08-multiseat-wasm/README.md)）；仍待多模式、上游差分、平台与 37 来源扩面；[依据](../operations/evidence/2026-10-24-architecture-doc-audit/README.md#a8) |
 | 9 / P1 / UP37 | R01–R10 规则差异、N01–N07 新内容 | **2026-10-26 用户裁决冻结旧线新增规则**：R02、R04–R10、N02–N07 及以后的上游内容直接进原生（优先 DSL→rule-vm 包，原生缺的 ABI/事件先补原生），不再先进旧线。已在旧线完成的 N01、R01（[证据](../operations/evidence/2026-10-24-up37-r01-dichou/README.md)）与部分完成的 R03（[证据](../operations/evidence/2026-10-24-up37-r03-recast/README.md)）列入原生移植：N01 与 R01 谓词面已在 PA12 批⑤推进，胆守/平寇与 R01 选择状态机依赖 §2 J 与主动技桥，R03 未开批。其余 R/N 项仍未实现；[差异主账](native-rules-baseline.md#upstream-2026-10-24) |
 | 10 / P2 / NC12、NC10、NC09 | 性能架构调整 | 见[台帐 PA01–PA12](native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)。**已定向通过**：PA01、PA02、PA03、PA05、PA06（含旧线同步，B1）；**已关闭**：PA07（Chromium 固有两帧）；**PA08 基本完成**（真机未接入挂起）；**PA10 维持现状**；**已裁决**：PA11 条件暂缓、PA09 原型验收后切原生（原型未开始）、PA12 冻结旧线新增规则并迁移进行中（批⑤-4）。**下一步**：PA12 按迁移计划连续推进（已授权）；「效果级选择窗挂起 + 主动技桥」先做设计与 ADR 草案（已授权），具体协议改动实施前请示；原生 VM ABI 升到 758 属版本门禁，须请示；PA09 原型；PA08 真机接入后补测；PA04 随 NC06/NC07 |
-| 11 / P1 / NC04、NC07 | B7 挂起恢复语义差异；炼妖壶摘要 | **B7 已修复（2026-10-28，提交 `cfacaf1c`）**：Rvm 挂起快照补齐声明技能名、触发事件、限次清单与命中旗标并纳入摘要，规则 v323→v324，旧档拒绝；16:22 扫描复跑 engine-native 1618/0/73（[B7 证据](../operations/evidence/2026-10-28-b7-vm-suspend-restore/README.md)）。**NC07 炼妖壶未实施**（只有 11:10 的 v323 基线捕获）；v324 已被 B7 占用，实施前须向用户确认实际版本号；[台帐 B7](native-remaining-ledger.md#当前阻断2026-10-26-扫描按优先级) |
+| 11 / P1 / NC04、NC07 | B7 挂起恢复语义差异；炼妖壶摘要 | **B7 已修复（2026-10-28，提交 `cfacaf1c`）**：Rvm 挂起快照补齐声明技能名、触发事件、限次清单与命中旗标并纳入摘要，规则 v323→v324，旧档拒绝；16:22 扫描复跑 engine-native 1618/0/73（[B7 证据](../operations/evidence/2026-10-28-b7-vm-suspend-restore/README.md)）。**NC07 炼妖壶未实施**（只有 11:10 的 v323 基线捕获）；v324 已被 B7 占用，用户 2026-10-28 确认改用 v324→v325（[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)第 9 项）；[台帐 B7](native-remaining-ledger.md#当前阻断2026-10-26-扫描按优先级) |
 
 **PA12 B6（2026-10-28）**：英逝/平寇编号冲突已修，规则 v323；旧档拒绝与 ABI 758 包门禁已验证。原生宿主仍为 753，N01 整包未完成（[证据](../operations/evidence/2026-10-27-pa12-tag656-fix/README.md)）。
 
@@ -122,6 +122,8 @@
 **NC03／NC09 本地投影（2026-10-28，ZCode）**：本地 `view_json` 补观察者过滤的 `identity` 与可见牌面 `cards`（裁决⑥⑦），Worker 复用既有 SeatView/CardView 字段——身份不再恒 null、牌面不再全占位（此前 UI 的 `def != null` 渲染门导致本人手牌/全场装备/判定/弃牌不渲染）；Worker/WS 消息结构、规则与存档版本不变。WASM 身份矩阵/牌面键集/恢复隐私 2 测 + Worker 纯函数 2 测 + 真实 Worker smoke 2 检查 + 服务端 def 跨入口锚定；wasm 68/0、前端 116/0、smoke 64/0、game-server 360/0。服务端 suit/rank/公开区牌面与 kind 粒度收敛、产品渲染整体验收待办（[证据](../operations/evidence/2026-10-28-nc03-view-projection/README.md)）。
 
 **NC08／NC09 复核项取证（2026-10-28，ZCode）**：触发全序复核启动——反例探针实证原生确定性全序无排序询问（兼补 GT-002 锁面）并与上游 chooseControl 对照，A（维持+差分统计）/B（OpenChoice 玩家选序）两方案待裁决；选择窗超时方案骨架成稿（宿主计时+显式命令+复用去重，命令扩展须授权）。两项零语义/命令/版本变化（[证据](../operations/evidence/2026-10-28-nc08-nc09-review-items/README.md)）。
+
+**NC07 版本号确认（2026-10-28 19:28）**：B7 占用 v324 后，用户确认炼妖壶摘要批使用规则 v324→v325（[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)第 9 项）；存档 v105、ABI 753 不变。只登记授权，源码未实施。
 
 ## 历史执行登记与轮次索引
 

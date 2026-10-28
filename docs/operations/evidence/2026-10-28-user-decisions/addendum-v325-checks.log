@@ -1,0 +1,14 @@
+### 2026-10-28 19:28:57 +0800 第 9 项（NC07 v325）补登后的文档检查；HEAD c54a668b
+### grep STANDARD_RULESET_VERSION / v325 in engine-native
+132:pub const STANDARD_RULESET_VERSION: u64 = 324;
+(v325 hits above, if any)
+### python3 -B -m unittest discover -s scripts -p test_check_source_lines.py
+OK
+### python3 -B scripts/check-source-lines.py
+Source line limit passed: 8653 files <= 2000 lines
+### python3 -B scripts/check_local_links.py --all
+检查 1865 个文件，坏链 0
+### python3 -B scripts/check-adr-index.py
+检查结果：通过
+### git diff --check
+exit: 0
