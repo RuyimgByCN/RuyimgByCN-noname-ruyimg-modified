@@ -1,0 +1,10 @@
+2026-10-28 09:42:24 +0800
+78f013d5d0c6c569364bd09266828832a0b8d4f7
+rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)
+cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)
+Darwin ruyimg-Book-Pro-14.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:42 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T6031 arm64
+3b6f10fbfa64d3845311a5155c2da054dbdfb95fc0a01da7bbf6b43fd50e8f17  /tmp/noname-nc10-trap-red.v90xwS/crates/engine-native/src/ai.rs
+2026-10-28 09:42:25 +0800
+78f013d5d0c6c569364bd09266828832a0b8d4f7
+c3c644ba5773632b6f869aa8da8b3d6d41ec235c0fbe2e85178cba46959fee39  crates/engine-native/src/ai.rs
+c3c644ba5773632b6f869aa8da8b3d6d41ec235c0fbe2e85178cba46959fee39  /tmp/noname-nc10-trap-red.v90xwS/crates/engine-native/src/ai.rs

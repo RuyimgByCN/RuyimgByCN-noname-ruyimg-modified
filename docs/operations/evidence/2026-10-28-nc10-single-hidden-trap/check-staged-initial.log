@@ -1,0 +1,9 @@
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/candidate.log:334: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/focused-pre.log:39: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/focused-vm.log:31: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/guard-before.log:314: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/guard-candidate2.log:622: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/guard-candidate3.log:622: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/guard-clean-before.log:602: new blank line at EOF.
+docs/operations/evidence/2026-10-28-nc10-single-hidden-trap/targeted.log:70: new blank line at EOF.
+exit 2

@@ -715,7 +715,9 @@ impl Engine {
         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
-            let fallback = if can_redact_suspended_duel(self, seat) {
+            let fallback = if can_redact_suspended_duel(self, seat)
+                || single_hidden_trap_owner(self, seat).is_some()
+            {
                 &sim
             } else {
                 self
@@ -947,6 +949,38 @@ fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
         .all(fixed)
 }
 
+// shortcut: 仅无 VM 的单张陷阱且无 VM 牌堆；其他情形需先完成通用自省。
+fn single_hidden_trap_owner(e: &Engine, seat: u8) -> Option<usize> {
+    let core = e.state_core();
+    let res = e.resolution();
+    if e.is_suspended()
+        || !res.stack.is_empty()
+        || !res.parks.is_empty()
+        || res.open_choice.is_some()
+        || res.answer.is_some()
+        || core.vm_aux.piles.values().any(|pile| !pile.is_empty())
+    {
+        return None;
+    }
+    let mut owners = core
+        .players
+        .iter()
+        .enumerate()
+        .filter(|(_, p)| !p.sxianjing_traps.is_empty());
+    let (owner, player) = owners.next()?;
+    if owner == seat as usize || player.sxianjing_traps.len() != 1 || owners.next().is_some() {
+        return None;
+    }
+    if e.catalog()
+        .skills
+        .iter()
+        .any(|skill| skill.behavior.is_vm_skill())
+    {
+        return None;
+    }
+    Some(owner)
+}
+
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
     // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
@@ -998,6 +1032,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
+    let trap_owner = single_hidden_trap_owner(e, seat);
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
@@ -1028,7 +1063,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
                 visible.extend(p.sxianjing_traps.iter().copied());
             }
         }
-        // shortcut: 对手陷阱与 VM 牌堆尚未保护，完成可见性和引用自省后重分配。
+        // shortcut: 其他对手陷阱与 VM 牌堆尚未保护，完成可见性和引用自省后重分配。
         for ((owner, _), pile) in &core.vm_aux.piles {
             if *owner == seat {
                 visible.extend(pile.iter().copied());
@@ -1037,13 +1072,15 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         visible.extend(core.table.iter().copied());
         // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
         // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
-        for (c, _) in core.turn.huanxia_track.iter() {
-            visible.insert(*c);
-        }
-        for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
-            visible.extend(a.iter().copied());
-            visible.extend(b.iter().copied());
-            visible.extend(c.iter().copied());
+        if trap_owner.is_none() {
+            for (c, _) in core.turn.huanxia_track.iter() {
+                visible.insert(*c);
+            }
+            for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
+                visible.extend(a.iter().copied());
+                visible.extend(b.iter().copied());
+                visible.extend(c.iter().copied());
+            }
         }
     }
     // 填充池：目录全部牌 id 去掉保留牌（保持确定性顺序）
@@ -1066,21 +1103,106 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         let j = ((rng_state >> 33) as usize) % (k + 1);
         pool.swap(j, k);
     }
-    let need = hand_lens.iter().sum::<usize>() + deck_len;
+    let need = hand_lens.iter().sum::<usize>() + deck_len + usize::from(trap_owner.is_some());
     assert!(
         pool.len() >= need,
         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
         pool.len()
     );
+    // 牌引用按同一个重分配映射更新，避免指向错误的实体。
+    let remap: Vec<CardId> = if let Some(owner) = trap_owner {
+        let mut remap: Vec<CardId> = (0..e.catalog().cards.len() as CardId).collect();
+        let old = std::iter::once(e.state_core().players[owner].sxianjing_traps[0])
+            .chain(
+                opponents
+                    .iter()
+                    .flat_map(|i| e.state_core().players[*i].hand.iter().copied()),
+            )
+            .chain(e.state_core().deck.iter().copied());
+        for (before, after) in old.zip(pool.iter().copied()) {
+            remap[before as usize] = after;
+        }
+        remap
+    } else {
+        Default::default()
+    };
     let core = e.core_mut();
     let mut cursor = 0usize;
+    if let Some(owner) = trap_owner {
+        core.players[owner].sxianjing_traps[0] = pool[cursor];
+        cursor += 1;
+    }
     for (&i, &len) in opponents.iter().zip(hand_lens.iter()) {
         core.players[i].hand = pool[cursor..cursor + len].to_vec();
         cursor += len;
     }
     core.deck = pool[cursor..cursor + deck_len].to_vec();
+    if !remap.is_empty() {
+        let replace = |card: &mut CardId| {
+            if let Some(replacement) = remap.get(*card as usize) {
+                *card = *replacement;
+            }
+        };
+        for card in core.vm_aux.lost.values_mut().flatten() {
+            replace(card);
+        }
+        for (card, _) in &mut core.turn.huanxia_track {
+            replace(card);
+        }
+        for (_, a, b, c) in &mut core.turn.kunlunjing_snapshot {
+            for card in a.iter_mut().chain(b).chain(c) {
+                replace(card);
+            }
+        }
+        if let Some(card) = &mut core.turn.luanjian_card {
+            replace(card);
+        }
+        if let Some(card) = &mut core.turn.qizuo_copy {
+            replace(card);
+        }
+        for player in &mut core.players {
+            if let Some(card) = &mut player.ctianfu_card {
+                replace(card);
+            }
+            for card in player
+                .jiguanyuan_cards
+                .iter_mut()
+                .chain(&mut player.yishan_lost)
+            {
+                replace(card);
+            }
+            player.card_mods = std::mem::take(&mut player.card_mods)
+                .into_iter()
+                .map(|(mut key, mut value)| {
+                    replace(&mut key);
+                    replace(&mut value);
+                    (key, value)
+                })
+                .collect();
+        }
+        core.declared_kinds = std::mem::take(&mut core.declared_kinds)
+            .into_iter()
+            .map(|(mut card, value)| {
+                replace(&mut card);
+                (card, value)
+            })
+            .collect();
+        core.declared_slots = std::mem::take(&mut core.declared_slots)
+            .into_iter()
+            .map(|(mut card, value)| {
+                replace(&mut card);
+                (card, value)
+            })
+            .collect();
+        core.card_natures = std::mem::take(&mut core.card_natures)
+            .into_iter()
+            .map(|(mut card, value)| {
+                replace(&mut card);
+                (card, value)
+            })
+            .collect();
+    }
 }
-
 
 #[cfg(test)]
 mod active_candidate_tests {

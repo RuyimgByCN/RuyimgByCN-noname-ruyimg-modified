@@ -1,0 +1,335 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized] target(s) in 4.78s
+     Running tests/nc10_guard_probe_temp.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/nc10_guard_probe_temp-4fd601e971dc8c4e)
+
+running 1 test
+CASE 3900 flag equal=true base=PlayCard { card: 17, targets: [1] } other=PlayCard { card: 17, targets: [1] }
+CASE 3900 storage equal=false base=PlayCard { card: 17, targets: [1] } other=PlayCard { card: 17, targets: [3] }
+CASE 3900 lost equal=false base=PlayCard { card: 17, targets: [1] } other=PlayCard { card: 17, targets: [3] }
+CASE 3901 flag equal=true base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [1] }
+CASE 3901 storage equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 3901 lost equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 3902 flag equal=true base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [1] }
+CASE 3902 storage equal=false base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [3] }
+CASE 3902 lost equal=false base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [3] }
+CASE 3903 flag equal=true base=NextPhase other=NextPhase
+CASE 3903 storage equal=true base=NextPhase other=NextPhase
+CASE 3903 lost equal=true base=NextPhase other=NextPhase
+CASE 3906 flag equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3906 storage equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3906 lost equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3907 flag equal=true base=PlayCard { card: 10, targets: [3] } other=PlayCard { card: 10, targets: [3] }
+CASE 3907 storage equal=true base=PlayCard { card: 10, targets: [3] } other=PlayCard { card: 10, targets: [3] }
+CASE 3907 lost equal=true base=PlayCard { card: 10, targets: [3] } other=PlayCard { card: 10, targets: [3] }
+CASE 3908 flag equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3908 storage equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3908 lost equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3909 flag equal=true base=NextPhase other=NextPhase
+CASE 3909 storage equal=true base=NextPhase other=NextPhase
+CASE 3909 lost equal=true base=NextPhase other=NextPhase
+CASE 3910 flag equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3910 storage equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3910 lost equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3911 flag equal=true base=PlayCard { card: 6, targets: [1] } other=PlayCard { card: 6, targets: [1] }
+CASE 3911 storage equal=false base=PlayCard { card: 6, targets: [1] } other=PlayCard { card: 6, targets: [3] }
+CASE 3911 lost equal=false base=PlayCard { card: 6, targets: [1] } other=PlayCard { card: 6, targets: [3] }
+CASE 3912 flag equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3912 storage equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3912 lost equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 3913 flag equal=true base=PlayCard { card: 5, targets: [3] } other=PlayCard { card: 5, targets: [3] }
+CASE 3913 storage equal=true base=PlayCard { card: 5, targets: [3] } other=PlayCard { card: 5, targets: [3] }
+CASE 3913 lost equal=true base=PlayCard { card: 5, targets: [3] } other=PlayCard { card: 5, targets: [3] }
+CASE 3915 flag equal=true base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [1] }
+CASE 3915 storage equal=false base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [3] }
+CASE 3915 lost equal=false base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [3] }
+CASE 3916 flag equal=true base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [1] }
+CASE 3916 storage equal=false base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [3] }
+CASE 3916 lost equal=false base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [3] }
+CASE 3917 flag equal=true base=PlayCard { card: 0, targets: [3] } other=PlayCard { card: 0, targets: [3] }
+CASE 3917 storage equal=true base=PlayCard { card: 0, targets: [3] } other=PlayCard { card: 0, targets: [3] }
+CASE 3917 lost equal=true base=PlayCard { card: 0, targets: [3] } other=PlayCard { card: 0, targets: [3] }
+CASE 3929 flag equal=true base=PlayCard { card: 94, targets: [1] } other=PlayCard { card: 94, targets: [1] }
+CASE 3929 storage equal=false base=PlayCard { card: 94, targets: [1] } other=PlayCard { card: 94, targets: [3] }
+CASE 3929 lost equal=false base=PlayCard { card: 94, targets: [1] } other=PlayCard { card: 94, targets: [3] }
+CASE 3931 flag equal=true base=PlayCard { card: 54, targets: [] } other=PlayCard { card: 54, targets: [] }
+CASE 3931 storage equal=true base=PlayCard { card: 54, targets: [] } other=PlayCard { card: 54, targets: [] }
+CASE 3931 lost equal=true base=PlayCard { card: 54, targets: [] } other=PlayCard { card: 54, targets: [] }
+CASE 3935 flag equal=true base=PlayCard { card: 13, targets: [1] } other=PlayCard { card: 13, targets: [1] }
+CASE 3935 storage equal=false base=PlayCard { card: 13, targets: [1] } other=PlayCard { card: 13, targets: [3] }
+CASE 3935 lost equal=false base=PlayCard { card: 13, targets: [1] } other=PlayCard { card: 13, targets: [3] }
+CASE 3937 flag equal=true base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [1] }
+CASE 3937 storage equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 3937 lost equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 3938 flag equal=true base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [1] }
+CASE 3938 storage equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3938 lost equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3941 flag equal=true base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [1] }
+CASE 3941 storage equal=false base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [3] }
+CASE 3941 lost equal=false base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [3] }
+CASE 3942 flag equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3942 storage equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3942 lost equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 3943 flag equal=true base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [1] }
+CASE 3943 storage equal=false base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [3] }
+CASE 3943 lost equal=false base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [3] }
+CASE 3953 flag equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3953 storage equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3953 lost equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3954 flag equal=true base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [1] }
+CASE 3954 storage equal=false base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [3] }
+CASE 3954 lost equal=false base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [3] }
+CASE 3957 flag equal=true base=PlayCard { card: 0, targets: [1] } other=PlayCard { card: 0, targets: [1] }
+CASE 3957 storage equal=false base=PlayCard { card: 0, targets: [1] } other=PlayCard { card: 0, targets: [3] }
+CASE 3957 lost equal=false base=PlayCard { card: 0, targets: [1] } other=PlayCard { card: 0, targets: [3] }
+CASE 3959 flag equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 3959 storage equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 3959 lost equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 3962 flag equal=true base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [1] }
+CASE 3962 storage equal=false base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [3] }
+CASE 3962 lost equal=false base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [3] }
+CASE 3964 flag equal=true base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [1] }
+CASE 3964 storage equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 3964 lost equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 3965 flag equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 3965 storage equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 3965 lost equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 3966 flag equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3966 storage equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3966 lost equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3967 flag equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3967 storage equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3967 lost equal=true base=PlayCard { card: 12, targets: [3] } other=PlayCard { card: 12, targets: [3] }
+CASE 3971 flag equal=true base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [1] }
+CASE 3971 storage equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3971 lost equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3973 flag equal=true base=PlayCard { card: 28, targets: [1] } other=PlayCard { card: 28, targets: [1] }
+CASE 3973 storage equal=false base=PlayCard { card: 28, targets: [1] } other=PlayCard { card: 28, targets: [3] }
+CASE 3973 lost equal=false base=PlayCard { card: 28, targets: [1] } other=PlayCard { card: 28, targets: [3] }
+CASE 3974 flag equal=true base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [1] }
+CASE 3974 storage equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 3974 lost equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 3975 flag equal=true base=PlayCard { card: 95, targets: [3] } other=PlayCard { card: 95, targets: [3] }
+CASE 3975 storage equal=false base=PlayCard { card: 95, targets: [3] } other=PlayCard { card: 95, targets: [1] }
+CASE 3975 lost equal=false base=PlayCard { card: 95, targets: [3] } other=PlayCard { card: 95, targets: [1] }
+CASE 3977 flag equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3977 storage equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3977 lost equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 3979 flag equal=true base=PlayCard { card: 7, targets: [3] } other=PlayCard { card: 7, targets: [3] }
+CASE 3979 storage equal=true base=PlayCard { card: 7, targets: [3] } other=PlayCard { card: 7, targets: [3] }
+CASE 3979 lost equal=true base=PlayCard { card: 7, targets: [3] } other=PlayCard { card: 7, targets: [3] }
+CASE 3982 flag equal=true base=PlayCard { card: 3, targets: [3] } other=PlayCard { card: 3, targets: [3] }
+CASE 3982 storage equal=true base=PlayCard { card: 3, targets: [3] } other=PlayCard { card: 3, targets: [3] }
+CASE 3982 lost equal=true base=PlayCard { card: 3, targets: [3] } other=PlayCard { card: 3, targets: [3] }
+CASE 3984 flag equal=true base=PlayCard { card: 4, targets: [3] } other=PlayCard { card: 4, targets: [3] }
+CASE 3984 storage equal=true base=PlayCard { card: 4, targets: [3] } other=PlayCard { card: 4, targets: [3] }
+CASE 3984 lost equal=true base=PlayCard { card: 4, targets: [3] } other=PlayCard { card: 4, targets: [3] }
+CASE 3986 flag equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3986 storage equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3986 lost equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 3988 flag equal=true base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [1] }
+CASE 3988 storage equal=false base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [3] }
+CASE 3988 lost equal=false base=PlayCard { card: 11, targets: [1] } other=PlayCard { card: 11, targets: [3] }
+CASE 3989 flag equal=true base=PlayCard { card: 9, targets: [1] } other=PlayCard { card: 9, targets: [1] }
+CASE 3989 storage equal=false base=PlayCard { card: 9, targets: [1] } other=PlayCard { card: 9, targets: [3] }
+CASE 3989 lost equal=false base=PlayCard { card: 9, targets: [1] } other=PlayCard { card: 9, targets: [3] }
+CASE 3994 flag equal=true base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [1] }
+CASE 3994 storage equal=false base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [3] }
+CASE 3994 lost equal=false base=PlayCard { card: 1, targets: [1] } other=PlayCard { card: 1, targets: [3] }
+CASE 3995 flag equal=true base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [1] }
+CASE 3995 storage equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3995 lost equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 3999 flag equal=true base=PlayCard { card: 20, targets: [3] } other=PlayCard { card: 20, targets: [3] }
+CASE 3999 storage equal=true base=PlayCard { card: 20, targets: [3] } other=PlayCard { card: 20, targets: [3] }
+CASE 3999 lost equal=true base=PlayCard { card: 20, targets: [3] } other=PlayCard { card: 20, targets: [3] }
+CASE 4001 flag equal=true base=PlayCard { card: 26, targets: [3] } other=PlayCard { card: 26, targets: [3] }
+CASE 4001 storage equal=true base=PlayCard { card: 26, targets: [3] } other=PlayCard { card: 26, targets: [3] }
+CASE 4001 lost equal=true base=PlayCard { card: 26, targets: [3] } other=PlayCard { card: 26, targets: [3] }
+CASE 4002 flag equal=true base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [1] }
+CASE 4002 storage equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4002 lost equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4004 flag equal=true base=PlayCard { card: 88, targets: [1] } other=PlayCard { card: 88, targets: [1] }
+CASE 4004 storage equal=false base=PlayCard { card: 88, targets: [1] } other=PlayCard { card: 88, targets: [3] }
+CASE 4004 lost equal=false base=PlayCard { card: 88, targets: [1] } other=PlayCard { card: 88, targets: [3] }
+CASE 4005 flag equal=true base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [1] }
+CASE 4005 storage equal=false base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [3] }
+CASE 4005 lost equal=false base=PlayCard { card: 25, targets: [1] } other=PlayCard { card: 25, targets: [3] }
+CASE 4006 flag equal=true base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [1] }
+CASE 4006 storage equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4006 lost equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4007 flag equal=true base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [1] }
+CASE 4007 storage equal=false base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [3] }
+CASE 4007 lost equal=false base=PlayCard { card: 3, targets: [1] } other=PlayCard { card: 3, targets: [3] }
+CASE 4009 flag equal=true base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [1] }
+CASE 4009 storage equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4009 lost equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4011 flag equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4011 storage equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4011 lost equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4012 flag equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 4012 storage equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 4012 lost equal=true base=PlayCard { card: 14, targets: [3] } other=PlayCard { card: 14, targets: [3] }
+CASE 4013 flag equal=true base=PlayCard { card: 53, targets: [] } other=PlayCard { card: 53, targets: [] }
+CASE 4013 storage equal=true base=PlayCard { card: 53, targets: [] } other=PlayCard { card: 53, targets: [] }
+CASE 4013 lost equal=true base=PlayCard { card: 53, targets: [] } other=PlayCard { card: 53, targets: [] }
+CASE 4014 flag equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4014 storage equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4014 lost equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4016 flag equal=true base=PlayCard { card: 11, targets: [3] } other=PlayCard { card: 11, targets: [3] }
+CASE 4016 storage equal=true base=PlayCard { card: 11, targets: [3] } other=PlayCard { card: 11, targets: [3] }
+CASE 4016 lost equal=true base=PlayCard { card: 11, targets: [3] } other=PlayCard { card: 11, targets: [3] }
+CASE 4017 flag equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4017 storage equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4017 lost equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4019 flag equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4019 storage equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4019 lost equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4020 flag equal=true base=PlayCard { card: 5, targets: [1] } other=PlayCard { card: 5, targets: [1] }
+CASE 4020 storage equal=false base=PlayCard { card: 5, targets: [1] } other=PlayCard { card: 5, targets: [3] }
+CASE 4020 lost equal=false base=PlayCard { card: 5, targets: [1] } other=PlayCard { card: 5, targets: [3] }
+CASE 4024 flag equal=true base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [1] }
+CASE 4024 storage equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 4024 lost equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 4025 flag equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4025 storage equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4025 lost equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4028 flag equal=true base=PlayCard { card: 20, targets: [1] } other=PlayCard { card: 20, targets: [1] }
+CASE 4028 storage equal=false base=PlayCard { card: 20, targets: [1] } other=PlayCard { card: 20, targets: [3] }
+CASE 4028 lost equal=false base=PlayCard { card: 20, targets: [1] } other=PlayCard { card: 20, targets: [3] }
+CASE 4029 flag equal=true base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [1] }
+CASE 4029 storage equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 4029 lost equal=false base=PlayCard { card: 18, targets: [1] } other=PlayCard { card: 18, targets: [3] }
+CASE 4030 flag equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4030 storage equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4030 lost equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4031 flag equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4031 storage equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4031 lost equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4033 flag equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4033 storage equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4033 lost equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4034 flag equal=true base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [1] }
+CASE 4034 storage equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4034 lost equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4038 flag equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4038 storage equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4038 lost equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4039 flag equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4039 storage equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4039 lost equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4040 flag equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4040 storage equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4040 lost equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4041 flag equal=true base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [1] }
+CASE 4041 storage equal=false base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [3] }
+CASE 4041 lost equal=false base=PlayCard { card: 26, targets: [1] } other=PlayCard { card: 26, targets: [3] }
+CASE 4042 flag equal=true base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [1] }
+CASE 4042 storage equal=false base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [3] }
+CASE 4042 lost equal=false base=PlayCard { card: 12, targets: [1] } other=PlayCard { card: 12, targets: [3] }
+CASE 4043 flag equal=true base=PlayCard { card: 4, targets: [1] } other=PlayCard { card: 4, targets: [1] }
+CASE 4043 storage equal=false base=PlayCard { card: 4, targets: [1] } other=PlayCard { card: 4, targets: [3] }
+CASE 4043 lost equal=false base=PlayCard { card: 4, targets: [1] } other=PlayCard { card: 4, targets: [3] }
+CASE 4047 flag equal=true base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [1] }
+CASE 4047 storage equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4047 lost equal=false base=PlayCard { card: 21, targets: [1] } other=PlayCard { card: 21, targets: [3] }
+CASE 4049 flag equal=true base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [1] }
+CASE 4049 storage equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 4049 lost equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 4050 flag equal=true base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [1] }
+CASE 4050 storage equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 4050 lost equal=false base=PlayCard { card: 2, targets: [1] } other=PlayCard { card: 2, targets: [3] }
+CASE 4052 flag equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4052 storage equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4052 lost equal=true base=PlayCard { card: 13, targets: [3] } other=PlayCard { card: 13, targets: [3] }
+CASE 4053 flag equal=true base=PlayCard { card: 10, targets: [1] } other=PlayCard { card: 10, targets: [1] }
+CASE 4053 storage equal=false base=PlayCard { card: 10, targets: [1] } other=PlayCard { card: 10, targets: [3] }
+CASE 4053 lost equal=false base=PlayCard { card: 10, targets: [1] } other=PlayCard { card: 10, targets: [3] }
+CASE 4054 flag equal=true base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [1] }
+CASE 4054 storage equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 4054 lost equal=false base=PlayCard { card: 29, targets: [1] } other=PlayCard { card: 29, targets: [3] }
+CASE 4057 flag equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4057 storage equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4057 lost equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4060 flag equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4060 storage equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4060 lost equal=true base=PlayCard { card: 16, targets: [3] } other=PlayCard { card: 16, targets: [3] }
+CASE 4061 flag equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4061 storage equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4061 lost equal=true base=PlayCard { card: 9, targets: [3] } other=PlayCard { card: 9, targets: [3] }
+CASE 4066 flag equal=true base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [1] }
+CASE 4066 storage equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4066 lost equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4072 flag equal=true base=PlayCard { card: 27, targets: [1] } other=PlayCard { card: 27, targets: [1] }
+CASE 4072 storage equal=false base=PlayCard { card: 27, targets: [1] } other=PlayCard { card: 27, targets: [3] }
+CASE 4072 lost equal=false base=PlayCard { card: 27, targets: [1] } other=PlayCard { card: 27, targets: [3] }
+CASE 4075 flag equal=true base=PlayCard { card: 18, targets: [3] } other=PlayCard { card: 18, targets: [3] }
+CASE 4075 storage equal=true base=PlayCard { card: 18, targets: [3] } other=PlayCard { card: 18, targets: [3] }
+CASE 4075 lost equal=true base=PlayCard { card: 18, targets: [3] } other=PlayCard { card: 18, targets: [3] }
+CASE 4077 flag equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4077 storage equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4077 lost equal=true base=PlayCard { card: 8, targets: [3] } other=PlayCard { card: 8, targets: [3] }
+CASE 4079 flag equal=true base=NextPhase other=NextPhase
+CASE 4079 storage equal=true base=NextPhase other=NextPhase
+CASE 4079 lost equal=true base=NextPhase other=NextPhase
+CASE 4081 flag equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 4081 storage equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 4081 lost equal=true base=PlayCard { card: 15, targets: [3] } other=PlayCard { card: 15, targets: [3] }
+CASE 4088 flag equal=true base=PlayCard { card: 14, targets: [1] } other=PlayCard { card: 14, targets: [1] }
+CASE 4088 storage equal=false base=PlayCard { card: 14, targets: [1] } other=PlayCard { card: 14, targets: [3] }
+CASE 4088 lost equal=false base=PlayCard { card: 14, targets: [1] } other=PlayCard { card: 14, targets: [3] }
+CASE 4092 flag equal=true base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [1] }
+CASE 4092 storage equal=false base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [3] }
+CASE 4092 lost equal=false base=PlayCard { card: 22, targets: [1] } other=PlayCard { card: 22, targets: [3] }
+CASE 4093 flag equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4093 storage equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4093 lost equal=true base=PlayCard { card: 19, targets: [3] } other=PlayCard { card: 19, targets: [3] }
+CASE 4094 flag equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4094 storage equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4094 lost equal=true base=PlayCard { card: 17, targets: [3] } other=PlayCard { card: 17, targets: [3] }
+CASE 4095 flag equal=true base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [1] }
+CASE 4095 storage equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4095 lost equal=false base=PlayCard { card: 15, targets: [1] } other=PlayCard { card: 15, targets: [3] }
+CASE 4097 flag equal=true base=PlayCard { card: 23, targets: [1] } other=PlayCard { card: 23, targets: [1] }
+CASE 4097 storage equal=false base=PlayCard { card: 23, targets: [1] } other=PlayCard { card: 23, targets: [3] }
+CASE 4097 lost equal=false base=PlayCard { card: 23, targets: [1] } other=PlayCard { card: 23, targets: [3] }
+test synthetic_guard_noninterference ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.61s
+
+     Running tests/nc10_single_hidden_trap.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/nc10_single_hidden_trap-51658a5eb3bb0d39)
+
+running 3 tests
+vm=VmAux { marks: {}, piles: {}, lost: {}, once: {}, flags: {}, hits: {}, storage: {}, drawn: {} }; turn_refs=[]/[]/None/None; metadata={}/{}/{}
+test inspect_fixture_guard ... ok
+test real_single_opponent_trap_redacts_without_duplicate_cards ... ok
+test single_opponent_trap_identity_cannot_change_planning ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc10_skill_pile_conservation.rs (/tmp/noname-nc06-ownership-green.DJEuFN/debug/deps/nc10_skill_pile_conservation-caa1f6bb91ae6da2)
+
+running 3 tests
+test opponent_private_pile_identity_does_not_change_synthetic_hands ... ok
+test fixed_piles_keep_hidden_hand_permutations_equivalent ... ok
+test redaction_preserves_owned_skill_cards_for_self_and_opponents ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+exit 0
