@@ -1,6 +1,6 @@
 # PA12 迁移批③：滤镜 Top-N 无状态谓词 + 修复 event_targets 桥接缺陷（2026-10-27）
 
-- 执行时间：2026-10-27 **11:02:57 → 11:45 +08:00**（`HEAD = 03b98724`；用户裁决问询未获答复，按推荐项**代理判断开工**——批③为迁移计划既定下一批、纯桥接词汇面、低风险，台帐已注明）；执行者 ZCode A 道
+- 执行时间：2026-10-27 **11:02:57 → ≤11:35（原记 11:45 晚于本批提交 11:35，2026-10-27 扫描按提交时间更正） +08:00**（`HEAD = 03b98724`；用户裁决问询未获答复，按推荐项**代理判断开工**——批③为迁移计划既定下一批、纯桥接词汇面、低风险，台帐已注明）；执行者 ZCode A 道
 - 工作包：[迁移计划](../../../architecture/native-dsl-migration-plan.md) 批③；本批先修盘点脚本（交替名计数 bug：`"a" | "b" => Some(..)` 此前只计 b），基数修正为滤镜命中 2,457 / 推迟 1,364（672 名）
 
 **一句话结论**：六个高频无状态谓词落原生精确策略并真实技能全链验收——`owner_source_sha`（76）、`owner_alive_not_target`（65）、`owner_is_target_source_alive`（14）、`owner_is_source_or_target`（13）、`owner_source_fire_sha`（10，映射面验收——无简单真实技能）、`owner_source_ordinary_trick`（9）；**修复第三个桥接缺陷**：原生 `EngineVmHost` 未覆写 `event_targets`（默认恒空）→ `HOST_EVENT_TARGET_COUNT` 恒 0（帝挽摸 0 实证），现从 `VmTriggerCtx.targets` 注入（旧线经 `run_module_with_event_cards` 传同集）。once/round 限次系勘正：**`vm_aux.once`（座位×键×范围 1回合/2轮/3整局）机制已存在**，`owner_is_target_once` 经具名程序可承载（map_vm_filter 返回 Some）——限次窗口与旧线 `turn_fires` 的对齐留作语义验收子批（原「需新状态字段」判断撤销）。盘点：滤镜命中 2,457→**2,644**、推迟 1,364→**1,177**、近似可直接原生 1,059→**1,098**。

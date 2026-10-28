@@ -1,6 +1,6 @@
 # PA12 迁移批⑤首步（D 道 N01 原生化起步）：SkipCurrentPhase 接线 + 发现 PhaseBegin 触发窗时序缺陷（2026-10-27）
 
-- 执行时间：2026-10-27 **14:34:18 → 15:10 +08:00**（`HEAD = 1a8b2476`；按已声明默认路线代理开工批⑤——裁决问询未获答复；真机复测仍 0 台接入）；执行者 ZCode A 道
+- 执行时间：2026-10-27 **14:34:18 → ≤15:03（原记 15:10 晚于本批提交 15:03，2026-10-27 扫描按提交时间更正） +08:00**（`HEAD = 1a8b2476`；按已声明默认路线代理开工批⑤——裁决问询未获答复；真机复测仍 0 台接入）；执行者 ZCode A 道
 - 工作包：[迁移计划](../../../architecture/native-dsl-migration-plan.md) §3 批⑤（N01 界朱然/界朱桓原生化首步）；台帐 [UP37-N01](../../../architecture/native-remaining-ledger.md)
 
 **一句话结论**：批⑤从 N01 真实包（onlyOL.npack.json）切入，先做**技能级 tag 清单**（36 模块直方图见 §1）：N01 五技能中 `ol_fenli`（奋励三窗口）只依赖 `SKIP_CURRENT_PHASE`——按既有跳过旗标接线（`turn.skip_draw_phase`/`turn.skip_play_phase`/`player.skip_discard_phase`，分别同兵粮寸断/乐不思蜀/入梦口径），`ol_jie_danshou` 需 `STORAGE_SET`+`RESOLVE_OL_JIE_DANSHOU(771)`、`ol_pingkou` 需 `CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW(656)`（选择链族）。**实测抓到第六个桥接/内核缺口**：VM 机器对 `PhaseBegin` 的执行窗**晚于该阶段入场行为**（奋励摸牌窗口的确认门打开时摸牌已完成，手牌 3≠1）——`skip` 置旗标对当前阶段无效，登记计划 §2 K（需前置窗调度，与 `game_started` 开局帧同族）；接线保留（前置窗落地后即正确），测试锁「三窗口可装载桥接」面并注明时序修复后补整局断言。

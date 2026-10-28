@@ -1,6 +1,6 @@
 # PA12 迁移批②：阶段/事件帧补齐（phase_begin 回合开始语义修正 + sha_dodged 映射）（2026-10-27）
 
-- 执行时间：2026-10-27 **10:27:36 → 11:00 +08:00**（`HEAD = 65f89334`，批①之后；用户已于 10:2x 裁决开批②）；执行者 ZCode A 道
+- 执行时间：2026-10-27 **10:27:36 → ≤10:52（原记 11:00 晚于本批提交 10:52，2026-10-27 扫描按提交时间更正） +08:00**（`HEAD = 65f89334`，批①之后；用户已于 10:2x 裁决开批②）；执行者 ZCode A 道
 - 工作包：[迁移计划](../../../architecture/native-dsl-migration-plan.md) 批②（阶段/事件帧补齐）；勘察结论先行——六候选事件中**只有两个无需新原生帧**即可正确承载，其余登记为内核缺口（见 §3）。
 
 **一句话结论**：① DSL `phase_begin`（旧线 = `DomainEvent::TurnBegan`，**回合开始**，90 处）此前被映到原生「任一阶段开始帧」（每回合 5 次）——修正为 `PhaseBegin` + `AtPhase(Judge)`（原生宿主技能同惯例：Judge 的 begin 帧即回合开始，kernel/phase.rs）；② DSL `sha_dodged`（15 处）映射原生 `EventData::ShaDodged`，新增 `trigger_ctx_of` 臂（来源=杀的使用者、事件主玩家=闪避目标，批① 的 `owner_is_source` 滤名可直接承载）。真实技能全链验收：五脉（key，`phase_begin owner_is_target optional`）只在持有者自己回合开始开确认门、确认摸 1、每回合一次；蹙国（newjiang，`sha_dodged owner_is_source`）持有者的杀被闪避才摸 1，他人被闪避不触发。两模块旧线差分（DrawCards×1）一致。
