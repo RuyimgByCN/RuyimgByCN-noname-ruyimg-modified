@@ -1,0 +1,128 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 0.76s
+     Running tests/nc10_hidden_trap_probe.rs (/tmp/noname-nc10-skill-red-target.UmKKOE/debug/deps/nc10_hidden_trap_probe-1b9398cbfd248513)
+
+running 1 test
+CASE seed=3900 a=PlayCard { card: 17, targets: [3] } b=PlayCard { card: 17, targets: [1] }
+seed=3900 sha=17 traps=166/50 action_a=PlayCard { card: 17, targets: [3] } action_b=PlayCard { card: 17, targets: [1] }
+CASE seed=3901 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+seed=3901 sha=15 traps=19/201 action_a=PlayCard { card: 15, targets: [3] } action_b=PlayCard { card: 15, targets: [1] }
+CASE seed=3902 a=PlayCard { card: 12, targets: [3] } b=PlayCard { card: 12, targets: [1] }
+seed=3902 sha=12 traps=68/187 action_a=PlayCard { card: 12, targets: [3] } action_b=PlayCard { card: 12, targets: [1] }
+CASE seed=3903 a=NextPhase b=NextPhase
+CASE seed=3906 a=PlayCard { card: 9, targets: [3] } b=PlayCard { card: 9, targets: [1] }
+CASE seed=3907 a=PlayCard { card: 10, targets: [3] } b=PlayCard { card: 10, targets: [1] }
+CASE seed=3908 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=3909 a=NextPhase b=NextPhase
+CASE seed=3910 a=PlayCard { card: 8, targets: [3] } b=PlayCard { card: 8, targets: [1] }
+CASE seed=3911 a=PlayCard { card: 6, targets: [3] } b=PlayCard { card: 6, targets: [1] }
+CASE seed=3912 a=PlayCard { card: 9, targets: [3] } b=PlayCard { card: 9, targets: [1] }
+CASE seed=3913 a=PlayCard { card: 5, targets: [3] } b=PlayCard { card: 5, targets: [1] }
+CASE seed=3915 a=PlayCard { card: 1, targets: [3] } b=PlayCard { card: 1, targets: [1] }
+CASE seed=3916 a=PlayCard { card: 3, targets: [3] } b=PlayCard { card: 3, targets: [1] }
+CASE seed=3917 a=PlayCard { card: 0, targets: [3] } b=PlayCard { card: 0, targets: [1] }
+CASE seed=3929 a=PlayCard { card: 94, targets: [3] } b=PlayCard { card: 94, targets: [1] }
+CASE seed=3931 a=PlayCard { card: 54, targets: [] } b=PlayCard { card: 54, targets: [] }
+CASE seed=3935 a=PlayCard { card: 13, targets: [3] } b=PlayCard { card: 13, targets: [1] }
+CASE seed=3937 a=PlayCard { card: 21, targets: [3] } b=PlayCard { card: 21, targets: [1] }
+CASE seed=3938 a=PlayCard { card: 2, targets: [3] } b=PlayCard { card: 2, targets: [3] }
+CASE seed=3941 a=PlayCard { card: 11, targets: [3] } b=PlayCard { card: 11, targets: [1] }
+CASE seed=3942 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=3943 a=PlayCard { card: 25, targets: [3] } b=PlayCard { card: 25, targets: [1] }
+CASE seed=3953 a=PlayCard { card: 12, targets: [3] } b=PlayCard { card: 12, targets: [1] }
+CASE seed=3954 a=PlayCard { card: 26, targets: [3] } b=PlayCard { card: 26, targets: [1] }
+CASE seed=3957 a=PlayCard { card: 0, targets: [3] } b=PlayCard { card: 0, targets: [1] }
+CASE seed=3959 a=PlayCard { card: 13, targets: [3] } b=PlayCard { card: 13, targets: [1] }
+CASE seed=3962 a=PlayCard { card: 22, targets: [3] } b=PlayCard { card: 22, targets: [1] }
+CASE seed=3964 a=PlayCard { card: 18, targets: [3] } b=PlayCard { card: 18, targets: [1] }
+CASE seed=3965 a=PlayCard { card: 16, targets: [3] } b=PlayCard { card: 16, targets: [1] }
+CASE seed=3966 a=PlayCard { card: 14, targets: [3] } b=PlayCard { card: 14, targets: [1] }
+CASE seed=3967 a=PlayCard { card: 12, targets: [3] } b=PlayCard { card: 12, targets: [1] }
+CASE seed=3971 a=PlayCard { card: 2, targets: [3] } b=PlayCard { card: 2, targets: [1] }
+CASE seed=3973 a=PlayCard { card: 28, targets: [3] } b=PlayCard { card: 28, targets: [1] }
+CASE seed=3974 a=PlayCard { card: 29, targets: [3] } b=PlayCard { card: 29, targets: [1] }
+CASE seed=3975 a=PlayCard { card: 95, targets: [1] } b=PlayCard { card: 95, targets: [3] }
+CASE seed=3977 a=PlayCard { card: 8, targets: [3] } b=PlayCard { card: 8, targets: [1] }
+CASE seed=3979 a=PlayCard { card: 7, targets: [3] } b=PlayCard { card: 7, targets: [1] }
+CASE seed=3982 a=PlayCard { card: 3, targets: [3] } b=PlayCard { card: 3, targets: [1] }
+CASE seed=3984 a=PlayCard { card: 4, targets: [3] } b=PlayCard { card: 4, targets: [1] }
+CASE seed=3986 a=PlayCard { card: 14, targets: [3] } b=PlayCard { card: 14, targets: [1] }
+CASE seed=3988 a=PlayCard { card: 11, targets: [3] } b=PlayCard { card: 11, targets: [1] }
+CASE seed=3989 a=PlayCard { card: 9, targets: [3] } b=PlayCard { card: 9, targets: [1] }
+CASE seed=3994 a=PlayCard { card: 1, targets: [3] } b=PlayCard { card: 1, targets: [1] }
+CASE seed=3995 a=PlayCard { card: 2, targets: [3] } b=PlayCard { card: 2, targets: [1] }
+CASE seed=3999 a=PlayCard { card: 20, targets: [3] } b=PlayCard { card: 20, targets: [1] }
+CASE seed=4001 a=PlayCard { card: 26, targets: [3] } b=PlayCard { card: 26, targets: [3] }
+CASE seed=4002 a=PlayCard { card: 21, targets: [3] } b=PlayCard { card: 21, targets: [1] }
+CASE seed=4004 a=PlayCard { card: 88, targets: [3] } b=PlayCard { card: 88, targets: [1] }
+CASE seed=4005 a=PlayCard { card: 25, targets: [3] } b=PlayCard { card: 25, targets: [1] }
+CASE seed=4006 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=4007 a=PlayCard { card: 3, targets: [3] } b=PlayCard { card: 3, targets: [1] }
+CASE seed=4009 a=PlayCard { card: 21, targets: [3] } b=PlayCard { card: 21, targets: [1] }
+CASE seed=4011 a=PlayCard { card: 19, targets: [3] } b=PlayCard { card: 19, targets: [1] }
+CASE seed=4012 a=PlayCard { card: 14, targets: [3] } b=PlayCard { card: 14, targets: [1] }
+CASE seed=4013 a=PlayCard { card: 53, targets: [] } b=PlayCard { card: 53, targets: [] }
+CASE seed=4014 a=PlayCard { card: 9, targets: [3] } b=PlayCard { card: 9, targets: [1] }
+CASE seed=4016 a=PlayCard { card: 11, targets: [3] } b=PlayCard { card: 11, targets: [1] }
+CASE seed=4017 a=PlayCard { card: 13, targets: [3] } b=PlayCard { card: 13, targets: [1] }
+CASE seed=4019 a=PlayCard { card: 19, targets: [3] } b=PlayCard { card: 19, targets: [1] }
+CASE seed=4020 a=PlayCard { card: 5, targets: [3] } b=PlayCard { card: 5, targets: [1] }
+CASE seed=4024 a=PlayCard { card: 18, targets: [3] } b=PlayCard { card: 18, targets: [1] }
+CASE seed=4025 a=PlayCard { card: 16, targets: [3] } b=PlayCard { card: 16, targets: [1] }
+CASE seed=4028 a=PlayCard { card: 20, targets: [3] } b=PlayCard { card: 20, targets: [3] }
+CASE seed=4029 a=PlayCard { card: 18, targets: [3] } b=PlayCard { card: 18, targets: [1] }
+CASE seed=4030 a=PlayCard { card: 16, targets: [3] } b=PlayCard { card: 16, targets: [1] }
+CASE seed=4031 a=PlayCard { card: 13, targets: [3] } b=PlayCard { card: 13, targets: [1] }
+CASE seed=4033 a=PlayCard { card: 17, targets: [3] } b=PlayCard { card: 17, targets: [1] }
+CASE seed=4034 a=PlayCard { card: 21, targets: [3] } b=PlayCard { card: 21, targets: [1] }
+CASE seed=4038 a=PlayCard { card: 19, targets: [3] } b=PlayCard { card: 19, targets: [1] }
+CASE seed=4039 a=PlayCard { card: 8, targets: [3] } b=PlayCard { card: 8, targets: [1] }
+CASE seed=4040 a=PlayCard { card: 16, targets: [3] } b=PlayCard { card: 16, targets: [1] }
+CASE seed=4041 a=PlayCard { card: 26, targets: [3] } b=PlayCard { card: 26, targets: [1] }
+CASE seed=4042 a=PlayCard { card: 12, targets: [3] } b=PlayCard { card: 12, targets: [1] }
+CASE seed=4043 a=PlayCard { card: 4, targets: [3] } b=PlayCard { card: 4, targets: [1] }
+CASE seed=4047 a=PlayCard { card: 21, targets: [3] } b=PlayCard { card: 21, targets: [1] }
+CASE seed=4049 a=PlayCard { card: 29, targets: [3] } b=PlayCard { card: 29, targets: [1] }
+CASE seed=4050 a=PlayCard { card: 2, targets: [3] } b=PlayCard { card: 2, targets: [1] }
+CASE seed=4052 a=PlayCard { card: 13, targets: [3] } b=PlayCard { card: 13, targets: [1] }
+CASE seed=4053 a=PlayCard { card: 10, targets: [3] } b=PlayCard { card: 10, targets: [1] }
+CASE seed=4054 a=PlayCard { card: 29, targets: [3] } b=PlayCard { card: 29, targets: [1] }
+CASE seed=4057 a=PlayCard { card: 17, targets: [3] } b=PlayCard { card: 17, targets: [1] }
+CASE seed=4060 a=PlayCard { card: 16, targets: [3] } b=PlayCard { card: 16, targets: [1] }
+CASE seed=4061 a=PlayCard { card: 9, targets: [3] } b=PlayCard { card: 9, targets: [1] }
+CASE seed=4066 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=4072 a=PlayCard { card: 27, targets: [3] } b=PlayCard { card: 27, targets: [1] }
+CASE seed=4075 a=PlayCard { card: 18, targets: [3] } b=PlayCard { card: 18, targets: [1] }
+CASE seed=4077 a=PlayCard { card: 8, targets: [3] } b=PlayCard { card: 8, targets: [1] }
+CASE seed=4079 a=NextPhase b=NextPhase
+CASE seed=4081 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=4088 a=PlayCard { card: 14, targets: [3] } b=PlayCard { card: 14, targets: [1] }
+CASE seed=4092 a=PlayCard { card: 22, targets: [3] } b=PlayCard { card: 22, targets: [1] }
+CASE seed=4093 a=PlayCard { card: 19, targets: [3] } b=PlayCard { card: 19, targets: [1] }
+CASE seed=4094 a=PlayCard { card: 17, targets: [3] } b=PlayCard { card: 17, targets: [1] }
+CASE seed=4095 a=PlayCard { card: 15, targets: [3] } b=PlayCard { card: 15, targets: [1] }
+CASE seed=4097 a=PlayCard { card: 23, targets: [3] } b=PlayCard { card: 23, targets: [1] }
+checked=96 different_actions=88 different_synthetic_pools=0
+test same_view_hidden_trap_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.93s
+
+
+exit 0

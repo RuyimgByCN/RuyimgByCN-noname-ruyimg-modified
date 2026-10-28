@@ -1000,7 +1000,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
-    // 可见牌集合（AI 合法已知）：自己各区域 + 弃牌堆 + 场上/装备等公开区
+    // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
     let mut visible: std::collections::BTreeSet<crate::ids::CardId> =
         std::collections::BTreeSet::new();
     {
@@ -1016,10 +1016,23 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         // `table`（在飞牌）可能被当作隐藏牌抽走并塞进隐藏区——这些牌被机器/帧/回合
         // 状态字段引用，重分配后 `take_hand_card` 找不到牌 → panic（实测
         // `machine.rs:408 card N not in hand of P`）。
-        for p in &core.players {
+        for (owner, p) in core.players.iter().enumerate() {
             visible.extend(p.equips.iter().copied());
             visible.extend(p.judge.iter().copied());
             visible.extend(p.off_court.iter().copied());
+            // 筑城、壶仓和护天在上游可见；陷阱只有持有者可见。
+            for pile in [&p.zhucheng, &p.lianyaohu_store, &p.hutian_hold] {
+                visible.extend(pile.iter().copied());
+            }
+            if owner == seat as usize {
+                visible.extend(p.sxianjing_traps.iter().copied());
+            }
+        }
+        // shortcut: 对手陷阱与 VM 牌堆尚未保护，完成可见性和引用自省后重分配。
+        for ((owner, _), pile) in &core.vm_aux.piles {
+            if *owner == seat {
+                visible.extend(pile.iter().copied());
+            }
         }
         visible.extend(core.table.iter().copied());
         // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
@@ -1033,7 +1046,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             visible.extend(c.iter().copied());
         }
     }
-    // 填充池：目录全部牌 id 去掉可见牌（保持确定性顺序）
+    // 填充池：目录全部牌 id 去掉保留牌（保持确定性顺序）
     let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
         .filter(|c| !visible.contains(c))
         .collect();

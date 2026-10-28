@@ -1,0 +1,62 @@
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling engine-native v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/engine-native)
+    Finished `test` profile [unoptimized] target(s) in 0.39s
+     Running tests/nc06_zhucheng_restore.rs (/tmp/noname-nc10-skill-red-target.UmKKOE/debug/deps/nc06_zhucheng_restore-853ad9ac7438d8fd)
+
+running 5 tests
+test non_owning_card_references_are_not_counted_twice ... ok
+test skill_pile_archive_restores_and_continues ... ok
+test skill_pile_rejects_duplicate_missing_and_unknown_cards ... ok
+
+thread 'ai_redaction_preserves_actual_zhucheng_pile' (110076791) panicked at crates/engine-native/tests/nc06_zhucheng_restore.rs:180:5:
+real zhucheng simulation: ["observer 0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 84 }", "observer 1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 84 }", "observer 2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 84 }"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test ai_redaction_preserves_actual_zhucheng_pile ... FAILED
+test all_owned_piles_are_counted_once ... ok
+
+failures:
+
+failures:
+    ai_redaction_preserves_actual_zhucheng_pile
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc06_zhucheng_restore`
+     Running tests/nc10_skill_pile_conservation.rs (/tmp/noname-nc10-skill-red-target.UmKKOE/debug/deps/nc10_skill_pile_conservation-caa1f6bb91ae6da2)
+
+running 1 test
+
+thread 'redaction_preserves_owned_skill_cards_for_self_and_opponents' (110076797) panicked at crates/engine-native/tests/nc10_skill_pile_conservation.rs:49:5:
+invalid redacted states: ["zhucheng/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "zhucheng/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "zhucheng/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "lianyaohu/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "lianyaohu/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "lianyaohu/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "sxianjing/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "sxianjing/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "sxianjing/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "hutian/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "hutian/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "hutian/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "vm_aux/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "vm_aux/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "vm_aux/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test redaction_preserves_owned_skill_cards_for_self_and_opponents ... FAILED
+
+failures:
+
+failures:
+    redaction_preserves_owned_skill_cards_for_self_and_opponents
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc10_skill_pile_conservation`
+error: 2 targets failed:
+    `-p engine-native --test nc06_zhucheng_restore`
+    `-p engine-native --test nc10_skill_pile_conservation`
+
+exit 101

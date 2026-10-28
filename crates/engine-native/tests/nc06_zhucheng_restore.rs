@@ -161,3 +161,24 @@ fn skill_pile_rejects_duplicate_missing_and_unknown_cards() {
         SnapshotError::IdOutOfBounds { what: "card", .. }
     ));
 }
+
+#[test]
+fn ai_redaction_preserves_actual_zhucheng_pile() {
+    let (engine, pack) = fixture();
+    let res = engine.resolution();
+    assert!(res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none());
+    let stored = engine.state_core().player(0).zhucheng.clone();
+    let mut failures = Vec::new();
+    for observer in 0..3 {
+        let mut sim = engine.clone();
+        engine_native::ai::redact_opponent_hands(&mut sim, observer);
+        assert_eq!(sim.state_core().player(0).zhucheng, stored);
+        if let Err(error) = Engine::restore_with_extensions(&sim.save(), &[&pack]) {
+            failures.push(format!("observer {observer}: {error:?}"));
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "real zhucheng simulation: {failures:?}"
+    );
+}

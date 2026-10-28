@@ -1,0 +1,76 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling arrayref v0.3.9
+   Compiling thiserror v2.0.18
+   Compiling constant_time_eq v0.4.2
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling cc v1.2.66
+   Compiling libc v0.2.186
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling bitflags v2.13.0
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.4.1
+   Compiling errno v0.3.14
+   Compiling blake3 v1.8.5
+   Compiling syn v2.0.118
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling engine-api v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/content-schema)
+   Compiling engine-native v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/content-compiler)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling content-native-loader v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/content-native-loader)
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+    Finished `test` profile [unoptimized] target(s) in 20.37s
+     Running tests/nc10_skill_pile_conservation.rs (/tmp/noname-nc10-skill-red-target.UmKKOE/debug/deps/nc10_skill_pile_conservation-caa1f6bb91ae6da2)
+
+running 1 test
+
+thread 'redaction_preserves_owned_skill_cards_for_self_and_opponents' (110076309) panicked at crates/engine-native/tests/nc10_skill_pile_conservation.rs:41:5:
+invalid redacted states: ["zhucheng/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "zhucheng/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "zhucheng/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "lianyaohu/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "lianyaohu/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "lianyaohu/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "sxianjing/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "sxianjing/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "sxianjing/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }", "hutian/0: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 100 }", "hutian/1: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 19 }", "hutian/2: IdOutOfBounds { what: \"card_in_multiple_zones\", got: 18 }"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test redaction_preserves_owned_skill_cards_for_self_and_opponents ... FAILED
+
+failures:
+
+failures:
+    redaction_preserves_owned_skill_cards_for_self_and_opponents
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc10_skill_pile_conservation`
+
+exit 101

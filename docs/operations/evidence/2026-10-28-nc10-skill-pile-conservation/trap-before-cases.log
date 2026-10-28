@@ -1,0 +1,129 @@
+   Compiling engine-native v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/engine-native)
+warning: unused import: `crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755`
+ --> crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs:4:5
+  |
+4 | use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ADDITIVE_RULE_VM_ABI_VERSION_755` is never used
+   --> crates/content-compiler/src/abi_versions.rs:742:18
+    |
+742 | pub(super) const ADDITIVE_RULE_VM_ABI_VERSION_755: u32 = 755;
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `content-compiler` (lib) generated 2 warnings (run `cargo fix --lib -p content-compiler` to apply 1 suggestion)
+   Compiling content-native-loader v0.1.0 (/tmp/noname-nc10-skill-red.zt6H6m/crates/content-native-loader)
+    Finished `test` profile [unoptimized] target(s) in 4.61s
+     Running tests/nc10_hidden_trap_probe.rs (/tmp/noname-nc10-skill-red-target.UmKKOE/debug/deps/nc10_hidden_trap_probe-1b9398cbfd248513)
+
+running 1 test
+CASE seed=3900 equal=false
+seed=3900 sha=17 traps=166/50 action_a=PlayCard { card: 17, targets: [3] } action_b=PlayCard { card: 17, targets: [1] }
+CASE seed=3901 equal=false
+seed=3901 sha=15 traps=19/201 action_a=PlayCard { card: 15, targets: [3] } action_b=PlayCard { card: 15, targets: [1] }
+CASE seed=3902 equal=false
+seed=3902 sha=12 traps=68/187 action_a=PlayCard { card: 12, targets: [3] } action_b=PlayCard { card: 12, targets: [1] }
+CASE seed=3903 equal=true
+CASE seed=3906 equal=false
+CASE seed=3907 equal=false
+CASE seed=3908 equal=false
+CASE seed=3909 equal=true
+CASE seed=3910 equal=false
+CASE seed=3911 equal=false
+CASE seed=3912 equal=false
+CASE seed=3913 equal=false
+CASE seed=3915 equal=false
+CASE seed=3916 equal=false
+CASE seed=3917 equal=false
+CASE seed=3929 equal=false
+CASE seed=3931 equal=true
+CASE seed=3935 equal=false
+CASE seed=3937 equal=false
+CASE seed=3938 equal=true
+CASE seed=3941 equal=false
+CASE seed=3942 equal=false
+CASE seed=3943 equal=false
+CASE seed=3953 equal=false
+CASE seed=3954 equal=false
+CASE seed=3957 equal=false
+CASE seed=3959 equal=false
+CASE seed=3962 equal=false
+CASE seed=3964 equal=false
+CASE seed=3965 equal=false
+CASE seed=3966 equal=false
+CASE seed=3967 equal=false
+CASE seed=3971 equal=false
+CASE seed=3973 equal=false
+CASE seed=3974 equal=false
+CASE seed=3975 equal=false
+CASE seed=3977 equal=false
+CASE seed=3979 equal=false
+CASE seed=3982 equal=false
+CASE seed=3984 equal=false
+CASE seed=3986 equal=false
+CASE seed=3988 equal=false
+CASE seed=3989 equal=false
+CASE seed=3994 equal=false
+CASE seed=3995 equal=false
+CASE seed=3999 equal=false
+CASE seed=4001 equal=true
+CASE seed=4002 equal=false
+CASE seed=4004 equal=false
+CASE seed=4005 equal=false
+CASE seed=4006 equal=false
+CASE seed=4007 equal=false
+CASE seed=4009 equal=false
+CASE seed=4011 equal=false
+CASE seed=4012 equal=false
+CASE seed=4013 equal=true
+CASE seed=4014 equal=false
+CASE seed=4016 equal=false
+CASE seed=4017 equal=false
+CASE seed=4019 equal=false
+CASE seed=4020 equal=false
+CASE seed=4024 equal=false
+CASE seed=4025 equal=false
+CASE seed=4028 equal=true
+CASE seed=4029 equal=false
+CASE seed=4030 equal=false
+CASE seed=4031 equal=false
+CASE seed=4033 equal=false
+CASE seed=4034 equal=false
+CASE seed=4038 equal=false
+CASE seed=4039 equal=false
+CASE seed=4040 equal=false
+CASE seed=4041 equal=false
+CASE seed=4042 equal=false
+CASE seed=4043 equal=false
+CASE seed=4047 equal=false
+CASE seed=4049 equal=false
+CASE seed=4050 equal=false
+CASE seed=4052 equal=false
+CASE seed=4053 equal=false
+CASE seed=4054 equal=false
+CASE seed=4057 equal=false
+CASE seed=4060 equal=false
+CASE seed=4061 equal=false
+CASE seed=4066 equal=false
+CASE seed=4072 equal=false
+CASE seed=4075 equal=false
+CASE seed=4077 equal=false
+CASE seed=4079 equal=true
+CASE seed=4081 equal=false
+CASE seed=4088 equal=false
+CASE seed=4092 equal=false
+CASE seed=4093 equal=false
+CASE seed=4094 equal=false
+CASE seed=4095 equal=false
+CASE seed=4097 equal=false
+checked=96 different_actions=88 different_synthetic_pools=0
+test same_view_hidden_trap_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+
+exit 0

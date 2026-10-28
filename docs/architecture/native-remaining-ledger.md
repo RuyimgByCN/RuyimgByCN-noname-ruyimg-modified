@@ -118,3 +118,5 @@ N01 更新：onlyOL 0.1.5／ABI 758；原生宿主 753 仍拒装，旧档策略�
 **NC02／NC04 浏览器补验（2026-10-28）**：真实 Worker 已验证异常 VM 包与旧档拒绝且不改原局；VM 安装、资源绑定、续行来源及其他故障矩阵仍待完成，两项保持部分（[证据](../operations/evidence/2026-10-28-nc02-real-worker-rejection/README.md)）。
 
 **NC06／NC07 进展（2026-10-28）**：四类技能实体牌区已接入恢复所有权校验；炼妖壶仓漏入状态摘要及其余字段完整登记仍待处理，两项保持部分（[证据](../operations/evidence/2026-10-28-nc06-zhucheng-restore/README.md)）。
+
+**NC10 后续（2026-10-28）**：静止态模拟已保护公开及本人部分技能牌区；敌方陷阱／VM 牌堆仍可能重复或泄漏，需安全重分配。NC10 保持部分（[证据](../operations/evidence/2026-10-28-nc10-skill-pile-conservation/README.md)）。
