@@ -1,0 +1,4 @@
+{"players":4,"steps":80,"checkpoint":9,"hidden_choices":9,"final_hash":"4a31d9d212947ef42f30067783a850bbcf32883f08e4ceaa91dc60f9f6c017a2"}
+{"players":8,"steps":80,"checkpoint":9,"hidden_choices":11,"final_hash":"c4641a1ba8aba8d905e486017de604f5c3020d0da4a96d4c0b8976cdaf6c96db"}
+
+exit 0

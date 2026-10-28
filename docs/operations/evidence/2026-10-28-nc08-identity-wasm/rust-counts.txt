@@ -1,0 +1,4 @@
+content-native-loader: 32 passed / 0 failed / 0 ignored
+engine-native: 1605 passed / 0 failed / 73 ignored
+engine-native-wasm: 63 passed / 0 failed / 0 ignored
+total: 1700 passed / 0 failed / 73 ignored; 356 test targets

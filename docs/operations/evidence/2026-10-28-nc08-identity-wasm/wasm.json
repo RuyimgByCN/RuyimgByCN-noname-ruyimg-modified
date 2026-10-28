@@ -1,0 +1,5580 @@
+{
+  "scenarios": [
+    {
+      "players": 4,
+      "checkpoint": 9,
+      "direct": [
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 4,
+          "revision": 1,
+          "hash": "ca2a849e9688d33b51b89fb2dbd371ffd99913f884d9eba8a3f55a0eec6fbf00",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 2,
+          "hash": "4d630150e413c3113086b6574e7402cfbcb49393f511fc7feddb15bfd383f450",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 3,
+          "hash": "3df0aa55935730074f0bb3629e84bc44600eee77c995171126cbcb0a8363bb2a",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 1,
+            "observer": 0,
+            "min": 1,
+            "count": 6,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 4,
+          "hash": "e729e5b65680e8cd80e3e77fde1725c8f4b6b16e6ac8453117f0d34aa3a89506",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 5,
+          "hash": "9e15b21d5b0e9eb6aaac3509cea1a522c2e74fbf46288dc6770558150b11800c",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 6,
+          "hash": "fc850ba1b243e795c1a8c383f7f68625eae6fa4112f20f1d966a3e80a2d5465d",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 7,
+          "hash": "2341aa60e52d5ebf229570480e9ce9f8ae927d3eaa047e7b33a6d3ec1f8502c9",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 8,
+          "hash": "f89b83ddce03549f555569d1b6f479c707a0eb0c25b79e2a79ce0669459dd556",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 9,
+          "hash": "55886b121d4f1240059156e6cc1aa2eac33b733a56bc3112c7773c71676d201f",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 2,
+            "observer": 1,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 10,
+          "hash": "a6f6bdd8557f0dd161120162ad5f01f2b373d8a4fe44c7b1d2e5138a0a96c66c",
+          "codes": [
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 11,
+          "hash": "33f1691704102d99b2d20b215f8d16f6f4185b4c596bfb63696a55ad9d13df95",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 12,
+          "hash": "5e08c7af323bf76d6169143c3d00991e6aff8568db95b93543fa02c4623d2056",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 13,
+          "hash": "978651d7c24cca5231b3e81dcf1f44f01ed587901ecc27abc397e5c28e9d5183",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 2,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 14,
+          "hash": "edaf1618bd4e9bf170a0964af7cab12a34d78a066e5c384491bcfdbe21511981",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 15,
+          "hash": "18bf9cfa76699a67abe5d4fec76ced66c40c3619728f5cde16817d8ca920dcfd",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 3,
+            "observer": 2,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 16,
+          "hash": "81401304f1efcb2d60f5cc8ad8c35c877e0a2ff39140c28211bb9749a43923ea",
+          "codes": [
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 17,
+          "hash": "45bad53bc50b54b89d784ac2edb9e6bb73a781833fc8fd81029c1529f8cbfffa",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 18,
+          "hash": "2badb5d2cda62891ed02dd0d595902563ebb646fafed1f256cd797c30d2f7e74",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 19,
+          "hash": "c6132e8d77352d03baccd52004f48b1b23b2b2d306e5b7a9e0254f87e359e734",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 3,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 20,
+          "hash": "3bb0ec00b63c30e4c77f16ca64afe4cbfc98b2a50f0f3dd4e33cf707a7d68450",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 21,
+          "hash": "15980f9539b33723d9cf00dbb499ed575b1300c4085df6556bf4c577ac64307a",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 4,
+            "observer": 3,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 22,
+          "hash": "950481f76a192c1c64eae037993e47936424105e805e154d8cf92849501a4bb1",
+          "codes": [
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 23,
+          "hash": "eec0c702190312913c610a910fee8c5da909357bdf6a73f94b16d51fd72acfa8",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 24,
+          "hash": "1bd59e3605544609165b2e15d3262cfe9933dc2ec7559b7ff4d49c2d5b4de77b",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 25,
+          "hash": "df28b0d59e409c66a990fa9ed0c77e94b988ce50c1d98ba3d2629f35b7dc1410",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 8,
+          "revision": 26,
+          "hash": "a0b910058cce61cf9afbc7c7a82d5886ef935a441e268c2e1dad1659b75ca2a5",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 8,
+          "revision": 27,
+          "hash": "3a72116fac63ae33dfc8801d2566e18e6f210e0c02077eebaa90fd55b386115e",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 8
+        },
+        {
+          "choice": {
+            "id": 5,
+            "observer": 0,
+            "min": 3,
+            "count": 8,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 8,
+          "revision": 28,
+          "hash": "f9472d73a1ae66936d743cffef4f68e9b76039676f40be842a5aa9df68ddc535",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 29,
+          "hash": "e8d8ff5a9f3642505002e68a9324e6773591b2ce81ba032b04b1cda78cfbfda3",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 30,
+          "hash": "ad7f5b3cab8a2af37ca2c91dc38d3acc44f95789e2fa807bb8a10323f3d3a29f",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 31,
+          "hash": "ca3905e527fde1db44564738b801f8217fe430dc05c6572d64d6f828aecd41f2",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 32,
+          "hash": "06da20b2047e08cf26144b0414ba8961be658327e71c4a25ee20a0180a564046",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 33,
+          "hash": "5f98152ab83fd2444912b2dc5fc3d035ce44e0c779aaf90cf8ea7f4537f79fdb",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 6,
+            "observer": 1,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 34,
+          "hash": "692e36c46c071c7951ce6b70302bc1f390080a2da8501350bca01b6965c03224",
+          "codes": [
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 35,
+          "hash": "8cdf1319001ba7672b7cd0a34e65b7e26e14764f7bd169c6f6beaa89fcca2888",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 36,
+          "hash": "c1613e0cfa740642ff86fd7439998fb3ab9220603855ab9a47100d2ec5ea75dc",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 37,
+          "hash": "e701a84f9e7e020cf8542e95334f18cb96a8b551dea19155f53e9b24c241e518",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 2,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 38,
+          "hash": "9627acfbf6299596ecd1113f451c840f05e76f83d55bf139131baf3736a39a36",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 39,
+          "hash": "a41df917401fa747d30179d1ae649bd6ce43daa30efb5b92e55fcac4932496e6",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 7,
+            "observer": 2,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 40,
+          "hash": "d9782d69f48914fa333b7f4ff18aa90a1df7a4b080be8e5b3b6c1ef0d98c6af4",
+          "codes": [
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 41,
+          "hash": "be1c6a8d633846006e2b30d1d852fc207f942c66db517f76735b790709a29ebd",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 42,
+          "hash": "7e49a9e49426be15829ccacf05a49bfb9057695712d0af1099ba48295497577f",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 43,
+          "hash": "be645ae621db22a2a133c45c6cb169bb05b76799696f8d061048e298bbcb1a84",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 3,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 44,
+          "hash": "187b46caff38221f3007d4503ead8d371588f7bb9fdd3ac9bad3a2c278d330f2",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 45,
+          "hash": "d07ca5f29a9db4544ee45e6c822f643db07f86858db76561625f7e793269b077",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 8,
+            "observer": 3,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 46,
+          "hash": "a3e367c4f2d4f119289b6709e5082b55307e1db59bfce81ce2667d1710cf57a4",
+          "codes": [
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 47,
+          "hash": "e9a4477346e75e7a7e793d85092012366f73aa227ec2a517cf3d3d688771243c",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 48,
+          "hash": "7c3f490725852d913bbb8352bcdf1745e890ddd4890244307f6e8bb38c68f7fe",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 49,
+          "hash": "2dd83f2ddd9bed0e07ab3268e846868f2673a17c1a5c50198d1961bab9022885",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 8,
+          "revision": 50,
+          "hash": "917e2cd860654d24705b7d77894d2e229382eeb2ea7f076a5ea5f5ee6c93e574",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 8,
+          "revision": 51,
+          "hash": "6a6536326aec62793df58968614cba8a36cf9d731e726633d91863e21dcf138d",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 8
+        },
+        {
+          "choice": {
+            "id": 9,
+            "observer": 0,
+            "min": 3,
+            "count": 8,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 8,
+          "revision": 52,
+          "hash": "5dfe7f9cc2f875b431aca8f0dc123281de26054fa6d589198fe7931d603314df",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 53,
+          "hash": "923957b8514d3d3021ba10ee9ffd0508e5db4cc5937be64157019587b2650e11",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 54,
+          "hash": "e201a08558729e80e4e9fae4b18fba665aa99727bcfbf6c922018d60b29dc3bd",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 55,
+          "hash": "3326bbae2895475e2309ec3282713313b870beec54a40183e851eb0164247a0c",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 56,
+          "hash": "eb4b7b18b0cf3f59467fe778984ee7b703fd016a1449c3445377e30438c5f5eb",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 57,
+          "hash": "c1bf6fa4641a081bd01df6a1e03b04e4d1b618c7bc14f098e1c05855acb18cee",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 10,
+            "observer": 1,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 58,
+          "hash": "4436c3915f1f9e29842547dca5d94ea2a189dc2707d49aaf25332b9711ccf231",
+          "codes": [
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 59,
+          "hash": "b77e90f5e26c1b6cddff750c8fcaf9603fdc0d95147f4765b05b1689b93acba7",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 60,
+          "hash": "e9148439bce6da7e00572558d76b604a1312456451a812237164a45f988e4d70",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 61,
+          "hash": "fe7d3105763966b393491e8a7c60fd493a5e4d8b08512e7ec0da85a427259bb4",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 2,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 62,
+          "hash": "ac38b5ba8faf22bbe1dc7bcba74b5ed597923372402115e4b5ef3a779afd3cf5",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 63,
+          "hash": "dad3cc06965698225d9a6579bd82ca6d6c1f07df24cd1e568623bbdfbbe2d311",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 11,
+            "observer": 2,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 64,
+          "hash": "211ce1a8528b2b469168db7c42be085fe6db9e510e83c717b83104ebd60041ee",
+          "codes": [
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 65,
+          "hash": "7d2113ffd8abe2823adb862da946145d48f313f33c365cd1940c62dc6a3498d3",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 66,
+          "hash": "bff3bc7a953c16582d1007aea7b13ac8bca785ca7ea85caba0182162ad266ccf",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 67,
+          "hash": "0d3360688a4311f839e01183952ee3e5507cee68971ddd302a040ad645e858f9",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 3,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 68,
+          "hash": "b408dca3f77bd24195ad2429e7371e664157d1a543ed8cf110e91cfafa83637e",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 69,
+          "hash": "6f405a9f60307750c53b30cdbc6ccfcf322a056eb3b16a645eb527fcfff2222e",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 12,
+            "observer": 3,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 70,
+          "hash": "8080af1238a6fd4473926b021d35566ebf18a78a1b22ae2fea8a7535ae7b05da",
+          "codes": [
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 71,
+          "hash": "10162f2ced55dd53bf9c119085ad9fa4b9c93b8262efcae83e5f56a5c3da1c5c",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 72,
+          "hash": "1bcbd0ce7a780c69bf4887de7abf6a9af01b6697b6940c4c5d249d8cb597c4bf",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 73,
+          "hash": "9748774787372f3d0cf30a63f94c566951de32916f195890d8f074f4e2697e81",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 8,
+          "revision": 74,
+          "hash": "cc40ffa59c3e36082cae1445325cd46c36153dc7b93af5269955013ac04e9368",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 8,
+          "revision": 75,
+          "hash": "4c69830a530e0422e70d6f1b3b0c4645372e8c0bad0daf37f0960b1db3f1b948",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 8
+        },
+        {
+          "choice": {
+            "id": 13,
+            "observer": 0,
+            "min": 3,
+            "count": 8,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 8,
+          "revision": 76,
+          "hash": "b9cf41b596a71d834a9c1f53e4d0ab1553a4ac8c072afbe805b42d4b5ca2eeee",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 77,
+          "hash": "516f10dc0360609d8c135a020afcb9b82e5ce97bd06b89f834a7ac5a0b3a6ba0",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 78,
+          "hash": "5d3ce3bc777b2b2865acf30ee0c3329735491fdab7a8dfc953ddcb0b24691786",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 79,
+          "hash": "f584213bc25340b2205e006c34e4d3d45285434dd2a8b76126cf7abd3cce7ae9",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 80,
+          "hash": "4a31d9d212947ef42f30067783a850bbcf32883f08e4ceaa91dc60f9f6c017a2",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        }
+      ],
+      "restore": {
+        "before": [
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 4,
+            "revision": 1,
+            "hash": "ca2a849e9688d33b51b89fb2dbd371ffd99913f884d9eba8a3f55a0eec6fbf00",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 2,
+            "hash": "4d630150e413c3113086b6574e7402cfbcb49393f511fc7feddb15bfd383f450",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 3,
+            "hash": "3df0aa55935730074f0bb3629e84bc44600eee77c995171126cbcb0a8363bb2a",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 1,
+              "observer": 0,
+              "min": 1,
+              "count": 6,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 4,
+            "hash": "e729e5b65680e8cd80e3e77fde1725c8f4b6b16e6ac8453117f0d34aa3a89506",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 5,
+            "hash": "9e15b21d5b0e9eb6aaac3509cea1a522c2e74fbf46288dc6770558150b11800c",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 6,
+            "hash": "fc850ba1b243e795c1a8c383f7f68625eae6fa4112f20f1d966a3e80a2d5465d",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 7,
+            "hash": "2341aa60e52d5ebf229570480e9ce9f8ae927d3eaa047e7b33a6d3ec1f8502c9",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 8,
+            "hash": "f89b83ddce03549f555569d1b6f479c707a0eb0c25b79e2a79ce0669459dd556",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 9,
+            "hash": "55886b121d4f1240059156e6cc1aa2eac33b733a56bc3112c7773c71676d201f",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          }
+        ],
+        "after": [
+          {
+            "choice": {
+              "id": 2,
+              "observer": 1,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 10,
+            "hash": "a6f6bdd8557f0dd161120162ad5f01f2b373d8a4fe44c7b1d2e5138a0a96c66c",
+            "codes": [
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 11,
+            "hash": "33f1691704102d99b2d20b215f8d16f6f4185b4c596bfb63696a55ad9d13df95",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 12,
+            "hash": "5e08c7af323bf76d6169143c3d00991e6aff8568db95b93543fa02c4623d2056",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 13,
+            "hash": "978651d7c24cca5231b3e81dcf1f44f01ed587901ecc27abc397e5c28e9d5183",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 2,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 14,
+            "hash": "edaf1618bd4e9bf170a0964af7cab12a34d78a066e5c384491bcfdbe21511981",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 15,
+            "hash": "18bf9cfa76699a67abe5d4fec76ced66c40c3619728f5cde16817d8ca920dcfd",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 3,
+              "observer": 2,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 16,
+            "hash": "81401304f1efcb2d60f5cc8ad8c35c877e0a2ff39140c28211bb9749a43923ea",
+            "codes": [
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 17,
+            "hash": "45bad53bc50b54b89d784ac2edb9e6bb73a781833fc8fd81029c1529f8cbfffa",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 18,
+            "hash": "2badb5d2cda62891ed02dd0d595902563ebb646fafed1f256cd797c30d2f7e74",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 19,
+            "hash": "c6132e8d77352d03baccd52004f48b1b23b2b2d306e5b7a9e0254f87e359e734",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 3,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 20,
+            "hash": "3bb0ec00b63c30e4c77f16ca64afe4cbfc98b2a50f0f3dd4e33cf707a7d68450",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 21,
+            "hash": "15980f9539b33723d9cf00dbb499ed575b1300c4085df6556bf4c577ac64307a",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 4,
+              "observer": 3,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 22,
+            "hash": "950481f76a192c1c64eae037993e47936424105e805e154d8cf92849501a4bb1",
+            "codes": [
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 23,
+            "hash": "eec0c702190312913c610a910fee8c5da909357bdf6a73f94b16d51fd72acfa8",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 24,
+            "hash": "1bd59e3605544609165b2e15d3262cfe9933dc2ec7559b7ff4d49c2d5b4de77b",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 25,
+            "hash": "df28b0d59e409c66a990fa9ed0c77e94b988ce50c1d98ba3d2629f35b7dc1410",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 8,
+            "revision": 26,
+            "hash": "a0b910058cce61cf9afbc7c7a82d5886ef935a441e268c2e1dad1659b75ca2a5",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 8,
+            "revision": 27,
+            "hash": "3a72116fac63ae33dfc8801d2566e18e6f210e0c02077eebaa90fd55b386115e",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 8
+          },
+          {
+            "choice": {
+              "id": 5,
+              "observer": 0,
+              "min": 3,
+              "count": 8,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 8,
+            "revision": 28,
+            "hash": "f9472d73a1ae66936d743cffef4f68e9b76039676f40be842a5aa9df68ddc535",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 29,
+            "hash": "e8d8ff5a9f3642505002e68a9324e6773591b2ce81ba032b04b1cda78cfbfda3",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 30,
+            "hash": "ad7f5b3cab8a2af37ca2c91dc38d3acc44f95789e2fa807bb8a10323f3d3a29f",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 31,
+            "hash": "ca3905e527fde1db44564738b801f8217fe430dc05c6572d64d6f828aecd41f2",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 32,
+            "hash": "06da20b2047e08cf26144b0414ba8961be658327e71c4a25ee20a0180a564046",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 33,
+            "hash": "5f98152ab83fd2444912b2dc5fc3d035ce44e0c779aaf90cf8ea7f4537f79fdb",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 6,
+              "observer": 1,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 34,
+            "hash": "692e36c46c071c7951ce6b70302bc1f390080a2da8501350bca01b6965c03224",
+            "codes": [
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 35,
+            "hash": "8cdf1319001ba7672b7cd0a34e65b7e26e14764f7bd169c6f6beaa89fcca2888",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 36,
+            "hash": "c1613e0cfa740642ff86fd7439998fb3ab9220603855ab9a47100d2ec5ea75dc",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 37,
+            "hash": "e701a84f9e7e020cf8542e95334f18cb96a8b551dea19155f53e9b24c241e518",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 2,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 38,
+            "hash": "9627acfbf6299596ecd1113f451c840f05e76f83d55bf139131baf3736a39a36",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 39,
+            "hash": "a41df917401fa747d30179d1ae649bd6ce43daa30efb5b92e55fcac4932496e6",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 7,
+              "observer": 2,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 40,
+            "hash": "d9782d69f48914fa333b7f4ff18aa90a1df7a4b080be8e5b3b6c1ef0d98c6af4",
+            "codes": [
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 41,
+            "hash": "be1c6a8d633846006e2b30d1d852fc207f942c66db517f76735b790709a29ebd",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 42,
+            "hash": "7e49a9e49426be15829ccacf05a49bfb9057695712d0af1099ba48295497577f",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 43,
+            "hash": "be645ae621db22a2a133c45c6cb169bb05b76799696f8d061048e298bbcb1a84",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 3,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 44,
+            "hash": "187b46caff38221f3007d4503ead8d371588f7bb9fdd3ac9bad3a2c278d330f2",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 45,
+            "hash": "d07ca5f29a9db4544ee45e6c822f643db07f86858db76561625f7e793269b077",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 8,
+              "observer": 3,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 46,
+            "hash": "a3e367c4f2d4f119289b6709e5082b55307e1db59bfce81ce2667d1710cf57a4",
+            "codes": [
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 47,
+            "hash": "e9a4477346e75e7a7e793d85092012366f73aa227ec2a517cf3d3d688771243c",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 48,
+            "hash": "7c3f490725852d913bbb8352bcdf1745e890ddd4890244307f6e8bb38c68f7fe",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 49,
+            "hash": "2dd83f2ddd9bed0e07ab3268e846868f2673a17c1a5c50198d1961bab9022885",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 8,
+            "revision": 50,
+            "hash": "917e2cd860654d24705b7d77894d2e229382eeb2ea7f076a5ea5f5ee6c93e574",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 8,
+            "revision": 51,
+            "hash": "6a6536326aec62793df58968614cba8a36cf9d731e726633d91863e21dcf138d",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 8
+          },
+          {
+            "choice": {
+              "id": 9,
+              "observer": 0,
+              "min": 3,
+              "count": 8,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 8,
+            "revision": 52,
+            "hash": "5dfe7f9cc2f875b431aca8f0dc123281de26054fa6d589198fe7931d603314df",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 53,
+            "hash": "923957b8514d3d3021ba10ee9ffd0508e5db4cc5937be64157019587b2650e11",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 54,
+            "hash": "e201a08558729e80e4e9fae4b18fba665aa99727bcfbf6c922018d60b29dc3bd",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 55,
+            "hash": "3326bbae2895475e2309ec3282713313b870beec54a40183e851eb0164247a0c",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 56,
+            "hash": "eb4b7b18b0cf3f59467fe778984ee7b703fd016a1449c3445377e30438c5f5eb",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 57,
+            "hash": "c1bf6fa4641a081bd01df6a1e03b04e4d1b618c7bc14f098e1c05855acb18cee",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 10,
+              "observer": 1,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 58,
+            "hash": "4436c3915f1f9e29842547dca5d94ea2a189dc2707d49aaf25332b9711ccf231",
+            "codes": [
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 59,
+            "hash": "b77e90f5e26c1b6cddff750c8fcaf9603fdc0d95147f4765b05b1689b93acba7",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 60,
+            "hash": "e9148439bce6da7e00572558d76b604a1312456451a812237164a45f988e4d70",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 61,
+            "hash": "fe7d3105763966b393491e8a7c60fd493a5e4d8b08512e7ec0da85a427259bb4",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 2,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 62,
+            "hash": "ac38b5ba8faf22bbe1dc7bcba74b5ed597923372402115e4b5ef3a779afd3cf5",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 63,
+            "hash": "dad3cc06965698225d9a6579bd82ca6d6c1f07df24cd1e568623bbdfbbe2d311",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 11,
+              "observer": 2,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 64,
+            "hash": "211ce1a8528b2b469168db7c42be085fe6db9e510e83c717b83104ebd60041ee",
+            "codes": [
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 65,
+            "hash": "7d2113ffd8abe2823adb862da946145d48f313f33c365cd1940c62dc6a3498d3",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 66,
+            "hash": "bff3bc7a953c16582d1007aea7b13ac8bca785ca7ea85caba0182162ad266ccf",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 67,
+            "hash": "0d3360688a4311f839e01183952ee3e5507cee68971ddd302a040ad645e858f9",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 3,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 68,
+            "hash": "b408dca3f77bd24195ad2429e7371e664157d1a543ed8cf110e91cfafa83637e",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 69,
+            "hash": "6f405a9f60307750c53b30cdbc6ccfcf322a056eb3b16a645eb527fcfff2222e",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 12,
+              "observer": 3,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 70,
+            "hash": "8080af1238a6fd4473926b021d35566ebf18a78a1b22ae2fea8a7535ae7b05da",
+            "codes": [
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 71,
+            "hash": "10162f2ced55dd53bf9c119085ad9fa4b9c93b8262efcae83e5f56a5c3da1c5c",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 72,
+            "hash": "1bcbd0ce7a780c69bf4887de7abf6a9af01b6697b6940c4c5d249d8cb597c4bf",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 73,
+            "hash": "9748774787372f3d0cf30a63f94c566951de32916f195890d8f074f4e2697e81",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 8,
+            "revision": 74,
+            "hash": "cc40ffa59c3e36082cae1445325cd46c36153dc7b93af5269955013ac04e9368",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 8,
+            "revision": 75,
+            "hash": "4c69830a530e0422e70d6f1b3b0c4645372e8c0bad0daf37f0960b1db3f1b948",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 8
+          },
+          {
+            "choice": {
+              "id": 13,
+              "observer": 0,
+              "min": 3,
+              "count": 8,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 8,
+            "revision": 76,
+            "hash": "b9cf41b596a71d834a9c1f53e4d0ab1553a4ac8c072afbe805b42d4b5ca2eeee",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 77,
+            "hash": "516f10dc0360609d8c135a020afcb9b82e5ce97bd06b89f834a7ac5a0b3a6ba0",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 78,
+            "hash": "5d3ce3bc777b2b2865acf30ee0c3329735491fdab7a8dfc953ddcb0b24691786",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 79,
+            "hash": "f584213bc25340b2205e006c34e4d3d45285434dd2a8b76126cf7abd3cce7ae9",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 80,
+            "hash": "4a31d9d212947ef42f30067783a850bbcf32883f08e4ceaa91dc60f9f6c017a2",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          }
+        ]
+      }
+    },
+    {
+      "players": 8,
+      "checkpoint": 9,
+      "direct": [
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 4,
+          "revision": 1,
+          "hash": "787f4f77bc11f1d44d3c97d8cf81990715b187df0c9307a7c5b95dbde002a672",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 2,
+          "hash": "65f0c60f9000acd802562d2c6e2e029861f75433fd457081ec93b30b2dc2ed1a",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 3,
+          "hash": "dc18b272b5cd16eae7eb34d4ace39ade94f6d105f4e39ac80f05e28b00231e90",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 1,
+            "observer": 0,
+            "min": 1,
+            "count": 6,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 4,
+          "hash": "8d8db884111373f9daf8c5784295c7b54dcbeec45ca250dac8e3edb25b725fc1",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 5,
+          "hash": "64988a81c48a11647055ae69d1afe9a8b51a9f15b3f088b4dfc7775e1b2cea55",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 6,
+          "hash": "ba785188dca11497204d07462a09a18df7ef8d72db1459b22b37d139abb02ace",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 7,
+          "hash": "b7f437a7551cb8821f5b0e35b0d9ec5514adcbe98d28afa1fbbd4ab7338fa259",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 8,
+          "hash": "b9237b8f1de46d5d67cec1aa37e65c381e538a8e7703e59c35c5e0d793022fa1",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 9,
+          "hash": "f4eb92ccef399689ba92c44fc2b77570eb55a314608587fcd1761b247c3d37fb",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 2,
+            "observer": 1,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 10,
+          "hash": "a3d0cc84330e50b71f028a818748d69bf156913715eaea824e9a125172e1c7cb",
+          "codes": [
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 11,
+          "hash": "759db20da0dc9807008f387255a1edeab57d56a9347ba1b7d001a8f37c129a2b",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 12,
+          "hash": "ab4b524a70ebe9ee711c154a41b108a07f19f831c4a7bce2181b80df2317abe3",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 13,
+          "hash": "6ed491c7aed1541aac53f09dd82ad008761486db0e3ab724ea69eb071a4f6f06",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 2,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 14,
+          "hash": "92c71994f3d347d0206222d12b6ad5e25bdaabb1c2bd9db861dd96bb78337830",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 15,
+          "hash": "eec68286a6ba50f9f7774fbcfa10a3356df99ad215e282c6c43578dfb8c54039",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 3,
+            "observer": 2,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 16,
+          "hash": "f11aaa636294f93f71965dd9b690f2b8fd599c741061404a98b35681cc5aa692",
+          "codes": [
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 17,
+          "hash": "99db6661dea32e167e3e91ae5aa0058ac62800429bea5561b44eba2983e35e73",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 18,
+          "hash": "2a684d23df31281fc9313546a21370fe46ac4fdfff3e3c8826b3ade42cb8dd83",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 19,
+          "hash": "fd35bc05e022958da4478ac7e66452d57d6f7c788e47a139145233aae44cb914",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 3,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 20,
+          "hash": "c86cee467dd206e26b5e78f41754b255ab78ebdb09ec6034e74f31d2b952b1fe",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 21,
+          "hash": "e1908aaaa496c9b449eba9c1cc905c8197e7ca59b22b3e3b2d6e788dee90741f",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 4,
+            "observer": 3,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 22,
+          "hash": "2429da4e73c6116f8e898d375a26d55c68bcfcf662cf0db8075bc8f79da82ef6",
+          "codes": [
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 23,
+          "hash": "57d3bcbcecc6478edbba18905f377d384d96e7b1d8a58dedb4fa54857680e211",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 24,
+          "hash": "84e1a2e541e89fe0e12ada1dd89b2f174c2e209366ec1e9a3cba4ae9621fcdda",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 25,
+          "hash": "198ac6361d472eb89c326bd566d3537a93d5f84183e838d3bf533b0938798d4b",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 4,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 26,
+          "hash": "89b9e87d8771426746fcef43a4b4630e5ec44a87a04eb20c5f09df585015ebb6",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 27,
+          "hash": "1b5d91e5b6d6f6951e49fde26d4da8d2b3348be65e9b36fa7839b0444060d3c1",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 4,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 5,
+            "observer": 4,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 28,
+          "hash": "f650f355810e2b401bef1980833f732d8fbc4422a7ab8b05a31e4b67008327ff",
+          "codes": [
+            10
+          ],
+          "turn": 4,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 29,
+          "hash": "76d3fbfabe713e3aadc180387ba3ff48b95c38d80d82372d94ec228b137d3f20",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 30,
+          "hash": "162a989bf6bceccf80a03cd36c8c709872a235aa0a638a0698f4e329bbbef97b",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 5,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 31,
+          "hash": "0ca76d648c5138ea60e5d39d089cbec20aecb56157012363db55e4c9f529b6fa",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 5,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 32,
+          "hash": "65cd45484cc14dd59d9444989c3cdfd726e7961f7845c20d36ae05db45b4b7f3",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 5,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 33,
+          "hash": "1ef56e2c4e549f04076c2b52a3285c31c10ffbc1cf67df0dc7c2db21a7ebae69",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 5,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 6,
+            "observer": 5,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 34,
+          "hash": "47d05656cfbd4aa36c2a13bcea520e60107886bc9995d35ae82979b1a9baded7",
+          "codes": [
+            10
+          ],
+          "turn": 5,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 35,
+          "hash": "a336da5d55bae74fb166c39a0e7deaddb7f099a22654bc4d585e970ce8b672a3",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 5,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 36,
+          "hash": "2248ae81bc4a0f9e33a29b482014b63f0c4870c1896237b8fddf483f4eeb3324",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 6,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 37,
+          "hash": "229c56dde9431300bc525c6c657d101dcff131d334402868ad62684bede2904f",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 6,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 38,
+          "hash": "0b6e3cb49a73f23c5105fc78533f0dbafc358784c5f0af40f784e810676a823f",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 6,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 39,
+          "hash": "68f51af046106a6f3b02d8b662070d0f98265c2d08784baa7565b3563e5c79f9",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 6,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 7,
+            "observer": 6,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 40,
+          "hash": "c2745639c008c3dc3137bdafea4c12b92ccc4b1d788ea8b789548ff6351ba9ec",
+          "codes": [
+            10
+          ],
+          "turn": 6,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 41,
+          "hash": "e5ffd7609760419910861a10628015a36a048c4e837ca9de2d7b861d2826ea1b",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 6,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 6,
+          "before_turn": 6,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 42,
+          "hash": "50c2c650f1a0cf062cface783f172b73324cc59e38d3feddf983e62870aa76d0",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 7,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 43,
+          "hash": "46aa6407faf479e2e65f752a87e41ea58b8978d2b41a93625fa3b1d7f1c68d86",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 7,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 44,
+          "hash": "daeacf10950eb3196eb8a386bb41c92dacdf1c3a7b42b1ea99216be1788c113d",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 7,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 45,
+          "hash": "9c00c6b14e378776defe03db97d4b13e8275f3067219a4685c0bf56f09873754",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 7,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 8,
+            "observer": 7,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 46,
+          "hash": "14353bb75b242eaf4cc7f777acfd0b369ce883c9ac0d8e139773636b743d465d",
+          "codes": [
+            10
+          ],
+          "turn": 7,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 47,
+          "hash": "963553296e9abef87cb0d39542fab3ec7cf144430fa225cb3498506fd8404445",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 7,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 7,
+          "before_turn": 7,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 48,
+          "hash": "3eaacb8b997e7211b5eed1155da091361506c2961cfca9a6c6e76a2e00be6bfc",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 49,
+          "hash": "4d54112ebfd98fab91eea4424fb94fbf03fad1b2cd6cfbe4ed866e0cb80d6d14",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 0,
+          "phase": "draw",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "draw",
+          "before_hand0": 8,
+          "revision": 50,
+          "hash": "20c5cea6fd9ffe6926af6ef90eb172e1bd0a01aa08259ee562f3c506d79e5f1d",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 0,
+          "phase": "play",
+          "hand0": 8
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "play",
+          "before_hand0": 8,
+          "revision": 51,
+          "hash": "a159eb5da2c83b5fbc7aae67d7b615748c586ce0da01dc68f810eb21cea6e3c8",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 8
+        },
+        {
+          "choice": {
+            "id": 9,
+            "observer": 0,
+            "min": 3,
+            "count": 8,
+            "hidden": false
+          },
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 8,
+          "revision": 52,
+          "hash": "c4e5feddbcf6fbdd23089da1c20c96636fc9637622d834b90d5168ce5e8e0f14",
+          "codes": [
+            10
+          ],
+          "turn": 0,
+          "phase": "discard",
+          "hand0": 5
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "discard",
+          "before_hand0": 5,
+          "revision": 53,
+          "hash": "d1ab83f1fff1979d5ccc0d3a2186cad75b30c57a57713d32c8108b995e1497ce",
+          "codes": [
+            8,
+            2,
+            8
+          ],
+          "turn": 0,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 0,
+          "before_turn": 0,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 54,
+          "hash": "37bee6310f4916646c2f95f58cace19f5b7e9f114bc2b3b02d1021c88d0c2262",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 55,
+          "hash": "ffc31f08b50705768c05722b58682bc3126a5f790d0294400df9ee1ca662ba1e",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 1,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 56,
+          "hash": "c9eda3d14bcb0f5c7b19801828fd93cfa582b434ea9ae70dbe37d66f9a56bbcc",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 57,
+          "hash": "58f95ed3ef4b06a54894986a7b268ec8a509ea1c19062826d268e64a77d611aa",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 10,
+            "observer": 1,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 58,
+          "hash": "b3a2f63bbc9f8d49475ed10e1c14d261c220798fc0bc2eca3070634dc6208a7d",
+          "codes": [
+            10
+          ],
+          "turn": 1,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 59,
+          "hash": "a24382a32f46523e68d13de236964fca3e2e3179189fcbe213adfdd31fbd27a1",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 1,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 1,
+          "before_turn": 1,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 60,
+          "hash": "3da3bc40cb9d4db2bda543ea1519fa14514a7ae36b750f1c50734eea26ce0751",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 61,
+          "hash": "8d8732dcbaecb3a26e1724eeff01870e609775919fcb0cb155e06f6e27ebd07e",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 2,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 62,
+          "hash": "7b26c53d7363484f0d4d27160d3857399119bf774b0005f3a3bd6483d59b5d58",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 63,
+          "hash": "77e21427a2744f828210bc83a671c70a1ab97c916a423feaab1052d9cf393d1b",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 11,
+            "observer": 2,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 64,
+          "hash": "097be1bf928696214e121c27816abf641837f865043361efbb74b5936932fc11",
+          "codes": [
+            10
+          ],
+          "turn": 2,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 65,
+          "hash": "9da84ff0811ed491f7465e929e0168d1659cb8b775a28b855ae0a4c27b5997ce",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 2,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 2,
+          "before_turn": 2,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 66,
+          "hash": "8241b7fa02a4bfc40573bf07fb42e25eb945759f0eaff89823ab309003121138",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 67,
+          "hash": "3b1ec28c4b15f5b5163c4f5b5c82655fa332cb7ae98869d4e58463d74779ba0d",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 3,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 68,
+          "hash": "f4835b9dbc7b4b044268498fc93d921f9c1980aafcfc01d929915c1259e51daf",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 69,
+          "hash": "d534daf976b09b917fe93fe9caad06dcea7ce15767dda3e915c99926a611a35d",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 12,
+            "observer": 3,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 70,
+          "hash": "92e71a313b003e9d1e4e2c3abdff870d2aea009faea26d460c707f5ebac238d4",
+          "codes": [
+            10
+          ],
+          "turn": 3,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 71,
+          "hash": "7a0a0dd76c4379a852853d032aa640a4afc648b064fdda3c4ba52444c1c7c371",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 3,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 3,
+          "before_turn": 3,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 72,
+          "hash": "cd10227482e88b9ba894f685c7b1f4b5fac04783f7707470529e51b1bda2e746",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 73,
+          "hash": "1b591dcfe1315cee00bcd663f4a463c572b92517a7163d88f48f2b84dd853324",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 4,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 74,
+          "hash": "d2ce44856d5849107886e31c0e99fecd519c5feaeb3364318ab17a4d7ea8bcc9",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "play",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "play",
+          "before_hand0": 6,
+          "revision": 75,
+          "hash": "c9c674162aa59a6a09c69367868f2991b1e0ea65b35eb9c9d57944cd9c2facd1",
+          "codes": [
+            8,
+            8,
+            10
+          ],
+          "turn": 4,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": {
+            "id": 13,
+            "observer": 4,
+            "min": 2,
+            "count": 6,
+            "hidden": true
+          },
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 76,
+          "hash": "3b9fe29e9828b22a8f27eee6c60eb21388ebd1e196c2a5261f7c85b5c2a0683b",
+          "codes": [
+            10
+          ],
+          "turn": 4,
+          "phase": "discard",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "discard",
+          "before_hand0": 6,
+          "revision": 77,
+          "hash": "da7b32dd3b4945b9e8a4362bddbb75efd1127dc537e160287f34641031a7e767",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 4,
+          "phase": "end",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 4,
+          "before_turn": 4,
+          "before_phase": "end",
+          "before_hand0": 6,
+          "revision": 78,
+          "hash": "fe0db0338f42b5100cc101ebe146db401c6e01f779288e8a4940bea5f6d0e663",
+          "codes": [
+            8,
+            8,
+            8
+          ],
+          "turn": 5,
+          "phase": "judge",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "judge",
+          "before_hand0": 6,
+          "revision": 79,
+          "hash": "5fe114b8c66e53600fd9bfc343179afb597aa1e2860c0627422c276b879e8fed",
+          "codes": [
+            8,
+            8,
+            2
+          ],
+          "turn": 5,
+          "phase": "draw",
+          "hand0": 6
+        },
+        {
+          "choice": null,
+          "actor": 5,
+          "before_turn": 5,
+          "before_phase": "draw",
+          "before_hand0": 6,
+          "revision": 80,
+          "hash": "c4641a1ba8aba8d905e486017de604f5c3020d0da4a96d4c0b8976cdaf6c96db",
+          "codes": [
+            8,
+            8
+          ],
+          "turn": 5,
+          "phase": "play",
+          "hand0": 6
+        }
+      ],
+      "restore": {
+        "before": [
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 4,
+            "revision": 1,
+            "hash": "787f4f77bc11f1d44d3c97d8cf81990715b187df0c9307a7c5b95dbde002a672",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 2,
+            "hash": "65f0c60f9000acd802562d2c6e2e029861f75433fd457081ec93b30b2dc2ed1a",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 3,
+            "hash": "dc18b272b5cd16eae7eb34d4ace39ade94f6d105f4e39ac80f05e28b00231e90",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 1,
+              "observer": 0,
+              "min": 1,
+              "count": 6,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 4,
+            "hash": "8d8db884111373f9daf8c5784295c7b54dcbeec45ca250dac8e3edb25b725fc1",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 5,
+            "hash": "64988a81c48a11647055ae69d1afe9a8b51a9f15b3f088b4dfc7775e1b2cea55",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 6,
+            "hash": "ba785188dca11497204d07462a09a18df7ef8d72db1459b22b37d139abb02ace",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 7,
+            "hash": "b7f437a7551cb8821f5b0e35b0d9ec5514adcbe98d28afa1fbbd4ab7338fa259",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 8,
+            "hash": "b9237b8f1de46d5d67cec1aa37e65c381e538a8e7703e59c35c5e0d793022fa1",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 9,
+            "hash": "f4eb92ccef399689ba92c44fc2b77570eb55a314608587fcd1761b247c3d37fb",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          }
+        ],
+        "after": [
+          {
+            "choice": {
+              "id": 2,
+              "observer": 1,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 10,
+            "hash": "a3d0cc84330e50b71f028a818748d69bf156913715eaea824e9a125172e1c7cb",
+            "codes": [
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 11,
+            "hash": "759db20da0dc9807008f387255a1edeab57d56a9347ba1b7d001a8f37c129a2b",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 12,
+            "hash": "ab4b524a70ebe9ee711c154a41b108a07f19f831c4a7bce2181b80df2317abe3",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 13,
+            "hash": "6ed491c7aed1541aac53f09dd82ad008761486db0e3ab724ea69eb071a4f6f06",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 2,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 14,
+            "hash": "92c71994f3d347d0206222d12b6ad5e25bdaabb1c2bd9db861dd96bb78337830",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 15,
+            "hash": "eec68286a6ba50f9f7774fbcfa10a3356df99ad215e282c6c43578dfb8c54039",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 3,
+              "observer": 2,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 16,
+            "hash": "f11aaa636294f93f71965dd9b690f2b8fd599c741061404a98b35681cc5aa692",
+            "codes": [
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 17,
+            "hash": "99db6661dea32e167e3e91ae5aa0058ac62800429bea5561b44eba2983e35e73",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 18,
+            "hash": "2a684d23df31281fc9313546a21370fe46ac4fdfff3e3c8826b3ade42cb8dd83",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 19,
+            "hash": "fd35bc05e022958da4478ac7e66452d57d6f7c788e47a139145233aae44cb914",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 3,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 20,
+            "hash": "c86cee467dd206e26b5e78f41754b255ab78ebdb09ec6034e74f31d2b952b1fe",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 21,
+            "hash": "e1908aaaa496c9b449eba9c1cc905c8197e7ca59b22b3e3b2d6e788dee90741f",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 4,
+              "observer": 3,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 22,
+            "hash": "2429da4e73c6116f8e898d375a26d55c68bcfcf662cf0db8075bc8f79da82ef6",
+            "codes": [
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 23,
+            "hash": "57d3bcbcecc6478edbba18905f377d384d96e7b1d8a58dedb4fa54857680e211",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 24,
+            "hash": "84e1a2e541e89fe0e12ada1dd89b2f174c2e209366ec1e9a3cba4ae9621fcdda",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 25,
+            "hash": "198ac6361d472eb89c326bd566d3537a93d5f84183e838d3bf533b0938798d4b",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 4,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 26,
+            "hash": "89b9e87d8771426746fcef43a4b4630e5ec44a87a04eb20c5f09df585015ebb6",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 27,
+            "hash": "1b5d91e5b6d6f6951e49fde26d4da8d2b3348be65e9b36fa7839b0444060d3c1",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 4,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 5,
+              "observer": 4,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 28,
+            "hash": "f650f355810e2b401bef1980833f732d8fbc4422a7ab8b05a31e4b67008327ff",
+            "codes": [
+              10
+            ],
+            "turn": 4,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 29,
+            "hash": "76d3fbfabe713e3aadc180387ba3ff48b95c38d80d82372d94ec228b137d3f20",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 30,
+            "hash": "162a989bf6bceccf80a03cd36c8c709872a235aa0a638a0698f4e329bbbef97b",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 5,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 31,
+            "hash": "0ca76d648c5138ea60e5d39d089cbec20aecb56157012363db55e4c9f529b6fa",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 5,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 32,
+            "hash": "65cd45484cc14dd59d9444989c3cdfd726e7961f7845c20d36ae05db45b4b7f3",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 5,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 33,
+            "hash": "1ef56e2c4e549f04076c2b52a3285c31c10ffbc1cf67df0dc7c2db21a7ebae69",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 5,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 6,
+              "observer": 5,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 34,
+            "hash": "47d05656cfbd4aa36c2a13bcea520e60107886bc9995d35ae82979b1a9baded7",
+            "codes": [
+              10
+            ],
+            "turn": 5,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 35,
+            "hash": "a336da5d55bae74fb166c39a0e7deaddb7f099a22654bc4d585e970ce8b672a3",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 5,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 36,
+            "hash": "2248ae81bc4a0f9e33a29b482014b63f0c4870c1896237b8fddf483f4eeb3324",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 6,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 37,
+            "hash": "229c56dde9431300bc525c6c657d101dcff131d334402868ad62684bede2904f",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 6,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 38,
+            "hash": "0b6e3cb49a73f23c5105fc78533f0dbafc358784c5f0af40f784e810676a823f",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 6,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 39,
+            "hash": "68f51af046106a6f3b02d8b662070d0f98265c2d08784baa7565b3563e5c79f9",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 6,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 7,
+              "observer": 6,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 40,
+            "hash": "c2745639c008c3dc3137bdafea4c12b92ccc4b1d788ea8b789548ff6351ba9ec",
+            "codes": [
+              10
+            ],
+            "turn": 6,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 41,
+            "hash": "e5ffd7609760419910861a10628015a36a048c4e837ca9de2d7b861d2826ea1b",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 6,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 6,
+            "before_turn": 6,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 42,
+            "hash": "50c2c650f1a0cf062cface783f172b73324cc59e38d3feddf983e62870aa76d0",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 7,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 43,
+            "hash": "46aa6407faf479e2e65f752a87e41ea58b8978d2b41a93625fa3b1d7f1c68d86",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 7,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 44,
+            "hash": "daeacf10950eb3196eb8a386bb41c92dacdf1c3a7b42b1ea99216be1788c113d",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 7,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 45,
+            "hash": "9c00c6b14e378776defe03db97d4b13e8275f3067219a4685c0bf56f09873754",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 7,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 8,
+              "observer": 7,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 46,
+            "hash": "14353bb75b242eaf4cc7f777acfd0b369ce883c9ac0d8e139773636b743d465d",
+            "codes": [
+              10
+            ],
+            "turn": 7,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 47,
+            "hash": "963553296e9abef87cb0d39542fab3ec7cf144430fa225cb3498506fd8404445",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 7,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 7,
+            "before_turn": 7,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 48,
+            "hash": "3eaacb8b997e7211b5eed1155da091361506c2961cfca9a6c6e76a2e00be6bfc",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 49,
+            "hash": "4d54112ebfd98fab91eea4424fb94fbf03fad1b2cd6cfbe4ed866e0cb80d6d14",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 0,
+            "phase": "draw",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "draw",
+            "before_hand0": 8,
+            "revision": 50,
+            "hash": "20c5cea6fd9ffe6926af6ef90eb172e1bd0a01aa08259ee562f3c506d79e5f1d",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 0,
+            "phase": "play",
+            "hand0": 8
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "play",
+            "before_hand0": 8,
+            "revision": 51,
+            "hash": "a159eb5da2c83b5fbc7aae67d7b615748c586ce0da01dc68f810eb21cea6e3c8",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 8
+          },
+          {
+            "choice": {
+              "id": 9,
+              "observer": 0,
+              "min": 3,
+              "count": 8,
+              "hidden": false
+            },
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 8,
+            "revision": 52,
+            "hash": "c4e5feddbcf6fbdd23089da1c20c96636fc9637622d834b90d5168ce5e8e0f14",
+            "codes": [
+              10
+            ],
+            "turn": 0,
+            "phase": "discard",
+            "hand0": 5
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "discard",
+            "before_hand0": 5,
+            "revision": 53,
+            "hash": "d1ab83f1fff1979d5ccc0d3a2186cad75b30c57a57713d32c8108b995e1497ce",
+            "codes": [
+              8,
+              2,
+              8
+            ],
+            "turn": 0,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 0,
+            "before_turn": 0,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 54,
+            "hash": "37bee6310f4916646c2f95f58cace19f5b7e9f114bc2b3b02d1021c88d0c2262",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 55,
+            "hash": "ffc31f08b50705768c05722b58682bc3126a5f790d0294400df9ee1ca662ba1e",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 1,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 56,
+            "hash": "c9eda3d14bcb0f5c7b19801828fd93cfa582b434ea9ae70dbe37d66f9a56bbcc",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 57,
+            "hash": "58f95ed3ef4b06a54894986a7b268ec8a509ea1c19062826d268e64a77d611aa",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 10,
+              "observer": 1,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 58,
+            "hash": "b3a2f63bbc9f8d49475ed10e1c14d261c220798fc0bc2eca3070634dc6208a7d",
+            "codes": [
+              10
+            ],
+            "turn": 1,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 59,
+            "hash": "a24382a32f46523e68d13de236964fca3e2e3179189fcbe213adfdd31fbd27a1",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 1,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 1,
+            "before_turn": 1,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 60,
+            "hash": "3da3bc40cb9d4db2bda543ea1519fa14514a7ae36b750f1c50734eea26ce0751",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 61,
+            "hash": "8d8732dcbaecb3a26e1724eeff01870e609775919fcb0cb155e06f6e27ebd07e",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 2,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 62,
+            "hash": "7b26c53d7363484f0d4d27160d3857399119bf774b0005f3a3bd6483d59b5d58",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 63,
+            "hash": "77e21427a2744f828210bc83a671c70a1ab97c916a423feaab1052d9cf393d1b",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 11,
+              "observer": 2,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 64,
+            "hash": "097be1bf928696214e121c27816abf641837f865043361efbb74b5936932fc11",
+            "codes": [
+              10
+            ],
+            "turn": 2,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 65,
+            "hash": "9da84ff0811ed491f7465e929e0168d1659cb8b775a28b855ae0a4c27b5997ce",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 2,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 2,
+            "before_turn": 2,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 66,
+            "hash": "8241b7fa02a4bfc40573bf07fb42e25eb945759f0eaff89823ab309003121138",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 67,
+            "hash": "3b1ec28c4b15f5b5163c4f5b5c82655fa332cb7ae98869d4e58463d74779ba0d",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 3,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 68,
+            "hash": "f4835b9dbc7b4b044268498fc93d921f9c1980aafcfc01d929915c1259e51daf",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 69,
+            "hash": "d534daf976b09b917fe93fe9caad06dcea7ce15767dda3e915c99926a611a35d",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 12,
+              "observer": 3,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 70,
+            "hash": "92e71a313b003e9d1e4e2c3abdff870d2aea009faea26d460c707f5ebac238d4",
+            "codes": [
+              10
+            ],
+            "turn": 3,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 71,
+            "hash": "7a0a0dd76c4379a852853d032aa640a4afc648b064fdda3c4ba52444c1c7c371",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 3,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 3,
+            "before_turn": 3,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 72,
+            "hash": "cd10227482e88b9ba894f685c7b1f4b5fac04783f7707470529e51b1bda2e746",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 73,
+            "hash": "1b591dcfe1315cee00bcd663f4a463c572b92517a7163d88f48f2b84dd853324",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 4,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 74,
+            "hash": "d2ce44856d5849107886e31c0e99fecd519c5feaeb3364318ab17a4d7ea8bcc9",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "play",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "play",
+            "before_hand0": 6,
+            "revision": 75,
+            "hash": "c9c674162aa59a6a09c69367868f2991b1e0ea65b35eb9c9d57944cd9c2facd1",
+            "codes": [
+              8,
+              8,
+              10
+            ],
+            "turn": 4,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": {
+              "id": 13,
+              "observer": 4,
+              "min": 2,
+              "count": 6,
+              "hidden": true
+            },
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 76,
+            "hash": "3b9fe29e9828b22a8f27eee6c60eb21388ebd1e196c2a5261f7c85b5c2a0683b",
+            "codes": [
+              10
+            ],
+            "turn": 4,
+            "phase": "discard",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "discard",
+            "before_hand0": 6,
+            "revision": 77,
+            "hash": "da7b32dd3b4945b9e8a4362bddbb75efd1127dc537e160287f34641031a7e767",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 4,
+            "phase": "end",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 4,
+            "before_turn": 4,
+            "before_phase": "end",
+            "before_hand0": 6,
+            "revision": 78,
+            "hash": "fe0db0338f42b5100cc101ebe146db401c6e01f779288e8a4940bea5f6d0e663",
+            "codes": [
+              8,
+              8,
+              8
+            ],
+            "turn": 5,
+            "phase": "judge",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "judge",
+            "before_hand0": 6,
+            "revision": 79,
+            "hash": "5fe114b8c66e53600fd9bfc343179afb597aa1e2860c0627422c276b879e8fed",
+            "codes": [
+              8,
+              8,
+              2
+            ],
+            "turn": 5,
+            "phase": "draw",
+            "hand0": 6
+          },
+          {
+            "choice": null,
+            "actor": 5,
+            "before_turn": 5,
+            "before_phase": "draw",
+            "before_hand0": 6,
+            "revision": 80,
+            "hash": "c4641a1ba8aba8d905e486017de604f5c3020d0da4a96d4c0b8976cdaf6c96db",
+            "codes": [
+              8,
+              8
+            ],
+            "turn": 5,
+            "phase": "play",
+            "hand0": 6
+          }
+        ]
+      }
+    }
+  ]
+}

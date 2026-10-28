@@ -5,6 +5,9 @@ use engine_native_wasm::test_support::{
 };
 use serde_json::{json, Value};
 
+#[path = "cross_target_multiseat/identity.rs"]
+mod identity;
+
 const SEED: u64 = 20261027;
 const STEPS: usize = 80;
 
