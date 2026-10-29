@@ -1,0 +1,25 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "env",
+    "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after",
+    "CARGO_BUILD_JOBS=8",
+    "CARGO_INCREMENTAL=1",
+    "RUSTFLAGS=-D warnings",
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native",
+    "--all-targets"
+  ],
+  "exit": 0,
+  "finished_at": "2026-10-30T01:51:42.782580+08:00",
+  "note": "Prior unrelated tool autofix saved then precisely restored to baseline bytes; no F7 semantic code change."
+}

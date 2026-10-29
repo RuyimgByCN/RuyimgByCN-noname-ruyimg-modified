@@ -1,0 +1,26 @@
+上游技能块 vs 原生宿主行为：**单技能事实检查器**（第 1017 轮）。
+
+为什么需要它：本会话三次用「文本窗口」做审计都产生了大量假信号
+（字符窗口溢到相邻技能、同名跨源/跨区段），结论全部作废。
+唯一可靠的做法是：
+
+1. **大括号配对**取上游技能块（跳过字符串字面量），而不是字符窗口；
+2. **来源限定**——先「技能名 → 包 → 来源 ID → 上游目录」，只在该目录里找；
+3. 原生侧按 `HostBehavior::` **切块归属**（整文件正则会跨技能）。
+
+审计四类标志：
+
+| 类 | 上游 | 原生 |
+|---|---|---|
+| 可选性 | `forced: true` / `direct: true` / 都没有 | `TriggerMeta.optional` |
+| 触发事件 | `trigger: { player/global/...: "X" }` | `TriggerMeta.event`（经映射表）|
+| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 的 `once_per_turn` 允许表 |
+| 每局一次 | `limited: true` | behavior 块里的 once/used 痕迹 |
+
+用法：
+    python3 -B scripts/audit_upstream_skill_flags.py <skill> [behavior]
+
+**只打印事实**（上游块 + 原生元数据 + 是否在 once 允许表），**不下判定**。
+理由：同名跨源/跨区段在本仓极常见（`gaizao`/`baiyi`/`datong`/`senluo` 都踩过），
+批量判定会产生大量假信号；结论必须由人逐条核对行为后给出。
+

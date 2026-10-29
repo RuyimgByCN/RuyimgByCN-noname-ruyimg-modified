@@ -47,7 +47,7 @@
 
 | 编号 | 事实 | 位置 |
 |---|---|---|
-| S1 | 杀结算机器快照内含铁骑、流离、护驾、酒等**具体技能字段**（`tieji_red`、`liuli_done/pending`、`hujia_queue/holder`、`jiu_bonus`） | `crates/engine-native/src/snap.rs` `MachineSnapshot::Sha` |
+| S1 | 杀结算机器快照内含铁骑、流离、护驾、酒等**具体技能字段**（`tieji_red`、`liuli_done/pending`、`hujia_queue/holder`、`jiu_bonus`） | `crates/engine-native-kernel/src/snap.rs` `MachineSnapshot::Sha` |
 | S2 | `CardKind` 为封闭枚举，共 86 个变体，扩展包的牌（炉石、运筹帷幄、古剑、玩点论杀等）直接写入内核枚举；`kernel.rs` 中文本匹配 `CardKind::` 为 130 次，多处按具体牌种 `match` | `src/catalog.rs`、`src/kernel.rs` |
 | S3 | 扩展行为 `HostBehavior` 为封闭枚举，共 74 个变体；契约写明"新增变体 = 宿主 ABI 递增"，即每个扩展效果由宿主逐个实现 | `src/content/host.rs` |
 | S4 | 源码注释中"登记差异"共 122 处（catalog 36 / host 49 / standard 28 / kernel 6 / engine 3），"确定性"80 处；主要类型是"上游由玩家选择，原生取确定性首张"及"无失去体力原语，简化为伤害" | `src/**` |

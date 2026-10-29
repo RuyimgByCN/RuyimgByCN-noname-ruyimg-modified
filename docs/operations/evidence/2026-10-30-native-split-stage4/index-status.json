@@ -1,0 +1,7 @@
+{
+  "performed": "git mv for all 214 source files, then git restore --staged -- . after recording rename status",
+  "staged_files": [],
+  "no_staged_files": true,
+  "head": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+  "notes": "Working-tree moves and changes retained for independent review; parent stages and commits."
+}

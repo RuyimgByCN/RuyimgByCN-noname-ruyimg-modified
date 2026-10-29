@@ -139,7 +139,7 @@ fn upstream_yingzi_draws_one_extra() {
 fn upstream_yingzi_numfixed_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ying_zi.rs"
+        "/../engine-native-content/src/content/standard/skills/ying_zi.rs"
     ))
     .expect("读英姿源码");
     let idx = src.find("YingZiBehavior").expect("英姿行为");

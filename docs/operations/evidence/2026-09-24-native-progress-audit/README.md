@@ -13,6 +13,6 @@
 
 规则版本参与状态摘要，因此 v59→v60 本身会改变场景哈希；这不证明所有差异都合理。standard_catalog_parts 中顺手牵羊与酒/雷杀的入目录操作还位于拆牌两次循环内，可能额外生成实体牌。下一步应先核对标准牌集合、14 个场景的命令/事件/状态轨迹和祖墨手铠封印语义，再决定是否更新 golden，随后重跑全量并形成新一轮通过证据。
 
-另有独立的字节存档问题：[archive.rs](../../../../crates/engine-native/src/archive.rs) 同时给 Dismantle 和 XiaoJi 机器快照编码 tag 29；解码先匹配 Dismantle，XiaoJi 分支不可达，编译器在本次测试输出中也报告 unreachable pattern。现有枭姬测试仅验证内存询问与摸牌，未覆盖挂起字节恢复。需修 tag 冲突并补往返/负例，不能因其他恢复用例通过而关闭 N11。
+另有独立的字节存档问题：[archive.rs](../../../../crates/engine-native-kernel/src/archive.rs) 同时给 Dismantle 和 XiaoJi 机器快照编码 tag 29；解码先匹配 Dismantle，XiaoJi 分支不可达，编译器在本次测试输出中也报告 unreachable pattern。现有枭姬测试仅验证内存询问与摸牌，未覆盖挂起字节恢复。需修 tag 冲突并补往返/负例，不能因其他恢复用例通过而关闭 N11。
 
 本轮只核验与整理文档；未修改内核或重录 golden。当前任务状态见[进度主稿](../../../architecture/native-progress.md)。

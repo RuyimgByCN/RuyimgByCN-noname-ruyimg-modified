@@ -7,7 +7,7 @@
 - 此前 `noname-next` 与工作区根都没有版本控制。10-10 host.rs 被截断后，只能靠会话记录回放修复（见 [v192 恢复证据](../2026-10-10-replay-golden-v192-recovery/README.md)）。
 - 本日执行 `git init -b main` 并提交基线 `72583b2b`（31,534 个文件，`git fsck --full` 无错误）。按用户要求只在本地使用：没有配置 remote，`.git/hooks/pre-push` 拦截一切推送。
 - `.gitignore` 新增排除 `node_modules/`、`/.codegraph/`、`/.npack-store/`、`/.scratch/`（本地工具与运行时状态，可再生）。`/target` 与 `/content/original/assets/` 原本已排除。
-- 提交前确认 `crates/engine-native/src/content/host.rs` 与恢复锚点 `~/host-recovery-20261010/final_allgreen_525pass.rs` 逐字节一致（见 [source-checks.txt](source-checks.txt)）。
+- 提交前确认 `crates/engine-native-content/src/content/host.rs` 与恢复锚点 `~/host-recovery-20261010/final_allgreen_525pass.rs` 逐字节一致（见 [source-checks.txt](source-checks.txt)）。
 
 ## 实跑结果
 

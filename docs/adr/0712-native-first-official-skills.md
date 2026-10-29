@@ -3,8 +3,8 @@
 - 状态：2026-09-17 初始切片及复核历史；当时 111 项通过，首组未完整迁移。
 - 后续：2026-09-18 [ADR 0714](0714-native-guidao-tiandu-semantics-n04d.md) 已修复天妒范围、鬼道旧牌归属和 N04-d，规则版本为 5。
   **下文“当前/本轮”均指 2026-09-17**；装备资格/事件/恢复扩展及新 N04-e 以 [当前进度](../architecture/native-progress.md) 为准。
-- 关联：[kernel](../../crates/engine-native/src/kernel.rs)、[snap](../../crates/engine-native/src/snap.rs)、
-  [standard](../../crates/engine-native/src/content/standard.rs)、[当前进度](../architecture/native-progress.md)。
+- 关联：[kernel](../../crates/engine-native-kernel/src/kernel.rs)、[snap](../../crates/engine-native-kernel/src/snap.rs)、
+  [standard](../../crates/engine-native-content/src/content/standard.rs)、[当前进度](../architecture/native-progress.md)。
 - 前序：[ADR 0711](0711-native-judge-order-alignment.md)；后续排序/版本见 [ADR 0713](0713-native-judge-grouping-version4.md)。
 
 ## 已落地

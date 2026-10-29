@@ -41,7 +41,7 @@ use engine_native::Engine;
 fn upstream_jiuyuan_qualification_and_bonus() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/dying.rs"
+        "/../engine-native-kernel/src/kernel/dying.rs"
     ))
     .expect("读 dying");
     let idx = src.find("let jiuyuan").expect("救援判定");
@@ -77,7 +77,7 @@ fn upstream_jiuyuan_qualification_and_bonus() {
 fn upstream_jiuyuan_lord_gate_is_same_family() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state/core_ops.rs"
+        "/../engine-native-kernel/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");
@@ -89,17 +89,17 @@ fn upstream_jiuyuan_lord_gate_is_same_family() {
     // 同族第 3 例：hujia / jijiang / jiuyuan 均以 is_lord 作主公技资格
     let sha = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     let jijiang = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/jijiang.rs"
+        "/../engine-native-content/src/content/standard/skills/jijiang.rs"
     ))
     .expect("读 jijiang");
     let dying = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/dying.rs"
+        "/../engine-native-kernel/src/kernel/dying.rs"
     ))
     .expect("读 dying");
     assert!(

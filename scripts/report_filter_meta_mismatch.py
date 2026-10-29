@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 #: * `SwdBaishouzhihuHeld`：上游 `player:'discardEnd'`，改正会撞 `daixing` 测试（待授权同步改断言）。
 ALLOWED: dict[str, str] = {
 }
-HOST = ROOT / "crates/engine-native/src/content/host"
+HOST = ROOT / "crates/engine-native-content/src/content/host"
 
 META_RE = re.compile(
     r"HostBehavior::(\w+)\s*=>\s*Some\(TriggerMeta\s*\{[^}]*?event:\s*EventKind::(\w+)",
@@ -31,7 +31,7 @@ META_RE = re.compile(
 ARM_RE = re.compile(r"HostBehavior::(\w+)\s*=>")
 
 
-def meta_events(base: Path = HOST.parents[1] / "vocabulary/host") -> dict[str, str]:
+def meta_events(base: Path = ROOT / "crates/engine-native-kernel/src/vocabulary/host") -> dict[str, str]:
     """HostBehavior → 声明的 EventKind（取第一处声明）。"""
     out: dict[str, str] = {}
     for path in sorted(base.glob("metadata/*.rs")):

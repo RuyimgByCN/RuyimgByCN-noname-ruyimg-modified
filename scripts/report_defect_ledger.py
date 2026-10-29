@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+HOST = ROOT / "crates" / "engine-native-content" / "src" / "content" / "host"
 
 
 #: **已登记差异**（规则基准/代码注释写明「有意保留」）：不是「待修缺陷」，但也不是「无差异」。

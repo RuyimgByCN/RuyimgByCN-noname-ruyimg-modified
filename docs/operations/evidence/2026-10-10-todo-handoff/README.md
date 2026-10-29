@@ -5,7 +5,7 @@
 ## 1. host.rs 的 14 个 `TODO(事故恢复)` 空分支（主稿 T1）
 
 查找方法：
-- 用 `rg -n "TODO\(事故恢复\)" crates/engine-native/src/content/host.rs` 定位空分支。
+- 用 `rg -n "TODO\(事故恢复\)" crates/engine-native-content/src/content/host.rs` 定位空分支。
 - 用各行为的技能键常量（`WUDIAN_*_KEY`、`XJ_TANNANG_KEY`、`GJ_FOOD_YUANBAOROU_KEY`）执行 `rg -nw`，找到效果实现的位置。
 - 上游定义在 `archive/upstream/noname/apps/core/extension/` 下按技能名定位，看其顶层键。
 

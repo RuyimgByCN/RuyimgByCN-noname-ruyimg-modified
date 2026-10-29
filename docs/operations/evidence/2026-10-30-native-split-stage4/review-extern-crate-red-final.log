@@ -1,0 +1,20 @@
+..F.....
+======================================================================
+FAIL: test_extern_crate_declarations_cannot_hide_upward_paths (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 65, in test_extern_crate_declarations_cannot_hide_upward_paths
+    self.assertEqual([line for _, line in CHECK.upward_references(root)], [1, 2, 3, 4])
+AssertionError: Lists differ: [] != [1, 2, 3, 4]
+
+Second list contains 4 additional elements.
+First extra element 0:
+1
+
+- []
++ [1, 2, 3, 4]
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.065s
+
+FAILED (failures=1)

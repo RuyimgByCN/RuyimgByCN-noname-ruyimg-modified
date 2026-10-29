@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+HOST = ROOT / "crates" / "engine-native-content" / "src" / "content" / "host"
 UPSTREAM = ROOT.parent / "archive" / "upstream"
 
 ARM_RE = re.compile(r"Phase::(Judge|Draw|Play|Discard|End),\s*begin:\s*(true|false)")
@@ -105,7 +105,7 @@ SEMANTIC_CHOICE = {
 
 
 def host_keys() -> dict[str, str]:
-    src = (HOST.parents[1] / "vocabulary/host/keys.rs").read_text(encoding="utf-8")
+    src = (ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs").read_text(encoding="utf-8")
     return {m.group(1): m.group(2) for m in re.finditer(r'HostBehavior::([A-Za-z0-9_]+)\s*=>\s*"(host:[^"]+)"', src)}
 
 

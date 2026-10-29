@@ -20,7 +20,7 @@
 
 | 文件 | 变更 |
 |---|---|
-| `crates/engine-native/src/rvm_bridge.rs` | `OwnerAlive` 策略 + 求值；`owner_alive`/`owner_is_source` 映射；`CardUsed` ctx 补 `event_source` |
+| `crates/engine-native-kernel/src/rvm_bridge.rs` | `OwnerAlive` 策略 + 求值；`owner_alive`/`owner_is_source` 映射；`CardUsed` ctx 补 `event_source` |
 | `crates/content-native-loader/src/lib.rs` | `UnsupportedVmFilters` 错误 + 拒装路径；`VmBridgeOutcome{decls}`（移除 deferred_filters，补 `#[derive(Debug)]`） |
 | `crates/engine-native/tests/t8_rvm_bridge.rs` | `t8_vm_skill_loader_rejects_unsupported_filters`（原 skips 测试改语义）；移除 4 处 deferred 断言 |
 

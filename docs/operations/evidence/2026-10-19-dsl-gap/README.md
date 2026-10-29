@@ -92,7 +92,7 @@ DSL 关键字
 
 | 文件 | `QueryRequest::` 臂数 | **`_ =>` catch-all** | tracked? |
 |---|---:|---:|---|
-| `crates/engine-native/src/rvm_ops.rs` | 42 | **7** | ✅ tracked |
+| `crates/engine-native-kernel/src/rvm_ops.rs` | 42 | **7** | ✅ tracked |
 | **`crates/engine-core/src/query/cache.rs`** | **41** | **0** ❗ | ❌ **未跟踪** |
 | **`crates/engine-core/src/query/mod.rs`** | **16** | **0** ❗ | ❌ **未跟踪** |
 

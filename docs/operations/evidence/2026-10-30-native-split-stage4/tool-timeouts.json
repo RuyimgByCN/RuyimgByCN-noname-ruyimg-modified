@@ -1,0 +1,4 @@
+{
+  "scanner-before": "First instrumented scanner collection timed out at tool 60 seconds; original initial trace closure bug and later import path bug retained in raw logs; successful repaired baselines separate.",
+  "source-lines": "Tool command interrupted at combined 60s limit after successful doc-line-refs; full preflight reruns source caps."
+}

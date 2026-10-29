@@ -1,0 +1,2831 @@
+[
+  {
+    "at": "2026-10-30T00:21:40.158067+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25521": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:41.204253+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:42.251365+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:43.296514+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:44.341601+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:45.388118+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:46.432864+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:47.478997+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:48.526037+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25748": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:49.568950+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25748": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:50.618036+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:51.667193+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:52.715535+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:53.753312+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:54.798648+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:55.847233+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:56.896206+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25981": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:57.941912+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25981": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:21:58.990906+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25981": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:00.040512+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25981": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:01.089564+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:02.141985+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25751": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:03.186766+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "25983": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:04.234515+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:05.281584+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:06.331154+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:07.383167+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26560": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:08.433138+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26560": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:09.476748+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26560": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:10.528959+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26560": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:11.578019+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:12.626159+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:13.670980+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:14.712922+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "25750": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:15.760845+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:16.808165+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:17.856066+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:18.897472+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26524": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26555": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26561": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:19.947456+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "27793": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:20.996857+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "27793": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:22.047483+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "24792": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27688": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "27793": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:23.099149+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27793": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:24.149150+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27832": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:25.195764+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:26.253916+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:27.302800+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26696": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:28.353735+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:29.410161+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:30.460544+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:31.508438+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:32.553416+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26497": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26547": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27794": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:33.603671+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27982": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:34.669004+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27982": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:35.720738+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27982": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:36.777180+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27982": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:37.819741+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "26562": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo-clippy",
+      "26633": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "27982": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/clippy-driver"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:38.872766+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:39.919833+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:40.982393+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:42.022617+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:43.069754+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:44.116240+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:45.155714+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:46.203450+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:47.251866+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:48.299923+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:49.345552+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:50.391503+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "27806": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:51.435244+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:52.498169+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:53.546452+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:54.607468+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:55.661979+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:56.711803+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:57.753476+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:58.797775+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:22:59.845782+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:00.892941+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:01.939162+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:02.986007+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:04.035131+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:05.082231+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:06.129406+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:07.177347+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:08.224008+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:09.270933+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:10.320280+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:11.398115+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:12.475655+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:13.524407+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:14.594017+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:15.645030+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:16.715947+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29266": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29268": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29269": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29271": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29272": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29275": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29276": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29277": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29278": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29279": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29280": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:17.799264+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29268": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29277": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29278": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29402": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29429": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29432": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29433": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29434": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29460": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29462": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29464": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29465": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29468": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:18.868445+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29277": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29278": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29477": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29504": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:19.945288+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29504": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29517": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29622": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29650": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29760": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29761": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29762": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29763": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29764": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29765": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:21.003327+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29622": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29850": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29853": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29854": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29855": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29881": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29883": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29884": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:22.044468+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29853": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29913": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29919": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29920": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:23.093457+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29922": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29924": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:24.146350+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:25.193526+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:26.242430+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:27.295545+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:28.344970+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:29.390218+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:30.458886+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:31.512245+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:32.560702+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:33.614796+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:34.659323+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "30190": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:35.706945+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "29236": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "30217": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "30218": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:36.754439+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:37.796471+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:38.842611+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:39.889214+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:40.935307+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:41.981454+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:43.029047+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:44.072169+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:45.110332+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:46.150415+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:47.192718+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:48.237866+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:49.284999+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:50.328112+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:51.376130+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:52.458701+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:53.544246+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:54.625655+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:55.705731+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:56.785225+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:57.844316+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:58.918557+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:23:59.980828+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:01.053242+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:02.125226+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:03.228492+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:04.323023+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:05.365022+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:06.423440+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:07.501398+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:08.579180+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:09.646797+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:10.716606+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:11.784565+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:12.869417+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:13.958440+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:15.027899+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:16.103293+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:17.181464+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:18.253083+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:19.317954+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:20.415477+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:21.493524+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:22.553675+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:23.622321+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:24.678891+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:25.751841+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:26.821666+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:27.888610+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:28.940914+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "28302": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:24:30.014647+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:31.084618+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:32.155839+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:33.215319+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:34.597326+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:35.666308+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:36.729873+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:37.802826+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:37.849351+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:38.141833+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:38.442240+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:38.737232+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:39.036479+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:39.335095+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:39.633765+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:39.930009+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:40.229425+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:40.527732+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:40.824827+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:41.115820+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:41.406259+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:41.700057+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:41.996859+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:42.293479+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:42.586116+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:42.883397+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:43.180731+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:43.477044+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:43.774122+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:44.069517+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:44.361041+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:44.659340+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:44.954440+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:45.251741+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:45.543385+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:45.834326+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:46.131567+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:46.424402+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:46.721344+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:47.009575+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:47.305442+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:47.602712+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:47.893735+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:48.192276+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:48.487774+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:48.783786+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:49.080880+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:49.378043+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:49.667929+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:49.966460+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:50.263550+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:50.555725+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:50.855090+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:51.172528+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:51.462366+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:51.760517+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:52.058503+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:52.353446+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:52.646767+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:52.938224+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:53.230512+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:53.528846+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:53.827327+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:54.124973+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:54.425716+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:54.719392+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:55.020092+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:55.316974+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:55.613465+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:55.906910+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:56.206070+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:56.498436+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:56.790069+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:57.082882+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:57.383420+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:57.680535+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:57.981137+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:58.280232+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:58.576494+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:58.868683+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:59.181903+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:59.486221+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:24:59.787343+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:00.089306+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:00.390356+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:00.695766+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:01.001432+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:01.310056+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:01.610310+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:01.914139+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:02.244699+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:02.544346+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:02.849406+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:03.148985+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:03.445485+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:03.739805+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:04.032685+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:04.330151+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:04.627676+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:04.921190+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:05.211839+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:05.510255+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:05.808401+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:06.102271+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:06.399880+08:00",
+    "phase": "before-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:06.707808+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:07.775026+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:08.848841+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:09.896697+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:09.948059+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:10.238745+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:10.536667+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:10.834939+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:11.126107+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:11.422236+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:11.712738+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:12.015361+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:12.322078+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:12.624022+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:12.927411+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:13.221898+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:13.515915+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:13.812482+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:14.099126+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:14.393861+08:00",
+    "phase": "before-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:14.804975+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:15.882839+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:16.956539+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:18.019058+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:21.585505+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:22.629935+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:23.699966+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:24.773463+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:24.815556+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:25.117656+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:25.418401+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:25.717402+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:26.013538+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:26.314706+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:26.604843+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:26.902362+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:27.202514+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:27.496476+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:27.795851+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:28.092301+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:28.388756+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:28.681728+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:28.972456+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:29.268328+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:29.560455+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:29.852094+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:30.147961+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:30.445329+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:30.742833+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:31.035722+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:31.330325+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:31.619867+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:31.919104+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:32.216624+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:32.504898+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:32.803553+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:33.099123+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:33.395676+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:33.690501+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:33.986885+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:34.276103+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:34.572176+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:34.868475+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:35.165834+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:35.463608+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:35.760138+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:36.049843+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:36.341201+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:36.634611+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:36.933753+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:37.226190+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:37.523864+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:37.825079+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:38.122471+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:38.415101+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:38.714506+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:39.012971+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:39.309396+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:39.605687+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:39.905308+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:40.205054+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:40.503278+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:40.800749+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:41.096515+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:41.393064+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:41.690972+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:41.988476+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:42.281227+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:42.579965+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:42.876134+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:43.170993+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:43.460142+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:43.758577+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:44.058386+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:44.347684+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:44.647001+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:44.939674+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:45.237998+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:45.536096+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:45.829792+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:46.131057+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:46.435346+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:46.736655+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:47.036807+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:47.339973+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:47.641916+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:47.943627+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:48.236496+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:48.540842+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:48.846141+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:49.150076+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:49.451404+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:49.753390+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:50.047537+08:00",
+    "phase": "after-cold-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:25:50.351171+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36468": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36469": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36470": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36471": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36472": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36473": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:51.395129+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36607": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36608": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36609": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:52.446959+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36669": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36670": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:53.497580+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36675": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36676": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:54.542955+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:55.590436+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:56.632440+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:57.673418+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:58.719652+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:25:59.767889+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:00.815370+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36674": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:01.855372+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36925": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:02.903332+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36927": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:03.951794+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36927": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:04.994819+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36927": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:06.036716+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36927": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:07.084875+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36927": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:08.132940+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:09.185484+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36928": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36992": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:10.234894+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "36994": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc",
+      "36995": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:11.288494+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+      "37029": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:12.334596+08:00",
+    "phase": "waiting-idle",
+    "foreign": {
+      "36467": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    }
+  },
+  {
+    "at": "2026-10-30T00:26:13.403853+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:14.474066+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:15.537646+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:16.608528+08:00",
+    "phase": "waiting-idle",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:16.655907+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:16.955810+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:17.255339+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:17.551109+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:17.850709+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:18.153399+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:18.479610+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:18.783287+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:19.101017+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  },
+  {
+    "at": "2026-10-30T00:26:19.420683+08:00",
+    "phase": "after-warm-serialized-1",
+    "foreign": {}
+  }
+]

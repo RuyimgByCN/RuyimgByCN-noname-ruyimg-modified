@@ -47,7 +47,7 @@ use engine_native::Engine;
 fn upstream_hujia_queue_is_wei_and_seat_ordered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha 源码");
     let idx = src.find("fn build_hujia_queue").expect("队列构造");
@@ -75,7 +75,7 @@ fn upstream_hujia_queue_is_wei_and_seat_ordered() {
 fn upstream_hujia_lord_qualification_difference_is_fixed() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state/core_ops.rs"
+        "/../engine-native-kernel/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");
@@ -86,7 +86,7 @@ fn upstream_hujia_lord_qualification_difference_is_fixed() {
     );
     let sha = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     let idx = sha.find("fn hujia_active").expect("hujia_active");
@@ -114,7 +114,7 @@ fn upstream_hujia_lord_qualification_difference_is_fixed() {
 fn upstream_hujia_only_for_shan() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     // 原生护驾位于【杀】结算机器中（需求即【闪】）：取文件内最近的 `impl <Name> {` 归属

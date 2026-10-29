@@ -255,7 +255,7 @@ fn upstream_xiuluo_filter_difference_is_registered() {
     // 源码事实固定：过滤条件同时含 judge 与 hand
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读过滤源码");
     let idx = src.find("HostBehavior::Xiuluo =>").expect("修罗过滤分支");
@@ -271,7 +271,7 @@ fn upstream_xiuluo_filter_difference_is_registered() {
 fn upstream_xiuluo_timing_is_folded_into_judge_begin() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读过滤源码");
     let idx = src.find("HostBehavior::Xiuluo =>").expect("修罗过滤分支");

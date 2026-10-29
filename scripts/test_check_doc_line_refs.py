@@ -56,7 +56,7 @@ class DocLineRefTests(unittest.TestCase):
                         self.assertEqual(self.mod.main(), 1)
 
     def test_resolves_repo_file(self):
-        target = self.mod.resolve("crates/engine-native/src/event.rs")
+        target = self.mod.resolve("crates/engine-native-kernel/src/event.rs")
         self.assertIsNotNone(target)
 
     def test_resolves_upstream_archive(self):

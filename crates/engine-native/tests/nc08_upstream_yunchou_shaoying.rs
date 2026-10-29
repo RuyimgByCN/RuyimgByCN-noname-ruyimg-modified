@@ -192,7 +192,7 @@ fn upstream_shaoying_black_reveal_no_burn() {
 fn upstream_shaoying_source_matches() {
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     // 分支较长 → 用**全文件**检查（固定窗口会截断）

@@ -46,7 +46,7 @@ use engine_native::Engine;
 fn upstream_jiyuan_effect_is_draw_one() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_yuan.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_yuan.rs"
     ))
     .expect("读急援源码");
     let head: String = src.chars().take(700).collect();
@@ -76,7 +76,7 @@ fn upstream_jiyuan_effect_is_draw_one() {
 fn upstream_jiyuan_missing_arms_are_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_yuan.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_yuan.rs"
     ))
     .expect("读急援源码");
     // filter 仅匹配 Dying

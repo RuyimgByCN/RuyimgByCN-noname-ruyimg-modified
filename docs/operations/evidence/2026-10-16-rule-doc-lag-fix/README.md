@@ -17,7 +17,7 @@
 
 ### 判定顺序：非闪电 FIFO + 闪电最后
 
-`crates/engine-native/src/kernel.rs`（`EventData::Phase { phase: Judge, begin: true }`）：
+`crates/engine-native-kernel/src/kernel.rs`（`EventData::Phase { phase: Judge, begin: true }`）：
 
 ```text
 // 判定排序分组（N06-a，对齐旧线 pending_delayed_cards）：

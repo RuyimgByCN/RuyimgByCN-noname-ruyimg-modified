@@ -99,7 +99,7 @@ fn upstream_luoshen_black_gains_and_red_stops() {
 fn upstream_luoshen_timing_anchor_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/luo_shen.rs"
+        "/../engine-native-content/src/content/standard/skills/luo_shen.rs"
     ))
     .expect("读洛神源码");
     let seg: String = src.chars().take(700).collect();
@@ -125,7 +125,7 @@ fn upstream_luoshen_timing_anchor_difference_is_fixed() {
 fn upstream_luoshen_loop_prompt_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/luo_shen.rs"
+        "/../engine-native-content/src/content/standard/skills/luo_shen.rs"
     ))
     .expect("读洛神源码");
     assert!(

@@ -60,7 +60,7 @@
 ## 三、交付 2：应答路由修复（1 场 golden 位移）
 
 变体 1 的全座位驱动在 seed 8211 第 110 步触发内核 panic
-`answer present on resume`（`crates/engine-native/src/machine.rs:258`）。
+`answer present on resume`（`crates/engine-native-kernel/src/machine.rs:258`）。
 
 **根因**（挂起机器按栈深恢复的失配）：`resolution::run` 用
 `park.resume_depth == 栈深` 选择恢复对象，而该深度是机器**创建**时的值。
@@ -69,7 +69,7 @@
 **深度恰好相等的另一台机器**上（本案：濒死救援机器消费了 AOE 响应应答），
 原机器再恢复时 `ctx.answer()` 为空 → panic。
 
-**修复**（`crates/engine-native/src/resolution.rs`）：机器返回
+**修复**（`crates/engine-native-kernel/src/resolution.rs`）：机器返回
 `Flow::WaitChoice` 时把恢复深度改写为**开窗时刻**的栈深
 （开窗后对局暂停、栈不推进，故开窗时刻栈深即恢复点）。
 

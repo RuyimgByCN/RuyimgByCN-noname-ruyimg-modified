@@ -179,7 +179,7 @@ fn upstream_tuxi_takes_cards_and_skips_draw() {
 fn upstream_tuxi_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/tu_xi.rs"
+        "/../engine-native-content/src/content/standard/skills/tu_xi.rs"
     ))
     .expect("读突袭源码");
     let seg: String = src.chars().take(1200).collect();

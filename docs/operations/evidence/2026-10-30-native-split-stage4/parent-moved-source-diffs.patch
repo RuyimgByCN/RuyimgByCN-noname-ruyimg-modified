@@ -1,0 +1,188 @@
+--- crates/engine-native/src/state.rs
++++ crates/engine-native-kernel/src/state.rs
+@@ -869,4 +869,4 @@
+ }
+ 
+ mod general_assembly;
+-pub(crate) use general_assembly::apply_general_assembly;
++pub use general_assembly::apply_general_assembly;
+--- crates/engine-native/src/state/general_assembly.rs
++++ crates/engine-native-kernel/src/state/general_assembly.rs
+@@ -5,7 +5,7 @@
+ /// 装配授予（P2/N08）：按武将表配置体力上限（主将槽）并授予技能集。
+ /// 国战明置（`RevealGeneral`，ADR 0769）与原型装配原语
+ /// （`debug_assemble_general`）共用此逻辑，授予语义不得分叉。
+-pub(crate) fn apply_general_assembly(
++pub fn apply_general_assembly(
+     state: &mut crate::state::GameStateCore,
+     catalog: &crate::catalog::Catalog,
+     player: PlayerId,
+--- crates/engine-native/src/kernel.rs
++++ crates/engine-native-kernel/src/kernel.rs
+@@ -48,11 +48,13 @@
+ mod events;
+ use events::*;
+ mod equipment;
+-pub(crate) use equipment::*;
++pub use equipment::{grant_equip_skills, revoke_equip_skills};
++use equipment::commit_equip;
+ mod intrinsic;
+ pub use intrinsic::*;
+ mod combat_rules;
+ pub(crate) use combat_rules::*;
++pub use combat_rules::tao_futai2_banned;
+ mod sha;
+ pub use sha::*;
+ mod dying;
+--- crates/engine-native/src/kernel/combat_rules.rs
++++ crates/engine-native-kernel/src/kernel/combat_rules.rs
+@@ -47,7 +47,7 @@
+ /// 覆泰2（Boss 穷奇，规则 v214）：场上存有持覆泰的穷奇、用/救桃者非
+ /// 穷奇且当前回合非穷奇时，桃不可用/不可救（上游 boss_futai2
+ /// cardSavable/cardEnabled 双 mod 同口径）。
+-pub(crate) fn tao_futai2_banned(
++pub fn tao_futai2_banned(
+     core: &crate::state::GameStateCore,
+     catalog: &crate::catalog::Catalog,
+     user: PlayerId,
+--- crates/engine-native/src/kernel/duel.rs
++++ crates/engine-native-kernel/src/kernel/duel.rs
+@@ -16,7 +16,7 @@
+ }
+ 
+ impl DuelMachine {
+-    pub(crate) fn new(
++    pub fn new(
+         card: crate::ids::CardId,
+         source: PlayerId,
+         target: PlayerId,
+--- crates/engine-native/src/kernel/equipment.rs
++++ crates/engine-native-kernel/src/kernel/equipment.rs
+@@ -3,7 +3,7 @@
+ /// 装备提交：牌入手牌区到对应装备栏，同栏旧牌替换入弃牌堆；
+ /// 替换结果写回帧载荷（哈希可见）。
+ /// G1 装备技能生命周期：装备 `card` 时授予其声明的目录技能。
+-pub(crate) fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
++pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
+     let names: Vec<&'static str> = ctx.catalog.cards[card as usize].equip_skills.clone();
+     for name in names {
+         if let Some(def) = ctx.catalog.skill_by_name(name) {
+@@ -23,7 +23,7 @@
+ 
+ /// G1 装备技能生命周期：装备 `card` 离场时撤销其技能——若该技能不同时
+ /// 由玩家剩余的其他装备提供（跨槽同名技能共存）。
+-pub(crate) fn revoke_equip_skills(
++pub fn revoke_equip_skills(
+     core: &mut crate::state::GameStateCore,
+     catalog: &crate::catalog::Catalog,
+     player: PlayerId,
+--- crates/engine-native/src/kernel/monkey.rs
++++ crates/engine-native-kernel/src/kernel/monkey.rs
+@@ -6,14 +6,14 @@
+ /// 入弃牌堆）。持有者死亡或失猴即跳过。
+ #[derive(Clone)]
+ pub struct MonkeyStealMachine {
+-    pub(crate) card: crate::ids::CardId,
+-    pub(crate) user: PlayerId,
+-    pub(crate) holders: Vec<PlayerId>,
+-    pub(crate) asked: bool,
++    pub card: crate::ids::CardId,
++    pub user: PlayerId,
++    pub holders: Vec<PlayerId>,
++    pub asked: bool,
+ }
+ 
+ impl MonkeyStealMachine {
+-    pub(crate) fn new(card: crate::ids::CardId, user: PlayerId, holders: Vec<PlayerId>) -> Self {
++    pub fn new(card: crate::ids::CardId, user: PlayerId, holders: Vec<PlayerId>) -> Self {
+         Self {
+             card,
+             user,
+--- crates/engine-native/src/kernel/nullify.rs
++++ crates/engine-native-kernel/src/kernel/nullify.rs
+@@ -328,7 +328,7 @@
+ }
+ 
+ /// 为锦囊构造无懈窗口并预载询问队列（无懈持有者过滤在运行时进行）。
+-pub(crate) fn wrap_nullify_window(
++pub fn wrap_nullify_window(
+     ctx: &Ctx<'_>,
+     card: crate::ids::CardId,
+     source: PlayerId,
+@@ -402,7 +402,7 @@
+ pub struct NoopMachine;
+ 
+ impl NoopMachine {
+-    pub(crate) fn new() -> Self {
++    pub fn new() -> Self {
+         Self
+     }
+ }
+--- crates/engine-native/src/kernel/sha.rs
++++ crates/engine-native-kernel/src/kernel/sha.rs
+@@ -84,7 +84,7 @@
+ 
+ impl ShaResolveMachine {
+     #[allow(clippy::too_many_arguments)]
+-    pub(crate) fn new(
++    pub fn new(
+         card: crate::ids::CardId,
+         source: PlayerId,
+         target: PlayerId,
+--- crates/engine-native/src/kernel/tricks.rs
++++ crates/engine-native-kernel/src/kernel/tricks.rs
+@@ -366,10 +366,10 @@
+ /// 过河拆桥：弃置目标角色一张牌（手牌优先，其次装备区，再次判定区）。
+ #[derive(Clone)]
+ pub struct DismantleMachine {
+-    pub(crate) card: crate::ids::CardId,
+-    pub(crate) source: PlayerId,
+-    pub(crate) target: PlayerId,
+-    pub(crate) asked: bool,
++    pub card: crate::ids::CardId,
++    pub source: PlayerId,
++    pub target: PlayerId,
++    pub asked: bool,
+ }
+ 
+ impl crate::catalog::SkillMachine for DismantleMachine {
+@@ -433,10 +433,10 @@
+ /// 各区首张确定性取牌；获得进来源手牌——与拆桥弃置不同）。
+ #[derive(Clone)]
+ pub struct SnatchMachine {
+-    pub(crate) card: crate::ids::CardId,
+-    pub(crate) source: PlayerId,
+-    pub(crate) target: PlayerId,
+-    pub(crate) asked: bool,
++    pub card: crate::ids::CardId,
++    pub source: PlayerId,
++    pub target: PlayerId,
++    pub asked: bool,
+ }
+ 
+ impl crate::catalog::SkillMachine for SnatchMachine {
+--- crates/engine-native/src/snap/asks/shapes.rs
++++ crates/engine-native-kernel/src/snap/asks/shapes.rs
+@@ -14,7 +14,7 @@
+     pub allow_cancel: bool,
+ }
+ 
+-pub(crate) fn ask(
++pub fn ask(
+     observer: PlayerId,
+     prompt: &'static str,
+     kind: ChoiceKind,
+@@ -46,11 +46,11 @@
+     )
+ }
+ 
+-pub(crate) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
++pub fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
+     hand.iter().copied().map(ChoiceOption::Card).collect()
+ }
+ 
+-pub(crate) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
++pub fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
+     core.alive_players()
+         .filter(|p| *p != owner)
+         .map(ChoiceOption::Player)

@@ -43,7 +43,7 @@ use engine_native::Engine;
 fn upstream_jijiang_qualification_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/jijiang.rs"
+        "/../engine-native-content/src/content/standard/skills/jijiang.rs"
     ))
     .expect("读激将源码");
     let head: String = src.chars().take(1600).collect();
@@ -77,7 +77,7 @@ fn upstream_jijiang_qualification_matches() {
 fn upstream_jijiang_uses_helpers_not_own_cards() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/jijiang.rs"
+        "/../engine-native-content/src/content/standard/skills/jijiang.rs"
     ))
     .expect("读激将源码");
     assert!(
@@ -98,7 +98,7 @@ fn upstream_jijiang_uses_helpers_not_own_cards() {
 fn upstream_jijiang_lord_gate_is_design_difference() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state/core_ops.rs"
+        "/../engine-native-kernel/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");
@@ -110,7 +110,7 @@ fn upstream_jijiang_lord_gate_is_design_difference() {
     // 与护驾同族：两处均用 is_lord 作主公技资格
     let hujia = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     assert!(

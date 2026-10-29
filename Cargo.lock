@@ -1132,12 +1132,31 @@ dependencies = [
  "content-native-loader",
  "content-runtime",
  "content-schema",
+ "engine-native-content",
+ "engine-native-kernel",
  "resource-schema",
  "rule-api",
  "rule-vm",
  "serde",
  "serde_json",
  "tempfile",
+]
+
+[[package]]
+name = "engine-native-content"
+version = "0.1.0"
+dependencies = [
+ "engine-native-kernel",
+ "rule-vm",
+]
+
+[[package]]
+name = "engine-native-kernel"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "rule-api",
+ "rule-vm",
 ]
 
 [[package]]

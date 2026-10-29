@@ -134,7 +134,7 @@ fn upstream_liutouge_two_branches() {
 fn upstream_liutouge_random_pool_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/jiguan.rs"
+        "/../engine-native-content/src/content/host/step/jiguan.rs"
     ))
     .expect("读 jiguan");
     let idx = src.find("JiguanLiutougeCard =>").expect("六骰格分支");

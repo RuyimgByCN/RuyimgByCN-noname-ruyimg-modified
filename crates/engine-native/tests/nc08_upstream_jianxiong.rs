@@ -150,7 +150,7 @@ fn upstream_jianxiong_gains_damage_card() {
 fn upstream_jianxiong_position_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/jian_xiong.rs"
+        "/../engine-native-content/src/content/standard/skills/jian_xiong.rs"
     ))
     .expect("读奸雄源码");
     assert!(
@@ -176,7 +176,7 @@ fn upstream_jianxiong_position_difference_is_fixed() {
 fn upstream_jianxiong_standard_face_has_no_mark_face() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/jian_xiong.rs"
+        "/../engine-native-content/src/content/standard/skills/jian_xiong.rs"
     ))
     .expect("读奸雄源码");
     assert!(

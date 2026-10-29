@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-KEYS = ROOT / "crates/engine-native/src/vocabulary/host/keys.rs"
+KEYS = ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs"
 PKGS = ROOT / "packages/extensions"
 
 
@@ -36,7 +36,7 @@ def declared_in_host_rs() -> set[str]:
     """
     keys_src = KEYS.read_text(encoding="utf-8")
     beh2key = dict(re.findall(r'HostBehavior::(\w+)\s*=>\s*"(host:[A-Za-z0-9_]+)"', keys_src))
-    host_rs = (ROOT / "crates/engine-native/src/vocabulary/card_skills.rs").read_text(encoding="utf-8")
+    host_rs = (ROOT / "crates/engine-native-kernel/src/vocabulary/card_skills.rs").read_text(encoding="utf-8")
     return {
         beh2key[b]
         for b in re.findall(r"behavior:\s*HostBehavior::(\w+)", host_rs)

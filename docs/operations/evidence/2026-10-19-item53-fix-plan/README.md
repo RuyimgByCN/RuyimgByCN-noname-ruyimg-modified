@@ -24,16 +24,16 @@
 
 | # | 文件 | 改动 | 说明 |
 |---|---|---|---|
-| 1 | `crates/engine-native/src/content/host/filtering/common.rs`（`ChenhuodajieCard` 臂） | 把 `=> false` 改为 **`host:damageEnd` 语义**：`EventData::Damage{ begin:false, .. }` 且 **持有者存活** | 上游为 `{ global: "damageEnd" }` ⇒ **任意角色**受伤结束 |
+| 1 | `crates/engine-native-content/src/content/host/filtering/common.rs`（`ChenhuodajieCard` 臂） | 把 `=> false` 改为 **`host:damageEnd` 语义**：`EventData::Damage{ begin:false, .. }` 且 **持有者存活** | 上游为 `{ global: "damageEnd" }` ⇒ **任意角色**受伤结束 |
 | 2 | `packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json` | 新增 `skills: [{"name": "chenhuodajie_window", "mapping": "host:chenhuodajie_card"}]` | 当前为 `null`；**无声明则行为永不实例化** |
-| 3 | `crates/engine-native/src/content/host/step/*.rs`（`ChenhuodajieCard` 实现臂） | 补**目标选择**：窗口内需选**受伤者**为 `he` 来源 | 上游 `filterTarget: true` + `gainPlayerCard(target)` |
+| 3 | `crates/engine-native-content/src/content/host/step/*.rs`（`ChenhuodajieCard` 实现臂） | 补**目标选择**：窗口内需选**受伤者**为 `he` 来源 | 上游 `filterTarget: true` + `gainPlayerCard(target)` |
 
 **注意**：步骤 1 的文件属**未跟踪目录**（并行拆分）⇒ **实施受阻**（见 §4）；
 步骤 2 属**已跟踪**包数据，**单独实施不完整**（仍不会触发）⇒ **与步骤 1 同步提交**。
 
 ## 4 阻塞说明（**如实**）
 
-`crates/engine-native/src/content/host/**` 在当前工作区**未跟踪**（并行拆分未提交）⇒
+`crates/engine-native-content/src/content/host/**` 在当前工作区**未跟踪**（并行拆分未提交）⇒
 按本会话一贯纪律，**不在未跟踪文件上改动**；因此第 53 项**保持待办**。
 
 **解除条件**：拆分提交落地后，按 §3 三步实施，并用样本 152 的 `#[ignore]` 用例验收。

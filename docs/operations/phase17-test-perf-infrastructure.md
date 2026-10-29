@@ -24,7 +24,7 @@
 | 查询/投影/AI | [query](../../crates/engine-core/src/query/mod.rs)经 query_explain；缓存命中会提前返回。[命令提交](../../crates/engine-core/src/engine.rs)与[投影](../../crates/engine-core/src/projection.rs)计算哈希；[AI fork](../../crates/engine-ai/src/fork.rs)走正式 submit | 测命中、分配、扇出和节点成本；不得直接跳过合法性/不变量校验。5–10 倍与固定 8 次重复哈希未证实 |
 | Store 遍历 | 多个 sorted_live 收集排序，PlayerStore 已有 iter_live | 先证明 ID→槽位顺序在所有变更/恢复路径成立并与 golden 对照；座次不能直接替换为 ID 顺序 |
 | WASM/依赖 | 本地 WASM 文件约 7.75 MB，wasm-opt 为 false；[engine-core 依赖](../../crates/engine-core/Cargo.toml)的普通 tempfile 在 src 未使用，workspace 已声明；原扫描的 Tokio features 漏实际使用的 fs | 固定工具链测原始/压缩体积、加载与功能；先做低风险依赖修正。1.5 MB 目标和 panic/unwind 归因未证实 |
-| 格式/原生派发 | 旧线[快照](../../crates/engine-core/src/snapshot.rs)与[回放](../../crates/engine-core/src/replay/mod.rs)用 JSON，回放命令字节参与哈希链；原生[技能接口](../../crates/engine-native/src/catalog.rs)用 trait object | 改格式必须兼容旧读取与版本化哈希链；动态派发分配次数和收益未测，不因文本出现次数引入大枚举 |
+| 格式/原生派发 | 旧线[快照](../../crates/engine-core/src/snapshot.rs)与[回放](../../crates/engine-core/src/replay/mod.rs)用 JSON，回放命令字节参与哈希链；原生[技能接口](../../crates/engine-native-kernel/src/catalog.rs)用 trait object | 改格式必须兼容旧读取与版本化哈希链；动态派发分配次数和收益未测，不因文本出现次数引入大枚举 |
 | 文档/大文件/工具 | ABI 文档、ADR、catalog 较大且有消费者；部分 Rust 文件超过 2,000 行；Blake3 小辅助与签名实现有重复；目录名称不统一 | 不按体积、行数或命名直接立性能任务。仅在维护缺陷或剖析指向它们时局部整理，并核对路径消费者 |
 
 该复核仅做静态核对，**未运行干净构建、分配剖析、WASM 配置对照或可重复性能实验**。原报告中“测试代码量为业务代码 2 倍”也不成立：粗口径两组 Rust 行数约 272,361 / 337,551，且都含混合内容；此比值不宜作质量指标。

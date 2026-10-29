@@ -237,7 +237,7 @@ fn upstream_fanjian_mismatched_suit_deals_damage() {
 fn upstream_fanjian_flow_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/fan_jian.rs"
+        "/../engine-native-content/src/content/standard/skills/fan_jian.rs"
     ))
     .expect("读反间源码");
     // 注释跨行书写 → 用全文件子串检查

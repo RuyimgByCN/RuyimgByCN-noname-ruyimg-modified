@@ -12,7 +12,7 @@
 CARGO_TARGET_DIR=<导出>/target-independent cargo test --offline --manifest-path <导出>/Cargo.toml -p rule-vm --test effect_656_collision -- --nocapture
 ```
 
-结果 **0 passed / 1 failed / 0 ignored，exit 101**：真实 `yingshi_die_death` 在收集宿主上实际产生 `ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player: PlayerId(2), amount: 0, ... }`，而非预期 `GainOtherSkillPileCards`（[完整日志](collision-red.log)）。这是 VM 实际模块反例；本批没有宣称原生或旧线完整对局已验证。[原生 VM 提交层](../../../../crates/engine-native/src/rvm_ops.rs)有英逝效果处理，因此纠正分派会改变相关规则行为。
+结果 **0 passed / 1 failed / 0 ignored，exit 101**：真实 `yingshi_die_death` 在收集宿主上实际产生 `ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player: PlayerId(2), amount: 0, ... }`，而非预期 `GainOtherSkillPileCards`（[完整日志](collision-red.log)）。这是 VM 实际模块反例；本批没有宣称原生或旧线完整对局已验证。[原生 VM 提交层](../../../../crates/engine-native-kernel/src/rvm_ops.rs)有英逝效果处理，因此纠正分派会改变相关规则行为。
 
 ## 裁决与未完成项
 

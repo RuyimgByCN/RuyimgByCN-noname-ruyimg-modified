@@ -112,7 +112,7 @@ fn upstream_kongcheng_coverage_difference_is_fixed() {
     let sites = [
         ("src/engine/play_card.rs", "决斗目标"),
         ("src/engine/play_sha.rs", "【杀】目标"),
-        ("src/snap/asks.rs", "借刀类目标选择"),
+        ("../engine-native-kernel/src/snap/asks.rs", "借刀类目标选择"),
     ];
     for (rel, label) in sites {
         let src = std::fs::read_to_string(
@@ -126,7 +126,7 @@ fn upstream_kongcheng_coverage_difference_is_fixed() {
     }
     let def = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/standard_skills.rs"
+        "/../engine-native-content/src/content/standard/standard_skills.rs"
     ))
     .expect("读标准技能表");
     assert!(

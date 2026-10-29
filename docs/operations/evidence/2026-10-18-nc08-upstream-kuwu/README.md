@@ -56,15 +56,15 @@ kuwu: { type: "equip", subtype: "equip1", skills: ["kuwu"], nomod: true,
 | 6 | `chooseToDiscard(true,"he")` | 受伤角色**强制**弃 1 张 `he` 牌（自选） | **差异 K4**（原生确定性弃首张手牌） |
 
 **原生实现引用**（工作树当前布局）：
-- `crates/engine-native/src/content/host/filtering/common.rs:531-534`：伤害过滤臂
+- `crates/engine-native-content/src/content/host/filtering/common.rs:531-534`：伤害过滤臂
   （`source==owner && !prevented && amount>0 && card.is_sha_like()`）；
-- `crates/engine-native/src/vocabulary/host/metadata/common.rs:6-12`：`EventKind::Damage` /
+- `crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs:6-12`：`EventKind::Damage` /
   `optional:false`（锁定）；
-- `crates/engine-native/src/content/host/step/skills_status.rs:666-681`：效果——
+- `crates/engine-native-content/src/content/host/step/skills_status.rs:666-681`：效果——
   `player(t).hand.first()` 弃置；
-- `crates/engine-native/src/vocabulary/host/tags.rs:303,549` 与 `vocabulary/host/keys.rs:315`：
+- `crates/engine-native-kernel/src/vocabulary/host/tags.rs:303,549` 与 `vocabulary/host/keys.rs:315`：
   tag 0 ↔ `host:sha_damage_force_discard`（包 `cards.json` 的映射名）；
-- `crates/engine-native/src/kernel/damage.rs:988-1015`：铁索传导伤害以
+- `crates/engine-native-kernel/src/kernel/damage.rs:988-1015`：铁索传导伤害以
   `from_chain:true` + 原 `source`/`card` 再入伤害结算。
 
 ## 3 差异登记（差异 + 影响分析 + 待办）

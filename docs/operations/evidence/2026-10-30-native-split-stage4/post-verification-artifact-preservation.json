@@ -1,0 +1,18 @@
+{
+  "automatic_unrelated_sources_restored": [
+    "crates/engine-native/src/engine/play_sha.rs",
+    "crates/engine-native/src/engine/legal_actions.rs",
+    "crates/engine-native/src/engine/construction.rs",
+    "crates/engine-native/src/engine/play_rules.rs",
+    "crates/engine-native/src/engine/hash.rs"
+  ],
+  "source_restore_basis": "Absent from task manifest; exact raw diff retained; restored HEAD blobs without reset/checkout/stash.",
+  "generated_dist_backup": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-generated-dist-cwu2jv3g",
+  "tracked_dist_paths_restored": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css",
+    "apps/web-client/dist/index.html"
+  ]
+}

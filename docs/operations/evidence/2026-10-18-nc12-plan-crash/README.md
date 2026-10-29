@@ -10,7 +10,7 @@
 长程负载（`nc12_bench long tier=swd budget=8 min_cmds=20000000`）在 **4,327** 条 `RESULT` 后崩溃：
 
 ```
-thread 'main' panicked at crates/engine-native/src/machine.rs:408: card 93 not in hand of 0
+thread 'main' panicked at crates/engine-native-kernel/src/machine.rs:408: card 93 not in hand of 0
 ```
 
 `RUST_BACKTRACE=1` 回溯（[catch-panics.log](catch-panics.log)）：
@@ -233,7 +233,7 @@ panic: card 93 not in hand of 0
 
 **根因链（已闭合到代码行）**：
 
-1. 崩溃点是 `crates/engine-native/src/kernel/events.rs::commit_card_used`：
+1. 崩溃点是 `crates/engine-native-kernel/src/kernel/events.rs::commit_card_used`：
    ```rust
    if ctx.core.player(u.player).hand.contains(&u.card) {
        ctx.take_hand_card(u.player, u.card);

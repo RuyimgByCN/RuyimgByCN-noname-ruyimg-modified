@@ -173,7 +173,7 @@ fn upstream_yiesheng_discards_black_only_and_draws_equal() {
 fn upstream_yiesheng_source_matches() {
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = step.find("YunchouYiesheng =>").expect("野升分支");

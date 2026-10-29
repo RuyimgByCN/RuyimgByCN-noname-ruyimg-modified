@@ -34,7 +34,7 @@ fn prepare_phase_triggers_are_folded_into_judge_begin() {
     // 行为键名稳定（防止重命名导致映射失效）：以源码引用固定
     let keys = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/vocabulary/host/keys.rs"
+        "/../engine-native-kernel/src/vocabulary/host/keys.rs"
     ))
     .expect("读键表源码");
     assert!(
@@ -53,7 +53,7 @@ fn xiuluo_filter_requires_hand_which_upstream_does_not() {
     // 原生直接不触发。此处只固定「原生要求手牌」这一事实，供上游判定。
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读过滤源码");
     let idx = src.find("HostBehavior::Xiuluo =>").expect("修罗过滤分支");

@@ -106,7 +106,7 @@ fn upstream_guanxing_offers_arrange_choice() {
 fn upstream_guanxing_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/guan_xing.rs"
+        "/../engine-native-content/src/content/standard/skills/guan_xing.rs"
     ))
     .expect("读观星源码");
     let head: String = src.chars().take(900).collect();

@@ -228,7 +228,7 @@ fn upstream_shushen_per_point_index_difference_is_fixed() {
     );
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/shu_shen.rs"
+        "/../engine-native-content/src/content/standard/skills/shu_shen.rs"
     ))
     .expect("读淑慎源码");
     let seg: String = src.chars().take(700).collect();

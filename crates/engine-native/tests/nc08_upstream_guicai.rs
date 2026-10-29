@@ -126,7 +126,7 @@ fn upstream_guicai_rewrites_others_judgement_with_any_hand_card() {
 fn upstream_guicai_equip_zone_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/judge.rs"
+        "/../engine-native-kernel/src/kernel/judge.rs"
     ))
     .expect("读 judge 源码");
     let idx = src.find("装备区：黑色牌（鬼道路径）").expect("装备区注释");

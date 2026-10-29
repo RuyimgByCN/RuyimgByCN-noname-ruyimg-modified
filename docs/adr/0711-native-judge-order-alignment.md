@@ -3,7 +3,7 @@
 - 状态：第十四批历史记录；当时分组排序与版本递增尚未完成。
 - 后续：2026-09-17 第十五批已补稳定分组、版本 4 和双放置序验收，见 [ADR 0713](0713-native-judge-grouping-version4.md)。
   **下文“当前/本轮”均指第十四批核验时点**；原反向布阵现在不再触发死亡清剩余 queue，最新状态见 [重写进度](../architecture/native-progress.md)。
-- 关联：[原生 kernel](../../crates/engine-native/src/kernel.rs)、[机制测试](../../crates/engine-native/tests/native_kernel.rs)。
+- 关联：[原生 kernel](../../crates/engine-native-kernel/src/kernel.rs)、[机制测试](../../crates/engine-native/tests/native_kernel.rs)。
 - 对照：[旧线 judge.rs](../../crates/engine-core/src/command/judge.rs) 的 collect_delayed_queue / resolve_judge_queue；
   前序 [ADR 0708](0708-native-rule-source-alignment.md)，当前验收见 [重写进度](../architecture/native-progress.md)。
 

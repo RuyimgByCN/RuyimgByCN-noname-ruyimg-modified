@@ -5,7 +5,7 @@
 
 ## 背景
 
-T8 接线（[rvm_bridge.rs](../../crates/engine-native/src/rvm_bridge.rs)）落地的两层提交协议：
+T8 接线（[rvm_bridge.rs](../../crates/engine-native-kernel/src/rvm_bridge.rs)）落地的两层提交协议：
 
 - VM 执行期效果只**排队**（`pending_effects`）；`Halted` 才整批提交（`rvm_ops::commit_effect`）；`Err` 整批回滚；`Paused`（字节码 `HOST_CHOICE`）以 `WaitChoice(PickTag)` 挂起、应答后续行——选择发生在**字节码执行期**。
 

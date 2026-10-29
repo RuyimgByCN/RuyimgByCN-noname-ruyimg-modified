@@ -1,7 +1,7 @@
 # ADR 0779：名称符号表总量上限与拒装策略（不回收）
 
 日期：2026-10-11　|　状态：已采纳
-关联：[ADR 0777](0777-native-c0-native-loader.md)、[ADR 0778](0778-native-c0-pack-data-keys.md)、[主稿 T6②](../architecture/native-progress.md)、`crates/engine-native/src/content/names.rs`
+关联：[ADR 0777](0777-native-c0-native-loader.md)、[ADR 0778](0778-native-c0-pack-data-keys.md)、[主稿 T6②](../architecture/native-progress.md)、`crates/engine-native-content/src/content/names.rs`
 
 ## 背景
 

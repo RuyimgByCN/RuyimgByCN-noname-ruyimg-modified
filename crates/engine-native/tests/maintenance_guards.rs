@@ -6,7 +6,7 @@
 //! `DBG ...` 行、`TB_DBG` 开关打印，2026-10-16 清理），说明该口径需要机器守护而
 //! 不是一次性 `rg`。
 //!
-//! 口径：`crates/engine-native/src/**/*.rs` 中不得出现打印宏或环境变量开关。
+//! 口径：原生 facade/kernel/content 三层源码 中不得出现打印宏或环境变量开关。
 //! 诊断输出请放在 `tests/`（`#[ignore]` 探针）、`examples/`，或走日志/表现事件
 //! （`LogEvent`/`PresentationEvent`）路径。注释若要提及这些名字，不要带 `(`。
 
@@ -25,22 +25,27 @@ fn collect_rs(dir: &Path, out: &mut Vec<PathBuf>) {
 
 #[test]
 fn production_sources_have_no_debug_output_or_env_switches() {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
+    let manifest = Path::new(env!("CARGO_MANIFEST_DIR"));
     let mut files = Vec::new();
-    collect_rs(&root, &mut files);
-    assert!(
-        files.len() > 10,
-        "源码目录扫描异常：仅找到 {} 个 .rs 文件（root={}）",
-        files.len(),
-        root.display()
-    );
+    for relative in [
+        "src",
+        "../engine-native-kernel/src",
+        "../engine-native-content/src",
+    ] {
+        let root = manifest.join(relative);
+        assert!(root.is_dir(), "源码目录不存在：{}", root.display());
+        let before = files.len();
+        collect_rs(&root, &mut files);
+        assert!(files.len() > before, "源码目录为空：{}", root.display());
+    }
+    assert!(files.len() > 10, "扫描源码数量异常：{}", files.len());
     let needles = ["println!(", "eprintln!(", "env::var("];
     let mut bad: Vec<String> = Vec::new();
     for f in &files {
         let text = std::fs::read_to_string(f).expect("read source");
         for (idx, line) in text.lines().enumerate() {
             if needles.iter().any(|n| line.contains(n)) {
-                let rel = f.strip_prefix(&root).unwrap_or(f);
+                let rel = f.strip_prefix(manifest).unwrap_or(f);
                 bad.push(format!("{}:{}: {}", rel.display(), idx + 1, line.trim()));
             }
         }

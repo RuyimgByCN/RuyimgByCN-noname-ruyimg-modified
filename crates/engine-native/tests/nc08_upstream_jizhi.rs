@@ -135,7 +135,7 @@ fn upstream_jizhi_scope_difference_is_registered() {
     // 源码事实：原生 filter 只列 5 种锦囊
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_zhi.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_zhi.rs"
     ))
     .expect("读集智源码");
     let seg: String = src.chars().take(1400).collect();
@@ -177,7 +177,7 @@ fn upstream_jizhi_scope_difference_is_registered() {
 fn upstream_jizhi_standard_face_has_no_gaintag() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_zhi.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_zhi.rs"
     ))
     .expect("读集智源码");
     assert!(

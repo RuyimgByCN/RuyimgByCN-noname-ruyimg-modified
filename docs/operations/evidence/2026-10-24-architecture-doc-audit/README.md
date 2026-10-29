@@ -57,7 +57,7 @@
 
 ### 6. P2：实际迁移内容状态，再统一编码与语义摘要
 
-- **具体情况**：`pingzhang_count` 等内容字段仍进入 `PlayerState`（`crates/engine-native/src/state.rs:78`），同时手写在 `archive/state_encode.rs:162`、`archive/state_decode.rs:117` 与 `engine/hash.rs:209`。`vm_aux` 通用面已存在，但没有让这些真实字段自动退出核心。EffectRequest 拆成小文件解决行数门禁，不等于 NC06／NC07 完成。
+- **具体情况**：`pingzhang_count` 等内容字段仍进入 `PlayerState`（`crates/engine-native-kernel/src/state.rs:78`），同时手写在 `archive/state_encode.rs:162`、`archive/state_decode.rs:117` 与 `engine/hash.rs:209`。`vm_aux` 通用面已存在，但没有让这些真实字段自动退出核心。EffectRequest 拆成小文件解决行数门禁，不等于 NC06／NC07 完成。
 - **最小修正**：选一个有生命周期、选择和恢复的真实扩展，把私有状态迁入已有命名空间状态能力；用最小共享遍历或声明统一字段／tag／编码检查，语义 hash 仍显式决定，不预设全过程宏。不要以关键词清零作为架构验收。
 - **验收**：普通新技能无需同步扩张核心状态、封闭行为枚举和多份编码表；验证获得／失去／失效、回合结束、死亡、跨进程恢复、未知 tag、长度限制和版本拒绝。规则变化与格式迁移分别登记。
 

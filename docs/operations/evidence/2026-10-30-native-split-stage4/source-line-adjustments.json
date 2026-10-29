@@ -1,0 +1,319 @@
+[
+  {
+    "old": "crates/engine-native/src/state.rs",
+    "new": "crates/engine-native-kernel/src/state.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 872,
+        "old_end": 872,
+        "new_start": 872,
+        "new_end": 872,
+        "old_lines": [
+          "pub(crate) use general_assembly::apply_general_assembly;"
+        ],
+        "new_lines": [
+          "pub use general_assembly::apply_general_assembly;"
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/state/general_assembly.rs",
+    "new": "crates/engine-native-kernel/src/state/general_assembly.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 8,
+        "old_end": 8,
+        "new_start": 8,
+        "new_end": 8,
+        "old_lines": [
+          "pub(crate) fn apply_general_assembly("
+        ],
+        "new_lines": [
+          "pub fn apply_general_assembly("
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel.rs",
+    "new": "crates/engine-native-kernel/src/kernel.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 51,
+        "old_end": 51,
+        "new_start": 51,
+        "new_end": 52,
+        "old_lines": [
+          "pub(crate) use equipment::*;"
+        ],
+        "new_lines": [
+          "pub use equipment::{grant_equip_skills, revoke_equip_skills};",
+          "use equipment::commit_equip;"
+        ]
+      },
+      {
+        "kind": "insert",
+        "old_start": 56,
+        "old_end": 55,
+        "new_start": 57,
+        "new_end": 57,
+        "old_lines": [],
+        "new_lines": [
+          "pub use combat_rules::tao_futai2_banned;"
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/combat_rules.rs",
+    "new": "crates/engine-native-kernel/src/kernel/combat_rules.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 50,
+        "old_end": 50,
+        "new_start": 50,
+        "new_end": 50,
+        "old_lines": [
+          "pub(crate) fn tao_futai2_banned("
+        ],
+        "new_lines": [
+          "pub fn tao_futai2_banned("
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/duel.rs",
+    "new": "crates/engine-native-kernel/src/kernel/duel.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 19,
+        "old_end": 19,
+        "new_start": 19,
+        "new_end": 19,
+        "old_lines": [
+          "    pub(crate) fn new("
+        ],
+        "new_lines": [
+          "    pub fn new("
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/equipment.rs",
+    "new": "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 6,
+        "old_end": 6,
+        "new_start": 6,
+        "new_end": 6,
+        "old_lines": [
+          "pub(crate) fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {"
+        ],
+        "new_lines": [
+          "pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {"
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 26,
+        "old_end": 26,
+        "new_start": 26,
+        "new_end": 26,
+        "old_lines": [
+          "pub(crate) fn revoke_equip_skills("
+        ],
+        "new_lines": [
+          "pub fn revoke_equip_skills("
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/monkey.rs",
+    "new": "crates/engine-native-kernel/src/kernel/monkey.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 9,
+        "old_end": 12,
+        "new_start": 9,
+        "new_end": 12,
+        "old_lines": [
+          "    pub(crate) card: crate::ids::CardId,",
+          "    pub(crate) user: PlayerId,",
+          "    pub(crate) holders: Vec<PlayerId>,",
+          "    pub(crate) asked: bool,"
+        ],
+        "new_lines": [
+          "    pub card: crate::ids::CardId,",
+          "    pub user: PlayerId,",
+          "    pub holders: Vec<PlayerId>,",
+          "    pub asked: bool,"
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 16,
+        "old_end": 16,
+        "new_start": 16,
+        "new_end": 16,
+        "old_lines": [
+          "    pub(crate) fn new(card: crate::ids::CardId, user: PlayerId, holders: Vec<PlayerId>) -> Self {"
+        ],
+        "new_lines": [
+          "    pub fn new(card: crate::ids::CardId, user: PlayerId, holders: Vec<PlayerId>) -> Self {"
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/nullify.rs",
+    "new": "crates/engine-native-kernel/src/kernel/nullify.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 331,
+        "old_end": 331,
+        "new_start": 331,
+        "new_end": 331,
+        "old_lines": [
+          "pub(crate) fn wrap_nullify_window("
+        ],
+        "new_lines": [
+          "pub fn wrap_nullify_window("
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 405,
+        "old_end": 405,
+        "new_start": 405,
+        "new_end": 405,
+        "old_lines": [
+          "    pub(crate) fn new() -> Self {"
+        ],
+        "new_lines": [
+          "    pub fn new() -> Self {"
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/sha.rs",
+    "new": "crates/engine-native-kernel/src/kernel/sha.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 87,
+        "old_end": 87,
+        "new_start": 87,
+        "new_end": 87,
+        "old_lines": [
+          "    pub(crate) fn new("
+        ],
+        "new_lines": [
+          "    pub fn new("
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/kernel/tricks.rs",
+    "new": "crates/engine-native-kernel/src/kernel/tricks.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 369,
+        "old_end": 372,
+        "new_start": 369,
+        "new_end": 372,
+        "old_lines": [
+          "    pub(crate) card: crate::ids::CardId,",
+          "    pub(crate) source: PlayerId,",
+          "    pub(crate) target: PlayerId,",
+          "    pub(crate) asked: bool,"
+        ],
+        "new_lines": [
+          "    pub card: crate::ids::CardId,",
+          "    pub source: PlayerId,",
+          "    pub target: PlayerId,",
+          "    pub asked: bool,"
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 436,
+        "old_end": 439,
+        "new_start": 436,
+        "new_end": 439,
+        "old_lines": [
+          "    pub(crate) card: crate::ids::CardId,",
+          "    pub(crate) source: PlayerId,",
+          "    pub(crate) target: PlayerId,",
+          "    pub(crate) asked: bool,"
+        ],
+        "new_lines": [
+          "    pub card: crate::ids::CardId,",
+          "    pub source: PlayerId,",
+          "    pub target: PlayerId,",
+          "    pub asked: bool,"
+        ]
+      }
+    ]
+  },
+  {
+    "old": "crates/engine-native/src/snap/asks/shapes.rs",
+    "new": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+    "edits": [
+      {
+        "kind": "replace",
+        "old_start": 17,
+        "old_end": 17,
+        "new_start": 17,
+        "new_end": 17,
+        "old_lines": [
+          "pub(crate) fn ask("
+        ],
+        "new_lines": [
+          "pub fn ask("
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 49,
+        "old_end": 49,
+        "new_start": 49,
+        "new_end": 49,
+        "old_lines": [
+          "pub(crate) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {"
+        ],
+        "new_lines": [
+          "pub fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {"
+        ]
+      },
+      {
+        "kind": "replace",
+        "old_start": 53,
+        "old_end": 53,
+        "new_start": 53,
+        "new_end": 53,
+        "old_lines": [
+          "pub(crate) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {"
+        ],
+        "new_lines": [
+          "pub fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {"
+        ]
+      }
+    ]
+  }
+]

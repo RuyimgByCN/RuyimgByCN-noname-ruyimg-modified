@@ -8,8 +8,8 @@
   读数前先 `git rev-parse HEAD`；本次实测源码版本见 [`source-versions.log`](source-versions.log)）。
 - 工作区：**dirty**（他人 249→261 项未提交改动；本切片只改文档/脚本/证据，未碰产品源码）。
 - 规则/存档（实测）：工作树 `STANDARD_RULESET_VERSION = 322`、`ARCHIVE_FORMAT_VERSION = 105`；
-  已提交 HEAD 为 321 / 105（`crates/engine-native/src/content/standard.rs:126`、
-  `crates/engine-native/src/archive.rs:113`）。
+  已提交 HEAD 为 321 / 105（`crates/engine-native-content/src/content/standard.rs:126`、
+  `crates/engine-native-kernel/src/archive.rs:113`）。
 - 本切片**不改产品源码**；两条行数门禁命令通过（见 [`source-lines-gate.log`](source-lines-gate.log)）。
 
 ## 1 主稿一致性核对：发现并修正的不一致
@@ -19,8 +19,8 @@
 
 | # | 不一致 | 修正 | 依据 |
 |---|---|---|---|
-| 1 | 规则版本：进度主稿「当前版本」写 **v321**；进度 NC06/NC07/NC08/NC10 行与规则基准 NC01 行分别写 v322 工作树、且把 v322 归因给 NC01 | 统一为「已提交 HEAD v321 / 当前工作树 v322 / 存档 v105」，并写明 v322 归因是 **NC07 座位环入摘要**，NC01 不升版本 | `crates/engine-native/src/content/standard.rs:126`（工作树 322）、`git show HEAD:...standard.rs` 第 127 行（321）、`crates/engine-native/tests/replay_scenarios.rs:1061`、[`source-versions.log`](source-versions.log) |
-| 2 | 存档格式：覆盖清单写 **`ARCHIVE_FORMAT_VERSION = 86`**、进度「完成状态」写「NGSA 存档（现 v60）」、进度 P0 行写「现为 v41」 | 三处统一为 **v105**，并标注原数字的时点 | `crates/engine-native/src/archive.rs:113`；[`source-versions.log`](source-versions.log) |
+| 1 | 规则版本：进度主稿「当前版本」写 **v321**；进度 NC06/NC07/NC08/NC10 行与规则基准 NC01 行分别写 v322 工作树、且把 v322 归因给 NC01 | 统一为「已提交 HEAD v321 / 当前工作树 v322 / 存档 v105」，并写明 v322 归因是 **NC07 座位环入摘要**，NC01 不升版本 | `crates/engine-native-content/src/content/standard.rs:126`（工作树 322）、`git show HEAD:...standard.rs` 第 127 行（321）、`crates/engine-native/tests/replay_scenarios.rs:1061`、[`source-versions.log`](source-versions.log) |
+| 2 | 存档格式：覆盖清单写 **`ARCHIVE_FORMAT_VERSION = 86`**、进度「完成状态」写「NGSA 存档（现 v60）」、进度 P0 行写「现为 v41」 | 三处统一为 **v105**，并标注原数字的时点 | `crates/engine-native-kernel/src/archive.rs:113`；[`source-versions.log`](source-versions.log) |
 | 3 | 规则基准头部写「现源码为 **v291 / 存档 v79**，v291 为最新」 | 改为 2026-10-18 实测值（HEAD 321 / 工作树 322 / 存档 105），v322 条目补入「近期版本」块 | 同上 |
 | 4 | 转换包数量：台账写「packages/extensions 现为 **15 个**转换包目录」；进度/清单多处沿用「15 个转换包」 | 统一标注为 **实测 41 个目录 / 41 份 `package.npack.json`**（其中 40 个对应 37 来源，1 个 `boss-zhugeliang-upstream-liuli` 属 T11 Boss 内容）；15 的句子保留为 2026-10-10 时点 | [`package-manifests.log`](package-manifests.log)（`ls -d ... | wc -l` = 41、`package.npack.json` = 41） |
 | 5 | 整包数量：台账同一页出现 **18/37、19/37**，覆盖清单写 **20/37**，进度完成状态写 **18/37** 而同页批次行一路推到 **24/37** | 全部改为引用 **登记表机器字段**：37 条「整包」条目 resolved **24** / open **13**（`meta.wholepack_count = 24`），并保留各处原数字为「2026-10-17 批次快照」 | [`register-fields.log`](register-fields.log)：`整包条目: 37 {'open': 13, 'resolved': 24}` |

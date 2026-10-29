@@ -1,0 +1,12 @@
+[package]
+name = "engine-native-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Deterministic native rule kernel and shared vocabulary"
+
+[dependencies]
+blake3 = { workspace = true }
+rule-api = { workspace = true }
+rule-vm = { workspace = true }

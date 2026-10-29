@@ -35,7 +35,7 @@ packages/extensions/<pkg-name>/
 3. **抽内容**：从上游 JS 抽出武将（`lib.character`）、卡牌（`lib.card`）、技能（`lib.skill`）
    → 写入 `generals[]` / `cards[]` / `skills[]`；
 4. **映射技能**：每条技能写 `mapping`（形如 `host:<key>` 或规则 VM 表达式）——
-   **前置条件**：该 `host:<key>` **必须已存在于** `crates/engine-native/src/vocabulary/host/keys.rs`
+   **前置条件**：该 `host:<key>` **必须已存在于** `crates/engine-native-kernel/src/vocabulary/host/keys.rs`
    （`HostBehavior` 枚举 + `as_key()`），否则该技能**无法**在原生侧生效；
 5. **验收**：包可发现 + 加载 + 行为对照（第⑦层样本）→ 才计入对应指标。
 

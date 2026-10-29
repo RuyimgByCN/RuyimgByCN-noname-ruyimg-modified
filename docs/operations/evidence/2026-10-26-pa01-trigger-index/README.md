@@ -2,7 +2,7 @@
 
 - 日期：2026-10-26；数据文件落盘 01:54–01:54、首次提交 01:56（8319a3fb）+08:00（原记「2026-10-26 01:20–02:10 +08:00」晚于提交或与文件时间矛盾，2026-10-26 17:30 扫描按数据文件时间与提交历史更正）
 - 工作包：[台帐 PA01](../../../architecture/native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26)；「前」数据与测量程序见[内核性能结构复核（2026-10-25）](../2026-10-25-native-arch-perf-review/README.md)
-- 源码：`HEAD = 7e28a93799a9c01794085e911a72a4faa5673883` 加未提交工作树；本批改动仅 `crates/engine-native/src/resolution.rs`、`crates/engine-native/src/catalog.rs` 与新增测试 `tests/pa01_catalog_index_equivalence.rs`（`git diff` 核对：resolution.rs 1 hunk、catalog.rs 3 hunk，均为本批）。规则 **v322**、存档 **v105** 未变
+- 源码：`HEAD = 7e28a93799a9c01794085e911a72a4faa5673883` 加未提交工作树；本批改动仅 `crates/engine-native-kernel/src/resolution.rs`、`crates/engine-native-kernel/src/catalog.rs` 与新增测试 `tests/pa01_catalog_index_equivalence.rs`（`git diff` 核对：resolution.rs 1 hunk、catalog.rs 3 hunk，均为本批）。规则 **v322**、存档 **v105** 未变
 - 测量程序：同[复核证据](../2026-10-25-native-arch-perf-review/archbench/)的 `archbench` crate 原样复制到 `/tmp/pa01-archbench`（path 依赖即本仓库），`CARGO_TARGET_DIR` 独立，`--offline --release`（thin LTO、16 codegen units，与复核口径一致），`GRANT=1`
 
 **一句话结论**：两处改动后，archbench `scale` 在 6215 技能目录档的提交 p50/p95 与 215 档相差 ≤3.2%（门限 10%），规划 p50 相差 ≤2.6%；各档步数/事件数与复核证据完全一致（818/2115、1467/4355），行为轨迹不变。

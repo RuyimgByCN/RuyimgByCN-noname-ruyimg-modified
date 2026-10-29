@@ -7,7 +7,7 @@
 
 `scripts/report_phase_arms.py`：
 
-1. 扫 `crates/engine-native/src/content/host/**` 里所有含 `Phase::(Judge|Draw|Play|Discard|End), begin: <bool>` 的行；
+1. 扫 `crates/engine-native-content/src/content/host/**` 里所有含 `Phase::(Judge|Draw|Play|Discard|End), begin: <bool>` 的行；
 2. 向上回溯到最近的 `HostBehavior::X =>` 得到行为名；
 3. 行为 → `host:` 键（`keys.rs`）→ 包内技能名（`packages/extensions/*/assets/*.json`）；
 4. 上游 trigger：按**六种「查不到」形态**逐一尝试（裸名 / `lib.skill.X =` / 前后下划线 / 加去扩展前缀），并跳过卡片定义；

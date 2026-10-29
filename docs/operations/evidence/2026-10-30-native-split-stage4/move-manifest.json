@@ -1,0 +1,1072 @@
+[
+  {
+    "old": "crates/engine-native/src/ids.rs",
+    "new": "crates/engine-native-kernel/src/ids.rs",
+    "before_sha256": "1d0dbe342e095b6af06112bc97ad6b4098a02250eaa884008de0f133b2074b2f"
+  },
+  {
+    "old": "crates/engine-native/src/rng.rs",
+    "new": "crates/engine-native-kernel/src/rng.rs",
+    "before_sha256": "b6db4e24d8ca95b7e059d4d82ee835da6372ebda272fa7f62a5fbf951d2f2136"
+  },
+  {
+    "old": "crates/engine-native/src/choice.rs",
+    "new": "crates/engine-native-kernel/src/choice.rs",
+    "before_sha256": "3dc40e6c661844e6ddce7fc4f9593abfef6a4f28828917681673302a77178448"
+  },
+  {
+    "old": "crates/engine-native/src/event.rs",
+    "new": "crates/engine-native-kernel/src/event.rs",
+    "before_sha256": "67b9884d45934eded9d4724d55ce56c4d39755bee8fd3ad0aa93190340bad014"
+  },
+  {
+    "old": "crates/engine-native/src/catalog.rs",
+    "new": "crates/engine-native-kernel/src/catalog.rs",
+    "before_sha256": "4b4e3d7a1ed733f0122f3633a53eb42f19827bf4e60ff7a7bd1d4855ee669ada"
+  },
+  {
+    "old": "crates/engine-native/src/catalog/card_kind.rs",
+    "new": "crates/engine-native-kernel/src/catalog/card_kind.rs",
+    "before_sha256": "41e7e53b5df05f2bd54693dc24edb268a3ff36107ea712e3038b5fae6c20ca1b"
+  },
+  {
+    "old": "crates/engine-native/src/state.rs",
+    "new": "crates/engine-native-kernel/src/state.rs",
+    "before_sha256": "9b344e9b7abc2da2bd82c8fb9eceefb694aae6bd0d6a2822967ddbffdd12494d"
+  },
+  {
+    "old": "crates/engine-native/src/state/core_ops.rs",
+    "new": "crates/engine-native-kernel/src/state/core_ops.rs",
+    "before_sha256": "6a13be1ee5ff2494e9035517986c19ba30ef98c7f26c5a530f9995da9a90cf30"
+  },
+  {
+    "old": "crates/engine-native/src/state/general_assembly.rs",
+    "new": "crates/engine-native-kernel/src/state/general_assembly.rs",
+    "before_sha256": "b68675116e0b52449d2502bbcb8bed64d52f48039fc89e0cbc624717362784f8"
+  },
+  {
+    "old": "crates/engine-native/src/machine.rs",
+    "new": "crates/engine-native-kernel/src/machine.rs",
+    "before_sha256": "26e66b8816af60430894c2a3803b595579d195565f4ddbd265d98d347eec70c9"
+  },
+  {
+    "old": "crates/engine-native/src/resolution.rs",
+    "new": "crates/engine-native-kernel/src/resolution.rs",
+    "before_sha256": "8262532b6bed1ee1fa04da7ced54f19ac29a3c48c9c0a79024fbc37d6d45a1ac"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary.rs",
+    "before_sha256": "eeb3e893dde68748075870e74035eb90d44056503817fe59a2939d702c719b6d"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/card_skills.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/card_skills.rs",
+    "before_sha256": "441df69328fdc686b19d0755c34fe2cf63aa9eee3be92ce13ee23a24d22230a3"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/generals.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/generals.rs",
+    "before_sha256": "e040883bd2a6301efc15380ce49776c9b9c9b5afb30502588eea9e6b1c8ab10f"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/behavior.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/behavior.rs",
+    "before_sha256": "ddde9bb0f2c8e445ede3d8776f78484952992bdc91ae22fcb22e255b09ab703a"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/behavior_list.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/behavior_list.rs",
+    "before_sha256": "2e30e5355d4cd92a197a77997f0cc28ef69267c6d892d84ddcfb8d24c38a648e"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/constants.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/constants.rs",
+    "before_sha256": "100a46e54d2e87c26eb20716c2883c903f6095a3944778467ec78f59a93d57a3"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/keys.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/keys.rs",
+    "before_sha256": "a3ba0bdc72ae90b383a0166a5e6b95537f171b8ff2f3dbb48f31e95fd5ba4a09"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/metadata/common.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+    "before_sha256": "96393d168b5abc7b8201f38adc831988251a96c1193bd7308a303eae1101d86c"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/metadata/swd.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+    "before_sha256": "db21179db071bea9a622923b03359b5faf12845f94fb4309ba65a79eff153502"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/metadata/xianjian.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/metadata/xianjian.rs",
+    "before_sha256": "ed4146688abf0c7233c2386a798e33a5d68dd534048b3ece21b45998810094c2"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/metadata.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/metadata.rs",
+    "before_sha256": "387f9e4f55ecad769b59d2717ddd0b85640c6d2335c74bddafd2c339f046fead"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/tag_decode.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/tag_decode.rs",
+    "before_sha256": "55c09762deec8070684c72e8168c9e4768a653b06332992e2845229766f60314"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host/tags.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host/tags.rs",
+    "before_sha256": "40005422c1ab1d213d7dc65be57e2fd5aab58563f1691f10876230518528d5c0"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/host.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/host.rs",
+    "before_sha256": "b9ced17d87750d76f94df2b24a19d867c09f3aa1cd566cae2806e69dfd3bfb66"
+  },
+  {
+    "old": "crates/engine-native/src/vocabulary/names.rs",
+    "new": "crates/engine-native-kernel/src/vocabulary/names.rs",
+    "before_sha256": "997418acd5cfe5741a088957482d62836805499deb8fd409215e74a559b321d7"
+  },
+  {
+    "old": "crates/engine-native/src/kernel.rs",
+    "new": "crates/engine-native-kernel/src/kernel.rs",
+    "before_sha256": "b30980ba352a84c878f04cdd4835ffe42608bafb49aeef4d284933087922b7c3"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/aoe.rs",
+    "new": "crates/engine-native-kernel/src/kernel/aoe.rs",
+    "before_sha256": "cea0c6c3d1cbe759f1060938f31d3f92e6e702215147e583e812739671083947"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/combat_rules.rs",
+    "new": "crates/engine-native-kernel/src/kernel/combat_rules.rs",
+    "before_sha256": "7f09f99e9c30ecf6e959273ad41b81a2bbf1c8f09533ec1f3be83a127b371205"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/damage.rs",
+    "new": "crates/engine-native-kernel/src/kernel/damage.rs",
+    "before_sha256": "8c8adb84445f898b4dbe0afd626b316027c95931454ce7de0a426b3434624429"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/death.rs",
+    "new": "crates/engine-native-kernel/src/kernel/death.rs",
+    "before_sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/discard.rs",
+    "new": "crates/engine-native-kernel/src/kernel/discard.rs",
+    "before_sha256": "36bd7c6e098ef9e0791bc5e341b43ee2121dd8c25ac5526d62621ff5a3900a92"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/duel.rs",
+    "new": "crates/engine-native-kernel/src/kernel/duel.rs",
+    "before_sha256": "da009cc1102135dc3627f831d49cf79483435d0744093bb09443b2d69e961879"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/dying.rs",
+    "new": "crates/engine-native-kernel/src/kernel/dying.rs",
+    "before_sha256": "7d657643ad1086665160dbfb17988c7b3a7be6454a2f3a5dc9d08524a5430fa6"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/equipment.rs",
+    "new": "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "before_sha256": "305e4fbf16403804a91155c2ffd96870368afa2f606134b766f03420063bcd1b"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/events.rs",
+    "new": "crates/engine-native-kernel/src/kernel/events.rs",
+    "before_sha256": "3fcb028e0712c05ede1a6f662ab038c6d9885265d002dc83932a0a69b8d46707"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/intrinsic.rs",
+    "new": "crates/engine-native-kernel/src/kernel/intrinsic.rs",
+    "before_sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/judge.rs",
+    "new": "crates/engine-native-kernel/src/kernel/judge.rs",
+    "before_sha256": "3c3af9caff49f0deecc917027ee885f10cb0995002d9a57086e5951f3e525221"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/monkey.rs",
+    "new": "crates/engine-native-kernel/src/kernel/monkey.rs",
+    "before_sha256": "f19842ba0a7f1651f37f70425157b16b266093d8815966c9f064f03d6f6f4432"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/nullify.rs",
+    "new": "crates/engine-native-kernel/src/kernel/nullify.rs",
+    "before_sha256": "91f28247cc84d6b1f85607d98d9e39cb4da5ea61e2fe5e238796144a56bbc740"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase/discard.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase/discard.rs",
+    "before_sha256": "9f4606707cd28ed5b71eb188b8fd6c7e7ef869603038302df5ce59456a9ef749"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase/draw.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase/draw.rs",
+    "before_sha256": "50a0d87f1071be0283f0edfe54e45286c0be13d46d2b1b72707541b4a2383dbc"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase/end.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase/end.rs",
+    "before_sha256": "c94ee9643f20bc0c2bf7a95e1a4b5aaf38a208614fc0f015bd4d24b428e368eb"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase/judge.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+    "before_sha256": "fed735ba1a0fa722980aa4cdb53d93b47158611148b19952f0c99e2b609012d8"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase/play.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase/play.rs",
+    "before_sha256": "a41723b49585c15d08ede554dc02cdf33101c5ba460c532f621211fa3239905e"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/phase.rs",
+    "new": "crates/engine-native-kernel/src/kernel/phase.rs",
+    "before_sha256": "5e080bdaeffefb99ecf7ee9e68679a47da8dbccea832b44f79fce6e910aa93e7"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/sha/liuli.rs",
+    "new": "crates/engine-native-kernel/src/kernel/sha/liuli.rs",
+    "before_sha256": "765d2692089e95a94c2a41daf9195b905996065d7a0aa841a323b6024f91f583"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/sha/resume.rs",
+    "new": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+    "before_sha256": "c3a86bf0c7e823a7349fb3058aa9078fa44d3bd63dd3c1a9fe919ddbe7ce70b8"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/sha/step.rs",
+    "new": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+    "before_sha256": "4674f9ba870bd2b83674ab4378ef118f1e349303ce63f9912b6241e4ca80155e"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/sha.rs",
+    "new": "crates/engine-native-kernel/src/kernel/sha.rs",
+    "before_sha256": "a45d9474fff118e04f298d8253e7dff1062b0625fa5e257a5a4df238d3558e52"
+  },
+  {
+    "old": "crates/engine-native/src/kernel/tricks.rs",
+    "new": "crates/engine-native-kernel/src/kernel/tricks.rs",
+    "before_sha256": "b54f467f3acbcda34d9361d3b79eeca67408b0fc5bfdd3ce6eddafc479424339"
+  },
+  {
+    "old": "crates/engine-native/src/snap.rs",
+    "new": "crates/engine-native-kernel/src/snap.rs",
+    "before_sha256": "7b1abad6044ce922fe7333e764e78136c008bb79d72e6cc766a2e23b29d7895b"
+  },
+  {
+    "old": "crates/engine-native/src/snap/asks/shapes.rs",
+    "new": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+    "before_sha256": "88c8bc76f09e8ce0e0e3e54e1cd9dc7c2eea2aa1259db400e39b507e19ac95bb"
+  },
+  {
+    "old": "crates/engine-native/src/snap/asks.rs",
+    "new": "crates/engine-native-kernel/src/snap/asks.rs",
+    "before_sha256": "fa5ca41101d1a8afa9f0eacf5ca7e484f91efa4fe4d30490813a3ef9ba35f642"
+  },
+  {
+    "old": "crates/engine-native/src/snap/machine_validation.rs",
+    "new": "crates/engine-native-kernel/src/snap/machine_validation.rs",
+    "before_sha256": "2a2cb48ae1ecea94ce96234c3ebae8b44c7ae02b531112da6d8a61bb2c24e9dc"
+  },
+  {
+    "old": "crates/engine-native/src/snap/restore.rs",
+    "new": "crates/engine-native-kernel/src/snap/restore.rs",
+    "before_sha256": "c2613eb11a8fa8e70390e4ec56986708a4a81d3aba120a0578bb50bca1d3c716"
+  },
+  {
+    "old": "crates/engine-native/src/snap/types.rs",
+    "new": "crates/engine-native-kernel/src/snap/types.rs",
+    "before_sha256": "25ae476e35d90f88a6f7c0bc63dd38e0f6f737a397a19a497d9d63e124d264a1"
+  },
+  {
+    "old": "crates/engine-native/src/snap/validation.rs",
+    "new": "crates/engine-native-kernel/src/snap/validation.rs",
+    "before_sha256": "9e1f0b9046e01ac1f9e979b67190431a97b73249ad3d848214ff3055665d5743"
+  },
+  {
+    "old": "crates/engine-native/src/archive.rs",
+    "new": "crates/engine-native-kernel/src/archive.rs",
+    "before_sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09"
+  },
+  {
+    "old": "crates/engine-native/src/archive/auxiliary.rs",
+    "new": "crates/engine-native-kernel/src/archive/auxiliary.rs",
+    "before_sha256": "fa93561ae184816df76021b47a9adfb0d1c64eeba0430a1b0546870325eeaa2b"
+  },
+  {
+    "old": "crates/engine-native/src/archive/card_codes.rs",
+    "new": "crates/engine-native-kernel/src/archive/card_codes.rs",
+    "before_sha256": "af3b033693b873934c889e91287e78f8edcc236b5732b6a53929b3c061f1b214"
+  },
+  {
+    "old": "crates/engine-native/src/archive/events.rs",
+    "new": "crates/engine-native-kernel/src/archive/events.rs",
+    "before_sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070"
+  },
+  {
+    "old": "crates/engine-native/src/archive/io.rs",
+    "new": "crates/engine-native-kernel/src/archive/io.rs",
+    "before_sha256": "2b861a6cc38d9c7adfdbb830c976a3f3c4bc2745fde1b6b28c14477770b1e055"
+  },
+  {
+    "old": "crates/engine-native/src/archive/machine_decode.rs",
+    "new": "crates/engine-native-kernel/src/archive/machine_decode.rs",
+    "before_sha256": "38c4d030e12600b9d4fdbe0487786e2a157fe842e8240b7a6875eaf1c62981bc"
+  },
+  {
+    "old": "crates/engine-native/src/archive/machine_encode.rs",
+    "new": "crates/engine-native-kernel/src/archive/machine_encode.rs",
+    "before_sha256": "ad19b9541793a9731977569150b33c7ccc9a055da693bf1a7e2bb181fb53b2f5"
+  },
+  {
+    "old": "crates/engine-native/src/archive/resolution.rs",
+    "new": "crates/engine-native-kernel/src/archive/resolution.rs",
+    "before_sha256": "258afe40a6c5289c17f96642baa9fabeaca040ab175224380f00d530a7b9e6db"
+  },
+  {
+    "old": "crates/engine-native/src/archive/state_decode.rs",
+    "new": "crates/engine-native-kernel/src/archive/state_decode.rs",
+    "before_sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb"
+  },
+  {
+    "old": "crates/engine-native/src/archive/state_encode.rs",
+    "new": "crates/engine-native-kernel/src/archive/state_encode.rs",
+    "before_sha256": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e"
+  },
+  {
+    "old": "crates/engine-native/src/archive/values.rs",
+    "new": "crates/engine-native-kernel/src/archive/values.rs",
+    "before_sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_ops.rs",
+    "new": "crates/engine-native-kernel/src/rvm_ops.rs",
+    "before_sha256": "4a14b29dc044f59425b96b7dd8b2ef40fbd7dcbab76ea761641230a446bda3a5"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_ops/codec.rs",
+    "new": "crates/engine-native-kernel/src/rvm_ops/codec.rs",
+    "before_sha256": "4527c85cde888bad941546ad438e293da96643a718ce3f5686db0b181d46c68a"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_ops/query.rs",
+    "new": "crates/engine-native-kernel/src/rvm_ops/query.rs",
+    "before_sha256": "7790591c675bd856dfe3ad515e4b4240a8bd52d1419c1af8af75a033b62dd9bd"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_bridge.rs",
+    "new": "crates/engine-native-kernel/src/rvm_bridge.rs",
+    "before_sha256": "7b9c06cadc7ef55c113a3ff9f23d5b8ab14abe7c13b8f9fe9f9ce63426ba73a7"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_bridge/machine.rs",
+    "new": "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+    "before_sha256": "8b4fc7e357f5579dd0fc1b2733c2bc7550128937f9d320cf8362e1ae645a0e25"
+  },
+  {
+    "old": "crates/engine-native/src/rvm_named.rs",
+    "new": "crates/engine-native-kernel/src/rvm_named.rs",
+    "before_sha256": "37d3a1c5eb87e983f1eda711e5dcfb516d8e37d1bfa93e98757193cd2567a81a"
+  },
+  {
+    "old": "crates/engine-native/src/content/extension.rs",
+    "new": "crates/engine-native-content/src/content/extension.rs",
+    "before_sha256": "b6817a89e057f3f816b57a870f6adcbda11e763f992df5b2a99099e403db464f"
+  },
+  {
+    "old": "crates/engine-native/src/content/hooks.rs",
+    "new": "crates/engine-native-content/src/content/hooks.rs",
+    "before_sha256": "5bf52a224f5247bc5c5b5eee5018b1635ce6838f5281111ad37d28d0b8f20b1a"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation/common.rs",
+    "new": "crates/engine-native-content/src/content/host/activation/common.rs",
+    "before_sha256": "f3ce8155a46e8fe2553e16f2526689666d1eebec975267eec5cd0bc620ba4b72"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation/swd_artifacts.rs",
+    "new": "crates/engine-native-content/src/content/host/activation/swd_artifacts.rs",
+    "before_sha256": "18e8c4fe73475f7687ffb49d36923e6da0aa7ff6f0f792f1c643f58b0dd6ef35"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation/swd_skills.rs",
+    "new": "crates/engine-native-content/src/content/host/activation/swd_skills.rs",
+    "before_sha256": "86fa8bded7d67e6b63ad7b50539556b47b426d68b99c9fed75094e15d6c68442"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation/wudian.rs",
+    "new": "crates/engine-native-content/src/content/host/activation/wudian.rs",
+    "before_sha256": "e833802ff51c384db1a41aecfc0d226f2f4c419c898dadf709ab04c2973a2e36"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation/xianjian.rs",
+    "new": "crates/engine-native-content/src/content/host/activation/xianjian.rs",
+    "before_sha256": "531b5f65a964c88cd8862f126a36513ce98b9bae96b42abebfed3e983c1bbb96"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/activation.rs",
+    "new": "crates/engine-native-content/src/content/host/activation.rs",
+    "before_sha256": "5bd87ac57772b595653ea10a70ecfa6a0a04f5b96b29d33868689bb0a029488e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/asks.rs",
+    "new": "crates/engine-native-content/src/content/host/asks.rs",
+    "before_sha256": "8bbcff6983affe1a8a44a9176a581fc33a859b4b2965dcb8a4c4314449c0d8e3"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/asks_mtg.rs",
+    "new": "crates/engine-native-content/src/content/host/asks_mtg.rs",
+    "before_sha256": "6c220d8ba833513d1376b91be96a293201167262e19ed4fc8f11c94b1ded6255"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/asks_wudian.rs",
+    "new": "crates/engine-native-content/src/content/host/asks_wudian.rs",
+    "before_sha256": "55d1a344e59888899bee9cf5434335bbac9bb07dee02f511555e9ac15086853c"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/boss.rs",
+    "new": "crates/engine-native-content/src/content/host/boss.rs",
+    "before_sha256": "06f2c18169af9653b810639f85248010a2e3d9772e7f49b741200ff0fdc26f3c"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/constants.rs",
+    "new": "crates/engine-native-content/src/content/host/constants.rs",
+    "before_sha256": "38502339997e9329b458c78c43c94628b54b5abcb2abb6c07484ac8f783463a3"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/factory.rs",
+    "new": "crates/engine-native-content/src/content/host/factory.rs",
+    "before_sha256": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/filtering/common.rs",
+    "new": "crates/engine-native-content/src/content/host/filtering/common.rs",
+    "before_sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/filtering/swd.rs",
+    "new": "crates/engine-native-content/src/content/host/filtering/swd.rs",
+    "before_sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/filtering/xianjian.rs",
+    "new": "crates/engine-native-content/src/content/host/filtering/xianjian.rs",
+    "before_sha256": "e2fb2ed77be221994c3b7f8b08b0727d09422631a727dd962db62591e8fb80e5"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/filtering.rs",
+    "new": "crates/engine-native-content/src/content/host/filtering.rs",
+    "before_sha256": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/intrinsic.rs",
+    "new": "crates/engine-native-content/src/content/host/intrinsic.rs",
+    "before_sha256": "684de2830e12253ec1a66be955dcd49cb9953e32f122f68de1105ef4fd95d971"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/boss.rs",
+    "new": "crates/engine-native-content/src/content/host/step/boss.rs",
+    "before_sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/gujian.rs",
+    "new": "crates/engine-native-content/src/content/host/step/gujian.rs",
+    "before_sha256": "e9378467d3a8f0e929b1a8cdae37e015ed9b66c8d2481b5033a37cb14335df78"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/gwent.rs",
+    "new": "crates/engine-native-content/src/content/host/step/gwent.rs",
+    "before_sha256": "1170d56df68bcc656052c121d0ad909be6ca1bb6ee19c5811297977d15fe983e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/hearth.rs",
+    "new": "crates/engine-native-content/src/content/host/step/hearth.rs",
+    "before_sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/jiguan.rs",
+    "new": "crates/engine-native-content/src/content/host/step/jiguan.rs",
+    "before_sha256": "0189920b9df928e956e33c76f85a5995392a50fab2002b0857904befd79a244f"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/mtg.rs",
+    "new": "crates/engine-native-content/src/content/host/step/mtg.rs",
+    "before_sha256": "e788c73c053480641c718afa1a25d6693753b5271cb0323e803ab67e2a2a413b"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_card_use.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_card_use.rs",
+    "before_sha256": "2e90466f19f53052f3f0dcf27f34d53150353fc49b7580efdfae197ebd608b5e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+    "before_sha256": "c9109e3232d4e94eb7fde4f6bd79ab23b2a9622d52fa28f0f1e504415176f3fc"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_damage.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+    "before_sha256": "0bc340bb8cbc2c1cf9732761f66ce131c5ea8460c626299b8e2a1324599591d7"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_discard_costs.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+    "before_sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_recovery.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+    "before_sha256": "15cf5b8a4230e748edb22d4cb097abb82d980656aed04f4a8a1680f0d87009a3"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_status.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+    "before_sha256": "a1625aef35bb53bad30b8ba9476e0652ef08813d06ee6eb07fe413c2ce290b7e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+    "before_sha256": "07beb547681224e99c78df53a8abfa0404449e4393cf946bf89e8120f9807cb4"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/skills_virtual_use.rs",
+    "new": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+    "before_sha256": "9725ae48dcdb058ae5067b6752a8735c67a1e18049a4594ec141cab5222f4415"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_card_attach.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+    "before_sha256": "00a3a16438713117ff54f297ccda5758e3c02d747a69ad33f826dee45280f933"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_card_contests.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+    "before_sha256": "a7bfcaaca5b48d851315bcf1163a6e504759efd0aa2bd3fc6a376eee7d08b392"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_card_effects.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+    "before_sha256": "1eb495f03416b4cd8b8b41af55ef152dacc476bb4e8e99001ddc21b586704f9e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_card_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+    "before_sha256": "3bc713a157091a1f8245c3b3ff6ae8db6140ee8ccd9040ec5cad8e8d9f6594ec"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+    "before_sha256": "f4ffbbc3c199589faf77560d5c55f7b60bf568834c607f403170a65d01532020"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+    "before_sha256": "a784374ad07da1ca6c74b65c11e7be188614f9d7e783f83f6dc4f572e6bb369f"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_damage_combos.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+    "before_sha256": "8cb00f9bf7fdd71087579fb912ea2a24a529e3efcfcc7dd778a7ad7a7247a9c7"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_damage_costs.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+    "before_sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_damage_multi.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+    "before_sha256": "1de0579ae26f3b43c08c4aa452b1be55790ff087d9e953132d752b0cd042ff1b"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_damage_reactions.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+    "before_sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_damage_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+    "before_sha256": "8ffdf2f2ceb731b1b155c7fec9119a36aab9be8ddb2b299e76f41d657279a25a"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_equipment.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+    "before_sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_equipment_skills.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs",
+    "before_sha256": "a0fd510b1b6bb6ac62150dc0b63f7e4b95295894fd03e11abf2ae4e63e8de580"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_jiguan_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+    "before_sha256": "6e350332f675f02918796b618476458c76398ffd90832639b63a6f98d59c7b5f"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_lingjian_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_lingjian_cards.rs",
+    "before_sha256": "c86a7db9c1ed82a1c9bd08a2f947c530f5e1ee86fefdbeb5d51c150216f6a2f1"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_recovery.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+    "before_sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_response_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+    "before_sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_status.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+    "before_sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+    "before_sha256": "3e164758b1ecd887b386ec26bfe3eb2a27175546cbbd032138e5dbbfca41e975"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_virtual_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+    "before_sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/swd_zhenfa_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+    "before_sha256": "621c9fa75658da189a68d0329663b57b5f67f77e0e86acd6aa7adc71641752f4"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+    "before_sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_damage.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_damage.rs",
+    "before_sha256": "aaaf18348716bfa3d294cfabb8ad3cad23cac59411ae6b8a3f60eb494e1c6994"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_ow_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs",
+    "before_sha256": "cead25691f4e277870076172ac3fb0deb90e3b6bb7ba6be0964819f61462314a"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_recovery.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+    "before_sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_status.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+    "before_sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/wudian_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/wudian_targets.rs",
+    "before_sha256": "d8df7da0dae11082467bcd383fcc0d4b47c558b5d67bcb266f7e2c3b3e0ef5d8"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_card_use.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_card_use.rs",
+    "before_sha256": "01fc55b0294cc372c06d2651d77c3f870a6525cff92c778027ba4090098006a5"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_cards.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+    "before_sha256": "70a8c2bb6821e6931cc11c720587f68123869e88002dc6937f9a31dda72012f6"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_damage.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+    "before_sha256": "061d91c6d3ffcd08cd9794464fb71393d8bb73c3155870113fd1256205ac5bda"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_recovery.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_recovery.rs",
+    "before_sha256": "d90342502b780949a4bd82491e8f648f47f3b5a6cadbf1b90b3362d8aee34461"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_status.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+    "before_sha256": "3a732164b8182c2ce4672e912ec249ec384f5716483272d2a62bb92883ce8dda"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/xianjian_targets.rs",
+    "new": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+    "before_sha256": "4d2229c77af39c96e0de030d7ae67e0ca8c5562f9aadb40b299ffedfa2153986"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step/yunchou.rs",
+    "new": "crates/engine-native-content/src/content/host/step/yunchou.rs",
+    "before_sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/step.rs",
+    "new": "crates/engine-native-content/src/content/host/step.rs",
+    "before_sha256": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553"
+  },
+  {
+    "old": "crates/engine-native/src/content/host/support.rs",
+    "new": "crates/engine-native-content/src/content/host/support.rs",
+    "before_sha256": "b796a9589d85476dd601c90500b1df9a81ac6cad5ac15a56ae539473b94a231c"
+  },
+  {
+    "old": "crates/engine-native/src/content/host.rs",
+    "new": "crates/engine-native-content/src/content/host.rs",
+    "before_sha256": "f17654cefe0bf7b904299b77a10f63ae16063256fbf8124e27625d4d483eefdb"
+  },
+  {
+    "old": "crates/engine-native/src/content/mod.rs",
+    "new": "crates/engine-native-content/src/content/mod.rs",
+    "before_sha256": "7ce854125394a1bb8ba84bdc04c5644099baac6aadee826067094d06cfdfc11a"
+  },
+  {
+    "old": "crates/engine-native/src/content/names.rs",
+    "new": "crates/engine-native-content/src/content/names.rs",
+    "before_sha256": "cbaa9e1ab9702ade251b04939762367814317b09e5c2dd86bdf9ee14e9c89f3a"
+  },
+  {
+    "old": "crates/engine-native/src/content/pile.rs",
+    "new": "crates/engine-native-content/src/content/pile.rs",
+    "before_sha256": "549739165cb7de99b283bb5e2f2677009cfdc572f63eb6dd957f13147a8812ff"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/boss_skills.rs",
+    "new": "crates/engine-native-content/src/content/standard/boss_skills.rs",
+    "before_sha256": "bf69acf66122d9323dba8ccb29e0bea7a12af2a6552848187daa6451b6590f84"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/cards.rs",
+    "new": "crates/engine-native-content/src/content/standard/cards.rs",
+    "before_sha256": "b93816573c9b0c0edd752e5a0363a2f1dc76288a8199af3bf0c76401676b9a73"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/bi_yue.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/bi_yue.rs",
+    "before_sha256": "7bd96409661a06006e06b2e11d03402f0327a205d1c61cbec9c641489f4d51fc"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/bingfeng.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/bingfeng.rs",
+    "before_sha256": "ed4605efc5ddad14c406e9d8850deeae83c4721be22f3b152d0cafedcd9b605b"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/buchun.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/buchun.rs",
+    "before_sha256": "7df34c85fd495f053a77cc81fc962974df18db64b5ee1c33c8b0f55a2d6a008a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/fan_jian.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/fan_jian.rs",
+    "before_sha256": "7d2fb426948bc7498c6d9256c43d7f80a7aea5dc852d5742ab2586511e7c06d7"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/fan_kui.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/fan_kui.rs",
+    "before_sha256": "dcadfcc69d861b47aad5e6c4beea56008d121b872150bc00c95d906b7dd25771"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/futai.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/futai.rs",
+    "before_sha256": "31495fbe2fe057db5f2ca5c5d73083e3d6b271a9d73879f2acd5531eeb16a4f6"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/gang_lie.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/gang_lie.rs",
+    "before_sha256": "6de77721ae47298608c6cfd3885e2456620fcc49b3988dab2cafb33dd0f77137"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/guan_xing.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/guan_xing.rs",
+    "before_sha256": "5bb52c2368c0aeb377bdb2d72b3d334e35d25a68d4da8258be217d8df4031cd8"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/heisheng.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/heisheng.rs",
+    "before_sha256": "76c12ca54c959f000b2274cf0a7b0b76f303ea39283ddbf48da5ef0ea22a1771"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/huoxing.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/huoxing.rs",
+    "before_sha256": "193500ff61c6de52a0cd6bb3b7a492926b46803c99a9e5c3ff63567ce9a72695"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ji_ji.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ji_ji.rs",
+    "before_sha256": "48ff1a5f25a94488d0f53279993003ca8ab09607f1cc88c94a136d273e3fcbd3"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ji_jie.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ji_jie.rs",
+    "before_sha256": "b669dc4b4b34d0e4b9d721c8ba86dc3dc1e9e250a15e53c5bece15fe45f68391"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ji_yuan.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ji_yuan.rs",
+    "before_sha256": "d9d3521ffde36ac4911124c5662af5e0b821f0b5d7281889e5acaea6c0364d64"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ji_zhi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ji_zhi.rs",
+    "before_sha256": "34bd732875d8002f19b17dde220087572f707c6fa0dfc81d193a23c5a7723adc"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/jian_xiong.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/jian_xiong.rs",
+    "before_sha256": "22396142e296a33cb3871f279331bd913334766b169009186d50fcc08c5403f5"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/jie_yin.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/jie_yin.rs",
+    "before_sha256": "beac3d9bd07d750ca6a7e5ba7f694d681d127cb5ff7276d5c180602022e386cd"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/jijiang.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/jijiang.rs",
+    "before_sha256": "d432417c57742bfc3bef2266a9f12f6fc2d54b92efed250e311167b48005af92"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/jushou.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/jushou.rs",
+    "before_sha256": "d8a98c2dbae62aaaee86a9d1b10976ab4cbfe83fb63dd42d748df7af11335639"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ku_rou.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ku_rou.rs",
+    "before_sha256": "2a3d06850778ba4d5253c51c95678e23c5dd471a14c98912711c4d33fc8d5f4e"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/kuang_fu.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/kuang_fu.rs",
+    "before_sha256": "edd408eded415cdfa0e827347dd2006627673c3a5e97ff80a6ed8ade29715397"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/leizhu.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/leizhu.rs",
+    "before_sha256": "0889be02000459e85310f629f803b6a201e86ef49e7cbb5b53affcb05c03ba3e"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/li_jian.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/li_jian.rs",
+    "before_sha256": "3d8b3fc73d6ea37c4f0582d26856725d1588c8fdcd78f4d747ea3d61ad95a82a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/lian_ying.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/lian_ying.rs",
+    "before_sha256": "1e1a7d2f4dd32ceb926cbb30460f2ea9b52076e4a99f24cca7b2c3b1357c996a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/lingbo.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/lingbo.rs",
+    "before_sha256": "fff2f602c158a44fcf6f1311caddf0d408b87d81f6d7aabfbb97c3232bdb953f"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/luan_chang.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/luan_chang.rs",
+    "before_sha256": "15c30ef2dc70f359ed333a3cb97574738011aa91aac51fe6e1ced03585e07291"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/luo_shen.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/luo_shen.rs",
+    "before_sha256": "172f2cd6ee9a58699082e6e8df709c23dea46dc6e245e8cd4b97f69f2b608d03"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/luo_yi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/luo_yi.rs",
+    "before_sha256": "73c242b28cc71395c691ed0de888049707bd5ef5255cf59079caee908d20160a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/noop.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/noop.rs",
+    "before_sha256": "9be9ab733210294cc45a08f26602096d41314889de156514521996829c16f2bd"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/pingdeng.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/pingdeng.rs",
+    "before_sha256": "852d5898219afe8309fe7d4c6397ee9e16daed05622e1207835c2ebb8160ae1b"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/qing_nang.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/qing_nang.rs",
+    "before_sha256": "76bcd8f71dc5a131689cbd3eeffc22aca88fa30848b2073bfff7e57426ab3bc1"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/qizuo.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/qizuo.rs",
+    "before_sha256": "5197fef1ae6f2ecfae801425019bc77c84110c351597d883a04dc4fff4d8bf2d"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/renao.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/renao.rs",
+    "before_sha256": "948a0273a6d6bdce64a6560513e8b3f43090b7283af0ffc92e635331a446c750"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/rende.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/rende.rs",
+    "before_sha256": "074fdeb0eaff9742f20f8945396c0c5fa845eafcb7a9a43723e1f52dbe660e85"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/san_cai.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/san_cai.rs",
+    "before_sha256": "13fd252e0537e9bb2f6199dd5f73ff7fa4844007a0e3170b2d48f59dc7d2ed0d"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/shed_u.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/shed_u.rs",
+    "before_sha256": "c5810e29610676716cc042733bba38c3f9d7050031a57fd58ad21ba154efb5c7"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/shen_zhi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/shen_zhi.rs",
+    "before_sha256": "ee265f81f25721aa5c6d76682af2ca64b480c9a32f5f482dadcc157c8adecf1e"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/shou_yi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/shou_yi.rs",
+    "before_sha256": "9b0f02ff3d4fbba5f64d92aabf9dc2168a560fe77654b59b1ba0db3e676741f7"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/shu_shen.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/shu_shen.rs",
+    "before_sha256": "03345c5cf068fe36c425f8382a5f5931360601785252ce854a8902d9ae8b3d1a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/su_qing.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/su_qing.rs",
+    "before_sha256": "1b456ce04194a234b03558b5c22cb8b7b9748f5106b2387920f2a0e83e50f9a4"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/sui_dun.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/sui_dun.rs",
+    "before_sha256": "a373a060ce9a9919c905b03f9bc7a72c87c739d5cbf47c0adecbe50bf2f0428a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/tashui.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/tashui.rs",
+    "before_sha256": "f29db29dacc6832f52ebb68034d1858a16b6c3fe982c3aaf928da44affedb90c"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/tong_ji.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/tong_ji.rs",
+    "before_sha256": "ee42266a8d41bcddf8063b1eca3e3cebf0312515f67477c6a1524de656d49e14"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/tu_xi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/tu_xi.rs",
+    "before_sha256": "e7eb93d573776024048149e49d68f7618c16c7f117c049950e114f0e89d9e4d0"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/wang_xi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/wang_xi.rs",
+    "before_sha256": "ba5b8394c2e10a3197bd6e131b1ea9bf6fc955fba32ebae84bde20090d870973"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/wang_zun.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/wang_zun.rs",
+    "before_sha256": "3caa63b43065bfdfa482b9a76d82f4a6a9e5229abc28753b82bfbb4fbeb826ca"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/wanghun.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/wanghun.rs",
+    "before_sha256": "e18c068357653c1f5573d410e42ecefbf58c9d3d25a81cb1e38498636954bf50"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/wangxiang.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/wangxiang.rs",
+    "before_sha256": "7aaeb8166a9dbebb0792d5d317fddc5c549e2866fc40452eff350c270cb47366"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xiang_de.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xiang_de.rs",
+    "before_sha256": "e226fac3ee8c64adcab182248aea512841852feee3374c6e9f7c0c52c8d5cd5f"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xiao_guo.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xiao_guo.rs",
+    "before_sha256": "a925d6a9ebe25f4a2411c1b2f3d51c83ec535126c1aba68c834292e10c8edf4d"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xiao_ji.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xiao_ji.rs",
+    "before_sha256": "7f3b0db3cb282609f17380575f98dc0e9d05534a99a056a48561e06874367d48"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xiaoxiong.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xiaoxiong.rs",
+    "before_sha256": "81c2a1d49983abc395932ffd465714ce338c1441b4f86eef2b36e6a03c384b41"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xingxia.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xingxia.rs",
+    "before_sha256": "2856d26401dc746d3f687f96b9e8a081c30bfe14aa5f940ee4fb815171218590"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/xun_xun.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/xun_xun.rs",
+    "before_sha256": "2d8dc2a9cd8aa5a81c72e57aaefb59bb98e1bc1909a73dd3951269b01b65000c"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/yao_wu.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/yao_wu.rs",
+    "before_sha256": "2f9643a0ff0dd72785d0ad1ca33272998176dd33f763afb451f36e1b608ef235"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/yi_shang.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/yi_shang.rs",
+    "before_sha256": "fbbf9f8e09a846206b054a9a031d9251969bfe1b56662e4a16544ee0f14f166a"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/ying_zi.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/ying_zi.rs",
+    "before_sha256": "578a27f2baa76c0cf4fbc53ac2936f63c8e8260e5ea6577677e47d4b7e097148"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/zhangba.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/zhangba.rs",
+    "before_sha256": "fbf3c4c62ed028641f62d3926b46a7ba185a7324d1d547fcbe3f809aa5a77a20"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/zhao_huo.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/zhao_huo.rs",
+    "before_sha256": "d1d4cbc874a8a09a32299064903aac7e67b0e5541c1e1bc219bd62d75cc784bb"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/zhi_heng.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/zhi_heng.rs",
+    "before_sha256": "6b01fe7a61eeb17fb0b2db6d1317f9325a6b45527dffdf6938e38842c07b2e4f"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/zhuxin.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/zhuxin.rs",
+    "before_sha256": "13b066ad414af596cc0e9bf2a5f2137e75bc4ab3f9e3e9fc073ed7b472fccced"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills/zj_leiji.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills/zj_leiji.rs",
+    "before_sha256": "7f930c70aad374868add89633c970f78b66d0009d57ebe3a920951051f41f971"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/skills.rs",
+    "new": "crates/engine-native-content/src/content/standard/skills.rs",
+    "before_sha256": "ab1c65b2ff45793ef8908db28a40841e8480668315131c25f867cf4a1942d3b3"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard/standard_skills.rs",
+    "new": "crates/engine-native-content/src/content/standard/standard_skills.rs",
+    "before_sha256": "e2b190f7b9762628dc4baee127ba9116cbceaea6f1564368ec7e07b392dd1f0e"
+  },
+  {
+    "old": "crates/engine-native/src/content/standard.rs",
+    "new": "crates/engine-native-content/src/content/standard.rs",
+    "before_sha256": "16bc14f8ec6a58a7b759127d20e73b67b207d117d1cc155211a1f79781d69c35"
+  }
+]

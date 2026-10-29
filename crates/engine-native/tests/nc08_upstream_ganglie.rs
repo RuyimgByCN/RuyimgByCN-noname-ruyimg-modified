@@ -142,7 +142,7 @@ fn upstream_ganglie_non_heart_hits_source_directly() {
 fn upstream_ganglie_discard_branch_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/gang_lie.rs"
+        "/../engine-native-content/src/content/standard/skills/gang_lie.rs"
     ))
     .expect("读刚烈源码");
     // 原生文件里唯一涉及弃置的是**判定牌**入弃牌堆（ctx.to_discard），没有「来源弃两张手牌」的询问

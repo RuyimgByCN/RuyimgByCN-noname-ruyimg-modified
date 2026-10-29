@@ -21,8 +21,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates/engine-native/src/content/host"
-KEYS = HOST.parents[1] / "vocabulary/host/keys.rs"
+HOST = ROOT / "crates/engine-native-content/src/content/host"
+KEYS = ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs"
 REG = ROOT / "docs/operations/evidence/2026-10-19-phase-audit/registry.txt"
 
 PHASE = re.compile(r"phase:\s*crate::event::Phase::(\w+),\s*begin:\s*(true|false)")

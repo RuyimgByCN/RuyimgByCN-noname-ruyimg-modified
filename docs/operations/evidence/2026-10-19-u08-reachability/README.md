@@ -51,9 +51,9 @@ test result: ok. 1 passed; 0 failed; 0 ignored
 
 | 文件 | 作用 | tracked? |
 |---|---|---|
-| `crates/engine-native/src/kernel/construction.rs` | **武将/角色的构建与技能授予** | ❌ **UNTRACKED** |
-| `crates/engine-native/src/content/host/mod.rs` | **宿主技能注册** | ❌ **UNTRACKED** |
-| `crates/engine-native/src/catalog.rs` | 目录（只读查询面）| ✅ tracked |
+| `crates/engine-native-kernel/src/kernel/construction.rs` | **武将/角色的构建与技能授予** | ❌ **UNTRACKED** |
+| `crates/engine-native-content/src/content/host/mod.rs` | **宿主技能注册** | ❌ **UNTRACKED** |
+| `crates/engine-native-kernel/src/catalog.rs` | 目录（只读查询面）| ✅ tracked |
 
 ⇒ **「给技能加载体」必须改 `construction.rs` / `content/host/mod.rs`** ⇒ **未跟踪** ⇒ **本代理不得修改** ❌。
 

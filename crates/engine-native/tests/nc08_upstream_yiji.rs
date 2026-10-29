@@ -116,7 +116,7 @@ fn upstream_yiji_draws_two_after_damage() {
 fn upstream_yiji_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_ji.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_ji.rs"
     ))
     .expect("读遗计源码");
     assert!(

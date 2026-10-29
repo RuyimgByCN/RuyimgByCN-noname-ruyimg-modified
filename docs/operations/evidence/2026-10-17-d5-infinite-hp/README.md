@@ -23,9 +23,9 @@
 | 投影 | UI 显示 ∞ | 视图直接暴露哨兵数值（`hp`/`max_hp`）；宿主可映射为 ∞——**登记差异**：不新增视图字段（避免扩大快照/协议面） |
 | 存档 | — | 哨兵随 `hp`/`max_hp` 自然往返；读档校验与既有规则版本门禁不变 |
 
-代码：`crates/engine-native/src/state.rs`（哨兵 + `infinite_hp()`）、
-`crates/engine-native/src/kernel.rs`（`commit_damage`/`commit_lose_hp` 门控）、
-`crates/engine-native/src/machine.rs`（`recover`/`lose_max_hp` 门控）、
+代码：`crates/engine-native-kernel/src/state.rs`（哨兵 + `infinite_hp()`）、
+`crates/engine-native-kernel/src/kernel.rs`（`commit_damage`/`commit_lose_hp` 门控）、
+`crates/engine-native-kernel/src/machine.rs`（`recover`/`lose_max_hp` 门控）、
 `crates/content-native-loader/src/lib.rs`（`bridge_generals` 接受 `Infinity`）。
 
 ## 验证

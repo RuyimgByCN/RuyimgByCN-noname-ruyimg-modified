@@ -16,7 +16,7 @@
 | 行内引用转换包 | 40 个引用，缺失 0（在盘包 **41** 个，全部含 `package.npack.json`） |
 | 行内引用测试文件 | 1 个引用，缺失 0；另有 294 个测试名只在证据目录中出现（未写进台账行） |
 | 装载器模块引用 | 2 个，缺失 0 |
-| 源码版本（实测） | 规则 `STANDARD_RULESET_VERSION = 322`（crates/engine-native/src/content/standard.rs:126）、存档 `ARCHIVE_FORMAT_VERSION = 105`（crates/engine-native/src/archive.rs:113） |
+| 源码版本（实测） | 规则 `STANDARD_RULESET_VERSION = 322`（crates/engine-native-content/src/content/standard.rs:126）、存档 `ARCHIVE_FORMAT_VERSION = 105`（crates/engine-native-kernel/src/archive.rs:113） |
 | 平台证据线索 | 有 **31** / 无 **6**（关键词判据，非平台验收结论） |
 | 证据缺失来源 | 缺上游证据 0 / 缺生产接口 5 / 缺测试案例 4 / 缺平台结果 6 |
 | 整包标签存疑 | **19/24** 个标签行在行内仍登记未迁移功能/表现/平台面 |

@@ -174,7 +174,7 @@ fn upstream_beige_heart_branch_recovers() {
 fn upstream_beige_club_choice_difference_is_registered() {
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     assert!(

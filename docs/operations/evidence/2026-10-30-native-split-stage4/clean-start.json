@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-30T00:03:43.781343+08:00",
+  "head": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+  "status": "",
+  "supplied": {
+    "checked_at": "2026-10-30T00:01:09.427435+08:00",
+    "head": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+    "main_clean": true,
+    "main": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "f7_base": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2",
+    "before": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/before",
+    "nc09": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree"
+  }
+}

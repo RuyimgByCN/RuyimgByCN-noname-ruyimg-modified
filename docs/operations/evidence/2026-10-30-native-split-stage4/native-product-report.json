@@ -1,0 +1,39 @@
+{
+  "reports": [
+    {
+      "mode": "prototype",
+      "seed": 42,
+      "players": 4,
+      "skipAnimations": true,
+      "steps": 319,
+      "revision": 319,
+      "hash": "b2368ec4866f4aeb727ec8474bb9829ebdb799ef75509c5e87a91d837a257904",
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "saved": {
+        "hash": "434ecfec737cf0dc132b02cb6014c73a605c96790f32f6a59bee604e4907a55b",
+        "revision": 0
+      }
+    },
+    {
+      "mode": "identity",
+      "seed": 42,
+      "players": 4,
+      "skipAnimations": true,
+      "steps": 280,
+      "revision": 280,
+      "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+      "outcome": {
+        "RebelWin": null
+      },
+      "saved": {
+        "hash": "6b8dd70e5f014db03d3a81417f952092e8641e7c01f371904cf668c375525970",
+        "revision": 0
+      }
+    }
+  ],
+  "exceptions": []
+}

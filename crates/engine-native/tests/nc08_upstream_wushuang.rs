@@ -42,12 +42,12 @@ use nc08_common::{advance_to_play, drain, next_dedup};
 fn upstream_wushuang_covers_both_directions() {
     let sha = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     let duel = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/duel.rs"
+        "/../engine-native-kernel/src/kernel/duel.rs"
     ))
     .expect("读 duel");
     assert!(
@@ -161,7 +161,7 @@ fn upstream_wushuang_sha_needs_two_shan() {
 fn upstream_wushuang_direct_hit_difference_is_fixed() {
     let sha = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha.rs"
+        "/../engine-native-kernel/src/kernel/sha.rs"
     ))
     .expect("读 sha");
     let idx = sha.find("fn source_has_wushuang").expect("source_has_wushuang");

@@ -1,7 +1,7 @@
 # ADR 0780：卡牌实例受控合成原语（CardMod 伴随表）
 
 日期：2026-10-11　|　状态：已采纳
-关联：[ADR 0777/0778](0777-native-c0-native-loader.md)、[T18](../architecture/native-progress.md)、`crates/engine-native/src/state.rs`
+关联：[ADR 0777/0778](0777-native-c0-native-loader.md)、[T18](../architecture/native-progress.md)、`crates/engine-native-kernel/src/state.rs`
 
 ## 背景
 

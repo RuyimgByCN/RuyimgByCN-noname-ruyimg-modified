@@ -125,7 +125,7 @@ fn upstream_kuangfu_loses_hp_when_target_not_lower() {
 fn upstream_kuangfu_once_per_phase_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/kuang_fu.rs"
+        "/../engine-native-content/src/content/standard/skills/kuang_fu.rs"
     ))
     .expect("读狂斧源码");
     let seg: String = src.chars().take(900).collect();

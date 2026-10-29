@@ -30,7 +30,7 @@ use engine_native::Engine;
 fn upstream_mashu_implemented_as_minus() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state/core_ops.rs"
+        "/../engine-native-kernel/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = src.find("MA_SHU").expect("马术");
@@ -74,7 +74,7 @@ fn upstream_feiying_difference_is_registered() {
     // 原生：标准技能名表中**没有**飞影常量（对照 names.rs 的实现索引）
     let names = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/vocabulary/names.rs"
+        "/../engine-native-kernel/src/vocabulary/names.rs"
     ))
     .expect("读 names");
     assert!(

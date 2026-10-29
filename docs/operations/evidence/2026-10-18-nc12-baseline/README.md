@@ -261,26 +261,26 @@
 
 | 日志 | # | panic 位置 | 消息 |
 |---|---:|---|---|
-| 04 | 1 | crates/engine-native/src/machine.rs:408:32 | card 204 not in hand of 0 |
-| 04 | 2 | crates/engine-native/src/machine.rs:408:32 | card 204 not in hand of 0 |
-| 04 | 3 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04 | 4 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 04 | 5 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04 | 6 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 04 | 7 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04b | 1 | crates/engine-native/src/machine.rs:408:32 | card 204 not in hand of 0 |
-| 04b | 2 | crates/engine-native/src/machine.rs:408:32 | card 204 not in hand of 0 |
-| 04b | 3 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04b | 4 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04b | 5 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 04b | 6 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 04b | 7 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 04b | 8 | crates/engine-native/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
-| 09 | 1 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 09b | 1 | crates/engine-native/src/machine.rs:408:32 | card 204 not in hand of 0 |
-| 10 | 1 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 10 | 2 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
-| 10 | 3 | crates/engine-native/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 04 | 1 | crates/engine-native-kernel/src/machine.rs:408:32 | card 204 not in hand of 0 |
+| 04 | 2 | crates/engine-native-kernel/src/machine.rs:408:32 | card 204 not in hand of 0 |
+| 04 | 3 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04 | 4 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 04 | 5 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04 | 6 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 04 | 7 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04b | 1 | crates/engine-native-kernel/src/machine.rs:408:32 | card 204 not in hand of 0 |
+| 04b | 2 | crates/engine-native-kernel/src/machine.rs:408:32 | card 204 not in hand of 0 |
+| 04b | 3 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04b | 4 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04b | 5 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 04b | 6 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 04b | 7 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 04b | 8 | crates/engine-native-kernel/src/kernel/monkey.rs:73:26 | 被拦截的桃应在使用者手牌 |
+| 09 | 1 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 09b | 1 | crates/engine-native-kernel/src/machine.rs:408:32 | card 204 not in hand of 0 |
+| 10 | 1 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 10 | 2 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
+| 10 | 3 | crates/engine-native-kernel/src/machine.rs:408:32 | card 90 not in hand of 0 |
 
 **H2 读档失败边界（archive：swd 单扩展）**
 
@@ -333,8 +333,8 @@ cargo run --offline --release -p engine-native --example nc12_bench -- archive t
 
 | 现场 | 消息 | 触发 | 路径 |
 |---|---|---|---|
-| `crates/engine-native/src/machine.rs:408:32`（`take_hand_card`） | `card 90 not in hand of 0` | combo，seed 42007，budget 64，variant=1，**step 5 seat 1**（该步有开放选择、`parks=1`） | `plan_action` 克隆内的模拟 `submit`（backtrace 见 [09-first-failure-panic.log](09-first-failure-panic.log)） |
-| `crates/engine-native/src/kernel/monkey.rs:73:26` | `被拦截的桃应在使用者手牌` | combo，seed 42007，budget 64，variant=1，**step 236 seat 0**；huanle 单档同类 | 同上（模拟内） |
+| `crates/engine-native-kernel/src/machine.rs:408:32`（`take_hand_card`） | `card 90 not in hand of 0` | combo，seed 42007，budget 64，variant=1，**step 5 seat 1**（该步有开放选择、`parks=1`） | `plan_action` 克隆内的模拟 `submit`（backtrace 见 [09-first-failure-panic.log](09-first-failure-panic.log)） |
+| `crates/engine-native-kernel/src/kernel/monkey.rs:73:26` | `被拦截的桃应在使用者手牌` | combo，seed 42007，budget 64，variant=1，**step 236 seat 0**；huanle 单档同类 | 同上（模拟内） |
 
 - 证据：[09-first-failure-panic.log](09-first-failure-panic.log)（不捕获，`RUST_BACKTRACE=full`，exit 101 + 完整栈）。
 - 现象：**AI 模拟候选能触发宿主断言 panic，进程直接中止**（不是「拒绝」）。这一路径把 3 个 drive 组打成部分覆盖：swd@budget64/256 variant1、huanle@budget8 variant1（[04-drive.log](04-drive.log)）。

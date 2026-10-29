@@ -1,0 +1,22 @@
+{
+  "moves": 214,
+  "byte_identical": 203,
+  "visibility_files": [
+    "crates/engine-native-kernel/src/state.rs",
+    "crates/engine-native-kernel/src/state/general_assembly.rs",
+    "crates/engine-native-kernel/src/kernel.rs",
+    "crates/engine-native-kernel/src/kernel/combat_rules.rs",
+    "crates/engine-native-kernel/src/kernel/duel.rs",
+    "crates/engine-native-kernel/src/kernel/equipment.rs",
+    "crates/engine-native-kernel/src/kernel/monkey.rs",
+    "crates/engine-native-kernel/src/kernel/nullify.rs",
+    "crates/engine-native-kernel/src/kernel/sha.rs",
+    "crates/engine-native-kernel/src/kernel/tricks.rs",
+    "crates/engine-native-kernel/src/snap/asks/shapes.rs"
+  ],
+  "import_export_only_extra": [
+    "crates/engine-native-kernel/src/kernel.rs"
+  ],
+  "base": "db4e37ca",
+  "all_before_hashes_verified": true
+}

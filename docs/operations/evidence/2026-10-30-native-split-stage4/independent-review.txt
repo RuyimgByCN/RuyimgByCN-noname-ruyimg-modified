@@ -1,0 +1,61 @@
+## Review
+
+**Merge verdict: BLOCK on the scanner acceptance gap below.** The crate split appears consistent with the intended dependency direction and preserves the façade’s type identity. I found one P1 scanner gap and one P2 guard regression; neither demonstrates a current game-rule regression.
+
+Reviewed the working-tree delta against reviewer-launch HEAD `db4e37ca6088`, the changed-file/move manifests, actual crate roots and affected source, Cargo/CI wiring, scanner implementation and tests, and retained validation/performance evidence. No edits, builds, tests, or commits were performed.
+
+### Findings
+
+**Finding — P1: `extern crate` aliases escape the new upward-reference scanner.**
+
+Location: [scripts/check-native-layering.py:101](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-native-layering.py:101), with the body-path matcher at [line 122](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-native-layering.py:122).
+
+The scanner learns aliases exclusively from `use` declarations. Its remaining matcher requires a known root followed by `::`. Consequently, this source fixture produces no upward reference by inspection:
+
+```rust
+extern crate engine_native_content as upper;
+upper::content::f();
+```
+
+The declaration has no `::`, and `upper` never enters the alias table. The raw-identifier form has the same gap. The new regression at [scripts/test_check_native_layering.py:35](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py:35) covers external `use` groups and aliases, but no `extern crate` declaration.
+
+This contradicts the requested rejection of external upward crate aliases. The Cargo check independently rejects forbidden **normal** dependencies, so this is not evidence that the present Cargo DAG contains an upward edge. That check does not satisfy the source-scanner requirement: it deliberately skips development dependencies, while the source scan includes test code.
+
+Smallest fix: recognize prohibited `extern crate` declarations directly, including optional aliases and raw identifiers. Add a regression for both upper crates using the existing mandatory-module fixture. Rejecting the declaration itself is sufficient; no general Rust parser is needed.
+
+**Finding — P2: the maintenance guard drops its existing scan-size threshold.**
+
+Location: [crates/engine-native/tests/maintenance_guards.rs:30](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/maintenance_guards.rs:30).
+
+The diff removes `assert!(files.len() > 10, …)` and replaces it with one nonempty check per root. Requiring all three roots is useful, but three roots containing one Rust file each now pass the scan-completeness checks; the prior guard rejected that inventory. This is a concrete threshold reduction under the task’s “no lowered thresholds/check removal” constraint.
+
+Smallest fix: retain the new per-root existence/nonempty checks and restore the aggregate `files.len() > 10` assertion after collection.
+
+### Correct
+
+- **The dependency split is real.** The actual manifests establish façade → content → kernel, with an additional façade → kernel edge. Kernel depends only on `blake3`, `rule-api`, and `rule-vm`; content depends on kernel and `rule-vm`. Following the local `rule-vm` → `rule-api`/`engine-api` manifests exposes no return edge to content or façade. Neither lower crate declares development dependencies. See [kernel Cargo.toml:10](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/Cargo.toml:10), [content Cargo.toml:10](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/Cargo.toml:10), and [façade Cargo.toml:12](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/Cargo.toml:12).
+
+- **Public paths retain the underlying types.** The façade re-exports kernel modules and content directly, then retains its former root exports, including `LogEvent`; it does not introduce wrapper types. The new lower roots expose the same kernel modules. An exhaustive Rust symbol search found one `LogEvent` definition and one `HostBehavior` definition, with the latter’s inherent implementations in kernel vocabulary. See [façade lib.rs:11](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/lib.rs:11), [kernel lib.rs:19](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/lib.rs:19), and [content lib.rs:4](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/lib.rs:4).
+
+- **The inspected visibility changes fit the cross-crate calls.** The recorded 11-file adjustment list contains visibility/export changes: equipment/general-assembly helpers, the Tao restriction helper, four constructors, three ask helpers, and 12 machine fields. In particular, `commit_equip` remains private while the two required equipment helpers become public. Actual inspected source agrees with the adjustment list. The 203 byte-identical move count is supported by the conservation artifact; I did not independently recompute all hashes.
+
+- **All seven moved unit tests still execute in the retained run.** The raw log lists the extension lifecycle test and three pile tests under content, and three archive tests under kernel, all passing. Façade unit tests remain 10. The aggregate log supports **1644 passed / 0 failed / 73 ignored**; the name-conservation artifact records the same **1717-name multiset** before and after. See [native-tests.log:1786](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-split-stage4/native-tests.log:1786).
+
+- **Consumers and CI were rewired without apparent input loss.** Inspected Rust source readers and `include_str!` paths point to their corresponding lower crate; mixed Python consumers read content behavior and kernel vocabulary separately. The scanner snapshots record no removed inputs and equal mapped outputs. Searches found no stale moved-source paths in the Rust consumers or Markdown documents checked. CI explicitly includes all three crates for Gate 1b and native regressions at [ci.yml:59](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.github/workflows/ci.yml:59) and [ci.yml:101](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.github/workflows/ci.yml:101).
+
+- **The principal gates and versions remain intact.** Layering `BASELINE` remains zero. Missing and whitespace-empty mandatory entries raise an error. Cargo checking follows normal dependencies by package name, including renamed and intermediate workspace dependencies. Source caps remain 2,000 total lines and 1,000 effective Rust lines. Actual constants remain rules **328**, archive **105**, and ABI **753**. `replay_scenarios.rs` and the ABI version file have no working-tree delta; broader golden conservation is documented in the retained preservation artifact.
+
+- **Performance claims are appropriately bounded.** The measurement script uses the same jobs/profile/incremental settings, fresh private targets, a shared lock, process sampling, and the same `standard_catalog` function-body edit. The retained warm log shows content, façade, and `content-native-loader` recompiling, with **no kernel compilation**. The reported cold **28.68s → 25.24s** and warm **4.48s → 2.79s** remain single samples, as the README states. They support the observed rebuild boundary, not a stable percentage improvement or platform equivalence.
+
+**Fixed:** None; this review was read-only.
+
+After the small guard fixes, the supervisor should run the layering unit suite and scanner, plus the maintenance guard:
+
+```text
+python3 -B -m unittest discover -s scripts -p 'test_check_native_layering.py'
+python3 -B scripts/check-native-layering.py
+cargo test --offline -p engine-native --test kernel maintenance_guards::production_sources_have_no_debug_output_or_env_switches
+```
+
+Skipped: independent hash recomputation and execution of builds/tests; NC09 and PA09 worktrees were outside this main-diff review.  
+Pending parent acceptance: workspace/conformance, rebuilt current WASM, and browser/product checks; retained native results do not establish platform or upstream-rule equivalence.

@@ -7,7 +7,7 @@
 （或统一装备类），于是「手里有任意一把武器」就让条件恒假，比上游严格得多。
 
 判定规则：
-* 扫描 `crates/engine-native/src/content/host/{filtering,step}/*.rs`；
+* 扫描 `crates/engine-native-content/src/content/host/{filtering,step}/*.rs`；
 * 命中 `card_kind(...) == ctx.catalog.card_kind(...)` / `!=` / `any(|o| ctx.catalog.card_kind` 形态；
 * `ALLOWED` 里登记已人工核对过的例外（附理由）。
 
@@ -21,8 +21,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TARGET_DIRS = [
-    ROOT / "crates/engine-native/src/content/host/filtering",
-    ROOT / "crates/engine-native/src/content/host/step",
+    ROOT / "crates/engine-native-content/src/content/host/filtering",
+    ROOT / "crates/engine-native-content/src/content/host/step",
 ]
 
 # 已人工核对：与上游语义一致，或比较对象不是「同一张牌」

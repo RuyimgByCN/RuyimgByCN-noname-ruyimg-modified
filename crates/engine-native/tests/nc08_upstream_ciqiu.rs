@@ -164,7 +164,7 @@ fn upstream_ciqiu_dying_is_turn_scoped() {
     // 结构断言：状态字段存在于 TurnState（随回合重置），而非 PlayerState（常驻）
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/../engine-native-kernel/src/state.rs"
     ))
     .expect("读状态源码");
     let idx = src.find("pub ciqiu_dying").expect("ciqiu_dying 字段");

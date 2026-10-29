@@ -171,7 +171,7 @@ fn upstream_chunbing_target_filter_rejects_existing_holder() {
 fn upstream_chunbing_modeling_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/gujian.rs"
+        "/../engine-native-content/src/content/host/step/gujian.rs"
     ))
     .expect("读古剑源码");
     let idx = src.find("HostBehavior::GujianFoodGrant =>").expect("食物授予分支");
@@ -182,7 +182,7 @@ fn upstream_chunbing_modeling_difference_is_fixed() {
     );
     let consts = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/vocabulary/host/constants.rs"
+        "/../engine-native-kernel/src/vocabulary/host/constants.rs"
     ))
     .expect("读常量");
     assert!(

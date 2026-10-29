@@ -10,7 +10,7 @@
 
 ## 新发现：VM 挂起恢复会改变规则语义（B7，未修复）
 
-定向测试最初要求恢复后的 `VmFault` 保留技能声明名，工作区及仅叠加该测试的 `git archive HEAD` 导出均 **3/1/0**（[首次](target-initial.log)、[干净复现](clean-reproduction.log)、[探针](fault-identity-probe.rs)）。恢复前为 `nc04_restored_fault`，恢复后却为模块名 `nc04-restored-fault`。检查 [VM 机器恢复](../../../../crates/engine-native/src/rvm_bridge.rs)发现快照恢复从模块名重建技能名，并将触发上下文、限次消费和命中计数重置。
+定向测试最初要求恢复后的 `VmFault` 保留技能声明名，工作区及仅叠加该测试的 `git archive HEAD` 导出均 **3/1/0**（[首次](target-initial.log)、[干净复现](clean-reproduction.log)、[探针](fault-identity-probe.rs)）。恢复前为 `nc04_restored_fault`，恢复后却为模块名 `nc04-restored-fault`。检查 [VM 机器恢复](../../../../crates/engine-native-kernel/src/rvm_bridge.rs)发现快照恢复从模块名重建技能名，并将触发上下文、限次消费和命中计数重置。
 
 进一步在同一干净 HEAD、独立 target 中以另一条[探针](storage-divergence-probe.rs)驱动 `HOST_CHOICE` 后的 `STORAGE_SET`，原局存储为 `{nc04_storage_skill#7: 11}`，恢复局额外出现 `{nc04-storage-module#7: 11}`，测试 **0/1/0**（[日志](storage-divergence.log)）。这是实际状态差异，不能按仅诊断差异关闭。探针可追加到本批的 `nc04_vm_resume.rs` 中重跑；故障身份探针则替换同名测试。
 

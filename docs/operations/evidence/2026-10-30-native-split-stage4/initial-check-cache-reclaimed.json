@@ -1,0 +1,5 @@
+{
+  "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after",
+  "du_before": "521728\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after\n",
+  "reason": "Fresh empty target required for after cold measurement; private initial cargo check artifacts only."
+}

@@ -1,0 +1,38 @@
+$ ['python3', '-B', '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_check_native_layering.py']
+cwd=.
+..F.FE.
+======================================================================
+ERROR: test_normal_dependency_direction_including_aliases_and_indirection (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 62, in test_normal_dependency_direction_including_aliases_and_indirection
+    self.assertEqual(CHECK.dependency_violations({"packages": packages}), [])
+AttributeError: module 'native_layering' has no attribute 'dependency_violations'
+
+======================================================================
+FAIL: test_external_crates_grouped_raw_and_aliased_paths_are_rejected (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 48, in test_external_crates_grouped_raw_and_aliased_paths_are_rejected
+    self.assertEqual([line for _, line in refs], [1, 1, 2, 2, 3, 3, 3, 3, 4, 4])
+AssertionError: Lists differ: [] != [1, 1, 2, 2, 3, 3, 3, 3, 4, 4]
+
+Second list contains 10 additional elements.
+First extra element 0:
+1
+
+- []
++ [1, 1, 2, 2, 3, 3, 3, 3, 4, 4]
+
+======================================================================
+FAIL: test_missing_and_empty_mandatory_modules_are_rejected (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 24, in test_missing_and_empty_mandatory_modules_are_rejected
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.065s
+
+FAILED (failures=2, errors=1)

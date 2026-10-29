@@ -1,0 +1,16 @@
+{
+  "before": {
+    "attempt": 1,
+    "cold_clean": true,
+    "warm_clean": true,
+    "source_restored": true,
+    "target_kib": "2403772\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before\n"
+  },
+  "after": {
+    "attempt": 1,
+    "cold_clean": true,
+    "warm_clean": true,
+    "source_restored": true,
+    "target_kib": "2287224\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after\n"
+  }
+}

@@ -129,7 +129,7 @@ fn upstream_lingxue_gains_hujia_on_real_recover() {
 fn upstream_lingxue_effect_is_fixed_by_source() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/xianjian_status.rs"
+        "/../engine-native-content/src/content/host/step/xianjian_status.rs"
     ))
     .expect("读 xianjian 状态源码");
     let idx = src.find("HostBehavior::XianjianLingxue =>").expect("灵雪分支");
@@ -141,7 +141,7 @@ fn upstream_lingxue_effect_is_fixed_by_source() {
     // 过滤臂：自己回复且 amount > 0
     let filt = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/xianjian.rs"
+        "/../engine-native-content/src/content/host/filtering/xianjian.rs"
     ))
     .expect("读过滤源码");
     let fi = filt.find("HostBehavior::XianjianLingxue =>").expect("灵雪过滤");

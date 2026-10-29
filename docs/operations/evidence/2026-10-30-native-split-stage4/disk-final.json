@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30T00:18:00.546997+08:00",
+  "df": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 907790764  34718416    97% 5981647 347184160    2%   /System/Volumes/Data\n",
+  "targets": "2387484\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before\n7373904\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after\n",
+  "post_measurement_observation": {
+    "before_private_target_after_warm": "2.3GiB",
+    "after_private_target_after_cold": "1.8GiB",
+    "available_before": "52GiB",
+    "available_after_cold": "42GiB"
+  },
+  "notes": "target-after subsequently reused for main native/dependent tests and a separate -D warnings fingerprint; no shared target cleanup, no third whole build cache."
+}

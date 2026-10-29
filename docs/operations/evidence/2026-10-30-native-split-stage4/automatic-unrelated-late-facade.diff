@@ -1,0 +1,84 @@
+diff --git a/crates/engine-native/src/engine/construction.rs b/crates/engine-native/src/engine/construction.rs
+index f0540512..0f801730 100644
+--- a/crates/engine-native/src/engine/construction.rs
++++ b/crates/engine-native/src/engine/construction.rs
+@@ -38,7 +38,7 @@ impl Engine {
+ 
+     fn identity_mode(seats: usize) -> GameMode {
+         let loyalists = match seats {
+-            4 | 5 | 6 => 1,
++            4..=6 => 1,
+             _ => 2,
+         };
+         let mut roles = vec![crate::state::Role::Lord];
+@@ -362,13 +362,10 @@ impl Engine {
+         // gameDraw num 覆盖）；其余模式各 4 张。先于 core move 计算。
+         let opening_cards: Vec<u32> = (0..seats as PlayerId)
+             .map(|p| match (&core.mode, &opening) {
+-                (GameMode::Doudizhu { lord }, OpeningPlan::DoudizhuBinglin) => {
+-                    if p == *lord {
++                (GameMode::Doudizhu { lord }, OpeningPlan::DoudizhuBinglin)
++                    if p == *lord => {
+                         5
+-                    } else {
+-                        4
+                     }
+-                }
+                 (
+                     GameMode::Boss { boss, .. },
+                     OpeningPlan::BossStage {
+diff --git a/crates/engine-native/src/engine/hash.rs b/crates/engine-native/src/engine/hash.rs
+index a720662c..1b52b4b8 100644
+--- a/crates/engine-native/src/engine/hash.rs
++++ b/crates/engine-native/src/engine/hash.rs
+@@ -615,7 +615,7 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
+                 crate::state::Winner::Rebels => push_u8(&mut h, 3),
+                 crate::state::Winner::Faction(f) => {
+                     push_u8(&mut h, 4);
+-                    push_u8(&mut h, f.clone() as u8);
++                    push_u8(&mut h, f as u8);
+                 }
+                 crate::state::Winner::Versus(t) => {
+                     push_u8(&mut h, 6);
+diff --git a/crates/engine-native/src/engine/legal_actions.rs b/crates/engine-native/src/engine/legal_actions.rs
+index 67238fea..443c2b97 100644
+--- a/crates/engine-native/src/engine/legal_actions.rs
++++ b/crates/engine-native/src/engine/legal_actions.rs
+@@ -49,7 +49,7 @@ impl Engine {
+                         .spec
+                         .options
+                         .iter()
+-                        .take(choice.spec.min as usize)
++                        .take(choice.spec.min)
+                         .copied()
+                         .collect();
+                     if !sel.is_empty() {
+diff --git a/crates/engine-native/src/engine/play_rules.rs b/crates/engine-native/src/engine/play_rules.rs
+index 8a3b8cfa..555b8d36 100644
+--- a/crates/engine-native/src/engine/play_rules.rs
++++ b/crates/engine-native/src/engine/play_rules.rs
+@@ -484,11 +484,10 @@ pub(super) fn check_play_use_restrictions(
+                 if !core.player(*t).alive {
+                     continue;
+                 }
+-                if core.is_boss_side(*t) != core.is_boss_side(core.turn.current) {
+-                    if (xuanming_alive && !is_basic && !is_equip) || (gonggong_alive && is_basic) {
++                if core.is_boss_side(*t) != core.is_boss_side(core.turn.current)
++                    && ((xuanming_alive && !is_basic && !is_equip) || (gonggong_alive && is_basic)) {
+                         return Err(RejectReason::IllegalTargets);
+                     }
+-                }
+             }
+         }
+     }
+diff --git a/crates/engine-native/src/engine/play_sha.rs b/crates/engine-native/src/engine/play_sha.rs
+index 94ebea2b..751f4bcb 100644
+--- a/crates/engine-native/src/engine/play_sha.rs
++++ b/crates/engine-native/src/engine/play_sha.rs
+@@ -510,5 +510,5 @@ pub(super) fn play_sha(
+             Some(kind),
+         )),
+     );
+-    return Ok(());
++    Ok(())
+ }

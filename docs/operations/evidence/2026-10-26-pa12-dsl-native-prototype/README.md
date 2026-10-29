@@ -34,7 +34,7 @@ skill olyinji(2633842541) locked {
 
 ## 2 原型暴露并修复的桥接缺陷（代码在本批提交）
 
-1. **活引擎首答丢失**（`crates/engine-native/src/rvm_bridge.rs` `VmMachine::run` Paused 分支）：返回 `Flow::WaitChoice` 的同时把 `asked` 置 false，下一 step 再次 `WaitChoice`，引擎已消费的首答被丢，只有第二次作答生效（实证：答 1 再答 2 → 仅上限 +1）。恢复路径 `restore_paused` 早已 `asked: true`，故既有 t8 挂起测试（只在恢复后的引擎上作答）与 nc04（空应答 drain）都没发现。修法：返回 WaitChoice 即 `asked = true`（与内核其它机器同定式）。连带：t8 测试助手 `np_settled` 曾把 rvm_choice 一并用首选项代答（实际依赖首答被吞），改为不代答 VM 挂起。
+1. **活引擎首答丢失**（`crates/engine-native-kernel/src/rvm_bridge.rs` `VmMachine::run` Paused 分支）：返回 `Flow::WaitChoice` 的同时把 `asked` 置 false，下一 step 再次 `WaitChoice`，引擎已消费的首答被丢，只有第二次作答生效（实证：答 1 再答 2 → 仅上限 +1）。恢复路径 `restore_paused` 早已 `asked: true`，故既有 t8 挂起测试（只在恢复后的引擎上作答）与 nc04（空应答 drain）都没发现。修法：返回 WaitChoice 即 `asked = true`（与内核其它机器同定式）。连带：t8 测试助手 `np_settled` 曾把 rvm_choice 一并用首选项代答（实际依赖首答被吞），改为不代答 VM 挂起。
 2. **`phase_end` 语义**：旧线 `TurnStateChanged{phase}` → `phase_{prepare,judge,draw,play,discard,end}`（进入阶段）、`PhaseEnded{phase}` → `phase_{draw,play,discard}_end`/`turn_ended`（离开阶段）；原生阶段帧按阶段逐一发 `begin/end`，装载器把 `phase_end` 映到 `EventKind::PhaseEnd`（任一阶段 `begin:false`）→ 每回合触发 5 次、时机也不对（原生宿主自己的酒尾注释把上游 `phaseEnd` 误读为"每个阶段结束"，同一误区）。修法：新增 `VmFilterPolicy::AtPhase{phase, inner}` 阶段门（`filter()` 头部递归评估），装载器阶段事件表：`phase_end`→PhaseBegin@End；`phase_{judge,draw,play,discard}`→PhaseBegin@X；`phase_{draw,play,discard}_end`→PhaseEnd@X；`phase_prepare` 原生无准备帧仍拒装（登记）；`phase_begin` 旧线产生者未核清，暂保持原映射（登记）。
 
 ## 3 盘点（[inventory.py](inventory.py) → [inventory.txt](inventory.txt)/[json](inventory.json)）

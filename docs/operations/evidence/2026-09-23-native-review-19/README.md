@@ -11,7 +11,7 @@
 | [engine-native 全量测试](native-tests.log) | **283 passed / 0 failed**（第 18 轮 277 + 规则宿主/欢乐卡牌 G1 4 项 + AI 候选回退 2 项）。全工作区 4,849 项通过。测试全绿不代表与上游规则等价。 |
 | [探针（v31 重跑）](probes.log) | **22 项 FIXED / 0 项 OPEN**——OPEN_AI_CANDIDATES 关闭（单选候选逐项枚举后规划选择出闪）。 |
 
-## 规则宿主原型（crates/engine-native/src/content/host.rs）
+## 规则宿主原型（crates/engine-native-content/src/content/host.rs）
 
 - **数据声明行为**：扩展包声明 `HostBehavior`（版本化标签枚举），宿主以有界原语执行，
   不暴露 Rust 内存布局或任意状态写权限。本批原语：苦无（杀伤害后目标弃一张手牌，

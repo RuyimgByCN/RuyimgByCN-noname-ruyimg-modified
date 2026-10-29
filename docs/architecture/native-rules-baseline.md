@@ -11,11 +11,11 @@
 > **NC04（2026-10-29）`cards_given` 给牌帧改为每次动作一帧（v326）**：`d7b46ea6` 接入的给牌触发帧按张发射（`give_hand_card` 单牌原语被仁德／蝶舞按张循环），一次给出 N 张时监听 `cards_given` 的技能触发 N 次，旧线 `give_cards` 只发一个批量事件（事件 `cards.len()` 即 amount）；同时该批新帧使事件 id 计数进入摘要域却未升号。用户授权原生规则 **v325→v326**（裁决登记第 10 项）：新增 `give_hand_cards(from,to,&[cards])` 批量原语，一次给牌动作只发一个 `CardsGiven` 帧并携带全部牌（事件主玩家=recipient、来源=giver、amount=张数，与旧线同口径）；仁德与蝶舞改调批量原语，其余 7 处单张调用方不变；**`CardsLost`／`CardsMoved` 仍逐张**（连营等失去牌监听口径不变）。存档格式保持 **v105**、全局原生 ABI 保持 **753**，Worker／WS 协议不变。**v325 及更早原生存档一律 `RuleVersionMismatch` 拒绝**（含 v325 逐张口径下挂起在确认窗、栈上有两个单张 `CardsGiven` 帧的档），不提供迁移。反例先红后绿：仁德一次给 2 张，探针由触发 2 次（+4）变 1 次（+3）；确认窗栈上恰一个含两张的 `CardsGiven` 帧、`CardsLost`／`CardsMoved` 各 2 帧，含该帧存档往返一致。三步探针：修复+v326 14 场全位移（重录值）；**回退 v325 保留修复 14 场全绿**——批量帧对标准 14 场零足迹（无一次给多张的动作），位移唯一来源是版本号。此前 event.rs 登记的「多张给牌触发次数不同」差异随本批撤销。完整边界见[v326 证据](../operations/evidence/2026-10-29-nc04-cards-given-v326/README.md)。
 > **NC07（2026-10-29）字段批：10 个「入档未入摘要」字段全部入摘要（v327）**：[字段审计](../operations/evidence/2026-10-28-nc07-lianyaohu-hash/archive-vs-hash-field-audit.log)所列 PlayerState 9 字段（`jiguanyuan_cards`／`jileng_active`／`chaofeng_active`／`xingtigaizao_count`／`yinmi_active`／`xuehuang_used`／`xuejibingbao`／`nigong_lv`／`card_mods`，编码序与 `state_encode.rs` 一致）与 TurnState 1 字段（`minwan_targets`）进入 `canonical_hash`——此前只改这些语义字段的两份存档摘要相同（GT-012 逐字段反例：同一快照仅在恢复前改该字段，修复前摘要相同、修复后不同）。十个字段全部在规则路径被读取（目标合法性、摸牌数、手牌上限、装备改造、伤害重定向），**排除名单为空**；新增结构守卫 `nc07_archive_hash_guard`——入档字段要么入摘要、要么登记排除理由，防止同类遗漏再次积累。用户授权原生规则 **v326→v327**（裁决登记第 11 项，全部字段共用一个版本号）。存档格式保持 **v105**、全局原生 ABI 保持 **753**；**v326 及更早存档一律 `RuleVersionMismatch` 拒绝**（v326 夹具回归；v322–v325 夹具随既有版本断言继续拒绝）。三步探针：修复+v327 14 场全位移（重录值）；回退 v326 保留修复仍全位移——新增哈希写入**无条件**（默认值也入摘要域，与 v325 壶仓空长度字节同理）；回退 hash.rs 修复（版本 326）14 场全绿——金面只受 hash.rs 与版本号影响，无行为变化。完整边界见[v327 证据](../operations/evidence/2026-10-29-nc07-archive-hash-fields/README.md)。
 > **ADR 0786 J1（2026-10-29）VM 提交期选择窗挂起（v328）**：`discard_hand_equip_count(N>0)` 自批④-2 起在 Halted 落账时被内联为「确定性首 N」近似（不开窗、玩家无权选择），旧线语义为「开窗选恰好 N 张并弃置」。用户授权 **v327→v328**（裁决登记第 13 项，方案①：不新增 DSL 原语、`RULE_VM_ABI_VERSION` 不变、存档 v105）：`VmMachine` 新增**提交期挂起**（`pump_commit` 提交泵遇开窗效果转 `Flow::WaitChoice`，`ChoiceKind::SelectCards` 恰好 N、手牌+装备、不可取消；应答复用既有 Answer 通道）；`MachineSnapshot::Rvm` 尾追 `commit_pending`/`commit_pick`（归档与规范摘要同步扩展）；`KNOWN_PROMPTS` 表尾追加 `"rvm_discard_pick"`（N11-b 零分配注册表，ADR §A.3 预期的「rvm_effect_pick 类受限 prompt」；表尾追加不移位既有线上 tag）。反例红→绿：真实开窗、选**非前 N** 两张只弃所选、队列继续落账；不足封顶、无牌空过；开窗挂起存读档恢复哈希一致（GT-011 口径）；N=0 在 DSL 编译期拒绝（accept 期拒绝为手写字节码防御层）。版本回退探针：保留修复、版本改回 327 → 14 golden 全绿（标准场无 VM 包，修复零足迹），重录仅反映版本入摘要。v327 及更早旧档一律 `RuleVersionMismatch` 拒绝；存档 v105、ABI 753、Worker／WS 协议不变。完整边界见[J1 证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)。
-> `STANDARD_RULESET_VERSION = 328`（`crates/engine-native/src/content/standard.rs:160`；ADR 0786 J1 批起为 328（工作树），NC07 字段批 327（工作树），NC04 v326 批（工作树），NC07 提交 `5eec1e9e` 为 325，B7 提交 `cfacaf1c` 为 324，此前 `ec672a1d` 为 323）、
-> `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native/src/archive.rs:113`）。
+> `STANDARD_RULESET_VERSION = 328`（`crates/engine-native-content/src/content/standard.rs:160`；ADR 0786 J1 批起为 328（工作树），NC07 字段批 327（工作树），NC04 v326 批（工作树），NC07 提交 `5eec1e9e` 为 325，B7 提交 `cfacaf1c` 为 324，此前 `ec672a1d` 为 323）、
+> `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native-kernel/src/archive.rs:113`）。
 > 下面「2026-10-10 复核」为**历史语境**；本次只审查上游差异，未升级规则或存档。
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native/src/content/standard.rs:126`、`crates/engine-native/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v325 为最新**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native-content/src/content/standard.rs:126`、`crates/engine-native-kernel/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v325 为最新**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -3946,7 +3946,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 1. **U08-1 是量化的缺口**：上游 43 条武将 ⇒ 原生 **0**；包内 `deferred` **自我登记**「依赖未齐」，
    与台账「部分重构」一致；
 2. **U08-2/3 只能在「键存在」层面确认**（`host:yxs_fanji` 等 5 个键**都已映射**），
-   **行为等价性未判定** —— 宿主实现在 `crates/engine-native/src/content/host/**`，**本工作树为未跟踪文件**，
+   **行为等价性未判定** —— 宿主实现在 `crates/engine-native-content/src/content/host/**`，**本工作树为未跟踪文件**，
    本代理**只读不改**，且本轮**未逐行读完**（`factory.rs`/`filtering.rs` 两处派发）；
 3. **U08-4 未判定**。
 
@@ -3979,7 +3979,7 @@ DBG U08 可达性：catalog 里含 5 个 U08 技能；全库武将引用 0 条
 
 ### U08 差异族 **v1**：已定位实现，且**发现 2 条实质差异**（同日）
 
-**实现位置已定位**（`crates/engine-native/src/content/host/**`）：
+**实现位置已定位**（`crates/engine-native-content/src/content/host/**`）：
 
 | 面 | 位置 |
 |---|---|
@@ -4074,7 +4074,7 @@ pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine
 
 ### U05-OW **v1**：两条硬结论（读 `step` 机器与源码注释所得，同日）
 
-读 `crates/engine-native/src/content/host/step/wudian_status.rs` 后，**6 条「trigger 不一致」中有 2 条得到解释**，
+读 `crates/engine-native-content/src/content/host/step/wudian_status.rs` 后，**6 条「trigger 不一致」中有 2 条得到解释**，
 且**代码注释本身就是差异登记**（本仓库用「规则 v122/v124」这类版本号标注改动）：
 
 #### `duwen`（毒吻）—— 时机**可能对齐**，实现在别处
@@ -4178,7 +4178,7 @@ HostBehavior::WudianDuwen => { … Flow::Done }
 
 ### U05-XJ **v1**：`EventKind` 变体表读出后的三点结论（同日）
 
-`crates/engine-native/src/event.rs`（**tracked**）的 `EventKind` **共 22 个变体**：
+`crates/engine-native-kernel/src/event.rs`（**tracked**）的 `EventKind` **共 22 个变体**：
 
 ```
 DamageBefore Damage Recover CardsDrawn CardsMoved CardUsed CardResponded Dying Death
@@ -4220,7 +4220,7 @@ TurnOvered LoseHp DyingSaved CardsLost ShaDodged
 
 > 这一节是**跨来源**的：任何包的「before/after 类时机差异」都应先对照本节，**不要逐包重复登记**。
 
-### 1 `EventKind` 只有 22 个变体（`crates/engine-native/src/event.rs`）
+### 1 `EventKind` 只有 22 个变体（`crates/engine-native-kernel/src/event.rs`）
 
 ```
 DamageBefore Damage Recover CardsDrawn CardsMoved CardUsed CardResponded Dying Death
@@ -4244,7 +4244,7 @@ TurnOvered LoseHp DyingSaved CardsLost ShaDodged
 
 ### 3 「失去牌」族的**既定口径**（已由源码自述）
 
-`crates/engine-native/src/kernel/events.rs:478-481`：
+`crates/engine-native-kernel/src/kernel/events.rs:478-481`：
 
 > 「……玩家失去手牌后（上游 `loseAfter`+`loseAsync` 族的 **`CardsDiscarded` 面**；
 > `gain`/`addJudge`/`equip` 等**其余卡牌移动面登记差异**）」
@@ -5296,7 +5296,7 @@ shihuifen   qiankundai   zhufangshenshi   hslingjian_*_equip3_dist   hslingjian_
 
 ### 事实
 
-`crates/engine-native/src/event.rs` 的 **`Phase` 只有 5 个变体**：
+`crates/engine-native-kernel/src/event.rs` 的 **`Phase` 只有 5 个变体**：
 
 ```rust
 Judge  Draw  Play  Discard  End
@@ -6174,7 +6174,7 @@ event.trigger('phaseAfter');
 {"name": "swd_hufu", "kind": "hufu", "suit": "spade", "rank": 1}
 ```
 
-⇒ 效果靠 `kind` 在 Rust 侧分派，登记表是 `crates/engine-native/src/catalog.rs`（`CardKind::X => "kind"`）。
+⇒ 效果靠 `kind` 在 Rust 侧分派，登记表是 `crates/engine-native-kernel/src/catalog.rs`（`CardKind::X => "kind"`）。
 
 | 层 | 结果 |
 |---|---:|
@@ -6605,7 +6605,7 @@ jiefen: {
 
 ### 修法（一行）
 
-把 `HostBehavior::SwdJiefen` 加入 `crates/engine-native/src/content/host.rs` 的
+把 `HostBehavior::SwdJiefen` 加入 `crates/engine-native-content/src/content/host.rs` 的
 `once_per_turn: true` 分支（与 `SwdZhanlu` 等同类主动技一起）。
 
 ### 这是怎么找到的

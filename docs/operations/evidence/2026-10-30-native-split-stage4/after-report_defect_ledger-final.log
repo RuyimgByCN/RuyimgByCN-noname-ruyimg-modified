@@ -1,0 +1,3 @@
+id	class	behavior	source	location	upstream	native	severity	fix	permission
+L03c	B	HlssGaiming	L03	content/host/**	player: judgeBefore	无 TriggerMeta **且**过滤臂恒 `false`、`step` 只 `Flow::Done`	中	技能**完全未实现**（不是「少一幕」）；需要 judge-before 钩子 + 改判逻辑；道心累加另有 `MbQianlong` 承担，不在此行	blocked
+合计 1 条：{'B': 1}

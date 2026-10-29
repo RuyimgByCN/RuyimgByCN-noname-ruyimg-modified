@@ -171,7 +171,7 @@ fn upstream_yangpijuan_two_stage_choice() {
 fn upstream_yangpijuan_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/swd_card_effects.rs"
+        "/../engine-native-content/src/content/host/step/swd_card_effects.rs"
     ))
     .expect("读 swd_card_effects");
     let idx = src.find("HostBehavior::SwdYangpijuanCard =>").expect("羊皮卷分支");

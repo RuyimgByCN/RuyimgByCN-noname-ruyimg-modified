@@ -159,7 +159,7 @@ fn upstream_xicai_gains_damage_card() {
 fn upstream_xicai_position_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou 源码");
     let idx = src.find("HostBehavior::YunchouXicai =>").expect("戏才分支");

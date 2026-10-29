@@ -1,0 +1,26 @@
+[
+  {
+    "step": "Initial scanner capture",
+    "outcome": "failed: atexit closure read mutated sys.argv; retained before-audit_upstream_skill_flags.log; fixed capture harness"
+  },
+  {
+    "step": "Second scanner capture",
+    "outcome": "tool timeout after 60s; retained scanner-before.log; rerun background scanner-before-final.log completed"
+  },
+  {
+    "step": "Registered-deviations initial instrumented baseline",
+    "outcome": "ModuleNotFoundError report_phase_arms due harness sys.path, retained before-report_registered_deviations-final.log; repaired baseline collected from clean before checkout"
+  },
+  {
+    "step": "Layering red regressions",
+    "outcome": "2 failures, 1 error expected on old scanner, retained layering-red.log; fixed scanner layering-green.log 7/0"
+  },
+  {
+    "step": "Source caps initial direct call",
+    "outcome": "combined tool 60s timeout after doc-line-refs succeeded; source-lines.log incomplete, full preflight and explicit caps verification cover final result"
+  },
+  {
+    "step": "First preservation summarizer",
+    "outcome": "assertion broad golden/version filename inventory unchanged failed on two Markdown source-path updates, not golden content; actual replay source and non-Markdown inventory validated separately in preservation-summary.log / golden-preservation.json"
+  }
+]

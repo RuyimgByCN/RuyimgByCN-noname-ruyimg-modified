@@ -53,16 +53,16 @@
 
 | 位置 | 已验证的交叠及最小处理 |
 |---|---|
-| [standard.rs:136](../../../../crates/engine-native/src/content/standard.rs#L136) | 同一 hunk 累积三版说明并把 `325`直接改成`328`；同文件还有⑧恢复签名和 hooks。②、④、⑤须分别得到326、327、328，不能原样选择当前版本 hunk。 |
+| [standard.rs:136](../../../../crates/engine-native-content/src/content/standard.rs#L136) | 同一 hunk 累积三版说明并把 `325`直接改成`328`；同文件还有⑧恢复签名和 hooks。②、④、⑤须分别得到326、327、328，不能原样选择当前版本 hunk。 |
 | [replay_scenarios.rs:1068](../../../../crates/engine-native/tests/replay_scenarios.rs#L1068) | 14项期望已是v328，旁边累计三批归因注释。v326/v327/v328清单均在，能帮助重建各版期望，但当前 diff 没有中间两版替换。 |
 | [nc04_cards_given_event.rs:351](../../../../crates/engine-native/tests/nc04_cards_given_event.rs#L351) | ②新增测试内的目录版本已由④⑤改成328；`nc04_vm_resume`、`nc07_lianyaohu_hash`、`pa12_tag656_version`同样连续改写。②提交须用326，④提交须用327。 |
 | [effect_set_draw_phase_from_bottom.rs:1](../../../../crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs#L1) | 文件头同一 hunk 同时删除755导入（①）和757导入（⑨，因相应结算器迁出）。①只应删除755；若提前取完整文件头，原位置仍存在的757使用会失去导入。 |
-| [xianjian_card_use.rs:80](../../../../crates/engine-native/src/content/host/step/xianjian_card_use.rs#L80) | ②蝶舞批量给牌现位于⑨新增文件。②应在原`xianjian_cards.rs`位置实施；不能为了带入②而提前带入整个⑨模块。仁德及`machine.rs`的②边界较清楚。 |
+| [xianjian_card_use.rs:80](../../../../crates/engine-native-content/src/content/host/step/xianjian_card_use.rs#L80) | ②蝶舞批量给牌现位于⑨新增文件。②应在原`xianjian_cards.rs`位置实施；不能为了带入②而提前带入整个⑨模块。仁德及`machine.rs`的②边界较清楚。 |
 | [hash.rs:229](../../../../crates/engine-native/src/engine/hash.rs#L229) / [hash/machine.rs:273](../../../../crates/engine-native/src/engine/hash/machine.rs#L273) | ④字段摘要仍在原文件；⑤提交挂起摘要已随⑨迁到新文件。⑤须先在旧结构加入编码，⑨再搬移。 |
 | [nc07_archive_hash_guard.rs:55](../../../../crates/engine-native/tests/nc07_archive_hash_guard.rs#L55) | ④新增守卫现`include_str!`⑨的`engine/hash/machine.rs`。若④原样入库而⑨未入，缺少该文件；④中间态须保持拆分前读取方式。 |
-| [rvm_bridge.rs:29](../../../../crates/engine-native/src/rvm_bridge.rs#L29) / [rvm_bridge/machine.rs:408](../../../../crates/engine-native/src/rvm_bridge/machine.rs#L408) | ⑤新逻辑与⑨机器实现搬移重合。当前未跟踪`machine.rs`包含⑤主体及既有实现，不能全部归⑤或全部延迟而遗漏⑤。`rvm_ops`的codec迁移同类。 |
-| [snap/restore.rs:8](../../../../crates/engine-native/src/snap/restore.rs#L8) / [snap/asks.rs:634](../../../../crates/engine-native/src/snap/asks.rs#L634) | ⑤提交挂起恢复/询问、⑧Catalog回调/恢复参数、⑨shape帮助项拆出同时存在。须按⑤→⑧→⑨恢复各自形态。 |
-| [content/host/asks.rs:9](../../../../crates/engine-native/src/content/host/asks.rs#L9) | ⑧迁入的新文件现导入⑨新增的`asks_mtg`和`asks_wudian`。⑧原样取当前文件、却不取⑨兄弟模块，会形成缺失依赖。 |
+| [rvm_bridge.rs:29](../../../../crates/engine-native-kernel/src/rvm_bridge.rs#L29) / [rvm_bridge/machine.rs:408](../../../../crates/engine-native-kernel/src/rvm_bridge/machine.rs#L408) | ⑤新逻辑与⑨机器实现搬移重合。当前未跟踪`machine.rs`包含⑤主体及既有实现，不能全部归⑤或全部延迟而遗漏⑤。`rvm_ops`的codec迁移同类。 |
+| [snap/restore.rs:8](../../../../crates/engine-native-kernel/src/snap/restore.rs#L8) / [snap/asks.rs:634](../../../../crates/engine-native-kernel/src/snap/asks.rs#L634) | ⑤提交挂起恢复/询问、⑧Catalog回调/恢复参数、⑨shape帮助项拆出同时存在。须按⑤→⑧→⑨恢复各自形态。 |
+| [content/host/asks.rs:9](../../../../crates/engine-native-content/src/content/host/asks.rs#L9) | ⑧迁入的新文件现导入⑨新增的`asks_mtg`和`asks_wudian`。⑧原样取当前文件、却不取⑨兄弟模块，会形成缺失依赖。 |
 | [nc08_upstream_mashu.rs:30](../../../../crates/engine-native/tests/nc08_upstream_mashu.rs#L30) | 同文件同时有①`mut`清理和⑨`state/core_ops.rs`扫描路径调整。类似测试不能按整个`tests/`目录归①。 |
 | [.github/workflows/ci.yml:44](../../../../.github/workflows/ci.yml#L44) | 一个相邻 hunk 含⑧分层门禁和⑨步骤名调整；`self-check-guide.md`另混⑦⑧⑨。按职责拆取。 |
 

@@ -166,7 +166,7 @@ fn upstream_linghunzhihuo_requires_a_target() {
 fn upstream_linghunzhihuo_random_discard_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/skills_damage.rs"
+        "/../engine-native-content/src/content/host/step/skills_damage.rs"
     ))
     .expect("读 skills_damage 源码");
     let idx = src

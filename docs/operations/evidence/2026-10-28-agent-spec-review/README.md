@@ -18,8 +18,8 @@
 | 1. WASM 插件被误列为必做后端 | [ADR 0782](../../../adr/0782-extension-backend-and-legacy-js-scope.md)规定内置 HostBehavior + 第三方 rule-vm，WASM 暂缓 | §1、§2、§5、§6、§11、§12 统一后端；区分引擎编译为 WASM 和采用 WASM 插件 |
 | 2. 交付范围缺少既定目标 | [性能架构](../../../../noname-performance-architecture.md)、[收敛方案](../../../architecture/native-convergence-plan.md)包含移动端、原生牌桌、37 来源及旧线退出 | §1、§2、§7、§9、§10、§14 承接完整范围；Vue／Tauri 明确为现有路径，不能替代原生表现验收 |
 | 3. 从空白重建与已有任务体系重复 | 已有 Workspace、模块、ADR 和 NC01–NC12／六阶段 | §0 明确主稿分工，§2.3 映射现有模块，§10 替换 P0–P4，§11 更新启动提示，§12 复用唯一 ADR 编号 |
-| 4. VM 恢复改变技能身份与存储 | [restore_paused](../../../../crates/engine-native/src/rvm_bridge.rs)用模块名重建技能名、重置上下文；[B7 原证据](../2026-10-28-nc04-choice-retry/README.md)；本次独立复现见下节 | §4.1／4.4、§9、GT-011 要求身份、上下文、限次、命中计数、存储键与故障一致；沿用 NC04／B7 |
-| 5. 语义牌区漏入摘要 | [PlayerState](../../../../crates/engine-native/src/state.rs)、[canonical_hash](../../../../crates/engine-native/src/engine/hash.rs)；[原反例](../2026-10-28-nc06-zhucheng-restore/lianyaohu-hash-probe.rs)；本次独立复现见下节 | §3.4、§7.3、§9、GT-012 要求字段同源、语义 hash 完整和完整状态／轨迹比较；沿用 NC06／NC07 |
+| 4. VM 恢复改变技能身份与存储 | [restore_paused](../../../../crates/engine-native-kernel/src/rvm_bridge.rs)用模块名重建技能名、重置上下文；[B7 原证据](../2026-10-28-nc04-choice-retry/README.md)；本次独立复现见下节 | §4.1／4.4、§9、GT-011 要求身份、上下文、限次、命中计数、存储键与故障一致；沿用 NC04／B7 |
+| 5. 语义牌区漏入摘要 | [PlayerState](../../../../crates/engine-native-kernel/src/state.rs)、[canonical_hash](../../../../crates/engine-native/src/engine/hash.rs)；[原反例](../2026-10-28-nc06-zhucheng-restore/lianyaohu-hash-probe.rs)；本次独立复现见下节 | §3.4、§7.3、§9、GT-012 要求字段同源、语义 hash 完整和完整状态／轨迹比较；沿用 NC06／NC07 |
 | 6. 本地／联机投影不一致 | [nativeObserverToSnapshot](../../../../apps/web-client/src/worker/nativeBackend.ts)将身份填 null、武将填 0；[服务端投影](../../../../apps/game-server/src/native_view.rs)已有身份规则；[BattleView](../../../../apps/web-client/src/views/BattleView.vue)按身份字段显示 | §8.3、§9、GT-013 要求同局面、同权限的字段与产品显示一致，同时验证不泄密；沿用 NC03／NC09 |
 | 7. 已有 VM 副本可用不等于本地正式可安装 | [bundledNativePackage](../../../../apps/web-client/src/engine/bundledNativePackages.ts)仍拒绝含 VM 模块的包，由[本地安装入口](../../../../apps/web-client/src/engine/extensionStore.ts)调用 | §6.2、§9、GT-014 验作者产物经正式入口完成全生命周期，保留校验和旧局内容锁；沿用 NC02／NC05／NC09 |
 

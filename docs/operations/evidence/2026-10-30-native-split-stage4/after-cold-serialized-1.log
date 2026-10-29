@@ -1,0 +1,62 @@
+$ ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', '/tmp/noname-run-serialized.py', 'env', 'CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after', 'CARGO_BUILD_JOBS=8', 'CARGO_INCREMENTAL=1', '/usr/bin/time', '-p', 'cargo', 'test', '--offline', '-p', 'engine-native-kernel', '-p', 'engine-native-content', '-p', 'engine-native', '--no-run']
+cwd=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling constant_time_eq v0.4.2
+   Compiling thiserror v2.0.18
+   Compiling cc v1.2.66
+   Compiling arrayref v0.3.9
+   Compiling arrayvec v0.7.8
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling libc v0.2.186
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling bitflags v2.13.0
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.4.1
+   Compiling syn v2.0.118
+   Compiling blake3 v1.8.5
+   Compiling errno v0.3.14
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/after/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.20s
+  Executable unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/engine_native-6805f23b283790cf)
+  Executable tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/g1-43eb0f840978ca6f)
+  Executable tests/groups/g1_shahai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/g1_shahai-d586c1057a0f4fb4)
+  Executable tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/kernel-2092fbdf4fa9a982)
+  Executable tests/groups/l_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/l_rounds-175399aaa1859642)
+  Executable tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/misc-129eb0d7396969d0)
+  Executable tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/nc08-b6a355656058c35a)
+  Executable tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/nc08_upstream_a_k-7d47b6dc71c72450)
+  Executable tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/nc08_upstream_l_z-58d61928a53ef13b)
+  Executable tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/nc_rounds-1b9f5aea2904dab1)
+  Executable tests/groups/swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/swd-744db5ff0ad35762)
+  Executable tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/test_registry-c1e6a08625a96020)
+  Executable unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/engine_native_content-ca681edb074a78ed)
+  Executable unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after/debug/deps/engine_native_kernel-5393bbf26ad01bb1)
+real 25.24
+user 76.69
+sys 8.12
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after", "CARGO_BUILD_JOBS=8", "CARGO_INCREMENTAL=1", "/usr/bin/time", "-p", "cargo", "test", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--no-run"], "exit": 0, "locked_seconds": 25.248189958001603}

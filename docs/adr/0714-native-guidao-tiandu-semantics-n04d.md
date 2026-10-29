@@ -1,7 +1,7 @@
 # ADR 0714：空改判队列拒绝、天妒范围与鬼道旧牌归属修复
 
 - 状态：第十六批切片已落地；2026-09-18 独立实跑 112 项通过，三项具体反例关闭；完整结构/技能验收未完成。
-- 关联：[snap](../../crates/engine-native/src/snap.rs)、[kernel](../../crates/engine-native/src/kernel.rs)、
+- 关联：[snap](../../crates/engine-native-kernel/src/snap.rs)、[kernel](../../crates/engine-native-kernel/src/kernel.rs)、
   [前序 ADR 0712](0712-native-first-official-skills.md)、[当前进度](../architecture/native-progress.md)。
 - 规则参考：仓库上游与旧线内容，具体来源链接保留于 ADR 0712，不把上游参考或测试数当作官方等价证明。
 

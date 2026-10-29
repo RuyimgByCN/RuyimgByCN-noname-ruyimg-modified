@@ -176,7 +176,7 @@ fn upstream_rangjie_gain_branch_draws_then_takes_card() {
 fn upstream_rangjie_move_branch_must_draw_one() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/skills_cards.rs"
+        "/../engine-native-content/src/content/host/step/skills_cards.rs"
     ))
     .expect("读 rangjie 源码");
     let idx = src.find("HostBehavior::Rangjie =>").expect("rangjie 分支");

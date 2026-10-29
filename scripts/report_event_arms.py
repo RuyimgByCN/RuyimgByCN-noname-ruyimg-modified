@@ -31,7 +31,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+HOST = ROOT / "crates" / "engine-native-content" / "src" / "content" / "host"
 
 BEH_RE = re.compile(r"HostBehavior::([A-Za-z0-9_]+)\s*=>")
 DAMAGE_RE = re.compile(r"EventData::(DamageBefore|Damage)\b")
@@ -53,7 +53,7 @@ def metadata_events() -> dict[str, str]:
     produces false positives (e.g. `Xunmeng`).
     """
     out: dict[str, str] = {}
-    for path in sorted((HOST.parents[1] / "vocabulary/host").rglob("metadata*.rs")) + sorted((HOST.parents[1] / "vocabulary/host").rglob("metadata/*.rs")):
+    for path in sorted((ROOT / "crates/engine-native-kernel/src/vocabulary/host").rglob("metadata*.rs")) + sorted((ROOT / "crates/engine-native-kernel/src/vocabulary/host").rglob("metadata/*.rs")):
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8")
@@ -74,9 +74,9 @@ def metadata_classes() -> dict[str, tuple[str, str]]:
     the helper module returns `None` — the codebase documents those as
     「无触发面（由 X 承载）」 and they are **by design**, not defects.
     """
-    meta_dir = HOST.parents[1] / "vocabulary/host/metadata"
+    meta_dir = ROOT / "crates/engine-native-kernel/src/vocabulary/host/metadata"
     literal: dict[str, str] = {}
-    for path in list((HOST.parents[1] / "vocabulary/host").glob("metadata*.rs")) + list(meta_dir.glob("*.rs")):
+    for path in list((ROOT / "crates/engine-native-kernel/src/vocabulary/host").glob("metadata*.rs")) + list(meta_dir.glob("*.rs")):
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8")
@@ -85,7 +85,7 @@ def metadata_classes() -> dict[str, tuple[str, str]]:
             if hit:
                 literal.setdefault(m.group(1), hit.group(1))
     helper: set[str] = set()
-    top = (HOST.parents[1] / "vocabulary/host/metadata.rs").read_text(encoding="utf-8")
+    top = (ROOT / "crates/engine-native-kernel/src/vocabulary/host/metadata.rs").read_text(encoding="utf-8")
     for m in re.finditer(r"HostBehavior::([A-Za-z0-9_]+)\s*=>\s*self\.trigger_meta_", top):
         helper.add(m.group(1))
     out: dict[str, tuple[str, str]] = {}

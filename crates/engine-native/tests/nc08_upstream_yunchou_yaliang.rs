@@ -106,7 +106,7 @@ fn upstream_yaliang_both_draw_one() {
 fn upstream_yaliang_source_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = src.find("YunchouYaliang =>").expect("雅量分支");

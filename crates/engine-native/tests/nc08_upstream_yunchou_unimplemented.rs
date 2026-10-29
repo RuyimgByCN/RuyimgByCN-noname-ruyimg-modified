@@ -64,7 +64,7 @@ fn upstream_defines_the_three_skills() {
 /// 原生侧：三项技能**均无实现**（固定「未实现」事实，便于后续修复后翻转该断言）。
 #[test]
 fn native_lacks_the_three_skills() {
-    let src = manifest().join("src");
+    let src = manifest().join("../engine-native-kernel/src");
     let behavior = read(&src.join("vocabulary/host/behavior.rs"));
     let keys = read(&src.join("vocabulary/host/keys.rs"));
     for (key, needle) in [

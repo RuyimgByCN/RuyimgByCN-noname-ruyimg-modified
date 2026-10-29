@@ -170,7 +170,7 @@ fn upstream_yaowu_black_sha_does_not_trigger() {
 fn upstream_yaowu_note_may_be_stale() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/yao_wu.rs"
+        "/../engine-native-content/src/content/standard/skills/yao_wu.rs"
     ))
     .expect("读耀武源码");
     let head: String = src.chars().take(400).collect();

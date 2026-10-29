@@ -6,7 +6,7 @@
 
 ## 勘察结论（改变处置方式）
 
-引擎已有种子 RNG（`crates/engine-native/src/rng.rs` `RuleRng::gen_range`
+引擎已有种子 RNG（`crates/engine-native-kernel/src/rng.rs` `RuleRng::gen_range`
 Lemire 无偏采样；state+calls 入存档，开局洗牌既有消费方）——上游
 `Math.random()` 类均匀随机可映射为原生种子均匀随机：**语义等价
 （同为均匀分布）、确定性可复放（种子决定）**，因此随机类以「消除」

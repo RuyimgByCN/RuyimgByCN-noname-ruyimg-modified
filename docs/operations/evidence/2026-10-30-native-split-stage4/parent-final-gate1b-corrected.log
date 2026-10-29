@@ -1,0 +1,6 @@
+    Checking content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+    Checking engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Checking content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.26s
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after", "CARGO_BUILD_JOBS=8", "CARGO_INCREMENTAL=1", "RUSTFLAGS=-D warnings", "cargo", "check", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 3.3149821660044836}

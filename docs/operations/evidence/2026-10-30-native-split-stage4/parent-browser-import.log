@@ -1,0 +1,5 @@
+PASS ui_import_rejects_corrupt_module_local_count: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+PASS ui_import_rejects_tampered_trigger_event: npack: logic_hash mismatch
+PASS ui_import_valid_marks_unsigned: title=vm-fixture（导入） 未签名 status=已安装
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/gt014-deep-MAi8tD origin=http://127.0.0.1:59352

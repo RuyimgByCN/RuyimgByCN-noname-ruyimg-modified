@@ -22,7 +22,7 @@
 
 ## 3. 实现变化
 
-- `crates/engine-native/src/kernel.rs`
+- `crates/engine-native-kernel/src/kernel.rs`
   - `ChainMachine` 由「整牌级单机器逐目标发 `Linked`」改为**派发层**：
     `card/source/targets/idx/inner/dispatcher`。派发层对**每个存活目标**生成
     `NullifyWindowMachine`（`owns_disposal=false`，队列 `seat_order_from(source)`），
@@ -31,14 +31,14 @@
   - `CardKind::Chain` 提交路径不再包 `wrap_nullify_window`（旧包裹在任一无懈生效
     时令全部目标都不横置）。
   - 收尾仍由派发层在所有目标结算后唯一弃置一次。
-- `crates/engine-native/src/snap.rs`：`MachineSnapshot::Chain` 载荷
+- `crates/engine-native-kernel/src/snap.rs`：`MachineSnapshot::Chain` 载荷
   `emitted` → `idx/inner/dispatcher`（`inner` 递归校验与重建）；
   `active_ask` 由 `None` 改为递归进入 `inner`（窗口挂起点恢复需要）。
-- `crates/engine-native/src/archive.rs`：Chain 变体编码/解码同步（tag 9）；
+- `crates/engine-native-kernel/src/archive.rs`：Chain 变体编码/解码同步（tag 9）；
   `ARCHIVE_FORMAT_VERSION` 76→**77**。
 - `crates/engine-native/src/engine.rs`：canonical hash 的 `M::Chain` 分支同步
   （`idx` 入哈希、`inner` 递归、`dispatcher` 字节）。
-- `crates/engine-native/src/content/standard.rs`：`STANDARD_RULESET_VERSION` 289→**290**。
+- `crates/engine-native-content/src/content/standard.rs`：`STANDARD_RULESET_VERSION` 289→**290**。
 
 ## 4. 版本与 golden
 

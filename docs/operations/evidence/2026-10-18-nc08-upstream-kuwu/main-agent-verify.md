@@ -12,8 +12,8 @@
 
 | # | 位置 | 现象 | 修法（已登记） |
 |---|---|---|---|
-| A | `crates/engine-native/src/content/host/step/skills_cards.rs`（`rangjie` 分支） | 选「移动牌」后使用者**不摸牌**（上游 `player.draw()` 在分支前无条件执行） | 在 `HostStage::SelectNature` 的 `1 =>` 分支开头补 `ctx.draw_cards(self.owner, 1);` |
-| B | `crates/engine-native/src/content/host.rs`（`host_skill_def` limits） | 五行盘 `usable:1` 失效（同阶段可二次发动） | `once_per_turn` 分支加入 `HostBehavior::ChangeCardNature` |
+| A | `crates/engine-native-content/src/content/host/step/skills_cards.rs`（`rangjie` 分支） | 选「移动牌」后使用者**不摸牌**（上游 `player.draw()` 在分支前无条件执行） | 在 `HostStage::SelectNature` 的 `1 =>` 分支开头补 `ctx.draw_cards(self.owner, 1);` |
+| B | `crates/engine-native-content/src/content/host.rs`（`host_skill_def` limits） | 五行盘 `usable:1` 失效（同阶段可二次发动） | `once_per_turn` 分支加入 `HostBehavior::ChangeCardNature` |
 
 **为何未修（复核认可）**：两处源码均属**他人未提交的 host.rs→host/ 模块拆分**（未跟踪整目录）；
 在此提交修复会把他人 200+ 在途改动并入本切片，或使本切片断言依赖未提交源码 → 按「只 add 自己

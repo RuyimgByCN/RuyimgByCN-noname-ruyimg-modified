@@ -1,7 +1,7 @@
 # 宿主行为「触发面未接入」清单（`=> false` 块，2026-10-19）
 
 - 工作包：**NC08 / 修复清单第 53 项**；规则版本 v322（工作树）/ 存档格式 v105
-- 位置：`crates/engine-native/src/content/host/filtering/common.rs` 的 `filter_common`
+- 位置：`crates/engine-native-content/src/content/host/filtering/common.rs` 的 `filter_common`
 
 ## 发现
 

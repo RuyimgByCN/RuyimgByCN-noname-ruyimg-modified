@@ -115,7 +115,7 @@ fn upstream_tiandu_gains_judge_card() {
 fn upstream_tiandu_du_exclusion_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/judge.rs"
+        "/../engine-native-kernel/src/kernel/judge.rs"
     ))
     .expect("读 judge 源码");
     let idx = src.find("tian_du: if tian_du_self").expect("tian_du 构建");

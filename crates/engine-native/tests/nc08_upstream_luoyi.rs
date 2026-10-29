@@ -168,7 +168,7 @@ fn upstream_luoyi_sha_damage_plus_one() {
 fn upstream_luoyi_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/luo_yi.rs"
+        "/../engine-native-content/src/content/standard/skills/luo_yi.rs"
     ))
     .expect("读裸衣源码");
     let seg: String = src.chars().take(900).collect();
@@ -178,7 +178,7 @@ fn upstream_luoyi_differences_are_fixed() {
     );
     let helper = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/combat_rules.rs"
+        "/../engine-native-kernel/src/kernel/combat_rules.rs"
     ))
     .expect("读 combat_rules");
     let idx = helper.find("fn luoyi_bonus").expect("luoyi_bonus");

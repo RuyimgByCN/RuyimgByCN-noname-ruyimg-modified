@@ -155,7 +155,7 @@ fn upstream_duwen_requires_the_skill() {
 fn upstream_duwen_notlink_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/damage.rs"
+        "/../engine-native-kernel/src/kernel/damage.rs"
     ))
     .expect("读 damage 源码");
     let idx = src.find("毒瘟（U07 ow").expect("毒瘟分支");

@@ -1,0 +1,25 @@
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index f4d75ac6..b0550c13 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -53,7 +53,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+             // 八卦阵判定标志入哈希（防篡改完整性）
+             push_u8(h, *armor_judged as u8);
+             // 无双已用闪数入哈希
+-            push_u8(h, *dodges_used as u8);
++            push_u8(h, (*dodges_used));
+             // 铁骑判定结果入哈希
+             push_u8(
+                 h,
+@@ -126,10 +126,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+             push_u8(h, *lueying_declined as u8);
+             push_u8(h, *asking_fuchou as u8);
+             push_u8(h, fuchou_card.is_some() as u8);
+-            match fuchou_card {
+-                Some(c) => push_u32(h, *c),
+-                None => {}
+-            }
++            if let Some(c) = fuchou_card { push_u32(h, *c) }
+             push_u8(h, *asking_sadeng as u8);
+             push_u8(h, *asking_sadeng_shan as u8);
+         }

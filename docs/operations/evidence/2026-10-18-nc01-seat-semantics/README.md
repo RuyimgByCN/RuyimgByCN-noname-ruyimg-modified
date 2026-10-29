@@ -70,7 +70,7 @@ python3 -B scripts/check-source-lines.py
 ## 5 版本处理（规则 v321，未升格的原因）
 
 - 修正属于**规则语义**变化（触发结算顺序原语），按规范应升规则版本；
-- 但版本常量位于 `crates/engine-native/src/content/standard.rs`，该文件正被**并行重构**（8 233 行差异，拆分模块）占用；本次已实测：升到 v322 会令 14 场 golden 全部位移（仅版本字段进入 hash，语义哈希不变），**回退探针 14/14 mismatch**；
+- 但版本常量位于 `crates/engine-native-content/src/content/standard.rs`，该文件正被**并行重构**（8 233 行差异，拆分模块）占用；本次已实测：升到 v322 会令 14 场 golden 全部位移（仅版本字段进入 hash，语义哈希不变），**回退探针 14/14 mismatch**；
 - 为避免把他方未完成改动一并提交，本轮**保持 v321**、**恢复 14 个 golden 原值**（修正前后逐字一致），并把版本升格 + 随之的 golden 位移登记为**待并行提交后随同入库**；
 - 3 处排序调用方的迁移位于并行重构新建的 `content/host/step/*.rs`（未跟踪），同样待其提交后随同入库；本轮已提交的调用方迁移为 `resolution.rs`（触发序键）。
 

@@ -110,7 +110,7 @@ L27 选将美化 ≈**45**、L10 史诗卡牌 ≈**37**、L19 末日乱斗 ≈**
 **不可靠**（命名不同：上游 `yiji` 在原生是常量 **`JI_JI`**，文档注释写明「郭嘉「遗计」」）→
 该法得出「43 个未实现」**多为误报**（`jianxiong`/`fankui`/`jizhi`/`yiji` 等实际**均已实现**）。
 
-**可靠方法**：`crates/engine-native/src/vocabulary/names.rs` 中**每个技能常量都带文档注释**
+**可靠方法**：`crates/engine-native-kernel/src/vocabulary/names.rs` 中**每个技能常量都带文档注释**
 （武将名 + 技能名），是**实现信号**；该文件共 **216 条** `pub const …: &str` 常量。
 清单（含技能中文名/常量名/注释首段）见 [standard-skill-implementation.txt](standard-skill-implementation.txt)。
 

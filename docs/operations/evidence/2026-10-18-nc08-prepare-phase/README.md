@@ -23,7 +23,7 @@
 
 | 面 | 原生实现 | 引用 |
 |---|---|---|
-| 相位集合 | `Judge/Draw/Play/Discard/End`（**无 Prepare**） | `crates/engine-native/src/event.rs`（`Phase::ALL`） |
+| 相位集合 | `Judge/Draw/Play/Discard/End`（**无 Prepare**） | `crates/engine-native-kernel/src/event.rs`（`Phase::ALL`） |
 | 准备阶段类触发 | `TriggerMeta.event = PhaseBegin` + 过滤条件限定 `Phase::Judge, begin: true`；源码注释「**Judge 阶段 = 上游 phaseZhunbei**」 | `vocabulary/host/metadata/common.rs:100`（起风）、`:272`（修罗）、`:533`（青翼/赤翼） |
 | 修罗过滤 | `judge` 非空 **且** `hand` 非空 | `content/host/filtering/common.rs:217` |
 

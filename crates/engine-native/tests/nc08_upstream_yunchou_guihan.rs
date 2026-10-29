@@ -74,7 +74,7 @@ fn upstream_defines_guihan() {
 /// 原生侧：**已注册但效果为空**（固定现状；实现后请翻转本断言）。
 #[test]
 fn native_guihan_effect_is_empty() {
-    let src = manifest().join("src/content/host");
+    let src = manifest().join("../engine-native-content/src/content/host");
     let step = std::fs::read_to_string(src.join("step/wudian_status.rs")).expect("读 wudian_status");
     let idx = step.find("WudianGuihan =>").expect("归汉分支");
     let seg: String = step[idx..].chars().take(120).collect();
@@ -87,7 +87,7 @@ fn native_guihan_effect_is_empty() {
         filter.contains("HostBehavior::WudianGuihan => false"),
         "登记：原生归汉过滤器恒 false（作为主动技方向正确）"
     );
-    let keys = std::fs::read_to_string(manifest().join("src/vocabulary/host/keys.rs")).expect("读 keys");
+    let keys = std::fs::read_to_string(manifest().join("../engine-native-kernel/src/vocabulary/host/keys.rs")).expect("读 keys");
     assert!(
         keys.contains("HostBehavior::WudianGuihan => \"host:guihan\""),
         "键映射存在：host:guihan（运筹 ycnguihan 的 mapping）"

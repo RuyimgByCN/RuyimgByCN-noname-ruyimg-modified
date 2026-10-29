@@ -1,0 +1,16 @@
+{
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "env": {},
+  "settings": {
+    "CARGO_BUILD_JOBS": "8",
+    "CARGO_INCREMENTAL": "1",
+    "profile": "dev/test; debug=line-tables-only"
+  },
+  "commands": {
+    "rustc -Vv": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+    "cargo -V": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\n",
+    "sysctl -n machdep.cpu.brand_string": "Apple M3 Max\n",
+    "df -k .": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 888241372  54267808    95% 5879924 542678080    1%   /System/Volumes/Data\n",
+    "git -C /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/before status --porcelain=v1": ""
+  }
+}

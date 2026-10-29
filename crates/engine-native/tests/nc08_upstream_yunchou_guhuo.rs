@@ -143,7 +143,7 @@ fn upstream_guhuo_draws_two_and_discards_two() {
 fn upstream_guhuo_choice_difference_is_registered() {
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = step.find("YunchouDiyguhuo =>").expect("蛊惑变体分支");

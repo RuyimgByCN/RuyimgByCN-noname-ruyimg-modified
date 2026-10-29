@@ -174,7 +174,7 @@ fn upstream_rende_cumulative_recovers_once() {
 fn upstream_rende_doc_inconsistency_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/rende.rs"
+        "/../engine-native-content/src/content/standard/skills/rende.rs"
     ))
     .expect("读仁德源码");
     let head: String = src.chars().take(300).collect();
@@ -184,7 +184,7 @@ fn upstream_rende_doc_inconsistency_is_fixed() {
     );
     let def = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/standard_skills.rs"
+        "/../engine-native-content/src/content/standard/standard_skills.rs"
     ))
     .expect("读标准技能表");
     let idx = def.find("name: REN_DE").expect("仁德注册");

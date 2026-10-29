@@ -1,0 +1,21 @@
+$ ['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '-B', '/tmp/noname-run-serialized.py', 'env', 'CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before', 'CARGO_BUILD_JOBS=8', 'CARGO_INCREMENTAL=1', '/usr/bin/time', '-p', 'cargo', 'test', '--offline', '-p', 'engine-native', '--no-run']
+cwd=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/before
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/before/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/before/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.44s
+  Executable unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/engine_native-ae94446c37eebafa)
+  Executable tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/g1-d683ad1f57c4ac27)
+  Executable tests/groups/g1_shahai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/g1_shahai-ea4479e0fce683a3)
+  Executable tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/kernel-4cf2f224adff8734)
+  Executable tests/groups/l_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/l_rounds-556c32d94fed19b0)
+  Executable tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/misc-f60a18e234c4d860)
+  Executable tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/nc08-37ac6b2ab31e9259)
+  Executable tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/nc08_upstream_a_k-96e8f448b8bb4b65)
+  Executable tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/nc08_upstream_l_z-967cadc1ff46fc17)
+  Executable tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/nc_rounds-368c29e1219c7492)
+  Executable tests/groups/swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/swd-ab231950eaf13694)
+  Executable tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before/debug/deps/test_registry-b26000af2ad376f9)
+real 4.48
+user 11.63
+sys 5.85
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before", "CARGO_BUILD_JOBS=8", "CARGO_INCREMENTAL=1", "/usr/bin/time", "-p", "cargo", "test", "--offline", "-p", "engine-native", "--no-run"], "exit": 0, "locked_seconds": 4.494814458012115}

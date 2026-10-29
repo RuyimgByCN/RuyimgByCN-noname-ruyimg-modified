@@ -43,7 +43,7 @@ use engine_native::Engine;
 fn upstream_jijie_takes_bottom_card() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_jie.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_jie.rs"
     ))
     .expect("读机捷源码");
     let head: String = src.chars().take(1400).collect();
@@ -73,7 +73,7 @@ fn upstream_jijie_takes_bottom_card() {
 fn upstream_jijie_allows_self_target() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/ji_jie.rs"
+        "/../engine-native-content/src/content/standard/skills/ji_jie.rs"
     ))
     .expect("读机捷源码");
     // 注释按行宽折行（「chooseTarget 无\n过滤器」）→ 用短片段断言

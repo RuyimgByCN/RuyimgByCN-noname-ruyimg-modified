@@ -174,7 +174,7 @@ fn upstream_lianying_threshold_off_by_one_is_registered() {
 fn upstream_lianying_coverage_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/lian_ying.rs"
+        "/../engine-native-content/src/content/standard/skills/lian_ying.rs"
     ))
     .expect("读连营源码");
     let seg: String = src.chars().take(1400).collect();

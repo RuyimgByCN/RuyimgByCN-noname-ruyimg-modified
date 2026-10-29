@@ -1901,7 +1901,7 @@ G23 的判定逻辑是「原生 `PhaseEnd` 未钉阶段 ⇒ 每阶段触发，�
 
 第 849 轮我判它「待核」，因为 grep `direct_hit` 只命中注释。**换查法**（查常量 `U08_YXS_FANJI2_KEY` 的所有引用）后找到：
 
-**`crates/engine-native/src/kernel/sha/step.rs:552`**
+**`crates/engine-native-kernel/src/kernel/sha/step.rs:552`**
 
 ```rust
 let yxs_fanji2_direct_hit = {

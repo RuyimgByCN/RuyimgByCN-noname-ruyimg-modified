@@ -128,7 +128,7 @@ fn upstream_jiaoxia_red_triggers_black_does_not() {
 fn upstream_jiaoxia_source_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读 filtering/common");
     let idx = src.find("HostBehavior::YunchouJiaoxia =>").expect("狡黠过滤");
@@ -139,7 +139,7 @@ fn upstream_jiaoxia_source_matches() {
     );
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = step.find("YunchouJiaoxia =>").expect("狡黠效果");

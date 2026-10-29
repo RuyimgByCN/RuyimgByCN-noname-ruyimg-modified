@@ -5,7 +5,7 @@
 
 ## 缺陷根因
 
-`MachineSnapshot::Rvm`（T8 增量 2）只携带 owner、模块字节与挂起态；[rvm_bridge.rs](../../../../crates/engine-native/src/rvm_bridge.rs) 的 `restore_paused`/`from_module` 以 `module.name` 重建 `skill_name`，并把 `trig`（触发上下文）、`consume`（限次清单）、`count_hits`（命中旗标）重置为默认。续行后：
+`MachineSnapshot::Rvm`（T8 增量 2）只携带 owner、模块字节与挂起态；[rvm_bridge.rs](../../../../crates/engine-native-kernel/src/rvm_bridge.rs) 的 `restore_paused`/`from_module` 以 `module.name` 重建 `skill_name`，并把 `trig`（触发上下文）、`consume`（限次清单）、`count_hits`（命中旗标）重置为默认。续行后：
 
 - `STORAGE_SET`/`commit_effect`/故障身份以模块名而非**声明技能名**为键；
 - `once` 限次消费丢失（恢复机 Halted 不落账）、`vm_aux.hits` 命中不计数；

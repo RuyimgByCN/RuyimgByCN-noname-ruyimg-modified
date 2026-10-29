@@ -91,7 +91,7 @@ fn upstream_boss_zhugeliang_pack_mapping() {
 fn upstream_xiangxing_three_stars_state() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/../engine-native-kernel/src/state.rs"
     ))
     .expect("读 state 源码");
     assert!(
@@ -144,7 +144,7 @@ fn upstream_xiangxing_differences_are_fixed() {
     );
     let dmg = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/damage.rs"
+        "/../engine-native-kernel/src/kernel/damage.rs"
     ))
     .expect("读 damage 源码");
     let idx = dmg

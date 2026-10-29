@@ -1,0 +1,29 @@
+{
+  "ignore": [],
+  "rules": {},
+  "format": {
+    "enabled": false
+  },
+  "autofix": {
+    "enabled": false
+  },
+  "actionableWarnings": {
+    "autoFix": {
+      "enabled": false
+    }
+  },
+  "raw": {
+    "format": {
+      "enabled": false
+    },
+    "autofix": {
+      "enabled": false
+    },
+    "actionableWarnings": {
+      "autoFix": {
+        "enabled": false
+      }
+    }
+  },
+  "configPath": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.pi-lens.json"
+}

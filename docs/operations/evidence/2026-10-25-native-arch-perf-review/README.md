@@ -49,7 +49,7 @@
 | 8 座 / 11 | 2,215 | 23,959 | 78,292 | 42.72 | 61,916 | 456,167 | 189.69 |
 | 8 座 / 11 | 6,215 | 44,417 | 214,500 | 95.56 | 87,625 | 1,149,291 | 419.21 |
 
-根因：[`resolution.rs:295`](../../../../crates/engine-native/src/resolution.rs) `plan_triggers` 对 `catalog.candidates(kind)` 的每个定义都完整遍历 `core.skills`（`range(..)`），复杂度为「目录候选数 × 本局技能实例数」。真实对局的技能实例更多（武将 2–3 技能 + 装备 + 临时技能），且真实目录的触发事件分布比本测的十类轮换更集中，本表应视为下限。旧线已有增量维护的 [`ActiveTriggerIndex`](../../../../crates/engine-core/src/trigger/index.rs)。
+根因：[`resolution.rs:295`](../../../../crates/engine-native-kernel/src/resolution.rs) `plan_triggers` 对 `catalog.candidates(kind)` 的每个定义都完整遍历 `core.skills`（`range(..)`），复杂度为「目录候选数 × 本局技能实例数」。真实对局的技能实例更多（武将 2–3 技能 + 装备 + 临时技能），且真实目录的触发事件分布比本测的十类轮换更集中，本表应视为下限。旧线已有增量维护的 [`ActiveTriggerIndex`](../../../../crates/engine-core/src/trigger/index.rs)。
 
 ### 表 B 对局推进（日志变长）时的成本（标准目录）
 
@@ -79,7 +79,7 @@
 
 ### 表 D 类型大小（`size_of`，字节）
 
-`GameStateCore` 776、`PlayerState` 512、`TurnState` 248、`GameState` 1048、`Engine` 2184、`rule_api::EffectRequest` 96、`EventData` 56、`LogEvent` 48。`TurnState` 61 个字段、`PlayerState` 105 个字段，其中大部分是具体技能专用状态（静态核对 [`state.rs`](../../../../crates/engine-native/src/state.rs)）；每局无论是否使用这些内容，都在复制、哈希、归档中付费（NC06 已列入）。
+`GameStateCore` 776、`PlayerState` 512、`TurnState` 248、`GameState` 1048、`Engine` 2184、`rule_api::EffectRequest` 96、`EventData` 56、`LogEvent` 48。`TurnState` 61 个字段、`PlayerState` 105 个字段，其中大部分是具体技能专用状态（静态核对 [`state.rs`](../../../../crates/engine-native-kernel/src/state.rs)）；每局无论是否使用这些内容，都在复制、哈希、归档中付费（NC06 已列入）。
 
 ## 4 未覆盖（不得外推）
 

@@ -433,9 +433,9 @@
 
 | 需要的改动 | 文件 | 状态 |
 |---|---|---|
-| 加 `reguhuo_phase` 标记 | `crates/engine-native/src/content/host/step/skills_cards.rs` | **未跟踪** ❌ |
-| 接线 `EPIC_REGUHUO_KEY` | `crates/engine-native/src/content/host/constants.rs` | **未跟踪** ❌ |
-| 次数门控（如需要）| `crates/engine-native/src/content/host/activation/common.rs` | **未跟踪** ❌ |
+| 加 `reguhuo_phase` 标记 | `crates/engine-native-content/src/content/host/step/skills_cards.rs` | **未跟踪** ❌ |
+| 接线 `EPIC_REGUHUO_KEY` | `crates/engine-native-content/src/content/host/constants.rs` | **未跟踪** ❌ |
+| 次数门控（如需要）| `crates/engine-native-content/src/content/host/activation/common.rs` | **未跟踪** ❌ |
 
 ⇒ **本会话无法修 5b** ⇒ **`L10` 也无法因本会话而可签** ⚠️
 ⇒ **A 类 17 条的修复点同样全在 `content/host/**`**（**未跟踪**）❌

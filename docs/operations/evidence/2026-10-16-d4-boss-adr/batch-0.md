@@ -8,8 +8,8 @@
 
 | 项 | 值 |
 |---|---|
-| `STANDARD_RULESET_VERSION` | **290**（`crates/engine-native/src/content/standard.rs`） |
-| `ARCHIVE_FORMAT_VERSION` | **78**（`crates/engine-native/src/archive.rs`） |
+| `STANDARD_RULESET_VERSION` | **290**（`crates/engine-native-content/src/content/standard.rs`） |
+| `ARCHIVE_FORMAT_VERSION` | **78**（`crates/engine-native-kernel/src/archive.rs`） |
 | `HostBehavior` 当前最高 tag | **410**（`SwdMinjing`）；下一可用起点 **411** |
 | `GameMode::Boss` | `{ boss, chongzheng, fellows }`（v84 fellow 已有）；**尚无** `BossStageState` / `change_boss` |
 | `TurnState` | B0 **不触碰**（流程态挂模式层，不进回合态） |

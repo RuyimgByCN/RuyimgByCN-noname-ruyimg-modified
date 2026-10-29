@@ -21,7 +21,7 @@
 | 文件 | 改动 |
 |---|---|
 | `crates/engine-native/src/engine/hash.rs` | `canonical_hash` 玩家段在 `zhucheng` 之后无条件写入 `lianyaohu_store` 长度与牌序（与相邻牌区同惯例，+6 行） |
-| `crates/engine-native/src/content/standard.rs` | `STANDARD_RULESET_VERSION` 324→**325**，补 v325 版本注释 |
+| `crates/engine-native-content/src/content/standard.rs` | `STANDARD_RULESET_VERSION` 324→**325**，补 v325 版本注释 |
 | `crates/engine-native/tests/nc07_lianyaohu_hash.rs`（新增） | ①`different_jar_orders_have_different_hashes_and_trajectories`：反例断言由「hash 相同」**反转为「hash 不同」**，并检查完整轨迹——归档往返各自摘要不变且仍区分、炼化选项精确等于各自壶序、各按自己窗口顺序作答后壶仓清空、弃牌堆末两张分别为 `[first, second]`／`[second, first]`、结算后摘要仍不同；②`v324_and_earlier_archives_are_rejected_by_rule_version`：`native-v323/v324.ngsa` 以 `RuleVersionMismatch { snapshot: 323/324, catalog: 325 }` 拒绝；`lianyaohu-v323/v324.ngsa`（扩展目录版本 = 标准版 ^ 内容锁高位混合）同样拒绝，并断言 `snapshot ^ catalog == 323/324 ^ 325`（差异只来自标准版本位） |
 | `crates/engine-native/tests/pa12_tag656_version.rs` | 目录版本断言 324→325（v322 旧档仍拒绝；新档往返仍一致） |
 | `crates/engine-native/tests/nc04_vm_resume.rs` | `b7_plain_v323_archive_is_rejected_by_rule_version` 的 `catalog` 324→325 |

@@ -1,7 +1,7 @@
 # ADR 0781：可变座位环原语（swapSeat）
 
 日期：2026-10-11　|　状态：已采纳
-关联：[T19b](../architecture/native-progress.md)、`crates/engine-native/src/state.rs`、[ADR 0780](0780-card-instance-mod-primitive.md)
+关联：[T19b](../architecture/native-progress.md)、`crates/engine-native-kernel/src/state.rs`、[ADR 0780](0780-card-instance-mod-primitive.md)
 
 ## 背景
 

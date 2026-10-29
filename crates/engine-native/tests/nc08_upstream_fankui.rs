@@ -117,7 +117,7 @@ fn upstream_fankui_gains_card_from_source() {
 fn upstream_fankui_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/fan_kui.rs"
+        "/../engine-native-content/src/content/standard/skills/fan_kui.rs"
     ))
     .expect("读反馈源码");
     // 全文件检查（文件头注释较长，固定窗口会漏掉取牌实现）

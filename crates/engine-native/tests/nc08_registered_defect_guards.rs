@@ -22,12 +22,12 @@
 use std::path::{Path, PathBuf};
 
 fn host_dir() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("src/content/host")
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-content/src/content/host")
 }
 
 fn read(rel: &str) -> String {
     let root = if rel.starts_with("metadata") {
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("src/vocabulary/host")
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-kernel/src/vocabulary/host")
     } else {
         host_dir()
     };
@@ -303,7 +303,7 @@ macro_rules! capability_guard {
         fn $fn_name() {
             let src = std::fs::read_to_string(concat!(
                 env!("CARGO_MANIFEST_DIR"),
-                "/src/event.rs"
+                "/../engine-native-kernel/src/event.rs"
             ))
             .expect("读 event.rs");
             assert!(
@@ -334,7 +334,7 @@ capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」�
 fn guard_yxs_menshen3_extra_phase() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/vocabulary/host/metadata.rs"
+        "/../engine-native-kernel/src/vocabulary/host/metadata.rs"
     ))
     .expect("读 metadata.rs");
     let idx = src.find("HostBehavior::YxsMenshen3 =>").expect("YxsMenshen3 无 arm");
@@ -351,7 +351,7 @@ fn guard_yxs_menshen3_extra_phase() {
 fn guard_mb_phase_before_enter_game() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(
@@ -369,7 +369,7 @@ macro_rules! meta_event_guard {
         #[ignore = "把 TriggerMeta 事件改对后本守卫转绿"]
         fn $fn_name() {
             use std::path::Path;
-            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/vocabulary/host");
+            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-kernel/src/vocabulary/host");
             let mut all = String::new();
             let mut stack = vec![dir];
             while let Some(next) = stack.pop() {
@@ -408,7 +408,7 @@ meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上�
 fn guard_prepare_phase_exists() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(src.contains("Prepare"), "上游 phaseZhunbeiBegin 需要准备阶段幕");
@@ -420,7 +420,7 @@ fn guard_prepare_phase_exists() {
 fn guard_xiangxing_lose_hp_end() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(src.contains("LoseHpEnd"), "上游 xiangxing 有 loseHpEnd 幕");
@@ -432,7 +432,7 @@ fn guard_xiangxing_lose_hp_end() {
 fn guard_yueyin_fourth_damage() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(src.contains("DamageBegin4") || src.contains("Damage4"), "上游 damageBegin4");
@@ -444,7 +444,7 @@ fn guard_yueyin_fourth_damage() {
 fn guard_gaiming_judge_before() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(src.contains("JudgeBefore"), "上游 gaiming 是 judgeBefore");
@@ -456,7 +456,7 @@ fn guard_gaiming_judge_before() {
 fn guard_kuwu_and_shengke_card_targeted() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(src.contains("CardTargeted"), "kuwu / shengke_check 需要「使用到目标」幕");
@@ -468,7 +468,7 @@ fn guard_kuwu_and_shengke_card_targeted() {
 fn guard_mopaifanbei_second_draw() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/event.rs"
+        "/../engine-native-kernel/src/event.rs"
     ))
     .expect("读 event.rs");
     assert!(
@@ -483,7 +483,7 @@ fn guard_mopaifanbei_second_draw() {
 fn guard_rangjie_branch1_draws() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/skills_cards.rs"
+        "/../engine-native-content/src/content/host/step/skills_cards.rs"
     ))
     .expect("读 step/skills_cards.rs");
     let idx = src.find("Rangjie").expect("找不到 rangjie 的效果步");
@@ -503,7 +503,7 @@ macro_rules! pin_phase_guard {
         #[ignore = "把过滤臂钉到该阶段后本守卫转绿"]
         fn $fn_name() {
             use std::path::Path;
-            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/content/host");
+            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-content/src/content/host");
             let mut all = String::new();
             let mut stack = vec![dir];
             while let Some(next) = stack.pop() {

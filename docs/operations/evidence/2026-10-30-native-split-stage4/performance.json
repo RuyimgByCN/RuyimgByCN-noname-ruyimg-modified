@@ -1,0 +1,45 @@
+{
+  "measurements": {
+    "before-cold": {
+      "real": 28.62,
+      "user": 78.26,
+      "sys": 7.95,
+      "compiled_native_packages": [
+        "engine-native"
+      ]
+    },
+    "before-warm": {
+      "real": 4.49,
+      "user": 11.64,
+      "sys": 5.71,
+      "compiled_native_packages": [
+        "engine-native"
+      ]
+    },
+    "after-cold": {
+      "real": 28.15,
+      "user": 77.67,
+      "sys": 8.82,
+      "compiled_native_packages": [
+        "engine-native-kernel",
+        "engine-native-content",
+        "engine-native"
+      ]
+    },
+    "after-warm": {
+      "real": 4.13,
+      "user": 12.0,
+      "sys": 7.12,
+      "compiled_native_packages": [
+        "engine-native-content",
+        "engine-native"
+      ]
+    }
+  },
+  "same_jobs": 8,
+  "same_incremental": 1,
+  "same_profile": "test; dev debug=line-tables-only",
+  "same_edit": "standard_catalog(): make cards mutable and shrink_to_fit before Catalog::build; restored byte-exactly in both isolated sources",
+  "scope": "Before engine-native vs after all three packages; cold test builds in fresh private targets; single sample each, no claimed general speedup",
+  "measurement_status": "Initial unmonitored/non-serialized samples retained as exploratory data only; superseded by shared-lock, process-monitored reruns after live steering."
+}

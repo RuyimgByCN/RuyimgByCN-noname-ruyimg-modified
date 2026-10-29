@@ -5,7 +5,7 @@
 
 ## 1 现状
 
-### `Phase` 只有 5 个变体（`crates/engine-native/src/event.rs`）
+### `Phase` 只有 5 个变体（`crates/engine-native-kernel/src/event.rs`）
 
 ```rust
 pub enum Phase { Judge, Draw, Play, Discard, End }
@@ -52,8 +52,8 @@ EventData::Phase { player, phase, timing: PhaseTiming }
 
 | 文件 | 状态 | 改动 |
 |---|---|---|
-| `crates/engine-native/src/event.rs` | **已跟踪** ✅ | 加 `PhaseTiming` / `Phase::Prepare` |
-| `crates/engine-native/src/kernel/**` | **未跟踪** ❌ | **发射点**需按新时序发事件（**这是主要工作量**）|
+| `crates/engine-native-kernel/src/event.rs` | **已跟踪** ✅ | 加 `PhaseTiming` / `Phase::Prepare` |
+| `crates/engine-native-kernel/src/kernel/**` | **未跟踪** ❌ | **发射点**需按新时序发事件（**这是主要工作量**）|
 | `content/host/filtering*.rs` | **未跟踪** ❌ | 6 条的 filter 改成新时序 |
 | `crates/engine-native/tests/**` | **已跟踪** ✅ | **6 个 `#[ignore]` 用例转正**（改造后可删 ignore）|
 
@@ -96,7 +96,7 @@ EventData::Phase { player, phase, timing: PhaseTiming }
 
 ### ✅ 已查（第 703 轮）：`Dying` 是**内联**发射的 ⇒ `Damage` 确实早于「结算完成」
 
-`crates/engine-native/src/kernel/damage.rs:977-987`：
+`crates/engine-native-kernel/src/kernel/damage.rs:977-987`：
 
 ```rust
 // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。

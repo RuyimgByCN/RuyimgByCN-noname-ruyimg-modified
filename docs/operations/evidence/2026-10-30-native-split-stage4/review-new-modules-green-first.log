@@ -1,0 +1,33 @@
+F........
+======================================================================
+FAIL: test_counts_kernel_layer_code_but_not_comments_or_content (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 133, in test_counts_kernel_layer_code_but_not_comments_or_content
+    self.assertEqual(
+AssertionError: Lists differ: ['cra[24 chars]/src/content/host.rs', 'crates/engine-native-k[219 chars].rs'] != ['cra[24 chars]/src/kernel.rs', 'crates/engine-native-kernel/[123 chars].rs']
+
+First differing element 0:
+'crates/engine-native-kernel/src/content/host.rs'
+'crates/engine-native-kernel/src/kernel.rs'
+
+First list contains 2 additional elements.
+First extra element 4:
+'crates/engine-native-kernel/src/kernel/damage.rs'
+
+- ['crates/engine-native-kernel/src/content/host.rs',
+-  'crates/engine-native-kernel/src/engine.rs',
+-  'crates/engine-native-kernel/src/kernel.rs',
+? ^
+
++ ['crates/engine-native-kernel/src/kernel.rs',
+? ^
+
+   'crates/engine-native-kernel/src/kernel/damage.rs',
+   'crates/engine-native-kernel/src/kernel/damage.rs',
+   'crates/engine-native-kernel/src/vocabulary/host.rs']
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.075s
+
+FAILED (failures=1)

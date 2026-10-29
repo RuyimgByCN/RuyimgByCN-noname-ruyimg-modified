@@ -332,7 +332,7 @@ fn upstream_kuwu_filter_gaps() {
     // 源码事实：伤害过滤臂只有「来源 + 未防止 + 有杀族牌」三项
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读宿主过滤源码");
     let idx = src

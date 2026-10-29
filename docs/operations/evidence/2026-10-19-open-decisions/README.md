@@ -59,8 +59,8 @@
 
 **91 条缺陷的 `location` 全部落在**：
 
-* `crates/engine-native/src/content/host/**`（`step/`、`activation/`、`filtering/`、`metadata/`、`constants.rs`）
-* `crates/engine-native/src/kernel/**`
+* `crates/engine-native-content/src/content/host/**`（`step/`、`activation/`、`filtering/`、`metadata/`、`constants.rs`）
+* `crates/engine-native-kernel/src/kernel/**`
 
 这两个目录**未纳入 git 跟踪**（`git ls-files` 里没有），因此**本会话只能读、不能改**。
 ⇒ **这是「91 条一条未修」的唯一原因**，不是分析未完成 ⚠️

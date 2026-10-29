@@ -1,0 +1,7 @@
+{
+  "path": "crates/engine-native/src/content/standard.rs",
+  "old": "pub fn standard_catalog() -> Catalog {\n    let (cards, skills) = standard_catalog_parts();",
+  "new": "pub fn standard_catalog() -> Catalog {\n    let (mut cards, skills) = standard_catalog_parts();\n    cards.shrink_to_fit();",
+  "restored": true,
+  "sha256": "16bc14f8ec6a58a7b759127d20e73b67b207d117d1cc155211a1f79781d69c35"
+}

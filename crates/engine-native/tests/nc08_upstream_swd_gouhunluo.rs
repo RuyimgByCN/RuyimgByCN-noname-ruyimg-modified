@@ -143,7 +143,7 @@ fn upstream_gouhunluo_rejects_already_marked_target() {
 fn upstream_gouhunluo_target_gate_is_enforced() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/swd_card_effects.rs"
+        "/../engine-native-content/src/content/host/step/swd_card_effects.rs"
     ))
     .expect("读 swd_card_effects");
     let idx = src.find("HostBehavior::SwdGouhunluoCard =>").expect("勾魂锣分支");

@@ -4,7 +4,7 @@
 
 ## 改动内容
 
-1. 删除 `crates/engine-native/src/content/host.rs.pre_assembly`（520,051 字节）与 `host.rs.recovered-v192`（559,445 字节）。两者不参与编译，内容已在 git 基线（`72583b2b` 起）中。
+1. 删除 `crates/engine-native-content/src/content/host.rs.pre_assembly`（520,051 字节）与 `host.rs.recovered-v192`（559,445 字节）。两者不参与编译，内容已在 git 基线（`72583b2b` 起）中。
 2. 删除 4 处按环境变量开关的 `eprintln`：
    - `src/resolution.rs` `push_frame`：`PT_DBG2` Death 帧打印（原 100–102 行）；
    - `src/resolution.rs` `plan_triggers`：`PT_DBG2` 候选数打印（原 287–293 行）；

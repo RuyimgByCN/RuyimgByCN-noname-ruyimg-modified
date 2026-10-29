@@ -15,7 +15,8 @@ from pathlib import Path
 
 import report_phase_arms as phase
 
-HOST = Path(__file__).resolve().parent.parent / "crates/engine-native/src/content/host"
+ROOT = Path(__file__).resolve().parent.parent
+HOST = ROOT / "crates/engine-native-content/src/content/host"
 LEDGER = (
     Path(__file__).resolve().parent.parent
     / "docs/operations/evidence/2026-10-19-defect-ledger/ledger.tsv"
@@ -26,7 +27,7 @@ MARKERS = ("差异", "差異", "登記差異", "登记差异")
 def arm_text(behavior: str, cached: dict[Path, str] | None = None) -> str:
     """返回该行为的全部行为臂文本。"""
     files = cached if cached is not None else {
-        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((HOST.parents[1] / "vocabulary/host").rglob("*.rs"))
+        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((ROOT / "crates/engine-native-kernel/src/vocabulary/host").rglob("*.rs"))
     }
     needle = f"HostBehavior::{behavior} =>"
     parts: list[str] = []
@@ -42,7 +43,7 @@ def arm_text(behavior: str, cached: dict[Path, str] | None = None) -> str:
 def registered(cached: dict[Path, str] | None = None) -> tuple[list[str], list[str]]:
     """返回（已登记差异的行为, 未登记差异的行为）。"""
     files = cached if cached is not None else {
-        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((HOST.parents[1] / "vocabulary/host").rglob("*.rs"))
+        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((ROOT / "crates/engine-native-kernel/src/vocabulary/host").rglob("*.rs"))
     }
     rows = phase.ledger_rows() if hasattr(phase, "ledger_rows") else _rows()
     yes: list[str] = []

@@ -1,0 +1,97 @@
+behavior	native	位置	skill	上游trigger	判定
+BossBaiyiThunder	DamageBefore	common.rs:868		player: 'damageBegin1'	OK
+FzXinKuanggu	Damage	common.rs:149	fz_xinkuanggu	source: "damageSource",	OK
+HlssXiangxing	Damage	common.rs:35		player:['damageEnd','loseHpEnd']	OK
+HlssYueyin	DamageBefore	common.rs:41		player: ['damageBegin4', 'damage'],	OK
+Rangjie	Damage	common.rs:215	rangjie	player: "damageEnd",	OK
+SwdChengjian	Damage	swd.rs:264		global:'damageEnd'	OK
+SwdDaixing3	Damage	swd.rs:39		player:['damageEnd','damageZero']	OK
+SwdDangping	Damage	swd.rs:690		source:'damageAfter'	OK
+SwdDaofa	Damage	swd.rs:313		global:'damageAfter'	OK
+SwdFuyan	Damage	swd.rs:593		player:'damageEnd'	OK
+SwdGuaili	DamageBefore	swd.rs:586		source:'damageBegin'	OK
+SwdGuanhu	Damage	swd.rs:955		source:'damageEnd'	OK
+SwdGuozao	Damage	swd.rs:639		global:'damageEnd'	OK
+SwdGuxing3	Damage	swd.rs:185		source:'damageAfter'	OK
+SwdHuajin2	DamageBefore	swd.rs:813	swd_huajin2	source:'damageBegin'	OK
+SwdHuajing	Damage	swd.rs:281		source:'damageEnd'	OK
+SwdHuanxing2	Damage	swd.rs:884	swd_huanxing_state	player:'damageAfter'	OK
+SwdHudun	Damage	swd.rs:291		source:'damageEnd'	OK
+SwdHuiqi	Damage	swd.rs:969		player:'damageEnd'	OK
+SwdJqimou	Damage	swd.rs:712		player:'damageEnd'	OK
+SwdJufu	DamageBefore	swd.rs:272		source:'damageBegin'	OK
+SwdLieren	Damage	swd.rs:839		source:'damageSource'	OK
+SwdLmazui2	DamageBefore	swd.rs:676	swd_lmazui2	source:'damageBegin'	OK
+SwdMilesXueyi	DamageBefore	swd.rs:607		player:'damageBefore'	OK
+SwdMinjing	DamageBefore	swd.rs:823		player:'damageBegin'	OK
+SwdNingxian	Damage	swd.rs:743		player:'damageEnd'	OK
+SwdPolang	Damage	swd.rs:548		source:'damageEnd'	OK
+SwdPoxing	DamageBefore	swd.rs:296		source:'damageBegin'	OK
+SwdPozhen	Damage	swd.rs:765		player:'damageEnd'	OK
+SwdPozhou	Damage	swd.rs:48		player:'damageEnd'	OK
+SwdShenyan	DamageBefore	swd.rs:173		source:'damageBegin'	OK
+SwdSuiyan	Damage	swd.rs:536		source:'damageEnd'	OK
+SwdTuzhen	Damage	swd.rs:334		source:'damageAfter'	OK
+SwdXiaomoyu	Damage	swd.rs:611		source:'damageEnd'	OK
+SwdXuying	DamageBefore	swd.rs:582		player:'damageBefore'	OK
+SwdYinguo	DamageBefore	swd.rs:797		global:'damageBefore'	OK
+SwdYishan	Damage	swd.rs:143		player:'damageEnd'	OK
+SwdYulin	DamageBefore	swd.rs:320		player:'damageBefore'	OK
+SwdZhuyu	DamageBefore	swd.rs:998		global:'damageBegin'	OK
+Tianxiang2	Damage	common.rs:408	tianxiang2	player:['damageAfter','damageCancelled','damageZero']	OK
+WudianFeidan	Damage	common.rs:695		source:'damageAfter'	OK
+WudianGuangshuDiamond	Damage	common.rs:706	guangshu_diamond	source:'damageEnd'	OK
+WudianGuangshuHeart	Damage	common.rs:709	guangshu_heart	player:'damageEnd'	OK
+WudianMengji	DamageBefore	common.rs:716		source:'damageBegin'	OK
+WudianPingzhang	DamageBefore	common.rs:726		global:'damageBegin'	OK
+WudianShenqiang	Damage	common.rs:749		source:'damageEnd'	OK
+WudianShihuo	Damage	common.rs:755		global:'damageEnd'	OK
+WudianZhiyuan	DamageBefore	common.rs:771		source:'damageBefore'	OK
+XianjianAnwugu	Damage	xianjian.rs:384	anwugu	source:'damageEnd'	OK
+XianjianCtianfu2	Damage	xianjian.rs:124		source:'damageAfter'	OK
+XianjianLuanjian2	DamageBefore	xianjian.rs:463		source:'damageBegin'	OK
+XianjianNingbin	Damage	xianjian.rs:87	ningbin	player:'damageEnd'	OK
+XianjianPoyun	Damage	xianjian.rs:227		source:'damageEnd'	OK
+XianjianSheying	Damage	xianjian.rs:283		source:'damageAfter'	OK
+XianjianSong	DamageBefore	xianjian.rs:419	song	source:'damageBegin'	OK
+XianjianTianshe	DamageBefore	xianjian.rs:423	tianshe	player:'damageBefore'	OK
+XianjianTianshe2	Damage	xianjian.rs:430	tianshe2	source:'damageAfter'	OK
+XianjianTxianqu	DamageBefore	xianjian.rs:101	txianqu	source:'damageBefore'	OK
+XianjianWangyou2	Damage	xianjian.rs:312		global:'damageEnd'	OK
+XianjianXuanyan2	DamageBefore	xianjian.rs:445	xuanyan2	source:'damageBegin'	OK
+XianjianXuanyan3	Damage	xianjian.rs:453	xuanyan3	source:'damageEnd'	OK
+XianjianYa	DamageBefore	xianjian.rs:460	ya	player:'damageBegin'	OK
+XuanyuanjianBacklash	Damage	common.rs:272	xuanyuanjian3	source:'damageAfter'	OK
+XuanyuanjianDamage	DamageBefore	common.rs:268	xuanyuanjian2	source:'damageBefore'	OK
+Xunmeng	DamageBefore	common.rs:196	xunmeng	source:'damageBegin'	OK
+YunchouBeige	Damage	common.rs:450		global:'damageEnd'	OK
+YunchouDiykuanggu	Damage	common.rs:535		source:'damageEnd'	OK
+YunchouHonglian	Damage	common.rs:490		player:'damageEnd'	OK
+YunchouShaoying	Damage	common.rs:511		source:'damageAfter'	OK
+YunchouZonghuo	DamageBefore	common.rs:504		source:'damageBefore'	OK
+YxsFanji	Damage	common.rs:106	yxs_fanji	player:"damageEnd",	OK
+BossChiyiMark	DamageBefore	common.rs:856			REVIEW(上游未定位)
+GwentKunenState	DamageBefore	common.rs:642			REVIEW(上游未定位)
+SwdNigongAccumulate	Damage	swd.rs:394			REVIEW(上游未定位)
+SwdShencaojieGuard	DamageBefore	swd.rs:448			REVIEW(上游未定位)
+SwdXuanwuzhihuangHeld	Damage	swd.rs:420			REVIEW(上游未定位)
+SwdZhuquezhizhangHeld	Damage	swd.rs:402			REVIEW(上游未定位)
+GujianFoodGudonggeng	DamageBefore	common.rs:604		player: "phaseBegin"	REVIEW(非伤害触发)
+JinlianzhuCancel	DamageBefore	common.rs:567		// 此参数是不是必须的 exist: false, // 参数类型 type: '字符串\'notrigger\'', // 参数作用 description: '事件取消时不额外创建取消此事件的事件（即不触发技能）', // 参数的顺序，allRight指任一顺序皆可 index: '3'	REVIEW(非伤害触发)
+SanjianWeaponDamage	Damage	common.rs:573	wd_sanjian	target: 'useCardToTargeted'	REVIEW(非伤害触发)
+ShaDamageForceDiscard	Damage	common.rs:540	huanle_kuwu	player:'phaseDiscardBefore'	REVIEW(非伤害触发)
+SwdSxianjingDamage	Damage	swd.rs:64		(无 trigger)	REVIEW(非伤害触发)
+SwdXuanying	Damage	swd.rs:704		player:['chooseToRespondBegin','chooseToUseBegin']	REVIEW(非伤害触发)
+XianjianHushaCount	Damage	xianjian.rs:157		global:'phaseEnd'	REVIEW(非伤害触发)
+XianjianZhangmu	DamageBefore	xianjian.rs:354		player:['chooseToRespondBegin','chooseToUseBegin']	REVIEW(非伤害触发)
+YunchouXicai	Damage	common.rs:530		(无 trigger)	REVIEW(非伤害触发)
+YunchouYaliang	Damage	common.rs:521		(无 trigger)	REVIEW(非伤害触发)
+Tianxiang	DamageBefore	common.rs:399		player:"damageBegin3",	第3次(需档位)
+
+共 88 个 damage 触发臂
+  OK: 71
+  REVIEW(非伤害触发): 10
+  REVIEW(上游未定位): 6
+  第3次(需档位): 1
+
+16 行需人工复核

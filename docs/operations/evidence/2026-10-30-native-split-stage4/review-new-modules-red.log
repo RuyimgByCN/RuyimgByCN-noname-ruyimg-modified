@@ -1,0 +1,13 @@
+......F..
+======================================================================
+FAIL: test_new_kernel_modules_are_scanned_without_registration (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 105, in test_new_kernel_modules_are_scanned_without_registration
+    self.assertEqual(len(refs), 2)
+AssertionError: 0 != 2
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.075s
+
+FAILED (failures=1)

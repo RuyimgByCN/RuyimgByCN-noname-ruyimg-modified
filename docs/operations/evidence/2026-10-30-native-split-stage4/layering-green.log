@@ -1,0 +1,7 @@
+$ ['python3', '-B', '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_check_native_layering.py']
+cwd=.
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.067s
+
+OK

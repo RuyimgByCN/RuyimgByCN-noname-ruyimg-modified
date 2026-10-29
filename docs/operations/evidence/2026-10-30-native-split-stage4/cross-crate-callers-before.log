@@ -1,0 +1,246 @@
+crates/engine-native/src/engine.rs:218:pub(crate) use crate::state::apply_general_assembly;
+crates/engine-native/src/engine.rs:317:                    machine: Box::new(ShaResolveMachine::new(
+crates/engine-native/src/kernel/damage.rs:440:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/kernel/monkey.rs:87:                        revoke_equip_skills(&mut ctx.core, ctx.catalog, holder, monkey);
+crates/engine-native/src/kernel/judge.rs:788:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, owner, c);
+crates/engine-native/src/kernel/sha/step.rs:617:                                    crate::kernel::revoke_equip_skills(
+crates/engine-native/src/kernel/sha/step.rs:655:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/kernel/sha/step.rs:887:                revoke_equip_skills(ctx.core, ctx.catalog, owner, shan);
+crates/engine-native/src/kernel/sha/resume.rs:200:                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+crates/engine-native/src/kernel/sha/liuli.rs:102:                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, c);
+crates/engine-native/src/kernel/tricks.rs:313:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/kernel/tricks.rs:332:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/kernel/tricks.rs:408:                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+crates/engine-native/src/kernel/tricks.rs:470:                        revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
+crates/engine-native/src/kernel/equipment.rs:6:pub(crate) fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
+crates/engine-native/src/kernel/equipment.rs:26:pub(crate) fn revoke_equip_skills(
+crates/engine-native/src/kernel/equipment.rs:80:        revoke_equip_skills(ctx.core, ctx.catalog, player, old);
+crates/engine-native/src/kernel/equipment.rs:85:    grant_equip_skills(ctx, player, card);
+crates/engine-native/src/kernel/equipment.rs:96:            revoke_equip_skills(ctx.core, ctx.catalog, player, card);
+crates/engine-native/src/kernel/death.rs:114:                    crate::state::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
+crates/engine-native/src/kernel/death.rs:261:                                revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+crates/engine-native/src/kernel/death.rs:291:                                revoke_equip_skills(ctx.core, ctx.catalog, k, *c);
+crates/engine-native/src/kernel/intrinsic.rs:60:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:68:                CardKind::Wuzhong => Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:79:                CardKind::Taoyuan => Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:90:                CardKind::Wugu => Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:106:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:126:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:183:                    Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/kernel/intrinsic.rs:216:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:238:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:255:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:268:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/intrinsic.rs:282:                    Some(Box::new(wrap_nullify_window(
+crates/engine-native/src/kernel/combat_rules.rs:50:pub(crate) fn tao_futai2_banned(
+crates/engine-native/src/kernel/combat_rules.rs:80:        return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
+crates/engine-native/src/kernel/events.rs:319:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, u.player, c);
+crates/engine-native/src/kernel/nullify.rs:331:pub(crate) fn wrap_nullify_window(
+crates/engine-native/src/kernel/phase/judge.rs:105:                            revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/kernel/phase/judge.rs:146:                        revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/kernel/phase/judge.rs:222:                        crate::state::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
+crates/engine-native/src/kernel/phase/judge.rs:347:                        revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/kernel/phase/judge.rs:655:                            revoke_equip_skills(ctx.core, ctx.catalog, holder, old);
+crates/engine-native/src/kernel/phase/judge.rs:659:                        grant_equip_skills(ctx, holder, c);
+crates/engine-native/src/state.rs:872:pub(crate) use general_assembly::apply_general_assembly;
+crates/engine-native/src/engine/general_select.rs:69:        crate::state::apply_general_assembly(self.state_core_mut(), &catalog, seat, 0);
+crates/engine-native/src/engine/apply_command.rs:47:            apply_general_assembly(&mut state.core, catalog, actor, slot as usize);
+crates/engine-native/src/engine/debug.rs:40:            crate::kernel::revoke_equip_skills(&mut work.core, &self.catalog, player, card);
+crates/engine-native/src/engine/debug.rs:82:            crate::kernel::revoke_equip_skills(&mut self.state.core, &self.catalog, player, card);
+crates/engine-native/src/engine/debug.rs:411:        apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+crates/engine-native/src/engine/debug.rs:430:    /// `apply_general_assembly`（授予语义不分叉）。原型模式无命令层
+crates/engine-native/src/engine/debug.rs:443:        apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+crates/engine-native/src/engine/debug.rs:447:    /// `debug_assemble_general` 同语义（`apply_general_assembly` + 体力按
+crates/engine-native/src/engine/debug.rs:456:        apply_general_assembly(&mut self.state.core, &self.catalog, player, 0);
+crates/engine-native/src/engine/debug.rs:660:        crate::kernel::revoke_equip_skills(&mut self.state.core, &self.catalog, player, card);
+crates/engine-native/src/state/general_assembly.rs:8:pub(crate) fn apply_general_assembly(
+crates/engine-native/src/snap/restore.rs:52:            } => Ok(Box::new(crate::kernel::ShaResolveMachine::new(
+crates/engine-native/src/snap/restore.rs:119:            } => Ok(Box::new(crate::kernel::DuelMachine::new(
+crates/engine-native/src/snap/restore.rs:166:            MachineSnapshot::Noop => Ok(Box::new(crate::kernel::NoopMachine::new())),
+crates/engine-native/src/machine.rs:392:                crate::kernel::revoke_equip_skills(self.core, self.catalog, player, card);
+crates/engine-native/src/engine/play_card.rs:658:                        && crate::kernel::tao_futai2_banned(core, catalog, user)
+crates/engine-native/src/engine/play_card.rs:694:                            machine: Box::new(crate::kernel::MonkeyStealMachine::new(
+crates/engine-native/src/snap/asks.rs:373:            let options = hand_card_options(&core.player(*player).hand);
+crates/engine-native/src/snap/asks.rs:405:                other_player_options(core, *owner),
+crates/engine-native/src/snap/asks.rs:414:                hand_card_options(&core.player(*owner).hand),
+crates/engine-native/src/snap/asks.rs:426:                other_player_options(core, *owner),
+crates/engine-native/src/snap/asks.rs:460:                    hand_card_options(hand),
+crates/engine-native/src/snap/asks.rs:470:                other_player_options(core, *owner),
+crates/engine-native/src/snap/asks.rs:534:                    hand_card_options(hand),
+crates/engine-native/src/snap/asks.rs:777:                hand_card_options(&core.player(*owner).hand),
+crates/engine-native/src/snap/asks.rs:795:                other_player_options(core, *owner),
+crates/engine-native/src/snap/asks.rs:818:                    hand_card_options(&core.player(*owner).hand),
+crates/engine-native/src/snap/asks.rs:842:                        hand_card_options(hand),
+crates/engine-native/src/snap/asks.rs:874:                    hand_card_options(top),
+crates/engine-native/src/snap/asks.rs:908:                hand_card_options(&core.player(*owner).hand),
+crates/engine-native/src/snap/asks.rs:920:                other_player_options(core, *owner),
+crates/engine-native/src/snap/asks.rs:929:                hand_card_options(&core.player(*owner).hand),
+crates/engine-native/src/snap/asks.rs:944:                    hand_card_options(hand),
+crates/engine-native/src/snap/asks/shapes.rs:49:pub(crate) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
+crates/engine-native/src/snap/asks/shapes.rs:53:pub(crate) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
+crates/engine-native/src/content/host/activation.rs:141:            // 命令层由 equip 技能实例承载——实例随 grant_equip_skills 授予）
+crates/engine-native/src/engine/construction.rs:154:        apply_general_assembly(&mut self.state.core, &self.catalog, seat, 0);
+crates/engine-native/src/content/host/step.rs:362:            //（take_hand_card+同栏替换+grant_equip_skills——破茧同款）
+crates/engine-native/src/content/host/asks_wudian.rs:400:                    hand_card_options(&core.player(r).hand),
+crates/engine-native/src/content/host/asks_wudian.rs:416:                other_player_options(core, owner),
+crates/engine-native/src/content/host/asks_wudian.rs:425:                let mut options = hand_card_options(&core.player(t).hand);
+crates/engine-native/src/content/host/asks_wudian.rs:498:                other_player_options(core, owner),
+crates/engine-native/src/content/host/support.rs:48:            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, card);
+crates/engine-native/src/content/host/support.rs:60:            crate::kernel::grant_equip_skills(ctx, player, card);
+crates/engine-native/src/content/host/support.rs:298:            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, h, card);
+crates/engine-native/src/content/host/support.rs:651:                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/support.rs:678:                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/intrinsic.rs:28:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:48:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:62:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:161:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:175:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:203:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:249:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:280:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:347:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:371:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:432:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:447:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:506:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:533:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:608:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:684:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:699:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:881:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:896:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:910:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:925:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:980:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:994:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:1008:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:1022:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:1036:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/intrinsic.rs:1050:            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+crates/engine-native/src/content/host/asks_mtg.rs:42:            let mut options = hand_card_options(&core.player(owner).hand);
+crates/engine-native/src/content/host/asks_mtg.rs:147:            let mut options = hand_card_options(&core.player(owner).hand);
+crates/engine-native/src/content/host/asks_mtg.rs:214:                other_player_options(core, owner),
+crates/engine-native/src/content/host/asks_mtg.rs:302:            let mut options = hand_card_options(&core.player(owner).hand);
+crates/engine-native/src/content/host/asks.rs:37:                hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:90:                hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:138:                other_player_options(core, owner),
+crates/engine-native/src/content/host/asks.rs:286:                hand_card_options(&core.player(t).hand),
+crates/engine-native/src/content/host/asks.rs:298:                hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:309:                    hand_card_options(&core.player(t).hand),
+crates/engine-native/src/content/host/asks.rs:382:                other_player_options(core, owner),
+crates/engine-native/src/content/host/asks.rs:394:                hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:430:                    hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:439:                    hand_card_options(&core.player(t).hand),
+crates/engine-native/src/content/host/asks.rs:455:                    hand_card_options(&core.player(t).hand),
+crates/engine-native/src/content/host/asks.rs:464:                    hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:482:                    hand_card_options(&core.player(targets[0]).hand),
+crates/engine-native/src/content/host/asks.rs:491:                    hand_card_options(&core.player(targets[1]).hand),
+crates/engine-native/src/content/host/asks.rs:544:                hand_card_options(hand),
+crates/engine-native/src/content/host/asks.rs:603:                hand_card_options(&core.player(owner).hand),
+crates/engine-native/src/content/host/asks.rs:648:                hand_card_options(hand),
+crates/engine-native/src/content/host/boss.rs:104:        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, c);
+crates/engine-native/src/content/host/boss.rs:448:    crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+crates/engine-native/src/content/host/boss.rs:471:    crate::state::apply_general_assembly(ctx.core, ctx.catalog, pid, 0);
+crates/engine-native/src/content/host/boss.rs:496:        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, seat, c);
+crates/engine-native/src/content/host/step/skills_status.rs:733:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, *t, c);
+crates/engine-native/src/content/host/step/skills_status.rs:914:                    crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/standard/skills/jijiang.rs:245:                let machine = crate::kernel::ShaResolveMachine::new(
+crates/engine-native/src/content/host/step/gwent.rs:287:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
+crates/engine-native/src/content/standard/skills/wangxiang.rs:40:                crate::kernel::revoke_equip_skills(&mut ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/activation/swd_artifacts.rs:101:            // 命令层由 equip 技能实例承载——实例随 grant_equip_skills 授予）
+crates/engine-native/src/content/standard/skills/li_jian.rs:165:                    crate::kernel::DuelMachine::new(card, picks[0], picks[1], true, false, false);
+crates/engine-native/src/content/host/step/skills_recovery.rs:260:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/skills_damage.rs:583:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, equip);
+crates/engine-native/src/content/host/step/hearth.rs:253:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, old);
+crates/engine-native/src/content/host/step/hearth.rs:257:                    crate::kernel::grant_equip_skills(ctx, t, c);
+crates/engine-native/src/content/standard/skills/xingxia.rs:171:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/xianjian_status.rs:309:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, owner, c);
+crates/engine-native/src/content/host/step/xianjian_status.rs:393:                        crate::kernel::grant_equip_skills(ctx, self.owner, c);
+crates/engine-native/src/content/host/step/swd_recovery.rs:57:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_recovery.rs:230:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_recovery.rs:319:                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_recovery.rs:449:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/gujian.rs:304:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
+crates/engine-native/src/content/host/step/swd_lingjian_cards.rs:29:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_lingjian_cards.rs:128:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_cards.rs:70:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_cards.rs:148:            //（take_hand_card+同栏替换+grant_equip_skills——破茧同款）
+crates/engine-native/src/content/host/step/swd_cards.rs:306:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
+crates/engine-native/src/content/host/step/swd_cards.rs:365:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/skills_cards.rs:191:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, from, card);
+crates/engine-native/src/content/host/step/skills_cards.rs:206:                        crate::kernel::grant_equip_skills(ctx, to, card);
+crates/engine-native/src/content/host/step/skills_cards.rs:452:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_zhenfa_cards.rs:57:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_zhenfa_cards.rs:157:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/yunchou.rs:90:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/yunchou.rs:145:                                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/yunchou.rs:300:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+crates/engine-native/src/content/host/step/yunchou.rs:346:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, src, c);
+crates/engine-native/src/content/host/step/xianjian_targets.rs:229:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:56:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:77:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:142:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, picked);
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:245:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:442:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:586:                                    crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:704:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_damage_reactions.rs:814:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs:47:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs:142:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs:398:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs:412:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, *c1);
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:55:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:212:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:369:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:477:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:554:                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, c);
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:614:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_costs.rs:754:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/wudian_cards.rs:47:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+crates/engine-native/src/content/host/step/wudian_cards.rs:330:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/xianjian_damage.rs:146:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, x, c);
+crates/engine-native/src/content/host/step/xianjian_damage.rs:311:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/xianjian_damage.rs:456:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, x);
+crates/engine-native/src/content/standard/skills/tong_ji.rs:128:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, target, equip);
+crates/engine-native/src/content/host/step/swd_card_targets.rs:243:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_equipment_skills.rs:398:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_equipment_skills.rs:478:                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_card_effects.rs:427:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, *c);
+crates/engine-native/src/content/host/step/skills_virtual_use.rs:159:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, card);
+crates/engine-native/src/content/standard/skills/noop.rs:16:        Box::new(crate::kernel::NoopMachine::new())
+crates/engine-native/src/content/host/step/swd_status.rs:123:                // （take_hand_card + 同栏替换 + grant_equip_skills 全托管）
+crates/engine-native/src/content/host/step/jiguan.rs:164:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
+crates/engine-native/src/content/host/step/jiguan.rs:225:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_targets.rs:59:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_virtual_cards.rs:51:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_virtual_cards.rs:127:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/xianjian_cards.rs:208:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/xianjian_cards.rs:458:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, src, eq);
+crates/engine-native/src/content/host/step/xianjian_cards.rs:460:                                crate::kernel::grant_equip_skills(ctx, dst, eq);
+crates/engine-native/src/content/host/step/xianjian_cards.rs:699:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, *c);
+crates/engine-native/src/content/host/step/swd_damage_multi.rs:169:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_multi.rs:458:                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, e, c);
+crates/engine-native/src/content/host/step/xianjian_card_use.rs:221:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, p, dc);
+crates/engine-native/src/content/host/step/xianjian_card_use.rs:304:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/wudian_status.rs:56:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, to, old);
+crates/engine-native/src/content/host/step/wudian_status.rs:60:                    crate::kernel::grant_equip_skills(ctx, to, card);
+crates/engine-native/src/content/host/step/swd_equipment.rs:293:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, old);
+crates/engine-native/src/content/host/step/swd_equipment.rs:297:                    crate::kernel::grant_equip_skills(ctx, self.owner, hu);
+crates/engine-native/src/content/host/step/swd_equipment.rs:334:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, old);
+crates/engine-native/src/content/host/step/swd_equipment.rs:394:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_equipment.rs:483:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, old);
+crates/engine-native/src/content/host/step/swd_response_cards.rs:119:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_response_cards.rs:197:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_response_cards.rs:265:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_response_cards.rs:357:                        crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/skills_discard_costs.rs:148:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/skills_discard_costs.rs:200:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+crates/engine-native/src/content/host/step/skills_discard_costs.rs:294:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+crates/engine-native/src/content/host/step/skills_discard_costs.rs:436:                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, user, c);
+crates/engine-native/src/content/host/step/swd_damage_combos.rs:45:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/swd_damage_combos.rs:161:                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/swd_damage_combos.rs:597:                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+crates/engine-native/src/content/host/step/mtg.rs:120:                                crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/mtg.rs:199:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/mtg.rs:665:                            crate::kernel::revoke_equip_skills(
+crates/engine-native/src/content/host/step/mtg.rs:910:                            crate::kernel::revoke_equip_skills(

@@ -8,27 +8,16 @@
 // 真实分支，按错误处理。
 #![deny(unreachable_patterns)]
 
-pub mod catalog;
-pub mod choice;
+pub use engine_native_kernel::{
+    ids, rng, choice, event, catalog, state, machine, resolution, vocabulary, kernel, snap, archive, rvm_ops, rvm_bridge, rvm_named,
+};
+pub use engine_native_content::content;
+
 pub mod ai;
 pub mod ai_pool;
-pub mod archive;
-pub mod content;
 pub mod view;
 pub mod engine;
-pub mod event;
-pub mod ids;
-pub mod kernel;
-pub mod machine;
 pub mod presentation;
-pub mod rvm_bridge;
-pub mod rvm_ops;
-pub mod rvm_named;
-pub mod resolution;
-pub mod rng;
-pub mod snap;
-pub mod state;
-pub mod vocabulary;
 
 pub use catalog::{CardKind, Catalog, EquipSlot, SharedCatalog, SkillBehavior, SkillDef, SkillMachine};
 pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};

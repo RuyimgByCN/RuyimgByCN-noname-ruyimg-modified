@@ -6,7 +6,7 @@
 
 ## 代码
 
-倍率在 `crates/engine-native/src/content/pile.rs` 的 `scale_plan`。比例条目与 noname 仓相同，所以同一倍率、同一牌堆长度得到同一追加快照。商店副本的 `source` 是 `noname-liuli`，不是 `noname`。点数是调用方给出的 1..=13 序列，不是上游 `Math.random`。113 张比例牌仍是目录材料。
+倍率在 `crates/engine-native-content/src/content/pile.rs` 的 `scale_plan`。比例条目与 noname 仓相同，所以同一倍率、同一牌堆长度得到同一追加快照。商店副本的 `source` 是 `noname-liuli`，不是 `noname`。点数是调用方给出的 1..=13 序列，不是上游 `Math.random`。113 张比例牌仍是目录材料。
 
 安装包是 `packages/extensions/cardpile-upstream-liuli`（`upstream-liuli/cardpile@1.0.0`）。`logic_hash` 前四字节为 `141,217,158,178`，`asset_hash` 前四字节为 `5,133,68,112`，比例表 `source_hash` 前四字节为 `223,149,103,52`。目标平台字符串辅助是 `crates/engine-native-wasm/src/lib.rs` 的 `cardpile_scale`，测试读的是 liuli 仓 `pile.json`。
 

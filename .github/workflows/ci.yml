@@ -54,9 +54,9 @@ jobs:
       - name: Gate 1b — engine-native all targets warnings denied
         # lib/测试/示例均已零警告（T21，2026-10-12），用 -D warnings 防死代码信号回流：
         # 漏写 #[test] 的测试函数只会报 dead_code，叠加 #[test] 只报 duplicated attribute。
-        # 只限定 engine-native（旧线工程仍有存量警告，不宜全局开启）；RUSTFLAGS 同时作用于
+        # 限定原生三层（旧线工程仍有存量警告，不宜全局开启）；RUSTFLAGS 同时作用于
         # 其路径依赖（content-runtime 等），它们也须保持零警告。
-        run: cargo check -p engine-native --all-targets
+        run: cargo check -p engine-native-kernel -p engine-native-content -p engine-native --all-targets
         env:
           RUSTFLAGS: -D warnings
       - name: Gate 2 — conformance
@@ -98,7 +98,7 @@ jobs:
       - name: Rebuild legacy WASM (still imported by the client)
         run: pnpm build:wasm
       - name: Native kernel and package loader regressions
-        run: cargo test -p engine-native -p engine-native-wasm -p content-native-loader --no-fail-fast
+        run: cargo test -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --no-fail-fast
       - name: Real native Worker smoke
         run: pnpm smoke:native
       - name: Frontend regressions

@@ -111,13 +111,13 @@
 | 6 | 无匹配 case → `return` | 无生克关系（土 vs 金）→ 不弃不摸 | **对齐** |
 
 **原生实现引用**（工作树当前布局）：
-- `crates/engine-native/src/content/host/filtering/common.rs:539-543`：`EventData::CardUsed`
+- `crates/engine-native-content/src/content/host/filtering/common.rs:539-543`：`EventData::CardUsed`
   且 `targets` 含 owner、牌在 `card_natures` 表内、owner 有 `wunature`；
-- `crates/engine-native/src/vocabulary/host/metadata/common.rs:619-625`：`EventKind::CardUsed` /
+- `crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs:619-625`：`EventKind::CardUsed` /
   `optional:false`（锁定）；
-- `crates/engine-native/src/content/host/step/skills_status.rs:680-706`：`KE`/`SHENG` 查表，
+- `crates/engine-native-content/src/content/host/step/skills_status.rs:680-706`：`KE`/`SHENG` 查表，
   被克→`hand.first()` 弃置、被生→`draw_cards(1)`；
-- `crates/engine-native/src/vocabulary/host/constants.rs:4-8`：
+- `crates/engine-native-kernel/src/vocabulary/host/constants.rs:4-8`：
   `KE=[1,4,3,0,2]`（金克木/木克土/水克火/火克金/土克水）、
   `SHENG=[2,3,1,4,0]`（金生水/木生火/水生木/火生土/土生金），下标 0..4 = 金/木/水/火/土；
 - `crates/engine-native/src/engine/construction.rs:437-470`：初始化钩子

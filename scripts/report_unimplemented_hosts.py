@@ -22,7 +22,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates/engine-native/src/content/host"
+HOST = ROOT / "crates/engine-native-content/src/content/host"
 NONE_RE = re.compile(r"HostBehavior::(\w+)\s*=>\s*\(None,\s*None\)")
 KEY_RE = re.compile(r'HostBehavior::(\w+)\s*=>\s*"host:([^"]+)"')
 PURE = 11
@@ -32,8 +32,8 @@ TBD = 13
 def analyze() -> tuple[list[tuple[str, str, int, str]], Counter]:
     factory = (HOST / "factory.rs").read_text(encoding="utf-8")
     none_beh = sorted(set(NONE_RE.findall(factory)))
-    texts = {f: f.read_text(encoding="utf-8") for f in list(HOST.rglob("*.rs")) + list((HOST.parents[1] / "vocabulary/host").rglob("*.rs"))}
-    keys = {b: k for b, k in KEY_RE.findall((HOST.parents[1] / "vocabulary/host/keys.rs").read_text(encoding="utf-8"))}
+    texts = {f: f.read_text(encoding="utf-8") for f in list(HOST.rglob("*.rs")) + list((ROOT / "crates/engine-native-kernel/src/vocabulary/host").rglob("*.rs"))}
+    keys = {b: k for b, k in KEY_RE.findall((ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs").read_text(encoding="utf-8"))}
 
     rows: list[tuple[str, str, int, str]] = []
     dist: Counter = Counter()

@@ -1,0 +1,15 @@
+子包                          卡数
+shahai-swd-upstream-noname    90
+shahai-gujian-upstream-noname    40
+shahai-yunchou-upstream-noname    23
+shahai-hearth-upstream-noname    17
+shahai-gwent-upstream-noname    21
+shahai-mtg-upstream-noname    10
+合计                         201
+
+唯一 kind             128
+catalog 已登记         128  (100.0%)
+catalog 之外有源码引用   128  (100.0%)
+完全无引用               0
+
+⚠ 「有引用」≠「行为正确」；效果正确性需逐张读效果步（本脚本不判断）。

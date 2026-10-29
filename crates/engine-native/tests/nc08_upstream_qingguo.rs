@@ -38,7 +38,7 @@ use engine_native::Engine;
 fn upstream_qingguo_in_shan_options() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha/resume.rs"
+        "/../engine-native-kernel/src/kernel/sha/resume.rs"
     ))
     .expect("读 sha/step");
     // 全文件检查（同文件有多个候选构造点，固定窗口会命中其它处）
@@ -69,7 +69,7 @@ fn upstream_qingguo_in_shan_options() {
 fn upstream_qingguo_zone_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha/resume.rs"
+        "/../engine-native-kernel/src/kernel/sha/resume.rs"
     ))
     .expect("读 sha/step");
     // 定位到含 `qingguo && black` 的候选构造点（其上方即为 `.hand` 遍历）

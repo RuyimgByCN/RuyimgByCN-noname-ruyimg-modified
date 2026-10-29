@@ -3,7 +3,7 @@
 - 日期：2026-10-19
 - 工作包：**NC08 / NC09 / NC12**（跨工作包）
 - 规则版本 v322（工作树）/ 存档格式 v105
-- 背景：`crates/engine-native/src/content/host/**`（含 `step/*.rs`）与 `crates/engine-native/src/kernel/**`
+- 背景：`crates/engine-native-content/src/content/host/**`（含 `step/*.rs`）与 `crates/engine-native-kernel/src/kernel/**`
   （含 `events.rs`、`equipment.rs`）**均为未跟踪文件**（他人 host.rs→host/ 模块拆分的在途成果）。
   按「只 `git add` 自己改动的文件」，本 agent **不把他人未提交改动并入自己的提交**，因此下列修复
   **已完成定位与修法设计，但未实施**；待拆分落定（或由拆分作者）后按本文逐条应用即可。
@@ -88,7 +88,7 @@ if !hand.is_empty() {
 ## 5 集智（`jizhi`）覆盖范围差异（NC08 样本 19 新发现，2026-10-19）
 
 **症状（规则损失）**：上游标准面 `jizhi` 的 filter 为 `get.type(event.card) === "trick"`（**任意锦囊**），
-而原生 `crates/engine-native/src/content/standard/skills/ji_zhi.rs` 的 filter **只列 5 种**：
+而原生 `crates/engine-native-content/src/content/standard/skills/ji_zhi.rs` 的 filter **只列 5 种**：
 `SavageAttack | ArcheryAttack | Duel | Chain | Nullify` → 使用【无中生有】【桃园结义】等**不触发**集智
 （实测：【无中生有】手牌净 +1，而按上游应为 +2）。
 
@@ -106,7 +106,7 @@ if !hand.is_empty() {
 
 **症状（规则损失）**：标准面 `ganglie` 在判定**非红桃**后，先让**伤害来源二选一**：
 `source.chooseToDiscard({selectCard: 2})`（**弃置两张手牌**），未弃（或手牌不足 2）才 `source.damage()`；
-而原生 `crates/engine-native/src/content/standard/skills/gang_lie.rs` 判定非红桃后**直接**对来源造成 1 点伤害，
+而原生 `crates/engine-native-content/src/content/standard/skills/gang_lie.rs` 判定非红桃后**直接**对来源造成 1 点伤害，
 **没有**弃牌询问分支。
 
 **修法**：判定成功后插入「来源手牌 ≥ 2 → `WaitChoice{SelectCards, min:2, max:2}` 弃两张；否则/未选 →
@@ -161,7 +161,7 @@ if !hand.is_empty() {
 ## 10 急救（`jijiu`）缺回合外限制（NC08 样本 30 新发现，2026-10-19）
 
 **症状（原生更宽松）**：上游 `jijiu` 的 `viewAsFilter` 含 `player !== _status.currentPhase`
-（**回合外**）；原生 `crates/engine-native/src/snap/asks.rs` 的 `is_tao_like` 只判花色为红
+（**回合外**）；原生 `crates/engine-native-kernel/src/snap/asks.rs` 的 `is_tao_like` 只判花色为红
 → **自己回合内濒死救援时也可用红牌当桃**（上游不允许）。
 
 **修法**：`is_tao_like` 的急救分支加入「响应者不是当前回合角色」判定（需把 `turn.current` 或
@@ -228,7 +228,7 @@ if !core.player(core.turn.current).hand.contains(&card) {
 ## 14 连营（`lianying`）阈值 off-by-one（NC08 样本 37 新发现，2026-10-19）
 
 **症状（原生更宽松）**：上游 `lianying` 要求**失去后手牌为空**（`if (player.hasCards("h")) return false`）；
-原生 `crates/engine-native/src/content/standard/skills/lian_ying.rs` 的 filter 为
+原生 `crates/engine-native-content/src/content/standard/skills/lian_ying.rs` 的 filter 为
 `if ctx.state.player(owner).hand.len() > 1 { return false }`，而该判定发生在**牌已离手之后**
 → **手牌剩 1 张时仍触发**（实测出现 `trigger_confirm`，上游不应触发）。
 
@@ -241,7 +241,7 @@ if !core.player(core.turn.current).hand.contains(&card) {
 ## 15 突袭（`tuxi`）无条件弃 2 张手牌（NC08 样本 39 定位，2026-10-19）
 
 **症状**：上游 `tuxi` 用 `trigger.changeToZero()` **取消本次摸牌**（不摸也不弃）+ `gainMultiple`
-取 1–2 张 → 净手牌应为 **+取牌数**；原生 `crates/engine-native/src/content/standard/skills/tu_xi.rs`
+取 1–2 张 → 净手牌应为 **+取牌数**；原生 `crates/engine-native-content/src/content/standard/skills/tu_xi.rs`
 的 `Read` 阶段**无条件 `hand.pop()` 弃置 2 张**（注释称「弃置本阶段固定摸到的牌」）→ 若固定摸牌
 **尚未发生**，就弃掉玩家**原有手牌** → 实测净变化 **0**（取 2 − 弃 2）。
 
@@ -313,7 +313,7 @@ if !core.player(core.turn.current).hand.contains(&card) {
 ### 原始登记（保留）
 
 **症状（原生更宽松）**：上游 `hujia` 的 `filter` 要求 `player.hasZhuSkill("hujia")`（**主公技旗标**，
-仅身份局成立）；原生 `crates/engine-native/src/kernel/sha.rs` 的 `hujia_active` 用
+仅身份局成立）；原生 `crates/engine-native-kernel/src/kernel/sha.rs` 的 `hujia_active` 用
 `ctx.core.is_lord(self.target)`，而 `state.rs` 的 `is_lord` 在**非身份局返回 `true`**
 （`match self.identity_roles() { Some(roles) => …, None => true }`）→ **原型/单挑模式下护驾可发动**。
 
@@ -386,7 +386,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **症状**：上游 `wushuang1` 的 filter 为
 `event.card.name === "sha" && !event.getParent()?.directHit.includes(event.target)`
 → 目标被标记为**必中**（`directHit`）时，无双**不**要求两张【闪】；
-原生 `crates/engine-native/src/kernel/sha.rs` 的 `source_has_wushuang` **只判来源是否持技**
+原生 `crates/engine-native-kernel/src/kernel/sha.rs` 的 `source_has_wushuang` **只判来源是否持技**
 → **必中目标仍需两张【闪】**（与上游不符）。
 
 **修法**：`sha` 结算机器在判定无双前检查本次【杀】对**该目标**是否 `directHit`（必中），
@@ -491,7 +491,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ## 25 仁德（`rende`）文件头注释滞后（样本 57 发现，2026-10-19）
 
-**症状（文档不一致，非行为缺陷）**：`crates/engine-native/src/content/standard/skills/rende.rs`
+**症状（文档不一致，非行为缺陷）**：`crates/engine-native-content/src/content/standard/skills/rende.rs`
 的**文件头注释**写「出牌阶段**限一次**的主动技」，但**注册面**
 （`standard_skills.rs:193`，`limits: SkillLimits::default()` + 注释「出牌阶段**可多次发动**（上游
 `enable: phaseUse` 无次数限制）；**累计给牌数入回合状态（跨过 2 张回复 1 点）**」）
@@ -507,7 +507,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ## 26 耀武（`yaowu`）注释所称「差异」**不成立**（样本 60 核对，2026-10-19）
 
-**症状（注释滞后，与第 25 项仁德同类）**：`crates/engine-native/src/content/standard/skills/yao_wu.rs`
+**症状（注释滞后，与第 25 项仁德同类）**：`crates/engine-native-content/src/content/standard/skills/yao_wu.rs`
 的头注释写「**登记差异**：上游 `chooseDrawRecover` 由 AI/玩家确认，原生为**强制二选**」。
 
 **核对结论（逐字读上游实现）**：`noname/library/element/player.js:6968` 的 `chooseDrawRecover`：
@@ -542,7 +542,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ### 27b 急援的濒死臂多一层 `dying` 守卫（样本 63 行为面新发现，2026-10-19）
 
-**症状（规则损失）**：`crates/engine-native/src/content/standard/skills/ji_yuan.rs` 的 `step` 为
+**症状（规则损失）**：`crates/engine-native-content/src/content/standard/skills/ji_yuan.rs` 的 `step` 为
 `if ctx.core.player(player).dying { ctx.draw_cards(player, 1) }` —— **额外要求 `dying == true`**；
 上游 `content` 是 `await event.targets[0].draw()`（**无条件**）。实测（真实伤害打至 hp=0）：
 `询问=["trigger_confirm","discard_to_limit"]`、`2 号 hp=0 dying=false alive=false`、**手牌未增加**
@@ -554,7 +554,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ## 28 激将（`jijiang`）**在原生侧不可达**（样本 58 行为面根因，2026-10-19）
 
-**症状（规则损失）**：`crates/engine-native/src/content/standard/skills/jijiang.rs` 实现了 `activate`
+**症状（规则损失）**：`crates/engine-native-content/src/content/standard/skills/jijiang.rs` 实现了 `activate`
 与 `HelperAsk` 机器，但**全库检索 `JI_JIANG` 仅命中其自身定义**（`standard_skills.rs` 的注册、
 `names.rs` 的名称、`generals.rs` 的武将表）——**没有任何调用点**（对照：`HU_JIA` 在
 `kernel/sha.rs`、`JIU_YUAN` 在 `kernel/dying.rs`、`JIE_YIN` 经 `ActivateSkill` 均可达）
@@ -1031,7 +1031,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 ## 48 **空选应答导致引擎 panic**（健壮性，2026-10-19 受理普查发现）
 
 **症状（健壮性/校验缺失）**：当一次 `min ≥ 1` 的询问被以**空选择**应答时，宿主机器在恢复后调用
-`Machine::answer_first()`（`crates/engine-native/src/machine.rs:314`）会命中
+`Machine::answer_first()`（`crates/engine-native-kernel/src/machine.rs:314`）会命中
 `expect("non-empty selection")` ⇒ **进程 panic**，而**不是**把该应答作为**非法输入拒绝**。
 
 **复现路径（已核实）**：受理面普查（台账第 127 行）首轮**未应答**中途询问（测试助手 `drain()`
@@ -1156,7 +1156,7 @@ let shengke: Vec<SkillDefId> = e.catalog.skills.iter().enumerate()
 ⇒ **源码层面「属性 + 授技 + 过滤」三者齐备**，而**行为面未见效果** ⇒
 剩余排查**必须在运行时插桩**（在 `ShengkeCheck` 分支加日志/断点，确认机器是否被驱动、`cnat/onat` 实值）。
 
-**阻塞说明（如实）**：插桩需改 `crates/engine-native/src/content/host/**`，该目录在当前工作区**未跟踪**
+**阻塞说明（如实）**：插桩需改 `crates/engine-native-content/src/content/host/**`，该目录在当前工作区**未跟踪**
 （并行拆分未提交）⇒ **本项与核心修复清单同因受阻**，**保持待办**，不在未跟踪文件上改动。
 
 **修法（先诊断后修）**：①确认该卡是否声明 `ShengkeCheck`；②改用**自身无弃/摸效果**的有属性牌；
@@ -1465,7 +1465,7 @@ if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
 ⇒ **与行为面「未触发」矛盾** ⇒ **必须运行时插桩**（在 `filter_behavior` 或 `run_queued_trigger` 加日志，
 打印 `event` 与各条件实值）。
 
-**阻塞**：插桩需改 `crates/engine-native/src/content/host/**`（**未跟踪**）⇒ **与核心修复清单同因受阻**。
+**阻塞**：插桩需改 `crates/engine-native-content/src/content/host/**`（**未跟踪**）⇒ **与核心修复清单同因受阻**。
 
 ## ✅ **根因确定（同日）**：`card_kind_host_skills` **无生产调用方**
 
@@ -1650,7 +1650,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 
 **⚠ 修法可行性更正（同日）**：仅补 `cards[].skills` **不足以生效**——技能声明进入目录后，
 仍需**授予**才有实例；而**授予侧**（`kernel/equipment.rs:6 grant_equip_skills`、`construction.rs` 的授予清单）
-同样位于**未跟踪**目录（`git ls-files crates/engine-native/src/kernel/` = **0**）⇒ **本项仍受阻**。
+同样位于**未跟踪**目录（`git ls-files crates/engine-native-kernel/src/kernel/` = **0**）⇒ **本项仍受阻**。
 **可做的部分已完成（同日）**：`cards[].skills` 的**装载器支持**已落地（`content-native-loader`，**已跟踪**），4 项验收全过——正向声明/去重/未知键拒绝/真实包无重名 214 项（见[装载支持证据](../2026-10-19-loader-card-skills/README.md)）；**包数据暂不改**（未授予时不产生行为，且会扰动目录计数）；**授予**待解阻后再接。
 
 **原计划的完整修法**：

@@ -78,7 +78,7 @@ fn longxue_pack_mapping() {
 fn native_matches_its_documented_upstream_semantics() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/../engine-native-kernel/src/state.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub mbqianlong_marks").expect("字段");
@@ -89,7 +89,7 @@ fn native_matches_its_documented_upstream_semantics() {
     );
     let beh = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/vocabulary/host/behavior.rs"
+        "/../engine-native-kernel/src/vocabulary/host/behavior.rs"
     ))
     .expect("读 behavior");
     let idx = beh.find("潜龙·道心值（tag 469").expect("潜龙注释");

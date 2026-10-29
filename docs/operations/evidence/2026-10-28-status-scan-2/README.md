@@ -4,7 +4,7 @@
 
 ## 1. 基准
 
-- HEAD：`d7b46ea6`（[source-head.txt](source-head.txt)）；规则 v325（`crates/engine-native/src/content/standard.rs:136`）、存档 v105、全局原生 ABI 753（`crates/engine-api/src/version.rs:17`）。
+- HEAD：`d7b46ea6`（[source-head.txt](source-head.txt)）；规则 v325（`crates/engine-native-content/src/content/standard.rs:136`）、存档 v105、全局原生 ABI 753（`crates/engine-api/src/version.rs:17`）。
 - 扫描开始时工作树干净（[status-before.txt](status-before.txt)），磁盘余量 177 GB（[disk.txt](disk.txt)），没有其他 cargo、rustc 或测试进程在运行。
 - 上一基准 `0a0eba8c` 之后入库五批，均有证据目录：
 

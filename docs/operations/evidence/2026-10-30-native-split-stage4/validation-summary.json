@@ -1,0 +1,35 @@
+{
+  "head": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+  "native": {
+    "passed": 1644,
+    "failed": 0,
+    "ignored": 73
+  },
+  "dependents": {
+    "passed": 465,
+    "failed": 0,
+    "ignored": 0
+  },
+  "test_names": 1717,
+  "facade_unit_tests": 10,
+  "content_unit_tests": 4,
+  "kernel_unit_tests": 3,
+  "layering_tests": 7,
+  "source_line_unit_tests": 2,
+  "effective_line_unit_tests": 1,
+  "preflight_checks": 21,
+  "source_caps_files": 8924,
+  "all_target_check_exit": 0,
+  "gate1b_exit": 0,
+  "preflight_exit": 0,
+  "independent_review": "pending parent reviewer",
+  "deferred": [
+    "final workspace",
+    "conformance",
+    "new WASM build",
+    "browser/product",
+    "physical devices"
+  ],
+  "commands_recorded": 26,
+  "no_staged_files": true
+}

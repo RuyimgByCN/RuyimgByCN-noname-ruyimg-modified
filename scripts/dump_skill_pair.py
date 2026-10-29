@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+HOST = ROOT / "crates" / "engine-native-content" / "src" / "content" / "host"
 
 
 def _load_phase():

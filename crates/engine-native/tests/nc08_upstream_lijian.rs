@@ -221,7 +221,7 @@ fn upstream_lijian_targets_must_be_male() {
 fn upstream_lijian_zone_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/skills/li_jian.rs"
+        "/../engine-native-content/src/content/standard/skills/li_jian.rs"
     ))
     .expect("读离间源码");
     let idx = src.find("fn activate").expect("activate");

@@ -133,7 +133,7 @@ fn upstream_zonghuo_discards_one_without_asking() {
 fn upstream_zonghuo_source_matches() {
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = step.find("YunchouZonghuo =>").expect("纵火分支");

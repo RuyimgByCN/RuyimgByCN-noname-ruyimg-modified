@@ -6,7 +6,7 @@
 
 ## 交付物
 
-- **桥模块 `crates/engine-native/src/rvm_bridge.rs`**：
+- **桥模块 `crates/engine-native-kernel/src/rvm_bridge.rs`**：
   - `VmSkillDecl`（extension.rs）——扩展包数据声明 VM 技能（name + BytecodeModule + TriggerMeta），经 `standard_catalog_with_extensions` 合并为目录 `SkillDef`（名称 intern 进 T6② 全局符号表，重复名拒绝）。
   - `VmSkillBehavior`/`VmMachine`——触发时以内核状态为只读查询面执行字节码；**两层提交协议**（原型同款）：排队效果仅 `Halted` 落账（`RecoverHp`/`DrawCards`/`DealDamage`[含 LoseHp 通道/nature 映射]），`Paused`（选择挂起，增量 2）与 `Err`（fuel 耗尽/trap）排队效果整批丢弃——半次效果不落账。
   - `EngineVmHost`——查询映射 `Hp`/`MaxHp`/`Distance`（computed_distance）；未映射查询/效果在 emit/query 时即 `InvalidRequest`（模块 trap → 回滚）。

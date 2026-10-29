@@ -28,5 +28,5 @@
 ## 3 变更与回归
 
 - `crates/content-native-loader/src/lib.rs`：`phase_begin`→PhaseBegin@Judge（注释含旧线依据与首回合差异）、`sha_dodged`→ShaDodged。
-- `crates/engine-native/src/rvm_bridge.rs`：`trigger_ctx_of` 新增 `ShaDodged` 臂。
+- `crates/engine-native-kernel/src/rvm_bridge.rs`：`trigger_ctx_of` 新增 `ShaDodged` 臂。
 - 回归（[b2 汇总](../2026-10-26-pa12-dsl-native-prototype/b2-regressions.txt)）：engine-native、content-native-loader、engine-native-wasm、game-server、engine-core 全量 + `cargo check --workspace --all-targets` + 前端 test/typecheck + 行数/链接/ADR 门禁；盘点重跑：近似可直接原生 1,054→**1,056**（本批主要是**语义修正**，解锁量小）。

@@ -160,7 +160,7 @@ NATIVE_EVENT_MAP = {
 def native_metas() -> dict[str, dict]:
     """按 HostBehavior 切块归属（整文件正则会跨技能）。"""
     out: dict[str, dict] = {}
-    for f in sorted((ROOT / "crates/engine-native/src/vocabulary/host/metadata").glob("*.rs")):
+    for f in sorted((ROOT / "crates/engine-native-kernel/src/vocabulary/host/metadata").glob("*.rs")):
         t = f.read_text(encoding="utf-8")
         marks = [m.start() for m in re.finditer(r"HostBehavior::(\w+)\s*=>", t)]
         for i, st in enumerate(marks):
@@ -178,7 +178,7 @@ def native_metas() -> dict[str, dict]:
 def native_blocks() -> dict[str, str]:
     out: dict[str, str] = {}
     for sub in ("filtering", "step", "activation"):
-        for f in sorted((ROOT / "crates/engine-native/src/content/host" / sub).glob("*.rs")):
+        for f in sorted((ROOT / "crates/engine-native-content/src/content/host" / sub).glob("*.rs")):
             t = f.read_text(encoding="utf-8")
             for m in re.finditer(r"HostBehavior::(\w+)\s*=>", t):
                 nxt = re.search(r"HostBehavior::\w+\s*=>", t[m.end() :])
@@ -188,7 +188,7 @@ def native_blocks() -> dict[str, str]:
 
 
 def host_keys() -> dict[str, str]:
-    t = (ROOT / "crates/engine-native/src/vocabulary/host/keys.rs").read_text(encoding="utf-8")
+    t = (ROOT / "crates/engine-native-kernel/src/vocabulary/host/keys.rs").read_text(encoding="utf-8")
     return {
         beh: name
         for beh, _k, name in re.findall(r'HostBehavior::(\w+)\s*=>\s*"(host:([a-z0-9_]+))"', t)
@@ -196,7 +196,7 @@ def host_keys() -> dict[str, str]:
 
 
 def once_allowlist() -> set[str]:
-    t = (ROOT / "crates/engine-native/src/content/host.rs").read_text(encoding="utf-8")
+    t = (ROOT / "crates/engine-native-content/src/content/host.rs").read_text(encoding="utf-8")
     m = re.search(r"let limits = match behavior \{(.*?)\n    \};", t, re.S)
     return set(re.findall(r"HostBehavior::(\w+)", m.group(1))) if m else set()
 

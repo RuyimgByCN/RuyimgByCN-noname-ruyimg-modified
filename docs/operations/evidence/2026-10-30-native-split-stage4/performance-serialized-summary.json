@@ -1,0 +1,58 @@
+{
+  "measurements": {
+    "before-cold": {
+      "log": "before-cold-serialized-1.log",
+      "real": 28.68,
+      "user": 79.71,
+      "sys": 7.7,
+      "locked_seconds": 28.693893208008376,
+      "compiled_native_packages": [
+        "engine-native"
+      ],
+      "observed_foreign_compiler_processes": []
+    },
+    "before-warm": {
+      "log": "before-warm-serialized-1.log",
+      "real": 4.48,
+      "user": 11.63,
+      "sys": 5.85,
+      "locked_seconds": 4.494814458012115,
+      "compiled_native_packages": [
+        "engine-native"
+      ],
+      "observed_foreign_compiler_processes": []
+    },
+    "after-cold": {
+      "log": "after-cold-serialized-1.log",
+      "real": 25.24,
+      "user": 76.69,
+      "sys": 8.12,
+      "locked_seconds": 25.248189958001603,
+      "compiled_native_packages": [
+        "engine-native-kernel",
+        "engine-native-content",
+        "engine-native"
+      ],
+      "observed_foreign_compiler_processes": []
+    },
+    "after-warm": {
+      "log": "after-warm-serialized-1.log",
+      "real": 2.79,
+      "user": 10.76,
+      "sys": 6.03,
+      "locked_seconds": 2.8045265410037246,
+      "compiled_native_packages": [
+        "engine-native-content",
+        "engine-native"
+      ],
+      "observed_foreign_compiler_processes": []
+    }
+  },
+  "process_poll_seconds": 0.25,
+  "idle_window_seconds": 3,
+  "source_restored": true,
+  "settings": "Identical device/toolchain/profile/environment/jobs8/incremental1 and shrink_to_fit function-body edit to exploratory runs; serialized commands share /tmp/noname-phase4-heavy-command.lock; locked_seconds excludes lock wait.",
+  "caveat": "One sample per condition, no observed overlapping Cargo/rustc/clippy during selected reruns; not a claim of stable percentage speedup.",
+  "disk_after": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 911302220  31206960    97% 6026735 312069600    2%   /System/Volumes/Data\n",
+  "private_target_sizes_after": "2403772\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before\n2287224\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after\n"
+}

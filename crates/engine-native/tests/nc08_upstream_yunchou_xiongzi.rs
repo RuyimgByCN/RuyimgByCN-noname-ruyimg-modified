@@ -96,7 +96,7 @@ fn upstream_xiongzi_draw_bonus_with_floor() {
 fn upstream_xiongzi_source_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = src.find("YunchouXiongzi =>").expect("雄姿分支");

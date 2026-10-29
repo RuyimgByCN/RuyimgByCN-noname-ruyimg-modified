@@ -4,7 +4,7 @@
 The card JSON only carries identity (`name/kind/suit/rank`) — no `effect` field.
 Effects dispatch on `kind`, so coverage has three layers:
 
-1. **registered** — `crates/engine-native/src/catalog.rs` maps `CardKind::X => "kind"`
+1. **registered** — `crates/engine-native-kernel/src/catalog.rs` maps `CardKind::X => "kind"`
 2. **wired** — the kind (as `CardKind::X` variant *or* bare `kind` literal) appears in
    some other `crates/**/*.rs`
 3. **behaviour correct** — NOT measurable here; needs a per-card read of the effect step
@@ -28,9 +28,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CATALOG = ROOT / "crates" / "engine-native" / "src" / "catalog.rs"
+CATALOG = ROOT / "crates" / "engine-native-kernel" / "src" / "catalog.rs"
 # catalog 模块的子文件（`impl CardKind` 等已拆到 catalog/ 下）一并视为目录本身。
-CATALOG_DIR = ROOT / "crates" / "engine-native" / "src" / "catalog"
+CATALOG_DIR = ROOT / "crates" / "engine-native-kernel" / "src" / "catalog"
 
 
 def catalog_files() -> list[Path]:

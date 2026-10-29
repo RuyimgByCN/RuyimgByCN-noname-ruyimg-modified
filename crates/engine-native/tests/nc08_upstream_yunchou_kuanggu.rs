@@ -113,7 +113,7 @@ fn upstream_kuanggu_three_branches() {
 fn upstream_kuanggu_source_matches() {
     let f = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/filtering/common.rs"
+        "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读 filtering/common");
     let idx = f.find("HostBehavior::YunchouDiykuanggu =>").expect("狂骨变体过滤");
@@ -126,7 +126,7 @@ fn upstream_kuanggu_source_matches() {
     );
     let step = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = step.find("YunchouDiykuanggu =>").expect("狂骨变体效果");

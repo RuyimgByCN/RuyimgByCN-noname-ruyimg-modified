@@ -133,7 +133,7 @@ fn upstream_mujiaren_trades_nonbasic_for_jiguan() {
 fn upstream_mujiaren_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/swd_card_effects.rs"
+        "/../engine-native-content/src/content/host/step/swd_card_effects.rs"
     ))
     .expect("读 swd_card_effects");
     let idx = src.find("HostBehavior::SwdMujiarenCard =>").expect("木甲人分支");

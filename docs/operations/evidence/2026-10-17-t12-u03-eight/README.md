@@ -6,7 +6,7 @@
 
 ## 代码
 
-倍率在 `crates/engine-native/src/content/pile.rs` 的 `scale_plan`。`getn = round(count * factor)`，`num` 为各 `getn` 之和，`dn = num * (deck_len - total) / (total - num)`，正无穷或大于 1000 时截到 1000；`dn > 0` 时每个花色桶 `n = round(dn * getn / num)`，零张的桶不出现。缺任一倍率或倍率非有限数时为 `Unconfigured`，不追加。负倍率由 `parse_pile_factors` 拒绝。点数是调用方给出的 1..=13 序列，不是上游 `Math.random`。`extension_pack_from_pile` 的 113 张比例牌仍是 ADR 0776 的目录材料；缺配置时上游追加零张，二者不是同一件事。
+倍率在 `crates/engine-native-content/src/content/pile.rs` 的 `scale_plan`。`getn = round(count * factor)`，`num` 为各 `getn` 之和，`dn = num * (deck_len - total) / (total - num)`，正无穷或大于 1000 时截到 1000；`dn > 0` 时每个花色桶 `n = round(dn * getn / num)`，零张的桶不出现。缺任一倍率或倍率非有限数时为 `Unconfigured`，不追加。负倍率由 `parse_pile_factors` 拒绝。点数是调用方给出的 1..=13 序列，不是上游 `Math.random`。`extension_pack_from_pile` 的 113 张比例牌仍是 ADR 0776 的目录材料；缺配置时上游追加零张，二者不是同一件事。
 
 倍率解析在 `crates/content-native-loader/src/lib.rs` 的 `parse_pile_factors`。允许的键是 `guohe`、`huosha`、`jiu`、`leisha`、`nanman`、`sha`、`shan`、`shunshou`、`tao`、`tiesuo`、`wanjian`、`wuxie`。缺键留给 `scale_plan` 判为未配置。
 

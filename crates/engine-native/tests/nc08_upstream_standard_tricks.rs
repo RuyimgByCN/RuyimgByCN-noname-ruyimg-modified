@@ -156,7 +156,7 @@ fn upstream_taoyuan_excludes_owner_and_skips_healthy() {
 fn upstream_taoyuan_order_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/tricks.rs"
+        "/../engine-native-kernel/src/kernel/tricks.rs"
     ))
     .expect("读 tricks 源码");
     let idx = src.find("TaoyuanMachine").expect("TaoyuanMachine");

@@ -143,7 +143,7 @@ fn upstream_tieji_differences_are_fixed() {
     );
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha/step.rs"
+        "/../engine-native-kernel/src/kernel/sha/step.rs"
     ))
     .expect("读 sha/step");
     let idx = src.find("铁骑（马超）").expect("原生铁骑注释");

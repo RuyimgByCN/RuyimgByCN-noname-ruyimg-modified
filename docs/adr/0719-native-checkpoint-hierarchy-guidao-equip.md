@@ -1,8 +1,8 @@
 # ADR 0719：检查点再嵌套拒绝与装备改判切片（验收未完成）
 
 - 状态：第二十一批切片已落地；2026-09-20 独立实跑 **118 passed / 0 failed**，装备仍有反例。
-- 关联：[engine](../../crates/engine-native/src/engine.rs)、[snap](../../crates/engine-native/src/snap.rs)、
-  [kernel](../../crates/engine-native/src/kernel.rs)、[当前进度](../architecture/native-progress.md)。
+- 关联：[engine](../../crates/engine-native/src/engine.rs)、[snap](../../crates/engine-native-kernel/src/snap.rs)、
+  [kernel](../../crates/engine-native-kernel/src/kernel.rs)、[当前进度](../architecture/native-progress.md)。
 - 前序：[0715](0715-native-choice-binding-validation.md)、[0716](0716-native-judgement-events-regressions.md)、
   [0717](0717-native-runner-baseline.md)、[0718](0718-native-neijiang-pure-command.md)。
 

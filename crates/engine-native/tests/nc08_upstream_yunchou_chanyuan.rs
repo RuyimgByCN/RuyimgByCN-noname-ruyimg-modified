@@ -90,7 +90,7 @@ fn upstream_chanyuan_killer_loses_max_hp() {
 fn upstream_chanyuan_source_matches() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/yunchou.rs"
+        "/../engine-native-content/src/content/host/step/yunchou.rs"
     ))
     .expect("读 yunchou");
     let idx = src.find("YunchouDiychanyuan =>").expect("蝉缘分支");

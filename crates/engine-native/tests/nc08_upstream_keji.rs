@@ -171,7 +171,7 @@ fn upstream_keji_after_using_sha_must_discard() {
 fn upstream_keji_respond_history_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/intrinsic.rs"
+        "/../engine-native-kernel/src/kernel/intrinsic.rs"
     ))
     .expect("读 intrinsic 源码");
     let idx = src.find("克己（吕蒙）").expect("克己分支");
