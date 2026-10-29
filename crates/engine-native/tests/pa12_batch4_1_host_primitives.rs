@@ -293,7 +293,7 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
     e.debug_place(1, "sha");
     // 推进到 1 号回合摸牌窗口
     let mut confirmed = false;
-    let mut e2e_hand_at_confirm = std::cell::Cell::new(0usize);
+    let e2e_hand_at_confirm = std::cell::Cell::new(0usize);
     for _ in 0..400 {
         if e.outcome().is_some() { break; }
         if let Some(c) = e.open_choice().cloned() {
@@ -432,7 +432,7 @@ fn pa12_batch5_4_dichou_predicates() {
     let sha = e.debug_place(0, "sha");
     submit(&mut e, 0, GameAction::PlayCard { card: sha, targets: vec![1] });
     drain_plain(&mut e);
-    eprintln!("after p0 sha→p1: marks={:?} vm_aux_all={:?}", e.state_core().vm_aux.marks.iter().filter(|((p,i),_)| *i==MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
+    eprintln!("after p0 sha→p1: marks={:?} vm_aux_all={:?}", e.state_core().vm_aux.marks.iter().filter(|((_, i), _)| *i == MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
     assert_eq!(
         e.state_core().vm_aux.marks.get(&(0, MARK)).copied().unwrap_or(0),
         1,

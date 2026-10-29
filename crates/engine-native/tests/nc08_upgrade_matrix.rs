@@ -77,7 +77,7 @@ fn check(pkg: &str) -> Option<String> {
         eprintln!("NOTE 升级矩阵：{pkg} 无法装载 —— 跳过");
         return None;
     };
-    let mut e = engine_native::Engine::new_with_extensions(59, 4, &[&v1]).expect("v1 建局");
+    let e = engine_native::Engine::new_with_extensions(59, 4, &[&v1]).expect("v1 建局");
     let snap = e.save();
     let before = e.state_hash();
     let mut v2 = load(pkg).expect("v2 可装载");

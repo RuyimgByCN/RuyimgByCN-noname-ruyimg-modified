@@ -1,7 +1,6 @@
 use super::*;
 use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_756;
 use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_757;
-use crate::abi_versions::ADDITIVE_RULE_VM_ABI_VERSION_755;
 
 impl Assembler {
     pub(super) fn emit_effect_set_draw_phase_from_bottom(

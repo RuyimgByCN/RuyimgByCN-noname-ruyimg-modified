@@ -34,7 +34,7 @@
 //! 未覆盖（登记）：上游**后续分支**（未弃同花色时的雷伤口径）的逐字确认。
 
 mod nc08_common;
-use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{Engine, GameAction, GameCommand, Phase};
 use nc08_common::{advance_to_phase, drain, next_dedup};
 
 /// 载入 **hearth 包**建局。

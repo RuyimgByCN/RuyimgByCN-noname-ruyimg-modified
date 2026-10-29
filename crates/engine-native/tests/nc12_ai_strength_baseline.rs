@@ -9,7 +9,7 @@
 //! 内核悬空引用故障（`Plan.sim_faults` / `legal_actions::probe_faults()`）则**失败**并打印。
 
 use engine_native::ai::BoundedPlanner;
-use engine_native::{CommandOutcome, Engine, GameCommand};
+use engine_native::{Engine, GameCommand};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);

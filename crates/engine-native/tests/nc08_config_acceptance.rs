@@ -56,7 +56,7 @@ fn config_enabled_flag_gates_cards() {
         .expect("swd 包");
     let json = read(&on_path);
     // 开：目录含该包的卡
-    let mut on = content_native_loader::bridge_pack(&json).expect("桥接").pack;
+    let on = content_native_loader::bridge_pack(&json).expect("桥接").pack;
     let on_cards = on.cards.len();
     // 关：置 enabled=false 后建局，目录不应含该包卡
     let mut off = content_native_loader::bridge_pack(&json).expect("桥接").pack;

@@ -27,7 +27,7 @@
 //! **不预设结论**：panic 则记录为**缺陷**（第 48 项）；否则记录为**普查夹具问题**（更正普查口径）。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use nc08_common::{advance_to_phase, drain, next_dedup};
 
 fn yunchou_engine(seed: u64) -> Engine {

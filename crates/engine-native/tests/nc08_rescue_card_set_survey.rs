@@ -9,7 +9,7 @@
 //! **口径**：本普查只记录「**是否获提供**」这一事实；**是否应当**由上游语义判定（登记/修复项）。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use nc08_common::{advance_to_phase, drain, next_dedup};
 
 fn pack_engine(pkg: &str, seed: u64) -> Engine {

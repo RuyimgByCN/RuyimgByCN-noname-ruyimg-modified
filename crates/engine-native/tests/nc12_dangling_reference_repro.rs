@@ -37,7 +37,7 @@ fn dump(e: &Engine, tag: &str) {
         e.turn().current,
         res.stack.len(),
         res.parks.len(),
-        e.open_choice().map(|c| (c.id, c.spec.prompt.clone())),
+        e.open_choice().map(|c| (c.id, c.spec.prompt)),
         e.state_core().table,
     );
     for (i, p) in e.state_core().players.iter().enumerate() {

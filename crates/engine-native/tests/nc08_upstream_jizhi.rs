@@ -118,7 +118,7 @@ fn upstream_jizhi_draws_on_covered_trick() {
     assert!(
         e.open_choice().is_none(),
         "集智为锁定技，不应出现确认门：{:?}",
-        e.open_choice().map(|c| c.spec.prompt.clone())
+        e.open_choice().map(|c| c.spec.prompt)
     );
     drain(&mut e);
     assert!(

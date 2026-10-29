@@ -96,7 +96,7 @@ fn identity_version_gate_over_all_packages() {
             init_hook: engine_native::content::extension::InitHook::None,
         };
 
-        let mut e = match engine_native::Engine::new_with_extensions(71, 4, &[&pack_v1]) {
+        let e = match engine_native::Engine::new_with_extensions(71, 4, &[&pack_v1]) {
             Ok(e) => e,
             Err(err) => {
                 failures.push(format!("{dir_name}: 建局失败 {err:?}"));

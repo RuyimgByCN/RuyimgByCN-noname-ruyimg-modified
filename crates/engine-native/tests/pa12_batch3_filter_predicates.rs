@@ -219,7 +219,6 @@ fn pa12_batch3_owner_alive_not_target() {
     e.debug_grant(1, &name);
     // 他人（0 号）结束阶段：确认 → 摸 1
     advance_to(&mut e, 0, Phase::End);
-    let base = hand_len(&e, 1);
     let mut confirmed = 0;
     for _ in 0..120 {
         if e.outcome().is_some() { break; }

@@ -120,31 +120,6 @@ fn arm_until_next<'a>(src: &'a str, anchor: &str) -> &'a str {
     }
 }
 
-/// G14 守卫：上游 `trigger.player == "phaseBegin"`（**任意阶段开始**），
-/// 原生把 filter 钉死在**判定阶段**（`Phase::Judge, begin: true`）。
-/// 修正后应照 `SwdJinlin2` 的先例写成 `Phase { player, begin: true, .. }`，
-/// 即该 arm 里**不再出现 `Phase::Judge`**。
-macro_rules! g14_guard {
-    ($fn_name:ident, $variant:literal, $file:literal) => {
-        #[test]
-        #[ignore = "登记缺陷 G14：上游 player phaseBegin，原生钉死 Phase::Judge；\
-                    修复需改未跟踪的 content/host/filtering*"]
-        fn $fn_name() {
-            let src = read($file);
-            let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
-            assert!(
-                !seg.contains("Phase::Judge"),
-                concat!(
-                    $variant,
-                    " 上游为「任意阶段开始」(phaseBegin)，filter 不应钉死判定阶段；",
-                    "当前 arm 仍含 `Phase::Judge`：\n{seg}",
-                ),
-                seg = seg,
-            );
-        }
-    };
-}
-
 
 // ------------------------------------------------- 凭空新增 / 自加分支（A 类）
 

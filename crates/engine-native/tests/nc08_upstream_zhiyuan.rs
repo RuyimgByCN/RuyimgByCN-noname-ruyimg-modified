@@ -27,7 +27,7 @@
 //!
 //! 未覆盖（登记）：`check`/`ai` 属策略面；`logTarget` 属表现面。
 
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);

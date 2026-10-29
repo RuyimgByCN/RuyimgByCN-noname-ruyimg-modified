@@ -25,7 +25,7 @@
 //! 未覆盖（登记）：`evt.num` 的**计数语义**与可观测效果；`targetRequired` 的目标面。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use nc08_common::{advance_to_phase, drain, next_dedup};
 
 fn swd_engine(seed: u64) -> Engine {

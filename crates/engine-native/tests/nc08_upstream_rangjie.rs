@@ -41,7 +41,7 @@
 //! 未覆盖（登记）：`audio` 属表现面；`canMoveCard()` 的完整判据（原生按可用移动目标是否存在）由
 //! 选项面承载。
 
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);

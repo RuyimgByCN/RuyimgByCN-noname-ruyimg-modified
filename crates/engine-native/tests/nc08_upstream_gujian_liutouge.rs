@@ -46,7 +46,7 @@ fn gujian_engine(seed: u64) -> Engine {
 #[test]
 fn upstream_liutouge_two_branches() {
     // ① 对自己：摸 1
-    let (self_gain, other_loss) = {
+    let self_gain = {
         let mut e = gujian_engine(20273101);
         advance_to_play(&mut e, 0);
         for p in 0..4 {
@@ -81,7 +81,7 @@ fn upstream_liutouge_two_branches() {
         );
         drain(&mut e);
         // 打出本体 −1、增益摸 1 → 手牌数不变
-        (e.debug_hand(0).len() as i64 - h0_before as i64, 0i64)
+        e.debug_hand(0).len() as i64 - h0_before as i64
     };
     // ② 对其他角色：其弃首张手牌
     let other = {

@@ -11,7 +11,7 @@
 
 use engine_native::archive::{decode_archive, encode_archive};
 use engine_native::view::HandView;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);

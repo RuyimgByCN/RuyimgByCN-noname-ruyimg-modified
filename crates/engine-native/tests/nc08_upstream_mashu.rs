@@ -98,7 +98,7 @@ fn upstream_mashu_distance_floor_is_one() {
     let with_skill = e.state_core().computed_distance(e.catalog(), 0, 1);
     // 远距离座位（0 → 2）应确实 −1
     let far_base = {
-        let mut e2 = Engine::new(20268302, 4);
+        let e2 = Engine::new(20268302, 4);
         e2.state_core().computed_distance(e2.catalog(), 0, 2)
     };
     let mut e3 = Engine::new(20268302, 4);

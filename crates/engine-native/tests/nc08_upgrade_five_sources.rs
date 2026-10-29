@@ -88,7 +88,7 @@ fn run(pkg: &str) {
         eprintln!("NOTE 升级：{pkg} 无法桥接 —— 跳过");
         return;
     };
-    let mut e = engine_native::Engine::new_with_extensions(47, 4, &[&v1]).expect("v1 建局");
+    let e = engine_native::Engine::new_with_extensions(47, 4, &[&v1]).expect("v1 建局");
     let snap = e.save();
     let before = e.state_hash();
     // v2：仅版本号 +1

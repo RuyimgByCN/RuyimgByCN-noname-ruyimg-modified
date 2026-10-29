@@ -95,7 +95,7 @@ fn upstream_duwen_equal_hands_adds_one_damage() {
     assert!(
         e.open_choice().is_none(),
         "毒吻为锁定技，不应出现确认门：{:?}",
-        e.open_choice().map(|c| c.spec.prompt.clone())
+        e.open_choice().map(|c| c.spec.prompt)
     );
     drain(&mut e);
     assert_eq!(

@@ -34,7 +34,7 @@
 //! 未覆盖（登记）：`check`/`ai` 策略面；`judge2` 的判定牌去向（原生走判定区结算）。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use nc08_common::put_judge;
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -80,20 +80,6 @@ fn drain(e: &mut Engine) {
             action: GameAction::Answer { choice_id: c.id, selection: sel },
         });
     }
-}
-
-/// 按**名字子串 + 花色条件**取 card id 后直接布阵。
-/// **必须按 id**：`debug_place(player, name)` 只按名字查找，同名牌有不同花色实例
-/// （奇袭/武圣样本即因此产生伪差异）。
-fn place_by_prefix(e: &mut Engine, prefix: &str, player: u8) -> engine_native::CardId {
-    let name = e
-        .catalog()
-        .cards
-        .iter()
-        .map(|c| c.name)
-        .find(|n| n.contains(prefix))
-        .unwrap_or_else(|| panic!("{prefix} 在目录"));
-    e.debug_place(player, name)
 }
 
 /// 取一张**非红桃**的【杀】实体并置入**判定区**（走共享助手：按 id 布阵）。

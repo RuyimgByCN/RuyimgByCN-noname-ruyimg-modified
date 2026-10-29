@@ -43,24 +43,6 @@ fn xianjian_engine(seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 驱动到静止：反复推进阶段并处理选择（回复等事件经帧结算，需推进才落地）。
-fn drive_to_quiescence(e: &mut Engine) {
-    for _ in 0..8 {
-        drain(e);
-        if e.resolution().stack.is_empty() && e.open_choice().is_none() {
-            return;
-        }
-        let actor = e.turn().current;
-        let _ = e.submit(GameCommand {
-            actor,
-            expected_revision: e.revision(),
-            dedup_id: next_dedup(),
-            action: engine_native::GameAction::NextPhase,
-        });
-    }
-    drain(e);
-}
-
 fn advance_to_play(e: &mut Engine, seat: u8) {
     for _ in 0..24 {
         if e.turn().current == seat && e.turn().phase == engine_native::Phase::Play {
@@ -131,7 +113,7 @@ fn upstream_lingxue_gains_hujia_on_real_recover() {
     assert!(
         e.open_choice().is_none(),
         "灵雪为锁定技（forced），不应出现确认门：{:?}",
-        e.open_choice().map(|c| c.spec.prompt.clone())
+        e.open_choice().map(|c| c.spec.prompt)
     );
     drain(&mut e);
     assert_eq!(e.debug_hp(0), hp_before + 1, "【桃】回复本身生效（体力 +1）");

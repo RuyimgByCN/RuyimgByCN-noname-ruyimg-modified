@@ -29,7 +29,7 @@
 //!
 //! 未覆盖（登记）：`audio`/`popup` 属表现面；`filterButton` 的 UI 交互细节由询问机选项面等价承载。
 
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -45,16 +45,6 @@ fn swd_engine(seed: u64) -> Engine {
         .expect("读 swd 包");
     let pack = content_native_loader::bridge_pack(&json).expect("桥接").pack;
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
-}
-
-fn answer(e: &mut Engine, pick: Vec<ChoiceOption>) {
-    let Some(c) = e.open_choice().cloned() else { return };
-    let _ = e.submit(GameCommand {
-        actor: c.observer,
-        expected_revision: e.revision(),
-        dedup_id: next_dedup(),
-        action: GameAction::Answer { choice_id: c.id, selection: pick },
-    });
 }
 
 fn drain(e: &mut Engine) {
@@ -171,7 +161,7 @@ fn upstream_xiuluo_discards_matching_suit_judge_card() {
     }
     eprintln!(
         "DBG 循环结束：found={:?} placed={} turn={} phase={:?} judge0={:?} hand0={:?}",
-        found.as_ref().map(|c| c.spec.prompt.clone()),
+        found.as_ref().map(|c| c.spec.prompt),
         placed,
         e.turn().current,
         e.turn().phase,

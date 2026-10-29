@@ -121,7 +121,7 @@ fn upstream_lianying_threshold_off_by_one_is_registered() {
     assert!(
         e.open_choice().is_none(),
         "布阵后不应有未决询问：{:?}",
-        e.open_choice().map(|c| c.spec.prompt.clone())
+        e.open_choice().map(|c| c.spec.prompt)
     );
     // 取手牌中**第一张**（用 id 提交，避免顺序假设）
     let first = *e.debug_hand(0).first().expect("有手牌");

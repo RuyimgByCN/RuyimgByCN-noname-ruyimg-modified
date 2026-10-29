@@ -1,0 +1,352 @@
+    Checking engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+error: unused variable: `other_loss`
+  --> crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs:49:21
+   |
+49 |     let (self_gain, other_loss) = {
+   |                     ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_other_loss`
+   |
+   = note: `-D unused-variables` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_variables)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_gujian_liutouge") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lianying.rs:124:46
+    |
+124 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `-D noop-method-call` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_lianying") due to 1 previous error
+error: unused macro definition: `g14_guard`
+   --> crates/engine-native/tests/nc08_registered_defect_guards.rs:127:14
+    |
+127 | macro_rules! g14_guard {
+    |              ^^^^^^^^^
+    |
+    = note: `-D unused-macros` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unused_macros)]`
+
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:37:35
+   |
+37 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: function `place_by_prefix` is never used
+  --> crates/engine-native/tests/nc08_upstream_ganglie.rs:88:4
+   |
+88 | fn place_by_prefix(e: &mut Engine, prefix: &str, player: u8) -> engine_native::CardId {
+   |    ^^^^^^^^^^^^^^^
+   |
+   = note: `-D dead-code` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_ganglie") due to 2 previous errors
+error: variable does not need to be mutable
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:296:9
+    |
+296 |     let mut e2e_hand_at_confirm = std::cell::Cell::new(0usize);
+    |         ----^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `-D unused-mut` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: unused variable: `p`
+   --> crates/engine-native/tests/pa12_batch4_1_host_primitives.rs:435:107
+    |
+435 | ....vm_aux.marks.iter().filter(|((p,i),_)| *i==MARK).collect::<Vec<_>>(), e.state_core().vm_aux.marks.len());
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_p`
+    |
+    = note: `-D unused-variables` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unused_variables)]`
+
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc12_ai_strength_baseline.rs:12:21
+   |
+12 | use engine_native::{CommandOutcome, Engine, GameCommand};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "pa12_batch4_1_host_primitives") due to 2 previous errors
+error: could not compile `engine-native` (test "nc12_ai_strength_baseline") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_registered_defect_guards") due to 1 previous error
+error: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_identity_gate_matrix.rs:99:13
+   |
+99 |         let mut e = match engine_native::Engine::new_with_extensions(71, 4, &[&pack_v1]) {
+   |             ----^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `-D unused-mut` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: could not compile `engine-native` (test "nc08_identity_gate_matrix") due to 1 previous error
+error: unused import: `std::collections::BTreeSet`
+ --> crates/engine-native/tests/nc08_standard_deck_coverage.rs:9:5
+  |
+9 | use std::collections::BTreeSet;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `-D unused-imports` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_standard_deck_coverage") due to 1 previous error
+error: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_jizhi.rs:121:46
+    |
+121 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `-D noop-method-call` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_jizhi") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_yunchou_toulianghuanzhu.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_yunchou_toulianghuanzhu") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_zhiyuan.rs:30:35
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_zhiyuan") due to 1 previous error
+error: unused variable: `base`
+   --> crates/engine-native/tests/pa12_batch3_filter_predicates.rs:222:9
+    |
+222 |     let base = hand_len(&e, 1);
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_base`
+    |
+    = note: `-D unused-variables` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unused_variables)]`
+
+error: could not compile `engine-native` (test "pa12_batch3_filter_predicates") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_rangjie.rs:44:35
+   |
+44 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_rangjie") due to 1 previous error
+error: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc12_dangling_reference_repro.rs:40:53
+   |
+40 |         e.open_choice().map(|c| (c.id, c.spec.prompt.clone())),
+   |                                                     ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `-D noop-method-call` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc12_dangling_reference_repro") due to 1 previous error
+error: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_five_sources.rs:91:9
+   |
+91 |     let mut e = engine_native::Engine::new_with_extensions(47, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `-D unused-mut` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: could not compile `engine-native` (test "nc08_upgrade_five_sources") due to 1 previous error
+error: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_config_acceptance.rs:59:9
+   |
+59 |     let mut on = content_native_loader::bridge_pack(&json).expect("桥接").pack;
+   |         ----^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `-D unused-mut` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: could not compile `engine-native` (test "nc08_config_acceptance") due to 1 previous error
+error: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/nc08_upstream_duwen.rs:98:46
+   |
+98 |         e.open_choice().map(|c| c.spec.prompt.clone())
+   |                                              ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `-D noop-method-call` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_duwen") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:32:35
+   |
+32 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: function `answer` is never used
+  --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:50:4
+   |
+50 | fn answer(e: &mut Engine, pick: Vec<ChoiceOption>) {
+   |    ^^^^^^
+   |
+   = note: `-D dead-code` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_xiuluo.rs:174:45
+    |
+174 |         found.as_ref().map(|c| c.spec.prompt.clone()),
+    |                                             ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `-D noop-method-call` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_xiuluo") due to 3 previous errors
+error: variable does not need to be mutable
+  --> crates/engine-native/tests/nc08_upgrade_matrix.rs:80:9
+   |
+80 |     let mut e = engine_native::Engine::new_with_extensions(59, 4, &[&v1]).expect("v1 建局");
+   |         ----^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `-D unused-mut` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/pa08_fullhand_dump.rs:14:35
+   |
+14 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upgrade_matrix") due to 1 previous error
+error: could not compile `engine-native` (test "pa08_fullhand_dump") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_swd_shencaojie_window.rs:28:35
+   |
+28 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_haidao.rs:120:46
+    |
+120 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `-D noop-method-call` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_haidao") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_upstream_hearth_shandianjian.rs:37:21
+   |
+37 | use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                     ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_swd_shencaojie_window") due to 1 previous error
+error: could not compile `engine-native` (test "nc08_upstream_hearth_shandianjian") due to 1 previous error
+error: unused import: `CommandOutcome`
+  --> crates/engine-native/tests/nc08_rescue_card_set_survey.rs:12:35
+   |
+12 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                   ^^^^^^^^^^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_rescue_card_set_survey") due to 1 previous error
+error: variable does not need to be mutable
+   --> crates/engine-native/tests/nc08_upstream_mashu.rs:101:13
+    |
+101 |         let mut e2 = Engine::new(20268302, 4);
+    |             ----^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `-D unused-mut` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unused_mut)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_mashu") due to 1 previous error
+error: unused import: `Phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_baishouzhihu.rs:30:84
+   |
+30 | use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+   |                                                                                    ^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_swd_baishouzhihu") due to 1 previous error
+error: function `drive_to_quiescence` is never used
+  --> crates/engine-native/tests/nc08_upstream_lingxue.rs:47:4
+   |
+47 | fn drive_to_quiescence(e: &mut Engine) {
+   |    ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `-D dead-code` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: unused import: `Phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_qinglong.rs:24:68
+   |
+24 | use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
+   |                                                                    ^^^^^
+   |
+   = note: `-D unused-imports` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+error: unused import: `advance_to_phase`
+  --> crates/engine-native/tests/nc08_upstream_swd_qinglong.rs:25:19
+   |
+25 | use nc08_common::{advance_to_phase, drain, next_dedup};
+   |                   ^^^^^^^^^^^^^^^^
+
+error: call to `.clone()` on a reference in this situation does nothing
+   --> crates/engine-native/tests/nc08_upstream_lingxue.rs:134:46
+    |
+134 |         e.open_choice().map(|c| c.spec.prompt.clone())
+    |                                              ^^^^^^^^ help: remove this redundant call
+    |
+    = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+    = note: `-D noop-method-call` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(noop_method_call)]`
+
+error: could not compile `engine-native` (test "nc08_upstream_lingxue") due to 2 previous errors
+error: could not compile `engine-native` (test "nc08_upstream_swd_qinglong") due to 2 previous errors

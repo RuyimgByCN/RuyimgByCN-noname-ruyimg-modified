@@ -21,8 +21,8 @@
 //! 未覆盖（登记）：`showCards` 表现面；阶段种类（`phaseBegin` 对**每个阶段**都触发 ⇒ 一轮可多次）。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, Engine, GameAction, GameCommand, Phase};
-use nc08_common::{advance_to_phase, drain, next_dedup};
+use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
+use nc08_common::{drain, next_dedup};
 
 fn swd_engine(seed: u64) -> Engine {
     let dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))

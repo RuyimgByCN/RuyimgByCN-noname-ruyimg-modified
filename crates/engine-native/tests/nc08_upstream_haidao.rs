@@ -117,7 +117,7 @@ fn upstream_haidao_healthy_grants_hujia_without_prompt() {
     assert!(
         e.open_choice().is_none(),
         "满血分支不应出现询问（上游 event.finish()）：{:?}",
-        e.open_choice().map(|c| c.spec.prompt.clone())
+        e.open_choice().map(|c| c.spec.prompt)
     );
     drain(&mut e);
     assert!(e.state_core().turn.land_used, "换地后本回合地已用（land_used）");
