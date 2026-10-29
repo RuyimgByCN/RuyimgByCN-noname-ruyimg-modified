@@ -1,0 +1,101 @@
+{
+  "source_head": "f6b7bb57bf27251b00832243b1e0826e6b3bc751",
+  "kind": "documentation only; no Rust/browser rerun",
+  "checks": [
+    {
+      "name": "local-links",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-local-links.py",
+        "--all"
+      ],
+      "exit": 2,
+      "seconds": 0.028,
+      "log": "local-links.log"
+    },
+    {
+      "name": "doc-line-refs",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "seconds": 30.441,
+      "log": "doc-line-refs.log"
+    },
+    {
+      "name": "source-lines-unit",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.164,
+      "log": "source-lines-unit.log"
+    },
+    {
+      "name": "source-lines",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 5.892,
+      "log": "source-lines.log"
+    },
+    {
+      "name": "stale-numbers",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-stale-numbers.py"
+      ],
+      "exit": 2,
+      "seconds": 0.018,
+      "log": "stale-numbers.log"
+    },
+    {
+      "name": "local-links",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "seconds": 0.659,
+      "log": "local-links-corrected-command.log",
+      "reason": "Corrected underscore script filename after initial harness error; successful checks were not rerun."
+    },
+    {
+      "name": "stale-numbers",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "exit": 0,
+      "seconds": 0.05,
+      "log": "stale-numbers-corrected-command.log",
+      "reason": "Corrected underscore script filename after initial harness error; successful checks were not rerun."
+    }
+  ],
+  "final_by_check": {
+    "local-links": 0,
+    "doc-line-refs": 0,
+    "source-lines-unit": 0,
+    "source-lines": 0,
+    "stale-numbers": 0
+  }
+}

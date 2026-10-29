@@ -5,9 +5,11 @@
 <a id="delivery-2026-10-24"></a>
 <a id="architecture-audit-2026-10-24"></a>
 
-## 2026-10-24 当前交付快照
+<a id="2026-10-24-当前交付快照"></a>
 
-**当前核验（2026-10-30 NC03 终局UI；HEAD `f27dd34f` + 本批改动，v328/v105/ABI753/WS5不变）**：本地SingleWin编号在适配层转为0基，0号胜者不再丢失，状态栏/横幅/事件记录共用展示；本人胜负依据实际身份，不按获胜阵营硬编码。主树前端 **139/0**、typecheck/build、行数门禁、完整preflight **21/21** 通过。真实Chrome原型seed42/319步正确显示P3及本人败北，身份seed42/280步显示本人败北，身份seed3/168步显示Rebel观察者本人🎉胜利；三局均经界面存读档并核对hash/revision、胜负横幅文字/样式与隐私，console异常0。Rust/网络胜者协议未变，未建模模式继续如实显示未建模。见[NC03证据](../operations/evidence/2026-10-30-nc03-outcome-ui/README.md)。
+## 当前交付与带日期核验记录
+
+**当前核验（2026-10-30 NC03 终局UI；提交 `f6b7bb57`，v328/v105/ABI753/WS5不变）**：本地SingleWin编号在适配层转为0基，0号胜者不再丢失，状态栏/横幅/事件记录共用展示；本人胜负依据实际身份，不按获胜阵营硬编码。主树前端 **139/0**、typecheck/build、行数门禁、完整preflight **21/21** 通过。真实Chrome原型seed42/319步正确显示P3及本人败北，身份seed42/280步显示本人败北，身份seed3/168步显示Rebel观察者本人🎉胜利；三局均经界面存读档并核对hash/revision、胜负横幅文字/样式与隐私，console异常0。Rust/网络胜者协议未变，未建模模式继续如实显示未建模。见[NC03证据](../operations/evidence/2026-10-30-nc03-outcome-ui/README.md)。
 
 **NC09投影已验收快照（2026-10-30，提交 `f27dd34f`；v328/v105/ABI753/WS5）**：服务端可见手牌/全部公开区牌面及武将定义已统一到实际本地投影，座位越界/旁观者附座位不提权。首版误压裁判主将定义经独立审查阻断后已先红后绿修复，复审通过。主树原生三包+WASM+服务端合计 **2088/0/73**，当前源码重建后 Worker **82/0**、前端 **128/0**/typecheck、native/WASM轨迹通过；同一存档实际生成WASM32 **40次精确比较/32次隐私检查/5种状态/0失败**。完整 preflight **21/21** 通过，具体结果见[整合证据](../operations/evidence/2026-10-30-nc09-projection/README.md)。裁判完整手牌/牌堆/私有区/身份/选择投影与超时仍未完成。
 
@@ -39,7 +41,11 @@
 <a id="native-room-commit-2026-10-24"></a>
 <a id="native-room-double-fault-2026-10-24"></a>
 
-### 已接通的能力与最近产品验证
+<a id="已接通的能力与最近产品验证"></a>
+
+### 能力与产品验证历史（2026-10-24至29）
+
+本节保留各轮原始能力判断和未完成项；当前状态以顶部核验与[剩余台账](native-remaining-ledger.md)为准。
 
 - **正式包与构建**：客户端正式安装载荷已进入原生 Worker 选将／开局、按原副本保存恢复；`build:desktop` 接通原生和旧线 WASM，独立 `native-web` CI 已配置。[拆分后完整构建／浏览器证据](../operations/evidence/2026-10-24-effect-integration-validation/README.md)仅证明当时记录的本地执行，GitHub Actions 尚未运行。
 - **原生 WS 与保存恢复**：双玩家／旁观、私人投影、权威 hash、重连续局已接通；服务端固定原局包 JSON／资产与完整内容锁，停用、升级或删除原安装包后按原内容恢复。见[WS 交付](../operations/evidence/2026-10-24-native-ws-delivery/README.md)与[固定包副本](../operations/evidence/2026-10-24-native-room-frozen-packages/README.md)。
@@ -67,15 +73,19 @@
 - **PA12 单一引擎收敛（2026-10-26/27）**：用户 2026-10-26 22:51 裁决**冻结旧线新增规则**（旧线只修缺陷、保持可编译并作 NC08 差分基准；新上游内容直接进原生；N01/R01/R03 列入原生移植；批量迁移前须用户确认）。④「DSL/IR→原生」原型与[迁移计划](native-dsl-migration-plan.md)已交（`26889e89`）；随后 13 次提交推进批①–⑤-4：桥接词汇、阶段帧、六滤镜谓词、限次系、`turn_over`/`discard_hand_equip_count`/伤害改写三原语、PhaseBegin 前置窗、`STORAGE_SET`、R01 谓词面，修复多处桥接缺陷，近似可直接原生 579→1,098（盘点口径）。批①②经用户确认；**批③至⑤-4 为代理开工，用户已于 2026-10-27 21:50 追认，并授权在迁移计划范围内连续推进；新立 ADR、改协议、改版本门禁的批次仍须先问用户**。尚缺：§2 J 效果级选择窗挂起、批⑥ 主动技桥（2026-10-28 已授权设计与 ADR 起草，具体协议改动与升号另行请示）、原生 VM ABI 升到 758（版本门禁，须请示）、胆守/平寇、R03。逐批明细见[台帐 PA12 批次登记](native-remaining-ledger.md#pa12-迁移批次登记按提交顺序)。
 - **NC02–NC10 信任边界与产品加固（2026-10-27/28）**：NC02 补 VM 包生命周期（浏览器/服务端/冻结副本/房间重启）、包身份与依赖锁拒绝、VM 声明摘要与模块指纹校验；NC03/NC04 补指令边界、非法回答回滚与同键重试、本地开局/读档原子性、拒绝原因与 Worker 故障提示、WASM 座位边界；NC06 补技能实体牌区恢复所有权；NC08 补四/八座（含身份局）native/WASM 对照；NC10 补挂起决斗与静止态陷阱/技能牌区的暗牌脱敏和守恒；I01 同步排序已改为区域无关。各项仍为「部分」。**新发现 B7**：VM 挂起存档恢复会改变故障技能名与 storage 键（规则语义差异），用户已授权独立修复，待实施。用户 2026-10-28 另授权：炼妖壶摘要升 v324（NC07，在途）、本地 WASM 身份与可见牌面投影（NC03/NC09）——炼妖壶与 B7 共用 v324，先提交者占用，另一批须重新确认版本号。逐批明细见[台帐 10-28 进展登记](native-remaining-ledger.md#2026-10-28-进展登记按提交顺序)与[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)。
 
-最近完整产品回归为 **2026-10-24 16:52–16:56 +08:00**：七 crate **1932 passed / 0 failed / 71 ignored**，前端 **70/70**、typecheck、既有 WASM/Worker **44/44**，正式服务构建及 Chrome SIGKILL 流程 **10 组**通过。该轮完整 preflight **20/20**；详见[原始命令与结果](../operations/evidence/2026-10-24-native-room-double-fault/README.md#完整回归与门禁)。本轮先核对其 **1067 个受验文件摘要无变化**，不把旧结果记成新跑的测试；本轮文档门禁结果单列在下方。
+该历史快照记录的完整产品回归为 **2026-10-24 16:52–16:56 +08:00**：七 crate **1932 passed / 0 failed / 71 ignored**，前端 **70/70**、typecheck、既有 WASM/Worker **44/44**，正式服务构建及 Chrome SIGKILL 流程 **10 组**通过。该轮完整 preflight **20/20**；详见[原始命令与结果](../operations/evidence/2026-10-24-native-room-double-fault/README.md#完整回归与门禁)。本轮先核对其 **1067 个受验文件摘要无变化**，不把旧结果记成新跑的测试；本轮文档门禁结果单列在下方。
 
-### 架构判断与下一步优先级
+<a id="架构判断与下一步优先级"></a>
+
+### 历史架构判断与优先级（2026-10-24至29）
+
+下表是当时的排序与状态，保留历史语境；后续已提交工作及当前优先级以顶部核验与剩余台账为准。
 
 **统一剩余台帐见[原生收敛剩余工作台帐](native-remaining-ledger.md)。**
 
 **保留 Rust 单写核心、不可变内容目录、可恢复结算栈、Worker／房间 actor 分层及既定 rule-vm 路线。** 调整接口和隔离边界即可，暂不新增框架；crate 拆分只按[架构演进 F7](architecture-evolution-plan.md#8-工作流-f工程与流程)把 engine-native 拆为 kernel/content/engine 三层（2026-10-29 第 1–2 步已做，第 3–4 步待做），engine-core 不拆。P1 四项已在本轮关闭；表中 P2 与 UP37 R/N 仍是待实施项；NC01–NC12 的完整范围仍服从[收敛方案](native-convergence-plan.md)。
 
-| 顺序 | 工作 | 当前结果与下一步 |
+| 顺序 | 工作 | 当时结果与下一步（按原日期解读） |
 |---|---|---|
 | 1 / P1 / NC03、NC07 | WASM 坏存档 | **已关闭（2026-10-24）**：奇数/非 ASCII/非法字符/截断/超限受控拒绝，原句柄与原局可继续；[证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md#1-p1wasm-坏存档受控拒绝) |
 | 2 / P1 / NC09 | 慢连接阻塞房间 actor | **已关闭（2026-10-24）**：有界非阻塞广播、writer 5s 超时、慢连接断开；actor 单测与真 WS 300 命令通过；[证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md#2-p1慢-ws-连接不阻塞房间-actor) |
@@ -94,7 +104,7 @@
 
 **范围仍未闭环**：客户端可发现 15 包、磁盘 41 包与两仓 37 来源是不同口径；~~客户端本地内置包安装入口仍拒绝含 VM 模块的包~~ **已改为正式导入 + 校验（GT-014，2026-10-28）**：含 VM 作者产物经 `importExtensionPackage` 与扩展页 UI 完成安装→启用→开局→真实触发→存读档→升级／回退／停用／卸载，真实 Worker 与 headless Chrome 产品路径通过，服务端同包行为核对一致（[GT-014 证据](../operations/evidence/2026-10-28-gt014-local-vm-install/README.md)）；导入期深层哈希校验已授权、本地验签暂缓（裁决登记第 12 项）；正式数据包样本不能证明第三方 SDK 和整包完成。原生 GPU 表现、完整 UI／音频／动画／平台服务、联机选将／明将与座位门控、上游规则等价、跨平台／跨机／TLS／代理以及签名录像仍按原计划验收。最近状态重启恢复不等于 WAL／历史录像持久化；真实断电和长局容量尚无本轮证据。
 
-**本轮文档验证（2026-10-24 19:18–19:21 与 19:45 后两次 +08:00）**：完整 preflight **20/20 通过，0 失败、0 跳过**；脚本单测 **180/180**、行数门禁 **8578 文件 ≤2000 行**。19:21 后另跑 engine-core 完整回归 **3780/0/1**（R01），P1 批次跑 engine-native **1547/0/71**、game-server **328/0/0**、前端测试/型别、真实 WASM Worker **44/44** 与真生成包探针；P2 事件/hash 批再跑 game-server **329/0/0**、engine-native-wasm **48/0/0**、前端 **72/72**、Worker **47/47**。完整命令、失败经过与保护记录见[P1／I01 证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md)与[R01 证据](../operations/evidence/2026-10-24-up37-r01-dichou/README.md)；最终 preflight 见[final-02](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/preflight-final-02.log)。47,064 个既有路径仅文档/内容增量变化，HEAD/index 不变，未暂存、未提交。10/24 各轮详细测试计数、失败经过和保护记录已逐字移到[交付流水](native-progress-history.md#delivery-2026-10-24-history)，旧原始证据保持不变。
+**历史文档验证（2026-10-24 19:18–19:21 与 19:45 后两次 +08:00）**：完整 preflight **20/20 通过，0 失败、0 跳过**；脚本单测 **180/180**、行数门禁 **8578 文件 ≤2000 行**。19:21 后另跑 engine-core 完整回归 **3780/0/1**（R01），P1 批次跑 engine-native **1547/0/71**、game-server **328/0/0**、前端测试/型别、真实 WASM Worker **44/44** 与真生成包探针；P2 事件/hash 批再跑 game-server **329/0/0**、engine-native-wasm **48/0/0**、前端 **72/72**、Worker **47/47**。完整命令、失败经过与保护记录见[P1／I01 证据](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/README.md)与[R01 证据](../operations/evidence/2026-10-24-up37-r01-dichou/README.md)；最终 preflight 见[final-02](../operations/evidence/2026-10-24-p1-trust-boundaries-sync/preflight-final-02.log)。47,064 个既有路径仅文档/内容增量变化，HEAD/index 不变，未暂存、未提交。10/24 各轮详细测试计数、失败经过和保护记录已逐字移到[交付流水](native-progress-history.md#delivery-2026-10-24-history)，旧原始证据保持不变。
 
 <a id="upstream-2026-10-24"></a>
 
