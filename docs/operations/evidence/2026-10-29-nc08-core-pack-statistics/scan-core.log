@@ -1,0 +1,71 @@
+noname/character/bingshi: files=13 skills=87(trigger=87) generals=36 hit_groups=3
+noname/character/clan: files=12 skills=81(trigger=81) generals=42 hit_groups=7
+noname/character/collab: files=12 skills=155(trigger=155) generals=96 hit_groups=4
+noname/character/diy: files=13 skills=118(trigger=118) generals=64 hit_groups=0
+noname/character/extra: files=12 skills=49(trigger=49) generals=13 hit_groups=1
+noname/character/huicui: files=12 skills=227(trigger=227) generals=120 hit_groups=1
+noname/character/jsrg: files=12 skills=164(trigger=164) generals=76 hit_groups=0
+noname/character/key: files=8 skills=196(trigger=196) generals=88 hit_groups=0
+noname/character/mobile: files=13 skills=339(trigger=339) generals=216 hit_groups=3
+noname/character/newjiang: files=13 skills=93(trigger=93) generals=43 hit_groups=0
+noname/character/offline: files=51 skills=683(trigger=683) generals=398 hit_groups=3
+noname/character/old: files=12 skills=23(trigger=23) generals=79 hit_groups=0
+noname/character/onlyOL: files=12 skills=158(trigger=158) generals=88 hit_groups=2
+noname/character/refresh: files=13 skills=209(trigger=209) generals=128 hit_groups=0
+noname/character/sb: files=12 skills=127(trigger=127) generals=55 hit_groups=7
+noname/character/shenhua: files=13 skills=114(trigger=114) generals=48 hit_groups=0
+noname/character/shiji: files=13 skills=142(trigger=142) generals=48 hit_groups=0
+noname/character/sixiang: files=13 skills=132(trigger=132) generals=103 hit_groups=0
+noname/character/sp: files=13 skills=623(trigger=623) generals=236 hit_groups=8
+noname/character/sp2: files=13 skills=249(trigger=249) generals=114 hit_groups=0
+noname/character/standard: files=13 skills=41(trigger=41) generals=33 hit_groups=0
+noname/character/sxrm: files=12 skills=56(trigger=56) generals=27 hit_groups=0
+noname/character/tw: files=13 skills=345(trigger=345) generals=170 hit_groups=2
+noname/character/xianding: files=13 skills=479(trigger=479) generals=227 hit_groups=5
+noname/character/yijiang: files=13 skills=193(trigger=193) generals=72 hit_groups=1
+noname/character/yingbian: files=13 skills=74(trigger=74) generals=26 hit_groups=1
+noname-liuli/character/clan: files=1 skills=31(trigger=31) generals=0 hit_groups=0
+noname-liuli/character/collab: files=1 skills=54(trigger=54) generals=2 hit_groups=0
+noname-liuli/character/ddd: files=1 skills=56(trigger=56) generals=0 hit_groups=0
+noname-liuli/character/diy: files=1 skills=330(trigger=330) generals=3 hit_groups=0
+noname-liuli/character/extra: files=1 skills=183(trigger=183) generals=4 hit_groups=0
+noname-liuli/character/gujian: files=1 skills=60(trigger=60) generals=0 hit_groups=0
+noname-liuli/character/gwent: files=1 skills=67(trigger=67) generals=0 hit_groups=0
+noname-liuli/character/hearth: files=1 skills=204(trigger=204) generals=2 hit_groups=0
+noname-liuli/character/huicui: files=1 skills=155(trigger=155) generals=0 hit_groups=0
+noname-liuli/character/jiange: files=1 skills=20(trigger=20) generals=0 hit_groups=0
+noname-liuli/character/jsrg: files=1 skills=88(trigger=88) generals=0 hit_groups=0
+noname-liuli/character/mobile: files=1 skills=252(trigger=252) generals=2 hit_groups=0
+noname-liuli/character/mtg: files=1 skills=14(trigger=14) generals=0 hit_groups=0
+noname-liuli/character/offline: files=1 skills=150(trigger=150) generals=0 hit_groups=0
+noname-liuli/character/old: files=1 skills=11(trigger=11) generals=0 hit_groups=0
+noname-liuli/character/ow: files=1 skills=80(trigger=80) generals=0 hit_groups=0
+noname-liuli/character/rank: files=1 skills=0(trigger=0) generals=0 hit_groups=0
+noname-liuli/character/refresh: files=1 skills=204(trigger=204) generals=0 hit_groups=0
+noname-liuli/character/sb: files=1 skills=100(trigger=100) generals=0 hit_groups=0
+noname-liuli/character/shenhua: files=1 skills=99(trigger=99) generals=0 hit_groups=0
+noname-liuli/character/shiji: files=1 skills=105(trigger=105) generals=0 hit_groups=0
+noname-liuli/character/sp: files=1 skills=389(trigger=389) generals=15 hit_groups=0
+noname-liuli/character/sp2: files=1 skills=204(trigger=204) generals=0 hit_groups=0
+noname-liuli/character/standard: files=1 skills=43(trigger=43) generals=0 hit_groups=0
+noname-liuli/character/swd: files=1 skills=199(trigger=199) generals=0 hit_groups=0
+noname-liuli/character/tw: files=1 skills=240(trigger=240) generals=4 hit_groups=0
+noname-liuli/character/xiake: files=1 skills=3(trigger=3) generals=0 hit_groups=0
+noname-liuli/character/xianding: files=1 skills=207(trigger=207) generals=7 hit_groups=0
+noname-liuli/character/xianjian: files=1 skills=96(trigger=96) generals=0 hit_groups=0
+noname-liuli/character/xinghuoliaoyuan: files=1 skills=17(trigger=17) generals=0 hit_groups=0
+noname-liuli/character/yijiang: files=1 skills=215(trigger=215) generals=0 hit_groups=0
+noname-liuli/character/yingbian: files=1 skills=71(trigger=71) generals=3 hit_groups=0
+noname-liuli/character/yxs: files=1 skills=65(trigger=65) generals=0 hit_groups=0
+noname-liuli/character/zhuogui: files=1 skills=9(trigger=9) generals=0 hit_groups=0
+{
+ "sources_scanned": 60,
+ "skills_total": 9178,
+ "skills_with_trigger_total": 9178,
+ "generals_total": 2688,
+ "hit_groups": 48,
+ "hit_generals": 33,
+ "same_scope_groups": 29,
+ "forced_involving_groups": 24,
+ "pairs": 54
+}

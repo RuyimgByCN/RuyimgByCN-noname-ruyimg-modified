@@ -1,0 +1,1588 @@
+{
+ "report": {
+  "sources": [
+   {
+    "source": "noname/character/bingshi",
+    "files": 13,
+    "skills": 87,
+    "skills_with_trigger": 87,
+    "generals": 36,
+    "translates": 250,
+    "hit_groups": 3,
+    "hit_generals": 1
+   },
+   {
+    "source": "noname/character/clan",
+    "files": 12,
+    "skills": 81,
+    "skills_with_trigger": 81,
+    "generals": 42,
+    "translates": 265,
+    "hit_groups": 7,
+    "hit_generals": 7
+   },
+   {
+    "source": "noname/character/collab",
+    "files": 12,
+    "skills": 155,
+    "skills_with_trigger": 155,
+    "generals": 96,
+    "translates": 489,
+    "hit_groups": 4,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/diy",
+    "files": 13,
+    "skills": 118,
+    "skills_with_trigger": 118,
+    "generals": 64,
+    "translates": 348,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/extra",
+    "files": 12,
+    "skills": 49,
+    "skills_with_trigger": 49,
+    "generals": 13,
+    "translates": 161,
+    "hit_groups": 1,
+    "hit_generals": 1
+   },
+   {
+    "source": "noname/character/huicui",
+    "files": 12,
+    "skills": 227,
+    "skills_with_trigger": 227,
+    "generals": 120,
+    "translates": 671,
+    "hit_groups": 1,
+    "hit_generals": 1
+   },
+   {
+    "source": "noname/character/jsrg",
+    "files": 12,
+    "skills": 164,
+    "skills_with_trigger": 164,
+    "generals": 76,
+    "translates": 522,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/key",
+    "files": 8,
+    "skills": 196,
+    "skills_with_trigger": 196,
+    "generals": 88,
+    "translates": 570,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/mobile",
+    "files": 13,
+    "skills": 339,
+    "skills_with_trigger": 339,
+    "generals": 216,
+    "translates": 1278,
+    "hit_groups": 3,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/newjiang",
+    "files": 13,
+    "skills": 93,
+    "skills_with_trigger": 93,
+    "generals": 43,
+    "translates": 276,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/offline",
+    "files": 51,
+    "skills": 683,
+    "skills_with_trigger": 683,
+    "generals": 398,
+    "translates": 2415,
+    "hit_groups": 3,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/old",
+    "files": 12,
+    "skills": 23,
+    "skills_with_trigger": 23,
+    "generals": 79,
+    "translates": 199,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/onlyOL",
+    "files": 12,
+    "skills": 158,
+    "skills_with_trigger": 158,
+    "generals": 88,
+    "translates": 566,
+    "hit_groups": 2,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/refresh",
+    "files": 13,
+    "skills": 209,
+    "skills_with_trigger": 209,
+    "generals": 128,
+    "translates": 814,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/sb",
+    "files": 12,
+    "skills": 127,
+    "skills_with_trigger": 127,
+    "generals": 55,
+    "translates": 370,
+    "hit_groups": 7,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/shenhua",
+    "files": 13,
+    "skills": 114,
+    "skills_with_trigger": 114,
+    "generals": 48,
+    "translates": 363,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/shiji",
+    "files": 13,
+    "skills": 142,
+    "skills_with_trigger": 142,
+    "generals": 48,
+    "translates": 428,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/sixiang",
+    "files": 13,
+    "skills": 132,
+    "skills_with_trigger": 132,
+    "generals": 103,
+    "translates": 552,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/sp",
+    "files": 13,
+    "skills": 623,
+    "skills_with_trigger": 623,
+    "generals": 236,
+    "translates": 1799,
+    "hit_groups": 8,
+    "hit_generals": 5
+   },
+   {
+    "source": "noname/character/sp2",
+    "files": 13,
+    "skills": 249,
+    "skills_with_trigger": 249,
+    "generals": 114,
+    "translates": 692,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/standard",
+    "files": 13,
+    "skills": 41,
+    "skills_with_trigger": 41,
+    "generals": 33,
+    "translates": 160,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/sxrm",
+    "files": 12,
+    "skills": 56,
+    "skills_with_trigger": 56,
+    "generals": 27,
+    "translates": 159,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname/character/tw",
+    "files": 13,
+    "skills": 345,
+    "skills_with_trigger": 345,
+    "generals": 170,
+    "translates": 1055,
+    "hit_groups": 2,
+    "hit_generals": 2
+   },
+   {
+    "source": "noname/character/xianding",
+    "files": 13,
+    "skills": 479,
+    "skills_with_trigger": 479,
+    "generals": 227,
+    "translates": 1392,
+    "hit_groups": 5,
+    "hit_generals": 4
+   },
+   {
+    "source": "noname/character/yijiang",
+    "files": 13,
+    "skills": 193,
+    "skills_with_trigger": 193,
+    "generals": 72,
+    "translates": 571,
+    "hit_groups": 1,
+    "hit_generals": 1
+   },
+   {
+    "source": "noname/character/yingbian",
+    "files": 13,
+    "skills": 74,
+    "skills_with_trigger": 74,
+    "generals": 26,
+    "translates": 207,
+    "hit_groups": 1,
+    "hit_generals": 1
+   },
+   {
+    "source": "noname-liuli/character/clan",
+    "files": 1,
+    "skills": 31,
+    "skills_with_trigger": 31,
+    "generals": 0,
+    "translates": 89,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/collab",
+    "files": 1,
+    "skills": 54,
+    "skills_with_trigger": 54,
+    "generals": 2,
+    "translates": 101,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/ddd",
+    "files": 1,
+    "skills": 56,
+    "skills_with_trigger": 56,
+    "generals": 0,
+    "translates": 127,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/diy",
+    "files": 1,
+    "skills": 330,
+    "skills_with_trigger": 330,
+    "generals": 3,
+    "translates": 987,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/extra",
+    "files": 1,
+    "skills": 183,
+    "skills_with_trigger": 183,
+    "generals": 4,
+    "translates": 469,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/gujian",
+    "files": 1,
+    "skills": 60,
+    "skills_with_trigger": 60,
+    "generals": 0,
+    "translates": 142,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/gwent",
+    "files": 1,
+    "skills": 67,
+    "skills_with_trigger": 67,
+    "generals": 0,
+    "translates": 234,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/hearth",
+    "files": 1,
+    "skills": 204,
+    "skills_with_trigger": 204,
+    "generals": 2,
+    "translates": 627,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/huicui",
+    "files": 1,
+    "skills": 155,
+    "skills_with_trigger": 155,
+    "generals": 0,
+    "translates": 445,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/jiange",
+    "files": 1,
+    "skills": 20,
+    "skills_with_trigger": 20,
+    "generals": 0,
+    "translates": 39,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/jsrg",
+    "files": 1,
+    "skills": 88,
+    "skills_with_trigger": 88,
+    "generals": 0,
+    "translates": 215,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/mobile",
+    "files": 1,
+    "skills": 252,
+    "skills_with_trigger": 252,
+    "generals": 2,
+    "translates": 704,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/mtg",
+    "files": 1,
+    "skills": 14,
+    "skills_with_trigger": 14,
+    "generals": 0,
+    "translates": 24,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/offline",
+    "files": 1,
+    "skills": 150,
+    "skills_with_trigger": 150,
+    "generals": 0,
+    "translates": 409,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/old",
+    "files": 1,
+    "skills": 11,
+    "skills_with_trigger": 11,
+    "generals": 0,
+    "translates": 102,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/ow",
+    "files": 1,
+    "skills": 80,
+    "skills_with_trigger": 80,
+    "generals": 0,
+    "translates": 196,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/rank",
+    "files": 1,
+    "skills": 0,
+    "skills_with_trigger": 0,
+    "generals": 0,
+    "translates": 0,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/refresh",
+    "files": 1,
+    "skills": 204,
+    "skills_with_trigger": 204,
+    "generals": 0,
+    "translates": 664,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/sb",
+    "files": 1,
+    "skills": 100,
+    "skills_with_trigger": 100,
+    "generals": 0,
+    "translates": 253,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/shenhua",
+    "files": 1,
+    "skills": 99,
+    "skills_with_trigger": 99,
+    "generals": 0,
+    "translates": 297,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/shiji",
+    "files": 1,
+    "skills": 105,
+    "skills_with_trigger": 105,
+    "generals": 0,
+    "translates": 295,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/sp",
+    "files": 1,
+    "skills": 389,
+    "skills_with_trigger": 389,
+    "generals": 15,
+    "translates": 1099,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/sp2",
+    "files": 1,
+    "skills": 204,
+    "skills_with_trigger": 204,
+    "generals": 0,
+    "translates": 518,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/standard",
+    "files": 1,
+    "skills": 43,
+    "skills_with_trigger": 43,
+    "generals": 0,
+    "translates": 176,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/swd",
+    "files": 1,
+    "skills": 199,
+    "skills_with_trigger": 199,
+    "generals": 0,
+    "translates": 593,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/tw",
+    "files": 1,
+    "skills": 240,
+    "skills_with_trigger": 240,
+    "generals": 4,
+    "translates": 631,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/xiake",
+    "files": 1,
+    "skills": 3,
+    "skills_with_trigger": 3,
+    "generals": 0,
+    "translates": 13,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/xianding",
+    "files": 1,
+    "skills": 207,
+    "skills_with_trigger": 207,
+    "generals": 7,
+    "translates": 511,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/xianjian",
+    "files": 1,
+    "skills": 96,
+    "skills_with_trigger": 96,
+    "generals": 0,
+    "translates": 253,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/xinghuoliaoyuan",
+    "files": 1,
+    "skills": 17,
+    "skills_with_trigger": 17,
+    "generals": 0,
+    "translates": 12,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/yijiang",
+    "files": 1,
+    "skills": 215,
+    "skills_with_trigger": 215,
+    "generals": 0,
+    "translates": 620,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/yingbian",
+    "files": 1,
+    "skills": 71,
+    "skills_with_trigger": 71,
+    "generals": 3,
+    "translates": 194,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/yxs",
+    "files": 1,
+    "skills": 65,
+    "skills_with_trigger": 65,
+    "generals": 0,
+    "translates": 237,
+    "hit_groups": 0,
+    "hit_generals": 0
+   },
+   {
+    "source": "noname-liuli/character/zhuogui",
+    "files": 1,
+    "skills": 9,
+    "skills_with_trigger": 9,
+    "generals": 0,
+    "translates": 29,
+    "hit_groups": 0,
+    "hit_generals": 0
+   }
+  ],
+  "totals": {
+   "sources_scanned": 60,
+   "skills_total": 9178,
+   "skills_with_trigger_total": 9178,
+   "generals_total": 2688,
+   "hit_groups": 48,
+   "hit_generals": 33,
+   "same_scope_groups": 29,
+   "forced_involving_groups": 24,
+   "pairs": 54
+  }
+ },
+ "hits": [
+  {
+   "source": "noname/character/bingshi",
+   "general": "pot_caoshuang",
+   "event": "damageEnd",
+   "priority": 0,
+   "skills": [
+    "potdianyi",
+    "potjianzhuan",
+    "potshequan"
+   ],
+   "scope_of": {
+    "potdianyi": "player",
+    "potjianzhuan": "player",
+    "potshequan": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "potdianyi": "const { triggers, triggered } = player.getStorage(\"potdianyi\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);",
+    "potjianzhuan": "if (!player.hasSkill(\"potdianyi\", null, false, false) && !player.hasSkill(\"potshequan\", null, false, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst { triggers: potdianyi } = player.getStorage(\"potdianyi\", { triggers: [] });\n\t\t\tconst { triggers: potshequan } = player.getStorage(\"potshequan\", { triggers: [] });\n\t\t\tconst alltriggers = potdianyi.concat(potshequan);\n\t\t\tif (alltriggers.length === 3) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\treturn !alltriggers.includes(name);",
+    "potshequan": "const { triggers, triggered } = player.getStorage(\"potshequan\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);"
+   }
+  },
+  {
+   "source": "noname/character/bingshi",
+   "general": "pot_caoshuang",
+   "event": "damageSource",
+   "priority": 0,
+   "skills": [
+    "potdianyi",
+    "potjianzhuan",
+    "potshequan"
+   ],
+   "scope_of": {
+    "potdianyi": "source",
+    "potjianzhuan": "source",
+    "potshequan": "source"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "potdianyi": "const { triggers, triggered } = player.getStorage(\"potdianyi\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);",
+    "potjianzhuan": "if (!player.hasSkill(\"potdianyi\", null, false, false) && !player.hasSkill(\"potshequan\", null, false, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst { triggers: potdianyi } = player.getStorage(\"potdianyi\", { triggers: [] });\n\t\t\tconst { triggers: potshequan } = player.getStorage(\"potshequan\", { triggers: [] });\n\t\t\tconst alltriggers = potdianyi.concat(potshequan);\n\t\t\tif (alltriggers.length === 3) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\treturn !alltriggers.includes(name);",
+    "potshequan": "const { triggers, triggered } = player.getStorage(\"potshequan\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);"
+   }
+  },
+  {
+   "source": "noname/character/bingshi",
+   "general": "pot_caoshuang",
+   "event": "dying",
+   "priority": 0,
+   "skills": [
+    "potdianyi",
+    "potjianzhuan",
+    "potshequan"
+   ],
+   "scope_of": {
+    "potdianyi": "global",
+    "potjianzhuan": "global",
+    "potshequan": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "potdianyi": "const { triggers, triggered } = player.getStorage(\"potdianyi\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);",
+    "potjianzhuan": "if (!player.hasSkill(\"potdianyi\", null, false, false) && !player.hasSkill(\"potshequan\", null, false, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst { triggers: potdianyi } = player.getStorage(\"potdianyi\", { triggers: [] });\n\t\t\tconst { triggers: potshequan } = player.getStorage(\"potshequan\", { triggers: [] });\n\t\t\tconst alltriggers = potdianyi.concat(potshequan);\n\t\t\tif (alltriggers.length === 3) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\treturn !alltriggers.includes(name);",
+    "potshequan": "const { triggers, triggered } = player.getStorage(\"potshequan\", { triggers: [], triggered: [] });\n\t\t\tif (!triggers.includes(name)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\" && event.num < 1) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !triggered.includes(name);"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xunshi",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clandaojie",
+    "clanxsyingxiang"
+   ],
+   "scope_of": {
+    "clandaojie": "player",
+    "clanxsyingxiang": "global"
+   },
+   "same_scope": false,
+   "any_forced": true,
+   "filters": {
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);",
+    "clanxsyingxiang": "if (event.name === \"useCard\") {\n\t\t\t\treturn event.player.hasHistory(\"lose\", evt => {\n\t\t\t\t\tif ((evt.relatedEvent || evt.getParent()) != event) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn Object.values(evt.gaintag_map).flat().includes(\"clanxsyingxiang\");\n\t\t\t\t});\n\t\t\t}\n\t\t\tif (player.hasSkill(\"clanxsyingxiang_used\") || !player.countDiscardableCards(player, \"h\", card => !get.info(\"clanqingjue\").isOnlySuit(card, player))) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"lose\" && event.getParent().name === \"useCard\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn game.hasPlayer(target => {\n\t\t\t\tconst evt = event.getl?. …"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_chenqun",
+   "event": "damageEnd",
+   "priority": 0,
+   "skills": [
+    "clangezhi",
+    "clanmingdian"
+   ],
+   "scope_of": {
+    "clangezhi": "global",
+    "clanmingdian": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "clangezhi": "return (event.player == player || player.inRange(event.player)) && event.source && event.source != player && (player.countDiscardableCards(player, \"he\") > 0 || event.source.countDiscardableCards(player, \"he\") > 0);",
+    "clanmingdian": "return player.hasCard(card => get.type(card) == \"basic\" && player.canRecast(card) && !player.getStorage(\"clanmingdian_used\").includes(get.name(card)), \"he\");"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xunyu",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clandaojie",
+    "clandingan"
+   ],
+   "scope_of": {
+    "clandaojie": "player",
+    "clandingan": "global"
+   },
+   "same_scope": false,
+   "any_forced": true,
+   "filters": {
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);",
+    "clandingan": "return game.getGlobalHistory(\"useCard\", evt => evt.card.name == event.card.name).indexOf(event) == 1 && game.hasPlayer(target => !event.targets.includes(target) && !player.getStorage(\"clandingan_used\").includes(target)) && !game.getGlobalHistory(\"everything\", evt => evt.name == \"dying\").length;"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xunchen",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clandaojie",
+    "clansankuang"
+   ],
+   "scope_of": {
+    "clandaojie": "player",
+    "clansankuang": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);",
+    "clansankuang": "if (!game.hasPlayer(current => current != player)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst type = get.type2(event.card);\n\t\t\treturn player.getRoundHistory(\"useCard\", evt => get.type2(evt.card) == type).indexOf(event) == 0;"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xuncai",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clandaojie",
+    "clandianzhan"
+   ],
+   "scope_of": {
+    "clandaojie": "player",
+    "clandianzhan": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);",
+    "clandianzhan": "if (!lib.suit.includes(get.suit(event.card))) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst suit = get.suit(event.card);\n\t\t\tif (player.getRoundHistory(\"useCard\", evt => get.suit(evt.card) == suit).indexOf(event) != 0) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn (event.targets && event.targets.length == 1 && !event.targets[0].isLinked()) || player.hasCard(card => get.suit(card) == get.suit(event.card) && player.canRecast(card), \"h\");"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xunguan",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clandaojie",
+    "clandunji"
+   ],
+   "scope_of": {
+    "clandaojie": "player",
+    "clandunji": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);",
+    "clandunji": "if (!event.cards?.someInD(\"od\") || !game.hasPlayer(target => target.countCards(\"h\"))) return false;\n\t\t\treturn player.getHistory(\"useCard\", evt => get.color(evt.card) === \"black\").indexOf(event) === 0;"
+   }
+  },
+  {
+   "source": "noname/character/clan",
+   "general": "clan_xunyou",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "clanbaichu",
+    "clandaojie"
+   ],
+   "scope_of": {
+    "clanbaichu": "player",
+    "clandaojie": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "clanbaichu": "const storage = player.storage.clanbaichu || {};\n\t\t\tif (Object.values(storage).includes(event.card.name)) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\tconst suit = get.suit(event.card);\n\t\t\tif (suit == \"none\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (!player.hasSkill(\"qice\")) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\tconst key = `${suit}+${get.type2(event.card)}`;\n\t\t\treturn !(key in storage);",
+    "clandaojie": "return (\n\t\t\t\tget.type(event.card, null, false) == \"trick\" &&\n\t\t\t\t!get.tag(event.card, \"damage\") &&\n\t\t\t\tevent.cards.filterInD().length > 0 &&\n\t\t\t\tplayer\n\t\t\t\t\t.getHistory(\"useCard\", evt => {\n\t\t\t\t\t\treturn get.type(evt.card, null, false) == \"trick\" && !get.tag(evt.card, \"damage\");\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 0\n\t\t\t);"
+   }
+  },
+  {
+   "source": "noname/character/collab",
+   "general": "ol_le_liushan",
+   "event": "enterGame",
+   "priority": 0,
+   "skills": [
+    "oltuoquan",
+    "olxianglv"
+   ],
+   "scope_of": {
+    "oltuoquan": "player",
+    "olxianglv": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "oltuoquan": "if (event.name == \"phaseZhunbei\") {\n\t\t\t\treturn player.getStorage(\"oltuoquan\").length || player.additionalSkills[\"oltuoquan\"]?.length;\n\t\t\t}\n\t\t\tif (\n\t\t\t\t!game.hasPlayer(current => {\n\t\t\t\t\tif (get.mode() == \"doudizhu\") {\n\t\t\t\t\t\treturn current.identity == \"fan\";\n\t\t\t\t\t}\n\t\t\t\t\treturn current != player;\n\t\t\t\t})\n\t\t\t) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.name != \"phase\" || game.phaseNumber == 0;",
+    "olxianglv": "if (event.name == \"gainFuchen\") {\n\t\t\t\treturn event.fuchens?.length && player.hasExpansions(\"olxianglv\");\n\t\t\t}\n\t\t\treturn event.name != \"phase\" || game.phaseNumber == 0;"
+   }
+  },
+  {
+   "source": "noname/character/collab",
+   "general": "ol_le_liushan",
+   "event": "phaseBefore",
+   "priority": 0,
+   "skills": [
+    "oltuoquan",
+    "olxianglv"
+   ],
+   "scope_of": {
+    "oltuoquan": "global",
+    "olxianglv": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "oltuoquan": "if (event.name == \"phaseZhunbei\") {\n\t\t\t\treturn player.getStorage(\"oltuoquan\").length || player.additionalSkills[\"oltuoquan\"]?.length;\n\t\t\t}\n\t\t\tif (\n\t\t\t\t!game.hasPlayer(current => {\n\t\t\t\t\tif (get.mode() == \"doudizhu\") {\n\t\t\t\t\t\treturn current.identity == \"fan\";\n\t\t\t\t\t}\n\t\t\t\t\treturn current != player;\n\t\t\t\t})\n\t\t\t) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.name != \"phase\" || game.phaseNumber == 0;",
+    "olxianglv": "if (event.name == \"gainFuchen\") {\n\t\t\t\treturn event.fuchens?.length && player.hasExpansions(\"olxianglv\");\n\t\t\t}\n\t\t\treturn event.name != \"phase\" || game.phaseNumber == 0;"
+   }
+  },
+  {
+   "source": "noname/character/collab",
+   "general": "ol_nianshou",
+   "event": "phaseBefore",
+   "priority": 0,
+   "skills": [
+    "olshouhun",
+    "olsuichong"
+   ],
+   "scope_of": {
+    "olshouhun": "global",
+    "olsuichong": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "olshouhun": "const storage = player.storage?.[\"olshouhun\"];\n\t\t\tif (!storage) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\") {\n\t\t\t\treturn storage.some(num => num < 4);\n\t\t\t}\n\t\t\tif (event.name === \"phaseDraw\") {\n\t\t\t\treturn !event.numFixed && storage[0] > 0;\n\t\t\t}\n\t\t\treturn storage[2] > 0 && (event.name !== \"phase\" || game.phaseNumber === 0);",
+    "olsuichong": "if (!get.info(\"olsuichong\").derivation.some(skill => !player.hasSkill(skill, null, false, false))) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name !== \"phaseZhunbei\") {\n\t\t\t\treturn event.name !== \"phase\" || game.phaseNumber === 0;\n\t\t\t}\n\t\t\tif (!_status.connectMode && game.changeCoin && lib.config.coin < Math.max(10, game.countPlayer() + 1)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn game.getAllGlobalHistory(\"everything\", evt => evt.name === \"olsuichong\" && evt.player === player && evt._trigger?.name === \"phaseZhunbei\").length < 3;"
+   }
+  },
+  {
+   "source": "noname/character/collab",
+   "general": "ol_nianshou",
+   "event": "enterGame",
+   "priority": 0,
+   "skills": [
+    "olshouhun",
+    "olsuichong"
+   ],
+   "scope_of": {
+    "olshouhun": "player",
+    "olsuichong": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "olshouhun": "const storage = player.storage?.[\"olshouhun\"];\n\t\t\tif (!storage) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\") {\n\t\t\t\treturn storage.some(num => num < 4);\n\t\t\t}\n\t\t\tif (event.name === \"phaseDraw\") {\n\t\t\t\treturn !event.numFixed && storage[0] > 0;\n\t\t\t}\n\t\t\treturn storage[2] > 0 && (event.name !== \"phase\" || game.phaseNumber === 0);",
+    "olsuichong": "if (!get.info(\"olsuichong\").derivation.some(skill => !player.hasSkill(skill, null, false, false))) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name !== \"phaseZhunbei\") {\n\t\t\t\treturn event.name !== \"phase\" || game.phaseNumber === 0;\n\t\t\t}\n\t\t\tif (!_status.connectMode && game.changeCoin && lib.config.coin < Math.max(10, game.countPlayer() + 1)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn game.getAllGlobalHistory(\"everything\", evt => evt.name === \"olsuichong\" && evt.player === player && evt._trigger?.name === \"phaseZhunbei\").length < 3;"
+   }
+  },
+  {
+   "source": "noname/character/extra",
+   "general": "shen_zhugeliang",
+   "event": "phaseJieshuBegin",
+   "priority": 0,
+   "skills": [
+    "dawu",
+    "kuangfeng"
+   ],
+   "scope_of": {
+    "dawu": "player",
+    "kuangfeng": "player"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "dawu": "return player.getExpansions(\"qixing\").length;",
+    "kuangfeng": "return player.getExpansions(\"qixing\").length;"
+   }
+  },
+  {
+   "source": "noname/character/huicui",
+   "general": "re_sunluyu",
+   "event": "phaseUseBegin",
+   "priority": 0,
+   "skills": [
+    "remeibu",
+    "remumu"
+   ],
+   "scope_of": {
+    "remeibu": "global",
+    "remumu": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "remeibu": "return event.player != player && event.player.isIn() && event.player.inRange(player) && player.countCards(\"he\") > 0;",
+    "remumu": "return game.hasPlayer(function (current) {\n\t\t\t\treturn current.countCards(\"e\") > 0;\n\t\t\t});"
+   }
+  },
+  {
+   "source": "noname/character/mobile",
+   "general": "o_tadun",
+   "event": "loseAfter",
+   "priority": 0,
+   "skills": [
+    "lianxi",
+    "youlve"
+   ],
+   "scope_of": {
+    "lianxi": "player",
+    "youlve": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "lianxi": "if (event.type != \"discard\" || !player.hasUseTarget({ name: \"sha\", isCard: true }, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getl?.(player)?.cards2?.some(card => get.name(card) == \"sha\");",
+    "youlve": "if (_status.currentPhase == player || !player.countDiscardableCards(player, \"he\")) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getParent(3).name != \"youlve\";"
+   }
+  },
+  {
+   "source": "noname/character/mobile",
+   "general": "o_tadun",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "lianxi",
+    "youlve"
+   ],
+   "scope_of": {
+    "lianxi": "global",
+    "youlve": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "lianxi": "if (event.type != \"discard\" || !player.hasUseTarget({ name: \"sha\", isCard: true }, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getl?.(player)?.cards2?.some(card => get.name(card) == \"sha\");",
+    "youlve": "if (_status.currentPhase == player || !player.countDiscardableCards(player, \"he\")) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getParent(3).name != \"youlve\";"
+   }
+  },
+  {
+   "source": "noname/character/mobile",
+   "general": "hefei_yuejin",
+   "event": "useCardToPlayered",
+   "priority": 0,
+   "skills": [
+    "hefeixianjian",
+    "hefeizherui"
+   ],
+   "scope_of": {
+    "hefeixianjian": "player",
+    "hefeizherui": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "hefeixianjian": "return event.card.name == \"sha\" && event.targets?.length == 1 && !get.is.convertedCard(event.card) && !get.is.virtualCard(event.card);",
+    "hefeizherui": "if (event.card.name != \"sha\" || get.is.convertedCard(event.card) || get.is.virtualCard(event.card)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.player.hasCards(\"e\", card => card.name == \"hefei_xianjian\");"
+   }
+  },
+  {
+   "source": "noname/character/offline",
+   "general": "hl_shen_zhugeliang",
+   "event": "phaseJieshuBegin",
+   "priority": 0,
+   "skills": [
+    "pekuangfeng",
+    "petianlin"
+   ],
+   "scope_of": {
+    "pekuangfeng": "player",
+    "petianlin": "player"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "pekuangfeng": "return player.getExpansions(\"qixing\").length;",
+    "petianlin": "return player.getExpansions(\"qixing\").length;"
+   }
+  },
+  {
+   "source": "noname/character/offline",
+   "general": "yj_yongkai",
+   "event": "gainAfter",
+   "priority": 0,
+   "skills": [
+    "psquanpan",
+    "psxiaofan"
+   ],
+   "scope_of": {
+    "psquanpan": "player",
+    "psxiaofan": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "psquanpan": "if (!game.hasPlayer(current => current !== player) || player.group !== \"wu\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getg?.(player).some(card => get.owner(card) === player && get.position(card) === \"h\" && get.type(card) === \"equip\");",
+    "psxiaofan": "if (!target?.isIn()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\") {\n\t\t\t\treturn target.group === \"shu\" && event.getParent().name !== \"psxiaofan\";\n\t\t\t}\n\t\t\treturn true;"
+   }
+  },
+  {
+   "source": "noname/character/offline",
+   "general": "yj_yongkai",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "psquanpan",
+    "psxiaofan"
+   ],
+   "scope_of": {
+    "psquanpan": "global",
+    "psxiaofan": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "psquanpan": "if (!game.hasPlayer(current => current !== player) || player.group !== \"wu\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getg?.(player).some(card => get.owner(card) === player && get.position(card) === \"h\" && get.type(card) === \"equip\");",
+    "psxiaofan": "if (!target?.isIn()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"damage\") {\n\t\t\t\treturn target.group === \"shu\" && event.getParent().name !== \"psxiaofan\";\n\t\t\t}\n\t\t\treturn true;"
+   }
+  },
+  {
+   "source": "noname/character/onlyOL",
+   "general": "ol_zhangsong",
+   "event": "phaseUseBegin",
+   "priority": 0,
+   "skills": [
+    "olqiangzhi",
+    "olxiantu"
+   ],
+   "scope_of": {
+    "olqiangzhi": "player",
+    "olxiantu": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "olqiangzhi": "return game.hasPlayer(function (current) {\n\t\t\t\treturn current != player && current.countCards(\"h\") > 0;\n\t\t\t});",
+    "olxiantu": "return event.player != player;"
+   }
+  },
+  {
+   "source": "noname/character/onlyOL",
+   "general": "ol_sb_yuanshao",
+   "event": "useCardToPlayered",
+   "priority": 0,
+   "skills": [
+    "olsbhetao",
+    "olsbshenli"
+   ],
+   "scope_of": {
+    "olsbhetao": "global",
+    "olsbshenli": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "olsbhetao": "return (\n\t\t\t\tevent.player != player &&\n\t\t\t\tevent.isFirstTarget &&\n\t\t\t\tevent.targets.length > 1 &&\n\t\t\t\tplayer.countCards(\"he\", card => {\n\t\t\t\t\tif (get.position(card) == \"h\" && _status.connectMode) {\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t\treturn get.color(card) == get.color(event.card) && lib.filter.cardDiscardable(card, player);\n\t\t\t\t})\n\t\t\t);",
+    "olsbshenli": "if (!player.isPhaseUsing() || player.hasSkill(\"olsbshenli_used\")) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn (\n\t\t\t\tevent.card.name == \"sha\" &&\n\t\t\t\tgame.hasPlayer(target => {\n\t\t\t\t\treturn !event.targets.includes(target) && player.canUse(event.card, target, false);\n\t\t\t\t}) &&\n\t\t\t\tevent.isFirstTarget\n\t\t\t);"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "loseAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "equipAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "addJudgeAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "gainAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "sb_zhugejin",
+   "event": "addToExpansionAfter",
+   "priority": 0,
+   "skills": [
+    "sbhongyuan",
+    "sbmingzhe"
+   ],
+   "scope_of": {
+    "sbhongyuan": "global",
+    "sbmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "sbhongyuan": "return player.countCharge();",
+    "sbmingzhe": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.countMark(\"sbmingzhe_used\") >= 2) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt.cards2?.length;"
+   }
+  },
+  {
+   "source": "noname/character/sb",
+   "general": "liucheng",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "splveying",
+    "spyingwu"
+   ],
+   "scope_of": {
+    "splveying": "player",
+    "spyingwu": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "splveying": "return event.card.name === \"sha\" && player.countMark(\"splveying\") > 1;",
+    "spyingwu": "return player.hasSkill(\"splveying\", null, null, false) && get.type(event.card) === \"trick\" && !get.tag(event.card, \"damage\") && player.countMark(\"splveying\") > 1;"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "quhuang",
+   "event": "loseAfter",
+   "priority": 0,
+   "skills": [
+    "olnishou",
+    "olqiejian"
+   ],
+   "scope_of": {
+    "olnishou": "player",
+    "olqiejian": "global"
+   },
+   "same_scope": false,
+   "any_forced": true,
+   "filters": {
+    "olnishou": "var phaseName;\n\t\t\tfor (var name of lib.phaseName) {\n\t\t\t\tvar evt = event.getParent(name);\n\t\t\t\tif (!evt || evt.name != name) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tphaseName = name;\n\t\t\t}\n\t\t\tvar cards = event.getd(player, \"es\");\n\t\t\treturn (\n\t\t\t\tcards.length &&\n\t\t\t\t(cards.some(card => {\n\t\t\t\t\tif (get.position(card, true) != \"d\") {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn player.hasUseTarget(get.autoViewAs({ name: \"shandian\" }, [card]));\n\t\t\t\t}) ||\n\t\t\t\t\t(phaseName && !player.hasSkill(\"olnishou_swap\")))\n\t\t\t);",
+    "olqiejian": "（无 filter：锁定直触发）"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "quhuang",
+   "event": "equipAfter",
+   "priority": 0,
+   "skills": [
+    "olnishou",
+    "olqiejian"
+   ],
+   "scope_of": {
+    "olnishou": "global",
+    "olqiejian": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "olnishou": "var phaseName;\n\t\t\tfor (var name of lib.phaseName) {\n\t\t\t\tvar evt = event.getParent(name);\n\t\t\t\tif (!evt || evt.name != name) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tphaseName = name;\n\t\t\t}\n\t\t\tvar cards = event.getd(player, \"es\");\n\t\t\treturn (\n\t\t\t\tcards.length &&\n\t\t\t\t(cards.some(card => {\n\t\t\t\t\tif (get.position(card, true) != \"d\") {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn player.hasUseTarget(get.autoViewAs({ name: \"shandian\" }, [card]));\n\t\t\t\t}) ||\n\t\t\t\t\t(phaseName && !player.hasSkill(\"olnishou_swap\")))\n\t\t\t);",
+    "olqiejian": "（无 filter：锁定直触发）"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "quhuang",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "olnishou",
+    "olqiejian"
+   ],
+   "scope_of": {
+    "olnishou": "global",
+    "olqiejian": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "olnishou": "var phaseName;\n\t\t\tfor (var name of lib.phaseName) {\n\t\t\t\tvar evt = event.getParent(name);\n\t\t\t\tif (!evt || evt.name != name) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tphaseName = name;\n\t\t\t}\n\t\t\tvar cards = event.getd(player, \"es\");\n\t\t\treturn (\n\t\t\t\tcards.length &&\n\t\t\t\t(cards.some(card => {\n\t\t\t\t\tif (get.position(card, true) != \"d\") {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn player.hasUseTarget(get.autoViewAs({ name: \"shandian\" }, [card]));\n\t\t\t\t}) ||\n\t\t\t\t\t(phaseName && !player.hasSkill(\"olnishou_swap\")))\n\t\t\t);",
+    "olqiejian": "（无 filter：锁定直触发）"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "xujing",
+   "event": "useCardAfter",
+   "priority": 0,
+   "skills": [
+    "xjshijian",
+    "yuxu"
+   ],
+   "scope_of": {
+    "xjshijian": "global",
+    "yuxu": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "xjshijian": "if (event.player == player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tvar evt = event.getParent(\"phaseUse\");\n\t\t\tif (!evt || evt.player != event.player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn (\n\t\t\t\tevent.player\n\t\t\t\t\t.getHistory(\"useCard\", function (evtt) {\n\t\t\t\t\t\treturn evtt.getParent(\"phaseUse\") == evt;\n\t\t\t\t\t})\n\t\t\t\t\t.indexOf(event) == 1 && player.countCards(\"he\") > 0\n\t\t\t);",
+    "yuxu": "var evt = event.getParent(\"phaseUse\");\n\t\t\tif (!evt || evt.player != player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn true;"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "zhugejin",
+   "event": "gainAfter",
+   "priority": 0,
+   "skills": [
+    "olhongyuan",
+    "olmingzhe"
+   ],
+   "scope_of": {
+    "olhongyuan": "player",
+    "olmingzhe": "global"
+   },
+   "same_scope": false,
+   "any_forced": true,
+   "filters": {
+    "olhongyuan": "if (!player.countCards(\"he\") || player.hasSkill(\"olhongyuan_blocker\", null, null, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getg(player).length >= 2;",
+    "olmingzhe": "if (player.isPhaseUsing()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tvar evt = event.getl(player);\n\t\t\tfor (var i of evt.cards2) {\n\t\t\t\tif (get.color(i, player) == \"red\") {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "zhugejin",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "olhongyuan",
+    "olmingzhe"
+   ],
+   "scope_of": {
+    "olhongyuan": "global",
+    "olmingzhe": "global"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "olhongyuan": "if (!player.countCards(\"he\") || player.hasSkill(\"olhongyuan_blocker\", null, null, false)) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.getg(player).length >= 2;",
+    "olmingzhe": "if (player.isPhaseUsing()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tvar evt = event.getl(player);\n\t\t\tfor (var i of evt.cards2) {\n\t\t\t\tif (get.color(i, player) == \"red\") {\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn false;"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "shixie",
+   "event": "phaseJieshuBegin",
+   "priority": 0,
+   "skills": [
+    "olbiluan",
+    "relixia"
+   ],
+   "scope_of": {
+    "olbiluan": "player",
+    "relixia": "global"
+   },
+   "same_scope": false,
+   "any_forced": true,
+   "filters": {
+    "olbiluan": "return (\n\t\t\t\tplayer.countCards(\"he\") &&\n\t\t\t\tgame.hasPlayer(function (current) {\n\t\t\t\t\treturn current != player && get.distance(current, player) <= 1;\n\t\t\t\t})\n\t\t\t);",
+    "relixia": "return event.player.isIn() && event.player != player && !player.inRangeOf(event.player);"
+   }
+  },
+  {
+   "source": "noname/character/sp",
+   "general": "sunluyu",
+   "event": "phaseUseBegin",
+   "priority": 0,
+   "skills": [
+    "new_meibu",
+    "new_mumu"
+   ],
+   "scope_of": {
+    "new_meibu": "global",
+    "new_mumu": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "new_meibu": "return event.player != player && event.player.isIn() && player.countCards(\"he\") > 0 && event.player.inRange(player);",
+    "new_mumu": "return game.hasPlayer(current => {\n\t\t\t\tif (current == player) {\n\t\t\t\t\treturn current.getEquips(2).length > 0;\n\t\t\t\t}\n\t\t\t\treturn current.countCards(\"e\") > 0;\n\t\t\t});"
+   }
+  },
+  {
+   "source": "noname/character/tw",
+   "general": "tw_yuantan",
+   "event": "phaseJieshuBegin",
+   "priority": 0,
+   "skills": [
+    "twbaizu",
+    "twqiaosi"
+   ],
+   "scope_of": {
+    "twbaizu": "player",
+    "twqiaosi": "player"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "twbaizu": "return (\n\t\t\t\tplayer.isDamaged() &&\n\t\t\t\tplayer.countCards(\"h\") &&\n\t\t\t\tgame.hasPlayer(target => {\n\t\t\t\t\treturn target != player && target.countCards(\"h\");\n\t\t\t\t}) &&\n\t\t\t\tplayer.getHp() + player.countMark(\"twbaizu_lizhan\")\n\t\t\t);",
+    "twqiaosi": "return get.info(\"twqiaosi\").getCards(player).length;"
+   }
+  },
+  {
+   "source": "noname/character/tw",
+   "general": "tw_xiahouen",
+   "event": "phaseZhunbeiBegin",
+   "priority": 0,
+   "skills": [
+    "twfujian",
+    "twjianwei"
+   ],
+   "scope_of": {
+    "twfujian": "player",
+    "twjianwei": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "twfujian": "if (player.getEquips(1).length) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.name != \"phase\" || game.phaseNumber == 0;",
+    "twjianwei": "if (!player.getEquips(1).length) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn game.hasPlayer(current => player.inRange(current) && player.canCompare(current));"
+   }
+  },
+  {
+   "source": "noname/character/xianding",
+   "general": "dc_wangyuanji",
+   "event": "phaseBegin",
+   "priority": 0,
+   "skills": [
+    "dcshiyu",
+    "dcshuaijian"
+   ],
+   "scope_of": {
+    "dcshiyu": "global",
+    "dcshuaijian": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "dcshiyu": "return player != event.player;",
+    "dcshuaijian": "return [\"h\", \"e\"].some(pos => game.hasPlayer(current => current.hasCards(pos)));"
+   }
+  },
+  {
+   "source": "noname/character/xianding",
+   "general": "dc_ruiji",
+   "event": "gainAfter",
+   "priority": 0,
+   "skills": [
+    "dcliying",
+    "dcwangyuan"
+   ],
+   "scope_of": {
+    "dcliying": "player",
+    "dcwangyuan": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "dcliying": "const cards = event.getg(player).filter(i => get.owner(i) === player && get.position(i) === \"h\");\n\t\t\tif (!cards.length) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getParent(\"phaseDraw\");\n\t\t\tif (evt?.name === \"phaseDraw\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn true;",
+    "dcwangyuan": "if (player === _status.currentPhase) {\n\t\t\t\treturn name === \"logSkill\" && event.skill === \"dcliying\" && player.getExpansions(\"dcwangyuan\").length < game.countPlayer2();\n\t\t\t}\n\t\t\tif (name === \"logSkill\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.getExpansions(\"dcwangyuan\").length >= game.countPlayer2()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"gain\" && event.player === player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt && evt.cards2 && evt.cards2.length > 0;"
+   }
+  },
+  {
+   "source": "noname/character/xianding",
+   "general": "dc_ruiji",
+   "event": "loseAsyncAfter",
+   "priority": 0,
+   "skills": [
+    "dcliying",
+    "dcwangyuan"
+   ],
+   "scope_of": {
+    "dcliying": "global",
+    "dcwangyuan": "global"
+   },
+   "same_scope": true,
+   "any_forced": false,
+   "filters": {
+    "dcliying": "const cards = event.getg(player).filter(i => get.owner(i) === player && get.position(i) === \"h\");\n\t\t\tif (!cards.length) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getParent(\"phaseDraw\");\n\t\t\tif (evt?.name === \"phaseDraw\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn true;",
+    "dcwangyuan": "if (player === _status.currentPhase) {\n\t\t\t\treturn name === \"logSkill\" && event.skill === \"dcliying\" && player.getExpansions(\"dcwangyuan\").length < game.countPlayer2();\n\t\t\t}\n\t\t\tif (name === \"logSkill\") {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (player.getExpansions(\"dcwangyuan\").length >= game.countPlayer2()) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tif (event.name === \"gain\" && event.player === player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst evt = event.getl(player);\n\t\t\treturn evt && evt.cards2 && evt.cards2.length > 0;"
+   }
+  },
+  {
+   "source": "noname/character/xianding",
+   "general": "yuanji",
+   "event": "damageEnd",
+   "priority": 0,
+   "skills": [
+    "dcfangdu",
+    "dcjiexing"
+   ],
+   "scope_of": {
+    "dcfangdu": "player",
+    "dcjiexing": "player"
+   },
+   "same_scope": true,
+   "any_forced": true,
+   "filters": {
+    "dcfangdu": "if (player === _status.currentPhase) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn (!event.hasNature() && !player.hasHistory(\"damage\", evt => !evt.hasNature() && evt !== event, event)) || (event.hasNature() && !player.hasHistory(\"damage\", evt => evt.hasNature() && evt !== event, event) && event.source && event.source.isIn() && event.source.hasGainableCards(player, \"h\"));",
+    "dcjiexing": "（无 filter：锁定直触发）"
+   }
+  },
+  {
+   "source": "noname/character/xianding",
+   "general": "dc_liuyu",
+   "event": "phaseJieshuBegin",
+   "priority": 0,
+   "skills": [
+    "dcpijing",
+    "dcsuifu"
+   ],
+   "scope_of": {
+    "dcpijing": "player",
+    "dcsuifu": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "dcpijing": "（无 filter：锁定直触发）",
+    "dcsuifu": "if (player === event.player) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tlet num = 0;\n\t\t\tgame.countPlayer(current => {\n\t\t\t\tif (current === player || current.getSeatNum() === 1) {\n\t\t\t\t\tcurrent.getHistory(\"damage\", evt => {\n\t\t\t\t\t\tnum += evt.num;\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t});\n\t\t\treturn num >= 2;"
+   }
+  },
+  {
+   "source": "noname/character/yijiang",
+   "general": "zhangsong",
+   "event": "phaseUseBegin",
+   "priority": 0,
+   "skills": [
+    "qiangzhi",
+    "xiantu"
+   ],
+   "scope_of": {
+    "qiangzhi": "player",
+    "xiantu": "global"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "qiangzhi": "return game.hasPlayer(function (current) {\n\t\t\t\treturn current != player && current.countCards(\"h\") > 0;\n\t\t\t});",
+    "xiantu": "return event.player != player;"
+   }
+  },
+  {
+   "source": "noname/character/yingbian",
+   "general": "yangzhi",
+   "event": "useCardToTargeted",
+   "priority": 0,
+   "skills": [
+    "maihuo",
+    "xinwanyi"
+   ],
+   "scope_of": {
+    "maihuo": "target",
+    "xinwanyi": "player"
+   },
+   "same_scope": false,
+   "any_forced": false,
+   "filters": {
+    "maihuo": "const evt2 = event.getParent(2);\n\t\t\tif (evt2 == null) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn event.card.name === \"sha\" && event.card.isCard && evt2.name !== \"maihuo_effect\" && event.cards.filterInD().length > 0 && event.targets.length === 1 && event.player.isIn() && !event.player.hasExpansions(\"maihuo_effect\");",
+    "xinwanyi": "return player !== event.target && event.targets.length === 1 && (event.card.name === \"sha\" || get.type(event.card, null, false) === \"trick\") && event.target.countCards(\"he\") > 0;"
+   }
+  }
+ ]
+}

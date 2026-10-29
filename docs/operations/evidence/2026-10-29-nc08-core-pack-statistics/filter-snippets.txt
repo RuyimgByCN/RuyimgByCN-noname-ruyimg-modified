@@ -1,0 +1,147 @@
+[0] noname/character/bingshi pot_caoshuang ev=damageEnd
+    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+    potjianzhuan: if (!player.hasSkill("potdianyi", null, false, false) && !player.hasSkill("potshequan", null, false, false)) { return false; } if (event.name === "damage" && event.num < 1) { return false; } const { t
+    potshequan: const { triggers, triggered } = player.getStorage("potshequan", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return
+[1] noname/character/bingshi pot_caoshuang ev=damageSource
+    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+    potjianzhuan: if (!player.hasSkill("potdianyi", null, false, false) && !player.hasSkill("potshequan", null, false, false)) { return false; } if (event.name === "damage" && event.num < 1) { return false; } const { t
+    potshequan: const { triggers, triggered } = player.getStorage("potshequan", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return
+[2] noname/character/bingshi pot_caoshuang ev=dying
+    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+    potjianzhuan: if (!player.hasSkill("potdianyi", null, false, false) && !player.hasSkill("potshequan", null, false, false)) { return false; } if (event.name === "damage" && event.num < 1) { return false; } const { t
+    potshequan: const { triggers, triggered } = player.getStorage("potshequan", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return
+[3] noname/character/clan clan_chenqun ev=damageEnd
+    clangezhi: return (event.player == player || player.inRange(event.player)) && event.source && event.source != player && (player.countDiscardableCards(player, "he") > 0 || event.source.countDiscardableCards(playe
+    clanmingdian: return player.hasCard(card => get.type(card) == "basic" && player.canRecast(card) && !player.getStorage("clanmingdian_used").includes(get.name(card)), "he");
+[4] noname/character/clan clan_xuncai ev=useCardAfter
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+    clandianzhan: if (!lib.suit.includes(get.suit(event.card))) { return false; } const suit = get.suit(event.card); if (player.getRoundHistory("useCard", evt => get.suit(evt.card) == suit).indexOf(event) != 0) { retur
+[5] noname/character/clan clan_xunchen ev=useCardAfter
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+    clansankuang: if (!game.hasPlayer(current => current != player)) { return false; } const type = get.type2(event.card); return player.getRoundHistory("useCard", evt => get.type2(evt.card) == type).indexOf(event) == 
+[6] noname/character/clan clan_xunguan ev=useCardAfter
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+    clandunji: if (!event.cards?.someInD("od") || !game.hasPlayer(target => target.countCards("h"))) return false; return player.getHistory("useCard", evt => get.color(evt.card) === "black").indexOf(event) === 0;
+[7] noname/character/clan clan_xunshi ev=useCardAfter
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+    clanxsyingxiang: if (event.name === "useCard") { return event.player.hasHistory("lose", evt => { if ((evt.relatedEvent || evt.getParent()) != event) { return false; } return Object.values(evt.gaintag_map).flat().inclu
+[8] noname/character/clan clan_xunyou ev=useCardAfter
+    clanbaichu: const storage = player.storage.clanbaichu || {}; if (Object.values(storage).includes(event.card.name)) { return true; } const suit = get.suit(event.card); if (suit == "none") { return false; } if (!pl
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+[9] noname/character/clan clan_xunyu ev=useCardAfter
+    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+    clandingan: return game.getGlobalHistory("useCard", evt => evt.card.name == event.card.name).indexOf(event) == 1 && game.hasPlayer(target => !event.targets.includes(target) && !player.getStorage("clandingan_used"
+[10] noname/character/collab ol_le_liushan ev=enterGame
+    oltuoquan: if (event.name == "phaseZhunbei") { return player.getStorage("oltuoquan").length || player.additionalSkills["oltuoquan"]?.length; } if ( !game.hasPlayer(current => { if (get.mode() == "doudizhu") { re
+    olxianglv: if (event.name == "gainFuchen") { return event.fuchens?.length && player.hasExpansions("olxianglv"); } return event.name != "phase" || game.phaseNumber == 0;
+[11] noname/character/collab ol_le_liushan ev=phaseBefore
+    oltuoquan: if (event.name == "phaseZhunbei") { return player.getStorage("oltuoquan").length || player.additionalSkills["oltuoquan"]?.length; } if ( !game.hasPlayer(current => { if (get.mode() == "doudizhu") { re
+    olxianglv: if (event.name == "gainFuchen") { return event.fuchens?.length && player.hasExpansions("olxianglv"); } return event.name != "phase" || game.phaseNumber == 0;
+[12] noname/character/collab ol_nianshou ev=enterGame
+    olshouhun: const storage = player.storage?.["olshouhun"]; if (!storage) { return false; } if (event.name === "damage") { return storage.some(num => num < 4); } if (event.name === "phaseDraw") { return !event.num
+    olsuichong: if (!get.info("olsuichong").derivation.some(skill => !player.hasSkill(skill, null, false, false))) { return false; } if (event.name !== "phaseZhunbei") { return event.name !== "phase" || game.phaseNum
+[13] noname/character/collab ol_nianshou ev=phaseBefore
+    olshouhun: const storage = player.storage?.["olshouhun"]; if (!storage) { return false; } if (event.name === "damage") { return storage.some(num => num < 4); } if (event.name === "phaseDraw") { return !event.num
+    olsuichong: if (!get.info("olsuichong").derivation.some(skill => !player.hasSkill(skill, null, false, false))) { return false; } if (event.name !== "phaseZhunbei") { return event.name !== "phase" || game.phaseNum
+[14] noname/character/extra shen_zhugeliang ev=phaseJieshuBegin
+    dawu: return player.getExpansions("qixing").length;
+    kuangfeng: return player.getExpansions("qixing").length;
+[15] noname/character/huicui re_sunluyu ev=phaseUseBegin
+    remeibu: return event.player != player && event.player.isIn() && event.player.inRange(player) && player.countCards("he") > 0;
+    remumu: return game.hasPlayer(function (current) { return current.countCards("e") > 0; });
+[16] noname/character/mobile hefei_yuejin ev=useCardToPlayered
+    hefeixianjian: return event.card.name == "sha" && event.targets?.length == 1 && !get.is.convertedCard(event.card) && !get.is.virtualCard(event.card);
+    hefeizherui: if (event.card.name != "sha" || get.is.convertedCard(event.card) || get.is.virtualCard(event.card)) { return false; } return event.player.hasCards("e", card => card.name == "hefei_xianjian");
+[17] noname/character/mobile o_tadun ev=loseAfter
+    lianxi: if (event.type != "discard" || !player.hasUseTarget({ name: "sha", isCard: true }, false)) { return false; } return event.getl?.(player)?.cards2?.some(card => get.name(card) == "sha");
+    youlve: if (_status.currentPhase == player || !player.countDiscardableCards(player, "he")) { return false; } return event.getParent(3).name != "youlve";
+[18] noname/character/mobile o_tadun ev=loseAsyncAfter
+    lianxi: if (event.type != "discard" || !player.hasUseTarget({ name: "sha", isCard: true }, false)) { return false; } return event.getl?.(player)?.cards2?.some(card => get.name(card) == "sha");
+    youlve: if (_status.currentPhase == player || !player.countDiscardableCards(player, "he")) { return false; } return event.getParent(3).name != "youlve";
+[19] noname/character/offline hl_shen_zhugeliang ev=phaseJieshuBegin
+    pekuangfeng: return player.getExpansions("qixing").length;
+    petianlin: return player.getExpansions("qixing").length;
+[20] noname/character/offline yj_yongkai ev=gainAfter
+    psquanpan: if (!game.hasPlayer(current => current !== player) || player.group !== "wu") { return false; } return event.getg?.(player).some(card => get.owner(card) === player && get.position(card) === "h" && get.
+    psxiaofan: if (!target?.isIn()) { return false; } if (event.name === "damage") { return target.group === "shu" && event.getParent().name !== "psxiaofan"; } return true;
+[21] noname/character/offline yj_yongkai ev=loseAsyncAfter
+    psquanpan: if (!game.hasPlayer(current => current !== player) || player.group !== "wu") { return false; } return event.getg?.(player).some(card => get.owner(card) === player && get.position(card) === "h" && get.
+    psxiaofan: if (!target?.isIn()) { return false; } if (event.name === "damage") { return target.group === "shu" && event.getParent().name !== "psxiaofan"; } return true;
+[22] noname/character/onlyOL ol_sb_yuanshao ev=useCardToPlayered
+    olsbhetao: return ( event.player != player && event.isFirstTarget && event.targets.length > 1 && player.countCards("he", card => { if (get.position(card) == "h" && _status.connectMode) { return true; } return ge
+    olsbshenli: if (!player.isPhaseUsing() || player.hasSkill("olsbshenli_used")) { return false; } return ( event.card.name == "sha" && game.hasPlayer(target => { return !event.targets.includes(target) && player.can
+[23] noname/character/onlyOL ol_zhangsong ev=phaseUseBegin
+    olqiangzhi: return game.hasPlayer(function (current) { return current != player && current.countCards("h") > 0; });
+    olxiantu: return event.player != player;
+[24] noname/character/sb liucheng ev=useCardAfter
+    splveying: return event.card.name === "sha" && player.countMark("splveying") > 1;
+    spyingwu: return player.hasSkill("splveying", null, null, false) && get.type(event.card) === "trick" && !get.tag(event.card, "damage") && player.countMark("splveying") > 1;
+[25] noname/character/sb sb_zhugejin ev=addJudgeAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[26] noname/character/sb sb_zhugejin ev=addToExpansionAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[27] noname/character/sb sb_zhugejin ev=equipAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[28] noname/character/sb sb_zhugejin ev=gainAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[29] noname/character/sb sb_zhugejin ev=loseAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[30] noname/character/sb sb_zhugejin ev=loseAsyncAfter
+    sbhongyuan: return player.countCharge();
+    sbmingzhe: if (player === _status.currentPhase) { return false; } if (player.countMark("sbmingzhe_used") >= 2) { return false; } const evt = event.getl(player); return evt.cards2?.length;
+[31] noname/character/sp quhuang ev=equipAfter
+    olnishou: var phaseName; for (var name of lib.phaseName) { var evt = event.getParent(name); if (!evt || evt.name != name) { continue; } phaseName = name; } var cards = event.getd(player, "es"); return ( cards.l
+    olqiejian: （无 filter：锁定直触发）
+[32] noname/character/sp quhuang ev=loseAfter
+    olnishou: var phaseName; for (var name of lib.phaseName) { var evt = event.getParent(name); if (!evt || evt.name != name) { continue; } phaseName = name; } var cards = event.getd(player, "es"); return ( cards.l
+    olqiejian: （无 filter：锁定直触发）
+[33] noname/character/sp quhuang ev=loseAsyncAfter
+    olnishou: var phaseName; for (var name of lib.phaseName) { var evt = event.getParent(name); if (!evt || evt.name != name) { continue; } phaseName = name; } var cards = event.getd(player, "es"); return ( cards.l
+    olqiejian: （无 filter：锁定直触发）
+[34] noname/character/sp shixie ev=phaseJieshuBegin
+    olbiluan: return ( player.countCards("he") && game.hasPlayer(function (current) { return current != player && get.distance(current, player) <= 1; }) );
+    relixia: return event.player.isIn() && event.player != player && !player.inRangeOf(event.player);
+[35] noname/character/sp sunluyu ev=phaseUseBegin
+    new_meibu: return event.player != player && event.player.isIn() && player.countCards("he") > 0 && event.player.inRange(player);
+    new_mumu: return game.hasPlayer(current => { if (current == player) { return current.getEquips(2).length > 0; } return current.countCards("e") > 0; });
+[36] noname/character/sp xujing ev=useCardAfter
+    xjshijian: if (event.player == player) { return false; } var evt = event.getParent("phaseUse"); if (!evt || evt.player != event.player) { return false; } return ( event.player .getHistory("useCard", function (ev
+    yuxu: var evt = event.getParent("phaseUse"); if (!evt || evt.player != player) { return false; } return true;
+[37] noname/character/sp zhugejin ev=gainAfter
+    olhongyuan: if (!player.countCards("he") || player.hasSkill("olhongyuan_blocker", null, null, false)) { return false; } return event.getg(player).length >= 2;
+    olmingzhe: if (player.isPhaseUsing()) { return false; } var evt = event.getl(player); for (var i of evt.cards2) { if (get.color(i, player) == "red") { return true; } } return false;
+[38] noname/character/sp zhugejin ev=loseAsyncAfter
+    olhongyuan: if (!player.countCards("he") || player.hasSkill("olhongyuan_blocker", null, null, false)) { return false; } return event.getg(player).length >= 2;
+    olmingzhe: if (player.isPhaseUsing()) { return false; } var evt = event.getl(player); for (var i of evt.cards2) { if (get.color(i, player) == "red") { return true; } } return false;
+[39] noname/character/tw tw_xiahouen ev=phaseZhunbeiBegin
+    twfujian: if (player.getEquips(1).length) { return false; } return event.name != "phase" || game.phaseNumber == 0;
+    twjianwei: if (!player.getEquips(1).length) { return false; } return game.hasPlayer(current => player.inRange(current) && player.canCompare(current));
+[40] noname/character/tw tw_yuantan ev=phaseJieshuBegin
+    twbaizu: return ( player.isDamaged() && player.countCards("h") && game.hasPlayer(target => { return target != player && target.countCards("h"); }) && player.getHp() + player.countMark("twbaizu_lizhan") );
+    twqiaosi: return get.info("twqiaosi").getCards(player).length;
+[41] noname/character/xianding dc_liuyu ev=phaseJieshuBegin
+    dcpijing: （无 filter：锁定直触发）
+    dcsuifu: if (player === event.player) { return false; } let num = 0; game.countPlayer(current => { if (current === player || current.getSeatNum() === 1) { current.getHistory("damage", evt => { num += evt.num; 
+[42] noname/character/xianding dc_ruiji ev=gainAfter
+    dcliying: const cards = event.getg(player).filter(i => get.owner(i) === player && get.position(i) === "h"); if (!cards.length) { return false; } const evt = event.getParent("phaseDraw"); if (evt?.name === "phas
+    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+[43] noname/character/xianding dc_ruiji ev=loseAsyncAfter
+    dcliying: const cards = event.getg(player).filter(i => get.owner(i) === player && get.position(i) === "h"); if (!cards.length) { return false; } const evt = event.getParent("phaseDraw"); if (evt?.name === "phas
+    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+[44] noname/character/xianding dc_wangyuanji ev=phaseBegin
+    dcshiyu: return player != event.player;
+    dcshuaijian: return ["h", "e"].some(pos => game.hasPlayer(current => current.hasCards(pos)));
+[45] noname/character/xianding yuanji ev=damageEnd
+    dcfangdu: if (player === _status.currentPhase) { return false; } return (!event.hasNature() && !player.hasHistory("damage", evt => !evt.hasNature() && evt !== event, event)) || (event.hasNature() && !player.has
+    dcjiexing: （无 filter：锁定直触发）
+[46] noname/character/yijiang zhangsong ev=phaseUseBegin
+    qiangzhi: return game.hasPlayer(function (current) { return current != player && current.countCards("h") > 0; });
+    xiantu: return event.player != player;
+[47] noname/character/yingbian yangzhi ev=useCardToTargeted
+    maihuo: const evt2 = event.getParent(2); if (evt2 == null) { return false; } return event.card.name === "sha" && event.card.isCard && evt2.name !== "maihuo_effect" && event.cards.filterInD().length > 0 && eve
+    xinwanyi: return player !== event.target && event.targets.length === 1 && (event.card.name === "sha" || get.type(event.card, null, false) === "trick") && event.target.countCards("he") > 0;
