@@ -4,11 +4,12 @@ import {
   EXTENSION_CATALOG,
   extensionKey,
 } from "../engine/extensionCatalog";
+import { EngineClient } from "../engine/client";
 import {
   activateExtension,
   contentLockSummary,
   deactivateExtension,
-  importExtensionPackage,
+  importExtensionPackageValidated,
   installAndActivateAll,
   installExtension,
   readExtensionStore,
@@ -23,6 +24,29 @@ const snap = ref<ExtensionStoreSnapshot>(readExtensionStore());
 const error = ref("");
 const notice = ref("");
 const importText = ref("");
+const importing = ref(false);
+
+/**
+ * GT-014 导入期深层校验（裁决第 12 项）：结构层通过后，把载荷交 Worker 内的
+ * Rust 校验器（包/模块 logic_hash、rule-vm verify、宿主 ABI 窗口）裁决，与
+ * 服务端导入期拒绝一致；只校验不建局。校验 Worker 按需连接、页面内复用。
+ */
+let validator: Promise<EngineClient> | null = null;
+function validatorClient(): Promise<EngineClient> {
+  validator ??= (async () => {
+    const client = new EngineClient();
+    await client.connect();
+    return client;
+  })().catch((e) => {
+    validator = null;
+    throw e;
+  });
+  return validator;
+}
+async function deepValidate(canonicalPackJson: string): Promise<void> {
+  const client = await validatorClient();
+  await client.validatePackage(canonicalPackJson);
+}
 
 function refresh() {
   snap.value = readExtensionStore();
@@ -40,15 +64,28 @@ function run(fn: () => void) {
   }
 }
 
-/** 正式导入入口：粘贴或选择作者产物（完整 npack JSON，可含 VM 模块）。 */
-function importFromText() {
-  run(() => {
+/**
+ * 正式导入入口：粘贴或选择作者产物（完整 npack JSON，可含 VM 模块）。
+ * 结构层 → Worker 深层校验（Rust）→ 提交；任一环节拒绝都不改写存储。
+ * 本地导入的包记为未签名（本地验签暂缓）。
+ */
+async function importFromText() {
+  if (importing.value) return;
+  error.value = "";
+  notice.value = "";
+  importing.value = true;
+  try {
     const text = importText.value;
-    importExtensionPackage(text);
+    await importExtensionPackageValidated(text, deepValidate);
     const manifest = (JSON.parse(text) as { manifest: { namespace: string; package_id: string; version: string } }).manifest;
-    notice.value = `已导入 ${manifest.namespace}/${manifest.package_id} @ ${manifest.version}`;
+    notice.value = `已导入 ${manifest.namespace}/${manifest.package_id} @ ${manifest.version}（未签名）`;
     importText.value = "";
-  });
+    refresh();
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : String(e);
+  } finally {
+    importing.value = false;
+  }
 }
 
 async function importFromFile(event: Event) {
@@ -57,7 +94,7 @@ async function importFromFile(event: Event) {
   if (!file) return;
   try {
     importText.value = await file.text();
-    importFromText();
+    await importFromText();
   } catch (e) {
     error.value = e instanceof Error ? e.message : String(e);
   } finally {
@@ -118,7 +155,8 @@ const rows = computed(() => {
       <h2>导入扩展包</h2>
       <p class="muted">
         正式导入入口：粘贴或选择作者产物（完整 npack JSON，可含 VM 模块与卡牌/武将/牌堆资产）。
-        同包新版本按升级处理并保留旧版本副本；同版本内容冲突、已撤销、对局冻结或结构校验失败时拒绝且不改写已安装内容。
+        同包新版本按升级处理并保留旧版本副本；同版本内容冲突、已撤销、对局冻结、结构校验或 Rust 深层校验（包/模块指纹、字节码、宿主 ABI 窗口）失败时拒绝且不改写已安装内容。
+        本地导入的包未经签名校验，列表中标为「未签名」。
       </p>
       <textarea
         v-model="importText"
@@ -129,7 +167,7 @@ const rows = computed(() => {
         placeholder='{"manifest": {...}, "modules": [...], ...}'
       ></textarea>
       <div class="row">
-        <button class="primary" type="button" :disabled="!importText.trim() || snap.matchFrozen" @click="importFromText">导入</button>
+        <button class="primary" type="button" :disabled="!importText.trim() || snap.matchFrozen || importing" @click="importFromText">{{ importing ? "校验中…" : "导入" }}</button>
         <label>
           选择文件
           <input type="file" accept=".json,application/json" aria-label="选择扩展包文件" :disabled="snap.matchFrozen" @change="importFromFile" />
@@ -159,7 +197,10 @@ const rows = computed(() => {
           <span>操作</span>
         </div>
         <div v-for="row in rows" :key="row.key" class="trow" role="row">
-          <span>{{ row.title }}</span>
+          <span>
+            {{ row.title }}
+            <span v-if="row.record?.signature === 'unsigned'" class="badge-unsigned" title="本地导入的包未经签名校验">未签名</span>
+          </span>
           <span class="mono">{{ row.key }}</span>
           <span class="mono">{{ row.record?.version ?? row.version }}</span>
           <span>{{ row.status }}</span>
@@ -204,6 +245,15 @@ const rows = computed(() => {
 .warn { color: var(--color-warning, #c90); }
 .error { color: var(--danger, #e55); }
 .mono { font-family: var(--mono, ui-monospace, monospace); font-size: 0.85em; word-break: break-all; }
+.badge-unsigned {
+  margin-left: 0.4em;
+  padding: 0 0.4em;
+  border: 1px solid var(--color-warning, #c90);
+  border-radius: 0.6em;
+  color: var(--color-warning, #c90);
+  font-size: 0.75em;
+  vertical-align: middle;
+}
 .import-box { width: 100%; box-sizing: border-box; font-family: var(--mono, ui-monospace, monospace); font-size: 0.8em; margin-bottom: 0.5rem; }
 .lock-list { margin: 0.4rem 0 0; padding-left: 1.2rem; line-height: 1.6; }
 .table { display: flex; flex-direction: column; gap: 0.35rem; }

@@ -111,6 +111,23 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     Ok(pack)
 }
 
+/// 导入期深层校验（GT-014，裁决第 12 项）：对**单个**安装载荷执行与开局装载
+/// 完全相同的逐包校验——manifest 身份字段、`ContentPackage::validate()`
+/// （模块结构 + 包/模块 logic_hash）、`bridge_vm_skill_decls`（rule-vm 装载期
+/// verify + 宿主 ABI 窗口）、cards/characters/pile 桥接。只校验不建局；跨包
+/// 依赖解析仍在开局（`packs_from_json`）执行。与 `packs_from_json` 的单项
+/// 分派保持一致（含无 manifest 的旧 cards.json 元素）。
+pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+    let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
+    if item.get("manifest").is_some() {
+        installed_pack(&item).map(|_| ())
+    } else {
+        content_native_loader::bridge_pack(&json(&item))
+            .map(|_| ())
+            .map_err(|e| e.to_string())
+    }
+}
+
 pub(super) fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
     let value: Value = serde_json::from_str(packs_json).map_err(|e| format!("packs JSON: {e}"))?;
     let arr = value

@@ -300,6 +300,10 @@ export type WorkerRequest =
   | { id: number; type: "chooseGeneral"; seat: number; name: string }
   | { id: number; type: "save" }
   | { id: number; type: "restore"; hex: string; packsJson?: string }
+  // GT-014 导入期深层校验（裁决第 12 项）：单个安装载荷交 Worker 内的 Rust
+  // 校验器（包/模块 logic_hash、rule-vm 装载期 verify、宿主 ABI 窗口）裁决，
+  // 只校验不建局；不需要已初始化的对局句柄。
+  | { id: number; type: "validatePackage"; packJson: string }
   | { id: number; type: "loadReplay"; json: string }
   | {
       id: number;

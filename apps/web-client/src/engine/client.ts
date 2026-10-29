@@ -423,6 +423,15 @@ export class EngineClient {
     }) as Promise<EngineEnvelope>;
   }
 
+  /**
+   * GT-014 导入期深层校验（裁决第 12 项）：把单个安装载荷交 Worker 内的
+   * Rust 校验器裁决（包/模块 logic_hash、rule-vm verify、宿主 ABI 窗口）。
+   * 拒绝即 reject，错误文本为 Rust 侧原始错因；通过则 resolve。
+   */
+  async validatePackage(packJson: string): Promise<void> {
+    await this.request({ id: this.nextId(), type: "validatePackage", packJson });
+  }
+
   loadReplay(json: string): Promise<ReplayMetadata> {
     return this.request({ id: this.nextId(), type: "loadReplay", json }) as Promise<ReplayMetadata>;
   }

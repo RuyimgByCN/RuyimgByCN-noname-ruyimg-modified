@@ -1,0 +1,129 @@
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:189:4
+    |
+189 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:797:4
+    |
+797 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:858:4
+    |
+858 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:920:4
+    |
+920 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:929:4
+    |
+929 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:955:4
+    |
+955 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:964:4
+    |
+964 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1003:4
+     |
+1003 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+     |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1012:4
+     |
+1012 | fn sj_apply(config_json: &str, commands: &str) -> String {
+     |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1020:4
+     |
+1020 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1028:4
+     |
+1028 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1036:4
+     |
+1036 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1044:4
+     |
+1044 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1052:4
+     |
+1052 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1060:4
+     |
+1060 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1068:4
+     |
+1068 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1076:4
+     |
+1076 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1084:4
+     |
+1084 | fn omnisearch_debug(source: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.26s
+     Running tests/gt014_import_validation_parity.rs (target/debug/deps/gt014_import_validation_parity-0ea6778053183a3c)
+
+running 3 tests
+GT014_WASM_REJECT corrupt_module_local_count: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+GT014_WASM_REJECT entry_pc_out_of_range: npack: module vm_fixture_phase_end_phase_end: invalid bytecode: entry_pc out of range
+test valid_fixtures_pass_import_validation ... ok
+GT014_WASM_REJECT trigger_unknown_module: npack: logic_hash mismatch
+GT014_WASM_REJECT tampered_trigger_event: npack: logic_hash mismatch
+GT014_WASM_REJECT invalid_identity: manifest.package_id 须为有效的身份字段
+GT014_WASM_REJECT same_version_different_content: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+test same_mutations_as_server_import_are_rejected_at_import_time ... ok
+GT014_WASM_REJECT abi_window: 包数据字段 manifest.rule_vm_abi_version 非法: incompatible: rule_vm_abi host=753 package=758
+test package_requiring_newer_host_abi_is_rejected_at_import_time ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

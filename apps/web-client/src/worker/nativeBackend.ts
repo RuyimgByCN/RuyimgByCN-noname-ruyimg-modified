@@ -27,7 +27,7 @@ import type {
   LegalAction,
   ObserverSnapshot,
 } from "../types/engine";
-import init, { NativeEngine } from "./native-pkg/engine_native_wasm.js";
+import init, { NativeEngine, validate_pack_json } from "./native-pkg/engine_native_wasm.js";
 import { stepMark } from "./stepTimings";
 
 export interface NativeHandle {
@@ -40,6 +40,18 @@ export interface NativeHandle {
 }
 
 let ready: Promise<void> | null = null;
+
+/**
+ * GT-014 导入期深层校验（裁决第 12 项）：单个安装载荷交 Rust 校验器
+ * （包/模块 logic_hash、rule-vm 装载期 verify、宿主 ABI 窗口、资产桥接），
+ * 与开局装载同一逐包校验，只校验不建局。拒绝时抛出 Rust 侧原始错误文本。
+ */
+export function nativeValidatePack(packJson: string): void {
+  if (typeof packJson !== "string" || packJson.length === 0) {
+    throw new Error("native: validatePackage 载荷须为非空 JSON 字符串");
+  }
+  validate_pack_json(packJson);
+}
 
 /** wasm-bindgen 会截断整数；必须先在 JS 边界拒绝不可表示的值。 */
 function unsigned(value: number, max: number, field: string): number {

@@ -41,6 +41,11 @@ export interface InstalledExtensionRecord {
   logicFingerprint: string;
   /** 按版本保留安装时的包字节；不会在开局时回读分发源。 */
   nativeVersions?: Record<string, string>;
+  /**
+   * 签名状态（裁决第 12 项）：本地正式导入的包一律 `"unsigned"`——本地验签
+   * 暂缓，先定客户端信任模型；内置目录包不带此字段。UI 据此标示「未签名」。
+   */
+  signature?: "unsigned";
 }
 
 export interface ExtensionStoreSnapshot {
@@ -153,9 +158,43 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
  * - 同包其他版本按升级/切换处理：导入版本成为当前版本，先前版本进 history，
  *   其安装副本保留供回退与旧局恢复；
  * - 任何校验失败都不改写存储；已撤销的包不可重装；对局冻结期间不可导入。
- * 字节码语义、模块/包 logic_hash 与 ABI 由开局时的 Rust 校验器裁决。
+ * - 本地导入的包一律记为**未签名**（`signature: "unsigned"`，裁决第 12 项：
+ *   本地验签暂缓，先定客户端信任模型；UI 据此标示）。
+ *
+ * 两层校验：本函数只做**结构层**（JSON/身份字段/模块形状/索引引用）；
+ * 字节码语义、包/模块 logic_hash 与宿主 ABI 窗口由 Rust 校验器裁决——产品
+ * 路径用 `importExtensionPackageValidated` 在**导入期**经 Worker
+ * `validatePackage` 请求完成（GT-014，与服务端导入期拒绝一致），开局装载
+ * 时仍会再校验一次。
  */
 export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
+  return commitImport(prepareImport(json));
+}
+
+/**
+ * 导入期深层校验入口（GT-014，裁决第 12 项）：结构层通过后，把规范化载荷交
+ * `deepValidate`（产品路径为 Worker 内的 Rust 校验器）裁决；拒绝即抛出且
+ * **不改写存储**；通过才提交。`deepValidate` 抛出的错误原样透传。
+ */
+export async function importExtensionPackageValidated(
+  json: string,
+  deepValidate: (canonicalPackJson: string) => Promise<void>,
+): Promise<ExtensionStoreSnapshot> {
+  const prepared = prepareImport(json);
+  await deepValidate(prepared.canonical);
+  return commitImport(prepared);
+}
+
+interface PreparedImport {
+  payload: ReturnType<typeof validateNativePackage>;
+  key: string;
+  version: string;
+  canonical: string;
+  fingerprint: string;
+}
+
+/** 结构层解析 + 存储前置条件（不写存储）。 */
+function prepareImport(json: string): PreparedImport {
   const snap = loadRaw();
   if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
   let parsed: unknown;
@@ -167,16 +206,35 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
   const payload = validateNativePackage(parsed);
   const key = nativePackageKey(payload);
   const version = payload.manifest.version;
-  if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
   const canonical = JSON.stringify(payload);
-  const fingerprint = nativePackageFingerprint(payload).slice(0, 8);
+  checkImportPreconditions(snap, key, version, canonical);
+  return { payload, key, version, canonical, fingerprint: nativePackageFingerprint(payload).slice(0, 8) };
+}
+
+/** 前置条件在准备与提交时各查一次（深层校验为异步，期间存储可能变化）。 */
+function checkImportPreconditions(
+  snap: ExtensionStoreSnapshot,
+  key: string,
+  version: string,
+  canonical: string,
+): void {
+  if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
+  if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
+  const existing = snap.installed.find((r) => r.key === key);
+  if (existing?.lifecycle === "revoked") {
+    throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
+  }
+  if (existing) checkVersionCopy(existing.nativeVersions, version, canonical);
+}
+
+/** 提交：重读存储并复核前置条件后写入记录。 */
+function commitImport(p: PreparedImport): ExtensionStoreSnapshot {
+  const snap = loadRaw();
+  const { payload, key, version, canonical, fingerprint } = p;
+  checkImportPreconditions(snap, key, version, canonical);
   const existing = snap.installed.find((r) => r.key === key);
   const t = nowIso();
   if (existing) {
-    if (existing.lifecycle === "revoked") {
-      throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
-    }
-    checkVersionCopy(existing.nativeVersions, version, canonical);
     existing.nativeVersions ??= {};
     existing.nativeVersions[version] ??= canonical;
     if (existing.version !== version) {
@@ -186,6 +244,7 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
     }
     existing.logicFingerprint = fingerprint;
     existing.updatedAt = t;
+    existing.signature = "unsigned";
     if (existing.lifecycle === "available") existing.lifecycle = "installed";
   } else {
     snap.installed.push({
@@ -200,6 +259,7 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
       updatedAt: t,
       logicFingerprint: fingerprint,
       nativeVersions: { [version]: canonical },
+      signature: "unsigned",
     });
   }
   saveRaw(snap);

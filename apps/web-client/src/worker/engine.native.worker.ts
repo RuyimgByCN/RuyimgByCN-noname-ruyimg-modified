@@ -15,6 +15,7 @@ import {
   nativeDispatch,
   nativeEnvelope,
   nativeUnsupported,
+  nativeValidatePack,
   type NativeHandle,
 } from "./nativeBackend";
 import { postWithStepTimings, setSabMirror, setStepTimingsEnabled, stepBegin } from "./stepTimings";
@@ -44,6 +45,13 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         ? nativeCreateWithPacks(4, 4242, 0, msg.packsJson)
         : nativeCreate(4, 4242, 0);
       reply({ id: msg.id, ok: true, data: "native ready" });
+      return;
+    }
+    if (msg.type === "validatePackage") {
+      // GT-014 导入期深层校验（裁决第 12 项）：不依赖对局句柄；拒绝经
+      // catch 以 ok:false 带 Rust 原始错因回包，主线程据此中止导入。
+      nativeValidatePack(msg.packJson);
+      reply({ id: msg.id, ok: true, data: { valid: true } as never });
       return;
     }
     if (!handle) throw new Error("native engine not initialized");

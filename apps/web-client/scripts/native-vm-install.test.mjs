@@ -5,8 +5,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { beforeEach, test } from "node:test";
 import {
-  activateExtension, deactivateExtension, importExtensionPackage, installExtension,
-  readExtensionStore, revokeExtension, rollbackExtension, setMatchFrozen,
+  activateExtension, deactivateExtension, importExtensionPackage, importExtensionPackageValidated,
+  installExtension, readExtensionStore, revokeExtension, rollbackExtension, setMatchFrozen,
   uninstallExtension, upgradeExtension,
 } from "../src/engine/extensionStore.ts";
 import { EXTENSION_CATALOG, extensionKey } from "../src/engine/extensionCatalog.ts";
@@ -167,4 +167,68 @@ test("catalog packages without VM modules keep their manifest+asset payload", ()
     assert.equal(payload.modules, undefined, key);
     assert.ok(payload.cards || payload.characters || payload.pile, key);
   }
+});
+
+// ---- GT-014 导入期深层校验（裁决第 12 项）：结构层 → deepValidate（产品路径为 Worker 内
+// Rust 校验器）→ 提交；拒绝不改写存储；本地导入一律记为未签名。真实 Rust 校验器对同一
+// 变异集的拒绝见 engine-native-wasm 的 gt014_import_validation_parity 与 smoke 的
+// worker_validate_package_* 段。
+
+test("validated import commits only after the deep validator passes and marks the copy unsigned", async () => {
+  const seen = [];
+  const snap = await importExtensionPackageValidated(JSON.stringify(v1), async (json) => { seen.push(json); });
+  assert.equal(seen.length, 1, "deep validator called exactly once");
+  const sent = JSON.parse(seen[0]);
+  assert.deepEqual(sent.manifest, v1.manifest, "validator receives the canonical payload with its manifest");
+  assert.deepEqual(sent.modules, v1.modules, "…and its VM modules (the Rust validator checks their logic_hash)");
+  assert.deepEqual(sent.trigger_index, v1.trigger_index);
+  const rec = snap.installed.find((r) => r.key === vmKey);
+  assert.equal(rec?.signature, "unsigned");
+  assert.equal(record()?.signature, "unsigned");
+  // 升级到 v0.1.1 仍为未签名
+  await importExtensionPackageValidated(JSON.stringify(v2), async () => {});
+  assert.equal(record()?.version, "0.1.1");
+  assert.equal(record()?.signature, "unsigned");
+});
+
+test("validated import aborts without touching the store when the deep validator rejects", async () => {
+  importExtensionPackage(JSON.stringify(v1));
+  const before = storage.get(storeKey);
+  await assert.rejects(
+    () => importExtensionPackageValidated(JSON.stringify(v2), async () => {
+      throw new Error("npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch");
+    }),
+    /logic_hash mismatch/,
+  );
+  assert.equal(storage.get(storeKey), before, "store byte-identical after a deep rejection");
+  assert.equal(record()?.version, "0.1.0");
+  assert.deepEqual(Object.keys(record()?.nativeVersions ?? {}), ["0.1.0"], "rejected version leaves no copy");
+});
+
+test("validated import never calls the deep validator when the structural layer or preconditions reject", async () => {
+  let calls = 0;
+  const deep = async () => { calls += 1; };
+  await assert.rejects(() => importExtensionPackageValidated("{not json", deep), /不是合法 JSON/);
+  const corrupt = structuredClone(v1);
+  corrupt.trigger_index[0].module = "ghost";
+  await assert.rejects(() => importExtensionPackageValidated(JSON.stringify(corrupt), deep), /不存在的 VM 模块/);
+  // 同版本内容冲突在准备阶段即拒，不进入深层校验。
+  importExtensionPackage(JSON.stringify(v1));
+  const conflict = structuredClone(v1);
+  conflict.modules[0].caps_mask += 1;
+  await assert.rejects(() => importExtensionPackageValidated(JSON.stringify(conflict), deep), /同版本包内容冲突/);
+  // 对局冻结同样前置拒绝。
+  setMatchFrozen(true);
+  await assert.rejects(() => importExtensionPackageValidated(JSON.stringify(v2), deep), /对局中不可安装/);
+  setMatchFrozen(false);
+  assert.equal(calls, 0, "deep validator must not run for structurally rejected or precondition-rejected imports");
+});
+
+test("validated import re-checks preconditions at commit time (store may change during async validation)", async () => {
+  await assert.rejects(
+    () => importExtensionPackageValidated(JSON.stringify(v1), async () => { setMatchFrozen(true); }),
+    /对局中不可安装/,
+  );
+  setMatchFrozen(false);
+  assert.equal(record(), undefined, "nothing committed when the match froze during validation");
 });

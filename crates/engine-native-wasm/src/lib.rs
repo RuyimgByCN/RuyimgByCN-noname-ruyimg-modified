@@ -57,6 +57,15 @@ pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String
     }
 }
 
+/// 导入期深层校验（GT-014，裁决第 12 项）：对单个安装载荷复用开局装载的
+/// 逐包 Rust 校验器（身份字段、包/模块 logic_hash、rule-vm 装载期 verify、
+/// 宿主 ABI 窗口、资产桥接），只校验不建局。Worker `validatePackage` 请求
+/// 经此裁决，使本地导入与服务端导入在导入期的拒绝行为一致。
+#[wasm_bindgen]
+pub fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+    installed_packs::validate_pack_json(pack_json)
+}
+
 fn prefix_count(engine: &Engine, prefix: &str) -> u32 {
     engine
         .catalog()

@@ -719,6 +719,33 @@ try {
   const vmReplayV1 = vmRunV1.saveHex ? await replayFromSave(vmRunV1, vmPacks, 12300) : { ok: false, detail: "no discard save" };
   check("worker_vm_same_package_restore_and_replay", vmReplayV1.ok, vmReplayV1.detail);
 
+  // GT-014 导入期深层校验（裁决第 12 项）：Worker `validatePackage` 复用开局装载的 Rust
+  // 校验器，与服务端导入核对同一变异集（gt014_vm_import_parity / gt014_import_validation_parity）。
+  // 此前只在开局被拒的两类指纹变异（local_count+1、篡改触发事件名）现在导入期即拒；
+  // 校验不建局——当前对局句柄不受影响。
+  const mutateVm = (f) => { const bad = structuredClone(vmPackage); f(bad); return bad; };
+  const validateOk = await workerSend({ id: 12780, type: "validatePackage", packJson: JSON.stringify(vmPackage) });
+  check("worker_validate_package_accepts_valid_fixture",
+    validateOk.ok === true && validateOk.data?.valid === true, JSON.stringify(validateOk));
+  const validateCases = [
+    ["corrupt_module_local_count", mutateVm((p) => { p.modules[0].local_count += 1; }), /logic_hash mismatch/],
+    ["tampered_trigger_event", mutateVm((p) => { p.trigger_index[0].event = "phase_draw"; }), /logic_hash mismatch/],
+    ["entry_pc_out_of_range", mutateVm((p) => { p.modules[0].entry_pc = p.modules[0].code.length; }), /entry_pc out of range/],
+    ["trigger_unknown_module", mutateVm((p) => { p.trigger_index[0].module = "ghost"; }), /logic_hash mismatch/],
+    ["invalid_identity", mutateVm((p) => { p.manifest.package_id = "../x"; }), /身份字段/],
+    ["same_version_different_content", mutateVm((p) => { p.modules[0].caps_mask += 1; }), /logic_hash mismatch/],
+  ];
+  for (const [i, [name, bad, pattern]] of validateCases.entries()) {
+    const r = await workerSend({ id: 12781 + i, type: "validatePackage", packJson: JSON.stringify(bad) });
+    check(`worker_validate_package_rejects_${name}`, r.ok === false && pattern.test(r.error ?? ""), r.error ?? JSON.stringify(r));
+  }
+  const onlyOlNpack = readFileSync(join(root, "../../content/original/ported/onlyOL/onlyOL.npack.json"), "utf8");
+  const abiWindow = await workerSend({ id: 12788, type: "validatePackage", packJson: onlyOlNpack });
+  check("worker_validate_package_rejects_abi_window",
+    abiWindow.ok === false && /rule_vm_abi host=753 package=758/.test(abiWindow.error ?? ""), abiWindow.error ?? "");
+  const afterValidate = await workerSend({ id: 12789, type: "status" });
+  check("worker_validate_package_does_not_touch_current_match", afterValidate.ok === true, JSON.stringify(afterValidate).slice(0, 120));
+
   // GT-014 升级/回退/停用/卸载（真实 Worker）：升级只影响后续建局，旧局按冻结副本恢复。
   importExtensionPackage(JSON.stringify(vmPackageV2));
   const vmContentV2 = prepareNativeMatchContent();
