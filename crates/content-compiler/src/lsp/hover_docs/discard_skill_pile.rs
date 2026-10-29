@@ -1,3 +1,5 @@
+//! LSP 悬停文档链：关键字、效果与结算器说明（owner_* 条件见下一环 `discard_skill_pile_owner_filters`）。
+
 pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
     Some(match word {
             "discard_skill_pile" => {
@@ -36,41 +38,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "debate_owner_participated" => {
                 "议事结算后触发：拥有者亮牌参与（红或黑意见）。"
             }
-            "owner_debate_participant" => {
-                "Trigger filter: the owner is among the participants of a debate that just opened (ADR 0644 P3, debateShowOpinion window)."
-            }
-            "owner_cards_moved_contain_ying" => {
-                "Trigger filter: cards moved into the discard pile and at least one is a shadow card (jsrg funi③)."
-            }
-            "owner_is_lord" => {
-                "Trigger filter: the skill owner has the Lord identity (identity mode)."
-            }
             "cards_moved_discard_at_least_three" => {
                 "Card-move trigger filter: at least three cards moved into the discard pile in a single discard move. Implements 集计 (diy nsjihui)."
-            }
-            "owner_alive_play_end_used_categories_positive" => {
-                "Play-phase-end trigger filter: the living owner's own play phase ends with at least one card used. Implements 连计 (offline zylianji)."
-            }
-            "owner_alive_other_targeted_by_sha" => {
-                "Card-target trigger filter: a living owner observes a logical Sha targeting another player (daimou)."
-            }
-            "owner_alive_targeted_by_other_sha_judge_xumou" => {
-                "Card-target trigger filter: a living owner is targeted by another player's Sha and their judge zone holds at least one xumou card (daimou)."
-            }
-            "owner_alive_event_player_lord" => {
-                "Phase-end trigger filter: the living owner observes the ending turn of the Lord player (jsrgzhenglve)."
-            }
-            "owner_alive_event_player_lord_no_damage" => {
-                "Phase-end trigger filter: the living owner observes the Lord's ending turn and the Lord dealt no damage this turn (jsrgzhenglve two-grant branch)."
-            }
-            "owner_alive_event_player_lord_damaged" => {
-                "Phase-end trigger filter: the living owner observes the Lord's ending turn and the Lord dealt damage this turn (jsrgzhenglve single-grant branch)."
-            }
-            "owner_alive_turn_used_all_suits" => {
-                "Turn-end trigger filter: the living owner's own turn ends with all four suits used during the turn. Implements 博图 (refresh botu)."
-            }
-            "owner_alive_other_source_damage" => {
-                "伤害事件且来源为非拥有者的其他角色（旁观者视角）时触发。"
             }
             "debate_owner_is_initiator_result_red" => {
                 "议事结算为红色且拥有者为发起者时触发。"
@@ -83,18 +52,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
 "owner_is_respond_to" => {
                 "矢仄 (clanshize) 过滤器：CardResponded 事件中被响应的牌属于技能拥有者（ctx.respond_to == owner）。注意响应事件中 ctx.source 是响应者。"
-            }
-            "owner_alive_event_player_self_or_clan_<clan>" => {
-                "保族 (clanbaozu) 家族过滤器：owner 存活、事件角色存活，且事件角色是 owner 本人或 <clan>（CJK 族名，如 颍川钟氏）成员。配合 dying 事件使用；上游 hp<=0 由濒死事件本身保证，未横置门槛由 DSL body 的 mark 守卫表达。"
-            }
-            "owner_hand_compare_finished_participant" => {
-                "The living skill owner is either participant (initiator or target) in a completed hand comparison (hand_compare_finished)."
-            }
-            "owner_hand_compare_participant_has_sha" => {
-                "Completed hand-comparison trigger filter: the living owner participated and at least one compared physical card is an effective Sha in the discard pile."
-            }
-            "owner_hand_compare_participant_result_card_in_discard" => {
-                "Completed hand-comparison trigger filter: the living owner participated and the exact result card selected by legacy zongshi semantics remains in the discard pile. Requires Rule VM ABI 66."
             }
             "choose_hand_count_different_target_draw_or_random_discard" => {
                 "Effect: forces the owner to select one snapshotted living player with a currently different hand count. A lower-hand target draws one; a higher-hand target discards one hand card selected by authoritative deterministic RNG. Requires Rule VM ABI 60.\n\n```\neffect choose_hand_count_different_target_draw_or_random_discard(self);\n```"
@@ -165,14 +122,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_kuangfu" => {
                 "Damage-source effect: choose one discardable equipment card from the damaged target, then discard it or move it into the owner's compatible equipment slot. Requires Rule VM ABI 282.\n\n```\neffect resolve_kuangfu(self, event_player);\n```"
             }
-            "owner_source_sha_damage_target_alive_has_discardable_equip" => {
-                "Damage trigger filter: the living owner caused logical Sha damage to a living target that currently has equipment the owner may discard. Requires Rule VM ABI 282."
-            }
             "resolve_shanjia" => {
                 "Play-phase effect: draw `min(count, 7)` cards, then discard that many current hand/equipment cards. Discarding equipment from the owner's equipment zone offers a normal-use-count, distance-unlimited virtual Sha after movement triggers finish. Requires Rule VM ABI 283.\n\n```\neffect resolve_shanjia(self, mark_count(self, self_skill));\n```"
-            }
-            "owner_source_equip_used_skill_mark_below_seven" => {
-                "Card-used trigger filter: the living owner used a logical equipment card and this skill definition's stable player mark is below seven. Requires Rule VM ABI 283."
             }
             "resolve_new_yajiao" => {
                 "Outside-turn card effect: reveal the draw-pile top card, force the owner to choose any living recipient, and give it after reveal triggers. If its logical basic/trick/equipment category differs from the triggering card, the owner then discards one hand/equipment card. Requires Rule VM ABI 284.\n\n```\neffect resolve_new_yajiao(self, event_card);\n```"
@@ -180,26 +131,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_dingpin" => {
                 "Active effect: the selected target judges. Black makes that target draw their lost HP and become unavailable to this skill for the turn; red turns the owner over. Requires Rule VM ABI 285.\n\n```\neffect resolve_dingpin(self, event_player);\n```"
             }
-            "owner_source_outside_turn_card_used_or_responded" => {
-                "Card-used/responded filter: the living owner is the event source and used or responded with a logical card outside their own turn. Requires Rule VM ABI 284."
-            }
             "record_selected_play_phase_category" => {
                 "Active-only effect: record the exact selected card's effective basic/trick/equipment category in `self_skill` for the current Play phase. Requires exact one-card selection with `unused_category_by_skill_this_play_phase` and Rule VM ABI 110.\n\n```\neffect record_selected_play_phase_category(self_skill);\n```"
             }
             "recover_if_min_current_hp" => {
                 "Effect: at resolution time, recovers `amount` HP for `player` only when that living player is tied for the lowest current HP. Requires Rule VM ABI 103.\n\n```\neffect recover_if_min_current_hp(self, 1);\n```"
-            }
-            "owner_is_target_any_alive_hand_nonempty" => {
-                "Prepare-phase trigger filter: the living owner is the event player and at least one living player, including the owner, has a nonempty hand. Requires Rule VM ABI 62."
-            }
-            "owner_is_target_any_alive_hand_empty" => {
-                "End-phase trigger filter: the living owner is the event player and at least one living player, including the owner, has no hand cards. Requires Rule VM ABI 162."
-            }
-            "owner_is_target_draw_reshuffle_zero_wounded" => {
-                "Prepare-phase trigger filter: the living owner is the event player, is wounded, and the discard pile has never been reshuffled into the draw pile. Requires Rule VM ABI 163."
-            }
-            "owner_is_target_draw_reshuffle_positive" => {
-                "Prepare-phase trigger filter: the living owner is the event player after at least one discard-pile reshuffle into the draw pile. Requires Rule VM ABI 163."
             }
             "choose_target_discard_excess_then_self_discard_or_target_draw" => {
                 "Effect: during the owner's Prepare phase, choose any living player with discardable hand/equipment cards. Discard max(target hand minus HP, 1) cards, capped to what is available. If any discarded card is not equipment, the owner may discard that many cards; cancellation or inability makes the target draw that many instead. Requires Rule VM ABI 62.\n\n```\neffect choose_target_discard_excess_then_self_discard_or_target_draw(self);\n```"
@@ -216,12 +152,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "draw_then_choose_gain_one_from_damage_target_and_neighbors" => {
                 "Effect: after damage caused by the owner, draw one card and wait for nested draw triggers. Then process the damaged player, their previous living seat, and their next living seat in that order, choosing and gaining one hand/equipment card from each. If the owner appears in the sequence, only equipment is eligible; duplicate previous/next seats are preserved. Requires Rule VM ABI 63.\n\n```\neffect draw_then_choose_gain_one_from_damage_target_and_neighbors(self, event_player);\n```"
             }
-            "owner_discarded_black_basic_to_discard" => {
-                "Cards-moved trigger filter: the owner discarded at least one effective black basic card from hand/equipment into the discard pile. The full moved-card batch is preserved for the effect. Requires Rule VM ABI 51."
-            }
-            "owner_alive_other_judge_phase_in_range_has_judge_card" => {
-                "Judgment-phase trigger filter: another living player is within the living owner's attack range and has a discardable judgment card. Requires Rule VM ABI 51."
-            }
             "ignore_armor_for_skill_card_policy" => {
                 "Modifier target: ignores armor only while resolving a card carrying the ignore-armor bit in this skill instance's exact-card policy state. Requires `override 1` and Rule VM ABI 49."
             }
@@ -230,27 +160,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "card_distance_unlimited_for_skill_card_policy" => {
                 "Modifier target: ignores ordinary target distance only for a card carrying the distance-unlimited bit in this skill instance's exact-card policy state. Requires `override 1` and Rule VM ABI 149."
-            }
-            "owner_source_single_target_sha_or_ordinary_trick_current_turn" => {
-                "Card-used trigger filter: during the owner's turn, the owner used a logical Sha or ordinary trick with exactly one declared target. Requires Rule VM ABI 49."
-            }
-            "owner_source_event_card_policy_draw" => {
-                "Damage trigger filter: the owner caused this damage with the exact card carrying the draw-on-damage bit in the current skill instance. Requires Rule VM ABI 49."
-            }
-            "owner_source_card_resolved_phase_policy" => {
-                "Card-resolved filter: the owner finished the exact physical card armed in this skill instance's phase policy. Requires Rule VM ABI 519."
-            }
-            "owner_phase_play_end_potguansha_available_once_per_game" => {
-                "Play-phase-end filter: the owner has hand/equipment cards and has not used 灌沙 this match. Requires Rule VM ABI 520."
-            }
-            "owner_discarded_sha_to_discard" => {
-                "Cards-moved filter: the owner discarded at least one physical Sha that remains in the shared discard pile. Requires Rule VM ABI 522."
-            }
-            "owner_alive_other_turn_discarded_recorded_potfuan_suit" => {
-                "End-phase filter: another player's turn ended after a suit recorded by 伏暗 entered the discard pile this turn. Requires Rule VM ABI 525."
-            }
-            "owner_source_sha_resolved_potfuan_dealt_damage" => {
-                "Sha-resolved filter: the owner's first pending 伏暗 virtual Sha dealt damage. Requires Rule VM ABI 525."
             }
             "reveal_top_gain_non_basic_or_swap_basic" => {
                 "Effect: publicly reveals the draw-pile top card. A non-basic card is gained immediately; a basic card may be exchanged by placing one hand card on top of the draw pile, otherwise it is discarded.\n\n```\neffect reveal_top_gain_non_basic_or_swap_basic(self);\n```"
@@ -390,32 +299,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_mbduanyang" => {
                 "断鞅 effect: store a random ownerless physical Sha lost from hand, use stored Sha at phase ends ignoring distance, and resolve its optional target recast plus owner draw. Requires Rule VM ABI 505."
             }
-            "owner_source_first_target_hand_damage_card_discardable" => {
-                "Card-targeted filter for 鸱张: the owner used a hand damage card, this is its first target, and the owner can discard a hand card. Requires Rule VM ABI 505."
-            }
-            "owner_lost_hand_ownerless_sha_not_use_once_per_turn" => {
-                "Cards-moved filter for 断鞅: the owner lost an ownerless physical Sha from hand outside use/response, once per turn. Requires Rule VM ABI 505."
-            }
-            "owner_alive_phase_any_end_originating_skill_pile_nonempty" => {
-                "Phase-any-end filter: the living owner's pile for the originating skill is nonempty. Requires Rule VM ABI 505."
-            }
-            "owner_source_damage_tracked_mbduanyang_target_recastable" => {
-                "Damage filter for 断鞅: its tracked Sha dealt damage and the target has a hand/equipment/judgment card. Requires Rule VM ABI 505."
-            }
             "resolve_mbrunwei" => {
                 "润微 effect: choose one to five draw-pile cards to reveal, choose a color and recipient, arm the qualifying-loss threshold, enable the second activation, and clean tracked self-gains at Play-phase end. Requires Rule VM ABI 506."
             }
             "resolve_mbshuanghuai" => {
                 "霜怀 effect: choose to prevent the bound damage or let its target gain a Tao from discard, then apply the repeated/different previous-target result. Requires Rule VM ABI 506."
-            }
-            "owner_mbrunwei_loss_threshold" => {
-                "Cards-moved filter for an armed 润微 loss threshold, excluding pure equipment-card use. Requires Rule VM ABI 506."
-            }
-            "owner_phase_play_end_mbrunwei_tracked_hand" => {
-                "Play-phase-end filter for tracked 润微 self-gains still in hand. Requires Rule VM ABI 506."
-            }
-            "owner_alive_damage_before_target_distance_le_one_once_per_turn" => {
-                "Damage-before filter: the target is within final distance one of the living owner, once per turn. Requires Rule VM ABI 506."
             }
             "choose_hand_compare_grant_target_on_win" => {
                 "Effect: choose one other player with hand cards for a hand comparison (both pick a card); on the chooser's strict victory the **target** is granted win_grant_def, on tie or loss nothing happens. Requires Rule VM ABI 678."
@@ -438,23 +326,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_mbxiongtu" => {
                 "凶图 effect: reveal a selected target hand card, discard the missing-suit count or that revealed card, then arm the next external-damage draw and second activation. Requires Rule VM ABI 507."
             }
-            "owner_source_damage_mbxiongtu_armed" => {
-                "Damage filter for an armed 凶图 reward, excluding damage caused by 凶图 itself. Requires Rule VM ABI 507."
-            }
-            "owner_phase_play_end_mbxiongtu_state" => {
-                "Play-phase-end filter for clearing 凶图's transient activation state. Requires Rule VM ABI 507."
-            }
             "resolve_mbganggeng" => {
                 "刚鲠 effect: give the selected hand cards to another player, then at turn end draw if that player ties for maximum hand size or discard one of their area cards otherwise. Requires Rule VM ABI 508."
             }
             "resolve_mbsijian" => {
                 "死谏 effect: choose its discard, current-player draw, or combined branch; combined uses accumulate the later HP-loss cost. Requires Rule VM ABI 508."
-            }
-            "owner_phase_end_mbganggeng_target_alive" => {
-                "Phase-end filter for resolving the living target remembered by 刚鲠. Requires Rule VM ABI 508."
-            }
-            "owner_from_hand_empty_or_dying_mbsijian_twice_per_turn" => {
-                "Cards-moved or dying filter for 死谏, shared across both event sources and limited to twice per turn. Requires Rule VM ABI 508."
             }
             "resolve_mbjianji" => {
                 "间计 effect: let two participants secretly compare using either their own hand card or the owner's shared selected card, then use a no-limit Sha from winner to loser and damage shared-Sha choosers. Requires Rule VM ABI 509."
@@ -462,23 +338,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_mbyuanmo" => {
                 "远谟 effect: move one legal equipment or judgment card, compare its former owner's attack-range population before and after, then optionally draw the capped loss. Requires Rule VM ABI 509."
             }
-            "owner_is_target_can_move_field_card_mbyuanmo_twice_per_turn" => {
-                "Prepare or post-damage filter for 远谟 when any legal field-card move exists, shared limit twice per turn. Requires Rule VM ABI 509."
-            }
             "resolve_mbfeijing" => {
                 "飞径 effect: choose a seat path between a single-target Sha's endpoints, collect one secret hand discard per eligible role, then add legal targets matching the chosen color. Requires Rule VM ABI 510."
             }
             "resolve_mbxiaoge" => {
                 "骁戈 effect: prevent damage to a 飞径-added target, recover and reclaim its discard, or follow the originally single-target Sha with a legal Duel. Requires Rule VM ABI 510."
-            }
-            "owner_source_first_single_target_sha_mbfeijing_twice_per_turn" => {
-                "Card-targeted filter for the owner's first and sole Sha target, limited to twice per turn. Requires Rule VM ABI 510."
-            }
-            "owner_source_damage_before_mbfeijing_extra" => {
-                "Damage-before filter for a target added to this exact Sha by 飞径. Requires Rule VM ABI 510."
-            }
-            "owner_source_sha_resolved_original_single_mbxiaoge" => {
-                "Card-resolved filter for the owner's originally single-target Sha, including targets later added by 飞径. Requires Rule VM ABI 510."
             }
             "resolve_mbxuye" => {
                 "蓄业 effect: draw two for the selected role, then if they newly tie for maximum hand size put one of their HEJ cards on top of the draw pile. Requires Rule VM ABI 514."
@@ -494,18 +358,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "resolve_potsifeng" => {
                 "势曹真伺锋 effect: distribute three top cards to other players' expansion piles, consume one after each card use with a color-mismatch discard, then gain all or discard all and damage at phase end. Requires Rule VM ABI 517."
-            }
-            "owner_alive_other_dying_mbchenshe_available" => {
-                "Dying filter: another living player is dying and at least one of the owner, dying player, or living damage source has a card the owner can discard. Requires Rule VM ABI 503."
-            }
-            "owner_alive_other_phase_end_mobiledanshou" => {
-                "Phase-end filter: the owner is alive, the phase player is another player, and Mobile Danshou can either draw for zero targetings or pay the exact current-turn targeting count. Requires Rule VM ABI 500."
-            }
-            "owner_alive_other_phase_end_not_damaged_owner_this_turn" => {
-                "Phase-end filter: the owner is alive, the phase player is another player, and that player dealt no damage to the owner this turn."
-            }
-            "owner_alive_other_phase_end_used_card_on_owner_undamaged_this_turn" => {
-                "Phase-end filter: the owner is alive, the phase player is another player who used at least one card targeting the owner this turn, and the owner took no damage this turn."
             }
             "choose_lose_hp_use_virtual_sha_by_basic_variants" => {
                 "Phase-end trigger effect: choose legal targets for an ignore-distance virtual Sha, then lose 1 HP and use it without ordinary use-count limits. Its base damage gains 1 when the user used at least two distinct basic-card name/nature variants this turn. Requires `trigger phase_end owner_is_target` and Rule VM ABI 361.\n\n```\neffect choose_lose_hp_use_virtual_sha_by_basic_variants(self);\n```"
@@ -537,74 +389,26 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_twyuyan" => {
                 "TW Yuyan effect: in the current physical Sha target context, the higher-HP source may give the owner one hand/equipment card whose rank exceeds the Sha's rank (or one non-basic card when the Sha has no rank). Declining or having no eligible card removes only the owner from that Sha. Requires Rule VM ABI 370.\n\n```\neffect resolve_twyuyan(self, event_source, event_card);\n```"
             }
-            "owner_target_physical_sha_source_hp_gt_owner" => {
-                "Card-targeted filter: the living owner is targeted by another living player's physical Sha and that source currently has strictly more HP. Requires Rule VM ABI 370."
-            }
             "resolve_twguoyi" => {
                 "TW Guoyi effect: the current Sha/ordinary-trick target chooses a turn-long hand-card use/response lock or a forced discard of lost-HP plus one cards. When both trigger conditions hold, or both branches have been chosen this turn, the same logical card is replayed on every original target only after the source use fully settles. Requires Rule VM ABI 371.\n\n```\neffect resolve_twguoyi(self, event_player, event_card, helper_skill_def);\n```"
-            }
-            "owner_source_other_target_sha_or_ordinary_trick_twguoyi_condition" => {
-                "Card-targeted filter: the owner used a Sha or ordinary trick on another living player, that target ties for maximum HP/hand or the owner's hand is at most lost HP plus one, and the card was not replayed by the same skill. Requires Rule VM ABI 371."
             }
             "resolve_twchuhai" => {
                 "TW Chuhai effect: action 0 completes the mission by disabling the judge zone and collecting one hand/equipment card from each other living player; action 1 discards exactly one card from the current batch gained from another player's personal zone. Requires Rule VM ABI 372.\n\n```\neffect resolve_twchuhai(self, action);\n```"
             }
-            "owner_alive_phase_end_caused_two_distinct_dying" => {
-                "Phase-end filter: the living owner caused at least two distinct other players to enter dying during the current turn. Requires Rule VM ABI 372."
-            }
-            "owner_gained_event_cards_from_other_personal_zone" => {
-                "Cards-moved filter: the owner gained at least one event card from another player's hand, equipment, or judge zone and at least one such card remains in hand. Requires Rule VM ABI 372."
-            }
             "resolve_twyizhu" => {
                 "TW Yizhu effect: action 0 draws and plants up to two hand/equipment cards near the draw-pile top, action 1 optionally adds or replaces the single target of another player's use of a tracked card then draws one, and action 2 clears tracked cards entering discard. Requires Rule VM ABI 373.\n\n```\neffect resolve_twyizhu(self, source, card, action);\n```"
-            }
-            "owner_alive_other_single_target_used_tracked_twyizhu" => {
-                "Card-targeted filter: another player used a tracked TW Yizhu physical card with exactly one declared target. Requires Rule VM ABI 373."
-            }
-            "owner_tracked_twyizhu_entered_discard" => {
-                "Cards-moved filter: at least one physical card tracked by TW Yizhu entered the discard pile. Requires Rule VM ABI 373."
             }
             "resolve_twluanchou" => {
                 "TW Luanchou/Gonghuan effect: action 0 removes the shared helper from every player and grants it to the active invocation's two selected living targets; action 1 prevents the current damage and recreates it on the helper owner with the same source, amount, nature, card, kind, and flags. Requires Rule VM ABI 374.\n\n```\neffect resolve_twluanchou(self, helper_skill_def, action);\n```"
             }
-            "owner_alive_other_twgonghuan_damage_before_hp_lte_owner_unused" => {
-                "Damage-before filter: another living holder of the same Gonghuan helper has HP no greater than the owner, the owner has not redirected damage this turn, and the segment was not itself redirected. Requires Rule VM ABI 374."
-            }
             "resolve_twxiawei" => {
                 "TW Xiawei/Qiongji effect: initializes and clears a playable Wei skill pile, prompts the one-through-four Wangxing choice and stores top cards, increases empty-pile incoming damage, or settles the exact discard/lose-max-HP cost. Requires Rule VM ABI 375.\n\n```\neffect resolve_twxiawei(self, wangxing_skill_def, action);\n```"
-            }
-            "owner_phase_begin_playable_skill_pile_nonempty" => {
-                "Phase-begin filter: the owner has at least one nonempty skill pile exposed at hand-card use/response boundaries. Requires Rule VM ABI 375."
-            }
-            "owner_used_playable_skill_pile_card_unused" => {
-                "Card-used/responded filter: the owner consumed a physical card from a playable skill pile and this trigger has not fired this turn. Requires Rule VM ABI 375."
-            }
-            "owner_target_damage_before_playable_skill_piles_empty" => {
-                "Damage-before filter: the owner is the target and all playable skill piles they own are empty. Requires Rule VM ABI 375."
             }
             "resolve_twbianfuren" => {
                 "TW Bianfuren effect: action 0 prevents minimum-HP damage to another player and/or schedules Wanwei's end-phase effect, action 1 gains the draw-pile top card and uses the revealed bottom card when legal, and action 2 partitions selected hand/equipment cards between draw-pile top and bottom before applying Yuejian's tiered rewards. Requires Rule VM ABI 376.\n\n```\neffect resolve_twbianfuren(self, event_player, helper_skill_def, action);\n```"
             }
-            "owner_alive_damage_before_target_min_hp_unused" => {
-                "Damage-before filter: a living player tied for minimum HP is the target and this skill has not fired this turn. Requires Rule VM ABI 376."
-            }
-            "owner_alive_global_phase_end" => {
-                "Phase-end filter: the owner is alive at the beginning of any player's End phase. Requires Rule VM ABI 376."
-            }
-            "owner_alive_global_phase_end_lost_cards_target_other_alive" => {
-                "Phase-end filter: the owner is alive, has lost at least one physical card this turn, and another living player's turn is ending. Requires Rule VM ABI 496."
-            }
-            "owner_alive_global_phase_end_discarded_cards_available" => {
-                "Phase-end filter: the owner and phase player are alive, at least one card discarded this turn remains in the discard pile, and the owner has a fixed or selectable other target. Requires Rule VM ABI 583."
-            }
             "resolve_twfeiyi" => {
                 "TW Feiyi effect: action 0 gains or creates a suit-distinct Tiaojiyanmei, action 1 chooses one canonical zhinang kind then gains it when present and draws, and action 2 transfers one triggering non-use discard card to another living player. Requires Rule VM ABI 377.\n\n```\neffect resolve_twfeiyi(self, action);\n```"
-            }
-            "owner_alive_phase_end_used_card_no_damage" => {
-                "Owner End-phase filter: at least one card was used and the owner dealt no damage this turn. Requires Rule VM ABI 377."
-            }
-            "owner_cards_entered_discard_not_use_unused" => {
-                "Cards-moved filter: the owner's personal cards entered discard for a cause other than use/response and the skill has not fired this turn. Requires Rule VM ABI 377."
             }
             "resolve_twchenzhen" => {
                 "TW Chenzhen effect: action 0 declares a basic/trick kind, pays or consumes Muyue's free-use helper, grants the named shared-pile card and restores the helper on a matching discard; actions 1-3 set up Chayi, force its next-use discard, and switch the delayed branch when hand count changes. Requires Rule VM ABI 378.\n\n```\neffect resolve_twchenzhen(self, event_player, helper_skill_def, record_skill_def, action);\n```"
@@ -783,9 +587,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "give_all_hand" => {
                 "Effect: gives every current hand card from `player` to `target`. Active use requires `hand_nonempty face_up targets 1 1 other male`. Requires Rule VM ABI 151.\n\n```\neffect give_all_hand(self, event_source);\n```"
             }
-            "owner_alive_other_source_sha_resolved_not_target_gainable_once_per_turn" => {
-                "Sha-resolved trigger filter: once per turn, a living non-target owner observes another player's fully resolved Sha while its physical carrier remains in discard. Requires Rule VM ABI 151."
-            }
             "choose_target_self_discard_then_owner_lose_hp_if_hand_ne_hp" => {
                 "Effect: forces `player` to choose any living target able to discard one of their own hand/equipment cards. That target chooses and discards exactly one. After the movement and all nested triggers finish, `player` loses 1 HP if the target's hand count differs from their HP. Requires Rule VM ABI 127.\n\n```\neffect choose_target_self_discard_then_owner_lose_hp_if_hand_ne_hp(self);\n```"
             }
@@ -810,32 +611,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_fengying" => {
                 "XIANDING Cuimao effect: discards all hand cards, queues the exact extra turn, and refills to max HP when tied for minimum HP. Requires Rule VM ABI 585."
             }
-            "owner_alive_phase_play_end_zhengbi_pending" => {
-                "Zhengbi Play-phase-end filter: the living owner has a pending target; the resolver consumes it and checks that phase's gain history. Requires Rule VM ABI 585."
-            }
-            "owner_is_target_source_hand_nonempty_per_damage_point" => {
-                "Xicha damage filter: owner is the damaged player and the source currently has hand cards; repeats once per damage point. Requires Rule VM ABI 586."
-            }
-            "owner_source_qiaojian_extra_available" => {
-                "Qiaojian helper filter: owner used a Sha or ordinary trick whose category has not yet been consumed this turn. Requires Rule VM ABI 586."
-            }
-            "owner_xicha_watched_source_card_used" => {
-                "Xicha watch filter: a player recorded in this skill's private state used their next card. Requires Rule VM ABI 586."
-            }
-            "owner_qiaojian_tracked_card_left_hand" => {
-                "Qiaojian tag cleanup filter: a tracked exempt card left the owner's hand. Requires Rule VM ABI 586."
-            }
             "resolve_qiaojian" => {
                 "XIANDING Fugan effect: privately collects both discard selections, compares physical ranks, recovers or gains the surviving discarded cards, and arms the chosen next-turn policy. Requires Rule VM ABI 586."
             }
             "resolve_xicha" => {
                 "XIANDING Fugan effect: privately marks up to two source hand cards, consumes the watch on that source's next card use, and cancels/gains a matching physical use. Requires Rule VM ABI 586."
-            }
-            "owner_alive_damage_target_self_or_in_range_other_source_numeric_card" => {
-                "Zhantao damage filter: owner or a character in range took numeric card damage from another source. Requires Rule VM ABI 587."
-            }
-            "owner_source_wounded_exists_once_per_turn" => {
-                "Anjing damage filter: owner dealt damage, a wounded living target exists, and the skill is unused this turn. Requires Rule VM ABI 587."
             }
             "resolve_huzun" => {
                 "XIANDING Huzun effect: resolves Zhantao's rank judgment and virtual Sha or Anjing's growing target cap, ordered draws, and random minimum-HP recovery. Requires Rule VM ABI 587."
@@ -873,9 +653,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "resolve_dc_sb_lusu" => {
                 "XIANDING DC SB Lu Su effect: Mingshi draws two, reveals three selected hand cards, and lets another character gain one; Mengmou toggles its conversion state and resolves its bounded Sha-use or Sha-response sequence. Requires Rule VM ABI 603."
             }
-            "owner_hand_transfer_other_dcsbmengmou_branch_available" => {
-                "Mengmou transfer filter: the owner and another living character exchanged at least one hand card, and the current conversion branch remains unused this turn. Requires Rule VM ABI 603."
-            }
             "dcsbmengmou_tracked_sha_damage" => {
                 "Mengmou Yang filter: exact damage from the currently tracked prompted Sha, repeated once per damage point. Requires Rule VM ABI 603."
             }
@@ -887,9 +664,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "resolve_zhugeruoxue" => {
                 "XIANDING Zhugeruoxue effect: Qiongying moves one legal field card then discards a matching-suit hand card or reveals the hand; Nuanhui repeatedly uses legal virtual basics up to the target's snapshotted equipment count and discards equipment after a repeated name. Requires Rule VM ABI 605."
-            }
-            "owner_is_target_card_damage_before" => {
-                "Card-damage-before filter: the living owner is the pending damage target and the damage carries a physical or logical card context. Requires Rule VM ABI 604."
             }
             "choose_give_two_different_colors_or_recover" => {
                 "Effect: lets `giver` give exactly two current hand/equipment cards with different effective colors to `target`. If the giver declines or has no valid pair, the target recovers 1 HP. `owner` remains the originating skill owner. Requires Rule VM ABI 330.\n\n```\neffect choose_give_two_different_colors_or_recover(self, event_source, event_player);\n```"
@@ -942,21 +716,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "lose_hp_then_damage_other_lose_max_hp_if_dying" => {
                 "Active-only effect: the owner loses `amount` HP; if that exact loss first puts them into dying, they lose one maximum HP. Equal ordinary damage to the selected other target resolves only after the complete dying/save window. Requires `targets 1 1 other`, `self_skill`, and Rule VM ABI 108.\n\n```\neffect lose_hp_then_damage_other_lose_max_hp_if_dying(self, event_source, 1, self_skill);\n```"
             }
-            "owner_source_basic" => {
-                "Trigger filter: the owner used a logical basic card. Requires Rule VM ABI 99."
-            }
-            "owner_source_non_basic" => {
-                "Trigger filter: the owner used a logical non-basic card. Requires Rule VM ABI 99."
-            }
-            "owner_source_wounded_nanman_wanjian_or_normal_spade_sha" => {
-                "Card-use trigger filter: the wounded owner used logical Nanman, Wanjian, or an ordinary-nature spade Sha. Requires Rule VM ABI 104."
-            }
-            "owner_alive_other_play_phase_duplicate_card_category_has_hand_equip" => {
-                "Play-phase-end trigger filter: the living owner is not the ending player, can discard from hand/equipment, and that player used at least two logical cards of the same basic/trick/equipment category in the exact Play phase. Requires Rule VM ABI 105."
-            }
-            "owner_alive_other_phase_end_damage_gt_one_has_hand_equip" => {
-                "End-phase trigger filter: the living owner is not the phase player, can discard from hand/equipment, and that player dealt more than one total damage during the current turn. Requires Rule VM ABI 105."
-            }
             "choose_store_hand_sha_in_skill_pile" => {
                 "Effect: forces the owner to select one or more logical Sha from hand and move them into this skill definition's public expansion pile. Requires Rule VM ABI 46.\n\n```\neffect choose_store_hand_sha_in_skill_pile(self);\n```"
             }
@@ -968,18 +727,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "choose_add_skill_bound_card_target" => {
                 "Effect: lets the card user cancel or append this skill instance's bound living target to a suspended one-target Sha or ordinary trick. Source/card, target policies, and the bound state are revalidated at the choice barrier. Requires Rule VM ABI 47.\n\n```\neffect choose_add_skill_bound_card_target(self, event_card);\n```"
-            }
-            "owner_alive_play_phase_sha_user_has_discardable_hand_equip" => {
-                "Trigger filter: the living owner can discard a hand/equipment card and a living player is currently using a logical Sha in that player's play phase. Requires Rule VM ABI 43."
-            }
-            "owner_is_target_play_phase_card_category_count_positive" => {
-                "Trigger filter: the owner is ending their play phase after using at least one logical basic, trick, or equipment card in that phase. Requires Rule VM ABI 42."
-            }
-            "owner_alive_play_phase_card_category_count_positive" => {
-                "Trigger filter: a living owner used at least one logical basic, trick, or equipment card in the exact Play phase that is ending. Requires Rule VM ABI 293."
-            }
-            "owner_is_target_sha_source_has_discardable_hand_equip" => {
-                "Trigger filter: the owner is the logical-Sha damage target, the damage has an identified source, and the owner can currently discard at least one hand/equipment card."
             }
             "discard_all_hand_and_equip" => {
                 "Effect: discards every card in the specified player's hand and equipment zones.\n\n```\neffect discard_all_hand_and_equip(event_source);\n```"
@@ -1074,93 +821,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "kill_player" => {
                 "Effect: immediately kills a player and attributes the death to the specified killer.\n\n```\neffect kill_player(event_player, event_source);\n```"
             }
-            "owner_alive_current_turn_other_event_player" => {
-                "Trigger filter: the living skill owner is the current turn player and differs from the event player."
-            }
-            "owner_alive_current_turn_other_event_player_from_hand_empty" => {
-                "Trigger filter: the living current-turn skill owner observes another living player lose hand cards and become empty-handed."
-            }
-            "owner_is_target_current_turn" => {
-                "Trigger filter: the living skill owner is both the event player and the current turn player. Requires Rule VM ABI 351."
-            }
-            "owner_gains_multiple_outside_own_draw" => {
-                "Trigger filter: the living skill owner gains more than one card in one draw or move event outside their own draw phase."
-            }
-            "owner_gained_or_lost_at_least_two" => {
-                "Trigger filter: the living skill owner gains or loses at least two cards in one draw or move event."
-            }
-            "owner_gains_outside_turn_mark_below_alive_once_2058376721" => {
-                "Parameterized trigger filter: once per turn, the living owner gains cards outside their turn while the mark named by the numeric suffix is below the living-player count."
-            }
-            "owner_card_responded_to_by_player_in_range" => {
-                "Trigger filter: a living player whose attack range includes the skill owner responded to a card used by that owner."
-            }
-            "owner_alive_first_cards_moved_to_hand" => {
-                "Trigger filter: the living skill owner observes the first non-draw card move into any player's hand this turn."
-            }
-            "owner_draws_during_own_play_not_self" => {
-                "Trigger filter: the living owner draws during their own play phase, excluding draws emitted by this skill instance."
-            }
-            "owner_source_non_equip_no_basic_hand_has_targets" => {
-                "Trigger filter: the living owner used a non-equipment card with at least one target while holding no basic hand cards."
-            }
-            "owner_equip_zone_changed_alive_wounded_at_least_two" => {
-                "Trigger filter: an equipment card entered or left the living owner's equipment zone while at least two living players were wounded."
-            }
-            "owner_alive_once_per_round" => {
-                "Trigger filter: the skill owner is alive and this skill instance has not fired during the current round."
-            }
-            "owner_is_event_player_no_enabled_equip_slot_once_per_game" => {
-                "Lifetime trigger filter: the living skill owner is the event player, has no enabled equipment slot, and this skill instance has never fired before. Requires Rule VM ABI 19."
-            }
-            "owner_alive_other_dying_hand_nonempty_once_per_game" => {
-                "Lifetime dying trigger filter: the living owner observes another living player at non-positive HP, has at least one hand card, and this skill instance has never fired before. Requires Rule VM ABI 125."
-            }
-            "owner_alive_sha_or_duel_damage_source_target_alive_hand_equip_nonempty" => {
-                "Damage trigger filter: the living owner observes damage from a logical Sha or Duel; the living source and target must collectively have at least one hand/equipment card. Requires Rule VM ABI 126."
-            }
-            "owner_alive_sha_damage_source_target_alive_owner_hand_equip_nonempty" => {
-                "Damage trigger filter: the living owner observes sourced logical-Sha damage to a living player and can discard one of their own hand/equipment cards. The source may already be dead when damage-end triggers settle. Requires Rule VM ABI 219."
-            }
-            "owner_is_target_any_alive_self_discardable_hand_equip" => {
-                "End-phase trigger filter: the living owner is the phase player and at least one living player can discard one of their own hand/equipment cards. Requires Rule VM ABI 127."
-            }
-            "owner_is_target_any_alive_discardable_by_owner_hand_equip" => {
-                "Prepare/End-phase trigger filter: the living owner is the phase player and may discard at least one hand/equipment card from some living player, including themselves. Requires Rule VM ABI 298."
-            }
-            "owner_is_target_any_alive_self_discardable_hand" => {
-                "Phase trigger filter: the living owner is the phase player and at least one living player can discard one of their own hand cards. Requires Rule VM ABI 194."
-            }
-            "owner_is_target_any_alive_wounded" => {
-                "Phase trigger filter: the living owner is the phase player and at least one living player is below maximum HP. Requires Rule VM ABI 195."
-            }
-            "owner_current_turn_other_equipment_lost" => {
-                "Trigger filter: during the living skill owner's turn, another player loses one or more cards from their equipment zone."
-            }
-            "owner_alive_other_discarded_basic_outside_turn" => {
-                "Trigger filter: outside the living owner's turn, another player discards at least one basic card from hand or equipment."
-            }
-            "owner_alive_other_discarded_basic_outside_turn_once" => {
-                "Trigger filter: once during each character's turn, outside the living owner's turn, another player discards at least one basic card from hand or equipment."
-            }
-            "owner_alive_other_discarded_black_to_discard" => {
-                "Cards-moved trigger filter: another player discarded at least one raw black physical card into the discard pile. Only matching black cards are exposed through `event_cards`; requires Rule VM ABI 112."
-            }
-            "owner_from_equip_per_card" => {
-                "Cards-moved trigger filter: the skill owner lost one or more equipment cards; offers the trigger independently once per moved equipment card. Requires Rule VM ABI 175."
-            }
-            "owner_outside_turn_red" => {
-                "View-as filter: the source card is red and the skill owner is not the current turn player. Requires Rule VM ABI 176."
-            }
-            "owner_alive_dealt_or_received_damage_this_turn" => {
-                "Turn-end trigger filter: the living owner dealt or received damage during the turn that just ended."
-            }
-            "owner_received_gift_from_other" => {
-                "Cards-moved trigger filter: the living skill owner received cards voluntarily given by another player."
-            }
-            "owner_initiated_duel_target_alive_loser_has_hand_or_equip" => {
-                "Duel-resolved trigger filter: the living owner initiated the Duel, its original target survived, and the loser can give a hand/equipment card to the winner."
-            }
             "duel_resolved" => {
                 "Trigger event emitted after a Duel resolves; `event_player` is the winner and `event_source` is the loser."
             }
@@ -1243,149 +903,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "turn_damaged_player_count" => {
                 "Number of distinct players damaged during the current turn, including players who later died; available in `phase_end` triggers."
             }
-            "owner_is_target" => {
-                "Trigger filter: fires only when the owner is the target of the event."
-            }
-            "owner_alive_is_target_current_play_phase" => {
-                "Trigger filter: the living owner is the event player, the owner is the current turn player, and the current phase is Play. Requires Rule VM ABI 106."
-            }
-            "owner_source" => "Trigger filter: fires only when the owner is the event source.",
-            "owner_is_target_not_unique_max_current_hp" => {
-                "Trigger filter: fires only when the owner is the event player and does not have strictly more current HP than every other living player."
-            }
-            "owner_is_target_once" => {
-                "Trigger filter: fires only when the owner is the event player and this skill has not fired during the current turn."
-            }
-            "owner_source_target_alive_has_equip" => {
-                "Damage trigger filter: the living owner is the source and the living damaged player has at least one equipment card."
-            }
-            "owner_source_black_sha_target_alive_has_discardable_equip" => {
-                "Damage trigger filter: the living owner caused damage with a physical black logical Sha, and the living damaged player has at least one equipment card the owner may discard. Requires Rule VM ABI 33."
-            }
-            "owner_source_sha_target_alive_has_discardable_region_card" => {
-                "Damage trigger filter: the living owner caused damage with a logical Sha, and the living damaged player has at least one discardable card in hand, equipment, or judgment zones. Requires Rule VM ABI 34."
-            }
-            "owner_source_sha_target_alive_has_discardable_hand_equip" => {
-                "Card-target trigger filter: the living owner used a logical Sha, and the current living target has at least one hand/equipment card the owner may discard. Requires Rule VM ABI 94."
-            }
-            "owner_source_tiesuo_target_alive_unlinked_hand_equip_nonempty" => {
-                "Card-target trigger filter: the living owner used a logical Tiesuo, and the current living target is unlinked with a nonempty hand/equipment region. Requires Rule VM ABI 305."
-            }
-            "owner_alive_source_target_was_linked" => {
-                "Damage trigger filter: the living owner was the source and the target was linked immediately before that damage segment committed. Requires Rule VM ABI 306."
-            }
-            "owner_source_sha_target_alive_hand_nonempty" => {
-                "Card-target trigger filter: the living owner used a logical Sha, and the current living target has at least one hand card. Requires Rule VM ABI 154."
-            }
-            "owner_source_sha_target_hand_gte_hp_or_lte_attack_range" => {
-                "Card-target trigger filter: the living owner used a logical Sha, and the current living target's hand count is at least the owner's HP or at most the owner's current attack range. Requires Rule VM ABI 35."
-            }
-            "owner_source_sha_target_hand_lte_owner_or_hp_gte_owner" => {
-                "Card-target trigger filter: the living owner used a logical Sha, and the current living target has no more hand cards than the owner or at least as much HP as the owner. Requires Rule VM ABI 223."
-            }
-            "owner_source_direct_sha_damage_target_armor_or_mount_card_gainable" => {
-                "Damage trigger filter: the living owner dealt direct logical Sha damage to a living target with armor or a mount, and the physical Sha remains in processing or discard. Requires Rule VM ABI 318."
-            }
-            "owner_is_source_or_target_xinyaoming_available" => {
-                "Damage trigger filter: the living owner is the damage source or target and at least one legal target/action pair remains for 界邀名 this turn. Requires Rule VM ABI 319."
-            }
-            "owner_alive_event_player_lost_armor_or_mount_has_originating_skill_pile" => {
-                "Cards-moved trigger filter: a living event player lost armor or a mount from equipment while holding cards in the public pile keyed by the observer's originating skill. Requires Rule VM ABI 318."
-            }
-            "owner_is_target_judge_nonempty" => {
-                "Prepare-phase trigger filter: the living owner is the event player and currently has at least one judgment-zone card. Requires Rule VM ABI 224."
-            }
-            "owner_is_target_draw_not_replaced" => {
-                "Draw-phase trigger filter: the living owner is the event player and the pending normal draw has not already been replaced. Requires Rule VM ABI 225."
-            }
-            "owner_is_target_draw_not_fixed_hp_one_or_hand_empty" => {
-                "Draw-phase trigger filter: the living owner is the event player, the pending normal draw count is not fixed, and the owner has exactly 1 HP or no hand cards. Requires Rule VM ABI 300."
-            }
-            "owner_source_sha_target_alive_owner_outside_target_attack_range" => {
-                "Card-target trigger filter: the living owner used a logical Sha on a living target whose current attack range does not include the owner. Requires Rule VM ABI 119."
-            }
-            "owner_source_sha_dodged_target_alive_has_discardable_hand_equip" => {
-                "Sha-dodged trigger filter: the living owner used the fully dodged Sha, and the living target has at least one discardable hand or equipment card. Requires Rule VM ABI 36."
-            }
-            "owner_source_sha_dodged_target_recorded_by_skill_has_discardable_hand_equip" => {
-                "Sha-dodged trigger filter: the living owner armed this skill for the exact dodged Sha target, and that target can discard one owner hand/equipment card. Requires Rule VM ABI 152."
-            }
-            "owner_source_sha_target_alive_distance_le_one" => {
-                "Damage trigger filter: the living owner is the source of logical Sha damage, the living target remains alive, and the final distance from owner to target is at most one. Requires Rule VM ABI 37."
-            }
-            "owner_alive_sha_target_distance_le_one" => {
-                "Per-target trigger filter: a living owner observes a living logical Sha target whose final distance from the owner is at most one. Requires Rule VM ABI 227."
-            }
-            "owner_alive_sha_target_distance_le_one_has_equip_card" => {
-                "Per-target trigger filter: a living owner observes a living logical Sha target within distance one and can discard an equipment card from hand/equipment. Requires Rule VM ABI 613."
-            }
-            "owner_source_target_alive_has_hand_or_equip" => {
-                "Damage trigger filter: the living owner is the source and the living damaged player has at least one hand or equipment card."
-            }
-            "owner_source_other_target_alive_has_discardable_hand_equip" => {
-                "Damage trigger filter: the living owner damaged another living player and may currently discard at least one card from that target's hand or equipment zone. Requires Rule VM ABI 118."
-            }
-            "owner_targeted_by_other_sha_once" => {
-                "Card-target trigger filter: the living owner is targeted by another player's Sha and this skill has not fired during the current turn."
-            }
-            "owner_targeted_by_other_sha" => {
-                "Card-target trigger filter: the living owner is targeted by another player's Sha."
-            }
-            "owner_is_target_wounded" => {
-                "Trigger filter: the skill owner is the event player and is wounded."
-            }
-            "owner_is_target_linked" => {
-                "Trigger filter: the living skill owner is the event player and is currently linked. Requires Rule VM ABI 189."
-            }
-            "owner_is_target_chain_damage_linked" => {
-                "Damage-before trigger filter: the skill owner is the damage target and the damage is iron-chain-propagated. Implements 红棉百花袍. Requires Rule VM ABI 575."
-            }
-            "owner_is_target_wounded_sha" => {
-                "Damage-before trigger filter: the skill owner is wounded and the damage comes from a Sha card. Implements 得势 (dcdeshi). Requires Rule VM ABI 575."
-            }
-            "owner_is_target_healthy_draw_not_fixed" => {
-                "Draw-phase trigger filter: the skill owner is at full health and the draw phase amount is not fixed. Implements 螭纹玉佩 (chiwenyupei) draw branch. Appended for ABI-stable serialization."
-            }
-            "owner_is_target_alive_wounded_or_guiming_wu_exists" => {
-                "Draw-phase trigger filter: the living owner is the event player and at least one living wounded player, or eligible other living Wu player under enabled Lord skill Guiming, exists. Requires Rule VM ABI 190."
-            }
-            "owner_is_target_hand_nonempty" => {
-                "Trigger filter: the skill owner is the event player and has at least one hand card."
-            }
-            "owner_is_target_hand_below_max_hp" => {
-                "Trigger filter: the skill owner is the event player and has fewer hand cards than maximum HP."
-            }
-            "owner_is_target_hand_above_hp" => {
-                "Trigger filter: the living skill owner is the event player and has more hand cards than current HP."
-            }
-            "owner_first_transformed_sha_used_this_turn" => {
-                "Card-used trigger filter: the living owner used a logical Sha converted by a skill from at least one physical card, limited to the first matching use each turn. Requires Rule VM ABI 357."
-            }
-            "owner_target_hand_empty_elemental_or_trick_damage_before" => {
-                "Damage-before trigger filter: the living owner has no hand cards and is about to take elemental or ordinary-trick damage. Requires Rule VM ABI 358."
-            }
-            "owner_is_target_hand_at_least_hp_other_alive" => {
-                "Trigger filter: the living skill owner is the event player, has at least as many hand cards as current HP, and another living player exists. Requires Rule VM ABI 69."
-            }
-            "owner_is_target_lost_cards_at_most_hp_gainable" => {
-                "Trigger filter: the living skill owner is the event player, lost between one and current-HP cards from hand/equipment this turn, and at least one unique lost physical card remains in discard. Loss history is tracked only when loaded content needs this filter. Requires Rule VM ABI 201."
-            }
-            "owner_is_target_source_movable_field_card" => {
-                "Damage trigger filter: the living owner is the damaged event player, the source is living, and at least one equipment or delayed-trick card can be moved from another living player's field to the source. Requires Rule VM ABI 202."
-            }
-            "owner_from_hand_empty_other_discardable_hand_equip" => {
-                "Cards-moved trigger filter: the living skill owner lost at least one card from hand in this movement batch, is now empty-handed, and another living player has at least one hand/equipment card the owner may discard. Requires Rule VM ABI 70."
-            }
-            "owner_is_source_or_target" => {
-                "Trigger filter: the skill owner is either the damage source or the damaged player."
-            }
-            "owner_is_source_or_target_other_alive_per_damage_point" => {
-                "Damage trigger filter: the owner is one endpoint of sourced damage between two distinct living players; the trigger is offered independently once per damage point."
-            }
-            "owner_target_fire" => "Trigger filter: the skill owner is receiving fire damage.",
-            "owner_target_thunder" => {
-                "Trigger filter: the skill owner is receiving thunder damage."
-            }
             "mark_count" => {
                 "Read-only query: `mark_count(player, mark_id)` returns the player's current stable mark count."
             }
@@ -1398,6 +915,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "empty_equip_slots" => {
                 "Read-only query: `empty_equip_slots(player)` returns the number of empty equipment slots."
             }
-            _ => return super::owner_is_target_no_turn_damage::documentation(word),
+            _ => return super::discard_skill_pile_owner_filters::documentation(word),
     })
 }

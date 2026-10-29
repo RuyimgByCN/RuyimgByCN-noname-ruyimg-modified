@@ -33,7 +33,7 @@ longdan: {
 | 4 | `longdan_draw` + `get.zhu(player,"shouyue")` | **登记差异②**：守约下用转化牌摸 1 的**摸牌面未建模**（全 crate 无 `shouyue`） | 通过（**差异登记**） |
 
 **原生实现引用**：`engine/play_card.rs:154`（使用面 `longdan && kind == Shan → Sha`）、
-`kernel/sha/step.rs:1207–1243`（闪响应面 `kind == Shan || (longdan && kind == Sha)`）、
+`kernel/sha/step.rs:693–1243`（闪响应面 `kind == Shan || (longdan && kind == Sha)`）、
 无双双闪臂 `:369–392`（同口径）。
 
 ## 3 与武圣样本 §7 的**互补关系**（方向不对称的正面证据）

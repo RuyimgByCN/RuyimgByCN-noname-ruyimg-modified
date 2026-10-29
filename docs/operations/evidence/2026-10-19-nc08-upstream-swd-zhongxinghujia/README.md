@@ -22,7 +22,7 @@ hslingjian_zhongxinghujia: {
 
 ## 2 原生实现（逐字引用）
 
-`engine/play_card.rs:1645`（`CardKind::Hslingjian` 的**逐卡目标规则**）：
+`engine/play_card_targets.rs:129`（`CardKind::Hslingjian` 的**逐卡目标规则**）：
 
 ```rust
 } else if cname.contains("zhongxinghujia") {

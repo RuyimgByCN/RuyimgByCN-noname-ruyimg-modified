@@ -75,7 +75,7 @@ fn upstream_hujia_queue_is_wei_and_seat_ordered() {
 fn upstream_hujia_lord_qualification_difference_is_fixed() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");

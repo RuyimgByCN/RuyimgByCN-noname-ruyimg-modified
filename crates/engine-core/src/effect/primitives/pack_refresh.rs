@@ -26,7 +26,14 @@ pub(crate) const CHOOSE_TARGET_DRAW_MAX_HP_CAP_THEN_ADD_SKILL_CUSTOM_CHOICE: u32
 
 mod refresh_skill;
 pub(crate) use refresh_skill::*;
+
+mod choose_other_recover;
+pub(crate) use choose_other_recover::*;
 mod choose_targets_damage;
 pub(crate) use choose_targets_damage::*;
+mod replace_draw_gain_top_two_add_skills_if_different_colors;
+pub(crate) use replace_draw_gain_top_two_add_skills_if_different_colors::*;
 mod choose_gain_target_card_alternate_zone_then_target_draw;
 pub(crate) use choose_gain_target_card_alternate_zone_then_target_draw::*;
+mod qieyi_phase_start;
+pub(crate) use qieyi_phase_start::*;

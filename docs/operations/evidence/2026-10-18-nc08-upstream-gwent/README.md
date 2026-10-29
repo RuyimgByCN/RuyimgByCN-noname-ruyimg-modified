@@ -34,7 +34,7 @@ gw_yanziyaoshui: {
 | 2 | `target.isMinHandcard()` → `draw(2)` | 目标手牌 1 张（全场最少）→ **摸 2** | 通过 |
 | 3 | 否则 `draw()` | 目标 3 张而他人有 1 张（非最少）→ **摸 1** | 通过 |
 
-**原生实现引用**：`engine/play_card.rs:1508`（恰 1 名存活目标校验）、
+**原生实现引用**：`engine/play_card.rs:979`（恰 1 名存活目标校验）、
 `kernel/intrinsic.rs:363`（无懈窗口包装 + `GwentYanzhiCard`）、
 `content/host/step/gwent.rs:6`（`alive_players().all(hand.len() >= t.hand.len())` → 2/1）。
 

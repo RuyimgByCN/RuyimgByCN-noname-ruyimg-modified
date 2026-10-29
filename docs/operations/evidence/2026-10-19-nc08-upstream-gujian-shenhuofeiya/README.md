@@ -32,7 +32,7 @@ shenhuofeiya: {
 | 1 | `filterTarget`：**只要求其他角色** | **门槛反向确认**：目标 `he` **无牌**时**仍受理**（`Accepted`）——与乾坤镖**不同** | 通过 |
 | 2+3 | `changeTarget`（距离 1）+ 出【闪】否则火伤 | **行为面**：`hp [4,4,4,4] → [4,3,3,4]`（**首目标 1 号与距离 1 的 2 号各受 1 点火伤**）、使用者 hp 不变 | 通过 |
 
-**原生实现引用**：`engine/play_card.rs:1684`（与乾坤镖**共用**目标校验分支）；`kernel/intrinsic.rs:253`
+**原生实现引用**：`engine/play_card.rs:1016`（与乾坤镖**共用**目标校验分支）；`kernel/intrinsic.rs:253`
 （映射 `GJ_SHENHUOFEIYA_CARD_KEY`）。
 
 ## 3 对第 35 项的意义

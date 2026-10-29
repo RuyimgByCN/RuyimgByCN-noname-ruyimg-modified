@@ -33,7 +33,16 @@ pub(crate) const DDD_YULV_DEF: u32 = 694_263_366;
 
 mod resolve_ddd_xianglang;
 pub(crate) use resolve_ddd_xianglang::*;
+
+mod ddd_baosanniang_is_male;
+pub(crate) use ddd_baosanniang_is_male::*;
 mod resolve_ddd_jijian_kind_choice;
 pub(crate) use resolve_ddd_jijian_kind_choice::*;
+mod ddd_zhenji_continue_after_events;
+pub(crate) use ddd_zhenji_continue_after_events::*;
+mod resolve_ddd_zhenji_choice;
+pub(crate) use resolve_ddd_zhenji_choice::*;
+mod resolve_ddd_zhaoang;
+pub(crate) use resolve_ddd_zhaoang::*;
 mod resolve_ddd_liuba;
 pub(crate) use resolve_ddd_liuba::*;

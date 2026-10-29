@@ -34,7 +34,12 @@ pub(crate) const CATEGORY_GIFT_DAMAGE_PLUS_ONE_MODE: u32 = 0xDCD9_4980;
 
 mod discard_all_judge;
 pub(crate) use discard_all_judge::*;
+
+mod choose_discard_basic_then_target_discard_equip_or_damage;
+pub(crate) use choose_discard_basic_then_target_discard_equip_or_damage::*;
 mod resolve_shoulijian;
 pub(crate) use resolve_shoulijian::*;
+mod damage_then_draw_selected_targets;
+pub(crate) use damage_then_draw_selected_targets::*;
 mod choose_category_then_target_give_matching_or_sha_unrespondable;
 pub(crate) use choose_category_then_target_give_matching_or_sha_unrespondable::*;

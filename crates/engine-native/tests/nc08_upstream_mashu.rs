@@ -30,7 +30,7 @@ use engine_native::Engine;
 fn upstream_mashu_implemented_as_minus() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = src.find("MA_SHU").expect("马术");

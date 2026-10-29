@@ -131,7 +131,7 @@ fn upstream_guose_requires_the_skill() {
 fn upstream_guose_zone_and_priority_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_rules.rs"
     ))
     .expect("读 play_card 源码");
     let idx = src.find("国色（方块手牌当乐不思蜀").expect("国色分支");

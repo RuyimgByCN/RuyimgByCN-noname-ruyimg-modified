@@ -77,7 +77,7 @@ fn upstream_jiuyuan_qualification_and_bonus() {
 fn upstream_jiuyuan_lord_gate_is_same_family() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");

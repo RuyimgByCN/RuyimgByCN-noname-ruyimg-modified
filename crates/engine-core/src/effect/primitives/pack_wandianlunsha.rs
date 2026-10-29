@@ -24,7 +24,12 @@ pub(crate) const RESOLVE_WDB_YANGYI_CHOICE: u32 = 0xDCDC_6150;
 
 mod resolve_dc_sb_lusu_choice;
 pub(crate) use resolve_dc_sb_lusu_choice::*;
+
+mod remove_empty_malingli_helper;
+pub(crate) use remove_empty_malingli_helper::*;
 mod resolve_wdb_liufu_choice;
 pub(crate) use resolve_wdb_liufu_choice::*;
+mod resolve_wdb_xizhenxihong;
+pub(crate) use resolve_wdb_xizhenxihong::*;
 mod resolve_wdb_yangyi_choice;
 pub(crate) use resolve_wdb_yangyi_choice::*;

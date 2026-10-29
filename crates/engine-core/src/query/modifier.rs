@@ -936,4 +936,9 @@ mod tests {
 mod bootstrap_modifier_defs;
 pub use bootstrap_modifier_defs::*;
 
+mod resolved_value;
+pub use resolved_value::*;
+
 mod matches_kind_and_suit;
+
+mod impl_activemodifierindex;

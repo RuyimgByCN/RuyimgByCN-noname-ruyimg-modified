@@ -190,7 +190,7 @@ fn upstream_qixi_requires_the_skill() {
 fn upstream_qixi_priority_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_rules.rs"
     ))
     .expect("读 play_card 源码");
     let idx = src.find("奇袭（甘宁）").expect("奇袭分支");

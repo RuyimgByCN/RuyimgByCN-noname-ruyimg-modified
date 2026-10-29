@@ -41,7 +41,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Source files stay within 2,000 lines
+      - name: Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)
         run: |
           python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
           python3 scripts/check-source-lines.py

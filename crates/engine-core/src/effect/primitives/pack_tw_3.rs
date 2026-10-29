@@ -19,5 +19,10 @@ pub(crate) const RESOLVE_DBZHUIFENG_TARGET: u32 = 0xDCDA_4190;
 
 mod resolve_twtianyu;
 pub(crate) use resolve_twtianyu::*;
+
+mod resolve_twguohuai;
+pub(crate) use resolve_twguohuai::*;
 mod resolve_twchenxun;
 pub(crate) use resolve_twchenxun::*;
+mod spwanwei_active;
+pub(crate) use spwanwei_active::*;

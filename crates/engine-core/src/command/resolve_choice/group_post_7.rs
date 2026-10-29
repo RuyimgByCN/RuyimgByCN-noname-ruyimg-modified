@@ -8,7 +8,12 @@ use super::*;
 
 mod resolve_potweiyan_choice;
 pub(crate) use resolve_potweiyan_choice::*;
+
+mod resolve_potchendao;
+pub(crate) use resolve_potchendao::*;
 mod resolve_reveal_category_distribution;
 pub(crate) use resolve_reveal_category_distribution::*;
+mod resolve_resolve_hfjieying;
+pub(crate) use resolve_resolve_hfjieying::*;
 mod resolve_discard_equipment_pair_with_armor;
 pub(crate) use resolve_discard_equipment_pair_with_armor::*;

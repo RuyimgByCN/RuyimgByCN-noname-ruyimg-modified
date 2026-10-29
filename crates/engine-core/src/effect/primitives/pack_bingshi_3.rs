@@ -126,5 +126,10 @@ pub(crate) const MBYUANMO_CUSTOM_CHOICE: u32 = 0xDCDD_5092;
 
 mod twyuyan_gift_cards;
 pub(crate) use twyuyan_gift_cards::*;
+
+mod resolve_tianxiang;
+pub(crate) use resolve_tianxiang::*;
 mod resolve_mbrenxing;
 pub(crate) use resolve_mbrenxing::*;
+mod mbxiongtu_damage;
+pub(crate) use mbxiongtu_damage::*;

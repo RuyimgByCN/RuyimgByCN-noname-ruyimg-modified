@@ -8,7 +8,12 @@ use super::*;
 
 mod oldxuanfeng_distance_one;
 pub(crate) use oldxuanfeng_distance_one::*;
+
+mod resolve_drlt_jueyan;
+pub(crate) use resolve_drlt_jueyan::*;
 mod resolve_beizhu;
 pub(crate) use resolve_beizhu::*;
+mod ban_active_until_turn_end;
+pub(crate) use ban_active_until_turn_end::*;
 mod draw_then_choose_give_or_discard_hand;
 pub(crate) use draw_then_choose_give_or_discard_hand::*;

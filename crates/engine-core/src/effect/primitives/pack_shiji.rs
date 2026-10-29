@@ -79,5 +79,8 @@ pub(crate) const RESOLVE_HEJI_CHOICE: u32 = 0xDCDA_4270;
 
 mod resolve_spchijie;
 pub(crate) use resolve_spchijie::*;
+
+mod resolve_xinyangjie;
+pub(crate) use resolve_xinyangjie::*;
 mod resolve_xiongshu;
 pub(crate) use resolve_xiongshu::*;

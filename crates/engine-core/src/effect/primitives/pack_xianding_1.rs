@@ -12,7 +12,14 @@ pub(crate) const MANTIANGUOHAI_CARD_DEF: u32 = 3_442_665_819;
 
 mod set_potfaen_pending;
 pub(crate) use set_potfaen_pending::*;
+
+mod choose_other_excluding_source_random_gain_hand_equip_then_use_if_equip;
+pub(crate) use choose_other_excluding_source_random_gain_hand_equip_then_use_if_equip::*;
 mod resolve_zhengbi;
 pub(crate) use resolve_zhengbi::*;
+mod gain_cards_by_zone;
+pub(crate) use gain_cards_by_zone::*;
+mod resolve_xicha;
+pub(crate) use resolve_xicha::*;
 mod resolve_sibian;
 pub(crate) use resolve_sibian::*;

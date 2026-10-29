@@ -11,7 +11,7 @@
 1. **`undist` 技能**：`!player.hasSkill("undist")`——持该标记技的玩家不参与距离计数（长度也不计入）。
 2. **`isMin(true)`**：处于「最小化/隐藏」态（模式级，如排位/国战派生）的玩家同样被排除；且当 from/to 任一方 `isMin(true)` 时整段距离计算**短路为空**（返回 NaN/未定义由调用方处理）。
 
-**原生**：`computed_distance`/`seat_distance_alive`（`state.rs:948/1192`）按「存活座位环形计数」计算，**不建模** `undist`/`isMin`；国战阵法派生判定处已就地登记「构逆/野心家结盟/undist 不建模」（`state.rs:1214`）。当前目录**无**任何标准/扩展将持 `undist`，也无 `isMin` 模式态入口，故不影响现有对局语义。
+**原生**：`computed_distance`/`seat_distance_alive`（`state/core_ops.rs:90/1192`）按「存活座位环形计数」计算，**不建模** `undist`/`isMin`；国战阵法派生判定处已就地登记「构逆/野心家结盟/undist 不建模」（`state/core_ops.rs:356`）。当前目录**无**任何标准/扩展将持 `undist`，也无 `isMin` 模式态入口，故不影响现有对局语义。
 
 ## 处置
 

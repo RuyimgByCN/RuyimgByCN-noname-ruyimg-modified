@@ -38,7 +38,7 @@ use engine_native::Engine;
 fn upstream_qingguo_in_shan_options() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha/step.rs"
+        "/src/kernel/sha/resume.rs"
     ))
     .expect("读 sha/step");
     // 全文件检查（同文件有多个候选构造点，固定窗口会命中其它处）
@@ -69,7 +69,7 @@ fn upstream_qingguo_in_shan_options() {
 fn upstream_qingguo_zone_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/kernel/sha/step.rs"
+        "/src/kernel/sha/resume.rs"
     ))
     .expect("读 sha/step");
     // 定位到含 `qingguo && black` 的候选构造点（其上方即为 `.hand` 遍历）
@@ -83,7 +83,7 @@ fn upstream_qingguo_zone_difference_is_registered() {
     // 与既有牌区族成员对照：guose/qixi 等在 play_card.rs 的命令面同样限定手牌
     let play_card = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_rules.rs"
     ))
     .expect("读 play_card");
     assert!(

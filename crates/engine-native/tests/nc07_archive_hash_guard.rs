@@ -52,7 +52,8 @@ fn fields_referenced(src: &str, var: char) -> Vec<String> {
 #[test]
 fn archived_state_fields_are_hashed_or_excluded() {
     let encode = include_str!("../src/archive/state_encode.rs");
-    let hash = include_str!("../src/engine/hash.rs");
+    // 摘要编码分布在 engine/hash.rs（状态）与 engine/hash/machine.rs（机器快照）。
+    let hash = [include_str!("../src/engine/hash.rs"), include_str!("../src/engine/hash/machine.rs")].concat();
     for (var, label, excluded) in [
         ('p', "PlayerState", EXCLUDED_PLAYER),
         ('t', "TurnState", EXCLUDED_TURN),

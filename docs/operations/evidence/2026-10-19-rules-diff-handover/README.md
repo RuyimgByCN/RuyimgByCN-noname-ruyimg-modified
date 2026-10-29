@@ -432,8 +432,8 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 | 行为 | 出现位置（节选）|
 |---|---|
 | `Bingfeng2` | `filtering/common.rs:365` **有逻辑**、`metadata/common.rs:389` **有 trigger meta**、`step/skills_status.rs:558` **有效果步**、`tags.rs:257` **有 tag** |
-| `Cyqiaoxie` | `filtering/common.rs:372`、`metadata/common.rs:399`、`step/skills_cards.rs:1214`、`tags.rs:255` |
-| `Gongxin` | `step/skills_cards.rs:542`、`activation/common.rs:69`、`tags.rs:278` |
+| `Cyqiaoxie` | `filtering/common.rs:372`、`metadata/common.rs:399`、`content/host/step/skills_virtual_use.rs:434`、`tags.rs:255` |
+| `Gongxin` | `step/skills_cards.rs:224`、`activation/common.rs:69`、`tags.rs:278` |
 | `Niepan` | `step/skills_status.rs:231`、`activation/common.rs:238`、`tags.rs:236` |
 
 ⇒ **`(None, None)` 只表示「没有 `activatable` 与 `factory` 层面的 step」** ✅

@@ -38,7 +38,7 @@ use engine_native::Engine;
 fn upstream_jijiu_red_card_is_tao_like() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/snap/asks.rs"
+        "/src/snap/asks/shapes.rs"
     ))
     .expect("读 asks 源码");
     let idx = src.find("fn is_tao_like").expect("is_tao_like");
@@ -66,7 +66,7 @@ fn upstream_jijiu_red_card_is_tao_like() {
 fn upstream_jijiu_turn_restriction_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/snap/asks.rs"
+        "/src/snap/asks/shapes.rs"
     ))
     .expect("读 asks 源码");
     // 只看 jijiu 判定块本身（`let jijiu =` 起 260 字符），避免窗口内混入无关代码
@@ -94,7 +94,7 @@ fn upstream_jijiu_turn_restriction_difference_is_fixed() {
 fn upstream_jijiu_requires_the_skill() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/snap/asks.rs"
+        "/src/snap/asks/shapes.rs"
     ))
     .expect("读 asks 源码");
     let idx = src.find("fn is_tao_like").expect("is_tao_like");

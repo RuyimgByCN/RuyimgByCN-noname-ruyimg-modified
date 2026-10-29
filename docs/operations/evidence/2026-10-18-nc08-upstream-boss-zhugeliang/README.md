@@ -39,7 +39,7 @@ hlss_xiangxing: {
 | 1 | 官方文本「**随机分配**给其他角色」 | **差异①**：原生按**座位序确定性近似**（「随机 → 确定性」族） | 通过（**差异登记**） |
 | 2 | `group: 'hlss_xiangxing_hp'`（任意体力变化后回满） | **差异②**：原生在 `kernel/damage.rs::hlss_light_refill` 于**伤害/失去体力提交点**回满（先判实例 `enabled` 再置 `hp = max_hp`）→ 调用点/口径不同 | 通过（**差异登记**） |
 
-**原生实现引用**：`content/host/keys.rs:774`（`HostBehavior::HlssXiangxing`）、
+**原生实现引用**：`content/host/keys.rs:239`（`HostBehavior::HlssXiangxing`）、
 `state.rs:247–252`（`hlss_stars`/`hlss_count`/`hlss_damage`）、`kernel/damage.rs:1032`（`hlss_light_refill`）。
 
 ## 3 验证结果

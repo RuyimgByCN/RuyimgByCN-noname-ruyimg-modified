@@ -103,11 +103,7 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::PickTargetCard
         | ContinuationKind::HuogongShow
         | ContinuationKind::HuogongDiscard
-        | ContinuationKind::RespondToSha
-        | ContinuationKind::RespondAoeQueue
         | ContinuationKind::JuedouDuel
-        | ContinuationKind::RewriteJudgment
-        | ContinuationKind::RewriteBeigeJudgment
         | ContinuationKind::JiedaoChoice
         | ContinuationKind::WuxieWindow
         | ContinuationKind::ActiveSkillSelection => choices_dying_save::resolve_choice(
@@ -121,81 +117,31 @@ pub(super) fn handle_resolve_choice(
             vm_cont,
             optional_trigger,
         ),
+        ContinuationKind::RespondToSha
+        | ContinuationKind::RespondAoeQueue
+        | ContinuationKind::RewriteJudgment
+        | ContinuationKind::RewriteBeigeJudgment => choices_dying_save_respond_rewrite::resolve_choice(
+            tx,
+            actor,
+            observer,
+            kind,
+            payload,
+            selections,
+            cancelled,
+            vm_cont,
+            optional_trigger,
+        ),
         ContinuationKind::ChooseDrawOrRecover
-        | ContinuationKind::VirtualShaTargets
-        | ContinuationKind::JudgeDamageOtherOnSuit
-        | ContinuationKind::GanglieSourceDiscardOrDamage
-        | ContinuationKind::ResolveGanglieThree
-        | ContinuationKind::TuxiGainOtherHandsReplaceDraw
-        | ContinuationKind::YijiDistributeTopCards
-        | ContinuationKind::XiaoguoDiscardBasicThenEquipOrDamage
-        | ContinuationKind::ResolveSpXiaoguo
         | ContinuationKind::ChooseDingpanBranch
-        | ContinuationKind::ResolveTanlu
-        | ContinuationKind::TargetDiscardThenDuelIfNonShaAndHpGteOwner
         | ContinuationKind::ChooseTargetLoseHpDiscardHandShaIfBasic
-        | ContinuationKind::TongjiDiscardRedirectSha
-        | ContinuationKind::LiuliDiscardRedirectSha
-        | ContinuationKind::JijieChooseBottomCardRecipient
-        | ContinuationKind::LuoshenRepeatBlackJudgment
-        | ContinuationKind::JudgeSameColorGainRepeat
-        | ContinuationKind::DelegatedGroupResponse
-        | ContinuationKind::MoveEquipmentThenDraw
-        | ContinuationKind::DiscardEquipmentPairWithArmor
-        | ContinuationKind::DiscardTargetEquipmentGainMount
-        | ContinuationKind::DiscardTargetEquipmentDrawWeaponRange
         | ContinuationKind::ChooseTargetRevealHandDamageIfSha
         | ContinuationKind::ChooseOtherGiveOneHandEquip
         | ContinuationKind::ChooseGiveOrRecastOneHand
-        | ContinuationKind::ResolveOlJieDanshou
         | ContinuationKind::ChooseOtherGiveThenRecover
-        | ContinuationKind::GuanxingPick
-        | ContinuationKind::RecoverToMaxThenOptionalExchangeSkill
-        | ContinuationKind::DiscardTargetCardGainMount
         | ContinuationKind::ChooseDiscardTargetCard
         | ContinuationKind::ChooseDiscardTargetCardResolveCurrentSha
-        | ContinuationKind::ResolveDcqiaomeng
-        | ContinuationKind::ResolveRetieji
-        | ContinuationKind::ResolveNewReluoyi
-        | ContinuationKind::ResolveXinyaoming
-        | ContinuationKind::ResolveRehuaiyi
-        | ContinuationKind::ResolveReanguo
-        | ContinuationKind::ResolveBeizhu
-        | ContinuationKind::ResolveMbshanjia
-        | ContinuationKind::ResolveDaoji
-        | ContinuationKind::GiveAllHandThenChooseUseOneOrDamage
         | ContinuationKind::ChooseCategoryThenTargetGiveMatchingOrShaUnrespondable
-        | ContinuationKind::ResolveTwfupan
-        | ContinuationKind::ResolveTwruilian
-        | ContinuationKind::ResolveTwjianwei
-        | ContinuationKind::ResolveTwtanfeng
-        | ContinuationKind::ResolveTwzhibian
-        | ContinuationKind::ResolveTwyuyan
-        | ContinuationKind::ResolveTwguoyi
-        | ContinuationKind::ResolveTwchuhai
-        | ContinuationKind::ResolveTwyizhu
-        | ContinuationKind::ResolveTwxiawei
-        | ContinuationKind::ResolveTwbianfuren
-        | ContinuationKind::ResolveTwfeiyi
-        | ContinuationKind::ResolveTwchenzhen
-        | ContinuationKind::ResolveTwqingxi
-        | ContinuationKind::ResolveTwzaoli
-        | ContinuationKind::ResolveTwzhengjian
-        | ContinuationKind::ResolveTwtianyu
-        | ContinuationKind::ResolveTwwujing
-        | ContinuationKind::ResolveTwshanghe
-        | ContinuationKind::ResolveTwwangchang
-        | ContinuationKind::ResolveTwcaozhao
-        | ContinuationKind::ResolveTwguohuai
-        | ContinuationKind::ClanshenjunUseCard
-        | ContinuationKind::ClanyuzhiRevealChoice
-        | ContinuationKind::ClanyuzhiEndChoice
-        | ContinuationKind::QieyiPutTopChoice
-        | ContinuationKind::JianzhiCountChoice
-        | ContinuationKind::JianzhiAssignCard
         | ContinuationKind::ChooseTargetDrawChoice
-        | ContinuationKind::ResolveJiaohua
-        | ContinuationKind::ResolveLuanqun
         | ContinuationKind::ChooseTargetReclaimEquipmentDrawIfRangeReduced
         | ContinuationKind::ChooseUseVirtualCard
         | ContinuationKind::ChooseDiscardOneThenGainTargetEquipment
@@ -203,47 +149,25 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseTargetsDamage
         | ContinuationKind::ChooseTargetDrawThenOwnerIfBelowMaxHp
         | ContinuationKind::ChooseTargetDrawMaxHpCapThenDiscardExcess
-        | ContinuationKind::GiveSelectedThenTargetChooseDiscardSameSuitOrLoseHp
-        | ContinuationKind::FanjianChooseSuitOrHand
         | ContinuationKind::ChooseTargetSelfDiscardThenOwnerLoseHpIfHandNeHp
         | ContinuationKind::ChooseGiveOneHandEquipOrRecover
         | ContinuationKind::ChooseGiveTwoDifferentColorsOrRecover
-        | ContinuationKind::ResolveMbzhuguo
-        | ContinuationKind::ResolveMbanxian
-        | ContinuationKind::ResolveMbjinzu
         | ContinuationKind::ChooseDiscardAllHandOrEquipDrawLostHpThenLoseHp
         | ContinuationKind::ChooseOtherDrawOwnerLostHpTurnOver
-        | ContinuationKind::ForceOthersUseShaOnNearestOrLoseHp
         | ContinuationKind::ChooseDiscardOneForShaRefundAndDrawIfRed
-        | ContinuationKind::ResolveOllinjie
         | ContinuationKind::ChooseTargetGainMaxHp
-        | ContinuationKind::GainTargetHandCard
-        | ContinuationKind::GainFromSkillPile
         | ContinuationKind::ChooseOtherAddMark
-        | ContinuationKind::StartDebateTargets
-        | ContinuationKind::PinDebateOpinions
-        | ContinuationKind::DistributeShadowCards
-        | ContinuationKind::RegisterTurnEndDebate
         | ContinuationKind::ChooseGroup
         | ContinuationKind::ChooseGainOtherSkill
-        | ContinuationKind::LoseGainedSkill
-        | ContinuationKind::ResolvePotheyun
         | ContinuationKind::ChoosePlaceHandXumou
-        | ContinuationKind::CityConsume
         | ContinuationKind::ChooseOthersAddMark
         | ContinuationKind::ChooseOthersInsertExtraTurn
-        | ContinuationKind::TwjieqiuSelect
-        | ContinuationKind::DiscardBasicDrawEqual
-        | ContinuationKind::PlaceHandCardToExpansion
         | ContinuationKind::ChooseClanNotMaxHandLimitGain
         | ContinuationKind::ChooseAddCurrentShaTarget
         | ContinuationKind::ChooseStoreHandShaInSkillPile
         | ContinuationKind::ChooseSpendSkillPileForDyingJiu
         | ContinuationKind::ChooseCompareTargetHandCard
         | ContinuationKind::ChooseHandCompareTarget
-        | ContinuationKind::BetweenOpponent
-        | ContinuationKind::BetweenFirstCard
-        | ContinuationKind::BetweenSecondCard
         | ContinuationKind::ChooseHandComparePlayerCard
         | ContinuationKind::ChooseOtherDamage
         | ContinuationKind::ChooseBoundSourceAttackRangeDamage
@@ -251,8 +175,6 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseGainDiscardCardByKind
         | ContinuationKind::ChooseGainOwnLostDiscardCardThisTurn
         | ContinuationKind::ChooseMoveFieldCardTo
-        | ContinuationKind::DrawThenOptionallyDistributeHandCards
-        | ContinuationKind::GiveSelectedThenContinueDistinctRecoverAtTwo
         | ContinuationKind::ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan
         | ContinuationKind::ChooseZonePriorityGainRandomCardFromEachOtherThenTurnOver
         | ContinuationKind::ChooseGainCardFromEachOtherThenTurnOver
@@ -260,47 +182,13 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseHiddenSkillPileCards
         | ContinuationKind::ChooseChangandajianTarget
         | ContinuationKind::ChooseChangandajianCard
-        | ContinuationKind::DiscardTiaojiyanmeiCard
         | ContinuationKind::ChooseTiaojiyanmeiGainTarget
         | ContinuationKind::ChooseOtherYinghun
         | ContinuationKind::ChooseOtherBizheng
         | ContinuationKind::ChooseOtherXiashu
-        | ContinuationKind::ResolveGuanwei
-        | ContinuationKind::ResolveLanjiang
-        | ContinuationKind::ResolveRebingyi
-        | ContinuationKind::ResolveOldimeng
-        | ContinuationKind::ResolveRejieyin
-        | ContinuationKind::ResolveReanxu
-        | ContinuationKind::ResolveOldAnxu
-        | ContinuationKind::ResolveOldQinqing
-        | ContinuationKind::ResolveOldMingjian
-        | ContinuationKind::ResolveOldXuanfeng
-        | ContinuationKind::ResolveJianrou
-        | ContinuationKind::ResolveOldHuisheng
-        | ContinuationKind::ResolveOldJiefan
-        | ContinuationKind::ResolveChegu
-        | ContinuationKind::ResolveJunkguixin
-        | ContinuationKind::ResolveGuhuo
-        | ContinuationKind::ResolveFaceDownViewAs
-        | ContinuationKind::ResolveSwapLowerHandViewAs
-        | ContinuationKind::ResolveYaoChenwei
-        | ContinuationKind::ResolveYoudi
-        | ContinuationKind::ResolveKuangfu
-        | ContinuationKind::ResolveShanjia
-        | ContinuationKind::ResolveNewYajiao
         | ContinuationKind::ChooseDiscardSkillPileCardAddMarkedSkill
-        | ContinuationKind::GainOneHandFromSelectedTargets
         | ContinuationKind::ChooseRepoluTargetsDraw
-        | ContinuationKind::ResolveZhuiyi
-        | ContinuationKind::ResolveXinfuGuolun
-        | ContinuationKind::ResolveDrltJueyan
-        | ContinuationKind::ResolveRejizhi
-        | ContinuationKind::ResolveJiexun
-        | ContinuationKind::ResolveWengua
-        | ContinuationKind::DiscardHandForMassDamage
         | ContinuationKind::ChooseMarkParityControlTarget
-        | ContinuationKind::DiscardMarkParityControlTargetCard
-        | ContinuationKind::ConfirmMarkParityMassDamage
         | ContinuationKind::ChooseSelectedTargetDamage
         | ContinuationKind::ChooseDistinctSuitCards
         | ContinuationKind::ChooseInspectedHeartCard
@@ -337,11 +225,145 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseDiscardJudgeUseVirtualShaDrawIfNoDamage
         | ContinuationKind::ChooseTargetDrawOrDiscardBySkillUseCountLinkIfWounded
         | ContinuationKind::ChooseRevealOtherHandCardRememberCategory
-        | ContinuationKind::GiveExactRecordPhaseTarget
         | ContinuationKind::ChooseGainResolvedShaOrShanThenOptionalUseSha
         | ContinuationKind::ChooseOtherTargetsBySkippedPhaseCountDamage
         | ContinuationKind::ChooseOthersAfterUniformHandReveal
         | ContinuationKind::ChooseCardUserOrAddTarget => {
+            choices_choose_draw_or_recover_choose::resolve_choice(
+                tx,
+                actor,
+                observer,
+                kind,
+                payload,
+                selections,
+                cancelled,
+                vm_cont,
+                optional_trigger,
+            )
+        }
+        ContinuationKind::VirtualShaTargets
+        | ContinuationKind::JudgeDamageOtherOnSuit
+        | ContinuationKind::GanglieSourceDiscardOrDamage
+        | ContinuationKind::ResolveGanglieThree
+        | ContinuationKind::TuxiGainOtherHandsReplaceDraw
+        | ContinuationKind::YijiDistributeTopCards
+        | ContinuationKind::XiaoguoDiscardBasicThenEquipOrDamage
+        | ContinuationKind::ResolveSpXiaoguo
+        | ContinuationKind::ResolveTanlu
+        | ContinuationKind::TargetDiscardThenDuelIfNonShaAndHpGteOwner
+        | ContinuationKind::TongjiDiscardRedirectSha
+        | ContinuationKind::LiuliDiscardRedirectSha
+        | ContinuationKind::JijieChooseBottomCardRecipient
+        | ContinuationKind::LuoshenRepeatBlackJudgment
+        | ContinuationKind::JudgeSameColorGainRepeat
+        | ContinuationKind::DelegatedGroupResponse
+        | ContinuationKind::MoveEquipmentThenDraw
+        | ContinuationKind::DiscardEquipmentPairWithArmor
+        | ContinuationKind::DiscardTargetEquipmentGainMount
+        | ContinuationKind::DiscardTargetEquipmentDrawWeaponRange
+        | ContinuationKind::ResolveOlJieDanshou
+        | ContinuationKind::GuanxingPick
+        | ContinuationKind::RecoverToMaxThenOptionalExchangeSkill
+        | ContinuationKind::DiscardTargetCardGainMount
+        | ContinuationKind::ResolveDcqiaomeng
+        | ContinuationKind::ResolveRetieji
+        | ContinuationKind::ResolveNewReluoyi
+        | ContinuationKind::ResolveXinyaoming
+        | ContinuationKind::ResolveRehuaiyi
+        | ContinuationKind::ResolveReanguo
+        | ContinuationKind::ResolveBeizhu
+        | ContinuationKind::ResolveMbshanjia
+        | ContinuationKind::ResolveDaoji
+        | ContinuationKind::GiveAllHandThenChooseUseOneOrDamage
+        | ContinuationKind::ResolveTwfupan
+        | ContinuationKind::ResolveTwruilian
+        | ContinuationKind::ResolveTwjianwei
+        | ContinuationKind::ResolveTwtanfeng
+        | ContinuationKind::ResolveTwzhibian
+        | ContinuationKind::ResolveTwyuyan
+        | ContinuationKind::ResolveTwguoyi
+        | ContinuationKind::ResolveTwchuhai
+        | ContinuationKind::ResolveTwyizhu
+        | ContinuationKind::ResolveTwxiawei
+        | ContinuationKind::ResolveTwbianfuren
+        | ContinuationKind::ResolveTwfeiyi
+        | ContinuationKind::ResolveTwchenzhen
+        | ContinuationKind::ResolveTwqingxi
+        | ContinuationKind::ResolveTwzaoli
+        | ContinuationKind::ResolveTwzhengjian
+        | ContinuationKind::ResolveTwtianyu
+        | ContinuationKind::ResolveTwwujing
+        | ContinuationKind::ResolveTwshanghe
+        | ContinuationKind::ResolveTwwangchang
+        | ContinuationKind::ResolveTwcaozhao
+        | ContinuationKind::ResolveTwguohuai
+        | ContinuationKind::ClanshenjunUseCard
+        | ContinuationKind::ClanyuzhiRevealChoice
+        | ContinuationKind::ClanyuzhiEndChoice
+        | ContinuationKind::QieyiPutTopChoice
+        | ContinuationKind::JianzhiCountChoice
+        | ContinuationKind::JianzhiAssignCard
+        | ContinuationKind::ResolveJiaohua
+        | ContinuationKind::ResolveLuanqun
+        | ContinuationKind::GiveSelectedThenTargetChooseDiscardSameSuitOrLoseHp
+        | ContinuationKind::FanjianChooseSuitOrHand
+        | ContinuationKind::ResolveMbzhuguo
+        | ContinuationKind::ResolveMbanxian
+        | ContinuationKind::ResolveMbjinzu
+        | ContinuationKind::ForceOthersUseShaOnNearestOrLoseHp
+        | ContinuationKind::ResolveOllinjie
+        | ContinuationKind::GainTargetHandCard
+        | ContinuationKind::GainFromSkillPile
+        | ContinuationKind::StartDebateTargets
+        | ContinuationKind::PinDebateOpinions
+        | ContinuationKind::DistributeShadowCards
+        | ContinuationKind::RegisterTurnEndDebate
+        | ContinuationKind::LoseGainedSkill
+        | ContinuationKind::ResolvePotheyun
+        | ContinuationKind::CityConsume
+        | ContinuationKind::TwjieqiuSelect
+        | ContinuationKind::DiscardBasicDrawEqual
+        | ContinuationKind::PlaceHandCardToExpansion
+        | ContinuationKind::BetweenOpponent
+        | ContinuationKind::BetweenFirstCard
+        | ContinuationKind::BetweenSecondCard
+        | ContinuationKind::DrawThenOptionallyDistributeHandCards
+        | ContinuationKind::GiveSelectedThenContinueDistinctRecoverAtTwo
+        | ContinuationKind::DiscardTiaojiyanmeiCard
+        | ContinuationKind::ResolveGuanwei
+        | ContinuationKind::ResolveLanjiang
+        | ContinuationKind::ResolveRebingyi
+        | ContinuationKind::ResolveOldimeng
+        | ContinuationKind::ResolveRejieyin
+        | ContinuationKind::ResolveReanxu
+        | ContinuationKind::ResolveOldAnxu
+        | ContinuationKind::ResolveOldQinqing
+        | ContinuationKind::ResolveOldMingjian
+        | ContinuationKind::ResolveOldXuanfeng
+        | ContinuationKind::ResolveJianrou
+        | ContinuationKind::ResolveOldHuisheng
+        | ContinuationKind::ResolveOldJiefan
+        | ContinuationKind::ResolveChegu
+        | ContinuationKind::ResolveJunkguixin
+        | ContinuationKind::ResolveGuhuo
+        | ContinuationKind::ResolveFaceDownViewAs
+        | ContinuationKind::ResolveSwapLowerHandViewAs
+        | ContinuationKind::ResolveYaoChenwei
+        | ContinuationKind::ResolveYoudi
+        | ContinuationKind::ResolveKuangfu
+        | ContinuationKind::ResolveShanjia
+        | ContinuationKind::ResolveNewYajiao
+        | ContinuationKind::GainOneHandFromSelectedTargets
+        | ContinuationKind::ResolveZhuiyi
+        | ContinuationKind::ResolveXinfuGuolun
+        | ContinuationKind::ResolveDrltJueyan
+        | ContinuationKind::ResolveRejizhi
+        | ContinuationKind::ResolveJiexun
+        | ContinuationKind::ResolveWengua
+        | ContinuationKind::DiscardHandForMassDamage
+        | ContinuationKind::DiscardMarkParityControlTargetCard
+        | ContinuationKind::ConfirmMarkParityMassDamage
+        | ContinuationKind::GiveExactRecordPhaseTarget => {
             choices_choose_draw_or_recover::resolve_choice(
                 tx,
                 actor,
@@ -364,7 +386,6 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseTargetDiscardAttackRangeCardsOrIncreaseDamageWeaponForcesBoth
         | ContinuationKind::ChooseDrawOrRecastAddSkill
         | ContinuationKind::ChooseDrawOrDiscardTargetCardRecordSha
-        | ContinuationKind::RevealHandChooseDiscardColor
         | ContinuationKind::ChooseDiscardTargetCardsRecoverSameCategory
         | ContinuationKind::ChooseScskuijiDiscard
         | ContinuationKind::ChoosePskuijiDiscard
@@ -375,17 +396,37 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ChooseDrawOrDiscardTargetCard
         | ContinuationKind::ChooseSeatPathDamage
         | ContinuationKind::ChooseGainShaForOpeningExtraPlay
-        | ContinuationKind::LoseHpGainDiscardCardForOpeningExtraPlay
         | ContinuationKind::ChooseHandCountDifferentTargetDrawOrRandomDiscard
         | ContinuationKind::ChooseTargetDiscardExcessThenSelfDiscardOrTargetDraw
         | ContinuationKind::ChooseGainOneFromDamageTargetAndNeighbors
         | ContinuationKind::ChoosePreventDamageOrLoseMaxHpIncreaseDamage
+        | ContinuationKind::ChooseOneFromSkillPileDiscard
+        | ContinuationKind::ChooseTargetHandCardToPile
+        | ContinuationKind::ChooseHandCardsToSkillPile
+        | ContinuationKind::ChooseGainTopCardsBySuit
+        | ContinuationKind::ChooseOtherDrawByHandCount
+        | ContinuationKind::ChooseOtherDrawOrRecover
+        | ContinuationKind::ChooseDiscardHandEquipThenRemoveSelfSkill
+        | ContinuationKind::ChooseTakeLargerHandUntilMax
+        | ContinuationKind::ChooseDrawOrIncreaseCurrentCardDamageOrBothMark => {
+            choices_choose_give_card_or_add_target_choose::resolve_choice(
+                tx,
+                actor,
+                observer,
+                kind,
+                payload,
+                selections,
+                cancelled,
+                vm_cont,
+                optional_trigger,
+            )
+        }
+        ContinuationKind::RevealHandChooseDiscardColor
+        | ContinuationKind::LoseHpGainDiscardCardForOpeningExtraPlay
         | ContinuationKind::SourceFreeViewAsEquipCost
         | ContinuationKind::SourceFreeViewAsPlay
         | ContinuationKind::SourceFreeViewAsResponse
         | ContinuationKind::MultiCardViewAsResponse
-        | ContinuationKind::ChooseOneFromSkillPileDiscard
-        | ContinuationKind::ChooseTargetHandCardToPile
         | ContinuationKind::PlaceHandCardsToDeckTop
         | ContinuationKind::ResolveDcbingjiStage
         | ContinuationKind::ResolvePxqixianStage
@@ -420,7 +461,6 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::ResolveQiangyongStage
         | ContinuationKind::ResolveZhengjianStage
         | ContinuationKind::ResolveReliangyinStage
-        | ContinuationKind::ChooseHandCardsToSkillPile
         | ContinuationKind::StoreSelectedInSkillPile
         | ContinuationKind::RearrangePileToDeckTop
         | ContinuationKind::VmResume
@@ -428,12 +468,6 @@ pub(super) fn handle_resolve_choice(
         | ContinuationKind::AdjustHandTo
         | ContinuationKind::DiscardHandAddSkillByColor
         | ContinuationKind::RevealTopGainNonBasicOrSwapBasic
-        | ContinuationKind::ChooseGainTopCardsBySuit
-        | ContinuationKind::ChooseOtherDrawByHandCount
-        | ContinuationKind::ChooseOtherDrawOrRecover
-        | ContinuationKind::ChooseDiscardHandEquipThenRemoveSelfSkill
-        | ContinuationKind::ChooseTakeLargerHandUntilMax
-        | ContinuationKind::ChooseDrawOrIncreaseCurrentCardDamageOrBothMark
         | ContinuationKind::DrawThenChooseGiveOrDiscardHand
         | ContinuationKind::GiveOneHandOrEquip
         | ContinuationKind::UseGivenEquipment
@@ -467,6 +501,10 @@ pub(super) fn handle_resolve_choice(
 }
 
 mod choices_choose_draw_or_recover;
+mod choices_choose_draw_or_recover_choose;
 mod choices_choose_give_card_or_add_target;
+mod choices_choose_give_card_or_add_target_choose;
 mod choices_custom;
+mod choices_custom_potchendao;
 mod choices_dying_save;
+mod choices_dying_save_respond_rewrite;

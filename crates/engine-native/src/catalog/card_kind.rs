@@ -1,0 +1,537 @@
+//! 牌种（CardKind）的分类、目标与结算属性查询。
+
+use super::*;
+
+impl CardKind {
+    /// AOE 牌对应的响应需求牌（惊雷山=杀，炽羽袭=闪）。
+    pub fn aoe_need(self) -> Option<CardKind> {
+        match self {
+            CardKind::SavageAttack | CardKind::Jingleishan => Some(CardKind::Sha),
+            CardKind::ArcheryAttack | CardKind::Chiyuxi => Some(CardKind::Shan),
+            _ => None,
+        }
+    }
+    /// 玉蝉八卦 autoViewAs（swd 补切批⑫）：手持时视作对应基本牌使用。
+    pub fn yuchan_auto_view_as(self) -> Option<CardKind> {
+        Some(match self {
+            CardKind::Yuchanqian => CardKind::Sha,
+            CardKind::Yuchankun => CardKind::Caoyao,
+            CardKind::Yuchanzhen => CardKind::Jiu,
+            CardKind::Yuchanxun => CardKind::Tao,
+            CardKind::Yuchankan => CardKind::Shenmiguo,
+            CardKind::Yuchanli => CardKind::Tianxianjiu,
+            CardKind::Yuchangen => CardKind::Fengyinzhidan,
+            CardKind::Yuchandui => CardKind::Xuejibingbao,
+            _ => return None,
+        })
+    }
+
+    /// AOE 伤害属性（惊雷山=雷、炽羽袭=火，南蛮/万箭普通）。
+    pub fn aoe_nature(self) -> crate::event::DamageNature {
+        match self {
+            CardKind::Jingleishan => crate::event::DamageNature::Thunder,
+            CardKind::Chiyuxi => crate::event::DamageNature::Fire,
+            _ => crate::event::DamageNature::Normal,
+        }
+    }
+}
+
+impl CardKind {
+    /// 是否按杀结算（普通/火/雷杀共用限一次与响应流程）。
+    pub fn is_sha_like(self) -> bool {
+        matches!(self, CardKind::Sha | CardKind::FireSha | CardKind::LeiSha)
+    }
+
+    /// 基础牌判定（往事封禁面，规则 v270）：杀族/闪/桃/酒族/手里剑。
+    /// 扩展牌种未逐一归类（恒定基本牌近似下的保守集，登记差异）。
+    pub fn is_basic_kind(self) -> bool {
+        matches!(
+            self,
+            CardKind::Sha
+                | CardKind::FireSha
+                | CardKind::LeiSha
+                | CardKind::Shan
+                | CardKind::Tao
+                | CardKind::Jiu
+                | CardKind::Tianxianjiu
+                | CardKind::ShouLiJian
+                | CardKind::Xuejibingbao
+                | CardKind::Shenmiguo
+                | CardKind::Fengyinzhidan
+        )
+    }
+
+    /// 出牌阶段主动使用的「基本/锦囊/装备」三类判定（T8 增量 14，
+    /// DSL filter `*_play_phase_card_category_count_positive` 承载；
+    /// 上游 "logical basic, trick, or equipment" 同口径）。地（mtg 十种）
+    /// 与机关牌（swd）为宿主专用异类不计入；其余经出牌提交的种均属三
+    /// 类（G1 扩展种按目录定义为锦囊/装备/基本牌；view-as 转化按结算
+    /// 牌种判）。扩展种未逐一归类按三类近似（保守集登记差异，同
+    /// is_basic_kind 先例）。
+    pub fn is_basic_trick_or_equip(self) -> bool {
+        if self.is_basic_kind() || self.equip_slot().is_some() {
+            return true;
+        }
+        !matches!(
+            self,
+            CardKind::Longlushanfeng
+                | CardKind::Haidao
+                | CardKind::Shuimomuxue
+                | CardKind::Feixu
+                | CardKind::Yixialan
+                | CardKind::Shamolvzhou
+                | CardKind::Linzhongjianta
+                | CardKind::Bingheyaosai
+                | CardKind::Youlin
+                | CardKind::Lindixiliu
+                | CardKind::Jiguan
+        )
+    }
+
+    /// 装备牌 → 装备栏；非装备牌返回 None。
+    pub fn equip_slot(self) -> Option<EquipSlot> {
+        Some(match self {
+            CardKind::Weapon => EquipSlot::Weapon,
+            CardKind::Armor => EquipSlot::Armor,
+            CardKind::HorsePlus => EquipSlot::HorsePlus,
+            CardKind::HorseMinus => EquipSlot::HorseMinus,
+            CardKind::WuxingPan => EquipSlot::Treasure,
+            CardKind::Sanjian => EquipSlot::Weapon,
+            CardKind::Suolianjia => EquipSlot::Armor,
+            CardKind::Mutoumianju => EquipSlot::Armor,
+            CardKind::Gjyuheng => EquipSlot::Treasure,
+            CardKind::Monkey => EquipSlot::Treasure,
+            CardKind::Xuelunyang => EquipSlot::Treasure,
+            CardKind::Lianyaohu => EquipSlot::Treasure,
+            CardKind::Qiankundai => EquipSlot::Treasure,
+            CardKind::Shennongding => EquipSlot::Treasure,
+            CardKind::Nvwashi => EquipSlot::Treasure,
+            CardKind::Kunlunjingc => EquipSlot::Treasure,
+            CardKind::Donghuangzhong => EquipSlot::Treasure,
+            CardKind::Kongdongyin => EquipSlot::Treasure,
+            CardKind::Guilingzhitao => EquipSlot::Treasure,
+            CardKind::Sifeizhenmian => EquipSlot::Treasure,
+            CardKind::Shuchui => EquipSlot::Treasure,
+            CardKind::Sadengjinhuan => EquipSlot::Treasure,
+            CardKind::Haotianta => EquipSlot::Treasure,
+            CardKind::Yuruyi => EquipSlot::Treasure,
+            // 上游 subtype equip2（防具栏）；2026-10-07 载荷对照修正（曾误
+            // 登记宝物栏）。
+            CardKind::Mianju => EquipSlot::Armor,
+            CardKind::Renwang => EquipSlot::Armor,
+            CardKind::Qinggang => EquipSlot::Weapon,
+            CardKind::Xuanyuanjian => EquipSlot::Weapon,
+            CardKind::Qilin => EquipSlot::Weapon,
+            CardKind::Hanbing => EquipSlot::Weapon,
+            CardKind::Zhuge => EquipSlot::Weapon,
+            CardKind::Guanshi => EquipSlot::Weapon,
+            CardKind::Qinglong => EquipSlot::Weapon,
+            CardKind::Zhangba => EquipSlot::Weapon,
+            CardKind::Cixiong => EquipSlot::Weapon,
+            CardKind::Fangtian => EquipSlot::Weapon,
+            CardKind::Jiuwei => EquipSlot::Treasure,
+            CardKind::Shentoumianju => EquipSlot::Treasure,
+            CardKind::Yufulu => EquipSlot::Treasure,
+            CardKind::Daihuofenglun => EquipSlot::HorsePlus,
+            CardKind::Xiayuncailing => EquipSlot::HorseMinus,
+            CardKind::Langeguaiyi => EquipSlot::Treasure,
+            CardKind::Xingjunyan => EquipSlot::Treasure,
+            CardKind::Qinglonglingzhu => EquipSlot::Treasure,
+            CardKind::Xixueguizhihuan => EquipSlot::Treasure,
+            CardKind::Chilongya => EquipSlot::Weapon,
+            CardKind::Fengxueren => EquipSlot::Weapon,
+            _ => return None,
+        })
+    }
+
+    pub fn is_equip(self) -> bool {
+        self.equip_slot().is_some()
+    }
+
+    /// 命名武器的射程（批③-b 逐把特效）：泛型 Weapon 走 CardDef.range，
+    /// 命名武器射程固定于牌种。
+    pub fn named_weapon_range(self) -> Option<u32> {
+        match self {
+            CardKind::Qinggang => Some(2),
+            // 轩辕剑：攻击范围 +2（上游 attackFrom -2；基础 1 → 3）
+            CardKind::Xuanyuanjian => Some(3),
+            CardKind::Qilin => Some(5),
+            CardKind::Hanbing => Some(2),
+            CardKind::Zhuge => Some(1),
+            CardKind::Guanshi => Some(3),
+            CardKind::Qinglong => Some(3),
+            CardKind::Zhangba => Some(3),
+            CardKind::Cixiong => Some(2),
+            CardKind::Fangtian => Some(4),
+            CardKind::Chilongya => Some(2),
+            CardKind::Fengxueren => Some(2),
+            _ => None,
+        }
+    }
+}
+
+impl CardKind {
+    /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
+    pub const ALL: [CardKind; 174] = [
+        CardKind::Sha,
+        CardKind::Shan,
+        CardKind::Tao,
+        CardKind::HorsePlus,
+        CardKind::HorseMinus,
+        CardKind::Weapon,
+        CardKind::Armor,
+        CardKind::FireSha,
+        CardKind::Chain,
+        CardKind::SavageAttack,
+        CardKind::ArcheryAttack,
+        CardKind::Duel,
+        CardKind::Nullify,
+        CardKind::Le,
+        CardKind::Bing,
+        CardKind::ShanDian,
+        CardKind::Dismantle,
+        CardKind::Snatch,
+        CardKind::Jiu,
+        CardKind::LeiSha,
+        CardKind::ShouLiJian,
+        CardKind::WuxingPan,
+        CardKind::WangmeiZhike,
+        CardKind::Sanjian,
+        CardKind::Shuigong,
+        CardKind::Fudichouxin,
+        CardKind::Chenhuodajie,
+        CardKind::Suolianjia,
+        CardKind::HongShui,
+        CardKind::Toulianghuanzhu,
+        CardKind::Linghunzhihuo,
+        CardKind::Zhaomingdan,
+        CardKind::Jihuocard,
+        CardKind::Youdishenru,
+        CardKind::Geanguanhuo,
+        CardKind::Caochuanjiejian,
+        CardKind::Shezhanqunru,
+        CardKind::Shujinsan,
+        CardKind::Mianlijinzhen,
+        CardKind::Feibiao,
+        CardKind::Jinlianzhu,
+        CardKind::Tanhuadong,
+        CardKind::Yougeng,
+        CardKind::Qingtuan,
+        CardKind::Yuanbaorou,
+        CardKind::Gudonggeng,
+        CardKind::Mapodoufu,
+        CardKind::Chunbing,
+        CardKind::Liyutang,
+        CardKind::Molicha,
+        CardKind::Xiajiao,
+        CardKind::Mizhilianou,
+        CardKind::Luyugeng,
+        CardKind::Bingpotong,
+        CardKind::Qiankunbiao,
+        CardKind::Longxugou,
+        CardKind::Shenhuofeiya,
+        CardKind::Ziyangdan,
+        CardKind::Yunvyuanshen,
+        CardKind::Shihuifen,
+        CardKind::Liufengsan,
+        CardKind::Shatang,
+        CardKind::Heilonglinpian,
+        CardKind::Liutouge,
+        CardKind::Mutoumianju,
+        CardKind::Dinvxuanshuang,
+        CardKind::Gjyuheng,
+        CardKind::Dunpaigedang,
+        CardKind::Zhiliaobo,
+        CardKind::Yuansuhuimie,
+        CardKind::Xingjiegoutong,
+        CardKind::Chuansongmen,
+        CardKind::Tanshezhiren,
+        CardKind::Shijieshu,
+        CardKind::Yanziyaoshui,
+        CardKind::Aozuzhilei,
+        CardKind::Wenyi,
+        CardKind::Zhihuanjun,
+        CardKind::Baoxueyaoshui,
+        CardKind::Qinpendayu,
+        CardKind::Birinongwu,
+        CardKind::Ciguhanshuang,
+        CardKind::Kunenfayin,
+        CardKind::Shanbengshu,
+        CardKind::Poxiao,
+        CardKind::Zumoshoukao,
+        CardKind::Monkey,
+        CardKind::Xuelunyang,
+        CardKind::Mianju,
+        CardKind::Jiuwei,
+        CardKind::Wuzhong,
+        CardKind::Taoyuan,
+        CardKind::Wugu,
+        CardKind::Jiedao,
+        CardKind::Renwang,
+        CardKind::Qinggang,
+        CardKind::Xuanyuanjian,
+        CardKind::Qilin,
+        CardKind::Hanbing,
+        CardKind::Zhuge,
+        CardKind::Guanshi,
+        CardKind::Qinglong,
+        CardKind::Zhangba,
+        CardKind::Cixiong,
+        CardKind::Fangtian,
+        CardKind::Hufu,
+        CardKind::Liuxinghuoyu,
+        CardKind::Caoyao,
+        CardKind::Chilongya,
+        CardKind::Tianxianjiu,
+        CardKind::Xixueguizhihuan,
+        CardKind::Guiyoujie,
+        CardKind::Shentoumianju,
+        CardKind::Xingjunyan,
+        CardKind::Qinglonglingzhu,
+        CardKind::Zhufangshenshi,
+        CardKind::Fengxueren,
+        CardKind::Yufulu,
+        CardKind::Yangpijuan,
+        CardKind::Daihuofenglun,
+        CardKind::Xiayuncailing,
+        CardKind::Langeguaiyi,
+        CardKind::Longlushanfeng,
+        CardKind::Haidao,
+        CardKind::Shuimomuxue,
+        CardKind::Feixu,
+        CardKind::Yixialan,
+        CardKind::Shamolvzhou,
+        CardKind::Linzhongjianta,
+        CardKind::Bingheyaosai,
+        CardKind::Youlin,
+        CardKind::Lindixiliu,
+        CardKind::Dizaizhen,
+        CardKind::Jiguan,
+        CardKind::Hslingjian,
+        CardKind::Xuejibingbao,
+        CardKind::Shenmiguo,
+        CardKind::Fengyinzhidan,
+        CardKind::Lianyaohu,
+        CardKind::Qiankundai,
+        CardKind::Shennongding,
+        CardKind::Nvwashi,
+        CardKind::Kunlunjingc,
+        CardKind::Donghuangzhong,
+        CardKind::Kongdongyin,
+        CardKind::Jingleishan,
+        CardKind::Chiyuxi,
+        CardKind::Guisheqi,
+        CardKind::Xianluhui,
+        CardKind::Guilingzhitao,
+        CardKind::Sifeizhenmian,
+        CardKind::Shuchui,
+        CardKind::Sadengjinhuan,
+        CardKind::Haotianta,
+        CardKind::Yuruyi,
+        CardKind::Yuchanqian,
+        CardKind::Yuchankun,
+        CardKind::Yuchanzhen,
+        CardKind::Yuchanxun,
+        CardKind::Yuchankan,
+        CardKind::Yuchanli,
+        CardKind::Yuchangen,
+        CardKind::Yuchandui,
+        CardKind::Shencaojie,
+        CardKind::Qinglongzhigui,
+        CardKind::Zhuquezhizhang,
+        CardKind::Baishouzhihu,
+        CardKind::Xuanwuzhihuang,
+        CardKind::Huanglinzhicong,
+        CardKind::Tianfuzhen,
+        CardKind::Qixingzhen,
+        CardKind::Niaoxiangzhen,
+        CardKind::Changshezhen,
+        CardKind::Pozhenjue,
+    ];
+
+    /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
+    /// 包内牌名可自取，`kind` 字段必须写本表的键。
+    pub const fn key(self) -> &'static str {
+        match self {
+            CardKind::Sha => "sha",
+            CardKind::Shan => "shan",
+            CardKind::Tao => "tao",
+            CardKind::HorsePlus => "horse_plus",
+            CardKind::HorseMinus => "horse_minus",
+            CardKind::Weapon => "weapon",
+            CardKind::Armor => "armor",
+            CardKind::FireSha => "huosha",
+            CardKind::Chain => "tiesuo",
+            CardKind::SavageAttack => "nanman",
+            CardKind::ArcheryAttack => "wanjian",
+            CardKind::Duel => "juedou",
+            CardKind::Nullify => "wuxie",
+            CardKind::Le => "lebu",
+            CardKind::Bing => "bingliang",
+            CardKind::ShanDian => "shandian",
+            CardKind::Dismantle => "guohe",
+            CardKind::Snatch => "shunshou",
+            CardKind::Jiu => "jiu",
+            CardKind::LeiSha => "leisha",
+            CardKind::ShouLiJian => "shoulijian",
+            CardKind::WuxingPan => "wuxingpan",
+            CardKind::WangmeiZhike => "wangmeizhike",
+            CardKind::Sanjian => "sanjian",
+            CardKind::Shuigong => "shuigong",
+            CardKind::Fudichouxin => "fudichouxin",
+            CardKind::Chenhuodajie => "chenhuodajie",
+            CardKind::Suolianjia => "suolianjia",
+            CardKind::HongShui => "hongshui",
+            CardKind::Toulianghuanzhu => "toulianghuanzhu",
+            CardKind::Linghunzhihuo => "linghunzhihuo",
+            CardKind::Zhaomingdan => "zhaomingdan",
+            CardKind::Jihuocard => "jihuocard",
+            CardKind::Youdishenru => "youdishenru",
+            CardKind::Geanguanhuo => "geanguanhuo",
+            CardKind::Caochuanjiejian => "caochuanjiejian",
+            CardKind::Shezhanqunru => "shezhanqunru",
+            CardKind::Shujinsan => "shujinsan",
+            CardKind::Mianlijinzhen => "mianlijinzhen",
+            CardKind::Feibiao => "feibiao",
+            CardKind::Jinlianzhu => "jinlianzhu",
+            CardKind::Tanhuadong => "tanhuadong",
+            CardKind::Yougeng => "yougeng",
+            CardKind::Qingtuan => "qingtuan",
+            CardKind::Yuanbaorou => "yuanbaorou",
+            CardKind::Gudonggeng => "gudonggeng",
+            CardKind::Mapodoufu => "mapodoufu",
+            CardKind::Chunbing => "chunbing",
+            CardKind::Liyutang => "liyutang",
+            CardKind::Molicha => "molicha",
+            CardKind::Xiajiao => "xiajiao",
+            CardKind::Mizhilianou => "mizhilianou",
+            CardKind::Luyugeng => "luyugeng",
+            CardKind::Bingpotong => "bingpotong",
+            CardKind::Qiankunbiao => "qiankunbiao",
+            CardKind::Longxugou => "longxugou",
+            CardKind::Shenhuofeiya => "shenhuofeiya",
+            CardKind::Ziyangdan => "ziyangdan",
+            CardKind::Yunvyuanshen => "yunvyuanshen",
+            CardKind::Shihuifen => "shihuifen",
+            CardKind::Liufengsan => "liufengsan",
+            CardKind::Shatang => "shatang",
+            CardKind::Heilonglinpian => "heilonglinpian",
+            CardKind::Liutouge => "liutouge",
+            CardKind::Mutoumianju => "mutoumianju",
+            CardKind::Dinvxuanshuang => "dinvxuanshuang",
+            CardKind::Gjyuheng => "gjyuheng",
+            CardKind::Dunpaigedang => "dunpaigedang",
+            CardKind::Zhiliaobo => "zhiliaobo",
+            CardKind::Yuansuhuimie => "yuansuhuimie",
+            CardKind::Xingjiegoutong => "xingjiegoutong",
+            CardKind::Chuansongmen => "chuansongmen",
+            CardKind::Tanshezhiren => "tanshezhiren",
+            CardKind::Shijieshu => "shijieshu",
+            CardKind::Yanziyaoshui => "yanziyaoshui",
+            CardKind::Aozuzhilei => "aozuzhilei",
+            CardKind::Wenyi => "wenyi",
+            CardKind::Zhihuanjun => "zhihuanjun",
+            CardKind::Baoxueyaoshui => "baoxueyaoshui",
+            CardKind::Qinpendayu => "qinpendayu",
+            CardKind::Birinongwu => "birinongwu",
+            CardKind::Ciguhanshuang => "ciguhanshuang",
+            CardKind::Kunenfayin => "kunenfayin",
+            CardKind::Shanbengshu => "shanbengshu",
+            CardKind::Poxiao => "poxiao",
+            CardKind::Zumoshoukao => "zumoshoukao",
+            CardKind::Monkey => "monkey",
+            CardKind::Xuelunyang => "xuelunyang",
+            CardKind::Mianju => "mianju",
+            CardKind::Jiuwei => "jiuwei",
+            CardKind::Wuzhong => "wuzhong",
+            CardKind::Taoyuan => "taoyuan",
+            CardKind::Wugu => "wugu",
+            CardKind::Jiedao => "jiedao",
+            CardKind::Renwang => "renwang",
+            CardKind::Qinggang => "qinggang",
+            CardKind::Xuanyuanjian => "xuanyuanjian",
+            CardKind::Qilin => "qilin",
+            CardKind::Hanbing => "hanbing",
+            CardKind::Zhuge => "zhuge",
+            CardKind::Guanshi => "guanshi",
+            CardKind::Qinglong => "qinglong",
+            CardKind::Zhangba => "zhangba",
+            CardKind::Cixiong => "cixiong",
+            CardKind::Fangtian => "fangtian",
+            CardKind::Hufu => "hufu",
+            CardKind::Liuxinghuoyu => "liuxinghuoyu",
+            CardKind::Caoyao => "caoyao",
+            CardKind::Chilongya => "chilongya",
+            CardKind::Tianxianjiu => "tianxianjiu",
+            CardKind::Xixueguizhihuan => "xixueguizhihuan",
+            CardKind::Guiyoujie => "guiyoujie",
+            CardKind::Shentoumianju => "shentoumianju",
+            CardKind::Xingjunyan => "xingjunyan",
+            CardKind::Qinglonglingzhu => "qinglonglingzhu",
+            CardKind::Zhufangshenshi => "zhufangshenshi",
+            CardKind::Fengxueren => "fengxueren",
+            CardKind::Yufulu => "yufulu",
+            CardKind::Yangpijuan => "yangpijuan",
+            CardKind::Daihuofenglun => "daihuofenglun",
+            CardKind::Xiayuncailing => "xiayuncailing",
+            CardKind::Langeguaiyi => "langeguaiyi",
+            CardKind::Longlushanfeng => "longlushanfeng",
+            CardKind::Haidao => "haidao",
+            CardKind::Shuimomuxue => "shuimomuxue",
+            CardKind::Feixu => "feixu",
+            CardKind::Yixialan => "yixialan",
+            CardKind::Shamolvzhou => "shamolvzhou",
+            CardKind::Linzhongjianta => "linzhongjianta",
+            CardKind::Bingheyaosai => "bingheyaosai",
+            CardKind::Youlin => "youlin",
+            CardKind::Lindixiliu => "lindixiliu",
+            CardKind::Dizaizhen => "dizaizhen",
+            CardKind::Jiguan => "jiguan",
+            CardKind::Xuejibingbao => "xuejibingbao",
+            CardKind::Shenmiguo => "shenmiguo",
+            CardKind::Fengyinzhidan => "fengyinzhidan",
+            CardKind::Lianyaohu => "lianyaohu",
+            CardKind::Qiankundai => "qiankundai",
+            CardKind::Shennongding => "shennongding",
+            CardKind::Nvwashi => "nvwashi",
+            CardKind::Kunlunjingc => "kunlunjingc",
+            CardKind::Donghuangzhong => "donghuangzhong",
+            CardKind::Kongdongyin => "kongdongyin",
+            CardKind::Jingleishan => "jingleishan",
+            CardKind::Chiyuxi => "chiyuxi",
+            CardKind::Guisheqi => "guisheqi",
+            CardKind::Xianluhui => "xianluhui",
+            CardKind::Guilingzhitao => "guilingzhitao",
+            CardKind::Sifeizhenmian => "sifeizhenmian",
+            CardKind::Shuchui => "shuchui",
+            CardKind::Sadengjinhuan => "sadengjinhuan",
+            CardKind::Haotianta => "haotianta",
+            CardKind::Yuruyi => "yuruyi",
+            CardKind::Yuchanqian => "yuchanqian",
+            CardKind::Yuchankun => "yuchankun",
+            CardKind::Yuchanzhen => "yuchanzhen",
+            CardKind::Yuchanxun => "yuchanxun",
+            CardKind::Yuchankan => "yuchankan",
+            CardKind::Yuchanli => "yuchanli",
+            CardKind::Yuchangen => "yuchangen",
+            CardKind::Yuchandui => "yuchandui",
+            CardKind::Shencaojie => "shencaojie",
+            CardKind::Qinglongzhigui => "qinglongzhigui",
+            CardKind::Zhuquezhizhang => "zhuquezhizhang",
+            CardKind::Baishouzhihu => "baishouzhihu",
+            CardKind::Xuanwuzhihuang => "xuanwuzhihuang",
+            CardKind::Huanglinzhicong => "huanglinzhicong",
+            CardKind::Hslingjian => "hslingjian",
+            CardKind::Tianfuzhen => "tianfuzhen",
+            CardKind::Qixingzhen => "qixingzhen",
+            CardKind::Niaoxiangzhen => "niaoxiangzhen",
+            CardKind::Changshezhen => "changshezhen",
+            CardKind::Pozhenjue => "pozhenjue",
+        }
+    }
+
+    /// 由包数据 `kind` 键解析牌种；未知键返回 None。
+    pub fn from_key(key: &str) -> Option<CardKind> {
+        CardKind::ALL.into_iter().find(|k| k.key() == key)
+    }
+}

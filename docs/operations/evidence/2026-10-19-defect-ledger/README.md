@@ -3513,7 +3513,7 @@ if begin { ctx.core.turn.phase_number += 1; }
 |---|---|
 | `engine/apply_command.rs:138-150` | **唯一的通用发射点**：处理 `NextPhase` 命令时，先 `push_frame(EventData::Phase { player, phase, begin: false })`（用**当前**阶段与本阶段编号）|
 | `kernel/phase.rs:113-140` | 只给**筑城**手工 `parks.push(...)`（注释：原生无 PhaseEnd 帧——直推）|
-| `content/host/step/swd_cards.rs:1158` | 某个技能内部构造一次 |
+| `content/host/step/swd_cards.rs:522` | 某个技能内部构造一次 |
 
 ### 由此得到的关键结论
 

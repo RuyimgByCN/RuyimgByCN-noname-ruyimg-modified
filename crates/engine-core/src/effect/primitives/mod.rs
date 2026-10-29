@@ -60,6 +60,8 @@ pub(crate) use pack_extra_1::*;
 pub(crate) use pack_extra_2::*;
 pub(crate) use pack_huicui::*;
 pub(crate) use pack_jsrg::*;
+mod choose_others_add_mark;
+pub(crate) use choose_others_add_mark::*;
 pub use pack_mobile::*;
 pub(crate) use pack_old::*;
 pub(crate) use pack_refresh::*;
@@ -109,15 +111,6 @@ pub fn apply_effect(
         | EffectRequest::DrawCardsFromSkill { .. }
         | EffectRequest::DrawCardsFromBottom { .. }
         | EffectRequest::SetDrawPhaseFromBottom { .. }
-        | EffectRequest::ResolveChenglve { .. }
-        | EffectRequest::ResolveShicai { .. }
-        | EffectRequest::ResolveXiongluan { .. }
-        | EffectRequest::ResolveGzbuqu { .. }
-        | EffectRequest::ResolveGzbuquRecover { .. }
-        | EffectRequest::ResolveSbbiyue { .. }
-        | EffectRequest::ResolveSxrmqiewang { .. }
-        | EffectRequest::ResolveSxrmqianliu { .. }
-        | EffectRequest::ResolveTwjuxiang { .. }
         | EffectRequest::DrawRememberedHandCards { .. }
         | EffectRequest::DiscardRememberedHandCards { .. }
         | EffectRequest::DrawEachBySeat { .. }
@@ -160,9 +153,6 @@ pub fn apply_effect(
         | EffectRequest::ChooseTargetSelfDiscardThenOwnerLoseHpIfHandNeHp { .. }
         | EffectRequest::ChooseGiveOneHandEquipOrRecover { .. }
         | EffectRequest::ChooseGiveTwoDifferentColorsOrRecover { .. }
-        | EffectRequest::ResolveMbzhuguo { .. }
-        | EffectRequest::ResolveMbanxian { .. }
-        | EffectRequest::ResolveMbjinzu { .. }
         | EffectRequest::ReplaceSkillWithBoundAfterResolutionIfTargetAlive { .. }
         | EffectRequest::ChooseDiscardAllHandOrEquipDrawLostHpThenLoseHp { .. }
         | EffectRequest::GainEventCards { .. }
@@ -186,26 +176,49 @@ pub fn apply_effect(
         | EffectRequest::ChooseGainCardFromEachOtherThenTurnOver { .. }
         | EffectRequest::ChooseGainCardFromEachOtherReplaceDraw { .. }
         | EffectRequest::GiveSelectedThenRecoverTarget { .. }
-        | EffectRequest::ResolveDingpan { .. }
-        | EffectRequest::ResolveTanlu { .. }
-        | EffectRequest::ResolveHiddenSkillPile { .. }
         | EffectRequest::SetNonLockedSkillSuppression { .. }
-        | EffectRequest::ResolveDiliYuheng { .. }
         | EffectRequest::FinalizeTiaojiyanmei { .. }
         | EffectRequest::BeginTiaojiyanmeiDiscard { .. }
         | EffectRequest::DiscardSelectedDrawAllHandBonus { .. }
         | EffectRequest::ChooseOtherYinghun { .. }
         | EffectRequest::AddSkillUntilTurnEnd { .. }
-        | EffectRequest::ResolveMassDamageDiscardTurnOver { .. }
-        | EffectRequest::ResolveMassDamageDiscardHandEquip { .. }
         | EffectRequest::RecordActiveTarget { .. }
         | EffectRequest::ChooseDiscardWeaponOrLoseHp { .. }
         | EffectRequest::ChooseDiscardOneHeOrLoseHp { .. }
         | EffectRequest::JudgeSpadeTwoToNineDrawTwoOrThunderShaTwice { .. }
         | EffectRequest::ChooseSourceConfirmOwnerLoseHp { .. }
-        | EffectRequest::ResolveMarkParityControl { .. }
         | EffectRequest::ChooseOtherBizheng { .. }
         | EffectRequest::ChooseOtherXiashu { .. }
+        | EffectRequest::GiveAllHandThenChooseUseOneOrDamage { .. }
+        | EffectRequest::ChooseCategoryThenTargetGiveMatchingOrShaUnrespondable { .. }
+        | EffectRequest::ChooseLoseHpUseVirtualShaByBasicVariants { .. }
+        | EffectRequest::EquipWeaponFromDrawPile { .. }
+        | EffectRequest::ReplayVirtualCardOnTargets { .. }
+        | EffectRequest::DiscardHandEquipCount { .. }
+        | EffectRequest::RevealChooseCategoryDistributeSelfThresholdHpLoss { .. }
+        | EffectRequest::SkipNextDiscardPhase { .. }
+        | EffectRequest::ChooseOtherRandomGainRegionThenDrawCompareColorLoseHp { .. }
+        | EffectRequest::ChooseGainTargetHandCeilHalfDifference { .. }
+        | EffectRequest::ChooseDiscardHandRange { .. } => dispatch_draw_cards::apply_effect(tx, req),
+        EffectRequest::ResolveChenglve { .. }
+        | EffectRequest::ResolveShicai { .. }
+        | EffectRequest::ResolveXiongluan { .. }
+        | EffectRequest::ResolveGzbuqu { .. }
+        | EffectRequest::ResolveGzbuquRecover { .. }
+        | EffectRequest::ResolveSbbiyue { .. }
+        | EffectRequest::ResolveSxrmqiewang { .. }
+        | EffectRequest::ResolveSxrmqianliu { .. }
+        | EffectRequest::ResolveTwjuxiang { .. }
+        | EffectRequest::ResolveMbzhuguo { .. }
+        | EffectRequest::ResolveMbanxian { .. }
+        | EffectRequest::ResolveMbjinzu { .. }
+        | EffectRequest::ResolveDingpan { .. }
+        | EffectRequest::ResolveTanlu { .. }
+        | EffectRequest::ResolveHiddenSkillPile { .. }
+        | EffectRequest::ResolveDiliYuheng { .. }
+        | EffectRequest::ResolveMassDamageDiscardTurnOver { .. }
+        | EffectRequest::ResolveMassDamageDiscardHandEquip { .. }
+        | EffectRequest::ResolveMarkParityControl { .. }
         | EffectRequest::ResolveGuanchaoRank { .. }
         | EffectRequest::ResolveGuanwei { .. }
         | EffectRequest::ResolveLanjiang { .. }
@@ -224,20 +237,15 @@ pub fn apply_effect(
         | EffectRequest::ResolveBeizhu { .. }
         | EffectRequest::ResolveMbshanjia { .. }
         | EffectRequest::ResolveDaoji { .. }
-        | EffectRequest::GiveAllHandThenChooseUseOneOrDamage { .. }
-        | EffectRequest::ChooseCategoryThenTargetGiveMatchingOrShaUnrespondable { .. }
-        | EffectRequest::ChooseLoseHpUseVirtualShaByBasicVariants { .. }
         | EffectRequest::ResolveTwfupan { .. }
         | EffectRequest::ResolveTwjiaohua { .. }
         | EffectRequest::ResolveTwkujian { .. }
         | EffectRequest::ResolveTwruilian { .. }
-        | EffectRequest::EquipWeaponFromDrawPile { .. }
         | EffectRequest::ResolveTwjianwei { .. }
         | EffectRequest::ResolveTwtanfeng { .. }
         | EffectRequest::ResolveTwzhibian { .. }
         | EffectRequest::ResolveTwyuyan { .. }
         | EffectRequest::ResolveTwguoyi { .. }
-        | EffectRequest::ReplayVirtualCardOnTargets { .. }
         | EffectRequest::ResolveTwchuhai { .. }
         | EffectRequest::ResolveTwyizhu { .. }
         | EffectRequest::ResolveTwluanchou { .. }
@@ -245,7 +253,6 @@ pub fn apply_effect(
         | EffectRequest::ResolveRetianxiang { .. }
         | EffectRequest::ResolveLianzhou { .. }
         | EffectRequest::ResolveStddechong { .. }
-        | EffectRequest::DiscardHandEquipCount { .. }
         | EffectRequest::ResolveJieliangGain { .. }
         | EffectRequest::ResolveStdjujian { .. }
         | EffectRequest::ResolveLulve { .. }
@@ -257,15 +264,11 @@ pub fn apply_effect(
         | EffectRequest::ResolveStdgaobian { .. }
         | EffectRequest::ResolveSpjiedao { .. }
         | EffectRequest::ResolveSibian { .. }
-        | EffectRequest::RevealChooseCategoryDistributeSelfThresholdHpLoss { .. }
-        | EffectRequest::SkipNextDiscardPhase { .. }
         | EffectRequest::ResolveSpfengyin { .. }
         | EffectRequest::ResolveXinfuLianpian { .. }
         | EffectRequest::ResolveGongjian { .. }
         | EffectRequest::ResolveXinfuQinguo { .. }
-        | EffectRequest::ChooseOtherRandomGainRegionThenDrawCompareColorLoseHp { .. }
         | EffectRequest::ResolveRefuhai { .. }
-        | EffectRequest::ChooseGainTargetHandCeilHalfDifference { .. }
         | EffectRequest::ResolveGzjinfa { .. }
         | EffectRequest::ResolveWnQifeng { .. }
         | EffectRequest::ResolveDcjue { .. }
@@ -280,19 +283,77 @@ pub fn apply_effect(
         | EffectRequest::ResolveDcshaowei { .. }
         | EffectRequest::ResolveDcdichou { .. }
         | EffectRequest::ResolveDcdufeng { .. }
-        | EffectRequest::ChooseDiscardHandRange { .. }
         | EffectRequest::ResolveDcctjiuxian { .. }
         | EffectRequest::ResolveBianyue { .. }
         | EffectRequest::ResolveZhupeilan { .. }
         | EffectRequest::ResolveDcSbZhangxiu { .. }
         | EffectRequest::ResolveDcSbZhouyu { .. }
-        | EffectRequest::ResolveDcSbLusu { .. } => dispatch_draw_cards::apply_effect(tx, req),
+        | EffectRequest::ResolveDcSbLusu { .. } => dispatch_draw_cards_resolvers::apply_effect(tx, req),
         EffectRequest::ResolveZhangjian { .. }
         | EffectRequest::ResolveZhugeruoxue { .. }
-        | EffectRequest::GiveSelectedThenTargetMayUseDrawOwner { .. }
-        | EffectRequest::ChooseCategoryThenTargetGiveMatchingOrDamagePlusOne { .. }
-        | EffectRequest::ChooseOtherExcludingSourceRandomGainHandEquipThenUseIfEquip { .. }
-        | EffectRequest::ResolveMobiledanshou { .. }
+        | EffectRequest::ResolveShoulijian { .. }
+        | EffectRequest::ResolvePotchengpu { .. }
+        | EffectRequest::ResolvePotjugu { .. }
+        | EffectRequest::ResolvePotsifeng { .. }
+        | EffectRequest::ResolvePotchenqun { .. }
+        | EffectRequest::ResolvePotwanglie { .. }
+        | EffectRequest::ResolvePothongyi { .. }
+        | EffectRequest::ResolvePotguansha { .. }
+        | EffectRequest::ResolvePotjiyu { .. }
+        | EffectRequest::ResolvePotlibing { .. }
+        | EffectRequest::ResolvePotpoxi { .. }
+        | EffectRequest::ResolvePotfuan { .. }
+        | EffectRequest::ResolvePotyinxian { .. }
+        | EffectRequest::ResolvePothuanjie { .. }
+        | EffectRequest::ResolvePotnigu { .. }
+        | EffectRequest::ResolvePotlulian { .. }
+        | EffectRequest::ResolvePotdimeng { .. }
+        | EffectRequest::ResolvePothaoshi { .. }
+        | EffectRequest::ResolveSxrmlanjiao { .. }
+        | EffectRequest::ResolveRekuanshi { .. }
+        | EffectRequest::ResolveRekuanshiResolve { .. }
+        | EffectRequest::ResolveXizhen { .. }
+        | EffectRequest::ResolveXuxie { .. }
+        | EffectRequest::ResolveXuxieAdd { .. }
+        | EffectRequest::ResolveShuangxiong { .. }
+        | EffectRequest::ResolveZhijian { .. }
+        | EffectRequest::ResolveZhiba { .. }
+        | EffectRequest::ResolveZhibaSettle { .. }
+        | EffectRequest::ResolveTuntian { .. }
+        | EffectRequest::ResolveZaoxian { .. }
+        | EffectRequest::ResolveTiaoxin { .. }
+        | EffectRequest::ResolveZhiji { .. }
+        | EffectRequest::ResolveZaiqi { .. }
+        | EffectRequest::ResolveZhengrong { .. }
+        | EffectRequest::ResolveReleiji { .. }
+        | EffectRequest::ResolveXiangle { .. }
+        | EffectRequest::ResolveRuoyu { .. }
+        | EffectRequest::ResolveZuilun { .. }
+        | EffectRequest::ResolveShenshi { .. }
+        | EffectRequest::ResolveZhenliang { .. }
+        | EffectRequest::ResolveZhizheng { .. }
+        | EffectRequest::ResolvePottuntian { .. }
+        | EffectRequest::ResolvePotjixi { .. }
+        | EffectRequest::ResolvePotceduan { .. }
+        | EffectRequest::ResolvePottaishici { .. }
+        | EffectRequest::ResolvePotjiejie { .. }
+        | EffectRequest::ResolvePotqingshi { .. }
+        | EffectRequest::ResolvePotcaoshuang { .. }
+        | EffectRequest::ResolvePotyuji { .. }
+        | EffectRequest::ResolveRehengjiang { .. }
+        | EffectRequest::ResolvePotlvyi { .. }
+        | EffectRequest::ResolvePotweiyan { .. }
+        | EffectRequest::ResolvePotzhouyu { .. }
+        | EffectRequest::ResolveZhengsu { .. }
+        | EffectRequest::ResolveRechuhai { .. }
+        | EffectRequest::ResolveXiongshu { .. }
+        | EffectRequest::ResolveTongduo { .. }
+        | EffectRequest::ResolveYuanqing { .. }
+        | EffectRequest::ResolveShuchen { .. }
+        | EffectRequest::ResolveZaoli { .. } => {
+            dispatch_resolve_zhangjian_resolvers_pot_r_z::apply_effect(tx, req)
+        }
+        EffectRequest::ResolveMobiledanshou { .. }
         | EffectRequest::ResolveJsrgchiying { .. }
         | EffectRequest::ResolveMbqingdao { .. }
         | EffectRequest::ResolveMbxiugeng { .. }
@@ -304,11 +365,8 @@ pub fn apply_effect(
         | EffectRequest::ResolveWdbLiuyan { .. }
         | EffectRequest::ResolveWdbLiuzan { .. }
         | EffectRequest::ResolveWdbTianyu { .. }
-        | EffectRequest::ContinueYoudishenru { .. }
         | EffectRequest::ResolveWdbXizhenxihong { .. }
-        | EffectRequest::ContinueWdbFuchou { .. }
         | EffectRequest::ResolveWdbYangyi { .. }
-        | EffectRequest::ContinueDiaobingqianjiang { .. }
         | EffectRequest::ResolveWdbZaozhiRenjun { .. }
         | EffectRequest::ResolveDddXianxi { .. }
         | EffectRequest::ResolveDddXiaheng { .. }
@@ -333,12 +391,7 @@ pub fn apply_effect(
         | EffectRequest::ResolveDddXiahouxuan { .. }
         | EffectRequest::ResolveDddZhangkai { .. }
         | EffectRequest::ResolveDddLiangxi { .. }
-        | EffectRequest::GuozhanUseZhulianBihe { .. }
-        | EffectRequest::ResolveShoulijian { .. }
-        | EffectRequest::CancelIncomingCardUse { .. }
-        | EffectRequest::ChooseOtherGainOneOfTwoSkills { .. }
         | EffectRequest::ResolveGwyewuChain { .. }
-        | EffectRequest::ContinueWugu { .. }
         | EffectRequest::ResolveMbchenshe { .. }
         | EffectRequest::ResolveMbquanchong { .. }
         | EffectRequest::ResolveMbrenxing { .. }
@@ -355,24 +408,7 @@ pub fn apply_effect(
         | EffectRequest::ResolveMbxiaoge { .. }
         | EffectRequest::ResolveMbxuye { .. }
         | EffectRequest::ResolveMbkuangxiang { .. }
-        | EffectRequest::ResolvePotchengpu { .. }
-        | EffectRequest::ResolvePotjugu { .. }
-        | EffectRequest::ResolvePotsifeng { .. }
-        | EffectRequest::ResolvePotchenqun { .. }
-        | EffectRequest::ResolvePotwanglie { .. }
-        | EffectRequest::ResolvePothongyi { .. }
-        | EffectRequest::ResolvePotguansha { .. }
-        | EffectRequest::ResolvePotjiyu { .. }
         | EffectRequest::ResolveMbzhuji { .. }
-        | EffectRequest::ResolvePotlibing { .. }
-        | EffectRequest::ResolvePotpoxi { .. }
-        | EffectRequest::ResolvePotfuan { .. }
-        | EffectRequest::ResolvePotyinxian { .. }
-        | EffectRequest::ResolvePothuanjie { .. }
-        | EffectRequest::ResolvePotnigu { .. }
-        | EffectRequest::ResolvePotlulian { .. }
-        | EffectRequest::ResolvePotdimeng { .. }
-        | EffectRequest::ResolvePothaoshi { .. }
         | EffectRequest::ResolveSpmiaolve { .. }
         | EffectRequest::ResolveSpyingjia { .. }
         | EffectRequest::ResolveMantianguohai { .. }
@@ -381,74 +417,38 @@ pub fn apply_effect(
         | EffectRequest::ResolveDckuizhen { .. }
         | EffectRequest::ResolveDckuizhenResolve { .. }
         | EffectRequest::ResolveNsdingzhou { .. }
-        | EffectRequest::ResolveSxrmlanjiao { .. }
-        | EffectRequest::ResolveRekuanshi { .. }
-        | EffectRequest::ResolveRekuanshiResolve { .. }
         | EffectRequest::ResolveDcmoyu { .. }
-        | EffectRequest::ResolveXizhen { .. }
-        | EffectRequest::ResolveXuxie { .. }
-        | EffectRequest::ResolveXuxieAdd { .. }
         | EffectRequest::ResolveDcchiying { .. }
         | EffectRequest::ResolveXinkuangfu { .. }
         | EffectRequest::ResolveDcxiangshu { .. }
-        | EffectRequest::ResolveShuangxiong { .. }
-        | EffectRequest::ResolveZhijian { .. }
         | EffectRequest::ResolveGuzheng { .. }
-        | EffectRequest::ResolveZhiba { .. }
-        | EffectRequest::ResolveZhibaSettle { .. }
         | EffectRequest::ResolveDrltCongjian { .. }
         | EffectRequest::ResolveNzryFeijun { .. }
         | EffectRequest::ResolveDrltYongsi { .. }
         | EffectRequest::ResolveDrltWeidi { .. }
         | EffectRequest::ResolveLieren { .. }
-        | EffectRequest::ResolveTuntian { .. }
-        | EffectRequest::ResolveZaoxian { .. }
-        | EffectRequest::ResolveTiaoxin { .. }
-        | EffectRequest::ResolveZhiji { .. }
-        | EffectRequest::ResolveZaiqi { .. }
         | EffectRequest::ResolveTwqiushou { .. }
-        | EffectRequest::ResolveZhengrong { .. }
         | EffectRequest::ResolveHongju { .. }
         | EffectRequest::ResolveQingjian { .. }
-        | EffectRequest::ResolveReleiji { .. }
         | EffectRequest::ResolveHuangtian { .. }
         | EffectRequest::ResolveHaoshi { .. }
         | EffectRequest::ResolveDimeng { .. }
         | EffectRequest::ResolveQiaobian { .. }
-        | EffectRequest::ExcludeSavedShaTarget { .. }
-        | EffectRequest::ResolveXiangle { .. }
         | EffectRequest::ResolveFangquanSkip { .. }
         | EffectRequest::ResolveFangquanGrant { .. }
-        | EffectRequest::ResolveRuoyu { .. }
-        | EffectRequest::ResolveZuilun { .. }
         | EffectRequest::ResolveFuyin { .. }
         | EffectRequest::BanUseAgainst { .. }
         | EffectRequest::ResolveJuzhan { .. }
         | EffectRequest::ResolveQizhi { .. }
         | EffectRequest::ResolveJinqu { .. }
         | EffectRequest::ResolveJianxiang { .. }
-        | EffectRequest::ResolveShenshi { .. }
         | EffectRequest::ResolveMingren { .. }
-        | EffectRequest::ResolveZhenliang { .. }
         | EffectRequest::ResolveKuizhu { .. }
-        | EffectRequest::ResolveZhizheng { .. }
         | EffectRequest::ResolveLijun { .. }
         | EffectRequest::ResolveLiangyin { .. }
         | EffectRequest::ResolveKongsheng { .. }
-        | EffectRequest::ResolvePottuntian { .. }
-        | EffectRequest::ResolvePotjixi { .. }
-        | EffectRequest::ResolvePotceduan { .. }
-        | EffectRequest::ResolvePottaishici { .. }
         | EffectRequest::ResolveMbzhonghui { .. }
-        | EffectRequest::ResolvePotjiejie { .. }
-        | EffectRequest::ResolvePotqingshi { .. }
-        | EffectRequest::ResolvePotcaoshuang { .. }
-        | EffectRequest::ResolvePotyuji { .. }
-        | EffectRequest::ResolveRehengjiang { .. }
         | EffectRequest::ResolveMuzhen { .. }
-        | EffectRequest::ResolvePotlvyi { .. }
-        | EffectRequest::ResolvePotweiyan { .. }
-        | EffectRequest::ResolvePotzhouyu { .. }
         | EffectRequest::ResolveDbzhuifeng { .. }
         | EffectRequest::ResolveDbquedi { .. }
         | EffectRequest::ResolveSpyinju { .. }
@@ -462,23 +462,29 @@ pub fn apply_effect(
         | EffectRequest::ResolveSpzundi { .. }
         | EffectRequest::ResolveXinyangjie { .. }
         | EffectRequest::ResolveQingyu { .. }
-        | EffectRequest::ResolveZhengsu { .. }
         | EffectRequest::ResolveHoufeng { .. }
         | EffectRequest::ResolveMbdiancai { .. }
-        | EffectRequest::ResolveRechuhai { .. }
-        | EffectRequest::ResolveXiongshu { .. }
         | EffectRequest::ResolveJianhui { .. }
         | EffectRequest::ResolveSpqiai { .. }
         | EffectRequest::ResolveSpshanxi { .. }
         | EffectRequest::ResolveSpshanxiSuoming { .. }
-        | EffectRequest::ResolveTongduo { .. }
-        | EffectRequest::ResolveYuanqing { .. }
-        | EffectRequest::ResolveShuchen { .. }
         | EffectRequest::ResolveDuanbi { .. }
-        | EffectRequest::ResolveZaoli { .. }
         | EffectRequest::ResolveGuying { .. }
         | EffectRequest::ResolveDcxiangshuLottery { .. }
         | EffectRequest::ResolveDcyingtu { .. } => {
+            dispatch_resolve_zhangjian_resolvers::apply_effect(tx, req)
+        }
+        EffectRequest::GiveSelectedThenTargetMayUseDrawOwner { .. }
+        | EffectRequest::ChooseCategoryThenTargetGiveMatchingOrDamagePlusOne { .. }
+        | EffectRequest::ChooseOtherExcludingSourceRandomGainHandEquipThenUseIfEquip { .. }
+        | EffectRequest::ContinueYoudishenru { .. }
+        | EffectRequest::ContinueWdbFuchou { .. }
+        | EffectRequest::ContinueDiaobingqianjiang { .. }
+        | EffectRequest::GuozhanUseZhulianBihe { .. }
+        | EffectRequest::CancelIncomingCardUse { .. }
+        | EffectRequest::ChooseOtherGainOneOfTwoSkills { .. }
+        | EffectRequest::ContinueWugu { .. }
+        | EffectRequest::ExcludeSavedShaTarget { .. } => {
             dispatch_resolve_zhangjian::apply_effect(tx, req)
         }
         EffectRequest::ResolveTwxiawei { .. }
@@ -504,7 +510,6 @@ pub fn apply_effect(
         | EffectRequest::ResolveTwqingkou { .. }
         | EffectRequest::ResolveTwchenxun { .. }
         | EffectRequest::ResolveTwfenxian { .. }
-        | EffectRequest::SetSkillContentFlag { .. }
         | EffectRequest::ResolveSpsongshu { .. }
         | EffectRequest::ResolveSpcunsi { .. }
         | EffectRequest::ResolveYuli { .. }
@@ -521,19 +526,11 @@ pub fn apply_effect(
         | EffectRequest::ResolveLuanqun { .. }
         | EffectRequest::ResolveGanglieThree { .. }
         | EffectRequest::ResolveZhongyi { .. }
-        | EffectRequest::DiscardEquipmentSlot { .. }
         | EffectRequest::ResolveOldAnxu { .. }
-        | EffectRequest::StoreSelectedInSkillPile { .. }
-        | EffectRequest::GainTopCardToSkillPile { .. }
-        | EffectRequest::ChooseDiscardSkillPileCardAddMarkedSkill { .. }
-        | EffectRequest::GainOneHandFromSelectedTargets { .. }
-        | EffectRequest::ChooseRepoluTargetsDraw { .. }
         | EffectRequest::ResolveZhuiyi { .. }
         | EffectRequest::ResolveDecadezhenjun { .. }
         | EffectRequest::ResolveSpXiaoguo { .. }
         | EffectRequest::ResolveXinfuGuolun { .. }
-        | EffectRequest::ChooseDiscardOneForShaRefundAndDrawIfRedRestoreIfEqualRank { .. }
-        | EffectRequest::EndMatchForCampIfSkillPileAtLeast { .. }
         | EffectRequest::ResolveOldQinqing { .. }
         | EffectRequest::ResolveOldMingjian { .. }
         | EffectRequest::ResolveOldXuanfeng { .. }
@@ -544,14 +541,10 @@ pub fn apply_effect(
         | EffectRequest::ResolveJunkguixin { .. }
         | EffectRequest::ResolveYaoChenwei { .. }
         | EffectRequest::ResolveSelectedEquipmentDiscardThenChooseDamage { .. }
-        | EffectRequest::ReplaceDrawWithDistinctSuitSelection { .. }
-        | EffectRequest::InspectTargetHandChooseHeartDiscardOrTop { .. }
         | EffectRequest::ResolveYeyan { .. }
-        | EffectRequest::ChooseAllLoseHpOrRecover { .. }
         | EffectRequest::ResolveQixing { .. }
         | EffectRequest::ResolveQixingWeather { .. }
         | EffectRequest::ResolveNzryLongnu { .. }
-        | EffectRequest::ChooseLinkOther { .. }
         | EffectRequest::ResolveDrltPoxi { .. }
         | EffectRequest::ResolveDrltJieying { .. }
         | EffectRequest::ResolveDrltDuorui { .. }
@@ -559,12 +552,81 @@ pub fn apply_effect(
         | EffectRequest::ResolveShenSimayi { .. }
         | EffectRequest::ResolveBeige { .. }
         | EffectRequest::ResolveBeigeConfigured { .. }
+        | EffectRequest::ResolveDccunsi { .. }
+        | EffectRequest::ResolveOllinjie { .. }
+        | EffectRequest::ResolveDcbingji { .. }
+        | EffectRequest::ResolvePxqixian { .. }
+        | EffectRequest::ResolveQuanjia { .. }
+        | EffectRequest::ResolveDuwang { .. }
+        | EffectRequest::ResolveJsrgdaoren { .. }
+        | EffectRequest::ResolveQianlong { .. }
+        | EffectRequest::ResolveJsrgzuozhan { .. }
+        | EffectRequest::ResolveJsrgzuozhanGain { .. }
+        | EffectRequest::ResolveTwmouzhi { .. }
+        | EffectRequest::ResolveTwdaigui { .. }
+        | EffectRequest::ResolveTwmitu { .. }
+        | EffectRequest::ResolveQiantun { .. }
+        | EffectRequest::ResolveYangming { .. }
+        | EffectRequest::ResolveCanyun { .. }
+        | EffectRequest::ResolveChuanyun { .. }
+        | EffectRequest::ResolveQinmian { .. }
+        | EffectRequest::ResolveBiaozhao2 { .. }
+        | EffectRequest::ResolveChumei { .. }
+        | EffectRequest::ResolveShuaiyan { .. }
+        | EffectRequest::ResolveMbbeiming { .. }
+        | EffectRequest::ResolveGaoyuan { .. }
+        | EffectRequest::ResolveDuoduan { .. }
+        | EffectRequest::ResolveDcanxu { .. }
+        | EffectRequest::ResolveChulao { .. }
+        | EffectRequest::ResolveMeiyong { .. }
+        | EffectRequest::ResolveTwxiongjun { .. }
+        | EffectRequest::ResolveDcqiaolve { .. }
+        | EffectRequest::ResolveDingce { .. }
+        | EffectRequest::ResolveYixiang { .. }
+        | EffectRequest::ResolveXinfuQiai { .. }
+        | EffectRequest::ResolveOlwenren { .. }
+        | EffectRequest::ResolveSpolaige { .. }
+        | EffectRequest::ResolveOlzhijie { .. }
+        | EffectRequest::ResolveOlsuyi { .. }
+        | EffectRequest::ResolveOlqiaozhi { .. }
+        | EffectRequest::ResolveDczhee { .. }
+        | EffectRequest::ResolveDchaoxian { .. }
+        | EffectRequest::ResolveZhongjie { .. }
+        | EffectRequest::ResolveStarcuxiaWeiming { .. }
+        | EffectRequest::ResolveSanshou { .. }
+        | EffectRequest::ResolveNhlundao { .. }
+        | EffectRequest::ResolveXiangshu { .. }
+        | EffectRequest::ResolveQiangyong { .. }
+        | EffectRequest::ResolveMbzhenann { .. }
+        | EffectRequest::ResolveFriendbiwei { .. }
+        | EffectRequest::ResolveZhengjian { .. }
+        | EffectRequest::ResolveReliangyin { .. }
+        | EffectRequest::ResolveZhongyan { .. }
+        | EffectRequest::ResolveDcmoukui { .. }
+        | EffectRequest::ResolveDcniji { .. }
+        | EffectRequest::ResolveHengwu { .. }
+        | EffectRequest::ResolveBiaozhao3 { .. }
+        | EffectRequest::ResolveJsrgchaozheng { .. } => {
+            dispatch_resolve_twxiawei_resolvers::apply_effect(tx, req)
+        }
+        EffectRequest::SetSkillContentFlag { .. }
+        | EffectRequest::DiscardEquipmentSlot { .. }
+        | EffectRequest::StoreSelectedInSkillPile { .. }
+        | EffectRequest::GainTopCardToSkillPile { .. }
+        | EffectRequest::ChooseDiscardSkillPileCardAddMarkedSkill { .. }
+        | EffectRequest::GainOneHandFromSelectedTargets { .. }
+        | EffectRequest::ChooseRepoluTargetsDraw { .. }
+        | EffectRequest::ChooseDiscardOneForShaRefundAndDrawIfRedRestoreIfEqualRank { .. }
+        | EffectRequest::EndMatchForCampIfSkillPileAtLeast { .. }
+        | EffectRequest::ReplaceDrawWithDistinctSuitSelection { .. }
+        | EffectRequest::InspectTargetHandChooseHeartDiscardOrTop { .. }
+        | EffectRequest::ChooseAllLoseHpOrRecover { .. }
+        | EffectRequest::ChooseLinkOther { .. }
         | EffectRequest::LoseHpGainDiscardCardForOpeningExtraPlay { .. }
         | EffectRequest::DrawForLifetimeCardActionDivisors { .. }
         | EffectRequest::GainDrawCardsForLifetimeCardActionDivisors { .. }
         | EffectRequest::ChooseAddMissingSkill { .. }
         | EffectRequest::AddFirstMissingSkill { .. }
-        | EffectRequest::ResolveDccunsi { .. }
         | EffectRequest::RecordCurrentShaAllTargets { .. }
         | EffectRequest::ChooseGiveOrDiscardHand { .. }
         | EffectRequest::ChooseDiscardHandEquipThenRecoverTarget { .. }
@@ -604,7 +666,6 @@ pub fn apply_effect(
         | EffectRequest::DrawByPlayPhaseCardCategoryCount { .. }
         | EffectRequest::RefundCurrentShaUseAndDrawIfRed { .. }
         | EffectRequest::ChooseDiscardOneForShaRefundAndDrawIfRed { .. }
-        | EffectRequest::ResolveOllinjie { .. }
         | EffectRequest::ChooseTargetGainMaxHp { .. }
         | EffectRequest::GainTargetHandCard { .. }
         | EffectRequest::ChooseClanNotMaxHandLimitGain { .. }
@@ -617,64 +678,11 @@ pub fn apply_effect(
         | EffectRequest::GainWholeSkillPile { .. }
         | EffectRequest::RearrangePileToDeckTop { .. }
         | EffectRequest::ChooseHandCardsToSkillPile { .. }
-        | EffectRequest::ResolveDcbingji { .. }
-        | EffectRequest::ResolvePxqixian { .. }
-        | EffectRequest::ResolveQuanjia { .. }
-        | EffectRequest::ResolveDuwang { .. }
-        | EffectRequest::ResolveJsrgdaoren { .. }
-        | EffectRequest::ResolveQianlong { .. }
-        | EffectRequest::ResolveJsrgzuozhan { .. }
-        | EffectRequest::ResolveJsrgzuozhanGain { .. }
-        | EffectRequest::ResolveTwmouzhi { .. }
-        | EffectRequest::ResolveTwdaigui { .. }
-        | EffectRequest::ResolveTwmitu { .. }
-        | EffectRequest::ResolveQiantun { .. }
-        | EffectRequest::ResolveYangming { .. }
-        | EffectRequest::ResolveCanyun { .. }
-        | EffectRequest::ResolveChuanyun { .. }
-        | EffectRequest::ResolveQinmian { .. }
-        | EffectRequest::ResolveBiaozhao2 { .. }
-        | EffectRequest::ResolveChumei { .. }
-        | EffectRequest::ResolveShuaiyan { .. }
-        | EffectRequest::ResolveMbbeiming { .. }
         | EffectRequest::ResetLinkedSelectedTargets { .. }
-        | EffectRequest::ResolveGaoyuan { .. }
-        | EffectRequest::ResolveDuoduan { .. }
-        | EffectRequest::ResolveDcanxu { .. }
-        | EffectRequest::ResolveChulao { .. }
-        | EffectRequest::ResolveMeiyong { .. }
-        | EffectRequest::ResolveTwxiongjun { .. }
-        | EffectRequest::ResolveDcqiaolve { .. }
-        | EffectRequest::ResolveDingce { .. }
-        | EffectRequest::ResolveYixiang { .. }
-        | EffectRequest::ResolveXinfuQiai { .. }
-        | EffectRequest::ResolveOlwenren { .. }
-        | EffectRequest::ResolveSpolaige { .. }
-        | EffectRequest::ResolveOlzhijie { .. }
-        | EffectRequest::ResolveOlsuyi { .. }
-        | EffectRequest::ResolveOlqiaozhi { .. }
-        | EffectRequest::ResolveDczhee { .. }
-        | EffectRequest::ResolveDchaoxian { .. }
-        | EffectRequest::ResolveZhongjie { .. }
-        | EffectRequest::ResolveStarcuxiaWeiming { .. }
-        | EffectRequest::ResolveSanshou { .. }
-        | EffectRequest::ResolveNhlundao { .. }
-        | EffectRequest::ResolveXiangshu { .. }
-        | EffectRequest::ResolveQiangyong { .. }
-        | EffectRequest::ResolveMbzhenann { .. }
-        | EffectRequest::ResolveFriendbiwei { .. }
         | EffectRequest::CommitGaoyuanRedirect { .. }
-        | EffectRequest::ResolveZhengjian { .. }
-        | EffectRequest::ResolveReliangyin { .. }
-        | EffectRequest::ResolveZhongyan { .. }
-        | EffectRequest::ResolveDcmoukui { .. }
-        | EffectRequest::ResolveDcniji { .. }
-        | EffectRequest::ResolveHengwu { .. }
-        | EffectRequest::ResolveBiaozhao3 { .. }
         | EffectRequest::PlaceHandCardsToDeckTop { .. }
         | EffectRequest::ChooseTargetHandCardToPile { .. }
         | EffectRequest::ChooseOtherAddMark { .. }
-        | EffectRequest::ResolveJsrgchaozheng { .. }
         | EffectRequest::StartDebateAllOthers { .. }
         | EffectRequest::DiscardBasicDrawEqual { .. }
         | EffectRequest::StartDebateTargets { .. } => {
@@ -686,26 +694,16 @@ pub fn apply_effect(
         | EffectRequest::ChangeGroup { .. }
         | EffectRequest::DistributeShadowCards { .. }
         | EffectRequest::RegisterTurnEndDebate { .. }
-        | EffectRequest::ResolveTurnEndDebates { .. }
-        | EffectRequest::ChooseGroup { .. }
-        | EffectRequest::ChooseGainOtherSkill { .. }
         | EffectRequest::LoseGainedSkill { .. }
-        | EffectRequest::ResolvePotheyun { .. }
         | EffectRequest::PlaceXumou { .. }
         | EffectRequest::PlaceDeckTopXumou { .. }
-        | EffectRequest::ChoosePlaceHandXumou { .. }
         | EffectRequest::DiscardOneOwnXumou { .. }
         | EffectRequest::PlaceDeckTopExpansion { .. }
         | EffectRequest::CityConsume { .. }
         | EffectRequest::QueueExtraTurn { .. }
-        | EffectRequest::ChooseOthersInsertExtraTurn { .. }
         | EffectRequest::QueueExtraPhases { .. }
-        | EffectRequest::ResolveTwjieqiu { .. }
         | EffectRequest::SkipRemainingPhases { .. }
-        | EffectRequest::ChooseOthersAddMark { .. }
-        | EffectRequest::ResolveJsrgsheju { .. }
         | EffectRequest::QueueOpeningExtraPlayPhase { .. }
-        | EffectRequest::ChooseEndExtraDrawOrPlayByUsedSuits { .. }
         | EffectRequest::LoseHpDoubleCurrentDamageThenReplace { .. }
         | EffectRequest::BeginTurn { .. }
         | EffectRequest::FinishTurnBegin { .. }
@@ -713,117 +711,51 @@ pub fn apply_effect(
         | EffectRequest::ConvertCurrentShaToFireLoseHpIfDamage { .. }
         | EffectRequest::IncreaseCurrentShaBaseDamage { .. }
         | EffectRequest::IncreaseCurrentCardBaseDamage { .. }
-        | EffectRequest::ChooseAddCurrentShaTarget { .. }
-        | EffectRequest::ChooseAddCurrentShaTargetWithinDistance { .. }
         | EffectRequest::RefundCurrentShaUse { .. }
-        | EffectRequest::CommitAddCurrentShaTarget { .. }
-        | EffectRequest::ChooseStoreHandShaInSkillPile { .. }
-        | EffectRequest::ChooseSpendSkillPileForDyingJiu { .. }
-        | EffectRequest::CommitStoreHandShaInSkillPile { .. }
-        | EffectRequest::CommitSpendSkillPileForDyingJiu { .. }
-        | EffectRequest::ChooseCompareSelectedHandCard { .. }
-        | EffectRequest::ChooseCompareSelectedHandCardSecondFailureSeatDamage { .. }
-        | EffectRequest::ChooseHandCompare { .. }
-        | EffectRequest::ChooseHandCompareGrantTargetOnWin { .. }
-        | EffectRequest::ChooseHandCompareBetween { .. }
         | EffectRequest::GuanxingTop { .. }
-        | EffectRequest::ChooseOtherGiveThenRecover { .. }
         | EffectRequest::GuanxingTopByFaluMarks { .. }
         | EffectRequest::GiveSelectedThenRecoverSelf { .. }
-        | EffectRequest::ChooseOtherDamage { .. }
-        | EffectRequest::ChooseBoundSourceAttackRangeDamage { .. }
-        | EffectRequest::ChooseOtherDiscardTargetCard { .. }
         | EffectRequest::ContinueChooseCompareTargetHandCard { .. }
         | EffectRequest::ContinueChooseCompareTargetHandCardSecondFailureSeatDamage { .. }
-        | EffectRequest::ChooseDrawOrDiscardTargetCard { .. }
-        | EffectRequest::ChooseSeatPathDamage { .. }
         | EffectRequest::RecordCompareFailureSeatDamage { .. }
         | EffectRequest::DealDamageEachInOrder { .. }
         | EffectRequest::RandomizeCurrentHandCompareOpponent { .. }
         | EffectRequest::EmitHandCompareFinished { .. }
         | EffectRequest::GainHighestRankShaFromEventCards { .. }
         | EffectRequest::GainHandCompareResultCard { .. }
-        | EffectRequest::ChooseAddOrRemoveCurrentCardTarget { .. }
-        | EffectRequest::ChooseAddSkillBoundCardTarget { .. }
-        | EffectRequest::CommitAddSkillBoundCardTarget { .. }
-        | EffectRequest::ChooseDiscardMatchingEquipColorAddSkill { .. }
         | EffectRequest::AddCardColorLockSkill { .. }
         | EffectRequest::UseVirtualShaFromCardColorLockSourceIfNoSha { .. }
-        | EffectRequest::ChooseCurrentCardUseEnhancements { .. }
-        | EffectRequest::ChooseDrawOrDiscardAddSkill { .. }
-        | EffectRequest::ChooseDiscardedBlackBasicAsBingliang { .. }
-        | EffectRequest::ChooseDiscardJudgeUseVirtualShaDrawIfNoDamage { .. }
         | EffectRequest::UseVirtualShaDrawIfNoDamage { .. }
         | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { .. }
-        | EffectRequest::ChooseTargetDrawOrDiscardBySkillUseCountLinkIfWounded { .. }
         | EffectRequest::FinishLinkIfTargetWounded { .. }
-        | EffectRequest::ChooseRevealOtherHandCardRememberCategory { .. }
         | EffectRequest::DrawThenGiveExactRecordPhaseTarget { .. }
         | EffectRequest::ClearPhaseGiftTarget { .. }
         | EffectRequest::EmitShaResolved { .. }
         | EffectRequest::EmitCardResolved { .. }
-        | EffectRequest::ChooseGainResolvedShaOrShanThenOptionalUseSha { .. }
-        | EffectRequest::ChooseGainAllResolvedShaShanThenColorRewards { .. }
-        | EffectRequest::ChooseUseShaAfterResolvedGift { .. }
         | EffectRequest::SkipCurrentPhase { .. }
-        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamage { .. }
-        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
         | EffectRequest::RevealUniformHandDrawSelfChooseOthers { .. }
-        | EffectRequest::ChooseCardUserOrAddTarget { .. }
-        | EffectRequest::CommitTransferSavedCardUser { .. }
-        | EffectRequest::ChooseDiscardEquipmentReduceCurrentDamage { .. }
         | EffectRequest::ModifyCurrentDamage { .. }
-        | EffectRequest::ChooseDiscardEquipmentPreventCurrentDamage { .. }
-        | EffectRequest::ChooseDiscardDamageEndpointCardIncreaseIfSuit { .. }
-        | EffectRequest::ChooseMoveTargetEquipmentOrDraw { .. }
-        | EffectRequest::ChooseMoveTargetEquipmentAndOrDraw { .. }
-        | EffectRequest::ChooseDrawViewTwoGainOrMoveEquipment { .. }
         | EffectRequest::GiveAllEquipmentChooseRecoverOrDamage { .. }
-        | EffectRequest::ChooseRecoverOwnerOrDamageByGivenEquipment { .. }
-        | EffectRequest::ChooseTargetDiscardWeaponRangeHandOrIncreaseDamage { .. }
-        | EffectRequest::ChooseTargetDiscardDistanceHandOrIncreaseDamage { .. }
-        | EffectRequest::ChooseTargetDiscardAttackRangeCardsOrIncreaseDamageWeaponForcesBoth {
-            ..
-        }
-        | EffectRequest::ChooseDrawOrRecastAddSkill { .. }
-        | EffectRequest::ChooseGainShaForOpeningExtraPlay { .. }
         | EffectRequest::FinishOpeningExtraPlayShaGain { .. }
         | EffectRequest::RevealTargetHandGainShanArmorOrDrawTwo { .. }
-        | EffectRequest::ChooseHandCountDifferentTargetDrawOrRandomDiscard { .. }
         | EffectRequest::IncreaseCurrentDrawCount { .. }
         | EffectRequest::SkipJudgeAndDrawPhases { .. }
         | EffectRequest::SkipNextPlayPhase { .. }
-        | EffectRequest::ChooseOtherDrawOrRecover { .. }
-        | EffectRequest::ChooseOtherRecover { .. }
         | EffectRequest::EnableEquipSlot { .. }
-        | EffectRequest::ChooseDiscardHandEquipThenRemoveSelfSkill { .. }
-        | EffectRequest::ChooseDiscardHandEquipThenRecover { .. }
         | EffectRequest::DrawSelectedTargets { .. }
         | EffectRequest::DamageThenDrawSelectedTargets { .. }
-        | EffectRequest::ResolveYoudi { .. }
-        | EffectRequest::ResolveKuangfu { .. }
-        | EffectRequest::ResolveShanjia { .. }
-        | EffectRequest::ResolveNewYajiao { .. }
-        | EffectRequest::ResolveDingpin { .. }
         | EffectRequest::FinishCurrentPhaseAbortResolution { .. }
         | EffectRequest::RecoverSelectedTargets { .. }
         | EffectRequest::RecordSelectedPlayPhaseCategory { .. }
         | EffectRequest::RecoverIfMinCurrentHp { .. }
-        | EffectRequest::ChooseTargetDiscardExcessThenSelfDiscardOrTargetDraw { .. }
-        | EffectRequest::ChooseSelfDiscardOrTargetDrawAfterTargetDiscard { .. }
         | EffectRequest::DrawThenChooseGainOneFromDamageTargetAndNeighbors { .. }
         | EffectRequest::ContinueChooseGainOneFromDamageTargetAndNeighbors { .. }
-        | EffectRequest::ChoosePreventDamageOrLoseMaxHpIncreaseDamage { .. }
         | EffectRequest::ContinueIncreaseBoundDamage { .. }
         | EffectRequest::AddCardUsePolicySkill { .. }
         | EffectRequest::DiscardTargetCards { .. }
         | EffectRequest::RemoveSkillByDef { .. }
-        | EffectRequest::ChooseDiscardHandAddSkillByColor { .. }
         | EffectRequest::RevealTopGainNonBasicOrSwapBasic { .. }
         | EffectRequest::PreventDamage { .. }
-        | EffectRequest::CommitDamage { .. }
-        | EffectRequest::CommitDamageBanActiveIfDying { .. }
-        | EffectRequest::CommitLoseHpThenDamageOtherLoseMaxHpIfDying { .. }
         | EffectRequest::MoveCards { .. }
         | EffectRequest::MoveCardsWithReason { .. }
         | EffectRequest::GiveCards { .. }
@@ -835,13 +767,11 @@ pub fn apply_effect(
         | EffectRequest::BanActiveUntilTurnEnd { .. }
         | EffectRequest::SpwanweiActive { .. }
         | EffectRequest::SpwanweiDying { .. }
-        | EffectRequest::ResolveSpxizhan { .. }
         | EffectRequest::LoseHpThenDamageOtherLoseMaxHpIfDying { .. }
         | EffectRequest::DealShaDamage { .. }
         | EffectRequest::DealCardDamage { .. }
         | EffectRequest::RecoverHp { .. }
         | EffectRequest::PreventRecovery { .. }
-        | EffectRequest::CommitRecovery { .. }
         | EffectRequest::ChangeMaxHp { .. }
         | EffectRequest::AddSkill { .. }
         | EffectRequest::AddBoundSkill { .. }
@@ -877,17 +807,97 @@ pub fn apply_effect(
         | EffectRequest::DiscardFromHandEquip { .. }
         | EffectRequest::AdjustHandTo { .. }
         | EffectRequest::DiscardCards { .. }
-        | EffectRequest::ChooseDiscardOneHandOrEquip { .. }
         | EffectRequest::DiscardAllHandAndEquip { .. }
         | EffectRequest::RemoveAllSkills { .. }
         | EffectRequest::JudgeGainEquipmentByColor { .. }
         | EffectRequest::JudgeCancelCurrentShaTargetOnRed { .. }
         | EffectRequest::MakeCurrentShaTargetUnrespondable { .. }
         | EffectRequest::JudgeMakeCurrentShaTargetUnrespondableOnRed { .. }
-        | EffectRequest::ChooseDiscardBasicThenTargetDiscardEquipOrDamage { .. }
-        | EffectRequest::TargetDiscardThenDuelIfNonShaAndHpGteOwner { .. }
-        | EffectRequest::ChooseTargetLoseHpDiscardHandShaIfBasic { .. } => {
+        | EffectRequest::TargetDiscardThenDuelIfNonShaAndHpGteOwner { .. } => {
             dispatch_pin_debate_opinions::apply_effect(tx, req)
+        }
+        EffectRequest::ChooseGroup { .. }
+        | EffectRequest::ChooseGainOtherSkill { .. }
+        | EffectRequest::ChoosePlaceHandXumou { .. }
+        | EffectRequest::ChooseOthersInsertExtraTurn { .. }
+        | EffectRequest::ChooseOthersAddMark { .. }
+        | EffectRequest::ChooseEndExtraDrawOrPlayByUsedSuits { .. }
+        | EffectRequest::ChooseAddCurrentShaTarget { .. }
+        | EffectRequest::ChooseAddCurrentShaTargetWithinDistance { .. }
+        | EffectRequest::CommitAddCurrentShaTarget { .. }
+        | EffectRequest::ChooseStoreHandShaInSkillPile { .. }
+        | EffectRequest::ChooseSpendSkillPileForDyingJiu { .. }
+        | EffectRequest::CommitStoreHandShaInSkillPile { .. }
+        | EffectRequest::CommitSpendSkillPileForDyingJiu { .. }
+        | EffectRequest::ChooseCompareSelectedHandCard { .. }
+        | EffectRequest::ChooseCompareSelectedHandCardSecondFailureSeatDamage { .. }
+        | EffectRequest::ChooseHandCompare { .. }
+        | EffectRequest::ChooseHandCompareGrantTargetOnWin { .. }
+        | EffectRequest::ChooseHandCompareBetween { .. }
+        | EffectRequest::ChooseOtherGiveThenRecover { .. }
+        | EffectRequest::ChooseOtherDamage { .. }
+        | EffectRequest::ChooseBoundSourceAttackRangeDamage { .. }
+        | EffectRequest::ChooseOtherDiscardTargetCard { .. }
+        | EffectRequest::ChooseDrawOrDiscardTargetCard { .. }
+        | EffectRequest::ChooseSeatPathDamage { .. }
+        | EffectRequest::ChooseAddOrRemoveCurrentCardTarget { .. }
+        | EffectRequest::ChooseAddSkillBoundCardTarget { .. }
+        | EffectRequest::CommitAddSkillBoundCardTarget { .. }
+        | EffectRequest::ChooseDiscardMatchingEquipColorAddSkill { .. }
+        | EffectRequest::ChooseCurrentCardUseEnhancements { .. }
+        | EffectRequest::ChooseDrawOrDiscardAddSkill { .. }
+        | EffectRequest::ChooseDiscardedBlackBasicAsBingliang { .. }
+        | EffectRequest::ChooseDiscardJudgeUseVirtualShaDrawIfNoDamage { .. }
+        | EffectRequest::ChooseTargetDrawOrDiscardBySkillUseCountLinkIfWounded { .. }
+        | EffectRequest::ChooseRevealOtherHandCardRememberCategory { .. }
+        | EffectRequest::ChooseGainResolvedShaOrShanThenOptionalUseSha { .. }
+        | EffectRequest::ChooseGainAllResolvedShaShanThenColorRewards { .. }
+        | EffectRequest::ChooseUseShaAfterResolvedGift { .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamage { .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { .. }
+        | EffectRequest::ChooseCardUserOrAddTarget { .. }
+        | EffectRequest::CommitTransferSavedCardUser { .. }
+        | EffectRequest::ChooseDiscardEquipmentReduceCurrentDamage { .. }
+        | EffectRequest::ChooseDiscardEquipmentPreventCurrentDamage { .. }
+        | EffectRequest::ChooseDiscardDamageEndpointCardIncreaseIfSuit { .. }
+        | EffectRequest::ChooseMoveTargetEquipmentOrDraw { .. }
+        | EffectRequest::ChooseMoveTargetEquipmentAndOrDraw { .. }
+        | EffectRequest::ChooseDrawViewTwoGainOrMoveEquipment { .. }
+        | EffectRequest::ChooseRecoverOwnerOrDamageByGivenEquipment { .. }
+        | EffectRequest::ChooseTargetDiscardWeaponRangeHandOrIncreaseDamage { .. }
+        | EffectRequest::ChooseTargetDiscardDistanceHandOrIncreaseDamage { .. }
+        | EffectRequest::ChooseTargetDiscardAttackRangeCardsOrIncreaseDamageWeaponForcesBoth { .. }
+        | EffectRequest::ChooseDrawOrRecastAddSkill { .. }
+        | EffectRequest::ChooseGainShaForOpeningExtraPlay { .. }
+        | EffectRequest::ChooseHandCountDifferentTargetDrawOrRandomDiscard { .. }
+        | EffectRequest::ChooseOtherDrawOrRecover { .. }
+        | EffectRequest::ChooseOtherRecover { .. }
+        | EffectRequest::ChooseDiscardHandEquipThenRemoveSelfSkill { .. }
+        | EffectRequest::ChooseDiscardHandEquipThenRecover { .. }
+        | EffectRequest::ChooseTargetDiscardExcessThenSelfDiscardOrTargetDraw { .. }
+        | EffectRequest::ChooseSelfDiscardOrTargetDrawAfterTargetDiscard { .. }
+        | EffectRequest::ChoosePreventDamageOrLoseMaxHpIncreaseDamage { .. }
+        | EffectRequest::ChooseDiscardHandAddSkillByColor { .. }
+        | EffectRequest::CommitDamage { .. }
+        | EffectRequest::CommitDamageBanActiveIfDying { .. }
+        | EffectRequest::CommitLoseHpThenDamageOtherLoseMaxHpIfDying { .. }
+        | EffectRequest::CommitRecovery { .. }
+        | EffectRequest::ChooseDiscardOneHandOrEquip { .. }
+        | EffectRequest::ChooseDiscardBasicThenTargetDiscardEquipOrDamage { .. }
+        | EffectRequest::ChooseTargetLoseHpDiscardHandShaIfBasic { .. } => {
+            dispatch_pin_debate_opinions_choose_commit::apply_effect(tx, req)
+        }
+        EffectRequest::ResolveTurnEndDebates { .. }
+        | EffectRequest::ResolvePotheyun { .. }
+        | EffectRequest::ResolveTwjieqiu { .. }
+        | EffectRequest::ResolveJsrgsheju { .. }
+        | EffectRequest::ResolveYoudi { .. }
+        | EffectRequest::ResolveKuangfu { .. }
+        | EffectRequest::ResolveShanjia { .. }
+        | EffectRequest::ResolveNewYajiao { .. }
+        | EffectRequest::ResolveDingpin { .. }
+        | EffectRequest::ResolveSpxizhan { .. } => {
+            dispatch_pin_debate_opinions_resolvers::apply_effect(tx, req)
         }
         EffectRequest::ChooseCurrentShaTargetDiscardRedirectToOwner { .. }
         | EffectRequest::ChooseDiscardRedirectCurrentSha { .. }
@@ -937,6 +947,12 @@ pub fn apply_effect(
 
 mod dispatch_choose_current_sha_target_discard_redirect_to_owner;
 mod dispatch_draw_cards;
+mod dispatch_draw_cards_resolvers;
 mod dispatch_pin_debate_opinions;
+mod dispatch_pin_debate_opinions_choose_commit;
+mod dispatch_pin_debate_opinions_resolvers;
 mod dispatch_resolve_twxiawei;
+mod dispatch_resolve_twxiawei_resolvers;
 mod dispatch_resolve_zhangjian;
+mod dispatch_resolve_zhangjian_resolvers;
+mod dispatch_resolve_zhangjian_resolvers_pot_r_z;

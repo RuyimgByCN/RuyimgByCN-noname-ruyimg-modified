@@ -40,7 +40,12 @@ pub(crate) struct PotlulianPending {
 
 mod resolve_mbfeijing;
 pub(crate) use resolve_mbfeijing::*;
+
+mod resolve_potjugu;
+pub(crate) use resolve_potjugu::*;
 mod suit_code;
 pub(crate) use suit_code::*;
+mod silence_nonlocked_until_own_turn_end;
+pub(crate) use silence_nonlocked_until_own_turn_end::*;
 mod resolve_potlulian;
 pub(crate) use resolve_potlulian::*;

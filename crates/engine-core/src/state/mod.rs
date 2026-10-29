@@ -1496,3 +1496,5 @@ mod u8_is_zero;
 pub(crate) use u8_is_zero::*;
 
 mod tag;
+
+mod impl_resolutionstate;

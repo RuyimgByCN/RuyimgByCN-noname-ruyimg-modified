@@ -16,7 +16,12 @@ pub(crate) const DDD_FENGZHENG_GLOBAL_DEF: u32 = 1_253_882_292;
 
 mod ddd_fengzheng_provider_exists;
 pub(crate) use ddd_fengzheng_provider_exists::*;
+
+mod handle_use_skill_card;
+pub(crate) use handle_use_skill_card::*;
 mod validate_source_free_cost;
 pub(crate) use validate_source_free_cost::*;
+mod record_face_down_view_as_kind;
+pub(crate) use record_face_down_view_as_kind::*;
 mod handle_view_as;
 pub(crate) use handle_view_as::*;

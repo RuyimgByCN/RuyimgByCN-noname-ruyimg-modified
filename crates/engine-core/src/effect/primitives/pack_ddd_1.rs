@@ -28,7 +28,12 @@ pub(crate) const DDD_DONGCHA_DEF: u32 = 3_036_718_178;
 
 mod current_wugu_revealed;
 pub(crate) use current_wugu_revealed::*;
+
+mod save_ddd_xiaheng_state;
+pub(crate) use save_ddd_xiaheng_state::*;
 mod resolve_ddd_duanbing;
 pub(crate) use resolve_ddd_duanbing::*;
+mod resolve_ddd_xujing;
+pub(crate) use resolve_ddd_xujing::*;
 mod resolve_ddd_xinxianying_choice;
 pub(crate) use resolve_ddd_xinxianying_choice::*;

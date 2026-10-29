@@ -31,7 +31,7 @@ guihan: {
 
 | 环节 | 现状 |
 |---|---|
-| 键与行为 | ✅ `keys.rs:579`：`HostBehavior::WudianGuihan => "host:guihan"`（运筹 `character.json` 中蔡文姬的 `ycnguihan` 的 `mapping` 正是 `host:guihan`） |
+| 键与行为 | ✅ `keys.rs:44`：`HostBehavior::WudianGuihan => "host:guihan"`（运筹 `character.json` 中蔡文姬的 `ycnguihan` 的 `mapping` 正是 `host:guihan`） |
 | 过滤器 | `filtering/common.rs:28` → **`false`**（作为**主动技**不随事件触发 → **方向正确**） |
 | 工厂 | `factory.rs:231` → `(None, None)`（无目标/牌注入） |
 | **效果分支** | **`step/wudian_status.rs:82` → `Flow::Done`（空实现）** ✗ |

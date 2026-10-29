@@ -26,11 +26,11 @@ luweiyan: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 1 | `filterCard: 非基本` + `viewAs: shuigong` | **行为面（正例）**：0 号持【过河拆桥】（非基本）→ 以【水攻】形态对**有装备的 1 号**使用 → **Accepted** | 通过 |
-| — | 水攻目标门槛（原生 `play_card.rs:1253`：目标须有装备） | **行为面（反例）**：1 号**无装备** → **`Rejected(IllegalTargets)`** | 通过 |
+| — | 水攻目标门槛（原生 `play_card.rs:724`：目标须有装备） | **行为面（反例）**：1 号**无装备** → **`Rejected(IllegalTargets)`** | 通过 |
 | 2 | `position: "hse"` | **差异登记（牌区族第 7 例）**：原生转化在**出牌命令面**（牌须为**手牌**）→ **装备区/判定区的非基本牌不能当【水攻】** | 通过（**差异登记**） |
 
 **原生实现引用**：`engine/play_card.rs:189`（持 `ycnluweiyan` 且非基本 → `CardKind::Shuigong`）；
-`play_card.rs:1253`（水攻目标须有装备）；`content/host/factory.rs:420`（`YunchouLuweiyan2` 链杀机器）。
+`play_card.rs:724`（水攻目标须有装备）；`content/host/factory.rs:420`（`YunchouLuweiyan2` 链杀机器）。
 
 ## 3 未完成 / 待办
 

@@ -33,7 +33,7 @@ tianfuzhen: {
 | 1 | `enable: hasPlayer(isMajor)` | 原生**额外要求存活 ≥4** → **差异登记**（源码事实固定 + 3 人局行为断言被拒） | 通过（**差异登记**） |
 
 **原生实现引用**：`engine/play_card.rs:903`（存活 ≥4 门 + 期望目标集合）、
-`content/host/step/swd_card_effects.rs:1146`（逐目标强制弃牌询问，`allow_cancel: false`）。
+`content/host/step/swd_zhenfa_cards.rs:11`（逐目标强制弃牌询问，`allow_cancel: false`）。
 
 ## 3 工程发现（写入证据）
 

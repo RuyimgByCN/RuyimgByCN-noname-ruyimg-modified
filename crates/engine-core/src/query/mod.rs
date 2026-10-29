@@ -471,9 +471,16 @@ mod cache_boundary_tests {
 
 mod alive_wounded_count;
 pub use alive_wounded_count::*;
+
+mod query;
+pub use query::*;
 mod sha_rank_skill_mark_modifier_active;
 pub use sha_rank_skill_mark_modifier_active::*;
+mod discardable_target_cards;
+pub use discardable_target_cards::*;
 mod card_target_cancelled_for_logical_kind;
 pub use card_target_cancelled_for_logical_kind::*;
+mod duel_response_count_for;
+pub use duel_response_count_for::*;
 mod target_legal_explain;
 pub(crate) use target_legal_explain::*;

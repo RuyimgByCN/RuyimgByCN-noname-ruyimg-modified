@@ -26,7 +26,7 @@ gouhunluo: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `storage.gouhunluo = 3` + `storage.gouhunluo2 = player` | **行为面**：0 号打出勾魂锣指定 1 号 → 目标 **`rounds=3`**、**`source=Some(0)`**（实测 `rounds=3 source=Some(0)`） | 通过 |
-| 1 | `filterTarget: !target.hasSkill("gouhunluo")` | **门槛已校验（2026-10-19 更正）**：原生在**出牌命令面** `engine/play_card.rs:1534` 校验 `gouhunluo_rounds > 0 → IllegalTargets`；**行为面实测**：第一张命中后目标 `rounds=3`，**第二张对同一目标 `Rejected(IllegalTargets)`** | 通过（**非差异**） |
+| 1 | `filterTarget: !target.hasSkill("gouhunluo")` | **门槛已校验（2026-10-19 更正）**：原生在**出牌命令面** `engine/play_card_targets.rs:32` 校验 `gouhunluo_rounds > 0 → IllegalTargets`；**行为面实测**：第一张命中后目标 `rounds=3`，**第二张对同一目标 `Rejected(IllegalTargets)`** | 通过（**非差异**） |
 
 > **更正说明（诚实记录）**：初版把该项登记为「差异」，原因是**只读了效果分支、未查完整校验链**
 > —— 属本仓库已沉淀方法学「断言缺陷前先读完整校验链」的**再次命中**（第 5 条）。现以**行为面**

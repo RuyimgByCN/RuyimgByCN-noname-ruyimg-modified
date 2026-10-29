@@ -57,7 +57,12 @@ pub(crate) struct YuhengState {
 
 mod draw_then_optionally_distribute_hand_cards;
 pub(crate) use draw_then_optionally_distribute_hand_cards::*;
+
+mod choose_gain_card_from_each_other_replace_draw;
+pub(crate) use choose_gain_card_from_each_other_replace_draw::*;
 mod replace_draw_with_distinct_suit_selection;
 pub(crate) use replace_draw_with_distinct_suit_selection::*;
+mod suppress_non_locked_skills_until_turn_end;
+pub(crate) use suppress_non_locked_skills_until_turn_end::*;
 mod resolve_nzry_longnu;
 pub(crate) use resolve_nzry_longnu::*;

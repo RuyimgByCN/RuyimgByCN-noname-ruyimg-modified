@@ -222,7 +222,7 @@ fn upstream_wusheng_red_trick_convertible_note() {
 fn upstream_wusheng_entry_and_shouyue_differences_are_fixed() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_rules.rs"
     ))
     .expect("读 play_card 源码");
     let idx = src.find("WU_SHENG").expect("武圣分支");

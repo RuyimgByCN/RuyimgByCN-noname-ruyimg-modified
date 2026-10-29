@@ -33,7 +33,7 @@ hslingjian_shijianhuisu: {
 | 2 | `target.gain(target.getCards("e"))` | **行为面**：1 号装备 1 张 → 0 号打出时间回溯指定 1 号 → **装备 1 → 0**、**手牌 0 → 1**，且收回的正是那张装备牌 | 通过 |
 | 1 | `filterTarget`：`target !== player && countCards("e") > 0` | **登记差异**：原生 `SwdShijianhuisuCard` 分支**只做效果**（`if alive`），**未见**对「目标装备区有牌」的校验（是否由 `filter_swd` 统一承载**未核对**） | 通过（**差异登记**） |
 
-**原生实现引用**：`content/host/step/swd_card_effects.rs:1025`（遍历 `equips` → `revoke_equip_skills`
+**原生实现引用**：`content/host/step/swd_lingjian_cards.rs:119`（遍历 `equips` → `revoke_equip_skills`
 + `hand.push`；本体入弃堆）。
 
 ## 3 验证结果

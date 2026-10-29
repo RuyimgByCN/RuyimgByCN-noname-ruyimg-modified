@@ -12,7 +12,12 @@ pub(crate) const DR_LT_XIONGLUAN_BAN: engine_api::SkillDefId =
 
 mod qizhi_count;
 pub(crate) use qizhi_count::*;
+
+mod liangyin_mark;
+pub(crate) use liangyin_mark::*;
 mod resolve_liangyin;
 pub(crate) use resolve_liangyin::*;
+mod bailingyun_xiace_mask;
+pub(crate) use bailingyun_xiace_mask::*;
 mod resolve_pottuntian;
 pub(crate) use resolve_pottuntian::*;

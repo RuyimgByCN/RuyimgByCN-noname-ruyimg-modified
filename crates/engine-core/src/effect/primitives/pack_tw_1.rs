@@ -8,7 +8,12 @@ use super::*;
 
 mod recover_hp;
 pub(crate) use recover_hp::*;
+
+mod grant_skill_instance;
+pub(crate) use grant_skill_instance::*;
 mod finish_turn_begin;
 pub use finish_turn_begin::*;
+mod open_choice;
+pub use open_choice::*;
 mod resolve_twtanfeng;
 pub(crate) use resolve_twtanfeng::*;

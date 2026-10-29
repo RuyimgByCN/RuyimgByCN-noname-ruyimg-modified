@@ -1,3 +1,5 @@
+//! LSP 悬停文档链：关键字与效果说明（结算器见 `skill_resolvers`，owner_* 条件见 `skill_owner_filters`）。
+
 pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
     Some(match word {
             "skill" => {
@@ -8,9 +10,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "active" => {
                 "Define a player-activated skill body. Optional `uses_per_turn N|owner_hp|owner_lost_hp_min_one|living_rebel_count`, `uses_per_play_phase N`, `once_per_game`, `owner_missing_skill def_id`, `hand_gt_hp`, `hand_gt_max_hp`, `hand_limit_positive`, `equip_nonempty`, `hand_nonempty`, `face_up`, `targets min max`, and `select_hand`/`select_he` clauses are authoritative contracts enforced by the engine."
-            }
-            "owner_missing_skill" => {
-                "Active-skill clause: activation is legal only while the owner does not have the given stable skill definition. Requires Rule VM ABI 234."
             }
             "view_as" => {
                 "Treat matching physical source cards as another card kind. Optional `from hand_equip`, `from hand_expansion`, `up_to 2` or `exactly 2`, `same_suit`, `nature fire|thunder`, `multi_card_bonus damage_1|recover_1|discard_current_hand_equip`, `uses_per_turn N`, `ignore_distance`, `red_unrespondable`, `black_no_use_count`, `no_use_count`, `target_lacks_source_suit_unrespondable`, and `refund_use_count_if_no_damage` clauses are authoritative. Source-free dynamic families use `basic|ordinary_trick any any from none branch N once_per_round next_branch N cost ...`; `cost swap_lower_hand uses_per_turn 1` swaps whole hands with a lower-hand target before continuing; delegated `shan response` and `sha any` rules use `from group_<tag>` and ask matching other players in seat order."
@@ -119,83 +118,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "pair_hand_difference_lte_three" => {
                 "Active-target constraint: exactly two selected targets must have hand-card counts differing by at most three. Revalidated by the engine and requires Rule VM ABI 535."
             }
-            "resolve_pothaoshi" => {
-                "Effect: action 0 optionally authorizes another living player to use/respond with the owner's current hand until action 1 clears all grants at the owner's next turn start. The first two borrowed uses that empty the owner's hand draw it to three. Requires Rule VM ABI 536.\n\n```\neffect resolve_pothaoshi(self, 0);\n```"
-            }
-            "resolve_spmiaolve" => {
-                "Effect: action 0 creates up to two globally suit-distinct Mantianguohai cards in the owner's hand; action 1 lets the owner cancel, draw two, or gain one canonical zhinang. Requires Rule VM ABI 539.\n\n```\neffect resolve_spmiaolve(self, 0);\n```"
-            }
-            "resolve_pottuntian" => {
-                "势屯田 effect: gain charge after a qualifying loss, grow the maximum and draw when full at turn start, or spend charge to distribute heart cards and trigger 势凿险 threshold rewards. Requires Rule VM ABI 543."
-            }
-            "resolve_potjixi" => {
-                "势急袭 effect: reset/record current-turn card targets, then discard one card from the turn player and use an ignore-distance virtual Shunshou on selected recorded targets. Requires Rule VM ABI 543."
-            }
-            "resolve_potceduan" => {
-                "势策断 effect: collect one hidden hand-card choice from every player in the selected target's attack range, reveal them together, and use all owner hand cards of every tied majority color as an unlimited physical Sha. Requires Rule VM ABI 544."
-            }
-            "resolve_pottaishici" => {
-                "势太史慈 effect: reset/collect 战烈 marks, resolve its enhanced virtual Sha, draw-to-X then duel for 酣战, and choose the limited 振锋 recovery or X-source rewrite. Requires Rule VM ABI 548."
-            }
-            "resolve_mbzhonghui" => {
-                "势钟会 effect: spend/settle 俟资 charge, grow 挟志 limits, awaken 狱难, and upgrade 克昌. Requires Rule VM ABI 553."
-            }
-            "resolve_potjiejie" => {
-                "势辛宪英诫节 effect: privately reveal the current actor hand, choose a suit, apply the matching discard/unlimited-use or draw-pile gain branch, and track the twice-per-round unique-maximum 清识 bonus. Requires Rule VM ABI 554."
-            }
-            "resolve_potqingshi" => {
-                "势辛宪英清识 effect: choose any living player; allied participants each draw one, otherwise both discard one hand/equipment card. Requires Rule VM ABI 554."
-            }
-            "resolve_potweiyan" => {
-                "势魏延 effect: resolve 忠傲 mission state, 壮誓 first-N-card helpers, 饮战 Sha follow-up, upgraded 狂骨, or 困奋. Requires Rule VM ABI 558."
-            }
-            "resolve_potzhouyu" => {
-                "势周瑜 effect: resolve 炽沄 gifts, 焰洄 reveal history, 焚涛 linked fire-damage choices, or 雄姿 branch locking. Requires Rule VM ABI 561."
-            }
-            "resolve_potlvyi" => {
-                "势吕壹 effect: resolve 隳律 tracked-card settlement, 颂谳 Wuzhong response conversion, or 势施 exact-card response locks. Requires Rule VM ABI 564."
-            }
-            "resolve_potcaoshuang" => {
-                "势曹爽 effect: resolve 典易/奢权 timing assignment, persistent card tags, 渐专 awakening, and 溺尊 pile use. Requires Rule VM ABI 568."
-            }
-            "resolve_potyuji" => {
-                "势于吉 effect: resolve 道转 basic-card conversion costs and 符济 tagged-card rewards. Requires Rule VM ABI 570."
-            }
-            "resolve_rehengjiang" => {
-                "SP 横江 effect: stack the current turn player's temporary hand-limit penalty and settle the owner's draw at turn end. Requires Rule VM ABI 572."
-            }
-            "owner_alive_turn_ended_rehengjiang_pending" => {
-                "横江 turn-end filter: the living helper owner has pending state for the ended turn. Requires Rule VM ABI 572."
-            }
-            "owner_gained_cards_potzhouyu" => {
-                "炽沄 gain filter: the living owner gained cards and still has hand cards. Requires Rule VM ABI 561."
-            }
-            "owner_source_first_target_has_hand_potyanhui" => {
-                "焰洄 target filter: the owner used a card, this is its first target event, and some target has hand cards. Requires Rule VM ABI 561."
-            }
-            "owner_alive_fire_damage_potfentao" => {
-                "焚涛 fire-damage filter; target and chain eligibility are revalidated by the resolver. Requires Rule VM ABI 561."
-            }
-            "owner_alive_potfentao_pending_damage" => {
-                "焚涛 post-damage filter for its pending relink target. Requires Rule VM ABI 561."
-            }
-            "owner_source_sha_damage_before_potyinzhan_condition" => {
-                "饮战 Damage-before filter: the owner dealt Sha damage and has no more HP or hand cards than the target. Requires Rule VM ABI 558."
-            }
-            "owner_source_damage_within_one" => {
-                "狂骨 Damage filter: the owner dealt positive damage to a living target at distance 1 or less. Requires Rule VM ABI 558."
-            }
-            "owner_alive_play_phase_actor_hand_nonempty_potjiejie_unused" => {
-                "诫节 Play-phase filter: owner and current actor are alive, the actor has hand cards, and no 诫节 has been invoked by that actor this phase. Requires Rule VM ABI 554."
-            }
             "potqingyan" => {
                 "View-as cost: reveal exactly min(round uses + 1, 5) hand cards without consuming them; unavailable while any card shown by the previous activation remains in hand. Requires Rule VM ABI 544."
-            }
-            "owner_lost_non_damage_card_pottuntian_charge_not_full" => {
-                "Cards-moved filter: the owner lost at least one non-damage card from a personal zone, excluding an equipment card consumed by using it, while 势屯田 charge is below its stored maximum. Requires Rule VM ABI 543."
-            }
-            "resolve_spyingjia" => {
-                "Effect: actions 0/1 reset and record same-name trick uses; action 2 may discard one hand card and queue an extra turn for any living target, granting the supplied draw helper. Requires Rule VM ABI 539.\n\n```\neffect resolve_spyingjia(self, 2, 3612952432);\n```"
             }
             "hand_lt" => {
                 "Active-target constraint: `hand_lt N` requires every selected target to have fewer than N hand cards. Revalidated by the engine and requires Rule VM ABI 128."
@@ -229,9 +153,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "in_attack_range" => {
                 "Active-target constraint: every selected target must currently be inside the skill owner's attack range. Distance and attack-range modifiers are authoritatively revalidated. Requires Rule VM ABI 155."
-            }
-            "owner_in_target_attack_range" => {
-                "Active-target constraint: the skill owner must currently be inside every selected target's attack range. Requires Rule VM ABI 544."
             }
             "hand_equip_nonempty" => {
                 "Active-target constraint: every selected target must currently have at least one card in hand or equipment. Requires Rule VM ABI 192."
@@ -597,36 +518,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "queried_source_enemy_owner_ally_target_other_than_owner" => {
                 "Global distance aura value: one when the target is the owner's living ally other than the owner and the source is the target's enemy."
             }
-            "owner_hp" => {
-                "Query-time modifier value: the skill owner's current HP, clamped to zero."
-            }
-            "owner_max_hp" => "Query-time modifier value: the skill owner's maximum HP.",
-            "owner_hp_minus_one" => {
-                "Query-time modifier value: the skill owner's current HP minus one, clamped to zero."
-            }
-            "owner_lost_hp" => {
-                "Query-time modifier value: the skill owner's current lost HP, clamped to zero."
-            }
-            "owner_lost_hp_minus_one" => {
-                "Query-time modifier value: the skill owner's current lost HP minus one, clamped to zero."
-            }
-            "owner_lost_hp_min_one" => {
-                "Query-time modifier value: the skill owner's current lost HP, with a minimum of one."
-            }
-            "owner_skill_mark" => {
-                "Query-time modifier value: the owner's mark count whose id equals this skill definition id."
-            }
-            "owner_skill_state_u32" => {
-                "Query-time modifier value: the first little-endian u32 in this skill instance's state blob. ABI 522."
-            }
-            "owner_skill_state_u32_negative" => {
-                "Query-time modifier value: the negative first little-endian u32 in this skill instance's state blob. ABI 612."
-            }
             "queried_player_qun_owner_lord_alive" => {
                 "Query-time modifier value: one for a living Qun card user while the living modifier owner is the Lord. ABI 553."
-            }
-            "owner_mark_2058376721" => {
-                "Parameterized query-time modifier value: the owner's mark count whose stable definition id is the numeric suffix."
             }
             "alive_group_count" => {
                 "Read-only `alive_group_count()` query and query-time modifier value: the number of distinct non-empty groups among living players' characters. The expression query requires Rule VM ABI 6."
@@ -667,15 +560,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "alive_other_qun_count" => {
                 "Query-time modifier value: the number of other alive players whose character group is qun."
             }
-            "owner_has_weapon" => {
-                "Query-time modifier value: one while the skill owner's equipment zone contains a weapon, otherwise zero."
-            }
-            "owner_no_weapon" => {
-                "Query-time modifier value: one while the skill owner's equipment zone lacks a weapon, otherwise zero."
-            }
-            "owner_has_armor_equip" => {
-                "Query-time modifier value: one while the skill owner's equipment zone contains an armor, otherwise zero."
-            }
             "round_number_capped_five" => {
                 "Query-time modifier value: the current round number, capped at five."
             }
@@ -690,30 +574,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             }
             "field_mount_card_count_ceil_half" => {
                 "Query-time modifier value: half the mount cards on living players' fields, rounded up."
-            }
-            "owner_unique_max_hand" => {
-                "Query-time modifier value: one while the skill owner uniquely has the most hand cards among living players, otherwise zero."
-            }
-            "owner_hand_gt_other" => {
-                "Contextual damage modifier value: one while the skill owner's hand count is greater than the other damage participant's, otherwise zero."
-            }
-            "owner_hand_lt_other" => {
-                "Contextual damage modifier value: one while the skill owner's hand count is less than the other damage participant's, otherwise zero."
-            }
-            "owner_qun_other_shu" => {
-                "Contextual damage modifier value: one while the skill owner is a living qun character and the other damage participant is a living shu character, otherwise zero. Requires Rule VM ABI 81."
-            }
-            "owner_turned_over_diff_other" => {
-                "Contextual damage modifier value: one while the skill owner's face-up/face-down state differs from the other damage participant's, otherwise zero."
-            }
-            "owner_linked_diff_other" => {
-                "Contextual damage modifier value: one while the skill owner and the other damage participant have different linked states, otherwise zero."
-            }
-            "owner_hand_equip_gte_other" => {
-                "Contextual damage modifier value: one while the skill owner's hand and equipment counts are each no smaller than the other damage participant's corresponding count, otherwise zero."
-            }
-            "owner_sha_damage_dealt_zero_this_turn" => {
-                "Turn-scoped damage modifier value: one before the skill owner has dealt any logical-Sha damage event in the current turn, otherwise zero."
             }
             "queried_player_hand_gt_hp_signed" => {
                 "Global attack-range modifier value: positive one when the queried player's hand count exceeds HP, otherwise negative one."
@@ -730,20 +590,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "queried_player_mark_positive_2172383355" => {
                 "Parameterized global-aura value: one while the queried living player has the stable mark id in the numeric suffix; otherwise zero. Requires Rule VM ABI 215."
             }
-            "resolve_nzry_longnu" => {
-                "Effect: toggles Longnu, pays the matching HP/max-HP cost, draws one card, and grants the matching helper. Requires Rule VM ABI 213."
-            }
             "choose_link_other" => {
                 "Effect: forces the owner to choose another living unlinked player and link them. Requires Rule VM ABI 213."
-            }
-            "resolve_drlt_poxi" => {
-                "Effect: privately exposes the selected target hand, chooses exactly four distinct-suit cards across both hands, discards them, and resolves Poxi by the owner's selected-card count. Requires Rule VM ABI 214."
-            }
-            "resolve_drlt_jieying" => {
-                "Effect: resolves Jieying's ensure-mark, optional transfer, or other-player turn-end hand collection mode. Requires Rule VM ABI 215."
-            }
-            "resolve_shen_simayi" => {
-                "Effect: resolves Shen Simayi's discard-phase Renjie count, Lianpo extra-turn queue, or a Jilue Wansha/Zhiheng/Jizhi branch selected by mode. Requires Rule VM ABI 218."
             }
             "lord_only" => {
                 "Skill declaration marker: the skill is active only while its owner has the Lord identity."
@@ -754,95 +602,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "conversion" => {
                 "Skill declaration marker: the skill has a generic togglable conversion branch."
             }
-            "owner_no_mount" => {
-                "Query-time modifier value: one while the skill owner's equipment zone contains no mount, otherwise zero."
-            }
-            "owner_armor_empty" => {
-                "Query-time modifier value: one while the skill owner's equipment zone contains no armor, otherwise zero."
-            }
-            "owner_healthy" => {
-                "Query-time modifier value: one while the skill owner is at full health, otherwise zero."
-            }
-            "owner_hand_empty" => {
-                "Trigger filter or query-time modifier value: matches while the skill owner's hand is empty."
-            }
-            "owner_has_treasure" => {
-                "Query-time modifier value: one while the skill owner's equipment zone contains a treasure, otherwise zero."
-            }
             "alive_mounted_player_count_min_one" => {
                 "Query-time modifier value: the number of alive players with at least one offensive or defensive mount equipped, with a minimum of one."
             }
-            "owner_equip_count_odd" => {
-                "Query-time modifier value: one while the skill owner's equipment-card count is odd, otherwise zero."
-            }
-            "owner_equip_count_even" => {
-                "Query-time modifier value: one while the skill owner's equipment-card count is even (including zero), otherwise zero."
-            }
-            "owner_equip_count_half_floor" => {
-                "Query-time modifier value: half the skill owner's equipment-card count, rounded down."
-            }
-            "owner_equip_count_exactly_one" => {
-                "Query-time modifier value: one while the skill owner has exactly one equipment card, otherwise zero."
-            }
-            "owner_equip_count" => {
-                "Query-time modifier value: the number of cards in the skill owner's equipment zone."
-            }
-            "owner_hp_gt_two" => {
-                "Query-time modifier value: one while the skill owner's current HP is greater than two, otherwise zero."
-            }
-            "owner_hp_le_two" => {
-                "Query-time modifier value: one while the skill owner's current HP is at most two, otherwise zero."
-            }
-            "owner_lost_hp_at_least_two" => {
-                "Query-time modifier value: one while the skill owner's lost HP is at least two, otherwise zero."
-            }
-            "owner_all_others_in_attack_range" => {
-                "Query-time modifier value: one while every other alive player is within the skill owner's attack range, otherwise zero."
-            }
-            "owner_current_turn_all_others_distance_at_most_one" => {
-                "Query-time modifier value: one during the owner's current turn while every other living player's final distance from the owner is at most one; otherwise zero. Requires Rule VM ABI 281."
-            }
-            "owner_sha_used_zero" => {
-                "Query-time modifier value: one before the first Sha is used in the current turn, otherwise zero."
-            }
-            "owner_sha_used_nonzero" => {
-                "Query-time modifier value: one after the skill owner uses at least one Sha in the current turn, otherwise zero."
-            }
-            "owner_sha_used_exactly_one" => {
-                "Query-time modifier value: one after the skill owner uses exactly one Sha in their current turn, otherwise zero."
-            }
-            "owner_sha_used_exactly_two" => {
-                "Query-time modifier value: one after the skill owner uses exactly two Sha in their current turn, otherwise zero."
-            }
-            "owner_max_hand_before_skill_fires_this_turn" => {
-                "Query-time modifier value: one while the skill owner ties for maximum hand size and this skill has not fired in the current turn, otherwise zero."
-            }
-            "owner_non_damage_hand_type_count" => {
-                "Query-time modifier value: number of distinct basic, trick, and equipment categories among the owner's non-damage hand cards."
-            }
-            "owner_sha_hand_count" => {
-                "Query-time modifier value: number of Sha cards in the skill owner's hand (任城 pxrencheng)."
-            }
-            "owner_turn_damage_dealt" => {
-                "Query-time modifier value: total damage dealt by the skill owner during their current turn."
-            }
-            "owner_current_turn_card_use_count" => {
-                "Query-time modifier value: cards proactively used by the skill owner during their current turn; zero outside that owner's turn. Requires Rule VM ABI 49."
-            }
-            "owner_play_phase_card_use_count_zero" => {
-                "Query-time modifier value: one before the skill owner proactively uses a card in their current Play phase; zero otherwise. Requires Rule VM ABI 115."
-            }
-            "owner_skill_play_phase_fire_count_below_2" => {
-                "Parameterized query-time modifier value: one during the owner's Play phase while this skill instance has fired fewer than the positive numeric suffix; zero otherwise. Requires Rule VM ABI 220."
-            }
-            "owner_skill_use_count" => {
-                "Query-time modifier value: originating active skill invocations in the current turn. Requires Rule VM ABI 143."
-            }
             "alive_wounded_or_guiming_wu_count_min_one" => {
                 "Query-time modifier value: living wounded-player count, plus other living Wu players while the owner is the Lord and has enabled Guiming; minimum one. Requires Rule VM ABI 145."
-            }
-            "owner_has_heart_equip" => {
-                "Query-time modifier value: one while the owner's equipment zone contains a card whose effective suit is heart."
             }
             "sha_use_limit" => {
                 "Modifier target: adjusts proactive 杀 uses allowed during the owner's turn."
@@ -938,9 +702,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "choose_discard_target_card_resolve_current_sha_nonbasic_bonus" => {
                 "Effect: forces the current Sha user to discard one hand/equipment card from the current target. A non-basic card makes only that target unable to respond, grants the supplied modifier skill, and adds one matching mark; a basic card makes the target gain the physical Sha if it remains in the discard pile. Available only in `card_targeted` triggers and requires Rule VM ABI 312.\n\n```\neffect choose_discard_target_card_resolve_current_sha_nonbasic_bonus(self, event_card, event_player, bonus_skill_def);\n```"
             }
-            "resolve_dcqiaomeng" => {
-                "Effect: choose one other target of the current black card, then discard one of that target's hand/equipment cards. Gain discarded equipment; discarded trick cards make the current card use unrespondable to all players. Available only in the matching `card_targeted` trigger and requires Rule VM ABI 313.\n\n```\neffect resolve_dcqiaomeng(self, event_card, helper_skill_def);\n```"
-            }
             "remove_skill_by_def" => {
                 "Effect: removes every instance of one stable skill definition from the specified player.\n\n```\neffect remove_skill_by_def(self, skill_def);\n```"
             }
@@ -1019,101 +780,14 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "gain_one_hand_from_selected_targets" => {
                 "Effect: gains one current hand card from each active-skill target in submitted order. Requires `targets ... other max_by_owner_hp hand_nonempty` and Rule VM ABI 288.\n\n```\neffect gain_one_hand_from_selected_targets(self);\n```"
             }
-            "owner_outside_turn" => {
-                "View-as filter: matches any legal source card only while the skill owner is not the current turn player. Requires Rule VM ABI 289."
-            }
-            "owner_alive_is_source" => {
-                "Trigger filter: the skill owner is the event source and remains alive after the event. Requires Rule VM ABI 291."
-            }
             "choose_repolu_targets_draw" => {
                 "Death-trigger effect: the owner, including a dead owner, may cancel or choose one or more living recipients. A successful choice increments the originating skill's same-id mark once, then each selected recipient draws the previous mark plus one card in seat order. Requires Rule VM ABI 291.\n\n```\neffect choose_repolu_targets_draw(self);\n```"
-            }
-            "resolve_xinfu_guolun" => {
-                "Active effect: the owner privately selects and publicly reveals one target hand card, then may cancel or publicly reveal one own hand/equipment card. A successful choice atomically exchanges both cards into the opposite hands; the original owner of the lower physical rank draws one card, while a tie draws none. Requires Rule VM ABI 294.\n\n```\neffect resolve_xinfu_guolun(self, event_source);\n```"
-            }
-            "owner_alive_shan_used_by_owner_or_during_owner_turn" => {
-                "Card-used trigger filter: the owner is alive, the logical card is Shan, and either the owner used it or it was used during the owner's current turn. Requires Rule VM ABI 287."
-            }
-            "owner_alive_other_phase_play_skill_pile_nonempty" => {
-                "Play-phase trigger filter: the owner and entering player are distinct and alive, and the originating skill's public pile is nonempty. Requires Rule VM ABI 287."
             }
             "choose_other_targets_by_skipped_phase_count_damage" => {
                 "Effect: forces the owner to choose one to X distinct living other players, where X is this turn's current skipped-phase count, then deals the supplied amount to each in submitted order. Requires Rule VM ABI 55.\n\n```\neffect choose_other_targets_by_skipped_phase_count_damage(self, 1);\n```"
             }
-            "owner_is_target_other_hand_nonempty" => {
-                "Phase trigger filter: the owner is the entering Play- or Draw-phase player and at least one other living player has a hand card. Requires Rule VM ABI 53."
-            }
-            "owner_is_target_positive_draw_other_hand_nonempty" => {
-                "Draw-phase trigger filter: the living owner is entering an unfixed Draw phase with a positive pending draw count and at least one other living player has a hand card. Requires Rule VM ABI 311."
-            }
-            "owner_source_first_target_black_card_any_target_other_discardable_hand_equip" => {
-                "Card-target trigger filter: the living owner used a black card, this is its first target event, and at least one other target has a discardable hand/equipment card. Requires Rule VM ABI 313."
-            }
-            "owner_source_play_card_matches_remembered_category" => {
-                "Card-used trigger filter: during the owner's Play phase, the used card's effective basic/trick/equipment category matches the category remembered by this skill instance. Requires Rule VM ABI 53."
-            }
-            "owner_phase_gift_target_is_source" => {
-                "Death trigger filter: the killer matches this skill instance's delayed Play-phase gift target. Requires Rule VM ABI 53."
-            }
-            "owner_phase_gift_target_is_target" => {
-                "Play-phase-end trigger filter: the ending phase player matches this skill instance's delayed gift target. Requires Rule VM ABI 53."
-            }
-            "owner_source_sha_resolved_has_gainable_cards_and_recipient" => {
-                "Sha-resolved trigger filter: the living owner used this Sha, at least one physical Sha/Shan group remains in discard, and at least one living recipient is neither the owner nor an original target. Requires Rule VM ABI 54."
-            }
-            "owner_is_target_tied_max_hand" => {
-                "Phase trigger filter: the living owner is the event player and ties for the largest hand among living players. Requires Rule VM ABI 55."
-            }
-            "owner_is_target_tied_max_hp" => {
-                "Phase trigger filter: the living owner is the event player and ties for the highest current HP among living players. Requires Rule VM ABI 55."
-            }
-            "owner_is_target_tied_max_equip_nonempty" => {
-                "Phase trigger filter: the living owner is the event player, has at least one equipment card, and ties for the largest equipment count among living players. Requires Rule VM ABI 55."
-            }
-            "owner_is_target_skipped_phase_count_positive" => {
-                "Phase trigger filter: the living owner is the event player and at least one phase has been skipped this turn. Requires Rule VM ABI 55."
-            }
-            "owner_discarded_has_hand_once_per_phase" => {
-                "Cards-moved trigger filter: the living owner discarded at least one hand/equipment card, still has hand cards, and has not accepted this trigger in the current phase. Requires Rule VM ABI 56."
-            }
-            "owner_alive_lost_hand_this_turn" => {
-                "Phase-end trigger filter: the living owner lost at least one hand/equipment card during the current turn. Requires Rule VM ABI 405."
-            }
-            "owner_source_first_sha_this_play_phase" => {
-                "Card-used trigger filter: the living owner used the first logical Sha of their current Play phase. Requires Rule VM ABI 407."
-            }
-            "owner_source_damage_target_distance_at_most_one_empty_equip_slot_unused" => {
-                "Damage trigger filter: the owner dealt damage to a target within distance 1, has an enabled empty equipment slot, and has not fired this turn. Requires Rule VM ABI 379."
-            }
-            "owner_source_first_sha_target_this_turn" => {
-                "Card-targeted trigger filter: this target belongs to the owner's first logical Sha of the current turn. Requires Rule VM ABI 379."
-            }
-            "owner_alive_other_phase_play_end_twzhengjian_condition" => {
-                "Play-phase-end filter: another living player failed the current Zhengjian branch (no non-basic use or no gain), and can pay unless Zhengjian has awakened. Requires Rule VM ABI 381."
-            }
-            "owner_source_sha_target_twzhenxi_available_once_per_turn" => {
-                "Card-targeted filter: once per turn, the owner's Sha target has discardable hand cards or a field card that can move to another player. Requires Rule VM ABI 382."
-            }
-            "owner_source_first_target_damage_card_once_per_turn" => {
-                "Card-targeted filter: the first declared target of the owner's Sha or damage trick, once per turn. Requires Rule VM ABI 384."
-            }
-            "owner_outside_turn_discarded_red_cards_in_discard" => {
-                "Cards-moved filter: outside the owner's turn, at least one red card discarded by the owner remains in the shared discard pile. Requires Rule VM ABI 384."
-            }
-            "resolve_twtianyu" => {
-                "TW Tianyu resolver: Zhenxi discards up to distance hand cards and/or moves one target field card; Yangshi adds a permanent attack-range mark unless all others are already in range, then gains a Sha. Requires Rule VM ABI 382."
-            }
-            "resolve_twwujing" => {
-                "TW Wujing resolver: Fenghan chooses up to the triggering card's target count to draw one each; Congji chooses red event cards still in discard and gives them to one other player. Requires Rule VM ABI 384."
-            }
             "reveal_uniform_hand_draw_self_choose_others" => {
                 "Effect: publicly reveals the owner's current hand. If every card has one uniform effective color, the owner chooses zero to the current hand count of other living players; the chosen players and owner each draw one in canonical seat order. Requires Rule VM ABI 56.\n\n```\neffect reveal_uniform_hand_draw_self_choose_others(self);\n```"
-            }
-            "owner_source_single_target_sha_or_black_ordinary_trick_current_play_phase_unused" => {
-                "Card-used trigger filter: during the owner's Play phase, the owner used a single-target Sha or black ordinary trick and this skill has not completed in the current phase. Requires Rule VM ABI 57."
-            }
-            "owner_is_target_male_source_has_discardable_equipment" => {
-                "Damage-before trigger filter: the living owner is the damage target, the living source is male/double-sex, and the owner can discard an effective equipment card from hand/equipment. Requires Rule VM ABI 57."
             }
             "choose_card_user_or_add_target" => {
                 "Effect: chooses another legal target of the suspended single-target Sha/ordinary trick. That player may give one hand card and become the user, or become an extra target. Requires Rule VM ABI 57.\n\n```\neffect choose_card_user_or_add_target(self, event_card);\n```"
@@ -1124,26 +798,11 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "choose_discard_equipment_prevent_current_damage" => {
                 "Effect: forces one effective equipment card to be discarded from hand/equipment, then prevents the entire bound pre-resolution damage segment. Requires a damage_before trigger and Rule VM ABI 398.\n\n```\neffect choose_discard_equipment_prevent_current_damage(self);\n```"
             }
-            "owner_alive_other_turn_ended_no_card_targeted_other" => {
-                "Turn-ended trigger filter: the living owner is not the living ending player, and that player used no card targeting another player during the ended turn. Requires Rule VM ABI 58."
-            }
-            "owner_alive_other_turn_ended_card_targeted_other_no_damage_other" => {
-                "Turn-ended trigger filter: the living owner is not the living ending player, and that player targeted another player with a card but dealt no damage to another player during the ended turn. Requires Rule VM ABI 146."
-            }
-            "owner_alive_phase_targeted_hp_changed_can_use_wanjian" => {
-                "Phase-any-end filter: the living owner was named as a card target and their actual HP changed during the ending phase, and a source-free Wanjian is currently legal. Requires Rule VM ABI 98."
-            }
-            "owner_alive_phase_targeted_hp_unchanged_can_use_juedou" => {
-                "Phase-any-end filter: the living owner was named as a card target and their actual HP did not change during the ending phase, and a source-free Juedou is currently legal. Requires Rule VM ABI 98."
-            }
             "choose_move_target_equipment_or_draw" => {
                 "Effect: lets the owner cancel, draw one, or move one compatible equipment card from the other player into the owner's matching slot, replacing an occupied slot normally. Requires Rule VM ABI 58.\n\n```\neffect choose_move_target_equipment_or_draw(self, event_player);\n```"
             }
             "choose_move_target_equipment_and_or_draw" => {
                 "Effect: lets the owner cancel, draw one, move one compatible equipment card from the other player into the owner's matching slot, or choose both available actions in move-then-draw order. Requires Rule VM ABI 146.\n\n```\neffect choose_move_target_equipment_and_or_draw(self, event_player);\n```"
-            }
-            "owner_source_sha_direct_damage_before" => {
-                "Damage-before trigger filter: the living owner is the source of direct logical-Sha damage and the event player is its living target. Chain-propagated damage is excluded. Requires Rule VM ABI 147."
             }
             "choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both" => {
                 "Effect: the bound direct-Sha damage target discards up to the source's current attack range from hand/equipment or increases the damage and chain base by one. A physical source weapon forces discard followed by the increase, then is discarded. Requires Rule VM ABI 147.\n\n```\neffect choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both(self, event_player);\n```"
@@ -1163,35 +822,14 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "give_all_equipment_choose_recover_or_damage" => {
                 "Effect: gives all current equipment to one recipient. After movement triggers, that recipient may cancel target selection to recover the owner by the captured count, or damage one to that many distinct players in current attack range. Requires Rule VM ABI 58.\n\n```\neffect give_all_equipment_choose_recover_or_damage(self, event_source);\n```"
             }
-            "owner_source_sha_has_weapon" => {
-                "Damage-before trigger filter: the living owner is the source of Sha damage, the event player is its living target, and the owner has a physical weapon equipped. Requires Rule VM ABI 59."
-            }
             "choose_target_discard_weapon_range_hand_or_increase_damage" => {
                 "Effect: the bound Sha damage target may discard exactly the source's physical weapon range in hand cards. If the target cannot or cancels, the damage and its chain base increase by one; if paid, the selected hand cards and the source's current physical weapon are discarded in that order. Requires Rule VM ABI 59.\n\n```\neffect choose_target_discard_weapon_range_hand_or_increase_damage(self, event_player);\n```"
-            }
-            "owner_source_other_damage_before_once_per_turn" => {
-                "Damage-before trigger filter: once per current turn, the living owner is the damage source and the living event player is another player. Requires Rule VM ABI 322."
             }
             "choose_target_discard_distance_hand_or_increase_damage" => {
                 "Effect: the bound damage target may discard exactly `max(1, 4-distance from source)` current hand cards. If the target has fewer cards or cancels, the current damage and chain base increase by one. Requires Rule VM ABI 322.\n\n```\neffect choose_target_discard_distance_hand_or_increase_damage(self, event_player);\n```"
             }
-            "owner_alive_other_turn_ended_no_damage_other" => {
-                "Turn-ended trigger filter: the living owner is not the living ending player, and that player dealt no damage to any other player during the ended turn. Requires Rule VM ABI 323."
-            }
-            "owner_alive_gained_two_this_turn_can_compare_other" => {
-                "End-phase trigger filter: the living owner gained at least two physical cards during the current turn, has a hand card, and another living player has a hand card for comparison. Card gains are tracked only when loaded content needs this filter. Requires Rule VM ABI 325."
-            }
             "choose_draw_view_two_gain_or_move_equipment" => {
                 "Effect: lets the owner cancel, draw one card, privately inspect up to two deterministically sampled current hand cards from the other player and gain one, or move one compatible equipment card into the owner's matching slot. Requires Rule VM ABI 323.\n\n```\neffect choose_draw_view_two_gain_or_move_equipment(self, event_player);\n```"
-            }
-            "owner_source_or_target_hand_count_differs_once_per_turn" => {
-                "Damage trigger filter: the living owner is the damage source or target, some living player's hand count differs from the owner's, and this skill has not fired in the current turn. Requires Rule VM ABI 60."
-            }
-            "owner_hand_compare_participant" => {
-                "Hand-comparison trigger filter: the living owner is either the initiator or target of the current comparison."
-            }
-            "owner_skill_pile_nonempty_<def>" => {
-                "Trigger filter: the owner's named skill pile (keyed by the skill definition id literal) holds at least one card. Matches upstream getExpansions(...).length > 0 gates."
             }
             "gain_from_skill_pile" => {
                 "取用（expansion P1，ADR 0641）：从自己的技能牌堆（武将牌上）选一张牌加入手牌。参数 (player, self_skill)。"
@@ -1205,188 +843,8 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "rearrange_pile_to_deck_top" => {
                 "Effect: select count cards from the specified skill pile and place them on top of the draw pile.\n\n```\neffect rearrange_pile_to_deck_top(self, self_skill, 1234567890, 3);\n```"
             }
-            "resolve_qianlong" => {
-                "Effect: authoritative machine for 潜龙 — after damage, view the top three deck cards and gain up to lost-HP count, the rest go to deck bottom.\n\n```\neffect resolve_qianlong(self, self_skill);\n```"
-            }
-            "resolve_jsrgzuozhan" => {
-                "Effect: authoritative machine for 坐瞻 — at game start choose up to two other players; gain an attack-range mark equal to min(their highest HP, 5) and mark them as 坐瞻 allies.\n\n```\neffect resolve_jsrgzuozhan(self, self_skill);\n```"
-            }
-            "resolve_jsrgzuozhan_gain" => {
-                "Effect: authoritative machine for the 坐瞻 group face — after a marked ally dies, have one surviving 坐瞻 ally gain up to X basic cards of distinct names from the discard pile.\n\n```\neffect resolve_jsrgzuozhan_gain(self, self_skill, event_player);\n```"
-            }
-            "resolve_twmouzhi" => {
-                "Effect: authoritative machine for 谋制 — mode 0 (damage_before): if the damage card's color matches the recorded last damage color, prevent the damage; mode 1 (damage): record the event card's color (red/black, cleared when colorless).\n\n```\neffect resolve_twmouzhi(self, self_skill, mode, event_card);\n```"
-            }
-            "resolve_twdaigui" => {
-                "Effect: authoritative machine for 待归 (slice 1) — at play-phase end with a uniform-colored hand, choose up to hand-count players and reveal that many cards from the deck bottom (per-target picks follow in a later slice).\n\n```\neffect resolve_twdaigui(self, self_skill, stage, count);\n```"
-            }
-            "resolve_twmitu" => {
-                "Effect: authoritative machine for 迷途 (slice 1) — at your prepare phase choose up to three players; each draws two cards tagged 迷途 and shows them publicly (compare rounds follow in a later slice).\n\n```\neffect resolve_twmitu(self, self_skill, stage, count);\n```"
-            }
-            "resolve_qiantun" => {
-                "Effect: authoritative machine for 谦吞 — once per play phase, have another player show any number of hand cards (their only compare cards), then compare: if you win, take the shown cards; otherwise take their other hand cards.\n\n```\neffect resolve_qiantun(self, self_skill);\n```"
-            }
-            "resolve_yangming" => {
-                "Effect: authoritative machine for 养名 — once per play phase, compare with one player; if the target wins, they draw once per prior loss and you recover 1; otherwise count a loss and you may repeat.\n\n```\neffect resolve_yangming(self, self_skill);\n```"
-            }
-            "resolve_canyun" => {
-                "Effect: authoritative machine for 残殒 — discard one card and pick 1-2 other players; compare equipment counts: if you have more they recover 1, if equal they draw 1, if they have more they lose 1 HP; you draw 1 when a target is at 1 HP.\n\n```\neffect resolve_canyun(self, self_skill);\n```"
-            }
-            "resolve_hengwu" => {
-                "Effect: authoritative machine for 横骛 — after using or playing a card whose suit is absent from your hand, draw one card per equipment of that suit on the field.\n\n```\neffect resolve_hengwu(self, self_skill, event_card);\n```"
-            }
-            "resolve_biaozhao3" => {
-                "Effect: authoritative machine for 表召·归 — at your prepare phase with a 表 card present: discard it, then optionally have one player draw up to the field's largest hand count (max 5) and recover 1.\n\n```\neffect resolve_biaozhao3(self, self_skill);\n```"
-            }
-            "resolve_chuanyun" => {
-                "Effect: authoritative machine for 穿云 — after your Sha targets a player with equipment, randomly discard one of their equipped cards.\n\n```\neffect resolve_chuanyun(self, self_skill, event_player, event_card);\n```"
-            }
-            "resolve_biaozhao2" => {
-                "Effect: authoritative machine for 表召·应 — when a discard matches the 表 card's suit and rank, give the 表 card to the discarder; you lose 1 HP.\n\n```\neffect resolve_biaozhao2(self, self_skill, event_player);\n```"
-            }
-            "resolve_dcniji" => {
-                "Effect: authoritative machine for 逆击 — mode 0 (targeted by a non-equipment card): draw a card and tag it 逆击; mode 1 (your end phase): discard all tagged cards from your hand.\n\n```\neffect resolve_dcniji(self, self_skill, mode, event_card);\n```"
-            }
-            "resolve_dcmoukui" => {
-                "Effect: authoritative machine for 谋溃 — after your Sha targets a player, choose one or both: draw a card, or discard one of the target's hand cards.\n\n```\neffect resolve_dcmoukui(self, self_skill, stage, target);\n```"
-            }
-            "resolve_zhongyan" => {
-                "Effect: authoritative machine for 忠言 — once per play phase, reveal the top three deck cards; a chosen player with hand cards exchanges one of them for one revealed card.\n\n```\neffect resolve_zhongyan(self, self_skill, stage);\n```"
-            }
-            "resolve_chumei" => {
-                "Effect: authoritative machine for 狐魅 — during your play phase, choose a player whose HP is at most the damage you dealt this turn; they draw a card, give you a card, or recover 1 HP.\n\n```\neffect resolve_chumei(self, self_skill, stage);\n```"
-            }
-            "owner_is_target_damage_amount_gt_one" => {
-                "Trigger filter: the owner is the damage target and the incoming damage amount is greater than one (照月狮子盔 gate)."
-            }
-            "owner_phase_end_lost_cards" => {
-                "Trigger filter: at the owner\'s own end phase, if they have lost at least one card this turn (镇抚 gate)."
-            }
-            "owner_alive_second_global_dying" => {
-                "Trigger filter: after the second dying window of the whole match resolves (觉醒 gate; fires exactly once)."
-            }
-            "owner_is_target_source_hp_gt_owner_or_source_damaged_owner" => {
-                "Trigger filter: you are targeted by another player\'s card, and their hp is higher than yours, or they have damaged you this match (粗遐 gate)."
-            }
-            "owner_is_target_owner_hp_gt_source_or_source_damaged_owner" => {
-                "Trigger filter: you are targeted by another player\'s card, and your hp is higher than theirs, or they have damaged you this match (未命 gate)."
-            }
-            "owner_is_target_sanshou_type_tracked" => {
-                "Trigger filter: the owner is the damage target (carries the used-type bitmap track for 三首)."
-            }
-            "owner_source_in_turn_target_unharmed_card_actions_ge_target_hp" => {
-                "Trigger filter: the owner is the damage source during their own turn, the target has never taken damage this match, and the owner\'s lifetime card actions reach the target\'s hp (威临 gate)."
-            }
-            "owner_used_and_was_targeted_this_turn_in_range" => {
-                "Trigger filter: at any player\'s end phase, if this turn you have used or played a card, been named a card target, and someone is within your attack range (直谏 gate)."
-            }
-            "resolve_qiangyong" => {
-                "Effect: authoritative machine for 羌勇 — when your Sha deals damage, discard X cards from the wounded player (X = Sha uses this turn); if they then have no hand cards this damage is increased by one.\n\n```\neffect resolve_qiangyong(self, event_player);\n```"
-            }
-            "resolve_twxiongjun" => {
-                "Effect: authoritative machine for 雄军 — after the owner deals damage, every living player owning 雄军 draws one card.\n\n```\neffect resolve_twxiongjun(self);\n```"
-            }
-            "owner_is_target_source_hp_gt_owner_per_role_turn" => {
-                "Trigger filter: once per role turn, when the owner is targeted by a card and the source has more HP than the owner."
-            }
-            "resolve_dcqiaolve" => {
-                "Effect: authoritative machine for 巧略 — discard one of your cards first, then take a random hand card from the event target (cost-added completion).\n\n```\neffect resolve_dcqiaolve(self);\n```"
-            }
-            "resolve_yixiang" => {
-                "Effect: authoritative machine for 义襄 — randomly gain a basic card from the deck that is not already in your hand (once per role turn when targeted).\n\n```\neffect resolve_yixiang(self);\n```"
-            }
-            "resolve_xinfu_qiai" => {
-                "Effect: authoritative machine for 求援 — once per game, while dying, every other player in seat order hands you one hand/equip card (players with none are skipped).\n\n```\neffect resolve_xinfu_qiai(self);\n```"
-            }
-            "resolve_olwenren" => {
-                "Effect: authoritative machine for 温仁 — once per play phase, pick any number of targets; each draws 1 if they have no hand cards and 1 more if their hand count is not greater than yours.\n\n```\neffect resolve_olwenren(self);\n```"
-            }
-            "resolve_spolaige" => {
-                "Effect: authoritative machine for 霸业 — after the second dying window of the match, exchange 西向 for 朔北, draw up to your max HP, and recover up to your max HP.\n\n```\neffect resolve_spolaige(self);\n```"
-            }
-            "resolve_olzhijie" => {
-                "Effect: authoritative machine for 直谏 — at any player\'s end phase, choose a player within your attack range and deal 1 damage to them.\n\n```\neffect resolve_olzhijie(self);\n```"
-            }
-            "resolve_olsuyi" => {
-                "Effect: authoritative machine for 俗义 — once per play phase, search the deck for equipment the target can use, have them equip it, then use a virtual Sha against them.\n\n```\neffect resolve_olsuyi(self, event_source);\n```"
-            }
-            "resolve_olqiaozhi" => {
-                "Effect: authoritative machine for 巧织 — discard one card, reveal the top two deck cards, and gain one of them (tagged 巧织; while you hold one you cannot activate again).\n\n```\neffect resolve_olqiaozhi(self, stage);\n```"
-            }
-            "resolve_dczhee" => {
-                "Effect: authoritative machine for 拓跋? — on entry/game start search the draw pile, and at every end phase search the discard pile, for a Lightning to hang as your judge card.\n\n```\neffect resolve_dczhee(self, mode);\n```"
-            }
-            "resolve_dchaoxian" => {
-                "Effect: authoritative machine for 朝献 — once per game, shuffle every rank-3 card from the discard pile back into the deck bottom and collect all rank-3 hand cards from other players.\n\n```\neffect resolve_dchaoxian(self);\n```"
-            }
-            "resolve_xiangshu" => {
-                "Effect: authoritative machine for 襄戍 — once per game, a wounded target recovers X hp and draws X cards (X = min(5, damage you dealt this turn)).\n\n```\neffect resolve_xiangshu(self, event_target);\n```"
-            }
-            "resolve_nhlundao" => {
-                "Effect: authoritative machine for 论道 — after taking damage, if the source is alive with a different hand count: draw one when your hand is larger, otherwise discard one of the source\'s cards.\n\n```\neffect resolve_nhlundao(self, event_source);\n```"
-            }
-            "resolve_sanshou" => {
-                "Effect: authoritative machine for 三首 — reveal the top three deck cards; if any revealed card is of a type never used this match, the incoming damage is cancelled.\n\n```\neffect resolve_sanshou(self);\n```"
-            }
-            "resolve_starcuxia_weiming" => {
-                "Effect: authoritative machine for 粗遐/未命 — the card user randomly discards a hand card; the owner draws one if the dominance condition still holds.\n\n```\neffect resolve_starcuxia_weiming(self, event_source, variant);\n```"
-            }
-            "resolve_zhongjie" => {
-                "Effect: authoritative machine for 张介 — when you die, choose another player: they gain 1 max hp, recover 1 hp, and draw a card.\n\n```\neffect resolve_zhongjie(self);\n```"
-            }
-            "resolve_dingce" => {
-                "Effect: authoritative machine for 定策 — after taking damage, discard one of your hand cards, then the damage source discards one (you choose it); same-color bonus is deferred (card absent from the pool).\n\n```\neffect resolve_dingce(self, event_source);\n```"
-            }
-            "resolve_meiyong" => {
-                "Effect: authoritative machine for 姝勇 — when you use or play a Sha, take one card from another player\'s hand/equip/judge area, then they draw one.\n\n```\neffect resolve_meiyong(self);\n```"
-            }
-            "resolve_mbzhenann" => {
-                "Effect: authoritative machine for 镇南 — when targeted by a trick whose target count exceeds max(1, the user\'s hp), discard one card and deal 1 damage to any character.\n\n```\neffect resolve_mbzhenann(self);\n```"
-            }
-            "resolve_friendbiwei" => {
-                "Effect: authoritative machine for 鄙位 — discard the highest-rank hand card, then the target discards every hand card of rank >= it; if they discarded nothing the skill\'s use is refunded.\n\n```\neffect resolve_friendbiwei(self, event_source);\n```"
-            }
-            "resolve_chulao" => {
-                "Effect: authoritative machine for 黜老 — discard one card, then for each selected target of a distinct group the owner picks one of their cards to discard; spade discards draw.\n\n```\neffect resolve_chulao(self);\n```"
-            }
-            "resolve_dcanxu" => {
-                "Effect: authoritative machine for 暗蓄 — the player with fewer hand cards takes one card from the other; non-spade gain draws owner one, equalized hands recover owner one.\n\n```\neffect resolve_dcanxu(self);\n```"
-            }
-            "resolve_duoduan" => {
-                "Effect: authoritative machine for 度断 — once per turn when targeted by a Sha, recast one card, then choose: the Sha user draws two and the Sha has no effect on you, or the user discards a card and you cannot respond.\n\n```\neffect resolve_duoduan(self, event_source, event_card);\n```"
-            }
-            "resolve_gaoyuan" => {
-                "Effect: authoritative machine for 告援 — when targeted by a Sha, discard one card to redirect the Sha to a legal target holding a 诤 mark.\n\n```\neffect resolve_gaoyuan(self, event_source, event_card);\n```"
-            }
             "reset_linked_selected_targets" => {
                 "Effect: resets every selected linked target, then deals 1 fire damage to each (duansuo).\n\n```\neffect reset_linked_selected_targets(self);\n```"
-            }
-            "resolve_mbbeiming" => {
-                "Effect: authoritative machine for 孛明 — at game start choose up to two players; each gains a weapon from the deck whose attack range equals the number of suits in their hand.\n\n```\neffect resolve_mbbeiming(self, self_skill, stage);\n```"
-            }
-            "resolve_shuaiyan" => {
-                "Effect: authoritative machine for 率言 — at your discard phase with more than one hand card, choose another player; they give you one card from their hand or equipment.\n\n```\neffect resolve_shuaiyan(self, self_skill, stage);\n```"
-            }
-            "resolve_zhengjian" => {
-                "Effect: authoritative machine for 诤荐 — mode 0: at your end phase, grant a 诤 mark to one player; mode 1/2: a marked player's card use or play increments their mark; mode 3: at your turn begin, each marked player draws min(5, max HP, marks) and marks clear.\n\n```\neffect resolve_zhengjian(self, self_skill, stage, event_player);\n```"
-            }
-            "resolve_qinmian" => {
-                "Effect: authoritative machine for 勤勉 — mode 0: at your prepare phase or after damage, draw that many cards tagged 勤勉; mode 1: at an end phase, optionally discard all tagged cards to damage the current turn player equal to their count (or 1 if your whole hand is tagged).\n\n```\neffect resolve_qinmian(self, self_skill, mode, amount);\n```"
-            }
-            "resolve_jsrgdaoren" => {
-                "Effect: authoritative machine for 蹈仁 — give one hand card to another player, then deal 1 damage to every player inside both attack ranges.\n\n```\neffect resolve_jsrgdaoren(self, self_skill);\n```"
-            }
-            "resolve_duwang" => {
-                "Effect: authoritative machine for 度望 — at game start, place the first five non-Sha cards from the deck top onto the own skill pile.\n\n```\neffect resolve_duwang(self, self_skill);\n```"
-            }
-            "resolve_quanjia" => {
-                "Effect: authoritative machine for 拳甲 — randomly view (2+marks) cards of the damage source's hand; use a virtual Sha on them if any, else gain a mark.\n\n```\neffect resolve_quanjia(self, self_skill, event_source, event_player);\n```"
-            }
-            "resolve_pxqixian" => {
-                "Effect: authoritative machine for 祁县 — recast one equip card as a virtual Sha or Guohe used on another player.\n\n```\neffect resolve_pxqixian(self, self_skill, 0, 0);\n```"
-            }
-            "resolve_dcbingji" => {
-                "Effect: authoritative machine for 秉纪 — validates hand suit uniformity and per-turn suit history, then uses a virtual Sha or Tao.\n\n```\neffect resolve_dcbingji(self, self_skill, 0, 0);\n```"
             }
             "choose_hand_cards_to_skill_pile" => {
                 "Effect: select between min and max cards from your hand and place them into your own skill pile.\n\n```\neffect choose_hand_cards_to_skill_pile(self, self_skill, 1, hand_count(self));\n```"
@@ -1400,6 +858,6 @@ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
             "place_top_deck_to_expansion" => {
                 "Effect: places the top N cards of the draw pile into your own skill pile (the cards placed on your general card), creating the pile if needed.\n\n```\neffect place_top_deck_to_expansion(self, self_skill, 1234567890, 2);\n```"
             }
-            _ => return super::discard_skill_pile::documentation(word),
+            _ => return super::skill_resolvers::documentation(word),
     })
 }

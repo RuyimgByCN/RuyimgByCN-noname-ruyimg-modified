@@ -29,6 +29,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "crates" / "engine-native" / "src" / "catalog.rs"
+# catalog 模块的子文件（`impl CardKind` 等已拆到 catalog/ 下）一并视为目录本身。
+CATALOG_DIR = ROOT / "crates" / "engine-native" / "src" / "catalog"
+
+
+def catalog_files() -> list[Path]:
+    return [CATALOG] + (sorted(CATALOG_DIR.rglob("*.rs")) if CATALOG_DIR.is_dir() else [])
 
 #: 六个带卡牌的 U05 子包（xianjian / ow 的 cards 为空）。
 PACKS = [
@@ -75,7 +81,7 @@ def kinds() -> set[str]:
 
 
 def catalog_map() -> dict[str, str]:
-    text = CATALOG.read_text(encoding="utf-8")
+    text = "\n".join(p.read_text(encoding="utf-8") for p in catalog_files())
     return {kind: variant for variant, kind in re.findall(r'CardKind::([A-Za-z0-9_]+)\s*=>\s*"([a-z0-9_]+)"', text)}
 
 
@@ -83,7 +89,7 @@ def wired_kinds(all_kinds: set[str], mapping: dict[str, str]) -> set[str]:
     blobs = [
         path.read_text(encoding="utf-8", errors="replace")
         for path in (ROOT / "crates").rglob("*.rs")
-        if path.name != "catalog.rs"
+        if path.name != "catalog.rs" and CATALOG_DIR not in path.parents
     ]
     wired = set()
     for kind in all_kinds:

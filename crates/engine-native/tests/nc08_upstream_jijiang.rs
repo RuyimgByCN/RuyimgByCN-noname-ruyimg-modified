@@ -98,7 +98,7 @@ fn upstream_jijiang_uses_helpers_not_own_cards() {
 fn upstream_jijiang_lord_gate_is_design_difference() {
     let state = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/state.rs"
+        "/src/state/core_ops.rs"
     ))
     .expect("读 state");
     let idx = state.find("pub fn is_lord").expect("is_lord");

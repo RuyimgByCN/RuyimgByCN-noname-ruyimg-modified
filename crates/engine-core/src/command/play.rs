@@ -120,17 +120,30 @@ mod tests {
 
 mod pack_damage_card_context;
 pub(crate) use pack_damage_card_context::*;
+
+mod redirect_saved_sha_target;
+pub(crate) use redirect_saved_sha_target::*;
 mod current_card_use_enhancement_extra_targets;
 pub(crate) use current_card_use_enhancement_extra_targets::*;
 mod handle_card_with_policies_and_flags;
 pub(crate) use handle_card_with_policies_and_flags::*;
+mod source_free_ordinary_trick_kinds;
+pub(crate) use source_free_ordinary_trick_kinds::*;
 mod skill_card_target_spec_with_options;
 pub(crate) use skill_card_target_spec_with_options::*;
+mod play_as_kind_with_extra_damage_flags;
+pub(crate) use play_as_kind_with_extra_damage_flags::*;
 mod source_free_wuzhong_has_legal_use;
 pub(crate) use source_free_wuzhong_has_legal_use::*;
+mod saved_independent_trick_damage_card_and_bonus;
+pub(crate) use saved_independent_trick_damage_card_and_bonus::*;
 mod open_sha_response_step;
 pub(crate) use open_sha_response_step::*;
+mod use_youdishenru_for_saved_sha;
+pub(crate) use use_youdishenru_for_saved_sha::*;
 mod apply_deferred_trick;
 pub(crate) use apply_deferred_trick::*;
+mod saved_aoe_base_damage;
+pub(crate) use saved_aoe_base_damage::*;
 mod play_prompted_sha_source;
 pub(crate) use play_prompted_sha_source::*;

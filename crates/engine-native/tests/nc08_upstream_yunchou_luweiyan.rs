@@ -146,7 +146,7 @@ fn upstream_luweiyan_shuigong_target_needs_equip() {
 fn upstream_luweiyan_zone_difference_is_registered() {
     let pc = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_rules.rs"
     ))
     .expect("读 play_card");
     let idx = pc.find("ycnluweiyan").expect("厉焰转化点");

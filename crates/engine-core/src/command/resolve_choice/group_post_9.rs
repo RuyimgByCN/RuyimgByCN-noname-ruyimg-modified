@@ -8,5 +8,10 @@ use super::*;
 
 mod resolve_choose_spxizhan_discard_or_lose;
 pub(crate) use resolve_choose_spxizhan_discard_or_lose::*;
+
+mod resolve_dcjue_choice;
+pub(crate) use resolve_dcjue_choice::*;
 mod resolve_houfeng_choice;
 pub(crate) use resolve_houfeng_choice::*;
+mod resolve_tongduo_choice;
+pub(crate) use resolve_tongduo_choice::*;

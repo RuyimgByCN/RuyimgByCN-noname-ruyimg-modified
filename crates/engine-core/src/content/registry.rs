@@ -627,6 +627,8 @@ mod tests {
 mod default_view_as_card_count;
 pub use default_view_as_card_count::*;
 mod map_filter;
+mod map_filter_other;
+mod map_filter_source_target;
 pub(crate) use map_filter::*;
 mod valid_group_filter_tag;
 pub use valid_group_filter_tag::*;
@@ -634,3 +636,4 @@ pub use valid_group_filter_tag::*;
 mod new;
 
 mod load_package_inner;
+mod load_package_checks;

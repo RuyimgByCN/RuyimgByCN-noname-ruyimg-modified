@@ -109,7 +109,7 @@ fn upstream_shijianhuisu_recalls_equips() {
 fn upstream_shijianhuisu_target_gate_note() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/step/swd_card_effects.rs"
+        "/src/content/host/step/swd_lingjian_cards.rs"
     ))
     .expect("读 swd_card_effects");
     let idx = src.find("SwdShijianhuisuCard =>").expect("时间回溯分支");

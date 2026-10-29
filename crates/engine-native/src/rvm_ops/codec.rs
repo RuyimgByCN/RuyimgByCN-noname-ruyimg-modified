@@ -1,0 +1,381 @@
+//! VM 效果请求的字节编解码（入队前持久化与恢复）。
+
+use super::*;
+
+pub(super) fn push_u32(w: &mut Vec<u8>, v: u32) {
+    w.extend_from_slice(&v.to_le_bytes());
+}
+pub(super) fn push_i32(w: &mut Vec<u8>, v: i32) {
+    w.extend_from_slice(&v.to_le_bytes());
+}
+
+/// 排队效果编码。只覆盖 `accept_effect` 放行的变体。
+pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
+    push_u32(w, effects.len() as u32);
+    for e in effects {
+        match e {
+            EffectRequest::RecoverHp { source, player, amount } => {
+                w.push(1);
+                push_u32(w, source.raw());
+                push_u32(w, player.raw());
+                push_u32(w, *amount);
+            }
+            EffectRequest::DrawCards { player, count } => {
+                w.push(2);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+            }
+            EffectRequest::DealDamage {
+                source,
+                target,
+                amount,
+                is_lose_hp,
+                nature,
+            } => {
+                w.push(3);
+                push_u32(w, source.raw());
+                push_u32(w, target.raw());
+                push_u32(w, *amount);
+                w.push(u8::from(*is_lose_hp));
+                w.push(*nature);
+            }
+            EffectRequest::ChangeMaxHp { player, delta } => {
+                w.push(4);
+                push_u32(w, player.raw());
+                push_i32(w, *delta);
+            }
+            EffectRequest::AddMark { player, mark, delta } => {
+                w.push(5);
+                push_u32(w, player.raw());
+                push_u32(w, mark.raw());
+                push_i32(w, *delta);
+            }
+            EffectRequest::RemoveMark { player, mark, amount } => {
+                w.push(6);
+                push_u32(w, player.raw());
+                push_u32(w, mark.raw());
+                push_u32(w, *amount);
+            }
+            EffectRequest::DiscardFromHand { player, count } => {
+                w.push(7);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+            }
+            EffectRequest::DiscardFromHandEquip { player, count } => {
+                w.push(8);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+            }
+            EffectRequest::AddSkill { player, skill_def } => {
+                w.push(9);
+                push_u32(w, player.raw());
+                push_u32(w, skill_def.raw());
+            }
+            EffectRequest::RemoveSkill { skill } => {
+                w.push(10);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::GainTopCardToSkillPile { player, skill } => {
+                w.push(11);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::GainWholeSkillPile {
+                player,
+                skill,
+                pile_def,
+            } => {
+                w.push(12);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+                push_u32(w, *pile_def);
+            }
+            EffectRequest::GainAllSkillPileCards { player, skill } => {
+                w.push(13);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::GainFromSkillPile { player, skill } => {
+                w.push(14);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::DiscardSkillPile {
+                player,
+                skill,
+                pile_def,
+            } => {
+                w.push(15);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+                push_u32(w, *pile_def);
+            }
+            EffectRequest::StoreEventCardInSkillPile { player, card, skill } => {
+                w.push(16);
+                push_u32(w, player.raw());
+                push_u32(w, card.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::PlaceTopDeckToExpansion {
+                player,
+                skill,
+                pile_def,
+                count,
+            } => {
+                w.push(17);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+                push_u32(w, *pile_def);
+                push_u32(w, *count);
+            }
+            EffectRequest::EnterDying { player } => {
+                w.push(18);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::KillPlayer { player, killer } => {
+                w.push(19);
+                push_u32(w, player.raw());
+                push_u32(w, killer.raw());
+            }
+            EffectRequest::MoveCards { cards, to, from } => {
+                w.push(20);
+                push_u32(w, cards.len() as u32);
+                for c in cards {
+                    push_u32(w, c.raw());
+                }
+                push_u32(w, to.raw());
+                match from {
+                    Some(z) => {
+                        w.push(1);
+                        push_u32(w, z.raw());
+                    }
+                    None => w.push(0),
+                }
+            }
+            EffectRequest::RevealCards { cards, to } => {
+                w.push(21);
+                push_u32(w, cards.len() as u32);
+                for c in cards {
+                    push_u32(w, c.raw());
+                }
+                push_u32(w, to.len() as u32);
+                for p in to {
+                    push_u32(w, p.raw());
+                }
+            }
+            EffectRequest::SetTurnState { current, phase } => {
+                w.push(22);
+                push_u32(w, current.raw());
+                w.push(*phase);
+            }
+            EffectRequest::TakeFromHand { from, to } => {
+                w.push(23);
+                push_u32(w, from.raw());
+                push_u32(w, to.raw());
+            }
+            EffectRequest::DiscardAllOwnJudge { player, skill } => {
+                w.push(24);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::GainOtherSkillPileCards {
+                player,
+                target,
+                skill_def,
+                skill,
+            } => {
+                w.push(25);
+                push_u32(w, player.raw());
+                push_u32(w, target.raw());
+                push_u32(w, *skill_def);
+                push_u32(w, skill.raw());
+            }
+            // J1（规则 v328）：提交期挂起需要把开窗效果编码入档（此前该
+            // 变体从未在挂起队列中出现，编码面未覆盖）。
+            EffectRequest::DiscardHandEquipCount { player, count, skill } => {
+                w.push(26);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+                push_u32(w, skill.raw());
+            }
+            _ => unreachable!("accept_effect 已拒绝未编码变体"),
+        }
+    }
+}
+
+pub(super) struct Rd<'a> {
+    r: &'a [u8],
+}
+impl Rd<'_> {
+    fn u32(&mut self) -> Option<u32> {
+        if self.r.len() < 4 {
+            return None;
+        }
+        let (a, rest) = self.r.split_at(4);
+        self.r = rest;
+        Some(u32::from_le_bytes(a.try_into().ok()?))
+    }
+    fn i32(&mut self) -> Option<i32> {
+        self.u32().map(|v| v as i32)
+    }
+    fn u8(&mut self) -> Option<u8> {
+        let v = *self.r.first()?;
+        self.r = &self.r[1..];
+        Some(v)
+    }
+}
+
+/// 与 `enc_effects` 对偶。未知标签或尾部残留返回 None。
+pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
+    let mut rd = Rd { r: bytes };
+    let n = rd.u32()? as usize;
+    let mut out = Vec::new();
+    for _ in 0..n {
+        let tag = rd.u8()?;
+        let e = match tag {
+            1 => EffectRequest::RecoverHp {
+                source: rule_api::PlayerId::new(rd.u32()?),
+                player: rule_api::PlayerId::new(rd.u32()?),
+                amount: rd.u32()?,
+            },
+            2 => EffectRequest::DrawCards {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+            },
+            3 => EffectRequest::DealDamage {
+                source: rule_api::PlayerId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+                amount: rd.u32()?,
+                is_lose_hp: rd.u8()? == 1,
+                nature: rd.u8()?,
+            },
+            4 => EffectRequest::ChangeMaxHp {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                delta: rd.i32()?,
+            },
+            5 => EffectRequest::AddMark {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                mark: rule_api::MarkDefId::new(rd.u32()?),
+                delta: rd.i32()?,
+            },
+            6 => EffectRequest::RemoveMark {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                mark: rule_api::MarkDefId::new(rd.u32()?),
+                amount: rd.u32()?,
+            },
+            7 => EffectRequest::DiscardFromHand {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+            },
+            8 => EffectRequest::DiscardFromHandEquip {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+            },
+            9 => EffectRequest::AddSkill {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill_def: rule_api::SkillDefId::new(rd.u32()?),
+            },
+            10 => EffectRequest::RemoveSkill {
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            11 => EffectRequest::GainTopCardToSkillPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            12 => EffectRequest::GainWholeSkillPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+                pile_def: rd.u32()?,
+            },
+            13 => EffectRequest::GainAllSkillPileCards {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            14 => EffectRequest::GainFromSkillPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            15 => EffectRequest::DiscardSkillPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+                pile_def: rd.u32()?,
+            },
+            16 => EffectRequest::StoreEventCardInSkillPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            17 => EffectRequest::PlaceTopDeckToExpansion {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+                pile_def: rd.u32()?,
+                count: rd.u32()?,
+            },
+            18 => EffectRequest::EnterDying {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            19 => EffectRequest::KillPlayer {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                killer: rule_api::PlayerId::new(rd.u32()?),
+            },
+            20 => {
+                let n = rd.u32()? as usize;
+                let mut cards = Vec::with_capacity(n);
+                for _ in 0..n {
+                    cards.push(rule_api::CardId::new(rd.u32()?));
+                }
+                let to = rule_api::ZoneId::new(rd.u32()?);
+                let from = if rd.u8()? == 1 {
+                    Some(rule_api::ZoneId::new(rd.u32()?))
+                } else {
+                    None
+                };
+                EffectRequest::MoveCards { cards, to, from }
+            }
+            21 => {
+                let n = rd.u32()? as usize;
+                let mut cards = Vec::with_capacity(n);
+                for _ in 0..n {
+                    cards.push(rule_api::CardId::new(rd.u32()?));
+                }
+                let m = rd.u32()? as usize;
+                let mut to = Vec::with_capacity(m);
+                for _ in 0..m {
+                    to.push(rule_api::PlayerId::new(rd.u32()?));
+                }
+                EffectRequest::RevealCards { cards, to }
+            }
+            22 => EffectRequest::SetTurnState {
+                current: rule_api::PlayerId::new(rd.u32()?),
+                phase: rd.u8()?,
+            },
+            23 => EffectRequest::TakeFromHand {
+                from: rule_api::PlayerId::new(rd.u32()?),
+                to: rule_api::PlayerId::new(rd.u32()?),
+            },
+            24 => EffectRequest::DiscardAllOwnJudge {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            25 => EffectRequest::GainOtherSkillPileCards {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+                skill_def: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            // J1（规则 v328）：提交期挂起队列可含开窗效果（编码臂 26）。
+            26 => EffectRequest::DiscardHandEquipCount {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            _ => return None,
+        };
+        out.push(e);
+    }
+    if rd.r.is_empty() {
+        Some(out)
+    } else {
+        None
+    }
+}

@@ -31,7 +31,7 @@ youdishenru: {
 | 2 | 来源**不出杀 ⇒ 受 1 点伤害** | 来源（0 号）**掉血 1** | 通过 |
 | 3 | **登记差异**「无连用循环」 | 行为面一致（出杀后不再进入循环） | 确认 |
 
-**原生实现引用**：`engine/play_card.rs:1313`（`CardKind::Youdishenru`）。
+**原生实现引用**：`engine/play_card.rs:784`（`CardKind::Youdishenru`）。
 
 ## 3 夹具要点（**新增**）
 

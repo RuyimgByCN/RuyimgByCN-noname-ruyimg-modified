@@ -15,7 +15,12 @@ pub(crate) enum VirtualCardTracking {
 
 mod resolve_jiaohua;
 pub(crate) use resolve_jiaohua::*;
+
+mod take_target_hand_then_repeat_until_max;
+pub(crate) use take_target_hand_then_repeat_until_max::*;
 mod give_cards;
 pub use give_cards::*;
+mod choose_use_virtual_card;
+pub(crate) use choose_use_virtual_card::*;
 mod commit_damage;
 pub(crate) use commit_damage::*;

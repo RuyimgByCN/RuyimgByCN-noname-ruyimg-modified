@@ -8,7 +8,12 @@ use super::*;
 
 mod resolve_draw_give_or_discard_hand_discard;
 pub(crate) use resolve_draw_give_or_discard_hand_discard::*;
+
+mod resolve_choose_repolu_targets_draw;
+pub(crate) use resolve_choose_repolu_targets_draw::*;
 mod resolve_choose_give_two_different_colors_or_recover;
 pub(crate) use resolve_choose_give_two_different_colors_or_recover::*;
+mod resolve_resolve_tianxiang;
+pub(crate) use resolve_resolve_tianxiang::*;
 mod resolve_resolve_lulve;
 pub(crate) use resolve_resolve_lulve::*;

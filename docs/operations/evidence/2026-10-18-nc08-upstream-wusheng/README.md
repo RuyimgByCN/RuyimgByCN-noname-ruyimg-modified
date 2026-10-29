@@ -75,7 +75,7 @@ wusheng: {
 
 | 响应方向 | 构造处 | 是否含转化 |
 |---|---|---|
-| **闪**（`respond_shan`） | `kernel/sha/step.rs:1207–1243` | **含**：`kind == Shan \|\| (longdan && kind == Sha)`（龙胆）+ `qingguo && black`（倾国）+ 诱敌深入/神弓 |
+| **闪**（`respond_shan`） | `kernel/sha/step.rs:693–1243` | **含**：`kind == Shan \|\| (longdan && kind == Sha)`（龙胆）+ `qingguo && black`（倾国）+ 诱敌深入/神弓 |
 | **杀**（决斗 `duel_sha`） | `kernel/duel.rs:70` | **不含**：`filter(card_kind == Sha)` 只取**实体【杀】** |
 | **闪**（无双双闪臂） | `kernel/sha/step.rs:369–392` | **含**：同上三臂 |
 

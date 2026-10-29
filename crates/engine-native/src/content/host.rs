@@ -14,10 +14,13 @@ use crate::snap::MachineSnapshot;
 
 mod activation;
 mod asks;
+mod asks_mtg;
+mod asks_wudian;
 mod intrinsic;
 pub(crate) use asks::active_ask_host;
 pub(crate) use intrinsic::card_intrinsic;
 mod behavior;
+mod behavior_list;
 mod boss;
 mod constants;
 mod factory;
@@ -26,6 +29,7 @@ mod keys;
 mod metadata;
 mod step;
 mod support;
+mod tag_decode;
 mod tags;
 
 pub use behavior::HostBehavior;

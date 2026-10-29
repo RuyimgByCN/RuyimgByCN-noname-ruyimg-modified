@@ -12,7 +12,12 @@ pub(crate) const DDD_TONGYU_BLOCKER_DEF: u32 = 3_861_572_400;
 
 mod ddd_bailei_damage;
 pub(crate) use ddd_bailei_damage::*;
+
+mod add_caoyi_helper;
+pub(crate) use add_caoyi_helper::*;
 mod resolve_zhugeruoxue_choice;
 pub(crate) use resolve_zhugeruoxue_choice::*;
+mod finish_twyuejian_cards;
+pub(crate) use finish_twyuejian_cards::*;
 mod resolve_twzhengjian;
 pub(crate) use resolve_twzhengjian::*;

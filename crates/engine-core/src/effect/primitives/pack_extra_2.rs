@@ -20,7 +20,12 @@ pub(crate) const DAMAGE_DISCARD_DISTANCE: u32 = 1;
 
 mod choose_link_other;
 pub(crate) use choose_link_other::*;
+
+mod beige_stage_effect;
+pub(crate) use beige_stage_effect::*;
 mod reveal_uniform_hand_draw_self_choose_others;
 pub(crate) use reveal_uniform_hand_draw_self_choose_others::*;
+mod choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both;
+pub(crate) use choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both::*;
 mod reduce_bound_damage_by_one;
 pub(crate) use reduce_bound_damage_by_one::*;

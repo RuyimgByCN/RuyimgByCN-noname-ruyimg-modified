@@ -8,28 +8,41 @@ mod jiguan;
 mod mtg;
 mod skills_card_use;
 mod skills_cards;
+mod skills_virtual_use;
+mod skills_discard_costs;
 mod skills_damage;
 mod skills_recovery;
 mod skills_status;
 mod skills_targets;
 mod swd_card_contests;
 mod swd_card_effects;
+mod swd_jiguan_cards;
+mod swd_lingjian_cards;
+mod swd_zhenfa_cards;
 mod swd_card_targets;
+mod swd_card_virtual_sha;
+mod swd_card_attach;
 mod swd_cards;
+mod swd_virtual_cards;
+mod swd_response_cards;
 mod swd_damage_combos;
 mod swd_damage_costs;
+mod swd_damage_multi;
 mod swd_damage_reactions;
 mod swd_damage_targets;
 mod swd_equipment;
+mod swd_equipment_skills;
 mod swd_recovery;
 mod swd_status;
 mod swd_targets;
 mod wudian_cards;
+mod wudian_ow_cards;
 mod wudian_damage;
 mod wudian_recovery;
 mod wudian_status;
 mod wudian_targets;
 mod xianjian_cards;
+mod xianjian_card_use;
 mod xianjian_damage;
 mod xianjian_recovery;
 mod xianjian_status;
@@ -128,13 +141,13 @@ impl HostMachine {
             // 新实体，原生原体复用——弃堆在再结算窗口内少一张观测差）。
             // 确认即置位每阶段一次旗（上游 shenmiguo2 临时技：再结算牌
             // 的用牌后窗口被同一旗挡住=循环守卫）。
-            HostBehavior::SwdShenmiguoWindow => self.step_swd_equipment(ctx),
+            HostBehavior::SwdShenmiguoWindow => self.step_swd_equipment_skills(ctx),
             // 鼠槌（equip5 窗口机批）：凤略 Yield 循环同型——选攻击范围
             // 内目标（sha_range_free 链同 engine 出杀口径）→ 至多 3 张
             // 逐张自动用出（每次重扫手中首张杀=上游 getCards("h")[0]
             // 确定性口径）；终局若链上任一杀造成伤害（commit_damage 钩
             // 置位 shuchui_hit）则摸 1。cards 复用为剩余次数计数。
-            HostBehavior::SwdShuchuiUse => self.step_swd_equipment(ctx),
+            HostBehavior::SwdShuchuiUse => self.step_swd_equipment_skills(ctx),
             // 浴尘：Act 选目标（he 非空其他角色）→ TargetChoice 随机弃其
             // 一张（登记差异：上游弃牌者自选，原生 RNG 代选——冰河要塞
             // 同款登记；装备随 revoke）
@@ -149,7 +162,7 @@ impl HostMachine {
             // 苏生：死亡前置窗口——SelectCard 弃一张手牌（可取消=放弃，
             // 死亡照常）→ 目标体力回至 1 + death_cancelled 写回（空洞印
             // 取消基建；DeathMachine 清 dying 旗）
-            HostBehavior::SwdSusheng => self.step_swd_cards(ctx),
+            HostBehavior::SwdSusheng => self.step_swd_response_cards(ctx),
             // 相惠：SelectCard 弃一张红色手牌 → 全体体力最少且已受伤角色
             // 各回复 1（目标面自动求取，无选择窗）
             HostBehavior::SwdXianghui => self.step_swd_recovery(ctx),
@@ -160,7 +173,7 @@ impl HostMachine {
             HostBehavior::SwdSenluo => self.step_swd_status(ctx),
             // 连打：SelectCard 弃一张牌（he 可取消=放弃）→ 虚拟杀对原目
             // 标再结算（凤略直发口径；每回合旗置位=循环守卫）
-            HostBehavior::SwdLianda => self.step_swd_cards(ctx),
+            HostBehavior::SwdLianda => self.step_swd_virtual_cards(ctx),
             // 隳延：SelectCard 弃一张牌 → 弃置对方全部装备（随 revoke）
             HostBehavior::SwdSuiyan => self.step_swd_damage_reactions(ctx),
             // 断行：TargetChoice 选杀合法目标（距离内）→ 虚拟杀
@@ -215,12 +228,12 @@ impl HostMachine {
             HostBehavior::SwdShangxi => self.step_swd_damage_costs(ctx),
             // 花间·剑仙面：SelectCard 弃一张 he → TargetChoice 杀合法目标 →
             // 虚拟杀
-            HostBehavior::SwdHuajian => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdHuajian => self.step_swd_card_virtual_sha(ctx),
             // 星坠·慕月面：SelectCard 弃一张牌（定类别）→ TargetChoice 有
             // he 目标 → 目标弃同类别一张或受 1 伤
             HostBehavior::SwdXingzhui => self.step_swd_damage_combos(ctx),
             // 焰羽·少微面：SelectCards 弃两张红色牌 → 虚拟炽羽袭（全体其他）
-            HostBehavior::SwdHuangyu => self.step_swd_cards(ctx),
+            HostBehavior::SwdHuangyu => self.step_swd_virtual_cards(ctx),
             // 摄引：座位序逐判定区有牌者——弃其判定牌 + 其交一张手牌（循环
             // 面一次机器内完成，确定性座位序登记差异上游 chooseTarget 循环）
             HostBehavior::SwdXianyin => self.step_swd_status(ctx),
@@ -242,7 +255,7 @@ impl HostMachine {
             HostBehavior::SwdSliufeng => self.step_swd_status(ctx),
             // 乱击·多鹏面：SelectCards 弃两张同花色手牌 → 虚拟万箭齐发
             //（AOE 全体其他存活，座位序）
-            HostBehavior::SwdLuanji => self.step_swd_cards(ctx),
+            HostBehavior::SwdLuanji => self.step_swd_virtual_cards(ctx),
             // 聒噪·疾鹏面：TargetChoice 距离 2 内有手牌角色（含自己）→
             // 其手牌全部弃置，牌堆顶三张入手（上游 lose._triggered=null +
             // gain "draw" 同口径；登记差异：上游观看面为二段交互，原生
@@ -254,10 +267,10 @@ impl HostMachine {
             // 枕流·临月面：SelectCard 红色手牌 → TargetChoice 其他未挂附
             // 存活 → off_court 挂附（上游 placeCard 武将牌上同口径；
             // 触发面 SwdZhenjiu2 在其准备阶段取回）
-            HostBehavior::SwdZhenjiu => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdZhenjiu => self.step_swd_card_attach(ctx),
             // 麻醉·临月面：SelectCard 黑色手牌 → TargetChoice → off_court
             // 挂附（触发面 SwdLmazui2 在持有者伤害前置返还+降 1）
-            HostBehavior::SwdLmazui => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdLmazui => self.step_swd_card_attach(ctx),
             // 乐学·久悠面：回合开始授技——自己回合授{制衡/集智}之一，
             // 他人回合授{遗计/急救/鬼道/反馈}之一（RNG 选择；
             // expires_end_of_turn 到期移除。登记差异：上游池含缔盟/驱虎，
@@ -276,7 +289,7 @@ impl HostMachine {
             HostBehavior::SwdKbolan => self.step_swd_status(ctx),
             // 奥剑：SelectCard 弃 1..X 张手牌 → TargetChoice 攻击距离内
             // 至多 X 名 → 各 1 伤
-            HostBehavior::SwdAojian => self.step_swd_damage_costs(ctx),
+            HostBehavior::SwdAojian => self.step_swd_damage_multi(ctx),
             // 化金：SelectCard 弃一张 he → 授予 swd_huajin2
             HostBehavior::SwdHuajin => self.step_swd_cards(ctx),
             // 化金触发面：伤害前置 +1；准备阶段开始移除实例
@@ -289,7 +302,7 @@ impl HostMachine {
             // 玄咒：SelectCard 置出一张普通锦囊（discard:false=置出而非
             // 弃——原生近似弃置登记）→ TargetChoice 任一角色（含自己，
             // 判定区无同名牌）→ 确定性 kind 规则置入判定区
-            HostBehavior::SwdXuanzhou => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdXuanzhou => self.step_swd_card_attach(ctx),
             // 因果：确认 → 弃一张 he → DamageBefore 帧 source/target 对调
             //（unique 一次移除实例）
             HostBehavior::SwdYinguo => self.step_swd_damage_reactions(ctx),
@@ -316,7 +329,7 @@ impl HostMachine {
             HostBehavior::SwdFuniao => self.step_swd_card_targets(ctx),
             // 凝弦：确认 → SelectCards 弃任意张黑色 he 牌 → SelectPlayers
             // 等量目标 → 各受 1 伤
-            HostBehavior::SwdNingxian => self.step_swd_damage_costs(ctx),
+            HostBehavior::SwdNingxian => self.step_swd_damage_multi(ctx),
             // 妖童：锁定 marker（engine viewAs 链查询），无效果步
             HostBehavior::SwdYaotong => self.step_swd_status(ctx),
             // 黑火：SelectCard 弃一张装备牌（he）→ 摸等同弃前手牌数的牌
@@ -326,13 +339,13 @@ impl HostMachine {
             HostBehavior::SwdFzhenwei => self.step_swd_targets(ctx),
             // 遁行：确认 → SelectCard 弃一张 he → 判定非红桃 → 取消该牌
             //（cancelled 写回+桌面归还使用者手牌，工神同款）
-            HostBehavior::SwdDunxing => self.step_swd_cards(ctx),
+            HostBehavior::SwdDunxing => self.step_swd_response_cards(ctx),
             // 极谋·姬良面：回合外受伤后摸 1（上游 jqimou draw 同口径；
             // 使用牌续段=主动选择面登记差异不收）
             HostBehavior::SwdJqimou => self.step_swd_status(ctx),
             // 剑击·少微面：SelectCard 弃装备牌 → TargetChoice 杀合法目标 →
             // 虚拟杀 + 摸 1（上游 useCard sha + draw 同口径）
-            HostBehavior::SwdJianji => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdJianji => self.step_swd_card_virtual_sha(ctx),
             // 头弹·麦星面：SelectCard 黑桃 he → TargetChoice 其他存活 →
             // 目标 1 火伤 + 自受害者起（含自己）座位序各弃一张 he
             //（确定性首张登记差异）
@@ -352,7 +365,7 @@ impl HostMachine {
             // 存活 → 弃梅花牌+实体发现鬼幽结置其判定区（上游 prepare throw
             // + addJudge 同口径；登记差异：实体发现替代 createCard；同名
             // 判定区重复由命令期校验承担）
-            HostBehavior::SwdMingfu => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdMingfu => self.step_swd_card_attach(ctx),
             // 幻形（武将面批 87）：SelectCard 弃一张 he → TargetChoice
             // 男性其他存活角色 → 复制其（非 unique/未持有）技能实例并
             // 置 huanxing_granted（受伤后移除）
@@ -367,7 +380,7 @@ impl HostMachine {
             // 活弹·舒莞儿面：SelectCard 红色手牌 → TargetChoice 1-2 名任一
             // 存活（1 名=2 火伤/2 名=各 1 火伤）→ 自失 1 体力（contentBefore
             // 同口径：先弃牌再失体力）
-            HostBehavior::SwdHuodan => self.step_swd_damage_costs(ctx),
+            HostBehavior::SwdHuodan => self.step_swd_damage_multi(ctx),
             // 激昂·凤天凌面：摸 1（frequent 非 optional，无效果步以外的
             // 状态变化）
             HostBehavior::SwdJiang => self.step_swd_status(ctx),
@@ -378,11 +391,11 @@ impl HostMachine {
             // TargetChoice 攻击距离内其他存活 → 首张作 declared-Sha 载荷
             //（use_as 声明）进入杀结算，次张弃置（丈八蛇矛机同型，
             // 不计出杀次数经 kernel 豁免臂）
-            HostBehavior::SwdYudun => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdYudun => self.step_swd_card_virtual_sha(ctx),
             // 占星·肯迪面：SelectCards 弃任意张手牌 → 亮等量牌堆顶牌：
             // 方块摸 2/红桃回 1 或 +1 护甲/梅花各敌人随机弃 1/黑桃选一名
             // 角色受 1 无来源雷伤
-            HostBehavior::SwdZhanxing => self.step_swd_damage_costs(ctx),
+            HostBehavior::SwdZhanxing => self.step_swd_damage_multi(ctx),
             // 运筹·姬亮面：SelectCard 弃一张手牌 → TargetChoice 有手牌
             // 目标 → 目标随机弃一张手牌：同色自己摸 1 否则目标摸 1
             HostBehavior::SwdYunchou => self.step_swd_card_targets(ctx),
@@ -417,7 +430,7 @@ impl HostMachine {
             HostBehavior::SwdDuishi => self.step_swd_card_contests(ctx),
             // 玉蝉换形: 手牌中每张玉蝉实体轮换为八卦序下一 kind 的实体
             //（牌堆/弃堆确定性发现首张；登记差异上游随机+init 原地变形）
-            HostBehavior::SwdYuchanSwap => self.step_swd_equipment(ctx),
+            HostBehavior::SwdYuchanSwap => self.step_swd_equipment_skills(ctx),
             // 逆攻发动：TargetChoice 选目标 → Act 弃全部标记——奇数摸 1+
             // floor(标记/2) 伤；标记=1 时仅摸 1（activate 分流两 activate 面）
             HostBehavior::SwdNigongStrike => self.step_swd_equipment(ctx),
@@ -466,13 +479,13 @@ impl HostMachine {
             HostBehavior::SwdDaofa => self.step_swd_status(ctx),
             // 玉鳞：Act 问选装备牌（手/装备区）→ SelectCard 弃置+免伤；
             // 取消=不免伤（照常伤害）
-            HostBehavior::SwdYulin => self.step_swd_cards(ctx),
+            HostBehavior::SwdYulin => self.step_swd_response_cards(ctx),
             // 凝霜：Act 问选黑牌 → SelectCard 弃置+使用者阶梯
             // （已翻面→失 1 体力；已横置→翻面；否则→横置且自己摸 1）
-            HostBehavior::SwdNingshuang => self.step_swd_cards(ctx),
+            HostBehavior::SwdNingshuang => self.step_swd_response_cards(ctx),
             // 工神：Act 问选装备牌 → SelectCard 弃置+取消该使用（筑城
             // cancelled 写回同款；取消=使用照常）
-            HostBehavior::SwdGongshen => self.step_swd_cards(ctx),
+            HostBehavior::SwdGongshen => self.step_swd_response_cards(ctx),
             // 还灵：Act 问选其他角色 → TargetChoice 自己与目标同时翻面
             //（取消=不发动；上游 turnOver×2）
             HostBehavior::SwdHuanling => self.step_swd_targets(ctx),
@@ -567,7 +580,7 @@ impl HostMachine {
             HostBehavior::HlssYueyin => self.step_skills_status(ctx),
             // 起风：选一张未用过的可用锦囊牌名并使用（上游 chooseButton
             // + chooseUseTarget；原生以目录牌种码承载牌名选择）
-            HostBehavior::HlssFengqi => self.step_skills_cards(ctx),
+            HostBehavior::HlssFengqi => self.step_skills_virtual_use(ctx),
             // 起风·闭 / 改命：锁定旗标（无机器步；无懈门/判定机内联）
             HostBehavior::HlssFengqi2 => self.step_skills_status(ctx),
             HostBehavior::HlssGaiming => self.step_skills_status(ctx),
@@ -580,7 +593,7 @@ impl HostMachine {
             HostBehavior::Shenwei => self.step_skills_status(ctx),
             // 集控：选攻击距离内一名其他角色 → 虚拟雷杀（取消=不消耗次数）
             // 每步：弃一张牌 → 令目标本回合止息（+ 条件性距离视为 1）
-            HostBehavior::NewMeibu => self.step_skills_cards(ctx),
+            HostBehavior::NewMeibu => self.step_skills_virtual_use(ctx),
             // 止息：标记 +1；锦囊 → 置锦囊记录；显示标记 = 体力 - 计数
             HostBehavior::NewZhixi => self.step_skills_status(ctx),
             // 撷芳：刷新「存活女性数」标记（0 时清除）
@@ -588,15 +601,15 @@ impl HostMachine {
             // 让节：按伤害点数逐次——获得牌（摸 1 + 牌堆取指定类型）或移动牌
             HostBehavior::Rangjie => self.step_skills_cards(ctx),
             // 蛊惑：弃一张手牌 → 声明基本/锦囊牌名 → 选目标 → 转化使用
-            HostBehavior::Reguhuo => self.step_skills_cards(ctx),
+            HostBehavior::Reguhuo => self.step_skills_virtual_use(ctx),
             // 攻心：选目标 → 看其手牌选一张红桃 → 弃置或置于牌堆顶
             HostBehavior::Gongxin => self.step_skills_cards(ctx),
             // 魔化：移除旧三技 → 获得撒旦四技 → 上限 4 → 回复 2 → 摸 2
             HostBehavior::Mohua2 => self.step_skills_recovery(ctx),
             // 修罗：选一张手牌 → 选一张同花色判定区牌 → 一并弃置
-            HostBehavior::Xiuluo => self.step_skills_cards(ctx),
+            HostBehavior::Xiuluo => self.step_skills_discard_costs(ctx),
             // 灭道·弃：强制弃「已损失体力」张（手/装备）
-            HostBehavior::Miedao => self.step_skills_cards(ctx),
+            HostBehavior::Miedao => self.step_skills_discard_costs(ctx),
             // 魔焰：选 N 张红牌 → 选恰 N 名其他角色 → 逐个 1 点火焰伤害
             HostBehavior::Moyan => self.step_skills_damage(ctx),
             // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
@@ -609,9 +622,9 @@ impl HostMachine {
             // 轩辕剑·反噬：失去 1 点体力（无「轩辕」时）
             HostBehavior::XuanyuanjianBacklash => self.step_skills_status(ctx),
             // 轩辕：弃一张黑桃牌 → 从弃牌堆取【轩辕剑】装备（限定）
-            HostBehavior::Xuanyuan => self.step_skills_cards(ctx),
+            HostBehavior::Xuanyuan => self.step_skills_discard_costs(ctx),
             // 燎原：循环弃同花色牌（首张必问；弃后余 >1 张才续问）→ 记额外闪数
-            HostBehavior::Liaoyuan => self.step_skills_cards(ctx),
+            HostBehavior::Liaoyuan => self.step_skills_discard_costs(ctx),
             // 改造：选一个空栏位 → 写入 declared_slots（提交按新栏位入槽）
             HostBehavior::Gaizao => self.step_skills_status(ctx),
             // 天书：弃一张锦囊手牌 → 选角色 → 选其一个未持有技能 → 永久获取
@@ -619,14 +632,14 @@ impl HostMachine {
             // 李香龙：选攻击范围内目标 → 使用虚拟杀
             HostBehavior::Lxianglong => self.step_skills_targets(ctx),
             // 移花：弃 2 张手牌 → 帧「使用者/目标」对调（反弹）
-            HostBehavior::Yihua => self.step_skills_cards(ctx),
+            HostBehavior::Yihua => self.step_skills_discard_costs(ctx),
             // 贞烈：失去 1 体力 → 移出目标 → 弃置使用者一张牌（手/装备）
-            HostBehavior::Zhenlie => self.step_skills_cards(ctx),
+            HostBehavior::Zhenlie => self.step_skills_discard_costs(ctx),
             HostBehavior::Tianlun => self.step_skills_status(ctx),
             // 脉轮：选 1..8 效果 → 立即结算（1/2）或置模式位（3..8）
             HostBehavior::Mailun => self.step_skills_recovery(ctx),
             // 极略：看牌堆顶 3 张 → 选一张基本/锦囊牌 → 选目标 → 使用
-            HostBehavior::Jilve => self.step_skills_cards(ctx),
+            HostBehavior::Jilve => self.step_skills_virtual_use(ctx),
             // 革新印：选花色 → 静默弃该花色全部手牌 → 选另一花色 → 获得等量
             HostBehavior::Gxianyin => self.step_skills_status(ctx),
             // 冰封·封：翻回正面 → 移除自身
@@ -634,7 +647,7 @@ impl HostMachine {
             // 冰封：翻面自己与至多 3 名目标 + 失去体力上限 + 授予封锁
             HostBehavior::Bingfeng => self.step_skills_targets(ctx),
             // 此桥邪：失去装备后逐次使用机关牌（自目标/单目标/AOE）
-            HostBehavior::Cyqiaoxie => self.step_skills_cards(ctx),
+            HostBehavior::Cyqiaoxie => self.step_skills_virtual_use(ctx),
             // 魂殉志：万箭齐发 + 授予武圣/咆哮/殉 + 觉醒自身
             HostBehavior::Hxunzhi => self.step_skills_status(ctx),
             HostBehavior::Hxunzhi2 => self.step_skills_status(ctx),
@@ -647,9 +660,9 @@ impl HostMachine {
             // 颂词：选未记录角色 → 手牌多于体力弃 2 否则摸 2 → 记录
             HostBehavior::Songci => self.step_skills_cards(ctx),
             // 诛害：选一张手中的【杀】→ 对结束阶段角色使用（实体牌）
-            HostBehavior::SwdZhuhai => self.step_swd_cards(ctx),
+            HostBehavior::SwdZhuhai => self.step_swd_virtual_cards(ctx),
             // 林韵：两张牌当杀（手牌或装备；首张为载荷牌，declared Sha）
-            HostBehavior::SwdLinyun => self.step_swd_card_targets(ctx),
+            HostBehavior::SwdLinyun => self.step_swd_card_virtual_sha(ctx),
             HostBehavior::SwdJikong => self.step_swd_targets(ctx),
             // 魅惑：选目标 → 取其一张牌（装备牌则装备之）
             HostBehavior::SwdMeihuo => self.step_swd_card_targets(ctx),
@@ -778,10 +791,10 @@ impl HostMachine {
             HostBehavior::HuanleMianjuCard => self.step_skills_status(ctx),
             HostBehavior::ZhangbaSha => self.step_skills_card_use(ctx),
             HostBehavior::SwdLiuxinghuoyuCard => self.step_swd_card_effects(ctx),
-            HostBehavior::SwdShentouEquipSkill => self.step_swd_equipment(ctx),
-            HostBehavior::SwdYufuluEquipSkill => self.step_swd_equipment(ctx),
+            HostBehavior::SwdShentouEquipSkill => self.step_swd_equipment_skills(ctx),
+            HostBehavior::SwdYufuluEquipSkill => self.step_swd_equipment_skills(ctx),
             HostBehavior::SwdYangpijuanCard => self.step_swd_card_effects(ctx),
-            HostBehavior::SwdLangeguaiyiEquipSkill => self.step_swd_equipment(ctx),
+            HostBehavior::SwdLangeguaiyiEquipSkill => self.step_swd_equipment_skills(ctx),
             HostBehavior::MtgLongshanfengLand => self.step_mtg(ctx),
             HostBehavior::MtgHaidaoLand => self.step_mtg(ctx),
             HostBehavior::MtgShuimomuxueLand => self.step_mtg(ctx),
@@ -804,8 +817,8 @@ impl HostMachine {
             HostBehavior::WudianJuedao => self.step_wudian_status(ctx),
             HostBehavior::WudianGeju => self.step_wudian_status(ctx),
             HostBehavior::WudianTuji => self.step_wudian_status(ctx),
-            HostBehavior::WudianMujing => self.step_wudian_cards(ctx),
-            HostBehavior::WudianGuangshu => self.step_wudian_cards(ctx),
+            HostBehavior::WudianMujing => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianGuangshu => self.step_wudian_ow_cards(ctx),
             HostBehavior::WudianGuangshuHeart => self.step_wudian_recovery(ctx),
             HostBehavior::WudianGuangshuDiamond => self.step_wudian_status(ctx),
             HostBehavior::WudianGuangshuClub => self.step_wudian_status(ctx),
@@ -813,16 +826,16 @@ impl HostMachine {
             HostBehavior::WudianZiyu => self.step_wudian_recovery(ctx),
             HostBehavior::WudianShouhu => self.step_wudian_recovery(ctx),
             HostBehavior::WudianDuwen => self.step_wudian_status(ctx),
-            HostBehavior::WudianPaotai => self.step_wudian_cards(ctx),
+            HostBehavior::WudianPaotai => self.step_wudian_ow_cards(ctx),
             HostBehavior::WudianPaotaiFire => self.step_wudian_damage(ctx),
             HostBehavior::WudianBaoleiSwitch => self.step_wudian_status(ctx),
             HostBehavior::WudianZhenchaDraw => self.step_wudian_recovery(ctx),
             HostBehavior::WudianYuedong => self.step_wudian_recovery(ctx),
-            HostBehavior::WudianKuoyin => self.step_wudian_cards(ctx),
-            HostBehavior::WudianHuhuan => self.step_wudian_cards(ctx),
+            HostBehavior::WudianKuoyin => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianHuhuan => self.step_wudian_ow_cards(ctx),
             HostBehavior::WudianJidong => self.step_wudian_recovery(ctx),
             HostBehavior::WudianBaoxue => self.step_wudian_targets(ctx),
-            HostBehavior::WudianLiangou => self.step_wudian_cards(ctx),
+            HostBehavior::WudianLiangou => self.step_wudian_ow_cards(ctx),
             HostBehavior::WudianXiyang => self.step_wudian_recovery(ctx),
             HostBehavior::WudianFeiren => self.step_wudian_status(ctx),
             HostBehavior::WudianFeidan => self.step_wudian_damage(ctx),
@@ -830,11 +843,11 @@ impl HostMachine {
             HostBehavior::WudianShenqiang => self.step_wudian_status(ctx),
             HostBehavior::WudianShihuo => self.step_wudian_status(ctx),
             HostBehavior::WudianMengji => self.step_wudian_status(ctx),
-            HostBehavior::WudianYinbo => self.step_wudian_cards(ctx),
-            HostBehavior::WudianQianggu => self.step_wudian_cards(ctx),
-            HostBehavior::WudianQiangguGuard => self.step_wudian_cards(ctx),
-            HostBehavior::WudianFeitiao => self.step_wudian_cards(ctx),
-            HostBehavior::WudianPingzhang => self.step_wudian_cards(ctx),
+            HostBehavior::WudianYinbo => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianQianggu => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianQiangguGuard => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianFeitiao => self.step_wudian_ow_cards(ctx),
+            HostBehavior::WudianPingzhang => self.step_wudian_ow_cards(ctx),
             HostBehavior::WudianOwliyong => self.step_wudian_status(ctx),
             HostBehavior::WudianYinshen => self.step_wudian_status(ctx),
             HostBehavior::WudianXiandan => self.step_wudian_status(ctx),
@@ -857,7 +870,7 @@ impl HostMachine {
             HostBehavior::XianjianXuanyan3 => self.step_xianjian_status(ctx),
             HostBehavior::XianjianNingbin => self.step_xianjian_recovery(ctx),
             HostBehavior::XianjianXuanyan => self.step_xianjian_status(ctx),
-            HostBehavior::XianjianDiewu => self.step_xianjian_cards(ctx),
+            HostBehavior::XianjianDiewu => self.step_xianjian_card_use(ctx),
             HostBehavior::XianjianLingyu => self.step_xianjian_recovery(ctx),
             HostBehavior::WudianLueying => self.step_wudian_status(ctx),
             HostBehavior::XianjianAnwugu => self.step_xianjian_status(ctx),
@@ -891,7 +904,7 @@ impl HostMachine {
             HostBehavior::XianjianChangnian => self.step_xianjian_targets(ctx),
             HostBehavior::XianjianChangnian2 => self.step_xianjian_status(ctx),
             HostBehavior::XianjianShiying => self.step_xianjian_status(ctx),
-            HostBehavior::XianjianZhaoyao => self.step_xianjian_cards(ctx),
+            HostBehavior::XianjianZhaoyao => self.step_xianjian_card_use(ctx),
             HostBehavior::XianjianLiguang => self.step_xianjian_cards(ctx),
             HostBehavior::XianjianXuanmo => self.step_xianjian_cards(ctx),
             HostBehavior::XianjianSheying => self.step_xianjian_status(ctx),
@@ -899,17 +912,17 @@ impl HostMachine {
             HostBehavior::XianjianXtanxi => self.step_xianjian_cards(ctx),
             HostBehavior::XianjianFenglue => self.step_xianjian_targets(ctx),
             HostBehavior::XianjianLiefeng => self.step_xianjian_status(ctx),
-            HostBehavior::XianjianTianjian => self.step_xianjian_cards(ctx),
+            HostBehavior::XianjianTianjian => self.step_xianjian_card_use(ctx),
             HostBehavior::XianjianPoyun => self.step_xianjian_cards(ctx),
             HostBehavior::XianjianXshuangren => self.step_xianjian_status(ctx),
             HostBehavior::XianjianXshuangren2 => self.step_xianjian_status(ctx),
             HostBehavior::XianjianZhangmu => self.step_xianjian_damage(ctx),
-            HostBehavior::XianjianQianfang => self.step_xianjian_cards(ctx),
+            HostBehavior::XianjianQianfang => self.step_xianjian_card_use(ctx),
             HostBehavior::XianjianXunying => self.step_xianjian_status(ctx),
             HostBehavior::XianjianTianxian => self.step_xianjian_status(ctx),
             HostBehavior::XianjianXjyingfeng => self.step_xianjian_status(ctx),
             HostBehavior::XianjianXiepan => self.step_xianjian_cards(ctx),
-            HostBehavior::XianjianLuanjian => self.step_xianjian_cards(ctx),
+            HostBehavior::XianjianLuanjian => self.step_xianjian_card_use(ctx),
             HostBehavior::XianjianLuanjian2 => self.step_xianjian_damage(ctx),
             HostBehavior::XianjianCtianfu => self.step_xianjian_cards(ctx),
             HostBehavior::XianjianCtianfu2 => self.step_xianjian_damage(ctx),
@@ -918,12 +931,12 @@ impl HostMachine {
             HostBehavior::SwdMujiarenCard => self.step_swd_card_effects(ctx),
             HostBehavior::SwdGouhunluoCard => self.step_swd_card_effects(ctx),
             HostBehavior::SwdGouhunluoSub => self.step_swd_status(ctx),
-            HostBehavior::SwdJiguantongCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJiguantongCard => self.step_swd_jiguan_cards(ctx),
             // 机关凤（U05 swd 第二十批，规则 v195）：单体——目标选择打出
             // 一张闪（无闪/取消=未响应）；未响应→目标获得"封印"（全部技
             // 能实例禁用，其下一阶段开始解除[SwdFengyinState]，登记差异：
             // 原生无锁定技区分）+受 1 点伤害；响应则无事。本体入弃堆。
-            HostBehavior::SwdJiguanfengCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJiguanfengCard => self.step_swd_jiguan_cards(ctx),
             // 机关凤封印状态（规则 v195）：拥有者任一阶段开始→全部技能
             // 实例重新启用并移除自身（上游 addTempSkill {player:
             // 'phaseBegin'} 移除同口径）
@@ -932,32 +945,32 @@ impl HostMachine {
             // 张手牌，与本体一起置于目标的武将牌上（离场区），其下一结束
             // 阶段强制获得（SwdJiguanyuanGain）；使用者摸 1。本体不进弃
             // 堆（随置牌走）。
-            HostBehavior::SwdJiguanyuanCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJiguanyuanCard => self.step_swd_jiguan_cards(ctx),
             // 机关怨待获得（规则 v196）：拥有者结束阶段——离场区待获得牌
             // 移入手牌并移除自身（上游 jiguanyuan 技 phaseEnd forced 同口径）
             HostBehavior::SwdJiguanyuanGain => self.step_swd_status(ctx),
             // 旋风之刃（灵剑，规则 v198）：目标随机弃 1 张 he；本体入弃堆。
-            HostBehavior::SwdXuanfengzhirenCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdXuanfengzhirenCard => self.step_swd_lingjian_cards(ctx),
             // 中行虎甲（灵剑，规则 v198）：目标非 isMin——从牌堆+弃堆发现防
             // 具 Kind 实体装配（登记差异：上游装备定义池凭空造），再随机弃
             // 1 张手牌；本体入弃堆。
-            HostBehavior::SwdZhongxinghujiaCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdZhongxinghujiaCard => self.step_swd_lingjian_cards(ctx),
             // 星体改造（灵剑，规则 v198）：使用者（自目标）摸 1 + 手牌上限
             // -1 累加（其下一结束阶段重置，kernel 相位钩）；本体入弃堆。
-            HostBehavior::SwdXingtigaizaoCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdXingtigaizaoCard => self.step_swd_lingjian_cards(ctx),
             // 时间回溯（灵剑，规则 v198）：目标获得其装备区全部牌（装备技
             // 随迁撤销）；本体入弃堆。
-            HostBehavior::SwdShijianhuisuCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdShijianhuisuCard => self.step_swd_lingjian_cards(ctx),
             // 紧急冷冻（灵剑，规则 v198）：目标≠使用者且未翻面——+2 护甲、
             // 翻面；仍翻面则冻结（不能使用牌也不能成为目标，翻回解除，
             // kernel TurnOvered 钩）；本体入弃堆。
-            HostBehavior::SwdJinjilengdongCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJinjilengdongCard => self.step_swd_lingjian_cards(ctx),
             // 圣休号角（灵剑，规则 v198）：目标获嘲讽（相邻角色只能以其为
             // 杀目标；其下一阶段开始解除，kernel 相位钩）；本体入弃堆。
-            HostBehavior::SwdShengxiuhaojiaoCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdShengxiuhaojiaoCard => self.step_swd_lingjian_cards(ctx),
             // 隐秘离场（灵剑，规则 v198）：目标≠使用者——潜行（不能成为牌
             // 的目标；当前回合结束解除，kernel 回合收束钩）；本体入弃堆。
-            HostBehavior::SwdYinmilichangCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdYinmilichangCard => self.step_swd_lingjian_cards(ctx),
             // 机关妖术补偿（规则 v198）：非自己回合弃牌含装备 Kind 牌（近
             // 似失去装备区牌，登记差异：替换/获得离去不触发）→ 随机补获
             // 等量灵剑（牌堆+弃堆发现；无则不补，登记差异：上游全定义池
@@ -968,25 +981,25 @@ impl HostMachine {
             // card_mods 表）。登记差异：①名称合成/数值升级仅入改造表（目
             // 录不可变）；②jiqi/yuchan 池暂缓，全部附着灵剑；③演示呈现暂
             // 缓。本体入弃堆。
-            HostBehavior::SwdJiguanshuCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJiguanshuCard => self.step_swd_jiguan_cards(ctx),
             // 天覆阵（zhenfa，规则 v200/T19a）：AOE 逐大国目标强制弃 1 张
             // he（targets 队列；目标自选牌 min 1 不可取消；self.target=当
             // 前询问目标）。全部结算完后本体入弃堆。
-            HostBehavior::SwdTianfuzhenCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdTianfuzhenCard => self.step_swd_zhenfa_cards(ctx),
             // 七星阵（zhenfa，规则 v200/T19a）：阶段一 Act——逐围攻者弃 1
             //（SelectCard 询问，self.target=围攻者）；队列空后阶段二——
             // 视为对围攻者用杀（响应闪或 1 伤；登记差异：虚拟杀简化，无
             // 加成/不可无懈额外面），阶段二队列存 self.cards。本体入弃堆。
-            HostBehavior::SwdQixingzhenCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdQixingzhenCard => self.step_swd_zhenfa_cards(ctx),
             // 鸟翔阵（zhenfa，规则 v200/T19a）：逐合法目标响应闪或受 1 伤
             //（targets 队列；TargetChoice 询问，取消=伤害）。本体入弃堆。
-            HostBehavior::SwdNiaoxiangzhenCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdNiaoxiangzhenCard => self.step_swd_zhenfa_cards(ctx),
             // 长蛇阵（zhenfa，规则 v201/T19b）：队列中→全队列（含自己）各
             // 摸 1；否则与距离最近的友方换座成队列（swapSeat）；本体入弃堆。
-            HostBehavior::SwdChangshezhenCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdChangshezhenCard => self.step_swd_zhenfa_cards(ctx),
             // 破阵诀（zhenfa，规则 v201/T19b）：n 次随机座位交换（n=存活
             // 数，上游 swapSeat(random, random) ×n 同口径）；本体入弃堆。
-            HostBehavior::SwdPozhenjueCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdPozhenjueCard => self.step_swd_zhenfa_cards(ctx),
             // 机关妖术（U05 swd 第二十二批，规则 v197）：单体（range.global
             // 1）——从牌堆+弃堆装备实体中发现一张「目标空装备栏」子类型的
             // 装备，置入其手牌后 emit Equipped 走完整装配（commit_equip 同
@@ -995,7 +1008,7 @@ impl HostMachine {
             // 装备；②上游 jiguanyaoshu_skill 的补偿触发面——失去装备区牌
             // 时补获 hslingjian 灵剑——依赖灵剑类型池，暂缓登记至机关术
             // 批，本切片仅保留防重面）。本体入弃堆。
-            HostBehavior::SwdJiguanyaoshuCard => self.step_swd_card_effects(ctx),
+            HostBehavior::SwdJiguanyaoshuCard => self.step_swd_jiguan_cards(ctx),
             // 青木：标记四象链 + 表现隐藏（座位交互门控近似=日志；无存档字段）
             HostBehavior::BossQingmu2 => self.step_boss(ctx),
             // 青木·转阶：取消死亡执行 + 换勾芒 + 全场回满 + 两书精 + 挑战者重整

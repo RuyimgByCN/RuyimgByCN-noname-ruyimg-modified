@@ -32,7 +32,7 @@ longxugou: {
 | 1 | `countGainableCards(player, "e")` | **门槛反例**：目标装备区无牌 → **`Rejected(IllegalTargets)`**（已正确实现） | 通过 |
 | 2 | `choosePlayerCard` + **`player.equip`** | **差异登记**：询问 `gj_longxu_pick`（**自选，与上游一致** ✅）、目标装备 `1 → 0` ✅，但使用者装备 **`0 → 0`**、该牌进入**手牌** ✗ ⇒ **只获得未装备** | 登记（第 36 项） |
 
-**原生实现引用**：`engine/play_card.rs:1695`（目标校验：恰 1 名其他存活**且有装备**的目标）。
+**原生实现引用**：`engine/play_card.rs:1027`（目标校验：恰 1 名其他存活**且有装备**的目标）。
 
 ## 3 验证结果
 

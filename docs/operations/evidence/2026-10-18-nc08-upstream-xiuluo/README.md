@@ -33,7 +33,7 @@ swd_xiuluo: {
 **效果面为何未验收（如实）**：测试夹具的 `advance_to_judge_of` 在**同一次提交内**既推进到判定
 阶段又消费掉阶段开始事件产生的询问（其取消循环），未能稳定停在 `xiuluo_hand` 断点；需要改写为
 「按阶段逐步驱动 + 遇 `xiuluo*` 询问即停」的夹具。已由**源码核对**记录实现位置与口径
-（`content/host/step/skills_cards.rs:674-745`：手牌询问 → 同花色过滤 → 判定牌询问 → 双方离区，
+（`content/host/step/skills_discard_costs.rs:9-94`：手牌询问 → 同花色过滤 → 判定牌询问 → 双方离区，
 花色过滤与上游 `filterButton` 同口径），但**不写成通过**。
 
 ## 3 验证结果

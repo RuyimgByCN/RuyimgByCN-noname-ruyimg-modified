@@ -22,7 +22,12 @@ pub(crate) const DCMANZHI_GAIN_MARK: u32 = 5_0000_0002;
 
 mod potjixi_targets;
 pub(crate) use potjixi_targets::*;
+
+mod begin_pottaishici_response_cost;
+pub(crate) use begin_pottaishici_response_cost::*;
 mod resolve_dcchiying;
 pub(crate) use resolve_dcchiying::*;
+mod resolve_xinxingluan;
+pub(crate) use resolve_xinxingluan::*;
 mod choose_hand_compare_between;
 pub(crate) use choose_hand_compare_between::*;

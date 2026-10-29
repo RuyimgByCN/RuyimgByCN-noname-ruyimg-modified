@@ -8,8 +8,8 @@
 ## 1 原生口径（**逐字引用**）
 
 ```rust
-// engine/play_card.rs:1162  与 CardKind::Tao 同组（救援牌）
-// engine/play_card.rs:1178  if kind == CardKind::Hufu && !p.dying { … 拒绝 … }
+// engine/play_card.rs:633  与 CardKind::Tao 同组（救援牌）
+// engine/play_card.rs:649  if kind == CardKind::Hufu && !p.dying { … 拒绝 … }
 ```
 
 ⇒ **虎符是「濒死救援」牌**（与【桃】同组，但**仅限濒死**）。
@@ -18,7 +18,7 @@
 
 | 支 | 构造 | 实测 | 结果 |
 |---|---|---|---|
-| **未濒死** | 1 号满血，0 号主动使用虎符 | **`Rejected(IllegalTargets)`** | ✅ **通过**（与 `play_card.rs:1178` 一致） |
+| **未濒死** | 1 号满血，0 号主动使用虎符 | **`Rejected(IllegalTargets)`** | ✅ **通过**（与 `play_card.rs:649` 一致） |
 | **濒死** | `debug_deal_damage` 造成**真实伤害**（1 号 hp=0） | `debug_deal_damage` 返回 **`Accepted`**（**非 `Pending`**）且 **`询问=[]`** ⇒ **救援窗口未打开**、虎符**未获提供** | **未验收**（第 52 项） |
 
 ## 3 诊断与后续（第 52 项）

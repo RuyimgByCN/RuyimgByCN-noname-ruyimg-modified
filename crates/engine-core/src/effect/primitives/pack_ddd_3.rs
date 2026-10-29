@@ -32,5 +32,10 @@ pub(crate) const DDD_JIEXING_IGNORE_STOLEN_RECOVERY: u64 = 1;
 
 mod ddd_liuba_decode_distribution;
 pub(crate) use ddd_liuba_decode_distribution::*;
+
+mod resolve_ddd_jianshuo;
+pub(crate) use resolve_ddd_jianshuo::*;
 mod resolve_ddd_guanning_choice;
 pub(crate) use resolve_ddd_guanning_choice::*;
+mod resolve_ddd_liuhong;
+pub(crate) use resolve_ddd_liuhong::*;

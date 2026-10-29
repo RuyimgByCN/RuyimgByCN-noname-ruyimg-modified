@@ -123,7 +123,7 @@ if !hand.is_empty() {
 （`filter(|c| catalog.card_kind(*c) == CardKind::Sha)`）→ **不含**武圣可转化的红色牌。
 行为断言已复现（`upstream_wusheng_respond_path_not_covered`）。
 
-**精确定位（同轮核对）**：**「闪」方向**的响应转化**已实现**（`kernel/sha/step.rs:1207–1243`：
+**精确定位（同轮核对）**：**「闪」方向**的响应转化**已实现**（`kernel/sha/step.rs:693–1243`：
 龙胆【杀】、倾国黑牌；无双双闪臂 `:369–392` 同），**仅「杀」方向缺失** → 修法可**照搬**该模式。
 
 **修法**：在**杀响应**的选项构造处（决斗/南蛮/万箭/借刀等要求打出【杀】的路径）加入**转化候选**：
@@ -301,7 +301,7 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 ## 17 护驾（`hujia`）在非身份局亦可发动 —— **经核对为「有意的设计差异」，非缺陷**（2026-10-19）
 
-> **更正（同会话第 7 次更正）**：本条最初按「修复项」登记；随后核对 `state.rs:1118` 的**文档注释**
+> **更正（同会话第 7 次更正）**：本条最初按「修复项」登记；随后核对 `state/core_ops.rs:260` 的**文档注释**
 > 发现该行为是**有意设计**：
 > ```rust
 > /// 主公资格（zhu 技能：护驾/激将）：身份局要求主公身份；
@@ -331,14 +331,14 @@ if !core.player(core.turn.current).hand.contains(&card) {
 
 **修法（建议改在根因处）**：为「主公技资格」引入**独立判定**（如 `has_zhu_skill(p)` =
 `identity_roles().is_some() && is_lord(p)`），并把上述 4 处调用改到该判定；
-**不要**直接改 `is_lord` 的语义（`state.rs:1124` 的 `None => true` 可能被非主公技路径依赖——改动前需核对）。
+**不要**直接改 `is_lord` 的语义（`state/core_ops.rs:266` 的 `None => true` 可能被非主公技路径依赖——改动前需核对）。
 
 **风险核对（同轮完成）**：`is_lord` 在**引擎内**的调用点**恰为上表 4 处**（其余命中在测试夹具字段、
 DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改这 4 处即可**，
 `state.rs` 的 `None => true` **当前无其它依赖**（仍建议改动时保留该函数语义、另加主公技判定）。
 
 **参照实现（旧线）**：`crates/engine-core` 的 DSL 过滤 `owner_is_lord`
-（`trigger/dispatch/filters_owner_alive_ddd_fengzheng_round_pending.rs:1255`）用的是
+（`trigger/dispatch/filters_owner_alive_ddd_fengzheng_round_pending.rs:696`）用的是
 **`p.identity == Identity::Lord`**（**要求显式主公身份**）→ 旧线**严格**、原生**宽松**
 → 修法可直接采用旧线口径（**跨线一致性**）。
 
@@ -656,7 +656,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ### 第 4 项：`guihan`（归汉）——**已注册但效果为空**（样本 83）
 
-**症状**：键与行为**已注册**（`keys.rs:579` `host:guihan`；运筹 `ycnguihan` 的 `mapping` 即此），
+**症状**：键与行为**已注册**（`keys.rs:44` `host:guihan`；运筹 `ycnguihan` 的 `mapping` 即此），
 但**效果分支为空**：`step/wudian_status.rs:82` → `Flow::Done`（过滤器恒 `false`——作为**主动技**
 方向正确）。上游为**限定技**：自己濒死时可令一名**男性其他角色**与自己**各回复 1 点并各摸 2 张**。
 
@@ -728,10 +728,10 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 ## 35 乾坤镖（`qiankunbiao`）目标门槛**未校验 `he` 有牌**（样本 84，2026-10-19）
 
 **症状（原生更宽松）**：上游 `filterTarget(card, player, target)` 为
-`target !== player && target.countCards("he") > 0`；原生 `engine/play_card.rs:1684` 的校验只要求
+`target !== player && target.countCards("he") > 0`；原生 `engine/play_card.rs:1016` 的校验只要求
 「**恰 1 名**其他存活目标」⇒ 目标 `he` **无牌**时**仍被受理**（实测 `Accepted`）。
 
-**修法**：在 `play_card.rs:1684` 的 `CardKind::Qiankunbiao | CardKind::Shenhuofeiya` 分支补
+**修法**：在 `play_card.rs:1016` 的 `CardKind::Qiankunbiao | CardKind::Shenhuofeiya` 分支补
 「目标 `he` 有牌」校验（**注意**：`shenhuofeiya` 的上游 `filterTarget` **只要求 `target !== player`**，
 **不要求** `he` 有牌 ⇒ 两者需**分别**校验，不可合并）。
 
@@ -776,7 +776,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 → 只能靠**逐卡行为面抽样**（如本样本）发现 ⇒ **建议**对古剑/同类卡包做**逐卡行为面抽样**。
 
 **已核对**：门槛**已正确实现**（目标已持子技时 `Rejected(IllegalTargets)`）；
-键存在（`keys.rs:882` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`constants.rs:58`）。
+键存在（`keys.rs:347` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`constants.rs:58`）。
 
 **修法**：在食物牌效果分支实现「目标获得此牌 + 记 `storage` + `markcount=2` + 授予计时子技」，
 并实现**计数的逐轮结算**（子技效果）。
@@ -846,7 +846,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 每个角色各 `target.recover()`；原生实测**只回复使用者**（使用者 hp `3 → 4`，其他角色 `3 → 3` 未变）。
 
 **夹具前提 + 源码级确认（已核对）**：该卡按「**无显式目标**」受理（`vec![]`；`vec![1]` → `IllegalTargets`）；
-使用者**满血**时 `Rejected(HpFull)`。**源码直接印证**：`engine/play_card.rs:1440` 注释为
+使用者**满血**时 `Rejected(HpFull)`。**源码直接印证**：`engine/play_card.rs:911` 注释为
 「**帝女玄霜：无目标、对自己使用、需已受伤（桃同款校验）**」⇒ 原生**明确**把它建模为
 **对自己**的回复牌（桃同款），与上游 `selectTarget: -1`（**全部角色**）**不一致** —— 该差异
 **有源码依据、非夹具问题**。
@@ -964,7 +964,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 ## 45 视界术（`shijieshu`）**目标集合 + 末尾弃 1**（样本 124，2026-10-19）
 
 **症状一（目标集合）**：上游 `filterTarget: !target.isMin()` ⇒ **指定其他角色**；
-原生 `engine/play_card.rs:1481-1485` 注释「**世界树：自-target**」且**要求 `targets` 为空**
+原生 `engine/play_card.rs:968-972` 注释「**世界树：自-target**」且**要求 `targets` 为空**
 （传显式目标 → `Rejected(IllegalTargets)`）⇒ **效果只作用于使用者**。
 
 **症状二（末尾弃 1 缺失）**：上游 `step 3` 为 `if (target.countCards("he")) target.chooseToDiscard("he", true)`
@@ -1082,7 +1082,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 ## 50 重型护甲（`hslingjian_zhongxinghujia`）**门槛口径不一致**（样本 128，2026-10-19）
 
 **症状（门槛口径）**：上游 `filterTarget: !target.isMin()`（**体力不是最少**）；
-原生 `engine/play_card.rs:1645` 的 `zhongxinghujia` 分支为
+原生 `engine/play_card_targets.rs:129` 的 `zhongxinghujia` 分支为
 `alive && hand.len() as i32 > hp`（**手牌多于体力**）⇒ **两者不等价**。
 
 **行为面证据**：
@@ -1098,7 +1098,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ### 第 50 项扩展：`CardKind::Hslingjian` **全部分支口径对照**（2026-10-19）
 
-按修法要求逐一对照**上游 `filterTarget`**（`swd/card.js`）与**原生分支**（`engine/play_card.rs:1619–1656`）：
+按修法要求逐一对照**上游 `filterTarget`**（`swd/card.js`）与**原生分支**（`engine/play_card_targets.rs:95–1656`）：
 
 | 卡 | 上游 `filterTarget`（**逐字**） | 原生条件（**逐字**） | 一致？ |
 |---|---|---|---|
@@ -1134,7 +1134,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
    `EventData::CardUsed(u) if u.targets.contains(&owner) && card_natures.contains_key(&u.card) && player(owner).wunature.is_some()`
    —— 本用例三项**均满足**（目标含 1 号、牌有属性、1 号属性已设）；
 2. **声明面存在**：`packages/extensions/wuxing-upstream-liuli/assets/cards.json` **确实含 `shengke` 声明**，
-   且 `keys.rs:853` 映射 `host:shengke_check`；
+   且 `keys.rs:318` 映射 `host:shengke_check`；
 3. **`init_hook` 已生效**：样本 141 实测**牌属性表 38 条**（= 牌堆 114/3）⇒ 属性赋予链路**正常**。
 
 ⇒ 剩余候选收窄为：**宿主技实例是否挂到「该牌/该角色」**、以及 **`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。
@@ -1167,7 +1167,7 @@ let shengke: Vec<SkillDefId> = e.catalog.skills.iter().enumerate()
 ## 52 虎符（`hufu`）**濒死支未复现**（样本 143，2026-10-19）
 
 **已通过的一面**：**未濒死支** —— 0 号主动使用虎符 ⇒ **`Rejected(IllegalTargets)`** ✅
-（与 `play_card.rs:1178` 的 `kind == Hufu && !p.dying` 一致）。
+（与 `play_card.rs:649` 的 `kind == Hufu && !p.dying` 一致）。
 
 **未复现的一面**：**濒死支** —— 以 `debug_deal_damage` 造成**真实伤害**（1 号 `hp=0`）后，
 **`debug_deal_damage` 返回 `Accepted`（非 `Pending`）且 `询问=[]`** ⇒ **救援窗口未打开**，
@@ -1642,7 +1642,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 |---|---|
 | 包数据 `cards.json` | 3 张 `chenhuodajie` 条目**均无 `skills` 字段** |
 | `bridge_pack`（**已跟踪**） | 仅支持 **`cards[].equip_skills`**（`lib.rs:567-572`），**不支持 `cards[].skills`** |
-| 宿主键表 | `host:chenhuodajie_card` **存在**（`keys.rs:862`） |
+| 宿主键表 | `host:chenhuodajie_card` **存在**（`keys.rs:327`） |
 | 授予路径 | `ChenhuodajieCard` **不在** `construction.rs`（2026-10-18 快照第 468–500 行；2026-10-24 当前授技入口见 `engine/construction.rs:463-477`） 的授予清单、也**不在** `card_kind_host_skills` |
 
 ⇒ **非装备牌的 `global` 子技能没有任何声明通道** ⇒ `host:chenhuodajie_card` **永远不会被实例化**

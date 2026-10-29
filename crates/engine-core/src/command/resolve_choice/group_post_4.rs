@@ -8,7 +8,12 @@ use super::*;
 
 mod resolve_resolve_dctingxian;
 pub(crate) use resolve_resolve_dctingxian::*;
+
+mod resolve_resolve_zhiba;
+pub(crate) use resolve_resolve_zhiba::*;
 mod settle_releiji_judgment;
 pub(crate) use settle_releiji_judgment::*;
+mod resolve_qizhi_target;
+pub(crate) use resolve_qizhi_target::*;
 mod resolve_kuizhu_damage;
 pub(crate) use resolve_kuizhu_damage::*;

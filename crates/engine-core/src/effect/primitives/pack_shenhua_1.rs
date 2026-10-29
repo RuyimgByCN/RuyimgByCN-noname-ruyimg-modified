@@ -191,5 +191,10 @@ pub(crate) const POTWEIYAN_KUANGGU_LIMIT_DEF: u32 = 4_200_000_565;
 
 mod reveal_hand_to_player;
 pub(crate) use reveal_hand_to_player::*;
+
+mod resolve_zhiba;
+pub(crate) use resolve_zhiba::*;
 mod guanxing_top_by_falu_marks;
 pub(crate) use guanxing_top_by_falu_marks::*;
+mod resolve_haoshi;
+pub(crate) use resolve_haoshi::*;

@@ -159,7 +159,7 @@ fn upstream_gouhunluo_target_gate_is_enforced() {
     // 门槛在**命令面**（不是效果分支）——须读完整校验链
     let play_card = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/engine/play_card.rs"
+        "/src/engine/play_card_targets.rs"
     ))
     .expect("读 play_card");
     let idx = play_card.find("gouhunluo_rounds > 0").expect("勾魂锣门槛");

@@ -29,14 +29,14 @@ jiguantong: {
 |---|---|---|---|
 | 2 | 有手牌 → `chooseToDiscard` | **分支 A**：AOE 三名目标**各弃一张** → 询问 `swd_jiguantong_discard` 出现、**hp 4 → 4（免伤）**、使用者手牌 **1 → 1**（打出本体 −1、**contentAfter 摸 1**） | 通过 |
 | 2 | 无手牌 → `damage("fire")` | **分支 B**：目标**无手牌** → **无弃牌询问**（`询问=[]`）、**hp 4 → 3（火伤）**、使用者手牌 **1 → 0**（**有实伤 → 不摸牌**） | 通过 |
-| 1 | `reverseOrder: true` | **差异登记**：上游**逆序**结算 ↔ 原生**座位序**（`play_card.rs:1526` 注释自述「结算序=座位序登记差异」） | 通过（**差异登记**） |
+| 1 | `reverseOrder: true` | **差异登记**：上游**逆序**结算 ↔ 原生**座位序**（`play_card.rs:997` 注释自述「结算序=座位序登记差异」） | 通过（**差异登记**） |
 
 **原生实现引用**：`content/host/step/swd_card_effects.rs:645`（逐目标两分支 + targets 空后按
 日志实伤判定 `!damaged → draw_cards(owner,1)`）。
 
 ## 3 夹具要点（**AOE 门槛**）
 
-该卡为 AOE，`engine/play_card.rs:1526` 要求 `targets` **恰为**「自当前回合角色起的座位序中
+该卡为 AOE，`engine/play_card.rs:997` 要求 `targets` **恰为**「自当前回合角色起的座位序中
 **全部其他存活角色**」→ 夹具须传 **`vec![1,2,3]`**（传单个目标会 `Rejected(IllegalTargets)`）。
 另：分支 A 须让**全部目标**都有手牌，否则未弃牌者受火伤 → `contentAfter` 判定为「有实伤」→ 使用者**不**摸牌。
 

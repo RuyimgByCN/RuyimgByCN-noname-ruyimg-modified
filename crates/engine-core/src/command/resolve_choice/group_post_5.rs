@@ -8,7 +8,12 @@ use super::*;
 
 mod resolve_zhizheng_commit;
 pub(crate) use resolve_zhizheng_commit::*;
+
+mod resolve_twjuxiang_card;
+pub(crate) use resolve_twjuxiang_card::*;
 mod resolve_qiaobian_discard;
 pub(crate) use resolve_qiaobian_discard::*;
+mod resolve_resolve_xinkuangfu;
+pub(crate) use resolve_resolve_xinkuangfu::*;
 mod resolve_resolve_nsdingzhou;
 pub(crate) use resolve_resolve_nsdingzhou::*;

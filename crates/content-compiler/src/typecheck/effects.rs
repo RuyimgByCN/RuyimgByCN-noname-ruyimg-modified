@@ -1,14 +1,26 @@
 use super::*;
 
 mod choose_discard_heart_redirect_current_damage;
+mod choose_discard_heart_redirect_current_damage_resolvers;
+mod choose_discard_heart_redirect_current_damage_resolvers_ddd_wdb;
 mod choose_discard_one_for_sha_refund_and_draw_if_red;
+mod choose_discard_one_for_sha_refund_and_draw_if_red_resolvers;
 mod gain_draw_cards_for_lifetime_card_action_divisors;
+mod gain_draw_cards_for_lifetime_card_action_divisors_resolvers;
 mod qieyi_phase_start;
 mod resolve_beizhu;
+mod resolve_beizhu_resolvers;
 mod resolve_ddd_guanning;
+mod resolve_ddd_guanning_resolvers;
 mod resolve_heji;
+mod resolve_heji_resolvers;
 mod resolve_zhizheng;
+mod resolve_zhizheng_choices;
+mod resolve_zhizheng_resolvers;
 mod set_draw_phase_bottom;
+mod set_draw_phase_bottom_resolvers;
+mod set_draw_phase_bottom_resolvers_packs;
 mod skip_remaining_phases;
+mod skip_remaining_phases_resolvers;
 
 pub(super) use set_draw_phase_bottom::check_effect_stmt;

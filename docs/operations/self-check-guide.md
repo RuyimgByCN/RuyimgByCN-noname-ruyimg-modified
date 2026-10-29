@@ -7,7 +7,7 @@
 
 | # | 命令 | 检查什么 | 期望 | 红了怎么办 |
 |---:|---|---|---|---|
-| 1 | `python3 -B scripts/check-source-lines.py` | **单文件 ≤ 2000 行** | `exit=0` | **拆文件**（见 AGENTS.md 第 1–3 条），**不要压缩代码或藏文件** |
+| 1 | `python3 -B scripts/check-source-lines.py` | **单文件 ≤ 2000 行；Rust 非测试源码有效行（去注释、空行、`#[cfg(test)]`）≤ 1000** | `exit=0` | **拆文件**（见 AGENTS.md 第 1–3 条），**不要压缩代码或藏文件** |
 | 2 | `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | **门禁脚本自身** | `OK` | **修门禁脚本**，不是改阈值 |
 | 3 | `python3 -B scripts/check_local_links.py --all` | **docs/ 下全部 Markdown 的本地链接** | `坏链 0` | **修正路径或恢复缺失目标**；`KNOWN_BAD` 只保留已核实的历史例外，不能用它豁免新增坏链 |
 | 4 | `python3 -B scripts/refresh_recent_rounds.py --check` | **进度主稿「最近 20 轮索引」是否过期** | `exit=0` | **跑一次不带 `--check` 的**刷新它 |

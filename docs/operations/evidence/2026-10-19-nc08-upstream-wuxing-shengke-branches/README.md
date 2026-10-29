@@ -38,7 +38,7 @@
 1. **触发条件逐条成立**：`filtering/common.rs:539` 的过滤为
    `CardUsed(u) if u.targets.contains(&owner) && card_natures.contains_key(&u.card) && player(owner).wunature.is_some()`
    —— 本用例**三项均满足**；
-2. **声明面存在**：包数据 `wuxing-upstream-liuli/assets/cards.json` **含 `shengke` 声明**；`keys.rs:853` 映射 `host:shengke_check`；
+2. **声明面存在**：包数据 `wuxing-upstream-liuli/assets/cards.json` **含 `shengke` 声明**；`keys.rs:318` 映射 `host:shengke_check`；
 3. **`init_hook` 已生效**：样本 141 实测**牌属性表 38 条 = 牌堆 114/3**。
 
 ⇒ 剩余候选：**宿主技实例是否挂到「该牌/该角色」**、**`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。

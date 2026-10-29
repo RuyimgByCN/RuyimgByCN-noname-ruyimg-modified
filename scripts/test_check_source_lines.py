@@ -39,6 +39,24 @@ class SourceLinesTest(unittest.TestCase):
                 },
             )
 
+    def test_rust_effective_limit_skips_comments_blank_lines_and_test_code(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            code = "fn f() {}\n" * 1001
+            padded = ("// note\n\nfn f() {}\n" * 1000) + "#[cfg(test)]\nmod tests {\n    fn t() {}\n}\n"
+            for name, text in {
+                "crates/example/src/big.rs": code,
+                "crates/example/src/padded.rs": padded,
+                "crates/example/tests/big.rs": code,
+            }.items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8")
+            self.assertEqual(
+                dict(CHECK.rust_effective_oversized(root)),
+                {Path("crates/example/src/big.rs"): 1001},
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

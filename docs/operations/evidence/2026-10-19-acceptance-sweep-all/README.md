@@ -116,7 +116,7 @@ DBG   REJECTED wudian-upstream-noname / youdishenru
 
 | 卡 | 原生实现（**逐字引用**） | 定性 |
 |---|---|---|
-| `hufu`（虎符） | `play_card.rs:1162`：与 **`CardKind::Tao` 同组**；`:1178`：**`if kind == CardKind::Hufu && !p.dying`** | **合理**：虎符为**濒死救援**牌，普查无人濒死 |
+| `hufu`（虎符） | `play_card.rs:633`：与 **`CardKind::Tao` 同组**；`:1178`：**`if kind == CardKind::Hufu && !p.dying`** | **合理**：虎符为**濒死救援**牌，普查无人濒死 |
 | `shenmiguo`（神秘果） | `play_card.rs:568-571`：**「神秘果不可直接使用（经用牌后窗口消耗——窗口机登记结构性暂缓，见补切批②证据）」** + `return Err(IllegalTargets)` | **合理**：**已登记为「暂缓」**（不可直接使用） |
 | `guilingzhitao`（龟龄芝桃） | `play_card.rs:576-600` 的**大组**（`Lianyaohu … Guilingzhitao … Yuchan* …`）；该组注释：**「器族五件：手持牌（非装备路径；效果经手持触发技）」** | **合理**：**手持/器牌**，**按设计不直接使用** |
 | `yuchankan` / `yuchankun` / `yuchanxun`（渔产三件） | 同上大组（`Yuchanqian/Yuchankun/Yuchanzhen/Yuchanxun/Yuchankan/…`） | **合理**：同上（手持触发） |

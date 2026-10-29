@@ -81,7 +81,7 @@
 | 用例 | 现象 | 定案 |
 |---|---|---|
 | **`gujian_mizhilianou`（41）** | 红桃牌应可当【桃】用，实测 `Rejected` | ❗ **B 类**：上游是 **`trigger: player phaseAfter`**（**阶段后**）+ `mark: "card"` ⇒ **「阶段后」缺档 = G15 家族** |
-| **`swd_hufu`（52）** | 濒死支未复现 | ✅ **非缺陷**：上游是**「濒死救援专用」牌**，原生**已实现**（`play_card.rs:1178` `Hufu` 要求 `p.dying`）⇒ **是测试夹具问题**（救援窗口没做出来）|
+| **`swd_hufu`（52）** | 濒死支未复现 | ✅ **非缺陷**：上游是**「濒死救援专用」牌**，原生**已实现**（`play_card.rs:649` `Hufu` 要求 `p.dying`）⇒ **是测试夹具问题**（救援窗口没做出来）|
 | **`jijiang`** | 决斗场景询问为空 | ✅ **范围外**：上游 `jijiang` 是 **`zhuSkill: true` + `group: ["jijiang1"]`**（**主公技 + 子技能组，无 `trigger`**）⇒ **效果走子技能 `jijiang1`**；**原生在 `content/host/` 里零命中** ⇒ **属 `engine-core` 的主公技/代打机制**（`hash/…`、`effect/primitives/pack_shenhua_1/…` 里有 `jijiang_def`）⇒ **不在 `content/host` 范围，需 engine-core 侧修** |
 | **`luweiyan`** | 虚拟杀未产生响应询问 | ✅ **B 类**：**嵌套结算**（**虚拟杀在【水攻】自身结算内发起被丢弃**，修复清单第 31 项）⇒ **引擎能力缺口** |
 
