@@ -1,0 +1,78 @@
+{
+  "status": "proposal only; no wire additions or variants implemented",
+  "currentVersions": {
+    "rules": 328,
+    "archive": 105,
+    "abi": 753,
+    "ws": 5
+  },
+  "counterexamples": [
+    {
+      "source": "crates/engine-native/tests/nc09_referee_projection.rs::referee_reveals_both_dark_generals_and_identities_without_mutating_authority",
+      "fact": "Native referee view contains both configured dark slots with definition/name/faction; current SeatView has one character_def and no second slot or metadata fields, so its serialized snapshot cannot convey both slots."
+    },
+    {
+      "source": "crates/engine-native/tests/nc09_referee_projection.rs::referee_includes_machine_held_cards_and_private_choice_after_archive",
+      "fact": "Native referee ChoiceView contains guanxing_arrange prompt and exact native kind; current ChoiceRequest has no prompt member. RespondCard/PickTag have no exact ChoiceKind wire variants and remain Custom."
+    }
+  ],
+  "proposedAdditions": {
+    "SeatView": {
+      "appendAfter": "skills",
+      "rust": "#[serde(default)] pub generals: [Option<GeneralSlotView>; 2]",
+      "json": "generals: [GeneralSlotView|null, GeneralSlotView|null]",
+      "slotOrder": [
+        "primary",
+        "secondary"
+      ],
+      "absence": "Old server missing field deserializes to [None,None]; hidden or unconfigured slot is null; a populated slot always contains its actual definition and metadata."
+    },
+    "GeneralSlotView": {
+      "def": "u32 (not an Option or sentinel)",
+      "name": "String",
+      "faction": "String with canonical current native values wei/shu/wu/qun",
+      "revealed": "bool from the slot reveal flag"
+    },
+    "ChoiceRequestPrompt": {
+      "appendAfter": "kind",
+      "rust": "#[serde(default, skip_serializing_if = \"Option::is_none\")] pub prompt: Option<String>",
+      "absent": "None for older server or no available prompt; display falls back to existing choice kind and option labels."
+    },
+    "ChoiceRequestExactKind": {
+      "appendAfter": "prompt",
+      "rust": "#[serde(default, skip_serializing_if = \"Option::is_none\")] pub native_kind: Option<String>",
+      "values": [
+        "confirm",
+        "select_cards",
+        "select_players",
+        "respond_card",
+        "pick_tag"
+      ],
+      "reason": "Preserve the exact native semantic kind without adding enum variants that older serde clients would reject. Keep existing kind populated with current mappings and Custom fallback."
+    }
+  },
+  "visibility": {
+    "Player": "Use existing shared PlayerView: own configured slots visible; foreign Kingdoms slots only when revealed; non-Kingdoms configured generals remain public. Choice options/prompt/exact kind only through authorized own choice.",
+    "Spectator": "Use existing shared spectator view: Kingdoms dark slots null; no private choice object even with a valid supplied player ID.",
+    "Referee": "Use trusted server membership only: both configured slots and all native choice metadata available; legal_actions empty and submit/replay forbidden. No client role or JSON extras grant Referee."
+  },
+  "compatibilityValidationRequired": [
+    "Serialize old server SeatView without generals and ChoiceRequest without prompt/native_kind, deserialize with new Rust types, and assert default absence plus existing field preservation.",
+    "Serialize populated new snapshot/choice JSON, deserialize using fixture copies of old WS5 Rust structs, and verify existing fields; old structs ignore unknown fields because they do not deny_unknown_fields.",
+    "Exercise old TypeScript consumer with extra fields and new consumer with absent fields, preserving current character_def and labels fallback.",
+    "Round-trip both-slot data for Player/Spectator/trusted Referee before and after actual archive decode/restore and real WS reconnect/restart, checking private slots stay null for unauthorized observers.",
+    "Prove optional exact-kind strings do not change command tokens, observer identity, continuation IDs, revision, cancellation or authorization.",
+    "Test known-name localization fallback and escaping for native prompt/name strings in the UI; no rendering from raw authority."
+  ],
+  "versionRecommendation": "No technical WS6 requirement for these additive optional JSON fields: old Rust serde structs ignore new fields, new structs default absent fields, and existing enum values stay unchanged. Retain WS5 only after the explicit old/new compatibility tests above and user approval of new fields. If instead adding RespondCard/PickTag to the existing ChoiceKind enum or requiring new fields without defaults, use an explicitly approved WS6 and rejection/upgrade plan because old enum deserializers or missing-field readers may fail. This run makes no version change.",
+  "consumersToWireAfterApproval": [
+    "crates/engine-api/src/view.rs and choice.rs: append optional/default fields and GeneralSlotView; keep character_def and existing ChoiceKind.",
+    "apps/game-server/src/native_view.rs: copy metadata only from the shared authorized PlayerView/ChoiceView, never from raw authority as a bypass.",
+    "apps/web-client/src/types/engine.ts: add optional generals tuple and prompt/native_kind, with nullable slot values and finite known faction/kind strings plus safe unknown fallback.",
+    "crates/engine-native-wasm/src/lib.rs: explicitly emit already-filtered native general slots and exact choice kind/prompt through the local projection after approved envelope review.",
+    "apps/web-client/src/worker/nativeBackend.ts: extend NativeView/NativeChoiceJson and nativeObserverToSnapshot/choice adaptation to pass already-authorized values while preserving local 0-based versus wire 1-based player normalization.",
+    "apps/web-client/src/components/battle/SeatCard.vue and apps/web-client/src/views/BattleView.vue choice controls: consume optional secondary general metadata and prompt/kind with the old character_def/labels fallback; no raw-authority lookup to fill hidden slots.",
+    "apps/web-client/scripts/native-server-projection-parity.mjs and native-adapter/choice tests: compare both slots and choice semantics on the same archives, include absent/new-field compatibility, and retain existing ordinary privacy assertions."
+  ],
+  "remainingScope": "This proposal does not close all NC09/NC03 work. Network secondary general metadata, native prompt/exact-kind wire precision and local Worker choice-kind normalization remain incomplete pending explicit protocol work; timeout, wider UI/platform and parent integration acceptance are separate."
+}

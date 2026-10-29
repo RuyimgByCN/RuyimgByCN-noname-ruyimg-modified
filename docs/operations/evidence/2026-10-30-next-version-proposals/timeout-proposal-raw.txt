@@ -1,0 +1,149 @@
+# NC09 超时：J2 之后的条件式 v330 审批稿（只读源码核对）
+
+结论：第 15 项已经批准“30 秒默认、房间可选 10/15/30/60/90 秒、actor 计时、显式原生 TimeoutAction、AI 应答入命令流/WAL、座位托管到本人操作或重连”。不要再次请示这些目标。仍须批准的是 **J2 实际落地后 v329→v330 的具体版本占用、下述最终内部动作/房间持久化及 WS 字段、恢复时限政策和一份未编号 ADR**。源码不能支持“房间可配置且 WS5 字段完全不变”的承诺；本稿建议在条件成立时与待审 Referee 一并使用 WS6，未分配任何版本。
+
+## 核对基线与已有授权
+
+- 本次实际只读 HEAD：`38789f54c798829d7b32bff1c990def50cf7f611`；开始及结束所见 `git status --porcelain=v1`、`git diff --cached --name-only` 均空。主树规则328、存档105、WS5；J2/规则329/ABI758 是隔离候选与单独授权，不能当作当前 main。
+- 规范已读：`/Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md` 与 `NONAME_NEXT_AGENT_SPEC.md`，特别是 §0.10、§4.4、§7.2、§8.2–8.4、§11.2。第15项原文：`docs/operations/evidence/2026-10-28-user-decisions/README.md`（15）；J2 独占号与协议边界为同文（17）。NC09 合同：`docs/architecture/native-convergence-plan.md:119`。
+- 第15项对 WS 升号的现有授权明确属于**服务端牌面统一**子项；不能据此宣称新的 timeout 配置/托管字段已获得具体形状授权。TimeoutAction **概念本身已获原生命令新增许可**，不再拿旧方案“命令变体待批准”的历史文字当作当前阻断。
+- CodeGraph 扩展/LSP 工具未提供；先以 SQLite `mode=ro` 查看 `.codegraph/codegraph.db` 的元信息及 `NativeRoomState/NativeRoomSession/GameAction/action_for/RoomDurability/save_durable` 节点。图停在 `95f51867`，仍将 ChoiceSpec 指向拆分前路径，故按已定位文件 focused rg/读取当前模块体；未重建图、未触发编译。
+- 保留既有反例：`docs/operations/evidence/2026-10-28-nc08-nc09-review-items/README.md`；真实 actor 默认30秒、31秒仍无应答的红灯及源码在 `docs/operations/evidence/2026-10-30-nc09-projection/initial/timeout-counterexample-test.rs`，总结在该证据目录 `README.md:28`。本次没有重跑。
+
+## 当前事实与落点
+
+| 事实 | 当前源码句柄 / 后果 |
+|---|---|
+| 没有选择计时器 | `apps/game-server/src/room_native_actor.rs:172` 的 loop 仅 `rx.recv().await`；`SEAT_TIMEOUT_SECS` 是默认600秒离线回收，不可复用为选择超时。`NativeActorMember.last_seen` 是进程内 Instant。 |
+| 没有房间 options 通道 | `crates/engine-protocol/src/messages.rs:48` CreateRoom 只有 players/seed/password；`apps/game-server/src/lobby.rs:339` 及 `apps/web-client/src/engine/networkClient.ts:225` 原样转发；不能把配置塞进 password、ruleset 字符串或不存在的 metadata。 |
+| 房间可持久化元数据已有唯一载体 | `apps/game-server/src/room_native.rs:27` NativeRoomState；session/checkpoint/export_state/from_saved 在82/101/334/356附近。已有 snapshot、next_dedup、成员/令牌、冻结包、玩家收据；**没有** timeout、managed、deadline、落盘命令WAL。 |
+| 托管不是现成内核字段 | `NativeMember:68` 只有连接/玩家/座位/角色/令牌；`SeatPresence` (`messages.rs:213`) 只有身份/名称/connected；内核 PlayerState/Core、StateSnapshot 没有托管控制字段。托管应为房间调度元数据，不塞进内核技能状态。 |
+| 既有公开 TimeoutAction 不能作为特权入口 | `crates/engine-api/src/command.rs:93` 已有 `TimeoutAction { choice_id: Option<ChoiceId> }`，但 native `action_for:487` 的 fallback 明确拒绝，旧线语义不适合直接照抄。native submit 以真实成员座位为 actor，拒 spectator；必须保留。 |
+| 普通 Answer 校验和事务可复用 | `crates/engine-native/src/engine.rs:27` GameAction、`:56` GameCommand；`engine/commands.rs:84` submit 的去重/修订/actor/终局/挂起门；`engine/apply_command.rs:109` 校验 choice_id、observer、ChoiceSpec::accepts，写 ChoiceAnswered 和 resolution.answer；`engine-native-kernel/src/choice.rs:87` 校验数量/重复/候选/取消。 |
+| 动作目前没有磁盘 codec | GameAction、ChoiceOption 没有 serde；native及kernel没有生产serde依赖。`engine-native-kernel/src/archive/resolution.rs:5` 已编码 ChoiceOption 的0..5标签，但函数为私有，仅供**状态**归档；archive 不序列化 GameCommand/GameAction。不能声称“加个变体会自动落盘”。 |
+| 现有 WAL 仅内存 | `room_native.rs:585` NativeRoomPersist 存 `(revision,seat,GameAction,hash)`；`:616` recover 人造 `revision*2` dedup。actor 接受分支在 durability.commit **之后** persist.record；重启只恢复最新完整 snapshot_hex，没有动作日志。这必须随超时接线补齐，不能只在内存 record 后宣称耐久WAL。 |
+| 成员收据不能假装系统收据 | `room_native/receipts.rs:7` 保存 reconnect_token/player_id/key/**CommandKind**/result；按(token,key)查冲突，只接受玩家成功命令，4096条上限。其载荷既不表达实际 AI selection，也不覆盖无人入座，不能借用玩家 key/令牌提交系统命令。 |
+| 持久化已有确认/不确定处理 | `room_native_actor/durability.rs:26/52` checkpoint/commit；`native_room_store.rs:190` save_durable；`native_room_store/journal.rs:105/142` 校验及 Prepared/Committed 决策。Prepared 恢复旧确认字节，Committed 验候选全字节hash；失败补偿再失败会 requires_restart。 |
+| 选择投影没有倒计时数据 | `apps/game-server/src/native_view.rs:246` choice_for 的 timeout_policy 恒 None；engine-api ChoiceRequest 有策略枚举但无时长/截止时间。`continuation_id` 是续行标识，不可借放时钟。Pong 的 lobby.rs:537 实际使用 SystemTime/UNIX_EPOCH，注释虽称 monotonic，其值不是单调时钟。 |
+| 可复用的安全AI输入 | `crates/engine-native/src/view.rs:151/168` PolicyInput / AiSession::input 及 Own ChoiceView。`ai.rs:513` 通用 planner 会模拟结算；`ai/redact.rs:25` 明示悬停态遮蔽只支持受限决斗，不能把任意挂起VM选择都交给该搜索器并宣称无信息泄漏。 |
+
+## 建议的一条最小完整实现路径（未实施）
+
+### 1. 内部动作：记录选择结果，不让恢复再次调用 AI
+
+原生 GameAction **只新增**：
+
+```rust
+TimeoutAction {
+    choice_id: u64,
+    selection: Vec<ChoiceOption>,
+}
+```
+
+actor/expected_revision/dedup_id 已在 GameCommand 中，不复制到 action；不加时间戳、AI种子、嵌套任意 GameAction 或由客户端声明的 system bool。TimeoutAction 只用于首次到时接管的这一条回答。后续托管回答仍显式提交 **Answer { choice_id, selection }**；非选择时的托管阶段推进仍是 **NextPhase**，每步都记录实际动作，不靠恢复重算策略。
+
+在 submit 的挂起门及终局挂起应答例外中把 TimeoutAction 与 Answer 同等处理；apply_command 两变体并入**同一个**应答校验分支，actor 必须仍等于 open.observer，候选和取消复用 accepts。没有 pending、过期 choice、错观察者、非法/重复 selection、旧 revision、旧 dedup、故障/预算拒绝时都不产生托管效果。规则核不检查到期时间，也不维护 managed。
+
+权限是宿主入口的能力边界：新增 `pub(crate)` session 超时提交函数，仅 native actor 的内部到期分支调用，调用参数由当前 choice 和持久化 deadline 得出；不得新增 RoomMsg/WS/Worker 任意原生命令提交入口。native `action_for(CommandKind::TimeoutAction {..})` 必须继续拒绝（可改为明确稳定拒因）；public/legal_actions、native_view 映射和 WASM action_to_json 绝不产生 TimeoutAction。WASM绑定保持现有 answer/next_phase 入口，内部Rust一致性测试可直接构造该动作，不导出可由页面调用的 timeout binding。拒绝报文自报系统actor/timeout字段；spectator及未来Referee同样无此特权。
+
+### 2. AI与托管：简单的只读策略，分步交回 actor
+
+复用 PolicyInput / Own ChoiceView，采用当前测试与 `examples/n10_table.rs:27` 已有“按候选顺序选最少合法项”的基线：从本人授权选项取前 min 个不同值，min=0时空选合法；生成 Answer 后仍走正式内核校验。不是照搬例子中 `.max(1)` 的快捷行为，也不在策略中调用 submit/run_policy（后者会先修改引擎且使用另一套dedup）。这个策略只看到本人投影，不访问真实暗手牌/牌库，不模拟未知挂起机器，不新增AI依赖或搜索配置。
+
+首次 timeout 成功后 managed_seats 标记该内核座位，包括暂未有人入座的合法座位；后续该座位 Own Choice 立即排一个显式 Answer，轮到该座位且无选择时排一个 NextPhase，沿用同一提交/WAL事务。每次最多推进一条，然后让 actor 处理外部消息，不能在一个分支 while 自动跑整局。这里是最低能力的代答/推进基线，棋力、主动技搜索和通用AI池仍归 NC10，不能以本批冒充AI质量验收。
+
+本人**新的合法操作被接受**或有效令牌重连成功时清托管，变化与该操作/重连一起耐久提交；快照/心跳、非法包、旧收据重放不清。此“本人操作”的精确定义在审批问题中写明，避免用拒绝报文或历史重放抢回调度权。断线不清 managed，重启保留；reclaim只换成员，不能改变座位当前托管/选择结算。旧连接在重绑定后无控制权。
+
+### 3. 房间元数据与时钟：同一个 JSON/事务，不加 store
+
+NativeRoomState 尾部增加两个**可省略 aggregate**：`timeout: Option<NativeTimeoutState>` 和 `wal: Option<NativeWalState>`，均 default None + skip_serializing_if None。新版本新房间必须有 Some；旧房间缺字段反序列化后仍按旧字段序列化，从而**不改变旧校验和**。from_saved 先做归档/规则门禁，再要求当前规则的新房间元数据完整，不能给旧规则档补默认值后升级。
+
+```rust
+struct NativeTimeoutState {
+    choice_timeout_secs: u8, // 只能10/15/30/60/90；新房间默认30
+    managed_seats: Vec<u8>, // 按座位排序，无重复，全部<max_seats
+    deadline: Option<NativeChoiceDeadline>,
+}
+struct NativeChoiceDeadline {
+    choice_id: u64,
+    observer: u8,
+    deadline_unix_ms: u64,
+}
+```
+
+deadline必须与当前 OpenChoice 的 id/observer一致；无选择时为None。它不绑定revision：补偿RevealGeneral会推进revision却保留同一选择，不能因此重置倒计时。新选择提交时生成截止时间，与引擎、managed、收据及WAL同一候选落盘，只有持久化确认后发布；同选择的 Snapshot、断线、重连、重启、Recover 不加时。初建即挂起的房间在初次持久化时也要建立 deadline。
+
+**建议批准的恢复政策**：截止值为服务端 SystemTime 的 Unix毫秒绝对时间，与现有Pong同一时间语义；停机时间计入时限，恢复时未来截止继续剩余时间、过期截止排一次当前选择的timeout。有效重连先清托管，但不延长仍挂起的选择时间；到期后仍可能再被接管。actor 可用 tokio timer 等待由同一服务端截止值计算的剩余间隔，唤醒必须重新核对 SystemTime 和 choice；不能把 std::Instant 落盘或把Pong当作单调时钟。进程内时钟回拨会增加等待，前拨会使选择提前到期，这是绝对时间政策的明确边界；生产校时/时钟错误应显式报错，不能把时钟失败当0并自动接管。用户可见倒计时是近似显示，客户端时钟永不决定规则提交。
+
+### 4. 真实动作 WAL：补入现有 NativeRoomState serializer
+
+将 NativeRoomPersist 的有效“基准快照+命令段”纳入 session/checkpoint 的可回滚数据并导出到上面的 `wal`，由现有 StoredRoom/serde_json/checksum/journal 一次保存；复用现有 snapshot_every 做段检查点，不新建数据库/文件/服务。记录所有实际推进的动作，人工与托管之间的中间命令不能缺失。
+
+```rust
+struct NativeWalState {
+    base_snapshot_hex: String,
+    entries: Vec<NativeWalEntry>,
+}
+struct NativeWalEntry {
+    actor: u8,
+    expected_revision: u64,
+    dedup_id: u64,
+    action: StoredNativeAction,
+    revision: u64,
+    state_hash: [u8; 32],
+}
+```
+
+在 server 现有 room_native 子模块内放一个小的私有serde DTO codec：StoredNativeAction 与当前 GameAction 的6种变体一一对应（PlayCard/NextPhase/ActivateSkill/RevealGeneral/Answer/TimeoutAction），其 selection 使用同样6种值的 `StoredChoiceOption::{Confirm,Pass,Card(u32),Player(u8),Tag(u8),Kind(u16)}`，转换穷举匹配，不依赖Debug字符串或裸u32混用。内核新增变体使匹配编译失败即可提醒维护；不为几行JSON编码给两个核心crate增加serde或开放archive私有函数。当前 ChoiceOption::Kind 的解码门禁/数量界限等在服务器DTO恢复校验保留，未知类型、超界、过大选择及无效WAL链明确拒绝。
+
+候选提交顺序：checkpoint →构造实际 GameCommand（用 session.next_dedup，checked递增）→ Engine::submit →成功后在候选中同时追加**这条实际命令**、设置/清managed、建立后继deadline、记玩家收据→ durability.commit →发布个性化状态/名册。**不能沿用当前“先commit再record”的时序。** 非revision推进的 StartGame兼容空操作不造伪WAL；成功 assign_general 不推进revision但改状态，沿用其替换快照恢复点的语义，重置WAL基准而非制造无法重放的缺口。
+
+Recover/from_saved重放保留的命令段必须使用原 expected_revision/actor/dedup/selection，检查每条result revision/hash及最终完整规范快照（包括last_dedup/RNG/续行），与保存的snapshot_hex一致；去掉现有Recover的人造 `revision*2`。TimeoutAction重放纯粹走Answer逻辑，不检查时钟、不给AI第二次机会；managed/deadline从同一确认房间元数据恢复。段可随既有快照策略压缩，压缩后的检查点就是旧命令效果的恢复依据；这不是永久录像历史完整交付，原NC09录像待办仍保留。
+
+### 5. 竞争、幂等和失败边界
+
+单写actor一次只提交一个候选。建议定义：actor选取消息前先检查已经到期的当前deadline；到期与消息同时就绪时timeout优先；此前已取出并正在处理的人工命令先完成。这是actor观察到的顺序，绝不承诺按客户端点击时间或报文发送时间排序。不要使用可被源源不断消息饿死的“总是rx优先”select；自动后继每条回到调度边界。
+
+- 人工先成功：choice消失/变更，旧timer按(id,observer)失效；不能给下一窗套旧timeout。timeout先成功：人工旧答被拒；无重复扣牌/事件/RNG。若只是RevealGeneral而保留同choice，保留截止，在提交timeout时取**当前**revision。
+- 系统timeout不占玩家(token,key)命名空间：其幂等使用既有GameCommand dedup水位 + 已耐久的(choice,deadline)/WAL状态；不为系统伪造NativeCommandReceipt或令牌。重复唤醒在最新选择和已接受命令上核对后不再执行。人工重试继续走当前command_receipt，完全相同请求返回原结果、同键异载荷冲突、replay无收据拒绝。
+- 内核拒绝/故障：不追加WAL、不消耗确认dedup、不标managed、不发布成功；保持原deadline。不可对必拒选择进行无让出的零延时循环；记录不含私牌/令牌的稳定故障并暂停该窗口自动重试，待明确新操作/恢复后再评估。
+- 持久化前失败：整个候选（engine、dedup、deadline、managed、WAL、收据）回滚；没有成功ack/广播。retry不得因只回滚engine而留下managed或已消费timer。
+- rename后不确定：原RoomDurability规则照用；replacement_visible要求先固定确认状态，decision_uncertain/补偿失败要求重启。不能让timer绕开checkpoint继续写。重启只按Prepared/Committed实际决定恢复：已提交则不再重答，未提交则只从旧确认状态重新产生一次候选；向客户端如实报不确定，绝不假报取消成功。
+
+## WS字段与版本：不能在事实不足时承诺WS5
+
+建议最小公开变化只在房间协议，不扩展内核ChoiceKind或Worker命令：
+
+1. `ClientMessage::CreateRoom` 新增 `choice_timeout_secs: Option<u8>`；None=30，仅接受五个值，非原生房间明确拒绝非默认设置而非静默忽略。Lobby→spawn_native_room_if_configured→session设置→首次耐久保存完整接线；创建UI提供同五个选项。
+2. `ServerMessage::RoomRoster` 新增 `choice_timeout_secs: Option<u8>`（旧线None，原生Some）；`SeatPresence` 新增 `managed: bool`（旧线false）。以现有创建/重连/状态更新的名册广播显示实际配置与托管，不能客户端自行猜。新增字段同步Rust和networkClient.RoomRoster/产品UI及旧线构造者。
+3. 不改全局 engine_api::ChoiceRequest：在已有 `ServerMessage::{JoinOk,Snapshot,CommandOutcome}` **各新增** `choice_deadline_unix_ms: Option<u64>`，只在该观察者有personal choice时给值，和choice同报文防串窗。相应 `room::JoinReply`、Lobby组包、native actor三条输出、TS解析和OnlineSession/恢复路径同步；旧线None。客户端已有Pong服务端Unix时间可用于显示同步，不能新造控制命令或借continuation_id传时钟。
+4. 条件式 **WS5→WS6** 随本字段集审批；若Referee先获批并落WS6，则本字段在同一待发布的WS6合约中合并，不再自行分配WS7。所有旧线/原生协议构造和序列化测试同步。旧WS5客户端明确VersionMismatch，缺新字段拒绝，不依赖serde忽略未知字段的偶然行为；WS6先Hello并验证版本才允许建房/入房/提交。当前Hello只返回错误，且header版本被Lobby重建，故仅改常量不构成拒旧门禁，必须加会话握手状态/公共入口校验；同步客户端Welcome校验，防反向连到WS5后端。现有0=unspecified不能绕过本WS6新房间合约。
+
+这是本稿唯一推荐路径：需用户批准新wire fields/兼容门禁。只做全服固定30秒、用现有None策略字段或在UI硬编码可选值，均不满足已批准的房间配置与实际托管反馈。
+
+## 版本与未编号ADR草案
+
+- **前提**：J2经独立复审、接入并确认实际为规则329/ABI758且archive105；若不成立/版本被占用，暂停重新确认，不预留、不抢占329。满足后才请求此批独占 **329→330**。NC08后续v331候选独立待批，不在本次分配。
+- **预计archive105保持的源码理由**：新增变体属于 GameAction，不是 StateSnapshot；规则核只复用Answer，不新增PlayerState/Resolution/MachineSnapshot/ChoiceOption/ChoiceKind/prompt；托管/时钟/WAL均放已有外层NativeRoomState JSON。`engine-native-kernel/src/archive.rs:113/142` 状态二进制layout不用改。WS新字段不等于native存档格式升号。是否真的维持必须由实施后的字节/恢复检查证明，不能仅凭本稿验收。
+- **预计ABI758保持的理由**：不新增DSL语法、VM原语/effect tag/机器载荷/ChoiceKind，不更改J2的rule-api ABI或原局冻结包；核心crate不需serde依赖。
+- **规则升号理由**：原生命令接受面加入TimeoutAction及同Answer门禁，实际联机默认推进/托管输入流改变；遵守批准前不改号。golden先用同输入三步探针解释版本域hash差，再重录，不把timer/AI引入golden内核执行。
+- **旧档边界**：v329及更早原生规则档在 `crates/engine-native/src/engine/snapshot.rs:57` 的ruleset精确校验或既有安全解码门明确拒绝；保留旧归档字节、包/锁/冻结副本，不改version/checksum“升级”。外层可省略字段须先证明旧JSON重序列化的checksum不变；失败档保留房号及原字节，启动不发布，不通过重写archive头规避。带扩展规则号是标准版本与内容锁派生值，使用对应冻结目录验证，不能简单作数值<=329比较。
+
+**ADR草案（不申请正式编号前先批准内容）**：
+
+> 标题：原生房间选择超时的显式应答、托管和耐久恢复。状态：提议，用户批准后才由父任务分配唯一正式编号。背景：当前actor无选择计时器，31秒红灯已证；第15项策略已批准，具体门禁尚缺。决策：房间30秒默认/五档配置，actor以服务端绝对截止值计时；原生TimeoutAction记录完整选择，复用Answer；托管在房间元数据，后继输入仍显式记录；WAL/时钟/收据同一StoredRoom耐久事务；停机计时、重连不延长窗口；本人新合法操作或有效重连清托管。兼容：仅J2接入后申请329→330，预计archive105/ABI758不变；新增房间wire字段条件升WS6并拒旧握手；旧规则档明确拒绝且原字节/冻结锁保留。取舍：比只记choice_id多保存真实应答及耐久命令段，但避免重算AI；绝对时间支持跨重启连续时限，需承认校时边界；简单view-only代答不等于强AI。验收：见下列门禁，未通过前不改“部分”结论。
+
+## 必须补齐的验收（本次全部未运行）
+
+- **先红/负例**：复用已有31秒红证据，不重跑既成取证；未来将该用例纳入真实actor绿回归。用可控actor时钟覆盖10/15/30/60/90及默认；9/11/0/91、负数/小数/未知字段、无/错choice、错seat、非法/重复selection、旧revision/dedup、终局、内容故障均拒且状态/managed/WAL不变；测试注册到当前 `autotests=false` 分组，而非引用已经不独立存在的cargo test target。
+- **竞争与权限**：截止前人工先、截止同就绪timeout先、队列已有人工但timer到期、断线/无成员座位、慢连接、同choice的RevealGeneral、后继新choice、旧timer、未来managed Answer/NextPhase让出调度；WS伪造已有TimeoutAction/系统actor/任意selection、Worker/旁观/裁判均无特权。两个玩家同key不串收据；同token同key异kind冲突；已接受重放不清managed、不重复事件。
+- **耐久/恢复**：沿用 `apps/game-server/tests/nc09_native_durability.rs` 和store fault入口，覆盖PartialWrite/FileSync/Rename/DirectorySync/Prepared/Decision各阶段及补偿双故障；断点前后engine/last_dedup/receipt/managed/deadline/WAL一致。snapshot+typed WAL实际JSON往返，再完整命令重放（实际dedup）对照snapshot；篡改selection/tag/WAL链/元数据即拒。旧v329真实字节拒绝、旧checksum/冻结锁字节不变；缺字段的新规则档拒绝。
+- **真实server进程及产品**：正式WS创建默认和10秒房间，响应窗中杀进程/SIGKILL，停机跨截止后重启，携原令牌回原seat；核对一次AI命令、实际selection、WAL/Committed、重连清managed而不延长窗。实测在线不答、断线不答、人工抢答、旁观不同投影、托管后续及回控制、写盘失败/不确定UI。使用当前源码重建的前后端；UI五档、倒计时、托管及错误可见，不能仅用helper或31秒不挂死证明产品完成。WS5/未Hello/0版本、WS6→旧服反向兼容均实际拒绝。
+- **native/WASM**：从本批源码重建真实wasm32，对同一记录的TimeoutAction选值在native内部动作与WASM既有Answer路径进行完整状态/规范字节、hash、事件、Choice、RNG及中断恢复轨迹比对；无需对外导出timeout绑定。覆盖当前ChoiceOption六类、强制多选/取消/min0、嵌套VM挂起、J2真实主动技窗及恢复。相同AI策略输出不是规则等价证据，更不能重跑AI代替回放记录。
+- **必跑命令（未来实施批）**：`cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native`；`cargo test --offline -p game-server -p engine-protocol -p engine-native-wasm`；实际受影响Worker/前端测试与typecheck、重建WASM后的smoke/真实跨目标及浏览器场景；`python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'`、`python3 -B scripts/check-source-lines.py`；现行Gate1b、相关版本/协议/包门禁、文档链接/ADR索引。本批不是37来源或全目标平台验收，未运行的不记绿色。
+
+## 父任务可直接合并的审批问题（4句，仅问未批准部分）
+
+建议在J2独立复审接入、实际确认规则329/ABI758/存档105且无版本冲突之后，批准NC09这一批独占规则329→330，并按上述内容立未编号ADR；存档105和ABI758预计保持，如源码迫使更改则另报具体方案。您是否批准内部 `TimeoutAction { choice_id: u64, selection: Vec<ChoiceOption> }` 的最终载荷、外层房间JSON中的配置/托管/截止与实际动作WAL，以及停机计时、重连不延长当前选择、本人新合法操作或有效重连清托管的精确定义？由于现有CreateRoom没有options通道，建议一并批准上述CreateRoom/RoomRoster/SeatPresence及三种个性化回复的新增字段，条件式WS5→WS6并明确拒旧握手；若Referee同批获批，合并一个WS6合约，不另行分配版本。30秒默认、五档时限、actor发显式命令和AI代答入WAL本已由第15项批准，本问题不再请求这些目标的授权。
+
+本次仅完成源码审查与审批草稿；未改仓库源码/文档/工作树，未跑测试/构建/探针，未提交或访问远端。尚待独立审查与用户批准；真实耐久WAL接线、绝对时钟校时边界、WS握手拒旧和后续产品验收是主要风险。

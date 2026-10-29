@@ -1,0 +1,69 @@
+{
+  "source_head": "38789f54c798829d7b32bff1c990def50cf7f611",
+  "kind": "Proposal documentation checks only; no implementation or future acceptance run",
+  "checks": [
+    {
+      "name": "local-links",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "seconds": 0.674,
+      "log": "local-links.log"
+    },
+    {
+      "name": "doc-line-refs",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "seconds": 26.185,
+      "log": "doc-line-refs.log"
+    },
+    {
+      "name": "source-lines-unit",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.094,
+      "log": "source-lines-unit.log"
+    },
+    {
+      "name": "source-lines",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.298,
+      "log": "source-lines.log"
+    },
+    {
+      "name": "stale-numbers",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "exit": 0,
+      "seconds": 0.052,
+      "log": "stale-numbers.log"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source_head": "38789f54c798829d7b32bff1c990def50cf7f611",
+  "kind": "Unapproved proposals; raw reviewer source references retain their original snapshot context. Curated README records parent amendments.",
+  "files": [
+    {
+      "artifact": "timeout-proposal-raw.txt",
+      "sha256": "45bb1529a211eb9b7df7d05afea0a9268ecccb741bc5aa11494e7be2b24d593e",
+      "bytes": 25807
+    },
+    {
+      "artifact": "trigger-order-proposal-raw.txt",
+      "sha256": "9f67630259e6d747d76e6e62b537fff928b8cce134d2f3f041779843a54e1c19",
+      "bytes": 45751
+    },
+    {
+      "artifact": "referee-wire-proposal-raw.json",
+      "sha256": "dd27bdf65a893c7e4fecf09c892bbd73fc30e0fa12914c95bc8c6f1e2aa38e52",
+      "bytes": 6592
+    }
+  ]
+}
