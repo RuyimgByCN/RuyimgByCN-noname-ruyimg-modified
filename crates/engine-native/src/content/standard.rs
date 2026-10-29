@@ -139,7 +139,16 @@ use crate::snap::{
 /// `d7b46ea6` 新帧使事件 id 计数进入摘要域而未升号的位移。v325 及更早存档
 /// 按版本策略拒绝（RuleVersionMismatch）；存档格式 v105、全局原生 ABI 753、
 /// CardsLost/CardsMoved 逐张口径不变。
-pub const STANDARD_RULESET_VERSION: u64 = 326;
+/// v327：NC07（裁决第 11 项）——字段审计所列 10 个「入档未入摘要」字段全部
+/// 入摘要：PlayerState 的 `jiguanyuan_cards`／`jileng_active`／`chaofeng_active`
+/// ／`xingtigaizao_count`／`yinmi_active`／`xuehuang_used`／`xuejibingbao`
+/// ／`nigong_lv`／`card_mods` 与 TurnState 的 `minwan_targets`（编码序与
+/// state_encode.rs 一致）。此前只改这些语义字段的两份存档摘要相同（GT-012
+/// 逐字段反例）；排除名单为空（十个字段均在规则路径被读取）。结构守卫
+/// `nc07_archive_hash_guard` 要求入档字段要么入摘要、要么登记排除理由。
+/// v326 及更早存档按版本策略拒绝（RuleVersionMismatch）；存档格式 v105 与
+/// 全局原生 ABI 753 不变。
+pub const STANDARD_RULESET_VERSION: u64 = 327;
 
 mod names;
 pub use names::*;

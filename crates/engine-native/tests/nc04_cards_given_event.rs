@@ -348,7 +348,7 @@ fn v325_and_earlier_archives_are_rejected_by_rule_version() {
     assert_eq!(snap.ruleset_version, 325);
     assert!(matches!(
         Engine::restore(&snap),
-        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 326 })
+        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 327 })
     ));
     // 挂起档：目录版本 = 标准版本 ^ 内容锁；与当前目录的差异只来自标准版本位。
     let pack = cards_given_pack(true);
@@ -357,7 +357,7 @@ fn v325_and_earlier_archives_are_rejected_by_rule_version() {
         .ruleset_version();
     let snap =
         decode_archive(&std::fs::read(ev.join("cards-given-v325.ngsa")).unwrap()).unwrap();
-    assert_eq!(snap.ruleset_version ^ catalog_version, 325 ^ 326);
+    assert_eq!(snap.ruleset_version ^ catalog_version, 325 ^ 327);
     let given_frames = snap
         .resolution
         .stack

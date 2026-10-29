@@ -227,6 +227,27 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
         for c in &p.lianyaohu_store {
             push_u32(&mut h, *c);
         }
+        // NC07（规则 v327，裁决第 11 项）：字段审计所列 9 个「入档未入摘要」
+        // 玩家字段全部入摘要（编码序与 state_encode.rs 一致）。它们都在规则
+        // 路径被读取（目标合法性/摸牌数/手牌上限/装备改造/回合旗标），排除
+        // 名单为空；结构守卫 nc07_archive_hash_guard 要求入档字段要么入摘要、
+        // 要么登记排除理由。逐字段反例见 nc07_archive_hash_fields。
+        push_u32(&mut h, p.jiguanyuan_cards.len() as u32);
+        for c in &p.jiguanyuan_cards {
+            push_u32(&mut h, *c);
+        }
+        push_u8(&mut h, p.jileng_active as u8);
+        push_u8(&mut h, p.chaofeng_active as u8);
+        push_u8(&mut h, p.xingtigaizao_count);
+        push_u8(&mut h, p.yinmi_active as u8);
+        push_u8(&mut h, p.xuehuang_used as u8);
+        push_u8(&mut h, p.xuejibingbao);
+        push_u8(&mut h, p.nigong_lv);
+        push_u32(&mut h, p.card_mods.len() as u32);
+        for (card, attached) in &p.card_mods {
+            push_u32(&mut h, *card);
+            push_u32(&mut h, *attached);
+        }
         push_u8(&mut h, p.paotai_lv);
         push_u8(&mut h, p.baolei_mode);
         // 暴雪/急冻（U05 ow 美，规则 v127）
@@ -468,6 +489,13 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
     }
     push_u8(&mut h, c.turn.extra_phase_lingwu as u8);
     push_u32(&mut h, c.turn.bte_used_play_phase);
+    // NC07（规则 v327，裁决第 11 项）：悯婉目标集入摘要——伤害结算收集、
+    // 事件分派按集合判读（审计所列唯一 TurnState 遗漏；反例见
+    // nc07_archive_hash_fields::minwan_targets_enters_hash）。
+    push_u32(&mut h, c.turn.minwan_targets.len() as u32);
+    for p in &c.turn.minwan_targets {
+        push_u8(&mut h, *p);
+    }
     push_u32(&mut h, c.turn.phase_number);
     // 贴房绅视：本回合无视距离目标（规则 v94）
     match c.turn.zhufangshenshi_target {
