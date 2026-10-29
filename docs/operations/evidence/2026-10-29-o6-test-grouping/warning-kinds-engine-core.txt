@@ -1,0 +1,165 @@
+ 130 warning: variable does not need to be mutable
+  31 warning: unused import: `ChoiceKind`
+  30 warning: unused variable: `skill`
+  16 warning: unused import: `EffectError`
+  12 warning: unreachable pattern
+  11 warning: unused variable: `player`
+   9 warning: unused import: `ContinuationKind`
+   8 warning: unused variable: `target`
+   8 warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`
+   8 warning: function `resolve` is never used
+   7 warning: unused variable: `state`
+   7 warning: unused import: `engine_core::command::apply_command`
+   7 warning: unused import: `CardId`
+   6 warning: unused import: `RULE_VM_ABI_VERSION`
+   6 warning: function `inject_hand` is never used
+   5 warning: unused variable: `owner`
+   5 warning: unused `Result` that must be used
+   4 warning: unused variable: `other`
+   4 warning: unused imports: `ChoiceKind` and `ZoneId`
+   4 warning: unused imports: `CardKind` and `Card`
+   4 warning: unused imports: `CardDefId`, `CardId`, and `Suit`
+   4 warning: unused imports: `CardDefId` and `Suit`
+   4 warning: unused import: `Phase`
+   4 warning: unused import: `DomainEvent`
+   3 warning: unused variable: `h2`
+   3 warning: unused variable: `card`
+   3 warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+   3 warning: unused imports: `Card` and `ZoneKind`
+   3 warning: unused imports: `CardKind`, `Card`, and `ZoneKind`
+   3 warning: unused imports: `CardDefId` and `CardId`
+   3 warning: unused import: `engine_core::trigger::TriggerFireRecord`
+   3 warning: function `inject_hand_card` is never used
+   3 warning: function `hand_of` is never used
+   2 warning: unused variable: `sha`
+   2 warning: unused variable: `holder`
+   2 warning: unused variable: `h1`
+   2 warning: unused variable: `draw`
+   2 warning: unused variable: `count`
+   2 warning: unused imports: `DomainEvent` and `TurnPhaseTag`
+   2 warning: unused import: `engine_core::state::ZoneKind`
+   2 warning: unused import: `TurnPhaseTag`
+   2 warning: unused import: `PipelineResult`
+   2 warning: unused import: `MarkDefId`
+   2 warning: unused import: `CommandResult`
+   2 warning: unused import: `ChoiceId`
+   2 warning: unused import: `Card`
+   2 warning: function `resolve_choice` is never used
+   2 warning: function `option_tokens` is never used
+   2 warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing
+   1 warning: variable `onlyOL` should have a snake case name
+   1 warning: variable `CLANSHIZE` should have a snake case name
+   1 warning: variable `CLANMUYIN` should have a snake case name
+   1 warning: variable `CLANFENSHI` should have a snake case name
+   1 warning: value assigned to `key` is never read
+   1 warning: unused variable: `view`
+   1 warning: unused variable: `value`
+   1 warning: unused variable: `tx`
+   1 warning: unused variable: `top1`
+   1 warning: unused variable: `third`
+   1 warning: unused variable: `targets`
+   1 warning: unused variable: `source`
+   1 warning: unused variable: `sid`
+   1 warning: unused variable: `sid2`
+   1 warning: unused variable: `seed`
+   1 warning: unused variable: `saw_lose`
+   1 warning: unused variable: `pile_zone`
+   1 warning: unused variable: `pile_def`
+   1 warning: unused variable: `phase`
+   1 warning: unused variable: `owner_hand_before`
+   1 warning: unused variable: `mode`
+   1 warning: unused variable: `kongsheng_def`
+   1 warning: unused variable: `kind`
+   1 warning: unused variable: `hand`
+   1 warning: unused variable: `give_cards`
+   1 warning: unused variable: `flipped`
+   1 warning: unused variable: `first_hand_before`
+   1 warning: unused variable: `dodger`
+   1 warning: unused variable: `diamond`
+   1 warning: unused variable: `cur`
+   1 warning: unused variable: `armor`
+   1 warning: unused variable: `actor`
+   1 warning: unused variable: `action`
+   1 warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+   1 warning: unused imports: `TriggerFireRecord` and `dispatch_for_events as dfx`
+   1 warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   1 warning: unused imports: `QueryRequest` and `QueryResponse`
+   1 warning: unused imports: `PipelineResult` and `apply_command`
+   1 warning: unused imports: `GameState` and `Phase`
+   1 warning: unused imports: `EffectError`, `bootstrap_match`, and `run_effects`
+   1 warning: unused imports: `CommandKind`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+   1 warning: unused imports: `CommandKind`, `CommandResult`, `Command`, and `DomainEvent`
+   1 warning: unused imports: `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`
+   1 warning: unused imports: `ChoiceKind`, `CommandResult`, and `TurnPhaseTag`
+   1 warning: unused imports: `ChoiceKind` and `CommandResult`
+   1 warning: unused imports: `Card`, `Phase`, and `ZoneKind`
+   1 warning: unused imports: `Card`, `GameState`, and `ZoneKind`
+   1 warning: unused imports: `CardId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, `PlayerId`, and `SkillDefId`
+   1 warning: unused imports: `CardId` and `DomainEvent`
+   1 warning: unused imports: `CardDefId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, and `Suit`
+   1 warning: unused import: `turn_flag`
+   1 warning: unused import: `rule_api::EffectRequest`
+   1 warning: unused import: `primitives::resolve_yixiang`
+   1 warning: unused import: `primitives::resolve_xinfu_qiai`
+   1 warning: unused import: `primitives::resolve_twxiongjun`
+   1 warning: unused import: `primitives::resolve_reliangyin`
+   1 warning: unused import: `primitives::resolve_qiangyong`
+   1 warning: unused import: `primitives::resolve_duoduan`
+   1 warning: unused import: `primitives::enable_equip_slot`
+   1 warning: unused import: `engine_core::transaction::Transaction`
+   1 warning: unused import: `engine_core::state::GameState`
+   1 warning: unused import: `engine_core::state::ContinuationKind`
+   1 warning: unused import: `engine_core::state::CardKind`
+   1 warning: unused import: `engine_core::Engine`
+   1 warning: unused import: `commit_hand_compare`
+   1 warning: unused import: `Zone`
+   1 warning: unused import: `ZoneKind`
+   1 warning: unused import: `SkillId`
+   1 warning: unused import: `Serialize`
+   1 warning: unused import: `GameState`
+   1 warning: unreachable expression
+   1 warning: function `wuxie_tokens` is never used
+   1 warning: function `validate_sha_target` is never used
+   1 warning: function `suit_from_tag` is never used
+   1 warning: function `sources` is never used
+   1 warning: function `sha_card` is never used
+   1 warning: function `setup` is never used
+   1 warning: function `resolve_rechuhai_choice` is never used
+   1 warning: function `rank_of` is never used
+   1 warning: function `module` is never used
+   1 warning: function `mingren_color_mask` is never used
+   1 warning: function `kongsheng_pile_cards_by_def` is never used
+   1 warning: function `has_skill_state` is never used
+   1 warning: function `fire_used` is never used
+   1 warning: function `fire_sha` is never used
+   1 warning: function `equip_count` is never used
+   1 warning: function `end_event` is never used
+   1 warning: function `drive_use_card` is never used
+   1 warning: function `dispatch` is never used
+   1 warning: function `discard_move` is never used
+   1 warning: function `confirm` is never used
+   1 warning: function `alloc_card` is never used
+   1 warning: function `add_bound_skill` is never used
+   1 warning: field `far` is never read
+   1 warning: field `challenger` is never read
+   1 warning: duplicated attribute
+   1 warning: constant `TWJIEQIU` is never used
+   1 warning: constant `TUIFENG2_SRC` is never used
+   1 warning: constant `SOURCE` is never used
+   1 warning: constant `SOURCES_DIR` is never used
+   1 warning: constant `REXIANZHEN_LOSE` is never used
+   1 warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+   1 warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+   1 warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+   1 warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+   1 warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+   1 warning: constant `REFRESH` is never used
+   1 warning: constant `PLAY_MASK` is never used
+   1 warning: constant `NSDIEMOU_SRC` is never used
+   1 warning: constant `MOUKUI` is never used
+   1 warning: constant `MOUKUI_SRC` is never used
+   1 warning: constant `MOBILE` is never used
+   1 warning: constant `GONGSUNZAN` is never used
+   1 warning: constant `FALU_DIAMOND` is never used
+   1 warning: constant `FALU_CLUB` is never used
+   1 warning: comparison is useless due to type limits

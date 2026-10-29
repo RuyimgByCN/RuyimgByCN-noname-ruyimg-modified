@@ -11,6 +11,15 @@ use engine_native::event::DamageNature;
 use engine_native::event::Phase;
 use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
 
+/// 子进程按 `--exact` 重跑本文件测试用的 libtest 全名：分组二进制里本文件是子模块，
+/// 全名带模块前缀（`module_path!` 去掉首段 crate 名）。
+fn libtest_name(test: &str) -> String {
+    match module_path!().split_once("::") {
+        Some((_, module)) => format!("{module}::{test}"),
+        None => test.to_string(),
+    }
+}
+
 /// 酒尾对照样本（同原型 JIUWEI_DSL 语义）。
 const JIUWEI_DSL: &str = "\
 skill hnl_jiuwei_t8(990001) {
@@ -746,7 +755,7 @@ skill hnl_xproc_t8(990008) {
     // 自启子进程（同测试二进制，T8_WORKER 环境变量识别）
     let exe = std::env::current_exe().expect("测试二进制");
     let status = std::process::Command::new(exe)
-        .args(["--exact", "t8_vm_skill_cross_process_resume", "--nocapture"])
+        .args(["--exact", libtest_name("t8_vm_skill_cross_process_resume").as_str(), "--nocapture"])
         .env("T8_WORKER_ARCHIVE", archive_path.display().to_string())
         .env("T8_WORKER_REPLY", reply_path.display().to_string())
         .output()

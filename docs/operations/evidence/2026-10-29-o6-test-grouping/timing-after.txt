@@ -1,0 +1,19 @@
+# after (2026-10-29 15:3x). lt = debug=line-tables-only (workspace default now), full = CARGO_PROFILE_DEV_DEBUG=true.
+# lt_*/full_*: clean rsync copy of the working tree, own CARGO_TARGET_DIR; main_*: main working tree target (touch only).
+lt_engine-native_cold rc=0 30.2s
+lt_engine-native_libedit_alltests rc=0 3.2s
+lt_engine-native_libedit_alltests_repeat rc=0 3.3s
+lt_engine-core_cold rc=0 30.3s
+lt_engine-core_libedit_alltests rc=0 5.9s
+lt_engine-core_libedit_alltests_repeat rc=0 5.7s
+6.6G	target-lt
+full_engine-native_cold rc=0 31.8s
+full_engine-native_libedit_alltests rc=0 3.3s
+full_engine-native_libedit_alltests_repeat rc=0 3.4s
+full_engine-core_cold rc=0 36.5s
+full_engine-core_libedit_alltests rc=0 5.3s
+full_engine-core_libedit_alltests_repeat rc=0 5.2s
+8.2G	target-full
+lt_native_testfile_edit_group rc=0 2.1s
+main_native_touch_alltests rc=0 9.1s
+main_core_touch_alltests rc=0 9.9s

@@ -755,7 +755,7 @@ NC12 基线测量（[证据](../operations/evidence/2026-10-18-nc12-baseline/REA
   | 服务端 | `cargo test --offline -p game-server`（10-14 为 47/0/0，含 T6③ 原生产品路径 3 测+T8 增量 4 磁盘路径 1 测） |
   | 规则语义 | 递增 `STANDARD_RULESET_VERSION`；14 个 golden 先按 AGENTS.md 第 4 条查明原因，再重录 |
   | 存档编码 | 递增 `ARCHIVE_FORMAT_VERSION` |
-  | 覆盖清单 | `cargo test --offline -p engine-native --test replay_scenarios`（清单联动守护） |
+  | 覆盖清单 | `cargo test --offline -p engine-native --test kernel replay_scenarios::`（清单联动守护） |
 
 | 编号 | 优先级 / 领域 | 状态 | 任务、位置与做法 | 完成条件 |
 |---|---|---|---|---|
@@ -2273,3 +2273,5 @@ _playpackconfig`** 为乘数 → `getn` 缩放 → **`dn` 补充公式** → **�
 **NC04 后续（2026-10-28）**：本地 Worker 故障及关闭已结束等待并提示结果未知；静默失效、结果核对与 B7 等仍待完成，NC04 保持部分（[证据](../operations/evidence/2026-10-28-nc04-worker-failure/README.md)）。
 
 **用户裁决（2026-10-28）**：炼妖壶摘要升至 v324、PA12 两项设计与 ADR 起草、本地身份及可见牌面投影、B7 独立修复均已授权；各自版本与协议边界见[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)，授权不等于验收完成。
+
+**追加（2026-10-29 15:40，同一工作树第七批，未提交）**：O6 集成测试分组编译——engine-native/engine-core 的 `tests/*.rs` 改为各 10 个分组二进制 + `test_registry` 守卫，workspace dev 调试信息改 `line-tables-only`；改 lib 后重建测试 native 17.9→3.2s、core 24.6→5.7s，测试全名守恒，全套 native **1644/0/73**、core **3847/0/1**、Gate 1b exit 0。单跑测试写法改为 `--test <组> <文件名>::`。详见[性能待办 O6](#性能优化核验后的待办2026-09-24)与[证据](../operations/evidence/2026-10-29-o6-test-grouping/README.md)。

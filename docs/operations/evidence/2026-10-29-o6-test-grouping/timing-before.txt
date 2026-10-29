@@ -1,0 +1,18 @@
+# before (main tree, touch only, 2026-10-29 12:5x)
+A_native_lib_warm rc=0 0s
+B_native_lib_touch rc=0 2s
+F_native_one_test_touch rc=0 2s
+D_native_all_tests_touch rc=0 70s
+E0_core_lib_warm rc=0 5s
+E1_core_lib_touch rc=0 4s
+done
+
+# before (clean copy of tree, real one-line edits)
+C0_native_all_tests_cold rc=0 45s
+C1_native_lib_edit rc=0 2s
+C2_native_lib_plus_one_test_edit rc=0 2s
+C3_native_all_tests_edit rc=0 18s
+C4_native_one_test_file_edit rc=0 0s
+C5_core_lib_cold rc=0 25s
+C6_core_lib_edit rc=0 4s
+done

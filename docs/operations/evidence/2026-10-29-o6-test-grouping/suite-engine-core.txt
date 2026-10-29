@@ -1,0 +1,26 @@
+     Running unittests src/lib.rs
+test result: ok. 89 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/misc.rs
+test result: ok. 113 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_key.rs
+test result: ok. 450 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_misc.rs
+test result: ok. 321 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_mobile.rs
+test result: ok. 490 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_offline.rs
+test result: ok. 366 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_ol.rs
+test result: ok. 367 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_shenhua.rs
+test result: ok. 458 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_sp.rs
+test result: ok. 602 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/original_yijiang.rs
+test result: ok. 430 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/phase.rs
+test result: ok. 160 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/test_registry.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+   Doc-tests engine_core
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out

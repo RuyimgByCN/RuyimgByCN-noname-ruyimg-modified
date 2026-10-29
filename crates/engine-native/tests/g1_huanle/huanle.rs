@@ -1,5 +1,14 @@
 use super::*;
 
+/// 子进程按 `--exact` 重跑本文件测试用的 libtest 全名：分组二进制里本文件是子模块，
+/// 全名带模块前缀（`module_path!` 去掉首段 crate 名）。
+fn libtest_name(test: &str) -> String {
+    match module_path!().split_once("::") {
+        Some((_, module)) => format!("{module}::{test}"),
+        None => test.to_string(),
+    }
+}
+
 /// 桥接后的包：3 张实体牌 + 2 条宿主技能声明，行为标签合法。
 #[test]
 fn huanle_bridge_builds_pack() {
@@ -1678,7 +1687,7 @@ fn huanle_g5_cross_process_relay() {
     let status = std::process::Command::new(exe)
         .args([
             "--exact",
-            "huanle::huanle_g5_cross_process_relay",
+            libtest_name("huanle_g5_cross_process_relay").as_str(),
             "--nocapture",
         ])
         .env("HUANLE_G5_ARCHIVE", archive_path.display().to_string())

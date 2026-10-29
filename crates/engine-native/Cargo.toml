@@ -5,6 +5,8 @@ edition.workspace = true
 license.workspace = true
 authors.workspace = true
 description = "干净原生内核原型：只读规则目录 + 紧凑对局状态 + 显式事件栈与类型化技能暂停恢复"
+# 集成测试只编译下方 [[test]] 分组，不逐文件自动发现。
+autotests = false
 
 [dependencies]
 blake3 = { workspace = true }
@@ -21,3 +23,49 @@ content-schema = { path = "../content-schema" }
 resource-schema = { path = "../resource-schema" }
 serde_json = { workspace = true }
 tempfile = { workspace = true }
+
+# tests/*.rs 经 tests/groups/<组>.rs 的 #[path] 模块编入分组二进制：每组链接一次，
+# 不再每个文件各链接一个测试二进制。新增测试文件须登记到一个分组（test_registry 守卫）。
+[[test]]
+name = "g1"
+path = "tests/groups/g1.rs"
+
+[[test]]
+name = "g1_shahai"
+path = "tests/groups/g1_shahai.rs"
+
+[[test]]
+name = "kernel"
+path = "tests/groups/kernel.rs"
+
+[[test]]
+name = "l_rounds"
+path = "tests/groups/l_rounds.rs"
+
+[[test]]
+name = "misc"
+path = "tests/groups/misc.rs"
+
+[[test]]
+name = "nc08"
+path = "tests/groups/nc08.rs"
+
+[[test]]
+name = "nc08_upstream_a_k"
+path = "tests/groups/nc08_upstream_a_k.rs"
+
+[[test]]
+name = "nc08_upstream_l_z"
+path = "tests/groups/nc08_upstream_l_z.rs"
+
+[[test]]
+name = "nc_rounds"
+path = "tests/groups/nc_rounds.rs"
+
+[[test]]
+name = "swd"
+path = "tests/groups/swd.rs"
+
+[[test]]
+name = "test_registry"
+path = "tests/groups/test_registry.rs"

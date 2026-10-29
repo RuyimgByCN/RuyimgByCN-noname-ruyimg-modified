@@ -1,0 +1,26 @@
+     Running unittests src/lib.rs
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/g1.rs
+test result: ok. 166 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+     Running tests/groups/g1_shahai.rs
+test result: ok. 174 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/kernel.rs
+test result: ok. 435 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/l_rounds.rs
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/misc.rs
+test result: ok. 173 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/nc08.rs
+test result: ok. 45 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out
+     Running tests/groups/nc08_upstream_a_k.rs
+test result: ok. 130 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out
+     Running tests/groups/nc08_upstream_l_z.rs
+test result: ok. 199 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out
+     Running tests/groups/nc_rounds.rs
+test result: ok. 127 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out
+     Running tests/groups/swd.rs
+test result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/groups/test_registry.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+   Doc-tests engine_native
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out

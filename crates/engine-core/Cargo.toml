@@ -4,6 +4,8 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Deterministic game core: state, command pipeline, effects, triggers, query, RNG, replay"
+# 集成测试只编译下方 [[test]] 分组，不逐文件自动发现。
+autotests = false
 
 [dependencies]
 engine-api = { workspace = true }
@@ -26,3 +28,49 @@ tempfile = "3"
 default = []
 # Enable when building wasm32 dual-target tests
 wasm = []
+
+# tests/*.rs 经 tests/groups/<组>.rs 的 #[path] 模块编入分组二进制：每组链接一次，
+# 不再每个文件各链接一个测试二进制。新增测试文件须登记到一个分组（test_registry 守卫）。
+[[test]]
+name = "misc"
+path = "tests/groups/misc.rs"
+
+[[test]]
+name = "original_key"
+path = "tests/groups/original_key.rs"
+
+[[test]]
+name = "original_misc"
+path = "tests/groups/original_misc.rs"
+
+[[test]]
+name = "original_mobile"
+path = "tests/groups/original_mobile.rs"
+
+[[test]]
+name = "original_offline"
+path = "tests/groups/original_offline.rs"
+
+[[test]]
+name = "original_ol"
+path = "tests/groups/original_ol.rs"
+
+[[test]]
+name = "original_shenhua"
+path = "tests/groups/original_shenhua.rs"
+
+[[test]]
+name = "original_sp"
+path = "tests/groups/original_sp.rs"
+
+[[test]]
+name = "original_yijiang"
+path = "tests/groups/original_yijiang.rs"
+
+[[test]]
+name = "phase"
+path = "tests/groups/phase.rs"
+
+[[test]]
+name = "test_registry"
+path = "tests/groups/test_registry.rs"

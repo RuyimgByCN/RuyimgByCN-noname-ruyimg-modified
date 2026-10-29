@@ -19,6 +19,8 @@
 cargo test --offline -p engine-native
 ```
 
+engine-native 与 engine-core 的集成测试按分组编译（2026-10-29 O6）：单跑某个测试文件写 `cargo test -p <crate> --test <组> <文件名>::`；新增 `tests/*.rs` 须登记到 `tests/groups/<组>.rs`，漏登记由 `--test test_registry` 报出。
+
 当前基线、失败和忽略项见[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)。涉及原生内核时执行上面的完整测试；服务端、前端、Worker、WASM 或存档接线变化还须运行对应回归，不能用文档门禁代替产品验证。
 **红了**：先判断是 **golden 语义变化** 还是 **回归**；**golden 变化必须先查原因再决定是否重录**，不能只改期望值。
 

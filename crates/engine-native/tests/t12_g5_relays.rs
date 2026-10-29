@@ -18,6 +18,15 @@ use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameComman
 
 static DEDUP: AtomicU64 = AtomicU64::new(9_000_000_000);
 
+/// 子进程按 `--exact` 重跑本文件测试用的 libtest 全名：分组二进制里本文件是子模块，
+/// 全名带模块前缀（`module_path!` 去掉首段 crate 名）。
+fn libtest_name(test: &str) -> String {
+    match module_path!().split_once("::") {
+        Some((_, module)) => format!("{module}::{test}"),
+        None => test.to_string(),
+    }
+}
+
 fn submit(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
     e.submit(GameCommand {
         actor,
@@ -146,7 +155,7 @@ fn g5_relay(package_id: &str, pack_name: &'static str, test_name: &str) {
 
     let exe = std::env::current_exe().expect("测试二进制");
     let status = std::process::Command::new(exe)
-        .args(["--exact", test_name, "--nocapture"])
+        .args(["--exact", libtest_name(test_name).as_str(), "--nocapture"])
         .env("T12_G5_ARCHIVE", archive_path.display().to_string())
         .env("T12_G5_REPLY", reply_path.display().to_string())
         .env("T12_G5_STORE", store_dir.display().to_string())
@@ -275,7 +284,7 @@ fn t12_g5_relay_d3_generals() {
     std::fs::write(&archive_path, engine_native::archive::encode_archive(&e.save()))
         .expect("落盘");
     let status = std::process::Command::new(&exe)
-        .args(["--exact", "t12_g5_relay_d3_generals_worker", "--nocapture"])
+        .args(["--exact", libtest_name("t12_g5_relay_d3_generals_worker").as_str(), "--nocapture"])
         .env("T12_G5_ARCHIVE", archive_path.display().to_string())
         .env("T12_G5_REPLY", reply_path.display().to_string())
         .env("T12_G5_STORE", store_dir.display().to_string())
@@ -388,7 +397,7 @@ fn t12_g5_relay_cardpile_liuli() {
     std::fs::write(&archive_path, encode_archive(&e.save())).expect("父进程落盘");
     let exe = std::env::current_exe().expect("测试二进制");
     let status = std::process::Command::new(exe)
-        .args(["--exact", "t12_g5_relay_cardpile_liuli", "--nocapture"])
+        .args(["--exact", libtest_name("t12_g5_relay_cardpile_liuli").as_str(), "--nocapture"])
         .env("T12_G5_ARCHIVE", archive_path.display().to_string())
         .env("T12_G5_REPLY", reply_path.display().to_string())
         .env("T12_G5_STORE", store_dir.display().to_string())
@@ -478,7 +487,11 @@ fn t12_g5_relay_cardpile_dual_namespace() {
     std::fs::write(&archive_path, encode_archive(&e.save())).expect("父进程落盘");
     let exe = std::env::current_exe().expect("测试二进制");
     let status = std::process::Command::new(exe)
-        .args(["--exact", "t12_g5_relay_cardpile_dual_namespace_worker", "--nocapture"])
+        .args([
+            "--exact",
+            libtest_name("t12_g5_relay_cardpile_dual_namespace_worker").as_str(),
+            "--nocapture",
+        ])
         .env("T12_G5_ARCHIVE", archive_path.display().to_string())
         .env("T12_G5_REPLY", reply_path.display().to_string())
         .env("T12_G5_STORE", store_dir.display().to_string())
