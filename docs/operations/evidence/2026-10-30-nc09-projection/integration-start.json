@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-30T02:00:04.719282+08:00",
+  "head": "2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6",
+  "clean_before_apply": true,
+  "patch_sha256": "234e4b1a7fe7246856b293d393d1dac3e5ab521b08a44c8b6320899ba8040597",
+  "patch_applied_without_index_writes": true
+}

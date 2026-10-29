@@ -3,6 +3,7 @@
 mod durability;
 mod commit_crash;
 mod double_failure;
+mod authority;
 
 use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
 use engine_api::{
@@ -101,24 +102,19 @@ impl State {
 
     fn assert_player(&self, player: PlayerId) {
         assert_eq!(self.view.observer, ObserverKind::Player(player));
-        assert!(
-            !self.view.known_cards.is_empty(),
-            "own hand must be visible"
-        );
-        assert!(self
-            .view
-            .known_cards
-            .iter()
-            .all(|card| card.owner == Some(player)));
+        let hand: Vec<_> = self.view.known_cards.iter()
+            .filter(|card| card.zone == engine_api::CardZoneTag::Hand).collect();
+        assert!(hand.iter().all(|card| card.owner == Some(player)));
         assert_eq!(
-            self.view.known_cards.len() as u32,
-            self.view
-                .seats
-                .iter()
-                .find(|seat| seat.player == player)
-                .unwrap()
-                .hand_count
+            hand.len() as u32,
+            self.view.seats.iter().find(|seat| seat.player == player).unwrap().hand_count
         );
+        assert!(self.view.known_cards.iter().all(|card| {
+            card.def.is_some() && card.suit.is_some() && card.rank.is_some()
+                && matches!(card.zone, engine_api::CardZoneTag::Hand
+                    | engine_api::CardZoneTag::Equip | engine_api::CardZoneTag::Judge
+                    | engine_api::CardZoneTag::DiscardPile | engine_api::CardZoneTag::Processing)
+        }));
         if let Some(choice) = &self.choice {
             assert_eq!(choice.observer, player);
         }
@@ -126,7 +122,12 @@ impl State {
 
     fn assert_spectator(&self) {
         assert_eq!(self.view.observer, ObserverKind::Spectator);
-        assert!(self.view.known_cards.is_empty());
+        assert!(self.view.known_cards.iter().all(|card| {
+            card.def.is_some() && card.suit.is_some() && card.rank.is_some()
+                && matches!(card.zone, engine_api::CardZoneTag::Equip
+                    | engine_api::CardZoneTag::Judge | engine_api::CardZoneTag::DiscardPile
+                    | engine_api::CardZoneTag::Processing)
+        }));
         assert!(self.legal.is_empty());
         assert!(self.choice.is_none());
     }

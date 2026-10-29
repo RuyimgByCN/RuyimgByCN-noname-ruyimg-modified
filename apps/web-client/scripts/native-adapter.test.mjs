@@ -368,3 +368,12 @@ test("可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备�
   assert.equal(snapshot.known_cards.length, 8);
   assert(!snapshot.known_cards.some((c) => c.zone === "Hand" && c.owner === 1));
 });
+
+test("visible general definition reaches the existing seat view", () => {
+  const view = JSON.parse(VIEW_JSON);
+  view.players[0].characterDef = 17;
+  view.players[1].characterDef = 0;
+  const snapshot = nativeObserverToSnapshot(view);
+  assert.equal(snapshot.seats[0].character_def, 17);
+  assert.equal(snapshot.seats[1].character_def, 0);
+});

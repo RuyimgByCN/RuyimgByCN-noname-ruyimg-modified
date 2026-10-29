@@ -1,0 +1,41 @@
+## Review
+
+- **Merge verdict: BLOCK** pending the Referee visibility correction below. The player/spectator projection changes are otherwise consistent with the inspected code and recorded tests. This projection-only result does **not** complete NC09 decision15.
+- **Fixed:** None; review was read-only.
+- **Finding — P1: The patch suppresses an authorized Referee general definition and adds a test requiring that regression.** At [native_view.rs:145](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_view.rs:145), `character_def` now comes exclusively from the filtered `PlayerView`. Referee uses `view_spectator()`, so an unrevealed Kingdoms general becomes `0`. Before this patch, the same field came from the authoritative general slot and remained visible to Referee.
+
+  This contradicts the existing policy: [engine-api/src/view.rs:14](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-api/src/view.rs:14) defines Referee as “full hidden info”; [engine-core/src/projection.rs:22](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-core/src/projection.rs:22) implements that distinction; and [security_observer_leak.rs:129](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-core/tests/security_observer_leak.rs:129) tests Referee access to hidden information. Decision15 authorizes card-projection consistency without redefining Referee as Spectator.
+
+  The new [nc09_projection_parity.rs:192](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/tests/nc09_projection_parity.rs:192) explicitly includes Referee among roles required to receive `0`. Its earlier observer loop also requires Referee to have no hands or living non-lord identity. Those latter native limitations predate this patch; the newly suppressed general definition is the diff-caused regression.
+
+  **Smallest correction:** preserve Referee-authorized general visibility through a role-aware projection path, retain the new Player/Spectator filtering, and split the tests by role. Record the older native Referee hand/identity limitations separately instead of asserting them as the privacy contract.
+
+- **Correct — player/spectator trust boundary:** [native_view.rs:127](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_view.rs:127) performs checked subtraction and range validation before narrowing the 1-based ID. Zero, `257`, and `u32::MAX` cannot wrap into a private seat. Only `RoomRole::Player` selects that seat’s private projection; a Spectator supplied with a valid seat receives public cards and filtered identities.
+- **Correct — card faces and ownership:** [native_view.rs:35](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_view.rs:35) enumerates the already-filtered own hand, every equipment/judgment zone, discard, and processing cards. Player owners are normalized to 1-based IDs; discard/processing owners are `None`. Suit, rank, definition code, and the existing six kinds plus `Other` agree with the local facade comparison. The patch introduces no additional kind-mapping implementation.
+- **Correct — general definition propagation for ordinary viewers:** the definition enters `GeneralView` only after the existing visibility gate in [engine/views.rs:36](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-native/src/engine/views.rs:36), then travels through WASM `characterDef` into the existing TS `character_def`. Own hidden generals remain available; opponents’ unrevealed generals are filtered. The Worker retains its fallback for older local artifacts.
+- **Correct — bounded delta:** the supplied patch contains the stated 13 files. It changes no authoritative state, rules, archive encoding, ABI, command, or WS schema. Existing `CardView` fields and enum values support the populated payload; the new WS5 round-trip test exercises them. The WASM dependency is under server `dev-dependencies`, and the inspected production dependency paths do not lead back to game-server. Existing source-named native tests remain registered in `tests/groups/misc.rs`.
+
+**Test evidence audit**
+
+The logs support real regressions being exercised, with one policy exception identified above:
+
+| Evidence | Assessment |
+|---|---|
+| Projection red → green | The red log records missing suit/rank, public-card omission, and hidden general `22` exposure. Final logs run all seven new server tests successfully. |
+| Adapter red → green | The red assertion is substantive: supplied general `17` becomes `0`. Rebuilt frontend tests report **128 passed / 0 failed**. |
+| Same-archive comparison | The helper serializes the server engine’s archive, restores it into `engine_native_wasm::NativeEngine`, and compares card IDs, faces, normalized owners/zones, identities, and general definitions for every seat. Hidden deck/opponent-hand IDs are checked independently. |
+| Existing WS privacy checks | Replacing “all cards belong to self” with own-Hand filtering is justified by public-zone support. Hand ownership/count checks remain; spectators exclude Hand and DrawPile zones. Separate parity tests check hidden-ID exclusion. |
+| Recorded full runs | Raw result summaries agree with native **1644/0/73 ignored**, WASM crate **72/0**, server **369/0**, loader **32/0**, protocol **1/0**, WS **15/0**, and rebuilt Worker **82/0**. |
+
+The same-archive test executes the **Rust implementation of the WASM facade natively**. The separately rebuilt WASM32 Worker smoke verifies the general-definition route (`37` expected/actual), but does not compare all public zones, faces, and kinds against the server on that same archive. Thus the evidence supports facade parity plus rebuilt-WASM smoke; direct same-archive server/WASM32 parity remains acceptance work. The Referee assertions also demonstrate that a passing regression test can encode an incorrect policy.
+
+**Remaining acceptance**
+
+1. Correct the Referee regression and its tests; retain supplied-seat refusal for Spectator and invalid-seat coverage.
+2. Complete the requested same-archive comparison against the rebuilt WASM32 artifact, covering faces, all public zones, ownership normalization, and six kinds plus `Other`.
+3. Apply through the parent’s final F7 layout and adapted Cargo lock. Preserve public `view`/`engineViews` facade paths. Carry only the added `characterDef` serialization into PA09’s moved helper, preserving root exports and JS signatures. Rerun affected checks after integration.
+4. Keep timeout explicitly **UNIMPLEMENTED**. The retained counterexample fails after the default deadline; its removal from the final suite does not turn that requirement green. Rules329 remains reserved for J2. Rules330 after J2 is an unapproved proposal. Subsequent timeout acceptance still needs authoritative timeout/AI command and WAL behavior, restart/deadline policy, takeover clearing, duplicate/stale callback handling, durability failures, and authenticated-actor/privacy checks.
+5. Browser rendering, full product flows, parent-workspace preflight, and target-platform acceptance remain outstanding; the recorded suite totals do not establish those outcomes.
+
+Skipped: no writes, builds, tests, commits, or checksum recomputation; the review used the supplied patch, source, report, and recorded logs.  
+Risk: the current green suite locks in incorrect Referee suppression, and timeout remains unfinished.

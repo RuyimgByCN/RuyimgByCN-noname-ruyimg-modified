@@ -1,0 +1,161 @@
+Implemented decision15 Scope B projection in the isolated worktree. Scope A timeout remains blocked by the reserved rules version; this is a partial result, not completion of all NC09 decision15 work.
+
+Base and current HEAD are both `db4e37ca608877111d9d6f5e12290e6ec912da41`. J1 `b7ebdf30a96c3848c30f1466b54f70b004de4b34` is an ancestor. Native rules **328**, archive **105**, ABI **753**, and WS **5** are unchanged. No commits, refs, remotes, staging, main-worktree edits, shared target edits or shared documentation edits were made.
+
+The reviewable patch is [evidence/nc09-decision15.patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/nc09-decision15.patch), **28,982 bytes**, SHA256 `702b506457cac21788c41a371eafa693819d9b6582b0b8cf8a15c6b7d8298613`. It contains only this task's 13-file delta against db4e37ca, including the new untracked test file. [Per-file before/after SHA256](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/before-after-sha256.json), [changed files](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/changed-files.txt), [final status](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/final-status.txt), [before index](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/before-index.txt), and [after index](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/after-index.txt) provide independent integrity evidence. The index files are byte-identical and `git diff --cached --name-only` is empty. Reverse `git apply --check` passes.
+
+The server previously omitted public card zones and every suit/rank, read hidden general slots directly, and could treat an observer supplied with a seat as that private viewer for identity/cards. It now obtains all visibility from the existing filtered `PlayerView`: own hand plus all equipment/judgment/discard/processing cards, real faces and normalized owners/zones, filtered identities and general definitions. Checked subtraction/range validation prevents invalid 1-based seat IDs from wrapping to a private native seat. Existing six concrete kind categories plus `Other` match the actual local projection exactly; no richer semantic mapping was invented.
+
+`GeneralView` gains only its already-filtered definition id; the existing native constructor, WASM local JSON and Worker adapter carry that id into the existing `SeatView.character_def`. No rule state, snapshots, commands, VM ABI, ChoiceKind, Worker messages or WS schema changed. This native source change is confined to `crates/engine-native/src/view.rs` and `crates/engine-native/src/engine/views.rs`; the parent owns mapping those source seams into its new F7 kernel/content layout. A game-server dev dependency on the existing engine-native-wasm crate permits tests to compare the actual local Rust/WASM facade on the same archive instead of maintaining a summary oracle.
+
+PA09 coordination: the only WASM lib.rs delta is the added `"characterDef": p.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),` line after `"seat": p.seat` inside `view_to_json`. `kind_tag_json`, `suit_json`, `identity_json`, helper/NativeEngine signatures and root exports are untouched. The parent was notified to carry that single serialization line into its planned session helper. Desktop/EngineClient files have no delta.
+
+The new server regression file covers all four player views, owner/opponent identities, lord/dead disclosure, public zones and real face data, observer/referee role authority (including supplied seat), invalid wrapping IDs, hidden and revealed Kingdoms general definitions, archive restart and all standard card kinds. The actual local `restore_hex`/`view_json` code supplies the comparison. Existing native source-named tests remain registered in `tests/groups/misc.rs`; the targeted filter was `--test misc t13_info_isolation::` (12/0). WASM tests gain one actual definition/restore case; Worker unit and rebuilt smoke each gain a general-definition check. WS privacy assertions now separately count own Hand cards and require real public faces, while excluding all foreign hands and draw-pile cards.
+
+Validation on 2026-10-29 UTC (local machine date 2026-10-30):
+
+| Check | Actual result | Raw evidence |
+|---|---|---|
+| Native room actor timeout red | **53 pass / 1 expected fail**; no command answered a genuine pending choice by 31 seconds | [red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/red.log), [temporary test source](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/timeout-counterexample-test.rs) |
+| Projection red | **0/4**, explicit public-card omission, missing suit/rank and hidden general22 exposure | [projection-red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/projection-red.log) |
+| Frontend red | Visible general17 became0; initial import-only missing generated artifact also preserved | [web-red-with-import-artifact.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/web-red-with-import-artifact.log), [initial environment failure](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/web-red.log) |
+| Actual local facade + server targeted projection | WASM **3/0**, server **6/0**; seventh all-kind test subsequently included in final full run | [projection-all-targeted-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/projection-all-targeted-green.log) |
+| Native source-named targeted | **12/0**, 161 unrelated tests filtered; same combined command's filter did not run the other packages' tests, corrected by the preceding dedicated projection run | [targeted-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/targeted-green.log) |
+| First affected full | Native/WASM passed; six WS helper assertions still assumed own-hand-only/empty observer cards | [affected-full.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/affected-full.log) |
+| Real WS tests after helper correction | **15/0**, including crash/restart, frozen content, uncertain writes, retries and receipts | [ws-targeted-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/ws-targeted-green.log) |
+| Final full affected | engine-native **1644/0/73 ignored**, engine-native-wasm **72/0**, game-server **369/0**; exit0 | [affected-full-final.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/affected-full-final.log), [counts](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/full-counts.txt) |
+| Independent native warning gate | `RUSTFLAGS=-D warnings cargo check --offline -p engine-native --all-targets`, private target-gate; exit0 | [native-gate1b.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/native-gate1b.log) |
+| Dependent full | content-native-loader **32/0**, engine-protocol **1/0** | [dependent-full.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/dependent-full.log) |
+| Fresh WASM build | Current edited source, web/release/no-opt/offline, private target-nc09; exit0 | [wasm-rebuild.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/wasm-rebuild.log), [artifact hashes](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/rebuilt-wasm-sha256.json) |
+| Frontend after rebuild | **128/0**, typecheck0 | [web-full-rebuilt.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/web-full-rebuilt.log), [web-typecheck-rebuilt.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/web-typecheck-rebuilt.log) |
+| Real rebuilt Worker smoke | **82/0**, general definition expected37/actual37 | [worker-smoke-rebuilt.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/worker-smoke-rebuilt.log) |
+| Source limits | 2 checker tests pass; **8917** maintained files <=2000 physical and Rust non-test <=1000 effective | [source-line-tests.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/source-line-tests.log), [source-lines-final.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/source-lines-final.log) |
+
+All explicit Cargo and wasm-pack builds used `python3 -B /tmp/noname-run-serialized.py env CARGO_TARGET_DIR=<task-private absolute directory> ...`; full argv, exit status and locked_seconds are recorded at each log's end. No performance conclusion is claimed. Early tool-triggered clippy/autofix jobs ran outside this serialization and were recorded in [automatic-runners.txt](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/automatic-runners.txt). They applied unrelated server/native suggestions; the unrelated hunks were captured in [automatic-unrelated.diff](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/automatic-unrelated.diff) and restored from baseline bytes. A temporary local pi-lens config disabled formatting/autofix; subsequent mutation logs show zero changes. It and the temporary read-only node_modules symlink were removed before handoff. The pre-existing untracked `.pi-lens-probe-home/` runtime log directory remains; it is excluded from the patch. Generated local packages are ignored, and legacy WASM declarations were copied only to satisfy the existing legacy import during typecheck; only the changed native WASM is claimed rebuilt.
+
+WS compatibility needs no bump: `CardView` already has optional suit/rank plus the exact zones/kinds now supplied; `SeatView.character_def` already exists. The existing protocol/API/TS schema files have zero delta ([schema check](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence/unchanged-wire-schema-paths.txt)); a new WS5 Snapshot encode/decode regression preserves the complete real projection. Older clients using these unchanged schemas can parse the newly populated values; no new message, tag or enum variant is emitted. The additional `characterDef` key is internal local WASM JSON, and Worker retains fallback0 for older local artifacts.
+
+Timeout authorization boundary and proposed follow-up:
+
+1. Decision15 authorizes the feature and native command but explicitly requires confirmation before a rules/archive version change. The actor red proves that current code does not implement the behavior. Adding an accepted native timeout command changes command/revision/replay semantics. The supervisor explicitly confirmed preserving rules328 and deferring timeout execution, because rules329 belongs exclusively to J2 after F7. No inactive timeout setting, countdown, auto-state field, timer or partial AI/WAL implementation was added. The failing temporary test was removed from the worktree and retained in evidence; no timeout green is claimed.
+2. After J2 v329 is committed, request a **separate rules329→330 timeout batch**. This report and the supervisor's defer instruction are **not** authorization for330. Preserve old native rule archives unchanged and explicitly reject incompatible old rules via the existing version gate; no migration is assumed. Archive105 is an expectation to verify against any genuinely required persisted fields, not permission to waive a format bump. Timeout adds no VM primitive or ABI bump: current753 stays untouched here; if J2 advances global ABI to758, the later timeout batch should retain its entry ABI758, not revert it to753.
+3. Add an explicit native `TimeoutAction` aligned with the old `CommandKind::TimeoutAction`, bound to the live choice id and actual choice observer. The kernel validates actor/id/revision/dedup and never reads a clock. Timeout must be represented in the authoritative ordered command/WAL stream before the separate ordinary AI `Answer`; exact no-op/marker transition and any required snapshot/hash/codec fields need validation in that authorized batch. Update every exhaustive native/API/serde/codec/host/AI caller, test registry and export together; do not merely route timeout to client-cancellable Answer.
+4. Host scheduling lives solely in the existing room actor. Match deadlines to the live choice, prevent an unrelated message/retry from extending them, and invalidate stale scheduled callbacks when choices change. Durable timeout/auto/deadline metadata belongs in the existing room session/state/checkpoint path only when required to recover actual behavior; no parallel store. Specify and test the restart deadline policy before implementing it. Timer firing, durable commit uncertainty, recovery and AI Answer must retain the current checkpoint/receipt safety guarantees.
+5. Reject client-triggered arbitrary timeout/AI execution. Public Submit authority remains the authenticated connection seat; only the actor's internal timer path may initiate timeout. Use existing seat-scoped AI input/planning and validate hidden-hand/deck permutation invariance, including pending choices. Submit AI decisions through the same ordinary command path and WAL/commit machinery; replay consumes recorded commands, never reruns AI.
+6. Persist seat takeover in the existing member/session representation so that disconnect/restart does not silently erase it; clear it on that member's authenticated operation/reconnect. Only after the behavior has an active consumer, expose room choices **10/15/30/60/90 seconds, default30**, via existing config/lobby/UI paths with validation. Do not ship settings that imply an inactive timer works.
+7. Before acceptance, reverse the red and cover exact deadline boundaries with a deterministic test clock; connected/disconnected/reconnected members; host restart and actor Recover; stale choice/revision; duplicate timer/internal retry; repeated idempotency key across reconnect/process exit; durability failures before/after the timeout and before/after the ordinary AI Answer; actor forgery/spectator refusal; correct auto-seat continuation/clearing; WAL replay and no AI information leaks. No new ChoiceKind, parameterized prompts, Worker/VM protocol or ADR is part of this proposal.
+
+Open risks: Scope A remains unimplemented pending version authorization; independent review and integration into the parent's F7 layout remain required. Browser/product rendering, full parent-workspace/preflight acceptance, upstream gameplay equivalence and physical platform acceptance were not performed. Existing native kind granularity was preserved, with no richer card-category or other visibility-policy redesign.
+
+Recommended next step: independently review/apply the projection-only patch with the parent's source-path mapping, run integrated acceptance there, and obtain the separate post-J2 timeout version decision before resuming Scope A.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "not-satisfied",
+      "evidence": "Scope B projection implemented and verified; Scope A timeout execution intentionally deferred by supervisor because native rules329 is J2-reserved and timeout semantic/version authorization is still required."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Isolated 13-file patch against db4e37ca, before/after SHA256 manifest, raw red/green/full/gate logs, rebuilt WASM smoke and explicit authorization boundaries are available outside worktree."
+    }
+  ],
+  "changedFiles": [
+    "Cargo.lock",
+    "apps/game-server/Cargo.toml",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/web-client/scripts/native-adapter.test.mjs",
+    "apps/web-client/scripts/native-worker-smoke.mjs",
+    "apps/web-client/src/worker/nativeBackend.ts",
+    "crates/engine-native-wasm/src/lib.rs",
+    "crates/engine-native-wasm/tests/nc03_view_projection.rs",
+    "crates/engine-native/src/engine/views.rs",
+    "crates/engine-native/src/view.rs",
+    "crates/engine-native/tests/t13_info_isolation.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/tests/nc09_projection_parity.rs (7 tests)",
+    "apps/game-server/src/native_ws_e2e.rs (shared privacy assertions)",
+    "crates/engine-native/tests/t13_info_isolation.rs (registered misc group, definition assertions)",
+    "crates/engine-native-wasm/tests/nc03_view_projection.rs (1 new test)",
+    "apps/web-client/scripts/native-adapter.test.mjs (1 new test)",
+    "apps/web-client/scripts/native-worker-smoke.mjs (1 new check)"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p game-server --test nc09_projection_parity --test nc09_native_room_session",
+      "result": "failed",
+      "summary": "Expected timeout red: 53 passed/1 failed; pending choice received no AI command within 31 seconds. Temporary failing test retained in evidence only."
+    },
+    {
+      "command": "cargo test --offline -p game-server --test nc09_projection_parity",
+      "result": "failed",
+      "summary": "Projection red: 0 passed/4 failed; missing public cards, missing suit/rank, hidden general exposed."
+    },
+    {
+      "command": "cargo test --offline --no-fail-fast -p game-server -p engine-native -p engine-native-wasm",
+      "result": "passed",
+      "summary": "Final: native1644/0/73 ignored; wasm72/0; server369/0. First full run had six obsolete WS privacy-helper failures, retained separately."
+    },
+    {
+      "command": "cargo check --offline -p engine-native --all-targets (RUSTFLAGS=-D warnings, independent private target-gate)",
+      "result": "passed",
+      "summary": "Gate1b exit0, 21.08 locked seconds."
+    },
+    {
+      "command": "cargo test --offline -p content-native-loader -p engine-protocol",
+      "result": "passed",
+      "summary": "Loader32/0; protocol1/0."
+    },
+    {
+      "command": "cargo test --offline -p game-server --bin game-server native_ws_e2e::",
+      "result": "passed",
+      "summary": "15 real WS tests passed, including restart/failure/retry paths."
+    },
+    {
+      "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir <isolated worktree>/apps/web-client/src/worker/native-pkg -- --offline",
+      "result": "passed",
+      "summary": "Rebuilt actual changed source, private target-nc09; final Worker smoke82/0."
+    },
+    {
+      "command": "node --import ./scripts/ts-register.mjs --test; vue-tsc --noEmit; node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs (apps/web-client)",
+      "result": "passed",
+      "summary": "128/0; typecheck0; rebuilt smoke82/0."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'; python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "2 script tests; 8917 maintained files <=2000 physical, Rust non-test <=1000 effective lines."
+    },
+    {
+      "command": "git diff --check; git apply --reverse --check ../evidence/nc09-decision15.patch; compare before/after git ls-files -s; git diff --cached --name-only",
+      "result": "passed",
+      "summary": "Patch consistent with worktree, no whitespace errors, index byte-identical and no staged files."
+    }
+  ],
+  "validationOutput": [
+    "Projection cross-check uses actual NativeEngine.restore_hex/view_json on the same native archive, not a handwritten local mapping.",
+    "Owner/opponent/lord/dead/observer/referee, public zones, hidden hands/deck, Kingdoms concealed/revealed generals, invalid wrapping seat IDs, all standard card kinds and archive restart checked.",
+    "Existing WS5 schema remains unchanged; Snapshot roundtrip preserves real cards. Native RULES328/archive105/ABI753 unchanged; J1 b7ebdf30 verified ancestor."
+  ],
+  "residualRisks": [
+    "Timeout timer/native command/AI takeover/config/persistence are not implemented; explicit post-J2 rules330 authorization is required.",
+    "Independent parent review, integration into the main F7 source layout, final browser/product and physical platform acceptance remain unclaimed.",
+    "Native existing six concrete card categories plus Other are preserved exactly; this does not add richer category semantics."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Server consumes filtered native PlayerView for identities/generals/cards and supplies real face/zone metadata; native GeneralView exposes filtered definition id to server and existing local seat fields; actual-source parity and WS privacy tests updated.",
+  "reviewFindings": [
+    "No known projection blocker in the verified delta; independent reviewer gate remains required.",
+    "Scope A remains explicitly blocked, not complete."
+  ],
+  "manualNotes": "No commits/ref changes/push/reset/clean/stash; no main/shared docs/shared target edits. Temporary pi-lens config and node_modules link removed; pre-existing untracked pi-lens runtime directory retained. Automatic unrelated fixes were recorded and restored."
+}
+```
+
+Skipped: blocked timeout semantics/config and final parent workspace/browser/platform acceptance. Risk: projection is verified locally; all decision15 work is not complete.

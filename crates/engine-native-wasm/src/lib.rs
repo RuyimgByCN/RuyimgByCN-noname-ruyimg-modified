@@ -397,6 +397,7 @@ fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
         "seat": v.seat,
         "players": v.players.iter().map(|p| serde_json::json!({
             "seat": p.seat,
+            "characterDef": p.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
             "alive": p.alive,
             "hp": p.hp,
             "maxHp": p.max_hp,

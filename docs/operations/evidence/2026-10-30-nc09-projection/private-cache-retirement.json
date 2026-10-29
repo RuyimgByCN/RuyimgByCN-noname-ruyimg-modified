@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-30T02:00:54.375962+08:00",
+  "accepted_f7_commit": "2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6",
+  "preserved_evidence": "docs/operations/evidence/2026-10-30-native-split-stage4/",
+  "before_disk": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 929437552  13071628    99% 6148721 130716280    4%   /System/Volumes/Data\n",
+  "paths": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before",
+      "size": "2387484\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-before",
+      "ownership": "Private benchmark/check cache created solely for completed F7; no active reader/writer after final gates and commit."
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after",
+      "size": "2774016\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage4-9rhcfkw2/target-after",
+      "ownership": "Private benchmark/check cache created solely for completed F7; no active reader/writer after final gates and commit."
+    }
+  ],
+  "after_disk": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 924725556  17783624    99% 6136671 177836240    3%   /System/Volumes/Data\n"
+}

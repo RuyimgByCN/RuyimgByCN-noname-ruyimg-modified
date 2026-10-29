@@ -25,6 +25,7 @@ pub enum HandView {
 /// 暗置槽不产生本单元——他人视图不可见（信息隔离，ADR 0757）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GeneralView {
+    pub def: u16,
     pub name: &'static str,
     pub faction: crate::catalog::Faction,
 }

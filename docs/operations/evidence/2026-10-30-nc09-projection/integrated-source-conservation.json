@@ -1,0 +1,114 @@
+{
+  "base": "2b3348ef",
+  "files": [
+    {
+      "path": "Cargo.lock",
+      "integrated_sha256": "4b383c72e37eba05bf82cfa12b7e7d79a127cb748c29bd465a19db726b9b1dbf",
+      "isolated_sha256": "b8386186d9350dbb0d470cba0647f68d1d24073138094c6b6b7fd9cae438f19d",
+      "identical": false
+    },
+    {
+      "path": "apps/game-server/Cargo.toml",
+      "integrated_sha256": "83a4d408b192810fbb509432f1b01a59d1ce616eb983fd74a896d8e1d97bcd62",
+      "isolated_sha256": "83a4d408b192810fbb509432f1b01a59d1ce616eb983fd74a896d8e1d97bcd62",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/examples/emit_projection_fixture.rs",
+      "integrated_sha256": "ab1b6fc40e833562e23eb963992c96acfe54cd0f4f7212e14b089e7e606e8e87",
+      "isolated_sha256": "ab1b6fc40e833562e23eb963992c96acfe54cd0f4f7212e14b089e7e606e8e87",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/src/native_view.rs",
+      "integrated_sha256": "70218a67407b255653fdb83fcc1dc840a204b7b395a305841f992845feeafe82",
+      "isolated_sha256": "70218a67407b255653fdb83fcc1dc840a204b7b395a305841f992845feeafe82",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "integrated_sha256": "631304007c740de47c4c6c8418f98605f48a4b4f278f4de416eef9f0f2ae6b9c",
+      "isolated_sha256": "631304007c740de47c4c6c8418f98605f48a4b4f278f4de416eef9f0f2ae6b9c",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/authority.rs",
+      "integrated_sha256": "64336c5daa62d9a0e7ebbd63488e18cdc2de0af9037c2efdb0453e5716392956",
+      "isolated_sha256": "64336c5daa62d9a0e7ebbd63488e18cdc2de0af9037c2efdb0453e5716392956",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_room_session.rs",
+      "integrated_sha256": "2525fbe990d0bf187897e8aafeb99f1dca79b3a8ad3adf64397ab1d242d1f131",
+      "isolated_sha256": "2525fbe990d0bf187897e8aafeb99f1dca79b3a8ad3adf64397ab1d242d1f131",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_projection_parity.rs",
+      "integrated_sha256": "cb8004f1876d90bc3920880a6d67d45e0277f7b2eaa1169d6debb3ac3d6be1eb",
+      "isolated_sha256": "cb8004f1876d90bc3920880a6d67d45e0277f7b2eaa1169d6debb3ac3d6be1eb",
+      "identical": true
+    },
+    {
+      "path": "apps/game-server/tests/support/nc09_projection_fixtures.rs",
+      "integrated_sha256": "8a16e7c2759664890e434a480af0690876d77e9ff150530887ec4bc380bf98cd",
+      "isolated_sha256": "8a16e7c2759664890e434a480af0690876d77e9ff150530887ec4bc380bf98cd",
+      "identical": true
+    },
+    {
+      "path": "apps/web-client/scripts/native-adapter.test.mjs",
+      "integrated_sha256": "67ce8854fd24665437855aa9debe9929c8cc203d45227daa3f17a2885c64d10e",
+      "isolated_sha256": "67ce8854fd24665437855aa9debe9929c8cc203d45227daa3f17a2885c64d10e",
+      "identical": true
+    },
+    {
+      "path": "apps/web-client/scripts/native-server-projection-parity.mjs",
+      "integrated_sha256": "935e2242a8d148bd3ece3966c40437acadcb205484ac9d1df18dd7fb773f23b4",
+      "isolated_sha256": "935e2242a8d148bd3ece3966c40437acadcb205484ac9d1df18dd7fb773f23b4",
+      "identical": true
+    },
+    {
+      "path": "apps/web-client/scripts/native-worker-smoke.mjs",
+      "integrated_sha256": "3e618d89fc9e121fbdcd16ae0286db187813eb13adefcb7ba4172cdb7eae6fa6",
+      "isolated_sha256": "3e618d89fc9e121fbdcd16ae0286db187813eb13adefcb7ba4172cdb7eae6fa6",
+      "identical": true
+    },
+    {
+      "path": "apps/web-client/src/worker/nativeBackend.ts",
+      "integrated_sha256": "2e204ecdc3f47e5283d60744869d14b4c88127254854ed74adfa02cd566c74ed",
+      "isolated_sha256": "2e204ecdc3f47e5283d60744869d14b4c88127254854ed74adfa02cd566c74ed",
+      "identical": true
+    },
+    {
+      "path": "crates/engine-native-wasm/src/lib.rs",
+      "integrated_sha256": "ed51bf4e4a9f58b15a1c60c24b9f36949411ad9f8ce3f361142ac9313f2caac1",
+      "isolated_sha256": "ed51bf4e4a9f58b15a1c60c24b9f36949411ad9f8ce3f361142ac9313f2caac1",
+      "identical": true
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc03_view_projection.rs",
+      "integrated_sha256": "ed0e5d149a64a7fd0429c1e64f0b1a481ac5e90a4576d9859f484e961fa3fb0f",
+      "isolated_sha256": "ed0e5d149a64a7fd0429c1e64f0b1a481ac5e90a4576d9859f484e961fa3fb0f",
+      "identical": true
+    },
+    {
+      "path": "crates/engine-native/src/engine/views.rs",
+      "integrated_sha256": "f513851f4b20fc7d2d8f1637005ab5ae2bc72b4ae57e0e7a1e43fef977791ab4",
+      "isolated_sha256": "f513851f4b20fc7d2d8f1637005ab5ae2bc72b4ae57e0e7a1e43fef977791ab4",
+      "identical": true
+    },
+    {
+      "path": "crates/engine-native/src/view.rs",
+      "integrated_sha256": "63c11bc12307cb19b47c4beb001603cebc5b4464be2033e68071a32f8082bded",
+      "isolated_sha256": "63c11bc12307cb19b47c4beb001603cebc5b4464be2033e68071a32f8082bded",
+      "identical": true
+    },
+    {
+      "path": "crates/engine-native/tests/t13_info_isolation.rs",
+      "integrated_sha256": "9203265700ae99d71fa7f162b176dfd07a1aad4287faa8deae44d6e859dbc7a8",
+      "isolated_sha256": "9203265700ae99d71fa7f162b176dfd07a1aad4287faa8deae44d6e859dbc7a8",
+      "identical": true
+    }
+  ],
+  "exception": "Cargo.lock preserves accepted F7 kernel/content packages; only game-server dev-dependency engine-native-wasm is added by this patch."
+}

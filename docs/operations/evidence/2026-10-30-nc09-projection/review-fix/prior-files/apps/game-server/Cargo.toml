@@ -1,0 +1,40 @@
+[package]
+name = "game-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Authoritative multiplayer server for noname-next (Phase 7)"
+
+[[bin]]
+name = "game-server"
+path = "src/main.rs"
+
+[dependencies]
+engine-api = { workspace = true }
+engine-core = { workspace = true }
+content-runtime = { workspace = true }
+content-native-loader = { path = "../../crates/content-native-loader" }
+content-schema = { path = "../../crates/content-schema" }
+engine-native = { path = "../../crates/engine-native" }
+engine-ai = { workspace = true }
+engine-protocol = { path = "../../crates/engine-protocol" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8", features = ["ws"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "fs"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+futures-util = "0.3"
+dashmap = "6"
+parking_lot = "0.12"
+blake3 = { workspace = true }
+
+[dev-dependencies]
+engine-native-wasm = { path = "../../crates/engine-native-wasm" }
+tokio-tungstenite = "0.26"
+url = "2"
+content-compiler = { path = "../../crates/content-compiler" }
+tempfile = { workspace = true }

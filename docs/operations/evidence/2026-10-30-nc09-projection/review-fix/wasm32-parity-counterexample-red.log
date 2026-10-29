@@ -1,0 +1,180 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: identity-public-zones/restore0/seat0: all faces/owners/zones
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      def: 0,
+      id: 10,
+      kind: 'Sha',
+...
+      rank: 1,
++     suit: 'Spade',
+-     suit: null,
+      zone: 'Hand'
+    },
+    {
+      def: 19,
+      id: 88,
+
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/web-client/scripts/native-server-projection-parity.mjs:43:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      id: 10,
+      def: 0,
+      suit: 'Club',
+      rank: 5,
+      owner: 0,
+      zone: 'Hand',
+      kind: 'Sha'
+    },
+    {
+      id: 11,
+      def: 0,
+      suit: 'Club',
+      rank: 6,
+      owner: 0,
+      zone: 'Hand',
+      kind: 'Sha'
+    },
+    {
+      id: 14,
+      def: 0,
+      suit: 'Club',
+      rank: 8,
+      owner: 0,
+      zone: 'Hand',
+      kind: 'Sha'
+    },
+    {
+      id: 75,
+      def: 13,
+      suit: 'Club',
+      rank: 6,
+      owner: 2,
+      zone: 'Judge',
+      kind: 'Other'
+    },
+    {
+      id: 81,
+      def: 3,
+      suit: 'Spade',
+      rank: 1,
+      owner: 0,
+      zone: 'Hand',
+      kind: 'Other'
+    },
+    {
+      id: 88,
+      def: 19,
+      suit: 'Club',
+      rank: 5,
+      owner: null,
+      zone: 'DiscardPile',
+      kind: 'ShaThunder'
+    },
+    {
+      id: 90,
+      def: 5,
+      suit: 'Spade',
+      rank: 1,
+      owner: 1,
+      zone: 'Equip',
+      kind: 'Other'
+    },
+    {
+      id: 95,
+      def: 7,
+      suit: 'Spade',
+      rank: 1,
+      owner: null,
+      zone: 'Processing',
+      kind: 'ShaFire'
+    }
+  ],
+  expected: [
+    {
+      def: 0,
+      id: 10,
+      kind: 'Sha',
+      owner: 0,
+      rank: 5,
+      suit: 'Club',
+      zone: 'Hand'
+    },
+    {
+      def: 0,
+      id: 11,
+      kind: 'Sha',
+      owner: 0,
+      rank: 6,
+      suit: 'Club',
+      zone: 'Hand'
+    },
+    {
+      def: 0,
+      id: 14,
+      kind: 'Sha',
+      owner: 0,
+      rank: 8,
+      suit: 'Club',
+      zone: 'Hand'
+    },
+    {
+      def: 13,
+      id: 75,
+      kind: 'Other',
+      owner: 2,
+      rank: 6,
+      suit: 'Club',
+      zone: 'Judge'
+    },
+    {
+      def: 3,
+      id: 81,
+      kind: 'Other',
+      owner: 0,
+      rank: 1,
+      suit: null,
+      zone: 'Hand'
+    },
+    {
+      def: 19,
+      id: 88,
+      kind: 'ShaThunder',
+      owner: null,
+      rank: 5,
+      suit: 'Club',
+      zone: 'DiscardPile'
+    },
+    {
+      def: 5,
+      id: 90,
+      kind: 'Other',
+      owner: 1,
+      rank: 1,
+      suit: 'Spade',
+      zone: 'Equip'
+    },
+    {
+      def: 7,
+      id: 95,
+      kind: 'ShaFire',
+      owner: null,
+      rank: 1,
+      suit: 'Spade',
+      zone: 'Processing'
+    }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "./apps/web-client/scripts/native-server-projection-parity.mjs", "../evidence-review-fix/wasm32-fixtures-mutated-suit.json"], "exit": 1, "locked_seconds": 0.22378070799459238}

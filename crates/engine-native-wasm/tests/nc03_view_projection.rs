@@ -132,3 +132,18 @@ fn nc03_view_json_privacy_stable_across_restore() {
     assert_eq!(before["discard"], after["discard"]);
     assert_eq!(before["table"], after["table"]);
 }
+
+#[test]
+fn nc03_visible_general_definition_survives_local_projection_and_restore() {
+    let mut engine = NativeEngine::new_identity(4, 1515).unwrap();
+    engine.assign_general(1, "刘备").unwrap();
+    let own: Value = serde_json::from_str(&engine.view_json(1).unwrap()).unwrap();
+    let other: Value = serde_json::from_str(&engine.view_json(0).unwrap()).unwrap();
+    let def = own["players"][1]["characterDef"].as_u64().unwrap();
+    assert!(def > 0, "刘备不是目录 0 号");
+    assert_eq!(other["players"][1]["characterDef"], def);
+    let hex = engine.save_hex();
+    engine.restore_hex(&hex).unwrap();
+    let restored: Value = serde_json::from_str(&engine.view_json(0).unwrap()).unwrap();
+    assert_eq!(restored["players"][1]["characterDef"], def);
+}

@@ -349,6 +349,7 @@ fn isolation_generals_public_in_non_kingdoms_modes() {
         let v = e.view_for(seat);
         let g = v.players[1].generals[0].as_ref().expect("标准将公开可见");
         assert_eq!(g.name, "刘备", "seat={seat} 视角应见 1 号主将");
+        assert_eq!(Some(g.def), e.state_core().player(1).general_slots[0]);
     }
 
     // 扩展将（玩点论杀）：def 接在标准表之后，投影须经 catalog 取名称/势力。
@@ -367,6 +368,7 @@ fn isolation_generals_public_in_non_kingdoms_modes() {
             .as_ref()
             .expect("扩展将公开可见（经 catalog.general_meta）");
         assert_eq!(g.name, "费诗", "seat={seat} 视角应见扩展主将名");
+        assert_eq!(g.def, base, "扩展目录定义号保持真实");
     }
     // 对手手牌与牌库仍不可见（隔离不因武将公开而松动）。
     let v = e.view_for(0);

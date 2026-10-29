@@ -1,0 +1,3 @@
+engine-native: passed=1644 failed=0 ignored=73 binaries/doc-targets=13
+engine-native-wasm: passed=72 failed=0 ignored=0 binaries/doc-targets=18
+game-server: passed=369 failed=0 ignored=0 binaries/doc-targets=27

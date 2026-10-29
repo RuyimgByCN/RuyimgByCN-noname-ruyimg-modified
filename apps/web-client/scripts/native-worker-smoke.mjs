@@ -552,6 +552,11 @@ try {
   );
   const identityPick = await workerSend({ id: 921, type: "chooseGeneral", seat: 0, name: "ddd刘冲" });
   const identitySeat = identityPick.data?.envelope?.view?.seats[0];
+  expectedIdentity.assign_general(0, "ddd刘冲");
+  const visibleGeneral = JSON.parse(expectedIdentity.view_json(0)).players[0].characterDef;
+  check("worker_visible_general_definition_reaches_seat_view",
+    visibleGeneral > 0 && identitySeat?.character_def === visibleGeneral,
+    `expected=${visibleGeneral} actual=${identitySeat?.character_def}`);
   check(
     "worker_identity_selection_keeps_lord_bonus_and_global_skills",
     identityPick.ok === true && identitySeat?.max_hp === 5 &&

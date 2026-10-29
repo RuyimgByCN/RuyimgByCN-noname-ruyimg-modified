@@ -1,0 +1,482 @@
+diff --git a/apps/game-server/examples/emit_projection_fixture.rs b/apps/game-server/examples/emit_projection_fixture.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/examples/emit_projection_fixture.rs
+@@ -0,0 +1,42 @@
++//! Emit trusted archives and server expectations for the generated WASM32 parity check.
++//! cargo run -p game-server --example emit_projection_fixture -- /tmp/projection.json
++#[path = "../tests/support/nc09_projection_fixtures.rs"]
++mod fixtures;
++#[path = "../src/native_view.rs"]
++mod native_view;
++
++use engine_api::PlayerId;
++use native_view::{observer_snapshot_for, RoomRole};
++use serde_json::json;
++
++fn main() -> Result<(), Box<dyn std::error::Error>> {
++    let output = std::env::args().nth(1).ok_or("output JSON path required")?;
++    let mut cases = Vec::new();
++    for (name, engine) in fixtures::scenarios() {
++        let bytes = engine_native::archive::encode_archive(&engine.save());
++        let archive_hex: String = bytes.iter().map(|b| format!("{b:02x}")).collect();
++        let restored = engine_native::Engine::restore(
++            &engine_native::archive::decode_archive(&bytes).expect("decode generated archive"),
++        )
++        .expect("restore generated archive");
++        let seats: Vec<_> = (0..engine.state_core().players.len())
++            .map(|seat| {
++                let id = Some(PlayerId::new(seat as u32 + 1));
++                let view = observer_snapshot_for(&engine, RoomRole::Player, id);
++                assert_eq!(view, observer_snapshot_for(&restored, RoomRole::Player, id));
++                view
++            })
++            .collect();
++        cases.push(json!({
++            "name": name,
++            "archiveHex": archive_hex,
++            "seats": seats,
++            "spectator": observer_snapshot_for(&engine, RoomRole::Spectator, Some(PlayerId::new(2))),
++            "hands": engine.state_core().players.iter().map(|p| &p.hand).collect::<Vec<_>>(),
++            "deck": engine.state_core().deck,
++        }));
++    }
++    std::fs::write(output, serde_json::to_vec_pretty(&cases)?)?;
++    println!("emitted {} same-archive projection cases", cases.len());
++    Ok(())
++}
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -8,8 +8,8 @@
+ //! 口径：
+ //! - 座位投影：自己手牌与公开牌区可见，他人手牌仅数量（原生视图保证）；
+ //!   `known_cards` 为这些可见牌附上真实牌面。
+-//! - 观察者：`Spectator`/`Referee` 由角色决定（`Referee` 仍走同一原生投影，
+-//!   原生视图本身不含他人手牌内容）；
++//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 保留完整武将定义，
++//!   其余原生完整信息投影尚未齐备；
+ //! - 权威动作：`Engine::legal_actions`（内核校验同源）→ `LegalAction`；
+ //! - 摘要：`Engine::state_hash`（规范摘要）逐字节带上，供客户端比对修订。
+ 
+@@ -20,14 +20,14 @@
+ use engine_native::view::{HandView, PlayerView};
+ use engine_native::{Engine, GameAction};
+ 
+-/// 房间角色 → 协议观察者种类（座位号由 `seat` 给出）。
++/// 房间角色由可信成员记录决定，不能取自客户端自报角色（座位号由 `seat` 给出）。
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+ pub enum RoomRole {
+     /// 入座玩家。
+     Player,
+     /// 观战者（公开信息）。
+     Spectator,
+-    /// 裁判（完整信息角色；原生投影仍不暴露他人手牌内容）。
++    /// 裁判（可信宿主授予；原生完整信息投影尚未齐备）。
+     Referee,
+ }
+ 
+@@ -123,7 +123,7 @@
+     role: RoomRole,
+     seat: Option<ApiPlayerId>,
+ ) -> ObserverSnapshot {
+-    // 原生视图：Player 用座位投影；观战/裁判用「无座位」投影（不含任何手牌 id）
++    // shortcut: 原生裁判手牌/身份仍缺完整投影，待共享 full-info 视图补齐后替换。
+     let native_seat = seat
+         .and_then(|p| p.raw().checked_sub(1))
+         .filter(|p| (*p as usize) < engine.state_core().players.len());
+@@ -142,7 +142,11 @@
+         .map(|cell| SeatView {
+             player: ApiPlayerId::new(cell.seat as u32 + 1),
+             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+-            character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
++            character_def: if role == RoomRole::Referee {
++                engine.state_core().player(cell.seat).general_slots[0].map(u32::from).unwrap_or(0)
++            } else {
++                cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0)
++            },
+             seat: engine_api::SeatIndex::new(cell.seat),
+             hp: cell.hp,
+             max_hp: cell.max_hp,
+diff --git a/apps/game-server/src/native_ws_e2e.rs b/apps/game-server/src/native_ws_e2e.rs
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -3,6 +3,7 @@
+ mod durability;
+ mod commit_crash;
+ mod double_failure;
++mod authority;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+ use engine_api::{
+diff --git a/apps/game-server/src/native_ws_e2e/authority.rs b/apps/game-server/src/native_ws_e2e/authority.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/src/native_ws_e2e/authority.rs
+@@ -0,0 +1,46 @@
++//! Client-supplied role claims never grant server Referee authority.
++use super::*;
++
++#[tokio::test]
++async fn native_ws_client_role_claim_cannot_promote_to_referee() {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = config(directory.path());
++    let server = Server::start(&cfg, 0).await;
++    let mut owner = Peer::connect(&server).await;
++    owner.create().await;
++    let mut peer = Peer::connect(&server).await;
++    peer.ws
++        .send(Message::Text(
++            serde_json::json!({
++                "type": "JoinRoom", "payload": {
++                    "room_id": owner.room, "password": PASSWORD, "preferred_seat": 1,
++                    "reconnect_token": null, "role": "Referee", "observer": "Referee"
++                }
++            })
++            .to_string()
++            .into(),
++        ))
++        .await
++        .unwrap();
++    let player = peer.join_result().await;
++    player.assert_player(peer.player);
++    assert_ne!(player.view.observer, ObserverKind::Referee);
++    let mut spectator = Peer::connect(&server).await;
++    spectator
++        .ws
++        .send(Message::Text(
++            serde_json::json!({
++                "type": "Spectate", "payload": {
++                    "room_id": owner.room, "role": "Referee", "preferred_seat": 0, "player_id": 1
++                }
++            })
++            .to_string()
++            .into(),
++        ))
++        .await
++        .unwrap();
++    spectator.join_result().await.assert_spectator();
++    spectator.snapshot().await.assert_spectator();
++    peer.snapshot().await.assert_player(peer.player);
++    server.stop().await;
++}
+diff --git a/apps/game-server/tests/nc09_native_room_session.rs b/apps/game-server/tests/nc09_native_room_session.rs
+--- a/apps/game-server/tests/nc09_native_room_session.rs
++++ b/apps/game-server/tests/nc09_native_room_session.rs
+@@ -688,3 +688,37 @@
+     assert!(result.is_err());
+     assert_eq!(std::fs::read(blocked).unwrap(), b"retain this file");
+ }
++
++
++#[test]
++fn nc09_referee_general_authority_survives_trusted_restore_and_reconnect() {
++    let mut engine = engine_native::Engine::new(1515, 4);
++    engine.assign_general_named(1, "刘备").unwrap();
++    let general = engine.state_core().player(1).general_slots[0].unwrap() as u32;
++    let mut snapshot = engine.save();
++    snapshot.core.mode = engine_native::state::GameMode::Kingdoms;
++    snapshot.core.player_mut(1).revealed_generals = [false, false];
++    let mut room = NativeRoomSession::new(engine_native::Engine::restore(&snapshot).unwrap(), 4);
++    let ordinary = room.join(1, Some(0), None).unwrap();
++    assert_eq!(ordinary.member.role, ClientRole::Player);
++    assert_eq!(ordinary.view.seats[1].character_def, 0);
++    room.spectate(90);
++    let mut saved = room.export_state(&room.snapshot_hex());
++    // Only a trusted host/store can provision a Referee; no client grant message exists.
++    let referee = saved.members.iter_mut().find(|m| m.connection_id == 90).unwrap();
++    referee.role = ClientRole::Referee;
++    referee.reconnect_token = uuid::Uuid::new_v4().to_string();
++    let token = referee.reconnect_token.clone();
++    let mut restored = NativeRoomSession::from_saved(&saved, Vec::new()).unwrap();
++    assert_eq!(restored.snapshot(90).unwrap().seats[1].character_def, general);
++    assert_eq!(restored.snapshot(1).unwrap().seats[1].character_def, 0);
++    let rejoined = restored.join(99, None, Some(token)).unwrap();
++    assert_eq!(rejoined.member.role, ClientRole::Referee);
++    assert_eq!(rejoined.view.observer, engine_api::ObserverKind::Referee);
++    assert_eq!(rejoined.view.seats[1].character_def, general);
++    assert!(restored.snapshot(90).is_err());
++    assert!(restored.join(100, None, Some("Referee".into())).is_err());
++    let spec = restored.spectate(101);
++    assert_eq!(spec.member.role, ClientRole::Spectator);
++    assert_eq!(spec.view.seats[1].character_def, 0);
++}
+diff --git a/apps/game-server/tests/nc09_projection_parity.rs b/apps/game-server/tests/nc09_projection_parity.rs
+--- a/apps/game-server/tests/nc09_projection_parity.rs
++++ b/apps/game-server/tests/nc09_projection_parity.rs
+@@ -3,38 +3,14 @@
+ mod native_view;
+ 
+ use engine_api::{CardZoneTag, PlayerId};
+-use engine_native::{catalog::CardKind, state::GameMode, Engine};
++use engine_native::{state::GameMode, Engine};
+ use native_view::{observer_snapshot_for, RoomRole};
+ use serde_json::Value;
+ use std::collections::BTreeSet;
+ 
+-fn fixture() -> Engine {
+-    let mut engine = Engine::new_identity(1515, 4);
+-    engine.assign_general_named(0, "曹操").unwrap();
+-    engine.assign_general_named(1, "刘备").unwrap();
+-    let mut snapshot = engine.save();
+-    let equipment = snapshot
+-        .core
+-        .deck
+-        .iter()
+-        .position(|id| engine.catalog().card_kind(*id) == CardKind::Weapon)
+-        .unwrap();
+-    let equipment = snapshot.core.deck.remove(equipment);
+-    snapshot.core.player_mut(1).equips.push(equipment);
+-    let judge = snapshot
+-        .core
+-        .deck
+-        .iter()
+-        .position(|id| engine.catalog().card_kind(*id) == CardKind::Le)
+-        .unwrap();
+-    let judge = snapshot.core.deck.remove(judge);
+-    snapshot.core.player_mut(2).judge.push(judge);
+-    let discard = snapshot.core.deck.pop().unwrap();
+-    snapshot.core.discard.push(discard);
+-    let processing = snapshot.core.deck.pop().unwrap();
+-    snapshot.core.table.push(processing);
+-    Engine::restore(&snapshot).unwrap()
+-}
++#[path = "support/nc09_projection_fixtures.rs"]
++mod fixtures;
++use fixtures::{all_cards_fixture, fixture};
+ 
+ fn local(engine: &Engine, seat: u8) -> Value {
+     let hex: String = engine_native::archive::encode_archive(&engine.save())
+@@ -145,15 +121,17 @@
+ 
+ #[test]
+ fn nc09_server_cards_and_identity_match_local_before_and_after_restart() {
+-    let engine = fixture();
+-    assert_parity(&engine);
+-    let bytes = engine_native::archive::encode_archive(&engine.save());
+-    let restored =
+-        Engine::restore(&engine_native::archive::decode_archive(&bytes).unwrap()).unwrap();
+-    assert_parity(&restored);
++    for (_, engine) in fixtures::scenarios() {
++        assert_parity(&engine);
++        let bytes = engine_native::archive::encode_archive(&engine.save());
++        let restored =
++            Engine::restore(&engine_native::archive::decode_archive(&bytes).unwrap()).unwrap();
++        assert_parity(&restored);
++    }
++    let restored = fixture();
+     for seat in [None, Some(PlayerId::new(2))] {
+-        for role in [RoomRole::Spectator, RoomRole::Referee] {
+-            let view = observer_snapshot_for(&restored, role, seat);
++        {
++            let view = observer_snapshot_for(&restored, RoomRole::Spectator, seat);
+             assert_eq!(
+                 view.known_cards.len(),
+                 4,
+@@ -189,7 +167,7 @@
+     assert_ne!(general, 0);
+     let own = observer_snapshot_for(&engine, RoomRole::Player, Some(PlayerId::new(2)));
+     assert_eq!(own.seats[1].character_def, general);
+-    for role in [RoomRole::Spectator, RoomRole::Referee, RoomRole::Player] {
++    for role in [RoomRole::Spectator, RoomRole::Player] {
+         let view = observer_snapshot_for(&engine, role, Some(PlayerId::new(1)));
+         assert_eq!(
+             view.seats[1].character_def, 0,
+@@ -261,16 +239,7 @@
+ 
+ #[test]
+ fn nc09_every_standard_card_kind_preserves_local_granularity() {
+-    let engine = fixture();
+-    let mut snapshot = engine.save();
+-    snapshot.core.discard.append(&mut snapshot.core.deck);
+-    for player in &mut snapshot.core.players {
+-        snapshot.core.discard.append(&mut player.hand);
+-        snapshot.core.discard.append(&mut player.equips);
+-        snapshot.core.discard.append(&mut player.judge);
+-    }
+-    snapshot.core.discard.append(&mut snapshot.core.table);
+-    let engine = Engine::restore(&snapshot).unwrap();
++    let engine = all_cards_fixture();
+     assert_parity(&engine);
+     let public = observer_snapshot_for(&engine, RoomRole::Spectator, None);
+     assert_eq!(public.known_cards.len(), engine.catalog().cards.len());
+@@ -295,3 +264,26 @@
+         .collect()
+     );
+ }
++
++#[test]
++fn nc09_referee_retains_authorized_unrevealed_general_definition() {
++    let mut snapshot = fixture().save();
++    snapshot.core.mode = GameMode::Kingdoms;
++    snapshot.core.player_mut(1).revealed_generals = [false, false];
++    let engine = Engine::restore(&snapshot).unwrap();
++    let general = engine.state_core().player(1).general_slots[0].unwrap() as u32;
++    assert_ne!(general, 0);
++    for seat in [
++        None,
++        Some(PlayerId::new(1)),
++        Some(PlayerId::NONE),
++        Some(PlayerId::new(257)),
++    ] {
++        let view = observer_snapshot_for(&engine, RoomRole::Referee, seat);
++        assert_eq!(view.observer, engine_api::ObserverKind::Referee);
++        assert_eq!(
++            view.seats[1].character_def, general,
++            "Referee is full-info authority, not a seated Player or Spectator"
++        );
++    }
++}
+diff --git a/apps/game-server/tests/support/nc09_projection_fixtures.rs b/apps/game-server/tests/support/nc09_projection_fixtures.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/tests/support/nc09_projection_fixtures.rs
+@@ -0,0 +1,62 @@
++//! Shared authoritative states for native-facade and generated-WASM projection comparisons.
++use engine_native::{catalog::CardKind, state::GameMode, Engine};
++
++pub fn fixture() -> Engine {
++    let mut engine = Engine::new_identity(1515, 4);
++    engine.assign_general_named(0, "曹操").unwrap();
++    engine.assign_general_named(1, "刘备").unwrap();
++    let mut snapshot = engine.save();
++    let equipment = snapshot
++        .core
++        .deck
++        .iter()
++        .position(|id| engine.catalog().card_kind(*id) == CardKind::Weapon)
++        .unwrap();
++    let equipment = snapshot.core.deck.remove(equipment);
++    snapshot.core.player_mut(1).equips.push(equipment);
++    let judge = snapshot
++        .core
++        .deck
++        .iter()
++        .position(|id| engine.catalog().card_kind(*id) == CardKind::Le)
++        .unwrap();
++    let judge = snapshot.core.deck.remove(judge);
++    snapshot.core.player_mut(2).judge.push(judge);
++    let discard = snapshot.core.deck.pop().unwrap();
++    snapshot.core.discard.push(discard);
++    let processing = snapshot.core.deck.pop().unwrap();
++    snapshot.core.table.push(processing);
++    Engine::restore(&snapshot).unwrap()
++}
++
++pub fn all_cards_fixture() -> Engine {
++    let engine = fixture();
++    let mut snapshot = engine.save();
++    snapshot.core.discard.append(&mut snapshot.core.deck);
++    for player in &mut snapshot.core.players {
++        snapshot.core.discard.append(&mut player.hand);
++        snapshot.core.discard.append(&mut player.equips);
++        snapshot.core.discard.append(&mut player.judge);
++    }
++    snapshot.core.discard.append(&mut snapshot.core.table);
++    Engine::restore(&snapshot).unwrap()
++}
++
++pub fn scenarios() -> Vec<(&'static str, Engine)> {
++    let engine = fixture();
++    let mut dead = engine.save();
++    dead.core.player_mut(2).alive = false;
++    dead.core.player_mut(2).hp = 0;
++    let mut hidden = engine.save();
++    hidden.core.mode = GameMode::Kingdoms;
++    hidden.core.player_mut(1).revealed_generals = [false, false];
++    let mut revealed = hidden.clone();
++    revealed.core.player_mut(1).revealed_generals[0] = true;
++    vec![
++        ("identity-public-zones", engine),
++        ("dead-identity", Engine::restore(&dead).unwrap()),
++        ("kingdoms-hidden", Engine::restore(&hidden).unwrap()),
++        ("kingdoms-revealed", Engine::restore(&revealed).unwrap()),
++        ("all-kinds", all_cards_fixture()),
++    ]
++}
+diff --git a/apps/web-client/scripts/native-server-projection-parity.mjs b/apps/web-client/scripts/native-server-projection-parity.mjs
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/native-server-projection-parity.mjs
+@@ -0,0 +1,81 @@
++// Compare emitted server snapshots with the actual generated WASM32 artifact on the same archives.
++// node --import ./scripts/ts-register.mjs scripts/native-server-projection-parity.mjs /tmp/projection.json
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import init, { NativeEngine } from "../src/worker/native-pkg/engine_native_wasm.js";
++import { nativeObserverToSnapshot } from "../src/worker/nativeBackend.ts";
++
++assert(process.argv[2], "provide JSON emitted by game-server's emit_projection_fixture example");
++const fixtures = JSON.parse(readFileSync(process.argv[2], "utf8"));
++await init({ module_or_path: readFileSync(new URL("../src/worker/native-pkg/engine_native_wasm_bg.wasm", import.meta.url)) });
++const kinds = new Set();
++const zones = new Set();
++let comparisons = 0;
++let privateChecks = 0;
++
++const cards = (snapshot, server) => snapshot.known_cards.map((card) => ({
++  ...card,
++  owner: server && card.owner !== null ? card.owner - 1 : card.owner,
++})).sort((a, b) => a.id - b.id);
++const seats = (snapshot, server) => snapshot.seats.map((seat) => ({
++  player: server ? seat.player - 1 : seat.player,
++  seat: seat.seat,
++  character_def: seat.character_def,
++  identity: seat.identity,
++  hp: seat.hp,
++  max_hp: seat.max_hp,
++  alive: seat.alive,
++  turned_over: seat.turned_over,
++  hand_count: seat.hand_count,
++}));
++
++for (const fixture of fixtures) {
++  const engine = NativeEngine.new_identity(fixture.seats.length, 1515n);
++  try {
++    for (let restore = 0; restore < 2; restore++) {
++      engine.restore_hex(fixture.archiveHex);
++      for (let seat = 0; seat < fixture.seats.length; seat++) {
++        const context = `${fixture.name}/restore${restore}/seat${seat}`;
++        const raw = JSON.parse(engine.view_json(seat));
++        const actual = nativeObserverToSnapshot(raw);
++        const server = fixture.seats[seat];
++        assert.equal(server.observer.Player - 1, seat, context);
++        assert.deepEqual(cards(actual, false), cards(server, true), `${context}: all faces/owners/zones`);
++        assert.deepEqual(seats(actual, false), seats(server, true), `${context}: identity/general/seat fields`);
++        assert.deepEqual(raw.players[seat].hand.own, fixture.hands[seat], `${context}: exact own hand`);
++        const hidden = new Set([
++          ...fixture.deck,
++          ...fixture.hands.flatMap((hand, owner) => owner === seat ? [] : hand),
++        ]);
++        for (const snapshot of [actual, server]) {
++          assert(snapshot.known_cards.every((card) => !hidden.has(card.id)), `${context}: hidden hand/deck ID leak`);
++        }
++        for (const player of raw.players.filter((player) => player.seat !== seat)) {
++          assert.equal(player.hand.own, undefined, `${context}: foreign raw hand`);
++          assert.equal(player.hand.hidden, true, `${context}: foreign raw hand must be hidden`);
++        }
++        assert.equal(raw.deckCount, fixture.deck.length, `${context}: deck count`);
++        assert.equal(raw.deck, undefined, `${context}: raw deck contents`);
++        if (hidden.size) privateChecks++;
++        for (const card of actual.known_cards) {
++          kinds.add(card.kind);
++          zones.add(card.zone);
++        }
++        comparisons++;
++      }
++    }
++    const hidden = new Set([...fixture.deck, ...fixture.hands.flat()]);
++    assert.equal(fixture.spectator.observer, "Spectator");
++    assert(fixture.spectator.known_cards.every((card) => !hidden.has(card.id)
++      && card.zone !== "Hand" && card.zone !== "DrawPile"), `${fixture.name}: supplied-seat spectator leak`);
++    console.log(`PASS ${fixture.name}: every seat, two archive restores, server/generated-WASM32 parity`);
++  } finally {
++    engine.free();
++  }
++}
++assert.equal(fixtures.length, 5);
++assert.equal(comparisons, 40);
++assert.equal(privateChecks, 32);
++assert.deepEqual([...kinds].sort(), ["Sha", "Tao", "Shan", "Jiu", "ShaFire", "ShaThunder", "Other"].sort());
++assert.deepEqual([...zones].sort(), ["Hand", "Equip", "Judge", "DiscardPile", "Processing"].sort());
++console.log(JSON.stringify({ fixtures: fixtures.length, comparisons, privateChecks, kinds: [...kinds].sort(), zones: [...zones].sort(), failed: 0 }));

@@ -1,0 +1,140 @@
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling libc v0.2.186
+   Compiling once_cell v1.21.4
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling syn v2.0.118
+   Compiling errno v0.3.14
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/rule-api)
+   Compiling engine-protocol v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-protocol)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/content-schema)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 21.25s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/content_native_loader-a5beb8feac136375)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ai_tuning_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/ai_tuning_loader-775e5af1f7e68a0d)
+
+running 3 tests
+test benefit_applies_weight_only_when_enabled ... ok
+test weight_resolution_follows_ckqz ... ok
+test parses_modes_and_tables ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/doomsday_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/doomsday_loader-f4f885565d768582)
+
+running 3 tests
+test zaibian_draw_counts_identities ... ok
+test identity_chain_follows_upstream_gates ... ok
+test wujinmoshi_bonuses_apply_to_human_seat_only ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/epic_cards_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/epic_cards_loader-c39867deaaec1a99)
+
+running 3 tests
+test parses_config_and_presentation_flags ... ok
+test shichangshi_plan_tracks_external_dependency ... ok
+test rejects_bad_scale_and_missing_fields ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/loader_acceptance.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/loader_acceptance-6aa8af0a582515ff)
+
+running 3 tests
+test bridge_pile_parses_installed_cardpile_asset ... ok
+test bridge_pile_rejects_bad_data ... ok
+test loader_acceptance_bounded_names_and_clear_errors ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/qhly_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/qhly_loader-41702b5a68816a9b)
+
+running 7 tests
+test resolves_real_name_and_gz_fallback ... ok
+test erases_extension_and_checks_bans ... ok
+test only_hp_rules_participate ... ok
+test filters_skin_list_by_hide_and_lock ... ok
+test hp_loss_gates_phase_end_switch ... ok
+test random_skin_filters_banned_and_terms ... ok
+test parses_config_and_auto_switch_flag ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rzsh_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/rzsh_loader-c00f0efec87c9b0c)
+
+running 3 tests
+test picks_are_deterministic_and_wrap ... ok
+test text_tables_match_upstream_counts ... ok
+test roman_covers_one_to_six ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/skin_switch_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/skin_switch_loader-e4e352bbc9389792)
+
+running 6 tests
+test damage_transform_is_once_per_avatar ... ok
+test lowhp_triggers_only_on_new_low ... ok
+test reapply_backoff_follows_upstream_schedule ... ok
+test group_nature_and_change_detection ... ok
+test resolves_transform_targets ... ok
+test parses_config_and_saved_positions ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/symbol_table_limit.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/symbol_table_limit-6c2caee8accd0036)
+
+running 1 test
+test bridge_rejected_at_symbol_table_limit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.42s
+
+     Running tests/thunder_loader.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/thunder_loader-1c03d45292e5d7f6)
+
+running 3 tests
+test replace_plan_pairs_parallel_tables ... ok
+test mark_labels_follow_shh_new_switch ... ok
+test parses_config_and_speed_bounds ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/engine_protocol-ce7c3c6435b94ad3)
+
+running 1 test
+test wire::tests::roundtrip_hello ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests content_native_loader
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "cargo", "test", "--offline", "-p", "content-native-loader", "-p", "engine-protocol"], "exit": 0, "locked_seconds": 22.906008167003165}

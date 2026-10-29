@@ -1,0 +1,7 @@
+PASS identity-public-zones: every seat, two archive restores, server/generated-WASM32 parity
+PASS dead-identity: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-hidden: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-revealed: every seat, two archive restores, server/generated-WASM32 parity
+PASS all-kinds: every seat, two archive restores, server/generated-WASM32 parity
+{"fixtures":5,"comparisons":40,"privateChecks":32,"kinds":["Jiu","Other","Sha","ShaFire","ShaThunder","Shan","Tao"],"zones":["DiscardPile","Equip","Hand","Judge","Processing"],"failed":0}
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "./apps/web-client/scripts/native-server-projection-parity.mjs", "../evidence-review-fix/wasm32-fixtures.json"], "exit": 0, "locked_seconds": 0.2261052079993533}

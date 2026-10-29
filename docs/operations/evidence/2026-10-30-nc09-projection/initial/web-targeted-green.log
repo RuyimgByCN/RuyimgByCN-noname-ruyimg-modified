@@ -1,0 +1,19 @@
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.415625ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.179333ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.120417ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.117459ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (0.146833ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.069208ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.079125ms)
+✔ 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择 (0.775583ms)
+✔ identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null (0.10125ms)
+✔ 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位 (0.189ms)
+✔ visible general definition reaches the existing seat view (0.061792ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 247.011167

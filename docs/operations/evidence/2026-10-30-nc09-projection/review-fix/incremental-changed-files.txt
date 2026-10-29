@@ -1,0 +1,8 @@
+apps/game-server/examples/emit_projection_fixture.rs
+apps/game-server/src/native_view.rs
+apps/game-server/src/native_ws_e2e.rs
+apps/game-server/src/native_ws_e2e/authority.rs
+apps/game-server/tests/nc09_native_room_session.rs
+apps/game-server/tests/nc09_projection_parity.rs
+apps/game-server/tests/support/nc09_projection_fixtures.rs
+apps/web-client/scripts/native-server-projection-parity.mjs

@@ -1,0 +1,47 @@
+## Review
+
+**Merge verdict: OK with notes。前次 P1 已修复，真实 WASM32 同归档验收缺口已补齐；可以进入主线程既定整合顺序。**
+
+No issues found.
+
+本次只复核了 8 文件修正增量、18 文件总补丁的范围，以及新增源码和日志，没有重做此前已通过部分。
+
+- **Fixed（核验通过，未由本审查修改）：Referee 主将定义权限恢复。**  
+  [native_view.rs:145](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_view.rs:145) 仅在 `role == RoomRole::Referee` 时读取权威状态中的主将实际定义；Player/Spectator 继续使用经过原生可见性过滤的 `cell.generals[0]`。没有恢复普通观察者的未过滤读取，也没有借此扩展其他私有字段。原有 checked subtraction 和座位范围检查保留。新增 [Referee 回归测试:267](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/tests/nc09_projection_parity.rs:267) 覆盖无座位、有效座位、零及 wrapping ID；Referee 权限来自角色，不依赖所附座位。红日志确实为实际值 `0`、期望值 `22`，修复后该测试通过。
+
+- **Correct：客户端自报角色不会进入授权来源。**  
+  协议 JoinRoom/Spectate 没有角色授予字段；新入座成员固定为 Player，新观战成员固定为 Spectator。[room_native.rs:218](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/room_native.rs:218) 的重连分支从服务端令牌表取得原成员并保留角色；[snapshot_for:554](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/room_native.rs:554) 使用服务端成员角色选择投影，actor 广播也沿用该角色。新增 [authority.rs:5](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_ws_e2e/authority.rs:5) 经真实 WebSocket 发送额外 `role`、`observer` 和座位声明，验证 Join/Spectate 仍返回 Player/Spectator，并再次请求快照检查没有提权。
+
+- **Correct：可信成员恢复与重连有实际行为测试。**  
+  [nc09_native_room_session.rs:694](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/tests/nc09_native_room_session.rs:694) 在可信宿主侧为保存的成员设置 Referee 与随机重连令牌，再经 `from_saved` 和 `join` 恢复。测试检查 Referee 角色及实际主将定义保留、普通玩家和新 Spectator 仍看不到暗将、旧连接失效、伪造令牌被拒绝。该证据属于真实 session 层恢复/重连；WebSocket 测试另行覆盖客户端自我提权拒绝，没有混淆两者范围。
+
+- **Correct：旧 Referee 缺口不再被测试固化为预期政策。**  
+  前次把 Referee 放入“不得见手牌/隐藏身份”和“暗将必须为零”的断言已移除，改为独立检查其授权主将定义。报告如实保留旧 native Referee 的手牌、牌堆内容/顺序、私有技能牌区、隐藏身份及完整 choice 详情缺口；源码也注明完整投影尚未齐备。本修正仅恢复主将定义，不能作为 full-information Referee 已完成的证据。
+
+- **Correct：新增验收实际执行生成的 WASM32。**  
+  [native-server-projection-parity.mjs:5](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/web-client/scripts/native-server-projection-parity.mjs:5) 导入生成的 JS、初始化实际 `.wasm`，随后调用生成绑定的 `restore_hex` / `view_json`，并经过现有生产适配器。TS loader 只做转译，没有替换引擎。生成绑定确实调用 WASM exports。产物复用清单中的 JS/WASM 摘要与此前重建记录一致；此次增量没有 native/WASM 源码变更。
+
+  [emit_projection_fixture.rs:16](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/examples/emit_projection_fixture.rs:16) 从同一引擎导出归档与服务端快照，并断言服务端归档恢复前后快照相等。Node 检查器恢复这些相同归档，完整比较牌的 ID、def、suit、rank、kind、owner、zone，以及所列座位、身份和主将字段。1-based 服务端 owner/player 到本地 0-based 的转换明确。
+
+  **40 次对照 = 5 场景 × 4 座位 × 2 次恢复。** 32 次 privacy 计数对应隐藏集合非空的 seat/restore 检查，每次同时检查服务端和本地已知牌；全牌公开场景的空隐藏集合不计入其中。此外还检查原始 WASM 对手手牌、牌堆仅数量、本人手牌精确内容，以及附带座位的服务端 Spectator 无私有牌。种类和区域集合断言覆盖六类加 Other、五个要求区域。
+
+- **Correct：权威 fixture 数据没有进入网络。**  
+  完整 archive、hand/deck authority IDs 仅由 example 写入指定验收 JSON，供独立负面检查使用。[exporter:30](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/examples/emit_projection_fixture.rs:30) 没有更改 `ObserverSnapshot` 或网络消息；该 fixture 模块只由测试/example 引用。
+
+核读的新增日志与报告相符：
+
+| 检查 | 原始证据结果 |
+|---|---|
+| Referee 正确预期先红后绿 | 红：`0 != 22`；修后投影测试 **8/0** |
+| 可信恢复/重连 | **1/0** |
+| WS 自报角色提权拒绝 | **1/0**；最终全量包含迁入 `authority` 模块后的测试 |
+| [真实 WASM32 同档对照日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/wasm32-server-parity-green.log) | **5 场景、40 对照、32 非空隐藏集合检查，exit 0** |
+| [修改 suit 的负对照日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/wasm32-parity-counterexample-red.log) | 同一检查器在首场景牌面比较处发现 `Spade` 与 `null` 差异，**exit 1** |
+| 最终 server 全量 | **372/0/0，exit 0** |
+
+整合时仍应遵循主线程安排：F7 最终门禁通过并独立提交后，再整合本 projection patch；映射 facade 路径、适配 Cargo lock，并把此前唯一的 `characterDef` 序列化增量带入 PA09 提取后的 helper，保留 root exports 和 JS signatures。此次复核没有发现需要扩大实现范围的问题。
+
+**NC09 仍为部分完成。** Timeout 仍是 UNIMPLEMENTED；rules329 属于 J2，J2 后 rules330 仍未批准。完整 Referee、父工作区整合验收、浏览器产品流程和目标平台验收继续保留为未完成项。
+
+未执行修改、测试、构建、提交或摘要重算；结论基于源码、补丁及已有日志。  
+剩余风险是旧 full-info Referee 能力不足与 timeout 未实现，不能把本次通过登记为 NC09 完成。

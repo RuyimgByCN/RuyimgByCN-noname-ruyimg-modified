@@ -688,3 +688,37 @@ async fn nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_writte
     assert!(result.is_err());
     assert_eq!(std::fs::read(blocked).unwrap(), b"retain this file");
 }
+
+
+#[test]
+fn nc09_referee_general_authority_survives_trusted_restore_and_reconnect() {
+    let mut engine = engine_native::Engine::new(1515, 4);
+    engine.assign_general_named(1, "刘备").unwrap();
+    let general = engine.state_core().player(1).general_slots[0].unwrap() as u32;
+    let mut snapshot = engine.save();
+    snapshot.core.mode = engine_native::state::GameMode::Kingdoms;
+    snapshot.core.player_mut(1).revealed_generals = [false, false];
+    let mut room = NativeRoomSession::new(engine_native::Engine::restore(&snapshot).unwrap(), 4);
+    let ordinary = room.join(1, Some(0), None).unwrap();
+    assert_eq!(ordinary.member.role, ClientRole::Player);
+    assert_eq!(ordinary.view.seats[1].character_def, 0);
+    room.spectate(90);
+    let mut saved = room.export_state(&room.snapshot_hex());
+    // Only a trusted host/store can provision a Referee; no client grant message exists.
+    let referee = saved.members.iter_mut().find(|m| m.connection_id == 90).unwrap();
+    referee.role = ClientRole::Referee;
+    referee.reconnect_token = uuid::Uuid::new_v4().to_string();
+    let token = referee.reconnect_token.clone();
+    let mut restored = NativeRoomSession::from_saved(&saved, Vec::new()).unwrap();
+    assert_eq!(restored.snapshot(90).unwrap().seats[1].character_def, general);
+    assert_eq!(restored.snapshot(1).unwrap().seats[1].character_def, 0);
+    let rejoined = restored.join(99, None, Some(token)).unwrap();
+    assert_eq!(rejoined.member.role, ClientRole::Referee);
+    assert_eq!(rejoined.view.observer, engine_api::ObserverKind::Referee);
+    assert_eq!(rejoined.view.seats[1].character_def, general);
+    assert!(restored.snapshot(90).is_err());
+    assert!(restored.join(100, None, Some("Referee".into())).is_err());
+    let spec = restored.spectate(101);
+    assert_eq!(spec.member.role, ClientRole::Spectator);
+    assert_eq!(spec.view.seats[1].character_def, 0);
+}

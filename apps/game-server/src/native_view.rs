@@ -6,10 +6,10 @@
 //! 协议，不要求客户端改类型，也不允许各自再写一套投影规则。
 //!
 //! 口径：
-//! - 座位投影：自己手牌可见、他人仅数量（原生 `HandView` 已保证），映射后
-//!   `SeatView.hand_count` 仍只给数量——**协议视图不含手牌 id**（授权面例外见待办）；
-//! - 观察者：`Spectator`/`Referee` 由角色决定（`Referee` 仍走同一原生投影，
-//!   原生视图本身不含他人手牌内容）；
+//! - 座位投影：自己手牌与公开牌区可见，他人手牌仅数量（原生视图保证）；
+//!   `known_cards` 为这些可见牌附上真实牌面。
+//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 保留完整武将定义，
+//!   其余原生完整信息投影尚未齐备；
 //! - 权威动作：`Engine::legal_actions`（内核校验同源）→ `LegalAction`；
 //! - 摘要：`Engine::state_hash`（规范摘要）逐字节带上，供客户端比对修订。
 
@@ -20,67 +20,70 @@ use engine_api::{
 use engine_native::view::{HandView, PlayerView};
 use engine_native::{Engine, GameAction};
 
-/// 房间角色 → 协议观察者种类（座位号由 `seat` 给出）。
+/// 房间角色由可信成员记录决定，不能取自客户端自报角色（座位号由 `seat` 给出）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RoomRole {
     /// 入座玩家。
     Player,
     /// 观战者（公开信息）。
     Spectator,
-    /// 裁判（完整信息角色；原生投影仍不暴露他人手牌内容）。
+    /// 裁判（可信宿主授予；原生完整信息投影尚未齐备）。
     Referee,
 }
 
-/// 身份可见性：本人、主公、已死亡者可见（与内核 `view_for` 同口径）；其余 None。
-fn identity_tag_for(engine: &Engine, viewer: Option<ApiPlayerId>, seat: u8) -> Option<IdentityTag> {
-    let roles = engine.state_core().identity_roles()?;
-    let role = roles.get(seat as usize)?;
-    let is_self = viewer
-        .map(|v| v.raw().saturating_sub(1) as u8 == seat)
-        .unwrap_or(false);
-    let dead = !engine.state_core().player(seat).alive;
-    if !(is_self || *role == engine_native::state::Role::Lord || dead) {
-        return None;
+/// 本人手牌与公开牌区均从已经按观察者过滤的原生视图取得。
+fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
+    let mut cards = Vec::new();
+    let mut push = |id, owner, zone| {
+        let def = &engine.catalog().cards[id as usize];
+        cards.push(CardView {
+            id: engine_api::CardId::new(id),
+            def: Some(kind_code_u32(def.kind)),
+            suit: Some(match def.suit {
+                engine_native::catalog::Suit::Spade => engine_api::Suit::Spade,
+                engine_native::catalog::Suit::Heart => engine_api::Suit::Heart,
+                engine_native::catalog::Suit::Club => engine_api::Suit::Club,
+                engine_native::catalog::Suit::Diamond => engine_api::Suit::Diamond,
+            }),
+            rank: Some(def.rank),
+            owner,
+            zone,
+            kind: kind_tag(def.kind),
+        });
+    };
+    for player in &view.players {
+        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
+        if let HandView::Own(hand) = &player.hand {
+            for id in hand {
+                push(*id, owner, CardZoneTag::Hand);
+            }
+        }
     }
-    Some(match role {
+    for player in &view.players {
+        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
+        for id in &player.equips {
+            push(*id, owner, CardZoneTag::Equip);
+        }
+        for id in &player.judge {
+            push(*id, owner, CardZoneTag::Judge);
+        }
+    }
+    for id in &view.discard {
+        push(*id, None, CardZoneTag::DiscardPile);
+    }
+    for id in &view.table {
+        push(*id, None, CardZoneTag::Processing);
+    }
+    cards
+}
+
+fn identity_tag(role: engine_native::state::Role) -> IdentityTag {
+    match role {
         engine_native::state::Role::Lord => IdentityTag::Lord,
         engine_native::state::Role::Loyalist => IdentityTag::Loyalist,
         engine_native::state::Role::Rebel => IdentityTag::Rebel,
         engine_native::state::Role::Traitor => IdentityTag::Renegade,
-    })
-}
-
-/// 观察者授权可见的牌：本人手牌（他人手牌仅数量，不进入 known_cards）。
-///
-/// 协议 `CardView` 只暴露**公开规则类别**（`CardKindTag`），不含具体牌种码：
-/// 未在协议枚举中建模的牌种 → `CardKindTag::Other`（**不猜测**）。
-fn known_cards_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Vec<CardView> {
-    let Some(seat) = seat else {
-        return Vec::new();
-    };
-    let native_seat = seat.raw().saturating_sub(1) as u8;
-    if native_seat as usize >= engine.state_core().players.len() {
-        return Vec::new();
     }
-    let catalog = engine.catalog();
-    engine
-        .state_core()
-        .player(native_seat)
-        .hand
-        .iter()
-        .map(|c| {
-            let kind = catalog.card_kind(*c);
-            CardView {
-                id: engine_api::CardId::new(*c as u32),
-                def: Some(kind_code_u32(kind)),
-                suit: None,
-                rank: None,
-                owner: Some(seat),
-                zone: CardZoneTag::Hand,
-                kind: kind_tag(kind),
-            }
-        })
-        .collect()
 }
 
 /// 原生牌种 → 协议公开规则类别（未建模者 `Other`，不猜测）。
@@ -120,9 +123,12 @@ pub fn observer_snapshot_for(
     role: RoomRole,
     seat: Option<ApiPlayerId>,
 ) -> ObserverSnapshot {
-    // 原生视图：Player 用座位投影；观战/裁判用「无座位」投影（不含任何手牌 id）
-    let view: PlayerView = match (role, seat) {
-        (RoomRole::Player, Some(p)) => engine.view_for(p.raw().saturating_sub(1) as u8),
+    // shortcut: 原生裁判手牌/身份仍缺完整投影，待共享 full-info 视图补齐后替换。
+    let native_seat = seat
+        .and_then(|p| p.raw().checked_sub(1))
+        .filter(|p| (*p as usize) < engine.state_core().players.len());
+    let view: PlayerView = match (role, native_seat) {
+        (RoomRole::Player, Some(p)) => engine.view_for(p as u8),
         _ => engine.view_spectator(),
     };
     let observer = match role {
@@ -136,21 +142,23 @@ pub fn observer_snapshot_for(
         .map(|cell| SeatView {
             player: ApiPlayerId::new(cell.seat as u32 + 1),
             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
-            character_def: engine.state_core().player(cell.seat).general_slots[0]
-                .map(|d| d as u32)
-                .unwrap_or(0),
+            character_def: if role == RoomRole::Referee {
+                engine.state_core().player(cell.seat).general_slots[0].map(u32::from).unwrap_or(0)
+            } else {
+                cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0)
+            },
             seat: engine_api::SeatIndex::new(cell.seat),
             hp: cell.hp,
             max_hp: cell.max_hp,
             alive: cell.alive,
             turned_over: cell.turned_over,
-            // 手牌**仅数量**（自己与公开区的手牌内容不进入协议视图）
+            // 座位仅给手牌数量；授权牌面由 known_cards 提供。
             hand_count: match &cell.hand {
                 HandView::Own(cards) => cards.len() as u32,
                 HandView::Hidden => cell.hand_count as u32,
             },
             // 身份可见性：本人、主公（公开）与已死亡者（遗言公开）可见；其余为 None
-            identity: identity_tag_for(engine, seat, cell.seat),
+            identity: cell.role.map(identity_tag),
             // 技能：以**内核技能实例**为准（不是「目录里有就算在册」）：
             // - `def` = 目录定义 id；`id` 同 def（原生 `ActivateSkill{skill: def}` 以此为键，
             //   见 `legal_actions_for`——协议注释的「运行时实例 id」在原生即 def）；
@@ -226,7 +234,7 @@ pub fn observer_snapshot_for(
         current_player: ApiPlayerId::new(view.turn as u32 + 1),
         phase: phase_tag(view.phase),
         seats,
-        known_cards: known_cards_for(engine, seat),
+        known_cards: known_cards_for(engine, &view),
         outcome,
     }
 }

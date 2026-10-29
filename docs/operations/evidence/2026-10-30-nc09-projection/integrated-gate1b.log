@@ -1,0 +1,6 @@
+    Checking engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+    Checking engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+    Checking engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Checking content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.14s
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-gate", "RUSTFLAGS=-D warnings", "cargo", "check", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 7.192106791990227}

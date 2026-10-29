@@ -1,0 +1,8 @@
+{
+  "apps/game-server/src/native_view.rs": "fd3ea66c35bb3275569bea838707b33e154b5ae7435fd68e33b1827f218b1702",
+  "crates/engine-native/src/view.rs": "3768986bdf2b91daa7d17399e5dcfa02c9dd4cfe74289b4e9b203645e044f067",
+  "crates/engine-native/src/engine/views.rs": "19f4649048d16dac882354d6ffcc07cabc7a6eadc4e02eb35dc9dee2cbca5bd2",
+  "crates/engine-native-wasm/src/lib.rs": "4755233247441695d4473922a0d6815bb30c134245694984dabd62dff5611cc2",
+  "apps/web-client/src/worker/nativeBackend.ts": "336c600ea9913b05ffd48d4c2cbd73fdb064d97a5447004f61bf9049489f8def",
+  "apps/game-server/Cargo.toml": "acc6b5417f345529c8c30add9503f3278cd776cdd937a2f331ce22ff6253caa9"
+}

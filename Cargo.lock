@@ -1416,6 +1416,7 @@ dependencies = [
  "engine-api",
  "engine-core",
  "engine-native",
+ "engine-native-wasm",
  "engine-protocol",
  "futures-util",
  "parking_lot",

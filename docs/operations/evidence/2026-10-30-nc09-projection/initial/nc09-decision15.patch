@@ -1,0 +1,686 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 21f9ee44..81bb2ba5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1397,6 +1397,7 @@ dependencies = [
+  "engine-api",
+  "engine-core",
+  "engine-native",
++ "engine-native-wasm",
+  "engine-protocol",
+  "futures-util",
+  "parking_lot",
+diff --git a/apps/game-server/Cargo.toml b/apps/game-server/Cargo.toml
+index bfa04073..537e7c92 100644
+--- a/apps/game-server/Cargo.toml
++++ b/apps/game-server/Cargo.toml
+@@ -33,6 +33,7 @@ parking_lot = "0.12"
+ blake3 = { workspace = true }
+ 
+ [dev-dependencies]
++engine-native-wasm = { path = "../../crates/engine-native-wasm" }
+ tokio-tungstenite = "0.26"
+ url = "2"
+ content-compiler = { path = "../../crates/content-compiler" }
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+index 3bf95752..021690b6 100644
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -6,8 +6,8 @@
+ //! 协议，不要求客户端改类型，也不允许各自再写一套投影规则。
+ //!
+ //! 口径：
+-//! - 座位投影：自己手牌可见、他人仅数量（原生 `HandView` 已保证），映射后
+-//!   `SeatView.hand_count` 仍只给数量——**协议视图不含手牌 id**（授权面例外见待办）；
++//! - 座位投影：自己手牌与公开牌区可见，他人手牌仅数量（原生视图保证）；
++//!   `known_cards` 为这些可见牌附上真实牌面。
+ //! - 观察者：`Spectator`/`Referee` 由角色决定（`Referee` 仍走同一原生投影，
+ //!   原生视图本身不含他人手牌内容）；
+ //! - 权威动作：`Engine::legal_actions`（内核校验同源）→ `LegalAction`；
+@@ -31,56 +31,59 @@ pub enum RoomRole {
+     Referee,
+ }
+ 
+-/// 身份可见性：本人、主公、已死亡者可见（与内核 `view_for` 同口径）；其余 None。
+-fn identity_tag_for(engine: &Engine, viewer: Option<ApiPlayerId>, seat: u8) -> Option<IdentityTag> {
+-    let roles = engine.state_core().identity_roles()?;
+-    let role = roles.get(seat as usize)?;
+-    let is_self = viewer
+-        .map(|v| v.raw().saturating_sub(1) as u8 == seat)
+-        .unwrap_or(false);
+-    let dead = !engine.state_core().player(seat).alive;
+-    if !(is_self || *role == engine_native::state::Role::Lord || dead) {
+-        return None;
++/// 本人手牌与公开牌区均从已经按观察者过滤的原生视图取得。
++fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
++    let mut cards = Vec::new();
++    let mut push = |id, owner, zone| {
++        let def = &engine.catalog().cards[id as usize];
++        cards.push(CardView {
++            id: engine_api::CardId::new(id),
++            def: Some(kind_code_u32(def.kind)),
++            suit: Some(match def.suit {
++                engine_native::catalog::Suit::Spade => engine_api::Suit::Spade,
++                engine_native::catalog::Suit::Heart => engine_api::Suit::Heart,
++                engine_native::catalog::Suit::Club => engine_api::Suit::Club,
++                engine_native::catalog::Suit::Diamond => engine_api::Suit::Diamond,
++            }),
++            rank: Some(def.rank),
++            owner,
++            zone,
++            kind: kind_tag(def.kind),
++        });
++    };
++    for player in &view.players {
++        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
++        if let HandView::Own(hand) = &player.hand {
++            for id in hand {
++                push(*id, owner, CardZoneTag::Hand);
++            }
++        }
++    }
++    for player in &view.players {
++        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
++        for id in &player.equips {
++            push(*id, owner, CardZoneTag::Equip);
++        }
++        for id in &player.judge {
++            push(*id, owner, CardZoneTag::Judge);
++        }
+     }
+-    Some(match role {
++    for id in &view.discard {
++        push(*id, None, CardZoneTag::DiscardPile);
++    }
++    for id in &view.table {
++        push(*id, None, CardZoneTag::Processing);
++    }
++    cards
++}
++
++fn identity_tag(role: engine_native::state::Role) -> IdentityTag {
++    match role {
+         engine_native::state::Role::Lord => IdentityTag::Lord,
+         engine_native::state::Role::Loyalist => IdentityTag::Loyalist,
+         engine_native::state::Role::Rebel => IdentityTag::Rebel,
+         engine_native::state::Role::Traitor => IdentityTag::Renegade,
+-    })
+-}
+-
+-/// 观察者授权可见的牌：本人手牌（他人手牌仅数量，不进入 known_cards）。
+-///
+-/// 协议 `CardView` 只暴露**公开规则类别**（`CardKindTag`），不含具体牌种码：
+-/// 未在协议枚举中建模的牌种 → `CardKindTag::Other`（**不猜测**）。
+-fn known_cards_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Vec<CardView> {
+-    let Some(seat) = seat else {
+-        return Vec::new();
+-    };
+-    let native_seat = seat.raw().saturating_sub(1) as u8;
+-    if native_seat as usize >= engine.state_core().players.len() {
+-        return Vec::new();
+     }
+-    let catalog = engine.catalog();
+-    engine
+-        .state_core()
+-        .player(native_seat)
+-        .hand
+-        .iter()
+-        .map(|c| {
+-            let kind = catalog.card_kind(*c);
+-            CardView {
+-                id: engine_api::CardId::new(*c as u32),
+-                def: Some(kind_code_u32(kind)),
+-                suit: None,
+-                rank: None,
+-                owner: Some(seat),
+-                zone: CardZoneTag::Hand,
+-                kind: kind_tag(kind),
+-            }
+-        })
+-        .collect()
+ }
+ 
+ /// 原生牌种 → 协议公开规则类别（未建模者 `Other`，不猜测）。
+@@ -121,8 +124,11 @@ pub fn observer_snapshot_for(
+     seat: Option<ApiPlayerId>,
+ ) -> ObserverSnapshot {
+     // 原生视图：Player 用座位投影；观战/裁判用「无座位」投影（不含任何手牌 id）
+-    let view: PlayerView = match (role, seat) {
+-        (RoomRole::Player, Some(p)) => engine.view_for(p.raw().saturating_sub(1) as u8),
++    let native_seat = seat
++        .and_then(|p| p.raw().checked_sub(1))
++        .filter(|p| (*p as usize) < engine.state_core().players.len());
++    let view: PlayerView = match (role, native_seat) {
++        (RoomRole::Player, Some(p)) => engine.view_for(p as u8),
+         _ => engine.view_spectator(),
+     };
+     let observer = match role {
+@@ -136,21 +142,19 @@ pub fn observer_snapshot_for(
+         .map(|cell| SeatView {
+             player: ApiPlayerId::new(cell.seat as u32 + 1),
+             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+-            character_def: engine.state_core().player(cell.seat).general_slots[0]
+-                .map(|d| d as u32)
+-                .unwrap_or(0),
++            character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+             seat: engine_api::SeatIndex::new(cell.seat),
+             hp: cell.hp,
+             max_hp: cell.max_hp,
+             alive: cell.alive,
+             turned_over: cell.turned_over,
+-            // 手牌**仅数量**（自己与公开区的手牌内容不进入协议视图）
++            // 座位仅给手牌数量；授权牌面由 known_cards 提供。
+             hand_count: match &cell.hand {
+                 HandView::Own(cards) => cards.len() as u32,
+                 HandView::Hidden => cell.hand_count as u32,
+             },
+             // 身份可见性：本人、主公（公开）与已死亡者（遗言公开）可见；其余为 None
+-            identity: identity_tag_for(engine, seat, cell.seat),
++            identity: cell.role.map(identity_tag),
+             // 技能：以**内核技能实例**为准（不是「目录里有就算在册」）：
+             // - `def` = 目录定义 id；`id` 同 def（原生 `ActivateSkill{skill: def}` 以此为键，
+             //   见 `legal_actions_for`——协议注释的「运行时实例 id」在原生即 def）；
+@@ -226,7 +230,7 @@ pub fn observer_snapshot_for(
+         current_player: ApiPlayerId::new(view.turn as u32 + 1),
+         phase: phase_tag(view.phase),
+         seats,
+-        known_cards: known_cards_for(engine, seat),
++        known_cards: known_cards_for(engine, &view),
+         outcome,
+     }
+ }
+diff --git a/apps/game-server/src/native_ws_e2e.rs b/apps/game-server/src/native_ws_e2e.rs
+index 8ee6c91c..f3ec370b 100644
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -101,24 +101,19 @@ impl State {
+ 
+     fn assert_player(&self, player: PlayerId) {
+         assert_eq!(self.view.observer, ObserverKind::Player(player));
+-        assert!(
+-            !self.view.known_cards.is_empty(),
+-            "own hand must be visible"
+-        );
+-        assert!(self
+-            .view
+-            .known_cards
+-            .iter()
+-            .all(|card| card.owner == Some(player)));
++        let hand: Vec<_> = self.view.known_cards.iter()
++            .filter(|card| card.zone == engine_api::CardZoneTag::Hand).collect();
++        assert!(hand.iter().all(|card| card.owner == Some(player)));
+         assert_eq!(
+-            self.view.known_cards.len() as u32,
+-            self.view
+-                .seats
+-                .iter()
+-                .find(|seat| seat.player == player)
+-                .unwrap()
+-                .hand_count
++            hand.len() as u32,
++            self.view.seats.iter().find(|seat| seat.player == player).unwrap().hand_count
+         );
++        assert!(self.view.known_cards.iter().all(|card| {
++            card.def.is_some() && card.suit.is_some() && card.rank.is_some()
++                && matches!(card.zone, engine_api::CardZoneTag::Hand
++                    | engine_api::CardZoneTag::Equip | engine_api::CardZoneTag::Judge
++                    | engine_api::CardZoneTag::DiscardPile | engine_api::CardZoneTag::Processing)
++        }));
+         if let Some(choice) = &self.choice {
+             assert_eq!(choice.observer, player);
+         }
+@@ -126,7 +121,12 @@ impl State {
+ 
+     fn assert_spectator(&self) {
+         assert_eq!(self.view.observer, ObserverKind::Spectator);
+-        assert!(self.view.known_cards.is_empty());
++        assert!(self.view.known_cards.iter().all(|card| {
++            card.def.is_some() && card.suit.is_some() && card.rank.is_some()
++                && matches!(card.zone, engine_api::CardZoneTag::Equip
++                    | engine_api::CardZoneTag::Judge | engine_api::CardZoneTag::DiscardPile
++                    | engine_api::CardZoneTag::Processing)
++        }));
+         assert!(self.legal.is_empty());
+         assert!(self.choice.is_none());
+     }
+diff --git a/apps/web-client/scripts/native-adapter.test.mjs b/apps/web-client/scripts/native-adapter.test.mjs
+index 5f162273..69654b24 100644
+--- a/apps/web-client/scripts/native-adapter.test.mjs
++++ b/apps/web-client/scripts/native-adapter.test.mjs
+@@ -368,3 +368,12 @@ test("可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备
+   assert.equal(snapshot.known_cards.length, 8);
+   assert(!snapshot.known_cards.some((c) => c.zone === "Hand" && c.owner === 1));
+ });
++
++test("visible general definition reaches the existing seat view", () => {
++  const view = JSON.parse(VIEW_JSON);
++  view.players[0].characterDef = 17;
++  view.players[1].characterDef = 0;
++  const snapshot = nativeObserverToSnapshot(view);
++  assert.equal(snapshot.seats[0].character_def, 17);
++  assert.equal(snapshot.seats[1].character_def, 0);
++});
+diff --git a/apps/web-client/scripts/native-worker-smoke.mjs b/apps/web-client/scripts/native-worker-smoke.mjs
+index 9c59d2f0..412d51b4 100644
+--- a/apps/web-client/scripts/native-worker-smoke.mjs
++++ b/apps/web-client/scripts/native-worker-smoke.mjs
+@@ -552,6 +552,11 @@ try {
+   );
+   const identityPick = await workerSend({ id: 921, type: "chooseGeneral", seat: 0, name: "ddd刘冲" });
+   const identitySeat = identityPick.data?.envelope?.view?.seats[0];
++  expectedIdentity.assign_general(0, "ddd刘冲");
++  const visibleGeneral = JSON.parse(expectedIdentity.view_json(0)).players[0].characterDef;
++  check("worker_visible_general_definition_reaches_seat_view",
++    visibleGeneral > 0 && identitySeat?.character_def === visibleGeneral,
++    `expected=${visibleGeneral} actual=${identitySeat?.character_def}`);
+   check(
+     "worker_identity_selection_keeps_lord_bonus_and_global_skills",
+     identityPick.ok === true && identitySeat?.max_hp === 5 &&
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index 6bff9174..4bbd6812 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -174,6 +174,7 @@ interface NativeView {
+   seat: number;
+   players: Array<{
+     seat: number;
++    characterDef?: number;
+     alive: boolean;
+     hp: number;
+     maxHp: number;
+@@ -255,7 +256,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
+     phase: PHASE_MAP[view.phase] ?? "Idle",
+     seats: view.players.map((p) => ({
+       player: p.seat,
+-      character_def: 0,
++      character_def: p.characterDef ?? 0,
+       seat: p.seat,
+       hp: p.hp,
+       max_hp: p.maxHp,
+diff --git a/crates/engine-native-wasm/src/lib.rs b/crates/engine-native-wasm/src/lib.rs
+index 2698d6b9..d1fee923 100644
+--- a/crates/engine-native-wasm/src/lib.rs
++++ b/crates/engine-native-wasm/src/lib.rs
+@@ -397,6 +397,7 @@ fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
+         "seat": v.seat,
+         "players": v.players.iter().map(|p| serde_json::json!({
+             "seat": p.seat,
++            "characterDef": p.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+             "alive": p.alive,
+             "hp": p.hp,
+             "maxHp": p.max_hp,
+diff --git a/crates/engine-native-wasm/tests/nc03_view_projection.rs b/crates/engine-native-wasm/tests/nc03_view_projection.rs
+index 11844361..a698f12c 100644
+--- a/crates/engine-native-wasm/tests/nc03_view_projection.rs
++++ b/crates/engine-native-wasm/tests/nc03_view_projection.rs
+@@ -132,3 +132,18 @@ fn nc03_view_json_privacy_stable_across_restore() {
+     assert_eq!(before["discard"], after["discard"]);
+     assert_eq!(before["table"], after["table"]);
+ }
++
++#[test]
++fn nc03_visible_general_definition_survives_local_projection_and_restore() {
++    let mut engine = NativeEngine::new_identity(4, 1515).unwrap();
++    engine.assign_general(1, "刘备").unwrap();
++    let own: Value = serde_json::from_str(&engine.view_json(1).unwrap()).unwrap();
++    let other: Value = serde_json::from_str(&engine.view_json(0).unwrap()).unwrap();
++    let def = own["players"][1]["characterDef"].as_u64().unwrap();
++    assert!(def > 0, "刘备不是目录 0 号");
++    assert_eq!(other["players"][1]["characterDef"], def);
++    let hex = engine.save_hex();
++    engine.restore_hex(&hex).unwrap();
++    let restored: Value = serde_json::from_str(&engine.view_json(0).unwrap()).unwrap();
++    assert_eq!(restored["players"][1]["characterDef"], def);
++}
+diff --git a/crates/engine-native/src/engine/views.rs b/crates/engine-native/src/engine/views.rs
+index c7763f25..432d7fb7 100644
+--- a/crates/engine-native/src/engine/views.rs
++++ b/crates/engine-native/src/engine/views.rs
+@@ -39,7 +39,11 @@ impl Engine {
+                         continue; // 国战暗置槽：他人不可见
+                     }
+                     if let Some((name, faction, _, _, _)) = self.catalog.general_meta(*g) {
+-                        generals[s] = Some(crate::view::GeneralView { name, faction });
++                        generals[s] = Some(crate::view::GeneralView {
++                            def: *g,
++                            name,
++                            faction,
++                        });
+                     }
+                 }
+                 crate::view::PlayerCellView {
+diff --git a/crates/engine-native/src/view.rs b/crates/engine-native/src/view.rs
+index b197aa9f..69f090e6 100644
+--- a/crates/engine-native/src/view.rs
++++ b/crates/engine-native/src/view.rs
+@@ -25,6 +25,7 @@ pub enum HandView {
+ /// 暗置槽不产生本单元——他人视图不可见（信息隔离，ADR 0757）。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub struct GeneralView {
++    pub def: u16,
+     pub name: &'static str,
+     pub faction: crate::catalog::Faction,
+ }
+diff --git a/crates/engine-native/tests/t13_info_isolation.rs b/crates/engine-native/tests/t13_info_isolation.rs
+index 0ed877e4..c4580f84 100644
+--- a/crates/engine-native/tests/t13_info_isolation.rs
++++ b/crates/engine-native/tests/t13_info_isolation.rs
+@@ -349,6 +349,7 @@ fn isolation_generals_public_in_non_kingdoms_modes() {
+         let v = e.view_for(seat);
+         let g = v.players[1].generals[0].as_ref().expect("标准将公开可见");
+         assert_eq!(g.name, "刘备", "seat={seat} 视角应见 1 号主将");
++        assert_eq!(Some(g.def), e.state_core().player(1).general_slots[0]);
+     }
+ 
+     // 扩展将（玩点论杀）：def 接在标准表之后，投影须经 catalog 取名称/势力。
+@@ -367,6 +368,7 @@ fn isolation_generals_public_in_non_kingdoms_modes() {
+             .as_ref()
+             .expect("扩展将公开可见（经 catalog.general_meta）");
+         assert_eq!(g.name, "费诗", "seat={seat} 视角应见扩展主将名");
++        assert_eq!(g.def, base, "扩展目录定义号保持真实");
+     }
+     // 对手手牌与牌库仍不可见（隔离不因武将公开而松动）。
+     let v = e.view_for(0);
+diff --git a/apps/game-server/tests/nc09_projection_parity.rs b/apps/game-server/tests/nc09_projection_parity.rs
+new file mode 100644
+index 00000000..9e71dfd9
+--- /dev/null
++++ b/apps/game-server/tests/nc09_projection_parity.rs
+@@ -0,0 +1,297 @@
++//! NC09 decision15: compare server snapshots with the actual local WASM projection.
++#[path = "../src/native_view.rs"]
++mod native_view;
++
++use engine_api::{CardZoneTag, PlayerId};
++use engine_native::{catalog::CardKind, state::GameMode, Engine};
++use native_view::{observer_snapshot_for, RoomRole};
++use serde_json::Value;
++use std::collections::BTreeSet;
++
++fn fixture() -> Engine {
++    let mut engine = Engine::new_identity(1515, 4);
++    engine.assign_general_named(0, "曹操").unwrap();
++    engine.assign_general_named(1, "刘备").unwrap();
++    let mut snapshot = engine.save();
++    let equipment = snapshot
++        .core
++        .deck
++        .iter()
++        .position(|id| engine.catalog().card_kind(*id) == CardKind::Weapon)
++        .unwrap();
++    let equipment = snapshot.core.deck.remove(equipment);
++    snapshot.core.player_mut(1).equips.push(equipment);
++    let judge = snapshot
++        .core
++        .deck
++        .iter()
++        .position(|id| engine.catalog().card_kind(*id) == CardKind::Le)
++        .unwrap();
++    let judge = snapshot.core.deck.remove(judge);
++    snapshot.core.player_mut(2).judge.push(judge);
++    let discard = snapshot.core.deck.pop().unwrap();
++    snapshot.core.discard.push(discard);
++    let processing = snapshot.core.deck.pop().unwrap();
++    snapshot.core.table.push(processing);
++    Engine::restore(&snapshot).unwrap()
++}
++
++fn local(engine: &Engine, seat: u8) -> Value {
++    let hex: String = engine_native::archive::encode_archive(&engine.save())
++        .iter()
++        .map(|b| format!("{b:02x}"))
++        .collect();
++    let mut wasm = engine_native_wasm::NativeEngine::new_identity(4, 1515).unwrap();
++    wasm.restore_hex(&hex).unwrap();
++    serde_json::from_str(&wasm.view_json(seat).unwrap()).unwrap()
++}
++
++fn assert_parity(engine: &Engine) {
++    for seat in 0..4 {
++        let local = local(engine, seat);
++        let server = observer_snapshot_for(
++            engine,
++            RoomRole::Player,
++            Some(PlayerId::new(seat as u32 + 1)),
++        );
++        let local_ids: BTreeSet<u32> = local["cards"]
++            .as_object()
++            .unwrap()
++            .keys()
++            .map(|id| id.parse().unwrap())
++            .collect();
++        assert_eq!(
++            server
++                .known_cards
++                .iter()
++                .map(|c| c.id.raw())
++                .collect::<BTreeSet<_>>(),
++            local_ids,
++            "server must preserve every locally visible card, including public zones"
++        );
++        for card in &server.known_cards {
++            let face = &local["cards"][card.id.raw().to_string()];
++            assert_eq!(serde_json::to_value(card.def).unwrap(), face["def"]);
++            assert_eq!(serde_json::to_value(card.suit).unwrap(), face["suit"]);
++            assert_eq!(serde_json::to_value(card.rank).unwrap(), face["rank"]);
++            assert_eq!(serde_json::to_value(card.kind).unwrap(), face["kind"]);
++            match card.zone {
++                CardZoneTag::Hand => {
++                    assert_eq!(card.owner, Some(PlayerId::new(seat as u32 + 1)));
++                    assert!(local["players"][seat as usize]["hand"]["own"]
++                        .as_array()
++                        .unwrap()
++                        .contains(&Value::from(card.id.raw())));
++                }
++                CardZoneTag::Equip | CardZoneTag::Judge => {
++                    let owner = card.owner.unwrap().raw() as usize - 1;
++                    let zone = if card.zone == CardZoneTag::Equip {
++                        "equips"
++                    } else {
++                        "judge"
++                    };
++                    assert!(local["players"][owner][zone]
++                        .as_array()
++                        .unwrap()
++                        .contains(&Value::from(card.id.raw())));
++                }
++                CardZoneTag::DiscardPile | CardZoneTag::Processing => {
++                    assert!(card.owner.is_none());
++                    let zone = if card.zone == CardZoneTag::DiscardPile {
++                        "discard"
++                    } else {
++                        "table"
++                    };
++                    assert!(local[zone]
++                        .as_array()
++                        .unwrap()
++                        .contains(&Value::from(card.id.raw())));
++                }
++                other => panic!("unexpected visible zone {other:?}"),
++            }
++        }
++        for (server, local) in server
++            .seats
++            .iter()
++            .zip(local["players"].as_array().unwrap())
++        {
++            assert_eq!(
++                serde_json::to_value(server.identity).unwrap(),
++                local["identity"]
++            );
++            assert_eq!(Value::from(server.character_def), local["characterDef"]);
++        }
++        let hidden: BTreeSet<_> = engine
++            .state_core()
++            .deck
++            .iter()
++            .copied()
++            .chain(
++                engine
++                    .state_core()
++                    .players
++                    .iter()
++                    .enumerate()
++                    .filter(|(i, _)| *i != seat as usize)
++                    .flat_map(|(_, p)| p.hand.iter().copied()),
++            )
++            .collect();
++        assert!(server
++            .known_cards
++            .iter()
++            .all(|c| !hidden.contains(&c.id.raw())));
++    }
++}
++
++#[test]
++fn nc09_server_cards_and_identity_match_local_before_and_after_restart() {
++    let engine = fixture();
++    assert_parity(&engine);
++    let bytes = engine_native::archive::encode_archive(&engine.save());
++    let restored =
++        Engine::restore(&engine_native::archive::decode_archive(&bytes).unwrap()).unwrap();
++    assert_parity(&restored);
++    for seat in [None, Some(PlayerId::new(2))] {
++        for role in [RoomRole::Spectator, RoomRole::Referee] {
++            let view = observer_snapshot_for(&restored, role, seat);
++            assert_eq!(
++                view.known_cards.len(),
++                4,
++                "observer sees four public cards and no hands"
++            );
++            assert!(view.known_cards.iter().all(|c| c.zone != CardZoneTag::Hand));
++            assert!(
++                view.seats[1].identity.is_none(),
++                "role must control identity visibility"
++            );
++        }
++    }
++}
++
++#[test]
++fn nc09_server_faces_have_real_suit_and_rank() {
++    let engine = fixture();
++    let view = observer_snapshot_for(&engine, RoomRole::Player, Some(PlayerId::new(1)));
++    assert!(view
++        .known_cards
++        .iter()
++        .all(|c| c.suit.is_some() && c.rank.is_some()));
++}
++
++#[test]
++fn nc09_server_general_visibility_uses_native_projection() {
++    let engine = fixture();
++    let mut snapshot = engine.save();
++    snapshot.core.mode = GameMode::Kingdoms;
++    snapshot.core.player_mut(1).revealed_generals = [false, false];
++    let engine = Engine::restore(&snapshot).unwrap();
++    let general = engine.state_core().player(1).general_slots[0].unwrap() as u32;
++    assert_ne!(general, 0);
++    let own = observer_snapshot_for(&engine, RoomRole::Player, Some(PlayerId::new(2)));
++    assert_eq!(own.seats[1].character_def, general);
++    for role in [RoomRole::Spectator, RoomRole::Referee, RoomRole::Player] {
++        let view = observer_snapshot_for(&engine, role, Some(PlayerId::new(1)));
++        assert_eq!(
++            view.seats[1].character_def, 0,
++            "unrevealed opponent general must stay hidden"
++        );
++    }
++    assert_parity(&engine);
++    let mut snapshot = engine.save();
++    snapshot.core.player_mut(1).revealed_generals[0] = true;
++    let revealed = Engine::restore(&snapshot).unwrap();
++    assert_eq!(
++        observer_snapshot_for(&revealed, RoomRole::Spectator, None).seats[1].character_def,
++        general
++    );
++    assert_parity(&revealed);
++}
++
++#[test]
++fn nc09_dead_identity_is_public_after_restart() {
++    let engine = fixture();
++    let mut snapshot = engine.save();
++    snapshot.core.player_mut(2).alive = false;
++    snapshot.core.player_mut(2).hp = 0;
++    let engine = Engine::restore(&snapshot).unwrap();
++    assert_parity(&engine);
++    let view = observer_snapshot_for(&engine, RoomRole::Spectator, None);
++    assert!(view.seats[0].identity.is_some(), "lord remains public");
++    assert!(view.seats[2].identity.is_some(), "dead identity is public");
++    assert!(
++        view.seats[1].identity.is_none(),
++        "living opponent stays hidden"
++    );
++}
++
++#[test]
++fn nc09_invalid_seat_cannot_wrap_to_a_private_projection() {
++    let engine = fixture();
++    for seat in [PlayerId::NONE, PlayerId::new(257), PlayerId::new(u32::MAX)] {
++        let view = observer_snapshot_for(&engine, RoomRole::Player, Some(seat));
++        assert_eq!(view.known_cards.len(), 4);
++        assert!(view.known_cards.iter().all(|c| c.zone != CardZoneTag::Hand));
++        assert!(view.seats[1].identity.is_none());
++    }
++}
++
++#[test]
++fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
++    let engine = fixture();
++    let view = observer_snapshot_for(&engine, RoomRole::Player, Some(PlayerId::new(1)));
++    let message = engine_protocol::ServerMessage::Snapshot {
++        header: engine_protocol::MessageHeader::new(15, 1, engine.revision()),
++        view: view.clone(),
++        choice: native_view::choice_for(&engine, Some(PlayerId::new(1))),
++        legal_actions: native_view::legal_actions_for(&engine, PlayerId::new(1)),
++    };
++    assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 5);
++    let wire = engine_protocol::encode_s2c(&message).unwrap();
++    let engine_protocol::ServerMessage::Snapshot {
++        header,
++        view: decoded,
++        ..
++    } = engine_protocol::decode_s2c(&wire).unwrap()
++    else {
++        panic!("snapshot");
++    };
++    assert_eq!(header.protocol_version, 5);
++    assert_eq!(decoded, view);
++}
++
++#[test]
++fn nc09_every_standard_card_kind_preserves_local_granularity() {
++    let engine = fixture();
++    let mut snapshot = engine.save();
++    snapshot.core.discard.append(&mut snapshot.core.deck);
++    for player in &mut snapshot.core.players {
++        snapshot.core.discard.append(&mut player.hand);
++        snapshot.core.discard.append(&mut player.equips);
++        snapshot.core.discard.append(&mut player.judge);
++    }
++    snapshot.core.discard.append(&mut snapshot.core.table);
++    let engine = Engine::restore(&snapshot).unwrap();
++    assert_parity(&engine);
++    let public = observer_snapshot_for(&engine, RoomRole::Spectator, None);
++    assert_eq!(public.known_cards.len(), engine.catalog().cards.len());
++    let kinds: BTreeSet<_> = public
++        .known_cards
++        .iter()
++        .map(|c| format!("{:?}", c.kind))
++        .collect();
++    assert_eq!(
++        kinds,
++        [
++            "Sha",
++            "Shan",
++            "Tao",
++            "Jiu",
++            "ShaFire",
++            "ShaThunder",
++            "Other"
++        ]
++        .into_iter()
++        .map(String::from)
++        .collect()
++    );
++}

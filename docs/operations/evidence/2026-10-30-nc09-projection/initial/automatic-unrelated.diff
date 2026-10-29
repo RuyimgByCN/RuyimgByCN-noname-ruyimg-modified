@@ -1,0 +1,1332 @@
+diff --git a/crates/engine-native/src/archive/resolution.rs b/crates/engine-native/src/archive/resolution.rs
+index 6a29b433..80f8f15e 100644
+--- a/crates/engine-native/src/archive/resolution.rs
++++ b/crates/engine-native/src/archive/resolution.rs
+@@ -148,7 +148,7 @@ pub(super) fn dec_open_choice(r: &mut R<'_>) -> Result<OpenChoice, ArchiveError>
+     if prompt_bytes.len() > 128 {
+         return Err(ArchiveError::BadTag("prompt_too_long", 0));
+     }
+-    let prompt: &'static str = intern_prompt(&prompt_bytes)?;
++    let prompt: &'static str = intern_prompt(prompt_bytes)?;
+     let options = r.vec(dec_choice_option)?;
+     let min = r.u64()? as usize;
+     let max = r.u64()? as usize;
+diff --git a/crates/engine-native/src/archive/state_encode.rs b/crates/engine-native/src/archive/state_encode.rs
+index eccd1713..c13704e5 100644
+--- a/crates/engine-native/src/archive/state_encode.rs
++++ b/crates/engine-native/src/archive/state_encode.rs
+@@ -411,7 +411,7 @@ pub(super) fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
+     // 猛态双旗标（v248）
+     w.boolean(t.mengtai_draw_pending);
+     w.boolean(t.mengtai_use_pending);
+-    w.opt_u8(t.zhufangshenshi_target.map(|p| p as u8));
++    w.opt_u8(t.zhufangshenshi_target.map(|p| p));
+     // 乐动三角（U07 ow 卢西奥，规则 v126）：目标数/摸回量/回复模式
+     w.u8(t.yuedong_num);
+     w.u8(t.yuedong_eff);
+diff --git a/crates/engine-native/src/archive/values.rs b/crates/engine-native/src/archive/values.rs
+index 3c703e05..03b4685e 100644
+--- a/crates/engine-native/src/archive/values.rs
++++ b/crates/engine-native/src/archive/values.rs
+@@ -26,7 +26,7 @@ pub(super) fn enc_pid(w: &mut W, v: &PlayerId) {
+ }
+ 
+ pub(super) fn dec_pid(r: &mut R<'_>) -> Result<PlayerId, ArchiveError> {
+-    Ok(r.u8()?)
++    r.u8()
+ }
+ 
+ /// Option<PlayerId>。
+@@ -66,7 +66,7 @@ pub(super) fn enc_skill(w: &mut W, v: &SkillDefId) {
+ }
+ 
+ pub(super) fn dec_skill(r: &mut R<'_>) -> Result<SkillDefId, ArchiveError> {
+-    Ok(r.u16()?)
++    r.u16()
+ }
+ 
+ pub(super) fn enc_damage_nature(w: &mut W, v: &DamageNature) {
+diff --git a/crates/engine-native/src/catalog.rs b/crates/engine-native/src/catalog.rs
+index 0e5097af..01d0d5bb 100644
+--- a/crates/engine-native/src/catalog.rs
++++ b/crates/engine-native/src/catalog.rs
+@@ -991,17 +991,15 @@ impl Catalog {
+         core: &crate::state::GameStateCore,
+         p: crate::ids::PlayerId,
+     ) -> bool {
+-        core.skills
++        if core.skills
+             .keys()
+-            .any(|(o, _)| *o == p)
+-            .then(|| {
++            .any(|(o, _)| *o == p) { {
+                 core.skills.iter().any(|((o, def), inst)| {
+                     *o == p
+                         && inst.enabled
+                         && self.skills[*def as usize].behavior.blocks_delayed_trick_target()
+                 })
+-            })
+-            .unwrap_or(false)
++            } } else { false }
+     }
+ }
+ 
+diff --git a/crates/engine-native/src/content/host/activation/swd_skills.rs b/crates/engine-native/src/content/host/activation/swd_skills.rs
+index 81b0f047..7e2b325d 100644
+--- a/crates/engine-native/src/content/host/activation/swd_skills.rs
++++ b/crates/engine-native/src/content/host/activation/swd_skills.rs
+@@ -535,7 +535,7 @@ impl HostSkillBehavior {
+             }
+             // 乱击·多鹏面（武将面批 81）：手牌存在同花色两卡
+             HostBehavior::SwdLuanji => {
+-                let hand: Vec<CardId> = ctx.state.player(owner).hand.iter().copied().collect();
++                let hand: Vec<CardId> = ctx.state.player(owner).hand.to_vec();
+                 let has_pair = hand.iter().enumerate().any(|(i, a)| {
+                     let sa = ctx.catalog.cards[*a as usize].suit;
+                     hand.iter()
+diff --git a/crates/engine-native/src/content/host/filtering/common.rs b/crates/engine-native/src/content/host/filtering/common.rs
+index 105943bf..3a447cba 100644
+--- a/crates/engine-native/src/content/host/filtering/common.rs
++++ b/crates/engine-native/src/content/host/filtering/common.rs
+@@ -380,9 +380,7 @@ impl HostSkillBehavior {
+                     player, origins, ..
+                 } => {
+                     *player == owner
+-                        && origins
+-                            .iter()
+-                            .any(|o| *o == crate::event::LostOrigin::Equip)
++                        && origins.contains(&crate::event::LostOrigin::Equip)
+                 }
+                 _ => false,
+             },
+@@ -598,7 +596,7 @@ impl HostSkillBehavior {
+                     && ctx.state.player(owner).baolei_mode == 2),
+             HostBehavior::WudianZiyu => matches!(event,
+                 EventData::Phase { begin: false, .. }
+-                if ctx.state.turn.phase_number % 4 == 0),
++                if ctx.state.turn.phase_number.is_multiple_of(4)),
+             HostBehavior::WudianGuangshuSpade => matches!(event,
+                 EventData::Phase { player, begin: false, .. } if *player == owner),
+             HostBehavior::GujianFoodGudonggeng => matches!(event,
+diff --git a/crates/engine-native/src/content/host/filtering/swd.rs b/crates/engine-native/src/content/host/filtering/swd.rs
+index c2df65a4..5fd5323d 100644
+--- a/crates/engine-native/src/content/host/filtering/swd.rs
++++ b/crates/engine-native/src/content/host/filtering/swd.rs
+@@ -114,7 +114,7 @@ impl HostSkillBehavior {
+                             player, origins, ..
+                         } => {
+                             *player == owner
+-                                && origins.iter().any(|o| *o == crate::event::LostOrigin::Hand)
++                                && origins.contains(&crate::event::LostOrigin::Hand)
+                                 && ctx.state.player(owner).hand.is_empty()
+                         }
+                         _ => false,
+@@ -126,9 +126,7 @@ impl HostSkillBehavior {
+                     player, origins, ..
+                 } => {
+                     *player == owner
+-                        && origins
+-                            .iter()
+-                            .any(|o| *o == crate::event::LostOrigin::Equip)
++                        && origins.contains(&crate::event::LostOrigin::Equip)
+                         && ctx.state.player(owner).equips.is_empty()
+                 }
+                 _ => false,
+@@ -1083,10 +1081,7 @@ impl HostSkillBehavior {
+                 if *player != ctx.state.turn.current
+                     && ctx.state.player(*player).alive
+                     && cards.iter().any(|c| {
+-                        matches!(
+-                            ctx.catalog.card_slot_of(ctx.state, *c),
+-                            Some(_)
+-                        )
++                        ctx.catalog.card_slot_of(ctx.state, *c).is_some()
+                     })),
+             HostBehavior::SwdXuanfengzhirenCard => false,
+             HostBehavior::SwdZhongxinghujiaCard => false,
+diff --git a/crates/engine-native/src/content/host/filtering/xianjian.rs b/crates/engine-native/src/content/host/filtering/xianjian.rs
+index bd7f2712..c62dc016 100644
+--- a/crates/engine-native/src/content/host/filtering/xianjian.rs
++++ b/crates/engine-native/src/content/host/filtering/xianjian.rs
+@@ -356,7 +356,7 @@ impl HostSkillBehavior {
+             if d.target == owner
+                 && !d.prevented
+                 && d.card.is_some()
+-                && ctx.catalog.card_kind(d.card.as_ref().unwrap().clone())
++                && ctx.catalog.card_kind(*d.card.as_ref().unwrap())
+                     == crate::catalog::CardKind::Sha
+                 && !ctx.state.turn.zhangmu_used
+                 && ctx.state.player(owner).hand.iter().any(|c| {
+@@ -466,7 +466,7 @@ impl HostSkillBehavior {
+                     && !d.prevented
+                     && d.amount > 0
+                     && d.card.is_some()
+-                    && ctx.state.turn.luanjian_card == d.card.map(|c| c as u32)),
++                    && ctx.state.turn.luanjian_card == d.card.map(|c| c)),
+             _ => unreachable!("behavior routed to the wrong filter module"),
+         }
+     }
+diff --git a/crates/engine-native/src/content/host/step/hearth.rs b/crates/engine-native/src/content/host/step/hearth.rs
+index d0a90969..cc681452 100644
+--- a/crates/engine-native/src/content/host/step/hearth.rs
++++ b/crates/engine-native/src/content/host/step/hearth.rs
+@@ -182,7 +182,7 @@ impl HostMachine {
+                 let mut current = self.owner;
+                 let mut times = {
+                     let alive = ctx.core.alive_count();
+-                    if alive % 2 == 0 {
++                    if alive.is_multiple_of(2) {
+                         alive - 1
+                     } else {
+                         alive
+diff --git a/crates/engine-native/src/content/host/step/jiguan.rs b/crates/engine-native/src/content/host/step/jiguan.rs
+index b2841680..1d654db5 100644
+--- a/crates/engine-native/src/content/host/step/jiguan.rs
++++ b/crates/engine-native/src/content/host/step/jiguan.rs
+@@ -59,7 +59,7 @@ impl HostMachine {
+                             .answer()
+                             .iter()
+                             .filter_map(|o| match o {
+-                                ChoiceOption::Card(c) => Some(*c as u32),
++                                ChoiceOption::Card(c) => Some(*c ),
+                                 _ => None,
+                             })
+                             .collect();
+diff --git a/crates/engine-native/src/content/host/step/mtg.rs b/crates/engine-native/src/content/host/step/mtg.rs
+index 5f3c342c..75dc813b 100644
+--- a/crates/engine-native/src/content/host/step/mtg.rs
++++ b/crates/engine-native/src/content/host/step/mtg.rs
+@@ -222,7 +222,7 @@ impl HostMachine {
+                     sync_land_skill(ctx, self.owner, CardKind::Feixu);
+                     ctx.core.current_land = Some(crate::catalog::CardKind::Feixu);
+                     ctx.core.turn.land_used = true;
+-                    let mut pool: Vec<CardId> = ctx.core.discard.iter().copied().collect();
++                    let mut pool: Vec<CardId> = ctx.core.discard.to_vec();
+                     if pool.is_empty() {
+                         return Flow::Done;
+                     }
+@@ -780,7 +780,7 @@ impl HostMachine {
+                         player: self.owner,
+                         cards: vec![trick],
+                     });
+-                    let mut pool: Vec<CardId> = ctx.core.deck.iter().copied().collect();
++                    let mut pool: Vec<CardId> = ctx.core.deck.to_vec();
+                     if pool.is_empty() {
+                         return Flow::Done;
+                     }
+diff --git a/crates/engine-native/src/content/host/step/skills_card_use.rs b/crates/engine-native/src/content/host/step/skills_card_use.rs
+index 8201093d..81a8007d 100644
+--- a/crates/engine-native/src/content/host/step/skills_card_use.rs
++++ b/crates/engine-native/src/content/host/step/skills_card_use.rs
+@@ -372,7 +372,7 @@ impl HostMachine {
+                         return Flow::Done;
+                     }
+                     self.stage = HostStage::CardsAsk;
+-                    return Flow::WaitChoice {
++                    Flow::WaitChoice {
+                         observer: self.owner,
+                         spec: ChoiceSpec {
+                             kind: ChoiceKind::SelectCards,
+@@ -382,7 +382,7 @@ impl HostMachine {
+                             max: 2,
+                             allow_cancel: false,
+                         },
+-                    };
++                    }
+                 }
+                 HostStage::CardsAsk => {
+                     let picked: Vec<crate::ids::CardId> = ctx
+@@ -452,7 +452,7 @@ impl HostMachine {
+                             Some(crate::catalog::CardKind::Sha),
+                         ),
+                     ));
+-                    return Flow::Yield; // CardUsed 帧挂起结算（出闪/伤害）
++                    Flow::Yield// CardUsed 帧挂起结算（出闪/伤害）
+                 }
+                 _ => Flow::Done,
+             },
+diff --git a/crates/engine-native/src/content/host/step/skills_cards.rs b/crates/engine-native/src/content/host/step/skills_cards.rs
+index f28363b4..cc4a1341 100644
+--- a/crates/engine-native/src/content/host/step/skills_cards.rs
++++ b/crates/engine-native/src/content/host/step/skills_cards.rs
+@@ -405,7 +405,7 @@ impl HostMachine {
+                             .collect();
+                         let need = cards.len().min(2);
+                         if need > 0 {
+-                            self.cards = cards.into_iter().take(need).map(u32::from).collect();
++                            self.cards = cards.into_iter().take(need).collect();
+                             self.stage = HostStage::SelectCard;
+                             return Flow::WaitChoice {
+                                 observer: target,
+diff --git a/crates/engine-native/src/content/host/step/skills_damage.rs b/crates/engine-native/src/content/host/step/skills_damage.rs
+index 9565b19f..ea004f1d 100644
+--- a/crates/engine-native/src/content/host/step/skills_damage.rs
++++ b/crates/engine-native/src/content/host/step/skills_damage.rs
+@@ -256,7 +256,7 @@ impl HostMachine {
+                     if options.len() < need {
+                         return Flow::Done;
+                     }
+-                    self.cards = picked.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = picked.to_vec();
+                     self.stage = HostStage::TargetChoice;
+                     Flow::WaitChoice {
+                         observer: self.owner,
+@@ -422,17 +422,14 @@ impl HostMachine {
+                     }
+                     // 授予「天香·受」（运行时实例；承受后按其失去体力摸牌）
+                     if let Some(def) = ctx.catalog.skill_by_name(SWD_TIANXIANG2_KEY) {
+-                        if !ctx.core.skills.contains_key(&(target, def)) {
+-                            ctx.core.skills.insert(
+-                                (target, def),
+-                                crate::state::SkillInstance {
++                        if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((target, def)) {
++                            e.insert(crate::state::SkillInstance {
+                                     owner: target,
+                                     enabled: true,
+                                     once_used: false,
+                                     expires_end_of_turn: false,
+                                     rounds: 0,
+-                                },
+-                            );
++                                });
+                             ctx.log(LogEvent::SkillToggled {
+                                 player: target,
+                                 skill: ctx.catalog.skill_name(def),
+@@ -477,7 +474,7 @@ impl HostMachine {
+                     if chosen.is_empty() {
+                         return Flow::Done;
+                     }
+-                    self.cards = chosen.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = chosen.to_vec();
+                     let options: Vec<ChoiceOption> = ctx
+                         .core
+                         .alive_players()
+diff --git a/crates/engine-native/src/content/host/step/skills_discard_costs.rs b/crates/engine-native/src/content/host/step/skills_discard_costs.rs
+index 05a88a31..5be668bc 100644
+--- a/crates/engine-native/src/content/host/step/skills_discard_costs.rs
++++ b/crates/engine-native/src/content/host/step/skills_discard_costs.rs
+@@ -110,7 +110,7 @@ impl HostMachine {
+                     if need == 0 {
+                         return Flow::Done;
+                     }
+-                    self.cards = cards.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = cards.to_vec();
+                     self.stage = HostStage::SelectCard;
+                     Flow::WaitChoice {
+                         observer: self.owner,
+@@ -296,7 +296,7 @@ impl HostMachine {
+                     } else {
+                         return Flow::Done;
+                     }
+-                    self.cards.push(u32::from(c));
++                    self.cards.push(c);
+                     self.stage = HostStage::Act;
+                     Flow::Yield
+                 }
+@@ -408,7 +408,7 @@ impl HostMachine {
+                         return Flow::Done;
+                     }
+                     self.target = Some(user);
+-                    self.cards = cards.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = cards.to_vec();
+                     self.stage = HostStage::SelectCard;
+                     Flow::WaitChoice {
+                         observer: self.owner,
+diff --git a/crates/engine-native/src/content/host/step/skills_recovery.rs b/crates/engine-native/src/content/host/step/skills_recovery.rs
+index ed9370e1..593d3d83 100644
+--- a/crates/engine-native/src/content/host/step/skills_recovery.rs
++++ b/crates/engine-native/src/content/host/step/skills_recovery.rs
+@@ -83,17 +83,14 @@ impl HostMachine {
+                     let Some(def) = ctx.catalog.skill_by_name(name) else {
+                         continue;
+                     };
+-                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+-                        ctx.core.skills.insert(
+-                            (self.owner, def),
+-                            crate::state::SkillInstance {
++                    if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((self.owner, def)) {
++                        e.insert(crate::state::SkillInstance {
+                                 owner: self.owner,
+                                 enabled: true,
+                                 once_used: false,
+                                 expires_end_of_turn: false,
+                                 rounds: 0,
+-                            },
+-                        );
++                            });
+                     }
+                     ctx.log(LogEvent::SkillToggled {
+                         player: self.owner,
+@@ -218,7 +215,7 @@ impl HostMachine {
+                     if picked.is_empty() {
+                         return Flow::Done;
+                     }
+-                    self.cards = picked.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = picked.to_vec();
+                     let need = picked.len() as u16;
+                     let options: Vec<ChoiceOption> = ctx
+                         .core
+diff --git a/crates/engine-native/src/content/host/step/skills_status.rs b/crates/engine-native/src/content/host/step/skills_status.rs
+index 4c432a98..1130bd4c 100644
+--- a/crates/engine-native/src/content/host/step/skills_status.rs
++++ b/crates/engine-native/src/content/host/step/skills_status.rs
+@@ -486,7 +486,7 @@ impl HostMachine {
+                         return Flow::Done;
+                     }
+                     let count = cards.len();
+-                    self.cards = cards.iter().map(|c| u32::from(*c)).collect();
++                    self.cards = cards.to_vec();
+                     for c in cards.iter().copied() {
+                         ctx.take_hand_card(self.owner, c);
+                         ctx.to_discard(c);
+@@ -605,17 +605,14 @@ impl HostMachine {
+                     let Some(def) = ctx.catalog.skill_by_name(name) else {
+                         continue;
+                     };
+-                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+-                        ctx.core.skills.insert(
+-                            (self.owner, def),
+-                            crate::state::SkillInstance {
++                    if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((self.owner, def)) {
++                        e.insert(crate::state::SkillInstance {
+                                 owner: self.owner,
+                                 enabled: true,
+                                 once_used: false,
+                                 expires_end_of_turn: false,
+                                 rounds: 0,
+-                            },
+-                        );
++                            });
+                         ctx.log(LogEvent::SkillToggled {
+                             player: self.owner,
+                             skill: ctx.catalog.skill_name(def),
+@@ -624,17 +621,14 @@ impl HostMachine {
+                     }
+                 }
+                 if let Some(def) = ctx.catalog.skill_by_name(SWD_HXUNZHI2_KEY) {
+-                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+-                        ctx.core.skills.insert(
+-                            (self.owner, def),
+-                            crate::state::SkillInstance {
++                    if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((self.owner, def)) {
++                        e.insert(crate::state::SkillInstance {
+                                 owner: self.owner,
+                                 enabled: true,
+                                 once_used: false,
+                                 expires_end_of_turn: false,
+                                 rounds: 0,
+-                            },
+-                        );
++                            });
+                     }
+                 }
+                 Flow::Done
+@@ -912,7 +906,7 @@ impl HostMachine {
+                 {
+                     let monkey = ctx.core.players[self.owner as usize].equips.remove(pos);
+                     crate::kernel::revoke_equip_skills(
+-                        &mut ctx.core,
++                        ctx.core,
+                         ctx.catalog,
+                         self.owner,
+                         monkey,
+diff --git a/crates/engine-native/src/content/host/step/skills_targets.rs b/crates/engine-native/src/content/host/step/skills_targets.rs
+index 096dfc36..e26683cf 100644
+--- a/crates/engine-native/src/content/host/step/skills_targets.rs
++++ b/crates/engine-native/src/content/host/step/skills_targets.rs
+@@ -185,17 +185,14 @@ impl HostMachine {
+                     holders.extend(targets.iter().copied());
+                     if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG2_KEY) {
+                         for h in holders {
+-                            if !ctx.core.skills.contains_key(&(h, def)) {
+-                                ctx.core.skills.insert(
+-                                    (h, def),
+-                                    crate::state::SkillInstance {
++                            if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((h, def)) {
++                                e.insert(crate::state::SkillInstance {
+                                         owner: h,
+                                         enabled: true,
+                                         once_used: false,
+                                         expires_end_of_turn: false,
+                                         rounds: 0,
+-                                    },
+-                                );
++                                    });
+                                 ctx.log(LogEvent::SkillToggled {
+                                     player: h,
+                                     skill: ctx.catalog.skill_name(def),
+diff --git a/crates/engine-native/src/content/host/step/swd_card_contests.rs b/crates/engine-native/src/content/host/step/swd_card_contests.rs
+index 8f632e1b..c3c83316 100644
+--- a/crates/engine-native/src/content/host/step/swd_card_contests.rs
++++ b/crates/engine-native/src/content/host/step/swd_card_contests.rs
+@@ -240,7 +240,7 @@ impl HostMachine {
+                     let Some(def) = ctx.catalog.skill_by_name(name) else {
+                         return Flow::Done;
+                     };
+-                    let def_id = u16::from(def);
++                    let def_id = def;
+                     ctx.log(LogEvent::SkillTriggered {
+                         skill: "天书",
+                         owner: self.owner,
+@@ -250,22 +250,19 @@ impl HostMachine {
+                         ctx.discard_from_hand(self.owner, card);
+                     }
+                     // 永久获取（附加技实例）
+-                    if !ctx.core.skills.contains_key(&(self.owner, def)) {
+-                        ctx.core.skills.insert(
+-                            (self.owner, def),
+-                            crate::state::SkillInstance {
++                    if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((self.owner, def)) {
++                        e.insert(crate::state::SkillInstance {
+                                 owner: self.owner,
+                                 enabled: true,
+                                 once_used: false,
+                                 expires_end_of_turn: false,
+                                 rounds: 0,
+-                            },
+-                        );
++                            });
+                     }
+                     {
+                         let p = ctx.core.player_mut(self.owner);
+                         p.swdtianshu_from = Some(target);
+-                        p.swdtianshu_granted = Some(u16::from(def_id));
++                        p.swdtianshu_granted = Some(def_id);
+                     }
+                     ctx.log(LogEvent::SkillToggled {
+                         player: self.owner,
+diff --git a/crates/engine-native/src/content/host/step/swd_card_targets.rs b/crates/engine-native/src/content/host/step/swd_card_targets.rs
+index df0c72cd..6d863571 100644
+--- a/crates/engine-native/src/content/host/step/swd_card_targets.rs
++++ b/crates/engine-native/src/content/host/step/swd_card_targets.rs
+@@ -410,7 +410,7 @@ impl HostMachine {
+                     if !ctx.core.player(t).alive || ctx.core.player(t).hand.is_empty() {
+                         return Flow::Done;
+                     }
+-                    let pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                    let pool: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                     let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                     let c = pool[j];
+                     let same = {
+diff --git a/crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs b/crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs
+index 2f36a57a..7b205585 100644
+--- a/crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs
++++ b/crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs
+@@ -10,7 +10,7 @@ impl HostMachine {
+             HostBehavior::SwdHuajian => match self.stage {
+                 HostStage::Act => {
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/swd_damage_combos.rs b/crates/engine-native/src/content/host/step/swd_damage_combos.rs
+index 060e90b6..6aa237ca 100644
+--- a/crates/engine-native/src/content/host/step/swd_damage_combos.rs
++++ b/crates/engine-native/src/content/host/step/swd_damage_combos.rs
+@@ -8,7 +8,7 @@ impl HostMachine {
+             HostBehavior::SwdXingzhui => match self.stage {
+                 HostStage::Act => {
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/swd_damage_costs.rs b/crates/engine-native/src/content/host/step/swd_damage_costs.rs
+index aed737a3..d51654d7 100644
+--- a/crates/engine-native/src/content/host/step/swd_damage_costs.rs
++++ b/crates/engine-native/src/content/host/step/swd_damage_costs.rs
+@@ -18,7 +18,7 @@ impl HostMachine {
+                         _ => self.targets.clear(),
+                     }
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+@@ -195,7 +195,7 @@ impl HostMachine {
+                     )));
+                     let x =
+                         (ctx.core.player(t).max_hp as i32 - ctx.core.player(t).hp).max(0) as usize;
+-                    let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                    let mut pool: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                     pool.extend(ctx.core.player(t).equips.iter().copied());
+                     for _ in 0..x {
+                         if pool.is_empty() {
+@@ -332,7 +332,7 @@ impl HostMachine {
+             HostBehavior::SwdShangxi => match self.stage {
+                 HostStage::Act => {
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/swd_damage_reactions.rs b/crates/engine-native/src/content/host/step/swd_damage_reactions.rs
+index fd1eedd2..dd3848e2 100644
+--- a/crates/engine-native/src/content/host/step/swd_damage_reactions.rs
++++ b/crates/engine-native/src/content/host/step/swd_damage_reactions.rs
+@@ -19,7 +19,7 @@ impl HostMachine {
+                     };
+                     self.target = Some(d);
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+@@ -70,7 +70,7 @@ impl HostMachine {
+                         Some(t) => t,
+                         None => return Flow::Done,
+                     };
+-                    let equips: Vec<CardId> = ctx.core.player(t).equips.iter().copied().collect();
++                    let equips: Vec<CardId> = ctx.core.player(t).equips.to_vec();
+                     for c in equips {
+                         ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                         if ctx.catalog.card_kind(c).is_equip() {
+@@ -163,7 +163,7 @@ impl HostMachine {
+                 for v in victims {
+                     let n = ctx.core.player(v).judge.len() as u32;
+                     let judge_cards: Vec<CardId> =
+-                        ctx.core.player(v).judge.iter().copied().collect();
++                        ctx.core.player(v).judge.to_vec();
+                     for c in judge_cards {
+                         ctx.core.player_mut(v).judge.retain(|x| *x != c);
+                         ctx.to_discard(c);
+@@ -208,7 +208,7 @@ impl HostMachine {
+             HostBehavior::SwdYinguo => match self.stage {
+                 HostStage::Act => {
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+@@ -382,7 +382,7 @@ impl HostMachine {
+                         return Flow::Done;
+                     };
+                     if confirmed && ctx.core.player(t).alive {
+-                        let hand: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                        let hand: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                         for c in hand.into_iter().take(n) {
+                             ctx.discard_from_hand(t, c);
+                         }
+@@ -664,7 +664,7 @@ impl HostMachine {
+                     };
+                     self.target = Some(d);
+                     // 自选窗：目标手牌+装备合集任选（min 0 可取消=放弃）
+-                    let mut pool: Vec<CardId> = ctx.core.player(d).hand.iter().copied().collect();
++                    let mut pool: Vec<CardId> = ctx.core.player(d).hand.to_vec();
+                     pool.extend(ctx.core.player(d).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+@@ -729,7 +729,7 @@ impl HostMachine {
+                         let stage = ctx.res.frame(ctx.current_frame_id()).expect("frame").stage;
+                         if stage == crate::event::Stage::AfterTriggers {
+                             let hand: Vec<CardId> =
+-                                ctx.core.player(self.owner).hand.iter().copied().collect();
++                                ctx.core.player(self.owner).hand.to_vec();
+                             let n = hand.len().min(2);
+                             for c in hand.into_iter().take(n) {
+                                 ctx.discard_from_hand(self.owner, c);
+diff --git a/crates/engine-native/src/content/host/step/swd_jiguan_cards.rs b/crates/engine-native/src/content/host/step/swd_jiguan_cards.rs
+index 4bb7bc17..6cd38b99 100644
+--- a/crates/engine-native/src/content/host/step/swd_jiguan_cards.rs
++++ b/crates/engine-native/src/content/host/step/swd_jiguan_cards.rs
+@@ -249,7 +249,7 @@ impl HostMachine {
+                             self.card = None;
+                         }
+                         let moved: Vec<crate::ids::CardId> =
+-                            ctx.core.player(t).off_court.iter().copied().collect();
++                            ctx.core.player(t).off_court.to_vec();
+                         ctx.core.player_mut(t).jiguanyuan_cards = moved;
+                         if let Some(gdef) = ctx.catalog.skill_by_name(SWD_JIGUANYUAN_GAIN_KEY) {
+                             ctx.core.skills.insert(
+@@ -281,7 +281,7 @@ impl HostMachine {
+             // 缓。本体入弃堆。
+             HostBehavior::SwdJiguanshuCard => {
+                 let valid: Vec<CardId> =
+-                    ctx.core.player(self.owner).equips.iter().copied().collect();
++                    ctx.core.player(self.owner).equips.to_vec();
+                 let lingjian: Vec<CardId> = ctx
+                     .catalog
+                     .cards
+@@ -336,7 +336,7 @@ impl HostMachine {
+                             .copied()
+                             .filter(|x| {
+                                 let slot = ctx.catalog.card_slot_of(ctx.core, *x);
+-                                matches!(slot, Some(_)) && !occupied.contains(&slot)
++                                slot.is_some() && !occupied.contains(&slot)
+                             })
+                             .collect();
+                         let n = pool.len();
+diff --git a/crates/engine-native/src/content/host/step/swd_lingjian_cards.rs b/crates/engine-native/src/content/host/step/swd_lingjian_cards.rs
+index 122b5cce..ec0a5390 100644
+--- a/crates/engine-native/src/content/host/step/swd_lingjian_cards.rs
++++ b/crates/engine-native/src/content/host/step/swd_lingjian_cards.rs
+@@ -119,7 +119,7 @@ impl HostMachine {
+             HostBehavior::SwdShijianhuisuCard => {
+                 if let Some(t) = self.target {
+                     if ctx.core.player(t).alive {
+-                        let es: Vec<CardId> = ctx.core.player(t).equips.iter().copied().collect();
++                        let es: Vec<CardId> = ctx.core.player(t).equips.to_vec();
+                         for c in es {
+                             if let Some(pos) =
+                                 ctx.core.player(t).equips.iter().position(|x| *x == c)
+@@ -129,7 +129,7 @@ impl HostMachine {
+                                 ctx.core.player_mut(t).hand.push(c);
+                             }
+                         }
+-                        let hand: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                        let hand: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                         ctx.log(LogEvent::CardsDrawn {
+                             player: t,
+                             cards: hand,
+diff --git a/crates/engine-native/src/content/host/step/swd_recovery.rs b/crates/engine-native/src/content/host/step/swd_recovery.rs
+index c6abf947..2bcaa8cb 100644
+--- a/crates/engine-native/src/content/host/step/swd_recovery.rs
++++ b/crates/engine-native/src/content/host/step/swd_recovery.rs
+@@ -306,7 +306,7 @@ impl HostMachine {
+                             let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+                             let t = pool.swap_remove(j);
+                             let mut he: Vec<CardId> =
+-                                ctx.core.player(t).hand.iter().copied().collect();
++                                ctx.core.player(t).hand.to_vec();
+                             he.extend(ctx.core.player(t).equips.iter().copied());
+                             let k = ctx.core.rng.gen_range(he.len() as u32) as usize;
+                             let c = he[k];
+@@ -409,7 +409,7 @@ impl HostMachine {
+                     };
+                     self.target = Some(dp);
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/swd_response_cards.rs b/crates/engine-native/src/content/host/step/swd_response_cards.rs
+index 2b736327..e0c82112 100644
+--- a/crates/engine-native/src/content/host/step/swd_response_cards.rs
++++ b/crates/engine-native/src/content/host/step/swd_response_cards.rs
+@@ -82,7 +82,7 @@ impl HostMachine {
+             HostBehavior::SwdDunxing => match self.stage {
+                 HostStage::Act => {
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/swd_status.rs b/crates/engine-native/src/content/host/step/swd_status.rs
+index ea7c34f4..6d2a5f32 100644
+--- a/crates/engine-native/src/content/host/step/swd_status.rs
++++ b/crates/engine-native/src/content/host/step/swd_status.rs
+@@ -18,7 +18,7 @@ impl HostMachine {
+                     .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
+                     .collect();
+                 for t in targets {
+-                    let hand: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                    let hand: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                     let n = hand.len().min(2);
+                     for c in hand.into_iter().take(n) {
+                         ctx.discard_from_hand(t, c);
+@@ -72,7 +72,7 @@ impl HostMachine {
+                     .collect();
+                 for v in victims {
+                     let judge_cards: Vec<CardId> =
+-                        ctx.core.player(v).judge.iter().copied().collect();
++                        ctx.core.player(v).judge.to_vec();
+                     for c in judge_cards {
+                         ctx.core.player_mut(v).judge.retain(|x| *x != c);
+                         ctx.to_discard(c);
+@@ -421,7 +421,7 @@ impl HostMachine {
+             // 敌人；目标中途死亡即终止该张）
+             HostBehavior::SwdXuehuang => {
+                 ctx.core.player_mut(self.owner).xuehuang_used = true;
+-                let cards: Vec<CardId> = ctx.core.player(self.owner).hand.iter().copied().collect();
++                let cards: Vec<CardId> = ctx.core.player(self.owner).hand.to_vec();
+                 let num = cards.len();
+                 for c in cards {
+                     ctx.discard_from_hand(self.owner, c);
+@@ -683,7 +683,7 @@ impl HostMachine {
+                     amount: 1,
+                 });
+                 // 弃全部手牌（真实弃置事件=械磐等可触发）
+-                let hand: Vec<CardId> = ctx.core.player(self.owner).hand.iter().copied().collect();
++                let hand: Vec<CardId> = ctx.core.player(self.owner).hand.to_vec();
+                 if !hand.is_empty() {
+                     for c in &hand {
+                         ctx.take_hand_card(self.owner, *c);
+@@ -754,7 +754,7 @@ impl HostMachine {
+                 };
+                 let num = lost
+                     .iter()
+-                    .filter(|c| matches!(ctx.catalog.card_slot_of(ctx.core, **c), Some(_)))
++                    .filter(|c| ctx.catalog.card_slot_of(ctx.core, **c).is_some())
+                     .count();
+                 if num > 0 {
+                     let mut pool: Vec<CardId> = ctx
+diff --git a/crates/engine-native/src/content/host/step/swd_targets.rs b/crates/engine-native/src/content/host/step/swd_targets.rs
+index 31abc9a2..c3a8bf14 100644
+--- a/crates/engine-native/src/content/host/step/swd_targets.rs
++++ b/crates/engine-native/src/content/host/step/swd_targets.rs
+@@ -43,7 +43,7 @@ impl HostMachine {
+                     if !ctx.core.player(t).alive {
+                         return Flow::Done;
+                     }
+-                    let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                    let mut pool: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                     pool.extend(ctx.core.player(t).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+@@ -258,7 +258,7 @@ impl HostMachine {
+                     }
+                     // 目标手牌全部弃置（上游 lose(...)._triggered=null 同
+                     // 口径不发射弃置事件），三张入手（gain "draw"）
+-                    let taken: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++                    let taken: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+                     for c in &taken {
+                         ctx.take_hand_card(t, *c);
+                         ctx.to_discard(*c);
+diff --git a/crates/engine-native/src/content/host/step/swd_virtual_cards.rs b/crates/engine-native/src/content/host/step/swd_virtual_cards.rs
+index 44113c19..c690c2b4 100644
+--- a/crates/engine-native/src/content/host/step/swd_virtual_cards.rs
++++ b/crates/engine-native/src/content/host/step/swd_virtual_cards.rs
+@@ -14,7 +14,7 @@ impl HostMachine {
+                     };
+                     self.targets = u.targets.clone();
+                     let mut pool: Vec<CardId> =
+-                        ctx.core.player(self.owner).hand.iter().copied().collect();
++                        ctx.core.player(self.owner).hand.to_vec();
+                     pool.extend(ctx.core.player(self.owner).equips.iter().copied());
+                     if pool.is_empty() {
+                         return Flow::Done;
+diff --git a/crates/engine-native/src/content/host/step/wudian_ow_cards.rs b/crates/engine-native/src/content/host/step/wudian_ow_cards.rs
+index 198da29d..075cd132 100644
+--- a/crates/engine-native/src/content/host/step/wudian_ow_cards.rs
++++ b/crates/engine-native/src/content/host/step/wudian_ow_cards.rs
+@@ -135,7 +135,6 @@ impl HostMachine {
+                     let options: Vec<ChoiceOption> = ctx
+                         .core
+                         .alive_players()
+-                        .into_iter()
+                         .filter(|t| {
+                             *t != self.owner
+                                 && ![
+diff --git a/crates/engine-native/src/content/host/step/xianjian_card_use.rs b/crates/engine-native/src/content/host/step/xianjian_card_use.rs
+index 5f61c081..1eeb4a2d 100644
+--- a/crates/engine-native/src/content/host/step/xianjian_card_use.rs
++++ b/crates/engine-native/src/content/host/step/xianjian_card_use.rs
+@@ -207,7 +207,7 @@ impl HostMachine {
+                         if !ctx.core.player(p).alive {
+                             continue;
+                         }
+-                        let mut he: Vec<CardId> = ctx.core.player(p).hand.iter().copied().collect();
++                        let mut he: Vec<CardId> = ctx.core.player(p).hand.to_vec();
+                         he.extend(ctx.core.player(p).equips.iter().copied());
+                         if he.is_empty() {
+                             continue;
+@@ -416,7 +416,7 @@ impl HostMachine {
+                     // 载体牌锚定（DamageBefore 增伤判定=普通杀/其他虚拟
+                     // 技载体不命中）——预读牌堆底=use_virtual_card 载体
+                     let carrier = ctx.core.deck.first().copied();
+-                    ctx.core.turn.luanjian_card = carrier.map(|c| c as u32);
++                    ctx.core.turn.luanjian_card = carrier.map(|c| c);
+                     ctx.use_virtual_card(self.owner, crate::catalog::CardKind::Sha, picked);
+                     Flow::Done
+                 }
+diff --git a/crates/engine-native/src/content/host/step/xianjian_cards.rs b/crates/engine-native/src/content/host/step/xianjian_cards.rs
+index ff350e08..46e196e5 100644
+--- a/crates/engine-native/src/content/host/step/xianjian_cards.rs
++++ b/crates/engine-native/src/content/host/step/xianjian_cards.rs
+@@ -867,7 +867,7 @@ impl HostMachine {
+                     }
+                     let pl = ctx.core.player_mut(t);
+                     pl.ctianfu_source = Some(self.owner);
+-                    pl.ctianfu_card = Some(c as u32);
++                    pl.ctianfu_card = Some(c);
+                     Flow::Done
+                 }
+                 _ => Flow::Done,
+diff --git a/crates/engine-native/src/content/host/step/xianjian_status.rs b/crates/engine-native/src/content/host/step/xianjian_status.rs
+index 4ab959b2..4c5d3463 100644
+--- a/crates/engine-native/src/content/host/step/xianjian_status.rs
++++ b/crates/engine-native/src/content/host/step/xianjian_status.rs
+@@ -361,17 +361,14 @@ impl HostMachine {
+                 };
+                 if let Some(name) = skill_name {
+                     if let Some(def) = ctx.catalog.skill_by_name(name) {
+-                        if !ctx.core.skills.contains_key(&(self.owner, def)) {
+-                            ctx.core.skills.insert(
+-                                (self.owner, def),
+-                                crate::state::SkillInstance {
++                        if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((self.owner, def)) {
++                            e.insert(crate::state::SkillInstance {
+                                     owner: self.owner,
+                                     enabled: true,
+                                     once_used: false,
+                                     expires_end_of_turn: false,
+                                     rounds: 0,
+-                                },
+-                            );
++                                });
+                         }
+                     }
+                 }
+diff --git a/crates/engine-native/src/content/host/support.rs b/crates/engine-native/src/content/host/support.rs
+index c8edf52b..a4815ad7 100644
+--- a/crates/engine-native/src/content/host/support.rs
++++ b/crates/engine-native/src/content/host/support.rs
+@@ -186,7 +186,7 @@ pub(super) fn cyqiaoxie_candidates(ctx: &Ctx<'_>, owner: PlayerId) -> Vec<Choice
+         if seen.contains(&name) {
+             continue;
+         }
+-        let Some(rule) = cyqiaoxie_rule(&name) else {
++        let Some(rule) = cyqiaoxie_rule(name) else {
+             continue;
+         };
+         let ok = match rule {
+@@ -202,7 +202,7 @@ pub(super) fn cyqiaoxie_candidates(ctx: &Ctx<'_>, owner: PlayerId) -> Vec<Choice
+             CyqiaoxieRule::OneOther => ctx
+                 .core
+                 .alive_players()
+-                .any(|p| p != owner && cyqiaoxie_target_ok(ctx, p, &name)),
++                .any(|p| p != owner && cyqiaoxie_target_ok(ctx, p, name)),
+             CyqiaoxieRule::AllOthers => ctx.core.alive_players().any(|p| p != owner),
+         };
+         if !ok {
+@@ -383,17 +383,14 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
+                 let Some(sd) = ctx.catalog.skill_by_name(name) else {
+                     continue;
+                 };
+-                if !ctx.core.skills.contains_key(&(owner, sd)) {
+-                    ctx.core.skills.insert(
+-                        (owner, sd),
+-                        crate::state::SkillInstance {
++                if let std::collections::btree_map::Entry::Vacant(e) = ctx.core.skills.entry((owner, sd)) {
++                    e.insert(crate::state::SkillInstance {
+                             owner,
+                             enabled: true,
+                             once_used: false,
+                             expires_end_of_turn: false,
+                             rounds: 0,
+-                        },
+-                    );
++                        });
+                     ctx.log(LogEvent::SkillToggled {
+                         player: owner,
+                         skill: ctx.catalog.skill_name(sd),
+@@ -590,7 +587,7 @@ pub use crate::vocabulary::card_skills::yangpijuan_class;
+ 
+ pub(super) fn ctianfu_clear(ctx: &mut crate::machine::Ctx<'_>, owner: u8) {
+     if let Some(cid) = ctx.core.player(owner).ctianfu_card {
+-        let cid = cid as u32;
++        let cid = cid;
+         if let Some(pos) = ctx
+             .core
+             .player(owner)
+@@ -635,7 +632,7 @@ impl HostMachine {
+ 
+     /// 横刀被获得面：随机获得当前回合角色一张 he 牌。
+     pub(super) fn hwendao_gain_random(&mut self, ctx: &mut Ctx<'_>, t: PlayerId) -> Flow {
+-        let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++        let mut pool: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+         pool.extend(ctx.core.player(t).equips.iter().copied());
+         if pool.is_empty() || !ctx.core.player(self.owner).alive {
+             return Flow::Done;
+@@ -663,7 +660,7 @@ impl HostMachine {
+     /// 对诗获得面：随机获得目标一张牌（he；登记差异：上游弃牌者自选，
+     /// 原生 RNG 代选——浴尘同款）。
+     pub(super) fn duishi_gain_random(&mut self, ctx: &mut Ctx<'_>, t: PlayerId) -> Flow {
+-        let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
++        let mut pool: Vec<CardId> = ctx.core.player(t).hand.to_vec();
+         pool.extend(ctx.core.player(t).equips.iter().copied());
+         if pool.is_empty() || !ctx.core.player(self.owner).alive {
+             return Flow::Done;
+diff --git a/crates/engine-native/src/content/standard/skills/wangxiang.rs b/crates/engine-native/src/content/standard/skills/wangxiang.rs
+index 2bb57022..d3a4be1c 100644
+--- a/crates/engine-native/src/content/standard/skills/wangxiang.rs
++++ b/crates/engine-native/src/content/standard/skills/wangxiang.rs
+@@ -34,10 +34,10 @@ impl SkillMachine for WangxiangMachine {
+                 continue;
+             }
+             let equips: Vec<crate::ids::CardId> =
+-                ctx.core.player(t).equips.iter().copied().collect();
++                ctx.core.player(t).equips.to_vec();
+             for c in equips {
+                 ctx.core.player_mut(t).equips.retain(|x| *x != c);
+-                crate::kernel::revoke_equip_skills(&mut ctx.core, ctx.catalog, t, c);
++                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                 ctx.to_discard(c);
+             }
+         }
+diff --git a/crates/engine-native/src/content/standard/skills/xun_xun.rs b/crates/engine-native/src/content/standard/skills/xun_xun.rs
+index e65f77e1..ea24b83a 100644
+--- a/crates/engine-native/src/content/standard/skills/xun_xun.rs
++++ b/crates/engine-native/src/content/standard/skills/xun_xun.rs
+@@ -48,7 +48,7 @@ impl SkillMachine for XunXunMachine {
+                 XunXunStage::Undo => XunXunStageSnap::Undo,
+                 XunXunStage::Arrange => XunXunStageSnap::Arrange,
+             },
+-            top: self.top.iter().copied().map(|c| c as u32).collect(),
++            top: self.top.to_vec(),
+         }
+     }
+     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+diff --git a/crates/engine-native/src/content/standard/skills/zhangba.rs b/crates/engine-native/src/content/standard/skills/zhangba.rs
+index d76dfce8..d8722ad1 100644
+--- a/crates/engine-native/src/content/standard/skills/zhangba.rs
++++ b/crates/engine-native/src/content/standard/skills/zhangba.rs
+@@ -64,7 +64,7 @@ impl SkillMachine for ZhangbaMachine {
+     fn snapshot(&self) -> MachineSnapshot {
+         MachineSnapshot::Zhangba {
+             owner: self.owner,
+-            cards: self.cards.iter().copied().map(|c| c as u32).collect(),
++            cards: self.cards.to_vec(),
+             stage: match self.stage {
+                 ZhangbaStage::Cards => ZhangbaStageSnap::Cards,
+                 ZhangbaStage::Target => ZhangbaStageSnap::Target,
+diff --git a/crates/engine-native/src/engine/construction.rs b/crates/engine-native/src/engine/construction.rs
+index f0540512..0f801730 100644
+--- a/crates/engine-native/src/engine/construction.rs
++++ b/crates/engine-native/src/engine/construction.rs
+@@ -38,7 +38,7 @@ impl Engine {
+ 
+     fn identity_mode(seats: usize) -> GameMode {
+         let loyalists = match seats {
+-            4 | 5 | 6 => 1,
++            4..=6 => 1,
+             _ => 2,
+         };
+         let mut roles = vec![crate::state::Role::Lord];
+@@ -362,13 +362,10 @@ impl Engine {
+         // gameDraw num 覆盖）；其余模式各 4 张。先于 core move 计算。
+         let opening_cards: Vec<u32> = (0..seats as PlayerId)
+             .map(|p| match (&core.mode, &opening) {
+-                (GameMode::Doudizhu { lord }, OpeningPlan::DoudizhuBinglin) => {
+-                    if p == *lord {
++                (GameMode::Doudizhu { lord }, OpeningPlan::DoudizhuBinglin)
++                    if p == *lord => {
+                         5
+-                    } else {
+-                        4
+                     }
+-                }
+                 (
+                     GameMode::Boss { boss, .. },
+                     OpeningPlan::BossStage {
+diff --git a/crates/engine-native/src/engine/hash.rs b/crates/engine-native/src/engine/hash.rs
+index a720662c..1b52b4b8 100644
+--- a/crates/engine-native/src/engine/hash.rs
++++ b/crates/engine-native/src/engine/hash.rs
+@@ -615,7 +615,7 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
+                 crate::state::Winner::Rebels => push_u8(&mut h, 3),
+                 crate::state::Winner::Faction(f) => {
+                     push_u8(&mut h, 4);
+-                    push_u8(&mut h, f.clone() as u8);
++                    push_u8(&mut h, f as u8);
+                 }
+                 crate::state::Winner::Versus(t) => {
+                     push_u8(&mut h, 6);
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index f4d75ac6..5c5e80d1 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -53,7 +53,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+             // 八卦阵判定标志入哈希（防篡改完整性）
+             push_u8(h, *armor_judged as u8);
+             // 无双已用闪数入哈希
+-            push_u8(h, *dodges_used as u8);
++            push_u8(h, *dodges_used);
+             // 铁骑判定结果入哈希
+             push_u8(
+                 h,
+@@ -126,10 +126,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+             push_u8(h, *lueying_declined as u8);
+             push_u8(h, *asking_fuchou as u8);
+             push_u8(h, fuchou_card.is_some() as u8);
+-            match fuchou_card {
+-                Some(c) => push_u32(h, *c),
+-                None => {}
+-            }
++            if let Some(c) = fuchou_card { push_u32(h, *c) }
+             push_u8(h, *asking_sadeng as u8);
+             push_u8(h, *asking_sadeng_shan as u8);
+         }
+diff --git a/crates/engine-native/src/engine/legal_actions.rs b/crates/engine-native/src/engine/legal_actions.rs
+index 67238fea..443c2b97 100644
+--- a/crates/engine-native/src/engine/legal_actions.rs
++++ b/crates/engine-native/src/engine/legal_actions.rs
+@@ -49,7 +49,7 @@ impl Engine {
+                         .spec
+                         .options
+                         .iter()
+-                        .take(choice.spec.min as usize)
++                        .take(choice.spec.min)
+                         .copied()
+                         .collect();
+                     if !sel.is_empty() {
+diff --git a/crates/engine-native/src/engine/play_rules.rs b/crates/engine-native/src/engine/play_rules.rs
+index 8a3b8cfa..555b8d36 100644
+--- a/crates/engine-native/src/engine/play_rules.rs
++++ b/crates/engine-native/src/engine/play_rules.rs
+@@ -484,11 +484,10 @@ pub(super) fn check_play_use_restrictions(
+                 if !core.player(*t).alive {
+                     continue;
+                 }
+-                if core.is_boss_side(*t) != core.is_boss_side(core.turn.current) {
+-                    if (xuanming_alive && !is_basic && !is_equip) || (gonggong_alive && is_basic) {
++                if core.is_boss_side(*t) != core.is_boss_side(core.turn.current)
++                    && ((xuanming_alive && !is_basic && !is_equip) || (gonggong_alive && is_basic)) {
+                         return Err(RejectReason::IllegalTargets);
+                     }
+-                }
+             }
+         }
+     }
+diff --git a/crates/engine-native/src/engine/play_sha.rs b/crates/engine-native/src/engine/play_sha.rs
+index 94ebea2b..751f4bcb 100644
+--- a/crates/engine-native/src/engine/play_sha.rs
++++ b/crates/engine-native/src/engine/play_sha.rs
+@@ -510,5 +510,5 @@ pub(super) fn play_sha(
+             Some(kind),
+         )),
+     );
+-    return Ok(());
++    Ok(())
+ }
+diff --git a/crates/engine-native/src/kernel/judge.rs b/crates/engine-native/src/kernel/judge.rs
+index 65fe0abb..c7fda9a3 100644
+--- a/crates/engine-native/src/kernel/judge.rs
++++ b/crates/engine-native/src/kernel/judge.rs
+@@ -118,11 +118,11 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                     finalized: c.finalized,
+                     judge_held: c.judge_held,
+                     haotian_holder: c.haotian_holder,
+-                    haotian_other: c.haotian_other.map(|x| x as u32),
++                    haotian_other: c.haotian_other.map(|x| x),
+                     gaiming_cards: c
+                         .gaiming_cards
+                         .as_ref()
+-                        .map(|v| v.iter().map(|x| *x as u32).collect()),
++                        .map(|v| v.to_vec()),
+                 })
+             }),
+         }
+diff --git a/crates/engine-native/src/kernel/monkey.rs b/crates/engine-native/src/kernel/monkey.rs
+index e1f657a2..073e789d 100644
+--- a/crates/engine-native/src/kernel/monkey.rs
++++ b/crates/engine-native/src/kernel/monkey.rs
+@@ -84,7 +84,7 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
+                         .position(|c| ctx.catalog.card_kind(*c) == CardKind::Monkey)
+                     {
+                         let monkey = ctx.core.players[holder as usize].equips.remove(pos);
+-                        revoke_equip_skills(&mut ctx.core, ctx.catalog, holder, monkey);
++                        revoke_equip_skills(ctx.core, ctx.catalog, holder, monkey);
+                         ctx.core.discard.push(monkey);
+                         ctx.log(LogEvent::CardDiscarded {
+                             player: holder,
+diff --git a/crates/engine-native/src/kernel/phase.rs b/crates/engine-native/src/kernel/phase.rs
+index b3e7ef68..b3cdca3b 100644
+--- a/crates/engine-native/src/kernel/phase.rs
++++ b/crates/engine-native/src/kernel/phase.rs
+@@ -60,15 +60,14 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
+     }
+     // 月行（U05 xianjian 龙幽，规则 v159）：出牌阶段结束解除距离基数交
+     // 换（双向互指一并清除；上游 yuexing2 临时技 phaseUseAfter 同口径）
+-    if !begin && phase == Phase::Play {
+-        if ctx.core.player(player).yuexing_pair.is_some() {
++    if !begin && phase == Phase::Play
++        && ctx.core.player(player).yuexing_pair.is_some() {
+             if let Some(pair) = ctx.core.player_mut(player).yuexing_pair.take() {
+                 if ctx.core.player(pair).yuexing_pair == Some(player) {
+                     ctx.core.player_mut(pair).yuexing_pair = None;
+                 }
+             }
+         }
+-    }
+     // 逐月（U05 xianjian 云天河，规则 v161）：出牌阶段结束清白名单
+     //（上游 zhuyue2 phaseUseEnd silent 同口径）
+     if !begin && phase == Phase::Play {
+diff --git a/crates/engine-native/src/kernel/phase/draw.rs b/crates/engine-native/src/kernel/phase/draw.rs
+index f3335b46..1bbf1468 100644
+--- a/crates/engine-native/src/kernel/phase/draw.rs
++++ b/crates/engine-native/src/kernel/phase/draw.rs
+@@ -212,7 +212,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
+             if ctx.core.has_skill(player, def) {
+                 let alive = ctx.core.alive_count();
+                 if alive > 2 {
+-                    ctx.draw_cards(player, (alive - 2) as usize);
++                    ctx.draw_cards(player, alive - 2 );
+                 }
+             }
+         }
+diff --git a/crates/engine-native/src/kernel/phase/judge.rs b/crates/engine-native/src/kernel/phase/judge.rs
+index 71d48412..2f6bcf24 100644
+--- a/crates/engine-native/src/kernel/phase/judge.rs
++++ b/crates/engine-native/src/kernel/phase/judge.rs
+@@ -98,7 +98,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
+                         continue;
+                     }
+                     let equips: Vec<crate::ids::CardId> =
+-                        ctx.core.player(t).equips.iter().copied().collect();
++                        ctx.core.player(t).equips.to_vec();
+                     if !equips.is_empty() {
+                         for c in equips {
+                             ctx.core.player_mut(t).equips.retain(|x| *x != c);
+diff --git a/crates/engine-native/src/kernel/sha/step.rs b/crates/engine-native/src/kernel/sha/step.rs
+index 137fb92c..fda1288e 100644
+--- a/crates/engine-native/src/kernel/sha/step.rs
++++ b/crates/engine-native/src/kernel/sha/step.rs
+@@ -16,7 +16,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+             tieji_red: self.tieji_red,
+             liuli_done: self.liuli_done,
+             liuli_stage: self.liuli_stage,
+-            liuli_card: self.liuli_card.map(|c| c as u32),
++            liuli_card: self.liuli_card.map(|c| c),
+             hujia_queue: self.hujia_queue.clone(),
+             hujia_holder: self.hujia_holder,
+             jiu_bonus: self.jiu_bonus,
+@@ -25,7 +25,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+             asking_hanbing: self.asking_hanbing,
+             asking_fengxueren: self.asking_fengxueren,
+             asking_guanshi: self.asking_guanshi,
+-            guanshi_cards: self.guanshi_cards.iter().copied().collect(),
++            guanshi_cards: self.guanshi_cards.to_vec(),
+             asking_qinglong: self.asking_qinglong,
+             asking_cixiong: self.asking_cixiong,
+             cixiong_done: self.cixiong_done,
+@@ -43,7 +43,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+             lueying_victim: self.lueying_victim.map(|c| c as u32),
+             lueying_declined: self.lueying_declined,
+             asking_fuchou: self.asking_fuchou,
+-            fuchou_card: self.fuchou_card.map(|c| c as u32),
++            fuchou_card: self.fuchou_card.map(|c| c),
+             asking_sadeng: self.asking_sadeng,
+             asking_sadeng_shan: self.asking_sadeng_shan,
+             shoulie_direct: self.shoulie_direct,
+@@ -290,7 +290,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+                                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                                 ))
+                     })
+-                    .map(|c| ChoiceOption::Card(c))
++                    .map(ChoiceOption::Card)
+                     .collect();
+                 return Flow::WaitChoice {
+                     observer: next,
+@@ -405,7 +405,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+                     let diff = ctx.core.player(self.target).hand.len()
+                         - ctx.core.player(self.source).hand.len();
+                     let hs: Vec<crate::ids::CardId> =
+-                        ctx.core.player(self.target).hand.iter().copied().collect();
++                        ctx.core.player(self.target).hand.to_vec();
+                     let mut pool = hs;
+                     for _ in 0..diff {
+                         if pool.is_empty() {
+@@ -603,7 +603,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+                     ctx.to_discard(judged);
+                     if black {
+                         let mut pool: Vec<crate::ids::CardId> =
+-                            ctx.core.player(self.target).hand.iter().copied().collect();
++                            ctx.core.player(self.target).hand.to_vec();
+                         pool.extend(ctx.core.player(self.target).equips.iter().copied());
+                         if !pool.is_empty() {
+                             let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
+@@ -1060,6 +1060,6 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
+             target: self.target,
+         });
+         // 目标已死等无伤害路径：推进队列/弃置杀本体。
+-        return self.advance_target(ctx);
++        self.advance_target(ctx)
+     }
+ }
+diff --git a/crates/engine-native/src/kernel/tricks.rs b/crates/engine-native/src/kernel/tricks.rs
+index c55a34a3..c985a9f3 100644
+--- a/crates/engine-native/src/kernel/tricks.rs
++++ b/crates/engine-native/src/kernel/tricks.rs
+@@ -134,7 +134,7 @@ impl crate::catalog::SkillMachine for WuguMachine {
+     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+         crate::snap::MachineSnapshot::Wugu {
+             owner: self.owner,
+-            cards: self.cards.iter().copied().map(|c| c as u32).collect(),
++            cards: self.cards.to_vec(),
+             pickers: self.pickers.clone(),
+         }
+     }
+@@ -143,7 +143,7 @@ impl crate::catalog::SkillMachine for WuguMachine {
+             WuguStage::Init => {
+                 let alive: Vec<PlayerId> = ctx.core.alive_players().collect();
+                 let take = alive.len().min(ctx.core.deck.len());
+-                if take == 0 || self.cards.is_empty() == false {
++                if take == 0 || !self.cards.is_empty() {
+                     return Flow::Done;
+                 }
+                 let new_len = ctx.core.deck.len() - take;
+diff --git a/crates/engine-native/src/rvm_bridge/machine.rs b/crates/engine-native/src/rvm_bridge/machine.rs
+index 7de943e6..32e6a247 100644
+--- a/crates/engine-native/src/rvm_bridge/machine.rs
++++ b/crates/engine-native/src/rvm_bridge/machine.rs
+@@ -308,7 +308,7 @@ impl VmMachine {
+                         .map(to_rule_pid)
+                         .map(|p| p.raw())
+                         .unwrap_or(0),
+-                    event_card: self.trig.event_card.map(|c| c as u32).unwrap_or(0),
++                    event_card: self.trig.event_card.map(|c| c).unwrap_or(0),
+                     event_amount: self.trig.event_amount,
+                 },
+                 seats,
+diff --git a/crates/engine-native/src/snap/asks.rs b/crates/engine-native/src/snap/asks.rs
+index 9d881b68..a171a7a9 100644
+--- a/crates/engine-native/src/snap/asks.rs
++++ b/crates/engine-native/src/snap/asks.rs
+@@ -959,7 +959,7 @@ pub fn active_ask(
+             cards,
+             ..
+         } => (catalog.hooks.host_ask)(
+-            u16::from(*behavior),
++            *behavior ,
+             *stage,
+             *owner,
+             *target,
+diff --git a/crates/engine-native/src/snap/restore.rs b/crates/engine-native/src/snap/restore.rs
+index 00a02a8a..cb44429d 100644
+--- a/crates/engine-native/src/snap/restore.rs
++++ b/crates/engine-native/src/snap/restore.rs
+@@ -90,7 +90,7 @@ impl MachineSnapshot {
+                 lueying_victim.map(|c| c as crate::ids::PlayerId),
+                 *lueying_declined,
+                 *asking_fuchou,
+-                fuchou_card.map(|c| c as u32),
++                fuchou_card.map(|c| c),
+                 *asking_sadeng,
+                 *asking_sadeng_shan,
+                 *shoulie_direct,
+diff --git a/crates/engine-native/src/vocabulary/host/behavior.rs b/crates/engine-native/src/vocabulary/host/behavior.rs
+index 6abd3b91..2a0174dd 100644
+--- a/crates/engine-native/src/vocabulary/host/behavior.rs
++++ b/crates/engine-native/src/vocabulary/host/behavior.rs
+@@ -1342,7 +1342,7 @@ pub enum HostBehavior {
+     Xunmeng,
+     /// 集舍（tag 522，L27 选将美化批 5，`jishe`）：出牌阶段主动（手牌上限
+     /// >0）——摸一张牌并累计标记（上游 `jishe2` 的手牌上限削减面因该技在
+-    /// 上游被注释而**不生效**，登记差异）。
++    /// > 上游被注释而**不生效**，登记差异）。
+     Jishe,
+     /// 诈降（tag 521，L27 选将美化批 4，`sbzhaxiang`）：锁定——本阶段已用
+     /// 牌数 < 已损失体力时：用牌**无距离/次数限制**且【杀】**不可被闪避**；
+diff --git a/crates/engine-native/src/vocabulary/names.rs b/crates/engine-native/src/vocabulary/names.rs
+index 75d1d5cd..a8b9670a 100644
+--- a/crates/engine-native/src/vocabulary/names.rs
++++ b/crates/engine-native/src/vocabulary/names.rs
+@@ -534,7 +534,7 @@ pub const BOSS_LIANYU: &str = "炼狱";
+ pub const BOSS_SHOUYI: &str = "守翼";
+ /// 睿智（年兽睿智形态，规则 v250）：锁定技——准备阶段其余角色（手牌
+ /// >1 或装备 >1）须保留一张手牌和一张装备区内的牌，弃置其余（保留哪张
+-/// 由目标自选——原生保留首张确定性近似登记）。
++/// > 由目标自选——原生保留首张确定性近似登记）。
+ pub const BOSS_RUIZHI: &str = "睿智";
+ /// 形态轮换（Boss 年兽系，规则 v249）：锁定技——回合开始交替轮换至另
+ /// 一「形态轮换」携带将（assembly 重挂+hp/手牌/装备/判定区保留；首次置

@@ -1,0 +1,42 @@
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.547666ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.169791ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.125041ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.114208ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (0.144ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.070416ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.08375ms)
+✔ 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择 (0.774916ms)
+✔ identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null (0.11625ms)
+✔ 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位 (0.218167ms)
+✖ visible general definition reaches the existing seat view (0.424542ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 258.5115
+
+✖ failing tests:
+
+test at scripts/native-adapter.test.mjs:372:1
+✖ visible general definition reaches the existing seat view (0.424542ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 17
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/web-client/scripts/native-adapter.test.mjs:377:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 17,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

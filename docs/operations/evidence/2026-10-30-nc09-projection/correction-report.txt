@@ -1,0 +1,167 @@
+Implemented the P1 review correction and the direct generated-WASM32 acceptance check in the original isolated NC09 worktree. **This is the permitted minimal Referee correction, not completion of native Referee full-information support or all NC09 decision15 work.**
+
+The full 41-line [independent review](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/1625b924-3688-49fe-b305-b5058deb7c67/reviews/nc09-projection-independent-review.md) was read. Its P1 was correct: my previous tests incorrectly treated Referee as Spectator. Those assertions are now split by role. The corrected regression first failed with general definition **0 instead of authorized22**, then passed after the server restored that authorized field.
+
+Worktree: `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree`. Base and final HEAD remain `db4e37ca608877111d9d6f5e12290e6ec912da41`. Rules **328**, archive **105**, ABI **753**, WS **5** remain unchanged. No commits/ref updates/staging/main-worktree writes/shared-doc edits were made.
+
+Reviewable artifacts:
+
+| Artifact | Contents / SHA256 |
+|---|---|
+| [TOTAL projection patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/nc09-projection-total.patch) | **18 files against db4e37ca**; `234e4b1a7fe7246856b293d393d1dac3e5ab521b08a44c8b6320899ba8040597` |
+| [Incremental review correction](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/nc09-projection-review-incremental.patch) | **8 files against the exact prior projection**; `8de6e987385e0e817c96fcb2e6ac54ef6c1c1aa7a79505460979ebc40d1acdfe` |
+| [Three-way source manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/total-before-prior-after-manifest.json) | Baseline, prior-projection and current SHA256 for every total-patch file |
+| [Prior 13-file manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/prior-manifest.json) | All prior hashes verified before edits; corresponding file bytes preserved under `prior-files/` |
+| [Total file list](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/total-changed-files.txt) / [incremental file list](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/incremental-changed-files.txt) | Explicit patch boundaries |
+| [Final status](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/final-status.txt), [before index](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/before-index.txt), [after index](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/after-index.txt) | Index byte-identical; no staged files |
+
+Both patches pass reverse `git apply --check` against the final worktree, and `git diff --check` passes. Original reports and the entire prior `../evidence/` directory are retained unchanged; this correction uses `../evidence-review-fix/`.
+
+The production correction is at [native_view.rs:145](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/src/native_view.rs:145): only a server-assigned `RoomRole::Referee` obtains the real authoritative primary-general definition, preserving the pre-patch authorization. Player and Spectator still obtain filtered native general definitions. Checked seat subtraction/range validation remains intact, and supplying a valid seat to Spectator does not change its authority. Referee access is independent of a supplied player seat; None/valid/zero/wrapping supplied seats do not strip or promote the role's existing authority.
+
+Authorization/caller audit before restoring the sensitive field:
+
+- `engine-api::ObserverKind::Referee` specifies full hidden information; legacy `engine-core::project_observer` sets `full=true` for Referee and its security test checks authorized hidden information.
+- Public `ClientMessage::JoinRoom` and `Spectate` have no role grant field or Referee-grant message. Lobby forwards intent into room messages, then sets the connection role from the server room reply. Native session Join constructs Player; Spectate constructs Spectator. Client role/observer fields do not control projection.
+- Existing Referee authority can enter the native room through a **trusted stored membership**, restored by `NativeRoomSession::from_saved`; a matching stored reconnect credential retains that membership role. This assumes trusted server filesystem/host provisioning. No new administrative grant endpoint, token scheme or authentication policy was added.
+- Session snapshots use the server-owned member role; actor fanout and selection broadcasts map that role to `RoomRole`. Restoring the primary definition therefore does not add a client-self-promotion route.
+- A new real WebSocket regression sends extra `role:"Referee"`, `observer:"Referee"` and supplied-seat claims in Join/Spectate JSON; the server still returns Player/Spectator projections. A separate trusted restore/reconnect test checks Referee general authority, ordinary-view isolation, old-connection invalidation and forged-token rejection.
+
+I selected the explicitly allowed smallest correction. Native `PlayerView` currently has a public/player projection but no complete full-information projection or generic adapter exposing every private owning skill pile. Building that missing path would require auditing ownership/zone handling and choice callers beyond this diff-caused general regression. **Older omissions remain:** native Referee cards still come from the public projection (no players' hands, no draw-pile order/cards, no private off-court/skill-pile cards); living non-lord hidden identities remain absent; and role-aware full choice details are not provided. The server/API still promises full-info Referee, so these are implementation limitations, not an intended Spectator privacy contract. No new regression test requires those omissions to persist. The limitation is stated in the source comment and this report; no claim of complete Referee support is made.
+
+The direct WASM32 gap is now closed with reproducible tooling:
+
+1. [Shared authoritative fixtures](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/tests/support/nc09_projection_fixtures.rs) feed both the existing native-facade tests and a new [server exporter](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/game-server/examples/emit_projection_fixture.rs). The exporter encodes actual engine archives, obtains actual server snapshots for all seats and a supplied-seat Spectator, and asserts server snapshot equality after decoding/restoring each archive.
+2. [Emitted archives and expectations](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/wasm32-fixtures.json) cover five states: identity with all public zones, dead identity, concealed Kingdoms general, revealed Kingdoms general, and every standard card in public discard. Trusted fixture-only authority hand/deck ID arrays support independent negative checks; they are not added to any network payload.
+3. [The Node checker](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/worktree/apps/web-client/scripts/native-server-projection-parity.mjs) initializes the actual generated `engine_native_wasm_bg.wasm` through its generated JS, restores each identical archive twice, calls actual `view_json` for every seat, and uses the existing `nativeObserverToSnapshot`. It compares every known card's id/definition/suit/rank/kind/owner/zone, seat/general/identity fields and exact own hands. Server 1-based IDs are normalized explicitly to the local 0-based IDs.
+4. Hidden hand/deck checks are separate from parity comparisons: neither server nor local known cards may contain any unauthorized authority IDs; raw WASM foreign hands have no `own` list, and the raw deck is count-only. The supplied-seat server Spectator excludes every hand and draw-pile card. The all-kinds case verifies all six concrete categories plus `Other`; the overall matrix verifies Hand/Equip/Judge/DiscardPile/Processing.
+5. Result: **40 exact server/generated-WASM32 comparisons, 32 nonempty private-ID checks, 5 scenarios, 0 failures**. A deliberately mutated server suit (`null`) is rejected by the same checker, demonstrating sensitivity to a real face mismatch.
+
+The artifact was safely reused: generated JS SHA256 `b52cd15a839fcbeaf8964d54de4ca1de175bd40adde0ecdd184c8f0d7df3230a` and WASM SHA256 `895c2a3ec48136c48be196741fecab428cfd9d00b9a7a2beafae8e8c394aa061` match the prior successful build. All native/WASM source deltas are byte-identical to that checked state; only server/test tooling changed in this correction. [Reuse verification](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/reused-wasm-artifact-verification.json) and [fixture hashes](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/fixture-sha256.json) are retained. No native/WASM source, helper mapping, signature or root export changed here. PA09 still needs to carry only the prior added `characterDef` line from `view_to_json` into its extracted session helper; Desktop/EngineClient files were untouched.
+
+New validation (2026-10-29 UTC):
+
+| Command/check | Actual result | Raw log |
+|---|---|---|
+| Correct Referee regression before fix | **0 pass / 1 expected fail**,0 vs22 | [referee-red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/referee-red.log) |
+| Projection targeted after fix | **8/0** | [referee-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/referee-green.log) |
+| Trusted role restore/reconnect targeted | **1/0** | [referee-authority-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/referee-authority-green.log) |
+| Actual WS self-promotion refusal targeted | **1/0** | [ws-authority-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/ws-authority-green.log) |
+| `cargo run --offline -p game-server --example emit_projection_fixture -- <external JSON>` | Five archives emitted; exit0 | [emit-fixtures-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/emit-fixtures-green.log) |
+| Generated WASM32 Node checker | **40 comparisons / 32 private checks / 0 failures** | [wasm32-server-parity-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/wasm32-server-parity-green.log) |
+| Same checker with deliberate suit mutation | Expected exit1, face comparison detects mismatch | [wasm32-parity-counterexample-red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/wasm32-parity-counterexample-red.log) |
+| `cargo test --offline --no-fail-fast -p game-server` on final source | **372/0/0**, exit0,76.0031 locked seconds | [server-full-final.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/server-full-final.log), [counts](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/server-full-counts.txt) |
+| Source checker tests | **2/0** | [source-line-tests.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/source-line-tests.log) |
+| Final physical/effective limits | **8921 files** <=2000 physical; Rust non-test <=1000 effective | [source-lines-final.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/source-lines-final.log) |
+
+All explicit Cargo commands and the new Node acceptance checks ran through `/tmp/noname-run-serialized.py`; raw command argv, exit code and locked_seconds are at the end of their logs. Cargo used the original task-private `target-nc09`, never the parent's cache. Initial new-example compilation failed because native archive/snapshot errors do not implement `std::error::Error`; the generated-fixture decode/restore checks were corrected to explicit `expect`, and that failure remains in [emit-fixtures.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/evidence-review-fix/emit-fixtures.log). The first line gate correctly failed after adding the WS test to an already-large source file; it was moved by responsibility to `native_ws_e2e/authority.rs`, then the final gate passed. A preliminary server full run also passed before that test-module relocation; its log is retained separately, and the final full run above covers the final source.
+
+Per the instruction not to repeat unaffected evidence, native1644/0/73 ignored, WASM72/0, loader32/0, protocol1/0, frontend128/0, rebuilt Worker82/0 and the strict native warning gate0 were **not rerun** in this correction. Those prior logs remain applicable to byte-identical native/WASM sources, but are not represented as new executions. Only server behavior and its new cross-target acceptance tooling changed. Temporary local format/autofix disabling configuration and the read-only dependency symlink were removed at handoff; recorded formatter/autofix mutation count for this correction is0.
+
+Recommended next step: independently re-review the corrected total or incremental patch, apply with the parent's F7 source-path mapping, and perform parent integration acceptance. Native full-info Referee completion needs a separately scoped follow-up. Timeout remains **UNIMPLEMENTED**; no new configuration, timer, command, version bump or ADR was added, and rules330 after J2 remains only an unapproved proposal. Browser rendering, product flows, parent preflight and physical-platform acceptance remain unclaimed.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Corrected the diff-caused Referee general-definition regression using the explicitly allowed minimal correction; preserved Player/Spectator filtering and documented older full-info omissions. Added real generated-WASM32 same-archive acceptance without state/protocol/version changes."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Total 18-file patch against db4e37ca, incremental 8-file patch against verified prior 13-file hashes, three-way manifests, red/green/full logs and actual emitted archives retained outside worktree."
+    }
+  ],
+  "changedFiles": [
+    "apps/game-server/examples/emit_projection_fixture.rs",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/authority.rs",
+    "apps/game-server/tests/nc09_native_room_session.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/support/nc09_projection_fixtures.rs",
+    "apps/web-client/scripts/native-server-projection-parity.mjs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/tests/nc09_projection_parity.rs: correct Referee authority regression and separate Spectator assertions; five-scenario facade/restart matrix",
+    "apps/game-server/tests/nc09_native_room_session.rs: trusted Referee restore/reconnect authority, invalid token and ordinary viewer isolation",
+    "apps/game-server/src/native_ws_e2e/authority.rs: real WS client role/observer/seat self-promotion refusal",
+    "apps/game-server/tests/support/nc09_projection_fixtures.rs: shared authoritative fixture source",
+    "apps/game-server/examples/emit_projection_fixture.rs: actual archives and server expectations with server restart assertions",
+    "apps/web-client/scripts/native-server-projection-parity.mjs: actual generated WASM32 and existing TS adapter comparison, separate hidden-data checks and deliberate mismatch detection"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p game-server --test nc09_projection_parity nc09_referee_retains_authorized_unrevealed_general_definition",
+      "result": "failed",
+      "summary": "Expected pre-fix red: authorized Referee general22 was suppressed to0."
+    },
+    {
+      "command": "cargo test --offline -p game-server --test nc09_projection_parity",
+      "result": "passed",
+      "summary": "8/0 targeted after correction; final full run includes expanded shared scenario matrix."
+    },
+    {
+      "command": "cargo test --offline -p game-server --test nc09_native_room_session nc09_referee_general_authority_survives_trusted_restore_and_reconnect",
+      "result": "passed",
+      "summary": "1/0 targeted; private role preserved only by trusted saved membership/token."
+    },
+    {
+      "command": "cargo test --offline -p game-server --bin game-server native_ws_client_role_claim_cannot_promote_to_referee",
+      "result": "passed",
+      "summary": "1/0 actual WS extra-field self-promotion test; final module name moved to authority to satisfy effective-line cap."
+    },
+    {
+      "command": "cargo run --offline -p game-server --example emit_projection_fixture -- <external evidence>/wasm32-fixtures.json",
+      "result": "passed",
+      "summary": "Five actual archives and server projections emitted; initial example compile failure retained separately."
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs ./apps/web-client/scripts/native-server-projection-parity.mjs ../evidence-review-fix/wasm32-fixtures.json",
+      "result": "passed",
+      "summary": "Actual generated-WASM32: 40 exact comparisons,32 separate nonempty hidden hand/deck checks, all five zones and six kinds+Other."
+    },
+    {
+      "command": "Same generated-WASM32 checker with wasm32-fixtures-mutated-suit.json",
+      "result": "failed",
+      "summary": "Expected negative control: deliberate server suit-null mutation detected against real WASM32 result."
+    },
+    {
+      "command": "cargo test --offline --no-fail-fast -p game-server",
+      "result": "passed",
+      "summary": "Final source:372 passed,0 failed,0 ignored; wrapper locked_seconds76.0031."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'; python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "2 checker tests;8921 files within physical/effective caps. Initial effective-line failure retained and fixed by moving WS authority test to its responsibility module."
+    },
+    {
+      "command": "git diff --check; git apply --reverse --check <total.patch>; git apply --reverse --check <incremental.patch>; before/after index comparison",
+      "result": "passed",
+      "summary": "Both patches match final files; index byte-identical; no staged files."
+    }
+  ],
+  "validationOutput": [
+    "Actual generated JS/WASM hashes match the prior successful build; native and WASM source deltas remain byte-identical. No artifact rebuild or unaffected native/loader/frontend suite rerun was necessary.",
+    "Prior unchanged-source evidence remains native1644/0/73 ignored, WASM72/0, loader32/0, protocol1/0, frontend128/0, rebuilt Worker82/0, native strict warning gate0; these were not rerun in this correction.",
+    "Rules328/archive105/ABI753/WS5 and HEADdb4e37ca remain unchanged. No main/shared-doc/state/version/timeout edits."
+  ],
+  "residualRisks": [
+    "Native Referee still lacks the older promised full-info hands, hidden living identities, deck/private skill pile cards and choice details; only its newly-regressed primary-general definition is restored here.",
+    "No public Referee grant/authentication workflow was added; existing authority comes from trusted server membership and its reconnect credential.",
+    "Timeout remains unimplemented and rules330 remains unauthorized. Independent re-review, parent F7/PA09 integration, browser/product and physical-platform acceptance remain outstanding."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Eight-file review-correction delta; total projection patch has18 files against db4e37ca. Role-aware Referee general definition, corrected tests and real generated-WASM32 archive parity tooling.",
+  "reviewFindings": [
+    "P1 corrected: Referee general22 preserved while ordinary Player/Spectator receive0 for unrevealed opponent general.",
+    "Actual same-archive WASM32 acceptance gap closed for the requested ordinary-seat contract; full native Referee information policy remains an explicitly older limitation."
+  ],
+  "manualNotes": "Prior reports/logs retained. Temporary local pi-lens config and node_modules link removed. No new formatter/autofix mutation observed; no commits/ref/staging/main writes. Native/WASM helper and PA09 extraction seams unchanged from prior projection delta."
+}
+```
+
+Skipped: unaffected suite reruns and full native Referee implementation. Risk: the P1 general regression is fixed, but older full-info omissions and timeout remain open.

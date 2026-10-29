@@ -39,7 +39,11 @@ impl Engine {
                         continue; // 国战暗置槽：他人不可见
                     }
                     if let Some((name, faction, _, _, _)) = self.catalog.general_meta(*g) {
-                        generals[s] = Some(crate::view::GeneralView { name, faction });
+                        generals[s] = Some(crate::view::GeneralView {
+                            def: *g,
+                            name,
+                            faction,
+                        });
                     }
                 }
                 crate::view::PlayerCellView {

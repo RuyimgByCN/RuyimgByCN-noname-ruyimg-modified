@@ -1,0 +1,19 @@
+ M Cargo.lock
+ M apps/game-server/Cargo.toml
+ M apps/game-server/src/native_view.rs
+ M apps/game-server/src/native_ws_e2e.rs
+ M apps/game-server/tests/nc09_native_room_session.rs
+ M apps/web-client/scripts/native-adapter.test.mjs
+ M apps/web-client/scripts/native-worker-smoke.mjs
+ M apps/web-client/src/worker/nativeBackend.ts
+ M crates/engine-native-wasm/src/lib.rs
+ M crates/engine-native-wasm/tests/nc03_view_projection.rs
+ M crates/engine-native/src/engine/views.rs
+ M crates/engine-native/src/view.rs
+ M crates/engine-native/tests/t13_info_isolation.rs
+?? .pi-lens-probe-home/
+?? apps/game-server/examples/emit_projection_fixture.rs
+?? apps/game-server/src/native_ws_e2e/authority.rs
+?? apps/game-server/tests/nc09_projection_parity.rs
+?? apps/game-server/tests/support/
+?? apps/web-client/scripts/native-server-projection-parity.mjs

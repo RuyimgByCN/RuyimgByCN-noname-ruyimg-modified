@@ -1,0 +1,146 @@
+{
+  "head": "2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6",
+  "started_at": "2026-10-30T02:01:30.304736+08:00",
+  "source_sha256": {
+    "Cargo.lock": "4b383c72e37eba05bf82cfa12b7e7d79a127cb748c29bd465a19db726b9b1dbf",
+    "apps/game-server/Cargo.toml": "83a4d408b192810fbb509432f1b01a59d1ce616eb983fd74a896d8e1d97bcd62",
+    "apps/game-server/src/native_view.rs": "70218a67407b255653fdb83fcc1dc840a204b7b395a305841f992845feeafe82",
+    "apps/game-server/src/native_ws_e2e.rs": "631304007c740de47c4c6c8418f98605f48a4b4f278f4de416eef9f0f2ae6b9c",
+    "apps/game-server/tests/nc09_native_room_session.rs": "2525fbe990d0bf187897e8aafeb99f1dca79b3a8ad3adf64397ab1d242d1f131",
+    "apps/web-client/scripts/native-adapter.test.mjs": "67ce8854fd24665437855aa9debe9929c8cc203d45227daa3f17a2885c64d10e",
+    "apps/web-client/scripts/native-worker-smoke.mjs": "3e618d89fc9e121fbdcd16ae0286db187813eb13adefcb7ba4172cdb7eae6fa6",
+    "apps/web-client/src/worker/nativeBackend.ts": "2e204ecdc3f47e5283d60744869d14b4c88127254854ed74adfa02cd566c74ed",
+    "crates/engine-native-wasm/src/lib.rs": "ed51bf4e4a9f58b15a1c60c24b9f36949411ad9f8ce3f361142ac9313f2caac1",
+    "crates/engine-native-wasm/tests/nc03_view_projection.rs": "ed0e5d149a64a7fd0429c1e64f0b1a481ac5e90a4576d9859f484e961fa3fb0f",
+    "crates/engine-native/src/engine/views.rs": "f513851f4b20fc7d2d8f1637005ab5ae2bc72b4ae57e0e7a1e43fef977791ab4",
+    "crates/engine-native/src/view.rs": "63c11bc12307cb19b47c4beb001603cebc5b4464be2033e68071a32f8082bded",
+    "crates/engine-native/tests/t13_info_isolation.rs": "9203265700ae99d71fa7f162b176dfd07a1aad4287faa8deae44d6e859dbc7a8"
+  },
+  "commands": [
+    {
+      "name": "native-server-wasm-full",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--no-fail-fast",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "game-server"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 0,
+      "elapsed_including_lock_wait": 142.156,
+      "completed_at": "2026-10-30T02:03:52.460763+08:00"
+    },
+    {
+      "name": "projection-fixtures",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "game-server",
+        "--example",
+        "emit_projection_fixture",
+        "--",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc09-projection/integrated-wasm32-fixtures.json"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 0,
+      "elapsed_including_lock_wait": 25.041,
+      "completed_at": "2026-10-30T02:04:17.501867+08:00"
+    },
+    {
+      "name": "fresh-wasm",
+      "argv": [
+        "pnpm",
+        "build:native"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "elapsed_including_lock_wait": 17.651,
+      "completed_at": "2026-10-30T02:04:35.152814+08:00"
+    },
+    {
+      "name": "frontend-tests",
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "elapsed_including_lock_wait": 2.651,
+      "completed_at": "2026-10-30T02:04:37.804816+08:00"
+    },
+    {
+      "name": "frontend-typecheck",
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "elapsed_including_lock_wait": 1.458,
+      "completed_at": "2026-10-30T02:04:39.263110+08:00"
+    },
+    {
+      "name": "worker-smoke",
+      "argv": [
+        "pnpm",
+        "smoke:native"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "elapsed_including_lock_wait": 0.511,
+      "completed_at": "2026-10-30T02:04:39.774549+08:00"
+    },
+    {
+      "name": "wasm32-same-archive",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/ts-register.mjs",
+        "scripts/native-server-projection-parity.mjs",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc09-projection/integrated-wasm32-fixtures.json"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "elapsed_including_lock_wait": 0.26,
+      "completed_at": "2026-10-30T02:04:40.035175+08:00"
+    },
+    {
+      "name": "native-wasm-trajectories",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 0,
+      "elapsed_including_lock_wait": 8.802,
+      "completed_at": "2026-10-30T02:04:48.837165+08:00"
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 0,
+      "elapsed_including_lock_wait": 382.88,
+      "completed_at": "2026-10-30T02:11:11.718401+08:00"
+    }
+  ],
+  "source_unchanged": true,
+  "completed_at": "2026-10-30T02:11:11.719962+08:00"
+}

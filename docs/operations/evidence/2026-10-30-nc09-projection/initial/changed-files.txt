@@ -1,0 +1,13 @@
+Cargo.lock
+apps/game-server/Cargo.toml
+apps/game-server/src/native_view.rs
+apps/game-server/src/native_ws_e2e.rs
+apps/web-client/scripts/native-adapter.test.mjs
+apps/web-client/scripts/native-worker-smoke.mjs
+apps/web-client/src/worker/nativeBackend.ts
+crates/engine-native-wasm/src/lib.rs
+crates/engine-native-wasm/tests/nc03_view_projection.rs
+crates/engine-native/src/engine/views.rs
+crates/engine-native/src/view.rs
+crates/engine-native/tests/t13_info_isolation.rs
+apps/game-server/tests/nc09_projection_parity.rs

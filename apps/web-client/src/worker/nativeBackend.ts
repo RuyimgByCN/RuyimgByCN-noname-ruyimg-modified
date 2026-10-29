@@ -174,6 +174,7 @@ interface NativeView {
   seat: number;
   players: Array<{
     seat: number;
+    characterDef?: number;
     alive: boolean;
     hp: number;
     maxHp: number;
@@ -255,7 +256,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
     phase: PHASE_MAP[view.phase] ?? "Idle",
     seats: view.players.map((p) => ({
       player: p.seat,
-      character_def: 0,
+      character_def: p.characterDef ?? 0,
       seat: p.seat,
       hp: p.hp,
       max_hp: p.maxHp,

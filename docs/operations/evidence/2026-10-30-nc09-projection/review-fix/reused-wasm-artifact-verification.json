@@ -1,0 +1,7 @@
+{
+  "unchanged_native_and_wasm_delta_sources": true,
+  "artifact_sha256": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "b52cd15a839fcbeaf8964d54de4ca1de175bd40adde0ecdd184c8f0d7df3230a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "895c2a3ec48136c48be196741fecab428cfd9d00b9a7a2beafae8e8c394aa061"
+  }
+}
