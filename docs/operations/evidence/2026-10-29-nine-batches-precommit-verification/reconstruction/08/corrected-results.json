@@ -1,0 +1,26 @@
+[
+  {
+    "command": "cargo check --offline --workspace --all-targets",
+    "exit_code": 0,
+    "seconds": 10.793346881866455,
+    "log": "corrected-00.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 38.92673683166504,
+    "log": "corrected-01.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native-wasm -p content-native-loader -p game-server --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 117.06531596183777,
+    "log": "corrected-02.log"
+  },
+  {
+    "command": "python3 -B scripts/preflight.py",
+    "exit_code": 1,
+    "seconds": 406.16649413108826,
+    "log": "corrected-03.log"
+  }
+]

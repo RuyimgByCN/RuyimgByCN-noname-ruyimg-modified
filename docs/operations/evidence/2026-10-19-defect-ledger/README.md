@@ -3581,7 +3581,7 @@ HostBehavior::WudianZiyu => Some(TriggerMeta { event: EventKind::PhaseBegin, …
 
 | 文件 | 改动 |
 |---|---|
-| `content/host/metadata/common.rs` | `HostBehavior::WudianZiyu` 的 `TriggerMeta.event`：**`PhaseBegin` → `PhaseEnd`** |
+| `vocabulary/host/metadata/common.rs` | `HostBehavior::WudianZiyu` 的 `TriggerMeta.event`：**`PhaseBegin` → `PhaseEnd`** |
 | `content/host/filtering/common.rs` | 过滤臂：`Phase { End, begin: true }` → **`Phase { begin: false, .. }`** + 保留 `phase_number % 4 == 0` |
 | `docs/.../phase-audit/registry.txt` | 重新生成（该行相位从 `End/true` 变为 `-/false`）|
 
@@ -3945,7 +3945,7 @@ assert!(state 已移除, "一次性状态移除");
 
 台账原写：「上游 `player:['phaseBegin','dieBegin']`，原生只挂 `PhaseBegin` ⇒ 少死亡前幕」。
 
-实际代码（`metadata/common.rs:179-185`）：
+实际代码（`vocabulary/host/metadata/common.rs:179-185`）：
 
 ```rust
 HostBehavior::YxsMenshen3 => Some(TriggerMeta {

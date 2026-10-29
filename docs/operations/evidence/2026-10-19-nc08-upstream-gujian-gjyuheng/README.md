@@ -10,7 +10,7 @@
 
 - 规则基准 golden 表第 54 行：「**玉衡**（**主动型装备技**——**确定性取其他角色首张黑桃**；
   **登记差异：升级机制+随机敌暂缓**）」；
-- 原生常量 `content/host/constants.rs:138`（`GJ_YUHENG_SKILL_KEY = "gj_yuheng_skill"`）。
+- 原生常量 `vocabulary/host/constants.rs:132`（`GJ_YUHENG_SKILL_KEY = "gj_yuheng_skill"`）。
 
 ## 2 验收结果（`nc08_upstream_gujian_gjyuheng.rs`）
 

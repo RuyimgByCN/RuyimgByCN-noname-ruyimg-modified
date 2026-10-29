@@ -178,7 +178,7 @@ impl ShaResolveMachine {
         }
         let kongcheng = ctx
             .catalog
-            .skill_by_name(crate::content::standard::KONG_CHENG)
+            .skill_by_name(crate::vocabulary::names::KONG_CHENG)
             .map(|d| ctx.core.has_skill(p, d))
             .unwrap_or(false);
         if kongcheng && ctx.core.player(p).hand.is_empty() {
@@ -278,7 +278,7 @@ impl ShaResolveMachine {
     /// 来源是否持有无双（需要连续两张闪）。
     fn source_has_wushuang(&self, ctx: &Ctx<'_>) -> bool {
         ctx.catalog
-            .skill_by_name(crate::content::standard::WU_SHUANG)
+            .skill_by_name(crate::vocabulary::names::WU_SHUANG)
             .map(|d| ctx.core.has_skill(self.source, d))
             .unwrap_or(false)
     }
@@ -296,7 +296,7 @@ impl ShaResolveMachine {
     fn hujia_active(&self, ctx: &Ctx<'_>) -> bool {
         let hujia = ctx
             .catalog
-            .skill_by_name(crate::content::standard::HU_JIA)
+            .skill_by_name(crate::vocabulary::names::HU_JIA)
             .map(|d| ctx.core.has_skill(self.target, d))
             .unwrap_or(false);
         hujia && ctx.core.is_lord(self.target)
@@ -323,7 +323,7 @@ impl ShaResolveMachine {
     /// 杀无视距离/防具、无次数限制、不可闪避。
     fn baolei_sentinel(&self, ctx: &Ctx<'_>) -> bool {
         ctx.catalog
-            .skill_by_name(crate::content::host::WUDIAN_BAOLEI_KEY)
+            .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
             .map(|def| {
                 ctx.core.has_skill(self.source, def)
                     && ctx.core.player(self.source).baolei_mode == 1

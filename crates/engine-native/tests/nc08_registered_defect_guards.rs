@@ -26,7 +26,12 @@ fn host_dir() -> PathBuf {
 }
 
 fn read(rel: &str) -> String {
-    let path = host_dir().join(rel);
+    let root = if rel.starts_with("metadata") {
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("src/vocabulary/host")
+    } else {
+        host_dir()
+    };
+    let path = root.join(rel);
     std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("读 {} 失败: {e}", path.display()))
 }
 
@@ -329,7 +334,7 @@ capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」�
 fn guard_yxs_menshen3_extra_phase() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/metadata.rs"
+        "/src/vocabulary/host/metadata.rs"
     ))
     .expect("读 metadata.rs");
     let idx = src.find("HostBehavior::YxsMenshen3 =>").expect("YxsMenshen3 无 arm");
@@ -364,7 +369,7 @@ macro_rules! meta_event_guard {
         #[ignore = "把 TriggerMeta 事件改对后本守卫转绿"]
         fn $fn_name() {
             use std::path::Path;
-            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/content/host");
+            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/vocabulary/host");
             let mut all = String::new();
             let mut stack = vec![dir];
             while let Some(next) = stack.pop() {

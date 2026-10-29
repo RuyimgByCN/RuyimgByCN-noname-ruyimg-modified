@@ -1,0 +1,20 @@
+[
+  {
+    "command": "pnpm --dir apps/web-client test",
+    "exit_code": 0,
+    "seconds": 0.8520083427429199,
+    "log": "frontend-rerun-00.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client typecheck",
+    "exit_code": 0,
+    "seconds": 1.196962833404541,
+    "log": "frontend-rerun-01.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client smoke:native",
+    "exit_code": 0,
+    "seconds": 0.45069193840026855,
+    "log": "frontend-rerun-02.log"
+  }
+]

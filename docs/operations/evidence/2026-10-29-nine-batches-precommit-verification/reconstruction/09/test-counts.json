@@ -1,0 +1,18 @@
+[
+  {
+    "log": "final-01.log",
+    "passed_failed_ignored": [
+      6726,
+      2,
+      74
+    ]
+  },
+  {
+    "log": "wasm-02.log",
+    "passed_failed_ignored": [
+      2,
+      0,
+      0
+    ]
+  }
+]

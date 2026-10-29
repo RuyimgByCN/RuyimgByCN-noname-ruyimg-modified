@@ -34,7 +34,7 @@ fn prepare_phase_triggers_are_folded_into_judge_begin() {
     // 行为键名稳定（防止重命名导致映射失效）：以源码引用固定
     let keys = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/keys.rs"
+        "/src/vocabulary/host/keys.rs"
     ))
     .expect("读键表源码");
     assert!(

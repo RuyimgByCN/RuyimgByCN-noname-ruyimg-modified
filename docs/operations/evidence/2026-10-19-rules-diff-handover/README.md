@@ -149,7 +149,7 @@
 **三条挂载路径**（缺一不可）：
 1. **包数据 JSON**（`skills[].mapping` / `generals[].skills[].mapping`）—— **370**；
 2. **`content/host.rs` 的 `CardKind → HostSkillDecl` 表** —— **56**（**漏查这条会把 150 误报，已更正到 94**）；
-3. **运行时授予** —— **必经 `catalog.skill_by_name`** ⇒ **不进目录就授不了**（`support.rs:1020`）。
+3. **运行时授予** —— **必经 `catalog.skill_by_name`** ⇒ **不进目录就授不了**（`support.rs:976`）。
 
 **94 条的处置分类**：
 
@@ -431,10 +431,10 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 
 | 行为 | 出现位置（节选）|
 |---|---|
-| `Bingfeng2` | `filtering/common.rs:365` **有逻辑**、`metadata/common.rs:389` **有 trigger meta**、`step/skills_status.rs:558` **有效果步**、`tags.rs:257` **有 tag** |
-| `Cyqiaoxie` | `filtering/common.rs:372`、`metadata/common.rs:399`、`content/host/step/skills_virtual_use.rs:434`、`tags.rs:255` |
-| `Gongxin` | `step/skills_cards.rs:224`、`activation/common.rs:69`、`tags.rs:278` |
-| `Niepan` | `step/skills_status.rs:231`、`activation/common.rs:238`、`tags.rs:236` |
+| `Bingfeng2` | `filtering/common.rs:365` **有逻辑**、`vocabulary/host/metadata/common.rs:389` **有 trigger meta**、`step/skills_status.rs:558` **有效果步**、`vocabulary/host/tags.rs:257` **有 tag** |
+| `Cyqiaoxie` | `filtering/common.rs:372`、`vocabulary/host/metadata/common.rs:399`、`content/host/step/skills_virtual_use.rs:434`、`vocabulary/host/tags.rs:255` |
+| `Gongxin` | `step/skills_cards.rs:224`、`activation/common.rs:69`、`vocabulary/host/tags.rs:278` |
+| `Niepan` | `step/skills_status.rs:231`、`activation/common.rs:238`、`vocabulary/host/tags.rs:236` |
 
 ⇒ **`(None, None)` 只表示「没有 `activatable` 与 `factory` 层面的 step」** ✅
 ⇒ **实际效果走 `step.rs` 的分发 + `step/skills_*.rs`** ✅ ⇒ **与「未实现」无关** ❌
@@ -466,13 +466,13 @@ EventData::Phase { player, begin: true, .. } if …   // `..` 省略 phase ⇒ �
 
 | 位置 | 内容 |
 |---|---|
-| `keys.rs:531/825` | 键注册 |
+| `vocabulary/host/keys.rs:290`、`vocabulary/host/behavior_list.rs:517` | 键注册 |
 | `factory.rs:317` | `(None, None)` |
 | `filtering.rs:116` / `filtering/common.rs:212` | **`=> false`** |
 | **`activation.rs:44` / `activation/common.rs:50`** | **主动面：`activate_common`** ✅ |
 | **`step.rs:591` / `step/skills_cards.rs:416`** | **效果步：`step_skills_cards`** ✅ |
-| **`tags.rs:279/1056`** | **tag 515（双向）** ✅ |
-| `metadata.rs:126` / `metadata/common.rs:261` | meta |
+| **`vocabulary/host/tags.rs:279`、`vocabulary/host/tag_decode.rs:515`** | **tag 515（双向）** ✅ |
+| `vocabulary/host/metadata.rs:126` / `vocabulary/host/metadata/common.rs:261` | meta |
 
 ⇒ **它有主动面、有效果步、有 tag** ⇒ **已实现** ✅
 

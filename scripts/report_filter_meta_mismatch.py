@@ -31,7 +31,7 @@ META_RE = re.compile(
 ARM_RE = re.compile(r"HostBehavior::(\w+)\s*=>")
 
 
-def meta_events(base: Path = HOST) -> dict[str, str]:
+def meta_events(base: Path = HOST.parents[1] / "vocabulary/host") -> dict[str, str]:
     """HostBehavior → 声明的 EventKind（取第一处声明）。"""
     out: dict[str, str] = {}
     for path in sorted(base.glob("metadata/*.rs")):

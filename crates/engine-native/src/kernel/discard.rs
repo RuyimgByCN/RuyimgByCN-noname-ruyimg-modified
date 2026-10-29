@@ -38,7 +38,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
             // 上限即不会被要求弃）
             let honglianx = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+                .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
                 .map(|def| ctx.core.has_skill(self.player, def))
                 .unwrap_or(false);
             let options: Vec<ChoiceOption> = ctx
@@ -57,7 +57,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                         return false;
                     }
                     !shamolvzhou
-                        || crate::content::host::yangpijuan_class(ctx.catalog.card_kind(*c))
+                        || crate::vocabulary::card_skills::yangpijuan_class(ctx.catalog.card_kind(*c))
                             != Some(0)
                 })
                 .map(ChoiceOption::Card)
@@ -96,7 +96,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
             if ctx.core.turn.phase == crate::event::Phase::Discard {
                 if let Some(sydef) = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::BOSS_SHIYOU)
+                    .skill_by_name(crate::vocabulary::names::BOSS_SHIYOU)
                 {
                     let seats = ctx.core.players.len() as PlayerId;
                     let holders: Vec<PlayerId> = (0..seats)

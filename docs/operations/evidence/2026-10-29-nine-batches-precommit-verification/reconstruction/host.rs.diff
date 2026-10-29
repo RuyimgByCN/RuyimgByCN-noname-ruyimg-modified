@@ -1,0 +1,21 @@
+--- 
++++ 
+@@ -14,5 +14,12 @@
+ 
+ mod activation;
++mod asks;
++mod asks_mtg;
++mod asks_wudian;
++mod intrinsic;
++pub(crate) use asks::active_ask_host;
++pub(crate) use intrinsic::card_intrinsic;
+ mod behavior;
++mod behavior_list;
+ mod boss;
+ mod constants;
+@@ -23,4 +30,5 @@
+ mod step;
+ mod support;
++mod tag_decode;
+ mod tags;
+ 

@@ -89,7 +89,7 @@ fn native_matches_its_documented_upstream_semantics() {
     );
     let beh = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/behavior.rs"
+        "/src/vocabulary/host/behavior.rs"
     ))
     .expect("读 behavior");
     let idx = beh.find("潜龙·道心值（tag 469").expect("潜龙注释");

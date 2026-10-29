@@ -1,0 +1,14 @@
+[
+  {
+    "command": "python3 -B scripts/check_local_links.py",
+    "exit_code": 0,
+    "seconds": 0.09665489196777344,
+    "log": "links-corrected-00.log"
+  },
+  {
+    "command": "python3 -B scripts/check_local_links.py --all",
+    "exit_code": 0,
+    "seconds": 0.4392879009246826,
+    "log": "links-corrected-01.log"
+  }
+]

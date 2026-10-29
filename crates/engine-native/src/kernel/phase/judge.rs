@@ -26,7 +26,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 3-0 名确定性近似）
         if let Some(hdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+            .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
         {
             if ctx.core.has_skill(player, hdef) {
                 let mut gained = 0usize;
@@ -81,7 +81,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 登记先例族）
         if let Some(jhdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_JUEHONG)
+            .skill_by_name(crate::vocabulary::names::BOSS_JUEHONG)
         {
             if ctx.core.has_skill(player, jhdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -117,7 +117,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         //（撤技能+入弃堆）
         if let Some(jzdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_JIAZU)
+            .skill_by_name(crate::vocabulary::names::BOSS_JIAZU)
         {
             if ctx.core.has_skill(player, jzdef) {
                 for t in [ctx.core.ring_prev(player), ctx.core.ring_next(player)] {
@@ -154,7 +154,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // hp phaseZhunbeiBegin loseHp(min) 同口径）
         if let Some(zhdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZAOYI_HP)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZAOYI_HP)
         {
             if ctx.core.has_skill(player, zhdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -185,7 +185,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 互斥轮转登记）
         if let Some(nbdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_NBIANSHEN)
+            .skill_by_name(crate::vocabulary::names::BOSS_NBIANSHEN)
         {
             if ctx.core.has_skill(player, nbdef) {
                 let armed = ctx.core.player(player).nbianshen_toggle;
@@ -194,7 +194,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
                     // 次 phaseBefore 均换同口径）
                     // 轮换：找另一携带「形态轮换」的 BOSS 段将
                     let base = (ctx.catalog.general_count()
-                        - crate::content::standard::BOSS_GENERALS.len())
+                        - crate::vocabulary::generals::BOSS_GENERALS.len())
                         as u16;
                     let cur = ctx.core.player(player).general_slots[0];
                     let other = (base..ctx.catalog.general_count() as u16).find(|&d| {
@@ -202,7 +202,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
                             && ctx
                                 .catalog
                                 .general_meta(d)
-                                .map(|m| m.2.contains(&crate::content::standard::BOSS_NBIANSHEN))
+                                .map(|m| m.2.contains(&crate::vocabulary::names::BOSS_NBIANSHEN))
                                 .unwrap_or(false)
                     });
                     if let (Some(other), Some(cur)) = (other, cur) {
@@ -219,7 +219,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
                             ctx.core.skills.remove(&(player, d));
                         }
                         ctx.core.player_mut(player).general_slots[0] = Some(other);
-                        crate::engine::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
+                        crate::state::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
                         // hp/手牌/装备/判定区保留（上游 init 保
                         // 留 hp/maxHp/hujia 同口径）
                         ctx.log(LogEvent::SkillToggled {
@@ -237,7 +237,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // boss_zirun phaseZhunbeiBegin asyncDraw 同口径）
         if let Some(zrdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZIRUN)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZIRUN)
         {
             if ctx.core.has_skill(player, zrdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -257,7 +257,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 魔道（Boss 夜叉，规则 v253）：准备阶段摸 2 张牌
         if let Some(mddef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_MODAO)
+            .skill_by_name(crate::vocabulary::names::BOSS_MODAO)
         {
             if ctx.core.has_skill(player, mddef) {
                 ctx.draw_cards(player, 2);
@@ -269,7 +269,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // randomGet→座位序首个确定性近似登记；无事件面直写）
         if let Some(lhdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_LUNHUI)
+            .skill_by_name(crate::vocabulary::names::BOSS_LUNHUI)
         {
             if ctx.core.has_skill(player, lhdef) && ctx.core.player(player).hp <= 2 {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -299,7 +299,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 摸牌/出牌阶段开始时清位）
         if let Some(mtdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+            .skill_by_name(crate::vocabulary::names::BOSS_MENGTAI)
         {
             if ctx.core.has_skill(player, mtdef) {
                 ctx.core.turn.mengtai_draw_pending = true;
@@ -312,7 +312,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 确定性近似登记）
         if let Some(rzdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_RUIZHI)
+            .skill_by_name(crate::vocabulary::names::BOSS_RUIZHI)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -355,7 +355,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 己判定区一张牌（随机→首张确定性近似登记）
         if let Some(gjdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_GUIJI)
+            .skill_by_name(crate::vocabulary::names::BOSS_GUIJI)
         {
             if ctx.core.has_skill(player, gjdef) {
                 if let Some(c) = ctx.core.player(player).judge.first().copied() {
@@ -370,7 +370,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 近似登记；鬼计同款臂）
         if let Some(gzdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_GONGZHENG)
+            .skill_by_name(crate::vocabulary::names::BOSS_GONGZHENG)
         {
             if ctx.core.has_skill(player, gzdef) {
                 if let Some(c) = ctx.core.player(player).judge.first().copied() {
@@ -384,7 +384,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         //（目标自选→首个已链接确定性近似登记）
         if let Some(xxdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_XIXING)
+            .skill_by_name(crate::vocabulary::names::BOSS_XIXING)
         {
             if ctx.core.has_skill(player, xxdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -410,7 +410,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 近似登记；吸行同位）
         if let Some(lzdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_LEIZHOU)
+            .skill_by_name(crate::vocabulary::names::BOSS_LEIZHOU)
         {
             if ctx.core.has_skill(player, lzdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -432,7 +432,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 记差异）
         if let Some(kjdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_KUJIU)
+            .skill_by_name(crate::vocabulary::names::BOSS_KUJIU)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -454,7 +454,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // target.damage(1, player, "fire")；炼狱同款臂内循环）
         if let Some(bfdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_BUFO)
+            .skill_by_name(crate::vocabulary::names::BOSS_BUFO)
         {
             if ctx.core.has_skill(player, bfdef) {
                 let seats = ctx.core.players.len() as PlayerId;
@@ -479,7 +479,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 径；ctx.recover 落 hp——v234 坑位）
         if let Some(wldef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_WULIANG)
+            .skill_by_name(crate::vocabulary::names::BOSS_WULIANG)
         {
             if ctx.core.has_skill(player, wldef)
                 && ctx.core.player(player).alive
@@ -498,7 +498,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 源→座位序首个+首张确定性近似登记）
         if let Some(zfdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZHIFEN)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZHIFEN)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -541,7 +541,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 口径；不分阵营；索链甲/星囚 linked 直写同款）
         if let Some(szdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_SUOZU)
+            .skill_by_name(crate::vocabulary::names::BOSS_SUOZU)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -574,7 +574,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 位+回合结束全清）
         if let Some(wsdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_WANGSHI)
+            .skill_by_name(crate::vocabulary::names::BOSS_WANGSHI)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -596,7 +596,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 同口径）
         if let Some(fddef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_FENGDONG)
+            .skill_by_name(crate::vocabulary::names::BOSS_FENGDONG)
         {
             if ctx.core.has_skill(player, fddef) {
                 for t in ctx.core.seat_order_from(player) {
@@ -612,7 +612,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 备牌自动使用（直接装上，v180 双刃系 grant 先例）
         if let Some(xdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_XUNYOU)
+            .skill_by_name(crate::vocabulary::names::BOSS_XUNYOU)
         {
             // global phaseBegin：任意 enabled 持有者（≠当前回
             // 合玩家）在场即触发（炎狱 holders 先例同构）
@@ -674,7 +674,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 计数器，回合更替清零；上游 getIndex 3 同口径）
         if let Some(ydef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_YANYU)
+            .skill_by_name(crate::vocabulary::names::BOSS_YANYU)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -712,7 +712,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 判定=铁骑内联先例）
         if let Some(zd) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZHONGDU)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU)
         {
             if ctx.core.has_skill(player, zd) {
                 let judged = ctx.draw_judge_card();

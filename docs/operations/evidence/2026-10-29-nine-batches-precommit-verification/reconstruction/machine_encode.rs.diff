@@ -1,0 +1,24 @@
+--- 
++++ 
+@@ -251,4 +251,6 @@
+             consume,
+             count_hits,
++            commit_pending,
++            commit_pick,
+         } => {
+             w.u8(82);
+@@ -281,4 +283,14 @@
+             }
+             w.boolean(*count_hits);
++            // J1（规则 v328）：提交期挂起（尾部追加——旧格式档在此读完即止）。
++            w.bytes(commit_pending);
++            match commit_pick {
++                None => w.u8(0),
++                Some((player, count)) => {
++                    w.u8(1);
++                    w.u8(*player);
++                    w.u32(*count);
++                }
++            }
+         }
+         MachineSnapshot::Shedu { owner } => {

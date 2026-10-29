@@ -1,0 +1,23 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo check --offline -p engine-native --all-targets
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target
+RUSTFLAGS=-D warnings
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-native)
+error: unexpected closing delimiter: `}`
+   --> crates/engine-native/src/engine/hash.rs:959:1
+    |
+ 94 | pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
+    |                                                             - this delimiter might not be properly closed...
+...
+675 |     }
+    |     - ...as it matches this but it has different indentation
+...
+959 | }
+    | ^ unexpected closing delimiter
+
+error: could not compile `engine-native` (lib) due to 1 previous error
+
+EXIT_CODE: 101

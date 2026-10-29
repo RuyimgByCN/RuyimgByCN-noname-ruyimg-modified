@@ -1,0 +1,87 @@
+[
+  {
+    "name": "core-and-desktop",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "-p",
+      "desktop-client",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-29T20:46:32.389808+08:00",
+    "exit_code": 101,
+    "elapsed_seconds": 75.309,
+    "finished_at": "2026-10-29T20:47:47.699045+08:00"
+  },
+  {
+    "name": "workspace-after-fixes",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-29T20:47:47.699399+08:00",
+    "exit_code": 101,
+    "elapsed_seconds": 7.79,
+    "finished_at": "2026-10-29T20:47:55.489339+08:00"
+  },
+  {
+    "name": "conformance-after-fix",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-29T20:47:55.489740+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 6.734,
+    "finished_at": "2026-10-29T20:48:02.223899+08:00"
+  },
+  {
+    "name": "build-native-current",
+    "command": [
+      "pnpm",
+      "build:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-29T20:48:02.224304+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 46.627,
+    "finished_at": "2026-10-29T20:48:48.851327+08:00"
+  },
+  {
+    "name": "worker-smoke-current",
+    "command": [
+      "pnpm",
+      "smoke:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "started_at": "2026-10-29T20:48:48.851729+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.47,
+    "finished_at": "2026-10-29T20:48:49.321490+08:00"
+  },
+  {
+    "name": "native-wasm-cross-target",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-29T20:48:49.321910+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 2.032,
+    "finished_at": "2026-10-29T20:48:51.354409+08:00"
+  }
+]

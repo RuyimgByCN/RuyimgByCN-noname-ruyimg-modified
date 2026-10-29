@@ -1,0 +1,32 @@
+[
+  {
+    "command": "cargo check --offline --workspace --all-targets",
+    "exit_code": 101,
+    "seconds": 1.1947710514068604,
+    "log": "early-00.log"
+  },
+  {
+    "command": "cargo test --offline -p content-compiler --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 0.3704109191894531,
+    "log": "early-01.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native --no-fail-fast",
+    "exit_code": 101,
+    "seconds": 0.419248104095459,
+    "log": "early-02.log"
+  },
+  {
+    "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+    "exit_code": 0,
+    "seconds": 0.05084633827209473,
+    "log": "early-03.log"
+  },
+  {
+    "command": "python3 -B scripts/check-source-lines.py",
+    "exit_code": 1,
+    "seconds": 0.6874439716339111,
+    "log": "early-04.log"
+  }
+]

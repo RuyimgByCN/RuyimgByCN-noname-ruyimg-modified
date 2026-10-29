@@ -1,0 +1,24 @@
+...F
+======================================================================
+FAIL: test_raw_identifiers_cannot_hide_upward_paths (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_native_layering.py", line 83, in test_raw_identifiers_cannot_hide_upward_paths
+    self.assertEqual([line for _, line in refs], [1, 2, 2, 3, 4, 5, 6, 7])
+AssertionError: Lists differ: [6, 7] != [1, 2, 2, 3, 4, 5, 6, 7]
+
+First differing element 0:
+6
+1
+
+Second list contains 6 additional elements.
+First extra element 2:
+2
+
+- [6, 7]
++ [1, 2, 2, 3, 4, 5, 6, 7]
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.045s
+
+FAILED (failures=1)

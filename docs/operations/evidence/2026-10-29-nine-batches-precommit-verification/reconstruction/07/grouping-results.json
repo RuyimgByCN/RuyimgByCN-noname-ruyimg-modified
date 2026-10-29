@@ -1,0 +1,26 @@
+[
+  {
+    "command": "cargo test --offline -p engine-native -p engine-core --test test_registry",
+    "exit_code": 0,
+    "seconds": 49.87695598602295,
+    "log": "grouping-00.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-core --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 101.52975296974182,
+    "log": "grouping-01.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native --tests -- --list",
+    "exit_code": 0,
+    "seconds": 0.12566208839416504,
+    "log": "grouping-02.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-core --tests -- --list",
+    "exit_code": 0,
+    "seconds": 0.1859278678894043,
+    "log": "grouping-03.log"
+  }
+]

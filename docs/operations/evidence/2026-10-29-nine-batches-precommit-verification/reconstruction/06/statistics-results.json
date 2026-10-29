@@ -1,0 +1,8 @@
+[
+  {
+    "command": "python3 -B ../reconstruction-logs/scan_statistics.py",
+    "exit_code": 0,
+    "seconds": 10.981287956237793,
+    "log": "statistics-00.log"
+  }
+]

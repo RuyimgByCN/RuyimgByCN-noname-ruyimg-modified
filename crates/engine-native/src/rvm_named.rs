@@ -4,7 +4,7 @@
 //! 整段无法归入 `owner*` 域的名称返回 None，装载器继续跳过。
 
 use crate::catalog::{CardKind, Faction, QueryCtx, Suit};
-use crate::content::standard::Gender;
+use crate::vocabulary::generals::Gender;
 use crate::event::{DamageNature, Phase};
 use crate::ids::PlayerId;
 use crate::state::Role;

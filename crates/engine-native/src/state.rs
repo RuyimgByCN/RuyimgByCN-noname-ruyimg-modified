@@ -867,3 +867,6 @@ pub struct GameState {
     pub core: GameStateCore,
     pub resolution: crate::resolution::Resolution,
 }
+
+mod general_assembly;
+pub(crate) use general_assembly::apply_general_assembly;

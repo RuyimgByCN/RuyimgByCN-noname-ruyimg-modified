@@ -37,7 +37,7 @@ chunbing: {
 
 **原生实现引用**：`kernel/intrinsic.rs:244`（食物牌 → `GujianFoodGrant`）、
 `content/host/step/gujian.rs:197`（授予监听技实例 + 弃置本体）、
-`content/host/constants.rs:12`（`GJ_FOOD_ROUNDS_CHUNBING = 5`）。
+`vocabulary/host/constants.rs:12`（`GJ_FOOD_ROUNDS_CHUNBING = 5`）。
 
 ## 3 工程发现（写入证据）
 

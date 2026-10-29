@@ -101,7 +101,30 @@ fn synthetic_catalog_membership_and_first_match_name() {
         mk("dup", EventKind::Recover, vec![]),
         mk("plain", EventKind::PhaseEnd, vec![]),
     ];
-    let catalog = Catalog::build(Vec::new(), skills);
+    let mut catalog = Catalog::build(Vec::new(), skills);
+    // F7: a raw catalog keeps its default metadata, without content hooks.
+    use engine_native::content::standard::{Gender, BOSS_GENERALS, STANDARD_GENERALS};
+    assert_eq!(catalog.general_count(), STANDARD_GENERALS.len() + BOSS_GENERALS.len());
+    for (i, &(name, faction, skills, hp, gender)) in
+        STANDARD_GENERALS.iter().chain(BOSS_GENERALS).enumerate()
+    {
+        assert_eq!(catalog.general_meta(i as u16), Some((name, faction, skills.to_vec(), hp, gender)));
+    }
+    assert_eq!(catalog.general_meta(catalog.general_count() as u16), None);
+    catalog.extension_generals.push(engine_native::content::extension::ExtensionGeneral {
+        name: "F7 metadata probe",
+        faction: engine_native::catalog::Faction::Qun,
+        skills: &["dup"],
+        max_hp: 3,
+        gender: Gender::Female,
+    });
+    let ext = STANDARD_GENERALS.len() as u16;
+    assert_eq!(catalog.general_meta(ext).unwrap().0, "F7 metadata probe");
+    assert_eq!(catalog.general_meta(ext).unwrap().4, Gender::Female);
+    for (i, &(name, faction, skills, hp, gender)) in BOSS_GENERALS.iter().enumerate() {
+        assert_eq!(catalog.general_meta(ext + 1 + i as u16), Some((name, faction, skills.to_vec(), hp, gender)));
+    }
+    assert_eq!(catalog.general_meta(catalog.general_count() as u16), None);
     // dispatch ⟺ 元数据成员（含 extra_events 路径；主事件不互串）
     assert!(catalog.candidates(EventKind::Damage).contains(&0u16));
     assert!(catalog.candidates(EventKind::CardsDrawn).contains(&0u16));

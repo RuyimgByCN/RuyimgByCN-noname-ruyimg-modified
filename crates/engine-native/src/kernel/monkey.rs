@@ -41,7 +41,7 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
             while let Some(h) = self.holders.first().copied() {
                 let def = ctx
                     .catalog
-                    .skill_by_name(crate::content::host::HUANLE_MONKEY_KEY);
+                    .skill_by_name(crate::vocabulary::host::HUANLE_MONKEY_KEY);
                 let armed = def.is_some_and(|d| ctx.core.has_skill(h, d));
                 if !ctx.core.player(h).alive || !armed {
                     self.holders.remove(0);

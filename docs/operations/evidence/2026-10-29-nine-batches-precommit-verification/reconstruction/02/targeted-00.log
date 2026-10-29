@@ -1,0 +1,60 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo test --offline -p engine-native --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running tests/nc04_cards_given_event.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_cards_given_event-67ba8e5583519b23)
+
+running 7 tests
+test cards_given_dsl_package_bridges_to_native_event ... ok
+test probe_on_recipient_side_does_not_trigger ... ok
+test rende_give_triggers_cards_given_probe_for_recipient ... ok
+test giving_two_cards_at_once_triggers_cards_given_once ... ok
+test v325_and_earlier_archives_are_rejected_by_rule_version ... ok
+test optional_probe_confirms_and_restores_across_save ... ok
+test single_cards_given_frame_carries_all_cards ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc04_vm_resume.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_vm_resume-81e8a659b5dc4193)
+
+running 9 tests
+test b7_suspended_vm_v323_archive_is_rejected ... ok
+test b7_plain_v323_archive_is_rejected_by_rule_version ... ok
+test nc04_vm_restore_preserves_hit_counting ... ok
+test nc04_pause_resume_completes ... ok
+test nc04_vm_restore_preserves_once_consume ... ok
+test nc04_vm_restore_uses_declared_skill_for_storage ... ok
+test nc04_invalid_vm_answers_preserve_retry_across_archive ... ok
+test nc04_fault_after_resume_rolls_back ... ok
+test nc04_vm_fault_after_archive_restores_choice_and_allows_retry ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc07_lianyaohu_hash.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_lianyaohu_hash-15f3df844c52be09)
+
+running 2 tests
+test v324_and_earlier_archives_are_rejected_by_rule_version ... FAILED
+test different_jar_orders_have_different_hashes_and_trajectories ... ok
+
+failures:
+
+---- v324_and_earlier_archives_are_rejected_by_rule_version stdout ----
+
+thread 'v324_and_earlier_archives_are_rejected_by_rule_version' (4751096) panicked at crates/engine-native/tests/nc07_lianyaohu_hash.rs:135:9:
+assertion failed: matches!(Engine::restore(&snap),
+    Err(SnapshotError::RuleVersionMismatch { snapshot, catalog }) if snapshot
+    == version && catalog == 325)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    v324_and_earlier_archives_are_rejected_by_rule_version
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc07_lianyaohu_hash`
+
+EXIT_CODE: 101

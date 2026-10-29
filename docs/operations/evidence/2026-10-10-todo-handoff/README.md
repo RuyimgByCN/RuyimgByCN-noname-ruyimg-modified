@@ -47,7 +47,7 @@
 | host.rs | 字段赋值给自己 | `self.card = self.card; // 保持本体` | 删除 |
 | host.rs | 未用变量 `def` | `sync_land_skill` 首行查依夏兰重铸技，后文按映射逐个查，这一行没用上 | 删除 |
 | host.rs | 未用导入 `HostBehavior as B` | `card_kind_host_skills` 内的别名没用到 | 删除 |
-| engine.rs:230 | 未用变量 `chongzheng` | `debug_add_fellow` 只用 match 判断是否 Boss 模式 | 改用 `matches!` 判断 |
+| state/general_assembly.rs:17 | 未用变量 `chongzheng` | `debug_add_fellow` 只用 match 判断是否 Boss 模式 | 改用 `matches!` 判断 |
 | kernel.rs | 未用变量 `boss` | Boss 死亡座位的重整 tick 只用阈值 | 该绑定改为 `_` |
 | kernel.rs | 多余的 `mut` | KOF 终局分支里 `mut games` 未被修改 | 去掉 `mut` |
 | presentation.rs:185 | 未用变量 `count` | 重整 tick 映射为 `Recovered { amount: 0 }`，计数没用上 | 改为 `count: _` |

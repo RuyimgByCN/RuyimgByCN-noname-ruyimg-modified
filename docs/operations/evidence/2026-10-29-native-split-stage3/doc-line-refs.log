@@ -1,0 +1,26 @@
+
+找不到的文件（可能是文档里的示例路径）：
+  - content/host/keys.rs（3 处）
+  - crates/engine-native/src/content/host/metadata/common.rs（2 处）
+  - content/host/metadata/swd.rs（2 处）
+  - path.rs（2 处）
+  - content/host/behavior.rs（2 处）
+  - content/host/metadata/common.rs（1 处）
+  - .../gujian/skill.js（1 处）
+  - content/standard/names.rs（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+
+越界的引用：
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: content/host/support.rs:1112 超出所有候选的最大行数 1068
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: content/host.rs:308 超出所有候选的最大行数 305
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: support.rs:1106 超出所有候选的最大行数 1068
+  - docs/operations/evidence/2026-10-18-nc08-upstream-hearth/README.md: content/host/constants.rs:212 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-gjyuheng/README.md: content/host/constants.rs:138 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-mutoumianju/README.md: content/host/constants.rs:112 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-heilonglinpian/README.md: content/host/constants.rs:84 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-18-nc08-upstream-longxue/README.md: content/host/constants.rs:804 超出所有候选的最大行数 41
+  - docs/architecture/native-progress.md: support.rs:1106 超出所有候选的最大行数 1068
+  - docs/architecture/native-progress.md: content/host.rs:308 超出所有候选的最大行数 305
+  - docs/migration/upstream-extension-reconstruction.md: support.rs:1106 超出所有候选的最大行数 1068
+检查 1041 处 `file:line` 引用；文件不存在 13 种；越界 11 处

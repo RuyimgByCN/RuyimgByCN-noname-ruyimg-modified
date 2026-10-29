@@ -23,8 +23,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 
-#: `xxx.rs:123` / `xxx.py:12` / `xxx.ts:7` — with an optional line range.
-REF_RE = re.compile(r"([A-Za-z0-9_./-]+\.(?:rs|py|ts|tsx|js|json|toml|md)):(\d+)(?:-(\d+))?")
+#: `xxx.rs:123`, ranges with ASCII/Unicode dashes, or slash-separated lines.
+REF_RE = re.compile(r"([A-Za-z0-9_./-]+\.(?:rs|py|ts|tsx|js|json|toml|md)):(\d+)((?:[-–—/]\d+)*)")
 
 #: 少见的合法目标（不在 docs 的父目录树里）。
 SKIP_PREFIXES = ("http", "www.")
@@ -98,7 +98,7 @@ def main() -> int:
             if not options:
                 missing_files[candidate] += 1
                 continue
-            last = int(end) if end else start
+            last = max([start, *map(int, re.findall(r"\d+", end or ""))])
             # 同名文件可能有多个（仓库 + 上游快照）；取**行数足够**且最大的那个
             sizes: list[tuple[int, Path]] = []
             for option in options:

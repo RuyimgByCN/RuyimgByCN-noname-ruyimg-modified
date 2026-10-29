@@ -1,0 +1,8 @@
+[
+  {
+    "command": "env RUSTFLAGS=-D warnings CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target cargo check --offline -p engine-native --all-targets",
+    "exit_code": 0,
+    "seconds": 9.618957042694092,
+    "log": "gate-corrected-00.log"
+  }
+]

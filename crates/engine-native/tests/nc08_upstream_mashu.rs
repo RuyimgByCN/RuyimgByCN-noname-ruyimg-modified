@@ -74,7 +74,7 @@ fn upstream_feiying_difference_is_registered() {
     // 原生：标准技能名表中**没有**飞影常量（对照 names.rs 的实现索引）
     let names = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/standard/names.rs"
+        "/src/vocabulary/names.rs"
     ))
     .expect("读 names");
     assert!(

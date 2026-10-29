@@ -1,0 +1,24 @@
+{
+  "manifest_paths": 757,
+  "matched": 757,
+  "sha_mismatches": [],
+  "extra_product_paths_vs_baseline": [],
+  "manifest_paths_missing_from_commit_diff": [],
+  "staged_paths": [],
+  "tracked_dirty_paths": [],
+  "untracked_paths": [
+    ".pi-lens-probe-home/bus-events.log",
+    ".pi-lens-probe-home/cascade.log",
+    ".pi-lens-probe-home/extension.log",
+    ".pi-lens-probe-home/latency.log",
+    ".pi-lens-probe-home/logs/2026-10-29.jsonl",
+    ".pi-lens-probe-home/read-guard.log",
+    ".pi-lens-probe-home/review-graph.log",
+    ".pi-lens-probe-home/sessionstart.log",
+    ".pi-lens-probe-home/tree-sitter.log",
+    "apps/web-client/node_modules",
+    "apps/web-client/src/wasm-pkg",
+    "archive"
+  ]
+}
+Committed Git blobs: 756 matching SHA256 plus 1 matching deletion; no extra product difference.

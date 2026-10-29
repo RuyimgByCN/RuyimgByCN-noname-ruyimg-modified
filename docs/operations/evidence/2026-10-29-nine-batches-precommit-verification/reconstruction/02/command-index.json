@@ -1,0 +1,69 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 2,
+  "commands": [
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+      "exit_code": 0,
+      "seconds": 0.5601150989532471,
+      "log": "corrected-00.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 36.045522928237915,
+      "log": "corrected-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 8.802467107772827,
+      "log": "early-00.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p content-compiler --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 0.3460237979888916,
+      "log": "early-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 101,
+      "seconds": 56.16789102554321,
+      "log": "early-02.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.05673980712890625,
+      "log": "early-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 0.7740669250488281,
+      "log": "early-04.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 4.964664936065674,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "cargo test --offline -p engine-native --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+      "exit_code": 101,
+      "seconds": 0.2022409439086914,
+      "log": "targeted-00.log"
+    }
+  ]
+}

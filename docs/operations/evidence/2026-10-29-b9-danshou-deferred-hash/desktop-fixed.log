@@ -1,0 +1,47 @@
+   Compiling parking_lot_core v0.9.12
+   Compiling parking_lot v0.12.5
+   Compiling string_cache v0.9.0
+   Compiling web_atoms v0.2.5
+   Compiling markup5ever v0.38.0
+   Compiling html5ever v0.38.0
+   Compiling dom_query v0.27.0
+   Compiling tauri-utils v2.9.3
+   Compiling tauri-build v2.6.3
+   Compiling desktop-client v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/desktop-client)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.12s
+     Running unittests src/lib.rs (target/debug/deps/desktop_client-fb5705918729f7f2)
+
+running 11 tests
+test mobile::tests::touch_target_minimum ... ok
+test mobile::tests::background_policy_actions ... ok
+test mobile::tests::safe_area_css_vars ... ok
+test mobile::tests::user_agent_detection ... ok
+test mobile::tests::shell_config_css_vars ... ok
+test mobile::tests::android_checklist_has_6_items ... ok
+test mobile::tests::checklist_all_passed ... ok
+test mobile::tests::ios_checklist_has_6_items ... ok
+test mobile::tests::checklist_has_failure ... ok
+test tests::signed_install_via_host ... FAILED
+test tests::freeze_blocks_install ... FAILED
+
+failures:
+
+---- tests::signed_install_via_host stdout ----
+
+thread 'tests::signed_install_via_host' (4785287) panicked at apps/desktop-client/src/lib.rs:901:14:
+called `Result::unwrap()` on an `Err` value: Runtime(Package("module m: logic_hash mismatch"))
+
+---- tests::freeze_blocks_install stdout ----
+
+thread 'tests::freeze_blocks_install' (4785286) panicked at apps/desktop-client/src/lib.rs:877:56:
+called `Result::unwrap()` on an `Err` value: Runtime(Package("module m: logic_hash mismatch"))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::freeze_blocks_install
+    tests::signed_install_via_host
+
+test result: FAILED. 9 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p desktop-client --lib`

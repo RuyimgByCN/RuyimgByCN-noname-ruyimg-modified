@@ -35,7 +35,7 @@ linghunzhihuo: {
 | 4 | `hs.randomGet()` | 原生为**确定性首张**（`hand.first()`）→ **差异登记**（源码事实固定） | 通过（**差异登记**） |
 
 **原生实现引用**：`content/host/step/skills_damage.rs:749`（火伤 `DamageNature::Fire` + 使用者弃手牌首张）、
-`content/host/constants.rs:212`（`ht:linghunzhihuo`）。
+`vocabulary/host/constants.rs:206`（`ht:linghunzhihuo`）。
 
 ## 3 验证结果
 

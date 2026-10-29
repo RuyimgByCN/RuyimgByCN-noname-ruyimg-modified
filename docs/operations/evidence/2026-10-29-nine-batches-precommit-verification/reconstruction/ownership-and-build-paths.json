@@ -1,0 +1,18 @@
+{
+  "base": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt",
+  "worktree_target_exists": true,
+  "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target",
+  "gate_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target",
+  "read_only_dependency_links": {
+    "../archive": "/Users/ruyimg/Documents/Claude/sanguosha/archive",
+    "../AGENTS.md": "/Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md",
+    "../NONAME_NEXT_AGENT_SPEC.md": "/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md",
+    "archive": "/Users/ruyimg/Documents/Claude/sanguosha/archive",
+    "apps/web-client/node_modules": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules",
+    "apps/web-client/src/wasm-pkg": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/wasm-pkg"
+  },
+  "manifest_sha256": "75311a59454764d5395514da1c04b92133593164d00e70fe6afb661eb16f0b5e",
+  "head": "c7a55d9846fc1db311f632dddaaf26231b0a9e10",
+  "branch_status": "## HEAD (no branch)",
+  "automatic_runner_target_exception": "An ignored worktree/target cache exists (5.8G); Clippy diagnostics found in its fingerprints, consistent with tool auto-runner notices. All explicitly invoked validations used base/target or base/gate-target; no main-worktree target access or cleanup was performed."
+}

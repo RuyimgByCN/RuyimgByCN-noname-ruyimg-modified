@@ -1,0 +1,723 @@
+crates/engine-native/src/vocabulary/generals.rs:642: new blank line at EOF.
+crates/engine-native/src/vocabulary/host.rs:22: new blank line at EOF.
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/desktop-fixed-semantic-hash.log:25: new blank line at EOF.
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/engine-core-full.log:7566: new blank line at EOF.
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/green.log:797: new blank line at EOF.
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/worker-smoke-current.log:64: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/worker-smoke-current.log:76: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/worker-smoke-current.log:80: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-b9-danshou-deferred-hash/workspace-fixed-final.log:13466: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/cross-native-corrected.log:8: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/cross-package-native.log:139: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/dependent-tests-final.log:3577: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/dependent-tests.log:3723: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:9: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:84: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:91: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:93: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:94: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:95: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:99: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:100: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:103: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:104: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:108: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:109: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:113: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:124: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:126: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:128: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:137: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:142: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:144: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:151: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:153: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:161: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:171: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:175: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:178: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:226: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:228: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:233: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:235: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:245: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:249: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:255: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:260: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:268: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:273: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:280: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:282: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:286: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:289: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:295: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:300: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:304: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:308: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:312: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:316: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:322: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:324: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:329: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:331: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:333: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:335: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:348: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:359: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:364: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:370: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:372: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:375: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:381: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:386: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:397: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:399: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:406: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:410: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:412: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:418: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:422: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:427: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:432: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:434: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:439: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:443: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:445: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:454: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:456: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:465: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:467: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:489: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:494: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:498: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:503: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:505: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:531: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:536: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:543: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:545: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:547: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:550: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:556: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:569: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:571: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:575: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:577: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:580: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:590: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:595: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:606: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:612: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:619: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:623: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:628: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:633: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:635: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:641: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:644: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:646: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:652: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:657: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:659: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:665: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:670: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:674: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:682: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:687: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:692: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:694: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:698: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:713: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:725: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:731: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:747: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:749: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:753: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:771: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:773: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:775: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:786: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:790: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:803: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:805: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/doc-reference-adjustments.patch:805: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:10: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:17: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:24: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:32: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:42: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:53: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:62: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:101: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:114: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:122: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:170: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:174: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:2671: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:2673: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:3293: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:3299: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:3494: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:3497: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:7430: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:7477: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:8585: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:8595: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:9973: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:10028: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:10760: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:11941: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:11949: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:11960: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:12117: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22001: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22012: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22141: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22142: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22155: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22218: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22219: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22222: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22259: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22260: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22266: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22268: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22275: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22281: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22300: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22305: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22306: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22308: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22309: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22313: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22363: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22364: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22374: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22375: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22379: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22380: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22386: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22387: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22392: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22393: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22398: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22404: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22438: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22445: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22446: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22469: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/f7-stage3.patch:22470: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:7: trailing whitespace.
++- **Finding — P2：新分层扫描器漏掉 raw identifier 路径。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:22: trailing whitespace.
++- **Correct — 默认 Catalog 与标准／扩展／Boss 索引保留。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:25: trailing whitespace.
++- **Correct — vocabulary 下沉保持类型归属，具体内容机器留在内容层。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:26: trailing whitespace.
++  [vocabulary/host.rs:6](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/vocabulary/host.rs:6) 汇集 `HostBehavior` 定义及全部 inherent impl 所在模块。全源码检索未发现留在内容层的 `impl HostBehavior`。  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:27: trailing whitespace.
++  [content/host.rs:135](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/content/host.rs:135) 仍以本地 `HostSkillBehavior` 实现 `SkillBehavior`，以本地 `HostMachine` 实现 `SkillMachine`；filter、activation、factory、step 没有迁入 vocabulary。该结构为下一步拆 crate 保留了合法的类型／trait 归属，不会要求内容 crate 给外部 enum 添加 inherent impl，或实现两个都属于外部 crate 的 trait／类型组合。  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:30: trailing whitespace.
++- **Correct — 神弓回调保留实际内容目录的查询候选与处理位置。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:31: trailing whitespace.
++  [content/hooks.rs:10](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/content/hooks.rs:10) 将两个回调直接指向原内容函数；标准目录和扩展合并目录均继续装入这组 hooks。  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:34: trailing whitespace.
++- **Correct — `apply_general_assembly` 为 state 层单实现。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:37: trailing whitespace.
++- **Correct — 扫描消费者迁移没有改变判据或缩减当前集合。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:38: trailing whitespace.
++  13 个 Python 文件中，11 个消费者仅调整定义读取路径，或将原内容目录的扫描集合补上迁出的 vocabulary 文件；另 2 个是分层扫描器及其测试，包含实际解析逻辑增强，不能笼统称为“全部只改路径”。未见阈值抬高、豁免扩大或断言删除。  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:41: trailing whitespace.
++- **Correct — 验证证据支持当前迁移，但验收边界明确。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:42: trailing whitespace.
++  已读取的最终日志支持 native **1644 passed / 0 failed / 73 ignored**、依赖合计 **465/0/0**、产品 Gate 1b 通过；神弓三个既有用例及 golden replay 在日志中通过。测试名称多重集合为 **1717→1717**。  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:47: trailing whitespace.
++- **Merge verdict：OK with notes。**  
+docs/operations/evidence/2026-10-29-native-split-stage3/independent-review.txt:52: trailing whitespace.
++未执行构建、测试、补丁应用或 Git 状态认证；未审查父线程整合后的九批、B9 与 desktop 组合结果。  
+docs/operations/evidence/2026-10-29-native-split-stage3/integration-doc-reference-unit-first.log:8: trailing whitespace.
++AssertionError: 1 != 0 : 
+docs/operations/evidence/2026-10-29-native-split-stage3/integration-native-tests.log:1798: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/native-tests-1.log:1800: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/native-tests-final.log:1798: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/preflight-quick-final.log:23: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/preflight-quick.log:23: new blank line at EOF.
+docs/operations/evidence/2026-10-29-native-split-stage3/script-tests.log:302: trailing whitespace.
++AssertionError: 1 != 0 : 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/README.md:75: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/frontend-typecheck.log:4: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/preflight.log:23: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/02/staged-whitespace.log:6: trailing whitespace.
+++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/02/staged-whitespace.log:8: trailing whitespace.
+++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/02/staged-whitespace.log:10: trailing whitespace.
+++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/frontend-rerun-02.log:68: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/frontend-rerun-02.log:80: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/frontend-rerun-02.log:84: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/staged-whitespace.log:5: trailing whitespace.
+++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/staged-whitespace.log:7: trailing whitespace.
+++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/03/staged-whitespace.log:9: trailing whitespace.
+++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/04/staged-whitespace.log:5: trailing whitespace.
+++test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/04/staged-whitespace.log:12: trailing whitespace.
+++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/04/staged-whitespace.log:14: trailing whitespace.
+++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/04/staged-whitespace.log:16: trailing whitespace.
+++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/05/staged-whitespace.log:11: trailing whitespace.
+++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/05/staged-whitespace.log:13: trailing whitespace.
+++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/05/staged-whitespace.log:15: trailing whitespace.
+++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:2: trailing whitespace.
+++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:4: trailing whitespace.
+++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:6: trailing whitespace.
+++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:8: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:10: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:12: trailing whitespace.
+++    clansankuang: if (!game.hasPlayer(current => current != player)) { return false; } const type = get.type2(event.card); return player.getRoundHistory("useCard", evt => get.type2(evt.card) == type).indexOf(event) == 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:14: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:16: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:18: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:20: trailing whitespace.
+++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:22: trailing whitespace.
+++    dcsuifu: if (player === event.player) { return false; } let num = 0; game.countPlayer(current => { if (current === player || current.getSeatNum() === 1) { current.getHistory("damage", evt => { num += evt.num; 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:24: trailing whitespace.
+++    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/06/staged-whitespace.log:26: trailing whitespace.
+++    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/08/wasm-01.log:68: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/08/wasm-01.log:80: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/08/wasm-01.log:84: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/09/wasm-01.log:68: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/09/wasm-01.log:80: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/09/wasm-01.log:84: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/a0_tag_registry.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/a0_tag_registry.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:7: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:11: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:595: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/catalog.rs.diff:602: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/engine-hash.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/engine-hash.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/engine-hash.rs.diff:7: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/engine-hash.rs.diff:49: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/host.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/host.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/host.rs.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/host.rs.diff:21: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/host.rs.diff:21: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/huanle.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/huanle.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/huanle.rs.diff:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/intrinsic.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/intrinsic.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine.rs.diff:6: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine.rs.diff:67: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine.rs.diff:67: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_decode.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_decode.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_encode.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_encode.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_validation.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/machine_validation.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:15: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:17: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:20: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:25: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:31: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:33: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:36: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:40: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:42: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:50: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-progress.md.diff:72: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:7: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:29: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:31: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:34: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-remaining-ledger.md.diff:40: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:23: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:30: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:68: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/native-rules-baseline.md.diff:68: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/nc04_vm_resume.rs.diff:11: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/nc04_vm_resume.rs.diff:11: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/preflight.py.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/preflight.py.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/preflight.py.diff:8: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/preflight.py.diff:8: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/replay_scenarios.rs.diff:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/resolution.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/resolution.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/resolution.rs.diff:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/resolution.rs.diff:12: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-asks.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-asks.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-asks.rs.diff:7: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-asks.rs.diff:119: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-restore.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-restore.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-restore.rs.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-types.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap-types.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/snap.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_bridge.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_bridge.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_bridge.rs.diff:7: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_bridge.rs.diff:33: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_bridge.rs.diff:40: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_ops.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_ops.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_ops.rs.diff:10: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_ops.rs.diff:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/src-rvm_ops.rs.diff:21: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/standard.rs.diff:33: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/standard.rs.diff:37: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t12_g5_relays.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t12_g5_relays.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t12_g5_relays.rs.diff:4: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t12_g5_relays.rs.diff:15: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t8_rvm_bridge.rs.diff:1: trailing whitespace.
++--- 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t8_rvm_bridge.rs.diff:2: trailing whitespace.
+++++ 
+docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/reconstruction/t8_rvm_bridge.rs.diff:15: trailing whitespace.
++ 

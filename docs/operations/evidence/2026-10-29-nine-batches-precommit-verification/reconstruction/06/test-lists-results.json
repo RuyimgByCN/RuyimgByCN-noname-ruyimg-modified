@@ -1,0 +1,14 @@
+[
+  {
+    "command": "cargo test --offline -p engine-native --tests -- --list",
+    "exit_code": 0,
+    "seconds": 2.5504651069641113,
+    "log": "test-lists-00.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-core --tests -- --list",
+    "exit_code": 0,
+    "seconds": 57.79519009590149,
+    "log": "test-lists-01.log"
+  }
+]

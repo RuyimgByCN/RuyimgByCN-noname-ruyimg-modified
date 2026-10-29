@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-29T22:13:38.758444+08:00",
+  "remotes": [],
+  "probes": [
+    {
+      "name": "github-account",
+      "command": [
+        "gh",
+        "api",
+        "user",
+        "--jq",
+        ".login"
+      ],
+      "exit": 0,
+      "stdout": "RuyimgByCN\n",
+      "stderr": ""
+    },
+    {
+      "name": "android-devices",
+      "command": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "stdout": "List of devices attached\n\n",
+      "stderr": "* daemon not running; starting now at tcp:5037\n* daemon started successfully\n"
+    },
+    {
+      "name": "apple-devices",
+      "command": [
+        "xcrun",
+        "devicectl",
+        "list",
+        "devices"
+      ],
+      "exit": 0,
+      "stdout": "Name                    Hostname   Identifier                                    State         Model                              Reality  \n---------------------   --------   -------------------------------------------   -----------   --------------------------------   ---------\nRuyimg音                            00008140-0002149826F3001C (UDID)              unavailable   iPhone17,2                                  \niPad Pro 11-inch (M5)              BD762A77-1E61-4B60-B3B9-1625614AA2E9 (UDID)   shutdown      iPad Pro 11-inch (M5) (iPad17,2)   simulated\niPhone 17                          1151B0AF-FE83-4915-A53A-DBBE2A8F6B7B (UDID)   shutdown      iPhone 17 (iPhone18,3)             simulated\niPhone 17 Pro                      DC913A00-6826-47B5-B227-0FB779488A27 (UDID)   shutdown      iPhone 17 Pro (iPhone18,1)         simulated\niPhone 18 Pro                      AAE990A2-1D4C-4F7D-9BD1-2AD14EF881C4 (UDID)   shutdown      iPhone 18 Pro (iPhone19,2)         simulated\niPhone Duo                         A29CB84D-E998-4E83-B427-E7C1194654D4 (UDID)   shutdown      iPhone Duo (iPhone19,4)            simulated\n",
+      "stderr": ""
+    }
+  ],
+  "repository_discovery_exit": 0,
+  "candidate_repositories": [
+    {
+      "isPrivate": false,
+      "nameWithOwner": "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+      "url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified"
+    }
+  ]
+}

@@ -93,7 +93,7 @@ def main() -> int:
     ledger_mod = _load("report_defect_ledger", "report_defect_ledger.py")
     g23_behaviors = {row[0] for row in ledger_mod.g23_rows()}
     # 行为必须在 keys.rs 的枚举里出现（有些行为没有 `host:` 键，如卡片全局技能）
-    keys_src = (ROOT / "crates/engine-native/src/content/host/keys.rs").read_text(encoding="utf-8")
+    keys_src = (ROOT / "crates/engine-native/src/vocabulary/host/keys.rs").read_text(encoding="utf-8")
     known_behaviors = set(re.findall(r"HostBehavior::([A-Za-z0-9_]+)", keys_src))
     phase_pairs = {(b, v) for b, v in phase}
     event_pairs = {(b, v) for b, v in event}

@@ -12,9 +12,10 @@
 
 use crate::catalog::{CardKind, Catalog, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, OpenChoice, Selection};
-use crate::content::host::GJ_FOOD_MIZHLIANOU_KEY;
-use crate::content::host::HostBehavior;
-use crate::content::standard::{general_gender, Gender, GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
+use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
+use crate::vocabulary::host::HostBehavior;
+use crate::vocabulary::generals::{general_gender, Gender};
+use crate::vocabulary::names::{GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
 use crate::event::{DamageNature, EventData, Frame};
 use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::resolution::{Slot, NO_FRAME};

@@ -327,8 +327,8 @@ pub fn intrinsic_machine(
             // phaseDiscardBefore trigger.cancel 同口径；此前贪欲面被测试
             // drain 掩盖，本臂补真实闸门）
             let mut skip_discard = [
-                crate::content::standard::BOSS_TANYU,
-                crate::content::standard::BOSS_QINGZHU,
+                crate::vocabulary::names::BOSS_TANYU,
+                crate::vocabulary::names::BOSS_QINGZHU,
             ]
             .iter()
             .any(|name| {
@@ -342,7 +342,7 @@ pub fn intrinsic_machine(
             if !skip_discard && ctx.core.turn.mengtai_use_pending {
                 if let Some(mtdef) = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+                    .skill_by_name(crate::vocabulary::names::BOSS_MENGTAI)
                 {
                     if ctx.core.has_skill(player, mtdef) {
                         skip_discard = true;
@@ -357,7 +357,7 @@ pub fn intrinsic_machine(
             else {
                 let keji = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::KE_JI)
+                    .skill_by_name(crate::vocabulary::names::KE_JI)
                     .map(|d| ctx.core.has_skill(player, d))
                     .unwrap_or(false);
                 if keji && !ctx.core.turn.sha_used_play_phase {
@@ -368,7 +368,7 @@ pub fn intrinsic_machine(
                     //（上游 mod maxHandcard storage.jijia 同口径）
                     if ctx
                         .catalog
-                        .skill_by_name(crate::content::host::WUDIAN_JIJIA_KEY)
+                        .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
                         .map(|def| ctx.core.has_skill(player, def))
                         .unwrap_or(false)
                         && ctx.core.player(player).jijia_hp > 0
@@ -383,7 +383,7 @@ pub fn intrinsic_machine(
                     // 春饼（G1 古剑食物）：手牌上限 +1（持有状态即生效）
                     if let Some(def) = ctx
                         .catalog
-                        .skill_by_name(crate::content::host::GJ_FOOD_CHUNBING_KEY)
+                        .skill_by_name(crate::vocabulary::host::GJ_FOOD_CHUNBING_KEY)
                     {
                         if ctx
                             .core
@@ -420,7 +420,7 @@ pub fn intrinsic_machine(
                     // 倾盆大雨（gwent 天气）：手牌上限 -1
                     if let Some(def) = ctx
                         .catalog
-                        .skill_by_name(crate::content::host::GW_QINPEN_STATE_KEY)
+                        .skill_by_name(crate::vocabulary::host::GW_QINPEN_STATE_KEY)
                     {
                         if ctx
                             .core
@@ -435,7 +435,7 @@ pub fn intrinsic_machine(
                     // 妄尊印（袁术妄尊授予的回合级印记）：手牌上限 -1
                     if let Some(def) = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::WANG_ZUN_MARK)
+                        .skill_by_name(crate::vocabulary::names::WANG_ZUN_MARK)
                     {
                         if ctx
                             .core
@@ -461,7 +461,7 @@ pub fn intrinsic_machine(
                     //（上游 ignoredHandcard red 同口径）
                     let honglianx = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::BOSS_HONGLIANX)
+                        .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
                         .map(|def| ctx.core.has_skill(player, def))
                         .unwrap_or(false);
                     let hand = if shamolvzhou {
@@ -470,7 +470,7 @@ pub fn intrinsic_machine(
                             .hand
                             .iter()
                             .filter(|c| {
-                                crate::content::host::yangpijuan_class(ctx.catalog.card_kind(**c))
+                                crate::vocabulary::card_skills::yangpijuan_class(ctx.catalog.card_kind(**c))
                                     != Some(0)
                             })
                             .count()

@@ -95,11 +95,11 @@ EventData::Phase { player, begin: true, .. } if *player == owner   // `..` 省�
 
 | 文件:行 | 注释 | 行为 | 代码 | 上游 |
 |---|---|---|---|---|
-| `common.rs:216` | **修罗：自己准备阶段开始** | `swd_xiuluo` | `Phase::Judge, begin=true` | **`phaseZhunbeiBegin`** |
-| `swd.rs:24` | **魂身·收束：自己准备阶段开始** | `hyunshen2` | 同上 | **`phaseBegin`** |
-| `swd.rs:34` | **待行·清甲：自己准备阶段开始** | `daixing2` | 同上 | **`phaseBegin`** |
-| `swd.rs:673` | **枕流触发面：自己准备阶段开始** | `zhenjiu2` | 同上 | **`phaseBegin`** |
-| `swd.rs:699` | **幻形：自己准备阶段开始** | `huanxing` | 同上 | **`phaseBegin`** |
+| `vocabulary/host/metadata/common.rs:216` | **修罗：自己准备阶段开始** | `swd_xiuluo` | `Phase::Judge, begin=true` | **`phaseZhunbeiBegin`** |
+| `vocabulary/host/metadata/swd.rs:24` | **魂身·收束：自己准备阶段开始** | `hyunshen2` | 同上 | **`phaseBegin`** |
+| `vocabulary/host/metadata/swd.rs:34` | **待行·清甲：自己准备阶段开始** | `daixing2` | 同上 | **`phaseBegin`** |
+| `vocabulary/host/metadata/swd.rs:673` | **枕流触发面：自己准备阶段开始** | `zhenjiu2` | 同上 | **`phaseBegin`** |
+| `vocabulary/host/metadata/swd.rs:699` | **幻形：自己准备阶段开始** | `huanxing` | 同上 | **`phaseBegin`** |
 
 （`grep -c 准备阶段` 在 `filtering*.rs` 里共 **19 处**）
 

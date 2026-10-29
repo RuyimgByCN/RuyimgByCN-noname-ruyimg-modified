@@ -1,0 +1,20 @@
+[
+  {
+    "crate": "engine-native",
+    "before": 1699,
+    "after": 1699,
+    "added_registry": [
+      "every_test_file_is_registered_in_exactly_one_group"
+    ],
+    "sha256": "3c8c52bd8a690797c4f25ae604a731cfe11ec6f4365cfa6aba7777b0f85c079c"
+  },
+  {
+    "crate": "engine-core",
+    "before": 3758,
+    "after": 3758,
+    "added_registry": [
+      "every_test_file_is_registered_in_exactly_one_group"
+    ],
+    "sha256": "8f7ae3a0049b23bf6484ec012f5e967e03d07ae099935091463390df19f647df"
+  }
+]

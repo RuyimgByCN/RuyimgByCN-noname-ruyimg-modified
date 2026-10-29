@@ -1,0 +1,26 @@
+[
+  {
+    "command": "python3 -B -m unittest discover -s scripts -p test_check_native_layering.py",
+    "exit_code": 0,
+    "seconds": 0.05504631996154785,
+    "log": "layering-00.log"
+  },
+  {
+    "command": "python3 -B scripts/check-native-layering.py",
+    "exit_code": 0,
+    "seconds": 0.03781390190124512,
+    "log": "layering-01.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native-wasm -p content-native-loader -p game-server --no-fail-fast",
+    "exit_code": 101,
+    "seconds": 30.562707901000977,
+    "log": "layering-02.log"
+  },
+  {
+    "command": "python3 -B scripts/preflight.py",
+    "exit_code": 1,
+    "seconds": 334.9328329563141,
+    "log": "layering-03.log"
+  }
+]

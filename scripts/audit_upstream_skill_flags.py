@@ -160,7 +160,7 @@ NATIVE_EVENT_MAP = {
 def native_metas() -> dict[str, dict]:
     """按 HostBehavior 切块归属（整文件正则会跨技能）。"""
     out: dict[str, dict] = {}
-    for f in sorted((ROOT / "crates/engine-native/src/content/host/metadata").glob("*.rs")):
+    for f in sorted((ROOT / "crates/engine-native/src/vocabulary/host/metadata").glob("*.rs")):
         t = f.read_text(encoding="utf-8")
         marks = [m.start() for m in re.finditer(r"HostBehavior::(\w+)\s*=>", t)]
         for i, st in enumerate(marks):
@@ -188,7 +188,7 @@ def native_blocks() -> dict[str, str]:
 
 
 def host_keys() -> dict[str, str]:
-    t = (ROOT / "crates/engine-native/src/content/host/keys.rs").read_text(encoding="utf-8")
+    t = (ROOT / "crates/engine-native/src/vocabulary/host/keys.rs").read_text(encoding="utf-8")
     return {
         beh: name
         for beh, _k, name in re.findall(r'HostBehavior::(\w+)\s*=>\s*"(host:([a-z0-9_]+))"', t)

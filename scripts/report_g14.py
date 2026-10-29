@@ -60,7 +60,7 @@ def judge_behaviors() -> list[str]:
 
 
 def host_keys() -> dict[str, str]:
-    return {m.group(1): m.group(2) for m in KEY.finditer((HOST / "keys.rs").read_text(encoding="utf-8"))}
+    return {m.group(1): m.group(2) for m in KEY.finditer((HOST.parents[1] / "vocabulary/host/keys.rs").read_text(encoding="utf-8"))}
 
 
 def package_skill_names() -> dict[str, str]:

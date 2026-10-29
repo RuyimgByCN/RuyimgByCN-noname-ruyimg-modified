@@ -11,6 +11,8 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     card_intrinsic: crate::content::host::card_intrinsic,
     host_ask: crate::content::host::active_ask_host,
     restore_machine,
+    borrow_options: crate::content::host::shengong_borrow_options,
+    borrowed_owner: crate::content::host::shengong_borrowed_owner,
 };
 
 /// 内容机器的快照重建（自 `MachineSnapshot::restore` 迁出的内容分支）：先走标准

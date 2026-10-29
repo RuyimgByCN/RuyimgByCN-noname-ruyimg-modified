@@ -9,7 +9,7 @@ references, then verifies each against the engine sources.
 
 Allowed name sources:
 
-* `HostBehavior` variants — `crates/engine-native/src/content/host/keys.rs`
+* `HostBehavior` variants — `crates/engine-native/src/vocabulary/host/keys.rs`
 * `EventKind` variants — `crates/engine-native/src/event.rs`
 * `Phase` variants — `crates/engine-native/src/event.rs`
 * a small whitelist of capability names that do **not** exist yet and are the
@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 GUARDS = ROOT / "crates" / "engine-native" / "tests" / "nc08_registered_defect_guards.rs"
-KEYS = ROOT / "crates" / "engine-native" / "src" / "content" / "host" / "keys.rs"
+KEYS = ROOT / "crates" / "engine-native" / "src" / "vocabulary" / "host" / "keys.rs"
 EVENT = ROOT / "crates" / "engine-native" / "src" / "event.rs"
 
 #: 守卫**故意**引用的「尚不存在」的能力名（补上后守卫转绿）。

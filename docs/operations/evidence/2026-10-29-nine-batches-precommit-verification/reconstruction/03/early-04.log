@@ -1,0 +1,7 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: python3 -B scripts/check-source-lines.py
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+Source line limit passed: 8646 files <= 2000 lines
+
+EXIT_CODE: 0

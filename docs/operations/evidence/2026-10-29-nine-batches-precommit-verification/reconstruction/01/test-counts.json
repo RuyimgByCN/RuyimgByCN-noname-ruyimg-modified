@@ -1,0 +1,26 @@
+[
+  {
+    "log": "native-environment-rerun.log",
+    "passed_failed_ignored": [
+      1624,
+      0,
+      73
+    ]
+  },
+  {
+    "log": "early-01.log",
+    "passed_failed_ignored": [
+      541,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "early-02.log",
+    "passed_failed_ignored": [
+      1549,
+      75,
+      73
+    ]
+  }
+]

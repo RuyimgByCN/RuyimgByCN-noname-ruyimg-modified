@@ -9,8 +9,8 @@
 
 | 文件 | 处数 |
 |---|---:|
-| `content/host/behavior.rs` | 87 |
-| `content/standard/names.rs` | 69 |
+| `vocabulary/host/behavior.rs` | 87 |
+| `vocabulary/names.rs` | 69 |
 | `content/host/step.rs` | 52 |
 | `catalog.rs` | 45 |
 | `content/standard.rs` | 27 |

@@ -10,7 +10,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         ctx.core.player_mut(player).skip_next_draw = false;
     } else if ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU)
         .map(|def| ctx.core.has_skill(player, def))
         .unwrap_or(false)
     {
@@ -52,7 +52,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
             && !ctx.core.is_boss_side(player)
             && ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_BAIYI)
+                .skill_by_name(crate::vocabulary::names::BOSS_BAIYI)
                 .map(|def| {
                     ctx.core
                         .skills
@@ -80,7 +80,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // `trigger.num += Math.min(3, game.players.length-1)`）
         let shenwei_draw = if ctx
             .catalog
-            .skill_by_name(crate::content::host::BOSS_SHENWEI_KEY)
+            .skill_by_name(crate::vocabulary::host::BOSS_SHENWEI_KEY)
             .map(|def| ctx.core.has_skill(player, def))
             .unwrap_or(false)
         {
@@ -94,7 +94,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // trigger.num += maxHp-hp 同口径）
         let miedao_draw = if ctx
             .catalog
-            .skill_by_name(crate::content::host::SWD_MIEDAO_KEY)
+            .skill_by_name(crate::vocabulary::host::SWD_MIEDAO_KEY)
             .map(|def| ctx.core.has_skill(player, def))
             .unwrap_or(false)
         {
@@ -107,7 +107,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // getDamagedHp()，已损失体力 > 0 时）
         let sbzhaxiang_draw = if ctx
             .catalog
-            .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+            .skill_by_name(crate::vocabulary::host::L27_SBZHAXIANG_KEY)
             .map(|def| ctx.core.has_skill(player, def))
             .unwrap_or(false)
         {
@@ -119,7 +119,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         //（上游配置 mpfbmoshi 门控；原生以实例启用承载）
         let mopai_extra = usize::from(
             ctx.catalog
-                .skill_by_name(crate::content::host::L20_MOPAI_KEY)
+                .skill_by_name(crate::vocabulary::host::L20_MOPAI_KEY)
                 .map(|def| ctx.core.has_skill(player, def))
                 .unwrap_or(false),
         ) * 2;
@@ -134,7 +134,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // ⇒ 摸牌数 -1（`event.num > 0` 才减，同上游 filter）
         let cigu_cut = i32::from(
             ctx.catalog
-                .skill_by_name(crate::content::host::GW_CIGU_STATE_KEY)
+                .skill_by_name(crate::vocabulary::host::GW_CIGU_STATE_KEY)
                 .map(|def| ctx.core.has_skill(player, def))
                 .unwrap_or(false),
         );
@@ -178,7 +178,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         {
             let active = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_SHENEN)
+                .skill_by_name(crate::vocabulary::names::BOSS_SHENEN)
                 .map(|def| ctx.core.skills.keys().any(|(_, dd)| *dd == def))
                 .unwrap_or(false);
             if active && !ctx.core.is_boss_side(player) {
@@ -191,7 +191,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 同口径）
         if let Some(def) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_WUZANG)
+            .skill_by_name(crate::vocabulary::names::BOSS_WUZANG)
         {
             if ctx.core.has_skill(player, def) {
                 let hp = ctx.core.player(player).hp.max(0) as u32;
@@ -207,7 +207,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // phaseDrawBegin trigger.num += countPlayer()-2 同口径）
         if let Some(def) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_CANGMU)
+            .skill_by_name(crate::vocabulary::names::BOSS_CANGMU)
         {
             if ctx.core.has_skill(player, def) {
                 let alive = ctx.core.alive_count();
@@ -220,7 +220,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // boss_nianrui phaseDrawBegin trigger.num += 2 同口径）
         if let Some(def) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_NIANRUI)
+            .skill_by_name(crate::vocabulary::names::BOSS_NIANRUI)
         {
             if ctx.core.has_skill(player, def) {
                 ctx.draw_cards(player, 2);
@@ -230,7 +230,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         // 同位）
         if let Some(def) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_TAIPING)
+            .skill_by_name(crate::vocabulary::names::BOSS_TAIPING)
         {
             if ctx.core.has_skill(player, def) {
                 ctx.draw_cards(player, 2);

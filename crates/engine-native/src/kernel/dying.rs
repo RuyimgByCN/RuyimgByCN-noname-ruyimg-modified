@@ -66,7 +66,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
         if !self.guihan_asked {
             let gui = ctx
                 .catalog
-                .skill_by_name(crate::content::host::WUDIAN_GUIHAN_KEY)
+                .skill_by_name(crate::vocabulary::host::WUDIAN_GUIHAN_KEY)
                 .map(|d| ctx.core.has_skill(self.dying, d))
                 .unwrap_or(false);
             let unused = !ctx.core.player(self.dying).guihan_used;
@@ -88,7 +88,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 let male = (0..ctx.core.players.len() as u8).find(|&i| {
                     i != t
                         && ctx.core.player(i).alive
-                        && ctx.core.effective_gender(i) == crate::content::standard::Gender::Male
+                        && ctx.core.effective_gender(i) == crate::vocabulary::generals::Gender::Male
                 });
                 if let Some(m) = male {
                     ctx.recover(m, 1, None);
@@ -160,7 +160,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
                     let jiuyuan = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::JIU_YUAN)
+                        .skill_by_name(crate::vocabulary::names::JIU_YUAN)
                         .map(|d| {
                             ctx.core.has_skill(self.dying, d)
                                 && responder != self.dying
@@ -190,7 +190,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             // 的桃不入选项（酒同理由 cardRespondable）
             let sipu_ban_save = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
                 .map(|def| {
                     ctx.core.has_skill(self.dying, def)
                         && ctx.core.turn.current == self.dying
@@ -199,7 +199,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 .unwrap_or(false);
             let sipu_holder = if ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
                 .is_some()
             {
                 self.dying

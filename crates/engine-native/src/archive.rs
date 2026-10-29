@@ -221,7 +221,7 @@ pub fn decode_archive(data: &[u8]) -> Result<StateSnapshot, ArchiveError> {
 mod a0_rebuilt_tests {
     use super::*;
     use crate::catalog::CardKind;
-    use crate::content::host::{card_kind_equip_skills, card_kind_host_skills};
+    use crate::vocabulary::card_skills::{card_kind_equip_skills, card_kind_host_skills};
 
     /// CardKind 编号连续且全量编码往返（u8 存档编码域）。
     #[test]

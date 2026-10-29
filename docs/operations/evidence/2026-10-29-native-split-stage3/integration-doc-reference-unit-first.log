@@ -1,0 +1,24 @@
+....F.
+======================================================================
+FAIL: test_strict_mode_passes_after_cleanup (test_check_doc_line_refs.DocLineRefTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/test_check_doc_line_refs.py", line 77, in test_strict_mode_passes_after_cleanup
+    self.assertEqual(proc.returncode, 0, proc.stderr)
+AssertionError: 1 != 0 : 
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+
+越界的引用：
+  - docs/operations/evidence/2026-10-29-native-split-stage3/README.md: content/host.rs:308 超出所有候选的最大行数 305
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 28.605s
+
+FAILED (failures=1)

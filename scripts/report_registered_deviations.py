@@ -26,7 +26,7 @@ MARKERS = ("差异", "差異", "登記差異", "登记差异")
 def arm_text(behavior: str, cached: dict[Path, str] | None = None) -> str:
     """返回该行为的全部行为臂文本。"""
     files = cached if cached is not None else {
-        path: path.read_text(encoding="utf-8") for path in HOST.rglob("*.rs")
+        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((HOST.parents[1] / "vocabulary/host").rglob("*.rs"))
     }
     needle = f"HostBehavior::{behavior} =>"
     parts: list[str] = []
@@ -42,7 +42,7 @@ def arm_text(behavior: str, cached: dict[Path, str] | None = None) -> str:
 def registered(cached: dict[Path, str] | None = None) -> tuple[list[str], list[str]]:
     """返回（已登记差异的行为, 未登记差异的行为）。"""
     files = cached if cached is not None else {
-        path: path.read_text(encoding="utf-8") for path in HOST.rglob("*.rs")
+        path: path.read_text(encoding="utf-8") for path in list(HOST.rglob("*.rs")) + list((HOST.parents[1] / "vocabulary/host").rglob("*.rs"))
     }
     rows = phase.ledger_rows() if hasattr(phase, "ledger_rows") else _rows()
     yes: list[str] = []

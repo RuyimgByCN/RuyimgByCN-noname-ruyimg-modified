@@ -28,7 +28,7 @@ heilonglinpian: {
 | 2 | `target.changeHujia()` | **行为面**：使用者**护甲 0 → 1** | 通过 |
 | 2 | `addTempSkill("heilonglinpian", …)`（**防御距离 +1**） | **未实现（源码级自述）**：行为枚举名为 **`HostBehavior::JiguanHeilongCard`**（`intrinsic.rs:417`；实现 `step/jiguan.rs:352`），其代码注释即 **「获得 1 点护甲（登记差异：防御距离 +1 临时技暂缓）」** ⇒ **原生自己登记**该差异（**暂缓** = 未实现）；配合 5 候选名探测为空 | **待修（第 40 项）** |
 
-**原生实现引用**：`content/host/constants.rs:84`（`GJ_HEILONGLINPIAN_CARD_KEY = "gj:heilonglinpian"`）。
+**原生实现引用**：`vocabulary/host/constants.rs:78`（`GJ_HEILONGLINPIAN_CARD_KEY = "gj:heilonglinpian"`）。
 
 ## 3 未完成 / 待办
 

@@ -7,7 +7,7 @@ use super::*;
 pub(super) fn commit_cards_moved(ctx: &mut Ctx<'_>, to: PlayerId) {
     if let Some(zwdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ZHIWANG)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZHIWANG)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -81,7 +81,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     ) {
         if let Some(edef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ECHOU)
+            .skill_by_name(crate::vocabulary::names::BOSS_ECHOU)
         {
             let holders: Vec<PlayerId> = ctx
                 .core
@@ -106,7 +106,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
         if kind == CardKind::Tao {
             if let Some(fddef) = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_FUDU)
+                .skill_by_name(crate::vocabulary::names::BOSS_FUDU)
             {
                 let seats = ctx.core.players.len() as PlayerId;
                 if seats > 2 {
@@ -139,7 +139,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     if ctx.core.turn.current == u.player && !ctx.core.turn.minwan_targets.is_empty() {
         if let Some(mdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_MINWAN)
+            .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
         {
             if ctx.core.has_skill(u.player, mdef) {
                 ctx.draw_cards(u.player, 1);
@@ -151,7 +151,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     // 臂同族——机器直发 useCard 同覆盖）
     if let Some(qwdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_QIWU)
+        .skill_by_name(crate::vocabulary::names::BOSS_QIWU)
     {
         let club = matches!(
             ctx.catalog.cards[u.card as usize].suit,
@@ -171,7 +171,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     // 含延时自置目标）
     if let Some(jxdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIAOXIA)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIAOXIA)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -369,7 +369,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
 pub(super) fn releiji_on_shan(ctx: &mut Ctx<'_>, holder: PlayerId) {
     let releiji = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_RELEIJI)
+        .skill_by_name(crate::vocabulary::names::BOSS_RELEIJI)
         .map(|d| ctx.core.has_skill(holder, d))
         .unwrap_or(false);
     if !releiji {
@@ -415,7 +415,7 @@ pub(super) fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cance
     // 口径——入口直读跳过，死亡取消型基建同款）
     if let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_XIONGSHOU)
     {
         if ctx
             .core
@@ -432,7 +432,7 @@ pub(super) fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cance
     // 背→正照常翻回）
     if let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SHENYI)
+        .skill_by_name(crate::vocabulary::names::BOSS_SHENYI)
     {
         if ctx
             .core
@@ -456,7 +456,7 @@ pub(super) fn commit_turn_over_before(ctx: &mut Ctx<'_>, player: PlayerId, cance
         // 各造成 1 点伤害（上游 [1,2] 随机——恒 1 登记差异；激活态查询）
         if let Some(xdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_XUSHI)
+            .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
         {
             if ctx.core.has_skill(player, xdef) {
                 for t in ctx.core.seat_order_from(player) {
@@ -495,8 +495,8 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
         }
     }
     let names = [
-        crate::content::standard::BOSS_DANSHU,
-        crate::content::standard::BOSS_JINGJUE,
+        crate::vocabulary::names::BOSS_DANSHU,
+        crate::vocabulary::names::BOSS_JINGJUE,
     ];
     for name in names {
         let Some(def) = ctx.catalog.skill_by_name(name) else {
@@ -529,7 +529,7 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
     // loseEnd 全牌损失面→CardsDiscarded 面登记差异）
     if let Some(mydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_MOYANY)
+        .skill_by_name(crate::vocabulary::names::BOSS_MOYANY)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -570,7 +570,7 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 登记差异）
     if let Some(jcdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JUECE)
+        .skill_by_name(crate::vocabulary::names::BOSS_JUECE)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -596,7 +596,7 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 登记）
     if let Some(xydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XIANYIN)
+        .skill_by_name(crate::vocabulary::names::BOSS_XIANYIN)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -631,7 +631,7 @@ pub(super) fn commit_cards_discarded(ctx: &mut Ctx<'_>, player: PlayerId) {
 /// 造异异变 def 查询（运行时授予技）。
 pub(super) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
     ctx.catalog
-        .skill_by_name(crate::content::standard::BOSS_ZAOYI_HP)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZAOYI_HP)
         .expect("造异异变入目录")
 }
 
@@ -802,7 +802,7 @@ pub(super) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
     // 径；damageEnd 半面见 commit_damage 忍性臂）
     if let Some(rxdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_RENXING)
+        .skill_by_name(crate::vocabulary::names::BOSS_RENXING)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -818,7 +818,7 @@ pub(super) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
     }
     let Some(jdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JICAI)
+        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
     else {
         return;
     };

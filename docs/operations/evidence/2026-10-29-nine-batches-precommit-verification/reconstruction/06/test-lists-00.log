@@ -1,0 +1,2731 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo test --offline -p engine-native --tests -- --list
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running unittests src/lib.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/engine_native-7d1be85d6c1acfe4)
+a0_lib_tests::host_behavior_keys_bijective: test
+a0_lib_tests::standard_skill_ids_append_only: test
+ai::active_candidate_tests::variant_one_does_not_include_active_skill_candidates: test
+ai::active_candidate_tests::variant_two_can_choose_granted_active_skill: test
+ai::active_candidate_tests::variant_two_includes_granted_active_skill_candidates: test
+ai::active_candidate_tests::variant_two_weights_damage_by_enemy_skill_threat: test
+ai::active_candidate_tests::variant_zero_does_not_include_active_skill_candidates: test
+archive::a0_rebuilt_tests::card_kind_companion_skills_consistent: test
+archive::a0_rebuilt_tests::card_kind_encoding_roundtrip_all_variants: test
+archive::a0_rebuilt_tests::card_kind_keys_bijective: test
+content::extension::tests::extension_registry_lifecycle: test
+content::pile::tests::pile_spec_builds_unique_cards: test
+content::pile::tests::pile_spec_rejects_invalid_entries: test
+content::pile::tests::scale_plan_follows_upstream_formula: test
+engine::commands::pa02_simulation_tests::simulation_submit_skips_session_work_and_matches_authoritative_state: test
+engine::tests::park_machine_state_changes_digest: test
+engine::tests::ruleset_version_changes_digest: test
+
+17 tests, 0 benchmarks
+     Running tests/a0_tag_registry.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/a0_tag_registry-b3b3605909743b35)
+host_behavior_tags_unique: test
+machine_snapshot_tags_unique_and_roundtrip: test
+
+2 tests, 0 benchmarks
+     Running tests/adr0786_j1_commit_window.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/adr0786_j1_commit_window-5b68a371fb11c370)
+j1_commit_window_saves_and_restores_across_archive: test
+j1_real_choice_window_discards_picked_cards_and_resumes_queue: test
+j1_window_caps_to_available_and_skips_when_empty: test
+j1_zero_count_first_launch_remains_rejected: test
+
+4 tests, 0 benchmarks
+     Running tests/ai_content_tuning.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/ai_content_tuning-cabfa35eb2cd6476)
+content_tuning_defaults_and_helpers: test
+content_tuning_is_deterministic: test
+content_tuning_prefers_high_weight_enemy: test
+
+3 tests, 0 benchmarks
+     Running tests/ai_planner.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/ai_planner-15e066a154ee02c6)
+plan_apply_roundtrip_at_high_water: test
+plan_enumerates_confirm_and_cancel_fallbacks: test
+plan_enumerates_single_choice_fallbacks: test
+plan_pipeline_works_with_hidden_opponent_cards: test
+plan_sim_uses_session_high_water: test
+policy_and_plan_reject_cleanly_at_dedup_exhaustion: test
+policy_v2_drives_all_seats_without_answer_routing_panic: test
+policy_v2_plays_value_card_and_is_deterministic: test
+redact_deterministic_with_empty_deck_fallback: test
+redact_preserves_card_ownership_and_multiset: test
+redact_shuffles_unknown_pool_when_deck_present: test
+t13_plan_cancel_mid_run_cross_thread: test
+t13_plan_pool_more_seats_than_workers_keeps_order: test
+t13_plan_pool_parallel_matches_sequential: test
+two_ply_lookahead_deterministic_and_bounded: test
+
+15 tests, 0 benchmarks
+     Running tests/auth_archive.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/auth_archive-a388cb125d6784ba)
+archive_detects_tampering_and_version: test
+auth_token_reissue_revokes_old: test
+auth_tokens_do_not_survive_archive: test
+authed_submit_rejects_impersonation_and_unknown_token: test
+session_layer_reconnect_out_of_order_and_dedup: test
+snapshot_archive_roundtrip_rest_and_window: test
+
+6 tests, 0 benchmarks
+     Running tests/boss_play_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/boss_play_eight-df2c4bc6cdc977d3)
+l03_eight_dimension_from_fresh_install: test
+u02_eight_dimension_from_fresh_install: test
+
+2 tests, 0 benchmarks
+     Running tests/boundary_snapshot.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/boundary_snapshot-82c0b392ec595da0)
+abort::abort_segment_truncates_log: test
+answer::answer_by_wrong_player_rejected: test
+answer::answer_without_open_choice_rejected: test
+archive::archive_choice_kind_discard_to_limit_roundtrip: test
+archive::archive_choice_kind_duel_sha_roundtrip: test
+archive::archive_choice_kind_jiji_target_roundtrip: test
+archive::archive_choice_kind_nullify_window_roundtrip: test
+archive::archive_choice_kind_tian_du_gain_roundtrip: test
+archive::archive_hardening_rejects_unknown_kind_and_trailing_bytes: test
+archive::archive_rejects_unknown_prompt_and_v1_bytes: test
+commands::commands_by_non_current_player_rejected: test
+duplicate::duplicate_and_zero_dedup_rejected: test
+duplicate::duplicate_selection_rejected_by_spec: test
+guidao::guidao_rewrite_mixed_hand_and_equip_options: test
+guidao::guidao_rewrite_with_real_black_equip_only: test
+open::open_segment_checkpoint_association_positive: test
+out::out_of_bounds_actor_rejected: test
+out::out_of_bounds_ids_rejected_not_panic: test
+pause::pause_roundtrip_active_nullify_chain: test
+pause::pause_roundtrip_aoe_mid_queue: test
+pause::pause_roundtrip_chain_target_window: test
+pause::pause_roundtrip_discard_to_limit: test
+pause::pause_roundtrip_duel_respond: test
+pause::pause_roundtrip_dying_save: test
+pause::pause_roundtrip_guidao_active_rewrite: test
+pause::pause_roundtrip_guidao_pass: test
+pause::pause_roundtrip_guidao_rewrite: test
+pause::pause_roundtrip_judge_lightning_dying_save: test
+pause::pause_roundtrip_judge_window: test
+pause::pause_roundtrip_negative_hp_multi_tao_rescue: test
+pause::pause_roundtrip_nullify_reshuffle_chain: test
+pause::pause_roundtrip_rewrite_then_tiandu_combo: test
+pause::pause_roundtrip_sha_respond: test
+pause::pause_roundtrip_tiandu_confirm: test
+pause::pause_roundtrip_tiandu_decline: test
+pause::pause_roundtrip_yishang_chain: test
+pending::pending_state_hash_stable_across_save_restore: test
+restore::restore_accepts_park_depth_below_stack: test
+restore::restore_at_every_choice_point_continues_identically: test
+restore::restore_carries_dedup_high_water: test
+restore::restore_guidao_rewrite_equips_options: test
+restore::restore_guidao_rewrite_mid_window: test
+restore::restore_rejects_all_cards_missing: test
+restore::restore_rejects_broken_frame_parent_chain: test
+restore::restore_rejects_choice_id_overrun: test
+restore::restore_rejects_choice_without_machine: test
+restore::restore_rejects_dangling_park_frame: test
+restore::restore_rejects_duplicate_frame_id: test
+restore::restore_rejects_forward_referencing_frame_parent: test
+restore::restore_rejects_inconsistent_skill_instance_owner: test
+restore::restore_rejects_lord_not_at_first_seat: test
+restore::restore_rejects_middle_card_missing: test
+restore::restore_rejects_nested_checkpoint: test
+restore::restore_rejects_oob_event_payload: test
+restore::restore_rejects_oob_queue_trigger: test
+restore::restore_rejects_out_of_bounds_ids: test
+restore::restore_rejects_outcome_mode_mismatch: test
+restore::restore_rejects_park_depth_overrun: test
+restore::restore_rejects_rewrite_asked_with_empty_rewriters: test
+restore::restore_rejects_rule_version_mismatch: test
+restore::restore_rejects_segment_checkpoint_mismatches: test
+restore::restore_rejects_self_referencing_frame_parent: test
+restore::restore_rejects_sha_asked_tamper: test
+restore::restore_rejects_tampered_core_ruleset_version: test
+restore::restore_rejects_tampered_gate_event_payload: test
+restore::restore_rejects_tampered_identity_roles: test
+restore::restore_rejects_trailing_card_missing: test
+savage::savage_multi_nullify_judge_reshuffle_restore: test
+save::save_restore_at_rest_continues_identically: test
+stale::stale_revision_rejected_then_retry_same_dedup: test
+xiaoji::xiaoji_machine_byte_roundtrip_and_rejects: test
+
+71 tests, 0 benchmarks
+     Running tests/d5_longxue_mbqianlong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/d5_longxue_mbqianlong-a1b818bdf51dcbd1)
+longxue_marks_accumulate_and_cap: test
+longxue_opening_marks_twenty_or_sixty: test
+longxue_package_maps_host_and_defers_external: test
+longxue_threshold_grants_when_skill_exists: test
+longxue_weitong_registration_only: test
+qingzheng_discards_both_sides_and_punishes_fewer: test
+qingzheng_no_damage_when_target_discards_enough: test
+
+7 tests, 0 benchmarks
+     Running tests/e02_c3_lifecycle.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/e02_c3_lifecycle-0f05bd8f9dfee1a0)
+e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1: test
+e03_c3_uninstall_during_active_game_lock_pinned: test
+
+2 tests, 0 benchmarks
+     Running tests/epic_rangjie_after_damage.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/epic_rangjie_after_damage-6d7de3b35a7f626f)
+rangjie_decline_and_absent: test
+rangjie_gains_basic_card: test
+rangjie_moves_card_between_players: test
+
+3 tests, 0 benchmarks
+     Running tests/epic_reguhuo_viewas.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/epic_reguhuo_viewas-530e9916847ae811)
+reguhuo_absent_rejected: test
+reguhuo_declares_sha_with_target: test
+reguhuo_declares_tao_from_hand: test
+reguhuo_is_once_per_turn: test
+
+4 tests, 0 benchmarks
+     Running tests/fuzz_corpus_replay.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/fuzz_corpus_replay-d453506f23c1f229)
+replay_bytecode_verify_on_decoded_corpus: test
+replay_fuzz_bytecode_module_corpus: test
+
+2 tests, 0 benchmarks
+     Running tests/g1_cardpile.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_cardpile-a7bdc467031b496c)
+cardpile_liuli_real_host_full_lifecycle: test
+cardpile_real_host_full_lifecycle: test
+converted_packages_match_generator: test
+g1_cardpile_vertical_install_enable_newgame_saverestore: test
+pile_bridge_rejects_invalid_spec: test
+
+5 tests, 0 benchmarks
+     Running tests/g1_d3.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_d3-01138fc75b9e3b7d)
+d3_real_host_full_lifecycle: test
+g1_d3_content_lock_and_bounds: test
+g1_d3_install_bridge_and_metadata: test
+g1_d3_vertical_reveal_jinggou_and_restore: test
+
+4 tests, 0 benchmarks
+     Running tests/g1_hearth.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_hearth-88333f0c89863b73)
+hearth_content_lock_saverestore: test
+hearth_real_host_full_lifecycle: test
+hearth_remaining_batch_a: test
+hearth_remaining_batch_b: test
+jihuocard_self_draw: test
+linghunzhihuo_fire_damage_and_self_discard: test
+shijieshu_equips_two_different_slots: test
+zhaomingdan_forced_discard_and_draws: test
+
+8 tests, 0 benchmarks
+     Running tests/g1_huanle.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_huanle-ca814bd64e1ba40b)
+caoren::caoren_jushou_flips_and_mianju_cancels_flip: test
+equip::equip_skill_lifecycle_grant_and_revoke: test
+equip::equip_skill_snapshot_mismatch_rejected: test
+flip::flip_frame_lifecycle_no_residue: test
+flip::flip_primitive_toggles_facing_without_mask: test
+g1::g1_huanle_vertical_host_behaviors_and_restore: test
+host::host_skill_restore_rejects_without_pack: test
+huanle::huanle_bridge_builds_pack: test
+huanle::huanle_combo_kuwu_sha_like_and_non_sha_damage: test
+huanle::huanle_combo_stolen_jushou_fires_for_thief: test
+huanle::huanle_combo_stolen_jushou_flip_cancelled_by_mask: test
+huanle::huanle_g5_cross_process_relay: test
+huanle::huanle_jiuwei_optional_confirm_and_restore: test
+huanle::huanle_jiuwei_recovers_or_draws_at_turn_end: test
+huanle::huanle_mianju_blocks_flip_while_equipped: test
+huanle::huanle_monkey_cancels_peach_and_takes_it: test
+huanle::huanle_pack_payload_matches_upstream_list: test
+huanle::huanle_real_host_full_lifecycle: test
+huanle::huanle_xuelunyang_pass_declines_theft: test
+huanle::huanle_xuelunyang_steals_target_skill_until_turn_end: test
+u06::u06_eight_dimension_from_fresh_install: test
+u06::u06_g2g4_channels_acceptance: test
+xly::xly_state_growth_probe: test
+
+23 tests, 0 benchmarks
+     Running tests/g1_shahai_gujian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_gujian-94a1872a29f4f695)
+dinvxuanshuang::dinvxuanshuang_and_gjyuheng_closeout: test
+feibiao::feibiao_discard_black_or_damage: test
+food::food_effects_batch_two: test
+food::food_state_grant_tick_and_expire: test
+g1::g1_gujian_vertical_existing_kinds_and_lock: test
+gujian::gujian_real_host_full_lifecycle: test
+gujian::gujian_rejects_illegal_targets: test
+hujia::hujia_primitive_and_food_batch_three: test
+jiguan::jiguan_batch_four_kinds: test
+jinlianzhu::jinlianzhu_cancels_damage_with_holder_confirm: test
+lifecycle::final_batch_shatang_heilong_liutouge_mutou: test
+mizhilianou::mizhilianou_viewas_and_luyugeng_discover: test
+remaining::remaining_clusters_batch: test
+shujinsan::shujinsan_discard_any_draws_equal_with_restore: test
+
+14 tests, 0 benchmarks
+     Running tests/g1_shahai_gwent.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_gwent-4bff41dee26e7c25)
+g1_gwent_vertical_and_lock: test
+gwent_closeout_kunen_shanbeng_poxiao: test
+gwent_fengyin_disables_target_skills: test
+gwent_real_host_full_lifecycle: test
+gwent_spells_yanzhi_aozu_wenyi: test
+gwent_spells_zhihuan_baoxue: test
+gwent_weather_states: test
+
+7 tests, 0 benchmarks
+     Running tests/g1_shahai_mtg.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_mtg-3aeb3cec7cfd3fd9)
+mtg_bingheyaosai_land_effect: test
+mtg_feixu_land_effect: test
+mtg_haidao_land_effect: test
+mtg_lindixiliu_land_effect: test
+mtg_linzhongjianta_land_and_strike: test
+mtg_longshanfeng_land_flow: test
+mtg_real_host_full_lifecycle: test
+mtg_shamolvzhou_land_effect: test
+mtg_shuimomuxue_land_effect: test
+mtg_yixialan_land_and_recast: test
+mtg_youlin_land_and_discover: test
+
+11 tests, 0 benchmarks
+     Running tests/g1_shahai_swd.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_swd-850c2be74926da1a)
+bingjian::swd_generals_b74_bingjian_shending_guiyan: test
+cyxianjiang::swd_cyxianjiang_compares_card_name_not_kind: test
+cyxianjiang::swd_generals_b89_cyxianjiang: test
+daixing::swd_deferred_daixing_hujia_cycle: test
+datong::swd_generals_b18_datong_draw: test
+duanyue::swd_generals_b24_duanyue_tuzhen_luomei_xingdian: test
+fengming::swd_generals_b73_fengming_xiaomoyu_touxi: test
+five::swd_generals_b19_five_damage_line_skills: test
+funiao::swd_deferred_b93_funiao_ningxian_yaotong: test
+gtiandao::swd_deferred_gtiandao_rewrites_judge_with_any_he: test
+guaili::swd_generals_b71_guaili_fuyan_wuxie_guanhu: test
+guxing::swd_deferred_guxing_all_hand_sha_and_draw: test
+heihuo::swd_deferred_b92_heihuo_fzhenwei_dunxing: test
+hlingbo::swd_generals_b72_hlingbo_miles_xueyi: test
+huajin::swd_deferred_b99_huajin_minjing: test
+huangyu::swd_generals_b76_huangyu_xianyin_pojian: test
+huanhun::swd_deferred_b96_huanhun_lqingcheng: test
+huanjian::swd_generals_b70_huanjian_weida_xuying: test
+huanxia::swd_generals_b27_huanxia_viewas_reclaim: test
+huanxing::swd_generals_b87_huanxing: test
+huanyin::swd_deferred_huanyin_judge_cancel_or_draw: test
+huodan::swd_generals_b85_huodan: test
+hwendao::swd_generals_b77_hwendao_lingfeng_tianhuo: test
+hyunshen::swd_deferred_hyunshen_counter_draw_and_distance: test
+jiefen::swd_generals_b20_jiefen_multistep: test
+jiefen::swd_jiefen_is_once_per_play_phase: test
+jinlin::swd_deferred_jinlin_limited_hujia_and_phase_ticks: test
+jiying::swd_generals_b61_jiying_mufeng_wangchen: test
+jiying::swd_mufeng_uses_discover_not_draw: test
+jqimou::swd_generals_b91_jqimou_jianji_toudan: test
+juxi::swd_deferred_juxi_damage_or_recover: test
+kbolan::swd_deferred_b98_kbolan_aojian: test
+lanzhi::swd_deferred_lanzhi_heals_le_own_hp_damaged: test
+lexue::swd_generals_b83_lexue_zhenjiu_lmazui: test
+lianda::swd_generals_b64_lianda_suiyan_duanxing_polang_youyin: test
+lianwu::swd_generals_b63_lianwu_yuchen_duishi_xielei: test
+lingshi::swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit: test
+lingxian::swd_deferred_lingxian_draws_with_far_target: test
+lingxin::swd_generals_b69_lingxin_yueren: test
+liuhong::swd_generals_b21_liuhong_mojian_daofa: test
+ljifeng::swd_generals_b68_ljifeng_duanyi_yinyue: test
+luanji::swd_generals_b81_luanji_guozao_reyingzi: test
+mingfu::swd_generals_b88_mingfu: test
+nlianji::swd_deferred_nlianji_compare_reward_and_damage: test
+pingxu::swd_generals_b23_pingxu_huanling_builtin_four_full: test
+poxiao::swd_generals_b79_poxiao: test
+poyue::swd_generals_b28_poyue_black_range_red_free_direct: test
+pozhen::swd_deferred_b94_pozhen_guiyan2: test
+pozhou::swd_deferred_pozhou_seal_cycle: test
+rexue::swd_deferred_rexue_and_liuli: test
+shangxi::swd_generals_b75_shangxi_huajian_xingzhui: test
+shehun::swd_deferred_shehun_suit_match_damage: test
+shengshou::swd_generals_b84_shengshou_jiang: test
+shoulie::swd_deferred_b95_shoulie_busi: test
+sliufeng::swd_generals_b80_sliufeng: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b34_qiankundai_shennongding_nvwashi: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b35_kunlunjingc_donghuangzhong: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b36_kongdongyin_death_cancel: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b39_sifeizhenmian_yiluan: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b42_yuchan_autoviewas: test
+swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard: test
+swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_equip5_b44_yuruyi_draw_window: test
+swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_yuchan_b45_swap_rotation: test
+swd_cards_equip5_b44_yuruyi_draw_window::swd_window_machines_b62: test
+swd_extra_cards_disposition_guard::swd_caoyao_heals_wounded_in_range: test
+swd_extra_cards_disposition_guard::swd_chilongya_amplifies_fire_damage: test
+swd_extra_cards_disposition_guard::swd_daihuo_xiayun_distance_pair: test
+swd_extra_cards_disposition_guard::swd_extra_cards_disposition_guard: test
+swd_extra_cards_disposition_guard::swd_fengxueren_flip_or_damage: test
+swd_extra_cards_disposition_guard::swd_guiyoujie_delayed_black_loss: test
+swd_extra_cards_disposition_guard::swd_hufu_self_dying_only: test
+swd_extra_cards_disposition_guard::swd_liuxinghuoyu_discard2_or_fire: test
+swd_extra_cards_disposition_guard::swd_real_host_full_lifecycle: test
+swd_extra_cards_disposition_guard::swd_shentou_active_steal_with_club_judge: test
+swd_extra_cards_disposition_guard::swd_tianxianjiu_ameisha_and_self_rescue: test
+swd_extra_cards_disposition_guard::swd_xingjunyan_amp_and_qinglonglingzhu_steal: test
+swd_extra_cards_disposition_guard::swd_xixue_lifesteal_on_sha_damage: test
+swd_extra_cards_disposition_guard::swd_yangpijuan_discover_from_deck: test
+swd_extra_cards_disposition_guard::swd_yufulu_give_weapon_and_damage: test
+swd_extra_cards_disposition_guard::swd_zhufangshenshi_distance_waiver: test
+swd_langeguaiyi_longfan_suit_branches::swd_cards_alignment_guard_b29: test
+swd_langeguaiyi_longfan_suit_branches::swd_cards_basic_b32_xuejibingbao_fengyinzhidan: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_shan_respond_no_damage: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanshu_attaches_card_mods_and_roundtrips: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_discovers_equip_and_marks_target: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_full_slots_rejected: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_gain_compensates_lost_equip: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_pending_then_gain_at_phase_end: test
+swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_same_target_rejected_while_pending: test
+swd_langeguaiyi_longfan_suit_branches::swd_langeguaiyi_longfan_suit_branches: test
+swd_langeguaiyi_longfan_suit_branches::swd_lingjian_chaofeng_yinmi_xingtigaizao: test
+swd_langeguaiyi_longfan_suit_branches::swd_lingjian_jinjilengdong_freeze_and_unfreeze: test
+swd_langeguaiyi_longfan_suit_branches::swd_lingjian_xuanfeng_and_shijianhuisu: test
+sxianjing::swd_deferred_sxianjing_trap_cycle: test
+tiebi::swd_generals_b18_tiebi_and_datong: test
+wanjun::swd_generals_b66_wanjun_senluo_huopu: test
+xielv::swd_generals_b25_xielv_zhuyu: test
+xuanying::swd_generals_b90_xuanying_lieren: test
+xuanzhou::swd_deferred_b97_xuanzhou_yinguo: test
+xuehuang::swd_generals_b26_xuehuang_limited_virtual_firesha: test
+yeying::swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying: test
+yijue::swd_generals_b86_yijue_dangping: test
+yudun::swd_generals_b82_yudun_zhanxing: test
+yulin::swd_generals_b22_yulin_ningshuang_gongshen: test
+yunchou::swd_generals_b78_yunchou: test
+zhanlu::swd_generals_b65_zhanlu_susheng_xianghui_huiqi: test
+
+111 tests, 0 benchmarks
+     Running tests/g1_shahai_yunchou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_yunchou-2b71e7258d990d71)
+caochuan::caochuan_branch_zero_gives_shas_and_reprisal: test
+caochuan::caochuan_no_sha_branch_shows_and_discards: test
+chenhuodajie::chenhuodajie_gains_target_hand_card: test
+fudichouxin::fudichouxin_compare_two_stage_with_restore: test
+g1::g1_yunchou_generals_batch17_guihan_dying_limited: test
+g1::g1_yunchou_generals_batch18_beige_judge_branches: test
+g1::g1_yunchou_generals_batch1_bridge_and_behaviors: test
+g1::g1_yunchou_generals_batch2_xiongzi_yaliang: test
+g1::g1_yunchou_generals_batch3_zonghuo_shaoying: test
+g1::g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian: test
+g1::g1_yunchou_generals_batch5_full_roster_metadata: test
+g1::g1_yunchou_generals_batch6_luweiyan_conversion_and_chain: test
+g1::g1_yunchou_generals_batch7_active_skills_jieyan_yiesheng: test
+g1::g1_yunchou_generals_batch8_builtin_skill_refs: test
+g1::g1_yunchou_generals_batch8_builtin_whitelist_rejects: test
+g1::g1_yunchou_generals_batch9_diychanyuan_max_hp_loss: test
+g1::g1_yunchou_vertical_existing_kinds_and_lock: test
+geanguanhuo::geanguanhuo_rejects_wrong_target_count: test
+geanguanhuo::geanguanhuo_two_target_compare_chain: test
+hongshui::hongshui_self_delayed_trick_thunder_damage: test
+shezhanqunru::shezhanqunru_compares_all_responders: test
+shuigong::shuigong_multi_target_forced_equip_discard: test
+suolianjia::suolianjia_links_on_equip_resets_on_leave: test
+touliang::touliang_swap_two_stage_with_restore: test
+yunchou::yunchou_real_host_full_lifecycle: test
+
+25 tests, 0 benchmarks
+     Running tests/g1_shahai_zhenfa.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_zhenfa-4e5eb4571502e660)
+zf_changshe_pozhen_swap_seat: test
+zf_dizaizhen_major_faction_draw: test
+zf_niaoxiangzhen_respond_shan_or_damage: test
+zf_qixingzhen_siege_discard_and_virtual_sha: test
+zf_real_host_full_lifecycle: test
+zf_tianfuzhen_major_aoe_discard: test
+
+6 tests, 0 benchmarks
+     Running tests/g1_wudian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_wudian-bc6ac808be6465bc)
+ana::ana_zhiyuan_cancel_damage_and_equal_recover: test
+anu::anu_anwugu_afflict_and_limits: test
+banzang::banzang_yinbo_random_discard_three: test
+baolei::baolei_mode_effects_on_sha: test
+baolei::baolei_switch_mode_cycle: test
+changqing::changqing_ctianfu_attach_thunder_and_death_clear: test
+changqing::changqing_luanjian_dual_sha_viewas_multi_target: test
+chanyata::chanyata_ziyu_every_four_phases: test
+dva::dva_jijia_absorbs_damage_and_hand_limit: test
+falaozhiying::falaozhiying_feidan_splash_cancel_and_range: test
+feishi::feishi_moshou_declaration_wired_to_host_behavior: test
+feishi::feishi_shuaiyan_recover_trigger_two_choice: test
+g1::g1_wudian_content_lock_and_byte_restore: test
+g1::g1_wudian_generals_and_siji_discard_draw: test
+hanlingsha::hanlingsha_tannang_snatch_unlimited_range: test
+hanlong::hanlong_ciqiu_sha_healthy_bonus_and_dying_mark: test
+heibaihe::heibaihe_duwen_equal_hand_damage_bonus: test
+heiying::heiying_yinshen_untargetable_until_own_judge: test
+jiangcheng::jiangcheng_fenshi_awaken_once_on_rescue: test
+jiangcheng::jiangcheng_longhuo_fires_at_own_phase_end: test
+jiangyunfan::jiangyunfan_liefeng_grant_and_tianjian_aoe: test
+jiangyunfan::jiangyunfan_xunying_auto_second_sha: test
+jingtian::jingtian_jtjubao_gains_nonbasic_and_gates: test
+jingtian::jingtian_sajin_judge_color_recover_and_once: test
+jushifang::jushifang_xiepan_discard_and_discover_equip: test
+kuangshu::kuangshu_shihuo_fire_damage_draw: test
+laiyinhate::laiyinhate_mengji_no_armor_bonus: test
+leiyuange::leiyuange_feng_ya_song_counters: test
+linyueru::linyueru_guiyuan_discard_sha_recover_draw: test
+liufu::liufu_zhucheng_toggle_and_sha_guard: test
+liumengli::liumengli_changnian_death_bequest: test
+liumengli::liumengli_runxin_heart_use_and_respond: test
+liumengli::liumengli_tianxian_range_targets_and_judge_cancel: test
+liumengli::liumengli_xjzhimeng_darkmark_and_draw: test
+liuyan::liuyan_geju_out_of_range_counts: test
+liuyan::liuyan_geju_out_of_range_faction_draw: test
+liuyan::liuyan_juedao_link_and_distance: test
+liuzan::liuzan_kangyin_losehp_discard_and_branch: test
+lixiaoyao::lixiaoyao_xjyufeng_draw_to_two_twice_per_turn: test
+longkui::longkui_diewu_give_and_lingyu_recover: test
+longyou::longyou_minsha_thunder_and_neighbor_discard: test
+longyou::longyou_yuexing_distance_swap_and_clear: test
+luba::luba_liangou_heart_fail_and_xiyang_flip_recover: test
+luba::luba_liangou_hook_distance_and_damage: test
+luozhaoyan::luozhaoyan_fenglue_auto_use_sha_duel: test
+luxiao::luxiao_huhuan_switches_yuedong_to_recover: test
+luxiao::luxiao_kuoyin_eff_and_double_full_gate: test
+luxiao::luxiao_kuoyin_num_extends_yuedong_draw: test
+luxiao::luxiao_yuedong_cancel_and_pending_ask_restores: test
+luxiao::luxiao_yuedong_storage_resets_next_turn: test
+maikelei::maikelei_shenqiang_sha_limit_refund: test
+mei::mei_baoxue_limited_discard_and_flips: test
+mei::mei_flip_face_down_turn_skipped_and_flipped_back: test
+mei::mei_jidong_freeze_damage_immune_and_untargetable: test
+mingxiu::mingxiu_chengxin_rescue_and_immunity: test
+mingxiu::mingxiu_guijin_deal_and_skip_draw: test
+mingxiu::mingxiu_linghuo_round_cooldown_and_fire: test
+moshou::moshou_blocks_delayed_trick_target: test
+muchanglan::muchanglan_lueying_decline_keeps_usable_for_next_sha: test
+muchanglan::muchanglan_lueying_gain_and_victim_discard: test
+muchanglan::muchanglan_lueying_no_third_party_never_fires: test
+murongziying::murongziying_poyun_discard_and_decrement: test
+murongziying::murongziying_qianfang_discard_and_aoe: test
+nangonghuang::nangonghuang_sheling_three_event_reclaim: test
+nangonghuang::nangonghuang_zhangmu_flash_discard_prevent: test
+nangonghuang::nangonghuang_zhaoyao_compare_and_top: test
+orisa::orisa_qianggu_armor_and_guard_nullify: test
+ow::ow_real_host_full_lifecycle: test
+ow::ow_shibing_tuji_and_mujing: test
+sanjian::sanjian_weapon_skill_two_stage_choice_with_restore: test
+shenqishuang::shenqishuang_binxin_grants_hujia_at_low_hp: test
+sishen::sishen_xiandan_red_direct_black_bonus: test
+sumei::sumei_huahu_sacrifice_multi_target: test
+sumei::sumei_sheying_black_judge_reclaim: test
+swd::swd_gouhunluo_countdown_lose_hp_discard: test
+swd::swd_jiguantong_aoe_discard_or_fire: test
+swd::swd_jiguantong_reverse_order_and_content_after_draw: test
+swd::swd_mujiaren_discard_nonbasic_discover_jiguan: test
+swd::swd_zhiluxiaohu_random_enemy_virtual_sha: test
+tangyurou::tangyurou_txianqu_prevent_and_replenish: test
+tianshi::tianshi_shouhu_discard_heal_and_sha_ban: test
+tianyu::tianyu_chezhen_distance_mod: test
+tuobiang::tuobiang_paotai_stack_fire_and_downgrade: test
+wangmeizhike::wangmeizhike_draws_min_hand_target: test
+wangmeizhike::wangmeizhike_recovers_min_hp_damaged_target: test
+wangpengxu::wangpengxu_feixu_shan_draw: test
+wangxiaohu::wangxiaohu_husha_marks_and_virtual_cards: test
+wangxiaohu::wangxiaohu_husha_virtual_nanman: test
+wenhui::wenhui_longxiang_random_discard_diff: test
+wensidun::wensidun_feitiao_range_and_random_discard: test
+wudian::wudian_generals_batch10_diyjuntun_recast_and_jinyan: test
+wudian::wudian_generals_batch12_liduan_gain_equip: test
+wudian::wudian_generals_batch13_jianbi_aoe_exclude: test
+wudian::wudian_generals_batch14_fuchou_cancel_and_settle: test
+wudian::wudian_generals_batch15_liangce_conversion_and_remain: test
+wudian::wudian_real_host_full_lifecycle: test
+xia::xia_fanling_recover_on_others_hp_loss: test
+xiahoujinxuan::xiahoujinxuan_xuanmo_discover_same_class: test
+xianjian::xianjian_real_host_full_lifecycle: test
+xianqing::xianqing_xtanxi_no_holder_cancel: test
+xianqing::xianqing_xtanxi_same_name_steal: test
+xiaoman::xiaoman_lingquan_awaken_grants_shuiyun: test
+xiaoman::xiaoman_shenwu_awaken_grants_huimeng: test
+xingxuan::xingxuan_lingxue_recover_grants_hujia: test
+xuanxiao::xuanxiao_xuanyan_ningbin_fire_thunder: test
+xuejian::xuejian_duci_equip_discard_damage: test
+xuejian::xuejian_shenmu_red_discard_rescue: test
+xuejian::xuejian_xshuangren_offcourt_and_death_discard: test
+youdishenru::youdishenru_cancels_sha_with_reprisal: test
+yuanshi::yuanshi_feiren_bonus_range_and_club_extra_target: test
+yuanshi::yuanshi_feiren_chain_damage_not_bonused: test
+yuejinzhao::yuejinzhao_xjyingfeng_random_virtual_sha: test
+yueqi::yueqi_liguang_discard_and_move_equip: test
+yueqi::yueqi_shiying_cancel_death_and_reset: test
+yuntianhe::yuntianhe_guanri_once_fire_and_equip_strip: test
+yuntianhe::yuntianhe_zhuyue_whitelist_and_clear: test
+zhaliya::zhaliya_pingzhang_barrier_and_owliyong_draw: test
+zhaoliner::zhaoliner_huimeng_tianshe_family: test
+zhixuzhiguang::zhixuzhiguang_guangshu_suit_marks: test
+zixuan::zixuan_shuiyun5_dying_rescue_channel: test
+zixuan::zixuan_shuiyun_off_court_and_type_dedup: test
+zixuan::zixuan_wangyou_roundstamp_and_draw: test
+
+122 tests, 0 benchmarks
+     Running tests/g1_wuxing.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_wuxing-64b0c92a303f8cf4)
+g1_wuxing_vertical_natures_shengke_saverestore: test
+l06_eight_dimension_from_fresh_install: test
+wuxing_real_host_full_lifecycle: test
+wuxingpan_card_equips_via_treasure_slot: test
+wuxingpan_skill_change_nature_with_restore: test
+
+5 tests, 0 benchmarks
+     Running tests/l01_ai_tuning_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l01_ai_tuning_eight-d310a9b35b2fd39b)
+l01_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l02_sj_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l02_sj_eight-c340ffb61791a3bc)
+l02_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l04_cardpile_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l04_cardpile_eight-95920403c7615562)
+l04_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l05_coin_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l05_coin_eight-775d2344c9877f60)
+l05_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l07_omnisearch.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l07_omnisearch-4f0ae31bed06a70c)
+l07_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l09_qhly_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l09_qhly_eight-0e0898ceba2e59c8)
+l09_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l10_epic_cards_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l10_epic_cards_eight-79c967ed34cdbce3)
+l10_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l13_shousha_mvp_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l13_shousha_mvp_eight-7b35ee6cd74cbfc1)
+l13_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l15_shousha_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l15_shousha_eight-ebd41e19304dca17)
+l15_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l16_drag_read_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l16_drag_read_eight-bb048fd642eea981)
+l16_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l17_douzhuan_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l17_douzhuan_eight-2b87b490b9841d0e)
+l17_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l18_update_guard_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l18_update_guard_eight-6b6790330877e132)
+l18_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l19_brawl_batch1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l19_brawl_batch1-1c6a56c65c3de773)
+shishi_gains_max_hp_and_recovers: test
+xunmeng_absent_normal: test
+xunmeng_adds_damage_and_loses_hp: test
+
+3 tests, 0 benchmarks
+     Running tests/l19_zaibian_batch2.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l19_zaibian_batch2-859ac2ab993a528b)
+zaibian_absent_no_draw: test
+zaibian_draws_by_identity_counts: test
+
+2 tests, 0 benchmarks
+     Running tests/l20_config_mods_batch1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_config_mods_batch1-ae635ea6c8b2141a)
+absent_no_mods: test
+mopai_doubles_draw: test
+xueliang_doubles_hp: test
+
+3 tests, 0 benchmarks
+     Running tests/l20_kurou_batch2.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_kurou_batch2-9037685373098b14)
+kurou_absent_rejected: test
+kurou_loses_hp_and_draws: test
+zhuwanzhongji_succession: test
+
+3 tests, 0 benchmarks
+     Running tests/l20_liegong_batch3.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_liegong_batch3-ffda15c364fc302b)
+liegong_direct_hit_when_hand_ge_hp: test
+xinkuanggu_draws_or_recovers: test
+
+2 tests, 0 benchmarks
+     Running tests/l21_martial_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l21_martial_eight-25c3debaa189296d)
+l21_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l22_elo_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l22_elo_eight-b9fc545249656b9e)
+l22_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l23_desktop_adapt.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l23_desktop_adapt-fbda977802dfc729)
+l23_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l24_skin_switch_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l24_skin_switch_eight-cff2702c37493299)
+l24_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l26_fool_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l26_fool_eight-58b81a16d6ce916e)
+l26_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/l27_jishe_batch5.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_jishe_batch5-ac4ef496cb563073)
+jishe_absent_rejected: test
+jishe_draws_and_marks: test
+
+2 tests, 0 benchmarks
+     Running tests/l27_new_meibu_batch3.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_new_meibu_batch3-9cfbdc249a922372)
+new_meibu_absent_no_window: test
+new_meibu_locks_target_for_play_phase: test
+
+2 tests, 0 benchmarks
+     Running tests/l27_new_zhixi_batch2.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_new_zhixi_batch2-d816ac5e1c7af3ae)
+new_zhixi_absent_no_lock: test
+new_zhixi_locks_after_trick: test
+
+2 tests, 0 benchmarks
+     Running tests/l27_sbzhaxiang_batch4.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_sbzhaxiang_batch4-90bb7cf943149150)
+sbzhaxiang_absent_normal_draw: test
+sbzhaxiang_absent_sha_limited: test
+sbzhaxiang_extra_draw: test
+sbzhaxiang_unlimited_sha: test
+
+4 tests, 0 benchmarks
+     Running tests/l27_xiefang_batch1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_xiefang_batch1-234fce24dce0610e)
+xiefang_absent_no_effect: test
+xiefang_reduces_distance_by_alive_females: test
+
+2 tests, 0 benchmarks
+     Running tests/l29_longxue_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l29_longxue_eight-acf05c93afbc866b)
+l29_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/maintenance_guards.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/maintenance_guards-b2acfcc8631498a5)
+production_sources_have_no_debug_output_or_env_switches: test
+
+1 test, 0 benchmarks
+     Running tests/native_kernel.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/native_kernel-291388fb2e63abe0)
+activate::activate_skill_rejected_outside_play_phase: test
+activate::activate_skill_without_grant_rejected: test
+area_attacks::aoe_continues_after_midqueue_death: test
+area_attacks::aoe_target_freeze_at_commit: test
+area_attacks::archery_attack_all_pass_takes_damage: test
+area_attacks::savage_attack_response_skip_and_pass: test
+area_attacks::savage_nullified_target_discards_once: test
+area_attacks::savage_nullify_after_deck_drain_conserves: test
+area_attacks::savage_per_target_nullify: test
+boss_baihu::boss_baihu_kuangxiao_sha_range_and_targets: test
+boss_bianchengwang::boss_bianchengwang_leizhou_leifu_phase_arms: test
+boss_bianchengwang::boss_bianchengwang_leizhu_death_thunder_sequential: test
+boss_bifang::boss_bifang_honglianx_red_excluded_and_judge_gain: test
+boss_bifang::boss_bifang_yanyu_judge_fire_max_three: test
+boss_bifang::boss_bifang_zhaohuo_fire_nature_and_immune: test
+boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source: test
+boss_chujiangwang::boss_chujiangwang_fankui_reuse_gain: test
+boss_chujiangwang::boss_chujiangwang_weimu_black_trick_block: test
+boss_dizangwang::boss_dizangwang_bufo_damage_cap: test
+boss_dizangwang::boss_dizangwang_bufo_prepare_range1_fire: test
+boss_dizangwang::boss_dizangwang_diting_distance_both_ways: test
+boss_dizangwang::boss_dizangwang_wuliang_prepare_recover_end_draw: test
+boss_dongzhuo::boss_dongzhuo_jiuchi_viewas: test
+boss_dushiwang::boss_dushiwang_huoxing_death_fire_all: test
+boss_dushiwang::boss_dushiwang_remen_aoe_skip: test
+boss_dushiwang::boss_dushiwang_remen_sha_reject_then_armor: test
+boss_dushiwang::boss_dushiwang_zhifen_prepare_steal_and_fire: test
+boss_futai2::boss_futai2_tao_banned_both_sides: test
+boss_guojia::boss_guojia_guimou_mad_lifecycle: test
+boss_guojia::boss_guojia_qizuo_trick_reuse: test
+boss_guojia::boss_guojia_yuance_judge_branches: test
+boss_heiwuchang::boss_heiwuchang_guiji_taiping_suoming_xixing: test
+boss_hundun::boss_hundun_wuzang_draw_and_hand_limit: test
+boss_hundun::boss_hundun_xiangde_yinzei: test
+boss_huoshenzhurong::boss_huoshenzhurong_xingxia_yanling_burn: test
+boss_jinshenrushou::boss_jinshenrushou_xingqiu_link_toggle: test
+boss_liubei::boss_liubei_xiaoxiong_gain_and_damage: test
+boss_liubei::boss_liubei_zhangwu_discard_or_damage: test
+boss_luocha::boss_luocha_yushou_moyany: test
+boss_mamian::boss_mamian_juece_last_hand_damage: test
+boss_mamian::boss_mamian_lianyu_fire_all: test
+boss_mengpo::boss_mengpo_shiyou_distinct_suit_gain: test
+boss_mengpo::boss_mengpo_wanghun_death_clear_and_disable: test
+boss_mengpo::boss_mengpo_wangshi_basic_ban_turn_clear: test
+boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding: test
+boss_mode::boss_mode_add_fellow_seat_expansion: test
+boss_mode::boss_mode_chongzheng_revival_and_victory: test
+boss_mushengoumang::boss_mushengoumang_buchun_revive_and_recover: test
+boss_nianshou::boss_nianshou_jingjue_danshu_recover: test
+boss_nianshou::boss_nianshou_nbianshen_rotation_renxing: test
+boss_nianshou::boss_nianshou_nianrui_mengtai: test
+boss_nianshou::boss_nianshou_ruizhi_prune: test
+boss_nianshou::boss_nianshou_shouyi_range_free: test
+boss_pangtong::boss_pangtong_qiwu_club_recover: test
+boss_pangtong::boss_pangtong_tianyu_end_link_all: test
+boss_pingdengwang::boss_pingdengwang_abi_source_fire_no_source_skip: test
+boss_pingdengwang::boss_pingdengwang_pingdeng_death_two_wave_fire: test
+boss_pingdengwang::boss_pingdengwang_suozu_link_all_others: test
+boss_qinglong::boss_qinglong_releiji_thunder_judge: test
+boss_qinglong::boss_qinglong_shenyi_judge_void_and_never_flipped: test
+boss_qinguangwang::boss_qinguangwang_juhun_end_flip_first: test
+boss_qinguangwang::boss_qinguangwang_panguan_delay_reject: test
+boss_qinguangwang::boss_qinguangwang_wangxiang_death_strip_equips: test
+boss_qiongqi::boss_qiongqi_futai_recover_wounded: test
+boss_qiongqi::boss_qiongqi_yandu_gain_at_end_phase: test
+boss_qiongqi::boss_qiongqi_zhue_dual_draw: test
+boss_shuishengonggong::boss_shuishengonggong_juehong_strip_enemies: test
+boss_shuishenxuanming::boss_shuishenxuanming_zirun_draw_all: test
+boss_shujing::boss_shujing_cuidui_poison_cycle: test
+boss_songdiwang::boss_songdiwang_heisheng_death_link_shengfu: test
+boss_stage::boss_stage_opening_and_first_actor: test
+boss_taihao::boss_taihao_shenen_aura: test
+boss_taishanwang::boss_taishanwang_fudu_kujiu_arms: test
+boss_taishanwang::boss_taishanwang_renao_death_fire: test
+boss_taotie::boss_taotie_cangmu_jicai: test
+boss_taotie::boss_taotie_tanyu_skip_discard_and_max_hand_lose_hp: test
+boss_taowu::boss_taowu_luanchang_virtual_aoe: test
+boss_taowu::boss_taowu_minwan_lockset_draw_and_target_mod: test
+boss_taowu::boss_taowu_nitai_in_shield_out_fire: test
+boss_wuguanwang::boss_wuguanwang_zhiwang_gongzheng_xuechi: test
+boss_xiangliu::boss_xiangliu_duqu_shedu_echou: test
+boss_xiangliu::boss_xiangliu_jiushou_limit_nine_and_refill: test
+boss_xiangliu::boss_xiangliu_yaoshou_distance_minus_two: test
+boss_xuanwu::boss_xuanwu_lingqu_damage_counter: test
+boss_yandi::boss_yandi_shaohao_pure_entries: test
+boss_yanling::boss_yanling_huihuo_furan: test
+boss_yanluowang::boss_yanluowang_tiemian_black_sha_block: test
+boss_yanluowang::boss_yanluowang_zhadao_pierce_renwang: test
+boss_yanluowang::boss_yanluowang_zhuxin_death_min_hp: test
+boss_yecha::boss_yecha_modao_mojian_danshu: test
+boss_yingzhao::boss_yingzhao_fengdong_hand_ban: test
+boss_yingzhao::boss_yingzhao_sipu_use_ban_first_two: test
+boss_yingzhao::boss_yingzhao_xunyou_steal_and_equip: test
+boss_yinjian::boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou: test
+boss_zhangchunhua::boss_zhangchunhua_jueqing_wuxin_damage_faces: test
+boss_zhangchunhua::boss_zhangchunhua_wuxin_damage_only: test
+boss_zhangchunhua::boss_zhangchunhua_wuxin_delay_and_shangshix: test
+boss_zhangjiao::boss_zhangjiao_jidian_chain_guard: test
+boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder: test
+boss_zhangjiao::boss_zhangjiao_tiandao_rewrite: test
+boss_zhenji::boss_zhenji_lingbo_jiaoxia_draws: test
+boss_zhenji::boss_zhenji_tashui_flip_and_fanghua: test
+boss_zhouyu::boss_zhouyu_honglian_end_and_xianyin: test
+boss_zhouyu::boss_zhouyu_huoshen_fire_immune_recover: test
+boss_zhuanlunwang::boss_zhuanlunwang_fanshi_damage_toggle: test
+boss_zhuanlunwang::boss_zhuanlunwang_lunhui_swap_at_judge: test
+boss_zhuanlunwang::boss_zhuanlunwang_wangsheng_virtual_savage: test
+boss_zhuanxu::boss_zhuanxu_zaoyi_grant_and_exec: test
+boss_zhuque::boss_zhuque_fentian_red_cards: test
+boss_zhuyan::boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn: test
+boss_zhuyan::boss_zhuyan_juyuan_storage_and_extra_target: test
+boss_zhuyan::boss_zhuyan_xushi_flip_and_aoe: test
+boss_zhuyin::boss_zhuyin_xiongshou_semantics: test
+caocao::caocao_jianxiong_takes_damaging_card: test
+catalog::catalog_shared_across_commands: test
+chain::chain_card_toggles_link: test
+chain::chain_double_nullify_leaves_nobody_linked: test
+chain::chain_nullify_is_per_target_first_only: test
+chain::chain_nullify_is_per_target_second_only: test
+chain::chain_propagation_preserves_source: test
+cixiong::cixiong_opposite_gender_discard_or_draw: test
+combat::fire_sha_propagates_through_chain: test
+combat::fire_sha_shares_sha_limit: test
+combat::normal_damage_does_not_propagate: test
+combat::propagated_damage_is_full_resolution: test
+combat::sha_damage_dealt_carries_card: test
+combat::sha_dodge_damage_limit_and_range: test
+combat::thunder_damage_propagates_and_unlinks_all: test
+d4::d4_boss_b0_add_fellow_api_appends_and_marks_boss_side: test
+d4::d4_boss_b0_archive_format_v79_rejects_v78_without_migration: test
+d4::d4_boss_b0_ban_query_stub_always_false: test
+d4::d4_boss_b0_change_boss_api_reinit_updates_pointer: test
+d4::d4_boss_b0_hash_includes_stage_fields: test
+d4::d4_boss_b0_stage_state_default_none_roundtrip: test
+d4::d4_boss_b1_qingmu2_chain_to_goumang: test
+d4::d4_boss_b1_qingmu3_chain_to_taihao_sides: test
+d4::d4_boss_b1_qingmu_host_tags: test
+d4::d4_boss_b2_baimang2_chain_to_rushou: test
+d4::d4_boss_b2_chiyan2_chain_to_zhurong: test
+d4::d4_boss_b2_sixiang_host_tags: test
+d4::d4_boss_b2_xuanlin2_chain_to_gonggong: test
+d4::d4_boss_b3_baimang3_chain_to_shaohao_sides: test
+d4::d4_boss_b3_chiyan3_chain_to_yandi_sides: test
+d4::d4_boss_b3_sixiang3_host_tags: test
+d4::d4_boss_b3_xuanlin3_chain_to_zhuanxu: test
+d4::d4_boss_b4_baiyi_discard_thunder_and_draw: test
+d4::d4_boss_b4_bianshen3_changes_boss_seeded: test
+d4::d4_boss_b4_bianshen4_changes_boss_seeded: test
+d4::d4_boss_b4_chiyi_mark_then_real_damage: test
+d4::d4_boss_b4_host_tags: test
+d4::d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo: test
+d4::d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo: test
+d4::d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji: test
+d4::d4_boss_b4_qingyi_rounds_change_hp: test
+daqiao::daqiao_guose_diamond_as_le: test
+dead::dead_skill_holder_excluded_from_rewrite: test
+death::death_clears_judge_zone: test
+diaochan::diaochan_biyue_draws_at_end_phase: test
+discard::discard_phase_enforces_hand_limit: test
+distance::distance_clamp_to_minimum_1: test
+distance::distance_range_reference_differential: test
+doudizhu::doudizhu_binglin_opening_draw: test
+doudizhu::doudizhu_mode_victory_and_roundtrip: test
+duel::duel_alternating_sha_until_pass: test
+duel::duel_can_be_nullified: test
+duel::duel_damage_can_kill: test
+duel::duel_does_not_consume_sha_limit: test
+duel::duel_no_sha_immediate_loss: test
+dying::dying_rescue_and_death: test
+dying::dying_save_with_jiu_derivation_restores: test
+e01::e01_extension_registry_lifecycle: test
+e02::e02_registry_rejects_uninstalled_operations: test
+e03::e03_extension_cards_in_catalog_and_game: test
+e03::e03_extension_catalog_content_lock_in_game_and_restore: test
+e04::e04_extension_conflict_detection: test
+e05::e05_extension_card_in_game: test
+e06::e06_extension_general_metadata: test
+equipment::armor_bagua_judgement_semantics: test
+equipment::equip_distance_skips_dead_players: test
+equipment::equip_horses_weapon_range_and_replacement: test
+fangtian::fangtian_multi_target_sha: test
+ganfuren::ganfuren_assembly_shushen_shenzhi: test
+ganning::ganning_qixi_black_card_as_dismantle: test
+general::general_assembly_grants_and_remove_revokes_slot_skills: test
+general::general_bundle_grant_full_skill_set: test
+general::general_faction_mapping_complete: test
+general::general_table_grants_all_bundles: test
+gongsunzan::gongsunzan_assembly_yicong_distance: test
+guanshi::guanshi_forces_damage_after_dodge: test
+guanyu::guanyu_wusheng_red_card_as_sha: test
+guidao::guidao_rewrite_replaces_judgment: test
+guidao::guidao_tiandu_combo_final_card_gained: test
+guidao::guidao_two_holders_asked_in_seat_order: test
+guojia::guojia_jiji_draws_and_gives_one_card: test
+guozhan::guozhan_compensatory_reveal_during_targeting: test
+guozhan::guozhan_general_slots_roundtrip: test
+guozhan::guozhan_m3_faction_victory: test
+guozhan::guozhan_m3_victory_regression_matrix: test
+guozhan::guozhan_reveal_gating_view_isolation: test
+hanbing::hanbing_prevents_damage_discards_two_cards: test
+host::host_assembler_prototype_contract: test
+huanggai::huanggai_kurou_lose_hp_draw_two: test
+huangyueying::huangyueying_jizhi_draws_on_trick: test
+huatuo::huatuo_qingnang_heals_wounded_player: test
+hujia::hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass: test
+hujia::hujia_pending_ask_byte_roundtrip_restores: test
+hujia::hujia_public_asks_do_not_leak_hidden_shan: test
+hujia::hujia_shan_counts_toward_wushuang_requirement: test
+hujia::hujia_skips_non_wei_helpers: test
+identity::identity_full_match_replay_reaches_lord_side_victory: test
+identity::identity_lord_death_decides_by_faction: test
+identity::identity_lord_killing_loyalist_discards_all: test
+identity::identity_lord_penalty_discards_equips: test
+identity::identity_lord_side_wins_when_rebels_and_traitor_dead: test
+identity::identity_matrix_for_supported_seats: test
+identity::identity_pure_command_match_reaches_outcome: test
+identity::identity_pure_command_traitor_victory: test
+identity::identity_rebel_death_rewards_killer: test
+identity::identity_versus_boss_replay_restore_parity: test
+jijiang::jijiang_activate_not_phase_locked: test
+jijiang::jijiang_pending_ask_restore_continues: test
+jiu::jiu_bonus_survives_byte_restore: test
+jiu::jiu_boosts_next_sha_once_per_turn: test
+jiu::jiu_saves_dying_player: test
+judgement::bing_judgement_skips_draw_phase: test
+judgement::delayed_trick_bing_and_shandian_nullify_window: test
+judgement::delayed_trick_play_time_nullify_window: test
+judgement::judge_lightning_saved_by_enough_taos: test
+judgement::judge_order_delayed_first_then_lightning_hit_kills: test
+judgement::judge_order_grouping_multi_cards_and_restore: test
+judgement::judge_owner_death_settles_zones_and_conservation: test
+judgement::judge_zone_same_name_limit: test
+judgement::judgement_event_order_rewrite_then_tiandu: test
+judgement::judgement_no_rewrite_single_finalized: test
+judgement::le_judgement_skips_play_phase: test
+judgement::lightning_damage_has_no_card: test
+judgement::lightning_miss_to_next_with_same_name_discards: test
+judgement::lightning_miss_transfer_skips_dead_seat: test
+kof::kof_engine_mode_session_advance: test
+kof::kof_m1_two_player_pure_command_endgame: test
+kof::kof_session_consistency_and_midrestore: test
+last::last_rebel_reward_precedes_victory: test
+leisha::leisha_pending_ask_byte_roundtrip: test
+leisha::leisha_resolves_as_sha_and_shares_limit: test
+lidian::lidian_assembly_xunxun_wangxi: test
+liubei::liubei_jijiang_borrows_sha_from_shu_helper: test
+liubei::liubei_rende_gives_cards_and_heals: test
+luoshen::luoshen_repeat_judgement_gains_black_cards: test
+luxun::luxun_lianying_draws_after_losing_last_card: test
+luxun::luxun_lianying_triggers_on_forced_discard: test
+luxun::luxun_qianxun_blocks_le_target: test
+lvbu::lvbu_wushuang_duel_needs_double_sha: test
+lvbu::lvbu_wushuang_sha_needs_two_dodges: test
+lvmeng::lvmeng_keji_skips_discard_without_sha: test
+machao::machao_mashu_distance_minus_one: test
+machao::machao_tieji_judgement_blocks_shan_on_red: test
+n04f::n04f_snapshot_association_validation: test
+n08::n08_fanjian_give_and_damage: test
+n08::n08_hujia_borrows_shan_from_others: test
+n08::n08_jieyin_heals_both: test
+n08::n08_jijiu_red_card_as_tao: test
+n08::n08_lijian_forces_duel: test
+n08::n08_liuli_transfers_sha_target: test
+n08::n08_qingguo_qicai_jiuyuan: test
+n10::n10_planner_baseline_completes_games: test
+n10::n10_planner_cancel_and_deadline: test
+n10::n10_planner_isolation_and_budget: test
+n10::n10_planner_stale_rejection: test
+n10::n10_policy_input_isolation: test
+n10a::n10a_private_choice_answer_hidden_from_others: test
+n11::n11_kof_session_parse_negatives: test
+n11::n11_reveal_grants_skills_and_hp: test
+n11a::n11a_auth_token_instance_and_generation_binding: test
+n11b::n11b_archive_header_and_length_validation: test
+negative::negative_hp_rescued_by_three_taos: test
+no::no_nullify_window_for_basic_card: test
+no::no_paoxiao_second_sha_rejected: test
+nullify::nullify_cancels_savage: test
+nullify::nullify_on_nullify_reverses: test
+nullify::nullify_rejected_when_played_actively: test
+p2::p2_death_with_machine_held_cards: test
+p2::p2_identity_endgame_per_submission_parity: test
+p2::p2_new_choice_points_per_submission_conservation: test
+presentation::presentation_visibility_and_render_determinism: test
+probe::probe_tashui2_tmp: test
+qilin::qilin_bow_discards_target_horse_on_sha_damage: test
+qinggang::qinggang_pierces_armor: test
+qinglong::qinglong_replays_sha_after_dodge: test
+rejections::rejections_leave_state_unchanged: test
+rende::rende_cumulative_crosses_two_across_activations: test
+render::render_frame_guozhan_generals_isolation: test
+renwang::renwang_blocks_black_sha_only: test
+replay::replay_and_restore_per_command_parity: test
+replay::replay_determinism_same_seed_identical: test
+replay::replay_different_seed_diverges: test
+reshuffle::reshuffle_conserves_every_card_exactly_once: test
+rollback::abort_after_restore_restores_segment_start: test
+rollback::abort_contract_direct_vs_restored_identical: test
+rollback::abort_requires_open_segment_and_nonsliced_rollback_unchanged: test
+rollback::aborted_segment_restores_pre_command_state: test
+rollback::budget_exhaustion_rolls_back: test
+sancai::sancai_nested_choice_chain_and_decline: test
+seat::seat_quota_bounds_commands_and_resets_per_round: test
+shandian::shandian_hits_and_transfers: test
+shouyi::shouyi_grants_temporary_yishang_until_owner_turn_end: test
+simayi::simayi_fankui_decline_takes_nothing: test
+simayi::simayi_fankui_steals_from_damage_source: test
+simayi::simayi_guicai_rewrites_with_any_suit_card: test
+skill::skill_disabled_gate_excludes_rewriter: test
+snapshot::snapshot_roundtrip_while_suspended: test
+snatch::snatch_steals_card_within_distance: test
+standard::standard_missing_generals_assembly_and_behaviors: test
+suidun::suidun_prevents_once_per_turn: test
+sun::sun_xiangxiang_jixiang_draws_on_equip_loss: test
+sunquan::sunquan_zhiheng_discard_n_draw_n: test
+suqing::suqing_disables_queued_suidun_mid_resolution: test
+suspension::suspended_segment_rejects_commands_and_resume_requires_open_segment: test
+suspension::time_slice_resumes_to_identical_result: test
+tiandu::tiandu_gain_own_judge_card_only: test
+tiandu::tiandu_other_holder_not_asked: test
+versus::versus_4v4_eight_seats_team_victory: test
+versus::versus_mode_team_victory_and_rewards: test
+versus::versus_substitute_revive_on_death: test
+weapon::weapon_replacement_terminates_old_range: test
+wugu::wugu_jiedao_trick_behaviors: test
+wuzhong::wuzhong_taoyuan_trick_behaviors: test
+xiahoudun::xiahoudun_ganglie_non_heart_reflects: test
+xuchu::xuchu_luoyi_boosts_sha_damage: test
+yiji::yiji_assembly_jijie_jiyuan: test
+yishang::yishang_redirects_damage_in_before_window: test
+yuanshu::yuanshu_assembly_wangzun_tongji: test
+zhangba::zhangba_two_cards_as_sha: test
+zhangfei::zhangfei_paoxiao_removes_sha_limit: test
+zhangliao::zhangliao_tuxi_replaces_draw: test
+zhaoyun::zhaoyun_longdan_sha_as_dodge: test
+zhiheng::zhiheng_decline_draws_nothing: test
+zhouyu::zhouyu_yingzi_extra_draw_at_draw_phase: test
+zhu::zhu_skills_require_lord_role_in_identity_mode: test
+zhuge::zhuge_crossbow_unlimited_sha: test
+zhugeliang::zhugeliang_guanxing_reorders_deck_top: test
+zhugeliang::zhugeliang_kongcheng_blocks_sha_and_duel_targets: test
+
+341 tests, 0 benchmarks
+     Running tests/nc01_seat_semantics.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc01_seat_semantics-1b2dee0b3dbb8eee)
+alive_ring_ignores_dead_seats: test
+audit_counterexamples_are_fixed: test
+seat_distance_all_pairs_for_supported_counts: test
+seat_distance_is_rotation_invariant: test
+seat_ring_swap_changes_order: test
+seat_steps_and_distance_are_distinct_concepts: test
+
+6 tests, 0 benchmarks
+     Running tests/nc03_ai_consistency.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc03_ai_consistency-6c1b43a3f6fb1793)
+forged_action_is_rejected_by_authoritative_validation: test
+planner_actions_pass_authoritative_validation: test
+
+2 tests, 0 benchmarks
+     Running tests/nc03_legal_actions.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc03_legal_actions-03d2f01f9e1b049c)
+legal_actions_cover_open_choice: test
+legal_actions_do_not_mutate_engine: test
+legal_actions_empty_for_other_seat: test
+legal_actions_respect_attack_range: test
+
+4 tests, 0 benchmarks
+     Running tests/nc04_cards_given_event.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_cards_given_event-67ba8e5583519b23)
+cards_given_dsl_package_bridges_to_native_event: test
+giving_two_cards_at_once_triggers_cards_given_once: test
+optional_probe_confirms_and_restores_across_save: test
+probe_on_recipient_side_does_not_trigger: test
+rende_give_triggers_cards_given_probe_for_recipient: test
+single_cards_given_frame_carries_all_cards: test
+v325_and_earlier_archives_are_rejected_by_rule_version: test
+
+7 tests, 0 benchmarks
+     Running tests/nc04_vm_fault.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_vm_fault-9c05ad2773c93a4f)
+nc04_duplicate_submission_after_fault: test
+nc04_fuel_exhaustion_rolls_back_and_rejects: test
+nc04_normal_completion: test
+nc04_pause_and_resume: test
+
+4 tests, 0 benchmarks
+     Running tests/nc04_vm_resume.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_vm_resume-81e8a659b5dc4193)
+b7_plain_v323_archive_is_rejected_by_rule_version: test
+b7_suspended_vm_v323_archive_is_rejected: test
+nc04_fault_after_resume_rolls_back: test
+nc04_invalid_vm_answers_preserve_retry_across_archive: test
+nc04_pause_resume_completes: test
+nc04_vm_fault_after_archive_restores_choice_and_allows_retry: test
+nc04_vm_restore_preserves_hit_counting: test
+nc04_vm_restore_preserves_once_consume: test
+nc04_vm_restore_uses_declared_skill_for_storage: test
+
+9 tests, 0 benchmarks
+     Running tests/nc05_general_select.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc05_general_select-cc8ea8fddb1d5cdd)
+assign_general_grants_pack_skills: test
+assign_general_validates_inputs: test
+general_candidates_include_pack_generals: test
+identity_lord_selection_preserves_infinite_hp_sentinel: test
+match_continues_after_selection: test
+reselect_keeps_equipment_skill_shared_with_old_general: test
+reselect_keeps_global_skill_shared_with_old_general_and_restore: test
+
+7 tests, 0 benchmarks
+     Running tests/nc06_generic_content_state.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc06_generic_content_state-0aa80e24c3e70137)
+nc06_generic_turn_scoped_state_clears_on_turn_change: test
+nc06_shape_flags_is_same_sourced: test
+nc06_shape_hits_is_same_sourced: test
+nc06_shape_marks_is_same_sourced: test
+nc06_shape_once_is_same_sourced: test
+nc06_shape_piles_is_same_sourced: test
+
+6 tests, 0 benchmarks
+     Running tests/nc06_zhucheng_restore.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc06_zhucheng_restore-e295b087f8fcb449)
+ai_redaction_preserves_actual_zhucheng_pile: test
+all_owned_piles_are_counted_once: test
+non_owning_card_references_are_not_counted_twice: test
+skill_pile_archive_restores_and_continues: test
+skill_pile_rejects_duplicate_missing_and_unknown_cards: test
+
+5 tests, 0 benchmarks
+     Running tests/nc07_archive_hash_fields.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_archive_hash_fields-c6666d453ee11f34)
+card_mods_enters_hash: test
+chaofeng_active_enters_hash: test
+jiguanyuan_cards_enters_hash: test
+jileng_active_enters_hash: test
+minwan_targets_enters_hash: test
+nigong_lv_enters_hash: test
+v326_and_earlier_archives_are_rejected_by_rule_version: test
+xingtigaizao_count_enters_hash: test
+xuehuang_used_enters_hash: test
+xuejibingbao_enters_hash: test
+yinmi_active_enters_hash: test
+
+11 tests, 0 benchmarks
+     Running tests/nc07_archive_hash_guard.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_archive_hash_guard-bee59a70419db068)
+archived_state_fields_are_hashed_or_excluded: test
+
+1 test, 0 benchmarks
+     Running tests/nc07_discard_duplicate_probe.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_discard_duplicate_probe-1ebeab886f39a837)
+swd_discard_has_no_duplicates_and_restores: test
+
+1 test, 0 benchmarks
+     Running tests/nc07_lianyaohu_hash.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_lianyaohu_hash-15f3df844c52be09)
+different_jar_orders_have_different_hashes_and_trajectories: test
+v324_and_earlier_archives_are_rejected_by_rule_version: test
+
+2 tests, 0 benchmarks
+     Running tests/nc07_state_same_source.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_state_same_source-ea6cc6b60f202f2a)
+nc07_boss_stage_is_same_sourced: test
+nc07_counters_are_same_sourced: test
+nc07_equip_zone_is_same_sourced: test
+nc07_face_down_is_same_sourced: test
+nc07_hp_is_same_sourced: test
+nc07_identity_roles_are_same_sourced: test
+nc07_judge_zone_is_same_sourced: test
+nc07_max_hp_is_same_sourced: test
+nc07_restore_rejects_out_of_range_references: test
+nc07_seat_ring_is_same_sourced: test
+nc07_skill_instances_are_same_sourced: test
+nc07_turn_state_is_same_sourced: test
+
+12 tests, 0 benchmarks
+     Running tests/nc08_acceptance_sweep_all_packages.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_acceptance_sweep_all_packages-aa2997f7f5c854de)
+acceptance_sweep_all_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_acceptance_sweep_small_packages.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_acceptance_sweep_small_packages-ae13725c485231be)
+acceptance_sweep_small_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_card_name_prefix_regression.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_card_name_prefix_regression-95298f11de51de90)
+card_name_double_prefix_regression: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_card_ownership_partition.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_card_ownership_partition-bbce5ceb5a7c2b77)
+card_ownership_partition_roundtrip: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_composition_acceptance.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_composition_acceptance-9bfcefcd3e5c8a64)
+composition_all_card_packs_together: test
+composition_duplicate_card_names_report: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_composition_pair_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_composition_pair_matrix-d4ffc39ab964305f)
+composition_pair_matrix_all_pairs: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_config_acceptance.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_config_acceptance-1dbb7e2da497ef33)
+config_enabled_flag_gates_cards: test
+config_init_hook_parses: test
+config_invalid_data_rejected: test
+config_metadata_complete: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_conversion_gap_regression.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_conversion_gap_regression-86c37e49e2557746)
+conversion_gap_inventory_is_still_absent: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_cross_target_real.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_cross_target_real-d7dc9df6c2940b8e)
+native_standard_one_player_trajectory: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_dead_host_keys.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_dead_host_keys-5b1cad62c4f9240a)
+dead_host_keys_are_absent_from_catalog: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_general_pair_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_general_pair_matrix-09664d27828fcf4a)
+general_pair_matrix_with_card_packs: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_global_cards_active_use_probe.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_global_cards_active_use_probe-7ffd8e6f25c322c7)
+global_cards_active_use_probe: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_identity_gate_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_identity_gate_matrix-923e81efcfd6344c)
+identity_version_gate_over_all_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_loader_card_skills.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_loader_card_skills-77e14fe7ff4b4168)
+card_skills_declare_host_skill: test
+card_skills_deduplicated: test
+real_pack_still_bridges: test
+unknown_card_skill_key_rejected: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_manifest_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_manifest_matrix-730f59510d7a6c1e)
+manifest_matrix_over_package_dirs: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_phase_end_dispatch_probe.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_phase_end_dispatch_probe-0cf2b9184c2304e8)
+probe_phase_end_skills_and_candidates: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_pile_pair_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_pile_pair_matrix-c1acfd38d5fa4af7)
+pile_pair_matrix_over_card_packs: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_prepare_phase_mapping.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_prepare_phase_mapping-ba096004ce29edf9)
+prepare_phase_triggers_are_folded_into_judge_begin: test
+xiuluo_filter_requires_hand_which_upstream_does_not: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_registered_defect_guards.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_registered_defect_guards-a761f01b665f3b0b)
+baiyi_must_not_invent_a_phase_trigger: test
+cap_card_targeted: test
+cap_damage_begin_second: test
+cap_death_before: test
+cap_game_start: test
+cap_judge_before: test
+cap_sha_after: test
+cap_sha_before: test
+cap_sha_begin: test
+g19_rexue_filter_must_not_exclude_owner: test
+g19_tiebi_filter_must_not_exclude_owner: test
+g19_zhuhai_filter_must_not_exclude_owner: test
+g20_jiuwei_turn_end: test
+g20_liyutang_turn_end: test
+g20_paotai2_turn_end: test
+g20_zhucheng_turn_end: test
+g20_ziyu_turn_end: test
+g23_binxin_turn_end: test
+g23_donghuangzhong_turn_end: test
+g23_guangshu_spade_turn_end: test
+g23_huanling_turn_end: test
+g23_jidong_turn_end: test
+g23_lingxin_turn_end: test
+g23_lingyu_turn_end: test
+g23_lqingcheng_turn_end: test
+g23_menshen_turn_end: test
+g23_xuanyuan_turn_end: test
+guard_chengxin_dying: test
+guard_cigu_pre_draw: test
+guard_fenglue_before: test
+guard_fuchou2_before: test
+guard_gaiming_judge_before: test
+guard_hutian_pin_end: test
+guard_kuwu_and_shengke_card_targeted: test
+guard_mb_phase_before_enter_game: test
+guard_mopaifanbei_second_draw: test
+guard_mufeng_pin_end: test
+guard_niepan_dying: test
+guard_prepare_phase_exists: test
+guard_rangjie_branch1_draws: test
+guard_shouyin_dying: test
+guard_shuiyun5_dying: test
+guard_xiangxing_lose_hp_end: test
+guard_yueyin_fourth_damage: test
+guard_yxs_menshen3_extra_phase: test
+huajin2_must_not_add_a_phase_branch: test
+jiguanyuan_gain_must_trigger_on_damage: test
+lexue_any_phase_of_owner_only: test
+reguhuo_must_record_a_per_turn_use_marker: test
+ziyangdan_must_not_pin_the_end_phase: test
+
+50 tests, 0 benchmarks
+     Running tests/nc08_replay_determinism_five_sources.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_replay_determinism_five_sources-3983acbbb395ff1a)
+replay_determinism_per_pack: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_rescue_card_set_survey.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_rescue_card_set_survey-edcabd09c8f91e51)
+rescue_card_set_survey: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_save_restore_four_sources.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_four_sources-07b34e0d93633f04)
+save_restore_roundtrip_four_sources: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_save_restore_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_matrix-3414b4c9bfd18462)
+save_restore_matrix_over_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_save_restore_pile.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_pile-ed6660b243f6df3b)
+save_restore_roundtrip_pile_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_skill_mapping_inventory.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_skill_mapping_inventory-a7dc2d32ed6e4f55)
+skill_mapping_inventory_matches_baseline: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_skill_pair_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_skill_pair_matrix-da34c5e0f59602ba)
+skill_pair_matrix_over_general_packs: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_standard_deck_coverage.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_standard_deck_coverage-4281b10dfe3f83df)
+standard_deck_kind_instance_coverage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_swd_yuchan_family_probe.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_swd_yuchan_family_probe-f15e285720424532)
+swd_yuchan_family_active_use_probe: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_trigger_order_counterexample.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_trigger_order_counterexample-91fd450b8e5575f0)
+nc08_same_priority_pair_resolves_in_def_order_without_player_choice: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_u08_reachability.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_u08_reachability-ee2baecda2ebf5c0)
+u08_skills_are_declared_but_have_no_carrier: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upgrade_acceptance.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_acceptance-fc9dce64d4b75a86)
+upgrade_card_addition_is_additive: test
+upgrade_downgrade_still_bridges: test
+upgrade_old_and_new_coexist: test
+upgrade_version_bump_keeps_content: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upgrade_five_sources.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_five_sources-78303504171ab257)
+upgrade_per_source_five_sources: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upgrade_matrix.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_matrix-c3c62f8db72f8f2c)
+upgrade_matrix_over_packages: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upgrade_skill_mapping.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_skill_mapping-678be2089754fa72)
+upgrade_skill_mapping_change_is_detected: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_biyue_yingzi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_biyue_yingzi-69db2c6c141e7a44)
+upstream_biyue_draws_at_end_phase_begin: test
+upstream_biyue_requires_the_skill: test
+upstream_yingzi_draws_one_extra: test
+upstream_yingzi_numfixed_difference_is_fixed: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_boss_zhugeliang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_boss_zhugeliang-41142e481d39402e)
+upstream_boss_zhugeliang_pack_mapping: test
+upstream_xiangxing_differences_are_fixed: test
+upstream_xiangxing_three_stars_state: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_chunbing.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_chunbing-e45abd0f456fdc57)
+upstream_chunbing_grants_listener_with_count_five: test
+upstream_chunbing_modeling_difference_is_fixed: test
+upstream_chunbing_target_filter_rejects_existing_holder: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_ciqiu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ciqiu-9238af28bb5eab03)
+upstream_ciqiu_bonus_and_one_shot_removal: test
+upstream_ciqiu_dying_is_turn_scoped: test
+upstream_ciqiu_requires_sha_card: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_duwen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_duwen-8a4b1978d2983e3d)
+upstream_duwen_equal_hands_adds_one_damage: test
+upstream_duwen_notlink_difference_is_fixed: test
+upstream_duwen_requires_the_skill: test
+upstream_duwen_unequal_hands_no_bonus: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_fanjian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_fanjian-35640daa4d38c384)
+upstream_fanjian_flow_matches: test
+upstream_fanjian_matching_suit_no_damage: test
+upstream_fanjian_mismatched_suit_deals_damage: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_fankui.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_fankui-55a0db7d61ab0e6f)
+upstream_fankui_differences_are_fixed: test
+upstream_fankui_gains_card_from_source: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_ganglie.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ganglie-114f1a3bfab32bf1)
+upstream_ganglie_discard_branch_difference_is_fixed: test
+upstream_ganglie_non_heart_hits_source_directly: test
+upstream_ganglie_requires_the_skill: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_guanxing.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guanxing-22682e3da3b2c72e)
+upstream_guanxing_differences_are_fixed: test
+upstream_guanxing_offers_arrange_choice: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_guicai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guicai-c7bfbb55c553ede6)
+guidao_is_not_in_the_standard_face: test
+upstream_guicai_equip_zone_difference_is_registered: test
+upstream_guicai_rewrites_others_judgement_with_any_hand_card: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_bingpotong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_bingpotong-595fc15aaa507dce)
+upstream_bingpotong_hp_loss_ignores_hujia: test
+upstream_bingpotong_same_color_branch: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_dinvxuanshuang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_dinvxuanshuang-3109f58c4936a538)
+upstream_dinvxuanshuang_recovers: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_feibiao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_feibiao-b8e762f2669dfbe7)
+upstream_feibiao_two_branches: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_food_survey.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_food_survey-cb9df2dcfa9b465d)
+food_cards_body_ownership_survey: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_gjyuheng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_gjyuheng-98c30cb52b72b52a)
+upstream_gjyuheng_steals_spade: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_gudonggeng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_gudonggeng-e415b7fa3f1e85bf)
+upstream_gudonggeng_reduces_once: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_heilonglinpian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_heilonglinpian-8f4154c7c698a7f8)
+upstream_heilonglinpian_grants_hujia: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_jinlianzhu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_jinlianzhu-3b0c1b7b81b6462d)
+upstream_jinlianzhu_interrupts_and_source_draws: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_liufengsan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liufengsan-1357351367285148)
+upstream_liufengsan_grants_two_shan: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_liutouge.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liutouge-8e5e67355c938c9b)
+upstream_liutouge_random_pool_difference_is_registered: test
+upstream_liutouge_two_branches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_liyutang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liyutang-23fc942249589178)
+upstream_liyutang_gate_on_already_marked: test
+upstream_liyutang_target_gains_the_card: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_longxugou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_longxugou-32807d0b358ea546)
+upstream_longxugou_steals_and_equips: test
+upstream_longxugou_target_needs_equips: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_luyugeng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_luyugeng-d25737643b509b93)
+upstream_luyugeng_discards_basic_and_gains_deck_top: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_mapodoufu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mapodoufu-8f9aac6038fbcfdb)
+upstream_mapodoufu_target_gains_the_card: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_mianlijinzhen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mianlijinzhen-cbf60f8388bb5fc5)
+upstream_mianlijinzhen_draws_then_loses_hp: test
+upstream_mianlijinzhen_target_hp_gate: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_mizhilianou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mizhilianou-7a6ebfce6ff769aa)
+upstream_mizhilianou_heart_as_tao: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_molicha.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_molicha-1c39c4d7050c7282)
+upstream_molicha_blocks_black_cards: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_mutoumianju.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mutoumianju-a817f02127faadf5)
+upstream_mutoumianju_grants_skill_on_equip: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_qiankunbiao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_qiankunbiao-460d8ecf8b7087b0)
+upstream_qiankunbiao_discards_target_and_neighbor: test
+upstream_qiankunbiao_target_needs_he_cards: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_qingtuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_qingtuan-a36dda74bcecd75f)
+upstream_qingtuan_first_sha_draws_once_per_turn: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_shatang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shatang-e6afb925254d9410)
+upstream_shatang_damages_then_grants_hujia: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_shenhuofeiya.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shenhuofeiya-23bbae8b96c8ca70)
+upstream_shenhuofeiya_burns_who_cannot_dodge: test
+upstream_shenhuofeiya_target_without_he_is_legal: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_shihuifen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shihuifen-2b79fd547376fd98)
+upstream_shihuifen_blocks_cards_on_others: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_shujinsan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shujinsan-a504009b6c3b05ac)
+upstream_shujinsan_discards_and_draws_equal: test
+upstream_shujinsan_target_needs_he_cards: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_gujian_tanhuadong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_tanhuadong-621e7307f602fc4e)
+upstream_tanhuadong_draws_at_play_phase_end: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_xiajiao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_xiajiao-7cf673add9976c0e)
+upstream_xiajiao_extra_draw_then_discard: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_yougeng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yougeng-6129be264cabafa9)
+upstream_yougeng_recovers_when_lowest_and_wounded: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_yuanbaorou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yuanbaorou-c2667880c9319c80)
+upstream_yuanbaorou_extra_sha_and_qingtuan_gate: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_yunvyuanshen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yunvyuanshen-90bf7b336a68838d)
+upstream_yunvyuanshen_grants_skill: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_gujian_ziyangdan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_ziyangdan-cd09bb9ae63a6fce)
+upstream_ziyangdan_grants_hujia: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_guose.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guose-909d1b62e29f1d14)
+upstream_guose_diamond_used_as_le: test
+upstream_guose_non_diamond_rejected: test
+upstream_guose_requires_the_skill: test
+upstream_guose_zone_and_priority_differences_are_fixed: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_haidao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_haidao-ab555b56141a3618)
+upstream_haidao_damaged_cancel_grants_hujia: test
+upstream_haidao_damaged_discard_recovers: test
+upstream_haidao_healthy_grants_hujia_without_prompt: test
+upstream_haidao_is_once_per_turn: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_hearth_chuansongmen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_chuansongmen-5a0e9e299b6370a7)
+upstream_chuansongmen_gains_deck_top: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_dunpaigedang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_dunpaigedang-ac286f9069e848c7)
+upstream_dunpaigedang_hujia_draw_discard: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_jihuocard.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_jihuocard-03e5272688502ea2)
+upstream_jihuocard_draws_and_grants_temp_skill: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_linghunzhihuo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_linghunzhihuo-55c769e1d65d0a56)
+upstream_linghunzhihuo_damages_and_user_discards: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_shandianjian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shandianjian-b58039c6dfb6f281)
+upstream_shandianjian_record_acceptance: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_shenenshu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shenenshu-164239554d556423)
+upstream_shenenshu_replaces_hand_with_basics: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_shijieshu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shijieshu-81e72629ab80f008)
+upstream_shijieshu_equips_and_discards: test
+upstream_shijieshu_target_must_not_be_min: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_hearth_tanshezhiren.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_tanshezhiren-eecea30784ff3b97)
+upstream_tanshezhiren_chain_discards: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_xingjiegoutong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_xingjiegoutong-107dd0c9d97f79f6)
+upstream_xingjiegoutong_three_steps: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_yuansuhuimie.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_yuansuhuimie-413118f98c45fab0)
+upstream_yuansuhuimie_discard_shortfall_damage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_zhaomingdan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_zhaomingdan-f5b30d577114b17d)
+upstream_zhaomingdan_discard_and_both_draw: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_hearth_zhiliaobo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_zhiliaobo-8ee68a6b5b233083)
+upstream_zhiliaobo_target_must_be_wounded: test
+upstream_zhiliaobo_two_branches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_hujia.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hujia-a096b5543723aff6)
+upstream_hujia_borrows_shan_from_wei_ally: test
+upstream_hujia_lord_qualification_difference_is_fixed: test
+upstream_hujia_only_for_shan: test
+upstream_hujia_queue_is_wei_and_seat_ordered: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_identity_start.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_identity_start-48af0a85a7e4065b)
+upstream_identity_draw_is_uniform_four: test
+upstream_identity_start_lord_first_and_four_cards_each: test
+upstream_identity_start_prepare_phase_absent_is_registered: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jianxiong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jianxiong-e731c08fa98efa0b)
+upstream_jianxiong_gains_damage_card: test
+upstream_jianxiong_position_difference_is_fixed: test
+upstream_jianxiong_standard_face_has_no_mark_face: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jieyin.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jieyin-8726b9fe93577bf0)
+upstream_jieyin_heals_both: test
+upstream_jieyin_target_gates: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_jijiang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijiang-d3008376b7f7fd4d)
+upstream_jijiang_lord_gate_is_design_difference: test
+upstream_jijiang_qualification_matches: test
+upstream_jijiang_shu_ally_plays_sha_for_lord: test
+upstream_jijiang_uses_helpers_not_own_cards: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_jijie.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijie-a683e9134fc3d28b)
+upstream_jijie_allows_self_target: test
+upstream_jijie_moves_bottom_card_to_target: test
+upstream_jijie_takes_bottom_card: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jijiu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijiu-2bbe9f7a19e1680b)
+upstream_jijiu_red_card_is_tao_like: test
+upstream_jijiu_requires_the_skill: test
+upstream_jijiu_turn_restriction_difference_is_fixed: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jiuyuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jiuyuan-b01beb8156bb44b9)
+upstream_jiuyuan_lord_gate_is_same_family: test
+upstream_jiuyuan_qualification_and_bonus: test
+upstream_jiuyuan_wu_tao_recovers_two: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jiyuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jiyuan-d5cd484013304774)
+upstream_jiyuan_dying_arm_draws_one: test
+upstream_jiyuan_effect_is_draw_one: test
+upstream_jiyuan_missing_arms_are_registered: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_jizhi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jizhi-eeba4ecc0197e56b)
+upstream_jizhi_draws_on_covered_trick: test
+upstream_jizhi_scope_difference_is_registered: test
+upstream_jizhi_standard_face_has_no_gaintag: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_keji.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_keji-22fa4a3816914898)
+upstream_keji_after_using_sha_must_discard: test
+upstream_keji_no_sha_means_no_discard: test
+upstream_keji_respond_history_difference_is_fixed: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_kongcheng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kongcheng-73baaf574c94c7f3)
+upstream_kongcheng_allows_sha_when_hand_not_empty: test
+upstream_kongcheng_blocks_sha_when_hand_empty: test
+upstream_kongcheng_coverage_difference_is_fixed: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_kuangfu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kuangfu-a9ada15b3f7d4a02)
+upstream_kuangfu_draws_two_when_target_lower_hp: test
+upstream_kuangfu_loses_hp_when_target_not_lower: test
+upstream_kuangfu_once_per_phase_difference_is_fixed: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_kurou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kurou-1513162b4a27ba45)
+upstream_kurou_effect_order_is_recorded: test
+upstream_kurou_has_no_hp_filter: test
+upstream_kurou_is_not_limited_per_phase: test
+upstream_kurou_loses_hp_not_damage: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_kuwu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kuwu-7277c21375fc1c33)
+upstream_kuwu_chain_damage_difference: test
+upstream_kuwu_filter_gaps: test
+upstream_kuwu_forces_target_discard: test
+upstream_kuwu_is_equip_skill: test
+upstream_kuwu_requires_sha_damage_and_is_forced: test
+
+5 tests, 0 benchmarks
+     Running tests/nc08_upstream_lianying.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lianying-997ef0c562cccfe5)
+upstream_lianying_coverage_differences_are_fixed: test
+upstream_lianying_draws_after_losing_last_hand_card: test
+upstream_lianying_threshold_off_by_one_is_registered: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_liegong_xinkuanggu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_liegong_xinkuanggu-8a11f8412baff468)
+upstream_liegong_condition_not_met_allows_shan: test
+upstream_liegong_second_branch_by_attack_range: test
+upstream_xinkuanggu_choice_branches: test
+upstream_xinkuanggu_requires_distance_le_one: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_lijian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lijian-31213b0ad6398d95)
+upstream_lijian_makes_two_males_duel: test
+upstream_lijian_targets_must_be_male: test
+upstream_lijian_zone_difference_is_registered: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_linghunzhihuo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_linghunzhihuo-5ef733012a9ff15d)
+upstream_linghunzhihuo_fire_damage_and_self_discard: test
+upstream_linghunzhihuo_random_discard_difference_is_fixed: test
+upstream_linghunzhihuo_requires_a_target: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_lingxue.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lingxue-7a346422486557b0)
+upstream_lingxue_effect_is_fixed_by_source: test
+upstream_lingxue_gains_hujia_on_real_recover: test
+upstream_lingxue_requires_the_skill: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_liuli.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_liuli-04a44cafc65c1f3f)
+upstream_liuli_excludes_kongcheng_target: test
+upstream_liuli_redirects_sha: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_longdan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_longdan-d631e2de642ff29f)
+upstream_longdan_requires_the_skill: test
+upstream_longdan_sha_as_shan_in_response: test
+upstream_longdan_shan_used_as_sha: test
+upstream_longdan_shouyue_draw_difference_is_fixed: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_longxue.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_longxue-0263c40dfd832fa2)
+longxue_pack_mapping: test
+longxue_upstream_is_obfuscated_so_reference_is_weak: test
+native_matches_its_documented_upstream_semantics: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_luoshen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_luoshen-4bc01f9883176577)
+upstream_luoshen_black_gains_and_red_stops: test
+upstream_luoshen_loop_prompt_difference_is_fixed: test
+upstream_luoshen_requires_the_skill: test
+upstream_luoshen_timing_anchor_difference_is_fixed: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_luoyi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_luoyi-cc83aeecb6d4ecad)
+upstream_luoyi_differences_are_fixed: test
+upstream_luoyi_draws_one_less: test
+upstream_luoyi_sha_damage_plus_one: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_mashu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mashu-8600ac72e12ee2cf)
+upstream_feiying_difference_is_registered: test
+upstream_mashu_distance_floor_is_one: test
+upstream_mashu_implemented_as_minus: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_mtg_bingheyaosai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_bingheyaosai-d328db5d4808d551)
+upstream_mtg_bingheyaosai_draw2_discard2: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_feixu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_feixu-6f3a7752e21f207b)
+upstream_mtg_feixu_discovers_from_discard: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_haidao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_haidao-160dc9a587a0deff)
+upstream_mtg_haidao_three_branches: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_lindixiliu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_lindixiliu-1517e3eed30e2a87)
+upstream_mtg_lindixiliu_gains_heart: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_linzhongjianta.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_linzhongjianta-1afacf76cf2803f3)
+upstream_mtg_linzhongjianta_discover_and_equip: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_longlushanfeng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_longlushanfeng-42a9f66e7a29c963)
+upstream_mtg_longlushanfeng_two_choices: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_shamolvzhou.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_shamolvzhou-f465f417f84d93f1)
+upstream_mtg_shamolvzhou_discovers_basic: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_shuimomuxue.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_shuimomuxue-4b2930ebccd5aef0)
+upstream_mtg_shuimomuxue_two_branches: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_mtg_youlin.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_youlin-709d80e0c780a9c2)
+upstream_mtg_youlin_uses_a_trick: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_paoxiao.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_paoxiao-41d4589c0c66fa28)
+upstream_paoxiao_allows_multiple_sha: test
+upstream_paoxiao_bypass_difference_is_fixed: test
+upstream_paoxiao_requires_the_skill: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_qianxun.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qianxun-f54527a9c114a418)
+upstream_qianxun_allows_other_tricks: test
+upstream_qianxun_blocks_lebu: test
+upstream_qianxun_blocks_snatch: test
+upstream_qianxun_coverage_difference_is_fixed: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_qicai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qicai-7c27924ff0e5f9c0)
+upstream_qicai_coverage_differences_are_fixed: test
+upstream_qicai_ignores_distance_for_snatch: test
+upstream_qicai_requires_the_skill: test
+upstream_qicai_snatch_within_range_ok: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_qingguo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qingguo-b78d788093062ade)
+upstream_qingguo_black_hand_card_responds_as_shan: test
+upstream_qingguo_equip_zone_absent_from_options: test
+upstream_qingguo_in_shan_options: test
+upstream_qingguo_zone_difference_is_registered: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_qingnang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qingnang-0c60c9036945ba95)
+upstream_qingnang_discard_heals_wounded_other: test
+upstream_qingnang_full_hp_target_excluded: test
+upstream_qingnang_once_per_turn: test
+upstream_qingnang_self_target_difference_is_registered: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_qixi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qixi-4b2b4ad108f96d80)
+upstream_qixi_black_card_used_as_dismantle: test
+upstream_qixi_priority_difference_is_fixed: test
+upstream_qixi_red_card_rejected: test
+upstream_qixi_requires_the_skill: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_rangjie.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_rangjie-11b20d65147b1110)
+upstream_rangjie_gain_branch_draws_then_takes_card: test
+upstream_rangjie_move_branch_must_draw_one: test
+upstream_rangjie_triggers_after_damage_and_cancel_draws_nothing: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_rende.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_rende-54a7073d77ac8aab)
+upstream_rende_cumulative_recovers_once: test
+upstream_rende_doc_inconsistency_is_fixed: test
+upstream_rende_two_cards_once_recovers: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_shengke.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_shengke-9876596a43af383d)
+upstream_shengke_he_range_difference: test
+upstream_shengke_is_global_and_natures_initialized: test
+upstream_shengke_ke_forces_discard: test
+upstream_shengke_requires_both_natures_and_relation: test
+upstream_shengke_sheng_draws: test
+
+5 tests, 0 benchmarks
+     Running tests/nc08_upstream_shushen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_shushen-db07941aadcb919c)
+upstream_shushen_per_point_index_difference_is_fixed: test
+upstream_shushen_target_with_hand_draws_one: test
+upstream_shushen_target_without_hand_draws_two: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_standard_tricks.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_standard_tricks-0876bd4f4ca529f7)
+upstream_taoyuan_excludes_owner_and_skips_healthy: test
+upstream_taoyuan_order_difference_is_registered: test
+upstream_wuzhong_targets_self_only_and_draws_two: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_baishouzhihu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_baishouzhihu-3c90b198fed9ce1e)
+probe_baishouzhihu_hand_persists: test
+upstream_baishouzhihu_opens_target_window: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_cangchizhibi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_cangchizhibi-68d2b251bcda3704)
+upstream_cangchizhibi_is_a_known_conversion_gap: test
+upstream_cangchizhibi_target_discards: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_gouhunluo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_gouhunluo-a99b16d735000f42)
+upstream_gouhunluo_marks_target: test
+upstream_gouhunluo_rejects_already_marked_target: test
+upstream_gouhunluo_target_gate_is_enforced: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_huanglin.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_huanglin-65a58834b8dcb502)
+probe_hand_has_kind_matches_catalog_kind: test
+probe_huanglin_at_judge_phase: test
+probe_huanglin_at_next_round_judge: test
+probe_instance_and_candidates: test
+upstream_huanglinzhicong_gains_hujia_on_phase_begin: test
+upstream_huanglinzhicong_no_gain_when_armored: test
+
+6 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_hufu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_hufu-3fb51eb52004e124)
+upstream_rescue_contrast_tao_vs_hufu: test
+upstream_swd_hufu_dying_only: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_jiguantong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_jiguantong-a23c1afa88c1a940)
+upstream_jiguantong_discard_avoids_damage: test
+upstream_jiguantong_empty_hand_takes_fire_damage: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_mujiaren.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_mujiaren-5c607addd3e65b12)
+upstream_mujiaren_differences_are_fixed: test
+upstream_mujiaren_trades_nonbasic_for_jiguan: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_qinglong.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_qinglong-833f3ba9792af810)
+upstream_qinglongzhigui_draw2_discard1: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_shencaojie_reverse.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shencaojie_reverse-96fb63ebe53ba8a6)
+upstream_shencaojie_reverse_branch_reduces_damage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_shencaojie_window.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shencaojie_window-48a18f6556712965)
+upstream_shencaojie_window_on_trick_damage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_shenmiguo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shenmiguo-a04f2e28ddefbc79)
+upstream_shenmiguo_copies_card_after_use: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_shijianhuisu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shijianhuisu-ea3fea7f156f6c1d)
+upstream_shijianhuisu_recalls_equips: test
+upstream_shijianhuisu_target_gate_note: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_xuanwu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_xuanwu-5d7d4a276611f4aa)
+upstream_xuanwuzhihuang_heals_after_damage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_yangpijuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_yangpijuan-143f36eda5fb2a74)
+upstream_yangpijuan_differences_are_fixed: test
+upstream_yangpijuan_two_stage_choice: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_swd_zhongxinghujia.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhongxinghujia-a650a921f26bf223)
+upstream_zhongxinghujia_target_gate: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_zhufangshenshi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhufangshenshi-b218c0ed0d53efcf)
+upstream_zhufangshenshi_draws_after_use: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_swd_zhuque.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhuque-dcc09ef6c99ef99c)
+upstream_zhuquezhizhang_retaliates_on_source: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_tiandu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tiandu-c811e7a559565266)
+upstream_tiandu_du_exclusion_difference_is_fixed: test
+upstream_tiandu_gains_judge_card: test
+upstream_tiandu_requires_the_skill: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_tianfuzhen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tianfuzhen-0cb0efa788d390c0)
+upstream_tianfuzhen_enable_gate_difference_is_fixed: test
+upstream_tianfuzhen_forces_one_discard_per_target: test
+upstream_tianfuzhen_target_set_must_match_major_with_cards: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_tieji.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tieji-47c7f894fef9f473)
+upstream_tieji_differences_are_fixed: test
+upstream_tieji_red_judge_blocks_shan: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_tuxi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tuxi-20afa7bc42f8118b)
+upstream_tuxi_differences_are_fixed: test
+upstream_tuxi_requires_the_skill: test
+upstream_tuxi_takes_cards_and_skips_draw: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_wudian_wangmeizhike.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wudian_wangmeizhike-bce31919d8488ff4)
+upstream_wangmeizhike_two_branches: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_wudian_youdishenru.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wudian_youdishenru-48a297c66b10dbd8)
+upstream_youdishenru_cancels_sha_and_source_takes_damage: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_wusheng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wusheng-fa72b5050205961e)
+upstream_wusheng_black_card_rejected: test
+upstream_wusheng_entry_and_shouyue_differences_are_fixed: test
+upstream_wusheng_red_card_used_as_sha: test
+upstream_wusheng_red_trick_convertible_note: test
+upstream_wusheng_requires_the_skill: test
+upstream_wusheng_respond_path_not_covered: test
+
+6 tests, 0 benchmarks
+     Running tests/nc08_upstream_wushuang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wushuang-51915f5fca6ec4c1)
+upstream_wushuang_covers_both_directions: test
+upstream_wushuang_direct_hit_difference_is_fixed: test
+upstream_wushuang_duel_needs_two_sha: test
+upstream_wushuang_sha_needs_two_shan: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_wuxing_shengke.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_shengke-8b62756c131779c9)
+upstream_wuxing_shengke_resolves: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_wuxing_shengke_branches.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_shengke_branches-0c9f1a03e7f84032)
+upstream_wuxing_shengke_three_branches: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_wuxing_wuxingpan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_wuxingpan-7b2a8fdffada829e)
+upstream_wuxingpan_equips_and_grants_skill: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_xiaoji.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xiaoji-1d9a6685aed039eb)
+upstream_xiaoji_discard_loss_difference_is_registered: test
+upstream_xiaoji_replace_draws_two: test
+upstream_xiaoji_requires_the_skill: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_xicai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xicai-1eac8c927ca03b89)
+upstream_xicai_gains_damage_card: test
+upstream_xicai_position_difference_is_registered: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_xiuluo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xiuluo-f5674354143b79c0)
+upstream_xiuluo_discards_matching_suit_judge_card: test
+upstream_xiuluo_filter_difference_is_registered: test
+upstream_xiuluo_timing_is_folded_into_judge_begin: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_yanziyaoshui.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yanziyaoshui-f61cb7a16a0b25f7)
+upstream_yanziyaoshui_draws_one_otherwise: test
+upstream_yanziyaoshui_draws_two_for_min_hand: test
+upstream_yanziyaoshui_requires_exactly_one_target: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_yaowu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yaowu-487f18a2f4ab69e2)
+upstream_yaowu_black_sha_does_not_trigger: test
+upstream_yaowu_note_may_be_stale: test
+upstream_yaowu_red_sha_triggers_choice: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_yiji.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yiji-13e037e9d69a6fbe)
+upstream_yiji_differences_are_fixed: test
+upstream_yiji_draws_two_after_damage: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_beige.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_beige-c9ca12345e6ed0ef)
+upstream_beige_club_choice_difference_is_registered: test
+upstream_beige_heart_branch_recovers: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_chanyuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chanyuan-98e19cbdddcb5ffd)
+upstream_chanyuan_killer_loses_max_hp: test
+upstream_chanyuan_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_chenhuodajie.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chenhuodajie-b0b57e650d0d0d54)
+upstream_chenhuodajie_gains_target_card: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_chenhuodajie_window.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chenhuodajie_window-3e5fb1a5eb6c7c1a)
+upstream_chenhuodajie_window_after_damage: test
+upstream_chenhuodajie_window_damaged_player_holds_it: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_guhuo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_guhuo-5c1c783a6d66c45e)
+upstream_guhuo_choice_difference_is_registered: test
+upstream_guhuo_draws_two_and_discards_two: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_guihan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_guihan-fcfcef58e8e45f95)
+native_guihan_effect_is_empty: test
+upstream_defines_guihan: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_honglian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_honglian-d622b90900b4df1b)
+upstream_honglian_no_red_no_trigger: test
+upstream_honglian_source_discards_all_red: test
+upstream_honglian_source_matches: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_huoshan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_huoshan-2e81aa668e069850)
+upstream_huoshan_record_acceptance: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_jiaoxia.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_jiaoxia-08139dbbf9a60c2c)
+upstream_jiaoxia_red_triggers_black_does_not: test
+upstream_jiaoxia_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_jieyan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_jieyan-6c2c798924fd926f)
+upstream_jieyan_discards_red_and_damages_others: test
+upstream_jieyan_owner_exclusion_is_registered: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_kuanggu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_kuanggu-47d1007643f6d658)
+upstream_kuanggu_source_matches: test
+upstream_kuanggu_three_branches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_luweiyan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_luweiyan-de9103291e174412)
+upstream_luweiyan_chain_kill_fires_on_first_target: test
+upstream_luweiyan_nonbasic_as_shuigong: test
+upstream_luweiyan_shuigong_target_needs_equip: test
+upstream_luweiyan_zone_difference_is_registered: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_shaoying.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_shaoying-89eced009b9ed958)
+upstream_shaoying_black_reveal_no_burn: test
+upstream_shaoying_reveals_deck_top_and_burns_red: test
+upstream_shaoying_source_matches: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_toulianghuanzhu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_toulianghuanzhu-9dce2381b1549466)
+upstream_toulianghuanzhu_with_proper_answers: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_unimplemented.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_unimplemented-1221507350e797cc)
+native_lacks_the_three_skills: test
+upstream_defines_the_three_skills: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_xiongzi.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_xiongzi-6632e369d59b4d2d)
+upstream_xiongzi_draw_bonus_with_floor: test
+upstream_xiongzi_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_yaliang.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_yaliang-5d6ecbf4ba0d7382)
+upstream_yaliang_both_draw_one: test
+upstream_yaliang_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_yiesheng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_yiesheng-7b096aa72c80800c)
+upstream_yiesheng_discards_black_only_and_draws_equal: test
+upstream_yiesheng_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_yunchou_zonghuo.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_zonghuo-c91f135ed73e42b6)
+upstream_zonghuo_discards_one_without_asking: test
+upstream_zonghuo_source_matches: test
+
+2 tests, 0 benchmarks
+     Running tests/nc08_upstream_zhenfa_dizaizhen.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhenfa_dizaizhen-bb14834b65038aba)
+upstream_dizaizhen_draws_and_mode_gate: test
+
+1 test, 0 benchmarks
+     Running tests/nc08_upstream_zhiheng.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhiheng-1c50aa6c6cf23265)
+upstream_zhiheng_discard_two_draw_two: test
+upstream_zhiheng_equip_zone_difference_is_registered: test
+upstream_zhiheng_once_per_turn: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_zhiyuan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhiyuan-47511979a2087f49)
+upstream_zhiyuan_declined_damage_resolves_normally: test
+upstream_zhiyuan_prevents_damage_and_recovers_equal: test
+upstream_zhiyuan_requires_self_as_source: test
+
+3 tests, 0 benchmarks
+     Running tests/nc08_upstream_ziyu.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ziyu-ab7c472c1522b78e)
+upstream_ziyu_damaged_offers_recover_and_applies: test
+upstream_ziyu_draw_option_draws_one: test
+upstream_ziyu_full_hp_has_no_recover_option: test
+upstream_ziyu_opens_every_fourth_phase: test
+
+4 tests, 0 benchmarks
+     Running tests/nc08_zhenfa_mode_gate_survey.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_zhenfa_mode_gate_survey-db160cc1d90e3b73)
+zhenfa_mode_gate_survey: test
+
+1 test, 0 benchmarks
+     Running tests/nc09_identity_end_to_end.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc09_identity_end_to_end-8c5e81c5cf19a7c9)
+identity_game_is_stable_after_terminal: test
+identity_game_reaches_terminal_outcome: test
+identity_outcome_lord_side: test
+identity_outcome_traitor: test
+
+4 tests, 0 benchmarks
+     Running tests/nc09_projection_and_errors.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc09_projection_and_errors-0fef8545ff5b7020)
+nc09_choice_options_are_observer_only: test
+nc09_illegal_commands_are_visibly_rejected: test
+nc09_projection_survives_archive_roundtrip: test
+nc09_seat_projection_hides_others_cards: test
+
+4 tests, 0 benchmarks
+     Running tests/nc10_ai_boundary_and_cancel.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_boundary_and_cancel-26596b591206cee1)
+cancelled_planner_marks_plan_cancelled: test
+hidden_other_hands_do_not_change_seat_input: test
+policy_variants_are_deterministic: test
+pool_parallel_matches_sequential_and_records_tail: test
+stale_plan_is_rejected: test
+tiny_budget_marks_exhausted: test
+
+6 tests, 0 benchmarks
+     Running tests/nc10_ai_bounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_bounds-758c9253c5168c0b)
+content_tuning_rejects_non_finite_values: test
+nc10_leak_surface_quantified: test
+nc10_planner_is_deterministic: test
+nc10_planner_is_invariant_under_deck_order: test
+nc10_stale_plan_is_rejected: test
+nc10_tiny_budget_still_legal: test
+zero_deadline_returns_timed_out_plan_without_blocking: test
+
+7 tests, 0 benchmarks
+     Running tests/nc10_ai_information_boundary.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_information_boundary-5815d9dd034d8588)
+legal_action_set_is_invariant_under_hidden_information: test
+planner_detects_own_hand_change: test
+planner_is_invariant_under_hidden_information: test
+
+3 tests, 0 benchmarks
+     Running tests/nc10_duel_nullify_privacy.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_duel_nullify_privacy-64a2ff4ee204d733)
+both_answers_can_resume_redacted_window_after_restore: test
+nullify_timing: test
+planning_uses_only_observers_information: test
+redaction_preserves_window_and_produces_restorable_equal_hidden_zones: test
+special_zones_remain_conservative: test
+
+5 tests, 0 benchmarks
+     Running tests/nc10_multiple_hidden_traps.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_multiple_hidden_traps-e7f69a41a954defc)
+multiple_hidden_traps_do_not_change_simulation_or_plans: test
+multiple_traps_stay_physical_from_each_observer: test
+real_skill_places_two_traps_and_simulation_remains_restorable: test
+references_follow_multiple_synthetic_traps: test
+scarce_suits_are_shared_across_trap_holders: test
+
+5 tests, 0 benchmarks
+     Running tests/nc10_pending_duel_privacy.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_pending_duel_privacy-2e9313033af06b36)
+duel_planning_does_not_depend_on_opponent_hidden_card: test
+pending_duel_timing: test
+redaction_preserves_duel_machine_and_referenced_cards: test
+uninspected_special_zones_are_not_reassigned: test
+
+4 tests, 0 benchmarks
+     Running tests/nc10_planner_pool.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_planner_pool-a2d29a030e8d1e1c)
+nc10_pool_full_degrades_without_losing_plans: test
+nc10_pool_plans_are_revision_guarded: test
+nc10_pool_respects_cancellation: test
+nc10_pool_reuses_workers_and_returns_legal_plans: test
+
+4 tests, 0 benchmarks
+     Running tests/nc10_single_hidden_trap.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_single_hidden_trap-9a8fbdc23171024f)
+hidden_trap_sampling_is_invariant_across_seeds: test
+real_single_opponent_trap_redacts_without_duplicate_cards: test
+references_follow_their_synthetic_cards: test
+single_opponent_trap_identity_cannot_change_planning: test
+vm_opaque_storage_keeps_its_trap_reference: test
+
+5 tests, 0 benchmarks
+     Running tests/nc10_skill_pile_conservation.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_skill_pile_conservation-ab7c93275cc6c97d)
+fixed_piles_keep_hidden_hand_permutations_equivalent: test
+opponent_private_pile_identity_does_not_change_synthetic_hands: test
+redaction_preserves_owned_skill_cards_for_self_and_opponents: test
+
+3 tests, 0 benchmarks
+     Running tests/nc12_ai_strength_baseline.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_ai_strength_baseline-15846c8efca94318)
+nc12_ai_strength_baseline_statistics: test
+
+1 test, 0 benchmarks
+     Running tests/nc12_dangling_reference_probe.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_dangling_reference_probe-faac9a55e469da30)
+nc12_probe_scans_seeds_for_dangling_reference: test
+
+1 test, 0 benchmarks
+     Running tests/nc12_dangling_reference_repro.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_dangling_reference_repro-bb7eabf6f3c15edc)
+nc12_repro_seed_44170_step_10: test
+
+1 test, 0 benchmarks
+     Running tests/nc12_swd_authoritative_stability.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_swd_authoritative_stability-d5c648209ebe6d30)
+combo_tier_variant1_is_panic_free: test
+swd_authoritative_path_is_panic_free: test
+
+2 tests, 0 benchmarks
+     Running tests/pa01_catalog_index_equivalence.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa01_catalog_index_equivalence-dbc4faacabf169c1)
+dispatch_candidates_match_trigger_meta_membership: test
+synthetic_catalog_membership_and_first_match_name: test
+
+2 tests, 0 benchmarks
+     Running tests/pa08_fullhand_dump.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa08_fullhand_dump-60aeee64227e7cda)
+pa08_fullhand_dump: test
+
+1 test, 0 benchmarks
+     Running tests/pa12_batch1_vocabulary.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch1_vocabulary-d69eb26f796a0024)
+pa12_batch1_owner_alive_triggers_on_others_end_phase: test
+pa12_batch1_owner_is_source_after_own_card_used: test
+pa12_batch1_vocabulary_mapping_and_strict_reject: test
+
+3 tests, 0 benchmarks
+     Running tests/pa12_batch2_phase_events.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch2_phase_events-bdfb3236d690c87f)
+pa12_batch2_phase_begin_is_turn_start_of_owner_only: test
+pa12_batch2_sha_dodged_owner_is_source: test
+
+2 tests, 0 benchmarks
+     Running tests/pa12_batch3_filter_predicates.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch3_filter_predicates-c3757ce46e46b845)
+pa12_batch3_filter_mapping: test
+pa12_batch3_owner_alive_not_target: test
+pa12_batch3_owner_is_source_or_target: test
+pa12_batch3_owner_source_ordinary_trick: test
+pa12_batch3_owner_source_sha: test
+
+5 tests, 0 benchmarks
+     Running tests/pa12_batch3b_once_limits.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch3b_once_limits-c7b35683074b0c8e)
+pa12_batch3b_once_per_round_window: test
+pa12_batch3b_once_per_turn_window: test
+
+2 tests, 0 benchmarks
+     Running tests/pa12_batch4_1_host_primitives.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch4_1_host_primitives-82eb4d30643b394e)
+pa12_batch4_1_turn_over_toggles_face: test
+pa12_batch4_2_accept_rejects_zero_count: test
+pa12_batch4_2_discard_hand_equip_count: test
+pa12_batch4_3_damage_rewrite_window: test
+pa12_batch5_3_storage_set_clears_on_phase_play: test
+pa12_batch5_4_dichou_predicates: test
+pa12_batch5_fenli_bridges_with_skip_wiring: test
+
+7 tests, 0 benchmarks
+     Running tests/pa12_dsl_native_prototype.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_dsl_native_prototype-ddf1cdd835feaaef)
+pa12_dsl_choice_max_hp_branch: test
+pa12_dsl_choice_recover_branch: test
+pa12_dsl_filter_not_fired_when_unique_max: test
+pa12_dsl_fires_once_per_turn_at_end_phase_and_first_answer_lands: test
+pa12_dsl_pause_save_restore_resume_both_branches: test
+
+5 tests, 0 benchmarks
+     Running tests/pa12_tag656_version.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_tag656_version-84a2786b62cc6bb0)
+v322_archive_is_rejected_and_current_archive_round_trips: test
+
+1 test, 0 benchmarks
+     Running tests/replay_scenarios.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+pa12_print_golden_hex: test
+replay_scenarios_match_golden: test
+scenarios_are_registered_in_coverage_manifest: test
+
+3 tests, 0 benchmarks
+     Running tests/standard_catalog_inventory.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/standard_catalog_inventory-c8359cd55da9dc3d)
+defective_kinds_hold_declared_counts: test
+standard_catalog_matches_declared_inventory: test
+
+2 tests, 0 benchmarks
+     Running tests/swd_bingfeng_lock.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_bingfeng_lock-bcbf595d159a3cdd)
+bingfeng_flips_loses_max_hp_and_locks_cards: test
+bingfeng_lock_removed_on_turn_over: test
+bingfeng_locked_player_cannot_dodge: test
+bingfeng_unlocked_player_dodges: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_cyqiaoxie_jiguan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_cyqiaoxie_jiguan-b9aaf2b2ff3f8432)
+cyqiaoxie_absent_no_window: test
+cyqiaoxie_cancel_stops_loop: test
+cyqiaoxie_no_window_without_equip_loss: test
+cyqiaoxie_uses_jiguan_card_after_equip_loss: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_gaizao_slot.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gaizao_slot-d5c43791c5cf63e6)
+gaizao_decline_replaces_normally: test
+gaizao_moves_equip_to_empty_slot: test
+gaizao_no_window_when_slot_free: test
+gaizao_state_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_gongxin_hand_peek.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gongxin_hand_peek-641db2d1d28d84cb)
+gongxin_absent_and_once_per_turn: test
+gongxin_discards_target_heart: test
+gongxin_is_once_per_play_phase: test
+gongxin_places_heart_on_deck_top: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_gxianyin_suit_swap.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gxianyin_suit_swap-872bdc9df8ce7f10)
+gxianyin_absent_and_empty_hand: test
+gxianyin_phase_gate_and_limit: test
+gxianyin_swaps_suit_cards: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_hutian_deposit.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_hutian_deposit-de086b1c153efb6f)
+hutian_deposits_shields_and_returns: test
+hutian_returns_on_owner_death: test
+hutian_state_roundtrip: test
+hutian_target_filter_and_decline: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_hxunzhi_wanjian.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_hxunzhi_wanjian-07da177d9f7150fb)
+hxunzhi_phase_gate_and_absent: test
+hxunzhi_wanjian_grants_and_death: test
+hxunzhi_without_marker_survives_phase_end: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_jifeng_multishot.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jifeng_multishot-d18146aacb3ea272)
+jifeng_allows_multi_target_sha: test
+jifeng_multi_target_may_fizzle: test
+jifeng_single_target_never_fizzles: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_jikong_thunder_sha.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jikong_thunder_sha-07b41bcfa3ba7fcb)
+jikong_absent_no_window: test
+jikong_cancel_refunds_use: test
+jikong_lose_face_requires_empty_hand: test
+jikong_phase_face_virtual_thunder_sha_once_per_turn: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_jilve_top3.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jilve_top3-b62b888808470ffd)
+jilve_absent_and_no_candidate: test
+jilve_phase_gate_and_three_use_cap: test
+jilve_uses_top_card_and_counts_three: test
+legal_targets_helper_rules: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_kunlunjing_rewind.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_kunlunjing_rewind-e7001689f121c4a0)
+kunlunjing_no_rewind_when_hp_not_lower: test
+kunlunjing_snapshot_and_rewind: test
+kunlunjing_state_roundtrip: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_liaoyuan_extra_shan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_liaoyuan_extra_shan-37bddb4c98ef7bd7)
+liaoyuan_decline_normal_damage: test
+liaoyuan_direct_hit_with_bonus: test
+liaoyuan_no_window_without_same_suit: test
+liaoyuan_state_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_lingwu_extra_phase.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_lingwu_extra_phase-48c47abe7729095c)
+cards_used_turn_resets_next_turn: test
+lingwu_absent_no_insert: test
+lingwu_extra_phase_state_roundtrip: test
+lingwu_inserts_extra_play_phase_when_used_reaches_hp: test
+lingwu_no_insert_below_hp: test
+
+5 tests, 0 benchmarks
+     Running tests/swd_linyun_two_cards_sha.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_linyun_two_cards_sha-c146b1498dacb791)
+linyun_equip_material_allowed: test
+linyun_requires_play_phase: test
+linyun_requires_two_cards: test
+linyun_two_hand_cards_as_sha_hits: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_lxianglong_sha_miss.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_lxianglong_sha_miss-ec5755047a2c18d8)
+lxianglong_absent_no_window: test
+lxianglong_counterattacks_after_sha_miss: test
+lxianglong_decline_no_extra_sha: test
+lxianglong_no_window_when_sha_hits: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_mailun_modes.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_mailun_modes-bf247d07bdeaa270)
+mailun_absent_and_decline: test
+mailun_mode1_hp_shift_and_gate: test
+mailun_mode3_first_damage_minus: test
+mailun_mode5_draw_minus_and_limit_plus: test
+mailun_mode7_distance_minus: test
+mailun_state_roundtrip: test
+
+6 tests, 0 benchmarks
+     Running tests/swd_meihuo_cards_lost.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_meihuo_cards_lost-0abf2cbdafbaa096)
+cards_lost_event_roundtrip: test
+meihuo_negative_faces: test
+meihuo_no_window_when_still_equipped: test
+meihuo_takes_and_equips_when_equip_card: test
+meihuo_takes_hand_card_into_hand: test
+
+5 tests, 0 benchmarks
+     Running tests/swd_miedao_draw_discard.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_miedao_draw_discard-f3a99aeef70efbea)
+miedao_absent_no_extra_draw: test
+miedao_draw_extra_and_forced_discard: test
+miedao_no_effect_at_full_hp: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_mohua2_transform.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_mohua2_transform-d2832e88e624fb69)
+mohua2_absent_no_transform: test
+mohua2_fires_once: test
+mohua2_transforms_on_dying: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_moyan_multi_fire.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_moyan_multi_fire-a3f14f254d3d1cd4)
+moyan_absent_rejected: test
+moyan_is_once_per_play_phase: test
+moyan_requires_wounded_and_red_card: test
+moyan_two_red_two_targets_fire_damage: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_niepan_ref.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_niepan_ref-5db30a135217fac1)
+swd_niepan_granted_and_usable: test
+swd_niepan_package_mapping_is_host: test
+
+2 tests, 0 benchmarks
+     Running tests/swd_rumeng_phase_skip.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_rumeng_phase_skip-7bbe4c4f5a2d89d4)
+rumeng_no_window_without_non_basic: test
+rumeng_skip_flag_one_shot: test
+rumeng_skip_play_and_discard_when_target_declines: test
+rumeng_target_discards_basic_card_no_skip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_shengong_borrow.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shengong_borrow-b111f898f9706b66)
+shengong_absent_no_borrow_option: test
+shengong_borrows_armor_to_dodge: test
+shengong_own_equip_still_usable: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_shenyan_spread.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shenyan_spread-ef7bce9fe1a10391)
+shenyan_boosts_fire_and_spreads_to_neighbors: test
+shenyan_ignores_non_fire_damage: test
+shenyan_limited_once: test
+shenyan_only_own_fire_damage: test
+shenyan_state_roundtrip: test
+
+5 tests, 0 benchmarks
+     Running tests/swd_shouyin_full_heal.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shouyin_full_heal-e1b94192471a01d0)
+shouyin_absent_no_window: test
+shouyin_flips_self_and_heals_everyone_once: test
+shouyin_no_window_when_flipped: test
+shouyin_state_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_songci_targets.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_songci_targets-6f268f046a023ce3)
+songci_draw_group_skill_when_all_recorded: test
+songci_draws_two_and_records_target: test
+songci_forces_discard_when_hand_over_hp: test
+songci_phase_gate_and_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_swdtianshu_gain.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_swdtianshu_gain-84f8ce08899a9271)
+swdtianshu_absent_and_phase_gate: test
+swdtianshu_gains_skill_and_removes_on_source_death: test
+swdtianshu_requires_trick_card: test
+swdtianshu_state_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_tianlun_judge.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_tianlun_judge-b5b30033e8e0cce9)
+tianlun_absent_no_window: test
+tianlun_decline_keeps_judge_zone: test
+tianlun_replaces_judge_card_from_judge_zone: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_tianxiang_redirect.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_tianxiang_redirect-d288eaf659a90e57)
+tianxiang_absent_and_grant_roundtrip: test
+tianxiang_decline_keeps_damage: test
+tianxiang_no_window_without_heart: test
+tianxiang_redirects_damage_and_target_draws: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_xiuluo_judge_clear.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_xiuluo_judge_clear-9ad1a00927dd2ccb)
+xiuluo_absent_no_window: test
+xiuluo_discards_same_suit_judge_card: test
+xiuluo_no_window_without_judge_card: test
+
+3 tests, 0 benchmarks
+     Running tests/swd_xuanyuanjian_card.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_xuanyuanjian_card-b0fb864f251c3e1c)
+xuanyuan_retrieves_sword_from_discard: test
+xuanyuanjian_equip_grants_hujia: test
+xuanyuanjian_no_backlash_with_xuanyuan: test
+xuanyuanjian_state_roundtrip: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_yihua_bounce.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_yihua_bounce-aab519f4c66d640a)
+yihua_absent_no_window: test
+yihua_bounces_single_target_card: test
+yihua_decline_resolves_normally: test
+yihua_no_window_with_one_card: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_yishan_recover.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_yishan_recover-722a61c7c3d5d717)
+yishan_no_window_when_nothing_recoverable: test
+yishan_records_only_for_holder: test
+yishan_recovers_from_other_equip_and_roundtrips: test
+yishan_recovers_two_recent_lost_cards: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_zhenlie_target_exclude.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_zhenlie_target_exclude-0611c2fe179867ac)
+zhenlie_absent_no_window: test
+zhenlie_decline_takes_damage: test
+zhenlie_excludes_self_from_sha_and_discards_user_card: test
+zhenlie_no_window_when_not_targeted: test
+
+4 tests, 0 benchmarks
+     Running tests/swd_zhuhai_end_phase_sha.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_zhuhai_end_phase_sha-665daa435f77176f)
+zhuhai_absent_no_window: test
+zhuhai_no_window_without_damage: test
+zhuhai_no_window_without_sha: test
+zhuhai_uses_sha_on_damaging_player: test
+
+4 tests, 0 benchmarks
+     Running tests/t11_boss_pangtong_niepan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t11_boss_pangtong_niepan-5684937df5474f96)
+niepan_dying_save_or_decline: test
+niepan_play_phase_effect_and_yuhuo_chain: test
+niepan_state_roundtrip: test
+shenwei_draw_and_hand_limit_bonus: test
+
+4 tests, 0 benchmarks
+     Running tests/t11_boss_zhugeliang_hlss.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t11_boss_zhugeliang_hlss-3d77c7ea5c781ad1)
+hlss_assembly_initializes_stars_and_light_refill: test
+hlss_fengqi_decline_does_nothing: test
+hlss_fengqi_picks_unused_trick_and_records: test
+hlss_gaiming_picks_judge_result_or_declines: test
+hlss_with_infinite_hp_keeps_stars: test
+hlss_yueyin2_blocks_turnover_and_voids_delayed_trick: test
+hlss_yueyin_skip_prevents_star_loss: test
+hlss_zero_stars_awakens_and_stops_refill: test
+
+8 tests, 0 benchmarks
+     Running tests/t12_dual_diag.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_dual_diag-820cb12d270ef9fc)
+diag_dual_namespace_hang_point: test
+
+1 test, 0 benchmarks
+     Running tests/t12_g2g4_channels.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_g2g4_channels-516ce0944c77eb89)
+g2g4_cardpile_liuli: test
+g2g4_cardpile_noname: test
+g2g4_d3_select: test
+g2g4_shaai_ow: test
+g2g4_shaai_xianjian: test
+g2g4_shahai_gujian: test
+g2g4_shahai_gwent: test
+g2g4_shahai_hearth: test
+g2g4_shahai_mtg: test
+g2g4_shahai_swd: test
+g2g4_shahai_yunchou: test
+g2g4_shahai_zhenfa: test
+g2g4_wudian: test
+g2g4_wuxing: test
+
+14 tests, 0 benchmarks
+     Running tests/t12_g5_relays.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_g5_relays-db17b379e7088fa2)
+t12_g5_relay_cardpile_dual_namespace: test
+t12_g5_relay_cardpile_dual_namespace_worker: test
+t12_g5_relay_cardpile_liuli: test
+t12_g5_relay_d3_generals: test
+t12_g5_relay_d3_generals_worker: test
+t12_g5_relay_shaai_ow: test
+t12_g5_relay_shaai_xianjian: test
+t12_g5_relay_shahai_gujian: test
+t12_g5_relay_shahai_gwent: test
+t12_g5_relay_shahai_hearth: test
+t12_g5_relay_shahai_mtg: test
+t12_g5_relay_shahai_swd: test
+t12_g5_relay_shahai_yunchou: test
+t12_g5_relay_shahai_zhenfa: test
+t12_g5_relay_wudian: test
+t12_g5_relay_wuxing: test
+
+16 tests, 0 benchmarks
+     Running tests/t13_info_isolation.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t13_info_isolation-563a13cbeab313ed)
+deep_fields_turned_over_and_skills: test
+identity_role_visibility_and_death_reveal: test
+isolation_boss_stage_hidden: test
+isolation_doudizhu_two_sides: test
+isolation_extension_cards_hidden_like_standard: test
+isolation_generals_public_in_non_kingdoms_modes: test
+isolation_identity_roles_hidden: test
+isolation_kingdoms_seat_matrix: test
+isolation_kof_two_player: test
+isolation_planner_redaction_leaves_authority_intact: test
+isolation_prototype_seat_matrix: test
+isolation_versus_teammates_hidden: test
+
+12 tests, 0 benchmarks
+     Running tests/t8_rvm_bridge.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t8_rvm_bridge-300d93cbd858a500)
+t8_add_mark_writes: test
+t8_bte_kind_classification: test
+t8_bte_play_phase_filter_dual_gate_and_phase_kind: test
+t8_bte_zero_count_negative: test
+t8_change_max_hp_writes: test
+t8_filter_damage_before_hand_empty_elemental_or_trick: test
+t8_filter_damage_source_movable_field_card: test
+t8_filter_family_owner_gate_and_predicates: test
+t8_filter_param_hp_below_dual_gate_and_threshold: test
+t8_filter_param_play_count_and_at_least_hp: test
+t8_filter_targeted_by_other_sha: test
+t8_filter_tied_max_family: test
+t8_hand_count_query_gates_draw: test
+t8_loader_maps_all_carried_named_filters: test
+t8_loader_maps_parameterized_filters: test
+t8_lost_history_dual_gate: test
+t8_move_batch_dual_gate: test
+t8_named_filter_vocabulary_maps: test
+t8_named_sha_once_dual_gate: test
+t8_named_wounded_sha_dual_gate: test
+t8_rejection_caps_escalation_denied: test
+t8_rejection_corrupted_bytecode_rejected_at_load: test
+t8_rejection_tampered_snapshot_module_rejected: test
+t8_rejection_unmapped_effect_rolls_back: test
+t8_skill_pile_then_nonempty_filter: test
+t8_skill_uses_remaining_dual_gate: test
+t8_vm_skill_choice_suspend_resume_midrestore: test
+t8_vm_skill_content_lock_rejects_pack_drift: test
+t8_vm_skill_cross_process_resume: test
+t8_vm_skill_draw_branch_end_to_end: test
+t8_vm_skill_filter_always: test
+t8_vm_skill_filter_owner_is_source: test
+t8_vm_skill_fuel_exhaustion_rolls_back: test
+t8_vm_skill_id_reverse_lookup_wired: test
+t8_vm_skill_loader_bridge_end_to_end: test
+t8_vm_skill_loader_rejects_unsupported_filters: test
+t8_vm_skill_recover_branch_end_to_end: test
+t8_vm_skill_save_restore_roundtrip: test
+
+38 tests, 0 benchmarks
+     Running tests/t9_d5_surface.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t9_d5_surface-f7cc5b5965f527e0)
+infinite_hp_survives_damage_and_recovery: test
+t9_infinity_hp_maps_to_sentinel: test
+t9_invalid_hp_values_are_rejected: test
+t9_unknown_mapping_is_not_a_noop: test
+t9_zhuge_and_ylyg_skills_stay_unmapped: test
+
+5 tests, 0 benchmarks
+     Running tests/u01_d3_moyan.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u01_d3_moyan-bb8be527ceb5f687)
+u01_moyan_from_real_install: test
+
+1 test, 0 benchmarks
+     Running tests/u03_cardpile_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u03_cardpile_eight-dc558dbfb78f5d4b)
+u03_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/u04_coin_eight.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u04_coin_eight-ac1267a2933b74e3)
+u04_eight_dimension_from_fresh_install: test
+
+1 test, 0 benchmarks
+     Running tests/u08_hero_kill_batch1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u08_hero_kill_batch1-698a1491c5d592dd)
+yxs_fanji_absent_no_window: test
+yxs_fanji_counterattacks_source: test
+
+2 tests, 0 benchmarks
+     Running tests/u08_menshen_batch2.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u08_menshen_batch2-5ca5a1403488a542)
+menshen3_clears_marker: test
+menshen_marks_target: test
+
+2 tests, 0 benchmarks
+     Running tests/view_isolation.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/view_isolation-4a85346562778c72)
+ai_session_is_seat_bound_readonly_projection: test
+ai_session_non_observer_sees_limited_choice: test
+choice_options_visible_only_to_observer: test
+event_view_hides_other_players_drawn_cards: test
+isolation_holds_across_game_progress: test
+seat_views_hide_opponent_hands_and_deck: test
+view_public_fields_match_authoritative_state: test
+
+7 tests, 0 benchmarks
+
+EXIT_CODE: 0

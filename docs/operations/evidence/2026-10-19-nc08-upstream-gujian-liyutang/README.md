@@ -29,8 +29,8 @@ liyutang: {
 | 1 | `!target.hasSkill("liyutang")` | **门槛通过**：用 `debug_grant(1, "gj_food_liyutang")` 预置子技后，再对 1 号使用 → **`Rejected(IllegalTargets)`** | 通过 |
 | 2 | `target.$gain2(cards)` + `storage` + `addSkill` | **未验收（用牌效果缺失）**：实测发动 `Accepted`，但**目标手牌 0 → 0**、**使用者手牌为空**、**该牌进入弃牌堆**（`弃堆含此牌=true`）⇒ 只完成用牌与弃置。**注**：其**子技效果已实现**（`step/gujian.rs:318`：阶段开始体力最少 → +1 护甲 + `food_tick`）→ 缺的是**用牌那一段** | 登记（第 37 项） |
 
-**原生实现引用**：`content/host/keys.rs:347`（`HostBehavior::GujianFoodLiyutang => "host:gujian_food_liyutang"`）；
-子技在**目录中的名字**为 **`gj_food_liyutang`**（`constants.rs:58`）。
+**原生实现引用**：`vocabulary/host/keys.rs:347`（`HostBehavior::GujianFoodLiyutang => "host:gujian_food_liyutang"`）；
+子技在**目录中的名字**为 **`gj_food_liyutang`**（`vocabulary/host/constants.rs:52`）。
 
 ## 3 夹具要点
 

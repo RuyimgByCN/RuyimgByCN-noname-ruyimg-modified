@@ -4,7 +4,7 @@ use super::*;
 ///（上游 useCardToBefore cancel 同口径；防具槽=equip_slot()==Armor 全族）。
 pub(super) fn dushiwang_remen_blocks(ctx: &Ctx<'_>, target: PlayerId) -> bool {
     ctx.catalog
-        .skill_by_name(crate::content::standard::BOSS_REMEN)
+        .skill_by_name(crate::vocabulary::names::BOSS_REMEN)
         .map(|def| {
             ctx.core.has_skill(target, def)
                 && !ctx.core.player(target).equips.iter().any(|c| {
@@ -26,7 +26,7 @@ pub(super) fn weimu_blocks_aoe(ctx: &Ctx<'_>, card: crate::ids::CardId, target: 
         return false;
     }
     ctx.catalog
-        .skill_by_name(crate::content::standard::BOSS_WEIMU)
+        .skill_by_name(crate::vocabulary::names::BOSS_WEIMU)
         .map(|def| ctx.core.has_skill(target, def))
         .unwrap_or(false)
 }
@@ -134,7 +134,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
         if !ctx.catalog.blocks_all_cards(ctx.core, self.target) {
             options.extend(holders.into_iter().map(ChoiceOption::Card));
             // 神弓（swd 批 148）：按需求牌种借用他人装备
-            options.extend(crate::content::host::shengong_borrow_options(
+            options.extend((ctx.catalog.hooks.borrow_options)(
                 ctx,
                 self.target,
                 self.need == CardKind::Shan,

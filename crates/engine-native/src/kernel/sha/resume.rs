@@ -13,7 +13,7 @@ impl ShaResolveMachine {
         let t = self.target;
         let has = ctx
             .catalog
-            .skill_by_name(crate::content::host::WUDIAN_FUCHOU_KEY)
+            .skill_by_name(crate::vocabulary::host::WUDIAN_FUCHOU_KEY)
             .map(|d| ctx.core.has_skill(t, d))
             .unwrap_or(false);
         if has && !ctx.core.player(t).hand.is_empty() {
@@ -321,12 +321,12 @@ impl ShaResolveMachine {
             if red {
                 let longdan = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::LONG_DAN)
+                    .skill_by_name(crate::vocabulary::names::LONG_DAN)
                     .map(|d| ctx.core.has_skill(self.target, d))
                     .unwrap_or(false);
                 let qingguo = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::QING_GUO)
+                    .skill_by_name(crate::vocabulary::names::QING_GUO)
                     .map(|d| ctx.core.has_skill(self.target, d))
                     .unwrap_or(false);
                 let options: Vec<ChoiceOption> = ctx

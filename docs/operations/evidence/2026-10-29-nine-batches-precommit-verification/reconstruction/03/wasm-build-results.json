@@ -1,0 +1,8 @@
+[
+  {
+    "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg -- --offline",
+    "exit_code": 0,
+    "seconds": 46.89440393447876,
+    "log": "wasm-build-00.log"
+  }
+]

@@ -1,0 +1,3030 @@
+[
+  {
+    "path": ".github/workflows/ci.yml",
+    "sha256": "642221a3c28d9f283e5d4bdd15307c9f02a740c3ba5e55809e381ad5629f6d6d"
+  },
+  {
+    "path": "Cargo.toml",
+    "sha256": "9f0f835173c728cc639bd4763a5d5921e982648a7d8f48edace0db138325dbcd"
+  },
+  {
+    "path": "apps/web-client/scripts/native-vm-install.test.mjs",
+    "sha256": "26e9283d6b3c9cc07996b4266ee93e0dd4df2df9ce646780529db9271a58f258"
+  },
+  {
+    "path": "apps/web-client/scripts/native-worker-smoke.mjs",
+    "sha256": "6b2690421beea368d4008b4a80f968ef9e56bd9939e37ef98499be49633e7a52"
+  },
+  {
+    "path": "apps/web-client/src/engine/client.ts",
+    "sha256": "65d37406a620c8320d1c9b20e6e82f3bdc8e2fce78307df7628dd31d48d38b35"
+  },
+  {
+    "path": "apps/web-client/src/engine/extensionStore.ts",
+    "sha256": "da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f"
+  },
+  {
+    "path": "apps/web-client/src/types/engine.ts",
+    "sha256": "c6a36755d03e52df9a963b75e98000ec8b80a2b4d1fa3cc22d4d706dc4ee114a"
+  },
+  {
+    "path": "apps/web-client/src/views/ExtensionsView.vue",
+    "sha256": "c8a3e7ed7f54670d27fcaa8c0809e5441af67b9e260edf60e31092335fbdabf5"
+  },
+  {
+    "path": "apps/web-client/src/worker/engine.native.worker.ts",
+    "sha256": "0e7c90536ca9806b4971b9c3a62a8b127894d9414ece64afeb1af3422c55a1fb"
+  },
+  {
+    "path": "apps/web-client/src/worker/nativeBackend.ts",
+    "sha256": "336c600ea9913b05ffd48d4c2cbd73fdb064d97a5447004f61bf9049489f8def"
+  },
+  {
+    "path": "crates/content-compiler/src/abi.rs",
+    "sha256": "be4250b6235719d8885fe4dd6722de8d5aa3702cf1cb15db296fda18515c24ab"
+  },
+  {
+    "path": "crates/content-compiler/src/abi/since_abi_241.rs",
+    "sha256": "6bacf56df6ed39bc83d8b2c56606ee5b9a1efc7841a7bdd2b6704a310842811f"
+  },
+  {
+    "path": "crates/content-compiler/src/abi/since_abi_353.rs",
+    "sha256": "a69e2d9aab8c96b7b57822f85286e5677dfaf0321dcb82901cecf2b2123da8bb"
+  },
+  {
+    "path": "crates/content-compiler/src/abi/since_abi_513.rs",
+    "sha256": "cde60e8b14b7e1d735b2ca6ea70b186b858106411f32bb9ae5c45f0115c9543e"
+  },
+  {
+    "path": "crates/content-compiler/src/abi/since_abi_677.rs",
+    "sha256": "051a6bd9eb49a2d6d55fce7820a79e22f8a99bf26f722ac3f340db120565dcb1"
+  },
+  {
+    "path": "crates/content-compiler/src/abi_versions.rs",
+    "sha256": "c9bd4fa65d0f23944051dd0cf835b2966c220f52411e038b94ded98f8a3a3c69"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen.rs",
+    "sha256": "2288ed5b6c6d5bb6d17828581f2bf71415feda801b25217efcb4567755854134"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_ban_active_until_turn_end.rs",
+    "sha256": "5ffc42fe2ec9c42c3a007bd8a48f6d4ed7838b4d4956a0463d216a53acddd337"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_ban_active_until_turn_end_resolvers.rs",
+    "sha256": "a5215541d62e59c1a41f05f475ce75a01ba8992c1964975bcd4a08099ae0238e"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_ban_active_until_turn_end_resolvers_tw.rs",
+    "sha256": "6981c9ffd7e798c0af42608bb7bcd097ea6dc5d9b009afcdac7feb02a6c49d4e"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_convert_current_sha_to_fire_lose_hp_if_damage.rs",
+    "sha256": "20975b14821aa76e7118b5e1c05d34386a194cb7cef2d82870e92cdd2cdad791"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_convert_current_sha_to_fire_lose_hp_if_damage_resolvers.rs",
+    "sha256": "99b2e53feb35c7b9cae7a3a5586b4f681b43345e51875fab226a7c878050982f"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_gain_whole_skill_pile.rs",
+    "sha256": "4820ede58ca3020345588600092dac9d521a009dd2fff6936ae7147643b20dfe"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_gain_whole_skill_pile_resolvers.rs",
+    "sha256": "fad4d8adedaadc5470711d8b7b6ee121574bca396d7c8da27742931bd51f270c"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_resolve_wdb_yangyi.rs",
+    "sha256": "197fe91cbd4ce0d5c67da089620cff4364cffb9aca63c400f3ef4ee4d462adcd"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_resolve_wdb_yangyi_resolvers.rs",
+    "sha256": "263775c8b69c6f6aaa6a4bec141f8e13923f8997aa5440b1bab93ab51f3dfe41"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_resolve_wdb_yangyi_resolvers_mobile.rs",
+    "sha256": "8d37e39b130f4e21602e87f6f236248c8f2d0018d1755ece6bcf510f914d6de8"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_reveal_target_hand_sha_or_discard_bind.rs",
+    "sha256": "3ac51c60c8165c861ee85ae7874aa636b77b72eca86416396360e73d8ab72854"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_reveal_target_hand_sha_or_discard_bind_resolvers.rs",
+    "sha256": "85bf5fe271eb72d5f0e3c9ed4951a3869bb1ce6dc8714ceadc16657f975aa3dd"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom.rs",
+    "sha256": "ff9579d8032fbd2098f4018c9a4e7f4eaf0a7d5453a48c5853c25d3cee8cf87b"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/effect_set_draw_phase_from_bottom_resolvers.rs",
+    "sha256": "fa9512a2fdbefa098dee65a20f647efd818faae4b736ae81c4f5c5cae606c392"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/expressions.rs",
+    "sha256": "68cceffde9d0bf2859ce5672616b4e3fd5b276253cceebeb7ab440fcc519f9c2"
+  },
+  {
+    "path": "crates/content-compiler/src/codegen/statements.rs",
+    "sha256": "d9c6738c7081488924e27100ffe9ddd88f5bcf6d1887e95818ff6481afec3735"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/completions/trigger_body.rs",
+    "sha256": "11eef6a5f0a3137a84e72020df22bd058f54c7ef2aa4cf6ffaa7b2c538244ee1"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/completions/trigger_body/effect_choices.rs",
+    "sha256": "08dba0577ba8a22ccd255c8f4c2425986edc0fef9bc8c7c222725e9bad244380"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/completions/trigger_body/effect_choose_discard_one_from_each_linked.rs",
+    "sha256": "aa8af4384730f8c2cdebdec700d6523d8190e425f67e896f15a055059d91bf5b"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/completions/trigger_body/effect_resolvers.rs",
+    "sha256": "16ee9eb233a4937230e013723865d17dacd8c20ca6a45af78a9e8063149b83b1"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs.rs",
+    "sha256": "cca0686e8fc74de721b234727121233fab3b86260adc58f3e0f2ad25b9df8484"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs/discard_skill_pile.rs",
+    "sha256": "1fb9eb230e8e07fddc6669b7dbe9135132b893303a3672fd4040891a693c2537"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs/discard_skill_pile_owner_filters.rs",
+    "sha256": "e84a5c7aa63bea46715c3539a61fca4dbca0206cb931ac5fa207b320483e8564"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs/skill.rs",
+    "sha256": "cda2574c9e3afa35b194a979315ddaa84e80bb615a73a4e546c84d17157d2177"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs/skill_owner_filters.rs",
+    "sha256": "27d5da82f8baed5aea407c22546d3a36f3ed0ad8c3d2bfeb8dded752abd861ff"
+  },
+  {
+    "path": "crates/content-compiler/src/lsp/hover_docs/skill_resolvers.rs",
+    "sha256": "3abfca492c27edf4cd7dfe7c29870fae2dd9ca66726279f39bc00c66b77e6e78"
+  },
+  {
+    "path": "crates/content-compiler/src/parse.rs",
+    "sha256": "66a856eda0ec6355e66b451477409af722cc6f4886fabf7eca2b86b7d28db756"
+  },
+  {
+    "path": "crates/content-compiler/src/parse/active.rs",
+    "sha256": "ae24b77ad249431d4c85be757fd2e3cfb284de08b026d3ec9d0d34d67c00a33e"
+  },
+  {
+    "path": "crates/content-compiler/src/parse/view_as.rs",
+    "sha256": "2c7d8aa6f1f6e898cf0628af04ea3aefd1d73f153754761ac2e2c846766af91d"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects.rs",
+    "sha256": "6bd9b88e631077f933b7a444c11d20bec1f908e1a70960e3b83c41b7d8a377e2"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/choose_discard_heart_redirect_current_damage.rs",
+    "sha256": "8fdf448f95dfe4624036238281ac97f4348c992b85124813e1ad12acd261dafa"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/choose_discard_heart_redirect_current_damage_resolvers.rs",
+    "sha256": "5105f9aaf2b53d73c07fb6a2c28d9a9ffcb32f0681fcc8f5f77826e699ba7975"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/choose_discard_heart_redirect_current_damage_resolvers_ddd_wdb.rs",
+    "sha256": "e7b9cc234ef6a5482fc969c330d479959a21886433a3cd8ce013c838c4f292a1"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/choose_discard_one_for_sha_refund_and_draw_if_red.rs",
+    "sha256": "36c89dbe25de5d9a0daf977b3ab43f5ac4b8b7826188f8c0cd1d588cf8485b1c"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/choose_discard_one_for_sha_refund_and_draw_if_red_resolvers.rs",
+    "sha256": "5e8c0ff054d3b64e63d09d45d87322e3934a56b0ad9ed866fc21b04dd613907d"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/gain_draw_cards_for_lifetime_card_action_divisors.rs",
+    "sha256": "ac747b1a3d7a0943a768842d0190815f27776fffb85fc02b7637721a716c74c4"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/gain_draw_cards_for_lifetime_card_action_divisors_resolvers.rs",
+    "sha256": "f753297f445d394f5d34b6fbd946d6d501d3f0e19080ec175484574e8b10aa28"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_beizhu.rs",
+    "sha256": "b7b6ed885a02f33c92b56c8b979aa1d15f26ffe17dfb2092ece45de78acfb003"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_beizhu_resolvers.rs",
+    "sha256": "157a22bfc94f918da78647b203fd7961da462c1574c1b8ea8d20f28d3d025adc"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_ddd_guanning.rs",
+    "sha256": "87939aca04d0f48c0ca9f0ec19bf628c79688dbe2f8b6863117e53bde4c136aa"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_ddd_guanning_resolvers.rs",
+    "sha256": "35ca4f18c4a6c844dd5771cb2dc2f69cee43c8ab34f3c3d20c811f95d4ebb0f0"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_heji.rs",
+    "sha256": "83c54d54870577356798801aa924b2a9631132ecf69cf83ed50cacd7a161a08f"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_heji_resolvers.rs",
+    "sha256": "48843347093b7b16ba0fcd942a8fa963ef6dd616e0214c53a5a5950334ca0b52"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_zhizheng.rs",
+    "sha256": "4ad7509e0cca248dfbde503f913ded9b2d92e9538efbe6f1d9ba754b56eb9b45"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_zhizheng_choices.rs",
+    "sha256": "fc3da666fd2745fade1f1a606ea7715b5f6cc721a43caa94655eb03786c3e4fb"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/resolve_zhizheng_resolvers.rs",
+    "sha256": "98df22492375266fa0240c2c7dcec29333b7029e306eaaeefa0b09a4d997b4b2"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/set_draw_phase_bottom.rs",
+    "sha256": "d082ecec64842d632e6cb39a0784c804d9795cf22735aa3bd68f57822f8c2246"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/set_draw_phase_bottom_resolvers.rs",
+    "sha256": "5abb0cfb7a4bb9fbd594199ac6da034c1f2922fd687e1196ec9d2e7ff2283d82"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/set_draw_phase_bottom_resolvers_packs.rs",
+    "sha256": "973a4f5bafdf2f731dd560d79f2d6bb22e73aa5864e503d6bdc9a28da286bea6"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/skip_remaining_phases.rs",
+    "sha256": "3f4d601df971d226aa8e5742b5d0f7d8948c6a57d4f7946f3ab5c7ecf729ddd7"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/effects/skip_remaining_phases_resolvers.rs",
+    "sha256": "44e16226a84e461c720aa58400e64bb2a46dc2eb57669bacbe5c89557fe65941"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/skills.rs",
+    "sha256": "e3d02f47e2d77647de84ec84f8167e563450e8ad6cd42ddb164af1ddae501fbb"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/skills/trigger.rs",
+    "sha256": "9cae88c400272a01d1364ebb794ca8decc0dbca749af81b7d8166a3d100127ed"
+  },
+  {
+    "path": "crates/content-compiler/src/typecheck/skills/view_as.rs",
+    "sha256": "0b078fafc14c88ba929035ee798312e65b3681d2605e1b7eb435ca4d3a7da6b9"
+  },
+  {
+    "path": "crates/content-native-loader/src/fool.rs",
+    "sha256": "9a78a0f75eadc47b1775ae12a82cc99fbf9d677e701fd47ff00226e0c83e5ac6"
+  },
+  {
+    "path": "crates/content-native-loader/src/fool/audio.rs",
+    "sha256": "3108e0a935f4c73584b5a35c4ac4eeb56ef1d1be5a4668aa402c3ced21546325"
+  },
+  {
+    "path": "crates/content-native-loader/src/sj_settings.rs",
+    "sha256": "d0747b4e7e24b36cb3755fe3da30ecd0f8e26890fc2ec335ab315a8f727a8ccc"
+  },
+  {
+    "path": "crates/content-native-loader/src/sj_settings/codec.rs",
+    "sha256": "88d8c17e6ae199e754f83e5bdc994c7329c90d41cf7056a1a4dca19d975ec3e3"
+  },
+  {
+    "path": "crates/content-native-loader/src/sj_settings/commands.rs",
+    "sha256": "2016e0e6ae5fb582742c3d5c4a272dbe834eacde58b08519baa84938573d3ede"
+  },
+  {
+    "path": "crates/content-runtime/src/store.rs",
+    "sha256": "f26001e774fecd04b8665331c34aeb82ca3539901d954c8c861f4f76e2afd723"
+  },
+  {
+    "path": "crates/content-runtime/src/store/ordering.rs",
+    "sha256": "2eab5471c7146d795604a0ab5d76ee2c61e667c0da3f38d20b6a9e281ca6c61f"
+  },
+  {
+    "path": "crates/content-schema/src/package.rs",
+    "sha256": "7ada0c79c7bd9a5f633d5618ae20f38e298535eaea6ce420f2177ceaf00ddc23"
+  },
+  {
+    "path": "crates/content-schema/src/package/hashing.rs",
+    "sha256": "496e4635146cc2eb52e78d7dbca904a426b2c774529c65a58ab828105cc472b2"
+  },
+  {
+    "path": "crates/engine-core/Cargo.toml",
+    "sha256": "da63d4ee83d05e8a50265614f013abd2441214d3dd9fbe7f9d332fbb605eb7b4"
+  },
+  {
+    "path": "crates/engine-core/src/command/play.rs",
+    "sha256": "4371eed06bb5429c0a0250864df2df0889603501f4c4822f1e317e3554337f78"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/apply_deferred_trick.rs",
+    "sha256": "9e125f9eaac6d04a6ac880bc820a215c55146678c63e2520d647f79bb56f070f"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/handle_card_with_policies_and_flags.rs",
+    "sha256": "788494327d0231e6038a9b3038a117b337debf7eb5df83186b6c7f413cf270b3"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/open_sha_response_step.rs",
+    "sha256": "8957a433563ff7f94782d8c88072d8f11c483cf994c37d0263db18825b1752eb"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/pack_damage_card_context.rs",
+    "sha256": "8c549148cbf95ad71a8f035526eaaac98cca3fec68f13aea88e8d3e70afd3376"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/play_as_kind_with_extra_damage_flags.rs",
+    "sha256": "8ce655f7a2d160673a7030fc58bd5dfa61683dc0b5f15be8ec34dcc481ccafa6"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/redirect_saved_sha_target.rs",
+    "sha256": "78edd644804d8312bb4fc6499ae58a16cea2ea47b7861dd0f53cec028e335612"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/saved_aoe_base_damage.rs",
+    "sha256": "931bdefb5b2da4481fc7afe79ccd63402adf302c3a47628d42e43be2243a7422"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/saved_independent_trick_damage_card_and_bonus.rs",
+    "sha256": "430742ed22cfc705d968aecff67441a52dd10e44b5dea6e5709bc098358b9ee7"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/skill_card_target_spec_with_options.rs",
+    "sha256": "b8a5b1f7fbcf505dcd85c04d43ae56f47371a80c259e5f53d492033050740819"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/source_free_ordinary_trick_kinds.rs",
+    "sha256": "72b579f369c13c7fac7a0aa87bfa71fc5f653bba4352947df9e06f3abc099ba7"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/source_free_wuzhong_has_legal_use.rs",
+    "sha256": "44de2bd497ae27caed1738a44126694ef0cd942a1718b50af752f874ffc7917a"
+  },
+  {
+    "path": "crates/engine-core/src/command/play/use_youdishenru_for_saved_sha.rs",
+    "sha256": "f847651e744234a26f4da49da72b65c1d371e0934b363e70fc9ad1f053085c33"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_choose_draw_or_recover.rs",
+    "sha256": "d348c0b6d8d7ebd5cde1a635ca19be16629ef6e157c06fc3186efe3c37947329"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_choose_draw_or_recover_choose.rs",
+    "sha256": "d8c52ae314576303255f54786719f7b24b9b916bd10398d816a5134d61ea76cf"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_choose_give_card_or_add_target.rs",
+    "sha256": "e74d919d9050e4647c3e8d61ee3920b533a2c3fb2cfd6778d08cdbbd7b9f5d2c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_choose_give_card_or_add_target_choose.rs",
+    "sha256": "6a46dc52563d74ca5f37aea09b29b0ddf007316a62284a4cd7599de3acc35458"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_custom.rs",
+    "sha256": "b562a44ceb1e36ecf4caa7e187bb9af4a5077ddc63a893dda2e9d2ce9dbd9646"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_custom_potchendao.rs",
+    "sha256": "0139c9c2bba4e6ba471084e09cb57c6047f3c2f2abb1f8b3e03f72dc105e00ff"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_dying_save.rs",
+    "sha256": "9c912a1efb2b4879ff5df703a82157ba9ef103ebe5f0988d13eed5ee35ccd779"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/choices_dying_save_respond_rewrite.rs",
+    "sha256": "1167a9372556b83fa6fe8379eac6c46f6fb31a9cf78495b06f7201a16dedd033"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_1.rs",
+    "sha256": "18286c204e010c861b3480d6bbce618ebe9335fdf12a59d78d4d07dea0f65a7a"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_1/resolve_choose_add_current_card_target.rs",
+    "sha256": "7554effb5a42b3e5e75c0b1c8369be43d6f2b98808ce99075703644a935aaa0e"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_1/resolve_choose_gain_resolved_sha_or_shan_then_optional_use_sha.rs",
+    "sha256": "ed73f896b10102f11012271ce5cf36aafb444f6964943b3bf786309017be9f2c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_1/resolve_choose_gain_sha_for_opening_extra_play.rs",
+    "sha256": "a264184ba2168880e5887256e347411c1b9d3de2b35d47996641a4f1363d9c9d"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_1/resolve_force_others_use_sha_on_nearest_or_lose_hp.rs",
+    "sha256": "87c1f93ebb846a643f74272900e378430bc1ef726f2ca6fc504b55a14f1fc9c6"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_2.rs",
+    "sha256": "7f2b527a5d1c11d0c3f1b1ba80d8cd5c1554522e8a4644af334da0a18c2cf7de"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_2/resolve_choose_card_user_or_add_target.rs",
+    "sha256": "15a3543d96d2bafc7790bbcb2330f01594b1c673d321f6961e26d17acd5cc79c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_2/resolve_choose_dingpan_branch.rs",
+    "sha256": "f1668c5ab289943ec9591431bfca40a3fd6bfdd09d4791f355112da35fec352b"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_2/resolve_choose_target_discard_weapon_range_hand_or_increase_damage.rs",
+    "sha256": "cfcbcf69a2026272baffed07e1dbd25f91908847819f197adf1cece4d2ad4d95"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_2/resolve_tuxi_gain_other_hands_replace_draw.rs",
+    "sha256": "65d91ad795683454d8bd13907cb66dd1091640bd7dda680b23093076d0ff3807"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_3.rs",
+    "sha256": "fd5ac67077e500821f6dcb99f7a96a60e0b3b209eb9c0a59be3581f2d1358b7e"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_3/resolve_choose_give_two_different_colors_or_recover.rs",
+    "sha256": "c9b51e3a0a537c921aec587f0c1d0adb0f2266e0317d21a88f3c6738ff19202e"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_3/resolve_choose_repolu_targets_draw.rs",
+    "sha256": "31b5369f3ea674de58d7bccaccda96d1d7fdb84a14ea80b5cffa97cbd665ffa1"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_3/resolve_draw_give_or_discard_hand_discard.rs",
+    "sha256": "9a7492cf9952eabb41c12daafc45b127b5118ac1118292f247127cfcaa9fa222"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_tianxiang.rs",
+    "sha256": "79a27f39f3f3353bfc2050ea15f83319b59ab394e039c706dc78050a13d373aa"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_4.rs",
+    "sha256": "d5825618c8dd81846f4f8da67f3ca17e86e7d9c82c3ca2e47e1261435ba0833a"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs",
+    "sha256": "7b294e23c8115353bbf49f319431cd2ef7f263cb37480e34dbf37a42f4c06b08"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_dctingxian.rs",
+    "sha256": "039990f32684c22fb4705502f57fac76c14a073d3a8a2711857990b83c354ee9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_zhiba.rs",
+    "sha256": "a0ceb841f511724761211e7f523ad840254f953eddb22c42d383085085401401"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs",
+    "sha256": "ddf5adf4ae13f89124b66999712445e9d8fc8d19cb59cf288af4545202cad626"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5.rs",
+    "sha256": "2a533380cefdcffd388f20416752549d0288c01a40cb4388b24a86cde4f24ad5"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs",
+    "sha256": "928afa33ee8e68866b181f1b7fe701c189475a669f3ec057d65e3fe5497aaafd"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_resolve_xinkuangfu.rs",
+    "sha256": "7c4083fb7e813c4e3a18ad5b897099cbafe55fc4c32fa906a0170e5958685992"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_twjuxiang_card.rs",
+    "sha256": "66e8a835acd3b1430d2f453c35f8a346bd3741a97dc9c05a7e60605a3e49dee7"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_5/resolve_zhizheng_commit.rs",
+    "sha256": "dfe446e35b22c7c95dec26c429c430f633c1981c40b14c7eef3beaf54b369a26"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6.rs",
+    "sha256": "401a59945f14137ee83605d75d5e3ecac4272cd00a06e336a87724aab63b37e9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6/resolve_jiebing.rs",
+    "sha256": "dfbb324a45339eb857e972b6517481b81ee75a5cd56b091598e797c48ae368c5"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6/resolve_mbduanyang.rs",
+    "sha256": "84c3fb2f31fc66a0056abcff244bcc7dcdb86fcc0555c3f10e6f6ebc7db72466"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_dckuizhen.rs",
+    "sha256": "f962eb42034be9cd116563720fdfb90b0c5f638ea6ab70d71efaca5559cc8129"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_dcmanzhi.rs",
+    "sha256": "27a4146976735df7f3ece4c6d75498710fcddc16f8e7aae3ce12c448e7d0fdc9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_xinxingluan.rs",
+    "sha256": "d49b37bd558c864a3750bfb2d68c0374a004fd51d991808f87f58d97e876b67f"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_7.rs",
+    "sha256": "727df84c6f1daba3b98863e57b6e6e9aa8a7bb910f627118240936635647964c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_7/resolve_potchendao.rs",
+    "sha256": "0379d41f5ff8bb481549d5f95c6d4c09dd3166d3bdb158ee0186c0bef2f7f393"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_7/resolve_potweiyan_choice.rs",
+    "sha256": "6c765071812d687fe92ad9b84fe35cdb865be1675f4665506f5590b1ee85a09f"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_7/resolve_resolve_hfjieying.rs",
+    "sha256": "1d4cda8920a59939f9537fbf3cf2381a07a53c888787a2e4dcd027e5a2e7719c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_7/resolve_reveal_category_distribution.rs",
+    "sha256": "5a7933aa49fd0fa9763522691db26b86be85fad56a5f6e975452bfa228eceb46"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8.rs",
+    "sha256": "7a4d5f9cca80319b4516c25b6ebd11378faf5036da1c77fef06445f29a3414f0"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/complete_view_as_response.rs",
+    "sha256": "d843ac92506a0054999d45a0d6948ae73803e80fb9562e909675c900a704cae5"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/open_equipment_pair_choice.rs",
+    "sha256": "e93d592b8f240aecb889df2c511552e56b700fb18c81ca2df57ccbbd8968df24"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_choose_other_give_one_hand_equip.rs",
+    "sha256": "617aeab5780e226d0e42348df5c4df4d354e9dc76dc9ae3df6039336b4de2e4c"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_reanguo.rs",
+    "sha256": "f2acfafe5d5a646f12738e1485cf19ad018b113959e944041e61db02685eb5be"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs",
+    "sha256": "8c988021d8f5c51362141218bd6ca204194b6602dc23ea341392a61a622f15d1"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_mbbeiming.rs",
+    "sha256": "c66de98713ac615d4341d34632ad9539762e5ebf9a6e011211092fa1e909702d"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_olzhijie.rs",
+    "sha256": "878e488563e69dc529f315fede78f40d10f59fbdfae2fabdc1e007d71e615aa3"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/resolve_retieji.rs",
+    "sha256": "ef03bb1a57fc25a7e5576741ca8b0f6bf499957fa202c838561600ace83be643"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_8/run_response_effects.rs",
+    "sha256": "239cf7cc3963a63d463784f5497ce0976598bc8e39decdc899688bfb302ed16e"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_9.rs",
+    "sha256": "5dd8c502f80351c45b1eb1bdc7ae377e1ec0bb0ca3cf27e333d9ee397a86fbc9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_9/resolve_choose_spxizhan_discard_or_lose.rs",
+    "sha256": "6840a4f8d628399088143878e58495e9bdd2d95ab68655436bf3323ca6ad9e10"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_9/resolve_dcjue_choice.rs",
+    "sha256": "d6de4d45958e90aab8c596137fa38f053144ce898207ee8626b86fe6dcb82b8d"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_9/resolve_houfeng_choice.rs",
+    "sha256": "bd9d7203c938c53dea00e9cc00e92dde606486c3d94412b5264ac95c6f964f5a"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_post_9/resolve_tongduo_choice.rs",
+    "sha256": "4732f69a82f2d1f207a371c14f9af52bd6cc89a48f560a60daf31c8a1cc34fd4"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_1.rs",
+    "sha256": "e189d432ce21941feb3c9ae23a8f6ff004fb0a775c4912cea69eaaa32175bf99"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_1/resolve_chegu.rs",
+    "sha256": "4b6259ea9cb76f91a0b9ee699f7851befe083a635744dc988d7137da6632f857"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_1/resolve_choose_other_yinghun.rs",
+    "sha256": "9f90f11da9dc1b0c7361b2e89f42bd6126e352cac5b4288cdbda956f54aafe69"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_1/resolve_oldimeng.rs",
+    "sha256": "e771bd9877beb13811d6775a98b6c377cd02a550e3b72af5481b989065168dd9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_1/resolve_youdi.rs",
+    "sha256": "c35471bcfff0126fa8dd8f48066ca250b56d908bc676698b77ab768c8e777e14"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2.rs",
+    "sha256": "337e63dab6bebbbb4ea3d377ac97ffa7e5465c178743078d45469a13c00f49d9"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_guguoanbang_choice.rs",
+    "sha256": "623985f1e6889a66efa1f97d4bc6670003dbb5519e766a4fae212b92f0bd4b8b"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twchenzhen.rs",
+    "sha256": "c1eb0e1f3717afa8ef38e35348e1f649ff02a4624c34f99d2d7d1672dd1193c5"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twniujin_custom.rs",
+    "sha256": "d57f39288c20a6cc217f90cc64468d078ede6a269bc34edd03e4a4cf06eea64f"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twruilian.rs",
+    "sha256": "5c76924faebe7ebd9a7915c196b481fec7d09de5ee2a2416cd9907062219f10e"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twshanghe.rs",
+    "sha256": "2941f5552992d8dfba8eadfa317581f84ab896f2c6b4ce553e64cbab6d701ef0"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twyuyan.rs",
+    "sha256": "de632bb0602586d08ff628472462e505303fe8b2d412506735514f9080b9b3f5"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_3.rs",
+    "sha256": "a46050ca4e93df1e9179a9e00200470224d0ebadc0116362a91dd01f75771511"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_3/resolve_choose_gain_card_from_each_other_then_turn_over.rs",
+    "sha256": "f974f156001fa9f87d963e8dd041be30acfe540019a2377419829e6c3bcd518f"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_3/resolve_choose_inspected_heart_destination.rs",
+    "sha256": "7d50fb57a705c67a14f326621a3daa264df888f8eca30390093324b8531e017d"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_3/resolve_choose_qixing_weather_cards.rs",
+    "sha256": "f0b478fedc90c5b633d21b0b20d968e6eb05e1ec8faced068ee04b84e2b85948"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/group_pre_3/resolve_new_yajiao.rs",
+    "sha256": "8e1855ef4170c42bf157f01c3a9d92f809166f91f31d981c0f5131007ca5b726"
+  },
+  {
+    "path": "crates/engine-core/src/command/resolve_choice/mod.rs",
+    "sha256": "b41c28eabeef07eddcd35534a81ea97b9baea677bcdd81d95866d7c33d39851d"
+  },
+  {
+    "path": "crates/engine-core/src/command/skill.rs",
+    "sha256": "0b4ee92dc3b0405fe40d34a4eb18a859801966d1ebbe006db59dfd314b15b076"
+  },
+  {
+    "path": "crates/engine-core/src/command/skill/ddd_fengzheng_provider_exists.rs",
+    "sha256": "8cdce7731b93c9d25666a51d6dbacec6103d5af81a3b20f5df7f58c03cdcefa2"
+  },
+  {
+    "path": "crates/engine-core/src/command/skill/handle_use_skill_card.rs",
+    "sha256": "95a15edced142ec1778317dae11d3c6463be3e8031ce5603d3dff8c9763015bb"
+  },
+  {
+    "path": "crates/engine-core/src/command/skill/record_face_down_view_as_kind.rs",
+    "sha256": "168e18a24a411843222fb3579be44b59e9182b809067b079841d26f36125ca18"
+  },
+  {
+    "path": "crates/engine-core/src/command/skill/validate_source_free_cost.rs",
+    "sha256": "5779b1cc117f07aac983f82145977b33cd1aaa71feb1f7c91950a762e4917ed5"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry.rs",
+    "sha256": "6b052d7400d47632cfc568d666b01be5a5f87b55082ec8e01f7a03adab1e0d03"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry/load_package_checks.rs",
+    "sha256": "cd5eb0b231aaaf31a3c35079e8aaf3f82b5eb75addafec0d237b7dbe340dfc3f"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry/load_package_inner.rs",
+    "sha256": "37c6bb942b4a0a183c18064a8c41d4c90e9dda4b6da723d5beb13f6866dcbd34"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry/map_filter.rs",
+    "sha256": "3a977f6b7da02eaca10de44ade05f71c3aab3d8ef4ba1424fd0dae6dc47be7c7"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry/map_filter_other.rs",
+    "sha256": "a10d61e3c3fd69b8e209f55df7d4fc290840d928fbbd9813dd5d84dbbae3229b"
+  },
+  {
+    "path": "crates/engine-core/src/content/registry/map_filter_source_target.rs",
+    "sha256": "67174f7f2dbcf5af14fead0b85c2b6764bc72974714a74496a7243489cc980d7"
+  },
+  {
+    "path": "crates/engine-core/src/effect/continuations.rs",
+    "sha256": "0fdc199c9d019b0bcb6662ca598c2b42f570f4581038bc5d9ec17099e1a8b282"
+  },
+  {
+    "path": "crates/engine-core/src/effect/damage_prep.rs",
+    "sha256": "55927147ce42a13f6b920236104c8769563ea1c4292aafd7101e6eeddc7cb4a2"
+  },
+  {
+    "path": "crates/engine-core/src/effect/mod.rs",
+    "sha256": "70a0add3b9a1e38673480c1b002117c3e2b833e835804d36d2b4c3a8a830114e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/choose_others_add_mark.rs",
+    "sha256": "ff49c9ad735ea4b267855bbe4ca38cace6660015e569a0745578778f2c696f4d"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_draw_cards.rs",
+    "sha256": "1bb2ee37264423c37f4170329e42a886fb2dfddf8e861352f81094a3ac661212"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_draw_cards_resolvers.rs",
+    "sha256": "540b21634b68fe769f613e67eb4e957ecf8329407e7678e96c7a98953f1d1220"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_pin_debate_opinions.rs",
+    "sha256": "951d165b8eecb32cf10be49bdb8235607ac6456d994b3fdbb9a1ff3a5cc90869"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_pin_debate_opinions_choose_commit.rs",
+    "sha256": "64e91e922c89959cf400935f5822f041b4aab909f8c3cf873404c1fe5337cac6"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_pin_debate_opinions_resolvers.rs",
+    "sha256": "ec99ebb214a6929958198cdf3f21e1a25c7afb6cded3af70befc7efa1d68513c"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_resolve_twxiawei.rs",
+    "sha256": "24897a67c137f9b613a2da0b506c0830d0df5d0cd586eee5feef6765049b2342"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_resolve_twxiawei_resolvers.rs",
+    "sha256": "c953e1421f0f0b8ec06d782b86a06eaa2060d3939d096907769b1e9f85e0413c"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian.rs",
+    "sha256": "f4b12a88a1024efb88f692b46d789f7426197345585e410bf95cfc44a451eeda"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs",
+    "sha256": "db7824722034ddc27b02e8ebc899aa11a0a4b5b5a22a9a6b79109207a533b1ba"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers_pot_r_z.rs",
+    "sha256": "cfda2a63c956cc274bb139ba2fe2d2fac066871a3ae1c560da62b3e146e36e1f"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/mod.rs",
+    "sha256": "dad4f8efec4259e0613e3cd0f0954109f5b9958bc808e7a091de83af75caf475"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1.rs",
+    "sha256": "b463591ebe13c4a41cdda89c15ecc8d9a1100b12f0d38f5385dc7939c3360ea0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/begin_choose_compare_selected_hand_card.rs",
+    "sha256": "da4325c66c1bed00b3b2dee444c8e3aa19111e7ba443685d96c463b33036b2f1"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/choose_current_card_use_enhancements.rs",
+    "sha256": "6fef49bd7a0f65b841e80788e996627eb51d56388d799b532925a43941ae5a28"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/choose_draw_or_discard_target_card.rs",
+    "sha256": "646317e672c16d13ba11c0c8d483da38559a446dce3ccdb122fd39adfee68752"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs",
+    "sha256": "4417c41f1f4732d922dca9550b9db957bf2735540bfe46ec089000a7de674e6d"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs",
+    "sha256": "5d41109efbbfbddd2af47e1ea170d14426a1ed688dc28129ce6059bfa66f2a17"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_mbzhenann.rs",
+    "sha256": "117cdb69ab326ad90e67a9416ea909b484717c76d20c5d1027c6e8200c27c879"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs",
+    "sha256": "6c931dd2d1d6575a5f5604ee8db56b8bb95c0b0718ed9f7a806127c4bb333aea"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_potzhouyu_choice.rs",
+    "sha256": "56303bb9061c707d7dfa8861261f8f5a79b54d1451db0bdcd7ac524ae09ae591"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_shuaiyan.rs",
+    "sha256": "30e9f3cff6c3650a6bcdd8153bde833756388ae3a30d1121f0a0ed7d2bd9d3a8"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_twmitu_round.rs",
+    "sha256": "e43e84467e922d17400e713f763da300574f1b1b4d0c7801f12479dd5a87d6fe"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_yangming_round.rs",
+    "sha256": "4bfb54fe7d34b251a7b5bbf853c7f720dcb375cc897c5510c135b275f88f7ee1"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/set_potyinzhan_entries.rs",
+    "sha256": "b30048995a6519e97d8c46ade12b5c0df0cc6464917f230382f395d25e79e515"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/twmouzhi_card_color.rs",
+    "sha256": "38d7de7f97261ca59a720fd57f0382795cd6226b52e693a1e107c52340d82a8c"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_1/zuozhan_distinct_basics_from_discard.rs",
+    "sha256": "7853a67e96eba008e49b31f6606c733fcc6ffb53a72e62b798af621f53163efe"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2.rs",
+    "sha256": "130d8fe53503496650e2efc32c34a3d75bc5cfa277c8d06726d8dd29f4fac408"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/choose_discard_one_for_sha_refund_and_draw_if_red_restore_if_equal_rank.rs",
+    "sha256": "5e9cb17173c181c6d0aa8644afeadb4225944614bddc2c1a53ccd171c03d4fe3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/choose_give_one_hand_equip_or_recover.rs",
+    "sha256": "943284a5aa9c6d0a39ccc8df5a0f0ce07fd3630a1e9a598efa7d8849099599c7"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/first_shared_pile_card_by_kind.rs",
+    "sha256": "b032936fa233ef3e9eb9c1300426121d3a47fb2ba719092d300557052e0b9522"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/potcaoshuang_timing.rs",
+    "sha256": "a2d6fcd5a8bcee0d67407beea2c0a71715e8b2b671725788760390b7083054b8"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/resolve_potlvyi.rs",
+    "sha256": "5a208d2f5f3ee37feb5a5469515d49cf4953a223f27685c473991a6d0d465bbd"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_2/resolve_potyuji.rs",
+    "sha256": "d72b714a5f7f0d8ce7b569735547882957084bbe5eeff054e6104cae3ebc0f45"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_3.rs",
+    "sha256": "ff5316b7a2117f2c5f36b07c500a0bdb066aa654642de470cd3eecfd9db63db8"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_3/mbxiongtu_damage.rs",
+    "sha256": "bf3e829188d4e351c13155b03e9a4351754da8c0662da8a61abf85905a133b4e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_3/resolve_mbrenxing.rs",
+    "sha256": "7a04513bacd0c899b2a4ffaa886b7a25fe9ca3c58b85f7d0d7211a673aeb9477"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_3/resolve_tianxiang.rs",
+    "sha256": "42f54c1c7b794a888d13488ad4eafbe12cae67f856b171efd0545f4c383c944a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_3/twyuyan_gift_cards.rs",
+    "sha256": "2e7a99a6bbd579e54d9a8687c7dd41a3ea482ff4699a86b5db2f86f3a5fe083f"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_4.rs",
+    "sha256": "426ba4d4c1d0a6714b3f7560f238f31971d5ef23ba1fe7d0b879ff8ff678fd23"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_4/resolve_mbfeijing.rs",
+    "sha256": "f54ba47d97ff9bc2f032465b7c3840b1360c5189f1f971f0e2fa56bbe638cd6e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_4/resolve_potjugu.rs",
+    "sha256": "9bd4d427a9178e980c172685ae7bbd34858fb178880ef16435463308c51225dd"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_4/silence_nonlocked_until_own_turn_end.rs",
+    "sha256": "477fbe043fe553c83d5ee3f4a7b5ffba75d764dd8889bd1b126d3ee6cd7d6fa1"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_bingshi_4/suit_code.rs",
+    "sha256": "eb4a7464bf8a6dda1b1a73d4f05384d4ab4aea36dec6d56e1ce6f9181b6a931a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_1.rs",
+    "sha256": "275cb68145247ca9dae55812e9e5a248e31df2bd056490b4282f94e747e420c4"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_1/current_wugu_revealed.rs",
+    "sha256": "eb02002790e1302b5e1bf15ebc453550b1a2af596c6efee7ceaa1afdecbee486"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_1/resolve_ddd_duanbing.rs",
+    "sha256": "bd82d593668ceb8793e18073fb5011e3431fda659a2b46a6fb781d9825cb4c6a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_1/resolve_ddd_xujing.rs",
+    "sha256": "f1dc3e0394c5d71d8f944bd080531ceecf029d80af8bd269613e2f7bee0511a5"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_1/save_ddd_xiaheng_state.rs",
+    "sha256": "9dd4514ccc34d397b9ee8698015acdc55b991144a84fee448eb9ed39c4c96384"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2.rs",
+    "sha256": "2a086d52870f13a625ab8c727e973ee1dfbfe76e167ee1cbe0e03b4607bae82f"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/ddd_baosanniang_is_male.rs",
+    "sha256": "7ba85f98a3b513d641c2515a35a799e083577406a51277ccb95775994f23a188"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/ddd_zhenji_continue_after_events.rs",
+    "sha256": "e540ba7e56d7539bd3c7cebf422fe70a37df35b332773579158938fdf7383694"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_jijian_kind_choice.rs",
+    "sha256": "aa74833d15f780394dfaec6e150b6b9d77d2d661a50dbf0a33cc4a0f0665a5d2"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_xianglang.rs",
+    "sha256": "f4c725f2dede2a19cc4c6062d2eb2a4adb5b9b831a22c88d962a225af214df33"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_zhaoang.rs",
+    "sha256": "600ca3b2c1fd114199cd3ee0c2d5db9596273d50737fdef96e70f4e3a6d812e0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_zhenji_choice.rs",
+    "sha256": "fd5fc7a5b712238a6940dbe89b74a560712e7a0f65c197e8e9a791d2215a8579"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_3.rs",
+    "sha256": "81cddc0a9d4c3420a3da3100ec12b4716be3e383cc8d1742b28de8a50b091433"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_3/ddd_liuba_decode_distribution.rs",
+    "sha256": "460f19cdcc53b633b16e9c1124ff801ded723f88c2c9cd72eb5de941da89d9f4"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_3/resolve_ddd_guanning_choice.rs",
+    "sha256": "ddbfffc910593cae8baddc4303b44fe11b980be6895b921f453574bce5ebd8b0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_3/resolve_ddd_jianshuo.rs",
+    "sha256": "5bab5856c3a8f3c8b4c01180a0918a7a8dcf101cbe8edca83c9c54abb652d75a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_ddd_3/resolve_ddd_liuhong.rs",
+    "sha256": "bd22080c85037580b031ce19463a4e39d272d01e6ae7d0e948424c172fee94de"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_1.rs",
+    "sha256": "9742398594112b93fe0f772804b194940bf06cbf0b7182d7bc23a5dbdd55ca1d"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_1/choose_gain_card_from_each_other_replace_draw.rs",
+    "sha256": "98ddc10ef8fa245f56a43636e0b967674cf80fd3683333274a9211bb32fb5f42"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_1/draw_then_optionally_distribute_hand_cards.rs",
+    "sha256": "98b40d3e49658b803f05ac848a8fabd4305892d58101e7d5cc0084ee2627fa1e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_1/replace_draw_with_distinct_suit_selection.rs",
+    "sha256": "1723955d3daee4fe713c601712641e78b9eb96c8481f77d716883424923810c1"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_1/suppress_non_locked_skills_until_turn_end.rs",
+    "sha256": "212e199f707fdc190c5e744f3b7cbe9d07028fd4bef935c66dad663d9453ccca"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_2.rs",
+    "sha256": "587cd84fb9e02b7b05f272801bb870bbcd24a7738e52cf75efdd8916aa47cadb"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_2/beige_stage_effect.rs",
+    "sha256": "bf767b12fbf4f4524ee15f2457ea03ad8eadebaa364ab6c7689336e2ed024222"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_2/choose_link_other.rs",
+    "sha256": "3b78fd985576f72172a796720798805e1258bfee9171874fe8625e3db1e5c3d0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_2/choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both.rs",
+    "sha256": "ecf97c822b52a2cec2bd3c28bb1dc822d80cca092c739dd645e7c0015e290a99"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_extra_2/reveal_uniform_hand_draw_self_choose_others.rs",
+    "sha256": "3b269676836e8adc2ff3165fa9499894dbfc243c6ac84a84c7064efd1c591406"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_huicui.rs",
+    "sha256": "c54981c872a19d60b3451dd12ba3d147f34773174be6d78fc907b0b7c270d825"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_huicui/begin_pottaishici_response_cost.rs",
+    "sha256": "3a60b53a372bdf15d59f337d92c27834e47f9e2f4b75a05dccd4ea0360590685"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_huicui/potjixi_targets.rs",
+    "sha256": "687e672d2f794445dfa89f24479d9eed6442885a88cb4a597e3e82459cccb868"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs",
+    "sha256": "98831dd420e673c2b5d01115c632ac6761bb74f3f5b3cd31ce57bfc88e1cf217"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_huicui/resolve_xinxingluan.rs",
+    "sha256": "9cf8b9fef23ab7e64fb224c39120f572f3886fa72d46aae1a4938224d470d616"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_jsrg.rs",
+    "sha256": "b2d2b18f7a908a5dd170ef55aad6de20329ef854a4f1f2c6d524431663b28eaf"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_mobile.rs",
+    "sha256": "2ae0992f47eceec9b7143bbb082130624be5d2a1bf69d58380641c4f882d7a9c"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_mobile/choose_use_virtual_card.rs",
+    "sha256": "af5644a75ac72d9420ed88255a5f8cbbcb4aea3d139566fcd40fae96d02dcc99"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_mobile/give_cards.rs",
+    "sha256": "7a2addd52beed88bc985c07bd3cb3db12e498361dbbd0d57818207ada431277c"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_mobile/resolve_jiaohua.rs",
+    "sha256": "2977981d12dc7060e0f5995e0ec6767143a1c69874201001c67e7080da35771e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_mobile/take_target_hand_then_repeat_until_max.rs",
+    "sha256": "4029766ca87786a80eb02665de7a355962d8787e3af2ebac07af3f4a8fa581db"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_old.rs",
+    "sha256": "be093d7defeb54bd78804eaed48fd3455ddfbccf295c0cc3c350eeadc558b834"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_old/ban_active_until_turn_end.rs",
+    "sha256": "9ea8c57368ef3c6758f7bb80131fc89311c07866c9cb10cccc8f4fceae883e47"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_old/oldxuanfeng_distance_one.rs",
+    "sha256": "9a1f04119d88f488aca49d8e91501ade16f383471be64379459fa485882f1972"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_old/resolve_beizhu.rs",
+    "sha256": "ff582391903c6392ab9151507ebaa476a5084501d76c2bccc8570b996b9cab60"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_old/resolve_drlt_jueyan.rs",
+    "sha256": "8a86ee2fc8652a8f6b59b6080e3a139b6ce24b1ee2bb1c55ce8f7dfb68180527"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh.rs",
+    "sha256": "de017ef361b2d29f0173b8f5e32b0c9b23abf73e5486f3da1c27f61157ea1ed3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/choose_gain_target_card_alternate_zone_then_target_draw.rs",
+    "sha256": "953e64e9644de16dedf759c61d24abf56f5e15c4623b5956833079bcad0c6a0a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/choose_other_recover.rs",
+    "sha256": "2830a17ff026f0105fd2c500089f3d92250dff7817176d72f784ca6a9e52aa14"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/choose_targets_damage.rs",
+    "sha256": "3e65bcb6c6038efb0c7ded5ba958566f1bff1eb78ad479052cff6baff768522b"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/qieyi_phase_start.rs",
+    "sha256": "0827c2d84ed6a6346ee1819214d21200bc7f228d33c998ac41bb5ac0739f1b71"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/refresh_skill.rs",
+    "sha256": "1fbcabff637226b0135329096f87e0dc8d1e57e0ebf0abf9e0aa2d3936b56649"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_refresh/replace_draw_gain_top_two_add_skills_if_different_colors.rs",
+    "sha256": "6a55e07bde6fbd9c1f39ba00d480eeea562e45d29906ac33b2faa6f74176ad72"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_1.rs",
+    "sha256": "3b709f637999a3ca097092ea6f26856262dd6990dcfd11b32f3d670351b6cc77"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs",
+    "sha256": "510ca30198d636ae2dd255c64aa3196f4acadafb75a664a30e8294b536035982"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_haoshi.rs",
+    "sha256": "53a870d2e5ad9dbf02e3d35c84cb69d39bcc80ada05a1593703c348bec8da5b8"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs",
+    "sha256": "8669876e5eca176ce795d318f69ba7469c8e0caefcb751134139b96f7e89e364"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_1/reveal_hand_to_player.rs",
+    "sha256": "03ad8ac44f5c665b77662e45cc9b49f143952af0d9eced9bdaae490016734bd2"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2.rs",
+    "sha256": "a5ddc6b6a6971bc11a13e7f6227b5ce477098a188fafbff73899e56630b97eaa"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/bailingyun_xiace_mask.rs",
+    "sha256": "d1a8b07e7c312b20b3392a360be76f326d237f62473146f7003cfdadd82132b5"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/liangyin_mark.rs",
+    "sha256": "740f5078e063b3e61add05f38b4031d1c55bdd2efaa37d4fa5d2c3fcb6f8dadc"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs",
+    "sha256": "5934e47eafd2e1a1d6ff6160c0bb5fabae0e24c25a76b7e607d95640993f0401"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs",
+    "sha256": "9b541775ba949b328edb0713dc20ccc6b9579a5927d796cd25d22267eb521f8b"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shiji.rs",
+    "sha256": "56bfe06522889165b9621ea3adb69449bd2c5845bb3beb0e4baaa966e6982b0f"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs",
+    "sha256": "e01fbf2dd5a18f4d7ee090c563c1828cb2f376aaf1df8595f13c243d770a2d46"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_shiji/resolve_xinyangjie.rs",
+    "sha256": "61ebfea96369d676e245428b0ed92e7536dbfde73a605634b74c605232af52c9"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_1.rs",
+    "sha256": "ab6769442234f72d9bfc0e01181195e952452d7953bcfd25a24e0895be75adcd"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_1/choose_move_field_card_to.rs",
+    "sha256": "2a9299114ec30f1e4cefaf56a6b4edd88f43e1bddeb2144ea56b72ac8493ce64"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_1/choose_other_bizheng.rs",
+    "sha256": "2457ed8c386afd47fda617720d9dd53a20c25e35057e4ccfd904f0a4fb73c6a8"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_1/discard_from_hand.rs",
+    "sha256": "b04cbcb04865c4f127ddf84eb8de210f4f39af15cefbdd541015653033e67088"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_1/rejieyin_can_equip.rs",
+    "sha256": "3ef7f12cc3a74e4e353874247a87ed86c2abb9b0004eb8157a0ef329d84132df"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_2.rs",
+    "sha256": "ef4b1d91a28c580cdb747b0c3d3bf0f89953b1b51d6c5330a416171663fd1c48"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_2/choose_discard_basic_then_target_discard_equip_or_damage.rs",
+    "sha256": "a1fc34aa11ef1fad15fbaa01c5d2328a6b783531914427fc246ded608bdc0886"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_2/damage_then_draw_selected_targets.rs",
+    "sha256": "0a0e27052d2d3d91cd6c42907f63a924f3b163078e4fd298fbd5a1153e9b279b"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_2/discard_all_judge.rs",
+    "sha256": "ab80928f3d7969a85c7fd0bbd0b879d3248645ad19e37e6c9afa0fa8c97de3d0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_sp_2/resolve_shoulijian.rs",
+    "sha256": "e6ad4d3b0e421071333611a86f269073d748c9792b74c57baa1c0e660580f03d"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1.rs",
+    "sha256": "b007a0a7bf7be515e3bb46cb018856720798bf037c028d4b070b58c3c8974bf9"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs",
+    "sha256": "befd7bf50131556dacb9c4a999b8ca42037531183cfc7012a3c57ebe3f90e843"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1/grant_skill_instance.rs",
+    "sha256": "b37504547db5b098c155ed867560561d7244512ff12957df43d5c3c7bdb4dcf3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1/open_choice.rs",
+    "sha256": "e720b5cc38fca93d2108a157950bb7151d39e07db593652157a010043a4bd682"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "sha256": "d56283f9160f519d8a92180083e03bb1327effbf5c625b0e10b9d3bc65704de3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_2.rs",
+    "sha256": "7aa07a96847e54f7aae69a39952d4951483ae70ccacf455bc58290dce0247620"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_2/add_caoyi_helper.rs",
+    "sha256": "4cee4308b53edc69c00c75ead4ca531df338d92b2617a5033c8ed294cfb92046"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_2/ddd_bailei_damage.rs",
+    "sha256": "c1840a8e61bd0d808c39713060cd1f9edbffb9d005b24708736b5db01076c425"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_2/finish_twyuejian_cards.rs",
+    "sha256": "5b012e31e68b3eb37c0651c5206f1509715d3a250ffee29153c510f0f57f0aa4"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_2/resolve_zhugeruoxue_choice.rs",
+    "sha256": "6b87a6bae5c66577c634ea0f5569a6b931529c347f48174be687875a12840abd"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_3.rs",
+    "sha256": "06769bece949923a7abefa1257c98e1f7f5e581c2f4c1f33b2ecf2cb72b8f515"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_3/resolve_twchenxun.rs",
+    "sha256": "e704e9623e245f661be68f31a5a3da7bdb580942e647973b6acd9059b3051114"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_3/resolve_twguohuai.rs",
+    "sha256": "c28ae3e02ae9e265b7b222e9dce220d1971cd8792170ad887099697547ad3fbe"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_3/resolve_twtianyu.rs",
+    "sha256": "7f76dd26cc8fe7080ea7ac47573f140ce0130dfea08ec24b1845fb117f492213"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_tw_3/spwanwei_active.rs",
+    "sha256": "2f7929b92783ed614e3f21ae83d057a8ac33c510011f77ac7373121916a0db34"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_wandianlunsha.rs",
+    "sha256": "5646e2df47708a2b5a50cf6f367e3823d750d418626ea365b66a46a563fafd80"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_wandianlunsha/remove_empty_malingli_helper.rs",
+    "sha256": "af174bd217cc2344e70cc80a579ee80806a77ca0f5bdd34c011706376ac53fb0"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_wandianlunsha/resolve_dc_sb_lusu_choice.rs",
+    "sha256": "36d88064ab6ff81eebffba948d7ec7e29c8747b8e39b880e05ae6c8072a08895"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_wandianlunsha/resolve_wdb_liufu_choice.rs",
+    "sha256": "50a4cba402937faf7131192d3e4baa8f86fa9060cc08f60721d8a8298889338a"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_wandianlunsha/resolve_wdb_xizhenxihong.rs",
+    "sha256": "f9b7c25cc78bdf5d8bba4692fe573cdc97f7d7a76b4e70f4a2c46e60cd801e0e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1.rs",
+    "sha256": "a20d60af7199dd195705d945defe3e075ed51c27b8ba0ff04510f7408102e2e3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1/choose_other_excluding_source_random_gain_hand_equip_then_use_if_equip.rs",
+    "sha256": "32ffb9e5eb477448149f258a21f1640b18d518bea6f06ea965b72ddcb32000fb"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1/gain_cards_by_zone.rs",
+    "sha256": "3b00df1b3b7f712c8dde7f95e7764e70f855f6414cfc3343dc691489fd14ac29"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1/resolve_xicha.rs",
+    "sha256": "50461d6dc3e389cbf231e1fc9789b92084a3b829bbaa4dd0490faf3d838b5ef2"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1/resolve_zhengbi.rs",
+    "sha256": "df45123925ff49bb266f881f50b088cc0513fd0bee09ddf062d100f1601fdfb3"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_1/set_potfaen_pending.rs",
+    "sha256": "0caa71769f64ddd059f5bca36fee43a6664a78f968a26d2649d108f19d6310f2"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_2.rs",
+    "sha256": "3d7dd04effcf0f26fd6e9598d602f93e2a4efa3f14aa5b74abb908e5e4fccf16"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_2/bizu_groups.rs",
+    "sha256": "ab2f9bfccfa82a3747cb9c03024d95661689c09c6f101fd8853622e7b30dec3e"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_2/continue_dcsbyingmou_spree.rs",
+    "sha256": "2a699f62f92f21d3b38ec2c976ae9ca5ab4df641e4f628b355a1e08cc4ef4b24"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_2/resolve_dc_sb_zhangxiu.rs",
+    "sha256": "6815e2f77e9cc6b534987f28607c208f234c2542c3b430a0e14deeb0fb9b6f8b"
+  },
+  {
+    "path": "crates/engine-core/src/effect/primitives/pack_xianding_2/resolve_stdgaobian.rs",
+    "sha256": "30b9bdac0fc8092eb0317e8a5326f09457a7dd2801e13f1cf89c971cc1fe3513"
+  },
+  {
+    "path": "crates/engine-core/src/effect/source_skill.rs",
+    "sha256": "16a33d7bb5105a3ec26d8dd467278ab6ac370016dd2f3d949812e48132263b01"
+  },
+  {
+    "path": "crates/engine-core/src/hash.rs",
+    "sha256": "f158dd41a28859ddd9969764b035c6e6e88c1b4d53355be708a73335a34fb2ee"
+  },
+  {
+    "path": "crates/engine-core/src/hash/dispatch.rs",
+    "sha256": "80ba4da51b8fb67e74445271f120bc3d2a02c95ace8173c9e1d5b859700c20b1"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_discard_hand_equip_then_recover_target.rs",
+    "sha256": "abc76c96908e799be9bda4105f72cdacfbbd7343baef564f4a214aa519926829"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_discard_hand_equip_then_recover_target_resolvers.rs",
+    "sha256": "38b131bac801715e4848b73cb23aecde3f7f9c8648e7d3c3f8f82ca358286f1a"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_discard_hand_equip_then_recover_target_resolvers_ddd_wdb.rs",
+    "sha256": "53cc6b6460ec1420543f6be4bdbd8c6f17a2226adde54c4d50c3120d64cf99f0"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind.rs",
+    "sha256": "c789c96e10b755ea097c19259bcdc460b04e7b2a4a273aa82e63b3a8c14fbf15"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers.rs",
+    "sha256": "2c32cffc94929e36e6b4381a005a8ac0a11024a465032072009e1abfcb826653"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs",
+    "sha256": "b016f7497d70be3524cae7f4a85c9034c72760455a1860d327195a8b4397c7c6"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_draw_cards.rs",
+    "sha256": "a6005510b890befc510d86807582090ec5ece928211513ec4681fefb30d8bb9b"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_draw_cards_choose_draw.rs",
+    "sha256": "e360b7e28c014b885770222f10bba3bb18b16da4876f093314fd26d51d3b9cd1"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_recover_selected_targets.rs",
+    "sha256": "3c44970e7ad552e29d44c2fc145795a1bc2f881cc81479b4b6568a51fe36ad8b"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_recover_selected_targets_choose.rs",
+    "sha256": "059c9866455362a4491df814a8abee9c3ffad8b92ac800afc85ec6580b5c220f"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_recover_selected_targets_resolvers.rs",
+    "sha256": "d62d3ac9aa5784fc2616d5a9243b408f287a7b0afad6a8977591d1de16a115ad"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_dili_yuheng.rs",
+    "sha256": "d35bce5bacdd978b44dba0fa12aa7c84cba93342692350b9388e295513ae5ffc"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_dili_yuheng_resolvers.rs",
+    "sha256": "1adb327640087d3d2d519935c1700dde21304953a9f3a52e8b558df335d5cf93"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_potlulian.rs",
+    "sha256": "e036d93911fa84ed8fce2dbb0506a22b5e1bf09d622d32620013020389761a9b"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_potlulian_resolvers.rs",
+    "sha256": "c0cb3d1fb2be24cc741949a4f011f702595c22bc37c208e471e393f687ba1b93"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_twluanchou.rs",
+    "sha256": "0e962d38082ca6637af0777f69befe1e1608e8980a2f26913286747a3854f818"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_twluanchou_resolvers.rs",
+    "sha256": "285ae5acf6c2d36def798e56177840c3b10ee569898f544bd273c755511414cc"
+  },
+  {
+    "path": "crates/engine-core/src/hash/effects_resolve_twluanchou_resolvers_tw_mb.rs",
+    "sha256": "6416a74a000011e3184a1673734ecb92fdf8137314223bd4fefca5112d1cd461"
+  },
+  {
+    "path": "crates/engine-core/src/query/alive_wounded_count.rs",
+    "sha256": "d33816255a099d559fa33adfebf42ca99801d4105da1764a85e0cf346140cfa0"
+  },
+  {
+    "path": "crates/engine-core/src/query/card_target_cancelled_for_logical_kind.rs",
+    "sha256": "6ff4ff12a80f4e6ec8bc733b4989a52069cccabbe2ff5a6c111ff1f517d47bb3"
+  },
+  {
+    "path": "crates/engine-core/src/query/discardable_target_cards.rs",
+    "sha256": "ea226aa5598876e8ccf6de18f422d364b45a0615ceeb7985e9e46feef8c4c075"
+  },
+  {
+    "path": "crates/engine-core/src/query/duel_response_count_for.rs",
+    "sha256": "8273ae29c5148345f9f77b0516d4e82f2d18b1b2b16baed7fbf756b48a864f48"
+  },
+  {
+    "path": "crates/engine-core/src/query/mod.rs",
+    "sha256": "6a9701f35fdf0ec154318be665873d28982fa6623bdbda63905e7dc0e7ce7509"
+  },
+  {
+    "path": "crates/engine-core/src/query/modifier.rs",
+    "sha256": "f86a48080a699a19b990068e7ec0d28d13f46a47925a9370cf78f83c6a13aa02"
+  },
+  {
+    "path": "crates/engine-core/src/query/modifier/bootstrap_modifier_defs.rs",
+    "sha256": "d8aef3a4632997ac9911518ac3b421d901f536c2f4226705d92f26109ceabf82"
+  },
+  {
+    "path": "crates/engine-core/src/query/modifier/impl_activemodifierindex.rs",
+    "sha256": "35eff7d1187b9850626b4e3a17c86e40b4d1f6d7a5b2dd62980ee964c7fbd765"
+  },
+  {
+    "path": "crates/engine-core/src/query/modifier/matches_kind_and_suit.rs",
+    "sha256": "a690f5903b9167ffac9137a45010d819d526bc76bfcfb75339dad9ee89cee8b4"
+  },
+  {
+    "path": "crates/engine-core/src/query/modifier/resolved_value.rs",
+    "sha256": "0cedec19e131b4e1d18c8d11ddfed9df7dc8527b58d5f9b9efa316c7f6f3765f"
+  },
+  {
+    "path": "crates/engine-core/src/query/query.rs",
+    "sha256": "98519425f12bdeb2ed9c51bfcc6a4abf7784fc5aaa5381283332d67cf8282e6f"
+  },
+  {
+    "path": "crates/engine-core/src/query/sha_rank_skill_mark_modifier_active.rs",
+    "sha256": "ef6d3edcd19fa8a9f0f73beb3351ce50484ab5e61cf780b34ed194936329630f"
+  },
+  {
+    "path": "crates/engine-core/src/runner.rs",
+    "sha256": "069be59f85de1503b2a3f6cb5c7ba786f4f45cadbf6fa67779f25166a7422909"
+  },
+  {
+    "path": "crates/engine-core/src/runner/choices.rs",
+    "sha256": "1ef2ad1a7e39b802504fd85665970097ac5afcaaf35e7b7770679070ab016b51"
+  },
+  {
+    "path": "crates/engine-core/src/state/impl_resolutionstate.rs",
+    "sha256": "ca814aad02c58f921d89722f5cf93386371cc9a83c3e541f5c345b362d36f4e1"
+  },
+  {
+    "path": "crates/engine-core/src/state/mod.rs",
+    "sha256": "0ea00803f046e221f64cb60bcd6cb9d2aec49d1570f0061044b379607e12d82a"
+  },
+  {
+    "path": "crates/engine-core/src/state/skills/content_flag.rs",
+    "sha256": "31c9ff60c662cd8e0229e87b1355a214593d762c438b885c5ea0427489969495"
+  },
+  {
+    "path": "crates/engine-core/src/state/skills/content_flag/ddd_state.rs",
+    "sha256": "e9dee2ad0911a669d420120f285c08003f9310336c88fe00bdfcf2a9bfe0c8bb"
+  },
+  {
+    "path": "crates/engine-core/src/state/skills/content_flag/taiwan_state.rs",
+    "sha256": "538cdd2467597dce3fb70beed21edbfb1bd6b827e609edde20892b5ddcffdfd2"
+  },
+  {
+    "path": "crates/engine-core/src/state/tag.rs",
+    "sha256": "9a18eee55c57487a8fb7dafb4b0af131510a0a3e9d9ab81e04237d82a948c7d2"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch.rs",
+    "sha256": "e6f1ce78e8b78c0236047e665413e5c12838e5d6ad2fc7d8ba74a3b19e669dab"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/ddd_shixing_female_available.rs",
+    "sha256": "ceca7e0425c0ad60990a8abc35bb1d33ad3ecc5b760677ac8423cc294706115b"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/ddd_shixing_female_available/event_contexts.rs",
+    "sha256": "4980a82eed2e542ce5d7650442f231931f797c62c735a719830d166b29880f80"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filter_match.rs",
+    "sha256": "c85ef0c805853e8626ed185bb6bf26cd00919ab99b6b0659d7e94f186cd04264"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_always.rs",
+    "sha256": "9b2727e65645f2671c4821db555a19d32bb14e23a02e0a1d324017a202c1084d"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_always_source_other.rs",
+    "sha256": "6472bcbd8b3e5ab1c3a79a5f3d13eb0016b3a135f25579103c24826d76d780fe"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_dcyinjun_tracked_sha_resolved.rs",
+    "sha256": "1512922e151dc863c85a279e1a5a02b7b0e673e8c521f4fcd0334b22bb826f7f"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_dcyinjun_tracked_sha_resolved_owner.rs",
+    "sha256": "e9ee9ae59f252fc795d9b8a1c427f641b954c04e79d536c12c5886d1e9a20a58"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_dcyinjun_tracked_sha_resolved_owner_event_source.rs",
+    "sha256": "eb74a2db4d61e1898e62722cffa15b382aa93630478fd7c3362da484ea1310d1"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_ddd_fengzheng_round_pending.rs",
+    "sha256": "957b3fe2a269a5c7bcec09f559fdc9849c64d3d4b30362e2c371e05316cf9425"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_ddd_fengzheng_round_pending_ddd_event.rs",
+    "sha256": "254d55920fafaca1a4354282730d1683c20c72eba6edaa816f0a72198db4f9ef"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_other_marked_xi.rs",
+    "sha256": "85d1b63f639eb8b4a9aab3c61dd732a1ace7eb6c810340bdf0bf795538fe2d56"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_other_marked_xi_owner.rs",
+    "sha256": "1bcbfcadc63b7188568fba0953325ccaec01e4ada5fd16f8e0571186f990e64c"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_other_marked_xi_owner_source_other.rs",
+    "sha256": "8aae1c70e9528862602ec9f47ca756b2a8a3d461f38f78f3e5f64efe0864ef6a"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_turn_ended_rehengjiang_pending.rs",
+    "sha256": "b6b3059ad7fef2db859b638988a49e7147142648cc9155a75114f4650635bb55"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_turn_ended_rehengjiang_pending_owner.rs",
+    "sha256": "7da71e804a5008479069998d33e33e872a64d01d9c397a80997f2430a58dfbe1"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_alive_turn_ended_rehengjiang_pending_owner_source_other_event.rs",
+    "sha256": "0499aaae19f2d8b1d499049b8b9dbb0abc68e4262b3cfd77c67c4b1108197159"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_black_card_moved_equip_judge.rs",
+    "sha256": "4c9b92943c3be4338835643792baf0c05fb5958d3d2cea7544ab3eaaaea97c0c"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/filters_owner_black_card_moved_equip_judge_source_other.rs",
+    "sha256": "d4ddb6a9db0f73f887633a7bb0f037a59a7b9b2f28a3e9ac24cc7aa9b11b60e9"
+  },
+  {
+    "path": "crates/engine-core/src/trigger/dispatch/potcaoshuang_timing_ready.rs",
+    "sha256": "f83af305034e08859833481f6c6d50f6eeff26073345d5be984940139001e25e"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host.rs",
+    "sha256": "c2f103dabfb6e82846c756b83b6bf72e0f50b20db2853486c554215982892ce0"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_choose_current_trick_targets_to_nullify.rs",
+    "sha256": "eb08e9600e069b4995d9c8a3e4978518a96c98642882ae2ee4d3abcd3d74d9ba"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_choose_current_trick_targets_to_nullify_resolvers.rs",
+    "sha256": "b41fe831bfe6e97b0119d0970ca6cb01356d33eb46cefe13501ea8cffd8e7dfa"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_choose_current_trick_targets_to_nullify_resolvers_ddd.rs",
+    "sha256": "715d35f2d8ffeca25e65722b3e4b0c6c88dd5465080d2c09f93de6552494cc07"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_choose_targets_draw.rs",
+    "sha256": "f0f8c4fd3406cb17435ff8c27918381c8821272a1d54f1ad6d88adfe96d3aaea"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_choose_targets_draw_resolvers.rs",
+    "sha256": "903dbb3365019075053d8ca801e557e1e47ac76f54e7cd90ae0910364900a9e5"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_judge_make_current_sha_target_unrespondable_on_red.rs",
+    "sha256": "b2a9ecb3371b7a917bf96848359ed29b1aaab0ed79b5a40bde7a1d3ff0edff6a"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_judge_make_current_sha_target_unrespondable_on_red_resolvers.rs",
+    "sha256": "dda4819c2bf7085caba4db403d353a703e960e55229c910e3c9451fd8e8e156e"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_resolve_potchengpu.rs",
+    "sha256": "cd1ebdd11f8249b672906d004185b8d098b43e488d1ae13285a5874320f0e734"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_resolve_potchengpu_resolvers.rs",
+    "sha256": "27099d7995294c23eb95a26f015f727e7145bb06bb7d48df03529c82cd99c977"
+  },
+  {
+    "path": "crates/engine-core/src/vm_host/bindings_resolve_potchengpu_resolvers_pot_tw.rs",
+    "sha256": "bd533f5840f3f5f14ab07f9053504a5b57f75f5518d5dc39943508dcfc2f410c"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/misc.rs",
+    "sha256": "8f23b061d189b2b91cc5448b7878ec87ae131214e6e2bf0b37d6e00d790c4198"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_key.rs",
+    "sha256": "01ff965e193d3ebd4f94372ed6be98b47e8d20f92fd2d3f91c264d05d5058e76"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_misc.rs",
+    "sha256": "d8c34ca3cc3c6f7d97f1e6d52da6f083f3cff784565f475a1dd864f1afd6c94e"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_mobile.rs",
+    "sha256": "e9ea837aa9c0e221ef7f306dfaa4de2429de8870f256471a8f63f77c4a9bf439"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_offline.rs",
+    "sha256": "1408fac604e9d110eb1f91c6727649382b147dc61093e8cc7eca7eeda4d4c72d"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_ol.rs",
+    "sha256": "4784a1c7fd5ceb5125b5ad0626ce00bd7c3cb2462ba51efb148ad6cb0f95d757"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_shenhua.rs",
+    "sha256": "2aa6c15af5718a9d3e068c048d5b6fe129d9bc43cd62f88ce3114795c4597ac3"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_sp.rs",
+    "sha256": "47b5fe9377580e48256e819472bbc39f312b42295094fe48f791e84294667c39"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/original_yijiang.rs",
+    "sha256": "66465bb969aa0076f04ff16edf706995e88a4ec980065c2b8cd149ada869eaf0"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/phase.rs",
+    "sha256": "289805e9cdd07c3df06c5d0fe7ae67205d573bcded53c15dc3ea4629f950dd73"
+  },
+  {
+    "path": "crates/engine-core/tests/groups/test_registry.rs",
+    "sha256": "2a26fc3a2373706e803e1e122331891dc6cb19496aff38ff923059acddbe6101"
+  },
+  {
+    "path": "crates/engine-native-wasm/src/installed_packs.rs",
+    "sha256": "f0b8db5c28f55f3da83f047e06dc4767abcb62704937e392a54826ceee4d4eba"
+  },
+  {
+    "path": "crates/engine-native-wasm/src/lib.rs",
+    "sha256": "4755233247441695d4473922a0d6815bb30c134245694984dabd62dff5611cc2"
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/gt014_import_validation_parity.rs",
+    "sha256": "ac368ab5886148673d15720126af554e244f5b1c6ac211f5c578e26e9bfeb5eb"
+  },
+  {
+    "path": "crates/engine-native/Cargo.toml",
+    "sha256": "94d3a85746a29bbca07c36a3ecaa515e52ccccf4f23b86de9c5dc3f1f3a0e825"
+  },
+  {
+    "path": "crates/engine-native/examples/nc12_bench.rs",
+    "sha256": "7b60daa1ed4b3c76d267535b9e8302ee834339e24da2d6ebfd50779d8c10df3d"
+  },
+  {
+    "path": "crates/engine-native/examples/nc12_bench/scenarios.rs",
+    "sha256": "c19c768f20d70b1bea6f548a9426894b4c15e68d0b2b68d2fad5c94d7b98e08b"
+  },
+  {
+    "path": "crates/engine-native/src/ai.rs",
+    "sha256": "144a2b4e9ffc4ace8842bd3aa3054f774eb485a45869568248f03a3d04b61c03"
+  },
+  {
+    "path": "crates/engine-native/src/ai/redact.rs",
+    "sha256": "deaa4acebee0a74dde9ba950d3dd68e9252440685d33d14ad2ea3eea274b534f"
+  },
+  {
+    "path": "crates/engine-native/src/archive/machine_decode.rs",
+    "sha256": "38c4d030e12600b9d4fdbe0487786e2a157fe842e8240b7a6875eaf1c62981bc"
+  },
+  {
+    "path": "crates/engine-native/src/archive/machine_encode.rs",
+    "sha256": "ad19b9541793a9731977569150b33c7ccc9a055da693bf1a7e2bb181fb53b2f5"
+  },
+  {
+    "path": "crates/engine-native/src/archive/resolution.rs",
+    "sha256": "258afe40a6c5289c17f96642baa9fabeaca040ab175224380f00d530a7b9e6db"
+  },
+  {
+    "path": "crates/engine-native/src/catalog.rs",
+    "sha256": "9d34422c85f16c85ff354148b0011ed48e5652e1d7033c7b0a03366de1132211"
+  },
+  {
+    "path": "crates/engine-native/src/catalog/card_kind.rs",
+    "sha256": "41e7e53b5df05f2bd54693dc24edb268a3ff36107ea712e3038b5fae6c20ca1b"
+  },
+  {
+    "path": "crates/engine-native/src/content/hooks.rs",
+    "sha256": "3d589401f83007ca0d8c7d04946049a00045116e5f836bb0c9f8bbc8584989a6"
+  },
+  {
+    "path": "crates/engine-native/src/content/host.rs",
+    "sha256": "07ea7e9799231a9afd83a5bf4528c8064d0b87e04b8cc47ba2cc32596693e628"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/activation.rs",
+    "sha256": "5bd87ac57772b595653ea10a70ecfa6a0a04f5b96b29d33868689bb0a029488e"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/activation/common.rs",
+    "sha256": "f3ce8155a46e8fe2553e16f2526689666d1eebec975267eec5cd0bc620ba4b72"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/activation/wudian.rs",
+    "sha256": "e833802ff51c384db1a41aecfc0d226f2f4c419c898dadf709ab04c2973a2e36"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/activation/xianjian.rs",
+    "sha256": "531b5f65a964c88cd8862f126a36513ce98b9bae96b42abebfed3e983c1bbb96"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/asks.rs",
+    "sha256": "8bbcff6983affe1a8a44a9176a581fc33a859b4b2965dcb8a4c4314449c0d8e3"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/asks_mtg.rs",
+    "sha256": "6c220d8ba833513d1376b91be96a293201167262e19ed4fc8f11c94b1ded6255"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/asks_wudian.rs",
+    "sha256": "55d1a344e59888899bee9cf5434335bbac9bb07dee02f511555e9ac15086853c"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/behavior_list.rs",
+    "sha256": "2e30e5355d4cd92a197a77997f0cc28ef69267c6d892d84ddcfb8d24c38a648e"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/intrinsic.rs",
+    "sha256": "684de2830e12253ec1a66be955dcd49cb9953e32f122f68de1105ef4fd95d971"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/keys.rs",
+    "sha256": "a3ba0bdc72ae90b383a0166a5e6b95537f171b8ff2f3dbb48f31e95fd5ba4a09"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step.rs",
+    "sha256": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/skills_cards.rs",
+    "sha256": "c9109e3232d4e94eb7fde4f6bd79ab23b2a9622d52fa28f0f1e504415176f3fc"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/skills_discard_costs.rs",
+    "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/skills_virtual_use.rs",
+    "sha256": "9725ae48dcdb058ae5067b6752a8735c67a1e18049a4594ec141cab5222f4415"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_card_attach.rs",
+    "sha256": "00a3a16438713117ff54f297ccda5758e3c02d747a69ad33f826dee45280f933"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_card_effects.rs",
+    "sha256": "1eb495f03416b4cd8b8b41af55ef152dacc476bb4e8e99001ddc21b586704f9e"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_card_targets.rs",
+    "sha256": "3bc713a157091a1f8245c3b3ff6ae8db6140ee8ccd9040ec5cad8e8d9f6594ec"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_card_virtual_sha.rs",
+    "sha256": "f4ffbbc3c199589faf77560d5c55f7b60bf568834c607f403170a65d01532020"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_cards.rs",
+    "sha256": "a784374ad07da1ca6c74b65c11e7be188614f9d7e783f83f6dc4f572e6bb369f"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_damage_costs.rs",
+    "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_damage_multi.rs",
+    "sha256": "1de0579ae26f3b43c08c4aa452b1be55790ff087d9e953132d752b0cd042ff1b"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_equipment.rs",
+    "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_equipment_skills.rs",
+    "sha256": "a0fd510b1b6bb6ac62150dc0b63f7e4b95295894fd03e11abf2ae4e63e8de580"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_jiguan_cards.rs",
+    "sha256": "6e350332f675f02918796b618476458c76398ffd90832639b63a6f98d59c7b5f"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_lingjian_cards.rs",
+    "sha256": "c86a7db9c1ed82a1c9bd08a2f947c530f5e1ee86fefdbeb5d51c150216f6a2f1"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_response_cards.rs",
+    "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_virtual_cards.rs",
+    "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/swd_zhenfa_cards.rs",
+    "sha256": "621c9fa75658da189a68d0329663b57b5f67f77e0e86acd6aa7adc71641752f4"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/wudian_cards.rs",
+    "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/wudian_ow_cards.rs",
+    "sha256": "cead25691f4e277870076172ac3fb0deb90e3b6bb7ba6be0964819f61462314a"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/xianjian_card_use.rs",
+    "sha256": "01fc55b0294cc372c06d2651d77c3f870a6525cff92c778027ba4090098006a5"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/step/xianjian_cards.rs",
+    "sha256": "70a8c2bb6821e6931cc11c720587f68123869e88002dc6937f9a31dda72012f6"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/tag_decode.rs",
+    "sha256": "55c09762deec8070684c72e8168c9e4768a653b06332992e2845229766f60314"
+  },
+  {
+    "path": "crates/engine-native/src/content/host/tags.rs",
+    "sha256": "40005422c1ab1d213d7dc65be57e2fd5aab58563f1691f10876230518528d5c0"
+  },
+  {
+    "path": "crates/engine-native/src/content/mod.rs",
+    "sha256": "7ce854125394a1bb8ba84bdc04c5644099baac6aadee826067094d06cfdfc11a"
+  },
+  {
+    "path": "crates/engine-native/src/content/standard.rs",
+    "sha256": "a12332ab65bc03638a2b001391bc9a24ad96512c50482e5efe6ee9895529e9b3"
+  },
+  {
+    "path": "crates/engine-native/src/content/standard/skills/rende.rs",
+    "sha256": "074fdeb0eaff9742f20f8945396c0c5fa845eafcb7a9a43723e1f52dbe660e85"
+  },
+  {
+    "path": "crates/engine-native/src/engine.rs",
+    "sha256": "933a74931b92e3528e751546c2fe3aad94ee64e2a36d91b0ad296c7cffa85bb5"
+  },
+  {
+    "path": "crates/engine-native/src/engine/hash.rs",
+    "sha256": "b8a4243a87f4987ce852480eb9758c981a55e1d670676b9e8fe027511063edd3"
+  },
+  {
+    "path": "crates/engine-native/src/engine/hash/machine.rs",
+    "sha256": "4b13c27eeb9287d867bfe28986a1c6823f11f1230131969fed66c3c8b8079b32"
+  },
+  {
+    "path": "crates/engine-native/src/engine/play_card.rs",
+    "sha256": "9a4f4b0c041b84d0ef1922fe7ecebebbfbe1006aa19e61165e4afa7afa234b18"
+  },
+  {
+    "path": "crates/engine-native/src/engine/play_card_targets.rs",
+    "sha256": "ac16969d96c0752b21e4357bbcbf0283f0d9d3ca42d660040347a5d1acd16dd3"
+  },
+  {
+    "path": "crates/engine-native/src/engine/play_rules.rs",
+    "sha256": "f506ce6516545f22233cdd0c704591bc89cd9db6a4a329f91ff3d8fea5aab3b7"
+  },
+  {
+    "path": "crates/engine-native/src/engine/snapshot.rs",
+    "sha256": "6cf03a944ad69a8a3547f093a3902084e703ae1d5cfa7d994d3ab0e9336af3d1"
+  },
+  {
+    "path": "crates/engine-native/src/event.rs",
+    "sha256": "67b9884d45934eded9d4724d55ce56c4d39755bee8fd3ad0aa93190340bad014"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/intrinsic.rs",
+    "sha256": "6e99967c5932d47a00e6fc9a45e04f134483aa882948e2ee7cbbf6ba1ec22643"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/nullify.rs",
+    "sha256": "df0d36c80c5ffb382f5920d0211426b4c9435c9743969957faa3ef8dc1a0a9e3"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/sha.rs",
+    "sha256": "e171fc01b880268f1f0ab8a0a36ed7aefdc86bb14703d706f478dc8557000dcf"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/sha/liuli.rs",
+    "sha256": "2dda5752a64e3c9059455ff874a3caf9cf93d17c21d5a0c10d27bc21c94b6f9d"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/sha/resume.rs",
+    "sha256": "a063021e2b7875f1178b78546ab9e3367163190f0dd8425ba83c66ddfc5c4944"
+  },
+  {
+    "path": "crates/engine-native/src/kernel/sha/step.rs",
+    "sha256": "2c5eece3e73b148f4d94c6980408e389798a215ed5fd99f57a04ed1a789fafd8"
+  },
+  {
+    "path": "crates/engine-native/src/machine.rs",
+    "sha256": "26e66b8816af60430894c2a3803b595579d195565f4ddbd265d98d347eec70c9"
+  },
+  {
+    "path": "crates/engine-native/src/rvm_bridge.rs",
+    "sha256": "7b9c06cadc7ef55c113a3ff9f23d5b8ab14abe7c13b8f9fe9f9ce63426ba73a7"
+  },
+  {
+    "path": "crates/engine-native/src/rvm_bridge/machine.rs",
+    "sha256": "8b4fc7e357f5579dd0fc1b2733c2bc7550128937f9d320cf8362e1ae645a0e25"
+  },
+  {
+    "path": "crates/engine-native/src/rvm_ops.rs",
+    "sha256": "4a14b29dc044f59425b96b7dd8b2ef40fbd7dcbab76ea761641230a446bda3a5"
+  },
+  {
+    "path": "crates/engine-native/src/rvm_ops/codec.rs",
+    "sha256": "4527c85cde888bad941546ad438e293da96643a718ce3f5686db0b181d46c68a"
+  },
+  {
+    "path": "crates/engine-native/src/rvm_ops/query.rs",
+    "sha256": "7790591c675bd856dfe3ad515e4b4240a8bd52d1419c1af8af75a033b62dd9bd"
+  },
+  {
+    "path": "crates/engine-native/src/snap.rs",
+    "sha256": "27ef7f7aadf26c859af57c6ed3f1e0bb0a60974650a341aca620db9ebc9fd53d"
+  },
+  {
+    "path": "crates/engine-native/src/snap/asks.rs",
+    "sha256": "7f725a7dc9d48ccb1312790327c63367ba49eb99f2c0d2047eef22f4f20e899a"
+  },
+  {
+    "path": "crates/engine-native/src/snap/asks/shapes.rs",
+    "sha256": "88c8bc76f09e8ce0e0e3e54e1cd9dc7c2eea2aa1259db400e39b507e19ac95bb"
+  },
+  {
+    "path": "crates/engine-native/src/snap/host_asks.rs",
+    "sha256": null
+  },
+  {
+    "path": "crates/engine-native/src/snap/machine_validation.rs",
+    "sha256": "2a2cb48ae1ecea94ce96234c3ebae8b44c7ae02b531112da6d8a61bb2c24e9dc"
+  },
+  {
+    "path": "crates/engine-native/src/snap/restore.rs",
+    "sha256": "c2613eb11a8fa8e70390e4ec56986708a4a81d3aba120a0578bb50bca1d3c716"
+  },
+  {
+    "path": "crates/engine-native/src/snap/types.rs",
+    "sha256": "25ae476e35d90f88a6f7c0bc63dd38e0f6f737a397a19a497d9d63e124d264a1"
+  },
+  {
+    "path": "crates/engine-native/src/state.rs",
+    "sha256": "d6c90cb23ca9ed2e20c4b3eb6f133221465fb3cad58d9fd30037fc4e955f1279"
+  },
+  {
+    "path": "crates/engine-native/src/state/core_ops.rs",
+    "sha256": "709551cdc3778d34dd27d77f877222fc568ee89ca52ba0807821a4dfd354a7c1"
+  },
+  {
+    "path": "crates/engine-native/tests/a0_tag_registry.rs",
+    "sha256": "7328288d6ac48e194a7c7cb8ee3b60c1c07b7bc8e833a308e0e7a06f703a18a2"
+  },
+  {
+    "path": "crates/engine-native/tests/adr0786_j1_commit_window.rs",
+    "sha256": "b7af6c8a70cd39cd5888fd2a09126de61f8c8dc1f12e02db7d375c40752ee05f"
+  },
+  {
+    "path": "crates/engine-native/tests/g1_huanle/huanle.rs",
+    "sha256": "0a8b32515bdaf514b1c17437e8371806470bbc045a5bb538ca90a72f31714c3c"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/g1.rs",
+    "sha256": "e9272a4cb6c5eecc6a573acd8ea08a36bb433e572090613955fd00b9faa122ab"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/g1_shahai.rs",
+    "sha256": "be7d562aac1227f7e6cb0ffddc7e407b0e5276da6bc6852ea9c6794435d4cc01"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/kernel.rs",
+    "sha256": "d5483371c2f78e2c48d3a8dbf94d4c02bb5edfcfac2cd3d3b5023d00dc957656"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/l_rounds.rs",
+    "sha256": "b636ddc3eaa500af0ad53e10d51464f6448b4f85c85a7978ed55e56d6e3be1b2"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/misc.rs",
+    "sha256": "de8304b0431e1a03ce90817f7d2feb57b9c03c028516fcb11dbdafd53199514c"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/nc08.rs",
+    "sha256": "3b0281ca2310dafa5d20d588f440d16880834985e8954a9238033d934591a0df"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/nc08_upstream_a_k.rs",
+    "sha256": "191aa34852df4ea8e46058dc1ff19dd4a383e4782935f82ba24fa0ec37811e82"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/nc08_upstream_l_z.rs",
+    "sha256": "bce15f629344cb5d74d62c290d0d1f00aaede8cb35a37b2ea84c3e3ce98a424d"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+    "sha256": "04596d40c437743d082fe139ec6e3806b0a94202b3a455d9d4572af56234f2ee"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/swd.rs",
+    "sha256": "5edfadd5362cb921f8b733d8d8cf6b3c0aeeb9864840d4c83313647f097e24dd"
+  },
+  {
+    "path": "crates/engine-native/tests/groups/test_registry.rs",
+    "sha256": "2a26fc3a2373706e803e1e122331891dc6cb19496aff38ff923059acddbe6101"
+  },
+  {
+    "path": "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "sha256": "4b9df3c87d10e4848d6c7c0547680899bc10133ed42a6bdc60d317c192f2d126"
+  },
+  {
+    "path": "crates/engine-native/tests/nc04_vm_resume.rs",
+    "sha256": "965b33a054528be7233de854b74460517ae0b8aea8cbe905b03475c9c7887e82"
+  },
+  {
+    "path": "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "sha256": "c96dd621a5aaa2ff186167f09768c5290e06e61065eaf1d8a2840cf055c67e67"
+  },
+  {
+    "path": "crates/engine-native/tests/nc07_archive_hash_guard.rs",
+    "sha256": "1a1c000cae4722baf14d9446ff286184ecbb8d8ff25e1554f181f579f3de8adc"
+  },
+  {
+    "path": "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "sha256": "65403df09c7a5d58914b91097961b64cdabcdaed59a4831e6d161d8c91fa67b9"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_config_acceptance.rs",
+    "sha256": "900ac8fc98745fad32df7e8e377d7bf35bc917d5cb9ec0d8b82b280ccbe1774e"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_identity_gate_matrix.rs",
+    "sha256": "7e553703d2e5ca0e9c3841f18a138c7c6b22babb032497af43212fc88224d78a"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_registered_defect_guards.rs",
+    "sha256": "c8d1b6c3de8a2691dcbfbb57ec8f75ca0892f1c00eac15a49d00215bdb7044e8"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_rescue_card_set_survey.rs",
+    "sha256": "3bb0928540e1a1ab13a50308848398776ecee77f19c7982c26c37ed12b530c42"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_standard_deck_coverage.rs",
+    "sha256": "9f011fe31df33f0cf8d946f61fd86d5dd02d115d9ac61efdba1fb6f9a84cb6a8"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upgrade_five_sources.rs",
+    "sha256": "8e009261bceaf0adf003b5e7cd15d08ab76664b43a3b61d55b8ce8ede3a5744a"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upgrade_matrix.rs",
+    "sha256": "c6edee59b772b4fc60b5a32d9d4512f653539169c23e36b19833b9785790e1ca"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_duwen.rs",
+    "sha256": "b40cf35d31cb3f32a5288d9f2411ffa5b50a5f742b3305cc64d731f73b676c0b"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_ganglie.rs",
+    "sha256": "e7e2259eef1e0e7f4475e04cb8aaf8953a93a389e46dda838af839bf30a0097f"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs",
+    "sha256": "074c6f29a316da53f340d27b83e7e791b59a182ae8f0ae51ba72171fc2ec0c60"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_guose.rs",
+    "sha256": "da78e602527d2a2e8db0586de4974465510b780b4f276d5dbca65d9fc75ce50a"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_haidao.rs",
+    "sha256": "ce1aeddd8f6dfdc087c99851c153693a3911ec6705961f1844782df66cf2a374"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_hearth_shandianjian.rs",
+    "sha256": "e76bf7e840dedb867574f362a79f4150353047f59ebb5c6262c40a1d545abd3f"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_hujia.rs",
+    "sha256": "aed48d00010274bfe9b7b3e91e4fa4c8fb847829dfc789bf4b2403e06cb151e1"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_jijiang.rs",
+    "sha256": "52711078f11bac97b2b772c1f27120558b8da4f92f4a78023237584ad38fa2ac"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_jijiu.rs",
+    "sha256": "f87f85530ef39be120290889175468f6feb5211682c4950d8d6c36003c1a6dbb"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_jiuyuan.rs",
+    "sha256": "8b5af956fc46f66b852ba1ea85a60a772f24f4f2be9986ca0305db2f462813b9"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_jizhi.rs",
+    "sha256": "b72bac86b93383084ff183d013f50a49d4089fbd2ddb66074a31b6bf86eec1b3"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_lianying.rs",
+    "sha256": "d72f2a43567a46ebc8288a97f98051df91ee3d6a111779a18ab3812c57373aca"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_lingxue.rs",
+    "sha256": "7d64c288407ceec273be1c4d444b3d3c66d059aab67edf9518a7077841d1d060"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_mashu.rs",
+    "sha256": "17f2d8cfa22ea6d9c4695f14491b49a2c924e2dcb194b570b23a906d0ca6910a"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_qingguo.rs",
+    "sha256": "d54943f88707c570a84cd2c8a4909d6fb173be32c8b4cac0ffaaa59f3702639a"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_qixi.rs",
+    "sha256": "e8c3653dd981dad01ce7fe4ca4ba8ce6fbb6434274c869ec792e435da0328015"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_rangjie.rs",
+    "sha256": "b3eeee52c689439b03d72ef035a276b336ce0261e092ea1402c9f0003ffd170f"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_swd_baishouzhihu.rs",
+    "sha256": "c8f281cf204264f61cd104d632296f98af24ff7c59f2ee2f714c1a605989dede"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_swd_gouhunluo.rs",
+    "sha256": "35be73a337fb77a52463fdeb50b4b4d5ff834d88be6cf00607a4893b0be84ec8"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_swd_qinglong.rs",
+    "sha256": "2323490dd7e2436801560ed827d25faef67f448a4002025f615978dc242bccdc"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_swd_shencaojie_window.rs",
+    "sha256": "6b04413829773dee6b116f106ad7885582da3c1deb5bde03787e36f7b943c8f2"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_swd_shijianhuisu.rs",
+    "sha256": "bb1245d78b29ff204c25da664aed80fbc65bcc3ad90bb6639effb1542eb5027d"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_wusheng.rs",
+    "sha256": "1e47f9b895095dca402f115f2608d25a2749f16c5952bdad1ad23f596a2d2713"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_xiuluo.rs",
+    "sha256": "2074b50ea4944af057d900212cd4cba2e97fc0b7296dea2758a8b3fa09820bc8"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_yunchou_luweiyan.rs",
+    "sha256": "7f20c7e4212c06c38824bb86ea4886487287f9e6b074faf0de43683df33d48d7"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_yunchou_toulianghuanzhu.rs",
+    "sha256": "669d269f16d584f51a164b43747f4577c4f37d74576ffcebe8c1764c0509c3c9"
+  },
+  {
+    "path": "crates/engine-native/tests/nc08_upstream_zhiyuan.rs",
+    "sha256": "954401bc6c0b6d6abcf088879125d718b49f6cff716c3d4f0c6cc82a5104adf6"
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_ai_strength_baseline.rs",
+    "sha256": "35d0b2d44348ecc9a14c6fd5e8a6e87306698fbdc5339c5eb32466d6896edc36"
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_dangling_reference_repro.rs",
+    "sha256": "afa7bab0c9633448c5c8af1407bca2fb44713e7859626183589ca4b4be59f2ba"
+  },
+  {
+    "path": "crates/engine-native/tests/pa08_fullhand_dump.rs",
+    "sha256": "b92a706e778c3d8b7bb497acface52ade7012dd40ba127e4741e97b3380cfadc"
+  },
+  {
+    "path": "crates/engine-native/tests/pa12_batch3_filter_predicates.rs",
+    "sha256": "18c4b42d4712fbd2d3f49518e5a8b309a8fcd4ddbd6f7839d3e4363adde87ac8"
+  },
+  {
+    "path": "crates/engine-native/tests/pa12_batch4_1_host_primitives.rs",
+    "sha256": "6cb4cbb6b8f2b55b8eafed963b5df97d9a7fb7f0b4597ed263118f0a177c501d"
+  },
+  {
+    "path": "crates/engine-native/tests/pa12_tag656_version.rs",
+    "sha256": "5223cabcdfa8d640014b4ec2c164af05c089bd6a81e7ce70689a6072eb59ae54"
+  },
+  {
+    "path": "crates/engine-native/tests/replay_scenarios.rs",
+    "sha256": "de65694f4cfc9b409d6168409e025ed7ef2f69da97cfde54cc21d6ec47f84b31"
+  },
+  {
+    "path": "crates/engine-native/tests/t12_g5_relays.rs",
+    "sha256": "e73b2feef55d2076ae7d4a4c77283816c44a9fe64f27f50de7a265116ce1faba"
+  },
+  {
+    "path": "crates/engine-native/tests/t8_rvm_bridge.rs",
+    "sha256": "ba0b3bb6fbab7a0ac473967a77945aa6be25ada9539c5f4141b6ddc2f34f2477"
+  },
+  {
+    "path": "crates/rule-api/src/effect.rs",
+    "sha256": "633401a2cd9162b55002c8b1c7af134ac36b93055a2b3bfe81a5bbe5d105a8fe"
+  },
+  {
+    "path": "crates/rule-api/src/effect/general_resolvers.rs",
+    "sha256": "266f00fbc54dc8cc4eceb31344b2bcc91ca0c45a0017067bbf69e33d0f4235f5"
+  },
+  {
+    "path": "crates/rule-api/src/effect/staged_resolvers.rs",
+    "sha256": "030a3de8535a7acc4b107eb4e01a6457c9f8027f45dcc911c55d2dd85d08dc76"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects.rs",
+    "sha256": "47b69036b0c26d0a159dce7092fa875a499283795c640ca2b45148e0895067e9"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/draw_cards.rs",
+    "sha256": "8e0a61d5fce19017bb01f4e165048e94eb79d94a93d6dcf10be24cab43dd8666"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/draw_cards_choices.rs",
+    "sha256": "e5a00f9f00fc3044f805e6ce1837e62c5866bf525bc11599de21f46bee7a6bb5"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_huzun.rs",
+    "sha256": "1743bab9c6bd5bfb99d755380d4f8eef511b53a7e85f9c932913903ef5ee523e"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_huzun_packs.rs",
+    "sha256": "6b6d18dcba20875b3dd0c77edd4c17bef4859078b11530c2729dbc80a4a8764e"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_potjixi.rs",
+    "sha256": "dc61022b5e514e17a685725c0ad06e948b129b685a489ee0bec53f8d046d2563"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_potjixi_packs.rs",
+    "sha256": "43799ee63a2bc48c2ecab72252c004a140d1d0b4bbd577ac98680da008f21187"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_qixing.rs",
+    "sha256": "1db6c47325fb0fd831ba031338347d6e8da1571997249d5806b6f56500a85e61"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_qixing_choices.rs",
+    "sha256": "b555ee5b5be6653c319d6c4ee0d7f69ca0870c89f70d1ec21ec55ce9e1bc1436"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_starcuxia_weiming.rs",
+    "sha256": "8f40f5b967e54a7688c5c4f1a4cb662fe154042a0bd2a8f5e97acdadd90fb3d5"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_starcuxia_weiming_packs.rs",
+    "sha256": "35eb4ca648dd1c770583ea66d93e30ba57d3378380c677cdabb5a1b42faa3b4d"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_twwangchang.rs",
+    "sha256": "f556558f256fd0c715b9b241adeae3de82f69571ac370444bed46be5c45c1a22"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_twwangchang_mobile.rs",
+    "sha256": "0b977cb16461952f8776e6fb6902ad74114a2b3f7d4078f37cf0ff57654a1d46"
+  },
+  {
+    "path": "crates/rule-vm/src/vm/effects/resolve_twwangchang_packs.rs",
+    "sha256": "db996536e3d1ab4b44ca5d57dc40a522654aca1226cec02636cc5d75cf4c4014"
+  },
+  {
+    "path": "docs/adr/0786-vm-effect-choice-window-and-active-bridge.md",
+    "sha256": "b69e662cceee498ecdc77f569fa99fe819af05ddc51856cca489581cdae30bb9"
+  },
+  {
+    "path": "docs/architecture/architecture-evolution-plan.md",
+    "sha256": "c309a534a5a502899019df06ec766cb4f4d3614ed2cfaad9d9e223b3f540e06a"
+  },
+  {
+    "path": "docs/architecture/native-progress.md",
+    "sha256": "ca956bae573d6d435c770c8579c514cfccff355f36a397d318b782d22282410d"
+  },
+  {
+    "path": "docs/architecture/native-remaining-ledger.md",
+    "sha256": "93c2267f1211f562e82cd172accf9d180b92d6619170522c7474463eca91a0d0"
+  },
+  {
+    "path": "docs/architecture/native-rules-baseline.md",
+    "sha256": "e178525a7d0a8d0a25f2fb22e3abcef14888e59adbf68881555d0dae5731f918"
+  },
+  {
+    "path": "docs/migration/upstream-extension-reconstruction.md",
+    "sha256": "71e4c255170103b25d81eab1ec17ca31fc07fe6a01d0655f7347ec0d7d6621c7"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-17-rule-distance-unmodeled/README.md",
+    "sha256": "73bcbfa36d0857e8368543b93ee95d47ad23f74da1992c727ae5fef5667c9318"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-blocked-fixes/README.md",
+    "sha256": "83411d58c3dd791f453d749e612255bb80da73c242f0b01817fee1a0758910f0"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-boss-zhugeliang/README.md",
+    "sha256": "254074c53e241991a959ffee80bff5c49d4acd52530a0eb4aabdbc08a9b24440"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-gwent/README.md",
+    "sha256": "f57ea058266cbf626628aa12ab7c1fe36516a48ee5041602778cdefaee2c70b8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-keji/README.md",
+    "sha256": "a5ecd97d4e8b5174ef5e4675d85dc002ed9dd5f21a8b56770e3f4a1ab68ab010"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-kuwu/README.md",
+    "sha256": "a1ce62c939d3f455ea92445fd44ac036cdd46f6683d3959d0a0f73b15ef27326"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-longdan/README.md",
+    "sha256": "2f539737482d90cf6c5f83c85a40db86034f0e04a25f6dbe7d5d806c686100ee"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-mashu/README.md",
+    "sha256": "8635fdf8b12445b5d87c139197e4363b2cf2fc172fad5d5f9ed53b051863c761"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-tiandu/README.md",
+    "sha256": "d286831a6ffc60bda870d0046b155b50e97dc18a8bc66133b0a995e5ad08ca61"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-wusheng/README.md",
+    "sha256": "c2e090911eb048e15f743e649b76afdce8268234af77ab7a7782a4fe02a1cc72"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-xiuluo/README.md",
+    "sha256": "b46dfad5600ef6731716c97a08304126f6dc7b3634595395eabb1c384e1ef44d"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-18-nc08-upstream-zhenfa/README.md",
+    "sha256": "a568329a040556d4d09d5e08599892af044fe64f30ec4b3e8574b1ab779c2c5e"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-acceptance-sweep-all/README.md",
+    "sha256": "41b1db3b8716e5e0a0a072c635e39db073382fc3adcc1fd751c68cc253189d29"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-defect-ledger/README.md",
+    "sha256": "8930e9e687240374be6bc9b0517c2830c01285b5dd8e6b5505ce31503572ba01"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-gujian-liyutang/README.md",
+    "sha256": "70f0469df12dec2419842435c00e47c98ed8be9d6bbe0cc45f9a09fbc33f25a1"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-gujian-longxugou/README.md",
+    "sha256": "115a7f8eed24bfde2313ca67fa725d2d85d7570ae696c17a14ed5a707001aa15"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-gujian-qiankunbiao/README.md",
+    "sha256": "0b64cee01b8b09da3eb3730b6da528b7fa9ec3eebb1d96b70c906b8cd59957a2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-gujian-shenhuofeiya/README.md",
+    "sha256": "05576bf4c2f37408c5c09b78580c6b8daab8161394d20ac0185b0913ed0b6620"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-gujian-yunvyuanshen/README.md",
+    "sha256": "01d1901230cf78c80e17221519e2f6fd98b305dc9389c8f7b94c96cab9ff924c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-hearth-jihuocard/README.md",
+    "sha256": "8894523947eb3511aba9d2d51bc35283690c8f630d151b9faa41c16a5b13b282"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-hearth-linghunzhihuo/README.md",
+    "sha256": "fa76988b55423419caa768255a50e3962eaa6ee0bbff00da411412249cbaad39"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-hearth-shijieshu/README.md",
+    "sha256": "e0ab0bb4d1ef143d0f33f4fc5171bf573612e97dd583175a2ec5253d03272798"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-hearth-zhaomingdan/README.md",
+    "sha256": "aca771a2758df199d837efc048c6e33cf5efc79114a9eab63f5f706c05692917"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-mtg-haidao/README.md",
+    "sha256": "47c1dcef444e843f29356c251c3252d46432ce2f68cc6d6cbbe6e38ad3678762"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-swd-gouhunluo/README.md",
+    "sha256": "04309834f4502a965c6bf1e3a44900d9784da55614c20f383faa1f383e0c37cf"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-swd-hufu/README.md",
+    "sha256": "d462e4643ed212be0cb5cf283301d15488fc844b2f5513759bb4e93fb3b4b9a6"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-swd-jiguantong/README.md",
+    "sha256": "88e9774a2a46774af62c422a6484fb3e12fa165a083494b4f063c08681a67853"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-swd-shijianhuisu/README.md",
+    "sha256": "e98704c25a3e6d4beb774951ba87a15bb08607e0e298896d65eaab33f3b7461c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-swd-zhongxinghujia/README.md",
+    "sha256": "80a1d4837ea1e7a0fd3e0f6386107bf42372e4c3cf58c54a8ce882245db8510c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-wudian-youdishenru/README.md",
+    "sha256": "7b39b7db5e0ba24f682521e4da3cac0d5ee4cbe8fd85c98330f2734f1455487c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-wuxing-shengke-branches/README.md",
+    "sha256": "a0e9ea1125f281b1776099e0c2159fe8b484a8ea9df1e38f4f68c92655157360"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-wuxing-wuxingpan/README.md",
+    "sha256": "b8aa8dc1105ba7725ce247f094180fa0038dedea6a1164ae74a95fc99ad8ef08"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-yunchou-guihan/README.md",
+    "sha256": "3e6e62fbfdbdbb508856cab744b86b2c5267e0096fd3d5edea200c1622c973ee"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-yunchou-luweiyan/README.md",
+    "sha256": "b0e4718e1e22917276edad9308d3197356fe3e98c9c1013020a3a67e2e4f8db3"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-nc08-upstream-zhenfa-dizaizhen/README.md",
+    "sha256": "9c4cb2c0456d17fbda85a5a2a77a11ab81ec1ce7909c82af655efc70bc9de9de"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-registered-defects/README.md",
+    "sha256": "184d50ae17dcb14e5b8a1ea62e90bfa49d420971b9ab2f25706864fc9d0fe506"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-rules-diff-handover/README.md",
+    "sha256": "c506c1bb095772885e0b9dccc70e864ce90c97d0264edbdea6082883a5aecbb1"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-19-zhenfa-mode-gate-survey/README.md",
+    "sha256": "ca9538c6fee42d27be0bd11bea59da3a7778868a751c37fd6d3baaa1103130ec"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/README.md",
+    "sha256": "c5a3d1f2fd6d118c466567bae6b59c92cc31525093739fb4667cfe4a94955d3b"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/content-compiler.log",
+    "sha256": "0338a97851a738def8f82ff7cbdf1fe61522a30b9d4ff685fbb2b3ca35685699"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/end-time.txt",
+    "sha256": "351ead29fa4dc6d81c5f348814ffdd5592c140d4fac8a00eff6992cbac0110ad"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/engine-native.log",
+    "sha256": "75bcad0e8724063e5a2d2bf2d6c0111bd2ac7081cdeb13754380e2c509178923"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/gate1b-after.log",
+    "sha256": "b93a28d42abb562bacb9662dd5c84f816726a50491153e74c77091130236400c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/gate1b-before-head.log",
+    "sha256": "f0553162a84b6dced40ec7137d64931bc16b3a89d7f5db9314ad860b12c61d80"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/gate1b-before-masked-errors.log",
+    "sha256": "de0ed76155234f1829377d849085f2b66c46b00d40a1450c7e8dc81c907c4ac3"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/gate1b-positive-control.log",
+    "sha256": "27b927ca7e6097da563435fbe40f713be6c55e41d10dc1dbd7befc8738b46384"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/source-head.txt",
+    "sha256": "5b174e920ba109006d00011d8932a3e4438d367b4a797fe40ec971ba7e2445b4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/source-line-tests.log",
+    "sha256": "d16395eb731a73c7d3c652de7da1f92971f499be42cedb8a336ff282adf63fe1"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/source-lines.log",
+    "sha256": "9af7740bd81a8ba91a754979fa5ee2850f41b56c85c3d44a042f9e478e034ad8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-28-b8-gate1b/start-time.txt",
+    "sha256": "46f7b84d964b24c9b19040a074b452d0ca13432ab672a0505231c6d72bc941d8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/README.md",
+    "sha256": "49b2c31a58dfbeb5262d33898328544bb64616ac2b9f627d3272d2a627840b84"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/build-native.log",
+    "sha256": "9069a20c4b785c59b31055ad6ab64f9598a27c838d4f3d2216523742e54c0ce7"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/content-compiler.log",
+    "sha256": "e3c438c4789639ae629c5fe2952c59538fd5e89b20e1de4b03a221a40bdc6291"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/content-native-loader.log",
+    "sha256": "b840fb3df66f99645356708441acc165c2d63bca07adf1aa559ae7be1db16766"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/end-time.txt",
+    "sha256": "9b8b07447237aab026b1d7d513a2e208e9149a6c86762a98fa21f155ec6b9fe5"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/engine-native-wasm.log",
+    "sha256": "c1f9d2e4c55fc7fb4341ef99890dd5cab7cd559bfd8ed8c3d55fa0d454462bab"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/engine-native.log",
+    "sha256": "3bc0e0774e26e28316b32a0a001d220e2b24b51df80abbda5a3b871ea83b2a6f"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/game-server.log",
+    "sha256": "b08d61ec33b2992cd32ace7268a0391b58548ab09bcf4708fbafd37c5b3915b8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/gate1b.log",
+    "sha256": "eb7cbfca4b17fa621a228f034ccb83d07eb43fface641550b436a3f978112bfc"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/golden-after-rerecord.log",
+    "sha256": "1da34283ab78a42692b57d41058def28ef9460e397c0c82984cf154ee609a56a"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/golden-hex-v328.txt",
+    "sha256": "1ff194938d7bbd6541922ad5970cce87384f52961e51147baea045189956fa99"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/golden-probe-fix-v327.log",
+    "sha256": "7d9a2874bcad427132944526dfabc7070fa32771d39101ee902f64c1d18669e0"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/green-targeted.log",
+    "sha256": "508026977d363e9b1a7389e0d6a217d8f11e932d0334c399787c2de67d947d09"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/red-counterexample.log",
+    "sha256": "adafb84d9c04856b465b73a9600d6543ac08a235c0394a2a4f0f865c2f35311a"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/rule-vm.log",
+    "sha256": "f169a0dc70bf049006fd6169b19b5e223fdbd8c0f280435c384dc73890c05071"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/smoke-native.log",
+    "sha256": "a249df092136ea626cc55c7967c6a7dfe14b430e60400b49b1fe5d2cf5caafe0"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/source-head.txt",
+    "sha256": "5b174e920ba109006d00011d8932a3e4438d367b4a797fe40ec971ba7e2445b4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/source-lines.log",
+    "sha256": "e70455c1f5dad203263ca32e40c608e6df56b300475a8d9889731dcf9549a261"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/start-time.txt",
+    "sha256": "cb4244d0d5d263d1bf791cd636c550aaab1d43b2edb5f5112769882ad04d1b34"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/web-test.log",
+    "sha256": "74ef0359bea1ce56311b30b1ca502f0f452062ade3fb1954df2fbfa8ac8d7d92"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/web-typecheck.log",
+    "sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-adr0786-j1/workspace-check.log",
+    "sha256": "92703c12cebd1a49217c27177517034e079a885599427a9d43b0f0b872aab528"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/README.md",
+    "sha256": "a43be0effdf2028f11d08ed4c69038e623dad6b6b918615f131998fb92a798ec"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/browser-import-deep-validation.mjs",
+    "sha256": "0e457475be8e1e90538731b01ce9b96a1af228d4fc36e559a6f36e33efeeb343"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/browser-product-path.log",
+    "sha256": "1cec7cc679ae63a73433d78cd979052e48484b189110adcdb7ebd1ef36e61704"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/build-native.log",
+    "sha256": "5f3d211debae282b51baab23f33bbf6d4b468024affed25c94d6c5a2a76b75d2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/end-time.txt",
+    "sha256": "dab68831e163dedeaa7cbba766d38aa60aad31fd8bc6bd945a65ee19e2cdabf4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/engine-native-wasm.log",
+    "sha256": "9c2725911c0f1d84353cb4672c7a82b86ea90137ff1f497cc62d04b07a0ec3be"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/game-server-parity.log",
+    "sha256": "f4483f2aac8faa4c4f377d1252b34258157bef3e5ce178ba3f2fc6833f3c5e25"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/game-server.log",
+    "sha256": "3d2ff99475dc074e30c8e0a5bc7e7a506e2e6117d44dc4026b1e29beb7b8de4c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/gate1b.log",
+    "sha256": "f0788aa36d1c86b6ccdfb7f4042a5574102d82061c046422a2d42e008a1e4710"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/screenshot.png",
+    "sha256": "edbe50373eaf3eb8ae37677bc90c00a67d8771e22292f204e0fd2ca36fadff47"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/smoke-native.log",
+    "sha256": "81dd572cf954419fe16a0f86034e13796df4760d23a3cb7c987b045cc22420b2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/source-head.txt",
+    "sha256": "5b174e920ba109006d00011d8932a3e4438d367b4a797fe40ec971ba7e2445b4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/source-lines.log",
+    "sha256": "3ff6437aade9c97c069383348bed8997610d8a4da638b2629bd0662da53caeee"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/start-time.txt",
+    "sha256": "3ca6f835aaa03cecb6b262c25de5249c56d5ca24158189e424b62af7307541f0"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/vite-build.log",
+    "sha256": "ac9cb0c2eb458cdecf5fbe6917f921f906ea89355805a471be6dbac25e26b67c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/wasm-validator-parity.log",
+    "sha256": "5ffd1e6d1f85524759f9eff971fee2a615af3abef0ab77801417692d36b6eeac"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/web-test.log",
+    "sha256": "8003cf37d9555231bf35f2721278180b060e5c3625b196c00a8cfb96123f7f70"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/web-typecheck.log",
+    "sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-gt014-import-deep-validation/workspace-check.log",
+    "sha256": "d1392471ecea6e0fcf6e656e1f90591463f03edddf234e8f801475c544f5adaa"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-native-split-stage1-2/README.md",
+    "sha256": "1ff7ddaee2c58dd92c612f1c8943960699c74664cc6b76c0575904b785387cec"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-native-split-stage1-2/gate1b.log",
+    "sha256": "0f278831435e060309a6d533eedf44d4c8f426f9ec72ffbbaf80286aef7b28e9"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-native-split-stage1-2/suite-dependents.txt",
+    "sha256": "8a3f40e563d4788e115c8e508504209f3df0647b6e67796c43dfeb13c55202f3"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-native-split-stage1-2/suite-engine-native.txt",
+    "sha256": "3334a555240ae89be3a261919fab0b4bbdf090d8c3120da2e129a75720b33bc2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/README.md",
+    "sha256": "a262bfe90899888639bd0a99f9add3c1bec08466ca802b380ec5427cf11c424b"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/build-native.log",
+    "sha256": "a63bc1aef0461b1f2cf6c1846523da5bb4b60db9d604c9514f2bb5a38a50bddd"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/capture-v325-fixtures.log",
+    "sha256": "71c406a756cd94f31a6d770bf062f694c37c23b1a3ce9a6908e9d0365fe6b6e8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/cards-given-v325.ngsa",
+    "sha256": "25da6d7dc9d84bf815f2ae5a7fd80675754c4bf331292d681fcaace32b65dea9"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/content-native-loader.log",
+    "sha256": "485ee6597c6b314a6cfd43c46a49801946fa52a1235e9d5bebd12f18100f6919"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/end-time.txt",
+    "sha256": "af677e9d6df8a2fc56a4aec5769186b92fa64a04aaa6771b47e09c112c98507f"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/engine-native-wasm.log",
+    "sha256": "229ba3bbf605d11a656558d4f62cd878751a6a1b5e761bb97bf9fbe14d8f2865"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/engine-native.log",
+    "sha256": "1c84a8d9db73cbe5549b1fd336896be2335defeb497b945a4d92e5c220add184"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/game-server.log",
+    "sha256": "080a93e354394939965a24ae2348db7a438e3fb78b54dbf7a9c2725f223b5df1"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/gate1b.log",
+    "sha256": "663f9b8b6e372cc6c470c40f39dca99084a4c45c4a92aa45a33b808177667d16"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-after-rerecord.log",
+    "sha256": "4b8c5ff10caf1a88e5e06417b358dd2f0dee42770fefcaa9c8a2c2cc62501afa"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-hex-v326.txt",
+    "sha256": "1fd1aa63e02a6a2dd061149113ce717577bc1a82af0d2c63c7f7f62bb41cc827"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-probe-step1-fix-v326.log",
+    "sha256": "39a2f12a3e998f995fb04ea70b05e794ac0db9ce8b1ab0e20dced2b64fce771d"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-probe-step2-fix-v325.log",
+    "sha256": "4c5d8636efd3e8425b74c4e2e8a91fee5da21d8308348003dd0746466fd07530"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/green-targeted.log",
+    "sha256": "7df877d4c91d5c53920ea4d09def394ce41bdcb0da74ed953d7840313e65d29a"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/native-v325.ngsa",
+    "sha256": "5c2327577569643ce4821d7bcd81903a593a4fd7bf4e6e58541e2ad698f38eb7"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/red-counterexample.log",
+    "sha256": "2fd5c3a5218b0e287f0ad3111634e665150228965d7ee83f16e809cc9f2e044e"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/rule-vm.log",
+    "sha256": "0af6a41aefbaec568e42f5965b4cd423c3c0c617ecc006d25112f431ae093757"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/smoke-native.log",
+    "sha256": "18d7143339087947e5e44ee3bfd6e69ae42ade93f38bf556021a66dd05abd2e8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/source-head.txt",
+    "sha256": "5b174e920ba109006d00011d8932a3e4438d367b4a797fe40ec971ba7e2445b4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/source-lines.log",
+    "sha256": "9af7740bd81a8ba91a754979fa5ee2850f41b56c85c3d44a042f9e478e034ad8"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/start-time.txt",
+    "sha256": "368fae30dca0953b8589ec0d7ed1764ed2e410f4bf1b1e9f55de807636997927"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/web-test.log",
+    "sha256": "f2b3a5f6ca8d9cd7ba96061a37643f67ef0f7f8e7ba9cca576d91670d03b625d"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/web-typecheck.log",
+    "sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc04-cards-given-v326/workspace-check.log",
+    "sha256": "a1bacde922de87a54ac91794e9b9d37a0d8bdaa908aa97f4eaae56b30ead3e09"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/README.md",
+    "sha256": "ac9a59e8e9c4d39d7411d7a0d55b92db94354a6ba598ff830c626527492737d4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/build-native.log",
+    "sha256": "325b2d60e99a8f524da177f099e8b3bcb6d651c73e7cc7a2eeb2c760c77128ce"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/content-native-loader.log",
+    "sha256": "4d8d20cc5ce5e85ea1d6bd53c5d9106d1a442e1c115713bbe0a0a27488130840"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/end-time.txt",
+    "sha256": "d3c80c1de2ce74ab2a2f8c8f19224a9e3af49e143ba6b3b4f6766221f1283535"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/engine-native-wasm.log",
+    "sha256": "ed42f3afba748e04ea8b7f15c298d5f98d15ee1b04ba6a24c80871851d3724e4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/engine-native.log",
+    "sha256": "8a56dded940a26be8ddc39b9db83c23781c4cc768fe91484aa72ff51fa2b8b1b"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/game-server.log",
+    "sha256": "bb7716c5722af673fc6530a82090312e81b4c67bc496498ffce020fa3f3b4149"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/gate1b.log",
+    "sha256": "b0cc11b974ef0f9d2a06ccdaa51ececec6042c225bc09b494e175893ac279a2c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-after-rerecord.log",
+    "sha256": "331b0a44e38157a1fd9713ac1c641bb435c7685b83e2b8b20a8b3ea12e964d1e"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-hex-v327.txt",
+    "sha256": "0b64f14a8e1c69ad1d07f353737cda69694886d514e2f3efb6452f3b522136e0"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-probe-step2-fix-v326.log",
+    "sha256": "ed1431a4a4dae8febc3d4ad6c77681c84d0f2f07f3eb6a371467cefb2def05ce"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-probe-step3-revert-fix.log",
+    "sha256": "70ae964c616bc0e5e43b31433340f0af550cce89f1db1028d7a56c83a59c8787"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/green-targeted.log",
+    "sha256": "8a285f62cd0f445a536f1632ae61ec5eb15c027c8aad4aab50c83008ebf42f71"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/native-v326.ngsa",
+    "sha256": "7bbb29b9183d95e2cad1c758f3bb0c18a0fd848717d07d3e88606b6bbc06324a"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/red-counterexamples.log",
+    "sha256": "9210d587a04a7924d34172083d6d8520d416f35a92a5623ab423567f11cfe122"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/rule-vm.log",
+    "sha256": "05858cb26506c59405ef19329cfd6a8e247f857a755662392d75a27c8ad510f9"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/smoke-native.log",
+    "sha256": "75fef5a580cfb5e72764380912462626b1b64a31cad857bfce7528b833a59cde"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/source-head.txt",
+    "sha256": "5b174e920ba109006d00011d8932a3e4438d367b4a797fe40ec971ba7e2445b4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/source-lines.log",
+    "sha256": "b45bb0e4e9ccb6906af3a556326fa8f1c85fce80a12bcd142ce80a65e7efd6ac"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/start-time.txt",
+    "sha256": "21f1193ddadc843517c7f9cc97cb96361b9bfa6b0c3d196cdecaf499e86caf80"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/web-test.log",
+    "sha256": "66ec6be566a7f0a0539e38a5a3a7d8b89601f1e1accf981dcc2eafcc80d3ae64"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/web-typecheck.log",
+    "sha256": "a11e85cf8e75986fbed77dfb08bc7a4f73d1ce745bc4ee50186c0cec7e34f565"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/workspace-check.log",
+    "sha256": "7e8dd9b50e8a5187993fedccde8c660dc896f623fd26049aa43524cc6e6f38d6"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/README.md",
+    "sha256": "19056db12da9928fd9754e17ad8f9f2fd721197053d8ec8e6134e31699c5c10a"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-adr.log",
+    "sha256": "251e393714b8d75740370632fe1e9060e24683b7cb0f0daf1f143b4989758d92"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-linerefs.log",
+    "sha256": "54f327b9ab5999f988110825fb6ef4b18cfead67f8ae6fbf927664fe9adfd8c9"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-links.log",
+    "sha256": "aa97b8fa04c4342c2cc8c8a689c1fd837ba3dae2aa9454e99c0c90ec8f2fcef4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/end-time.txt",
+    "sha256": "c39fcf738d662822171549f0528b956253b4b210a32a51e00df352b5d3cb53b3"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt",
+    "sha256": "b4459825a4cf468059a315a0a6127177bb7de6f739ba9bc4234c1c2bd86e5acb"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/hits-core.json",
+    "sha256": "6c41de9854f467a6e63946bed414df2d232cd30a802371f3f3403bfe3c3db873"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/scan-core.log",
+    "sha256": "9adf9f615cb581d375a20be9ce95b0028ff670ca848cdaec66edbe2fe3333ee3"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/scan_core.py",
+    "sha256": "5db5e85767ef044545f2d5d13883bbc3666c5a3f93b4a1cb50378964c5916370"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/source-lines.log",
+    "sha256": "e70455c1f5dad203263ca32e40c608e6df56b300475a8d9889731dcf9549a261"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/start-time.txt",
+    "sha256": "f88e2d2aeaed04cb85221bb45b226b318a65ffb3fccf40d0651acd10d6f29822"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/README.md",
+    "sha256": "046fc7be1793a478cfeb3407866561e1aee96e61cd14b97f76fb27f632b3feb1"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/gate1b.log",
+    "sha256": "ae2a667906f9b912d566a0fe85dd5def05cbe3e8f7546862138d819b568f4300"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/suite-engine-core.txt",
+    "sha256": "2a3b996b31bdbb09e702eff0e7f3453eede4316e48e2e573348bbfccd981b240"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/suite-engine-native.txt",
+    "sha256": "3334a555240ae89be3a261919fab0b4bbdf090d8c3120da2e129a75720b33bc2"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/test-list-engine-core.txt",
+    "sha256": "8f7ae3a0049b23bf6484ec012f5e967e03d07ae099935091463390df19f647df"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/test-list-engine-native.txt",
+    "sha256": "3c8c52bd8a690797c4f25ae604a731cfe11ec6f4365cfa6aba7777b0f85c079c"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/timing-after.txt",
+    "sha256": "6de785a46826d18967d0c0ff859d718d3989cce699a72540c4afcece1c21effb"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/timing-before.txt",
+    "sha256": "aa6ff8c8bfc79f4b21517bd5e4df6f8a75c8ac9bb8fadaa6b33a6044e7b56742"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-o6-test-grouping/warning-kinds-engine-core.txt",
+    "sha256": "39001081bf451982c3476e42a127dcda909fc233c69e2669c067ab21d157eef4"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-29-rust-effective-1000/README.md",
+    "sha256": "ce4842cb77b11880b01f9e5de1a846106c34b91b9aaaeabfee0a53831d9d7a72"
+  },
+  {
+    "path": "docs/operations/native-convergence-agent-prompt.md",
+    "sha256": "ac56e06c13bf49b939f67c724a008423608067b57855edd3396903b709a56a5f"
+  },
+  {
+    "path": "docs/operations/self-check-guide.md",
+    "sha256": "ee584aa05df37a4dca1b4e17a4591e2f42c29f74bc26a1e64fb576454b53cdcb"
+  },
+  {
+    "path": "scripts/check-native-layering.py",
+    "sha256": "928909a0934e777cbb6665ae5af636735f03e8c26f07970da8cdd6671633f992"
+  },
+  {
+    "path": "scripts/check-native-wasm-cross-target.py",
+    "sha256": "db31806f3b8d5a9ae034ea63cfa0725026ecb1dc9a6bce2ccb6fed6377b8024e"
+  },
+  {
+    "path": "scripts/check-source-lines.py",
+    "sha256": "e9a0e10d02f76ad526898323de9e5b5a4ab5ad3682a3adfd3c605c4ea1be426a"
+  },
+  {
+    "path": "scripts/preflight.py",
+    "sha256": "5412c73f9b2e88fbd48918b5f24977a417e628099b9e6b59c743a4f6ccebae92"
+  },
+  {
+    "path": "scripts/report_card_coverage.py",
+    "sha256": "8146253d76e7321498f7308cf2060a4b49416b354c6809d9cd3f26aed44d9740"
+  },
+  {
+    "path": "scripts/rust_effective_lines.py",
+    "sha256": "1115ad0d5002d3587232f96c0fa0a6e70cef5008d07eb53c4528dfc057136554"
+  },
+  {
+    "path": "scripts/test_check_native_layering.py",
+    "sha256": "13cfdc3a8324139cf1ff080e872470029d75090cd1a379d71488057e20a90544"
+  },
+  {
+    "path": "scripts/test_check_source_lines.py",
+    "sha256": "21e5534fa15430cc08e22339d050b45757d0fdce02ae00cd886dc6418a4ee855"
+  },
+  {
+    "path": "scripts/test_rust_effective_lines.py",
+    "sha256": "de6745adcee915834647ea34ffb8e9351979f56cba5774542dc1b8baabee91f5"
+  }
+]

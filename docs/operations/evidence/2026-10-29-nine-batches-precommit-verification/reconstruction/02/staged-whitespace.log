@@ -1,0 +1,12 @@
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/capture-v325-fixtures.log:11: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-after-rerecord.log:11: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/golden-probe-step2-fix-v325.log:10: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/green-targeted.log:46: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/smoke-native.log:64: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/smoke-native.log:67: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/smoke-native.log:71: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc04-cards-given-v326/web-typecheck.log:4: new blank line at EOF.
+EXIT_CODE: 2

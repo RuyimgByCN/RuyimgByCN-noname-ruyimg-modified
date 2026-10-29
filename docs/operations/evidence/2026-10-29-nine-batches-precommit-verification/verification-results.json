@@ -1,0 +1,125 @@
+[
+  {
+    "name": "workspace-check-retry",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "--workspace",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:28:39.147541+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 91.466,
+    "finished_at": "2026-10-29T20:30:10.613720+08:00"
+  },
+  {
+    "name": "workspace-tests",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:30:10.614072+08:00",
+    "exit_code": 101,
+    "elapsed_seconds": 210.712,
+    "finished_at": "2026-10-29T20:33:41.324812+08:00"
+  },
+  {
+    "name": "gate1b",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "RUSTFLAGS": "-D warnings",
+      "CARGO_TARGET_DIR": "/tmp/nn-gate1b-b8"
+    },
+    "started_at": "2026-10-29T20:33:41.325223+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 19.24,
+    "finished_at": "2026-10-29T20:34:00.565857+08:00"
+  },
+  {
+    "name": "preflight",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:34:00.566233+08:00",
+    "exit_code": 1,
+    "elapsed_seconds": 339.897,
+    "finished_at": "2026-10-29T20:39:40.464503+08:00"
+  },
+  {
+    "name": "frontend-tests",
+    "command": [
+      "pnpm",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:39:40.464859+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.88,
+    "finished_at": "2026-10-29T20:39:41.344765+08:00"
+  },
+  {
+    "name": "frontend-typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:39:41.345182+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 1.358,
+    "finished_at": "2026-10-29T20:39:42.703266+08:00"
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:39:42.703701+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 0.971,
+    "finished_at": "2026-10-29T20:39:43.674463+08:00"
+  },
+  {
+    "name": "doc-line-refs",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {},
+    "started_at": "2026-10-29T20:39:43.674850+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 13.472,
+    "finished_at": "2026-10-29T20:39:57.146580+08:00"
+  }
+]

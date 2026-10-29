@@ -10,7 +10,7 @@
 //! | 授艺 | 失去体力后动态获得临时技能（回合结束到期）|
 
 use crate::catalog::{
-    CardDef, CardKind, Catalog, Faction, QueryCtx, SkillBehavior, SkillDef, SkillLimits,
+    CardDef, CardKind, Catalog, QueryCtx, SkillBehavior, SkillDef, SkillLimits,
     SkillMachine, Suit, TriggerMeta,
 };
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
@@ -159,10 +159,8 @@ use crate::snap::{
 /// 协议不变。
 pub const STANDARD_RULESET_VERSION: u64 = 328;
 
-mod names;
-pub use names::*;
-mod generals;
-pub use generals::*;
+pub use crate::vocabulary::names::*;
+pub use crate::vocabulary::generals::*;
 mod skills;
 use skills::*;
 pub(crate) use skills::{LeizhuMachine, RenaoMachine};

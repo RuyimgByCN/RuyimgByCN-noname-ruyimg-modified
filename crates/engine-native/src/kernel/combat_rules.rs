@@ -5,7 +5,7 @@ use super::*;
 /// 开始时随 `reset_turn_limits` 清除）→ 杀/决斗伤害 +1。
 pub(super) fn luoyi_bonus(ctx: &Ctx<'_>, source: Option<PlayerId>) -> u32 {
     let Some(s) = source else { return 0 };
-    let Some(def) = ctx.catalog.skill_by_name(crate::content::standard::LUO_YI) else {
+    let Some(def) = ctx.catalog.skill_by_name(crate::vocabulary::names::LUO_YI) else {
         return 0;
     };
     match ctx.core.skills.get(&(s, def)) {
@@ -20,7 +20,7 @@ pub(super) fn luoyi_bonus(ctx: &Ctx<'_>, source: Option<PlayerId>) -> u32 {
 pub(super) fn xiongshou_bonus(ctx: &Ctx<'_>, source: PlayerId, target: PlayerId) -> u32 {
     let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_XIONGSHOU)
     else {
         return 0;
     };
@@ -52,7 +52,7 @@ pub(crate) fn tao_futai2_banned(
     catalog: &crate::catalog::Catalog,
     user: PlayerId,
 ) -> bool {
-    let Some(fdef) = catalog.skill_by_name(crate::content::standard::BOSS_FUTAI) else {
+    let Some(fdef) = catalog.skill_by_name(crate::vocabulary::names::BOSS_FUTAI) else {
         return false;
     };
     let holders: Vec<PlayerId> = core
@@ -96,7 +96,7 @@ pub(super) fn is_tao_like(
     // 回合角色时不可发动
     let jijiu = ctx
         .catalog
-        .skill_by_name(crate::content::standard::JI_JIU)
+        .skill_by_name(crate::vocabulary::names::JI_JIU)
         .map(|d| ctx.core.has_skill(responder, d) && ctx.core.turn.current != responder)
         .unwrap_or(false);
     if jijiu
@@ -111,7 +111,7 @@ pub(super) fn is_tao_like(
     //（上游 boss_furan2 dying chooseToUse viewAs tao 同口径）
     let furan = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_FURAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_FURAN)
         .map(|d| ctx.core.has_skill(dying, d))
         .unwrap_or(false);
     if furan
@@ -126,7 +126,7 @@ pub(super) fn is_tao_like(
     // 蜜链藕（G1 古剑食物）：持有者红桃手牌可当桃（濒死响应）
     let mizhilianou = ctx
         .catalog
-        .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
+        .skill_by_name(crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY)
         .map(|d| ctx.core.has_skill(responder, d))
         .unwrap_or(false);
     if mizhilianou && ctx.catalog.cards[card as usize].suit == crate::catalog::Suit::Heart {

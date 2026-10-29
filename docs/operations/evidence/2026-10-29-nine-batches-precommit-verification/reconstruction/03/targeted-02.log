@@ -1,0 +1,265 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: pnpm --dir apps/web-client test
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+
+> noname-next-web-client@0.1.0 test /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client
+> node --import ./scripts/ts-register.mjs --test
+
+✔ desktop builds both WASM engines before the frontend, forcing native web output (40.817125ms)
+✔ Windows desktop runs pnpm.cmd through a shell (72.996333ms)
+✔ a failed native build prevents publishing a frontend with a stale native package (42.632708ms)
+✔ native build creates a missing package from source with portable PATH and argument boundaries (41.452041ms)
+✔ native build failure preserves the previous usable package and clears temporary output (33.117291ms)
+✔ native Node smoke target remains available without shell interpolation (33.63825ms)
+✔ legacy build prepends rustup PATH even when the cargo executable has a Windows suffix (34.824875ms)
+✔ Tauri hooks resolve the actual sibling web client from the desktop crate (0.472125ms)
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (2.436583ms)
+✔ 目录项与包元数据不一致会被判失败 (0.803333ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (1.586291ms)
+✔ 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入） (0.921958ms)
+✔ 空候选是显式空状态，不是错误也不是静默白屏 (0.081458ms)
+✔ 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集 (0.427167ms)
+✔ 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示） (0.080292ms)
+✔ 重新加载中保留旧候选但清掉旧错误 (0.074167ms)
+✔ 座位投影：只取目标座位，提取原生技能名与 id (0.1685ms)
+✔ 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清） (0.110208ms)
+✔ 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能 (0.206958ms)
+✔ 选将失败：显示错误、不应用刷新信封、不留下成功态 (0.174292ms)
+✔ 失败后重试成功：清除错误并进入成功态 (0.162375ms)
+✔ 返回与请求不一致（错座位）不得显示成功 (0.090292ms)
+✔ 畸形返回（缺刷新信封）不得显示成功 (0.07925ms)
+✔ 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误 (0.098959ms)
+✔ 空候选名在发起请求前就被拒绝 (0.060125ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-adapter.test.mjs (340.472375ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-general-select.test.mjs (322.782208ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-legal-actions.test.mjs (350.49775ms)
+✔ all discoverable packages install actual versioned data; active set reaches the match (13.187834ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (4.138917ms)
+✔ all lifecycle content mutations are blocked during a match (1.017666ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.672833ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.316666ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.452875ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.665458ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (1.196875ms)
+✔ old standard saves without packages remain compatible (0.811375ms)
+✔ same-version logic fingerprint conflict rejects installation atomically (1.174541ms)
+✔ same-version logic fingerprint conflict rejects upgrade atomically (0.309125ms)
+✔ same-version asset content conflict rejects installation atomically (0.279166ms)
+✔ same-version asset content conflict rejects upgrade atomically (0.215917ms)
+✔ same-version copies tolerate JSON formatting and object key order (0.526125ms)
+✔ unsafe identity fields cannot enter the browser content lock (0.566417ms)
+✔ package dependencies are checked for match start and frozen save restore (1.652708ms)
+✔ fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint (1.001458ms)
+✔ formal import installs a VM package with its modules and reaches the match (1.2135ms)
+✔ import rejects malformed packages without touching installed content (5.62425ms)
+✔ import upgrades to a new version, keeps the old copy, and rolls back (26.584792ms)
+✔ disable, uninstall and revoke affect new matches and saved matches as the contract requires (0.53175ms)
+✔ import is blocked while a match is frozen (0.151917ms)
+✔ catalog packages without VM modules keep their manifest+asset payload (17.535167ms)
+✔ validated import commits only after the deep validator passes and marks the copy unsigned (0.321334ms)
+✔ validated import aborts without touching the store when the deep validator rejects (0.242916ms)
+✔ validated import never calls the deep validator when the structural layer or preconditions reject (0.42375ms)
+✔ validated import re-checks preconditions at commit time (store may change during async validation) (0.091583ms)
+✔ complete VM-only package survives match preparation and frozen save restoration (1.448334ms)
+✔ VM payload must have an array of modules and does not excuse malformed assets (0.324791ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc03-native-input-bounds.test.mjs (311.927292ms)
+✔ 原生零号座位的回合与结束阶段可见 (77.67125ms)
+✔ 非零座位与准备阶段保持可见 (6.454417ms)
+✔ 旧线无当前玩家的零哨兵仍使用事件回退或不显示 (6.956375ms)
+(node:36204) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (21.373542ms)
+✔ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (13.099125ms)
+✔ 其他请求在途时发送失败不提前结束 SAB 唤醒 (10.149292ms)
+✔ 性能探针丢弃未发送请求，保留成功请求 (0.56675ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/nc04-restore-atomicity.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-restore-atomicity.test.mjs (254.822542ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/nc04-start-atomicity.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-start-atomicity.test.mjs (174.868584ms)
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (46.886ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (13.585958ms)
+✔ 初始化错误有结果，后续可创建新 Worker (10.992625ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (10.88175ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (8.6145ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (8.845833ms)
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (10.67675ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (0.753958ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (2.143334ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.422708ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.302125ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.2115ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.112584ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (6.61025ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (4.175459ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.1895ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (0.6875ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.440166ms)
+✔ 取消待确认命令会清除刷新持久化 (0.187541ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.143708ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.221875ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (0.558916ms)
+✔ 身份局胜负类型映射 (0.397667ms)
+✔ 单挑/势力与未建模形态 (0.06625ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.057625ms)
+✔ 原生命令的拒绝原因可显示，未知原因保留 (0.09975ms)
+✔ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.09475ms)
+✔ nearest-rank 分位与 NC12 口径一致；空输入为 null (0.398292ms)
+✔ 帧间隔统计：刷新周期估计与超预算比例 (0.170375ms)
+✔ 交互记录：有输入时端到端从输入起算，缺失段为 null (0.218375ms)
+✔ Worker 分段：关闭时只发原回包，开启时回包后追加分段 (0.509208ms)
+ℹ tests 98
+ℹ suites 0
+ℹ pass 92
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 586.309375
+
+✖ failing tests:
+
+test at scripts/native-adapter.test.mjs:1:1
+✖ scripts/native-adapter.test.mjs (340.472375ms)
+  'test failed'
+
+test at scripts/native-general-select.test.mjs:1:1
+✖ scripts/native-general-select.test.mjs (322.782208ms)
+  'test failed'
+
+test at scripts/native-legal-actions.test.mjs:1:1
+✖ scripts/native-legal-actions.test.mjs (350.49775ms)
+  'test failed'
+
+test at scripts/nc03-native-input-bounds.test.mjs:1:1
+✖ scripts/nc03-native-input-bounds.test.mjs (311.927292ms)
+  'test failed'
+
+test at scripts/nc04-restore-atomicity.test.mjs:1:1
+✖ scripts/nc04-restore-atomicity.test.mjs (254.822542ms)
+  'test failed'
+
+test at scripts/nc04-start-atomicity.test.mjs:1:1
+✖ scripts/nc04-start-atomicity.test.mjs (174.868584ms)
+  'test failed'
+ ELIFECYCLE  Test failed. See above for more details.
+
+EXIT_CODE: 1

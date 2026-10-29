@@ -1,0 +1,8 @@
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "afd094672ab990cb8c457d60481bb5f69995d95767becfa44cc6e223ce1e0005",
+  "native_wasm_match": true
+}

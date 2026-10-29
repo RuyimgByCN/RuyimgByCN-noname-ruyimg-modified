@@ -58,7 +58,7 @@ Gate 1b 用独立的 `CARGO_TARGET_DIR`（会话临时目录）运行，避免�
 1. **NC08 触发全序**：上游 `arrangeTrigger`（`archive/upstream/noname/apps/core/noname/library/element/content.ts:4017` 起）只要同一角色有多个同优先级、非 silent、有描述的技能，就无条件 `chooseControl` 询问顺序，没有可关闭的配置。统计证据第 3 节第 5 条写明核心武将包（standard、offline、jsrg 等）不在 9 组之内。
 2. **NC07 其余字段**：[字段审计](../2026-10-28-nc07-lianyaohu-hash/archive-vs-hash-field-audit.log)列出 PlayerState 9 个、TurnState 1 个入档未入摘要的字段，且都在规则路径上被读取（同文件末尾的引用计数）。该审计是文本匹配，逐项是否影响结算仍须反例确认。
 3. **GT-014**：客户端导入期只做结构校验；破坏模块指纹的两类变异在本地导入时被接受、开局时才被 Rust 校验器拒绝，服务端导入时即拒（GT-014 证据第 4 节）。本地验签缺少客户端侧的信任链。
-4. **ADR 0786**：J1 的原语方案②需要升 `RULE_VM_ABI_VERSION`。宿主 ABI 是单一整数，当前为 753，而编译器已有 755–758 级常量（`abi_versions.rs:742–745`），N01 onlyOL 需要 758。宿主 ABI 升到任何高于 753 的值，都意味着宣称支持 754 起的各级原语，须先逐级确认这些原语已在宿主实现。
+4. **ADR 0786**：J1 的原语方案②需要升 `RULE_VM_ABI_VERSION`。宿主 ABI 是单一整数，当前为 753，而编译器已有 755–758 级常量（当时位于 `abi_versions.rs` 第 742–745 行；B8 删除 755 后现存常量见 `abi_versions.rs:742–744`），N01 onlyOL 需要 758。宿主 ABI 升到任何高于 753 的值，都意味着宣称支持 754 起的各级原语，须先逐级确认这些原语已在宿主实现。
 5. **`cards_given`**：新帧使 `next_event_id` 前移，而该计数在规范摘要中，sancai 场 golden 因此位移（NOEMIT 探针已归因）。同为 v325 的 `5eec1e9e` 与 `d7b46ea6` 两个构建，在含给牌的轨迹上摘要不同。另外，原生按张发帧，旧线一次给牌只发一个批量事件：`event.rs` 注释与规则基准都写明“多张给牌触发次数不同”，即监听 `cards_given` 的技能在一次给出 N 张时，原生触发 N 次、旧线 1 次。
 6. **NC09 选择窗超时**：上游联机“出牌时限”为房间配置，默认 30 秒，可选 10／15／30／60／90 秒（`ui/create/menu/pages/startMenu.js:174`）。到时加 5 秒宽限后，服务端执行 `player.unwait("ai")` 由 AI 代答，并关闭该座连接（`library/element/player.js:9950` 起）。
 

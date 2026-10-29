@@ -1,0 +1,36 @@
+23af03f4 refactor: route native content through catalog hooks and add layering gate
+ .github/workflows/ci.yml                           |    4 +
+ crates/engine-native/src/catalog.rs                |   46 +
+ crates/engine-native/src/content/hooks.rs          |   64 ++
+ crates/engine-native/src/content/host.rs           |    4 +
+ .../{snap/host_asks.rs => content/host/asks.rs}    |    5 +-
+ crates/engine-native/src/content/host/intrinsic.rs | 1054 ++++++++++++++++++++
+ crates/engine-native/src/content/mod.rs            |    1 +
+ crates/engine-native/src/content/standard.rs       |   11 +-
+ crates/engine-native/src/engine/snapshot.rs        |    2 +-
+ crates/engine-native/src/kernel/intrinsic.rs       | 1041 +------------------
+ crates/engine-native/src/kernel/nullify.rs         |    2 +-
+ crates/engine-native/src/snap.rs                   |    4 +-
+ crates/engine-native/src/snap/asks.rs              |    8 +-
+ crates/engine-native/src/snap/restore.rs           |   49 +-
+ docs/architecture/architecture-evolution-plan.md   |    6 +
+ docs/architecture/native-progress.md               |    4 +-
+ docs/architecture/native-rules-baseline.md         |    2 +-
+ .../evidence/2026-10-18-blocked-fixes/README.md    |    2 +-
+ .../2026-10-18-nc08-upstream-keji/README.md        |    2 +-
+ .../2026-10-18-nc08-upstream-tiandu/README.md      |    2 +-
+ .../README.md                                      |    2 +-
+ .../README.md                                      |    2 +-
+ .../README.md                                      |    2 +-
+ .../2026-10-19-nc08-upstream-mtg-haidao/README.md  |    2 +-
+ .../README.md                                      |    2 +-
+ .../2026-10-19-zhenfa-mode-gate-survey/README.md   |    2 +-
+ .../2026-10-29-native-split-stage1-2/README.md     |   35 +
+ .../2026-10-29-native-split-stage1-2/gate1b.log    |   40 +
+ .../suite-dependents.txt                           |  111 +++
+ .../suite-engine-native.txt                        |   26 +
+ docs/operations/self-check-guide.md                |    8 +-
+ scripts/check-native-layering.py                   |   67 ++
+ scripts/preflight.py                               |    1 +
+ scripts/test_check_native_layering.py              |   41 +
+ 34 files changed, 1551 insertions(+), 1103 deletions(-)

@@ -1,0 +1,26 @@
+[
+  {
+    "log": "targeted-00.log",
+    "passed_failed_ignored": [
+      4,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "early-01.log",
+    "passed_failed_ignored": [
+      541,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "early-02.log",
+    "passed_failed_ignored": [
+      1643,
+      0,
+      73
+    ]
+  }
+]

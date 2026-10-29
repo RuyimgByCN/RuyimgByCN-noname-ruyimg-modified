@@ -1,0 +1,44 @@
+[
+  {
+    "batch": 1,
+    "commit": "67dadfa64c5d43b76e20f91506b49baee6e6496a",
+    "over_1000_count": 182,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 2,
+    "commit": "31a30673f29b4f62541ff0c5419a262440b9ce50",
+    "over_1000_count": 182,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 3,
+    "commit": "5ce54b1a498d9cbdf055e15c1ebd248503a09a60",
+    "over_1000_count": 182,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 4,
+    "commit": "999031698ea8c78d06f57e47329bcb01f5f16796",
+    "over_1000_count": 182,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 5,
+    "commit": "b7ebdf30a96c3848c30f1466b54f70b004de4b34",
+    "over_1000_count": 184,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 6,
+    "commit": "5efb7170df0e12ebfefa2b001e23c9abdeb1a886",
+    "over_1000_count": 184,
+    "limits_enforced_at_this_batch": false
+  },
+  {
+    "batch": 7,
+    "commit": "01b286932e48804c43ae96fdce3f33f9423a603a",
+    "over_1000_count": 184,
+    "limits_enforced_at_this_batch": false
+  }
+]

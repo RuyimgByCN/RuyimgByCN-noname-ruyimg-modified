@@ -1,0 +1,42 @@
+[
+  {
+    "log": "corrected-00.log",
+    "passed_failed_ignored": [
+      19,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "corrected-01.log",
+    "passed_failed_ignored": [
+      1627,
+      0,
+      73
+    ]
+  },
+  {
+    "log": "targeted-00.log",
+    "passed_failed_ignored": [
+      17,
+      1,
+      0
+    ]
+  },
+  {
+    "log": "early-01.log",
+    "passed_failed_ignored": [
+      541,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "early-02.log",
+    "passed_failed_ignored": [
+      1626,
+      1,
+      73
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: python3 -B -m unittest discover -s scripts -p test_rust_effective_lines.py
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+EXIT_CODE: 0

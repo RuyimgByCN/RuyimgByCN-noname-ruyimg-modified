@@ -35,7 +35,7 @@ packages/extensions/<pkg-name>/
 3. **抽内容**：从上游 JS 抽出武将（`lib.character`）、卡牌（`lib.card`）、技能（`lib.skill`）
    → 写入 `generals[]` / `cards[]` / `skills[]`；
 4. **映射技能**：每条技能写 `mapping`（形如 `host:<key>` 或规则 VM 表达式）——
-   **前置条件**：该 `host:<key>` **必须已存在于** `crates/engine-native/src/content/host/keys.rs`
+   **前置条件**：该 `host:<key>` **必须已存在于** `crates/engine-native/src/vocabulary/host/keys.rs`
    （`HostBehavior` 枚举 + `as_key()`），否则该技能**无法**在原生侧生效；
 5. **验收**：包可发现 + 加载 + 行为对照（第⑦层样本）→ 才计入对应指标。
 
@@ -43,12 +43,12 @@ packages/extensions/<pkg-name>/
 
 | 前置 | 现状 | 影响 |
 |---|---|---|
-| 宿主行为键（`host:<key>`）已实现 | 已有一批（`content/host/keys.rs`） | **键不存在**的技能需先补实现（属 **A 类**工作） |
+| 宿主行为键（`host:<key>`）已实现 | 已有一批（`vocabulary/host/keys.rs`） | **键不存在**的技能需先补实现（属 **A 类**工作） |
 | 包发现/加载链路 | 已有（41 个包目录） | B 类可直接复用 |
 | 上游可读 | 除 **L12/L29**（`jsjiami`）外均可读 | L12/L29 只能**弱对照** |
 
 → **结论**：B 类的**机械部分**（1–3 步）可批量做；**卡点在步骤 4**——凡上游技能在
-`content/host/keys.rs` 中**没有对应键**，就必须先做实现，**不能**靠「写进 cards.json」蒙混过关。
+`vocabulary/host/keys.rs` 中**没有对应键**，就必须先做实现，**不能**靠「写进 cards.json」蒙混过关。
 
 ## 4b 步骤 4 的自动化尝试：**同名比对不可用**（2026-10-19）
 

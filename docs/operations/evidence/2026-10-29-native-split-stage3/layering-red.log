@@ -1,0 +1,13 @@
+.F
+======================================================================
+FAIL: test_current_kernel_has_no_upward_references (test_check_native_layering.NativeLayeringTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/test_check_native_layering.py", line 17, in test_current_kernel_has_no_upward_references
+    self.assertEqual(len(refs), 0, f"kernel references content/engine {len(refs)} times")
+AssertionError: 240 != 0 : kernel references content/engine 240 times
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.018s
+
+FAILED (failures=1)

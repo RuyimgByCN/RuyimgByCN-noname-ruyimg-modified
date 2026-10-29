@@ -229,7 +229,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
         if self.window_open
             && ctx
                 .catalog
-                .skill_by_name(crate::content::host::HLSS_FENGQI2_KEY)
+                .skill_by_name(crate::vocabulary::host::HLSS_FENGQI2_KEY)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
         {

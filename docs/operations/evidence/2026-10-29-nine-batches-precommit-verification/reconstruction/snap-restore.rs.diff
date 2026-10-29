@@ -1,0 +1,113 @@
+--- 
++++ 
+@@ -6,10 +6,9 @@
+ 
+ impl MachineSnapshot {
+-    /// 由机器快照重建机器实例（内核机器就地分派；内容机器委托
+-    /// `content::standard::restore_content_machine`；宿主机器按标签重建）。
+-    pub fn restore(&self) -> Result<Box<dyn SkillMachine>, SnapshotError> {
+-        // 内容侧分派（标准内容机器 + 委托 kernel 的拆桥/牵羊）
+-        if let Some(m) = crate::content::standard::restore_content_machine(self) {
+-            return Ok(m);
++    /// 由机器快照重建机器实例（内核机器就地分派；内容机器——标准内容、
++    /// Boss、宿主机器——经目录回调 `hooks.restore_machine` 先行重建）。
++    pub fn restore(&self, catalog: &Catalog) -> Result<Box<dyn SkillMachine>, SnapshotError> {
++        if let Some(m) = (catalog.hooks.restore_machine)(self, catalog) {
++            return m;
+         }
+         match self {
+@@ -137,5 +136,5 @@
+             } => {
+                 let effect = match effect {
+-                    Some(e) => match e.restore() {
++                    Some(e) => match e.restore(catalog) {
+                         Ok(m) => Some(m),
+                         Err(_) => return Err(SnapshotError::UnknownMachine),
+@@ -183,5 +182,5 @@
+             } => {
+                 let inner = match inner {
+-                    Some(e) => match e.restore() {
++                    Some(e) => match e.restore(catalog) {
+                         Ok(m) => Some(m),
+                         Err(_) => return Err(SnapshotError::UnknownMachine),
+@@ -218,5 +217,5 @@
+             } => {
+                 let inner = match inner {
+-                    Some(e) => match e.restore() {
++                    Some(e) => match e.restore(catalog) {
+                         Ok(m) => Some(m),
+                         Err(_) => return Err(SnapshotError::UnknownMachine),
+@@ -243,10 +242,4 @@
+                 Ok(Box::new(crate::kernel::DeathMachine::new(*player, *killer)))
+             }
+-            MachineSnapshot::BossLeizhu { owner, emitted } => Ok(Box::new(
+-                crate::content::standard::LeizhuMachine::new(*owner, *emitted),
+-            )),
+-            MachineSnapshot::BossRenao { owner, emitted } => Ok(Box::new(
+-                crate::content::standard::RenaoMachine::new(*owner, *emitted),
+-            )),
+             MachineSnapshot::Rvm {
+                 owner,
+@@ -257,8 +250,25 @@
+                 consume,
+                 count_hits,
++                commit_pending,
++                commit_pick,
+             } => {
+                 let m = rule_vm::BytecodeModule::from_bytes(module)
+                     .map_err(|_| SnapshotError::UnknownMachine)?;
+-                let machine = if let Some(mut p) = paused.clone() {
++                let machine = if let Some((player, count)) = commit_pick {
++                    // J1（规则 v328）：提交期挂起——剩余队列+开窗参数重建，
++                    // 问询由 active_ask 派生。
++                    crate::rvm_bridge::VmMachine::restore_commit_paused(
++                        *owner,
++                        m,
++                        commit_pending.clone(),
++                        *player,
++                        *count,
++                        skill_name.clone(),
++                        event.clone(),
++                        consume.clone(),
++                        *count_hits,
++                    )
++                    .map_err(|_| SnapshotError::UnknownMachine)?
++                } else if let Some(mut p) = paused.clone() {
+                     crate::rvm_bridge::VmMachine::restore_paused(
+                         *owner,
+@@ -298,5 +308,5 @@
+             } => {
+                 let inner = match inner {
+-                    Some(e) => match e.restore() {
++                    Some(e) => match e.restore(catalog) {
+                         Ok(m) => Some(m),
+                         Err(_) => return Err(SnapshotError::UnknownMachine),
+@@ -312,28 +322,4 @@
+                 )))
+             }
+-            MachineSnapshot::Host {
+-                def_key,
+-                behavior,
+-                stage,
+-                owner,
+-                target,
+-                card,
+-                cards,
+-                targets,
+-            } => {
+-                let behavior =
+-                    HostBehavior::from_tag(*behavior).ok_or(SnapshotError::UnknownMachine)?;
+-                let stage = HostStage::from_tag(*stage).ok_or(SnapshotError::UnknownMachine)?;
+-                Ok(Box::new(HostMachine {
+-                    def_key: def_key.clone(),
+-                    behavior,
+-                    stage,
+-                    owner: *owner,
+-                    target: *target,
+-                    card: *card,
+-                    cards: cards.clone(),
+-                    targets: targets.clone(),
+-                }))
+-            }
+             _ => Err(SnapshotError::UnknownMachine),
+         }

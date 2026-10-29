@@ -1,0 +1,33 @@
+scripts/report_phase_arms.py:41:HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+scripts/check_guard_references.py:12:* `HostBehavior` variants — `crates/engine-native/src/content/host/keys.rs`
+scripts/check_guard_references.py:28:KEYS = ROOT / "crates" / "engine-native" / "src" / "content" / "host" / "keys.rs"
+scripts/check_guard_references.py:43:#: 守卫会引用的**常量名**（`content/host/constants.rs` 里存在）。
+scripts/report_unimplemented_hosts.py:7:**判据**：数 `HostBehavior::X` 在 `content/host/**` 的**出现次数**：
+scripts/report_unimplemented_hosts.py:25:HOST = ROOT / "crates/engine-native/src/content/host"
+scripts/report_card_coverage.py:12:Layer 2 is deliberately broad: an earlier version scanned only `content/host/` and
+scripts/report_phase_filters.py:24:HOST = ROOT / "crates/engine-native/src/content/host"
+scripts/report_g14.py:24:HOST = ROOT / "crates/engine-native/src/content/host"
+scripts/dump_skill_pair.py:22:HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+scripts/check_ledger_consistency.py:96:    keys_src = (ROOT / "crates/engine-native/src/content/host/keys.rs").read_text(encoding="utf-8")
+scripts/report_event_arms.py:34:HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+scripts/check_card_kind_compare.py:10:* 扫描 `crates/engine-native/src/content/host/{filtering,step}/*.rs`；
+scripts/check_card_kind_compare.py:24:    ROOT / "crates/engine-native/src/content/host/filtering",
+scripts/check_card_kind_compare.py:25:    ROOT / "crates/engine-native/src/content/host/step",
+scripts/check-native-layering.py:21:UPWARD = re.compile(r"\bcontent::(?:host|standard|extension|pile|names)\b|\bcrate::engine::")
+scripts/report_defect_ledger.py:6:has write access to `content/host/**` and `kernel/**`.
+scripts/report_defect_ledger.py:32:HOST = ROOT / "crates" / "engine-native" / "src" / "content" / "host"
+scripts/report_defect_ledger.py:220:        rows.append([rid, cls, behavior, source, "content/host/**", upstream, native,
+scripts/test_check_source_lines.py:23:                "content/standard/skills.skill": 2001,
+scripts/test_check_source_lines.py:36:                    Path("content/standard/skills.skill"): 2001,
+scripts/test_check_native_layering.py:23:                "kernel.rs": "use crate::content::host::HostMachine;\n",
+scripts/test_check_native_layering.py:26:                "content/host.rs": "use crate::content::standard::X;\n",
+scripts/test_check_native_layering.py:27:                "engine.rs": "use crate::content::host::Y;\n",
+scripts/report_registered_deviations.py:18:HOST = Path(__file__).resolve().parent.parent / "crates/engine-native/src/content/host"
+scripts/host_key_reachability.py:21:KEYS = ROOT / "crates/engine-native/src/content/host/keys.rs"
+scripts/host_key_reachability.py:31:    """`content/host.rs` 的 `CardKind → HostSkillDecl` 表（**第三条挂载路径**）。
+scripts/host_key_reachability.py:39:    host_rs = (ROOT / "crates/engine-native/src/content/host.rs").read_text(encoding="utf-8")
+scripts/report_filter_meta_mismatch.py:25:HOST = ROOT / "crates/engine-native/src/content/host"
+scripts/audit_upstream_skill_flags.py:163:    for f in sorted((ROOT / "crates/engine-native/src/content/host/metadata").glob("*.rs")):
+scripts/audit_upstream_skill_flags.py:181:        for f in sorted((ROOT / "crates/engine-native/src/content/host" / sub).glob("*.rs")):
+scripts/audit_upstream_skill_flags.py:191:    t = (ROOT / "crates/engine-native/src/content/host/keys.rs").read_text(encoding="utf-8")
+scripts/audit_upstream_skill_flags.py:199:    t = (ROOT / "crates/engine-native/src/content/host.rs").read_text(encoding="utf-8")

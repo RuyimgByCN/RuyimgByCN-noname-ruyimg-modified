@@ -1,0 +1,90 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 4,
+  "commands": [
+    {
+      "group": "corrected-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 13.889559030532837,
+      "log": "corrected-00.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native --test nc07_archive_hash_fields --test nc07_archive_hash_guard --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+      "exit_code": 0,
+      "seconds": 2.43819522857666,
+      "log": "corrected-01.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 63.910197019577026,
+      "log": "corrected-02.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 1.2725520133972168,
+      "log": "corrected-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 101,
+      "seconds": 1.1947710514068604,
+      "log": "early-00.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p content-compiler --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 0.3704109191894531,
+      "log": "early-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 101,
+      "seconds": 0.419248104095459,
+      "log": "early-02.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.05084633827209473,
+      "log": "early-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 1,
+      "seconds": 0.6874439716339111,
+      "log": "early-04.log"
+    },
+    {
+      "group": "gate-corrected-results",
+      "command": "env RUSTFLAGS=-D warnings CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 5.7952492237091064,
+      "log": "gate-corrected-00.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 101,
+      "seconds": 0.5819809436798096,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "cargo test --offline -p engine-native --test nc07_archive_hash_fields --test nc07_archive_hash_guard --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+      "exit_code": 101,
+      "seconds": 0.6063940525054932,
+      "log": "targeted-00.log"
+    }
+  ]
+}

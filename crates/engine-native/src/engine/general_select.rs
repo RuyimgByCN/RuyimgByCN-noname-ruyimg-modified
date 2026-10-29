@@ -66,7 +66,7 @@ impl Engine {
         self.state_core_mut().player_mut(seat).general_slots[1] = None;
         self.state_core_mut().player_mut(seat).revealed_generals = [true, false];
         let catalog = self.catalog().clone();
-        crate::engine::apply_general_assembly(self.state_core_mut(), &catalog, seat, 0);
+        crate::state::apply_general_assembly(self.state_core_mut(), &catalog, seat, 0);
         let lord = self
             .state_core()
             .identity_roles()

@@ -1,0 +1,481 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo check --offline -p engine-native --all-targets
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target
+RUSTFLAGS=-D warnings
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-native)
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:28:27
+    |
+ 28 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:48:27
+    |
+ 48 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:62:27
+    |
+ 62 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:161:27
+    |
+161 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:175:27
+    |
+175 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:203:27
+    |
+203 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:249:27
+    |
+249 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:280:27
+    |
+280 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:347:27
+    |
+347 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:371:27
+    |
+371 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:432:27
+    |
+432 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:447:27
+    |
+447 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:506:27
+    |
+506 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:533:27
+    |
+533 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:608:27
+    |
+608 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:684:27
+    |
+684 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:699:27
+    |
+699 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:881:27
+    |
+881 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:896:27
+    |
+896 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:910:27
+    |
+910 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:925:27
+    |
+925 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:980:27
+    |
+980 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+   --> crates/engine-native/src/content/host/intrinsic.rs:994:27
+    |
+994 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+    |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+   --> crates/engine-native/src/kernel/nullify.rs:331:1
+    |
+331 | / pub(super) fn wrap_nullify_window(
+332 | |     ctx: &Ctx<'_>,
+333 | |     card: crate::ids::CardId,
+334 | |     source: PlayerId,
+...   |
+348 | | }
+    | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+    --> crates/engine-native/src/content/host/intrinsic.rs:1008:27
+     |
+1008 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+     |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+    --> crates/engine-native/src/kernel/nullify.rs:331:1
+     |
+ 331 | / pub(super) fn wrap_nullify_window(
+ 332 | |     ctx: &Ctx<'_>,
+ 333 | |     card: crate::ids::CardId,
+ 334 | |     source: PlayerId,
+...    |
+ 348 | | }
+     | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+    --> crates/engine-native/src/content/host/intrinsic.rs:1022:27
+     |
+1022 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+     |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+    --> crates/engine-native/src/kernel/nullify.rs:331:1
+     |
+ 331 | / pub(super) fn wrap_nullify_window(
+ 332 | |     ctx: &Ctx<'_>,
+ 333 | |     card: crate::ids::CardId,
+ 334 | |     source: PlayerId,
+...    |
+ 348 | | }
+     | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+    --> crates/engine-native/src/content/host/intrinsic.rs:1036:27
+     |
+1036 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+     |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+    --> crates/engine-native/src/kernel/nullify.rs:331:1
+     |
+ 331 | / pub(super) fn wrap_nullify_window(
+ 332 | |     ctx: &Ctx<'_>,
+ 333 | |     card: crate::ids::CardId,
+ 334 | |     source: PlayerId,
+...    |
+ 348 | | }
+     | |_^ not accessible
+
+error[E0425]: cannot find function `wrap_nullify_window` in this scope
+    --> crates/engine-native/src/content/host/intrinsic.rs:1050:27
+     |
+1050 |             Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+     |                           ^^^^^^^^^^^^^^^^^^^ not found in this scope
+     |
+note: function `crate::kernel::wrap_nullify_window` exists but is inaccessible
+    --> crates/engine-native/src/kernel/nullify.rs:331:1
+     |
+ 331 | / pub(super) fn wrap_nullify_window(
+ 332 | |     ctx: &Ctx<'_>,
+ 333 | |     card: crate::ids::CardId,
+ 334 | |     source: PlayerId,
+...    |
+ 348 | | }
+     | |_^ not accessible
+
+error: unused import: `crate::kernel::*`
+ --> crates/engine-native/src/content/host/intrinsic.rs:7:5
+  |
+7 | use crate::kernel::*;
+  |     ^^^^^^^^^^^^^^^^
+  |
+  = note: `-D unused-imports` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(unused_imports)]`
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `engine-native` (lib) due to 28 previous errors
+
+EXIT_CODE: 101

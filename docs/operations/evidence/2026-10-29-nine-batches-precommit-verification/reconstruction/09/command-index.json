@@ -1,0 +1,90 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 9,
+  "commands": [
+    {
+      "group": "final-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 37.05093002319336,
+      "log": "final-00.log"
+    },
+    {
+      "group": "final-results",
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "exit_code": 101,
+      "seconds": 387.29642605781555,
+      "log": "final-01.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 20.202810764312744,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "preflight-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.060318946838378906,
+      "log": "preflight-00.log"
+    },
+    {
+      "group": "preflight-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_rust_effective_lines.py",
+      "exit_code": 0,
+      "seconds": 0.04877901077270508,
+      "log": "preflight-01.log"
+    },
+    {
+      "group": "preflight-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 3.895404100418091,
+      "log": "preflight-02.log"
+    },
+    {
+      "group": "preflight-results",
+      "command": "python3 -B scripts/preflight.py",
+      "exit_code": 0,
+      "seconds": 417.2780222892761,
+      "log": "preflight-03.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg -- --offline",
+      "exit_code": 0,
+      "seconds": 88.23351907730103,
+      "log": "wasm-00.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "pnpm --dir apps/web-client smoke:native",
+      "exit_code": 0,
+      "seconds": 0.7090568542480469,
+      "log": "wasm-01.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "exit_code": 0,
+      "seconds": 46.80769681930542,
+      "log": "wasm-02.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "pnpm --dir apps/web-client test",
+      "exit_code": 0,
+      "seconds": 1.860502004623413,
+      "log": "wasm-03.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "pnpm --dir apps/web-client typecheck",
+      "exit_code": 0,
+      "seconds": 1.4308209419250488,
+      "log": "wasm-04.log"
+    }
+  ]
+}

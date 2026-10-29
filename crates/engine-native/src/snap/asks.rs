@@ -78,7 +78,7 @@ pub fn active_ask(
                             && *p != *source
                             && {
                                 let kc = catalog
-                                    .skill_by_name(crate::content::standard::KONG_CHENG)
+                                    .skill_by_name(crate::vocabulary::names::KONG_CHENG)
                                     .map(|d| core.has_skill(*p, d))
                                     .unwrap_or(false);
                                 !(kc && core.player(*p).hand.is_empty())

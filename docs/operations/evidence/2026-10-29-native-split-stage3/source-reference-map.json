@@ -1,0 +1,334 @@
+[
+  {
+    "oldPath": "crates/engine-native/src/content/host/behavior.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/behavior.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 1586
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/behavior_list.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/behavior_list.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 540
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/keys.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/keys.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 557
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/tags.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/tags.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 547
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/tag_decode.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/tag_decode.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 543
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/metadata.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/metadata.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 831
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/metadata/common.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/metadata/common.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 1035
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/metadata/swd.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/metadata/swd.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 1057
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/metadata/xianjian.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/metadata/xianjian.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 418
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/constants.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host/constants.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 30
+      },
+      {
+        "oldStart": 37,
+        "newStart": 31,
+        "lines": 619
+      },
+      {
+        "oldStart": 680,
+        "newStart": 650,
+        "lines": 192
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/standard/names.rs",
+    "newPath": "crates/engine-native/src/vocabulary/names.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 712
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/standard/generals.rs",
+    "newPath": "crates/engine-native/src/vocabulary/generals.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 2,
+        "newStart": 3,
+        "lines": 629
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/extension.rs",
+    "newPath": "crates/engine-native/src/vocabulary/generals.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 37,
+        "newStart": 631,
+        "lines": 12
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host.rs",
+    "newPath": "crates/engine-native/src/vocabulary/host.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 147,
+        "newStart": 15,
+        "lines": 8
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host.rs",
+    "newPath": "crates/engine-native/src/vocabulary/card_skills.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 319,
+        "newStart": 5,
+        "lines": 303
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/support.rs",
+    "newPath": "crates/engine-native/src/vocabulary/card_skills.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 63,
+        "newStart": 294,
+        "lines": 3
+      },
+      {
+        "oldStart": 587,
+        "newStart": 307,
+        "lines": 47
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/engine.rs",
+    "newPath": "crates/engine-native/src/state/general_assembly.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 200,
+        "newStart": 5,
+        "lines": 3
+      },
+      {
+        "oldStart": 221,
+        "newStart": 8,
+        "lines": 20
+      },
+      {
+        "oldStart": 242,
+        "newStart": 29,
+        "lines": 12
+      },
+      {
+        "oldStart": 262,
+        "newStart": 49,
+        "lines": 12
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/constants.rs",
+    "newPath": "crates/engine-native/src/content/host/constants.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 32,
+        "newStart": 1,
+        "lines": 5
+      },
+      {
+        "oldStart": 655,
+        "newStart": 6,
+        "lines": 25
+      },
+      {
+        "oldStart": 873,
+        "newStart": 31,
+        "lines": 10
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host/support.rs",
+    "newPath": "crates/engine-native/src/content/host/support.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 588
+      },
+      {
+        "oldStart": 634,
+        "newStart": 590,
+        "lines": 479
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/host.rs",
+    "newPath": "crates/engine-native/src/content/host.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 5
+      },
+      {
+        "oldStart": 7,
+        "newStart": 6,
+        "lines": 3
+      },
+      {
+        "oldStart": 11,
+        "newStart": 9,
+        "lines": 11
+      },
+      {
+        "oldStart": 24,
+        "newStart": 20,
+        "lines": 4
+      },
+      {
+        "oldStart": 38,
+        "newStart": 30,
+        "lines": 107
+      },
+      {
+        "oldStart": 152,
+        "newStart": 137,
+        "lines": 168
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/content/standard.rs",
+    "newPath": "crates/engine-native/src/content/standard.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 12
+      },
+      {
+        "oldStart": 14,
+        "newStart": 14,
+        "lines": 148
+      },
+      {
+        "oldStart": 166,
+        "newStart": 164,
+        "lines": 380
+      }
+    ]
+  },
+  {
+    "oldPath": "crates/engine-native/src/engine.rs",
+    "newPath": "crates/engine-native/src/engine.rs",
+    "matchingLineSpans": [
+      {
+        "oldStart": 1,
+        "newStart": 1,
+        "lines": 199
+      },
+      {
+        "oldStart": 203,
+        "newStart": 200,
+        "lines": 18
+      },
+      {
+        "oldStart": 274,
+        "newStart": 219,
+        "lines": 263
+      }
+    ]
+  }
+]

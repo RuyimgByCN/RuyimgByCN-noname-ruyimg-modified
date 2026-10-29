@@ -1,0 +1,8 @@
+[
+  {
+    "command": "cargo test --offline -p engine-native --test nc07_archive_hash_fields --test nc07_archive_hash_guard --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+    "exit_code": 101,
+    "seconds": 0.6063940525054932,
+    "log": "targeted-00.log"
+  }
+]

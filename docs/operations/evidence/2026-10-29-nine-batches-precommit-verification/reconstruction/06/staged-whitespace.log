@@ -1,0 +1,27 @@
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:2: trailing whitespace.
++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:6: trailing whitespace.
++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:10: trailing whitespace.
++    potdianyi: const { triggers, triggered } = player.getStorage("potdianyi", { triggers: [], triggered: [] }); if (!triggers.includes(name)) { return false; } if (event.name === "damage" && event.num < 1) { return 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:17: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:20: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:21: trailing whitespace.
++    clansankuang: if (!game.hasPlayer(current => current != player)) { return false; } const type = get.type2(event.card); return player.getRoundHistory("useCard", evt => get.type2(evt.card) == type).indexOf(event) == 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:23: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:26: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:30: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:32: trailing whitespace.
++    clandaojie: return ( get.type(event.card, null, false) == "trick" && !get.tag(event.card, "damage") && event.cards.filterInD().length > 0 && player .getHistory("useCard", evt => { return get.type(evt.card, null, 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:129: trailing whitespace.
++    dcsuifu: if (player === event.player) { return false; } let num = 0; game.countPlayer(current => { if (current === player || current.getSeatNum() === 1) { current.getHistory("damage", evt => { num += evt.num; 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:132: trailing whitespace.
++    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt:135: trailing whitespace.
++    dcwangyuan: if (player === _status.currentPhase) { return name === "logSkill" && event.skill === "dcliying" && player.getExpansions("dcwangyuan").length < game.countPlayer2(); } if (name === "logSkill") { return 
+EXIT_CODE: 2

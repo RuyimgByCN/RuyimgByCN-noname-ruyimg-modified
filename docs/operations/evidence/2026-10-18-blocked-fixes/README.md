@@ -123,7 +123,7 @@ if !hand.is_empty() {
 （`filter(|c| catalog.card_kind(*c) == CardKind::Sha)`）→ **不含**武圣可转化的红色牌。
 行为断言已复现（`upstream_wusheng_respond_path_not_covered`）。
 
-**精确定位（同轮核对）**：**「闪」方向**的响应转化**已实现**（`kernel/sha/step.rs:693–1243`：
+**精确定位（同轮核对）**：**「闪」方向**的响应转化**已实现**（`kernel/sha/step.rs:672–725`、`kernel/sha/resume.rs:322–345`：
 龙胆【杀】、倾国黑牌；无双双闪臂 `:369–392` 同），**仅「杀」方向缺失** → 修法可**照搬**该模式。
 
 **修法**：在**杀响应**的选项构造处（决斗/南蛮/万箭/借刀等要求打出【杀】的路径）加入**转化候选**：
@@ -656,7 +656,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ### 第 4 项：`guihan`（归汉）——**已注册但效果为空**（样本 83）
 
-**症状**：键与行为**已注册**（`keys.rs:44` `host:guihan`；运筹 `ycnguihan` 的 `mapping` 即此），
+**症状**：键与行为**已注册**（`vocabulary/host/keys.rs:44` `host:guihan`；运筹 `ycnguihan` 的 `mapping` 即此），
 但**效果分支为空**：`step/wudian_status.rs:82` → `Flow::Done`（过滤器恒 `false`——作为**主动技**
 方向正确）。上游为**限定技**：自己濒死时可令一名**男性其他角色**与自己**各回复 1 点并各摸 2 张**。
 
@@ -685,7 +685,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 | 环节 | 状态 |
 |---|---|
-| 触发元数据 | `metadata/common.rs:49`：`EventKind::DamageBefore` + `Timing::Normal` + `optional: true` |
+| 触发元数据 | `vocabulary/host/metadata/common.rs:49`：`EventKind::DamageBefore` + `Timing::Normal` + `optional: true` |
 | 过滤器 | `filtering/common.rs:495`：来源为本人 + 未防止 + `amount > 0` + **非火焰** |
 | 机器工厂 | `factory.rs:212`（目标 = 受伤者）；`stage` **默认 `HostStage::Act`** |
 | 步进路由 | `step.rs:694` → `step_yunchou`；效果分支 `step/yunchou.rs:357`（弃手牌首张 + 改伤害性质） |
@@ -776,7 +776,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 → 只能靠**逐卡行为面抽样**（如本样本）发现 ⇒ **建议**对古剑/同类卡包做**逐卡行为面抽样**。
 
 **已核对**：门槛**已正确实现**（目标已持子技时 `Rejected(IllegalTargets)`）；
-键存在（`keys.rs:347` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`constants.rs:58`）。
+键存在（`vocabulary/host/keys.rs:347` `host:gujian_food_liyutang`）；子技目录名 `gj_food_liyutang`（`vocabulary/host/constants.rs:52`）。
 
 **修法**：在食物牌效果分支实现「目标获得此牌 + 记 `storage` + `markcount=2` + 授予计时子技」，
 并实现**计数的逐轮结算**（子技效果）。
@@ -1098,7 +1098,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 
 ### 第 50 项扩展：`CardKind::Hslingjian` **全部分支口径对照**（2026-10-19）
 
-按修法要求逐一对照**上游 `filterTarget`**（`swd/card.js`）与**原生分支**（`engine/play_card_targets.rs:95–1656`）：
+按修法要求逐一对照**上游 `filterTarget`**（`swd/card.js`）与**原生分支**（`engine/play_card_targets.rs:114–161`）：
 
 | 卡 | 上游 `filterTarget`（**逐字**） | 原生条件（**逐字**） | 一致？ |
 |---|---|---|---|
@@ -1121,7 +1121,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **被克**（目标 0=金）、**被生**（目标 4=土）、**无关**（目标 1=木）——**三次手牌变化均为 −1**
 ⇒ **无法区分生克是否生效**（−1 与该牌**自身效果**一致）。
 
-**已核对（源码层面生克确实存在）**：`constants.rs:4/8` 的 **`KE=[1,4,3,0,2]`/`SHENG=[2,3,1,4,0]`**
+**已核对（源码层面生克确实存在）**：`vocabulary/host/constants.rs:4/8` 的 **`KE=[1,4,3,0,2]`/`SHENG=[2,3,1,4,0]`**
 与上游九条生克规则**逐条一致**；`skills_status.rs:680` 的 `ShengkeCheck` 实现「被克弃一张 / 被生摸一张」；
 `construction.rs:431` 角色开局随机属性。
 
@@ -1134,7 +1134,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
    `EventData::CardUsed(u) if u.targets.contains(&owner) && card_natures.contains_key(&u.card) && player(owner).wunature.is_some()`
    —— 本用例三项**均满足**（目标含 1 号、牌有属性、1 号属性已设）；
 2. **声明面存在**：`packages/extensions/wuxing-upstream-liuli/assets/cards.json` **确实含 `shengke` 声明**，
-   且 `keys.rs:318` 映射 `host:shengke_check`；
+   且 `vocabulary/host/keys.rs:318` 映射 `host:shengke_check`；
 3. **`init_hook` 已生效**：样本 141 实测**牌属性表 38 条**（= 牌堆 114/3）⇒ 属性赋予链路**正常**。
 
 ⇒ 剩余候选收窄为：**宿主技实例是否挂到「该牌/该角色」**、以及 **`ShengkeCheck` 机器是否被 `CardUsed` 实际驱动**。
@@ -1228,7 +1228,7 @@ DBG 虎符：杀结算后 1 号 hp=0 dying=false alive=false
 **下一步**：核对原生是否声明 `damageEnd` 窗口宿主技（`HostBehavior`/`keys`）；
 若已声明，逐个排查其**过滤条件**（恐与上游 `filter` 的差异有关）。
 
-**✅ 根因确定（同日）**：`HostBehavior::ChenhuodajieCard` **已声明**（`keys.rs:33/862` →
+**✅ 根因确定（同日）**：`HostBehavior::ChenhuodajieCard` **已声明**（`vocabulary/host/keys.rs:327`、`vocabulary/host/behavior_list.rs:19` →
 `host:chenhuodajie_card`），但在 **`filtering/common.rs` 的 `filter_common` 中硬编码为 `=> false`**
 ⇒ **窗口永不触发**（属「**触发面未接入**」的显式占位，与同臂中正常接入的
 `YunchouLuweiyan2 => u_matches_lw2(…)`、`ShengkeCheck => matches!(…)` 形成对比）。
@@ -1458,7 +1458,7 @@ if !def.behavior.filter(&qctx, qt.owner, &event) { return; }
 
 ⇒ **filter 在「入队时」就被调用** ⇒ 若 filter 返回 false，则**永不入队**、也就**永不执行**。
 
-**关键依赖已核对**：`hand_has_kind`（`content/host/support.rs:1106-1112`）实现为
+**关键依赖已核对**：`hand_has_kind`（`content/host/support.rs:1062-1068`）实现为
 `ctx.state.player(owner).hand.iter().any(|c| ctx.catalog.card_kind(*c) == kind)` —— **按 `card_kind` 比对，正确**。
 
 ⇒ **按源码推理，本用例的 filter 条件全部成立**（阶段＝`Judge`+`begin`、`hujia == 0`、手牌含该 kind）
@@ -1473,7 +1473,7 @@ grep 结果：`card_kind_host_skills(` 的调用**只有**——
 
 | 位置 | 性质 |
 |---|---|
-| `content/host.rs:308` | **定义** |
+| `vocabulary/card_skills.rs:8` | **定义** |
 | `archive.rs:264` | **测试** |
 
 ⇒ **没有任何生产代码**把「**按牌种声明的手持宿主技能**」授予玩家 ⇒ **`CardKind::Qinglongzhigui`/
@@ -1481,7 +1481,7 @@ grep 结果：`card_kind_host_skills(` 的调用**只有**——
 `plan_triggers` 的 `for ((owner, idef), inst) in core.skills.range(..)` **取不到实例** ⇒ **filter 从不被调用**
 ⇒ **窗口永不触发**。
 
-**对照**：**包级** `pack.host_skills` **有**生产消费（`content/standard.rs:428` 注册进目录）；
+**对照**：**包级** `pack.host_skills` **有**生产消费（`content/standard.rs:426` 注册进目录）；
 差异在于「**按牌种**声明的技能」缺少**授予时机**（应为「**卡进入手牌/装备**时同步授予」）。
 
 **这也解释了**：为何 `TriggerMeta`/`PhaseBegin`/`hand_has_kind` 三项核对**全部成立**却仍不触发——
@@ -1503,7 +1503,7 @@ crates/content-native-loader/src/lib.rs:575   for decl in card_kind_host_skills(
 ```
 
 ⇒ **桥接期确实把「按牌种的宿主技能」并入了包的 `host_skills`** ✅
-⇒ 再由 `content/standard.rs:428`（`for decl in &pack.host_skills`）**注册进目录** ✅。
+⇒ 再由 `content/standard.rs:426`（`for decl in &pack.host_skills`）**注册进目录** ✅。
 
 **因此**：技能 **def 在目录中存在** ✅ —— 问题**不在声明**，而在「**是否进入 `core.skills` 实例表**」
 （`plan_triggers` 遍历的是 `core.skills`，不是 `catalog.skills`）。
@@ -1568,14 +1568,14 @@ DBG 探针：core.skills 实例 4/4（enabled 4）；candidates(PhaseBegin) 共 
 
 | 核对 | 结果 |
 |---|---|
-| 两个行为的 `TriggerMeta` | **均已注册 `event: EventKind::PhaseBegin`**（`metadata/swd.rs:337-350`）✅ |
+| 两个行为的 `TriggerMeta` | **均已注册 `event: EventKind::PhaseBegin`**（`vocabulary/host/metadata/swd.rs:337-350`）✅ |
 | `PhaseBegin` 是否可用 | **`SwdHyunshen2`（同为 `PhaseBegin`，且要求「自己准备阶段」）的既有用例 `hyunshen::swd_deferred_hyunshen_counter_draw_and_distance` **通过** ✅ |
 
 ⇒ **`PhaseBegin`（含 `Judge` 阶段）的派发机制正常** ✅ ⇒ **两个法器失败的原因不在触发器注册、也不在 `PhaseBegin` 派发**。
 
 **剩余唯一可疑条件**：`hand_has_kind(ctx, owner, CardKind::…Held)` ——
 即 `catalog.card_kind(手牌中的该牌)` **是否等于** 声明的 `CardKind`。
-（`hand_has_kind` 实现本身正确，`support.rs:1106`；但**目录里该牌的 kind 可能与声明不一致**。）
+（`hand_has_kind` 实现本身正确，`support.rs:1062`；但**目录里该牌的 kind 可能与声明不一致**。）
 
 **下一步（决定性、可读）**：写探针打印「放入手牌的该牌的 `catalog.card_kind`」与「期望的 `CardKind`」，比对是否相等。
 
@@ -1627,7 +1627,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 
 **57（新登记，真实缺陷）：`baishouzhihu`（白兽之琥）永不触发。**
 
-- `content/host/metadata/swd.rs:360` 注册 **`EventKind::PhaseEnd`**；
+- `vocabulary/host/metadata/swd.rs:360` 注册 **`EventKind::PhaseEnd`**；
 - `content/host/filtering/swd.rs:409-421` 的 filter 要求 **`begin == true`**；
 - 引擎的 `Phase` 事件**只有** `begin: true`（回合起点判定阶段）⇒ **元数据与过滤器自相矛盾** ⇒ 永不入队。
 - 实测：推进到**第 14 回合**判定阶段仍无 `baishouzhihu_target` 询问。
@@ -1642,7 +1642,7 @@ DBG hand_has_kind 探针：目录名=swd_swd_huanglinzhicong_73；card_kind=Huan
 |---|---|
 | 包数据 `cards.json` | 3 张 `chenhuodajie` 条目**均无 `skills` 字段** |
 | `bridge_pack`（**已跟踪**） | 仅支持 **`cards[].equip_skills`**（`lib.rs:567-572`），**不支持 `cards[].skills`** |
-| 宿主键表 | `host:chenhuodajie_card` **存在**（`keys.rs:327`） |
+| 宿主键表 | `host:chenhuodajie_card` **存在**（`vocabulary/host/keys.rs:327`） |
 | 授予路径 | `ChenhuodajieCard` **不在** `construction.rs`（2026-10-18 快照第 468–500 行；2026-10-24 当前授技入口见 `engine/construction.rs:463-477`） 的授予清单、也**不在** `card_kind_host_skills` |
 
 ⇒ **非装备牌的 `global` 子技能没有任何声明通道** ⇒ `host:chenhuodajie_card` **永远不会被实例化**

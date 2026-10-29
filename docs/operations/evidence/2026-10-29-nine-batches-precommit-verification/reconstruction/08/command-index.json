@@ -1,0 +1,146 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 8,
+  "commands": [
+    {
+      "group": "corrected-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 10.793346881866455,
+      "log": "corrected-00.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 38.92673683166504,
+      "log": "corrected-01.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "cargo test --offline -p engine-native-wasm -p content-native-loader -p game-server --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 117.06531596183777,
+      "log": "corrected-02.log"
+    },
+    {
+      "group": "corrected-results",
+      "command": "python3 -B scripts/preflight.py",
+      "exit_code": 1,
+      "seconds": 406.16649413108826,
+      "log": "corrected-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 101,
+      "seconds": 3.4147818088531494,
+      "log": "early-00.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p content-compiler --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 27.51393485069275,
+      "log": "early-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 101,
+      "seconds": 3.3615550994873047,
+      "log": "early-02.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.04074907302856445,
+      "log": "early-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 0.4261138439178467,
+      "log": "early-04.log"
+    },
+    {
+      "group": "gate-corrected-results",
+      "command": "env RUSTFLAGS=-D warnings CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 9.618957042694092,
+      "log": "gate-corrected-00.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 101,
+      "seconds": 3.1355059146881104,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "layering-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_native_layering.py",
+      "exit_code": 0,
+      "seconds": 0.05504631996154785,
+      "log": "layering-00.log"
+    },
+    {
+      "group": "layering-results",
+      "command": "python3 -B scripts/check-native-layering.py",
+      "exit_code": 0,
+      "seconds": 0.03781390190124512,
+      "log": "layering-01.log"
+    },
+    {
+      "group": "layering-results",
+      "command": "cargo test --offline -p engine-native-wasm -p content-native-loader -p game-server --no-fail-fast",
+      "exit_code": 101,
+      "seconds": 30.562707901000977,
+      "log": "layering-02.log"
+    },
+    {
+      "group": "layering-results",
+      "command": "python3 -B scripts/preflight.py",
+      "exit_code": 1,
+      "seconds": 334.9328329563141,
+      "log": "layering-03.log"
+    },
+    {
+      "group": "links-corrected-results",
+      "command": "python3 -B scripts/check_local_links.py",
+      "exit_code": 0,
+      "seconds": 0.09665489196777344,
+      "log": "links-corrected-00.log"
+    },
+    {
+      "group": "links-corrected-results",
+      "command": "python3 -B scripts/check_local_links.py --all",
+      "exit_code": 0,
+      "seconds": 0.4392879009246826,
+      "log": "links-corrected-01.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg -- --offline",
+      "exit_code": 0,
+      "seconds": 37.07308006286621,
+      "log": "wasm-00.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "pnpm --dir apps/web-client smoke:native",
+      "exit_code": 0,
+      "seconds": 0.6160688400268555,
+      "log": "wasm-01.log"
+    },
+    {
+      "group": "wasm-results",
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "exit_code": 0,
+      "seconds": 34.575676918029785,
+      "log": "wasm-02.log"
+    }
+  ]
+}

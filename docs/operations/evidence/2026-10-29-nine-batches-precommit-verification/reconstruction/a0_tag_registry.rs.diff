@@ -1,0 +1,9 @@
+--- 
++++ 
+@@ -205,4 +205,6 @@
+                 consume: Vec::new(),
+                 count_hits: false,
++                commit_pending: Vec::new(),
++                commit_pick: None,
+             },
+         ),

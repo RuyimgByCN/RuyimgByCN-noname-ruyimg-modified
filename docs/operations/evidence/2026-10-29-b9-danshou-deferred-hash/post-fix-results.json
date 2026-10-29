@@ -1,0 +1,46 @@
+[
+  {
+    "name": "workspace-fixed-final",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "started_at": "2026-10-29T20:54:36.785328+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 314.377,
+    "finished_at": "2026-10-29T20:59:51.163794+08:00"
+  },
+  {
+    "name": "doc-line-ref-tests",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_doc_line_refs.py"
+    ],
+    "started_at": "2026-10-29T20:59:51.164741+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 47.342,
+    "finished_at": "2026-10-29T21:00:38.507031+08:00"
+  },
+  {
+    "name": "preflight-fixed-final",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "started_at": "2026-10-29T21:00:38.507499+08:00",
+    "exit_code": 0,
+    "elapsed_seconds": 390.223,
+    "finished_at": "2026-10-29T21:07:08.732979+08:00"
+  }
+]

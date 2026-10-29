@@ -392,14 +392,14 @@ impl GameStateCore {
             .count() as u32;
         // 马术（马超）：锁定技——计算与他人的距离时始终 -1（下限 1）
         let mashu = catalog
-            .skill_by_name(crate::content::standard::MA_SHU)
+            .skill_by_name(crate::vocabulary::names::MA_SHU)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let minus = minus + u32::from(mashu);
         // 凶兽（Boss 模式共有技，规则 v208）：锁定技——你与其他角色
         // 距离 -1（上游 boss_xiongshou mod globalFrom distance-1 同口径）
         let xiongshou = catalog
-            .skill_by_name(crate::content::standard::BOSS_XIONGSHOU)
+            .skill_by_name(crate::vocabulary::names::BOSS_XIONGSHOU)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let minus = minus + u32::from(xiongshou);
@@ -433,18 +433,18 @@ impl GameStateCore {
         // 妖兽（Boss 神兽共有技，规则 v221）：锁定技——你与其他角色
         // 距离 -2（上游 boss_yaoshou mod globalFrom distance-2 同口径）
         let yaoshou = catalog
-            .skill_by_name(crate::content::standard::BOSS_YAOSHOU)
+            .skill_by_name(crate::vocabulary::names::BOSS_YAOSHOU)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let minus = minus + 2 * u32::from(yaoshou) + ljifeng_minus + poxiao_minus;
         // 义从（公孙瓒）：锁定技——你计算与其他角色的距离 -1；其他角色
         // 计算与你的距离 +1（你的体力值不大于 2 时）。
         let yicong_from = catalog
-            .skill_by_name(crate::content::standard::YI_CONG)
+            .skill_by_name(crate::vocabulary::names::YI_CONG)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let yicong_to = catalog
-            .skill_by_name(crate::content::standard::YI_CONG)
+            .skill_by_name(crate::vocabulary::names::YI_CONG)
             .map(|d| {
                 self.skills.get(&(b, d)).map(|i| i.enabled).unwrap_or(false)
                     && self.player(b).hp <= 2
@@ -456,11 +456,11 @@ impl GameStateCore {
         // 距离 -1；其他角色计算与你的距离 +1（上游 boss_diting mod
         // globalFrom/-1+globalTo/+1 同口径；义从同位）
         let diting_from = catalog
-            .skill_by_name(crate::content::standard::BOSS_DITING)
+            .skill_by_name(crate::vocabulary::names::BOSS_DITING)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         let diting_to = catalog
-            .skill_by_name(crate::content::standard::BOSS_DITING)
+            .skill_by_name(crate::vocabulary::names::BOSS_DITING)
             .map(|d| self.skills.get(&(b, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false);
         minus += u32::from(diting_from);
@@ -514,7 +514,7 @@ impl GameStateCore {
         // 突击（U07 ow 士兵76，规则 v118）：锁定——持有者回合内每已使
         // 用一张牌，进攻距离 -1（上游 tuji mod globalFrom countUsed 同
         // 口径）
-        if let Some(def) = catalog.skill_by_name(crate::content::host::WUDIAN_TUJI_KEY) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::WUDIAN_TUJI_KEY) {
             let tuji = self
                 .skills
                 .get(&(a, def))
@@ -530,7 +530,7 @@ impl GameStateCore {
         // 绝道（U07 玩点论杀刘焉，规则 v116）：锁定——**持技者**横置时
         // 双向距离 +1（上游 mod 挂在 juedao 技能上：globalFrom 查 from
         // 的技能、globalTo 查 to 的技能——非持技者的横置不影响距离）
-        if let Some(def) = catalog.skill_by_name(crate::content::host::WUDIAN_JUEDAO_KEY) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::WUDIAN_JUEDAO_KEY) {
             let juedao_a = self
                 .skills
                 .get(&(a, def))
@@ -551,7 +551,7 @@ impl GameStateCore {
         // 车阵（U07 玩点论杀田豫，规则 v115）：锁定——有装备时你算到
         // 他人 -1；目标无装备时其被算到 +1（上游 chezhen mod globalFrom/
         // globalTo 同口径）
-        if let Some(def) = catalog.skill_by_name(crate::content::host::WUDIAN_CHEZHEN_KEY) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::WUDIAN_CHEZHEN_KEY) {
             let chezhen_a = self
                 .skills
                 .get(&(a, def))
@@ -612,7 +612,7 @@ impl GameStateCore {
         // 每步·距离（L27 批 3，`new_meibu_range`）：临时——到「每步」弃牌者
         // 的距离视为 1（上游 mod.globalFrom -Infinity → 下限钳制同口径；
         // 目标座位存于标记）
-        if let Some(def) = catalog.skill_by_name(crate::content::host::L27_NEW_MEIBU_RANGE_KEY) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::L27_NEW_MEIBU_RANGE_KEY) {
             let enabled = self
                 .skills
                 .get(&(a, def))
@@ -633,7 +633,7 @@ impl GameStateCore {
         // 距离 -（场上存活**女性**角色数；上游 mod.globalFrom distance -
         // countPlayer(hasSex('female')) 同口径；下限 1 由末尾钳制）
         let xiefang_minus = if catalog
-            .skill_by_name(crate::content::host::L27_XIEFANG_KEY)
+            .skill_by_name(crate::vocabulary::host::L27_XIEFANG_KEY)
             .map(|d| self.skills.get(&(a, d)).map(|i| i.enabled).unwrap_or(false))
             .unwrap_or(false)
         {
@@ -641,7 +641,7 @@ impl GameStateCore {
                 .filter(|p| {
                     self.player(*p).alive
                         && self.effective_gender(*p)
-                            == crate::content::standard::Gender::Female
+                            == crate::vocabulary::generals::Gender::Female
                 })
                 .count() as u32
         } else {
@@ -687,10 +687,10 @@ impl GameStateCore {
     pub fn effective_gender(
         &self,
         p: PlayerId,
-    ) -> crate::content::standard::Gender {
+    ) -> crate::vocabulary::generals::Gender {
         self.player(p).general_slots[0]
-            .and_then(crate::content::standard::general_gender)
-            .unwrap_or(crate::content::standard::Gender::Male)
+            .and_then(crate::vocabulary::generals::general_gender)
+            .unwrap_or(crate::vocabulary::generals::Gender::Male)
     }
 
     // ---- 国战阵法派生判定（T19a，规则 v200；上游 guozhan patch
@@ -832,14 +832,14 @@ impl GameStateCore {
         // 无脏（Boss 混沌，规则 v209）：手牌上限基数 0——体力贡献清零
         // （上游 boss_wuzang mod maxHandcard `num - player.hp` 同口径：
         // 基数 hp-hp=0；其余加成修饰保留）
-        if let Some(def) = catalog.skill_by_name(crate::content::standard::BOSS_WUZANG) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::names::BOSS_WUZANG) {
             if self.has_skill(p, def) {
                 limit = limit.saturating_sub(self.player(p).hp.max(0) as usize);
             }
         }
         // 兽九（Boss 相柳，规则 v222）：手牌上限恒 9（上游 boss_jiushou
         // mod maxHandcard `num - hp + 9`：基数 hp-hp+9=9 同口径）
-        if let Some(def) = catalog.skill_by_name(crate::content::standard::BOSS_JIUSHOU) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU) {
             if self.has_skill(p, def) {
                 limit = 9;
             }
@@ -856,7 +856,7 @@ impl GameStateCore {
         }
         // 神威（Boss 庞统浴火授予，批 118 规则 v306）：手牌上限
         // +min(3, 其他角色数)（上游 shenwei mod maxHandcard 同口径）
-        if let Some(def) = catalog.skill_by_name(crate::content::host::BOSS_SHENWEI_KEY) {
+        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::BOSS_SHENWEI_KEY) {
             if self.has_skill(p, def) {
                 let others = self.alive_players().filter(|q| *q != p).count();
                 limit += others.min(3);
@@ -866,7 +866,7 @@ impl GameStateCore {
         //（上游 boss_shenen2 mod maxHandcard `!side → num+1` 同口径；
         // 光环激活=场上存在神恩持有者）
         {
-            let shenen = catalog.skill_by_name(crate::content::standard::BOSS_SHENEN);
+            let shenen = catalog.skill_by_name(crate::vocabulary::names::BOSS_SHENEN);
             let active = shenen
                 .map(|d| self.skills.keys().any(|(_, dd)| *dd == d))
                 .unwrap_or(false);

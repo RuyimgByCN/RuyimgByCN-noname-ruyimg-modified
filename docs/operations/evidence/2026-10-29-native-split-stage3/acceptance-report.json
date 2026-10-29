@@ -1,0 +1,229 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "88 paths confined to engine-native source/necessary regression scanners plus authorized script consumers. Complete kernel closure, including vocabulary, has 0 upward references and BASELINE 0. Legacy public paths/default metadata behavior preserved; no rules/archive/ABI/Cargo/protocol/docs changes."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Frozen-state patch with SHA256, full changed-file manifest, actual patch reconstruction, red/green logs, final full Rust/dependent suites, independent Gate 1b, identical 1717 test names, unchanged golden definitions and matching old-WASM state trajectories, line gates, explicit remaining doc-review work."
+    }
+  ],
+  "changedFiles": [
+    "crates/engine-native/src/archive.rs",
+    "crates/engine-native/src/catalog.rs",
+    "crates/engine-native/src/content/extension.rs",
+    "crates/engine-native/src/content/hooks.rs",
+    "crates/engine-native/src/content/host.rs",
+    "crates/engine-native/src/content/host/behavior.rs",
+    "crates/engine-native/src/content/host/behavior_list.rs",
+    "crates/engine-native/src/content/host/boss.rs",
+    "crates/engine-native/src/content/host/constants.rs",
+    "crates/engine-native/src/content/host/keys.rs",
+    "crates/engine-native/src/content/host/metadata.rs",
+    "crates/engine-native/src/content/host/metadata/common.rs",
+    "crates/engine-native/src/content/host/metadata/swd.rs",
+    "crates/engine-native/src/content/host/metadata/xianjian.rs",
+    "crates/engine-native/src/content/host/support.rs",
+    "crates/engine-native/src/content/host/tag_decode.rs",
+    "crates/engine-native/src/content/host/tags.rs",
+    "crates/engine-native/src/content/standard.rs",
+    "crates/engine-native/src/content/standard/generals.rs",
+    "crates/engine-native/src/content/standard/names.rs",
+    "crates/engine-native/src/engine.rs",
+    "crates/engine-native/src/engine/general_select.rs",
+    "crates/engine-native/src/kernel/aoe.rs",
+    "crates/engine-native/src/kernel/combat_rules.rs",
+    "crates/engine-native/src/kernel/damage.rs",
+    "crates/engine-native/src/kernel/death.rs",
+    "crates/engine-native/src/kernel/discard.rs",
+    "crates/engine-native/src/kernel/duel.rs",
+    "crates/engine-native/src/kernel/dying.rs",
+    "crates/engine-native/src/kernel/equipment.rs",
+    "crates/engine-native/src/kernel/events.rs",
+    "crates/engine-native/src/kernel/intrinsic.rs",
+    "crates/engine-native/src/kernel/judge.rs",
+    "crates/engine-native/src/kernel/monkey.rs",
+    "crates/engine-native/src/kernel/nullify.rs",
+    "crates/engine-native/src/kernel/phase.rs",
+    "crates/engine-native/src/kernel/phase/discard.rs",
+    "crates/engine-native/src/kernel/phase/draw.rs",
+    "crates/engine-native/src/kernel/phase/end.rs",
+    "crates/engine-native/src/kernel/phase/judge.rs",
+    "crates/engine-native/src/kernel/phase/play.rs",
+    "crates/engine-native/src/kernel/sha.rs",
+    "crates/engine-native/src/kernel/sha/liuli.rs",
+    "crates/engine-native/src/kernel/sha/resume.rs",
+    "crates/engine-native/src/kernel/sha/step.rs",
+    "crates/engine-native/src/lib.rs",
+    "crates/engine-native/src/rvm_named.rs",
+    "crates/engine-native/src/snap.rs",
+    "crates/engine-native/src/snap/asks.rs",
+    "crates/engine-native/src/state.rs",
+    "crates/engine-native/src/state/core_ops.rs",
+    "crates/engine-native/src/state/general_assembly.rs",
+    "crates/engine-native/src/vocabulary.rs",
+    "crates/engine-native/src/vocabulary/card_skills.rs",
+    "crates/engine-native/src/vocabulary/generals.rs",
+    "crates/engine-native/src/vocabulary/host.rs",
+    "crates/engine-native/src/vocabulary/host/behavior.rs",
+    "crates/engine-native/src/vocabulary/host/behavior_list.rs",
+    "crates/engine-native/src/vocabulary/host/constants.rs",
+    "crates/engine-native/src/vocabulary/host/keys.rs",
+    "crates/engine-native/src/vocabulary/host/metadata.rs",
+    "crates/engine-native/src/vocabulary/host/metadata/common.rs",
+    "crates/engine-native/src/vocabulary/host/metadata/swd.rs",
+    "crates/engine-native/src/vocabulary/host/metadata/xianjian.rs",
+    "crates/engine-native/src/vocabulary/host/tag_decode.rs",
+    "crates/engine-native/src/vocabulary/host/tags.rs",
+    "crates/engine-native/src/vocabulary/names.rs",
+    "crates/engine-native/tests/nc08_prepare_phase_mapping.rs",
+    "crates/engine-native/tests/nc08_registered_defect_guards.rs",
+    "crates/engine-native/tests/nc08_upstream_chunbing.rs",
+    "crates/engine-native/tests/nc08_upstream_longxue.rs",
+    "crates/engine-native/tests/nc08_upstream_mashu.rs",
+    "crates/engine-native/tests/nc08_upstream_yunchou_guihan.rs",
+    "crates/engine-native/tests/nc08_upstream_yunchou_unimplemented.rs",
+    "crates/engine-native/tests/pa01_catalog_index_equivalence.rs",
+    "scripts/audit_upstream_skill_flags.py",
+    "scripts/check-native-layering.py",
+    "scripts/check_guard_references.py",
+    "scripts/check_ledger_consistency.py",
+    "scripts/host_key_reachability.py",
+    "scripts/report_event_arms.py",
+    "scripts/report_filter_meta_mismatch.py",
+    "scripts/report_g14.py",
+    "scripts/report_phase_arms.py",
+    "scripts/report_phase_filters.py",
+    "scripts/report_registered_deviations.py",
+    "scripts/report_unimplemented_hosts.py",
+    "scripts/test_check_native_layering.py"
+  ],
+  "testsAddedOrUpdated": [
+    "crates/engine-native/tests/nc08_prepare_phase_mapping.rs",
+    "crates/engine-native/tests/nc08_registered_defect_guards.rs",
+    "crates/engine-native/tests/nc08_upstream_chunbing.rs",
+    "crates/engine-native/tests/nc08_upstream_longxue.rs",
+    "crates/engine-native/tests/nc08_upstream_mashu.rs",
+    "crates/engine-native/tests/nc08_upstream_yunchou_guihan.rs",
+    "crates/engine-native/tests/nc08_upstream_yunchou_unimplemented.rs",
+    "crates/engine-native/tests/pa01_catalog_index_equivalence.rs",
+    "scripts/test_check_native_layering.py"
+  ],
+  "commandsRun": [
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_native_layering.py (before migration)",
+      "result": "failed",
+      "summary": "Expected red: current-source zero-reference regression observed 240 upward references; layering-red.log."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_native_layering.py",
+      "result": "passed",
+      "summary": "Final 3 tests: real source zero, recursive vocabulary coverage, grouped use / crate alias / relative import detection."
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "result": "passed",
+      "summary": "0 upward references <= BASELINE 0; vocabulary included in KERNEL_MODULES."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target cargo check --offline -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "check-final.log; all targets finished successfully."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target cargo test --offline -p engine-native",
+      "result": "passed",
+      "summary": "native-tests-final.log: 1644 passed, 0 failed, 73 ignored; unchanged golden replay passed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target cargo test --offline -p engine-native-wasm -p content-native-loader -p game-server",
+      "result": "passed",
+      "summary": "dependent-tests-final.log: wasm 71/0/0, loader 32/0/0, game-server 362/0/0."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/gate-target RUSTFLAGS=\"-D warnings\" cargo check --offline -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Independent Gate 1b target, final source: gate1b-final.log."
+    },
+    {
+      "command": "cargo test --offline -p engine-native -- --list (before and after, isolated target)",
+      "result": "passed",
+      "summary": "1717 full names before and after, identical multisets; no additions/removals/renames."
+    },
+    {
+      "command": "Native nc08_cross_target_real + read-only previous generated WASM trajectory + compare.py",
+      "result": "passed",
+      "summary": "40 standard steps, save/restore at 20; hashes, revisions, events identical. Initial relative output path failed; absolute output path rerun passed."
+    },
+    {
+      "command": "Native WASM cross_target_package + read-only previous generated WASM package trajectory + compare.py",
+      "result": "passed",
+      "summary": "20 installed huanle-cards steps, save/restore at 10; hashes, revisions, events identical."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts",
+      "result": "failed",
+      "summary": "184 tests at that point; 183 passed, only existing doc file:line guard failed after source relocation. Final additional grouping scanner regression separately passed (3 layering tests)."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_report_event_arms.py; corresponding test_report_g14.py, test_report_phase_filters.py, test_report_filter_meta_mismatch.py",
+      "result": "passed",
+      "summary": "Final focused suites 15 + 7 + 9 + 13 tests passed; metadata/key/host declaration extraction also identical against frozen source."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py; corresponding test_rust_effective_lines.py; python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "2 + 1 unit tests passed; 8910 maintained files <=2000 physical lines; Rust non-test files <=1000 effective lines."
+    },
+    {
+      "command": "python3 -B scripts/preflight.py --quick",
+      "result": "failed",
+      "summary": "18 passed, 1 failed (public documentation source file:line references), 2 skipped; skipped ledger-consistency and script tests were exercised by the full script suite."
+    },
+    {
+      "command": "python3 -B scripts/check_local_links.py --all",
+      "result": "passed",
+      "summary": "1880 documents, 0 broken links after linking missing read-only AGENTS/spec dependencies in task base."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/gate-target cargo check --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/kernel-closure/Cargo.toml",
+      "result": "passed",
+      "summary": "Standalone library includes only complete KERNEL_MODULES and LogEvent facade re-export, no content/engine module; passed with one unused private constructor warning. Initial warnings-denied harness failed only on MonkeyStealMachine::new dead_code, recorded separately."
+    },
+    {
+      "command": "git apply --check on frozen baseline; apply to evidence/patch-probe and compare every changed path",
+      "result": "passed",
+      "summary": "All 88 paths reconstructed exactly, including 16 new and 11 deleted files; no index used."
+    },
+    {
+      "command": "frozen 757-path manifest audit; moved-source identity checks; git diff --cached --quiet; git rev-parse HEAD",
+      "result": "passed",
+      "summary": "No unexpected drift outside stage3 patch; 10 whole moved source files byte-identical; nothing staged; HEAD unchanged at 95f51867a3648321da1cc92149b60e2bbfaae748."
+    }
+  ],
+  "validationOutput": [
+    "layering red: 240 != 0; final: 0 <= BASELINE 0",
+    "engine-native: 1644 passed / 0 failed / 73 ignored",
+    "engine-native-wasm: 71 passed; content-native-loader: 32 passed; game-server: 362 passed",
+    "test names: 1717 == 1717, identical multisets",
+    "standard trajectory final hash: a3c8dfab6e9722906de982e6a44644549bb979ce39ac5e56f9588e5349350b01",
+    "installed package trajectory final hash: afd094672ab990cb8c457d60481bb5f69995d95767becfa44cc6e223ce1e0005",
+    "ruleset 328 / archive 105 / native VM ABI 753 unchanged; golden table/source unchanged; no golden re-recording"
+  ],
+  "residualRisks": [
+    "Public historical source citations need parent integration using source-reference-map.json; doc guard and therefore full preflight are not green in frozen isolated docs. No public documents or parent new doc validator were edited.",
+    "Actual three-crate split, cold/incremental performance, and new WASM build were not performed. Cross-target comparison used the unchanged read-only previously generated WASM.",
+    "Stage4 must expose required cross-crate pub(crate) APIs, including shared assembly and MonkeyStealMachine::new; keep all HostBehavior inherent impls with its definition, and content wrapper SkillBehavior impl with its local wrapper.",
+    "Independent reviewer gate remains required before parent integration; 73 pre-existing ignored Rust tests remain ignored."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "16 additions, 61 modifications, 11 deletions; pure vocabulary/metadata moves and pub use compatibility, shared assembly in state, equipment-response content callbacks, recursive complete-root layering scan and path-only consumer synchronization.",
+  "reviewFindings": [
+    "no blockers in implementation self-review; independent parent reviewer required",
+    "integration: historical document source paths/line ranges must be remapped; no doc-validator changes included"
+  ],
+  "manualNotes": "All artifacts under /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence; authoritative patch f7-stage3.patch SHA256 41cbc09212a09e691563bd128854743e390879b67abc3ffc880967ba5d4aa56e. No commits, staging, reference changes, main-tree writes, or main-target builds. The optional kernel closure harness initially selected newer cached dependencies; its final run reused the frozen Cargo.lock with blake3 pinned to 1.8.5. The actual product Gate1b used the unchanged workspace lock throughout."
+}

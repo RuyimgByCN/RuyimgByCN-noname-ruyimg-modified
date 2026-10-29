@@ -1,0 +1,14 @@
+5efb7170 docs: extend NC08 trigger statistics to core character packs
+ docs/architecture/native-remaining-ledger.md       |    4 +-
+ .../2026-10-29-nc08-core-pack-statistics/README.md |   47 +
+ .../doc-checks-adr.log                             |    7 +
+ .../doc-checks-linerefs.log                        |    9 +
+ .../doc-checks-links.log                           |    1 +
+ .../end-time.txt                                   |    1 +
+ .../filter-snippets.txt                            |  147 ++
+ .../hits-core.json                                 | 1588 ++++++++++++++++++++
+ .../scan-core.log                                  |   71 +
+ .../scan_core.py                                   |  175 +++
+ .../source-lines.log                               |    1 +
+ .../start-time.txt                                 |    1 +
+ 12 files changed, 2051 insertions(+), 1 deletion(-)

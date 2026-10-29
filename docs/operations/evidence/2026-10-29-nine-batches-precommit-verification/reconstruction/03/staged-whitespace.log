@@ -1,0 +1,12 @@
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/engine-native-wasm.log:301: new blank line at EOF.
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/game-server-parity.log:1111: new blank line at EOF.
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/game-server.log:3180: new blank line at EOF.
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/smoke-native.log:64: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/smoke-native.log:76: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/smoke-native.log:80: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/wasm-validator-parity.log:129: new blank line at EOF.
+docs/operations/evidence/2026-10-29-gt014-import-deep-validation/web-typecheck.log:4: new blank line at EOF.
+EXIT_CODE: 2

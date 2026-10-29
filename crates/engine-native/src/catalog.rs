@@ -696,7 +696,7 @@ pub trait SkillBehavior: Send + Sync {
 
     /// G1 规则宿主：宿主原语行为标识（非宿主行为返回 None）。
     /// 供恢复期校验快照中的扩展机器定义键与行为标签。
-    fn as_host_behavior(&self) -> Option<crate::content::host::HostBehavior> {
+    fn as_host_behavior(&self) -> Option<crate::vocabulary::host::HostBehavior> {
         None
     }
 
@@ -785,6 +785,8 @@ pub struct ContentHooks {
     pub card_intrinsic: CardIntrinsicHook,
     pub host_ask: HostAskHook,
     pub restore_machine: RestoreMachineHook,
+    pub borrow_options: fn(&crate::machine::Ctx<'_>, crate::ids::PlayerId, bool) -> Vec<crate::choice::ChoiceOption>,
+    pub borrowed_owner: fn(&crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId) -> Option<crate::ids::PlayerId>,
 }
 
 impl ContentHooks {
@@ -792,6 +794,8 @@ impl ContentHooks {
         card_intrinsic: |_, _, _| None,
         host_ask: |_, _, _, _, _, _, _, _| None,
         restore_machine: |_, _| None,
+        borrow_options: |_, _, _| Vec::new(),
+        borrowed_owner: |_, _, _| None,
     };
 }
 
@@ -800,7 +804,7 @@ pub struct Catalog {
     pub cards: Vec<CardDef>,
     pub skills: Vec<SkillDef>,
     /// 扩展武将（G1 角色包管线）：接在基础武将表之后的目录条目。
-    pub extension_generals: Vec<crate::content::extension::ExtensionGeneral>,
+    pub extension_generals: Vec<crate::vocabulary::generals::ExtensionGeneral>,
     /// 从启用扩展初始化声明派生的全局授技；恢复时随目录重建，不入存档。
     pub extension_global_skills: Vec<SkillDefId>,
     /// 事件类别 -> 触发定义列表（静态，运行时按实例过滤）。
@@ -896,8 +900,8 @@ impl Catalog {
 
     /// 武将总数 = 基础表 + 扩展表（G1 角色包管线）。
     pub fn general_count(&self) -> usize {
-        crate::content::standard::STANDARD_GENERALS.len()
-            + crate::content::standard::BOSS_GENERALS.len()
+        crate::vocabulary::generals::STANDARD_GENERALS.len()
+            + crate::vocabulary::generals::BOSS_GENERALS.len()
             + self.extension_generals.len()
     }
 
@@ -905,9 +909,9 @@ impl Catalog {
     pub fn general_meta(
         &self,
         g: u16,
-    ) -> Option<(&'static str, Faction, Vec<&'static str>, u32, crate::content::standard::Gender)>
+    ) -> Option<(&'static str, Faction, Vec<&'static str>, u32, crate::vocabulary::generals::Gender)>
     {
-        let base = crate::content::standard::STANDARD_GENERALS;
+        let base = crate::vocabulary::generals::STANDARD_GENERALS;
         if (g as usize) < base.len() {
             let (name, faction, skills, hp, gender) = base[g as usize];
             return Some((name, faction, skills.to_vec(), hp, gender));
@@ -920,7 +924,7 @@ impl Catalog {
         }
         // Boss 内置武将段（v208）：动态尾段（在全部启用扩展之后——扩展
         // 将 def 约定不受扰动；boss 将 def=base+ext_n+i 随启用集浮动）
-        let boss = crate::content::standard::BOSS_GENERALS;
+        let boss = crate::vocabulary::generals::BOSS_GENERALS;
         let boss_start = base.len() + self.extension_generals.len();
         if (g as usize) >= boss_start && (g as usize) < boss_start + boss.len() {
             let (name, faction, skills, hp, gender) = boss[g as usize - boss_start];

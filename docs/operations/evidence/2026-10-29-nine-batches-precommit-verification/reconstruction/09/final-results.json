@@ -1,0 +1,14 @@
+[
+  {
+    "command": "cargo check --offline --workspace --all-targets",
+    "exit_code": 0,
+    "seconds": 37.05093002319336,
+    "log": "final-00.log"
+  },
+  {
+    "command": "cargo test --offline --workspace --no-fail-fast",
+    "exit_code": 101,
+    "seconds": 387.29642605781555,
+    "log": "final-01.log"
+  }
+]

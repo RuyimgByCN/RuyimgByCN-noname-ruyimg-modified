@@ -1,0 +1,104 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 3,
+  "commands": [
+    {
+      "group": "early-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 2.135499954223633,
+      "log": "early-00.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p content-compiler --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 0.3932180404663086,
+      "log": "early-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 37.1308970451355,
+      "log": "early-02.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.06258296966552734,
+      "log": "early-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 1.1595089435577393,
+      "log": "early-04.log"
+    },
+    {
+      "group": "frontend-rerun-results",
+      "command": "pnpm --dir apps/web-client test",
+      "exit_code": 0,
+      "seconds": 0.8520083427429199,
+      "log": "frontend-rerun-00.log"
+    },
+    {
+      "group": "frontend-rerun-results",
+      "command": "pnpm --dir apps/web-client typecheck",
+      "exit_code": 0,
+      "seconds": 1.196962833404541,
+      "log": "frontend-rerun-01.log"
+    },
+    {
+      "group": "frontend-rerun-results",
+      "command": "pnpm --dir apps/web-client smoke:native",
+      "exit_code": 0,
+      "seconds": 0.45069193840026855,
+      "log": "frontend-rerun-02.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 1.2265510559082031,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "cargo test --offline -p engine-native-wasm --test gt014_import_validation_parity",
+      "exit_code": 0,
+      "seconds": 25.44454288482666,
+      "log": "targeted-00.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "cargo test --offline -p engine-native-wasm --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 2.1177778244018555,
+      "log": "targeted-01.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "pnpm --dir apps/web-client test",
+      "exit_code": 1,
+      "seconds": 0.7946121692657471,
+      "log": "targeted-02.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "pnpm --dir apps/web-client typecheck",
+      "exit_code": 2,
+      "seconds": 1.3195061683654785,
+      "log": "targeted-03.log"
+    },
+    {
+      "group": "wasm-build-results",
+      "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg -- --offline",
+      "exit_code": 0,
+      "seconds": 46.89440393447876,
+      "log": "wasm-build-00.log"
+    }
+  ]
+}

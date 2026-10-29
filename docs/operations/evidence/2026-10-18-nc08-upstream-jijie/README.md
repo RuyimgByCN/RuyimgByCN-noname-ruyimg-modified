@@ -6,7 +6,7 @@
 - 结论：**3 项通过（含行为面），未发现差异**（取牌位置 / 目标范围 / 限次均与上游一致）
 - **基准面**：`character/standard/skill.js`
 - **命名提示**：上游键 `xinfu_jijie` 在 **`translate.js`** 中映射为「**机捷**」（**不是**「新服结姻」）；
-  原生常量 **`JI_JIE`**（`names.rs:46`）——按上游键名检索原生源码会**查不到**（见实现索引）
+  原生常量 **`JI_JIE`**（`vocabulary/names.rs:46`）——按上游键名检索原生源码会**查不到**（见实现索引）
 
 ## 1 上游源码（归档快照，逐字引用；见 [upstream-jijie.js.txt](upstream-jijie.js.txt)）
 

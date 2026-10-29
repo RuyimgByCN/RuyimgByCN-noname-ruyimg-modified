@@ -586,51 +586,7 @@ pub(super) fn upstream_same_suit(ctx: &Ctx<'_>, cards: &[CardId]) -> bool {
         .all(|c| ctx.catalog.cards[*c as usize].suit == suit)
 }
 
-/// 羊皮卷发现类别池（swd 第十三批 v97）：上游 `get.inpile(type)` 按通用
-/// type 枚举；原生按目录牌种枚举——gwent/炉石/古剑机关/食物/欢乐等
-/// 专用牌种不入池（登记边界）。Tag：0=基本 1=锦囊 2=装备。
-pub fn yangpijuan_class(kind: CardKind) -> Option<u8> {
-    use CardKind as K;
-    match kind {
-        K::Sha
-        | K::FireSha
-        | K::LeiSha
-        | K::Shan
-        | K::Tao
-        | K::Jiu
-        | K::Hufu
-        | K::Caoyao
-        | K::Tianxianjiu => Some(0),
-        K::SavageAttack
-        | K::ArcheryAttack
-        | K::Duel
-        | K::Nullify
-        | K::Le
-        | K::Bing
-        | K::ShanDian
-        | K::Dismantle
-        | K::Snatch
-        | K::Chain
-        | K::Wuzhong
-        | K::Taoyuan
-        | K::Wugu
-        | K::Jiedao
-        | K::WangmeiZhike
-        | K::Shuigong
-        | K::Fudichouxin
-        | K::Chenhuodajie
-        | K::HongShui
-        | K::Toulianghuanzhu
-        | K::Youdishenru
-        | K::Geanguanhuo
-        | K::Caochuanjiejian
-        | K::Guiyoujie
-        | K::Zhufangshenshi
-        | K::Liuxinghuoyu => Some(1),
-        _ if kind.equip_slot().is_some() => Some(2),
-        _ => None,
-    }
-}
+pub use crate::vocabulary::card_skills::yangpijuan_class;
 
 pub(super) fn ctianfu_clear(ctx: &mut crate::machine::Ctx<'_>, owner: u8) {
     if let Some(cid) = ctx.core.player(owner).ctianfu_card {

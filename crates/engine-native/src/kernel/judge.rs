@@ -228,7 +228,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         // 鬼道/鬼才「旧牌归改判者」不同）
                         let tianlun = ctx
                             .catalog
-                            .skill_by_name(crate::content::host::SWD_TIANLUN_KEY)
+                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
                             .map(|d| ctx.core.has_skill(rewriter, d))
                             .unwrap_or(false);
                         if tianlun {
@@ -301,14 +301,14 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         };
                         let p = ctx.core.player(r);
                         // 鬼才：任意手牌可改判（不依赖黑色）
-                        let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
+                        let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
                         let has_gui_cai =
                             gui_cai.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
                         let has_any_hand = has_gui_cai && !p.hand.is_empty();
                         // 天道：任意手牌或装备牌可改判（hes 全量，规则 v263）
                         let tian_dao = ctx
                             .catalog
-                            .skill_by_name(crate::content::standard::BOSS_TIANDAO);
+                            .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
                         let has_tian_dao =
                             tian_dao.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
                         // 改天道（swd 孤月）：同天道——hes 全量可改判
@@ -339,7 +339,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     // 全场判定区牌（上游 tianlun 的 dialog list 同口径）
                     if ctx
                         .catalog
-                        .skill_by_name(crate::content::host::SWD_TIANLUN_KEY)
+                        .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
                         .map(|d| ctx.core.has_skill(rewriter, d))
                         .unwrap_or(false)
                     {
@@ -393,14 +393,14 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         )
                     };
                     // 鬼才持有者：全部手牌可打（不限花色）
-                    let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
+                    let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
                     let gui_cai_holders_any = gui_cai
                         .map(|d| ctx.core.has_skill(rewriter, d))
                         .unwrap_or(false);
                     // 天道持有者：全部手牌与装备牌可打（hes 全量，规则 v263）
                     let tian_dao = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::BOSS_TIANDAO);
+                        .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
                     let tian_dao_holders_any = tian_dao
                         .map(|d| ctx.core.has_skill(rewriter, d))
                         .unwrap_or(false);
@@ -514,7 +514,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // + trigger.direct 同口径）。
             let has_gaiming = ctx
                 .catalog
-                .skill_by_name(crate::content::host::HLSS_GAIMING_KEY)
+                .skill_by_name(crate::vocabulary::host::HLSS_GAIMING_KEY)
                 .map(|def| ctx.core.has_skill(self.owner, def))
                 .unwrap_or(false);
             if has_gaiming {
@@ -622,9 +622,9 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     };
                 }
             }
-            let gui_dao = ctx.catalog.skill_by_name(crate::content::standard::GUI_DAO);
-            let gui_cai = ctx.catalog.skill_by_name(crate::content::standard::GUI_CAI);
-            let tian_du = ctx.catalog.skill_by_name(crate::content::standard::TIAN_DU);
+            let gui_dao = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_DAO);
+            let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+            let tian_du = ctx.catalog.skill_by_name(crate::vocabulary::names::TIAN_DU);
             // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
             // 仅判定阶段拥有者本人持有时由本人询问。
             let tian_du_self = tian_du
@@ -637,7 +637,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // 与鬼道/鬼才并列（座位序同队）
             let tian_dao = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_TIANDAO);
+                .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
             // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
             let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
             let rewriters: Vec<PlayerId> = ctx
@@ -654,7 +654,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         || has(g_tiandao)
                         || has(ctx
                             .catalog
-                            .skill_by_name(crate::content::host::SWD_TIANLUN_KEY))
+                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY))
                 })
                 .collect();
             self.current = Some(JudgementProgress {
@@ -708,7 +708,7 @@ impl JudgePhaseMachine {
         // 锦囊照常弃置、闪电照常传下家）
         let shenyi_voids = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_SHENYI)
+            .skill_by_name(crate::vocabulary::names::BOSS_SHENYI)
             .map(|def| ctx.core.has_skill(owner, def))
             .unwrap_or(false)
             // 隐月·判（T11 Boss 诸葛亮族批 115，规则 v303）：上游
@@ -716,7 +716,7 @@ impl JudgePhaseMachine {
             // ——两臂皆不生效（牌去向不变），与神裔同口径。
             || ctx
                 .catalog
-                .skill_by_name(crate::content::host::HLSS_YUEYIN2_KEY)
+                .skill_by_name(crate::vocabulary::host::HLSS_YUEYIN2_KEY)
                 .map(|def| ctx.core.has_skill(owner, def))
                 .unwrap_or(false);
         match trick_kind {

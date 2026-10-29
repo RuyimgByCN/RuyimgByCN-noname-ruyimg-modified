@@ -65,8 +65,8 @@ fn upstream_defines_the_three_skills() {
 #[test]
 fn native_lacks_the_three_skills() {
     let src = manifest().join("src");
-    let behavior = read(&src.join("content/host/behavior.rs"));
-    let keys = read(&src.join("content/host/keys.rs"));
+    let behavior = read(&src.join("vocabulary/host/behavior.rs"));
+    let keys = read(&src.join("vocabulary/host/keys.rs"));
     for (key, needle) in [
         ("diyjianxiong", "Diyjianxiong"),
         ("xinfu_jingxie", "Jingxie"),

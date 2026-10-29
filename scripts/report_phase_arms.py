@@ -105,7 +105,7 @@ SEMANTIC_CHOICE = {
 
 
 def host_keys() -> dict[str, str]:
-    src = (HOST / "keys.rs").read_text(encoding="utf-8")
+    src = (HOST.parents[1] / "vocabulary/host/keys.rs").read_text(encoding="utf-8")
     return {m.group(1): m.group(2) for m in re.finditer(r'HostBehavior::([A-Za-z0-9_]+)\s*=>\s*"(host:[^"]+)"', src)}
 
 

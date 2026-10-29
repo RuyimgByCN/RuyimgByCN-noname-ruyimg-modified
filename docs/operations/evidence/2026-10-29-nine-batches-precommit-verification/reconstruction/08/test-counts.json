@@ -1,0 +1,34 @@
+[
+  {
+    "log": "corrected-02.log",
+    "passed_failed_ignored": [
+      465,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "corrected-01.log",
+    "passed_failed_ignored": [
+      1644,
+      0,
+      73
+    ]
+  },
+  {
+    "log": "early-01.log",
+    "passed_failed_ignored": [
+      541,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "wasm-02.log",
+    "passed_failed_ignored": [
+      2,
+      0,
+      0
+    ]
+  }
+]

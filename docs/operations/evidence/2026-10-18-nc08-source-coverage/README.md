@@ -81,12 +81,12 @@ L12/L29）。**口径警示**：登记表 `status = resolved` **不等于**来�
 
 见 **[g1-conversion-recipe.md](g1-conversion-recipe.md)**：实测 `huanle-upstream-noname` 的
 `manifest.json` + `assets/cards.json` 字段结构，给出可机械执行的 1–3 步与**关键前置**
-（步骤 4 的技能 → `host:<key>` 映射，键必须已存在于 `content/host/keys.rs`）。
+（步骤 4 的技能 → `host:<key>` 映射，键必须已存在于 `vocabulary/host/keys.rs`）。
 → 凡上游技能在原生**没有**对应键者，属 **A 类（需先实现）**，**不能**靠写数据蒙混。
 
 ## 1g 「技能 → 宿主键」清单：**自动同名比对不可用**（负面结果，如实登记）
 
-对 5 个 B 类来源做了自动抽取（上游 `lib.skill` 键名 vs 原生 `content/host/keys.rs` 键名）：
+对 5 个 B 类来源做了自动抽取（上游 `lib.skill` 键名 vs 原生 `vocabulary/host/keys.rs` 键名）：
 
 | 来源 | 抽取到的疑似技能键 | 与原生 host 键**同名**者 |
 |---|---:|---:|
@@ -110,7 +110,7 @@ L27 选将美化 ≈**45**、L10 史诗卡牌 ≈**37**、L19 末日乱斗 ≈**
 **不可靠**（命名不同：上游 `yiji` 在原生是常量 **`JI_JI`**，文档注释写明「郭嘉「遗计」」）→
 该法得出「43 个未实现」**多为误报**（`jianxiong`/`fankui`/`jizhi`/`yiji` 等实际**均已实现**）。
 
-**可靠方法**：`crates/engine-native/src/content/standard/names.rs` 中**每个技能常量都带文档注释**
+**可靠方法**：`crates/engine-native/src/vocabulary/names.rs` 中**每个技能常量都带文档注释**
 （武将名 + 技能名），是**实现信号**；该文件共 **216 条** `pub const …: &str` 常量。
 清单（含技能中文名/常量名/注释首段）见 [standard-skill-implementation.txt](standard-skill-implementation.txt)。
 

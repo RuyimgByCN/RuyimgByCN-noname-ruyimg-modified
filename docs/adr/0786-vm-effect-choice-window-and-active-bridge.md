@@ -1,6 +1,6 @@
 # ADR 0786：VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥，草案）
 
-日期：2026-10-28　|　状态：**J1 已实施（2026-10-29，规则 v328，工作树未提交，[证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)）；J2 仍为草案**
+日期：2026-10-28　|　状态：**J1 已实施（2026-10-29，规则 v328，提交 `b7ebdf30`，[证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)）；J2 已授权待实施（2026-10-29，规则 v329 / 宿主 ABI 758，见裁决第 17 项）**
 关联：[DSL 迁移计划](../architecture/native-dsl-migration-plan.md)（§2 J、批⑥、第 5/6 条）、[ADR 0782](0782-extension-backend-and-legacy-js-scope.md)、[ADR 0778](0778-native-c0-pack-data-keys.md)、[裁决登记第 5 项](../operations/evidence/2026-10-28-user-decisions/README.md)
 
 ## 背景
@@ -14,7 +14,7 @@ T8 接线（[rvm_bridge.rs](../../crates/engine-native/src/rvm_bridge.rs)）落�
 1. **效果级选择窗**：旧线 `discard_hand_equip_count(N>0)` 实为「开窗选恰好 N 张、按所选弃置」；原生桥无「效果**落地时**开窗挂起」的挂起点——批④-2 以确定性首 N 近似（`rvm_ops.rs`：手牌优先、装备补足、不足尽弃），`N=0`（VM 首发开选牌）在 accept 期直接拒绝（`DiscardHandEquipCount 选牌首发未接`）。牵连同族：`ChooseDiscardEquipmentPreventCurrentDamage`、`choose_other_damage`（48 技能）、`choose_use_virtual_sha`（33 技能）；`discard_hand_equip_count` 影响面 80 技能。另有 §2 L（card_targeted 模块体逐目标 `event_player`）需逐目标窗口，随本基建一并评估。
 2. **主动技桥**：npack `active_index`（主动技声明：技能、模块入口、用法约束）在引擎侧**无任何消费**；`active`／view_as 不走触发桥（sp 728 技能中大量主动技偏置）。N01 胆守／平寇依赖「批⑥ + §2 J」两者，迁移计划第 5 条建议合并单批并先立本 ADR。
 
-## 决策（草案）
+## 决策（J1 已实施；J2 已授权待实施）
 
 ### A. 效果级选择窗挂起（§2 J）
 
@@ -47,8 +47,10 @@ T8 接线（[rvm_bridge.rs](../../crates/engine-native/src/rvm_bridge.rs)）落�
 
 ## 状态
 
-草案。本 ADR 属[裁决登记第 5 项](../operations/evidence/2026-10-28-user-decisions/README.md)授权的「设计与 ADR 起草」范围；**VM 提交协议扩展（`MachineSnapshot::Rvm` 提交期挂起字段）、选择/命令协议的具体改动、`RULE_VM_ABI_VERSION` 与规则/存档升号，实施前仍须分别请示**。未拍板前，批④的确定性近似与登记差异照旧，不因本草案改变。
+**历史状态（2026-10-28）**：草案。本 ADR 属[裁决登记第 5 项](../operations/evidence/2026-10-28-user-decisions/README.md)授权的「设计与 ADR 起草」范围；**VM 提交协议扩展（`MachineSnapshot::Rvm` 提交期挂起字段）、选择/命令协议的具体改动、`RULE_VM_ABI_VERSION` 与规则/存档升号，实施前仍须分别请示**。未拍板前，批④的确定性近似与登记差异照旧，不因本草案改变。
 
 **2026-10-28 23:28 补记**：用户采纳 J1（[裁决登记第 13 项](../operations/evidence/2026-10-28-user-decisions/README.md)）：DSL 原语取方案①、不新增原语、`RULE_VM_ABI_VERSION` 不变，规则升 v327→v328，存档预计保持 v105，应答复用既有 Answer 与 ChoiceKind；需要新增 ChoiceKind 变体、prompt 载荷或升存档格式时另行请示。J2 与 ABI 升号未授权；先做 754–758 级原语盘点（只分析）。
 
 **2026-10-29 实施补记**：J1 已按上述边界实施（规则 **v328**、存档 v105 尾追、ABI 753 不变）。§A.3 的「受限 prompt 键」落地为 `KNOWN_PROMPTS` 表尾追加 `"rvm_discard_pick"`（`ChoiceKind::SelectCards` 复用、Answer 通道不变；解读见证据 §6）。反例红→绿、存读档（GT-011 口径）、不足封顶／空过、N=0 编译期拒绝与 golden 探针见[证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)。§5 的 754–758 原语盘点亦在该证据（756–758 三级在原生宿主均未实现，757/758 依赖 J2）。
+
+**2026-10-29 J2 授权补记**：用户明确选择“批准 J2：v329 / ABI758（推荐）”，采纳[本批实施方案](../operations/evidence/2026-10-29-adr0786-j2-proposal/README.md)，见[裁决第 17 项](../operations/evidence/2026-10-28-user-decisions/README.md)。F7 前置完成后接入 active_index→ActivateSkill 与 ABI 756–758 三原语；规则 v329 本批独占，三原语实际实现并验证后才升宿主 ABI 758。预计保持存档 v105；复用既有命令、ChoiceKind 与静态 prompt 机制，允许尾部登记本批静态键；新增 ChoiceKind、参数化 prompt、新 Worker/WS 命令或升存档格式须另行裁决。v328 及更早原生规则档明确拒绝、旧包/旧锁原件保留。J2 尚未实施，不把 N01 子包通过当 onlyOL 整包完成。

@@ -4,7 +4,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 爆敛（Boss 白无常/牛头，规则 v255）：结束阶段摸 2
     if let Some(bldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_BAOLIAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_BAOLIAN)
     {
         if ctx.core.has_skill(player, bldef) {
             ctx.draw_cards(player, 2);
@@ -14,7 +14,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 牌角色处随机获得一张手牌（随机→首张确定性近似登记）
     if let Some(qzdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_QIANGZHENG)
+        .skill_by_name(crate::vocabulary::names::BOSS_QIANGZHENG)
     {
         if ctx.core.has_skill(player, qzdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -38,7 +38,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 恒发动确定性近似登记）
     if let Some(xsdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XIAOSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_XIAOSHOU)
     {
         if ctx.core.has_skill(player, xsdef) {
             let hp_self = ctx.core.player(player).hp;
@@ -59,7 +59,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 登记；链接机直写+Linked 日志，索链甲同款）
     if let Some(smdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SUOMING)
+        .skill_by_name(crate::vocabulary::names::BOSS_SUOMING)
     {
         if ctx.core.has_skill(player, smdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -80,7 +80,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // boss_tianyu link 同口径；索链甲/锁足 linked 直写同款）
     if let Some(tydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_TIANYU)
+        .skill_by_name(crate::vocabulary::names::BOSS_TIANYU)
     {
         if ctx.core.has_skill(player, tydef) {
             if ctx.core.player(player).linked {
@@ -108,7 +108,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 面+首个确定性近似登记；风雪刃翻面写同款）
     if let Some(jhdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JUHUN)
+        .skill_by_name(crate::vocabulary::names::BOSS_JUHUN)
     {
         if ctx.core.has_skill(player, jhdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -131,7 +131,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     //（上游 boss_wuliang phaseJieshuBegin draw 2 同口径）
     if let Some(wldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_WULIANG)
+        .skill_by_name(crate::vocabulary::names::BOSS_WULIANG)
     {
         if ctx.core.has_skill(player, wldef) {
             ctx.draw_cards(player, 2);
@@ -141,7 +141,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 角色各造成 1 点火焰伤害（无询问直伤）
     if let Some(lydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_LIANYU)
+        .skill_by_name(crate::vocabulary::names::BOSS_LIANYU)
     {
         if ctx.core.has_skill(player, lydef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -164,7 +164,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 似登记）
     if let Some(xcdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XUECHI)
+        .skill_by_name(crate::vocabulary::names::BOSS_XUECHI)
     {
         if ctx.core.has_skill(player, xcdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -182,7 +182,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 上游原样，native 不复刻；equip6 宝物面随宝物栏机制登记）
     if let Some(sfdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SHENGFU)
+        .skill_by_name(crate::vocabulary::names::BOSS_SHENGFU)
     {
         if ctx.core.has_skill(player, sfdef) {
             use crate::catalog::CardKind::{HorseMinus, HorsePlus};
@@ -209,7 +209,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // randomGet→首个确定性近似登记）
     if let Some(lfdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_LEIFU)
+        .skill_by_name(crate::vocabulary::names::BOSS_LEIFU)
     {
         if ctx.core.has_skill(player, lfdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -227,7 +227,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // draw(2)+逐个 damage("fire") 同口径）
     if let Some(hldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ZYHONGLIAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZYHONGLIAN)
     {
         if ctx.core.has_skill(player, hldef) {
             ctx.draw_cards(player, 2);
@@ -250,7 +250,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // isTurnedOver 逐个 loseHp 同口径）
     if let Some(fhdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_FANGHUA)
+        .skill_by_name(crate::vocabulary::names::BOSS_FANGHUA)
     {
         if ctx.core.has_skill(player, fhdef)
             && ctx.core.players.iter().any(|p| p.alive && p.face_down)
@@ -272,7 +272,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 造成 1 点伤害
     if let Some(xxdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XIAOXIONG)
+        .skill_by_name(crate::vocabulary::names::BOSS_XIAOXIONG)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -300,7 +300,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 全体 loseHp 同口径）
     if let Some(ssdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SHANGSHIX)
+        .skill_by_name(crate::vocabulary::names::BOSS_SHANGSHIX)
     {
         if ctx.core.has_skill(player, ssdef) && ctx.core.player(player).hp > 1 {
             let seats = ctx.core.players.len() as PlayerId;
@@ -319,7 +319,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 除；随机→座位序首个确定性近似登记）
     if let Some(gmdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_GUIMOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_GUIMOU)
     {
         if ctx.core.has_skill(player, gmdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -339,7 +339,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 同口径）
     if let Some(mtdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_MENGTAI)
+        .skill_by_name(crate::vocabulary::names::BOSS_MENGTAI)
     {
         if ctx.core.has_skill(player, mtdef) && ctx.core.turn.mengtai_draw_pending {
             ctx.core.turn.mengtai_draw_pending = false;
@@ -364,7 +364,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // phaseAfter storage=hp 同口径；跨回合持久）
     if let Some(jdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JUYUAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_JUYUAN)
     {
         if ctx.core.has_skill(player, jdef) {
             let hp = ctx.core.player(player).hp;
@@ -377,7 +377,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // card，乱常万箭同款）
     if let Some(bdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_BINGXIAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_BINGXIAN)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -401,7 +401,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // phaseJieshuBegin draw(9-count) 同口径）
     if let Some(jdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU)
     {
         if ctx.core.has_skill(player, jdef) {
             let n = ctx.core.player(player).hand.len();
@@ -415,7 +415,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 游 boss_tanyu_hp phaseJieshuBegin isMaxHandcard 同口径）
     if let Some(tydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_TANYU)
+        .skill_by_name(crate::vocabulary::names::BOSS_TANYU)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -438,7 +438,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // end phaseJieshuBegin useCard wanjian 同口径）
     if let Some(ldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_LUANCHANG)
+        .skill_by_name(crate::vocabulary::names::BOSS_LUANCHANG)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -466,7 +466,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 由穷奇选牌，登记差异）
     if let Some(dudef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YANDU)
+        .skill_by_name(crate::vocabulary::names::BOSS_YANDU)
     {
         let holders: Vec<PlayerId> = ctx
             .core

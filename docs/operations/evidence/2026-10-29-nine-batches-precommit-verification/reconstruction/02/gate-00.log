@@ -1,0 +1,11 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo check --offline -p engine-native --all-targets
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target
+RUSTFLAGS=-D warnings
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-native)
+    Checking content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/content-native-loader)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.76s
+
+EXIT_CODE: 0

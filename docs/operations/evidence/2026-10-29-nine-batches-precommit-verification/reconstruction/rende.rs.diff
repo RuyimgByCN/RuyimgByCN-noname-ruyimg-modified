@@ -1,0 +1,13 @@
+--- crates/engine-native/src/content/standard/skills/rende.rs
++++ final
+@@ -137,9 +137,7 @@
+                 // 出牌阶段累计给出数判定——此前 <2 且累计后 ≥2 时回复
+                 // 1 点（每次发动都可给牌，无每回合一次限制）。
+                 let num_before = ctx.core.turn.rende_given;
+-                for c in &self.cards {
+-                    ctx.give_hand_card(self.owner, target, *c);
+-                }
++                ctx.give_hand_cards(self.owner, target, &self.cards);
+                 let given = self.cards.len() as u8;
+                 ctx.core.turn.rende_given = num_before.saturating_add(given);
+                 if num_before < 2 && num_before + given > 1 {

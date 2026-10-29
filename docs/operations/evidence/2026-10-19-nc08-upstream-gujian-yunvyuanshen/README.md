@@ -29,8 +29,8 @@ yunvyuanshen: {
 
 **原生实现引用**：`content/host/step/gujian.rs:220`（食物式机器：
 `CardKind::Yunvyuanshen => (GJ_YUNVYUANSHEN_LISTENER_KEY, GJ_FOOD_ROUNDS_DEFAULT)`）；
-`constants.rs:142`（`GJ_YUNVYUANSHEN_LISTENER_KEY = "gj_yunvyuanshen_listener"`）；
-`keys.rs:357`（`HostBehavior::GujianYunvyuanshen => "host:gujian_yunvyuanshen"`）；
+`vocabulary/host/constants.rs:136`（`GJ_YUNVYUANSHEN_LISTENER_KEY = "gj_yunvyuanshen_listener"`）；
+`vocabulary/host/keys.rs:357`（`HostBehavior::GujianYunvyuanshen => "host:gujian_yunvyuanshen"`）；
 `filtering/common.rs:625`（子技触发：**自己濒死**）。
 
 ## 3 方法学更正（**同日，第 8 次**）

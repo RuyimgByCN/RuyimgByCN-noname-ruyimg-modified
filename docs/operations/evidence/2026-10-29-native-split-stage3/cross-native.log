@@ -1,0 +1,21 @@
+    Blocking waiting for file lock on artifact directory
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 28.52s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-37ac6b2ab31e9259)
+
+running 1 test
+
+thread 'nc08_cross_target_real::native_standard_one_player_trajectory' (5457448) panicked at crates/engine-native/tests/groups/../nc08_cross_target_real.rs:98:50:
+create native trajectory output: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc08_cross_target_real::native_standard_one_player_trajectory ... FAILED
+
+failures:
+
+failures:
+    nc08_cross_target_real::native_standard_one_player_trajectory
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 94 filtered out; finished in 0.05s
+
+error: test failed, to rerun pass `-p engine-native --test nc08`

@@ -8,7 +8,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 不经距离/目标数校验=乱剑同口径）
     if let Some(wsdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_WANGSHENG)
+        .skill_by_name(crate::vocabulary::names::BOSS_WANGSHENG)
     {
         if ctx.core.has_skill(player, wsdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -26,7 +26,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     // mingxingzhu 授 boss_jiding 面依赖武将未入库，登记差异）
     if let Some(xqdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XINGQIU)
+        .skill_by_name(crate::vocabulary::names::BOSS_XINGQIU)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -68,7 +68,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     // phaseUseBegin draw(9-count) 同口径）
     if let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIUSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU)
     {
         if ctx.core.has_skill(player, def) {
             let n = ctx.core.player(player).hand.len();
@@ -92,7 +92,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 上游 canUse 过滤同口径）
     if let Some(mjdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_MOJIAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_MOJIAN)
     {
         if ctx.core.has_skill(player, mjdef) {
             let seats = ctx.core.players.len() as PlayerId;
@@ -111,7 +111,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 方使用【南蛮入侵】（魔剑同款虚拟南蛮）
     if let Some(ysdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YUSHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_YUSHOU)
     {
         if ctx.core.has_skill(player, ysdef) {
             let seats = ctx.core.players.len() as PlayerId;

@@ -1,0 +1,151 @@
+RECONSTRUCTION VALIDATION (not historical evidence)
+COMMAND: cargo test --offline -p engine-native-wasm --test gt014_import_validation_parity
+CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target
+RUSTFLAGS=
+   Compiling unicode-ident v1.0.24
+   Compiling once_cell v1.21.4
+   Compiling proc-macro2 v1.0.106
+   Compiling wasm-bindgen-shared v0.2.126
+   Compiling quote v1.0.46
+   Compiling syn v2.0.118
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling wasm-bindgen-macro v0.2.126
+   Compiling wasm-bindgen v0.2.126
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/content-schema)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/worktree/crates/engine-native-wasm)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:189:4
+    |
+189 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:797:4
+    |
+797 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:858:4
+    |
+858 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:920:4
+    |
+920 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:929:4
+    |
+929 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:955:4
+    |
+955 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:964:4
+    |
+964 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1003:4
+     |
+1003 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+     |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1012:4
+     |
+1012 | fn sj_apply(config_json: &str, commands: &str) -> String {
+     |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1020:4
+     |
+1020 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1028:4
+     |
+1028 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1036:4
+     |
+1036 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1044:4
+     |
+1044 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1052:4
+     |
+1052 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1060:4
+     |
+1060 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1068:4
+     |
+1068 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1076:4
+     |
+1076 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1084:4
+     |
+1084 | fn omnisearch_debug(source: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.37s
+     Running tests/gt014_import_validation_parity.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/gt014_import_validation_parity-0ea6778053183a3c)
+
+running 3 tests
+test valid_fixtures_pass_import_validation ... ok
+test same_mutations_as_server_import_are_rejected_at_import_time ... ok
+test package_requiring_newer_host_abi_is_rejected_at_import_time ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+EXIT_CODE: 0

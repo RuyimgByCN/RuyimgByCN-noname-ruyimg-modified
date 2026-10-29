@@ -86,7 +86,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 if !ctx.catalog.blocks_all_cards(ctx.core, responder) {
                     options.extend(shas.into_iter().map(ChoiceOption::Card));
                     // 神弓（swd 批 148）：借用他人武器作为杀
-                    options.extend(crate::content::host::shengong_borrow_options(
+                    options.extend((ctx.catalog.hooks.borrow_options)(
                         ctx, responder, false,
                     ));
                 }
@@ -120,7 +120,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 };
                 let opponent_has_wushuang = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::WU_SHUANG)
+                    .skill_by_name(crate::vocabulary::names::WU_SHUANG)
                     .map(|d| ctx.core.has_skill(wushuang_holder, d))
                     .unwrap_or(false);
                 if opponent_has_wushuang && !self.second_pending {

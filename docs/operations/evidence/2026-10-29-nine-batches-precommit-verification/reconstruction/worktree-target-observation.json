@@ -1,0 +1,26 @@
+[
+  {
+    "file": "target/debug/.fingerprint/engine-native-3cd84a077b8f3c83/lib-engine_native.json",
+    "mtime": "2026-10-29T21:06:09.315176",
+    "rustflags": [],
+    "profile": 8156909947036596715,
+    "metadata": null
+  },
+  {
+    "file": "target/debug/.fingerprint/engine-native-d6d0b45f2f61c58a/lib-engine_native.json",
+    "mtime": "2026-10-29T20:57:09.479208",
+    "rustflags": [],
+    "profile": 6675295047989516842,
+    "metadata": null
+  },
+  {
+    "file": "target/debug/.fingerprint/engine-native-dd5eb680c2c9a8c3/output-lib-engine_native",
+    "mtime": "2026-10-29T20:50:25.194971",
+    "first_diagnostic": "{\"$message_type\":\"diagnostic\",\"message\":\"empty line after doc comment\",\"code\":{\"code\":\"clippy::empty_line_after_doc_comments\",\"explanation\":null},\"level\":\"warning\",\"spans\":[{\"file_name\":\"crates/engine-native/src/content/host/constants.rs\",\"byte_start\":161,\"byte_end\":173,\"line_start\":4,\"line_end\":4,\"column_start\":1,\"column_end\":13,\"is_primary\":false,\"text\":[{\"text\":\"pub const KE: [u8; 5] = [1, 4, 3, 0, 2];\",\"highlight_start\":1,\"highlight_end\":13}],\"label\":\"the comment documents this constant item\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"crate"
+  },
+  {
+    "file": "target/debug/.fingerprint/engine-native-fc1c45969095e1c6/output-lib-engine_native",
+    "mtime": "2026-10-29T20:57:01.188416",
+    "first_diagnostic": "{\"$message_type\":\"diagnostic\",\"message\":\"empty line after doc comment\",\"code\":{\"code\":\"clippy::empty_line_after_doc_comments\",\"explanation\":null},\"level\":\"warning\",\"spans\":[{\"file_name\":\"crates/engine-native/src/content/host/constants.rs\",\"byte_start\":161,\"byte_end\":173,\"line_start\":4,\"line_end\":4,\"column_start\":1,\"column_end\":13,\"is_primary\":false,\"text\":[{\"text\":\"pub const KE: [u8; 5] = [1, 4, 3, 0, 2];\",\"highlight_start\":1,\"highlight_end\":13}],\"label\":\"the comment documents this constant item\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"crate"
+  }
+]

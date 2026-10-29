@@ -1,0 +1,26 @@
+[
+  {
+    "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+    "exit_code": 0,
+    "seconds": 0.060318946838378906,
+    "log": "preflight-00.log"
+  },
+  {
+    "command": "python3 -B -m unittest discover -s scripts -p test_rust_effective_lines.py",
+    "exit_code": 0,
+    "seconds": 0.04877901077270508,
+    "log": "preflight-01.log"
+  },
+  {
+    "command": "python3 -B scripts/check-source-lines.py",
+    "exit_code": 0,
+    "seconds": 3.895404100418091,
+    "log": "preflight-02.log"
+  },
+  {
+    "command": "python3 -B scripts/preflight.py",
+    "exit_code": 0,
+    "seconds": 417.2780222892761,
+    "log": "preflight-03.log"
+  }
+]

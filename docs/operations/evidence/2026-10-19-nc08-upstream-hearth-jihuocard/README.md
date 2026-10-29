@@ -30,7 +30,7 @@ jihuocard: {
 
 **原生实现引用**：`content/host/intrinsic.rs:1024`（`CardKind::Jihuocard` →
 `HostBehavior::JihuocardDraw`）；`content/host/step/skills_status.rs:790`（`JihuocardDraw`，**仅摸牌**）；
-`constants.rs:210`（`HT_JIHUO_KEY = "ht:jihuocard"`，**卡键**非临时技名）。
+`vocabulary/host/constants.rs:204`（`HT_JIHUO_KEY = "ht:jihuocard"`，**卡键**非临时技名）。
 
 ## 3 方法（**命名纪律 + 双向核对**）
 

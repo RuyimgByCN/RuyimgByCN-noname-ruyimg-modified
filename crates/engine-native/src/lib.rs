@@ -28,6 +28,7 @@ pub mod resolution;
 pub mod rng;
 pub mod snap;
 pub mod state;
+pub mod vocabulary;
 
 pub use catalog::{CardKind, Catalog, EquipSlot, SharedCatalog, SkillBehavior, SkillDef, SkillMachine};
 pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};

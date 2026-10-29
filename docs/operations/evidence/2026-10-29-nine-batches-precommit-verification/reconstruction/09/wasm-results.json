@@ -1,0 +1,32 @@
+[
+  {
+    "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg -- --offline",
+    "exit_code": 0,
+    "seconds": 88.23351907730103,
+    "log": "wasm-00.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client smoke:native",
+    "exit_code": 0,
+    "seconds": 0.7090568542480469,
+    "log": "wasm-01.log"
+  },
+  {
+    "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+    "exit_code": 0,
+    "seconds": 46.80769681930542,
+    "log": "wasm-02.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client test",
+    "exit_code": 0,
+    "seconds": 1.860502004623413,
+    "log": "wasm-03.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client typecheck",
+    "exit_code": 0,
+    "seconds": 1.4308209419250488,
+    "log": "wasm-04.log"
+  }
+]

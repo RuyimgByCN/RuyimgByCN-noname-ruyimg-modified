@@ -36,15 +36,7 @@ pub enum ExtensionError {
     InvalidVmModule { name: String },
 }
 
-/// 扩展提供的额外武将条目。
-#[derive(Debug, Clone)]
-pub struct ExtensionGeneral {
-    pub name: &'static str,
-    pub faction: Faction,
-    pub skills: &'static [&'static str],
-    pub max_hp: u32,
-    pub gender: Gender,
-}
+pub use crate::vocabulary::generals::ExtensionGeneral;
 
 /// 开局初始化钩子（G1：扩展声明的对局初始化行为）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]

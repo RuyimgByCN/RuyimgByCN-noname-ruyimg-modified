@@ -836,7 +836,7 @@ mod tests {
             manifest: PackageManifest::new("core", "std", "1.0.0"),
             modules: vec![BytecodeModule {
                 name: "m".into(),
-                code: vec![1, 2, 3],
+                code: rule_vm::assemble(&[rule_vm::Op::Halt]),
                 local_count: 0,
                 max_stack: 8,
                 entry_pc: 0,
@@ -856,7 +856,14 @@ mod tests {
             asset_paths: Default::default(),
             compiler_version: "t".into(),
         };
-        p.modules[0].logic_hash = *blake3::hash(&p.modules[0].code).as_bytes();
+        let module = &mut p.modules[0];
+        module.logic_hash = BytecodeModule::compute_logic_hash(
+            &module.name,
+            &module.code,
+            module.local_count,
+            module.caps_mask,
+            module.entry_pc,
+        );
         p.manifest.logic_hash = p.compute_logic_hash();
         p.to_json_bytes().unwrap()
     }

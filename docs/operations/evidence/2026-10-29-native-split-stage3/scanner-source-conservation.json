@@ -1,0 +1,32 @@
+{
+  "report_event_arms.metadata_events": {
+    "identical": true,
+    "beforeSize": 275,
+    "afterSize": 275
+  },
+  "report_event_arms.metadata_classes": {
+    "identical": true,
+    "beforeSize": 517,
+    "afterSize": 517
+  },
+  "audit_upstream_skill_flags.native_metas": {
+    "identical": true,
+    "beforeSize": 275,
+    "afterSize": 275
+  },
+  "report_g14.host_keys": {
+    "identical": true,
+    "beforeSize": 520,
+    "afterSize": 520
+  },
+  "report_unimplemented_hosts.analyze": {
+    "identical": true,
+    "beforeSize": 2,
+    "afterSize": 2
+  },
+  "host_key_reachability.declared_in_host_rs": {
+    "identical": true,
+    "beforeSize": 56,
+    "afterSize": 56
+  }
+}

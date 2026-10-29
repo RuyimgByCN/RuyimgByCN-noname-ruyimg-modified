@@ -3715,7 +3715,7 @@ swd（U05 杀海拾遗子包）暂缓技消解推进：**2026-10-17 批 100–11
 | **阶段计数起点** | `game.phaseNumber`（全局阶段计数） | `turn.phase_number`（局内计数） | ziyu（待核对） |
 | **阶段锚点** | 上游有**准备阶段**；原生无（相位序列前移，起手 `Judge` vs 旧线 `Draw`） | 已登记（开局差异判定证据） | 身份局开局对照 |
 
-| **转化入口范围**（标准面 `wusheng`） | `enable: ["chooseToUse","chooseToRespond"]`（**使用或打出**） | **「杀」方向响应转化缺失（规则损失，方向不对称）**：决斗要求打出【杀】时选项只含实体【杀】（`kernel/duel.rs:70`）；而**「闪」方向已实现**（`kernel/sha/step.rs:693–1243` 龙胆/倾国） | wusheng |
+| **转化入口范围**（标准面 `wusheng`） | `enable: ["chooseToUse","chooseToRespond"]`（**使用或打出**） | **「杀」方向响应转化缺失（规则损失，方向不对称）**：决斗要求打出【杀】时选项只含实体【杀】（`kernel/duel.rs:70`）；而**「闪」方向已实现**（`kernel/sha/step.rs:672–725`、`kernel/sha/resume.rs:322–345` 龙胆/倾国） | wusheng |
 | **主公技分支**（标准面 `wusheng`） | `get.zhu(player,"shouyue")` → **任意**牌可转化 | 原生**未建模**守约（全 crate 无 `shouyue`） | wusheng |
 | **门槛历史范围**（标准面 `keji`） | `useCard` **与** `respond` 两历史都查【杀】 | 原生只看 `turn.sha_used_play_phase`（出牌阶段使用） | keji |
 | **实现层级**（标准面 `keji`） | 事件级「跳过弃牌阶段」 | 上限级「手牌上限视为无限」（结果等价、事件面不同） | keji |
@@ -3983,11 +3983,11 @@ DBG U08 可达性：catalog 里含 5 个 U08 技能；全库武将引用 0 条
 
 | 面 | 位置 |
 |---|---|
-| 键映射 | `keys.rs:301-305` |
-| 触发元数据 | **`metadata/common.rs:170/188`（`TriggerMeta`）** |
+| 键映射 | `vocabulary/host/keys.rs:301-305` |
+| 触发元数据 | **`vocabulary/host/metadata/common.rs:170/188`（`TriggerMeta`）** |
 | filter | `filtering/common.rs:101/119` |
 | **步骤机** | **`step/skills_damage.rs:7`（反击）、`step/skills_targets.rs:7`（门神）** |
-| ABI tag | `tags.rs:290/292` ⇒ **526（反击）/ 528（门神）** |
+| ABI tag | `vocabulary/host/tags.rs:290/292` ⇒ **526（反击）/ 528（门神）** |
 
 #### v1 差异表
 
@@ -4031,7 +4031,7 @@ pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine
 
 | 面 | 位置 | 状态 |
 |---|---|---|
-| **键映射** | `content/host/keys.rs:301-305` | ✅ 5 个键都在 |
+| **键映射** | `vocabulary/host/keys.rs:301-305` | ✅ 5 个键都在 |
 | **filter** | `content/host/filtering/common.rs:101+`（`YxsFanji` 有 `EventData::Damage(d) if d.target == owner` + `has_sha` 判定）| ✅ **有实际条件** |
 | **触发/效果** | **未定位** | ❓ |
 | **元数据面**（priority 等）| —— | ❓ |
@@ -4141,7 +4141,7 @@ HostBehavior::WudianDuwen => { … Flow::Done }
 
 **来源**：`archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js`
 **原生包**：`packages/extensions/shaai-xianjian-upstream-noname`（**36 武将 / 22 技能**，全部 `host:xj_*`）
-**宿主实现**：`content/host/metadata/xianjian.rs`（**该组共 73 个 `HostBehavior::Xianjian*` 行为**）
+**宿主实现**：`vocabulary/host/metadata/xianjian.rs`（**该组共 73 个 `HostBehavior::Xianjian*` 行为**）
 
 ### 22 个声明技能的 trigger 对照
 
@@ -4401,7 +4401,7 @@ hxunzhi2: {
 |---|---|---|
 | filter | `filtering/common.rs:78` → **`HostBehavior::Hxunzhi2 => false`** | **filter 恒 false** ❗ |
 | step | `step/skills_status.rs:642` → **`Flow::Done`** | 无步骤机 |
-| 触发元数据 | `metadata/common.rs:408` → **`None`** | 无触发 |
+| 触发元数据 | `vocabulary/host/metadata/common.rs:408` → **`None`** | 无触发 |
 
 ⇒ **`hxunzhi2` 是「有键、有 filter 但恒 false」的占位** —— **即使事件发生也不会执行** ✅（**判定确定**）
 
@@ -5269,7 +5269,7 @@ shihuifen   qiankundai   zhufangshenshi   hslingjian_*_equip3_dist   hslingjian_
 | 编号 | 面 | 上游写法 | 原生现状 | 判定 |
 |---|---|---|---|---|
 | **G17a** | **距离修正** | **`globalTo(d) ⇒ d+1`**、**`globalFrom(d) ⇒ d-1`** | **只有 `computed_distance` 的「读」**（`filtering/swd.rs:92/207/229/241`）—— **无「改」的入口** | ❗ **缺（抽样 3/5）** |
-| **G17b** | **手牌上限修正** | **`maxHandcard(num) ⇒ num+1`** | **`state.hand_limit` 是「查询」**（`activation/common.rs:34` 用它）；`metadata.rs:430` 注释：「手牌上限=体力上限在 `state.hand_limit` 查询」—— **无修正器** | ❗ **缺（抽样 1/5）** |
+| **G17b** | **手牌上限修正** | **`maxHandcard(num) ⇒ num+1`** | **`state.hand_limit` 是「查询」**（`activation/common.rs:34` 用它）；`vocabulary/host/metadata.rs:430` 注释：「手牌上限=体力上限在 `state.hand_limit` 查询」—— **无修正器** | ❗ **缺（抽样 1/5）** |
 | **G17c** | **射程/目标覆写** | **`targetInRange(...) ⇒ bool`** | **有 case-by-case 的 `*_target_ok`**（`cyqiaoxie_target_ok`、`hlss_fengqi_target_ok` 等）| ⚠️ **部分（个案式，非通用 `mod`）** |
 
 ### 结论
@@ -5369,7 +5369,7 @@ HostStage::SelectNature → 选目标 → 转化使用
 | 检查 | 结果 |
 |---|---|
 | **`reguhuo_phase` 在 Rust 里** | **零命中** ❌ |
-| **`EPIC_REGUHUO_KEY`（`constants.rs:654`）** | **排除 `constants.rs` 后零使用** ❌ —— **常量定义了却从未接线** |
+| **`EPIC_REGUHUO_KEY`（`vocabulary/host/constants.rs:648`）** | **排除 `constants.rs` 后零使用** ❌ —— **常量定义了却从未接线** |
 | **`step/skills_cards.rs` 收尾** | **`TargetChoice` → … → `Flow::Done`，无「加标记」「移除技能」「计数 +1」** ❌ |
 | **`activation/common.rs:50` 门槛** | 只有 **出牌阶段 && 当前回合是 owner && 手牌非空**，**无次数限制** ❌ |
 
@@ -5399,7 +5399,7 @@ lib.skill.rangjie = {
 }
 ```
 
-**原生**（`filtering/common.rs:210` + `step/skills_cards.rs:201` + `metadata/common.rs:253`）：
+**原生**（`filtering/common.rs:210` + `step/skills_cards.rs:201` + `vocabulary/host/metadata/common.rs:253`）：
 
 ```rust
 filter: Damage(d) if d.target == owner && !d.prevented

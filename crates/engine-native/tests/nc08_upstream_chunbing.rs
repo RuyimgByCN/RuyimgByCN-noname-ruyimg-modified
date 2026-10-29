@@ -182,7 +182,7 @@ fn upstream_chunbing_modeling_difference_is_fixed() {
     );
     let consts = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/src/content/host/constants.rs"
+        "/src/vocabulary/host/constants.rs"
     ))
     .expect("读常量");
     assert!(

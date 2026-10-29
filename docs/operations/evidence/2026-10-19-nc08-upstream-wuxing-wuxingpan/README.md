@@ -38,8 +38,8 @@ help:{ '五行生克':'…每名角色在游戏开始时随机获得一个属性
 | 面 | 原生实现（**逐字**） |
 |---|---|
 | **牌的五行属性** | `state.rs:32`「五行属性（G1 wuxing：**0=金 1=木 2=水 3=火 4=土**；None = 未启用）」；`state.rs:802`「**五行属性表**（牌 id → 属性 …）」 |
-| **生克结算** | `behavior.rs:15`「**五行生克（wuxing）：成为有属性牌的目标时——被克弃一张手牌**」；`keys.rs:318`（`HostBehavior::ShengkeCheck => "host:shengke_check"`） |
-| **五行盘技能** | `behavior.rs:19`「五行盘（wuxing）：**出牌阶段限一次——改变一张手牌的五行属性**」；`activation.rs:125`「五行盘：出牌阶段限一次（**阶段门控在命令边界**），**需手牌非空**」 |
+| **生克结算** | `vocabulary/host/behavior.rs:15`「**五行生克（wuxing）：成为有属性牌的目标时——被克弃一张手牌**」；`vocabulary/host/keys.rs:318`（`HostBehavior::ShengkeCheck => "host:shengke_check"`） |
+| **五行盘技能** | `vocabulary/host/behavior.rs:19`「五行盘（wuxing）：**出牌阶段限一次——改变一张手牌的五行属性**」；`activation.rs:125`「五行盘：出牌阶段限一次（**阶段门控在命令边界**），**需手牌非空**」 |
 
 ⇒ **系统面（属性 + 生克 + 技能）均已在原生实现** ⇒ 本来源的待办**不是「未实现」**，
 而是**行为面尚未逐面采样**（属性赋予、生克两支、技能改属性）。

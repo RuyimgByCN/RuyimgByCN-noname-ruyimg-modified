@@ -1,0 +1,26 @@
+[
+  {
+    "command": "cargo test --offline -p engine-native-wasm --test gt014_import_validation_parity",
+    "exit_code": 0,
+    "seconds": 25.44454288482666,
+    "log": "targeted-00.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native-wasm --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 2.1177778244018555,
+    "log": "targeted-01.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client test",
+    "exit_code": 1,
+    "seconds": 0.7946121692657471,
+    "log": "targeted-02.log"
+  },
+  {
+    "command": "pnpm --dir apps/web-client typecheck",
+    "exit_code": 2,
+    "seconds": 1.3195061683654785,
+    "log": "targeted-03.log"
+  }
+]

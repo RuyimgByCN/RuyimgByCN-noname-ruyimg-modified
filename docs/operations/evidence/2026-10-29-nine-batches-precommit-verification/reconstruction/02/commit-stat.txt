@@ -1,0 +1,37 @@
+f4fdfae0 fix: batch cards_given events and advance rules to v326
+ .../src/content/host/step/xianjian_cards.rs        |    4 +-
+ crates/engine-native/src/content/standard.rs       |    8 +-
+ .../src/content/standard/skills/rende.rs           |    4 +-
+ crates/engine-native/src/event.rs                  |    6 +-
+ crates/engine-native/src/machine.rs                |   50 +-
+ .../engine-native/tests/nc04_cards_given_event.rs  |  137 +
+ crates/engine-native/tests/nc04_vm_resume.rs       |    2 +-
+ crates/engine-native/tests/nc07_lianyaohu_hash.rs  |    4 +-
+ crates/engine-native/tests/pa12_tag656_version.rs  |    4 +-
+ crates/engine-native/tests/replay_scenarios.rs     |   36 +-
+ .../2026-10-29-nc04-cards-given-v326/README.md     |   60 +
+ .../build-native.log                               |  143 +
+ .../capture-v325-fixtures.log                      |   11 +
+ .../cards-given-v325.ngsa                          |  Bin 0 -> 2249 bytes
+ .../content-native-loader.log                      |  101 +
+ .../2026-10-29-nc04-cards-given-v326/end-time.txt  |    1 +
+ .../engine-native-wasm.log                         |  296 +
+ .../engine-native.log                              | 3707 ++++++++++++
+ .../game-server.log                                | 3187 +++++++++++
+ .../2026-10-29-nc04-cards-given-v326/gate1b.log    |    3 +
+ .../golden-after-rerecord.log                      |   11 +
+ .../golden-hex-v326.txt                            |   14 +
+ .../golden-probe-step1-fix-v326.log                |   38 +
+ .../golden-probe-step2-fix-v325.log                |   10 +
+ .../green-targeted.log                             |   46 +
+ .../native-v325.ngsa                               |  Bin 0 -> 1904 bytes
+ .../red-counterexample.log                         |   37 +
+ .../2026-10-29-nc04-cards-given-v326/rule-vm.log   |   53 +
+ .../smoke-native.log                               |   77 +
+ .../source-head.txt                                |    1 +
+ .../source-lines.log                               |    1 +
+ .../start-time.txt                                 |    1 +
+ .../2026-10-29-nc04-cards-given-v326/web-test.log  |  137 +
+ .../web-typecheck.log                              |    4 +
+ .../workspace-check.log                            | 5910 ++++++++++++++++++++
+ 35 files changed, 14057 insertions(+), 47 deletions(-)

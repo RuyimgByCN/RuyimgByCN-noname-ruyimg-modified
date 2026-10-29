@@ -935,6 +935,13 @@ pub(super) fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
             put_u32(h, *amount);
             put_u32(h, skill.raw());
         }
+        EffectRequest::ResolveOlJieDanshou { player, skill } => {
+            put_u8(h, 0);
+            h.update(&771u16.to_le_bytes());
+            put_u32(h, player.raw());
+            put_u32(h, skill.raw());
+        }
+
         _ => unreachable!("effect routed to a different hash group"),
     }
 }

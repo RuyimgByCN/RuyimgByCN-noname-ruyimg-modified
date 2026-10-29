@@ -1,0 +1,3703 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/engine_native-7d1be85d6c1acfe4)
+
+running 17 tests
+test archive::a0_rebuilt_tests::card_kind_encoding_roundtrip_all_variants ... ok
+test content::extension::tests::extension_registry_lifecycle ... ok
+test content::pile::tests::pile_spec_rejects_invalid_entries ... ok
+test archive::a0_rebuilt_tests::card_kind_companion_skills_consistent ... ok
+test content::pile::tests::pile_spec_builds_unique_cards ... ok
+test content::pile::tests::scale_plan_follows_upstream_formula ... ok
+test archive::a0_rebuilt_tests::card_kind_keys_bijective ... ok
+test a0_lib_tests::standard_skill_ids_append_only ... ok
+test ai::active_candidate_tests::variant_zero_does_not_include_active_skill_candidates ... ok
+test ai::active_candidate_tests::variant_two_weights_damage_by_enemy_skill_threat ... ok
+test ai::active_candidate_tests::variant_one_does_not_include_active_skill_candidates ... ok
+test engine::tests::ruleset_version_changes_digest ... ok
+test ai::active_candidate_tests::variant_two_can_choose_granted_active_skill ... ok
+test engine::commands::pa02_simulation_tests::simulation_submit_skips_session_work_and_matches_authoritative_state ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+test ai::active_candidate_tests::variant_two_includes_granted_active_skill_candidates ... ok
+test a0_lib_tests::host_behavior_keys_bijective ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/a0_tag_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/a0_tag_registry-b3b3605909743b35)
+
+running 2 tests
+test host_behavior_tags_unique ... ok
+test machine_snapshot_tags_unique_and_roundtrip ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/ai_content_tuning.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/ai_content_tuning-cabfa35eb2cd6476)
+
+running 3 tests
+test content_tuning_defaults_and_helpers ... ok
+test content_tuning_is_deterministic ... ok
+test content_tuning_prefers_high_weight_enemy ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/ai_planner.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/ai_planner-15e066a154ee02c6)
+
+running 15 tests
+test plan_enumerates_confirm_and_cancel_fallbacks ... ok
+test redact_shuffles_unknown_pool_when_deck_present ... ok
+test redact_preserves_card_ownership_and_multiset ... ok
+test plan_pipeline_works_with_hidden_opponent_cards ... ok
+test policy_and_plan_reject_cleanly_at_dedup_exhaustion ... ok
+test plan_apply_roundtrip_at_high_water ... ok
+test redact_deterministic_with_empty_deck_fallback ... ok
+test plan_enumerates_single_choice_fallbacks ... ok
+test t13_plan_cancel_mid_run_cross_thread ... ok
+test t13_plan_pool_more_seats_than_workers_keeps_order ... ok
+test policy_v2_plays_value_card_and_is_deterministic ... ok
+test t13_plan_pool_parallel_matches_sequential ... ok
+test plan_sim_uses_session_high_water ... ok
+test two_ply_lookahead_deterministic_and_bounded ... ok
+test policy_v2_drives_all_seats_without_answer_routing_panic ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/auth_archive.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/auth_archive-a388cb125d6784ba)
+
+running 6 tests
+test authed_submit_rejects_impersonation_and_unknown_token ... ok
+test auth_token_reissue_revokes_old ... ok
+test archive_detects_tampering_and_version ... ok
+test auth_tokens_do_not_survive_archive ... ok
+test snapshot_archive_roundtrip_rest_and_window ... ok
+test session_layer_reconnect_out_of_order_and_dedup ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/boss_play_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/boss_play_eight-df2c4bc6cdc977d3)
+
+running 2 tests
+test l03_eight_dimension_from_fresh_install ... ok
+test u02_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/boundary_snapshot.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/boundary_snapshot-82c0b392ec595da0)
+
+running 71 tests
+test duplicate::duplicate_selection_rejected_by_spec ... ok
+test commands::commands_by_non_current_player_rejected ... ok
+test duplicate::duplicate_and_zero_dedup_rejected ... ok
+test answer::answer_by_wrong_player_rejected ... ok
+test archive::archive_choice_kind_jiji_target_roundtrip ... ok
+test archive::archive_choice_kind_discard_to_limit_roundtrip ... ok
+test answer::answer_without_open_choice_rejected ... ok
+test archive::archive_choice_kind_nullify_window_roundtrip ... ok
+test archive::archive_choice_kind_tian_du_gain_roundtrip ... ok
+test archive::archive_rejects_unknown_prompt_and_v1_bytes ... ok
+test out::out_of_bounds_actor_rejected ... ok
+test out::out_of_bounds_ids_rejected_not_panic ... ok
+test guidao::guidao_rewrite_mixed_hand_and_equip_options ... ok
+test archive::archive_choice_kind_duel_sha_roundtrip ... ok
+test abort::abort_segment_truncates_log ... ok
+test archive::archive_hardening_rejects_unknown_kind_and_trailing_bytes ... ok
+test open::open_segment_checkpoint_association_positive ... ok
+test guidao::guidao_rewrite_with_real_black_equip_only ... ok
+test pause::pause_roundtrip_duel_respond ... ok
+test pause::pause_roundtrip_chain_target_window ... ok
+test pause::pause_roundtrip_discard_to_limit ... ok
+test pause::pause_roundtrip_guidao_active_rewrite ... ok
+test pause::pause_roundtrip_aoe_mid_queue ... ok
+test pause::pause_roundtrip_active_nullify_chain ... ok
+test pause::pause_roundtrip_dying_save ... ok
+test pause::pause_roundtrip_guidao_rewrite ... ok
+test pause::pause_roundtrip_judge_window ... ok
+test pause::pause_roundtrip_guidao_pass ... ok
+test pause::pause_roundtrip_nullify_reshuffle_chain ... ok
+test pause::pause_roundtrip_judge_lightning_dying_save ... ok
+test restore::restore_rejects_all_cards_missing ... ok
+test restore::restore_carries_dedup_high_water ... ok
+test restore::restore_accepts_park_depth_below_stack ... ok
+test pause::pause_roundtrip_sha_respond ... ok
+test pause::pause_roundtrip_negative_hp_multi_tao_rescue ... ok
+test restore::restore_rejects_broken_frame_parent_chain ... ok
+test pending::pending_state_hash_stable_across_save_restore ... ok
+test pause::pause_roundtrip_rewrite_then_tiandu_combo ... ok
+test restore::restore_rejects_choice_without_machine ... ok
+test restore::restore_rejects_choice_id_overrun ... ok
+test pause::pause_roundtrip_tiandu_confirm ... ok
+test pause::pause_roundtrip_tiandu_decline ... ok
+test restore::restore_rejects_dangling_park_frame ... ok
+test restore::restore_rejects_lord_not_at_first_seat ... ok
+test restore::restore_rejects_duplicate_frame_id ... ok
+test restore::restore_rejects_middle_card_missing ... ok
+test restore::restore_rejects_forward_referencing_frame_parent ... ok
+test restore::restore_rejects_oob_event_payload ... ok
+test restore::restore_rejects_inconsistent_skill_instance_owner ... ok
+test restore::restore_guidao_rewrite_mid_window ... ok
+test restore::restore_guidao_rewrite_equips_options ... ok
+test restore::restore_rejects_nested_checkpoint ... ok
+test restore::restore_rejects_park_depth_overrun ... ok
+test pause::pause_roundtrip_yishang_chain ... ok
+test restore::restore_rejects_rewrite_asked_with_empty_rewriters ... ok
+test restore::restore_rejects_sha_asked_tamper ... ok
+test restore::restore_rejects_oob_queue_trigger ... ok
+test restore::restore_rejects_tampered_core_ruleset_version ... ok
+test restore::restore_rejects_rule_version_mismatch ... ok
+test restore::restore_at_every_choice_point_continues_identically ... ok
+test restore::restore_rejects_outcome_mode_mismatch ... ok
+test restore::restore_rejects_self_referencing_frame_parent ... ok
+test restore::restore_rejects_tampered_gate_event_payload ... ok
+test restore::restore_rejects_out_of_bounds_ids ... ok
+test restore::restore_rejects_trailing_card_missing ... ok
+test stale::stale_revision_rejected_then_retry_same_dedup ... ok
+test xiaoji::xiaoji_machine_byte_roundtrip_and_rejects ... ok
+test restore::restore_rejects_segment_checkpoint_mismatches ... ok
+test restore::restore_rejects_tampered_identity_roles ... ok
+test save::save_restore_at_rest_continues_identically ... ok
+test savage::savage_multi_nullify_judge_reshuffle_restore ... ok
+
+test result: ok. 71 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/d5_longxue_mbqianlong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/d5_longxue_mbqianlong-a1b818bdf51dcbd1)
+
+running 7 tests
+test longxue_package_maps_host_and_defers_external ... ok
+test longxue_threshold_grants_when_skill_exists ... ok
+test qingzheng_no_damage_when_target_discards_enough ... ok
+test qingzheng_discards_both_sides_and_punishes_fewer ... ok
+test longxue_marks_accumulate_and_cap ... ok
+test longxue_opening_marks_twenty_or_sixty ... ok
+test longxue_weitong_registration_only ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/e02_c3_lifecycle.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/e02_c3_lifecycle-0f05bd8f9dfee1a0)
+
+running 2 tests
+test e03_c3_uninstall_during_active_game_lock_pinned ... ok
+test e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/epic_rangjie_after_damage.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/epic_rangjie_after_damage-6d7de3b35a7f626f)
+
+running 3 tests
+test rangjie_gains_basic_card ... ok
+test rangjie_moves_card_between_players ... ok
+test rangjie_decline_and_absent ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/epic_reguhuo_viewas.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/epic_reguhuo_viewas-530e9916847ae811)
+
+running 4 tests
+test reguhuo_absent_rejected ... ok
+test reguhuo_is_once_per_turn ... ok
+test reguhuo_declares_tao_from_hand ... ok
+test reguhuo_declares_sha_with_target ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/fuzz_corpus_replay.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/fuzz_corpus_replay-d453506f23c1f229)
+
+running 2 tests
+test replay_bytecode_verify_on_decoded_corpus ... ok
+test replay_fuzz_bytecode_module_corpus ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/g1_cardpile.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_cardpile-a7bdc467031b496c)
+
+running 5 tests
+test pile_bridge_rejects_invalid_spec ... ok
+test converted_packages_match_generator ... ok
+test g1_cardpile_vertical_install_enable_newgame_saverestore ... ok
+test cardpile_liuli_real_host_full_lifecycle ... ok
+test cardpile_real_host_full_lifecycle ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/g1_d3.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_d3-01138fc75b9e3b7d)
+
+running 4 tests
+test g1_d3_install_bridge_and_metadata ... ok
+test g1_d3_vertical_reveal_jinggou_and_restore ... ok
+test g1_d3_content_lock_and_bounds ... ok
+test d3_real_host_full_lifecycle ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/g1_hearth.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_hearth-88333f0c89863b73)
+
+running 8 tests
+test hearth_content_lock_saverestore ... ok
+test hearth_remaining_batch_b ... ok
+test linghunzhihuo_fire_damage_and_self_discard ... ok
+test jihuocard_self_draw ... ok
+test shijieshu_equips_two_different_slots ... ok
+test hearth_remaining_batch_a ... ok
+test zhaomingdan_forced_discard_and_draws ... ok
+test hearth_real_host_full_lifecycle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/g1_huanle.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_huanle-ca814bd64e1ba40b)
+
+running 23 tests
+test flip::flip_primitive_toggles_facing_without_mask ... ok
+test huanle::huanle_combo_kuwu_sha_like_and_non_sha_damage ... ok
+test caoren::caoren_jushou_flips_and_mianju_cancels_flip ... ok
+test equip::equip_skill_lifecycle_grant_and_revoke ... ok
+test huanle::huanle_mianju_blocks_flip_while_equipped ... ok
+test huanle::huanle_jiuwei_recovers_or_draws_at_turn_end ... ok
+test host::host_skill_restore_rejects_without_pack ... ok
+test g1::g1_huanle_vertical_host_behaviors_and_restore ... ok
+test huanle::huanle_bridge_builds_pack ... ok
+test xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线
+test huanle::huanle_combo_stolen_jushou_flip_cancelled_by_mask ... ok
+test huanle::huanle_combo_stolen_jushou_fires_for_thief ... ok
+test equip::equip_skill_snapshot_mismatch_rejected ... ok
+test huanle::huanle_jiuwei_optional_confirm_and_restore ... ok
+test flip::flip_frame_lifecycle_no_residue ... ok
+test huanle::huanle_monkey_cancels_peach_and_takes_it ... ok
+test huanle::huanle_pack_payload_matches_upstream_list ... ok
+test huanle::huanle_xuelunyang_pass_declines_theft ... ok
+test huanle::huanle_xuelunyang_steals_target_skill_until_turn_end ... ok
+test u06::u06_g2g4_channels_acceptance ... ok
+test huanle::huanle_real_host_full_lifecycle ... ok
+test u06::u06_eight_dimension_from_fresh_install ... ok
+test huanle::huanle_g5_cross_process_relay ... ok
+
+test result: ok. 22 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/g1_shahai_gujian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_gujian-94a1872a29f4f695)
+
+running 14 tests
+test dinvxuanshuang::dinvxuanshuang_and_gjyuheng_closeout ... ok
+test lifecycle::final_batch_shatang_heilong_liutouge_mutou ... ok
+test food::food_effects_batch_two ... ok
+test g1::g1_gujian_vertical_existing_kinds_and_lock ... ok
+test gujian::gujian_rejects_illegal_targets ... ok
+test feibiao::feibiao_discard_black_or_damage ... ok
+test hujia::hujia_primitive_and_food_batch_three ... ok
+test shujinsan::shujinsan_discard_any_draws_equal_with_restore ... ok
+test food::food_state_grant_tick_and_expire ... ok
+test jinlianzhu::jinlianzhu_cancels_damage_with_holder_confirm ... ok
+test remaining::remaining_clusters_batch ... ok
+test jiguan::jiguan_batch_four_kinds ... ok
+test mizhilianou::mizhilianou_viewas_and_luyugeng_discover ... ok
+test gujian::gujian_real_host_full_lifecycle ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/g1_shahai_gwent.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_gwent-4bff41dee26e7c25)
+
+running 7 tests
+test gwent_spells_zhihuan_baoxue ... ok
+test gwent_fengyin_disables_target_skills ... ok
+test gwent_spells_yanzhi_aozu_wenyi ... ok
+test gwent_closeout_kunen_shanbeng_poxiao ... ok
+test gwent_real_host_full_lifecycle ... ok
+test g1_gwent_vertical_and_lock ... ok
+test gwent_weather_states ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/g1_shahai_mtg.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_mtg-3aeb3cec7cfd3fd9)
+
+running 11 tests
+test mtg_feixu_land_effect ... ok
+test mtg_longshanfeng_land_flow ... ok
+test mtg_shamolvzhou_land_effect ... ok
+test mtg_bingheyaosai_land_effect ... ok
+test mtg_youlin_land_and_discover ... ok
+test mtg_yixialan_land_and_recast ... ok
+test mtg_linzhongjianta_land_and_strike ... ok
+test mtg_lindixiliu_land_effect ... ok
+test mtg_haidao_land_effect ... ok
+test mtg_shuimomuxue_land_effect ... ok
+test mtg_real_host_full_lifecycle ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/g1_shahai_swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_swd-850c2be74926da1a)
+
+running 111 tests
+test cyxianjiang::swd_cyxianjiang_compares_card_name_not_kind ... ok
+test funiao::swd_deferred_b93_funiao_ningxian_yaotong ... ok
+test cyxianjiang::swd_generals_b89_cyxianjiang ... ok
+test guxing::swd_deferred_guxing_all_hand_sha_and_draw ... ok
+test heihuo::swd_deferred_b92_heihuo_fzhenwei_dunxing ... ok
+test datong::swd_generals_b18_datong_draw ... ok
+test daixing::swd_deferred_daixing_hujia_cycle ... ok
+test fengming::swd_generals_b73_fengming_xiaomoyu_touxi ... ok
+test five::swd_generals_b19_five_damage_line_skills ... ok
+test bingjian::swd_generals_b74_bingjian_shending_guiyan ... ok
+test gtiandao::swd_deferred_gtiandao_rewrites_judge_with_any_he ... ok
+test duanyue::swd_generals_b24_duanyue_tuzhen_luomei_xingdian ... ok
+test hlingbo::swd_generals_b72_hlingbo_miles_xueyi ... ok
+test guaili::swd_generals_b71_guaili_fuyan_wuxie_guanhu ... ok
+test huajin::swd_deferred_b99_huajin_minjing ... ok
+test huangyu::swd_generals_b76_huangyu_xianyin_pojian ... ok
+test huanhun::swd_deferred_b96_huanhun_lqingcheng ... ok
+test huanjian::swd_generals_b70_huanjian_weida_xuying ... ok
+test huanxia::swd_generals_b27_huanxia_viewas_reclaim ... ok
+test huanxing::swd_generals_b87_huanxing ... ok
+test huanyin::swd_deferred_huanyin_judge_cancel_or_draw ... ok
+test huodan::swd_generals_b85_huodan ... ok
+test hwendao::swd_generals_b77_hwendao_lingfeng_tianhuo ... ok
+test jiying::swd_generals_b61_jiying_mufeng_wangchen ... ok
+test hyunshen::swd_deferred_hyunshen_counter_draw_and_distance ... ok
+test jiefen::swd_generals_b20_jiefen_multistep ... ok
+test jiefen::swd_jiefen_is_once_per_play_phase ... ok
+test jinlin::swd_deferred_jinlin_limited_hujia_and_phase_ticks ... ok
+test jiying::swd_mufeng_uses_discover_not_draw ... ok
+test jqimou::swd_generals_b91_jqimou_jianji_toudan ... ok
+test juxi::swd_deferred_juxi_damage_or_recover ... ok
+test kbolan::swd_deferred_b98_kbolan_aojian ... ok
+test lanzhi::swd_deferred_lanzhi_heals_le_own_hp_damaged ... ok
+test lexue::swd_generals_b83_lexue_zhenjiu_lmazui ... ok
+test lianda::swd_generals_b64_lianda_suiyan_duanxing_polang_youyin ... ok
+test lianwu::swd_generals_b63_lianwu_yuchen_duishi_xielei ... ok
+test lingxian::swd_deferred_lingxian_draws_with_far_target ... ok
+test lingshi::swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit ... ok
+test lingxin::swd_generals_b69_lingxin_yueren ... ok
+test luanji::swd_generals_b81_luanji_guozao_reyingzi ... ok
+test liuhong::swd_generals_b21_liuhong_mojian_daofa ... ok
+test ljifeng::swd_generals_b68_ljifeng_duanyi_yinyue ... ok
+test mingfu::swd_generals_b88_mingfu ... ok
+test nlianji::swd_deferred_nlianji_compare_reward_and_damage ... ok
+test pingxu::swd_generals_b23_pingxu_huanling_builtin_four_full ... ok
+test poxiao::swd_generals_b79_poxiao ... ok
+test poyue::swd_generals_b28_poyue_black_range_red_free_direct ... ok
+test pozhen::swd_deferred_b94_pozhen_guiyan2 ... ok
+test pozhou::swd_deferred_pozhou_seal_cycle ... ok
+test rexue::swd_deferred_rexue_and_liuli ... ok
+test shengshou::swd_generals_b84_shengshou_jiang ... ok
+test shangxi::swd_generals_b75_shangxi_huajian_xingzhui ... ok
+test shehun::swd_deferred_shehun_suit_match_damage ... ok
+test sliufeng::swd_generals_b80_sliufeng ... ok
+test shoulie::swd_deferred_b95_shoulie_busi ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b34_qiankundai_shennongding_nvwashi ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b35_kunlunjingc_donghuangzhong ... ok
+test swd_extra_cards_disposition_guard::swd_extra_cards_disposition_guard ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b36_kongdongyin_death_cancel ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b39_sifeizhenmian_yiluan ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b42_yuchan_autoviewas ... ok
+test swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_equip5_b44_yuruyi_draw_window ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_yuchan_b45_swap_rotation ... ok
+test swd_cards_equip5_b44_yuruyi_draw_window::swd_window_machines_b62 ... ok
+test swd_extra_cards_disposition_guard::swd_chilongya_amplifies_fire_damage ... ok
+test swd_extra_cards_disposition_guard::swd_caoyao_heals_wounded_in_range ... ok
+test swd_extra_cards_disposition_guard::swd_daihuo_xiayun_distance_pair ... ok
+test swd_extra_cards_disposition_guard::swd_fengxueren_flip_or_damage ... ok
+test swd_extra_cards_disposition_guard::swd_guiyoujie_delayed_black_loss ... ok
+test swd_extra_cards_disposition_guard::swd_hufu_self_dying_only ... ok
+test swd_extra_cards_disposition_guard::swd_liuxinghuoyu_discard2_or_fire ... ok
+test swd_extra_cards_disposition_guard::swd_tianxianjiu_ameisha_and_self_rescue ... ok
+test swd_extra_cards_disposition_guard::swd_shentou_active_steal_with_club_judge ... ok
+test swd_extra_cards_disposition_guard::swd_xingjunyan_amp_and_qinglonglingzhu_steal ... ok
+test swd_extra_cards_disposition_guard::swd_xixue_lifesteal_on_sha_damage ... ok
+test swd_extra_cards_disposition_guard::swd_zhufangshenshi_distance_waiver ... ok
+test swd_extra_cards_disposition_guard::swd_yangpijuan_discover_from_deck ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_cards_alignment_guard_b29 ... ok
+test swd_extra_cards_disposition_guard::swd_yufulu_give_weapon_and_damage ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_cards_basic_b32_xuejibingbao_fengyinzhidan ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin ... ok
+test swd_extra_cards_disposition_guard::swd_real_host_full_lifecycle ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_shan_respond_no_damage ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanshu_attaches_card_mods_and_roundtrips ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_discovers_equip_and_marks_target ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_gain_compensates_lost_equip ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_full_slots_rejected ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_pending_then_gain_at_phase_end ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_same_target_rejected_while_pending ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_chaofeng_yinmi_xingtigaizao ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_jinjilengdong_freeze_and_unfreeze ... ok
+test tiebi::swd_generals_b18_tiebi_and_datong ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_lingjian_xuanfeng_and_shijianhuisu ... ok
+test swd_langeguaiyi_longfan_suit_branches::swd_langeguaiyi_longfan_suit_branches ... ok
+test sxianjing::swd_deferred_sxianjing_trap_cycle ... ok
+test wanjun::swd_generals_b66_wanjun_senluo_huopu ... ok
+test xielv::swd_generals_b25_xielv_zhuyu ... ok
+test xuanying::swd_generals_b90_xuanying_lieren ... ok
+test xuanzhou::swd_deferred_b97_xuanzhou_yinguo ... ok
+test xuehuang::swd_generals_b26_xuehuang_limited_virtual_firesha ... ok
+test yeying::swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying ... ok
+test yijue::swd_generals_b86_yijue_dangping ... ok
+test yudun::swd_generals_b82_yudun_zhanxing ... ok
+test yunchou::swd_generals_b78_yunchou ... ok
+test yulin::swd_generals_b22_yulin_ningshuang_gongshen ... ok
+test zhanlu::swd_generals_b65_zhanlu_susheng_xianghui_huiqi ... ok
+
+test result: ok. 111 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.67s
+
+     Running tests/g1_shahai_yunchou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_yunchou-2b71e7258d990d71)
+
+running 25 tests
+test g1::g1_yunchou_generals_batch5_full_roster_metadata ... ok
+test g1::g1_yunchou_generals_batch17_guihan_dying_limited ... ok
+test g1::g1_yunchou_generals_batch18_beige_judge_branches ... ok
+test g1::g1_yunchou_generals_batch6_luweiyan_conversion_and_chain ... ok
+test g1::g1_yunchou_generals_batch8_builtin_whitelist_rejects ... ok
+test g1::g1_yunchou_generals_batch1_bridge_and_behaviors ... ok
+test g1::g1_yunchou_generals_batch7_active_skills_jieyan_yiesheng ... ok
+test g1::g1_yunchou_generals_batch9_diychanyuan_max_hp_loss ... ok
+test g1::g1_yunchou_generals_batch8_builtin_skill_refs ... ok
+test g1::g1_yunchou_generals_batch3_zonghuo_shaoying ... ok
+test g1::g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian ... ok
+test g1::g1_yunchou_generals_batch2_xiongzi_yaliang ... ok
+test caochuan::caochuan_branch_zero_gives_shas_and_reprisal ... ok
+test caochuan::caochuan_no_sha_branch_shows_and_discards ... ok
+test g1::g1_yunchou_vertical_existing_kinds_and_lock ... ok
+test suolianjia::suolianjia_links_on_equip_resets_on_leave ... ok
+test chenhuodajie::chenhuodajie_gains_target_hand_card ... ok
+test shezhanqunru::shezhanqunru_compares_all_responders ... ok
+test geanguanhuo::geanguanhuo_rejects_wrong_target_count ... ok
+test geanguanhuo::geanguanhuo_two_target_compare_chain ... ok
+test fudichouxin::fudichouxin_compare_two_stage_with_restore ... ok
+test shuigong::shuigong_multi_target_forced_equip_discard ... ok
+test hongshui::hongshui_self_delayed_trick_thunder_damage ... ok
+test touliang::touliang_swap_two_stage_with_restore ... ok
+test yunchou::yunchou_real_host_full_lifecycle ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running tests/g1_shahai_zhenfa.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_shahai_zhenfa-4e5eb4571502e660)
+
+running 6 tests
+test zf_niaoxiangzhen_respond_shan_or_damage ... ok
+test zf_tianfuzhen_major_aoe_discard ... ok
+test zf_qixingzhen_siege_discard_and_virtual_sha ... ok
+test zf_dizaizhen_major_faction_draw ... ok
+test zf_changshe_pozhen_swap_seat ... ok
+test zf_real_host_full_lifecycle ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/g1_wudian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_wudian-bc6ac808be6465bc)
+
+running 122 tests
+test dva::dva_jijia_absorbs_damage_and_hand_limit ... ok
+test changqing::changqing_luanjian_dual_sha_viewas_multi_target ... ok
+test ana::ana_zhiyuan_cancel_damage_and_equal_recover ... ok
+test anu::anu_anwugu_afflict_and_limits ... ok
+test changqing::changqing_ctianfu_attach_thunder_and_death_clear ... ok
+test baolei::baolei_mode_effects_on_sha ... ok
+test chanyata::chanyata_ziyu_every_four_phases ... ok
+test feishi::feishi_moshou_declaration_wired_to_host_behavior ... ok
+test g1::g1_wudian_generals_and_siji_discard_draw ... ok
+test falaozhiying::falaozhiying_feidan_splash_cancel_and_range ... ok
+test banzang::banzang_yinbo_random_discard_three ... ok
+test baolei::baolei_switch_mode_cycle ... ok
+test g1::g1_wudian_content_lock_and_byte_restore ... ok
+test feishi::feishi_shuaiyan_recover_trigger_two_choice ... ok
+test hanlingsha::hanlingsha_tannang_snatch_unlimited_range ... ok
+test hanlong::hanlong_ciqiu_sha_healthy_bonus_and_dying_mark ... ok
+test heibaihe::heibaihe_duwen_equal_hand_damage_bonus ... ok
+test heiying::heiying_yinshen_untargetable_until_own_judge ... ok
+test jingtian::jingtian_jtjubao_gains_nonbasic_and_gates ... ok
+test jiangyunfan::jiangyunfan_xunying_auto_second_sha ... ok
+test jiangyunfan::jiangyunfan_liefeng_grant_and_tianjian_aoe ... ok
+test jiangcheng::jiangcheng_longhuo_fires_at_own_phase_end ... ok
+test jiangcheng::jiangcheng_fenshi_awaken_once_on_rescue ... ok
+test jushifang::jushifang_xiepan_discard_and_discover_equip ... ok
+test leiyuange::leiyuange_feng_ya_song_counters ... ok
+test jingtian::jingtian_sajin_judge_color_recover_and_once ... ok
+test kuangshu::kuangshu_shihuo_fire_damage_draw ... ok
+test laiyinhate::laiyinhate_mengji_no_armor_bonus ... ok
+test linyueru::linyueru_guiyuan_discard_sha_recover_draw ... ok
+test liumengli::liumengli_changnian_death_bequest ... ok
+test liufu::liufu_zhucheng_toggle_and_sha_guard ... ok
+test liumengli::liumengli_runxin_heart_use_and_respond ... ok
+test liumengli::liumengli_tianxian_range_targets_and_judge_cancel ... ok
+test liuyan::liuyan_geju_out_of_range_counts ... ok
+test liuyan::liuyan_geju_out_of_range_faction_draw ... ok
+test liuyan::liuyan_juedao_link_and_distance ... ok
+test liumengli::liumengli_xjzhimeng_darkmark_and_draw ... ok
+test liuzan::liuzan_kangyin_losehp_discard_and_branch ... ok
+test longkui::longkui_diewu_give_and_lingyu_recover ... ok
+test longyou::longyou_yuexing_distance_swap_and_clear ... ok
+test longyou::longyou_minsha_thunder_and_neighbor_discard ... ok
+test lixiaoyao::lixiaoyao_xjyufeng_draw_to_two_twice_per_turn ... ok
+test luba::luba_liangou_heart_fail_and_xiyang_flip_recover ... ok
+test luba::luba_liangou_hook_distance_and_damage ... ok
+test luozhaoyan::luozhaoyan_fenglue_auto_use_sha_duel ... ok
+test luxiao::luxiao_kuoyin_eff_and_double_full_gate ... ok
+test luxiao::luxiao_huhuan_switches_yuedong_to_recover ... ok
+test luxiao::luxiao_yuedong_cancel_and_pending_ask_restores ... ok
+test luxiao::luxiao_kuoyin_num_extends_yuedong_draw ... ok
+test maikelei::maikelei_shenqiang_sha_limit_refund ... ok
+test luxiao::luxiao_yuedong_storage_resets_next_turn ... ok
+test mei::mei_baoxue_limited_discard_and_flips ... ok
+test mei::mei_flip_face_down_turn_skipped_and_flipped_back ... ok
+test mingxiu::mingxiu_chengxin_rescue_and_immunity ... ok
+test mingxiu::mingxiu_guijin_deal_and_skip_draw ... ok
+test mei::mei_jidong_freeze_damage_immune_and_untargetable ... ok
+test mingxiu::mingxiu_linghuo_round_cooldown_and_fire ... ok
+test moshou::moshou_blocks_delayed_trick_target ... ok
+test muchanglan::muchanglan_lueying_decline_keeps_usable_for_next_sha ... ok
+test muchanglan::muchanglan_lueying_gain_and_victim_discard ... ok
+test muchanglan::muchanglan_lueying_no_third_party_never_fires ... ok
+test murongziying::murongziying_poyun_discard_and_decrement ... ok
+test nangonghuang::nangonghuang_zhangmu_flash_discard_prevent ... ok
+test murongziying::murongziying_qianfang_discard_and_aoe ... ok
+test nangonghuang::nangonghuang_zhaoyao_compare_and_top ... ok
+test nangonghuang::nangonghuang_sheling_three_event_reclaim ... ok
+test orisa::orisa_qianggu_armor_and_guard_nullify ... ok
+test ow::ow_shibing_tuji_and_mujing ... ok
+test sanjian::sanjian_weapon_skill_two_stage_choice_with_restore ... ok
+test shenqishuang::shenqishuang_binxin_grants_hujia_at_low_hp ... ok
+test sumei::sumei_huahu_sacrifice_multi_target ... ok
+test sishen::sishen_xiandan_red_direct_black_bonus ... ok
+test ow::ow_real_host_full_lifecycle ... ok
+test sumei::sumei_sheying_black_judge_reclaim ... ok
+test swd::swd_gouhunluo_countdown_lose_hp_discard ... ok
+test swd::swd_jiguantong_aoe_discard_or_fire ... ok
+test swd::swd_mujiaren_discard_nonbasic_discover_jiguan ... ok
+test tangyurou::tangyurou_txianqu_prevent_and_replenish ... ok
+test swd::swd_jiguantong_reverse_order_and_content_after_draw ... ok
+test swd::swd_zhiluxiaohu_random_enemy_virtual_sha ... ok
+test tianshi::tianshi_shouhu_discard_heal_and_sha_ban ... ok
+test tianyu::tianyu_chezhen_distance_mod ... ok
+test tuobiang::tuobiang_paotai_stack_fire_and_downgrade ... ok
+test wangmeizhike::wangmeizhike_draws_min_hand_target ... ok
+test wangpengxu::wangpengxu_feixu_shan_draw ... ok
+test wangmeizhike::wangmeizhike_recovers_min_hp_damaged_target ... ok
+test wangxiaohu::wangxiaohu_husha_marks_and_virtual_cards ... ok
+test wangxiaohu::wangxiaohu_husha_virtual_nanman ... ok
+test wenhui::wenhui_longxiang_random_discard_diff ... ok
+test wensidun::wensidun_feitiao_range_and_random_discard ... ok
+test wudian::wudian_generals_batch10_diyjuntun_recast_and_jinyan ... ok
+test wudian::wudian_generals_batch12_liduan_gain_equip ... ok
+test wudian::wudian_generals_batch14_fuchou_cancel_and_settle ... ok
+test wudian::wudian_generals_batch13_jianbi_aoe_exclude ... ok
+test wudian::wudian_generals_batch15_liangce_conversion_and_remain ... ok
+test xiahoujinxuan::xiahoujinxuan_xuanmo_discover_same_class ... ok
+test xia::xia_fanling_recover_on_others_hp_loss ... ok
+test xianqing::xianqing_xtanxi_no_holder_cancel ... ok
+test xianqing::xianqing_xtanxi_same_name_steal ... ok
+test xiaoman::xiaoman_lingquan_awaken_grants_shuiyun ... ok
+test xiaoman::xiaoman_shenwu_awaken_grants_huimeng ... ok
+test wudian::wudian_real_host_full_lifecycle ... ok
+test xingxuan::xingxuan_lingxue_recover_grants_hujia ... ok
+test xianjian::xianjian_real_host_full_lifecycle ... ok
+test xuanxiao::xuanxiao_xuanyan_ningbin_fire_thunder ... ok
+test xuejian::xuejian_duci_equip_discard_damage ... ok
+test xuejian::xuejian_xshuangren_offcourt_and_death_discard ... ok
+test xuejian::xuejian_shenmu_red_discard_rescue ... ok
+test youdishenru::youdishenru_cancels_sha_with_reprisal ... ok
+test yuanshi::yuanshi_feiren_bonus_range_and_club_extra_target ... ok
+test yuanshi::yuanshi_feiren_chain_damage_not_bonused ... ok
+test yuejinzhao::yuejinzhao_xjyingfeng_random_virtual_sha ... ok
+test yueqi::yueqi_liguang_discard_and_move_equip ... ok
+test yueqi::yueqi_shiying_cancel_death_and_reset ... ok
+test yuntianhe::yuntianhe_guanri_once_fire_and_equip_strip ... ok
+test yuntianhe::yuntianhe_zhuyue_whitelist_and_clear ... ok
+test zhaliya::zhaliya_pingzhang_barrier_and_owliyong_draw ... ok
+test zhixuzhiguang::zhixuzhiguang_guangshu_suit_marks ... ok
+test zhaoliner::zhaoliner_huimeng_tianshe_family ... ok
+test zixuan::zixuan_shuiyun5_dying_rescue_channel ... ok
+test zixuan::zixuan_shuiyun_off_court_and_type_dedup ... ok
+test zixuan::zixuan_wangyou_roundstamp_and_draw ... ok
+
+test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.86s
+
+     Running tests/g1_wuxing.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/g1_wuxing-64b0c92a303f8cf4)
+
+running 5 tests
+test wuxingpan_card_equips_via_treasure_slot ... ok
+test wuxingpan_skill_change_nature_with_restore ... ok
+test g1_wuxing_vertical_natures_shengke_saverestore ... ok
+test l06_eight_dimension_from_fresh_install ... ok
+test wuxing_real_host_full_lifecycle ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/l01_ai_tuning_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l01_ai_tuning_eight-d310a9b35b2fd39b)
+
+running 1 test
+test l01_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/l02_sj_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l02_sj_eight-c340ffb61791a3bc)
+
+running 1 test
+test l02_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l04_cardpile_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l04_cardpile_eight-95920403c7615562)
+
+running 1 test
+test l04_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l05_coin_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l05_coin_eight-775d2344c9877f60)
+
+running 1 test
+test l05_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l07_omnisearch.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l07_omnisearch-4f0ae31bed06a70c)
+
+running 1 test
+test l07_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l09_qhly_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l09_qhly_eight-0e0898ceba2e59c8)
+
+running 1 test
+test l09_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/l10_epic_cards_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l10_epic_cards_eight-79c967ed34cdbce3)
+
+running 1 test
+test l10_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l13_shousha_mvp_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l13_shousha_mvp_eight-7b35ee6cd74cbfc1)
+
+running 1 test
+test l13_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l15_shousha_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l15_shousha_eight-ebd41e19304dca17)
+
+running 1 test
+test l15_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
+
+     Running tests/l16_drag_read_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l16_drag_read_eight-bb048fd642eea981)
+
+running 1 test
+test l16_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l17_douzhuan_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l17_douzhuan_eight-2b87b490b9841d0e)
+
+running 1 test
+test l17_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l18_update_guard_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l18_update_guard_eight-6b6790330877e132)
+
+running 1 test
+test l18_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/l19_brawl_batch1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l19_brawl_batch1-1c6a56c65c3de773)
+
+running 3 tests
+test xunmeng_absent_normal ... ok
+test xunmeng_adds_damage_and_loses_hp ... ok
+test shishi_gains_max_hp_and_recovers ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l19_zaibian_batch2.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l19_zaibian_batch2-859ac2ab993a528b)
+
+running 2 tests
+test zaibian_absent_no_draw ... ok
+test zaibian_draws_by_identity_counts ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l20_config_mods_batch1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_config_mods_batch1-ae635ea6c8b2141a)
+
+running 3 tests
+test absent_no_mods ... ok
+test mopai_doubles_draw ... ok
+test xueliang_doubles_hp ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l20_kurou_batch2.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_kurou_batch2-9037685373098b14)
+
+running 3 tests
+test zhuwanzhongji_succession ... ok
+test kurou_absent_rejected ... ok
+test kurou_loses_hp_and_draws ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l20_liegong_batch3.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l20_liegong_batch3-ffda15c364fc302b)
+
+running 2 tests
+test xinkuanggu_draws_or_recovers ... ok
+test liegong_direct_hit_when_hand_ge_hp ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l21_martial_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l21_martial_eight-25c3debaa189296d)
+
+running 1 test
+test l21_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/l22_elo_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l22_elo_eight-b9fc545249656b9e)
+
+running 1 test
+test l22_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l23_desktop_adapt.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l23_desktop_adapt-fbda977802dfc729)
+
+running 1 test
+test l23_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/l24_skin_switch_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l24_skin_switch_eight-cff2702c37493299)
+
+running 1 test
+test l24_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/l26_fool_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l26_fool_eight-58b81a16d6ce916e)
+
+running 1 test
+test l26_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running tests/l27_jishe_batch5.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_jishe_batch5-ac4ef496cb563073)
+
+running 2 tests
+test jishe_absent_rejected ... ok
+test jishe_draws_and_marks ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l27_new_meibu_batch3.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_new_meibu_batch3-9cfbdc249a922372)
+
+running 2 tests
+test new_meibu_absent_no_window ... ok
+test new_meibu_locks_target_for_play_phase ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l27_new_zhixi_batch2.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_new_zhixi_batch2-d816ac5e1c7af3ae)
+
+running 2 tests
+test new_zhixi_locks_after_trick ... ok
+test new_zhixi_absent_no_lock ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l27_sbzhaxiang_batch4.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_sbzhaxiang_batch4-90bb7cf943149150)
+
+running 4 tests
+test sbzhaxiang_absent_normal_draw ... ok
+test sbzhaxiang_extra_draw ... ok
+test sbzhaxiang_absent_sha_limited ... ok
+test sbzhaxiang_unlimited_sha ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l27_xiefang_batch1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l27_xiefang_batch1-234fce24dce0610e)
+
+running 2 tests
+test xiefang_absent_no_effect ... ok
+test xiefang_reduces_distance_by_alive_females ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/l29_longxue_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/l29_longxue_eight-acf05c93afbc866b)
+
+running 1 test
+test l29_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/maintenance_guards.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/maintenance_guards-b2acfcc8631498a5)
+
+running 1 test
+test production_sources_have_no_debug_output_or_env_switches ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/native_kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/native_kernel-291388fb2e63abe0)
+
+running 341 tests
+test activate::activate_skill_without_grant_rejected ... ok
+test area_attacks::savage_nullified_target_discards_once ... ok
+test area_attacks::aoe_target_freeze_at_commit ... ok
+test area_attacks::savage_per_target_nullify ... ok
+test area_attacks::savage_attack_response_skip_and_pass ... ok
+test area_attacks::aoe_continues_after_midqueue_death ... ok
+test boss_bifang::boss_bifang_honglianx_red_excluded_and_judge_gain ... ok
+test boss_bianchengwang::boss_bianchengwang_leizhu_death_thunder_sequential ... ok
+test area_attacks::archery_attack_all_pass_takes_damage ... ok
+test activate::activate_skill_rejected_outside_play_phase ... ok
+test boss_chujiangwang::boss_chujiangwang_fankui_reuse_gain ... ok
+test boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source ... ok
+test boss_bianchengwang::boss_bianchengwang_leizhou_leifu_phase_arms ... ok
+test boss_dizangwang::boss_dizangwang_bufo_prepare_range1_fire ... ok
+test boss_dushiwang::boss_dushiwang_remen_aoe_skip ... ok
+test boss_dizangwang::boss_dizangwang_wuliang_prepare_recover_end_draw ... ok
+test boss_dizangwang::boss_dizangwang_bufo_damage_cap ... ok
+test boss_dushiwang::boss_dushiwang_huoxing_death_fire_all ... ok
+test boss_chujiangwang::boss_chujiangwang_weimu_black_trick_block ... ok
+test boss_dongzhuo::boss_dongzhuo_jiuchi_viewas ... ok
+test boss_bifang::boss_bifang_zhaohuo_fire_nature_and_immune ... ok
+test boss_dizangwang::boss_dizangwang_diting_distance_both_ways ... ok
+test boss_dushiwang::boss_dushiwang_zhifen_prepare_steal_and_fire ... ok
+test boss_bifang::boss_bifang_yanyu_judge_fire_max_three ... ok
+test boss_baihu::boss_baihu_kuangxiao_sha_range_and_targets ... ok
+test boss_hundun::boss_hundun_wuzang_draw_and_hand_limit ... ok
+test boss_dushiwang::boss_dushiwang_remen_sha_reject_then_armor ... ok
+test boss_guojia::boss_guojia_yuance_judge_branches ... ok
+test boss_liubei::boss_liubei_zhangwu_discard_or_damage ... ok
+test boss_guojia::boss_guojia_qizuo_trick_reuse ... ok
+test boss_guojia::boss_guojia_guimou_mad_lifecycle ... ok
+test boss_liubei::boss_liubei_xiaoxiong_gain_and_damage ... ok
+test boss_mamian::boss_mamian_lianyu_fire_all ... ok
+test boss_mengpo::boss_mengpo_shiyou_distinct_suit_gain ... ok
+test boss_hundun::boss_hundun_xiangde_yinzei ... ok
+test boss_mengpo::boss_mengpo_wangshi_basic_ban_turn_clear ... ok
+test boss_mamian::boss_mamian_juece_last_hand_damage ... ok
+test boss_mode::boss_mode_add_fellow_seat_expansion ... ok
+test boss_mengpo::boss_mengpo_wanghun_death_clear_and_disable ... ok
+test boss_luocha::boss_luocha_yushou_moyany ... ok
+test boss_nianshou::boss_nianshou_jingjue_danshu_recover ... ok
+test boss_futai2::boss_futai2_tao_banned_both_sides ... ok
+test boss_heiwuchang::boss_heiwuchang_guiji_taiping_suoming_xixing ... ok
+test boss_nianshou::boss_nianshou_ruizhi_prune ... ok
+test boss_mode::boss_mode_chongzheng_revival_and_victory ... ok
+test boss_pingdengwang::boss_pingdengwang_abi_source_fire_no_source_skip ... ok
+test boss_pangtong::boss_pangtong_qiwu_club_recover ... ok
+test boss_huoshenzhurong::boss_huoshenzhurong_xingxia_yanling_burn ... ok
+test boss_pingdengwang::boss_pingdengwang_pingdeng_death_two_wave_fire ... ok
+test boss_qinguangwang::boss_qinguangwang_panguan_delay_reject ... ok
+test boss_mushengoumang::boss_mushengoumang_buchun_revive_and_recover ... ok
+test boss_pingdengwang::boss_pingdengwang_suozu_link_all_others ... ok
+test boss_qinguangwang::boss_qinguangwang_wangxiang_death_strip_equips ... ok
+test boss_nianshou::boss_nianshou_nianrui_mengtai ... ok
+test boss_jinshenrushou::boss_jinshenrushou_xingqiu_link_toggle ... ok
+test boss_pangtong::boss_pangtong_tianyu_end_link_all ... ok
+test boss_qinguangwang::boss_qinguangwang_juhun_end_flip_first ... ok
+test boss_qiongqi::boss_qiongqi_futai_recover_wounded ... ok
+test boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding ... ok
+test boss_nianshou::boss_nianshou_shouyi_range_free ... ok
+test boss_stage::boss_stage_opening_and_first_actor ... ok
+test boss_qinglong::boss_qinglong_shenyi_judge_void_and_never_flipped ... ok
+test boss_songdiwang::boss_songdiwang_heisheng_death_link_shengfu ... ok
+test boss_shuishenxuanming::boss_shuishenxuanming_zirun_draw_all ... ok
+test boss_taishanwang::boss_taishanwang_fudu_kujiu_arms ... ok
+test boss_nianshou::boss_nianshou_nbianshen_rotation_renxing ... ok
+test boss_shuishengonggong::boss_shuishengonggong_juehong_strip_enemies ... ok
+test boss_taishanwang::boss_taishanwang_renao_death_fire ... ok
+test boss_taowu::boss_taowu_luanchang_virtual_aoe ... ok
+test boss_shujing::boss_shujing_cuidui_poison_cycle ... ok
+test boss_xiangliu::boss_xiangliu_yaoshou_distance_minus_two ... ok
+test boss_qiongqi::boss_qiongqi_yandu_gain_at_end_phase ... ok
+test boss_xuanwu::boss_xuanwu_lingqu_damage_counter ... ok
+test boss_qiongqi::boss_qiongqi_zhue_dual_draw ... ok
+test boss_taotie::boss_taotie_tanyu_skip_discard_and_max_hand_lose_hp ... ok
+test boss_taotie::boss_taotie_cangmu_jicai ... ok
+test boss_taihao::boss_taihao_shenen_aura ... ok
+test boss_yanluowang::boss_yanluowang_zhuxin_death_min_hp ... ok
+test boss_taowu::boss_taowu_nitai_in_shield_out_fire ... ok
+test boss_yanluowang::boss_yanluowang_zhadao_pierce_renwang ... ok
+test boss_taowu::boss_taowu_minwan_lockset_draw_and_target_mod ... ok
+test boss_yanluowang::boss_yanluowang_tiemian_black_sha_block ... ok
+test boss_yandi::boss_yandi_shaohao_pure_entries ... ok
+test boss_xiangliu::boss_xiangliu_jiushou_limit_nine_and_refill ... ok
+test boss_zhangchunhua::boss_zhangchunhua_wuxin_damage_only ... ok
+test boss_yingzhao::boss_yingzhao_fengdong_hand_ban ... ok
+test boss_qinglong::boss_qinglong_releiji_thunder_judge ... ok
+test boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder ... ok
+test boss_yanling::boss_yanling_huihuo_furan ... ok
+test boss_yecha::boss_yecha_modao_mojian_danshu ... ok
+test boss_zhangjiao::boss_zhangjiao_jidian_chain_guard ... ok
+test boss_zhouyu::boss_zhouyu_huoshen_fire_immune_recover ... ok
+test boss_yingzhao::boss_yingzhao_xunyou_steal_and_equip ... ok
+test boss_yinjian::boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou ... ok
+test boss_zhenji::boss_zhenji_lingbo_jiaoxia_draws ... ok
+test boss_zhuanlunwang::boss_zhuanlunwang_fanshi_damage_toggle ... ok
+test boss_xiangliu::boss_xiangliu_duqu_shedu_echou ... ok
+test boss_zhuanlunwang::boss_zhuanlunwang_lunhui_swap_at_judge ... ok
+test boss_zhenji::boss_zhenji_tashui_flip_and_fanghua ... ok
+test boss_zhangjiao::boss_zhangjiao_tiandao_rewrite ... ok
+test boss_zhangchunhua::boss_zhangchunhua_wuxin_delay_and_shangshix ... ok
+test boss_zhangchunhua::boss_zhangchunhua_jueqing_wuxin_damage_faces ... ok
+test boss_wuguanwang::boss_wuguanwang_zhiwang_gongzheng_xuechi ... ok
+test catalog::catalog_shared_across_commands ... ok
+test boss_zhouyu::boss_zhouyu_honglian_end_and_xianyin ... ok
+test caocao::caocao_jianxiong_takes_damaging_card ... ok
+test boss_zhuanlunwang::boss_zhuanlunwang_wangsheng_virtual_savage ... ok
+test boss_yingzhao::boss_yingzhao_sipu_use_ban_first_two ... ok
+test chain::chain_double_nullify_leaves_nobody_linked ... ok
+test chain::chain_propagation_preserves_source ... ok
+test combat::fire_sha_shares_sha_limit ... ok
+test combat::fire_sha_propagates_through_chain ... ok
+test boss_zhuyan::boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn ... ok
+test chain::chain_nullify_is_per_target_second_only ... ok
+test chain::chain_card_toggles_link ... ok
+test chain::chain_nullify_is_per_target_first_only ... ok
+test combat::normal_damage_does_not_propagate ... ok
+test combat::sha_damage_dealt_carries_card ... ok
+test combat::propagated_damage_is_full_resolution ... ok
+test boss_zhuyin::boss_zhuyin_xiongshou_semantics ... ok
+test area_attacks::savage_nullify_after_deck_drain_conserves ... ok
+test d4::d4_boss_b0_archive_format_v79_rejects_v78_without_migration ... ok
+test d4::d4_boss_b0_add_fellow_api_appends_and_marks_boss_side ... ok
+test boss_zhuanxu::boss_zhuanxu_zaoyi_grant_and_exec ... ok
+test combat::thunder_damage_propagates_and_unlinks_all ... ok
+test d4::d4_boss_b1_qingmu_host_tags ... ok
+test d4::d4_boss_b0_change_boss_api_reinit_updates_pointer ... ok
+test d4::d4_boss_b0_ban_query_stub_always_false ... ok
+test d4::d4_boss_b0_stage_state_default_none_roundtrip ... ok
+test d4::d4_boss_b1_qingmu3_chain_to_taihao_sides ... ok
+test combat::sha_dodge_damage_limit_and_range ... ok
+test d4::d4_boss_b2_sixiang_host_tags ... ok
+test boss_zhuyan::boss_zhuyan_juyuan_storage_and_extra_target ... ok
+test d4::d4_boss_b3_sixiang3_host_tags ... ok
+test d4::d4_boss_b1_qingmu2_chain_to_goumang ... ok
+test d4::d4_boss_b0_hash_includes_stage_fields ... ok
+test d4::d4_boss_b4_host_tags ... ok
+test d4::d4_boss_b2_chiyan2_chain_to_zhurong ... ok
+test d4::d4_boss_b2_xuanlin2_chain_to_gonggong ... ok
+test d4::d4_boss_b3_baimang3_chain_to_shaohao_sides ... ok
+test d4::d4_boss_b2_baimang2_chain_to_rushou ... ok
+test d4::d4_boss_b3_chiyan3_chain_to_yandi_sides ... ok
+test d4::d4_boss_b3_xuanlin3_chain_to_zhuanxu ... ok
+test d4::d4_boss_b4_chiyi_mark_then_real_damage ... ok
+test cixiong::cixiong_opposite_gender_discard_or_draw ... ok
+test boss_zhuque::boss_zhuque_fentian_red_cards ... ok
+test death::death_clears_judge_zone ... ok
+test d4::d4_boss_b4_bianshen4_changes_boss_seeded ... ok
+test d4::d4_boss_b4_baiyi_discard_thunder_and_draw ... ok
+test d4::d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji ... ok
+test daqiao::daqiao_guose_diamond_as_le ... ok
+test dead::dead_skill_holder_excluded_from_rewrite ... ok
+test distance::distance_clamp_to_minimum_1 ... ok
+test d4::d4_boss_b4_bianshen3_changes_boss_seeded ... ok
+test diaochan::diaochan_biyue_draws_at_end_phase ... ok
+test d4::d4_boss_b4_qingyi_rounds_change_hp ... ok
+test boss_zhuyan::boss_zhuyan_xushi_flip_and_aoe ... ok
+test discard::discard_phase_enforces_hand_limit ... ok
+test e01::e01_extension_registry_lifecycle ... ok
+test e02::e02_registry_rejects_uninstalled_operations ... ok
+test duel::duel_alternating_sha_until_pass ... ok
+test d4::d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo ... ok
+test duel::duel_damage_can_kill ... ok
+test duel::duel_can_be_nullified ... ok
+test duel::duel_no_sha_immediate_loss ... ok
+test duel::duel_does_not_consume_sha_limit ... ok
+test e03::e03_extension_cards_in_catalog_and_game ... ok
+test e06::e06_extension_general_metadata ... ok
+test e05::e05_extension_card_in_game ... ok
+test e04::e04_extension_conflict_detection ... ok
+test doudizhu::doudizhu_binglin_opening_draw ... ok
+test doudizhu::doudizhu_mode_victory_and_roundtrip ... ok
+test general::general_assembly_grants_and_remove_revokes_slot_skills ... ok
+test equipment::equip_distance_skips_dead_players ... ok
+test dying::dying_save_with_jiu_derivation_restores ... ok
+test general::general_bundle_grant_full_skill_set ... ok
+test ganning::ganning_qixi_black_card_as_dismantle ... ok
+test gongsunzan::gongsunzan_assembly_yicong_distance ... ok
+test guanyu::guanyu_wusheng_red_card_as_sha ... ok
+test guidao::guidao_rewrite_replaces_judgment ... ok
+test guidao::guidao_tiandu_combo_final_card_gained ... ok
+test guanshi::guanshi_forces_damage_after_dodge ... ok
+test guojia::guojia_jiji_draws_and_gives_one_card ... ok
+test equipment::equip_horses_weapon_range_and_replacement ... ok
+test guozhan::guozhan_compensatory_reveal_during_targeting ... ok
+test fangtian::fangtian_multi_target_sha ... ok
+test dying::dying_rescue_and_death ... ok
+test ganfuren::ganfuren_assembly_shushen_shenzhi ... ok
+test e03::e03_extension_catalog_content_lock_in_game_and_restore ... ok
+test guidao::guidao_two_holders_asked_in_seat_order ... ok
+test guozhan::guozhan_reveal_gating_view_isolation ... ok
+test huanggai::huanggai_kurou_lose_hp_draw_two ... ok
+test equipment::armor_bagua_judgement_semantics ... ok
+test guozhan::guozhan_general_slots_roundtrip ... ok
+test huangyueying::huangyueying_jizhi_draws_on_trick ... ok
+test huatuo::huatuo_qingnang_heals_wounded_player ... ok
+test hanbing::hanbing_prevents_damage_discards_two_cards ... ok
+test hujia::hujia_shan_counts_toward_wushuang_requirement ... ok
+test host::host_assembler_prototype_contract ... ok
+test hujia::hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass ... ok
+test hujia::hujia_skips_non_wei_helpers ... ok
+test identity::identity_lord_killing_loyalist_discards_all ... ok
+test hujia::hujia_pending_ask_byte_roundtrip_restores ... ok
+test hujia::hujia_public_asks_do_not_leak_hidden_shan ... ok
+test identity::identity_lord_penalty_discards_equips ... ok
+test identity::identity_lord_side_wins_when_rebels_and_traitor_dead ... ok
+test identity::identity_rebel_death_rewards_killer ... ok
+test jijiang::jijiang_activate_not_phase_locked ... ok
+test identity::identity_lord_death_decides_by_faction ... ok
+test guozhan::guozhan_m3_faction_victory ... ok
+test jiu::jiu_boosts_next_sha_once_per_turn ... ok
+test jijiang::jijiang_pending_ask_restore_continues ... ok
+test jiu::jiu_bonus_survives_byte_restore ... ok
+test jiu::jiu_saves_dying_player ... ok
+test judgement::bing_judgement_skips_draw_phase ... ok
+test judgement::delayed_trick_play_time_nullify_window ... ok
+test identity::identity_matrix_for_supported_seats ... ok
+test judgement::judge_lightning_saved_by_enough_taos ... ok
+test judgement::delayed_trick_bing_and_shandian_nullify_window ... ok
+test judgement::judge_zone_same_name_limit ... ok
+test judgement::judgement_event_order_rewrite_then_tiandu ... ok
+test judgement::judgement_no_rewrite_single_finalized ... ok
+test judgement::judge_order_delayed_first_then_lightning_hit_kills ... ok
+test judgement::lightning_damage_has_no_card ... ok
+test judgement::lightning_miss_transfer_skips_dead_seat ... ok
+test judgement::judge_owner_death_settles_zones_and_conservation ... ok
+test general::general_faction_mapping_complete ... ok
+test judgement::le_judgement_skips_play_phase ... ok
+test judgement::judge_order_grouping_multi_cards_and_restore ... ok
+test judgement::lightning_miss_to_next_with_same_name_discards ... ok
+test kof::kof_engine_mode_session_advance ... ok
+test leisha::leisha_resolves_as_sha_and_shares_limit ... ok
+test leisha::leisha_pending_ask_byte_roundtrip ... ok
+test last::last_rebel_reward_precedes_victory ... ok
+test identity::identity_full_match_replay_reaches_lord_side_victory ... ok
+test liubei::liubei_rende_gives_cards_and_heals ... ok
+test luoshen::luoshen_repeat_judgement_gains_black_cards ... ok
+test lidian::lidian_assembly_xunxun_wangxi ... ok
+test luxun::luxun_lianying_draws_after_losing_last_card ... ok
+test lvbu::lvbu_wushuang_duel_needs_double_sha ... ok
+test lvbu::lvbu_wushuang_sha_needs_two_dodges ... ok
+test luxun::luxun_lianying_triggers_on_forced_discard ... ok
+test luxun::luxun_qianxun_blocks_le_target ... ok
+test lvmeng::lvmeng_keji_skips_discard_without_sha ... ok
+test distance::distance_range_reference_differential ... ok
+test machao::machao_mashu_distance_minus_one ... ok
+test liubei::liubei_jijiang_borrows_sha_from_shu_helper ... ok
+test kof::kof_m1_two_player_pure_command_endgame ... ok
+test machao::machao_tieji_judgement_blocks_shan_on_red ... ok
+test n08::n08_lijian_forces_duel ... ok
+test n08::n08_fanjian_give_and_damage ... ok
+test n04f::n04f_snapshot_association_validation ... ok
+test n08::n08_hujia_borrows_shan_from_others ... ok
+test n08::n08_liuli_transfers_sha_target ... ok
+test n08::n08_jieyin_heals_both ... ok
+test n10::n10_planner_stale_rejection ... ok
+test n08::n08_jijiu_red_card_as_tao ... ok
+test n11::n11_kof_session_parse_negatives ... ok
+test n10::n10_planner_isolation_and_budget ... ok
+test n10::n10_planner_cancel_and_deadline ... ok
+test n10::n10_policy_input_isolation ... ok
+test n10a::n10a_private_choice_answer_hidden_from_others ... ok
+test n11b::n11b_archive_header_and_length_validation ... ok
+test general::general_table_grants_all_bundles ... ok
+test no::no_nullify_window_for_basic_card ... ok
+test n08::n08_qingguo_qicai_jiuyuan ... ok
+test n11a::n11a_auth_token_instance_and_generation_binding ... ok
+test no::no_paoxiao_second_sha_rejected ... ok
+test nullify::nullify_cancels_savage ... ok
+test nullify::nullify_on_nullify_reverses ... ok
+test negative::negative_hp_rescued_by_three_taos ... ok
+test n11::n11_reveal_grants_skills_and_hp ... ok
+test presentation::presentation_visibility_and_render_determinism ... ok
+test nullify::nullify_rejected_when_played_actively ... ok
+test probe::probe_tashui2_tmp ... ok
+test p2::p2_death_with_machine_held_cards ... ok
+test qinglong::qinglong_replays_sha_after_dodge ... ok
+test rende::rende_cumulative_crosses_two_across_activations ... ok
+test rejections::rejections_leave_state_unchanged ... ok
+test identity::identity_pure_command_traitor_victory ... ok
+test qilin::qilin_bow_discards_target_horse_on_sha_damage ... ok
+test qinggang::qinggang_pierces_armor ... ok
+test render::render_frame_guozhan_generals_isolation ... ok
+test replay::replay_determinism_same_seed_identical ... ok
+test p2::p2_new_choice_points_per_submission_conservation ... ok
+test replay::replay_different_seed_diverges ... ok
+test rollback::abort_requires_open_segment_and_nonsliced_rollback_unchanged ... ok
+test renwang::renwang_blocks_black_sha_only ... ok
+test rollback::aborted_segment_restores_pre_command_state ... ok
+test rollback::abort_after_restore_restores_segment_start ... ok
+test rollback::budget_exhaustion_rolls_back ... ok
+test rollback::abort_contract_direct_vs_restored_identical ... ok
+test simayi::simayi_fankui_decline_takes_nothing ... ok
+test sancai::sancai_nested_choice_chain_and_decline ... ok
+test seat::seat_quota_bounds_commands_and_resets_per_round ... ok
+test simayi::simayi_fankui_steals_from_damage_source ... ok
+test simayi::simayi_guicai_rewrites_with_any_suit_card ... ok
+test shouyi::shouyi_grants_temporary_yishang_until_owner_turn_end ... ok
+test skill::skill_disabled_gate_excludes_rewriter ... ok
+test snapshot::snapshot_roundtrip_while_suspended ... ok
+test snatch::snatch_steals_card_within_distance ... ok
+test guozhan::guozhan_m3_victory_regression_matrix ... ok
+test sunquan::sunquan_zhiheng_discard_n_draw_n ... ok
+test suqing::suqing_disables_queued_suidun_mid_resolution ... ok
+test sun::sun_xiangxiang_jixiang_draws_on_equip_loss ... ok
+test d4::d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo ... ok
+test tiandu::tiandu_gain_own_judge_card_only ... ok
+test suspension::suspended_segment_rejects_commands_and_resume_requires_open_segment ... ok
+test versus::versus_mode_team_victory_and_rewards ... ok
+test suidun::suidun_prevents_once_per_turn ... ok
+test shandian::shandian_hits_and_transfers ... ok
+test versus::versus_4v4_eight_seats_team_victory ... ok
+test tiandu::tiandu_other_holder_not_asked ... ok
+test versus::versus_substitute_revive_on_death ... ok
+test weapon::weapon_replacement_terminates_old_range ... ok
+test wugu::wugu_jiedao_trick_behaviors ... ok
+test wuzhong::wuzhong_taoyuan_trick_behaviors ... ok
+test yishang::yishang_redirects_damage_in_before_window ... ok
+test identity::identity_pure_command_match_reaches_outcome ... ok
+test xiahoudun::xiahoudun_ganglie_non_heart_reflects ... ok
+test yiji::yiji_assembly_jijie_jiyuan ... ok
+test suspension::time_slice_resumes_to_identical_result ... ok
+test zhangfei::zhangfei_paoxiao_removes_sha_limit ... ok
+test zhiheng::zhiheng_decline_draws_nothing ... ok
+test zhaoyun::zhaoyun_longdan_sha_as_dodge ... ok
+test zhangba::zhangba_two_cards_as_sha ... ok
+test yuanshu::yuanshu_assembly_wangzun_tongji ... ok
+test xuchu::xuchu_luoyi_boosts_sha_damage ... ok
+test zhuge::zhuge_crossbow_unlimited_sha ... ok
+test zhugeliang::zhugeliang_guanxing_reorders_deck_top ... ok
+test zhouyu::zhouyu_yingzi_extra_draw_at_draw_phase ... ok
+test zhugeliang::zhugeliang_kongcheng_blocks_sha_and_duel_targets ... ok
+test zhu::zhu_skills_require_lord_role_in_identity_mode ... ok
+test zhangliao::zhangliao_tuxi_replaces_draw ... ok
+test standard::standard_missing_generals_assembly_and_behaviors ... ok
+test replay::replay_and_restore_per_command_parity ... ok
+test reshuffle::reshuffle_conserves_every_card_exactly_once ... ok
+test n10::n10_planner_baseline_completes_games ... ok
+test p2::p2_identity_endgame_per_submission_parity ... ok
+test kof::kof_session_consistency_and_midrestore ... ok
+test identity::identity_versus_boss_replay_restore_parity ... ok
+
+test result: ok. 341 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.00s
+
+     Running tests/nc01_seat_semantics.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc01_seat_semantics-1b2dee0b3dbb8eee)
+
+running 6 tests
+test seat_ring_swap_changes_order ... ok
+test alive_ring_ignores_dead_seats ... ok
+test audit_counterexamples_are_fixed ... ok
+test seat_distance_all_pairs_for_supported_counts ... ok
+test seat_distance_is_rotation_invariant ... ok
+test seat_steps_and_distance_are_distinct_concepts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc03_ai_consistency.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc03_ai_consistency-6c1b43a3f6fb1793)
+
+running 2 tests
+test forged_action_is_rejected_by_authoritative_validation ... ok
+test planner_actions_pass_authoritative_validation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc03_legal_actions.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc03_legal_actions-03d2f01f9e1b049c)
+
+running 4 tests
+test legal_actions_empty_for_other_seat ... ok
+test legal_actions_cover_open_choice ... ok
+test legal_actions_respect_attack_range ... ok
+test legal_actions_do_not_mutate_engine ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc04_cards_given_event.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_cards_given_event-67ba8e5583519b23)
+
+running 4 tests
+test cards_given_dsl_package_bridges_to_native_event ... ok
+test probe_on_recipient_side_does_not_trigger ... ok
+test rende_give_triggers_cards_given_probe_for_recipient ... ok
+test optional_probe_confirms_and_restores_across_save ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc04_vm_fault.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_vm_fault-9c05ad2773c93a4f)
+
+running 4 tests
+test nc04_pause_and_resume ... ignored, NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖
+test nc04_normal_completion ... ok
+test nc04_duplicate_submission_after_fault ... ok
+test nc04_fuel_exhaustion_rolls_back_and_rejects ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc04_vm_resume.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc04_vm_resume-81e8a659b5dc4193)
+
+running 9 tests
+test b7_suspended_vm_v323_archive_is_rejected ... ok
+test b7_plain_v323_archive_is_rejected_by_rule_version ... ok
+test nc04_vm_restore_preserves_hit_counting ... ok
+test nc04_pause_resume_completes ... ok
+test nc04_vm_restore_preserves_once_consume ... ok
+test nc04_vm_restore_uses_declared_skill_for_storage ... ok
+test nc04_invalid_vm_answers_preserve_retry_across_archive ... ok
+test nc04_fault_after_resume_rolls_back ... ok
+test nc04_vm_fault_after_archive_restores_choice_and_allows_retry ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc05_general_select.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc05_general_select-cc8ea8fddb1d5cdd)
+
+running 7 tests
+test identity_lord_selection_preserves_infinite_hp_sentinel ... ok
+test assign_general_validates_inputs ... ok
+test reselect_keeps_equipment_skill_shared_with_old_general ... ok
+test reselect_keeps_global_skill_shared_with_old_general_and_restore ... ok
+test assign_general_grants_pack_skills ... ok
+test general_candidates_include_pack_generals ... ok
+test match_continues_after_selection ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc06_generic_content_state.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc06_generic_content_state-0aa80e24c3e70137)
+
+running 6 tests
+test nc06_shape_marks_is_same_sourced ... ok
+test nc06_shape_hits_is_same_sourced ... ok
+test nc06_shape_flags_is_same_sourced ... ok
+test nc06_shape_once_is_same_sourced ... ok
+test nc06_shape_piles_is_same_sourced ... ok
+test nc06_generic_turn_scoped_state_clears_on_turn_change ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc06_zhucheng_restore.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc06_zhucheng_restore-e295b087f8fcb449)
+
+running 5 tests
+test non_owning_card_references_are_not_counted_twice ... ok
+test skill_pile_archive_restores_and_continues ... ok
+test skill_pile_rejects_duplicate_missing_and_unknown_cards ... ok
+test ai_redaction_preserves_actual_zhucheng_pile ... ok
+test all_owned_piles_are_counted_once ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc07_discard_duplicate_probe.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_discard_duplicate_probe-1ebeab886f39a837)
+
+running 1 test
+test swd_discard_has_no_duplicates_and_restores ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc07_lianyaohu_hash.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_lianyaohu_hash-15f3df844c52be09)
+
+running 2 tests
+test v324_and_earlier_archives_are_rejected_by_rule_version ... ok
+test different_jar_orders_have_different_hashes_and_trajectories ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc07_state_same_source.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc07_state_same_source-ea6cc6b60f202f2a)
+
+running 12 tests
+test nc07_boss_stage_is_same_sourced ... ok
+test nc07_seat_ring_is_same_sourced ... ok
+test nc07_counters_are_same_sourced ... ok
+test nc07_hp_is_same_sourced ... ok
+test nc07_identity_roles_are_same_sourced ... ok
+test nc07_judge_zone_is_same_sourced ... ok
+test nc07_skill_instances_are_same_sourced ... ok
+test nc07_equip_zone_is_same_sourced ... ok
+test nc07_face_down_is_same_sourced ... ok
+test nc07_max_hp_is_same_sourced ... ok
+test nc07_turn_state_is_same_sourced ... ok
+test nc07_restore_rejects_out_of_range_references ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_acceptance_sweep_all_packages.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_acceptance_sweep_all_packages-aa2997f7f5c854de)
+
+running 1 test
+test acceptance_sweep_all_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+
+     Running tests/nc08_acceptance_sweep_small_packages.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_acceptance_sweep_small_packages-ae13725c485231be)
+
+running 1 test
+test acceptance_sweep_small_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_card_name_prefix_regression.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_card_name_prefix_regression-95298f11de51de90)
+
+running 1 test
+test card_name_double_prefix_regression ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_card_ownership_partition.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_card_ownership_partition-bbce5ceb5a7c2b77)
+
+running 1 test
+test card_ownership_partition_roundtrip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_composition_acceptance.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_composition_acceptance-9bfcefcd3e5c8a64)
+
+running 2 tests
+test composition_duplicate_card_names_report ... ok
+test composition_all_card_packs_together ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_composition_pair_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_composition_pair_matrix-d4ffc39ab964305f)
+
+running 1 test
+test composition_pair_matrix_all_pairs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/nc08_config_acceptance.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_config_acceptance-1dbb7e2da497ef33)
+
+running 4 tests
+test config_invalid_data_rejected ... ok
+test config_init_hook_parses ... ok
+test config_metadata_complete ... ok
+test config_enabled_flag_gates_cards ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_conversion_gap_regression.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_conversion_gap_regression-86c37e49e2557746)
+
+running 1 test
+test conversion_gap_inventory_is_still_absent ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_cross_target_real.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_cross_target_real-d7dc9df6c2940b8e)
+
+running 1 test
+test native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_dead_host_keys.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_dead_host_keys-5b1cad62c4f9240a)
+
+running 1 test
+test dead_host_keys_are_absent_from_catalog ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_general_pair_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_general_pair_matrix-09664d27828fcf4a)
+
+running 1 test
+test general_pair_matrix_with_card_packs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_global_cards_active_use_probe.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_global_cards_active_use_probe-7ffd8e6f25c322c7)
+
+running 1 test
+test global_cards_active_use_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/nc08_identity_gate_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_identity_gate_matrix-923e81efcfd6344c)
+
+running 1 test
+test identity_version_gate_over_all_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_loader_card_skills.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_loader_card_skills-77e14fe7ff4b4168)
+
+running 4 tests
+test card_skills_declare_host_skill ... ok
+test card_skills_deduplicated ... ok
+test unknown_card_skill_key_rejected ... ok
+test real_pack_still_bridges ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_manifest_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_manifest_matrix-730f59510d7a6c1e)
+
+running 1 test
+test manifest_matrix_over_package_dirs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_phase_end_dispatch_probe.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_phase_end_dispatch_probe-0cf2b9184c2304e8)
+
+running 1 test
+test probe_phase_end_skills_and_candidates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_pile_pair_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_pile_pair_matrix-c1acfd38d5fa4af7)
+
+running 1 test
+test pile_pair_matrix_over_card_packs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_prepare_phase_mapping.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_prepare_phase_mapping-ba096004ce29edf9)
+
+running 2 tests
+test xiuluo_filter_requires_hand_which_upstream_does_not ... ok
+test prepare_phase_triggers_are_folded_into_judge_begin ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_registered_defect_guards.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_registered_defect_guards-a761f01b665f3b0b)
+
+running 50 tests
+test baiyi_must_not_invent_a_phase_trigger ... ignored, 登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；修复需改未跟踪的 content/host/filtering/common.rs
+test cap_card_targeted ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_damage_begin_second ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_death_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_game_start ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_judge_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_sha_after ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_sha_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test cap_sha_begin ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test g19_rexue_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test g19_tiebi_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test g19_zhuhai_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test g20_jiuwei_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test g20_liyutang_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test g20_paotai2_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test g20_zhucheng_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test g20_ziyu_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test g23_binxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_donghuangzhong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_guangshu_spade_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_huanling_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_jidong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_lingxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_lingyu_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_lqingcheng_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_menshen_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test g23_xuanyuan_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test guard_chengxin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_cigu_pre_draw ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_fenglue_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_fuchou2_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_gaiming_judge_before ... ignored, 补 `judgeBefore` 幕并挂上后转绿
+test guard_hutian_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test guard_kuwu_and_shengke_card_targeted ... ignored, 补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）
+test guard_mb_phase_before_enter_game ... ignored, 补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿
+test guard_mopaifanbei_second_draw ... ignored, 补「第 2 次」档或摸牌前幕后转绿
+test guard_mufeng_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test guard_niepan_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_prepare_phase_exists ... ignored, 补 `Phase::Prepare` 后转绿
+test guard_rangjie_branch1_draws ... ignored, 补 `draw_cards` 后转绿（分支 1 应摸牌）
+test guard_shouyin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_shuiyun5_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test guard_xiangxing_lose_hp_end ... ignored, 补 LoseHpEnd 幕并挂上后转绿
+test guard_yueyin_fourth_damage ... ignored, 补「第 4 次」档后转绿
+test guard_yxs_menshen3_extra_phase ... ignored, 补 dieBegin 幕 / 改事件种类后转绿
+test huajin2_must_not_add_a_phase_branch ... ignored, 登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；修复需改未跟踪的 content/host/filtering/swd.rs
+test jiguanyuan_gain_must_trigger_on_damage ... ignored, 登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs
+test lexue_any_phase_of_owner_only ... ignored, 登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs
+test reguhuo_must_record_a_per_turn_use_marker ... ignored, 登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs
+test ziyangdan_must_not_pin_the_end_phase ... ignored, 登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；修复需改未跟踪的 content/host/filtering/common.rs
+
+test result: ok. 0 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_replay_determinism_five_sources.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_replay_determinism_five_sources-3983acbbb395ff1a)
+
+running 1 test
+test replay_determinism_per_pack ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_rescue_card_set_survey.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_rescue_card_set_survey-edcabd09c8f91e51)
+
+running 1 test
+test rescue_card_set_survey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_save_restore_four_sources.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_four_sources-07b34e0d93633f04)
+
+running 1 test
+test save_restore_roundtrip_four_sources ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_save_restore_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_matrix-3414b4c9bfd18462)
+
+running 1 test
+test save_restore_matrix_over_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_save_restore_pile.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_save_restore_pile-ed6660b243f6df3b)
+
+running 1 test
+test save_restore_roundtrip_pile_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_skill_mapping_inventory.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_skill_mapping_inventory-a7dc2d32ed6e4f55)
+
+running 1 test
+test skill_mapping_inventory_matches_baseline ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_skill_pair_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_skill_pair_matrix-da34c5e0f59602ba)
+
+running 1 test
+test skill_pair_matrix_over_general_packs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/nc08_standard_deck_coverage.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_standard_deck_coverage-4281b10dfe3f83df)
+
+running 1 test
+test standard_deck_kind_instance_coverage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_swd_yuchan_family_probe.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_swd_yuchan_family_probe-f15e285720424532)
+
+running 1 test
+test swd_yuchan_family_active_use_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_trigger_order_counterexample.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_trigger_order_counterexample-91fd450b8e5575f0)
+
+running 1 test
+test nc08_same_priority_pair_resolves_in_def_order_without_player_choice ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_u08_reachability.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_u08_reachability-ee2baecda2ebf5c0)
+
+running 1 test
+test u08_skills_are_declared_but_have_no_carrier ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upgrade_acceptance.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_acceptance-fc9dce64d4b75a86)
+
+running 4 tests
+test upgrade_downgrade_still_bridges ... ok
+test upgrade_version_bump_keeps_content ... ok
+test upgrade_card_addition_is_additive ... ok
+test upgrade_old_and_new_coexist ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upgrade_five_sources.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_five_sources-78303504171ab257)
+
+running 1 test
+test upgrade_per_source_five_sources ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_upgrade_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_matrix-c3c62f8db72f8f2c)
+
+running 1 test
+test upgrade_matrix_over_packages ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/nc08_upgrade_skill_mapping.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upgrade_skill_mapping-678be2089754fa72)
+
+running 1 test
+test upgrade_skill_mapping_change_is_detected ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_biyue_yingzi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_biyue_yingzi-69db2c6c141e7a44)
+
+running 4 tests
+test upstream_biyue_draws_at_end_phase_begin ... ok
+test upstream_biyue_requires_the_skill ... ok
+test upstream_yingzi_draws_one_extra ... ok
+test upstream_yingzi_numfixed_difference_is_fixed ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_boss_zhugeliang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_boss_zhugeliang-41142e481d39402e)
+
+running 3 tests
+test upstream_boss_zhugeliang_pack_mapping ... ok
+test upstream_xiangxing_differences_are_fixed ... ok
+test upstream_xiangxing_three_stars_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_chunbing.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_chunbing-e45abd0f456fdc57)
+
+running 3 tests
+test upstream_chunbing_modeling_difference_is_fixed ... ok
+test upstream_chunbing_grants_listener_with_count_five ... ok
+test upstream_chunbing_target_filter_rejects_existing_holder ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_ciqiu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ciqiu-9238af28bb5eab03)
+
+running 3 tests
+test upstream_ciqiu_requires_sha_card ... ok
+test upstream_ciqiu_dying_is_turn_scoped ... ok
+test upstream_ciqiu_bonus_and_one_shot_removal ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_duwen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_duwen-8a4b1978d2983e3d)
+
+running 4 tests
+test upstream_duwen_notlink_difference_is_fixed ... ok
+test upstream_duwen_unequal_hands_no_bonus ... ok
+test upstream_duwen_requires_the_skill ... ok
+test upstream_duwen_equal_hands_adds_one_damage ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_fanjian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_fanjian-35640daa4d38c384)
+
+running 3 tests
+test upstream_fanjian_flow_matches ... ok
+test upstream_fanjian_matching_suit_no_damage ... ok
+test upstream_fanjian_mismatched_suit_deals_damage ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_fankui.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_fankui-55a0db7d61ab0e6f)
+
+running 2 tests
+test upstream_fankui_differences_are_fixed ... ok
+test upstream_fankui_gains_card_from_source ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_ganglie.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ganglie-114f1a3bfab32bf1)
+
+running 3 tests
+test upstream_ganglie_discard_branch_difference_is_fixed ... ok
+test upstream_ganglie_requires_the_skill ... ok
+test upstream_ganglie_non_heart_hits_source_directly ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_guanxing.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guanxing-22682e3da3b2c72e)
+
+running 2 tests
+test upstream_guanxing_differences_are_fixed ... ok
+test upstream_guanxing_offers_arrange_choice ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_upstream_guicai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guicai-c7bfbb55c553ede6)
+
+running 3 tests
+test upstream_guicai_equip_zone_difference_is_registered ... ok
+test upstream_guicai_rewrites_others_judgement_with_any_hand_card ... ok
+test guidao_is_not_in_the_standard_face ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_bingpotong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_bingpotong-595fc15aaa507dce)
+
+running 2 tests
+test upstream_bingpotong_hp_loss_ignores_hujia ... ok
+test upstream_bingpotong_same_color_branch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_dinvxuanshuang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_dinvxuanshuang-3109f58c4936a538)
+
+running 1 test
+test upstream_dinvxuanshuang_recovers ... ignored, 帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_feibiao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_feibiao-b8e762f2669dfbe7)
+
+running 1 test
+test upstream_feibiao_two_branches ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_food_survey.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_food_survey-cb9df2dcfa9b465d)
+
+running 1 test
+test food_cards_body_ownership_survey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_gujian_gjyuheng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_gjyuheng-98c30cb52b72b52a)
+
+running 1 test
+test upstream_gjyuheng_steals_spade ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_gudonggeng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_gudonggeng-e415b7fa3f1e85bf)
+
+running 1 test
+test upstream_gudonggeng_reduces_once ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_heilonglinpian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_heilonglinpian-8f4154c7c698a7f8)
+
+running 1 test
+test upstream_heilonglinpian_grants_hujia ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_jinlianzhu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_jinlianzhu-3b0c1b7b81b6462d)
+
+running 1 test
+test upstream_jinlianzhu_interrupts_and_source_draws ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_liufengsan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liufengsan-1357351367285148)
+
+running 1 test
+test upstream_liufengsan_grants_two_shan ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_liutouge.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liutouge-8e5e67355c938c9b)
+
+running 2 tests
+test upstream_liutouge_random_pool_difference_is_registered ... ok
+test upstream_liutouge_two_branches ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_liyutang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_liyutang-23fc942249589178)
+
+running 2 tests
+test upstream_liyutang_target_gains_the_card ... ignored, 鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项
+test upstream_liyutang_gate_on_already_marked ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_longxugou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_longxugou-32807d0b358ea546)
+
+running 2 tests
+test upstream_longxugou_steals_and_equips ... ignored, 龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项
+test upstream_longxugou_target_needs_equips ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_luyugeng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_luyugeng-d25737643b509b93)
+
+running 1 test
+test upstream_luyugeng_discards_basic_and_gains_deck_top ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_mapodoufu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mapodoufu-8f9aac6038fbcfdb)
+
+running 1 test
+test upstream_mapodoufu_target_gains_the_card ... ignored, 麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_mianlijinzhen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mianlijinzhen-cbf60f8388bb5fc5)
+
+running 2 tests
+test upstream_mianlijinzhen_target_hp_gate ... ok
+test upstream_mianlijinzhen_draws_then_loses_hp ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_mizhilianou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mizhilianou-7a6ebfce6ff769aa)
+
+running 1 test
+test upstream_mizhilianou_heart_as_tao ... ignored, 蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_molicha.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_molicha-1c39c4d7050c7282)
+
+running 1 test
+test upstream_molicha_blocks_black_cards ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_mutoumianju.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_mutoumianju-a817f02127faadf5)
+
+running 1 test
+test upstream_mutoumianju_grants_skill_on_equip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_qiankunbiao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_qiankunbiao-460d8ecf8b7087b0)
+
+running 2 tests
+test upstream_qiankunbiao_target_needs_he_cards ... ignored, 乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项
+test upstream_qiankunbiao_discards_target_and_neighbor ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_qingtuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_qingtuan-a36dda74bcecd75f)
+
+running 1 test
+test upstream_qingtuan_first_sha_draws_once_per_turn ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_shatang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shatang-e6afb925254d9410)
+
+running 1 test
+test upstream_shatang_damages_then_grants_hujia ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_shenhuofeiya.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shenhuofeiya-23bbae8b96c8ca70)
+
+running 2 tests
+test upstream_shenhuofeiya_burns_who_cannot_dodge ... ok
+test upstream_shenhuofeiya_target_without_he_is_legal ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_shihuifen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shihuifen-2b79fd547376fd98)
+
+running 1 test
+test upstream_shihuifen_blocks_cards_on_others ... ignored, 石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_shujinsan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_shujinsan-a504009b6c3b05ac)
+
+running 2 tests
+test upstream_shujinsan_target_needs_he_cards ... ok
+test upstream_shujinsan_discards_and_draws_equal ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_tanhuadong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_tanhuadong-621e7307f602fc4e)
+
+running 1 test
+test upstream_tanhuadong_draws_at_play_phase_end ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_xiajiao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_xiajiao-7cf673add9976c0e)
+
+running 1 test
+test upstream_xiajiao_extra_draw_then_discard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_upstream_gujian_yougeng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yougeng-6129be264cabafa9)
+
+running 1 test
+test upstream_yougeng_recovers_when_lowest_and_wounded ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/nc08_upstream_gujian_yuanbaorou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yuanbaorou-c2667880c9319c80)
+
+running 1 test
+test upstream_yuanbaorou_extra_sha_and_qingtuan_gate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_yunvyuanshen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_yunvyuanshen-90bf7b336a68838d)
+
+running 1 test
+test upstream_yunvyuanshen_grants_skill ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_gujian_ziyangdan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_gujian_ziyangdan-cd09bb9ae63a6fce)
+
+running 1 test
+test upstream_ziyangdan_grants_hujia ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_guose.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_guose-909d1b62e29f1d14)
+
+running 4 tests
+test upstream_guose_zone_and_priority_differences_are_fixed ... ok
+test upstream_guose_requires_the_skill ... ok
+test upstream_guose_non_diamond_rejected ... ok
+test upstream_guose_diamond_used_as_le ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_haidao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_haidao-ab555b56141a3618)
+
+running 4 tests
+test upstream_haidao_healthy_grants_hujia_without_prompt ... ok
+test upstream_haidao_is_once_per_turn ... ok
+test upstream_haidao_damaged_cancel_grants_hujia ... ok
+test upstream_haidao_damaged_discard_recovers ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_chuansongmen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_chuansongmen-5a0e9e299b6370a7)
+
+running 1 test
+test upstream_chuansongmen_gains_deck_top ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_dunpaigedang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_dunpaigedang-ac286f9069e848c7)
+
+running 1 test
+test upstream_dunpaigedang_hujia_draw_discard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_jihuocard.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_jihuocard-03e5272688502ea2)
+
+running 1 test
+test upstream_jihuocard_draws_and_grants_temp_skill ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_linghunzhihuo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_linghunzhihuo-55c769e1d65d0a56)
+
+running 1 test
+test upstream_linghunzhihuo_damages_and_user_discards ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_shandianjian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shandianjian-b58039c6dfb6f281)
+
+running 1 test
+test upstream_shandianjian_record_acceptance ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_shenenshu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shenenshu-164239554d556423)
+
+running 1 test
+test upstream_shenenshu_replaces_hand_with_basics ... ignored, 神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_shijieshu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_shijieshu-81e72629ab80f008)
+
+running 2 tests
+test upstream_shijieshu_target_must_not_be_min ... ok
+test upstream_shijieshu_equips_and_discards ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_tanshezhiren.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_tanshezhiren-eecea30784ff3b97)
+
+running 1 test
+test upstream_tanshezhiren_chain_discards ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_xingjiegoutong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_xingjiegoutong-107dd0c9d97f79f6)
+
+running 1 test
+test upstream_xingjiegoutong_three_steps ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_yuansuhuimie.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_yuansuhuimie-413118f98c45fab0)
+
+running 1 test
+test upstream_yuansuhuimie_discard_shortfall_damage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_zhaomingdan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_zhaomingdan-f5b30d577114b17d)
+
+running 1 test
+test upstream_zhaomingdan_discard_and_both_draw ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hearth_zhiliaobo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hearth_zhiliaobo-8ee68a6b5b233083)
+
+running 2 tests
+test upstream_zhiliaobo_target_must_be_wounded ... ok
+test upstream_zhiliaobo_two_branches ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_hujia.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_hujia-a096b5543723aff6)
+
+running 4 tests
+test upstream_hujia_only_for_shan ... ok
+test upstream_hujia_queue_is_wei_and_seat_ordered ... ok
+test upstream_hujia_lord_qualification_difference_is_fixed ... ok
+test upstream_hujia_borrows_shan_from_wei_ally ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_identity_start.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_identity_start-48af0a85a7e4065b)
+
+running 3 tests
+test upstream_identity_start_lord_first_and_four_cards_each ... ok
+test upstream_identity_start_prepare_phase_absent_is_registered ... ok
+test upstream_identity_draw_is_uniform_four ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jianxiong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jianxiong-e731c08fa98efa0b)
+
+running 3 tests
+test upstream_jianxiong_standard_face_has_no_mark_face ... ok
+test upstream_jianxiong_position_difference_is_fixed ... ok
+test upstream_jianxiong_gains_damage_card ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jieyin.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jieyin-8726b9fe93577bf0)
+
+running 2 tests
+test upstream_jieyin_target_gates ... ok
+test upstream_jieyin_heals_both ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jijiang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijiang-d3008376b7f7fd4d)
+
+running 4 tests
+test upstream_jijiang_shu_ally_plays_sha_for_lord ... ignored, 激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收
+test upstream_jijiang_uses_helpers_not_own_cards ... ok
+test upstream_jijiang_qualification_matches ... ok
+test upstream_jijiang_lord_gate_is_design_difference ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jijie.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijie-a683e9134fc3d28b)
+
+running 3 tests
+test upstream_jijie_takes_bottom_card ... ok
+test upstream_jijie_moves_bottom_card_to_target ... ok
+test upstream_jijie_allows_self_target ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jijiu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jijiu-2bbe9f7a19e1680b)
+
+running 3 tests
+test upstream_jijiu_turn_restriction_difference_is_fixed ... ok
+test upstream_jijiu_red_card_is_tao_like ... ok
+test upstream_jijiu_requires_the_skill ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jiuyuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jiuyuan-b01beb8156bb44b9)
+
+running 3 tests
+test upstream_jiuyuan_qualification_and_bonus ... ok
+test upstream_jiuyuan_lord_gate_is_same_family ... ok
+test upstream_jiuyuan_wu_tao_recovers_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jiyuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jiyuan-d5cd484013304774)
+
+running 3 tests
+test upstream_jiyuan_effect_is_draw_one ... ok
+test upstream_jiyuan_missing_arms_are_registered ... ok
+test upstream_jiyuan_dying_arm_draws_one ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_jizhi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_jizhi-eeba4ecc0197e56b)
+
+running 3 tests
+test upstream_jizhi_standard_face_has_no_gaintag ... ok
+test upstream_jizhi_scope_difference_is_registered ... ok
+test upstream_jizhi_draws_on_covered_trick ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_keji.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_keji-22fa4a3816914898)
+
+running 3 tests
+test upstream_keji_respond_history_difference_is_fixed ... ok
+test upstream_keji_no_sha_means_no_discard ... ok
+test upstream_keji_after_using_sha_must_discard ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_kongcheng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kongcheng-73baaf574c94c7f3)
+
+running 3 tests
+test upstream_kongcheng_coverage_difference_is_fixed ... ok
+test upstream_kongcheng_blocks_sha_when_hand_empty ... ok
+test upstream_kongcheng_allows_sha_when_hand_not_empty ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_kuangfu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kuangfu-a9ada15b3f7d4a02)
+
+running 3 tests
+test upstream_kuangfu_once_per_phase_difference_is_fixed ... ok
+test upstream_kuangfu_loses_hp_when_target_not_lower ... ok
+test upstream_kuangfu_draws_two_when_target_lower_hp ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_kurou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kurou-1513162b4a27ba45)
+
+running 4 tests
+test upstream_kurou_effect_order_is_recorded ... ok
+test upstream_kurou_loses_hp_not_damage ... ok
+test upstream_kurou_is_not_limited_per_phase ... ok
+test upstream_kurou_has_no_hp_filter ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_kuwu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_kuwu-7277c21375fc1c33)
+
+running 5 tests
+test upstream_kuwu_is_equip_skill ... ok
+test upstream_kuwu_requires_sha_damage_and_is_forced ... ok
+test upstream_kuwu_forces_target_discard ... ok
+test upstream_kuwu_filter_gaps ... ok
+test upstream_kuwu_chain_damage_difference ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_lianying.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lianying-997ef0c562cccfe5)
+
+running 3 tests
+test upstream_lianying_coverage_differences_are_fixed ... ok
+test upstream_lianying_threshold_off_by_one_is_registered ... ok
+test upstream_lianying_draws_after_losing_last_hand_card ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_liegong_xinkuanggu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_liegong_xinkuanggu-8a11f8412baff468)
+
+running 4 tests
+test upstream_xinkuanggu_requires_distance_le_one ... ok
+test upstream_liegong_second_branch_by_attack_range ... ok
+test upstream_liegong_condition_not_met_allows_shan ... ok
+test upstream_xinkuanggu_choice_branches ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_lijian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lijian-31213b0ad6398d95)
+
+running 3 tests
+test upstream_lijian_zone_difference_is_registered ... ok
+test upstream_lijian_targets_must_be_male ... ok
+test upstream_lijian_makes_two_males_duel ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_linghunzhihuo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_linghunzhihuo-5ef733012a9ff15d)
+
+running 3 tests
+test upstream_linghunzhihuo_random_discard_difference_is_fixed ... ok
+test upstream_linghunzhihuo_requires_a_target ... ok
+test upstream_linghunzhihuo_fire_damage_and_self_discard ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_lingxue.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_lingxue-7a346422486557b0)
+
+running 3 tests
+test upstream_lingxue_effect_is_fixed_by_source ... ok
+test upstream_lingxue_requires_the_skill ... ok
+test upstream_lingxue_gains_hujia_on_real_recover ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_liuli.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_liuli-04a44cafc65c1f3f)
+
+running 2 tests
+test upstream_liuli_excludes_kongcheng_target ... ok
+test upstream_liuli_redirects_sha ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_longdan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_longdan-d631e2de642ff29f)
+
+running 4 tests
+test upstream_longdan_shouyue_draw_difference_is_fixed ... ok
+test upstream_longdan_requires_the_skill ... ok
+test upstream_longdan_sha_as_shan_in_response ... ok
+test upstream_longdan_shan_used_as_sha ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_longxue.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_longxue-0263c40dfd832fa2)
+
+running 3 tests
+test longxue_pack_mapping ... ok
+test native_matches_its_documented_upstream_semantics ... ok
+test longxue_upstream_is_obfuscated_so_reference_is_weak ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_luoshen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_luoshen-4bc01f9883176577)
+
+running 4 tests
+test upstream_luoshen_timing_anchor_difference_is_fixed ... ok
+test upstream_luoshen_loop_prompt_difference_is_fixed ... ok
+test upstream_luoshen_requires_the_skill ... ok
+test upstream_luoshen_black_gains_and_red_stops ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_luoyi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_luoyi-cc83aeecb6d4ecad)
+
+running 3 tests
+test upstream_luoyi_differences_are_fixed ... ok
+test upstream_luoyi_sha_damage_plus_one ... ok
+test upstream_luoyi_draws_one_less ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mashu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mashu-8600ac72e12ee2cf)
+
+running 3 tests
+test upstream_mashu_implemented_as_minus ... ok
+test upstream_feiying_difference_is_registered ... ok
+test upstream_mashu_distance_floor_is_one ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_bingheyaosai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_bingheyaosai-d328db5d4808d551)
+
+running 1 test
+test upstream_mtg_bingheyaosai_draw2_discard2 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_feixu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_feixu-6f3a7752e21f207b)
+
+running 1 test
+test upstream_mtg_feixu_discovers_from_discard ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_haidao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_haidao-160dc9a587a0deff)
+
+running 1 test
+test upstream_mtg_haidao_three_branches ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_lindixiliu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_lindixiliu-1517e3eed30e2a87)
+
+running 1 test
+test upstream_mtg_lindixiliu_gains_heart ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_linzhongjianta.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_linzhongjianta-1afacf76cf2803f3)
+
+running 1 test
+test upstream_mtg_linzhongjianta_discover_and_equip ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_longlushanfeng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_longlushanfeng-42a9f66e7a29c963)
+
+running 1 test
+test upstream_mtg_longlushanfeng_two_choices ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_shamolvzhou.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_shamolvzhou-f465f417f84d93f1)
+
+running 1 test
+test upstream_mtg_shamolvzhou_discovers_basic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_shuimomuxue.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_shuimomuxue-4b2930ebccd5aef0)
+
+running 1 test
+test upstream_mtg_shuimomuxue_two_branches ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_mtg_youlin.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_mtg_youlin-709d80e0c780a9c2)
+
+running 1 test
+test upstream_mtg_youlin_uses_a_trick ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_paoxiao.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_paoxiao-41d4589c0c66fa28)
+
+running 3 tests
+test upstream_paoxiao_bypass_difference_is_fixed ... ok
+test upstream_paoxiao_requires_the_skill ... ok
+test upstream_paoxiao_allows_multiple_sha ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_qianxun.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qianxun-f54527a9c114a418)
+
+running 4 tests
+test upstream_qianxun_coverage_difference_is_fixed ... ok
+test upstream_qianxun_blocks_lebu ... ok
+test upstream_qianxun_blocks_snatch ... ok
+test upstream_qianxun_allows_other_tricks ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_qicai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qicai-7c27924ff0e5f9c0)
+
+running 4 tests
+test upstream_qicai_coverage_differences_are_fixed ... ok
+test upstream_qicai_requires_the_skill ... ok
+test upstream_qicai_snatch_within_range_ok ... ok
+test upstream_qicai_ignores_distance_for_snatch ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_qingguo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qingguo-b78d788093062ade)
+
+running 4 tests
+test upstream_qingguo_in_shan_options ... ok
+test upstream_qingguo_zone_difference_is_registered ... ok
+test upstream_qingguo_black_hand_card_responds_as_shan ... ok
+test upstream_qingguo_equip_zone_absent_from_options ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_qingnang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qingnang-0c60c9036945ba95)
+
+running 4 tests
+test upstream_qingnang_self_target_difference_is_registered ... ok
+test upstream_qingnang_full_hp_target_excluded ... ok
+test upstream_qingnang_once_per_turn ... ok
+test upstream_qingnang_discard_heals_wounded_other ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_qixi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_qixi-4b2b4ad108f96d80)
+
+running 4 tests
+test upstream_qixi_red_card_rejected ... ok
+test upstream_qixi_requires_the_skill ... ok
+test upstream_qixi_black_card_used_as_dismantle ... ok
+test upstream_qixi_priority_difference_is_fixed ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_rangjie.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_rangjie-11b20d65147b1110)
+
+running 3 tests
+test upstream_rangjie_move_branch_must_draw_one ... ignored, 登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；修复需改未跟踪的 content/host/step/skills_cards.rs，待 host 拆分落定
+test upstream_rangjie_triggers_after_damage_and_cancel_draws_nothing ... ok
+test upstream_rangjie_gain_branch_draws_then_takes_card ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_rende.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_rende-54a7073d77ac8aab)
+
+running 3 tests
+test upstream_rende_doc_inconsistency_is_fixed ... ok
+test upstream_rende_two_cards_once_recovers ... ok
+test upstream_rende_cumulative_recovers_once ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_shengke.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_shengke-9876596a43af383d)
+
+running 5 tests
+test upstream_shengke_is_global_and_natures_initialized ... ok
+test upstream_shengke_he_range_difference ... ok
+test upstream_shengke_ke_forces_discard ... ok
+test upstream_shengke_sheng_draws ... ok
+test upstream_shengke_requires_both_natures_and_relation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_shushen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_shushen-db07941aadcb919c)
+
+running 3 tests
+test upstream_shushen_per_point_index_difference_is_fixed ... ok
+test upstream_shushen_target_without_hand_draws_two ... ok
+test upstream_shushen_target_with_hand_draws_one ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_standard_tricks.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_standard_tricks-0876bd4f4ca529f7)
+
+running 3 tests
+test upstream_taoyuan_order_difference_is_registered ... ok
+test upstream_taoyuan_excludes_owner_and_skips_healthy ... ok
+test upstream_wuzhong_targets_self_only_and_draws_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_baishouzhihu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_baishouzhihu-3c90b198fed9ce1e)
+
+running 2 tests
+test upstream_baishouzhihu_opens_target_window ... ignored, 第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs
+test probe_baishouzhihu_hand_persists ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_cangchizhibi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_cangchizhibi-68d2b251bcda3704)
+
+running 2 tests
+test upstream_cangchizhibi_target_discards ... ignored, 苍螭之璧属转换缺口（未交付）——转换后启用本用例，见台账第 117 行
+test upstream_cangchizhibi_is_a_known_conversion_gap ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_gouhunluo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_gouhunluo-a99b16d735000f42)
+
+running 3 tests
+test upstream_gouhunluo_target_gate_is_enforced ... ok
+test upstream_gouhunluo_marks_target ... ok
+test upstream_gouhunluo_rejects_already_marked_target ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_huanglin.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_huanglin-65a58834b8dcb502)
+
+running 6 tests
+test probe_hand_has_kind_matches_catalog_kind ... ok
+test probe_huanglin_at_judge_phase ... ok
+test probe_instance_and_candidates ... ok
+test upstream_huanglinzhicong_no_gain_when_armored ... ok
+test probe_huanglin_at_next_round_judge ... ok
+test upstream_huanglinzhicong_gains_hujia_on_phase_begin ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_hufu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_hufu-3fb51eb52004e124)
+
+running 2 tests
+test upstream_swd_hufu_dying_only ... ignored, 虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项
+test upstream_rescue_contrast_tao_vs_hufu ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_jiguantong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_jiguantong-a23c1afa88c1a940)
+
+running 2 tests
+test upstream_jiguantong_discard_avoids_damage ... ok
+test upstream_jiguantong_empty_hand_takes_fire_damage ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_mujiaren.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_mujiaren-5c607addd3e65b12)
+
+running 2 tests
+test upstream_mujiaren_differences_are_fixed ... ok
+test upstream_mujiaren_trades_nonbasic_for_jiguan ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_qinglong.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_qinglong-833f3ba9792af810)
+
+running 1 test
+test upstream_qinglongzhigui_draw2_discard1 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_shencaojie_reverse.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shencaojie_reverse-96fb63ebe53ba8a6)
+
+running 1 test
+test upstream_shencaojie_reverse_branch_reduces_damage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_shencaojie_window.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shencaojie_window-48a18f6556712965)
+
+running 1 test
+test upstream_shencaojie_window_on_trick_damage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_shenmiguo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shenmiguo-a04f2e28ddefbc79)
+
+running 1 test
+test upstream_shenmiguo_copies_card_after_use ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_shijianhuisu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_shijianhuisu-ea3fea7f156f6c1d)
+
+running 2 tests
+test upstream_shijianhuisu_target_gate_note ... ok
+test upstream_shijianhuisu_recalls_equips ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_xuanwu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_xuanwu-5d7d4a276611f4aa)
+
+running 1 test
+test upstream_xuanwuzhihuang_heals_after_damage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_yangpijuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_yangpijuan-143f36eda5fb2a74)
+
+running 2 tests
+test upstream_yangpijuan_differences_are_fixed ... ok
+test upstream_yangpijuan_two_stage_choice ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_zhongxinghujia.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhongxinghujia-a650a921f26bf223)
+
+running 1 test
+test upstream_zhongxinghujia_target_gate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_swd_zhufangshenshi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhufangshenshi-b218c0ed0d53efcf)
+
+running 1 test
+test upstream_zhufangshenshi_draws_after_use ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_swd_zhuque.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_swd_zhuque-dcc09ef6c99ef99c)
+
+running 1 test
+test upstream_zhuquezhizhang_retaliates_on_source ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_tiandu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tiandu-c811e7a559565266)
+
+running 3 tests
+test upstream_tiandu_du_exclusion_difference_is_fixed ... ok
+test upstream_tiandu_requires_the_skill ... ok
+test upstream_tiandu_gains_judge_card ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_tianfuzhen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tianfuzhen-0cb0efa788d390c0)
+
+running 3 tests
+test upstream_tianfuzhen_enable_gate_difference_is_fixed ... ok
+test upstream_tianfuzhen_target_set_must_match_major_with_cards ... ok
+test upstream_tianfuzhen_forces_one_discard_per_target ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_tieji.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tieji-47c7f894fef9f473)
+
+running 2 tests
+test upstream_tieji_differences_are_fixed ... ok
+test upstream_tieji_red_judge_blocks_shan ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_tuxi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_tuxi-20afa7bc42f8118b)
+
+running 3 tests
+test upstream_tuxi_differences_are_fixed ... ok
+test upstream_tuxi_requires_the_skill ... ok
+test upstream_tuxi_takes_cards_and_skips_draw ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wudian_wangmeizhike.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wudian_wangmeizhike-bce31919d8488ff4)
+
+running 1 test
+test upstream_wangmeizhike_two_branches ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wudian_youdishenru.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wudian_youdishenru-48a297c66b10dbd8)
+
+running 1 test
+test upstream_youdishenru_cancels_sha_and_source_takes_damage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wusheng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wusheng-fa72b5050205961e)
+
+running 6 tests
+test upstream_wusheng_entry_and_shouyue_differences_are_fixed ... ok
+test upstream_wusheng_black_card_rejected ... ok
+test upstream_wusheng_requires_the_skill ... ok
+test upstream_wusheng_red_card_used_as_sha ... ok
+test upstream_wusheng_red_trick_convertible_note ... ok
+test upstream_wusheng_respond_path_not_covered ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wushuang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wushuang-51915f5fca6ec4c1)
+
+running 4 tests
+test upstream_wushuang_direct_hit_difference_is_fixed ... ok
+test upstream_wushuang_covers_both_directions ... ok
+test upstream_wushuang_duel_needs_two_sha ... ok
+test upstream_wushuang_sha_needs_two_shan ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wuxing_shengke.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_shengke-8b62756c131779c9)
+
+running 1 test
+test upstream_wuxing_shengke_resolves ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wuxing_shengke_branches.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_shengke_branches-0c9f1a03e7f84032)
+
+running 1 test
+test upstream_wuxing_shengke_three_branches ... ignored, 五行生克两支未能在行为面复现（三次均 −1）——见第 51 项
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_wuxing_wuxingpan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_wuxing_wuxingpan-7b2a8fdffada829e)
+
+running 1 test
+test upstream_wuxingpan_equips_and_grants_skill ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_xiaoji.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xiaoji-1d9a6685aed039eb)
+
+running 3 tests
+test upstream_xiaoji_requires_the_skill ... ok
+test upstream_xiaoji_replace_draws_two ... ok
+test upstream_xiaoji_discard_loss_difference_is_registered ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_xicai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xicai-1eac8c927ca03b89)
+
+running 2 tests
+test upstream_xicai_position_difference_is_registered ... ok
+test upstream_xicai_gains_damage_card ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_xiuluo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_xiuluo-f5674354143b79c0)
+
+running 3 tests
+test upstream_xiuluo_filter_difference_is_registered ... ok
+test upstream_xiuluo_timing_is_folded_into_judge_begin ... ok
+test upstream_xiuluo_discards_matching_suit_judge_card ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc08_upstream_yanziyaoshui.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yanziyaoshui-f61cb7a16a0b25f7)
+
+running 3 tests
+test upstream_yanziyaoshui_requires_exactly_one_target ... ok
+test upstream_yanziyaoshui_draws_one_otherwise ... ok
+test upstream_yanziyaoshui_draws_two_for_min_hand ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yaowu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yaowu-487f18a2f4ab69e2)
+
+running 3 tests
+test upstream_yaowu_note_may_be_stale ... ok
+test upstream_yaowu_black_sha_does_not_trigger ... ok
+test upstream_yaowu_red_sha_triggers_choice ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yiji.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yiji-13e037e9d69a6fbe)
+
+running 2 tests
+test upstream_yiji_differences_are_fixed ... ok
+test upstream_yiji_draws_two_after_damage ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_beige.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_beige-c9ca12345e6ed0ef)
+
+running 2 tests
+test upstream_beige_club_choice_difference_is_registered ... ok
+test upstream_beige_heart_branch_recovers ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_chanyuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chanyuan-98e19cbdddcb5ffd)
+
+running 2 tests
+test upstream_chanyuan_source_matches ... ok
+test upstream_chanyuan_killer_loses_max_hp ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_chenhuodajie.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chenhuodajie-b0b57e650d0d0d54)
+
+running 1 test
+test upstream_chenhuodajie_gains_target_card ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_chenhuodajie_window.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_chenhuodajie_window-3e5fb1a5eb6c7c1a)
+
+running 2 tests
+test upstream_chenhuodajie_window_after_damage ... ignored, 趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项
+test upstream_chenhuodajie_window_damaged_player_holds_it ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_guhuo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_guhuo-5c1c783a6d66c45e)
+
+running 2 tests
+test upstream_guhuo_choice_difference_is_registered ... ok
+test upstream_guhuo_draws_two_and_discards_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc08_upstream_yunchou_guihan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_guihan-fcfcef58e8e45f95)
+
+running 2 tests
+test upstream_defines_guihan ... ok
+test native_guihan_effect_is_empty ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_honglian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_honglian-d622b90900b4df1b)
+
+running 3 tests
+test upstream_honglian_source_matches ... ok
+test upstream_honglian_no_red_no_trigger ... ok
+test upstream_honglian_source_discards_all_red ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_huoshan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_huoshan-2e81aa668e069850)
+
+running 1 test
+test upstream_huoshan_record_acceptance ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_jiaoxia.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_jiaoxia-08139dbbf9a60c2c)
+
+running 2 tests
+test upstream_jiaoxia_source_matches ... ok
+test upstream_jiaoxia_red_triggers_black_does_not ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_jieyan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_jieyan-6c2c798924fd926f)
+
+running 2 tests
+test upstream_jieyan_owner_exclusion_is_registered ... ok
+test upstream_jieyan_discards_red_and_damages_others ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_kuanggu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_kuanggu-47d1007643f6d658)
+
+running 2 tests
+test upstream_kuanggu_source_matches ... ok
+test upstream_kuanggu_three_branches ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_luweiyan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_luweiyan-de9103291e174412)
+
+running 4 tests
+test upstream_luweiyan_chain_kill_fires_on_first_target ... ignored, 链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查
+test upstream_luweiyan_zone_difference_is_registered ... ok
+test upstream_luweiyan_shuigong_target_needs_equip ... ok
+test upstream_luweiyan_nonbasic_as_shuigong ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_shaoying.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_shaoying-89eced009b9ed958)
+
+running 3 tests
+test upstream_shaoying_source_matches ... ok
+test upstream_shaoying_black_reveal_no_burn ... ok
+test upstream_shaoying_reveals_deck_top_and_burns_red ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_toulianghuanzhu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_toulianghuanzhu-9dce2381b1549466)
+
+running 1 test
+test upstream_toulianghuanzhu_with_proper_answers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_unimplemented.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_unimplemented-1221507350e797cc)
+
+running 2 tests
+test upstream_defines_the_three_skills ... ok
+test native_lacks_the_three_skills ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_xiongzi.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_xiongzi-6632e369d59b4d2d)
+
+running 2 tests
+test upstream_xiongzi_source_matches ... ok
+test upstream_xiongzi_draw_bonus_with_floor ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_yaliang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_yaliang-5d6ecbf4ba0d7382)
+
+running 2 tests
+test upstream_yaliang_source_matches ... ok
+test upstream_yaliang_both_draw_one ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_yiesheng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_yiesheng-7b096aa72c80800c)
+
+running 2 tests
+test upstream_yiesheng_source_matches ... ok
+test upstream_yiesheng_discards_black_only_and_draws_equal ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_yunchou_zonghuo.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_yunchou_zonghuo-c91f135ed73e42b6)
+
+running 2 tests
+test upstream_zonghuo_discards_one_without_asking ... ignored, 纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项
+test upstream_zonghuo_source_matches ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_zhenfa_dizaizhen.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhenfa_dizaizhen-bb14834b65038aba)
+
+running 1 test
+test upstream_dizaizhen_draws_and_mode_gate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_zhiheng.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhiheng-1c50aa6c6cf23265)
+
+running 3 tests
+test upstream_zhiheng_equip_zone_difference_is_registered ... ok
+test upstream_zhiheng_once_per_turn ... ok
+test upstream_zhiheng_discard_two_draw_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_zhiyuan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_zhiyuan-47511979a2087f49)
+
+running 3 tests
+test upstream_zhiyuan_prevents_damage_and_recovers_equal ... ok
+test upstream_zhiyuan_declined_damage_resolves_normally ... ok
+test upstream_zhiyuan_requires_self_as_source ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_upstream_ziyu.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_upstream_ziyu-ab7c472c1522b78e)
+
+running 4 tests
+test upstream_ziyu_full_hp_has_no_recover_option ... ok
+test upstream_ziyu_opens_every_fourth_phase ... ok
+test upstream_ziyu_damaged_offers_recover_and_applies ... ok
+test upstream_ziyu_draw_option_draws_one ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc08_zhenfa_mode_gate_survey.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc08_zhenfa_mode_gate_survey-db160cc1d90e3b73)
+
+running 1 test
+test zhenfa_mode_gate_survey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc09_identity_end_to_end.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc09_identity_end_to_end-8c5e81c5cf19a7c9)
+
+running 4 tests
+test identity_game_is_stable_after_terminal ... ok
+test identity_outcome_traitor ... ok
+test identity_game_reaches_terminal_outcome ... ok
+test identity_outcome_lord_side ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/nc09_projection_and_errors.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc09_projection_and_errors-0fef8545ff5b7020)
+
+running 4 tests
+test nc09_choice_options_are_observer_only ... ok
+test nc09_illegal_commands_are_visibly_rejected ... ok
+test nc09_seat_projection_hides_others_cards ... ok
+test nc09_projection_survives_archive_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc10_ai_boundary_and_cancel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_boundary_and_cancel-26596b591206cee1)
+
+running 6 tests
+test cancelled_planner_marks_plan_cancelled ... ok
+test tiny_budget_marks_exhausted ... ok
+test stale_plan_is_rejected ... ok
+test policy_variants_are_deterministic ... ok
+test hidden_other_hands_do_not_change_seat_input ... ok
+test pool_parallel_matches_sequential_and_records_tail ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc10_ai_bounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_bounds-758c9253c5168c0b)
+
+running 7 tests
+test content_tuning_rejects_non_finite_values ... ok
+test zero_deadline_returns_timed_out_plan_without_blocking ... ok
+test nc10_stale_plan_is_rejected ... ok
+test nc10_planner_is_deterministic ... ok
+test nc10_tiny_budget_still_legal ... ok
+test nc10_planner_is_invariant_under_deck_order ... ok
+test nc10_leak_surface_quantified ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/nc10_ai_information_boundary.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_ai_information_boundary-5815d9dd034d8588)
+
+running 3 tests
+test legal_action_set_is_invariant_under_hidden_information ... ok
+test planner_detects_own_hand_change ... ok
+test planner_is_invariant_under_hidden_information ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/nc10_duel_nullify_privacy.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_duel_nullify_privacy-64a2ff4ee204d733)
+
+running 5 tests
+test nullify_timing ... ignored, manual same-machine latency sampling
+test special_zones_remain_conservative ... ok
+test redaction_preserves_window_and_produces_restorable_equal_hidden_zones ... ok
+test both_answers_can_resume_redacted_window_after_restore ... ok
+test planning_uses_only_observers_information ... ok
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc10_multiple_hidden_traps.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_multiple_hidden_traps-e7f69a41a954defc)
+
+running 5 tests
+test scarce_suits_are_shared_across_trap_holders ... ok
+test references_follow_multiple_synthetic_traps ... ok
+test multiple_traps_stay_physical_from_each_observer ... ok
+test real_skill_places_two_traps_and_simulation_remains_restorable ... ok
+test multiple_hidden_traps_do_not_change_simulation_or_plans ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.98s
+
+     Running tests/nc10_pending_duel_privacy.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_pending_duel_privacy-2e9313033af06b36)
+
+running 4 tests
+test pending_duel_timing ... ignored, manual same-machine latency sampling
+test uninspected_special_zones_are_not_reassigned ... ok
+test redaction_preserves_duel_machine_and_referenced_cards ... ok
+test duel_planning_does_not_depend_on_opponent_hidden_card ... ok
+
+test result: ok. 3 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/nc10_planner_pool.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_planner_pool-a2d29a030e8d1e1c)
+
+running 4 tests
+test nc10_pool_respects_cancellation ... ok
+test nc10_pool_plans_are_revision_guarded ... ok
+test nc10_pool_full_degrades_without_losing_plans ... ok
+test nc10_pool_reuses_workers_and_returns_legal_plans ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/nc10_single_hidden_trap.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_single_hidden_trap-9a8fbdc23171024f)
+
+running 5 tests
+test vm_opaque_storage_keeps_its_trap_reference ... ok
+test references_follow_their_synthetic_cards ... ok
+test real_single_opponent_trap_redacts_without_duplicate_cards ... ok
+test single_opponent_trap_identity_cannot_change_planning ... ok
+test hidden_trap_sampling_is_invariant_across_seeds ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.19s
+
+     Running tests/nc10_skill_pile_conservation.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc10_skill_pile_conservation-ab7c93275cc6c97d)
+
+running 3 tests
+test opponent_private_pile_identity_does_not_change_synthetic_hands ... ok
+test fixed_piles_keep_hidden_hand_permutations_equivalent ... ok
+test redaction_preserves_owned_skill_cards_for_self_and_opponents ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc12_ai_strength_baseline.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_ai_strength_baseline-15846c8efca94318)
+
+running 1 test
+test nc12_ai_strength_baseline_statistics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.80s
+
+     Running tests/nc12_dangling_reference_probe.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_dangling_reference_probe-faac9a55e469da30)
+
+running 1 test
+test nc12_probe_scans_seeds_for_dangling_reference ... ignored, 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc12_dangling_reference_repro.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_dangling_reference_repro-bb7eabf6f3c15edc)
+
+running 1 test
+test nc12_repro_seed_44170_step_10 ... ignored, 登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/nc12_swd_authoritative_stability.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/nc12_swd_authoritative_stability-d5c648209ebe6d30)
+
+running 2 tests
+test combo_tier_variant1_is_panic_free ... ok
+test swd_authoritative_path_is_panic_free ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+
+     Running tests/pa01_catalog_index_equivalence.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa01_catalog_index_equivalence-dbc4faacabf169c1)
+
+running 2 tests
+test synthetic_catalog_membership_and_first_match_name ... ok
+test dispatch_candidates_match_trigger_meta_membership ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pa08_fullhand_dump.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa08_fullhand_dump-60aeee64227e7cda)
+
+running 1 test
+test pa08_fullhand_dump ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pa12_batch1_vocabulary.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch1_vocabulary-d69eb26f796a0024)
+
+running 3 tests
+test pa12_batch1_vocabulary_mapping_and_strict_reject ... ok
+test pa12_batch1_owner_alive_triggers_on_others_end_phase ... ok
+test pa12_batch1_owner_is_source_after_own_card_used ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pa12_batch2_phase_events.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch2_phase_events-bdfb3236d690c87f)
+
+running 2 tests
+test pa12_batch2_sha_dodged_owner_is_source ... ok
+test pa12_batch2_phase_begin_is_turn_start_of_owner_only ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/pa12_batch3_filter_predicates.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch3_filter_predicates-c3757ce46e46b845)
+
+running 5 tests
+test pa12_batch3_filter_mapping ... ok
+test pa12_batch3_owner_is_source_or_target ... ok
+test pa12_batch3_owner_source_sha ... ok
+test pa12_batch3_owner_source_ordinary_trick ... ok
+test pa12_batch3_owner_alive_not_target ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pa12_batch3b_once_limits.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch3b_once_limits-c7b35683074b0c8e)
+
+running 2 tests
+test pa12_batch3b_once_per_turn_window ... ok
+test pa12_batch3b_once_per_round_window ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pa12_batch4_1_host_primitives.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_batch4_1_host_primitives-82eb4d30643b394e)
+
+running 7 tests
+test pa12_batch4_2_accept_rejects_zero_count ... ok
+test pa12_batch4_2_discard_hand_equip_count ... ok
+test pa12_batch5_4_dichou_predicates ... ok
+test pa12_batch4_3_damage_rewrite_window ... ok
+test pa12_batch4_1_turn_over_toggles_face ... ok
+test pa12_batch5_3_storage_set_clears_on_phase_play ... ok
+test pa12_batch5_fenli_bridges_with_skip_wiring ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/pa12_dsl_native_prototype.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_dsl_native_prototype-ddf1cdd835feaaef)
+
+running 5 tests
+test pa12_dsl_choice_max_hp_branch ... ok
+test pa12_dsl_choice_recover_branch ... ok
+test pa12_dsl_pause_save_restore_resume_both_branches ... ok
+test pa12_dsl_fires_once_per_turn_at_end_phase_and_first_answer_lands ... ok
+test pa12_dsl_filter_not_fired_when_unique_max ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/pa12_tag656_version.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/pa12_tag656_version-84a2786b62cc6bb0)
+
+running 1 test
+test v322_archive_is_rejected_and_current_archive_round_trips ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/replay_scenarios.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+
+running 3 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test pa12_print_golden_hex ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/standard_catalog_inventory.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/standard_catalog_inventory-c8359cd55da9dc3d)
+
+running 2 tests
+test defective_kinds_hold_declared_counts ... ok
+test standard_catalog_matches_declared_inventory ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/swd_bingfeng_lock.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_bingfeng_lock-bcbf595d159a3cdd)
+
+running 4 tests
+test bingfeng_lock_removed_on_turn_over ... ok
+test bingfeng_flips_loses_max_hp_and_locks_cards ... ok
+test bingfeng_unlocked_player_dodges ... ok
+test bingfeng_locked_player_cannot_dodge ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_cyqiaoxie_jiguan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_cyqiaoxie_jiguan-b9aaf2b2ff3f8432)
+
+running 4 tests
+test cyqiaoxie_absent_no_window ... ok
+test cyqiaoxie_cancel_stops_loop ... ok
+test cyqiaoxie_no_window_without_equip_loss ... ok
+test cyqiaoxie_uses_jiguan_card_after_equip_loss ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_gaizao_slot.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gaizao_slot-d5c43791c5cf63e6)
+
+running 4 tests
+test gaizao_no_window_when_slot_free ... ok
+test gaizao_decline_replaces_normally ... ok
+test gaizao_moves_equip_to_empty_slot ... ok
+test gaizao_state_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_gongxin_hand_peek.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gongxin_hand_peek-641db2d1d28d84cb)
+
+running 4 tests
+test gongxin_absent_and_once_per_turn ... ok
+test gongxin_is_once_per_play_phase ... ok
+test gongxin_places_heart_on_deck_top ... ok
+test gongxin_discards_target_heart ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_gxianyin_suit_swap.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_gxianyin_suit_swap-872bdc9df8ce7f10)
+
+running 3 tests
+test gxianyin_phase_gate_and_limit ... ok
+test gxianyin_swaps_suit_cards ... ok
+test gxianyin_absent_and_empty_hand ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_hutian_deposit.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_hutian_deposit-de086b1c153efb6f)
+
+running 4 tests
+test hutian_returns_on_owner_death ... ok
+test hutian_target_filter_and_decline ... ok
+test hutian_state_roundtrip ... ok
+test hutian_deposits_shields_and_returns ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_hxunzhi_wanjian.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_hxunzhi_wanjian-07da177d9f7150fb)
+
+running 3 tests
+test hxunzhi_without_marker_survives_phase_end ... ok
+test hxunzhi_wanjian_grants_and_death ... ok
+test hxunzhi_phase_gate_and_absent ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_jifeng_multishot.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jifeng_multishot-d18146aacb3ea272)
+
+running 3 tests
+test jifeng_allows_multi_target_sha ... ok
+test jifeng_multi_target_may_fizzle ... ok
+test jifeng_single_target_never_fizzles ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/swd_jikong_thunder_sha.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jikong_thunder_sha-07b41bcfa3ba7fcb)
+
+running 4 tests
+test jikong_absent_no_window ... ok
+test jikong_phase_face_virtual_thunder_sha_once_per_turn ... ok
+test jikong_lose_face_requires_empty_hand ... ok
+test jikong_cancel_refunds_use ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_jilve_top3.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_jilve_top3-b62b888808470ffd)
+
+running 4 tests
+test legal_targets_helper_rules ... ok
+test jilve_phase_gate_and_three_use_cap ... ok
+test jilve_uses_top_card_and_counts_three ... ok
+test jilve_absent_and_no_candidate ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_kunlunjing_rewind.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_kunlunjing_rewind-e7001689f121c4a0)
+
+running 3 tests
+test kunlunjing_snapshot_and_rewind ... ok
+test kunlunjing_no_rewind_when_hp_not_lower ... ok
+test kunlunjing_state_roundtrip ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_liaoyuan_extra_shan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_liaoyuan_extra_shan-37bddb4c98ef7bd7)
+
+running 4 tests
+test liaoyuan_no_window_without_same_suit ... ok
+test liaoyuan_decline_normal_damage ... ok
+test liaoyuan_direct_hit_with_bonus ... ok
+test liaoyuan_state_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_lingwu_extra_phase.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_lingwu_extra_phase-48c47abe7729095c)
+
+running 5 tests
+test lingwu_absent_no_insert ... ok
+test lingwu_inserts_extra_play_phase_when_used_reaches_hp ... ok
+test lingwu_no_insert_below_hp ... ok
+test cards_used_turn_resets_next_turn ... ok
+test lingwu_extra_phase_state_roundtrip ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_linyun_two_cards_sha.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_linyun_two_cards_sha-c146b1498dacb791)
+
+running 4 tests
+test linyun_requires_play_phase ... ok
+test linyun_requires_two_cards ... ok
+test linyun_equip_material_allowed ... ok
+test linyun_two_hand_cards_as_sha_hits ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_lxianglong_sha_miss.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_lxianglong_sha_miss-ec5755047a2c18d8)
+
+running 4 tests
+test lxianglong_absent_no_window ... ok
+test lxianglong_decline_no_extra_sha ... ok
+test lxianglong_no_window_when_sha_hits ... ok
+test lxianglong_counterattacks_after_sha_miss ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_mailun_modes.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_mailun_modes-bf247d07bdeaa270)
+
+running 6 tests
+test mailun_mode7_distance_minus ... ok
+test mailun_mode3_first_damage_minus ... ok
+test mailun_mode5_draw_minus_and_limit_plus ... ok
+test mailun_state_roundtrip ... ok
+test mailun_mode1_hp_shift_and_gate ... ok
+test mailun_absent_and_decline ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_meihuo_cards_lost.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_meihuo_cards_lost-0abf2cbdafbaa096)
+
+running 5 tests
+test meihuo_no_window_when_still_equipped ... ok
+test meihuo_takes_hand_card_into_hand ... ok
+test meihuo_takes_and_equips_when_equip_card ... ok
+test meihuo_negative_faces ... ok
+test cards_lost_event_roundtrip ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_miedao_draw_discard.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_miedao_draw_discard-f3a99aeef70efbea)
+
+running 3 tests
+test miedao_absent_no_extra_draw ... ok
+test miedao_no_effect_at_full_hp ... ok
+test miedao_draw_extra_and_forced_discard ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_mohua2_transform.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_mohua2_transform-d2832e88e624fb69)
+
+running 3 tests
+test mohua2_absent_no_transform ... ok
+test mohua2_transforms_on_dying ... ok
+test mohua2_fires_once ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_moyan_multi_fire.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_moyan_multi_fire-a3f14f254d3d1cd4)
+
+running 4 tests
+test moyan_absent_rejected ... ok
+test moyan_requires_wounded_and_red_card ... ok
+test moyan_is_once_per_play_phase ... ok
+test moyan_two_red_two_targets_fire_damage ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_niepan_ref.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_niepan_ref-5db30a135217fac1)
+
+running 2 tests
+test swd_niepan_package_mapping_is_host ... ok
+test swd_niepan_granted_and_usable ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/swd_rumeng_phase_skip.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_rumeng_phase_skip-7bbe4c4f5a2d89d4)
+
+running 4 tests
+test rumeng_no_window_without_non_basic ... ok
+test rumeng_target_discards_basic_card_no_skip ... ok
+test rumeng_skip_play_and_discard_when_target_declines ... ok
+test rumeng_skip_flag_one_shot ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_shengong_borrow.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shengong_borrow-b111f898f9706b66)
+
+running 3 tests
+test shengong_borrows_armor_to_dodge ... ok
+test shengong_absent_no_borrow_option ... ok
+test shengong_own_equip_still_usable ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_shenyan_spread.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shenyan_spread-ef7bce9fe1a10391)
+
+running 5 tests
+test shenyan_only_own_fire_damage ... ok
+test shenyan_ignores_non_fire_damage ... ok
+test shenyan_boosts_fire_and_spreads_to_neighbors ... ok
+test shenyan_limited_once ... ok
+test shenyan_state_roundtrip ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_shouyin_full_heal.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_shouyin_full_heal-e1b94192471a01d0)
+
+running 4 tests
+test shouyin_absent_no_window ... ok
+test shouyin_no_window_when_flipped ... ok
+test shouyin_flips_self_and_heals_everyone_once ... ok
+test shouyin_state_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_songci_targets.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_songci_targets-6f268f046a023ce3)
+
+running 4 tests
+test songci_forces_discard_when_hand_over_hp ... ok
+test songci_draws_two_and_records_target ... ok
+test songci_phase_gate_and_roundtrip ... ok
+test songci_draw_group_skill_when_all_recorded ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_swdtianshu_gain.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_swdtianshu_gain-84f8ce08899a9271)
+
+running 4 tests
+test swdtianshu_absent_and_phase_gate ... ok
+test swdtianshu_requires_trick_card ... ok
+test swdtianshu_gains_skill_and_removes_on_source_death ... ok
+test swdtianshu_state_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_tianlun_judge.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_tianlun_judge-b5b30033e8e0cce9)
+
+running 3 tests
+test tianlun_replaces_judge_card_from_judge_zone ... ok
+test tianlun_decline_keeps_judge_zone ... ok
+test tianlun_absent_no_window ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_tianxiang_redirect.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_tianxiang_redirect-d288eaf659a90e57)
+
+running 4 tests
+test tianxiang_no_window_without_heart ... ok
+test tianxiang_decline_keeps_damage ... ok
+test tianxiang_redirects_damage_and_target_draws ... ok
+test tianxiang_absent_and_grant_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_xiuluo_judge_clear.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_xiuluo_judge_clear-9ad1a00927dd2ccb)
+
+running 3 tests
+test xiuluo_absent_no_window ... ok
+test xiuluo_no_window_without_judge_card ... ok
+test xiuluo_discards_same_suit_judge_card ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_xuanyuanjian_card.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_xuanyuanjian_card-b0fb864f251c3e1c)
+
+running 4 tests
+test xuanyuanjian_no_backlash_with_xuanyuan ... ok
+test xuanyuanjian_equip_grants_hujia ... ok
+test xuanyuan_retrieves_sword_from_discard ... ok
+test xuanyuanjian_state_roundtrip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_yihua_bounce.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_yihua_bounce-aab519f4c66d640a)
+
+running 4 tests
+test yihua_no_window_with_one_card ... ok
+test yihua_absent_no_window ... ok
+test yihua_decline_resolves_normally ... ok
+test yihua_bounces_single_target_card ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_yishan_recover.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_yishan_recover-722a61c7c3d5d717)
+
+running 4 tests
+test yishan_records_only_for_holder ... ok
+test yishan_no_window_when_nothing_recoverable ... ok
+test yishan_recovers_two_recent_lost_cards ... ok
+test yishan_recovers_from_other_equip_and_roundtrips ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_zhenlie_target_exclude.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_zhenlie_target_exclude-0611c2fe179867ac)
+
+running 4 tests
+test zhenlie_excludes_self_from_sha_and_discards_user_card ... ok
+test zhenlie_no_window_when_not_targeted ... ok
+test zhenlie_absent_no_window ... ok
+test zhenlie_decline_takes_damage ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/swd_zhuhai_end_phase_sha.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/swd_zhuhai_end_phase_sha-665daa435f77176f)
+
+running 4 tests
+test zhuhai_no_window_without_damage ... ok
+test zhuhai_no_window_without_sha ... ok
+test zhuhai_absent_no_window ... ok
+test zhuhai_uses_sha_on_damaging_player ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/t11_boss_pangtong_niepan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t11_boss_pangtong_niepan-5684937df5474f96)
+
+running 4 tests
+test niepan_play_phase_effect_and_yuhuo_chain ... ok
+test niepan_state_roundtrip ... ok
+test niepan_dying_save_or_decline ... ok
+test shenwei_draw_and_hand_limit_bonus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/t11_boss_zhugeliang_hlss.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t11_boss_zhugeliang_hlss-3d77c7ea5c781ad1)
+
+running 8 tests
+test hlss_fengqi_decline_does_nothing ... ok
+test hlss_assembly_initializes_stars_and_light_refill ... ok
+test hlss_yueyin2_blocks_turnover_and_voids_delayed_trick ... ok
+test hlss_yueyin_skip_prevents_star_loss ... ok
+test hlss_fengqi_picks_unused_trick_and_records ... ok
+test hlss_with_infinite_hp_keeps_stars ... ok
+test hlss_zero_stars_awakens_and_stops_refill ... ok
+test hlss_gaiming_picks_judge_result_or_declines ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/t12_dual_diag.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_dual_diag-820cb12d270ef9fc)
+
+running 1 test
+test diag_dual_namespace_hang_point ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/t12_g2g4_channels.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_g2g4_channels-516ce0944c77eb89)
+
+running 14 tests
+test g2g4_shaai_ow ... ok
+test g2g4_cardpile_noname ... ok
+test g2g4_wudian ... ok
+test g2g4_shahai_hearth ... ok
+test g2g4_shahai_swd ... ok
+test g2g4_shahai_yunchou ... ok
+test g2g4_cardpile_liuli ... ok
+test g2g4_shahai_gwent ... ok
+test g2g4_d3_select ... ok
+test g2g4_shahai_gujian ... ok
+test g2g4_shahai_zhenfa ... ok
+test g2g4_shaai_xianjian ... ok
+test g2g4_shahai_mtg ... ok
+test g2g4_wuxing ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+
+     Running tests/t12_g5_relays.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t12_g5_relays-db17b379e7088fa2)
+
+running 16 tests
+test t12_g5_relay_cardpile_dual_namespace_worker ... ok
+test t12_g5_relay_d3_generals_worker ... ok
+test t12_g5_relay_shahai_hearth ... ok
+test t12_g5_relay_shahai_gwent ... ok
+test t12_g5_relay_wudian ... ok
+test t12_g5_relay_shaai_xianjian ... ok
+test t12_g5_relay_d3_generals ... ok
+test t12_g5_relay_cardpile_liuli ... ok
+test t12_g5_relay_wuxing ... ok
+test t12_g5_relay_shahai_yunchou ... ok
+test t12_g5_relay_shahai_gujian ... ok
+test t12_g5_relay_shahai_mtg ... ok
+test t12_g5_relay_shahai_zhenfa ... ok
+test t12_g5_relay_cardpile_dual_namespace ... ok
+test t12_g5_relay_shahai_swd ... ok
+test t12_g5_relay_shaai_ow ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.79s
+
+     Running tests/t13_info_isolation.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t13_info_isolation-563a13cbeab313ed)
+
+running 12 tests
+test isolation_doudizhu_two_sides ... ok
+test isolation_boss_stage_hidden ... ok
+test isolation_kof_two_player ... ok
+test isolation_prototype_seat_matrix ... ok
+test isolation_planner_redaction_leaves_authority_intact ... ok
+test isolation_versus_teammates_hidden ... ok
+test isolation_identity_roles_hidden ... ok
+test deep_fields_turned_over_and_skills ... ok
+test isolation_kingdoms_seat_matrix ... ok
+test identity_role_visibility_and_death_reveal ... ok
+test isolation_generals_public_in_non_kingdoms_modes ... ok
+test isolation_extension_cards_hidden_like_standard ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/t8_rvm_bridge.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t8_rvm_bridge-300d93cbd858a500)
+
+running 38 tests
+test t8_bte_kind_classification ... ok
+test t8_loader_maps_parameterized_filters ... ok
+test t8_filter_param_hp_below_dual_gate_and_threshold ... ok
+test t8_loader_maps_all_carried_named_filters ... ok
+test t8_hand_count_query_gates_draw ... ok
+test t8_change_max_hp_writes ... ok
+test t8_filter_damage_before_hand_empty_elemental_or_trick ... ok
+test t8_filter_damage_source_movable_field_card ... ok
+test t8_add_mark_writes ... ok
+test t8_bte_zero_count_negative ... ok
+test t8_lost_history_dual_gate ... ok
+test t8_move_batch_dual_gate ... ok
+test t8_rejection_corrupted_bytecode_rejected_at_load ... ok
+test t8_named_wounded_sha_dual_gate ... ok
+test t8_rejection_caps_escalation_denied ... ok
+test t8_rejection_tampered_snapshot_module_rejected ... ok
+test t8_named_sha_once_dual_gate ... ok
+test t8_skill_uses_remaining_dual_gate ... ok
+test t8_skill_pile_then_nonempty_filter ... ok
+test t8_vm_skill_filter_always ... ok
+test t8_vm_skill_filter_owner_is_source ... ok
+test t8_filter_targeted_by_other_sha ... ok
+test t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_vm_skill_id_reverse_lookup_wired ... ok
+test t8_vm_skill_loader_rejects_unsupported_filters ... ok
+test t8_bte_play_phase_filter_dual_gate_and_phase_kind ... ok
+test t8_rejection_unmapped_effect_rolls_back ... ok
+test t8_vm_skill_save_restore_roundtrip ... ok
+test t8_vm_skill_loader_bridge_end_to_end ... ok
+test t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_filter_tied_max_family ... ok
+test t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+test t8_filter_param_play_count_and_at_least_hp ... ok
+test t8_filter_family_owner_gate_and_predicates ... ok
+test t8_vm_skill_cross_process_resume ... ok
+test t8_named_filter_vocabulary_maps ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/t9_d5_surface.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/t9_d5_surface-f7cc5b5965f527e0)
+
+running 5 tests
+test t9_unknown_mapping_is_not_a_noop ... ok
+test t9_zhuge_and_ylyg_skills_stay_unmapped ... ok
+test t9_infinity_hp_maps_to_sentinel ... ok
+test t9_invalid_hp_values_are_rejected ... ok
+test infinite_hp_survives_damage_and_recovery ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/u01_d3_moyan.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u01_d3_moyan-bb8be527ceb5f687)
+
+running 1 test
+test u01_moyan_from_real_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/u03_cardpile_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u03_cardpile_eight-dc558dbfb78f5d4b)
+
+running 1 test
+test u03_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/u04_coin_eight.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u04_coin_eight-ac1267a2933b74e3)
+
+running 1 test
+test u04_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/u08_hero_kill_batch1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u08_hero_kill_batch1-698a1491c5d592dd)
+
+running 2 tests
+test yxs_fanji_absent_no_window ... ok
+test yxs_fanji_counterattacks_source ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/u08_menshen_batch2.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/u08_menshen_batch2-5ca5a1403488a542)
+
+running 2 tests
+test menshen3_clears_marker ... ok
+test menshen_marks_target ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/view_isolation.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target/debug/deps/view_isolation-4a85346562778c72)
+
+running 7 tests
+test seat_views_hide_opponent_hands_and_deck ... ok
+test view_public_fields_match_authoritative_state ... ok
+test choice_options_visible_only_to_observer ... ok
+test ai_session_non_observer_sees_limited_choice ... ok
+test ai_session_is_seat_bound_readonly_projection ... ok
+test event_view_hides_other_players_drawn_cards ... ok
+test isolation_holds_across_game_progress ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+EXIT_CODE: 0

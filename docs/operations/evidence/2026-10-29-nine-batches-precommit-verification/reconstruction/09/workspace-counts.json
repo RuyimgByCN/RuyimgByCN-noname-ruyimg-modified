@@ -1,0 +1,13 @@
+{
+  "passed_failed_ignored": [
+    6726,
+    2,
+    74
+  ],
+  "source": "final-01.log",
+  "expected_known_failures": [
+    "desktop-client::tests::freeze_blocks_install",
+    "desktop-client::tests::signed_install_via_host"
+  ],
+  "exit_code": 101
+}

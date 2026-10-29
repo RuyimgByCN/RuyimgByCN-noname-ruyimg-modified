@@ -445,7 +445,7 @@ pub(super) fn sixiang_reinit_seat(
     ctx.core.player_mut(seat).general_slots[0] = Some(general);
     ctx.core.player_mut(seat).general_slots[1] = None;
     ctx.core.player_mut(seat).revealed_generals = [true, false];
-    crate::engine::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+    crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
     let p = ctx.core.player_mut(seat);
     if preserve_hp {
         p.hp = old_hp.min(p.max_hp as i32);
@@ -468,7 +468,7 @@ pub(super) fn sixiang_add_fellow(ctx: &mut Ctx<'_>, name: &str) -> Option<Player
     }
     ctx.core.player_mut(pid).general_slots[0] = Some(g);
     ctx.core.player_mut(pid).revealed_generals = [true, false];
-    crate::engine::apply_general_assembly(ctx.core, ctx.catalog, pid, 0);
+    crate::state::apply_general_assembly(ctx.core, ctx.catalog, pid, 0);
     let p = ctx.core.player_mut(pid);
     p.hp = p.max_hp as i32;
     p.alive = true;

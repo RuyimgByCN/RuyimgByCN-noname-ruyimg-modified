@@ -50,7 +50,7 @@ DBG 白兽之琥：回合=14 阶段=Judge；窗口 prompt=None
 
 | 位置 | 内容 |
 |---|---|
-| `content/host/metadata/swd.rs:360` | `SwdBaishouzhihuHeld => TriggerMeta { event: EventKind::PhaseEnd, … }` |
+| `vocabulary/host/metadata/swd.rs:360` | `SwdBaishouzhihuHeld => TriggerMeta { event: EventKind::PhaseEnd, … }` |
 | `content/host/filtering/swd.rs:409-421` | `EventData::Phase { player, begin, .. } if *player == owner && *begin && …` |
 
 ⇒ **触发元数据注册的是 `PhaseEnd`**，而**过滤器要求 `begin == true`**；

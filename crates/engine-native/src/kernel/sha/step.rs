@@ -64,7 +64,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang)
             || ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_ZHADAO)
+                .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false);
         // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
@@ -78,7 +78,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             );
             red && ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+                .skill_by_name(crate::vocabulary::names::BOSS_FENTIAN)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
         };
@@ -124,7 +124,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // useCardToPlayered → directHit.push(target) 同口径）
         let fz_liegong_direct_hit = ctx
             .catalog
-            .skill_by_name(crate::content::host::L20_FZ_LIEGONG_KEY)
+            .skill_by_name(crate::vocabulary::host::L20_FZ_LIEGONG_KEY)
             .map(|def| ctx.core.has_skill(self.source, def))
             .unwrap_or(false)
             && {
@@ -142,13 +142,13 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             );
             red && ctx
                 .catalog
-                .skill_by_name(crate::content::host::U08_YXS_FANJI2_KEY)
+                .skill_by_name(crate::vocabulary::host::U08_YXS_FANJI2_KEY)
                 .map(|def| ctx.core.has_skill(self.source, def))
                 .unwrap_or(false)
         };
         let sbzhaxiang_direct_hit = ctx
             .catalog
-            .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+            .skill_by_name(crate::vocabulary::host::L27_SBZHAXIANG_KEY)
             .map(|def| ctx.core.has_skill(self.source, def))
             .unwrap_or(false)
             && {
@@ -272,7 +272,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 // 候选=自己手牌中的真闪 + 倾国转化（黑手牌）；不含他人牌
                 let qingguo_next = ctx
                     .catalog
-                    .skill_by_name(crate::content::standard::QING_GUO)
+                    .skill_by_name(crate::vocabulary::names::QING_GUO)
                     .map(|d| ctx.core.has_skill(next, d))
                     .unwrap_or(false);
                 let options: Vec<ChoiceOption> = ctx
@@ -317,7 +317,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             {
                 let tianxian = ctx
                     .catalog
-                    .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
+                    .skill_by_name(crate::vocabulary::host::WUDIAN_XJ_TIANXIAN_KEY)
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
                 if tianxian {
@@ -335,7 +335,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 铁骑（马超）：锁定式判定——判定牌为红色则目标不能出闪响应
             let tieji = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::TIE_JI)
+                .skill_by_name(crate::vocabulary::names::TIE_JI)
                 .map(|d| ctx.core.has_skill(self.source, d))
                 .unwrap_or(false);
             if tieji && self.tieji_red.is_none() {
@@ -364,7 +364,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
                     let tiemian_active = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::BOSS_TIEMIAN)
+                        .skill_by_name(crate::vocabulary::names::BOSS_TIEMIAN)
                         .map(|def| ctx.core.has_skill(self.target, def))
                         .unwrap_or(false)
                         && !equips.iter().any(|c| {
@@ -394,7 +394,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             {
                 let has_longxiang = ctx
                     .catalog
-                    .skill_by_name(crate::content::host::WUDIAN_LONGXIANG_KEY)
+                    .skill_by_name(crate::vocabulary::host::WUDIAN_LONGXIANG_KEY)
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
                 if has_longxiang
@@ -432,7 +432,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             {
                 let has_lueying = ctx
                     .catalog
-                    .skill_by_name(crate::content::host::WUDIAN_LUEYING_KEY)
+                    .skill_by_name(crate::vocabulary::host::WUDIAN_LUEYING_KEY)
                     .map(|d| ctx.core.has_skill(self.source, d))
                     .unwrap_or(false);
                 let t_he = !ctx.core.player(self.target).hand.is_empty()
@@ -473,7 +473,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
             let has_xiandan = ctx
                 .catalog
-                .skill_by_name(crate::content::host::WUDIAN_XIANDAN_KEY)
+                .skill_by_name(crate::vocabulary::host::WUDIAN_XIANDAN_KEY)
                 .map(|d| ctx.core.has_skill(self.source, d))
                 .unwrap_or(false);
             if has_xiandan
@@ -671,20 +671,20 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 龙胆：杀可当闪打出——响应选项并入目标手牌中的杀
             let longdan = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::LONG_DAN)
+                .skill_by_name(crate::vocabulary::names::LONG_DAN)
                 .map(|d| ctx.core.has_skill(self.target, d))
                 .unwrap_or(false);
             let tieji_blocks = self.tieji_red == Some(true);
             // 倾国（甄姬，v202 对齐上游 position "hs"）：黑色手牌可当闪打出——并入响应选项
             let qingguo = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::QING_GUO)
+                .skill_by_name(crate::vocabulary::names::QING_GUO)
                 .map(|d| ctx.core.has_skill(self.target, d))
                 .unwrap_or(false);
             // 堡垒哨卫（U05 ow，规则 v125）目标侧：持有者不能闪避杀
             let target_sentinel = ctx
                 .catalog
-                .skill_by_name(crate::content::host::WUDIAN_BAOLEI_KEY)
+                .skill_by_name(crate::vocabulary::host::WUDIAN_BAOLEI_KEY)
                 .map(|def| {
                     ctx.core.has_skill(self.target, def)
                         && ctx.core.player(self.target).baolei_mode == 1
@@ -729,7 +729,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
             // 「无闪直接命中」判定之前纳入
             let shengong_borrow =
-                crate::content::host::shengong_borrow_options(ctx, self.target, true);
+                (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
             if (shans.is_empty() && shengong_borrow.is_empty())
                 || !ctx.core.player(self.target).alive
             {
@@ -809,7 +809,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 仅保留 Pass（目标必受伤害）
             let sipu_ban_respond = ctx
                 .catalog
-                .skill_by_name(crate::content::standard::BOSS_SIPU)
+                .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
                 .map(|def| {
                     ctx.core.has_skill(self.source, def)
                         && ctx.core.turn.current == self.source
@@ -880,7 +880,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .retain(|x| *x != shan);
                 ctx.to_discard(shan);
             } else if let Some(owner) =
-                crate::content::host::shengong_borrowed_owner(ctx, self.target, shan)
+                (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan)
             {
                 // 神弓借用（swd 批 148）：从所有者装备区取走并撤技
                 ctx.core.player_mut(owner).equips.retain(|x| *x != shan);

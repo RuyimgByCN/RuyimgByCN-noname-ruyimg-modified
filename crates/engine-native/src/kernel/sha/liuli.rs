@@ -14,7 +14,7 @@ impl ShaResolveMachine {
         self.liuli_done = true;
         let liuli = ctx
             .catalog
-            .skill_by_name(crate::content::standard::LIU_LI)
+            .skill_by_name(crate::vocabulary::names::LIU_LI)
             .map(|d| ctx.core.has_skill(self.target, d))
             .unwrap_or(false);
         let has_he = !ctx.core.player(self.target).hand.is_empty()

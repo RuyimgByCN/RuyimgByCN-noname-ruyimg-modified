@@ -22,7 +22,7 @@ xiongzi: {
 | # | 上游依据 | 判据 | 结果 |
 |---|---|---|---|
 | 2 | `1 + Math.floor(countCards("e")/2)` | **行为面**：装备 **0/2/3** 件 → 摸牌阶段净增 **3/4/4** 张（3 件仍 4 张 ⇒ **向下取整** ⌊3/2⌋=1 成立） | 通过 |
-| 1 | `phaseDrawBegin` + `forced` | 原生 `yunchou.rs:8` 的 `1 + equips.len() / 2`（整数除法）与上游式一致；注册/过滤见 `behavior.rs:619`（tag 243）、`filtering/common.rs:507` | 通过 |
+| 1 | `phaseDrawBegin` + `forced` | 原生 `yunchou.rs:8` 的 `1 + equips.len() / 2`（整数除法）与上游式一致；注册/过滤见 `vocabulary/host/behavior.rs:619`（tag 243）、`filtering/common.rs:507` | 通过 |
 
 ## 3 夹具要点（**重要，避免误判**）
 

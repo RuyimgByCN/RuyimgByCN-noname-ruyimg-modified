@@ -1,0 +1,150 @@
+{
+  "by_crate": {
+    "accessibility-schema": [
+      7,
+      0,
+      0
+    ],
+    "benchmark-runner": [
+      8,
+      0,
+      0
+    ],
+    "conformance": [
+      4,
+      0,
+      0
+    ],
+    "content-cli": [
+      1,
+      0,
+      0
+    ],
+    "content-compiler": [
+      541,
+      0,
+      0
+    ],
+    "content-native-loader": [
+      32,
+      0,
+      0
+    ],
+    "content-runtime": [
+      36,
+      0,
+      0
+    ],
+    "content-schema": [
+      0,
+      0,
+      0
+    ],
+    "desktop-client": [
+      9,
+      2,
+      0
+    ],
+    "devtools": [
+      14,
+      0,
+      0
+    ],
+    "diagnostics": [
+      14,
+      0,
+      0
+    ],
+    "engine-ai": [
+      29,
+      0,
+      0
+    ],
+    "engine-api": [
+      4,
+      0,
+      0
+    ],
+    "engine-cli": [
+      0,
+      0,
+      0
+    ],
+    "engine-core": [
+      3847,
+      0,
+      1
+    ],
+    "engine-native": [
+      1644,
+      0,
+      73
+    ],
+    "engine-native-wasm": [
+      71,
+      0,
+      0
+    ],
+    "engine-protocol": [
+      1,
+      0,
+      0
+    ],
+    "engine-wasm": [
+      2,
+      0,
+      0
+    ],
+    "extension-studio": [
+      0,
+      0,
+      0
+    ],
+    "game-server": [
+      362,
+      0,
+      0
+    ],
+    "legacy-analyzer": [
+      32,
+      0,
+      0
+    ],
+    "licensing-schema": [
+      7,
+      0,
+      0
+    ],
+    "renderer-runtime": [
+      22,
+      0,
+      0
+    ],
+    "resource-compiler": [
+      6,
+      0,
+      0
+    ],
+    "resource-runtime": [
+      7,
+      0,
+      0
+    ],
+    "resource-schema": [
+      3,
+      0,
+      0
+    ],
+    "rule-api": [
+      2,
+      0,
+      0
+    ],
+    "rule-vm": [
+      21,
+      0,
+      0
+    ]
+  },
+  "unmapped_running_targets": []
+}

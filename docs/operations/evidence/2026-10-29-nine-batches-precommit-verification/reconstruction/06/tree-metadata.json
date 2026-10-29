@@ -1,0 +1,23 @@
+{
+  "batch": 6,
+  "commit": "5efb7170df0e12ebfefa2b001e23c9abdeb1a886",
+  "rules_version": 328,
+  "archive_format_version": 105,
+  "native_abi": 753,
+  "reconstruction": true,
+  "historical_original_source_snapshot": false,
+  "changed_paths": [
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/README.md",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-adr.log",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-linerefs.log",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/doc-checks-links.log",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/end-time.txt",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/filter-snippets.txt",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/hits-core.json",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/scan-core.log",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/scan_core.py",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/source-lines.log",
+    "docs/operations/evidence/2026-10-29-nc08-core-pack-statistics/start-time.txt"
+  ]
+}

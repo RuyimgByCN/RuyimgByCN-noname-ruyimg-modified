@@ -12,7 +12,7 @@
 **连技能说明文本也不可读**（`mbqianlong_info` 在整目录内**无明文命中**，见
 [obfuscation-proof.txt](obfuscation-proof.txt)）→ **无法**从上游源码逐字引用语义。
 
-本样本的对照依据是：**原生注释中记录的上游键名与语义**（`content/host/behavior.rs:1279–1285`、
+本样本的对照依据是：**原生注释中记录的上游键名与语义**（`vocabulary/host/behavior.rs:1279–1285`、
 `state.rs:256–262`）+ **包数据映射**。→ 这**只能**证明「原生实现与其**自述**的上游口径一致、
 映射齐备」，**不能**证明与上游行为等价。**台账/进度按此强度记账。**
 
@@ -24,8 +24,8 @@
 | — | 包映射 | 1 将 / 2 技（`mbqianlong` + `mbweitong`），均映射 `host:` 行为键 | 通过 |
 | — | 原生注释所载口径 | 开局 **20 点**（魏势力持卫统者 **60 点**）、**上限 99**、阈值 **25/50/75/99** 解锁清正/酒诗/放逐/绝进；卫统 +60 | 通过 |
 
-**原生实现引用**：`content/host/behavior.rs:1279`（`MbQianlong`/`MbWeitong`）、
-`state.rs:259`（`mbqianlong_marks`）、`content/host/constants.rs:804`（键名）。
+**原生实现引用**：`vocabulary/host/behavior.rs:1279`（`MbQianlong`/`MbWeitong`）、
+`state.rs:259`（`mbqianlong_marks`）、`vocabulary/host/constants.rs:774`（键名）。
 
 ## 2b 升级尝试：**静态提取失败**（2026-10-19 同轮，如实记录）
 

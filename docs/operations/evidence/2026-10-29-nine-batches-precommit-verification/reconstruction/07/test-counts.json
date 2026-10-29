@@ -1,0 +1,34 @@
+[
+  {
+    "log": "early-01.log",
+    "passed_failed_ignored": [
+      541,
+      0,
+      0
+    ]
+  },
+  {
+    "log": "early-02.log",
+    "passed_failed_ignored": [
+      1644,
+      0,
+      73
+    ]
+  },
+  {
+    "log": "grouping-01.log",
+    "passed_failed_ignored": [
+      3847,
+      0,
+      1
+    ]
+  },
+  {
+    "log": "grouping-00.log",
+    "passed_failed_ignored": [
+      2,
+      0,
+      0
+    ]
+  }
+]

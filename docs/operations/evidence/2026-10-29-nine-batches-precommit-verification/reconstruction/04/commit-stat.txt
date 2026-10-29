@@ -1,0 +1,36 @@
+99903169 fix: hash all ten archived NC07 fields under rules v327
+ crates/engine-native/src/content/standard.rs       |   11 +-
+ crates/engine-native/src/engine/hash.rs            |   28 +
+ .../engine-native/tests/nc04_cards_given_event.rs  |    4 +-
+ crates/engine-native/tests/nc04_vm_resume.rs       |    2 +-
+ .../tests/nc07_archive_hash_fields.rs              |  135 +
+ .../engine-native/tests/nc07_archive_hash_guard.rs |   81 +
+ crates/engine-native/tests/nc07_lianyaohu_hash.rs  |    4 +-
+ crates/engine-native/tests/pa12_tag656_version.rs  |    4 +-
+ crates/engine-native/tests/replay_scenarios.rs     |   35 +-
+ docs/architecture/native-remaining-ledger.md       |    4 +-
+ docs/architecture/native-rules-baseline.md         |    3 +-
+ .../2026-10-29-nc07-archive-hash-fields/README.md  |   66 +
+ .../build-native.log                               |  143 +
+ .../content-native-loader.log                      |  100 +
+ .../end-time.txt                                   |    1 +
+ .../engine-native-wasm.log                         |  303 +
+ .../engine-native.log                              | 3731 +++++++++++++
+ .../game-server.log                                | 3183 +++++++++++
+ .../2026-10-29-nc07-archive-hash-fields/gate1b.log |    3 +
+ .../golden-after-rerecord.log                      |   11 +
+ .../golden-hex-v327.txt                            |   14 +
+ .../golden-probe-step2-fix-v326.log                |   37 +
+ .../golden-probe-step3-revert-fix.log              |   10 +
+ .../green-targeted.log                             |   68 +
+ .../native-v326.ngsa                               |  Bin 0 -> 1896 bytes
+ .../red-counterexamples.log                        |  105 +
+ .../rule-vm.log                                    |   52 +
+ .../smoke-native.log                               |   86 +
+ .../source-head.txt                                |    1 +
+ .../source-lines.log                               |    1 +
+ .../start-time.txt                                 |    1 +
+ .../web-test.log                                   |  141 +
+ .../web-typecheck.log                              |    4 +
+ .../workspace-check.log                            | 5899 ++++++++++++++++++++
+ 34 files changed, 14247 insertions(+), 24 deletions(-)

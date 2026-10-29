@@ -1,0 +1,33 @@
+5ce54b1a fix: validate imported VM packages through the worker
+ apps/web-client/scripts/native-vm-install.test.mjs |   68 +-
+ apps/web-client/scripts/native-worker-smoke.mjs    |   27 +
+ apps/web-client/src/engine/client.ts               |    9 +
+ apps/web-client/src/engine/extensionStore.ts       |   74 +-
+ apps/web-client/src/types/engine.ts                |    4 +
+ apps/web-client/src/views/ExtensionsView.vue       |   72 +-
+ apps/web-client/src/worker/engine.native.worker.ts |    8 +
+ apps/web-client/src/worker/nativeBackend.ts        |   14 +-
+ crates/engine-native-wasm/src/installed_packs.rs   |   17 +
+ crates/engine-native-wasm/src/lib.rs               |    9 +
+ .../tests/gt014_import_validation_parity.rs        |   94 +
+ docs/architecture/native-remaining-ledger.md       |    8 +-
+ .../README.md                                      |   50 +
+ .../browser-import-deep-validation.mjs             |  148 +
+ .../browser-product-path.log                       |    5 +
+ .../build-native.log                               |  141 +
+ .../end-time.txt                                   |    1 +
+ .../engine-native-wasm.log                         |  301 +
+ .../game-server-parity.log                         | 1111 ++++
+ .../game-server.log                                | 3180 +++++++++++
+ .../gate1b.log                                     |    1 +
+ .../screenshot.png                                 |  Bin 0 -> 126985 bytes
+ .../smoke-native.log                               |   86 +
+ .../source-head.txt                                |    1 +
+ .../source-lines.log                               |    1 +
+ .../start-time.txt                                 |    1 +
+ .../vite-build.log                                 |   13 +
+ .../wasm-validator-parity.log                      |  129 +
+ .../web-test.log                                   |  141 +
+ .../web-typecheck.log                              |    4 +
+ .../workspace-check.log                            | 5896 ++++++++++++++++++++
+ 31 files changed, 11590 insertions(+), 24 deletions(-)

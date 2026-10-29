@@ -1,0 +1,33 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde_core v1.0.228
+   Compiling serde v1.0.228
+   Compiling thiserror v2.0.18
+    Checking constant_time_eq v0.4.2
+    Checking cfg-if v1.0.4
+    Checking arrayref v0.3.9
+    Checking arrayvec v0.7.8
+   Compiling cc v1.2.66
+   Compiling blake3 v1.8.5
+   Compiling syn v2.0.118
+   Compiling thiserror-impl v2.0.18
+   Compiling serde_derive v1.0.228
+    Checking engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-api)
+    Checking rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/rule-api)
+    Checking rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/rule-vm)
+    Checking f7-kernel-closure-check v0.0.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/kernel-closure)
+warning: associated function `new` is never used
+  --> src/kernel/monkey.rs:16:19
+   |
+15 | impl MonkeyStealMachine {
+   | ----------------------- associated function in this implementation
+16 |     pub(crate) fn new(card: crate::ids::CardId, user: PlayerId, holders: Vec<PlayerId>) -> Self {
+   |                   ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `f7-kernel-closure-check` (lib) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.94s

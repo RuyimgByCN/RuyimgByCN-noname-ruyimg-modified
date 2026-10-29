@@ -1,0 +1,74 @@
+[
+  {
+    "batch": 1,
+    "commit": "67dadfa64c5d43b76e20f91506b49baee6e6496a",
+    "rules": 325,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 2,
+    "commit": "31a30673f29b4f62541ff0c5419a262440b9ce50",
+    "rules": 326,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 3,
+    "commit": "5ce54b1a498d9cbdf055e15c1ebd248503a09a60",
+    "rules": 326,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 4,
+    "commit": "999031698ea8c78d06f57e47329bcb01f5f16796",
+    "rules": 327,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 5,
+    "commit": "b7ebdf30a96c3848c30f1466b54f70b004de4b34",
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 6,
+    "commit": "5efb7170df0e12ebfefa2b001e23c9abdeb1a886",
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 7,
+    "commit": "01b286932e48804c43ae96fdce3f33f9423a603a",
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 8,
+    "commit": "23af03f4a725d6953386aed6916578f23318b7e1",
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  },
+  {
+    "batch": 9,
+    "commit": "c7a55d9846fc1db311f632dddaaf26231b0a9e10",
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "boundary_assertions": "passed"
+  }
+]

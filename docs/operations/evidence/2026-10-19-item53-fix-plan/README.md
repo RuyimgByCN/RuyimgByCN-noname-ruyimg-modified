@@ -7,7 +7,7 @@
 
 | 面 | 事实 | 证据 |
 |---|---|---|
-| **触发器** | `HostBehavior::ChenhuodajieCard` 已声明（`keys.rs:33` → `"host:chenhuodajie_card"`） | `keys.rs:33/862` |
+| **触发器** | `HostBehavior::ChenhuodajieCard` 已声明（`vocabulary/host/keys.rs:327` → `"host:chenhuodajie_card"`） | `vocabulary/host/keys.rs:327`、`vocabulary/host/behavior_list.rs:19` |
 | **过滤** | `filter_behavior`（`filtering.rs:473`）**委托** `filter_common`；后者对它是 **`=> false`** | `filtering.rs:473`、`filtering/common.rs:548` |
 | **挂载** | `packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json` 的 **`skills` 为 `null`** ⇒ **无任何宿主技声明** | 包数据 |
 | **行为面** | 他人受伤（hp 4→3 已确认）后**无窗口**；**受伤者本人持有亦无窗口** | 样本 152 + 387 轮对照 |

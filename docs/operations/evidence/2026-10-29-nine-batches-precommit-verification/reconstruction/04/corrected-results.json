@@ -1,0 +1,26 @@
+[
+  {
+    "command": "cargo check --offline --workspace --all-targets",
+    "exit_code": 0,
+    "seconds": 13.889559030532837,
+    "log": "corrected-00.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native --test nc07_archive_hash_fields --test nc07_archive_hash_guard --test nc04_cards_given_event --test nc04_vm_resume --test nc07_lianyaohu_hash --test pa12_tag656_version",
+    "exit_code": 0,
+    "seconds": 2.43819522857666,
+    "log": "corrected-01.log"
+  },
+  {
+    "command": "cargo test --offline -p engine-native --no-fail-fast",
+    "exit_code": 0,
+    "seconds": 63.910197019577026,
+    "log": "corrected-02.log"
+  },
+  {
+    "command": "python3 -B scripts/check-source-lines.py",
+    "exit_code": 0,
+    "seconds": 1.2725520133972168,
+    "log": "corrected-03.log"
+  }
+]

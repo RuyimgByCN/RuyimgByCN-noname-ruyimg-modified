@@ -1,0 +1,2 @@
+{"name": "native-tests", "command": ["cargo", "test", "--offline", "-p", "engine-native"], "exit": 0, "seconds": 39.551, "log": "integration-native-tests.log"}
+{"name": "preflight", "command": ["python3", "-B", "scripts/preflight.py"], "exit": 0, "seconds": 344.064, "log": "integration-preflight.log"}

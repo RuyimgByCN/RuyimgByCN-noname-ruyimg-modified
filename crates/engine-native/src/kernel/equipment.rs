@@ -88,7 +88,7 @@ pub(super) fn commit_equip(
     if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Xuanyuanjian {
         let has_xuanyuan = ctx
             .catalog
-            .skill_by_name(crate::content::host::SWD_XUANYUAN_KEY)
+            .skill_by_name(crate::vocabulary::host::SWD_XUANYUAN_KEY)
             .map(|d| ctx.core.has_skill(player, d))
             .unwrap_or(false);
         if !has_xuanyuan && ctx.core.player(player).hp <= 2 {

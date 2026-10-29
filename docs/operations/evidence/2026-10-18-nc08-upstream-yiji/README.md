@@ -5,7 +5,7 @@
 - 规则版本 v322（工作树）/ 存档格式 v105
 - 结论：**2 项通过**（含 2 项差异登记）
 - **基准面**：`character/standard/skill.js`
-- **命名提示**：该技能在原生是常量 **`JI_JI`**（`content/standard/names.rs:106`，注释写明「郭嘉「遗计」」）
+- **命名提示**：该技能在原生是常量 **`JI_JI`**（`vocabulary/names.rs:106`，注释写明「郭嘉「遗计」」）
   ——按上游键名 `yiji` 检索**查不到**（见[实现索引](../2026-10-18-nc08-source-coverage/standard-skill-implementation.txt)）
 
 ## 1 上游源码（归档快照，逐字引用；见 [upstream-yiji.js.txt](upstream-yiji.js.txt)）

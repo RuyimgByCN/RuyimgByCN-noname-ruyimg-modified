@@ -828,6 +828,30 @@ mod tests {
         assert_eq!(a, b);
     }
 
+    #[test]
+    fn b9_danshou_in_deferred_queues_hashes_player_and_skill() {
+        for tail in [false, true] {
+            let hash = |player, skill| {
+                let mut state = GameState::empty();
+                let effect = EffectRequest::ResolveOlJieDanshou {
+                    player: engine_api::PlayerId::new(player),
+                    skill: engine_api::SkillId::new(skill),
+                };
+                if tail {
+                    state.resolution.deferred_tail_effects.push(effect);
+                } else {
+                    state.resolution.deferred_effects.push(effect);
+                }
+                canonical_state_hash(&state)
+            };
+            let baseline = hash(1, 10);
+            assert_eq!(baseline, hash(1, 10));
+            assert_ne!(baseline, canonical_state_hash(&GameState::empty()));
+            assert_ne!(baseline, hash(2, 10), "player must enter the hash");
+            assert_ne!(baseline, hash(1, 11), "skill must enter the hash");
+        }
+    }
+
     /// T15②（2026-10-11）：hand_limit_bonus 进入 canonical hash。
     /// 空表不写字节（empty 哈希不变，既有 golden 兼容）；仅此字段不同
     /// 的两个状态哈希必须不同（一致性缺口回归）。

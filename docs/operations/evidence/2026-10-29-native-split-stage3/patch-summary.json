@@ -1,0 +1,11 @@
+{
+  "patch": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/f7-stage3.patch",
+  "sha256": "41cbc09212a09e691563bd128854743e390879b67abc3ffc880967ba5d4aa56e",
+  "changedFiles": 88,
+  "sourceFiles": 67,
+  "tests": 8,
+  "scripts": 13,
+  "added": 16,
+  "modified": 61,
+  "deleted": 11
+}

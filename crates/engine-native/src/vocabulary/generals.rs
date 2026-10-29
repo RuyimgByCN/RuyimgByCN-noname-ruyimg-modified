@@ -1,4 +1,5 @@
-use super::*;
+use crate::catalog::Faction;
+use super::names::*;
 
 /// 完整武将授予（N08 内容扩面）：武将名 → 技能集。
 /// 授予武将即同时授予其全部技能。「张角」为官方技能迁移；
@@ -627,4 +628,14 @@ pub fn general_skills(g: u16) -> &'static [&'static str] {
 /// 国战明置门控：势力判定只认「已明置」的武将槽（ADR 0756/0757）。
 pub fn faction_of_general(g: u16) -> Option<crate::catalog::Faction> {
     STANDARD_GENERALS.get(g as usize).map(|(_, f, _, _, _)| *f)
+}
+
+/// 扩展提供的额外武将条目。
+#[derive(Debug, Clone)]
+pub struct ExtensionGeneral {
+    pub name: &'static str,
+    pub faction: Faction,
+    pub skills: &'static [&'static str],
+    pub max_hp: u32,
+    pub gender: Gender,
 }

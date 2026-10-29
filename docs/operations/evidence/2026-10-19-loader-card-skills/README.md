@@ -19,7 +19,7 @@ for s in opt_array(c, "skills", "cards[].skills")? {
 }
 ```
 
-* 只负责**声明**（并入 `pack.host_skills`，由 `content/standard.rs:428` 注册入目录）；
+* 只负责**声明**（并入 `pack.host_skills`，由 `content/standard.rs:426` 注册入目录）；
 * **授予**仍由内核侧决定，**不在装载器范围**（见第 53 项）。
 
 ## 2 验收（4 项）

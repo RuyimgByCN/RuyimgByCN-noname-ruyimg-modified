@@ -1,0 +1,361 @@
+..........................F........................................................../private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+................................................................./private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>
+  doc = json.load(open(path, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................................
+======================================================================
+FAIL: test_strict_mode_passes_after_cleanup (test_check_doc_line_refs.DocLineRefTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/test_check_doc_line_refs.py", line 53, in test_strict_mode_passes_after_cleanup
+    self.assertEqual(proc.returncode, 0, proc.stderr)
+AssertionError: 1 != 0 : 
+找不到的文件（可能是文档里的示例路径）：
+  - content/host/keys.rs（3 处）
+  - crates/engine-native/src/content/host/metadata/common.rs（2 处）
+  - content/host/metadata/swd.rs（2 处）
+  - path.rs（2 处）
+  - content/host/behavior.rs（2 处）
+  - content/host/metadata/common.rs（1 处）
+  - .../gujian/skill.js（1 处）
+  - content/standard/names.rs（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+
+越界的引用：
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: content/host/support.rs:1112 超出所有候选的最大行数 1068
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: content/host.rs:308 超出所有候选的最大行数 305
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: support.rs:1106 超出所有候选的最大行数 1068
+  - docs/operations/evidence/2026-10-18-nc08-upstream-hearth/README.md: content/host/constants.rs:212 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-gjyuheng/README.md: content/host/constants.rs:138 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-mutoumianju/README.md: content/host/constants.rs:112 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-19-nc08-upstream-gujian-heilonglinpian/README.md: content/host/constants.rs:84 超出所有候选的最大行数 41
+  - docs/operations/evidence/2026-10-18-nc08-upstream-longxue/README.md: content/host/constants.rs:804 超出所有候选的最大行数 41
+  - docs/architecture/native-progress.md: support.rs:1106 超出所有候选的最大行数 1068
+  - docs/architecture/native-progress.md: content/host.rs:308 超出所有候选的最大行数 305
+  - docs/migration/upstream-extension-reconstruction.md: support.rs:1106 超出所有候选的最大行数 1068
+
+
+----------------------------------------------------------------------
+Ran 184 tests in 304.272s
+
+FAILED (failures=1)
+ADR 编号检查（scripts/check-adr-index.py）
+- ADR 文件 3（编号文件 2，唯一编号 1）
+- 重复编号 1 组 / 2 个文件
+- 消歧表登记 0 组
+- 标题错号 0
+- 未登记冲突 1，过时登记 0，登记内容不符 0，索引坏链 0
+  [未登记冲突] 0001: 0001-first.md, 0001-second.md
+检查结果：失败 1 项
+{
+ "adr_dir": "docs/adr",
+ "adr_files": 3,
+ "duplicate_files": 2,
+ "duplicate_groups": 1,
+ "duplicates": {
+  "0001": [
+   "0001-first.md",
+   "0001-second.md"
+  ]
+ },
+ "failures": 0,
+ "heading_mismatches": [],
+ "link_missing": [],
+ "numbered_files": 2,
+ "registry_duplicate_groups": 1,
+ "registry_mismatch": [],
+ "registry_missing": [],
+ "registry_stale": [],
+ "unique_numbers": 1
+}

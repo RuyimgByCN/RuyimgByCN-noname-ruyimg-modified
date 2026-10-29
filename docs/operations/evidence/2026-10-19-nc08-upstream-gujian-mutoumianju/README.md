@@ -24,7 +24,7 @@ mutoumianju: {
 |---|---|---|---|
 | 2 | `skills: ["mutoumianju_skill"]` | **行为面**：装备后 **装备区 0 → 1** 且 **`gj_mutoumianju_skill` 已授予（true）** | 通过 |
 
-**原生实现引用**：`content/host/constants.rs:112`（`GJ_MUTOU_SKILL_KEY = "gj_mutoumianju_skill"`）；
+**原生实现引用**：`vocabulary/host/constants.rs:106`（`GJ_MUTOU_SKILL_KEY = "gj_mutoumianju_skill"`）；
 规则基准 golden 表第 53 行（「木头面具（**view-as 装备技**——`equip_skills` + `once_used`，
 `EquipSlot::Armor` 注册）」）。
 

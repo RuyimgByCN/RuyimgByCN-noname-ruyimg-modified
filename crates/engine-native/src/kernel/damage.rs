@@ -35,7 +35,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 加成类不触发；置于急冻前——上游 damageBefore 同层内容序）
     if let Some(jqdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::JUE_QING)
+        .skill_by_name(crate::vocabulary::names::JUE_QING)
     {
         if let Some(src) = d.source {
             if src != d.target && ctx.core.player(src).alive && ctx.core.has_skill(src, jqdef) {
@@ -52,7 +52,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 口径；置于绝情后=同层 priority 序）
     if let Some(wxdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_WUXIN)
+        .skill_by_name(crate::vocabulary::names::BOSS_WUXIN)
     {
         if ctx.core.has_skill(d.target, wxdef) && ctx.core.player(d.target).alive {
             ctx.emit(EventData::LoseHp {
@@ -82,7 +82,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     if d.nature == crate::event::DamageNature::Fire {
         if let Some(zdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZHAOHUO)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZHAOHUO)
         {
             if ctx.core.has_skill(d.target, zdef) {
                 ctx.log(LogEvent::DamagePrevented { target: d.target });
@@ -96,7 +96,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     if d.nature == crate::event::DamageNature::Fire {
         if let Some(hsdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_HUOSHEN)
+            .skill_by_name(crate::vocabulary::names::BOSS_HUOSHEN)
         {
             if ctx.core.player(d.target).alive && ctx.core.has_skill(d.target, hsdef) {
                 ctx.log(LogEvent::DamagePrevented { target: d.target });
@@ -110,7 +110,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // =持有者）
     if let Some(ndef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_NITAI)
+        .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
     {
         if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current == d.target {
             ctx.log(LogEvent::DamagePrevented { target: d.target });
@@ -123,7 +123,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     if d.nature == crate::event::DamageNature::Fire {
         if let Some(ndef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_NITAI)
+            .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
         {
             if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current != d.target {
                 amount += 1;
@@ -189,7 +189,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
         if let Some(src) = d.source {
             let has_feiren = ctx
                 .catalog
-                .skill_by_name(crate::content::host::WUDIAN_FEIREN_KEY)
+                .skill_by_name(crate::vocabulary::host::WUDIAN_FEIREN_KEY)
                 .map(|def| ctx.core.has_skill(src, def))
                 .unwrap_or(false);
             if has_feiren && ctx.core.player(src).alive {
@@ -210,7 +210,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
             {
                 if let Some(def) = ctx
                     .catalog
-                    .skill_by_name(crate::content::host::WUDIAN_CIQIU_KEY)
+                    .skill_by_name(crate::vocabulary::host::WUDIAN_CIQIU_KEY)
                 {
                     if ctx.core.has_skill(src, def) {
                         amount += 1;
@@ -232,7 +232,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
         {
             if let Some(def) = ctx
                 .catalog
-                .skill_by_name(crate::content::host::WUDIAN_DUWEN_KEY)
+                .skill_by_name(crate::vocabulary::host::WUDIAN_DUWEN_KEY)
             {
                 if ctx.core.has_skill(src, def) {
                     amount += 1;
@@ -262,7 +262,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 扣体力（chongzhuang 重装累计登记暂缓）。
     let has_jijia = ctx
         .catalog
-        .skill_by_name(crate::content::host::WUDIAN_JIJIA_KEY)
+        .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
         .map(|def| ctx.core.has_skill(d.target, def))
         .unwrap_or(false);
     if has_jijia {
@@ -295,7 +295,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     {
         if let Some(zjdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZUIJIU)
+            .skill_by_name(crate::vocabulary::names::BOSS_ZUIJIU)
         {
             if let Some(src) = d.source {
                 if ctx.core.has_skill(src, zjdef) {
@@ -311,7 +311,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     if amount > 1 {
         if let Some(bfdef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_BUFO)
+            .skill_by_name(crate::vocabulary::names::BOSS_BUFO)
         {
             if ctx.core.has_skill(d.target, bfdef) {
                 amount -= 1;
@@ -323,7 +323,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     if amount > 1 {
         if let Some(ldef) = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_LINGQU)
+            .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
         {
             if ctx.core.has_skill(d.target, ldef) {
                 amount = 0;
@@ -456,7 +456,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // damageEnd randomDiscard 随机改首张登记差异）
     if let Some(ydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YINZEI)
+        .skill_by_name(crate::vocabulary::names::BOSS_YINZEI)
     {
         let holder = d.target;
         let has_yinzei = ctx.core.has_skill_any_state(holder, ydef);
@@ -500,7 +500,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 登记；num=刘备弃牌数可多张登记；弃牌面=手牌首张，两手皆空跳过）
     if let Some(zwdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ZHANGWU)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZHANGWU)
     {
         if ctx.core.has_skill(d.target, zwdef) && ctx.core.player(d.target).alive {
             if let Some(src) = d.source {
@@ -533,7 +533,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 判定为内联确定性口径，无改判窗）
     if let Some(jddef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIDIAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIDIAN)
     {
         if let Some(src) = d.source {
             if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
@@ -577,7 +577,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 首个确定性近似登记；旗清零=回合结束全清，封印解除同位）
     if let Some(fsdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ZLFANSHI)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZLFANSHI)
     {
         if ctx.core.has_skill(d.target, fsdef) && ctx.core.player(d.target).alive {
             if ctx.core.player(d.target).zlfanshi_terra {
@@ -600,7 +600,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // asyncDraw([player, source]) 同口径）
     if let Some(zdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ZHUE)
+        .skill_by_name(crate::vocabulary::names::BOSS_ZHUE)
     {
         // 任一存活穷奇持有者（单 boss 场景恰一）
         let holders: Vec<PlayerId> = ctx
@@ -627,7 +627,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 无来源伤害不触发；新伤害无来源→天然无递归）
     if let Some(abdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ABI)
+        .skill_by_name(crate::vocabulary::names::BOSS_ABI)
     {
         if let Some(src) = d.source {
             if ctx.core.has_skill(d.target, abdef)
@@ -651,7 +651,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 跳过登记差异）
     if let Some(ycdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YUANCE)
+        .skill_by_name(crate::vocabulary::names::BOSS_YUANCE)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -689,7 +689,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 计数=PlayerState.lingqu_count 跨回合持久，手牌上限 +X）
     if let Some(ldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_LINGQU)
+        .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
     {
         if ctx.core.has_skill(d.target, ldef) && ctx.core.player(d.target).alive {
             ctx.draw_cards(d.target, 1);
@@ -702,7 +702,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 经 PlayCard 校验；蓐收加成尾面登记差异未建模）
     if let Some(jddef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JIDING)
+        .skill_by_name(crate::vocabulary::names::BOSS_JIDING)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -732,7 +732,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // global `_status.currentPhase != player` 同口径）
     if let Some(rxdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_RENXING)
+        .skill_by_name(crate::vocabulary::names::BOSS_RENXING)
     {
         let holders: Vec<PlayerId> = ctx
             .core
@@ -750,7 +750,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
     if let Some(dudef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YANDU)
+        .skill_by_name(crate::vocabulary::names::BOSS_YANDU)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, dudef) && !ctx.core.has_skill(holder, dudef) {
@@ -771,7 +771,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 同款 enable 直写）
     if let Some(jdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_JICAI)
+        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, jdef) && !ctx.core.has_skill(holder, jdef) {
@@ -793,11 +793,11 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 联动摸牌；上游 boss_cuidui damageEnd addSkill 同口径）
     if let Some(cdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_CUIDUI)
+        .skill_by_name(crate::vocabulary::names::BOSS_CUIDUI)
     {
         let zdef = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_ZHONGDU);
+            .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU);
         if let (Some(src), Some(zd)) = (d.source, zdef) {
             if src != d.target
                 && ctx.core.has_skill(src, cdef)
@@ -810,7 +810,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
                 for skdef in [
                     zd,
                     ctx.catalog
-                        .skill_by_name(crate::content::standard::BOSS_SHEDU)
+                        .skill_by_name(crate::vocabulary::names::BOSS_SHEDU)
                         .expect("蛇毒 def"),
                 ] {
                     ctx.core.skills.insert(
@@ -836,7 +836,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 身不获；上游 boss_duqu damageEnd storage++ 同口径）
     if let Some(dddef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_DUQU)
+        .skill_by_name(crate::vocabulary::names::BOSS_DUQU)
     {
         if ctx.core.has_skill(d.target, dddef) {
             if let Some(src) = d.source {
@@ -851,7 +851,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 积财/乱常同款 enable 直写）
     if let Some(edef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_ECHOU)
+        .skill_by_name(crate::vocabulary::names::BOSS_ECHOU)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, edef) && !ctx.core.has_skill(holder, edef) {
@@ -872,7 +872,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 积财同款 enable 直写）
     if let Some(ldef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_LUANCHANG)
+        .skill_by_name(crate::vocabulary::names::BOSS_LUANCHANG)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, ldef) && !ctx.core.has_skill(holder, ldef) {
@@ -893,7 +893,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 积财/乱常同款 enable 直写）
     if let Some(sdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SIPU)
+        .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, sdef) && !ctx.core.has_skill(holder, sdef) {
@@ -912,7 +912,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     }
     if let Some(xdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XUSHI)
+        .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, xdef) && !ctx.core.has_skill(holder, xdef) {
@@ -933,7 +933,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // 积财/乱常/虚失同款 enable 直写）
     if let Some(ydef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_YANYU)
+        .skill_by_name(crate::vocabulary::names::BOSS_YANYU)
     {
         let holder = d.target;
         if ctx.core.has_skill_any_state(holder, ydef) && !ctx.core.has_skill(holder, ydef) {
@@ -955,7 +955,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
     // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
     if let Some(mdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_MINWAN)
+        .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
     {
         if let Some(src) = d.source {
             if src != d.target
@@ -1032,7 +1032,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
 pub(crate) fn hlss_light_refill(ctx: &mut Ctx<'_>, player: PlayerId) {
     let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::host::HLSS_XIANGXING_KEY)
+        .skill_by_name(crate::vocabulary::host::HLSS_XIANGXING_KEY)
     else {
         return;
     };
@@ -1120,7 +1120,7 @@ pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u3
 pub(super) fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
     if let Some(ssdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_SHANGSHIX)
+        .skill_by_name(crate::vocabulary::names::BOSS_SHANGSHIX)
     {
         if ctx.core.player(player).alive && ctx.core.has_skill(player, ssdef) {
             let n = ctx.core.player(player).hand.len();

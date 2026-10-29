@@ -1,0 +1,8 @@
+[
+  {
+    "command": "cargo check --offline -p engine-native --all-targets",
+    "exit_code": 0,
+    "seconds": 1.2265510559082031,
+    "log": "gate-00.log"
+  }
+]

@@ -5,7 +5,7 @@
 - 规则版本 v322（工作树）/ 存档格式 v105
 - 结论：**3 项通过（含行为面）** + **2 项规则损失**（①仅濒死臂（原生已自述）；②**多一层 `dying` 守卫**（本轮行为面新发现））
 - **基准面**：`character/standard/skill.js`
-- **命名提示**：`xinfu_jiyuan` → 「**急援**」（`translate.js`）；原生常量 `JI_YUAN`（`names.rs:51`）
+- **命名提示**：`xinfu_jiyuan` → 「**急援**」（`translate.js`）；原生常量 `JI_YUAN`（`vocabulary/names.rs:51`）
 
 ## 1 上游源码（归档快照，逐字引用；见 [upstream-jiyuan.js.txt](upstream-jiyuan.js.txt)）
 

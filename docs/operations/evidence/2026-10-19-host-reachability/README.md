@@ -108,7 +108,7 @@ test result: ok. 1 passed
 
 ### 为什么「不在目录里」= 死键
 
-**运行时授予必须经目录查名** —— 例（`support.rs:1020`）：
+**运行时授予必须经目录查名** —— 例（`support.rs:976`）：
 
 ```rust
 pub(super) fn grant_shihuifen_ban(…) {
@@ -125,7 +125,7 @@ pub(super) fn grant_shihuifen_ban(…) {
 |---|---|
 | **94 键既不在包数据、也不在 `host.rs` 表** | 静态扫描（§6）|
 | **抽查 6 个都不在目录里** | 本用例 |
-| **运行时授予要过目录** | `support.rs:1020` 的 `skill_by_name` |
+| **运行时授予要过目录** | `support.rs:976` 的 `skill_by_name` |
 | ⇒ **这 94 个键无法被授予** | **三者合起来** ✅ |
 
 **边界**：抽查 **6/94**（**不是全部**）；**其余 88 条未逐个验证**。

@@ -1,0 +1,15 @@
+{
+  "goldenDefinition": {
+    "path": "crates/engine-native/tests/replay_scenarios.rs",
+    "identical": true,
+    "sha256": "de65694f4cfc9b409d6168409e025ed7ef2f69da97cfde54cc21d6ec47f84b31"
+  },
+  "goldenReplayResult": "replay_scenarios::replay_scenarios_match_golden passed; no re-recording",
+  "versions": {
+    "ruleset": 328,
+    "archive": 105,
+    "vmAbi": 753
+  },
+  "upwardReferences": 0,
+  "baseline": 0
+}

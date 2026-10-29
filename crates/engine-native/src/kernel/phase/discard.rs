@@ -13,7 +13,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     // PhaseEnd 帧]；经 TurnOverBefore 走翻面提交）
     if let Some(xdef) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_XUSHI)
+        .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
     {
         if ctx.core.has_skill(player, xdef) && ctx.core.player(player).alive {
             ctx.emit(EventData::TurnOverBefore {
@@ -26,7 +26,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     //（上游 boss_tanyu phaseDiscardBefore trigger.cancel 同口径）
     if let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_TANYU)
+        .skill_by_name(crate::vocabulary::names::BOSS_TANYU)
     {
         if ctx.core.has_skill(player, def) {
             ctx.core.turn.discard_phase_discarded = 0;
@@ -38,7 +38,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     // 口径；与急叮解锁无关，恒跳）
     if let Some(def) = ctx
         .catalog
-        .skill_by_name(crate::content::standard::BOSS_QINGZHU)
+        .skill_by_name(crate::vocabulary::names::BOSS_QINGZHU)
     {
         if ctx.core.has_skill(player, def) {
             ctx.core.turn.discard_phase_discarded = 0;

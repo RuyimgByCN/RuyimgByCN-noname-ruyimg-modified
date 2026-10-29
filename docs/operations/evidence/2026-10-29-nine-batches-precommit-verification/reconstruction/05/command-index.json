@@ -1,0 +1,55 @@
+{
+  "kind": "reconstruction-validation",
+  "batch": 5,
+  "commands": [
+    {
+      "group": "early-results",
+      "command": "cargo check --offline --workspace --all-targets",
+      "exit_code": 0,
+      "seconds": 26.212197065353394,
+      "log": "early-00.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p content-compiler --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 0.8465631008148193,
+      "log": "early-01.log"
+    },
+    {
+      "group": "early-results",
+      "command": "cargo test --offline -p engine-native --no-fail-fast",
+      "exit_code": 0,
+      "seconds": 81.77840089797974,
+      "log": "early-02.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit_code": 0,
+      "seconds": 0.0940561294555664,
+      "log": "early-03.log"
+    },
+    {
+      "group": "early-results",
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit_code": 0,
+      "seconds": 1.2776851654052734,
+      "log": "early-04.log"
+    },
+    {
+      "group": "gate-results",
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "exit_code": 0,
+      "seconds": 6.25816798210144,
+      "log": "gate-00.log"
+    },
+    {
+      "group": "targeted-results",
+      "command": "cargo test --offline -p engine-native --test adr0786_j1_commit_window",
+      "exit_code": 0,
+      "seconds": 7.382717847824097,
+      "log": "targeted-00.log"
+    }
+  ]
+}

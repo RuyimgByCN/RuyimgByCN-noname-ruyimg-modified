@@ -46,7 +46,7 @@
 | host.rs `self.card = self.card` | 删除该行 |
 | host.rs 未用 `def`（sync_land_skill 首行） | 删除该行 |
 | host.rs 未用导入 `HostBehavior as B` | 删除该行 |
-| engine.rs:230 未用 `chongzheng`（debug_add_fellow） | 改 `matches!(&…mode, GameMode::Boss { .. })` 判空返回，语义不变 |
+| state/general_assembly.rs:17 未用 `chongzheng`（debug_add_fellow） | 改 `matches!(&…mode, GameMode::Boss { .. })` 判空返回，语义不变 |
 | kernel.rs 未用 `boss` | 绑定改 `_` |
 | kernel.rs 多余 `mut`（Kof games） | 去掉 `mut` |
 | presentation.rs:185 未用 `count` | 改 `count: _` |

@@ -1,0 +1,18 @@
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/content-native-loader.log:100: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/engine-native-wasm.log:303: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/engine-native.log:3731: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/game-server.log:2674: trailing whitespace.
++test native_room_store::tests::failed_first_write_never_becomes_a_committed_record ... 
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/game-server.log:3183: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-after-rerecord.log:11: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/golden-probe-step3-revert-fix.log:10: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/green-targeted.log:68: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/rule-vm.log:52: new blank line at EOF.
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/smoke-native.log:64: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/smoke-native.log:76: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/smoke-native.log:80: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/web-typecheck.log:4: new blank line at EOF.
+EXIT_CODE: 2

@@ -1,0 +1,53 @@
+## Review
+
+**可整合，结论为 OK with notes。** 未发现本补丁造成当前规则执行、目录索引、所有权处理或内核依赖闭包的实质回归；发现一项 **P2 分层扫描器漏检**，建议用小补丁补齐。
+
+审查以 `f7-stage3.patch`、88 路径清单、冻结底稿及隔离 cwd 源码为依据。全程只读，未修改文件、运行构建或提交。下述测试结果属于已读取的实现方证据，不是本审查重新执行的结果。
+
+- **Finding — P2：新分层扫描器漏掉 raw identifier 路径。**  
+  位置：[check-native-layering.py:22](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/scripts/check-native-layering.py:22)，以及同文件第 108、113、116–118 行。
+
+  合法 Rust 导入可以写为：
+
+  ```rust
+  use crate::r#content::host::HostBehavior;
+  ```
+
+  静态追踪当前实现：`TOKEN` 将 `r#content` 拆成 `r`、`content` 两个标识符；`resolve_path` 得到的根为 `r`，无法命中 `content`；随后整个 use 声明被遮蔽，正文扫描也不会补报。该输入因而得到 **0 引用，预期为 1**。旧扫描器的 `content::host` 正则可以命中这条导入，因此这是本次扫描器重写引入的漏检。分组导入中的 `r#content` 也有同样问题。
+
+  **最小修复：**在 use 分词和正文路径扫描两处识别 raw identifier，并在解析前去掉 `r#` 前缀；在现有扫描器测试中补入上述导入及一个分组／别名用例，断言引用被计入。无需引入 Rust parser 依赖。
+
+  此项为静态可复现分析，本审查未运行该用例。已检索当前 `engine-native/src`，没有 `r#content` 或 `r#engine` 写法，因此它不推翻当前闭包为零的结论，也不阻止当前代码整合；它影响后续回归门禁的完整性。
+
+- **Correct — 默认 Catalog 与标准／扩展／Boss 索引保留。**  
+  [catalog.rs:861](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/catalog.rs:861) 的 `Catalog::build` 仍初始化 `ContentHooks::NONE`，没有因迁移丢掉默认将表。`general_meta` 仍按标准段、扩展段、Boss 动态尾段查找；Boss 起点仍是 `STANDARD_GENERALS.len() + extension_generals.len()`。新增的 [PA01 断言:104](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/tests/pa01_catalog_index_equivalence.rs:104) 覆盖了原始 build 的默认元数据、插入扩展后的 Boss 顺序及越界返回值。
+
+- **Correct — vocabulary 下沉保持类型归属，具体内容机器留在内容层。**  
+  [vocabulary/host.rs:6](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/vocabulary/host.rs:6) 汇集 `HostBehavior` 定义及全部 inherent impl 所在模块。全源码检索未发现留在内容层的 `impl HostBehavior`。  
+  [content/host.rs:135](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/content/host.rs:135) 仍以本地 `HostSkillBehavior` 实现 `SkillBehavior`，以本地 `HostMachine` 实现 `SkillMachine`；filter、activation、factory、step 没有迁入 vocabulary。该结构为下一步拆 crate 保留了合法的类型／trait 归属，不会要求内容 crate 给外部 enum 添加 inherent impl，或实现两个都属于外部 crate 的 trait／类型组合。  
+  `Gender`、不可变 generals、`ExtensionGeneral` 及纯查询位于 vocabulary，旧 `content::standard`、`content::extension`、`content::host` 路径由重导出承接。`effective_gender` 仍只查标准表并默认 Male，没有趁迁移扩大其语义范围。
+
+- **Correct — 神弓回调保留实际内容目录的查询候选与处理位置。**  
+  [content/hooks.rs:10](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/content/hooks.rs:10) 将两个回调直接指向原内容函数；标准目录和扩展合并目录均继续装入这组 hooks。  
+  [support.rs:69](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/content/host/support.rs:69) 的候选与归属查询未改：仍排除自己、遍历存活角色、按实际装备栏过滤，并保留遍历顺序。AOE、决斗及杀响应处仅替换调用入口，参数和候选拼接顺序不变；杀响应仍在“无闪直接命中”判断前纳入借牌，选中借牌后仍从原所有者装备区移除并撤技。没有发现新增的提前 return、`?` 传播或借用范围变化。
+
+- **Correct — `apply_general_assembly` 为 state 层单实现。**  
+  [state/general_assembly.rs:8](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/worktree/crates/engine-native/src/state/general_assembly.rs:8) 保留原体力调整、技能授予、禳星初始化及默认禁用状态逻辑。检索只找到这一处函数定义；engine 通过重导出复用，kernel 和 content 调用方指向 state，没有复制第二套装配逻辑。
+
+- **Correct — 扫描消费者迁移没有改变判据或缩减当前集合。**  
+  13 个 Python 文件中，11 个消费者仅调整定义读取路径，或将原内容目录的扫描集合补上迁出的 vocabulary 文件；另 2 个是分层扫描器及其测试，包含实际解析逻辑增强，不能笼统称为“全部只改路径”。未见阈值抬高、豁免扩大或断言删除。  
+  [scanner-source-conservation.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/scanner-source-conservation.json) 记录 metadata events 275、classes 517、native metas 275、host keys 520、HostSkillDecl 56 及未实现行为分析结果前后一致。该证据覆盖列出的六个输出；其余消费者的判断依据是补丁中的路径替换及扫描逻辑保留。新 vocabulary 已加入扫描闭包，普通分组 use、crate 别名和相对导入有测试；上述 raw identifier 是剩余缺口。
+
+- **Correct — 验证证据支持当前迁移，但验收边界明确。**  
+  已读取的最终日志支持 native **1644 passed / 0 failed / 73 ignored**、依赖合计 **465/0/0**、产品 Gate 1b 通过；神弓三个既有用例及 golden replay 在日志中通过。测试名称多重集合为 **1717→1717**。  
+  [独立闭包库入口](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/kernel-closure/src/lib.rs:1) 确实没有声明 content／engine；其[最终编译日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/kernel-closure-final.log:1) 显示普通 check 成功，同时保留 `MonkeyStealMachine::new` 的 dead_code warning。这不能写成“独立内核库在 `-D warnings` 下通过”，也不能代替实际拆 crate 的验收。
+
+- **Fixed：无。** 本审查未修改任何文件。
+
+- **Merge verdict：OK with notes。**  
+  可以整合当前 F7 第 3 步补丁；P2 扫描器缺口建议作为小修补齐。公共文档引用问题已显式登记并由父线程负责，不列为隐藏未验收：[doc-line-refs.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/evidence/doc-line-refs.log:1) 确实仍有迁移后的缺失路径及 11 处越界引用，应依映射修正文档并在整合树补跑 preflight；当前隔离树不能宣称全量 preflight 全绿。
+
+实际第 4 步仍包括真正拆分 crate、开放所需跨 crate 可见性、保持公开重导出与 `LogEvent` 根路径、完成 workspace／依赖接线，并对拆分后的产物重新验证。现有旧 WASM 的标准与 huanle 保存恢复轨迹对照，只支持所测场景与旧产物一致，**不代表新 WASM 已重建或验收**。
+
+未执行构建、测试、补丁应用或 Git 状态认证；未审查父线程整合后的九批、B9 与 desktop 组合结果。  
+已知剩余风险为 P2 扫描器漏检、文档引用门禁未通过，以及实际拆 crate／新 WASM 构建尚待第 4 步验证。

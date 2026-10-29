@@ -1,0 +1,17 @@
+{
+  "content-native-loader": [
+    32,
+    0,
+    0
+  ],
+  "engine-native-wasm": [
+    71,
+    0,
+    0
+  ],
+  "game-server": [
+    362,
+    0,
+    0
+  ]
+}

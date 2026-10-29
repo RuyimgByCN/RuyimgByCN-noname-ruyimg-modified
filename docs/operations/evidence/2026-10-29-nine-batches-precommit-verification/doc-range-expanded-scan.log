@@ -1,0 +1,26 @@
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+
+越界的引用：
+  - docs/operations/evidence/2026-10-19-item53-fix-plan/README.md: keys.rs:862 超出所有候选的最大行数 557
+  - docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/README.md: state/core_ops.rs:1192 超出所有候选的最大行数 928
+  - docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/README.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+  - docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/nine-batches-boundaries.md: state/core_ops.rs:1192 超出所有候选的最大行数 928
+  - docs/operations/evidence/2026-10-29-nine-batches-precommit-verification/nine-batches-boundaries.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: engine/play_card_targets.rs:1656 超出所有候选的最大行数 195
+  - docs/operations/evidence/2026-10-18-blocked-fixes/README.md: keys.rs:862 超出所有候选的最大行数 557
+  - docs/operations/evidence/2026-10-28-status-scan-2/README.md: abi_versions.rs:745 超出所有候选的最大行数 744
+  - docs/operations/evidence/2026-10-17-rule-distance-unmodeled/README.md: state/core_ops.rs:1192 超出所有候选的最大行数 928
+  - docs/operations/evidence/2026-10-19-rules-diff-handover/README.md: keys.rs:825 超出所有候选的最大行数 557
+  - docs/operations/evidence/2026-10-19-rules-diff-handover/README.md: tags.rs:1056 超出所有候选的最大行数 547
+  - docs/operations/evidence/2026-10-18-nc08-upstream-wusheng/README.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+  - docs/operations/evidence/2026-10-18-nc08-upstream-longdan/README.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+  - docs/architecture/native-rules-baseline.md: kernel/sha/step.rs:1243 超出所有候选的最大行数 1065
+检查 1061 处 `file:line` 引用；文件不存在 6 种；越界 15 处

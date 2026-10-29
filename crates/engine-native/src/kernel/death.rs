@@ -111,7 +111,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     for c in leftover {
                         ctx.to_discard(c);
                     }
-                    crate::engine::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
+                    crate::state::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
                     let p = ctx.core.player_mut(self.player);
                     p.hp = p.max_hp as i32;
                     ctx.draw_cards(self.player, 4);
@@ -123,7 +123,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
         // 结算移除，故在移除前捕获
         let had_huihuo = ctx
             .catalog
-            .skill_by_name(crate::content::standard::BOSS_HUIHUO)
+            .skill_by_name(crate::vocabulary::names::BOSS_HUIHUO)
             .map(|d| ctx.core.skills.contains_key(&(self.player, d)))
             .unwrap_or(false);
         let p = ctx.core.player_mut(self.player);
@@ -163,7 +163,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 let g = ctx.core.player(self.player).general_slots[0];
                 let g = g?;
                 let base = (ctx.catalog.general_count()
-                    - crate::content::standard::BOSS_GENERALS.len())
+                    - crate::vocabulary::generals::BOSS_GENERALS.len())
                     as u16;
                 if g < base {
                     return None;
@@ -172,7 +172,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
             })();
             if dead_name.as_deref() == Some("共工") || dead_name.as_deref() == Some("玄冥") {
                 let base = (ctx.catalog.general_count()
-                    - crate::content::standard::BOSS_GENERALS.len())
+                    - crate::vocabulary::generals::BOSS_GENERALS.len())
                     as u16;
                 let named_alive = (base..ctx.catalog.general_count() as u16)
                     .filter(|&d| {
@@ -190,7 +190,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 if !named_alive {
                     let zdef = ctx
                         .catalog
-                        .skill_by_name(crate::content::standard::BOSS_ZAOYI);
+                        .skill_by_name(crate::vocabulary::names::BOSS_ZAOYI);
                     if let Some(zdef) = zdef {
                         let holders: Vec<PlayerId> = ctx
                             .core
