@@ -494,32 +494,46 @@ impl<'a> Ctx<'a> {
         carrier
     }
 
-    /// 手牌直接给予另一玩家（不进弃牌堆）。
+    /// 手牌直接给予另一玩家（不进弃牌堆）——单张便捷形式，见 `give_hand_cards`。
     pub fn give_hand_card(&mut self, from: PlayerId, to: PlayerId, card: CardId) {
-        self.take_hand_card(from, card);
-        self.note_cards_lost(from, &[card]);
-        self.emit(EventData::CardsLost {
-            player: from,
-            cards: vec![card],
-            origins: vec![crate::event::LostOrigin::Hand],
-        });
-        self.core.player_mut(to).hand.push(card);
-        self.emit(EventData::CardsMoved {
-            cards: vec![card],
-            from,
-            to,
-        });
-        // NC04：给牌触发帧（DSL `cards_given`）——事件主玩家=recipient、
-        // 来源=giver（旧线 dispatch 同口径）；逐张与 CardsLost/CardsMoved 同口径。
+        self.give_hand_cards(from, to, &[card]);
+    }
+
+    /// 一次给牌动作：`cards` 全部由 `from` 交给 `to`（不进弃牌堆）。
+    ///
+    /// `CardsLost`／`CardsMoved` 仍逐张发帧（既有口径；连营等失去牌监听不变）。
+    /// `CardsGiven` 触发帧（DSL `cards_given`）**每次给牌动作只发一个**并携带
+    /// 全部牌（规则 v326，裁决第 10 项）：事件主玩家=recipient、来源=giver、
+    /// amount=张数，与旧线 `give_cards` 单事件同口径。一次给出多张的技能
+    /// （仁德、蝶舞）须调用本方法，而不是按张循环 `give_hand_card`。
+    pub fn give_hand_cards(&mut self, from: PlayerId, to: PlayerId, cards: &[CardId]) {
+        if cards.is_empty() {
+            return;
+        }
+        for &card in cards {
+            self.take_hand_card(from, card);
+            self.note_cards_lost(from, &[card]);
+            self.emit(EventData::CardsLost {
+                player: from,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Hand],
+            });
+            self.core.player_mut(to).hand.push(card);
+            self.emit(EventData::CardsMoved {
+                cards: vec![card],
+                from,
+                to,
+            });
+        }
         self.emit(EventData::CardsGiven {
             giver: from,
             recipient: to,
-            cards: vec![card],
+            cards: cards.to_vec(),
         });
         self.out.push(LogEvent::CardsGiven {
             from,
             to,
-            cards: vec![card],
+            cards: cards.to_vec(),
         });
     }
 

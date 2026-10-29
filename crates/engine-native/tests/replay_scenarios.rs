@@ -1068,88 +1068,96 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "sha_dodge_then_damage",
         scenario_sha_dodge_then_damage,
         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
-        "999b53d022480dbdfd21cefc5651a7d2c312f4b297b582d1f15da4f49aa29ad5",
+        "62350f05b7aa145bf8eb11b958bb2f7a459c06f741a636ac9c83a0ea8733acd2",
     ),
     (
         "death_terminal_single",
         scenario_death_terminal_single,
         &["dying", "death", "victory"],
-        "8abe0289616095906d6cfc98c589803b5d3af433d8ccc236cbbfad44ed6737bc",
+        "81645d2648db1bee075e31c79176a06da82c87573fa7578732b51ce4e1ca39bb",
     ),
     (
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "7e0083a3a709099036defed8bc27a7626a50860c17f96a517feecd538af4e4c1",
+        "267d2dff13c28736b079b55c80cb78f495b04e41da81ba52ac69e95d3f4a26f7",
     ),
     (
         "yishang_redirect",
         scenario_yishang_redirect,
         &["damage_before_window", "payload_rewrite_redirect"],
-        "aac4058b4c25872c6cdb42770de81c8060146d9dc5e092d95c12b77f79a6eb06",
+        "b86936831b63d4c96fecfae36a3589bb4ad5433f5f50841c731df2dd06163830",
     ),
     (
         "suidun_window_matrix",
         scenario_suidun_window_matrix,
         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
-        "19686ddf1f1e8bedb125d785778b2f1fb440d9d3778d85bceb954d22d6d8f720",
+        "660b463596d406794cf18c57738df5393a5ebe33602fac01ec6ae4030ddbf6e2",
     ),
     (
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "b0dee86e7d75d24b7811e3da879ab5b7ed8c5be87cbc0b1a045a95c0d171273a",
+        "3283358d52a1bc6a208cd987437312b26c32d9b64fe52391652b22bfad56f011",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "249dd5dcc24a029d8cf5d839216a9680e7005347537be190415bdc640d375317",
+        "6a2c3e993b0abdb09d66ff2e32028476a5c39422ed5d9e767fdfe2e32f9f3d66",
     ),
     (
         "rollback_invariants",
         scenario_rollback_invariants,
         &["reject_rollback", "budget_rollback"],
-        "f9a1637fc25a7b1f1eb18e142995898d39301f133a1862fbc77fa270a11b8fe5",
+        "88f1a813425e61099f5a9d17722d7fdd1ab6286710a012e0f3cb8c577bb7b444",
     ),
     (
         "equip_distance_matrix",
         scenario_equip_distance_matrix,
         &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
-        "978f3b956945ae2b9ec566239d028bbc63d4a0f3b3dd2b5d6ecc8aabbbd1fb93",
+        "f019c16c5f4e8a8df7f901096457f5669bcc1b647b4184a8617d0c820c1f3029",
     ),
     (
         "chain_fire_propagation",
         scenario_chain_fire_propagation,
         &["chain_state", "damage_nature", "chain_propagation"],
-        "a125a5c6e9f22bc5094b4a762a0933f91878fad0777fc9758aef4543f0e493cb",
+        "f84ad42f4275b6c6c31365b38d4957f160927ea2f28d165f405cc8286d97874f",
     ),
     (
         "aoe_response_queue",
         scenario_aoe_response_queue,
         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
-        "32d2b5c590b508ab72239f5488dd2d3e65bb6afe82ef9285caa01d958852d6d5",
+        "9bf8ab59aa48bf48296e00dcf10d7bbcf517916e276e8324adf7e531d4e01be9",
     ),
     (
         "duel_alternating_response",
         scenario_duel_alternating_response,
         &["duel_alternating", "duel_no_distance_limit"],
-        "aeaedd725819804510188a85db853951a5da07118cca5f8cf7ce168ac8513b1e",
+        "36d1c39a52dc088f72d71f5c6028b1f3e20abb6839e3ae59070d0ce4538d8eaf",
     ),
     (
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "2e8a8d686983834c9c07b29faf8f1f346434f200351496117839b044f488712a",
+        "f9b0778d286f8e9fbd7fbb3ace3a36487c1f7aacdcfcd07b919dd5dd880a0f05",
     ),
     (
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "8d9b6a86ec0c9e10bb521092006f4a6970c616001901d7cbb4b5637e2350f72e",
+        "62268df5c84163dad60192c0f1412b7687d609da71baee4fae25b5be08d74e77",
     ),
 ];
 
+// NC04 cards_given v326（2026-10-29）：用户授权 v325→v326（裁决第 10 项）；
+// 给牌改为每次动作一帧携带全部牌（give_hand_cards；仁德/蝶舞多张只触发一
+// 次监听）。三步探针：修复+v326 全位移（本批重录值）；回退 v325 保留修复
+// 14 场全绿——批量帧本身对标准 14 场零足迹（无一次给多张的动作，单张路径
+// 帧序与事件 id 计数逐字相同），位移唯一来源是版本号进入摘要（并追认
+// d7b46ea6 未升号时 sancai 场的事件 id 位移）。多张触发语义由
+// nc04_cards_given_event 反例回归覆盖；旧档拒绝见其 v325 夹具测试。证据见
+// docs/operations/evidence/2026-10-29-nc04-cards-given-v326/。
 // NC04 cards_given（2026-10-28）：give_hand_card 新增给牌触发帧后，仅
 // sancai_nested_chain（14 场中唯一含给牌的场景）位移；NOEMIT 探针（临时
 // 停发新帧）14 场全绿——位移唯一来源是新帧的事件 id 计数进入规范摘要

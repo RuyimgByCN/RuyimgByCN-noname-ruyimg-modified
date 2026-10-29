@@ -182,9 +182,9 @@ pub enum EventData {
     },
     /// 手牌直接给予（NC04 未映射事件批）：`giver` 交出、`recipient` 收入，
     /// 与旧线 `DomainEvent::CardsGiven` 同形（giver≠recipient 且非空才发）。
-    /// 触发上下文：事件主玩家=recipient、来源=giver（旧线 dispatch 同口径）。
-    /// 帧为逐张（`give_hand_card` 单牌原语，与 CardsLost/CardsMoved 同口径；
-    /// 旧线 give_cards 批量单事件——多张给牌触发次数不同，登记差异）。
+    /// 触发上下文：事件主玩家=recipient、来源=giver、amount=张数（旧线
+    /// dispatch 同口径）。**每次给牌动作一帧、携带全部牌**（规则 v326，
+    /// `give_hand_cards` 批量原语）；CardsLost/CardsMoved 仍逐张。
     CardsGiven {
         giver: PlayerId,
         recipient: PlayerId,

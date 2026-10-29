@@ -75,9 +75,7 @@ impl HostMachine {
                             return Flow::Done;
                         };
                         let sel = std::mem::take(&mut self.cards);
-                        for c in &sel {
-                            ctx.give_hand_card(self.owner, t, *c);
-                        }
+                        ctx.give_hand_cards(self.owner, t, &sel);
                         if !ctx.core.turn.diewu_draw_used {
                             ctx.core.turn.diewu_draw_used = true;
                             ctx.draw_cards(self.owner, 1);

@@ -1,0 +1,37 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.73s
+     Running tests/nc04_cards_given_event.rs (target/debug/deps/nc04_cards_given_event-67ba8e5583519b23)
+
+running 6 tests
+test cards_given_dsl_package_bridges_to_native_event ... ok
+test probe_on_recipient_side_does_not_trigger ... ok
+test rende_give_triggers_cards_given_probe_for_recipient ... ok
+test giving_two_cards_at_once_triggers_cards_given_once ... FAILED
+test single_cards_given_frame_carries_all_cards ... FAILED
+test optional_probe_confirms_and_restores_across_save ... ok
+
+failures:
+
+---- giving_two_cards_at_once_triggers_cards_given_once stdout ----
+
+thread 'giving_two_cards_at_once_triggers_cards_given_once' (1220784) panicked at crates/engine-native/tests/nc04_cards_given_event.rs:264:5:
+assertion `left == right` failed: 一次给 2 张：收入 2 + 单次触发补摸 1（修复前为两次触发 +4）
+  left: 8
+ right: 7
+
+---- single_cards_given_frame_carries_all_cards stdout ----
+
+thread 'single_cards_given_frame_carries_all_cards' (1220788) panicked at crates/engine-native/tests/nc04_cards_given_event.rs:304:5:
+assertion `left == right` failed: 单帧携带本次给牌的全部两张
+  left: [44]
+ right: [44, 4]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    giving_two_cards_at_once_triggers_cards_given_once
+    single_cards_given_frame_carries_all_cards
+
+test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc04_cards_given_event`

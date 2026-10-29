@@ -133,7 +133,13 @@ use crate::snap::{
 /// 筑城牌区，无条件写入长度与牌序）。此前两种壶序的存档摘要相同，但炼
 /// 化选项与丢弃序按壶序生成（GT-012 反例）。v324 及更早存档按版本策略
 /// 拒绝（RuleVersionMismatch）；存档格式 v105 与全局原生 ABI 753 不变。
-pub const STANDARD_RULESET_VERSION: u64 = 325;
+/// v326：NC04——`cards_given` 给牌触发帧改为**每次给牌动作一帧、携带全部牌**
+/// （`give_hand_cards` 批量原语；仁德/蝶舞一次给 N 张只触发监听技一次，与
+/// 旧线 `give_cards` 单事件同口径；此前按张发帧触发 N 次）。同时追认
+/// `d7b46ea6` 新帧使事件 id 计数进入摘要域而未升号的位移。v325 及更早存档
+/// 按版本策略拒绝（RuleVersionMismatch）；存档格式 v105、全局原生 ABI 753、
+/// CardsLost/CardsMoved 逐张口径不变。
+pub const STANDARD_RULESET_VERSION: u64 = 326;
 
 mod names;
 pub use names::*;

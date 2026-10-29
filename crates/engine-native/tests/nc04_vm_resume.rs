@@ -600,7 +600,7 @@ fn b7_plain_v323_archive_is_rejected_by_rule_version() {
     assert_eq!(snapshot.ruleset_version, 323);
     assert!(matches!(
         Engine::restore(&snapshot),
-        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 325 })
+        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 326 })
     ));
 }
 

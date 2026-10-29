@@ -1,0 +1,11 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.42s
+     Running tests/zz_capture_v325_fixture.rs (target/debug/deps/zz_capture_v325_fixture-66111c9f0d5d872a)
+
+running 1 test
+catalog_version(with pack) = 9244387632160668915
+snap.ruleset_version = 9244387632160668915
+test capture_v325_fixtures ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
