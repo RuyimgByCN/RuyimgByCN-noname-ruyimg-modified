@@ -1,0 +1,27 @@
+{
+  "reports": [
+    {
+      "mode": "identity",
+      "seed": 3,
+      "players": 4,
+      "skipAnimations": true,
+      "steps": 168,
+      "revision": 168,
+      "hash": "4679f4410c1ce6132e401f6b67fa44df831b1005890c32bb987e9d594b40f1de",
+      "outcome": {
+        "RebelWin": null
+      },
+      "expectedSelfWin": true,
+      "banner": {
+        "text": "🎉\n反贼胜\n\nrev 168\n\n再来一局",
+        "win": true,
+        "lose": false
+      },
+      "saved": {
+        "hash": "6412a1c4b3c8d8d8a38340e682051965af256c5c351b52ccd7ccdb62ac8e1ec4",
+        "revision": 0
+      }
+    }
+  ],
+  "exceptions": []
+}

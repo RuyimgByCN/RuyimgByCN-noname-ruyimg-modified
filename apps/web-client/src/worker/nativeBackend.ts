@@ -247,6 +247,14 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
     ...view.discard.map((id) => faceToCardView(view, id, null, "DiscardPile")),
     ...view.table.map((id) => faceToCardView(view, id, null, "Processing")),
   ];
+  let outcome = view.outcome ?? null;
+  if (outcome && typeof outcome === "object" && "SingleWin" in outcome) {
+    const winner = (outcome as { SingleWin: { player?: unknown } | null }).SingleWin;
+    if (typeof winner?.player === "number" && Number.isInteger(winner.player) && winner.player > 0) {
+      // 窄壳胜者协议为一基；本地视图的 seat/player 为零基，联机投影不走此处。
+      outcome = { ...outcome, SingleWin: { ...winner, player: winner.player - 1 } };
+    }
+  }
   return {
     revision: view.rulesetVersion ?? view.ruleset_version ?? 0,
     state_hash: "",
@@ -277,7 +285,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
       })),
     })),
     known_cards,
-    outcome: view.outcome ?? null,
+    outcome,
   };
 }
 

@@ -1,0 +1,2 @@
+git apply --check and git apply against db4e37ca scoped blobs: passed
+All seven applied files byte-match final worktree, including new nc03-outcome-ui.test.mjs.

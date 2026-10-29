@@ -1,0 +1,6 @@
+PASS identity_save_via_ui: revision=0
+PASS identity_restore_exact_hash: 6412a1c4b3c8d8d8a38340e682051965af256c5c351b52ccd7ccdb62ac8e1ec4
+PASS identity_actual_terminal_banner: {"banner":{"text":"🎉\n反贼胜\n\nrev 168\n\n再来一局","win":true,"lose":false},"expectedSelfWin":true,"observer":1,"identity":"Rebel"}
+PASS identity_authoritative_terminal: steps=168 revision=168 hash=4679f4410c1ce6132e401f6b67fa44df831b1005890c32bb987e9d594b40f1de
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/gt014-deep-un3tuc origin=http://127.0.0.1:52268

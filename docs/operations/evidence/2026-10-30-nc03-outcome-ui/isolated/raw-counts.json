@@ -1,0 +1,32 @@
+{
+  "red": {
+    "tests": 30,
+    "suites": 0,
+    "pass": 22,
+    "fail": 8,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "exit": 1
+  },
+  "green-focused": {
+    "tests": 42,
+    "suites": 0,
+    "pass": 42,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "exit": 0
+  },
+  "pnpm-test": {
+    "tests": 138,
+    "suites": 0,
+    "pass": 138,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "exit": 0
+  }
+}

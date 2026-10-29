@@ -1,0 +1,7 @@
+{
+  "head": "f27dd34fc7ac15a2e7314758746334b112536e0f",
+  "clean_before_apply": true,
+  "patch_sha256": "ace2d7b7e63963894a5a2e986ef2e37f81699d8f00f2cd99df2b9aa95d67baa7",
+  "date": "2026-10-30T02:14:28.622044+08:00",
+  "parent_review": "Inspected all seven source/test deltas; existing Rust 1-based serialization and network client semantics unchanged; computed result follows applied authoritative view; SSR test executes actual SFC computed/template, integration browser still required."
+}

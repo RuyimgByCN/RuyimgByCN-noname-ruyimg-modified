@@ -1,0 +1,463 @@
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+index dc8aa14c..a23c2571 100644
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
+ import { readFileSync } from "node:fs";
+ import { test } from "node:test";
+ import ts from "typescript";
++import { computed } from "vue";
++import { matchOutcomePresentation } from "../src/engine/outcome.ts";
+ import { NetworkEngineClient, onlineReconnectKey } from "../src/engine/networkClient.ts";
+ import { applyEnvelope, clearEffects, createViewStore } from "../src/engine/viewStore.ts";
+ 
+@@ -212,11 +214,12 @@ function presentationFixture() {
+   let release;
+   const handle = new Function(
+     "store", "applyEnvelope", "nc12Mark", "presentationDelay", "clearEffects", "isOnline",
+-    "roomId", "statusLine", "localClient", "syncGeneralSelectProjection", "outcomeText",
++    "roomId", "statusLine", "localClient", "syncGeneralSelectProjection", "matchOutcome",
+     `${compiled}; return handleEnvelope;`,
+   )(
+     store, applyEnvelope, () => {}, () => new Promise((resolve) => { release = resolve; }),
+-    clearEffects, { value: true }, { value: 7 }, status, { isNative: () => true }, () => {}, () => "",
++    clearEffects, { value: true }, { value: 7 }, status, { isNative: () => true }, () => {},
++    computed(() => matchOutcomePresentation(store.view, store.lastEvents, 1)),
+   );
+   const env = (revision) => ({
+     result: null, events: [], choice: null, view: view(revision), legal_actions: [],
+@@ -475,3 +478,43 @@ test("联机公开事件与本地一致地展示粗粒度语义", async (t) => {
+   applyEnvelope(store, envelopes.at(-1));
+   assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+ });
++
++
++test("network SingleWin stays one-based with all authoritative projection fields unchanged", async (t) => {
++  const { client, connect } = fixture(t);
++  const socket = await connect();
++  const joined = client.joinRoom(7);
++  join(socket);
++  await joined;
++  const envelopes = [];
++  client.onEnvelope((envelope) => envelopes.push(envelope));
++  for (const player of [1, 4]) {
++    const projection = {
++      ...view(player + 1), outcome: { SingleWin: { player } },
++      seats: [1, 2, 3, 4].map((id) => ({ player: id, seat: id - 1 })),
++    };
++    socket.receive("CommandOutcome", {
++      view: projection, choice: null, legal_actions: [], result: { Accepted: {} }, idempotency_key: 99,
++    });
++    assert.deepEqual(envelopes.at(-1).view, projection);
++    assert.equal(envelopes.at(-1).finished, true);
++  }
++});
++
++
++test("finished status shares the banner's view and MatchEnded fallback wording", async () => {
++  const f = presentationFixture();
++  for (const event of [{ type: "MatchEnded", outcome: { RebelWin: null } },
++    { MatchEnded: { outcome: { RebelWin: null } } }]) {
++    const env = { ...f.env(4), finished: true, events: [event] };
++    let pending = f.handle(env);
++    f.release();
++    await pending;
++    assert.match(f.status.value, /终局 · 反贼胜 · rev 4/);
++    env.view = { ...env.view, outcome: { SingleWin: { player: 1 } } };
++    pending = f.handle(env);
++    f.release();
++    await pending;
++    assert.match(f.status.value, /终局 · 单挑胜者 P1 · rev 4/);
++  }
++});
+diff --git a/apps/web-client/scripts/outcome-text.test.mjs b/apps/web-client/scripts/outcome-text.test.mjs
+index 24cdeed7..cafe9ec2 100644
+--- a/apps/web-client/scripts/outcome-text.test.mjs
++++ b/apps/web-client/scripts/outcome-text.test.mjs
+@@ -11,6 +11,7 @@ test("身份局胜负类型映射", () => {
+ });
+ 
+ test("单挑/势力与未建模形态", () => {
++  assert.equal(outcomeText({ SingleWin: { player: 0 } }), "单挑胜者 P0");
+   assert.equal(outcomeText({ SingleWin: { player: 4 } }), "单挑胜者 P4");
+   assert.equal(outcomeText({ GroupWin: { group: "shu" } }), "势力胜（shu）");
+   assert.equal(outcomeText("finished"), "已结束（胜负类型未建模）");
+@@ -41,3 +42,12 @@ test("自动步进的嵌套拒绝和计划错误不可当作成功", () => {
+   assert.equal(outcome.nativeCommandError({ kind: "plan", error: "new_error" }), "自动操作失败：new_error");
+   assert.equal(outcome.nativeCommandError({ kind: "plan", outcome: "{" }), "自动操作结果无法读取");
+ });
++
++
++test("malformed and unmodeled outcome detail stays visible without inventing a winner", () => {
++  for (const value of [{ SingleWin: { player: -1 } }, { SingleWin: { player: "0" } },
++    { GroupWin: { unexpected: "shu" } }, { VersusWin: { team: 0 } }, { BossWin: { player: 1 } }]) {
++    assert.equal(outcomeText(value), `已结束（${JSON.stringify(value)}）`);
++    assert.equal(outcome.outcomePresentation(value).isSelfWin, null);
++  }
++});
+diff --git a/apps/web-client/src/engine/outcome.ts b/apps/web-client/src/engine/outcome.ts
+index 7957d812..9732c73a 100644
+--- a/apps/web-client/src/engine/outcome.ts
++++ b/apps/web-client/src/engine/outcome.ts
+@@ -1,32 +1,63 @@
+-/**
+- * 终局胜负文案（NC09/NC12）。
+- *
+- * 数据来源：视图下发的 `outcome`。原生 WASM 壳（`engine-native-wasm`）把
+- * `engine_native::Winner` 映射为协议形态：
+- * `{ "LoyalistWin": null }` / `{ "RebelWin": null }` / `{ "RenegadeWin": null }` /
+- * `{ "SingleWin": { "player": n } }` / `{ "GroupWin": { "group": "shu" } }`；
+- * **未建模的模式胜者**（对决/斗地主/Boss）保持字符串 `"finished"`。
+- *
+- * 本函数只做**展示映射**，不推断语义：未知形态**如实显示原始 JSON**。
+- */
+-export function outcomeText(outcome: unknown): string {
+-  if (outcome === null || outcome === undefined) return "胜负未知";
+-  if (outcome === "finished") return "已结束（胜负类型未建模）";
+-  if (typeof outcome === "object") {
+-    const o = outcome as Record<string, unknown>;
+-    if ("LoyalistWin" in o) return "主公方胜";
+-    if ("RebelWin" in o) return "反贼胜";
+-    if ("RenegadeWin" in o) return "内奸胜";
+-    if ("SingleWin" in o) {
+-      const p = (o.SingleWin as { player?: number } | null)?.player;
+-      return p ? `单挑胜者 P${p}` : "单挑结束";
++import type { ObserverSnapshot, SeatView } from "../types/engine";
++
++/** 展示使用视图中的玩家编号：本地适配后为零基，联机协议仍为一基。 */
++export function outcomePresentation(
++  outcome: unknown,
++  self?: Pick<SeatView, "player" | "identity">,
++): { label: string; isSelfWin: boolean | null } {
++  const neutral = (label: string) => ({ label, isSelfWin: null });
++  if (outcome === null || outcome === undefined) return neutral("胜负未知");
++  // 未建模的对决/斗地主/Boss 胜者不推断语义。
++  if (outcome === "finished") return neutral("已结束（胜负类型未建模）");
++  const o = typeof outcome === "object" ? outcome as Record<string, unknown> : {};
++  const tag = typeof outcome === "string" ? outcome : Object.keys(o)[0];
++  switch (tag) {
++    case "LoyalistWin":
++      return { label: "主公方胜", isSelfWin: self?.identity
++        ? self.identity === "Lord" || self.identity === "Loyalist" : null };
++    case "RebelWin":
++      return { label: "反贼胜", isSelfWin: self?.identity ? self.identity === "Rebel" : null };
++    case "RenegadeWin":
++      return { label: "内奸胜", isSelfWin: self?.identity ? self.identity === "Renegade" : null };
++    case "SingleWin": {
++      const player = (o.SingleWin as { player?: unknown } | null)?.player;
++      if (typeof player === "number" && Number.isInteger(player) && player >= 0) {
++        return { label: `单挑胜者 P${player}`, isSelfWin: self ? self.player === player : null };
++      }
++      break;
+     }
+-    if ("GroupWin" in o) {
+-      const g = (o.GroupWin as { group?: string } | null)?.group ?? "?";
+-      return `势力胜（${g}）`;
++    case "GroupWin": {
++      const group = (o.GroupWin as { group?: unknown } | null)?.group;
++      if (typeof group === "string") return neutral(`势力胜（${group}）`);
++      break;
++    }
++    case "Draw": return neutral("平局");
++    case "Aborted": return neutral("对局中止");
++  }
++  return neutral(`已结束（${JSON.stringify(outcome)}）`);
++}
++
++/** 未知形态如实显示原始 JSON，不猜测胜者或阵营。 */
++export function outcomeText(outcome: unknown): string {
++  return outcomePresentation(outcome).label;
++}
++
++/** 视图是权威来源；旧事件信封仅在视图缺少终局结果时回退。 */
++export function matchOutcomePresentation(
++  view: ObserverSnapshot | null,
++  events: unknown[],
++  selfId: number,
++) {
++  let outcome = view?.outcome;
++  if (outcome === null || outcome === undefined) {
++    for (const event of events) {
++      if (!event || typeof event !== "object") continue;
++      const e = event as { type?: string; outcome?: unknown; MatchEnded?: { outcome?: unknown } };
++      outcome = e.type === "MatchEnded" ? e.outcome : e.MatchEnded?.outcome;
++      if (outcome !== null && outcome !== undefined) break;
+     }
+   }
+-  return `已结束（${JSON.stringify(outcome)}）`;
++  return outcomePresentation(outcome, view?.seats.find((seat) => seat.player === selfId));
+ }
+ 
+ /** 原生窄壳命令及自动步进结果的可见错误。 */
+diff --git a/apps/web-client/src/engine/viewStore.ts b/apps/web-client/src/engine/viewStore.ts
+index 5d2dfff3..4c32dc55 100644
+--- a/apps/web-client/src/engine/viewStore.ts
++++ b/apps/web-client/src/engine/viewStore.ts
+@@ -1,6 +1,7 @@
+ import { reactive } from "vue";
+ import type { ChoiceRequest, EngineEnvelope, LegalAction, ObserverSnapshot } from "../types/engine";
+ import { perfEnvelopeApplied, perfEnvelopeApplying } from "./perfProbe";
++import { outcomeText } from "./outcome";
+ 
+ /** Presentation timeline event (not state truth). */
+ export interface PresentationEvent {
+@@ -173,7 +174,7 @@ function summarizeEvents(events: unknown[]): string[] {
+         out.push(`回合 · 玩家 ${body?.current} · ${body?.phase}`);
+         break;
+       case "MatchEnded":
+-        out.push(`终局 · ${JSON.stringify(body?.outcome)}`);
++        out.push(`终局 · ${outcomeText(body?.outcome)}`);
+         break;
+       case "ChoiceRequested":
+         out.push(`等待选择 · 玩家 ${body?.observer}`);
+diff --git a/apps/web-client/src/views/BattleView.vue b/apps/web-client/src/views/BattleView.vue
+index 3c578c7e..381845a0 100644
+--- a/apps/web-client/src/views/BattleView.vue
++++ b/apps/web-client/src/views/BattleView.vue
+@@ -43,7 +43,7 @@ import {
+ import BattleBoard from "../components/battle/BattleBoard.vue";
+ import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
+ import type { EngineEnvelope, LegalAction } from "../types/engine";
+-import { nativeCommandError, outcomeText } from "../engine/outcome";
++import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
+ import { nextTick } from "vue";
+ 
+ const route = useRoute();
+@@ -137,7 +137,7 @@ async function handleEnvelope(env: EngineEnvelope) {
+   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
+   const hashHint = (env.hash_hex || "").slice(0, 12);
+   statusLine.value = env.finished
+-    ? `${prefix}终局 · ${outcomeText(env.view?.outcome)} · rev ${env.revision}`
++    ? `${prefix}终局 · ${matchOutcome.value.label} · rev ${env.revision}`
+     : `${prefix}rev ${env.revision}${hashHint ? ` · ${hashHint}…` : ""}${
+         localClient.isNative() ? " · native" : ""
+       }`;
+@@ -623,28 +623,9 @@ const PHASE_LABELS: Record<string, string> = {
+   End: "结束",
+ };
+ 
+-const matchOutcome = computed(() => {
+-  const events = store.lastEvents ?? [];
+-  for (const e of events) {
+-    const ev = e as { type?: string; outcome?: Record<string, unknown> };
+-    if (ev?.type === "MatchEnded" && ev.outcome) {
+-      const oc = Object.keys(ev.outcome)[0];
+-      if (oc === "RebelWin") return { winner: "反贼", label: "反贼胜利！", isSelfWin: false };
+-      if (oc === "LoyalistWin") return { winner: "忠臣", label: "忠臣/主公胜利！", isSelfWin: true };
+-      if (oc === "RenegadeWin") return { winner: "内奸", label: "内奸胜利！", isSelfWin: false };
+-      if (oc === "Draw") return { winner: "平局", label: "平局", isSelfWin: false };
+-      if (oc === "Aborted") return { winner: "中止", label: "对局中止", isSelfWin: false };
+-    }
+-  }
+-  const outcome = store.view?.outcome;
+-  const tag = typeof outcome === "string" ? outcome : Object.keys((outcome ?? {}) as object)[0];
+-  if (tag === "RebelWin") return { winner: "反贼", label: "反贼胜利！", isSelfWin: false };
+-  if (tag === "LoyalistWin") return { winner: "忠臣", label: "忠臣/主公胜利！", isSelfWin: true };
+-  if (tag === "RenegadeWin") return { winner: "内奸", label: "内奸胜利！", isSelfWin: false };
+-  if (tag === "Draw") return { winner: "平局", label: "平局", isSelfWin: false };
+-  if (tag === "Aborted") return { winner: "中止", label: "对局中止", isSelfWin: false };
+-  return null;
+-});
++const matchOutcome = computed(() =>
++  matchOutcomePresentation(store.view, store.lastEvents ?? [], selfId.value),
++);
+ 
+ function returnToLobby() {
+   void router.push("/");
+@@ -691,12 +672,12 @@ const turnInfo = computed(() => {
+       </dl>
+     </section>
+     <!-- Match outcome banner -->
+-    <section v-if="store.finished && matchOutcome" class="panel outcome-banner" :class="{ win: matchOutcome.isSelfWin, lose: !matchOutcome.isSelfWin }" role="alert" aria-live="assertive">
++    <section v-if="store.finished && matchOutcome" class="panel outcome-banner" :class="{ win: matchOutcome.isSelfWin === true, lose: matchOutcome.isSelfWin === false }" role="alert" aria-live="assertive">
+       <div class="outcome-content">
+-        <span class="outcome-icon">{{ matchOutcome.isSelfWin ? "🎉" : "💀" }}</span>
++        <span class="outcome-icon">{{ matchOutcome.isSelfWin === null ? "⚑" : matchOutcome.isSelfWin ? "🎉" : "💀" }}</span>
+         <div>
+           <h2 class="outcome-label">{{ matchOutcome.label }}</h2>
+-          <p class="muted">{{ matchOutcome.winner }}阵营获胜 · rev {{ store.revision }}</p>
++          <p class="muted">rev {{ store.revision }}</p>
+         </div>
+       </div>
+       <button class="primary" type="button" @click="isOnline ? returnToLobby() : connectAndStart()">
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index 6bff9174..0393be3d 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -246,6 +246,14 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
+     ...view.discard.map((id) => faceToCardView(view, id, null, "DiscardPile")),
+     ...view.table.map((id) => faceToCardView(view, id, null, "Processing")),
+   ];
++  let outcome = view.outcome ?? null;
++  if (outcome && typeof outcome === "object" && "SingleWin" in outcome) {
++    const winner = (outcome as { SingleWin: { player?: unknown } | null }).SingleWin;
++    if (typeof winner?.player === "number" && Number.isInteger(winner.player) && winner.player > 0) {
++      // 窄壳胜者协议为一基；本地视图的 seat/player 为零基，联机投影不走此处。
++      outcome = { ...outcome, SingleWin: { ...winner, player: winner.player - 1 } };
++    }
++  }
+   return {
+     revision: view.rulesetVersion ?? view.ruleset_version ?? 0,
+     state_hash: "",
+@@ -276,7 +284,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
+       })),
+     })),
+     known_cards,
+-    outcome: view.outcome ?? null,
++    outcome,
+   };
+ }
+ 
+diff --git a/apps/web-client/scripts/nc03-outcome-ui.test.mjs b/apps/web-client/scripts/nc03-outcome-ui.test.mjs
+new file mode 100644
+index 00000000..7332dbd0
+--- /dev/null
++++ b/apps/web-client/scripts/nc03-outcome-ui.test.mjs
+@@ -0,0 +1,147 @@
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { test } from "node:test";
++import ts from "typescript";
++import { compile, computed, createSSRApp, reactive } from "vue";
++import { renderToString } from "vue/server-renderer";
++import * as outcome from "../src/engine/outcome.ts";
++import { nativeObserverToSnapshot } from "../src/worker/nativeBackend.ts";
++import { applyEnvelope, createViewStore } from "../src/engine/viewStore.ts";
++
++const sfc = readFileSync(new URL("../src/views/BattleView.vue", import.meta.url), "utf8");
++const script = sfc.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
++const ast = ts.createSourceFile("BattleView.ts", script, ts.ScriptTarget.Latest, true);
++const declaration = ast.statements.flatMap((node) =>
++  ts.isVariableStatement(node) ? [...node.declarationList.declarations] : [])
++  .find((node) => node.name.getText(ast) === "matchOutcome");
++assert.ok(declaration, "execute the SFC's actual outcome computed");
++const source = `const ${ts.createPrinter().printNode(ts.EmitHint.Unspecified, declaration, ast)};`;
++const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
++const banner = sfc.match(/<section v-if="store.finished && matchOutcome"[\s\S]*?<\/section>/)[0];
++const render = compile(banner);
++
++function fixture(identity = "Rebel", player = 0) {
++  const store = reactive({
++    finished: true, revision: 9, lastEvents: [],
++    view: { observer: player, seats: [{ player, identity }], outcome: null },
++  });
++  const info = new Function("computed", "store", "selfId", ...Object.keys(outcome),
++    js + "\nreturn matchOutcome;")(computed, store, { value: player }, ...Object.values(outcome));
++  return {
++    store, info,
++    html: () => renderToString(createSSRApp({
++      setup: () => ({ store, matchOutcome: info, isOnline: false, connectAndStart() {} }),
++      render,
++    })),
++  };
++}
++
++function nativeView(result) {
++  return {
++    seat: 0, turn: 0, phase: "end", round: 4, deckCount: 0, discard: [], table: [],
++    outcome: result,
++    players: [0, 1, 2, 3].map((seat) => ({
++      seat, alive: seat === 3, hp: 1, maxHp: 4, hand: { own: [] }, handCount: 0,
++      equips: [], judge: [], skills: [], revealedGenerals: [], turnedOver: false,
++    })),
++  };
++}
++
++test("native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data", () => {
++  for (const player of [1, 4]) {
++    const raw = nativeView({ SingleWin: { player } });
++    const snapshot = nativeObserverToSnapshot(raw);
++    assert.deepEqual(snapshot.outcome, { SingleWin: { player: player - 1 } });
++    assert.ok(snapshot.seats.some((seat) => seat.player === snapshot.outcome.SingleWin.player));
++    assert.deepEqual(raw.outcome, { SingleWin: { player } });
++    assert.equal(snapshot.observer, 0);
++    assert.equal(snapshot.current_player, 0);
++  }
++});
++
++test("native other outcome shapes and unknown detail pass through unchanged", () => {
++  for (const result of [null, "finished", { RebelWin: null }, { LoyalistWin: null },
++    { RenegadeWin: null }, { GroupWin: { group: "shu" } }, { FutureWin: { detail: 7 } }]) {
++    assert.deepEqual(nativeObserverToSnapshot(nativeView(result)).outcome, result);
++  }
++});
++
++test("actual BattleView computed and banner recognize a rebel observer's win and loss", async () => {
++  const f = fixture("Rebel");
++  f.store.view.outcome = { RebelWin: null };
++  assert.equal(f.info.value.isSelfWin, true);
++  let html = await f.html();
++  assert.match(html, /outcome-banner win/);
++  assert.match(html, /反贼胜/);
++  assert.match(html, /🎉/);
++  f.store.view.outcome = { LoyalistWin: null };
++  assert.equal(f.info.value.isSelfWin, false);
++  html = await f.html();
++  assert.match(html, /outcome-banner lose/);
++  assert.match(html, /主公方胜/);
++});
++
++test("identity victory follows each observer's own role, including loyalists losing to rebels", () => {
++  for (const identity of ["Lord", "Loyalist", "Rebel", "Renegade"]) {
++    const f = fixture(identity);
++    for (const winner of ["LoyalistWin", "RebelWin", "RenegadeWin"]) {
++      f.store.view.outcome = { [winner]: null };
++      assert.equal(f.info.value.isSelfWin,
++        winner === "LoyalistWin" ? ["Lord", "Loyalist"].includes(identity)
++          : identity === (winner === "RebelWin" ? "Rebel" : "Renegade"), `${identity}: ${winner}`);
++    }
++  }
++});
++
++test("SingleWin zero and normalized last seat render a banner with the matching observer result", async () => {
++  for (const player of [0, 3]) {
++    const f = fixture(null, player);
++    f.store.view = nativeObserverToSnapshot({ ...nativeView({ SingleWin: { player: player + 1 } }), seat: player });
++    assert.equal(f.info.value.label, `单挑胜者 P${player}`);
++    assert.equal(f.info.value.isSelfWin, true);
++    assert.match(await f.html(), new RegExp(`单挑胜者 P${player}`));
++    f.store.view.outcome = { SingleWin: { player: player === 0 ? 3 : 0 } };
++    assert.equal(f.info.value.isSelfWin, false);
++  }
++});
++
++test("group, unknown, unmodeled, draw, abort and hidden identity render neutral banners", async () => {
++  for (const [result, text] of [
++    [{ GroupWin: { group: "shu" } }, "势力胜（shu）"],
++    [{ FutureWin: { detail: 7 } }, '已结束（{"FutureWin":{"detail":7}}）'],
++    ["finished", "已结束（胜负类型未建模）"],
++    [{ Draw: null }, "平局"], [{ Aborted: { reason_code: 1 } }, "对局中止"],
++    [{ RebelWin: null }, "反贼胜"],
++  ]) {
++    const f = fixture(result?.GroupWin ? "Rebel" : null);
++    f.store.view.outcome = result;
++    assert.equal(f.info.value.label, text);
++    assert.equal(f.info.value.isSelfWin, null);
++    const html = await f.html();
++    assert.match(html, /outcome-banner/);
++    assert.doesNotMatch(html, /outcome-banner (win|lose)|💀|🎉|阵营获胜/);
++  }
++});
++
++test("view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation", () => {
++  const f = fixture("Rebel");
++  for (const event of [{ type: "MatchEnded", outcome: { RebelWin: null } },
++    { MatchEnded: { outcome: { RebelWin: null } } }]) {
++    f.store.view.outcome = null;
++    f.store.lastEvents = [event];
++    assert.equal(f.info.value.label, outcome.outcomeText({ RebelWin: null }));
++    assert.equal(f.info.value.isSelfWin, true);
++    f.store.view.outcome = { LoyalistWin: null };
++    assert.equal(f.info.value.isSelfWin, false);
++    assert.equal(f.info.value.label, outcome.outcomeText({ LoyalistWin: null }));
++  }
++});
++
++test("MatchEnded timeline uses shared outcome wording", () => {
++  const store = createViewStore();
++  applyEnvelope(store, {
++    revision: 9, hash_hex: "", finished: true, view: nativeObserverToSnapshot(nativeView(null)),
++    choice: null, legal_actions: [], events: [{ MatchEnded: { outcome: { SingleWin: { player: 0 } } } }],
++  });
++  assert.equal(store.log[0].text, "终局 · 单挑胜者 P0");
++});

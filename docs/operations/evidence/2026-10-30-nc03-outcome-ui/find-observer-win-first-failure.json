@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc03-outcome-ui/find-observer-win.mjs"
+  ],
+  "exit": 1,
+  "error": "AssertionError: found.length 1 !== 2",
+  "classification": "Optional fixture search assumed an observer-win seed exists within the first32 seeds for both modes; that assumption was false. This is not a product regression or a failed existing acceptance gate. Retain actual search coverage and use a found prototype positive case; identity win rendering remains covered by actual SFC SSR role matrix."
+}

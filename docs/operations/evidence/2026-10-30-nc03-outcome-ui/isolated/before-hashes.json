@@ -1,0 +1,10 @@
+{
+  "apps/web-client/src/engine/outcome.ts": "2ba3becc4927bf4df97398f1aa2edbf02d909c9040f781f3f3171d55545f4b99",
+  "apps/web-client/src/engine/viewStore.ts": "c3c62fcfd1a4d7a1acb14913526845703797410bd05a6ab02b7f341fe27a28b9",
+  "apps/web-client/src/worker/nativeBackend.ts": "336c600ea9913b05ffd48d4c2cbd73fdb064d97a5447004f61bf9049489f8def",
+  "apps/web-client/src/views/BattleView.vue": "935dda75662ad210cd7430dfda9a4a8b719dd74cdb9baf63634b6a8f52703ab2",
+  "apps/web-client/scripts/outcome-text.test.mjs": "3b11a502d953a538b9885cac405578d10460241cbdea9cbd6088000293333996",
+  "apps/web-client/scripts/native-adapter.test.mjs": "7ca75eae1ceaaf1c47f925cf6c6f1909fd66fda5ac22aefd547d2a36e6428e2f",
+  "apps/web-client/scripts/network-client.test.mjs": "949cde66f9e7b474059a3d71e3c393a03afb7e3432da6d4354614f3e1d1a5bb0",
+  "apps/web-client/scripts/nc03-outcome-ui.test.mjs": null
+}

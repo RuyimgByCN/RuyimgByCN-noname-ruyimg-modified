@@ -1,0 +1,1 @@
+pnpm build rewrote tracked dist; restored exact base blobs and removed only the newly produced build files. No dist diff remains.

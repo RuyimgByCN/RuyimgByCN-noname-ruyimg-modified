@@ -1,0 +1,10 @@
+PASS prototype_save_via_ui: revision=0
+PASS prototype_restore_exact_hash: 434ecfec737cf0dc132b02cb6014c73a605c96790f32f6a59bee604e4907a55b
+PASS prototype_actual_terminal_banner: {"banner":{"text":"💀\n单挑胜者 P3\n\nrev 319\n\n再来一局","win":false,"lose":true},"expectedSelfWin":false,"observer":1,"identity":null}
+PASS prototype_authoritative_terminal: steps=319 revision=319 hash=b2368ec4866f4aeb727ec8474bb9829ebdb799ef75509c5e87a91d837a257904
+PASS identity_save_via_ui: revision=0
+PASS identity_restore_exact_hash: 6b8dd70e5f014db03d3a81417f952092e8641e7c01f371904cf668c375525970
+PASS identity_actual_terminal_banner: {"banner":{"text":"💀\n反贼胜\n\nrev 280\n\n再来一局","win":false,"lose":true},"expectedSelfWin":false,"observer":1,"identity":"Loyalist"}
+PASS identity_authoritative_terminal: steps=280 revision=280 hash=0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f
+PASS browser_exceptions: 0
+run_dir=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/gt014-deep-rbjYfp origin=http://127.0.0.1:51406

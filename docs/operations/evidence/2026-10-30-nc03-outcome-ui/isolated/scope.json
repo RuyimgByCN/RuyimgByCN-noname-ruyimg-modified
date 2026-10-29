@@ -1,0 +1,17 @@
+{
+  "base": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+  "changedFiles": [
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/scripts/outcome-text.test.mjs",
+    "apps/web-client/src/engine/outcome.ts",
+    "apps/web-client/src/engine/viewStore.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "apps/web-client/src/worker/nativeBackend.ts",
+    "apps/web-client/scripts/nc03-outcome-ui.test.mjs"
+  ],
+  "temporaryNodeModulesSymlinkRemoved": true,
+  "temporaryPiLensRemoved": true,
+  "stagedFiles": [],
+  "nativeBuildRun": false,
+  "trackedDistRestored": true
+}

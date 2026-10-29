@@ -1,0 +1,135 @@
+Implemented the NC03 local outcome adapter and shared UI presentation fix in the isolated worktree at `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree`, based on `db4e37ca608877111d9d6f5e12290e6ec912da41`.
+
+The root cause had three parts: native `SingleWin.player` retained the Rust protocol's one-based ID while local seats were zero-based; `outcomeText` treated player zero as absent; BattleView duplicated its mapping and hardcoded self victory/defeat by winning faction. The adapter now changes only the local SingleWin player ID, preserving the original payload. The shared presentation helper supplies text and nullable self-result, while the match helper selects the authoritative view result or either legacy MatchEnded event shape. The banner, finished status, and MatchEnded timeline use the shared presentation wording. Identity results use the observer's own Lord/Loyalist/Rebel/Renegade role; SingleWin compares player IDs, including zero. Group results remain neutral even for an observer with a known identity. Unknown and malformed outcomes retain their JSON detail; unmodeled outcomes still say their victory type is unmodeled. Neutral results have neither win/lose class nor victory/defeat icon.
+
+Changed files:
+
+- `apps/web-client/src/worker/nativeBackend.ts`: local outcome projection only; NC09's character-definition seam is untouched.
+- `apps/web-client/src/engine/outcome.ts`: shared presentation and view/event selection, plus the existing text entry point.
+- `apps/web-client/src/views/BattleView.vue`: shared computed result and finished status; correct positive, negative, and neutral banner presentation.
+- `apps/web-client/src/engine/viewStore.ts`: MatchEnded timeline text reuses outcomeText.
+- `apps/web-client/scripts/nc03-outcome-ui.test.mjs`: new adapter, actual SFC computed, actual compiled banner template rendered through Vue SSR, identity-role, neutral-result, fallback, and timeline regression tests.
+- `apps/web-client/scripts/outcome-text.test.mjs`: P0 and unknown/malformed detail coverage.
+- `apps/web-client/scripts/network-client.test.mjs`: unchanged one-based network projection, shared finished-status wording, and fixture wiring for the shared computed result.
+
+Validation:
+
+- Before source edits, focused red tests: **30 total, 22 passed, 8 failed**, exit 1. Failures reproduce normalization, zero-player text, role/self-result, absent SingleWin/GroupWin banners, duplicated fallback, and timeline wording defects. Network projection preservation already passed.
+- Final focused Node tests, including the existing native-adapter tests: **42/42 passed**, no skips.
+- `pnpm test`: **138/138 passed**, no skips.
+- `pnpm typecheck`: passed.
+- `pnpm build`: passed (`vue-tsc --noEmit && vite build`). This used exact copies of existing main-worktree native/legacy generated artifacts; no fresh Rust/WASM build was run or claimed. Build-generated tracked dist changes were restored byte-for-byte from the base, and only newly generated build files were removed. No dist diff remains.
+- Source-line unittest: **2/2 passed**. Repository source-line gate: **8,917 files passed**, including the 2,000-line source cap and Rust effective-line cap.
+- `git diff --check`: passed. Patch check/apply against isolated base blobs: passed; all seven patched files byte-match the final worktree, including the new test file.
+
+Evidence is outside the worktree at [evidence](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/evidence). The handoff patch is [nc03-outcome-ui.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/evidence/nc03-outcome-ui.patch), with SHA-256 `ace2d7b7e63963894a5a2e986ef2e37f81699d8f00f2cd99df2b9aa95d67baa7`. It includes the new test file without staging it. Evidence also contains before/after hashes, red/green raw logs and counts, full test/typecheck/build logs and exit codes, generated-artifact copy hashes and verification, final status, no-staged-files evidence, and patch roundtrip verification.
+
+No Rust, protocol, Worker/WS transport, rule, ABI, archive, or EngineClient edits were made. No main-worktree writes, commit, push, reset, clean, or stash operations were used. The temporary node_modules symlink and temporary `.pi-lens.json` were removed. The pre-existing untracked `.pi-lens-probe-home/` remains untouched. Nothing is staged.
+
+Open risks/questions: independent reviewer acceptance and the parent's actual browser prototype seed42/4p and identity terminal rechecks remain pending. Node coverage renders the actual banner template with Vue SSR and executes actual SFC computed/handler code; it does not prove browser layout or actual terminal gameplay. The Rust winner protocol intentionally remains one-based, and network tests verify that projection remains unchanged. Versus/Boss victory semantics remain unmodeled.
+
+Recommended next step: apply the scoped patch alongside NC09 and PA09, run the independent review gate, then perform the parent's planned browser prototype/identity terminal rechecks. The nativeBackend hunk changes only outcome projection, and the existing native-adapter test file was not edited.
+
+Skipped fresh Cargo/WASM builds and browser execution; existing generated artifacts were reused exactly. Remaining risk is integration/browser verification, not an asserted new mode implementation.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Seven scoped TS/Vue/test files fix native-only winner indexing and shared outcome presentation; no Rust, protocol, transport, ABI, archive, or unrelated product edits remain."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "External evidence includes red 22/30 with eight reproduced failures, green focused 42/42, full Node 138/138, successful typecheck/build/source gates, hashes, no-staged-files check, and a patch including the new test verified against base db4e37ca."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/src/engine/outcome.ts",
+    "apps/web-client/src/engine/viewStore.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "apps/web-client/src/worker/nativeBackend.ts",
+    "apps/web-client/scripts/nc03-outcome-ui.test.mjs",
+    "apps/web-client/scripts/outcome-text.test.mjs",
+    "apps/web-client/scripts/network-client.test.mjs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/web-client/scripts/nc03-outcome-ui.test.mjs",
+    "apps/web-client/scripts/outcome-text.test.mjs",
+    "apps/web-client/scripts/network-client.test.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cd apps/web-client && node --import ./scripts/ts-register.mjs --test scripts/outcome-text.test.mjs scripts/nc03-outcome-ui.test.mjs scripts/network-client.test.mjs",
+      "result": "failed",
+      "summary": "Intentional red run before source edits: 30 tests, 22 passed, eight reproduced failures."
+    },
+    {
+      "command": "cd apps/web-client && node --import ./scripts/ts-register.mjs --test scripts/outcome-text.test.mjs scripts/nc03-outcome-ui.test.mjs scripts/network-client.test.mjs scripts/native-adapter.test.mjs",
+      "result": "passed",
+      "summary": "Final focused run: 42 tests passed, zero failed or skipped."
+    },
+    {
+      "command": "cd apps/web-client && pnpm test",
+      "result": "passed",
+      "summary": "138 tests passed, zero failed or skipped."
+    },
+    {
+      "command": "cd apps/web-client && pnpm typecheck",
+      "result": "passed",
+      "summary": "vue-tsc --noEmit passed."
+    },
+    {
+      "command": "cd apps/web-client && pnpm build",
+      "result": "passed",
+      "summary": "Typecheck and Vite production build passed using copied existing generated artifacts; tracked dist was subsequently restored to base."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'",
+      "result": "passed",
+      "summary": "Two source-line gate tests passed."
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "8,917 files pass source limits."
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed",
+      "summary": "No whitespace errors."
+    },
+    {
+      "command": "git apply --check and git apply nc03-outcome-ui.patch against temporary db4e37ca scoped blobs",
+      "result": "passed",
+      "summary": "All seven patched files match final worktree bytes, including the new test."
+    },
+    {
+      "command": "git diff --cached --name-only",
+      "result": "passed",
+      "summary": "Empty; no staged files."
+    }
+  ],
+  "validationOutput": [
+    "Red: total 30, pass 22, fail 8, skipped 0, exit 1.",
+    "Focused green: total 42, pass 42, fail 0, skipped 0, exit 0.",
+    "Full Node: total 138, pass 138, fail 0, skipped 0, exit 0.",
+    "Typecheck, production build, source-line unit and repository gates passed.",
+    "Patch SHA256 ace2d7b7e63963894a5a2e986ef2e37f81699d8f00f2cd99df2b9aa95d67baa7."
+  ],
+  "residualRisks": [
+    "Independent reviewer gate remains required.",
+    "Parent must run actual browser prototype seed42/4p and identity terminal rechecks after integration.",
+    "Existing generated WASM was copied byte-for-byte; no fresh Rust/WASM build was performed.",
+    "Versus/Boss winner semantics remain unmodeled."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Normalize native SingleWin IDs once at the local adapter; share role-aware and neutral presentation across banner, status, text, timeline, and view/event fallback; add focused adapter, network, and actual SFC/template regressions.",
+  "reviewFindings": [
+    "No blockers found in implementation self-review; independent reviewer acceptance remains pending."
+  ],
+  "manualNotes": "Evidence and patch are outside the worktree in ../evidence. Temporary dependency symlink and local formatter configuration removed. Tracked dist restored to base after successful build. Existing untracked .pi-lens-probe-home left untouched. NativeBackend changes avoid NC09 character-definition fields; native-adapter.test.mjs and EngineClient transport were not edited."
+}
+```

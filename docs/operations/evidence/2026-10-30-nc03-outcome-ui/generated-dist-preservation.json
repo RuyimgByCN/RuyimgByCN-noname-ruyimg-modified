@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-30T02:23:29.418699+08:00",
+  "backup": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-generated-dist-tkjgnzdp",
+  "restored_tracked_paths": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css",
+    "apps/web-client/dist/index.html"
+  ],
+  "moved_own_build_paths": [],
+  "basis": "Clean f27dd34f before this frontend-only patch; only pnpm production build generated these artifacts. Source patch/evidence retained; no shared target cleaned."
+}

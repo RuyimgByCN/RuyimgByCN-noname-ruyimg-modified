@@ -43,7 +43,7 @@ import {
 import BattleBoard from "../components/battle/BattleBoard.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
-import { nativeCommandError, outcomeText } from "../engine/outcome";
+import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
 import { nextTick } from "vue";
 
 const route = useRoute();
@@ -137,7 +137,7 @@ async function handleEnvelope(env: EngineEnvelope) {
   const prefix = isOnline.value ? `房间 #${roomId.value} · ` : "";
   const hashHint = (env.hash_hex || "").slice(0, 12);
   statusLine.value = env.finished
-    ? `${prefix}终局 · ${outcomeText(env.view?.outcome)} · rev ${env.revision}`
+    ? `${prefix}终局 · ${matchOutcome.value.label} · rev ${env.revision}`
     : `${prefix}rev ${env.revision}${hashHint ? ` · ${hashHint}…` : ""}${
         localClient.isNative() ? " · native" : ""
       }`;
@@ -623,28 +623,9 @@ const PHASE_LABELS: Record<string, string> = {
   End: "结束",
 };
 
-const matchOutcome = computed(() => {
-  const events = store.lastEvents ?? [];
-  for (const e of events) {
-    const ev = e as { type?: string; outcome?: Record<string, unknown> };
-    if (ev?.type === "MatchEnded" && ev.outcome) {
-      const oc = Object.keys(ev.outcome)[0];
-      if (oc === "RebelWin") return { winner: "反贼", label: "反贼胜利！", isSelfWin: false };
-      if (oc === "LoyalistWin") return { winner: "忠臣", label: "忠臣/主公胜利！", isSelfWin: true };
-      if (oc === "RenegadeWin") return { winner: "内奸", label: "内奸胜利！", isSelfWin: false };
-      if (oc === "Draw") return { winner: "平局", label: "平局", isSelfWin: false };
-      if (oc === "Aborted") return { winner: "中止", label: "对局中止", isSelfWin: false };
-    }
-  }
-  const outcome = store.view?.outcome;
-  const tag = typeof outcome === "string" ? outcome : Object.keys((outcome ?? {}) as object)[0];
-  if (tag === "RebelWin") return { winner: "反贼", label: "反贼胜利！", isSelfWin: false };
-  if (tag === "LoyalistWin") return { winner: "忠臣", label: "忠臣/主公胜利！", isSelfWin: true };
-  if (tag === "RenegadeWin") return { winner: "内奸", label: "内奸胜利！", isSelfWin: false };
-  if (tag === "Draw") return { winner: "平局", label: "平局", isSelfWin: false };
-  if (tag === "Aborted") return { winner: "中止", label: "对局中止", isSelfWin: false };
-  return null;
-});
+const matchOutcome = computed(() =>
+  matchOutcomePresentation(store.view, store.lastEvents ?? [], selfId.value),
+);
 
 function returnToLobby() {
   void router.push("/");
@@ -691,12 +672,12 @@ const turnInfo = computed(() => {
       </dl>
     </section>
     <!-- Match outcome banner -->
-    <section v-if="store.finished && matchOutcome" class="panel outcome-banner" :class="{ win: matchOutcome.isSelfWin, lose: !matchOutcome.isSelfWin }" role="alert" aria-live="assertive">
+    <section v-if="store.finished && matchOutcome" class="panel outcome-banner" :class="{ win: matchOutcome.isSelfWin === true, lose: matchOutcome.isSelfWin === false }" role="alert" aria-live="assertive">
       <div class="outcome-content">
-        <span class="outcome-icon">{{ matchOutcome.isSelfWin ? "🎉" : "💀" }}</span>
+        <span class="outcome-icon">{{ matchOutcome.isSelfWin === null ? "⚑" : matchOutcome.isSelfWin ? "🎉" : "💀" }}</span>
         <div>
           <h2 class="outcome-label">{{ matchOutcome.label }}</h2>
-          <p class="muted">{{ matchOutcome.winner }}阵营获胜 · rev {{ store.revision }}</p>
+          <p class="muted">rev {{ store.revision }}</p>
         </div>
       </div>
       <button class="primary" type="button" @click="isOnline ? returnToLobby() : connectAndStart()">

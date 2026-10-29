@@ -1,0 +1,195 @@
+✖ native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data (1.265459ms)
+✔ native other outcome shapes and unknown detail pass through unchanged (0.155167ms)
+✖ actual BattleView computed and banner recognize a rebel observer's win and loss (0.701083ms)
+✖ identity victory follows each observer's own role, including loyalists losing to rebels (0.408958ms)
+✖ SingleWin zero and normalized last seat render a banner with the matching observer result (0.151375ms)
+✖ group, unknown, unmodeled, draw, abort and hidden identity render neutral banners (0.129666ms)
+✖ view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation (0.206916ms)
+✖ MatchEnded timeline uses shared outcome wording (0.338334ms)
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (10.389333ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (0.594542ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (2.427667ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.718792ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.453083ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.261125ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.106291ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (7.020416ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (4.569ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.408334ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (0.772084ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.498958ms)
+✔ 取消待确认命令会清除刷新持久化 (0.191167ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.141917ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.225459ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (0.591708ms)
+✔ network SingleWin stays one-based with all authoritative projection fields unchanged (0.247209ms)
+✔ 身份局胜负类型映射 (0.402208ms)
+✖ 单挑/势力与未建模形态 (0.507166ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.072334ms)
+✔ 原生命令的拒绝原因可显示，未知原因保留 (0.112958ms)
+✔ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.095916ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 22
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 309.577416
+
+✖ failing tests:
+
+test at scripts/nc03-outcome-ui.test.mjs:50:1
+✖ native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data (1.265459ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      SingleWin: {
+  +     player: 1
+  -     player: 0
+      }
+    }
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:54:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { SingleWin: { player: 1 } },
+    expected: { SingleWin: { player: 0 } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-outcome-ui.test.mjs:69:1
+✖ actual BattleView computed and banner recognize a rebel observer's win and loss (0.701083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:72:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-outcome-ui.test.mjs:84:1
+✖ identity victory follows each observer's own role, including loyalists losing to rebels (0.408958ms)
+  AssertionError [ERR_ASSERTION]: Rebel: LoyalistWin
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:89:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-outcome-ui.test.mjs:96:1
+✖ SingleWin zero and normalized last seat render a banner with the matching observer result (0.151375ms)
+  TypeError: Cannot read properties of null (reading 'label')
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:100:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at scripts/nc03-outcome-ui.test.mjs:108:1
+✖ group, unknown, unmodeled, draw, abort and hidden identity render neutral banners (0.129666ms)
+  TypeError: Cannot read properties of null (reading 'label')
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:118:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at scripts/nc03-outcome-ui.test.mjs:126:1
+✖ view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation (0.206916ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '反贼胜利！' !== '反贼胜'
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:132:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '反贼胜利！',
+    expected: '反贼胜',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/nc03-outcome-ui.test.mjs:140:1
+✖ MatchEnded timeline uses shared outcome wording (0.338334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '终局 · {"SingleWin":{"player":0}}'
+  - '终局 · 单挑胜者 P0'
+          ^
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/nc03-outcome-ui.test.mjs:146:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '终局 · {"SingleWin":{"player":0}}',
+    expected: '终局 · 单挑胜者 P0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/outcome-text.test.mjs:13:1
+✖ 单挑/势力与未建模形态 (0.507166ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '单挑结束' !== '单挑胜者 P0'
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc03-outcome-t5plf1e7/worktree/apps/web-client/scripts/outcome-text.test.mjs:14:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '单挑结束',
+    expected: '单挑胜者 P0',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "node",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc03-outcome-ui/browser-observer-win.mjs",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/dist",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc03-outcome-ui/positive-observer"
+  ],
+  "exit": 0,
+  "bounded_search": {
+    "mode": "identity",
+    "seed": 3
+  },
+  "scope": "Actual UI with unmodified generated WASM; seed selected through Home input; no mocked rules or directly altered match state."
+}

@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
+import { computed } from "vue";
+import { matchOutcomePresentation } from "../src/engine/outcome.ts";
 import { NetworkEngineClient, onlineReconnectKey } from "../src/engine/networkClient.ts";
 import { applyEnvelope, clearEffects, createViewStore } from "../src/engine/viewStore.ts";
 
@@ -212,11 +214,12 @@ function presentationFixture() {
   let release;
   const handle = new Function(
     "store", "applyEnvelope", "nc12Mark", "presentationDelay", "clearEffects", "isOnline",
-    "roomId", "statusLine", "localClient", "syncGeneralSelectProjection", "outcomeText",
+    "roomId", "statusLine", "localClient", "syncGeneralSelectProjection", "matchOutcome",
     `${compiled}; return handleEnvelope;`,
   )(
     store, applyEnvelope, () => {}, () => new Promise((resolve) => { release = resolve; }),
-    clearEffects, { value: true }, { value: 7 }, status, { isNative: () => true }, () => {}, () => "",
+    clearEffects, { value: true }, { value: 7 }, status, { isNative: () => true }, () => {},
+    computed(() => matchOutcomePresentation(store.view, store.lastEvents, 1)),
   );
   const env = (revision) => ({
     result: null, events: [], choice: null, view: view(revision), legal_actions: [],
@@ -474,4 +477,44 @@ test("联机公开事件与本地一致地展示粗粒度语义", async (t) => {
   const store = createViewStore();
   applyEnvelope(store, envelopes.at(-1));
   assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+});
+
+
+test("network SingleWin stays one-based with all authoritative projection fields unchanged", async (t) => {
+  const { client, connect } = fixture(t);
+  const socket = await connect();
+  const joined = client.joinRoom(7);
+  join(socket);
+  await joined;
+  const envelopes = [];
+  client.onEnvelope((envelope) => envelopes.push(envelope));
+  for (const player of [1, 4]) {
+    const projection = {
+      ...view(player + 1), outcome: { SingleWin: { player } },
+      seats: [1, 2, 3, 4].map((id) => ({ player: id, seat: id - 1 })),
+    };
+    socket.receive("CommandOutcome", {
+      view: projection, choice: null, legal_actions: [], result: { Accepted: {} }, idempotency_key: 99,
+    });
+    assert.deepEqual(envelopes.at(-1).view, projection);
+    assert.equal(envelopes.at(-1).finished, true);
+  }
+});
+
+
+test("finished status shares the banner's view and MatchEnded fallback wording", async () => {
+  const f = presentationFixture();
+  for (const event of [{ type: "MatchEnded", outcome: { RebelWin: null } },
+    { MatchEnded: { outcome: { RebelWin: null } } }]) {
+    const env = { ...f.env(4), finished: true, events: [event] };
+    let pending = f.handle(env);
+    f.release();
+    await pending;
+    assert.match(f.status.value, /终局 · 反贼胜 · rev 4/);
+    env.view = { ...env.view, outcome: { SingleWin: { player: 1 } } };
+    pending = f.handle(env);
+    f.release();
+    await pending;
+    assert.match(f.status.value, /终局 · 单挑胜者 P1 · rev 4/);
+  }
 });

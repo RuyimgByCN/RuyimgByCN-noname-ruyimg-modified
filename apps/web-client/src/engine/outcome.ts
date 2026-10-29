@@ -1,32 +1,63 @@
-/**
- * 终局胜负文案（NC09/NC12）。
- *
- * 数据来源：视图下发的 `outcome`。原生 WASM 壳（`engine-native-wasm`）把
- * `engine_native::Winner` 映射为协议形态：
- * `{ "LoyalistWin": null }` / `{ "RebelWin": null }` / `{ "RenegadeWin": null }` /
- * `{ "SingleWin": { "player": n } }` / `{ "GroupWin": { "group": "shu" } }`；
- * **未建模的模式胜者**（对决/斗地主/Boss）保持字符串 `"finished"`。
- *
- * 本函数只做**展示映射**，不推断语义：未知形态**如实显示原始 JSON**。
- */
-export function outcomeText(outcome: unknown): string {
-  if (outcome === null || outcome === undefined) return "胜负未知";
-  if (outcome === "finished") return "已结束（胜负类型未建模）";
-  if (typeof outcome === "object") {
-    const o = outcome as Record<string, unknown>;
-    if ("LoyalistWin" in o) return "主公方胜";
-    if ("RebelWin" in o) return "反贼胜";
-    if ("RenegadeWin" in o) return "内奸胜";
-    if ("SingleWin" in o) {
-      const p = (o.SingleWin as { player?: number } | null)?.player;
-      return p ? `单挑胜者 P${p}` : "单挑结束";
+import type { ObserverSnapshot, SeatView } from "../types/engine";
+
+/** 展示使用视图中的玩家编号：本地适配后为零基，联机协议仍为一基。 */
+export function outcomePresentation(
+  outcome: unknown,
+  self?: Pick<SeatView, "player" | "identity">,
+): { label: string; isSelfWin: boolean | null } {
+  const neutral = (label: string) => ({ label, isSelfWin: null });
+  if (outcome === null || outcome === undefined) return neutral("胜负未知");
+  // 未建模的对决/斗地主/Boss 胜者不推断语义。
+  if (outcome === "finished") return neutral("已结束（胜负类型未建模）");
+  const o = typeof outcome === "object" ? outcome as Record<string, unknown> : {};
+  const tag = typeof outcome === "string" ? outcome : Object.keys(o)[0];
+  switch (tag) {
+    case "LoyalistWin":
+      return { label: "主公方胜", isSelfWin: self?.identity
+        ? self.identity === "Lord" || self.identity === "Loyalist" : null };
+    case "RebelWin":
+      return { label: "反贼胜", isSelfWin: self?.identity ? self.identity === "Rebel" : null };
+    case "RenegadeWin":
+      return { label: "内奸胜", isSelfWin: self?.identity ? self.identity === "Renegade" : null };
+    case "SingleWin": {
+      const player = (o.SingleWin as { player?: unknown } | null)?.player;
+      if (typeof player === "number" && Number.isInteger(player) && player >= 0) {
+        return { label: `单挑胜者 P${player}`, isSelfWin: self ? self.player === player : null };
+      }
+      break;
     }
-    if ("GroupWin" in o) {
-      const g = (o.GroupWin as { group?: string } | null)?.group ?? "?";
-      return `势力胜（${g}）`;
+    case "GroupWin": {
+      const group = (o.GroupWin as { group?: unknown } | null)?.group;
+      if (typeof group === "string") return neutral(`势力胜（${group}）`);
+      break;
+    }
+    case "Draw": return neutral("平局");
+    case "Aborted": return neutral("对局中止");
+  }
+  return neutral(`已结束（${JSON.stringify(outcome)}）`);
+}
+
+/** 未知形态如实显示原始 JSON，不猜测胜者或阵营。 */
+export function outcomeText(outcome: unknown): string {
+  return outcomePresentation(outcome).label;
+}
+
+/** 视图是权威来源；旧事件信封仅在视图缺少终局结果时回退。 */
+export function matchOutcomePresentation(
+  view: ObserverSnapshot | null,
+  events: unknown[],
+  selfId: number,
+) {
+  let outcome = view?.outcome;
+  if (outcome === null || outcome === undefined) {
+    for (const event of events) {
+      if (!event || typeof event !== "object") continue;
+      const e = event as { type?: string; outcome?: unknown; MatchEnded?: { outcome?: unknown } };
+      outcome = e.type === "MatchEnded" ? e.outcome : e.MatchEnded?.outcome;
+      if (outcome !== null && outcome !== undefined) break;
     }
   }
-  return `已结束（${JSON.stringify(outcome)}）`;
+  return outcomePresentation(outcome, view?.seats.find((seat) => seat.player === selfId));
 }
 
 /** 原生窄壳命令及自动步进结果的可见错误。 */

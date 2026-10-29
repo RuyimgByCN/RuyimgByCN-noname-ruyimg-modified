@@ -1,6 +1,7 @@
 import { reactive } from "vue";
 import type { ChoiceRequest, EngineEnvelope, LegalAction, ObserverSnapshot } from "../types/engine";
 import { perfEnvelopeApplied, perfEnvelopeApplying } from "./perfProbe";
+import { outcomeText } from "./outcome";
 
 /** Presentation timeline event (not state truth). */
 export interface PresentationEvent {
@@ -173,7 +174,7 @@ function summarizeEvents(events: unknown[]): string[] {
         out.push(`回合 · 玩家 ${body?.current} · ${body?.phase}`);
         break;
       case "MatchEnded":
-        out.push(`终局 · ${JSON.stringify(body?.outcome)}`);
+        out.push(`终局 · ${outcomeText(body?.outcome)}`);
         break;
       case "ChoiceRequested":
         out.push(`等待选择 · 玩家 ${body?.observer}`);

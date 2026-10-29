@@ -11,6 +11,7 @@ test("身份局胜负类型映射", () => {
 });
 
 test("单挑/势力与未建模形态", () => {
+  assert.equal(outcomeText({ SingleWin: { player: 0 } }), "单挑胜者 P0");
   assert.equal(outcomeText({ SingleWin: { player: 4 } }), "单挑胜者 P4");
   assert.equal(outcomeText({ GroupWin: { group: "shu" } }), "势力胜（shu）");
   assert.equal(outcomeText("finished"), "已结束（胜负类型未建模）");
@@ -40,4 +41,13 @@ test("自动步进的嵌套拒绝和计划错误不可当作成功", () => {
   assert.equal(outcome.nativeCommandError({ kind: "plan", error: "cancelled" }), "自动操作失败：已取消");
   assert.equal(outcome.nativeCommandError({ kind: "plan", error: "new_error" }), "自动操作失败：new_error");
   assert.equal(outcome.nativeCommandError({ kind: "plan", outcome: "{" }), "自动操作结果无法读取");
+});
+
+
+test("malformed and unmodeled outcome detail stays visible without inventing a winner", () => {
+  for (const value of [{ SingleWin: { player: -1 } }, { SingleWin: { player: "0" } },
+    { GroupWin: { unexpected: "shu" } }, { VersusWin: { team: 0 } }, { BossWin: { player: 1 } }]) {
+    assert.equal(outcomeText(value), `已结束（${JSON.stringify(value)}）`);
+    assert.equal(outcome.outcomePresentation(value).isSelfWin, null);
+  }
 });

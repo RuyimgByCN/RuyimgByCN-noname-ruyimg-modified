@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-30T02:16:02.713280+08:00",
+  "basis": "Nine reconstruction run and revival completed; authorized nine commits are main ancestors and full raw reconstruction logs copied into repository. Retire only their private target/gate-target. No active lane uses these paths; J2 uses nc09 target, PA09 uses stage3 target, parent uses main target. Source/frozen snapshot/worktree retained.",
+  "disk_before": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 930994792  11515472    99% 6167556 115154720    5%   /System/Volumes/Data\n",
+  "paths": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/target",
+      "size_kib": 49534376
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nine-replay.0m5ciyvt/gate-target",
+      "size_kib": 1967372
+    }
+  ],
+  "disk_after": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   971319460 879922712  62587552    94% 6052516 625875520    1%   /System/Volumes/Data\n"
+}

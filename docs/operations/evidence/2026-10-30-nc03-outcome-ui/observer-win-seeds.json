@@ -1,0 +1,429 @@
+{
+  "found": [
+    {
+      "mode": "identity",
+      "seed": 3,
+      "steps": 168,
+      "role": "Rebel",
+      "outcome": {
+        "RebelWin": null
+      }
+    }
+  ],
+  "trials": [
+    {
+      "mode": "prototype",
+      "seed": 1,
+      "steps": 261,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 2,
+      "steps": 201,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 3,
+      "steps": 284,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 4,
+      "steps": 313,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 5,
+      "steps": 238,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 6,
+      "steps": 249,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 7,
+      "steps": 209,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 1
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 8,
+      "steps": 276,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 9,
+      "steps": 365,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 10,
+      "steps": 321,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 11,
+      "steps": 377,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 12,
+      "steps": 177,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 13,
+      "steps": 251,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 14,
+      "steps": 228,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 15,
+      "steps": 309,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 16,
+      "steps": 282,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 17,
+      "steps": 265,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 18,
+      "steps": 253,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 1
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 19,
+      "steps": 203,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 20,
+      "steps": 205,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 21,
+      "steps": 331,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 22,
+      "steps": 355,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 23,
+      "steps": 294,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 24,
+      "steps": 259,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 25,
+      "steps": 245,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 26,
+      "steps": 227,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 27,
+      "steps": 360,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 28,
+      "steps": 211,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 29,
+      "steps": 207,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 30,
+      "steps": 323,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 4
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 31,
+      "steps": 264,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "prototype",
+      "seed": 32,
+      "steps": 211,
+      "role": null,
+      "outcome": {
+        "SingleWin": {
+          "player": 3
+        }
+      },
+      "won": false
+    },
+    {
+      "mode": "identity",
+      "seed": 1,
+      "steps": 210,
+      "role": "Renegade",
+      "outcome": {
+        "RebelWin": null
+      },
+      "won": false
+    },
+    {
+      "mode": "identity",
+      "seed": 2,
+      "steps": 119,
+      "role": "Renegade",
+      "outcome": {
+        "RebelWin": null
+      },
+      "won": false
+    },
+    {
+      "mode": "identity",
+      "seed": 3,
+      "steps": 168,
+      "role": "Rebel",
+      "outcome": {
+        "RebelWin": null
+      },
+      "won": true
+    }
+  ]
+}
