@@ -649,6 +649,12 @@ pub enum MachineSnapshot {
         consume: Vec<(String, u8)>,
         /// 命中计数旗标（伤害触发 Halted 时递增 `vm_aux.hits`）。
         count_hits: bool,
+        /// J1（ADR 0786 §A，规则 v328）：提交期挂起——提交期开窗时的剩余
+        /// 效果队列（rvm_bridge 自定义编码；未挂起为空）。
+        commit_pending: Vec<u8>,
+        /// J1：开窗参数（开窗座位, 弃置张数）；与 `paused` 互斥（VM 执行期
+        /// 挂起）——同一时刻至多一种挂起。
+        commit_pick: Option<(PlayerId, u32)>,
     },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询

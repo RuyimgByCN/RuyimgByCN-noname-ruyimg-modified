@@ -738,6 +738,35 @@ pub fn active_ask(
             None
         }
         MachineSnapshot::Rvm {
+            owner: _,
+            commit_pick: Some((player, count)),
+            ..
+        } => {
+            // J1（规则 v328）：提交期挂起——开窗座位的手牌+装备（手牌在前），
+            // 恰好 min(count, 可用) 张；无牌空过由恢复后首步处理（不派询问）。
+            let hand_equips: Vec<ChoiceOption> = core
+                .player(*player)
+                .hand
+                .iter()
+                .chain(core.player(*player).equips.iter())
+                .map(|c| ChoiceOption::Card(*c))
+                .collect();
+            let exact = (*count as usize).min(hand_equips.len());
+            if exact == 0 {
+                None
+            } else {
+                Some(ask(
+                    *player,
+                    "rvm_discard_pick",
+                    ChoiceKind::SelectCards,
+                    hand_equips,
+                    exact,
+                    exact,
+                    false,
+                ))
+            }
+        }
+        MachineSnapshot::Rvm {
             owner,
             paused: Some(p),
             ..

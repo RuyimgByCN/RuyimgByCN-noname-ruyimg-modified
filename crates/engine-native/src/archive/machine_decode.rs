@@ -713,6 +713,18 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 consume.push((key, scope));
             }
             let count_hits = r.boolean()?;
+            // J1（规则 v328）：提交期挂起（尾部追加——旧格式档在此读完即止，
+            // 读到 EOF 拒绝；v327 及更早档已被规则版本门禁先行拒绝）。
+            let commit_pending = r.bytes()?.to_vec();
+            let commit_pick = match r.u8()? {
+                0 => None,
+                1 => {
+                    let player = r.u8()?;
+                    let count = r.u32()?;
+                    Some((player, count))
+                }
+                _ => return Err(ArchiveError::BadTag("Rvm.commit_pick", 255)),
+            };
             MachineSnapshot::Rvm {
                 owner,
                 module,
@@ -721,6 +733,8 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 event,
                 consume,
                 count_hits,
+                commit_pending,
+                commit_pick,
             }
         }
         64 => {

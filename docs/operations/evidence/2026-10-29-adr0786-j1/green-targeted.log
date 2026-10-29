@@ -1,0 +1,12 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s
+     Running tests/adr0786_j1_commit_window.rs (target/debug/deps/adr0786_j1_commit_window-5b68a371fb11c370)
+
+running 4 tests
+test j1_zero_count_first_launch_remains_rejected ... ok
+test j1_real_choice_window_discards_picked_cards_and_resumes_queue ... ok
+test j1_window_caps_to_available_and_skips_when_empty ... ok
+test j1_commit_window_saves_and_restores_across_archive ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

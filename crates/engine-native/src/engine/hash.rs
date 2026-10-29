@@ -925,6 +925,8 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
             event,
             consume,
             count_hits,
+            commit_pending,
+            commit_pick,
         } => {
             push_u8(h, 82);
             push_u8(h, *owner);
@@ -960,6 +962,18 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
                 push_u8(h, *scope);
             }
             push_u8(h, *count_hits as u8);
+            // J1（规则 v328）：提交期挂起字段入摘要——两个仅剩余队列或开窗
+            // 参数不同的提交期挂起机必须可区分（GT-011 同款身份要求）。
+            push_u32(h, commit_pending.len() as u32);
+            h.update(commit_pending);
+            match commit_pick {
+                None => push_u8(h, 0),
+                Some((player, count)) => {
+                    push_u8(h, 1);
+                    push_u8(h, *player);
+                    push_u32(h, *count);
+                }
+            }
         }
         M::BossBuchun {
             owner,
@@ -1565,7 +1579,6 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
         }
     }
 }
-
 pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
     match data {
         EventData::Damage(d) => {

@@ -148,7 +148,16 @@ use crate::snap::{
 /// `nc07_archive_hash_guard` 要求入档字段要么入摘要、要么登记排除理由。
 /// v326 及更早存档按版本策略拒绝（RuleVersionMismatch）；存档格式 v105 与
 /// 全局原生 ABI 753 不变。
-pub const STANDARD_RULESET_VERSION: u64 = 327;
+/// v328：ADR 0786 J1（裁决第 13 项）——VM 提交期选择窗挂起：`Halted` 后逐
+/// 效果落账遇 `discard_hand_equip_count(N>0)` 不再内联「确定性首 N」近似，
+/// 而是暂停落账、向开窗座位发真实选牌窗（恰好 N 张手牌/装备，不足以可用
+/// 数封顶、无牌空过），应答后按所选弃置并继续提交剩余队列。选择作为普通
+/// Answer 命令进入命令流（可回放、跨端一致）；`MachineSnapshot::Rvm` 尾部
+/// 追加 `commit_pending`/`commit_pick`（归档与规范摘要同步扩展）。方案①：
+/// 不新增 DSL 原语、`RULE_VM_ABI_VERSION` 不变、N=0 首发拒绝照旧。v327 及
+/// 更早存档按版本策略拒绝；存档格式 v105、全局原生 ABI 753、Worker／WS
+/// 协议不变。
+pub const STANDARD_RULESET_VERSION: u64 = 328;
 
 mod names;
 pub use names::*;

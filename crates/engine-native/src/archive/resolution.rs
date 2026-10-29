@@ -124,6 +124,11 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "huanren_pick",
     "d3_moyan_target",
     "d3_moyan_gain",
+    // J1（ADR 0786 §A.3，规则 v328）：VM 提交期选择窗挂起的受限 prompt 键
+    // （ADR 预期的「rvm_effect_pick 类受限 prompt」；复用既有 ChoiceKind::
+    // SelectCards 与 Answer 通道，无新增变体/载荷）。**表尾追加**——索引即
+    // 线上 tag，既有编码不移位。
+    "rvm_discard_pick",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

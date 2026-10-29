@@ -1,0 +1,52 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running unittests src/lib.rs (target/debug/deps/rule_vm-d0dd841a9e445606)
+
+running 11 tests
+test bytecode::tests::effect_tags_keep_legacy_bytes_and_extend_past_u8 ... ok
+test verify::tests::accepts_simple ... ok
+test vm::tests::capability_denied ... ok
+test vm::tests::add_and_halt ... ok
+test verify::tests::rejects_bad_jump ... ok
+test vm::tests::infinite_loop_hits_fuel ... ok
+test vm::tests::min_picks_lower ... ok
+test verify::tests::finds_effect_tags_only_at_instruction_boundaries ... ok
+test vm::tests::draw_effect_via_host ... ok
+test reference::tests::matches_rule_vm_across_choice_resume ... ok
+test reference::tests::matches_rule_vm_across_range_choice_resume ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/control_flow_boundaries.rs (target/debug/deps/control_flow_boundaries-3d30cf912752299e)
+
+running 4 tests
+test rejects_entry_and_both_jump_forms_inside_immediates_or_past_end ... ok
+test rejects_interior_jump_even_when_it_hides_a_gated_effect ... ok
+test rejects_forged_resume_pc_before_it_can_execute_hidden_immediates ... ok
+test valid_instruction_targets_and_choice_resume_remain_usable ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/effect_tag_656_772.rs (target/debug/deps/effect_tag_656_772-2b119afe88a05388)
+
+running 1 test
+test real_sp_and_corrected_onlyol_modules_dispatch_different_effects ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/fuel_exhaustion.rs (target/debug/deps/fuel_exhaustion-bbb22eba8d8e6dea)
+
+running 5 tests
+test zero_budget_immediate_out_of_fuel ... ok
+test trap_instruction_produces_host_error ... ok
+test fuel_accounting_is_precise ... ok
+test finite_loop_within_budget_halts ... ok
+test infinite_loop_terminates_on_out_of_fuel ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rule_vm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

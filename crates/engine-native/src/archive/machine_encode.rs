@@ -250,6 +250,8 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             event,
             consume,
             count_hits,
+            commit_pending,
+            commit_pick,
         } => {
             w.u8(82);
             enc_pid(w, owner);
@@ -280,6 +282,16 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 w.u8(*scope);
             }
             w.boolean(*count_hits);
+            // J1（规则 v328）：提交期挂起（尾部追加——旧格式档在此读完即止）。
+            w.bytes(commit_pending);
+            match commit_pick {
+                None => w.u8(0),
+                Some((player, count)) => {
+                    w.u8(1);
+                    w.u8(*player);
+                    w.u32(*count);
+                }
+            }
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);

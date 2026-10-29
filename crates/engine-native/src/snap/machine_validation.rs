@@ -376,6 +376,8 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             paused,
             skill_name,
             consume,
+            commit_pending,
+            commit_pick,
             ..
         } => {
             check_pid(*owner, b)?;
@@ -401,6 +403,26 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
                     return Err(SnapshotError::UnknownMachine);
                 }
                 let _ = &p.frames;
+            }
+            // J1（规则 v328）：提交期挂起——开窗座位界内；挂起时剩余队列
+            // 必须非空且可解码（头元素即开窗效果）；未挂起时两者必须为空。
+            match commit_pick {
+                Some((player, _count)) => {
+                    check_pid(*player, b)?;
+                    if commit_pending.is_empty()
+                        || crate::rvm_ops::dec_effects(commit_pending).is_none()
+                    {
+                        return Err(SnapshotError::UnknownMachine);
+                    }
+                }
+                None => {
+                    if !commit_pending.is_empty() {
+                        return Err(SnapshotError::UnknownMachine);
+                    }
+                }
+            }
+            if paused.is_some() && commit_pick.is_some() {
+                return Err(SnapshotError::UnknownMachine);
             }
         }
         MachineSnapshot::Shedu { owner, .. } => {

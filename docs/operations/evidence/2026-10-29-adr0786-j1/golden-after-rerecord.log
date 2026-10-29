@@ -1,0 +1,11 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s
+     Running tests/replay_scenarios.rs (target/debug/deps/replay_scenarios-aa26e4af23d937a3)
+
+running 3 tests
+test scenarios_are_registered_in_coverage_manifest ... ok
+test pa12_print_golden_hex ... ok
+test replay_scenarios_match_golden ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

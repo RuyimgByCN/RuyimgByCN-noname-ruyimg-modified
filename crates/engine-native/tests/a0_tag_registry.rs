@@ -204,6 +204,8 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
                 },
                 consume: Vec::new(),
                 count_hits: false,
+                commit_pending: Vec::new(),
+                commit_pick: None,
             },
         ),
     ]

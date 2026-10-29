@@ -23,7 +23,7 @@ fn reject(name: &str) -> HostTrap {
     }
 }
 
-fn seat_of(p: rule_api::PlayerId, seats: u8) -> Option<PlayerId> {
+pub(crate) fn seat_of(p: rule_api::PlayerId, seats: u8) -> Option<PlayerId> {
     if !p.is_some() {
         return None;
     }
@@ -209,7 +209,7 @@ fn detach(core: &mut GameStateCore, card: CardId) -> bool {
     false
 }
 
-fn discard_some(ctx: &mut Ctx<'_>, seat: PlayerId, cards: Vec<CardId>) {
+pub(crate) fn discard_some(ctx: &mut Ctx<'_>, seat: PlayerId, cards: Vec<CardId>) {
     if cards.is_empty() {
         return;
     }
@@ -1248,12 +1248,20 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, *skill_def);
                 push_u32(w, skill.raw());
             }
+            // J1（规则 v328）：提交期挂起需要把开窗效果编码入档（此前该
+            // 变体从未在挂起队列中出现，编码面未覆盖）。
+            EffectRequest::DiscardHandEquipCount { player, count, skill } => {
+                w.push(26);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+                push_u32(w, skill.raw());
+            }
             _ => unreachable!("accept_effect 已拒绝未编码变体"),
         }
     }
 }
 
-struct Rd<'a> {
+pub(super) struct Rd<'a> {
     r: &'a [u8],
 }
 impl Rd<'_> {
@@ -1413,6 +1421,12 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 skill_def: rd.u32()?,
                 skill: rule_api::SkillId::new(rd.u32()?),
             },
+            // J1（规则 v328）：提交期挂起队列可含开窗效果（编码臂 26）。
+            26 => EffectRequest::DiscardHandEquipCount {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
             _ => return None,
         };
         out.push(e);
@@ -1423,4 +1437,3 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
         None
     }
 }
-

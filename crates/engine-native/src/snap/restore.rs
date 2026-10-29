@@ -256,10 +256,27 @@ impl MachineSnapshot {
                 event,
                 consume,
                 count_hits,
+                commit_pending,
+                commit_pick,
             } => {
                 let m = rule_vm::BytecodeModule::from_bytes(module)
                     .map_err(|_| SnapshotError::UnknownMachine)?;
-                let machine = if let Some(mut p) = paused.clone() {
+                let machine = if let Some((player, count)) = commit_pick {
+                    // J1（规则 v328）：提交期挂起——剩余队列+开窗参数重建，
+                    // 问询由 active_ask 派生。
+                    crate::rvm_bridge::VmMachine::restore_commit_paused(
+                        *owner,
+                        m,
+                        commit_pending.clone(),
+                        *player,
+                        *count,
+                        skill_name.clone(),
+                        event.clone(),
+                        consume.clone(),
+                        *count_hits,
+                    )
+                    .map_err(|_| SnapshotError::UnknownMachine)?
+                } else if let Some(mut p) = paused.clone() {
                     crate::rvm_bridge::VmMachine::restore_paused(
                         *owner,
                         m,

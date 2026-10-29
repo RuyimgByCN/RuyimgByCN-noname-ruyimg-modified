@@ -1,6 +1,6 @@
 # ADR 0786：VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥，草案）
 
-日期：2026-10-28　|　状态：**J1 已采纳（2026-10-28 23:28 用户裁决，裁决登记第 13 项；未实施）；J2 仍为草案**
+日期：2026-10-28　|　状态：**J1 已实施（2026-10-29，规则 v328，工作树未提交，[证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)）；J2 仍为草案**
 关联：[DSL 迁移计划](../architecture/native-dsl-migration-plan.md)（§2 J、批⑥、第 5/6 条）、[ADR 0782](0782-extension-backend-and-legacy-js-scope.md)、[ADR 0778](0778-native-c0-pack-data-keys.md)、[裁决登记第 5 项](../operations/evidence/2026-10-28-user-decisions/README.md)
 
 ## 背景
@@ -50,3 +50,5 @@ T8 接线（[rvm_bridge.rs](../../crates/engine-native/src/rvm_bridge.rs)）落�
 草案。本 ADR 属[裁决登记第 5 项](../operations/evidence/2026-10-28-user-decisions/README.md)授权的「设计与 ADR 起草」范围；**VM 提交协议扩展（`MachineSnapshot::Rvm` 提交期挂起字段）、选择/命令协议的具体改动、`RULE_VM_ABI_VERSION` 与规则/存档升号，实施前仍须分别请示**。未拍板前，批④的确定性近似与登记差异照旧，不因本草案改变。
 
 **2026-10-28 23:28 补记**：用户采纳 J1（[裁决登记第 13 项](../operations/evidence/2026-10-28-user-decisions/README.md)）：DSL 原语取方案①、不新增原语、`RULE_VM_ABI_VERSION` 不变，规则升 v327→v328，存档预计保持 v105，应答复用既有 Answer 与 ChoiceKind；需要新增 ChoiceKind 变体、prompt 载荷或升存档格式时另行请示。J2 与 ABI 升号未授权；先做 754–758 级原语盘点（只分析）。
+
+**2026-10-29 实施补记**：J1 已按上述边界实施（规则 **v328**、存档 v105 尾追、ABI 753 不变）。§A.3 的「受限 prompt 键」落地为 `KNOWN_PROMPTS` 表尾追加 `"rvm_discard_pick"`（`ChoiceKind::SelectCards` 复用、Answer 通道不变；解读见证据 §6）。反例红→绿、存读档（GT-011 口径）、不足封顶／空过、N=0 编译期拒绝与 golden 探针见[证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)。§5 的 754–758 原语盘点亦在该证据（756–758 三级在原生宿主均未实现，757/758 依赖 J2）。

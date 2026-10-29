@@ -753,6 +753,7 @@ impl SkillBehavior for VmSkillBehavior {
             settled: false,
             consume,
             count_hits,
+            commit_pause: None,
         })
     }
 }
@@ -762,6 +763,20 @@ impl SkillBehavior for VmSkillBehavior {
 pub struct VmPaused {
     pub continuation: Continuation,
     pub options: Vec<u32>,
+}
+
+/// J1（ADR 0786 §A，规则 v328）：**提交期挂起**——Halted 逐效果落账遇
+/// `discard_hand_equip_count(N>0)` 时不再内联「确定性首 N」近似，而是暂停
+/// 落账、向开窗座位发真实选牌窗（恰好 N 张手牌/装备；不足以可用数封顶，
+/// 无牌空过）；应答后按所选弃置并继续提交剩余队列（队列保留在
+/// `pending_effects`，头元素即本开窗效果）。与 `paused`（VM 执行期挂起）
+/// 互斥——同一时刻至多一种挂起。
+#[derive(Debug, Clone)]
+struct VmCommitPause {
+    /// 开窗座位（效果的目标玩家；问询 observer）。
+    player: PlayerId,
+    /// 弃置张数（min=max=封顶后的恰好值）。
+    count: u32,
 }
 
 /// VM 技能机器：可挂起（HOST_CHOICE）——挂起期间排队效果保留（原型
@@ -785,6 +800,8 @@ pub struct VmMachine {
     /// Halted 时写入 once（快照携带：挂起恢复后续跑不丢限次消费）。
     consume: Vec<(String, u8)>,
     count_hits: bool,
+    /// J1：提交期挂起（开窗参数；剩余队列在 `pending_effects`）。
+    commit_pause: Option<VmCommitPause>,
 }
 
 /// 内核座位 ↔ rule-api id（1 基，NONE=0）。
@@ -861,6 +878,7 @@ impl VmMachine {
             settled: false,
             consume,
             count_hits,
+            commit_pause: None,
         })
     }
 
@@ -915,15 +933,54 @@ impl VmMachine {
             settled: false,
             consume,
             count_hits,
+            commit_pause: None,
+        })
+    }
+
+    /// J1 存档重建（提交期挂起）：剩余队列 + 开窗参数还原。问询由
+    /// active_ask 按推进后状态派生，`asked=true`——下一应答即读答继续
+    /// 落账，不重问。
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn restore_commit_paused(
+        owner: PlayerId,
+        module: BytecodeModule,
+        commit_pending_bytes: Vec<u8>,
+        player: PlayerId,
+        count: u32,
+        skill_name: String,
+        event: EventData,
+        consume: Vec<(String, u8)>,
+        count_hits: bool,
+    ) -> Result<Self, ()> {
+        if skill_name.is_empty() {
+            return Err(());
+        }
+        let pending = dec_effects(&commit_pending_bytes).ok_or(())?;
+        if pending.is_empty() {
+            return Err(());
+        }
+        let program = VmSkillProgram::new(module, skill_name).map_err(|_| ())?;
+        Ok(Self {
+            owner,
+            program: Arc::new(program),
+            trig: trigger_ctx_of(&event),
+            event,
+            pending_effects: pending,
+            paused: None,
+            asked: true,
+            settled: false,
+            consume,
+            count_hits,
+            commit_pause: Some(VmCommitPause { player, count }),
         })
     }
 }
 
-fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
+pub(super) fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
     crate::rvm_ops::enc_effects(w, effects);
 }
 
-fn dec_effects(r: &[u8]) -> Option<Vec<EffectRequest>> {
+pub(super) fn dec_effects(r: &[u8]) -> Option<Vec<EffectRequest>> {
     crate::rvm_ops::dec_effects(r)
 }
 
@@ -953,12 +1010,70 @@ impl SkillMachine for VmMachine {
             event: self.event.clone(),
             consume: self.consume.clone(),
             count_hits: self.count_hits,
+            // J1：提交期挂起——剩余队列与开窗参数（未挂起为空/None）。
+            commit_pending: {
+                if self.commit_pause.is_some() {
+                    let mut b = Vec::new();
+                    enc_effects(&mut b, &self.pending_effects);
+                    b
+                } else {
+                    Vec::new()
+                }
+            },
+            commit_pick: self
+                .commit_pause
+                .as_ref()
+                .map(|cp| (cp.player, cp.count)),
         }
     }
 
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         if self.settled {
             return Flow::Done;
+        }
+        // J1 提交期挂起：先问（WaitChoice），已答则按所选弃置并继续落账
+        // （机器契约：WaitChoice 后下一 step 读应答）。
+        if let Some(cp) = self.commit_pause.clone() {
+            if !self.asked {
+                let exact = commit_window_exact(ctx, cp.player, cp.count);
+                if exact == 0 {
+                    // 无可弃牌：开窗效果空过（与旧近似「0 张尽弃」同收尾）。
+                    self.commit_pause = None;
+                    let _ = self.pending_effects.remove(0);
+                    return self.pump_commit(ctx);
+                }
+                self.asked = true;
+                let options = commit_window_options(ctx, cp.player);
+                return Flow::WaitChoice {
+                    observer: cp.player,
+                    spec: ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "rvm_discard_pick",
+                        options,
+                        min: exact,
+                        max: exact,
+                        allow_cancel: false,
+                    },
+                };
+            }
+            self.asked = false;
+            self.commit_pause = None;
+            // 开窗效果完成（无论空过与否都已消费头元素）。
+            let effect = self.pending_effects.remove(0);
+            let picked: Vec<CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .collect();
+            if !discard_picked(ctx, cp.player, &effect, picked) {
+                // 防御：应答与开窗不符（引擎按 options/min/max 校验，正常
+                // 不可达）——整段回滚，半次效果不落账。
+                return self.trap_done();
+            }
+            return self.pump_commit(ctx);
         }
         // 挂起态：先问（WaitChoice），已答则续跑
         if let Some(p) = self.paused.clone() {
@@ -1066,13 +1181,9 @@ impl VmMachine {
                         .entry((self.owner, self.program.skill_name.clone()))
                         .or_default() += 1;
                 }
-                let pending = std::mem::take(&mut self.pending_effects);
-                let skill = self.program.skill_name.clone();
-                for e in pending {
-                    crate::rvm_ops::commit_effect(ctx, &skill, e);
-                }
-                self.settled = true;
-                Flow::Done
+                // J1：落账改走提交泵——遇开窗效果转入提交期挂起（真实
+                // 选牌窗），否则逐效果落账至队列耗尽。
+                self.pump_commit(ctx)
             }
             Ok(ExecResult::Paused {
                 continuation,
@@ -1136,6 +1247,34 @@ impl VmMachine {
         }
     }
 
+    /// J1 提交泵：顺序落账排队效果；队头是开窗型效果（`discard_hand_equip_count`
+    /// N>0 且开窗座位有牌）时转入提交期挂起并经 `step` 的开窗分支发出问询。
+    /// once/命中计数已在 Halted 尾写入（幂等或一次性，恢复续跑不重记）。
+    fn pump_commit(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        let seats = ctx.core.players.len() as u8;
+        while !self.pending_effects.is_empty() {
+            let window = match &self.pending_effects[0] {
+                EffectRequest::DiscardHandEquipCount { player, count, .. } if *count > 0 => {
+                    match crate::rvm_ops::seat_of(*player, seats) {
+                        Some(p) if commit_window_exact(ctx, p, *count) > 0 => Some((p, *count)),
+                        _ => None,
+                    }
+                }
+                _ => None,
+            };
+            if let Some((player, count)) = window {
+                self.commit_pause = Some(VmCommitPause { player, count });
+                self.asked = false;
+                return self.step(ctx);
+            }
+            let e = self.pending_effects.remove(0);
+            let skill = self.program.skill_name.clone();
+            crate::rvm_ops::commit_effect(ctx, &skill, e);
+        }
+        self.settled = true;
+        Flow::Done
+    }
+
     /// 回滚收尾：排队效果整批丢弃（半次效果不落账，原型同款）。
     fn trap_done(&mut self) -> Flow {
         self.pending_effects.clear();
@@ -1143,4 +1282,56 @@ impl VmMachine {
         self.settled = true;
         Flow::Done
     }
+}
+
+/// J1：开窗可弃牌数（手牌+装备，不足以 count 封顶）。
+pub(super) fn commit_window_exact(ctx: &Ctx<'_>, player: PlayerId, count: u32) -> usize {
+    let p = ctx.core.player(player);
+    let available = p.hand.len() + p.equips.len();
+    (count as usize).min(available)
+}
+
+/// J1：开窗候选（手牌在前、装备在后——与旧近似的区优先序一致）。
+pub(super) fn commit_window_options(ctx: &Ctx<'_>, player: PlayerId) -> Vec<ChoiceOption> {
+    let p = ctx.core.player(player);
+    p.hand
+        .iter()
+        .chain(p.equips.iter())
+        .map(|c| ChoiceOption::Card(*c))
+        .collect()
+}
+
+/// J1：按所选弃置（先从所属区移除再入弃堆，`discard_some` 同口径）。
+/// 返回 false = 应答与开窗不符（防御路径，正常不可达）。
+pub(super) fn discard_picked(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    effect: &EffectRequest,
+    picked: Vec<CardId>,
+) -> bool {
+    let expect = match effect {
+        EffectRequest::DiscardHandEquipCount { count, .. } => {
+            commit_window_exact(ctx, player, *count)
+        }
+        _ => return false,
+    };
+    if picked.len() != expect || picked.is_empty() {
+        return false;
+    }
+    for c in &picked {
+        let in_hand = ctx.core.player(player).hand.contains(c);
+        let in_equip = ctx.core.player(player).equips.contains(c);
+        if !in_hand && !in_equip {
+            return false;
+        }
+    }
+    for c in &picked {
+        if ctx.core.player(player).hand.contains(c) {
+            ctx.take_hand_card(player, *c);
+        } else {
+            ctx.take_owned_card(player, *c);
+        }
+    }
+    crate::rvm_ops::discard_some(ctx, player, picked);
+    true
 }

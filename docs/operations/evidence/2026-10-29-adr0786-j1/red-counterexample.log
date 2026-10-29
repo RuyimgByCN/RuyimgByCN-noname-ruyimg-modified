@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running tests/adr0786_j1_commit_window.rs (target/debug/deps/adr0786_j1_commit_window-5b68a371fb11c370)
+
+running 1 test
+test j1_real_choice_window_discards_picked_cards_and_resumes_queue ... FAILED
+
+failures:
+
+---- j1_real_choice_window_discards_picked_cards_and_resumes_queue stdout ----
+
+thread 'j1_real_choice_window_discards_picked_cards_and_resumes_queue' (1499473) panicked at crates/engine-native/tests/adr0786_j1_commit_window.rs:97:10:
+提交期开窗（修复前为确定性首 N，无窗口）
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    j1_real_choice_window_discards_picked_cards_and_resumes_queue
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test adr0786_j1_commit_window`
