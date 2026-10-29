@@ -1285,6 +1285,49 @@ pub trait SkillMachine: Send + Sync {
     fn snapshot(&self) -> crate::snap::MachineSnapshot;
 }
 
+/// 内容卡牌的固有结算：`None` = 不是内容卡牌（内核继续分派）；`Some(m)` = 已处理。
+pub type CardIntrinsicHook = fn(
+    &mut crate::machine::Ctx<'_>,
+    &crate::event::CardUseData,
+    CardKind,
+) -> Option<Option<Box<dyn SkillMachine>>>;
+
+/// 宿主机器挂起询问的派生（行为标签、阶段标签、owner、target、targets、cards）。
+pub type HostAskHook = fn(
+    u16,
+    u8,
+    crate::ids::PlayerId,
+    Option<crate::ids::PlayerId>,
+    &[crate::ids::PlayerId],
+    &[crate::ids::CardId],
+    &crate::state::GameStateCore,
+    &Catalog,
+) -> Option<crate::snap::ExpectedAsk>;
+
+/// 内容机器的快照重建：`None` = 不是内容机器（内核继续分派）。
+pub type RestoreMachineHook = fn(
+    &crate::snap::MachineSnapshot,
+    &Catalog,
+) -> Option<Result<Box<dyn SkillMachine>, crate::snap::SnapshotError>>;
+
+/// 内容层回调：内核在帧固有流程、询问派生与机器恢复处经此调用内容层，
+/// 不直接引用 `crate::content`（拆 crate 第 2 步）。内容目录构建时装入
+/// 内容实现；`Catalog::build` 默认 [`ContentHooks::NONE`]（不认识任何内容机器）。
+#[derive(Clone, Copy)]
+pub struct ContentHooks {
+    pub card_intrinsic: CardIntrinsicHook,
+    pub host_ask: HostAskHook,
+    pub restore_machine: RestoreMachineHook,
+}
+
+impl ContentHooks {
+    pub const NONE: ContentHooks = ContentHooks {
+        card_intrinsic: |_, _, _| None,
+        host_ask: |_, _, _, _, _, _, _, _| None,
+        restore_machine: |_, _| None,
+    };
+}
+
 /// 目录：卡牌表、技能表与事件分发索引。
 pub struct Catalog {
     pub cards: Vec<CardDef>,
@@ -1303,6 +1346,8 @@ pub struct Catalog {
     pub ruleset_version: u64,
     /// 目录里有 VM 技能需要本回合弃置/摸牌史。不入对局摘要。
     pub vm_card_history: bool,
+    /// 内容层回调（内容目录构建时装入）。不入对局摘要。
+    pub hooks: ContentHooks,
 }
 
 impl Catalog {
@@ -1378,6 +1423,7 @@ impl Catalog {
             by_name,
             ruleset_version: 0,
             vm_card_history,
+            hooks: ContentHooks::NONE,
         }
     }
 

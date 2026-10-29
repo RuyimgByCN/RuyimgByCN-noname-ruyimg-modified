@@ -1,9 +1,12 @@
 use super::*;
+use crate::catalog::Catalog;
+use crate::snap::*;
+use crate::state::GameStateCore;
 
 /// 宿主机器的询问派生：按行为 + 阶段还原 host.rs 各 step 中
 /// 创建该 `WaitChoice` 时的 `ChoiceSpec`（挂起时 stage 已前移到下一阶段）。
 #[allow(clippy::too_many_arguments)]
-pub(super) fn active_ask_host(
+pub(crate) fn active_ask_host(
     behavior: u16,
     stage: u8,
     owner: PlayerId,

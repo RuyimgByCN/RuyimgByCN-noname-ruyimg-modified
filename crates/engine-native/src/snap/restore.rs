@@ -5,12 +5,11 @@ use super::*;
 // ---------------------------------------------------------------------------
 
 impl MachineSnapshot {
-    /// 由机器快照重建机器实例（内核机器就地分派；内容机器委托
-    /// `content::standard::restore_content_machine`；宿主机器按标签重建）。
-    pub fn restore(&self) -> Result<Box<dyn SkillMachine>, SnapshotError> {
-        // 内容侧分派（标准内容机器 + 委托 kernel 的拆桥/牵羊）
-        if let Some(m) = crate::content::standard::restore_content_machine(self) {
-            return Ok(m);
+    /// 由机器快照重建机器实例（内核机器就地分派；内容机器——标准内容、
+    /// Boss、宿主机器——经目录回调 `hooks.restore_machine` 先行重建）。
+    pub fn restore(&self, catalog: &Catalog) -> Result<Box<dyn SkillMachine>, SnapshotError> {
+        if let Some(m) = (catalog.hooks.restore_machine)(self, catalog) {
+            return m;
         }
         match self {
             MachineSnapshot::Sha {
@@ -136,7 +135,7 @@ impl MachineSnapshot {
                 effect,
             } => {
                 let effect = match effect {
-                    Some(e) => match e.restore() {
+                    Some(e) => match e.restore(catalog) {
                         Ok(m) => Some(m),
                         Err(_) => return Err(SnapshotError::UnknownMachine),
                     },
@@ -182,7 +181,7 @@ impl MachineSnapshot {
                 nature,
             } => {
                 let inner = match inner {
-                    Some(e) => match e.restore() {
+                    Some(e) => match e.restore(catalog) {
                         Ok(m) => Some(m),
                         Err(_) => return Err(SnapshotError::UnknownMachine),
                     },
@@ -217,7 +216,7 @@ impl MachineSnapshot {
                 dispatcher,
             } => {
                 let inner = match inner {
-                    Some(e) => match e.restore() {
+                    Some(e) => match e.restore(catalog) {
                         Ok(m) => Some(m),
                         Err(_) => return Err(SnapshotError::UnknownMachine),
                     },
@@ -242,12 +241,6 @@ impl MachineSnapshot {
             MachineSnapshot::Death { player, killer } => {
                 Ok(Box::new(crate::kernel::DeathMachine::new(*player, *killer)))
             }
-            MachineSnapshot::BossLeizhu { owner, emitted } => Ok(Box::new(
-                crate::content::standard::LeizhuMachine::new(*owner, *emitted),
-            )),
-            MachineSnapshot::BossRenao { owner, emitted } => Ok(Box::new(
-                crate::content::standard::RenaoMachine::new(*owner, *emitted),
-            )),
             MachineSnapshot::Rvm {
                 owner,
                 module,
@@ -314,7 +307,7 @@ impl MachineSnapshot {
                 inner,
             } => {
                 let inner = match inner {
-                    Some(e) => match e.restore() {
+                    Some(e) => match e.restore(catalog) {
                         Ok(m) => Some(m),
                         Err(_) => return Err(SnapshotError::UnknownMachine),
                     },
@@ -327,30 +320,6 @@ impl MachineSnapshot {
                     *asked,
                     inner,
                 )))
-            }
-            MachineSnapshot::Host {
-                def_key,
-                behavior,
-                stage,
-                owner,
-                target,
-                card,
-                cards,
-                targets,
-            } => {
-                let behavior =
-                    HostBehavior::from_tag(*behavior).ok_or(SnapshotError::UnknownMachine)?;
-                let stage = HostStage::from_tag(*stage).ok_or(SnapshotError::UnknownMachine)?;
-                Ok(Box::new(HostMachine {
-                    def_key: def_key.clone(),
-                    behavior,
-                    stage,
-                    owner: *owner,
-                    target: *target,
-                    card: *card,
-                    cards: cards.clone(),
-                    targets: targets.clone(),
-                }))
             }
             _ => Err(SnapshotError::UnknownMachine),
         }

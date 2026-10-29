@@ -172,7 +172,10 @@ mod standard_skills;
 
 /// 由内容机器快照重建机器实例（`MachineSnapshot::restore` 的内容侧分派）。
 /// 返回 None 表示快照不属于本目录的机器类型。
-pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachine>> {
+pub fn restore_content_machine(
+    s: &MachineSnapshot,
+    catalog: &Catalog,
+) -> Option<Box<dyn SkillMachine>> {
     match s {
         MachineSnapshot::FanKui {
             owner,
@@ -376,7 +379,7 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
             },
             card: *card,
             inner: match inner {
-                Some(m) => match m.restore() {
+                Some(m) => match m.restore(catalog) {
                     Ok(r) => Some(r),
                     Err(_) => return None,
                 },
@@ -413,7 +416,7 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
             helper: *helper,
             sha: *sha,
             inner: match inner {
-                Some(m) => match m.restore() {
+                Some(m) => match m.restore(catalog) {
                     Ok(r) => Some(r),
                     Err(_) => return None,
                 },
@@ -439,6 +442,7 @@ pub fn restore_content_machine(s: &MachineSnapshot) -> Option<Box<dyn SkillMachi
 pub fn standard_catalog() -> Catalog {
     let (cards, skills) = standard_catalog_parts();
     let mut catalog = Catalog::build(cards, skills);
+    catalog.hooks = super::hooks::CONTENT_HOOKS;
     catalog.ruleset_version = STANDARD_RULESET_VERSION;
     catalog
 }
@@ -508,6 +512,7 @@ pub fn standard_catalog_with_extensions(
     let mut skills = skills;
     skills.extend(ext_skills);
     let mut catalog = Catalog::build(cards, skills);
+    catalog.hooks = super::hooks::CONTENT_HOOKS;
     catalog.extension_generals = packs
         .iter()
         .filter(|p| p.enabled)

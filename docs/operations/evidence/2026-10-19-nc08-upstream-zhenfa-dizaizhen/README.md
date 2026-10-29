@@ -28,7 +28,7 @@ dizaizhen: {
 | 1 | **模式门槛**（`mode: ["guozhan"]`） | **身份局（4 人）下 `vec![]` → `Accepted`** ⇒ **仍可发动** | ✗ **差异（第 49 项）** |
 | — | 目标形态 | `vec![1]` → `Rejected`；**`vec![]` → `Accepted`**（`selectTarget: -1` 按「无显式目标」受理） | 记录 |
 
-**原生实现引用**：`kernel/intrinsic.rs:1012`（`CardKind::Dizaizhen` → `DizaizhenMachine`）。
+**原生实现引用**：`kernel/intrinsic.rs:179`（`CardKind::Dizaizhen` → `DizaizhenMachine`）。
 
 ## 3 差异归类
 

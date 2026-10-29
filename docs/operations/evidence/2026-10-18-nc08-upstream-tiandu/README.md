@@ -33,7 +33,7 @@ tiandu: {
 ## 3 口径与限制（不夸大）
 
 - **根因已查明（同轮）**：判定区在 **`Phase{Judge, begin:true}` 事件处被 `std::mem::take` 消费**
-  （`kernel/intrinsic.rs:1325`）；而引擎**初态即「0 号判定阶段」**（begin 已发出）→ 在 `Engine::new`
+  （`kernel/intrinsic.rs:294`）；而引擎**初态即「0 号判定阶段」**（begin 已发出）→ 在 `Engine::new`
   之后放入判定区**永远不会被结算**（初版夹具即因此失败：`判定区仍为 [74]、零询问`）。
   **修法**：改在**本轮判定阶段之后**（0 号 Draw 阶段）放入 → 由**下一轮**判定阶段开始消费
   → 用例**转为通过**（[targeted.log](targeted.log)；`skip-note.txt` 现为空文件）；

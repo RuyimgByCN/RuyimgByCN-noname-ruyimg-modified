@@ -30,12 +30,14 @@ engine-native 与 engine-core 的集成测试按分组编译（2026-10-29 O6）�
 
 五条自检仍按第 1 节逐项核验；历史超限与旧计划见[当时的量化分析](evidence/2026-10-19-effect-request-split-plan/README.md)，不再作为当前豁免依据。
 
-## 3.1 preflight：一次跑完全部 20 道门禁
+## 3.1 preflight：一次跑完全部 21 道门禁
 
 ```bash
-python3 -B scripts/preflight.py             # 完整 20 项
-python3 -B scripts/preflight.py --quick     # 实跑 18 项，跳过脚本单测与台账↔枚举一致
+python3 -B scripts/preflight.py             # 完整 21 项
+python3 -B scripts/preflight.py --quick     # 实跑 19 项，跳过脚本单测与台账↔枚举一致
 ```
+
+**第 21 项是 2026-10-29 新增的「原生分层棘轮」**（`check-native-layering.py`：engine-native 内核层对 content/engine 的引用只降不升）。
 
 **第 20 项是 2026-10-19 新增的「过滤臂↔元数据一致」**——
 `report_filter_meta_mismatch.py --strict` 会比对 `metadata/*.rs` 里每个 `HostBehavior` 声明的

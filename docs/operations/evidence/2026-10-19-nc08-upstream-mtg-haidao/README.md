@@ -33,7 +33,7 @@ mtg_haidao: {
 | **受伤且弃 1 张** | hp **+1**、护甲 **+0**（询问 `mtg_haidao_discard`） | 通过 |
 | **受伤且取消** | hp **+0**、护甲 **+1**（询问 `mtg_haidao_discard`） | 通过 |
 
-**原生实现引用**：`kernel/intrinsic.rs:875`（`CardKind::Haidao` → `HostBehavior::MtgHaidaoLand`）。
+**原生实现引用**：`content/host/intrinsic.rs:717`（`CardKind::Haidao` → `HostBehavior::MtgHaidaoLand`）。
 
 ## 3 未完成 / 待办
 

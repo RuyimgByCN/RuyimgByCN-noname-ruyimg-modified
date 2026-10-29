@@ -512,7 +512,7 @@ impl Engine {
             parks.push(crate::resolution::Park {
                 resume_depth: park.resume_depth,
                 slot: park.slot,
-                machine: park.machine.restore()?,
+                machine: park.machine.restore(&catalog)?,
             });
         }
         Ok(Self {

@@ -28,7 +28,7 @@ linghunzhihuo: {
 | 2 | **使用者弃 1 张手牌** | 0 号手牌 **3 → 1**（打出 −1、弃 1 ⇒ 净 **−2**） | 通过 |
 | — | 族内口径确认 | **`询问=[]`** ⇒ 弃牌为**自动（确定性）**，上游为 `hs.randomGet()` 随机 | 确认 |
 
-**原生实现引用**：`kernel/intrinsic.rs:1264`（`CardKind::Linghunzhihuo` →
+**原生实现引用**：`content/host/intrinsic.rs:996`（`CardKind::Linghunzhihuo` →
 `HostBehavior::LinghunzhihuoCard`）；`content/host/step/skills_damage.rs:749`；
 原生 `content/standard.rs:52`（「v40：…**灵魂之火**/照明弹/急耗卡（CardKind 三种 + 宿主行为）」）。
 

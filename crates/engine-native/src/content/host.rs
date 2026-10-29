@@ -13,6 +13,10 @@ use crate::machine::{Ctx, Flow, LogEvent};
 use crate::snap::MachineSnapshot;
 
 mod activation;
+mod asks;
+mod intrinsic;
+pub(crate) use asks::active_ask_host;
+pub(crate) use intrinsic::card_intrinsic;
 mod behavior;
 mod boss;
 mod constants;

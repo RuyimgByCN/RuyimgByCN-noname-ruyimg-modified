@@ -6,4 +6,5 @@ pub mod host;
 pub mod names;
 
 pub mod extension;
+mod hooks;
 pub mod pile;

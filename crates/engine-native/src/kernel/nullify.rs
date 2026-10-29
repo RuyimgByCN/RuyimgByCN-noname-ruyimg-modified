@@ -328,7 +328,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
 }
 
 /// 为锦囊构造无懈窗口并预载询问队列（无懈持有者过滤在运行时进行）。
-pub(super) fn wrap_nullify_window(
+pub(crate) fn wrap_nullify_window(
     ctx: &Ctx<'_>,
     card: crate::ids::CardId,
     source: PlayerId,

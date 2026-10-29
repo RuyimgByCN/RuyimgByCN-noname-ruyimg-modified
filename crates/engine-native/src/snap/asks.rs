@@ -16,7 +16,7 @@ pub struct ExpectedAsk {
     pub allow_cancel: bool,
 }
 
-pub(super) fn ask(
+pub(crate) fn ask(
     observer: PlayerId,
     prompt: &'static str,
     kind: ChoiceKind,
@@ -48,11 +48,11 @@ pub(super) fn confirm_ask(observer: PlayerId, prompt: &'static str) -> ExpectedA
     )
 }
 
-pub(super) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
+pub(crate) fn hand_card_options(hand: &[CardId]) -> Vec<ChoiceOption> {
     hand.iter().copied().map(ChoiceOption::Card).collect()
 }
 
-pub(super) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
+pub(crate) fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<ChoiceOption> {
     core.alive_players()
         .filter(|p| *p != owner)
         .map(ChoiceOption::Player)
@@ -1064,7 +1064,7 @@ pub fn active_ask(
             targets,
             cards,
             ..
-        } => active_ask_host(
+        } => (catalog.hooks.host_ask)(
             u16::from(*behavior),
             *stage,
             *owner,

@@ -33,7 +33,7 @@ zhaomingdan: {
 | 2 | **目标摸 1 + 使用者摸 1** | 1 号手牌 **1 → 1**（弃 1 摸 1）；0 号手牌 **1 → 1**（打出 −1、摸 1） | 通过 |
 | — | **差异登记** | 上游 `discardPlayerCard("hej", target, true)` 为**使用者选择**；原生为**自动取首张（手牌优先）** ⇒ **无询问** → **「确定性首张」族**（**第 42 项**） | 登记 |
 
-**原生实现引用**：`kernel/intrinsic.rs:1278`（`CardKind::Zhaomingdan` → `HostBehavior::ZhaomingdanCard`）。
+**原生实现引用**：`content/host/intrinsic.rs:1010`（`CardKind::Zhaomingdan` → `HostBehavior::ZhaomingdanCard`）。
 
 ## 3 未完成 / 待办
 

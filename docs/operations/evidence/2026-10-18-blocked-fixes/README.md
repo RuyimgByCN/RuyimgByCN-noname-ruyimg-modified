@@ -939,7 +939,7 @@ DSL 词汇表字符串、devtools 等处，与本语义无关）→ 因此**改�
 **命中集合为空**；②**全库 grep `jihuocard2`**（`crates/engine-native/src/` + 全部 `packages/extensions/*`）
 **0 命中** ⇒ **确未实现**（**非**名称不匹配）。
 
-**源码印证**：`kernel/intrinsic.rs:1292` 映射到 `HostBehavior::JihuocardDraw`，
+**源码印证**：`content/host/intrinsic.rs:1024` 映射到 `HostBehavior::JihuocardDraw`，
 `content/host/step/skills_status.rs:790` 的该分支**只做摸牌**，**无授予临时技**。
 
 **修法**：在**自己回合内**使用本卡时**授予临时技 `jihuocard2`**，并实现其**效果**与**到期移除**。

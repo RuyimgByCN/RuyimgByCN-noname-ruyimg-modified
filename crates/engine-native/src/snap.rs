@@ -13,7 +13,7 @@
 use crate::catalog::{CardKind, Catalog, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, OpenChoice, Selection};
 use crate::content::host::GJ_FOOD_MIZHLIANOU_KEY;
-use crate::content::host::{HostBehavior, HostMachine, HostStage};
+use crate::content::host::HostBehavior;
 use crate::content::standard::{general_gender, Gender, GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
 use crate::event::{DamageNature, EventData, Frame};
 use crate::ids::{CardId, PlayerId, SkillDefId};
@@ -28,6 +28,4 @@ mod machine_validation;
 use machine_validation::*;
 mod asks;
 pub use asks::*;
-mod host_asks;
-use host_asks::*;
 mod restore;

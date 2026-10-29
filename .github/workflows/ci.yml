@@ -45,6 +45,10 @@ jobs:
         run: |
           python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
           python3 scripts/check-source-lines.py
+      - name: engine-native kernel layer does not grow content/engine references
+        run: |
+          python3 -B -m unittest discover -s scripts -p 'test_check_native_layering.py'
+          python3 scripts/check-native-layering.py
       - name: Gate 1 — cargo test --workspace
         run: cargo test --workspace
       - name: Gate 1b — engine-native all targets warnings denied

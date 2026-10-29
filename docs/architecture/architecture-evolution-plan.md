@@ -241,6 +241,12 @@
 - **F4 模糊/变异测试候选**：优先覆盖已发现的存档 tag、目录构成、牌归属、选择恢复缺口；持续 fuzz 或 cargo-mutants 仅在产出可定位缺陷且运行成本可接受时扩大。
 - **F5 CI 原生门禁**：复用现有 `native-web` 和其他 CI 任务，按 NC08 补齐真实目标运行、恢复与规则对照；本地通过和 GitHub Actions 实跑分别登记。新增门禁须能暴露对应反例，release runner、故障恢复及上游对照按耗时和可重复性分层，不重复搭建已有检查。
 - **F6 状态与 ADR 校验**：按 NC11 保持主稿分工，复用 `scripts/check-adr-index.py`、对应单测及现有文档门禁，保留重复历史编号的消歧映射；CI 接线与实际运行结果单独核验。清理历史大段前核对链接、锚点和读取主稿的脚本，不并建第二套当前状态表。
+- **F7 原生拆 crate（三层，2026-10-29 用户要求拆分但粒度粗于 openidea 的 33 个小 crate）**：
+  - **依据**（同日实测，[O6 证据](../operations/evidence/2026-10-29-o6-test-grouping/README.md)）：O6 后改函数体重编 engine-native lib 1.1–1.5s、连全部测试 2.9–3.4s，日常增量已不是瓶颈；拆分的收益是内核/内容边界、冷构建与 CI 并行、内容与 engine 改动不重编内核——拆后按同口径复测，不预报百分比。engine-native/src 自 10-10 起 347 次提交，engine-core/src 仅 7 次，故只拆 engine-native；engine-core 按 F2 不拆（约 126k 行同一依赖环，57 个原语包经 `effect/primitives` 重导出被执行器调用）。
+  - **目标**：`engine-native-kernel`（ids rng choice event catalog state machine resolution kernel snap archive rvm_*，约 30k 行）← `engine-native-content`（content/*，约 55k 行）← `engine-native`（engine、view、presentation、ai 与门面 re-export，约 10k 行；下游与测试的 `engine_native::…` 路径不变）。
+  - **步骤**：① 分层棘轮 `scripts/check-native-layering.py`（内核层对 content/engine 的引用只降不升）；② 内容专用代码经 `Catalog::hooks`（`ContentHooks`）回调——帧固有内容牌、宿主询问派生、内容机器恢复；③ 内核用到的技能名/键常量与 `Gender` 下沉到内核侧词汇模块（内容侧 `pub use` 保持路径），辅助函数与 `apply_general_assembly` 下移或改回调，棘轮归零；④ `git mv` 拆为三个 crate，各 crate 根 `use` 内核模块使 `crate::catalog::…` 等路径不变，放宽约 29 个 `pub(crate)` 项与 12 个字段。④ 须在工作树在途批次入库后的空窗做。
+  - **状态**：①② 已完成（2026-10-29，未提交；棘轮 540→240，测试全名守恒、全套与依赖 crate 全绿、Gate 1b 与跨目标 wasm 轨迹一致——[证据](../operations/evidence/2026-10-29-native-split-stage1-2/README.md)）；③④ 待做。
+  - **验收**：每步测试全名清单不变、engine-native 与依赖 crate 全套通过、golden/哈希不变、Gate 1b、跨目标脚本；④ 另测冷构建与改动后重编。
 
 ## 9 微观性能
 

@@ -1,0 +1,111 @@
+     Running unittests src/lib.rs
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/ai_tuning_loader.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/doomsday_loader.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/epic_cards_loader.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/loader_acceptance.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/qhly_loader.rs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/rzsh_loader.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/skin_switch_loader.rs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/symbol_table_limit.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/thunder_loader.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running unittests src/lib.rs
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/cross_target_multiseat.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/cross_target_package.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/events_hash_export.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/gt014_import_validation_parity.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/installed_package_payload.rs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc03_actor_authorization.rs
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc03_legal_actions_export.rs
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc03_view_projection.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc04_vm_control_flow.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc05_general_select_export.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc06_skill_pile_restore.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc08_cross_target.rs
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/restore_boundary_handle.rs
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/vm_module_hash.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/vm_package_integrity.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/vm_package_worker.rs
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running unittests src/main.rs
+test result: ok. 73 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/fault_injection.rs
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/gt014_vm_import_parity.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/long_run_bot.rs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/long_run_memory.rs
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/long_run_soak.rs
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/m8_rolling_upgrade.rs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/multi_room_stress.rs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/native_frozen_packages.rs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/native_onlyol_general.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/native_product_path.rs
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/native_upgrade_rollback.rs
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc02_install_identity.rs
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc05_campaign_profile.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc05_lifecycle_heavy.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc05_skin_ui.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc08_command_by_command.rs
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc08_cross_line.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc08_install_matrix.rs
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc09_dual_backend.rs
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc09_native_actor.rs
+test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc09_native_durability.rs
+test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc09_native_room_session.rs
+test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/nc09_native_view_bridge.rs
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/room_flow.rs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+     Running tests/tournament_wal_signing.rs
+test result_record_carries_root_and_outcome ... ok
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+   Doc-tests content_native_loader
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+   Doc-tests engine_native_wasm
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out

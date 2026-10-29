@@ -65,7 +65,7 @@ filterTarget(card, player, target) {
 
 ⇒ 真实条件是「**目标的身份与其相邻座位相同**」（国战**同势力相邻**语义）——
 **身份局下通常不满足** ⇒ 三形态被拒**合理**；且原生**已实现**该卡
-（`kernel/intrinsic.rs:693` → `HostBehavior::SwdNiaoxiangzhenCard`；`content/host/step/swd_card_effects.rs:1329`；
+（`content/host/intrinsic.rs:535` → `HostBehavior::SwdNiaoxiangzhenCard`；`content/host/step/swd_card_effects.rs:1329`；
 `engine/play_card.rs:903` 目标校验）。
 
 **方法教训**：核对 `filterTarget` **必须读完整函数体**；**截断读取会把「多条件」误判为「单条件」**，

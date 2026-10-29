@@ -28,7 +28,7 @@ jihuocard: {
 | 2 | **摸 1** | **牌堆 123 → 122**；手牌 **1 → 1**（打出 −1、摸 1） | 通过 |
 | 2 | **临时技 `jihuocard2`** | **候选名探测命中 = []**；**全库 grep `jihuocard2` = 0 命中** ⇒ **未实现** | **未验收（第 43 项）** |
 
-**原生实现引用**：`kernel/intrinsic.rs:1292`（`CardKind::Jihuocard` →
+**原生实现引用**：`content/host/intrinsic.rs:1024`（`CardKind::Jihuocard` →
 `HostBehavior::JihuocardDraw`）；`content/host/step/skills_status.rs:790`（`JihuocardDraw`，**仅摸牌**）；
 `constants.rs:210`（`HT_JIHUO_KEY = "ht:jihuocard"`，**卡键**非临时技名）。
 
