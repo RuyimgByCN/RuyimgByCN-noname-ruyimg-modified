@@ -1,0 +1,165 @@
+{
+  "pairs": 14,
+  "views": 54,
+  "frozen_phase2_not_modified": true,
+  "allowed_new_field": "rollback TriggerOrder.normal_owners=4; current complete inventory and immutable initial Normal membership boundary",
+  "rows": [
+    {
+      "scenario": "aoe_response_queue",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "chain_fire_propagation",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "death_terminal_single",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "discard_to_limit",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "duel_alternating_response",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "equip_distance_matrix",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "judge_phase_delayed_tricks",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "nullify_chain_on_savage",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "rollback_invariants",
+      "all_fields_diff": [
+        {
+          "path": "$.$fields.resolution.$fields.parks.$list[0].$fields.machine.$fields",
+          "old": {
+            "frame": {
+              "$atom": "22"
+            },
+            "owner": {
+              "$atom": "0"
+            },
+            "candidates": {
+              "$list": []
+            },
+            "asked": {
+              "$atom": "false"
+            },
+            "cursor": {
+              "$atom": "4"
+            },
+            "done": {
+              "$list": [
+                {
+                  "$tuple": [
+                    {
+                      "$atom": "0"
+                    },
+                    {
+                      "$atom": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            "owners": {
+              "$list": [
+                {
+                  "$atom": "1"
+                },
+                {
+                  "$atom": "2"
+                },
+                {
+                  "$atom": "3"
+                },
+                {
+                  "$atom": "0"
+                }
+              ]
+            }
+          },
+          "new": {
+            "frame": {
+              "$atom": "22"
+            },
+            "owner": {
+              "$atom": "0"
+            },
+            "candidates": {
+              "$list": []
+            },
+            "asked": {
+              "$atom": "false"
+            },
+            "cursor": {
+              "$atom": "4"
+            },
+            "done": {
+              "$list": [
+                {
+                  "$tuple": [
+                    {
+                      "$atom": "0"
+                    },
+                    {
+                      "$atom": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            "owners": {
+              "$list": [
+                {
+                  "$atom": "1"
+                },
+                {
+                  "$atom": "2"
+                },
+                {
+                  "$atom": "3"
+                },
+                {
+                  "$atom": "0"
+                }
+              ]
+            },
+            "normal_owners": {
+              "$atom": "4"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "sancai_nested_chain",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "sha_dodge_then_damage",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "shouyi_dynamic_skill",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "suidun_window_matrix",
+      "all_fields_diff": []
+    },
+    {
+      "scenario": "yishang_redirect",
+      "all_fields_diff": []
+    }
+  ]
+}

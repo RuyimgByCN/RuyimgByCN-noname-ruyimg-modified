@@ -1,0 +1,1 @@
+Initial parent parser assumed every alias retained its old path. Approved change renames exactly ten logical alias basenames from .mp3 to .m4a. Inspected old-only10/new-only15 rows before correcting pairing to exact with_suffix(.m4a); all other rows and order still checked. This is a parent parser error, not a product/test failure.

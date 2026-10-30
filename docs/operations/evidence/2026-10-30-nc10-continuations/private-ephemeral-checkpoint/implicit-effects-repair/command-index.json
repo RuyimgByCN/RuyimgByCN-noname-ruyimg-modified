@@ -1,0 +1,282 @@
+[
+  {
+    "utc": "2026-10-30T18:54:10.950568+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native",
+      "--lib",
+      "simulation::",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 7.328082374995574,
+    "diskFreeBytes": 98922254336,
+    "log": "affected-simulation-fixed.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 7.275465415994404,
+    "record": "affected-simulation-fixed.json"
+  },
+  {
+    "utc": "2026-10-30T18:55:35.297850+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native",
+      "--lib",
+      "simulation::",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 4.083576707984321,
+    "diskFreeBytes": 98896699392,
+    "log": "affected-simulation-green.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 0.9525747500010766,
+    "record": "affected-simulation-green.json"
+  },
+  {
+    "utc": "2026-10-30T18:50:26.151050+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native",
+      "--lib",
+      "simulation::",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 121.97133824997582,
+    "diskFreeBytes": 98891042816,
+    "log": "affected-simulation.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 7.408559207979124,
+    "record": "affected-simulation.json"
+  },
+  {
+    "utc": "2026-10-30T18:54:12.179353+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 8.556253540999023,
+    "diskFreeBytes": 98921046016,
+    "log": "green-final-p1.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 1.2286097500182223,
+    "record": "green-final-p1.json"
+  },
+  {
+    "utc": "2026-10-30T18:55:34.345203+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 3.1365976249799132,
+    "diskFreeBytes": 98896859136,
+    "log": "green-final-registered.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 3.091455624991795,
+    "record": "green-final-registered.json"
+  },
+  {
+    "utc": "2026-10-30T18:45:58.170520+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 12.28977845798363,
+    "diskFreeBytes": 99084509184,
+    "log": "green-p1.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 12.20841437499621,
+    "record": "green-p1.json"
+  },
+  {
+    "utc": "2026-10-30T18:56:02.803169+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 1.8642316250188742,
+    "diskFreeBytes": 98895216640,
+    "log": "kernel-content-full.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 1.8196042079944164,
+    "record": "kernel-content-full.json"
+  },
+  {
+    "utc": "2026-10-30T18:56:23.514373+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 22.58232066599885,
+    "diskFreeBytes": 98875482112,
+    "log": "native-full.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 20.710992500011344,
+    "record": "native-full.json"
+  },
+  {
+    "utc": "2026-10-30T18:54:12.626883+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_private_scalar",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 8.998273042001529,
+    "diskFreeBytes": 98920222720,
+    "log": "original-scalars.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 0.17603620799491182,
+    "record": "original-scalars.json"
+  },
+  {
+    "utc": "2026-10-30T18:43:07.421906+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 1.4435380419890862,
+    "diskFreeBytes": 99163123712,
+    "log": "red-p1-complete.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 1.3954879579832777,
+    "record": "red-p1-complete.json"
+  },
+  {
+    "utc": "2026-10-30T18:44:04.337251+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 1.4930181250092573,
+    "diskFreeBytes": 99163652096,
+    "log": "red-p1-witness.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 1.451934958982747,
+    "record": "red-p1-witness.json"
+  },
+  {
+    "utc": "2026-10-30T18:42:22.810973+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_implicit_effect_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "wallIncludingLockQueueSeconds": 3.4341555839928333,
+    "diskFreeBytes": 99170623488,
+    "log": "red-p1.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 3.3775705409934744,
+    "record": "red-p1.json"
+  },
+  {
+    "utc": "2026-10-30T18:54:12.450825+00:00",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "test_registry"
+    ],
+    "exit": 0,
+    "wallIncludingLockQueueSeconds": 8.819612999999663,
+    "diskFreeBytes": 98920689664,
+    "log": "registry.log",
+    "timingNote": "wrapper locked_seconds includes inner process/test overhead, not pure execution; wall includes waiting for lock",
+    "wrapperLockedSeconds": 0.27137120900442824,
+    "record": "registry.json"
+  }
+]

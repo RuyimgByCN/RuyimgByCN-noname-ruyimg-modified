@@ -1,0 +1,48 @@
+{
+  "source": "Original Chrome failure and private compat acceptance retained; no original raw decode repeated in current main",
+  "originals": [
+    {
+      "kind": "audio",
+      "path": "audio/skill/tsumugi_mugyu1.mp3",
+      "size": 18559,
+      "source_category": "core",
+      "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+      "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+    },
+    {
+      "kind": "audio",
+      "path": "audio/skill/tsumugi_mugyu2.mp3",
+      "size": 114374,
+      "source_category": "core",
+      "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+      "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+    },
+    {
+      "kind": "audio",
+      "path": "audio/skill/tsumugi_mugyu3.mp3",
+      "size": 10031,
+      "source_category": "core",
+      "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+      "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+    },
+    {
+      "kind": "audio",
+      "path": "audio/skill/tsumugi_mugyu4.mp3",
+      "size": 38934,
+      "source_category": "core",
+      "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+      "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+    },
+    {
+      "kind": "audio",
+      "path": "audio/skill/tsumugi_mugyu5.mp3",
+      "size": 80896,
+      "source_category": "core",
+      "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+      "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+    }
+  ],
+  "main_old_direct_prefix_exact": true,
+  "qualification": "Same canonical/served dev-inode-size-mtime and old alias9 source SHA; bounded compatibility validator also pins original SHA",
+  "new_derivatives_only_approved_no_elst": true
+}

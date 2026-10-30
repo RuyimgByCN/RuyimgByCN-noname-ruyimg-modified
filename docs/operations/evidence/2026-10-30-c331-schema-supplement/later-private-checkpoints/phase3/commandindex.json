@@ -1,0 +1,761 @@
+{
+  "utc": "2026-10-30T18:41:20.498298+00:00",
+  "logs": [
+    {
+      "log": "affected-final.log",
+      "sha256": "5849378dad40103541cccf94a71a410b1866ea5584f3891b355b360b2f050ecb",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "--no-fail-fast",
+            "-p",
+            "engine-native-kernel",
+            "-p",
+            "engine-native-content",
+            "-p",
+            "engine-native",
+            "-p",
+            "engine-native-wasm",
+            "-p",
+            "game-server",
+            "-p",
+            "desktop-client",
+            "-p",
+            "content-schema",
+            "-p",
+            "content-compiler",
+            "-p",
+            "content-runtime",
+            "-p",
+            "content-native-loader"
+          ],
+          "exit": 101,
+          "locked_seconds": 274.3870512499998,
+          "disk_free_bytes": 99170951168
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "core-all-mid.log",
+      "sha256": "7d14a4b01a106002ffe20680283e89324a9a32665069d0795d6a27373fb4fb29",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_"
+          ],
+          "exit": 101,
+          "locked_seconds": 6.3872185420186725,
+          "disk_free_bytes": 99741310976
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "core-all2.log",
+      "sha256": "2ccfbfceb205fd0c82e1b959f2cd52e1cb3c3cf2debb32fd1a405e1a21164c06",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_"
+          ],
+          "exit": 0,
+          "locked_seconds": 1.0301593339827377,
+          "disk_free_bytes": 100392988672
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "desktop-app.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "desktop-build-final.log",
+      "sha256": "d2b61a11c315aa950c311be7a7e326fdcb901f9fa2d022531a44e720fbeddd93",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "desktop-build.log",
+      "sha256": "a35adb3c0f80f0b2300d63997f3ace559b2af9887a5c8cfa72b35534565f5a3a",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-build.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 58.56275683300919,
+          "disk_free_bytes": 99203264512
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "desktop-build2.log",
+      "sha256": "39e6ca012468ab393dc629f376ce5b6972dcad1a4306cb6500adc5132c41d94c",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-build.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 10.541675917018438,
+          "disk_free_bytes": 100494323712
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "desktop-ipc-final.log",
+      "sha256": "4cfee214c32935ca788692bd8c09d1491ade710dc70a75e7706008fb43180b0c",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "desktop-ipc-run1.log",
+      "sha256": "da35f42731cd38f5dd4866d1a80491f90d2b91ed3934ec0948884b710ee703aa",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-run.py"
+          ],
+          "exit": 1,
+          "locked_seconds": 1.4701353750133421,
+          "disk_free_bytes": 99115978752
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "desktop-ipc-run2.log",
+      "sha256": "40cdf2798a176cf9feac7b8688eeaa63a4188d105f6163adcd9f8004062a2a05",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-run.py"
+          ],
+          "exit": 1,
+          "locked_seconds": 50.40088483298314,
+          "disk_free_bytes": 99120218112
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "desktop-ipc-run3.log",
+      "sha256": "11b95afcafe9678c654ba9568dafcd6484a6d5412cce11698be6972c281a8af0",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-run.py"
+          ],
+          "exit": 1,
+          "locked_seconds": 50.68365941700176,
+          "disk_free_bytes": 99121606656
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "desktop-ipc-run4.log",
+      "sha256": "6c0cda0dc590ed2b36a1bdb4e41054af57518e45d40724573c710f41f3db4471",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/desktop-run.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 29.129913790995488,
+          "disk_free_bytes": 100330225664
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "full-vector.log",
+      "sha256": "156de8faaacfa20889693f057d5379cf33dfd0f94def5de6347afe5dc9d08618",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_trigger_order"
+          ],
+          "exit": 101,
+          "locked_seconds": 0.8410745419969317,
+          "disk_free_bytes": 99196342272
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "full-vector2.log",
+      "sha256": "166c1a7ac95ffb002d07b7468dae789e498d843e1eba97836c1f4a8f45459fb1",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_trigger_order"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.1061012080172077,
+          "disk_free_bytes": 99214503936
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "full-vector3.log",
+      "sha256": "b25534c027b611d8f7bba4a89b821864b4b3bf16a2b03e6ead98cea61c462054",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_trigger_order"
+          ],
+          "exit": 101,
+          "locked_seconds": 0.9902864580217283,
+          "disk_free_bytes": 99228667904
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "full-vector4.log",
+      "sha256": "9cb81abe2a7df7776b5ce8c5771d2375d2b4f260913e117b673913a9c989ffed",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_trigger_order"
+          ],
+          "exit": 0,
+          "locked_seconds": 8.94481120898854,
+          "disk_free_bytes": 99164504064
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "full-vector5.log",
+      "sha256": "0d16faddee4b5c5ed4ca67cf52023c0880d23ce15cf5f4dff6114eebae34e1ab",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_trigger_order"
+          ],
+          "exit": 0,
+          "locked_seconds": 9.109877415990923,
+          "disk_free_bytes": 100526952448
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "golden-before-update.log",
+      "sha256": "939eaba044c288f4d58916db6734537b473e730b675370fcaca5b1c0f996c003",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "kernel",
+            "replay_scenarios::replay_scenarios_match_golden"
+          ],
+          "exit": 101,
+          "locked_seconds": 2.6142171249957755,
+          "disk_free_bytes": 100394242048
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "golden-green.log",
+      "sha256": "d2c3fbfdc16a3ed1da743f0e6165ca821f53d9452c27c9b6351dadc91a233b4f",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "kernel",
+            "replay_scenarios::replay_scenarios_match_golden"
+          ],
+          "exit": 0,
+          "locked_seconds": 3.036026290996233,
+          "disk_free_bytes": 100127862784
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "gujian-red.log",
+      "sha256": "8a7aef7bebf9842c82968be71615e5fc670bea753e1f31969fa787f548d8c8e2",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "gujian_food_ordering"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.3042769170133397,
+          "disk_free_bytes": 99272028160
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "k4-green1.log",
+      "sha256": "774043a1b8464881e1f452f8f424fe6d479731b546ffdb05eea68807590d52f9",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_damage_windows"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.0340310419851448,
+          "disk_free_bytes": 99233611776
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "k4-green2.log",
+      "sha256": "4f86acd02f6c7e93c3e8c4fdc46ba5a04b4a219fb666bcb89bfcc3799ab24199",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_damage_windows"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.0826260409958195,
+          "disk_free_bytes": 99228397568
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "k4-green3.log",
+      "sha256": "11418b8217bc4ee7c56de1eabb2477fe33da55b903ec2e3b66e36a53c82c6fa6",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_damage_windows"
+          ],
+          "exit": 0,
+          "locked_seconds": 6.722661124978913,
+          "disk_free_bytes": 99129044992
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "k4-green4.log",
+      "sha256": "0071c4d8ce60c46ced69b1e46a50781628e76623dcbb46f718e52282e6f81a84",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_damage_windows"
+          ],
+          "exit": 0,
+          "locked_seconds": 6.802474333002465,
+          "disk_free_bytes": 99108073472
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "k4-red.log",
+      "sha256": "1ab64428c4e25e69e84191e8d4a4b2b3956a3c912b26c0718f4853706090bd4a",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_damage_windows"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.216190415987512,
+          "disk_free_bytes": 99197005824
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "layering-checkpoint.log",
+      "sha256": "a3ace901f75e478b721fcf4c44872d5018603966a215b00b24b328dbdeadda9e",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "layering-final.log",
+      "sha256": "a3ace901f75e478b721fcf4c44872d5018603966a215b00b24b328dbdeadda9e",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "node-current-wasm-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "owners-green.log",
+      "sha256": "2d4b79f080873bc34ad6759f8e9e7c6f8490d8feb6c2839c34b508cee94f626a",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_review_owner_ring"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.09086224998463877,
+          "disk_free_bytes": 99107987456
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "owners-red.log",
+      "sha256": "58d75e71918ca67e9308521f8e9605a7a545c4f629a4b3bb986b841578b5a2de",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc08",
+            "c331_review_owner_ring"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.0523854579951148,
+          "disk_free_bytes": 99121664000
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "platform-final.log",
+      "sha256": "740c0c56b6fdb0b844702f2c7b506c07c0d328699f785b8e609a9d05f47b2313",
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "../evidence/phase3/final-platform.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 69.52620604197728,
+          "disk_free_bytes": 99141132288
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "server-final-serial.log",
+      "sha256": "d8db2aeade12c0c18eec5a996f9355bbdfc54e0d87de105d24624bcf92df2ca4",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "game-server",
+            "--bin",
+            "game-server",
+            "native_ws_e2e::c331::",
+            "--",
+            "--test-threads=1"
+          ],
+          "exit": 0,
+          "locked_seconds": 77.85411045901128,
+          "disk_free_bytes": 99122925568
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "server-matrix1.log",
+      "sha256": "6cae65f68d8a035d941cef41fa2b22957dedc0e2479ed0a351e38666f6129847",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "game-server",
+            "--bin",
+            "game-server",
+            "native_ws_e2e::c331::",
+            "--",
+            "--test-threads=1"
+          ],
+          "exit": 101,
+          "locked_seconds": 9.576090082991868,
+          "disk_free_bytes": 100461035520
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "server-matrix2.log",
+      "sha256": "97aaf5ce0ab5b77ca33ce5baa1c628bfa8f6aba90e270b11a350166ac51f599f",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "game-server",
+            "--bin",
+            "game-server",
+            "native_ws_e2e::c331::",
+            "--",
+            "--test-threads=1"
+          ],
+          "exit": 101,
+          "locked_seconds": 43.94168879199424,
+          "disk_free_bytes": 100276486144
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "server-matrix3.log",
+      "sha256": "540703dcd20b923be2f16bbd6b406d6efd7dffe69b22bb5a829cfeb71f7ad3e6",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "game-server",
+            "--bin",
+            "game-server",
+            "native_ws_e2e::c331::",
+            "--",
+            "--test-threads=1"
+          ],
+          "exit": 101,
+          "locked_seconds": 66.23062254101387,
+          "disk_free_bytes": 100110151680
+        }
+      ],
+      "result": "failed"
+    },
+    {
+      "log": "server-matrix4.log",
+      "sha256": "d179378a3f0af6529f204707c1ea2d2536d892e60689754eee45b881f4829d93",
+      "commands": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "game-server",
+            "--bin",
+            "game-server",
+            "native_ws_e2e::c331::",
+            "--",
+            "--test-threads=1"
+          ],
+          "exit": 0,
+          "locked_seconds": 76.11874833298498,
+          "disk_free_bytes": 99282411520
+        }
+      ],
+      "result": "passed"
+    },
+    {
+      "log": "source-line-tests.log",
+      "sha256": "cc4ce8d54ec0f6a2d972abf34157488e5e132e9d71efaebb422979f2bf3356f8",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "sourcecaps-checkpoint.log",
+      "sha256": "39a08682627e25b1878f833a7aa5127ab57adbcbf7e85ff4e53c304455dbd5dc",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "sourcecaps-final.log",
+      "sha256": "39a08682627e25b1878f833a7aa5127ab57adbcbf7e85ff4e53c304455dbd5dc",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "sourcecaps-mid.log",
+      "sha256": "d6c027fac40a51fd8ff92b51600bdfb80230e240c840064d26eaae70a384b795",
+      "commands": [],
+      "result": "pending or nested"
+    },
+    {
+      "log": "wasm-release-final.log",
+      "sha256": "c28ff9ca45e1f0ede4643c003aead02b003b78034bab8271eedc312674836404",
+      "commands": [],
+      "result": "pending or nested"
+    }
+  ],
+  "platform": [
+    {
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-native-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/native-pkg"
+      ],
+      "exit": 0,
+      "seconds": 29.238387583987787,
+      "log": "wasm-release-final.log"
+    },
+    {
+      "command": [
+        "node",
+        "--import",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/private-wasm-preload.mjs",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/c331-trigger-order-cross-target.mjs",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/author257-vector.json",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/author257-wasm-result.json"
+      ],
+      "exit": 0,
+      "seconds": 0.27995099997497164,
+      "log": "node-current-wasm-final.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-build.py"
+      ],
+      "exit": 0,
+      "seconds": 10.420401750016026,
+      "log": "desktop-build-final.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-run.py"
+      ],
+      "exit": 0,
+      "seconds": 29.552142958011245,
+      "log": "desktop-ipc-final.log"
+    }
+  ]
+}

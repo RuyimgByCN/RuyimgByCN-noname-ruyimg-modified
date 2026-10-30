@@ -1,0 +1,485 @@
+{
+  "utc": "2026-10-30T18:56:32.548056+00:00",
+  "head": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "productSourceCount": 63,
+  "changedFiles": [
+    "crates/engine-native-kernel/src/simulation.rs",
+    "crates/engine-native/src/engine/simulation.rs",
+    "crates/engine-native-kernel/src/rvm_bridge.rs",
+    "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_implicit_effect_privacy.rs"
+  ],
+  "productSources": [
+    {
+      "path": "apps/desktop-client/tests/native_planner_measurement.rs",
+      "sha256": "21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f",
+      "bytes": 3587,
+      "physicalLines": 79,
+      "changedThisRun": false
+    },
+    {
+      "path": "apps/game-server/src/native.rs",
+      "sha256": "dcce31938f7233293ea894bb8126fc1ce6cecfe40d9a79733cade69fe19e0692",
+      "bytes": 22905,
+      "physicalLines": 590,
+      "changedThisRun": false,
+      "rustEffectiveLines": 464
+    },
+    {
+      "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+      "sha256": "2dfc94c5f161b703ff127236820234cd72ddb4a50ecc8badae269710001ef8f1",
+      "bytes": 8448,
+      "physicalLines": 168,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host.rs",
+      "sha256": "cec8d4ad133527087ed11e493ac273d15c5abb99106a8bf65fc876e00dde5212",
+      "bytes": 11276,
+      "physicalLines": 310,
+      "changedThisRun": false,
+      "rustEffectiveLines": 259
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/simulation.rs",
+      "sha256": "ea54795c4642d09cfc08adcb2dfcce109b8a4ee7ed21da423f5347c4c8d877c3",
+      "bytes": 2642,
+      "physicalLines": 55,
+      "changedThisRun": false,
+      "rustEffectiveLines": 51
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "sha256": "4eb398355432b5d5001de2c93f44f5d0e1bedbbeaad6cdc11ad0a572123d8041",
+      "bytes": 53099,
+      "physicalLines": 1138,
+      "changedThisRun": false,
+      "rustEffectiveLines": 637
+    },
+    {
+      "path": "crates/engine-native-kernel/src/lib.rs",
+      "sha256": "65d704ccb35ccfe8aca032f5c33f0192d1feee78d6da8820790a4c3b9159dbe2",
+      "bytes": 397,
+      "physicalLines": 21,
+      "changedThisRun": false,
+      "rustEffectiveLines": 18
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "sha256": "b8e70a952d5fd49b8b384e09ac8f684395a5bd26744633e3e06a91ecdfb54bf6",
+      "bytes": 29306,
+      "physicalLines": 860,
+      "changedThisRun": false,
+      "rustEffectiveLines": 688
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "9bc4bebda4fa910326e7283ea8e9e0ac0f057a5af20c20b7e8b4c51119ff15c6",
+      "bytes": 26962,
+      "physicalLines": 697,
+      "changedThisRun": false,
+      "rustEffectiveLines": 585
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "5df21a8840f2f9c7fdc98fa6de95f060c827b1790b2eaecae5f3e53404947697",
+      "bytes": 45586,
+      "physicalLines": 1037,
+      "changedThisRun": true,
+      "rustEffectiveLines": 817
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+      "sha256": "de6622e28c698f87ea465856a5dc21a009a7b5652affbef7945a708176680b1f",
+      "bytes": 3676,
+      "physicalLines": 114,
+      "changedThisRun": false,
+      "rustEffectiveLines": 107
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "4918dc7d8d6104b5392a575338f0aae9147170a039d141f252d152ac2da1240a",
+      "bytes": 25189,
+      "physicalLines": 654,
+      "changedThisRun": true,
+      "rustEffectiveLines": 591
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_named.rs",
+      "sha256": "03a90c80cf05db0507376527b38a4f74f964d173d2c91a4e2190dc3638ac36cb",
+      "bytes": 37126,
+      "physicalLines": 932,
+      "changedThisRun": false,
+      "rustEffectiveLines": 892
+    },
+    {
+      "path": "crates/engine-native-kernel/src/simulation.rs",
+      "sha256": "e6ef0f1ba3815416173dc2e35de6c95df4bce52e32cd858155ea4a352559806e",
+      "bytes": 15764,
+      "physicalLines": 432,
+      "changedThisRun": true,
+      "rustEffectiveLines": 271
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "e855c9b07ca7e9a55242bf9233aa31012e63c6bbca6fff3724f436405ede2e7e",
+      "bytes": 32021,
+      "physicalLines": 797,
+      "changedThisRun": false,
+      "rustEffectiveLines": 589
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/pa09_native_session.rs",
+      "sha256": "a55e81d8f8820f5c611409aec895831ea5b1c9e69d65a0e8bda4ea9e37a738e1",
+      "bytes": 4482,
+      "physicalLines": 105,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/examples/nc12_bench.rs",
+      "sha256": "5894063b11d1f35827d22aa7da6568a67ffc5b09c5471a593a3a0821a32e70a1",
+      "bytes": 31442,
+      "physicalLines": 843,
+      "changedThisRun": false,
+      "rustEffectiveLines": 704
+    },
+    {
+      "path": "crates/engine-native/examples/nc12_bench/scenarios.rs",
+      "sha256": "6f088bfead3ee3ca9a12e2b5c0e3fe55f104db2c81000b6ca941ce253e1c843b",
+      "bytes": 40519,
+      "physicalLines": 931,
+      "changedThisRun": false,
+      "rustEffectiveLines": 875
+    },
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "48c7c56589789b8a833885261905c63439e2ac00bce940dd181d9a2d9a637985",
+      "bytes": 35941,
+      "physicalLines": 858,
+      "changedThisRun": false,
+      "rustEffectiveLines": 671
+    },
+    {
+      "path": "crates/engine-native/src/ai/redact.rs",
+      "sha256": "528ae85e9519ae1069002154910e02db3574833c184eb97ef398d12d3530832f",
+      "bytes": 16616,
+      "physicalLines": 396,
+      "changedThisRun": false,
+      "rustEffectiveLines": 268
+    },
+    {
+      "path": "crates/engine-native/src/ai/remap.rs",
+      "sha256": "d7ab2f1f85bd4f047166a993944b8018d13f0cabfb8a3bc8ab5d9ede769fc384",
+      "bytes": 9886,
+      "physicalLines": 292,
+      "changedThisRun": false,
+      "rustEffectiveLines": 223
+    },
+    {
+      "path": "crates/engine-native/src/ai/trial.rs",
+      "sha256": "9b0791363f2cadc3f7ec17b6915237c7bae0dda5eba2c6960cc47a199bc510e6",
+      "bytes": 5135,
+      "physicalLines": 157,
+      "changedThisRun": false,
+      "rustEffectiveLines": 146
+    },
+    {
+      "path": "crates/engine-native/src/ai_pool.rs",
+      "sha256": "2db7bda6691855f45d19ff05fcc9381b7e18e41b88ff64985849007733a4d343",
+      "bytes": 6081,
+      "physicalLines": 157,
+      "changedThisRun": false,
+      "rustEffectiveLines": 112
+    },
+    {
+      "path": "crates/engine-native/src/engine.rs",
+      "sha256": "7d70d55e44ddbb753018403377961918b5c39e354f729027e10287b2eb1f81ac",
+      "bytes": 19184,
+      "physicalLines": 483,
+      "changedThisRun": false,
+      "rustEffectiveLines": 147
+    },
+    {
+      "path": "crates/engine-native/src/engine/certification.rs",
+      "sha256": "04c9800571e0a772f354ed5ba4c9157d3430ee3d512764e50db12daae793012d",
+      "bytes": 4390,
+      "physicalLines": 118,
+      "changedThisRun": false,
+      "rustEffectiveLines": 115
+    },
+    {
+      "path": "crates/engine-native/src/engine/commands.rs",
+      "sha256": "4c5b25ec2ecd6573a2d8db9214aec73b6dfdc4753584f8f5c9227d630ff3ab27",
+      "bytes": 16261,
+      "physicalLines": 352,
+      "changedThisRun": false,
+      "rustEffectiveLines": 245
+    },
+    {
+      "path": "crates/engine-native/src/engine/legal_actions.rs",
+      "sha256": "569c00b6c08f38c3fa7c966a4f6b3ac01eda4c79b2d85dc90050233169c59a52",
+      "bytes": 12160,
+      "physicalLines": 288,
+      "changedThisRun": false,
+      "rustEffectiveLines": 212
+    },
+    {
+      "path": "crates/engine-native/src/engine/simulation.rs",
+      "sha256": "ebefc2b6cde355e4eddc1ec3cec122cf51155ddc0a72bd3d82cfbe23aba8f3d7",
+      "bytes": 19844,
+      "physicalLines": 483,
+      "changedThisRun": true,
+      "rustEffectiveLines": 139
+    },
+    {
+      "path": "crates/engine-native/src/lib.rs",
+      "sha256": "b2fca45efb9d80fbadbb2cda9b425c325933c5146bf80bfb8b2983c8c9ed975c",
+      "bytes": 6171,
+      "physicalLines": 70,
+      "changedThisRun": false,
+      "rustEffectiveLines": 22
+    },
+    {
+      "path": "crates/engine-native/tests/adr0786_j2_effect_choices.rs",
+      "sha256": "a94ceb6bf50b4b2e331c706eb2e3f2106e9eb869f3d81583899b3a8bb1b81b4f",
+      "bytes": 22970,
+      "physicalLines": 634,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/ai_content_tuning.rs",
+      "sha256": "6ed20b00710527c43c015c40d3d29cda811c10b0420b407389bdf835f0f2bb1d",
+      "bytes": 4679,
+      "physicalLines": 135,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/ai_planner.rs",
+      "sha256": "8c4575b079fddfecf6997b8a43c1f1923b954d6b01af165f80f5e34148ec835a",
+      "bytes": 20689,
+      "physicalLines": 453,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "98f3c510713958cb12c1ce8ccd1ae5158c06293382d83e8a1a62fd14e3e59c1b",
+      "bytes": 2862,
+      "physicalLines": 113,
+      "changedThisRun": true
+    },
+    {
+      "path": "crates/engine-native/tests/l01_ai_tuning_eight.rs",
+      "sha256": "e734df0836753866a08e1470df206523a665ccda02c35d405874afa72d932f76",
+      "bytes": 11271,
+      "physicalLines": 301,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/n10.rs",
+      "sha256": "7a1cf762774922cf3370a50968b9031d75c0bbccaf443b7d06bb1692915e8e89",
+      "bytes": 5092,
+      "physicalLines": 140,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc03_ai_consistency.rs",
+      "sha256": "d0407791dfd457fc83760e613717dd997f4db26023d3bed5f7830568120867fa",
+      "bytes": 3935,
+      "physicalLines": 101,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc07_discard_duplicate_probe.rs",
+      "sha256": "9127b5cd10f60e71536db56bda6493cfb09032e14746ae3fdf8a26cce9095cc4",
+      "bytes": 5053,
+      "physicalLines": 126,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_ai_boundary_and_cancel.rs",
+      "sha256": "232237c89aaedc62c18c304efbd9fa90feed7c120ed0eafd19f1997cf7be2604",
+      "bytes": 10069,
+      "physicalLines": 248,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_ai_bounds.rs",
+      "sha256": "3ffa3eacd2463b7e71bd6987dd7e057b22f9ee0d7103a6b5f35231e4ddeb5a51",
+      "bytes": 12921,
+      "physicalLines": 314,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_ai_information_boundary.rs",
+      "sha256": "51e532145d51f370d9453dd1e5a0c62005cc867b1f4d0cef9bdb2f61c489fbf6",
+      "bytes": 9154,
+      "physicalLines": 223,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_duel_nullify_privacy.rs",
+      "sha256": "32151de6f1991291bc493428bb0dfe05a8b3a6c012b5a26a7ec2985c7f6a6e7f",
+      "bytes": 7398,
+      "physicalLines": 214,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_empty_choice.rs",
+      "sha256": "c518dd5c543f17441c1780d37e77d16be4704aaa7e760dcb1a38c570e366a794",
+      "bytes": 4758,
+      "physicalLines": 134,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_host_privacy.rs",
+      "sha256": "2fbbfa4ac8bd6e2f32604df8f15d8e0c9cc751d16115fee374b018cf5f8c24c4",
+      "bytes": 5569,
+      "physicalLines": 158,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_implicit_effect_privacy.rs",
+      "sha256": "7c7a54d60e24191df7b4e35514f8e098dee15df8646d9533cbb5bd9c02e798e3",
+      "bytes": 9344,
+      "physicalLines": 168,
+      "changedThisRun": true
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_j2_vm_privacy.rs",
+      "sha256": "ea1ee25beb2fd7fb06b84b8ed0d1a7e1e7ed41cd6e8520ac276b3b24fffd543b",
+      "bytes": 7551,
+      "physicalLines": 212,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+      "sha256": "68072d34a9f2085d4fc61c875107f54d6eb7029874955035ab413fadee000a7d",
+      "bytes": 17483,
+      "physicalLines": 473,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_multiple_hidden_traps.rs",
+      "sha256": "698a9cd23d9ca579f4ea24c66c255e85ac64cc4608da1073e30a7fc6fc8ad88f",
+      "bytes": 13165,
+      "physicalLines": 346,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+      "sha256": "a101b6f246aba9125b024b7c62e80a31df22d48e4c37a50c282cc66b2834bd85",
+      "bytes": 11207,
+      "physicalLines": 319,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_pending_duel_privacy.rs",
+      "sha256": "921c4182da917b935c58db0a69d69cf466a90632c0e24cf38bc6f7a756a24b0b",
+      "bytes": 8421,
+      "physicalLines": 263,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_planner_pool.rs",
+      "sha256": "47feeff2d30bf2968421e664cfa574b499eb40e28e99ea966c26a03d07b3d4c9",
+      "bytes": 5295,
+      "physicalLines": 128,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_private_scalar.rs",
+      "sha256": "a7e180ab78c9b898845e1d18181c978480426c84e882b7edc1e3daef8065e9cd",
+      "bytes": 13924,
+      "physicalLines": 371,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+      "sha256": "b4c6c2fa44c00652c0dace73d0df87c3679fee94bfcec2e52a11b8755210978f",
+      "bytes": 10911,
+      "physicalLines": 308,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_single_hidden_trap.rs",
+      "sha256": "e71d0728a7d2f61ac0b4271a5a17140c528a8d938f97eb0075abb850f90c3600",
+      "bytes": 14939,
+      "physicalLines": 384,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_skill_pile_conservation.rs",
+      "sha256": "a86d66db4e1e46ef88b6a4b7a681645d5e733b21ae33e0c4776e712cfe7d7fcc",
+      "bytes": 4397,
+      "physicalLines": 111,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc12_ai_strength_baseline.rs",
+      "sha256": "d13cb30cdaa9ccdce7974b5e25a49e3b4b1408be76812b86472ed4ba247402df",
+      "bytes": 10134,
+      "physicalLines": 205,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc12_dangling_reference_probe.rs",
+      "sha256": "e2e92b562fc01fb18fb78ad513289ca701da9df09de45d81ee118475f746c51a",
+      "bytes": 4600,
+      "physicalLines": 106,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc12_dangling_reference_repro.rs",
+      "sha256": "004ee941a62ac00c27c7a78c4e3fb8a8b9f0824439c9d627c2da4d5897dd83fe",
+      "bytes": 4645,
+      "physicalLines": 115,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/nc12_swd_authoritative_stability.rs",
+      "sha256": "83d5057ff77c85485156d61d939bcd0d7e3117e1c2d758ba1ca604c14bd09de7",
+      "bytes": 5826,
+      "physicalLines": 148,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/engine-native/tests/t9_d5_surface.rs",
+      "sha256": "45f5888617b48247734307ab8a12641d4861d1293321a76515fe9d2577f68f38",
+      "bytes": 8111,
+      "physicalLines": 218,
+      "changedThisRun": false
+    },
+    {
+      "path": "crates/rule-vm/src/lib.rs",
+      "sha256": "bdc8dc7ffc9894a5aa231882833ee9ff20bd8761bcd4115c20e4f398bfe21714",
+      "bytes": 3021,
+      "physicalLines": 87,
+      "changedThisRun": false,
+      "rustEffectiveLines": 54
+    },
+    {
+      "path": "crates/rule-vm/src/vm.rs",
+      "sha256": "fd34f83c338cb7b4dc9c7c11f3a63e1080c23378a29983ef7fe6e5ab13f2f833",
+      "bytes": 34097,
+      "physicalLines": 920,
+      "changedThisRun": false,
+      "rustEffectiveLines": 717
+    },
+    {
+      "path": "crates/rule-vm/src/vm/controlled.rs",
+      "sha256": "19998e068e3005e0090d67000cfb19ae18fedad9ebf5d06d54b9ab869550ca7b",
+      "bytes": 4952,
+      "physicalLines": 140,
+      "changedThisRun": false,
+      "rustEffectiveLines": 111
+    },
+    {
+      "path": "crates/rule-vm/tests/controlled.rs",
+      "sha256": "6953140270e9a8ca4f829835fd6f0937f8d774cd0c7162e8dbb062a029fbc2d6",
+      "bytes": 4575,
+      "physicalLines": 158,
+      "changedThisRun": false
+    }
+  ]
+}

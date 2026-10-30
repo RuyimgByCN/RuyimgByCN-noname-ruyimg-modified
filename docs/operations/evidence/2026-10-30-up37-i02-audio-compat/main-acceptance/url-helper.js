@@ -1,0 +1,51 @@
+function originalResourceUrl(base, asset) {
+    if (typeof asset !== "string" || !asset || !asset.split("/").every((part) => part && part !== "." && part !== ".." && !/[\\%?#:\u0000-\u001f\u007f]/.test(part)))
+        return "";
+    return `${base}/${asset.split("/").map(encodeURIComponent).join("/")}`;
+}
+function originalCharacterAudio(manifest, character) {
+    const validName = (name) => typeof name === "string" && !name.includes("/") && !!originalResourceUrl("", name);
+    if (!validName(character.pack) || !validName(character.name))
+        return [];
+    const byPath = new Map();
+    const backing = new Map();
+    for (const asset of manifest.assets) {
+        if (!asset || typeof asset.path !== "string")
+            continue;
+        // A conflicting row must never be selected according to its position in the manifest.
+        if (byPath.has(asset.path))
+            return [];
+        byPath.set(asset.path, asset);
+        if (asset.kind === "audio" && !asset.path.startsWith("audio-declared/")) {
+            const key = `${asset.source_category}:${asset.source_path}`;
+            if (backing.has(key))
+                return [];
+            backing.set(key, asset);
+        }
+    }
+    const characterPrefix = `audio-declared/${character.pack}/character/${character.name}/`;
+    const prefixes = [
+        `audio-declared/${character.pack}/die/${character.name}/`,
+        `${characterPrefix}die/`,
+        ...character.skills.filter(validName).map((skill) => `${characterPrefix}skill/${skill}/`),
+    ];
+    const seenSources = new Set();
+    return manifest.assets.filter((asset) => {
+        if (!asset || typeof asset.path !== "string" || !prefixes.some((prefix) => asset.path.startsWith(prefix)) ||
+            typeof asset.source_path !== "string" ||
+            typeof asset.sha256 !== "string" || asset.kind !== "audio" || !["core", "compat"].includes(asset.source_category) ||
+            !/^[a-f0-9]{64}$/.test(asset.sha256) || !Number.isSafeInteger(asset.size) || asset.size <= 0 ||
+            !originalResourceUrl("", asset.path) || !originalResourceUrl("", asset.source_path) ||
+            !asset.source_path.startsWith("audio/") || !/\.(?:mp3|ogg|wav|m4a|aac|flac|opus|mp4)$/.test(asset.path))
+            return false;
+        const source = backing.get(`${asset.source_category}:${asset.source_path}`);
+        const expectedPath = asset.source_category === "core" ? asset.source_path :
+            asset.source_path.replace(/^audio\//, "audio-compat/");
+        if (!source || source.kind !== "audio" || source.source_category !== asset.source_category ||
+            source.source_path !== asset.source_path || source.path !== expectedPath || source.sha256 !== asset.sha256 || source.size !== asset.size ||
+            asset.path.split("/").at(-1) !== source.path.split("/").at(-1) || seenSources.has(`${asset.source_category}:${asset.source_path}`))
+            return false;
+        seenSources.add(`${asset.source_category}:${asset.source_path}`);
+        return true;
+    });
+}

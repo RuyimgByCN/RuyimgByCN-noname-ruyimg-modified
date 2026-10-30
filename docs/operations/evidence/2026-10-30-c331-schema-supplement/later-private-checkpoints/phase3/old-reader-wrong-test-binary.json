@@ -1,0 +1,29 @@
+[
+  {
+    "mode": "archive",
+    "input": "../evidence/real330-pending.ngsa",
+    "input_sha256": "b16abfe4ec21ee97d33a7f91505d0791e3f7d508a257484e5bff1ba07dbeb522",
+    "reader_sha256": "dcab9db5eeb488b0b58f15b4f89f2849bfc3bd3cdfa6a9a419ac59cdcc7299dd",
+    "exit": 0,
+    "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 95 filtered out; finished in 0.00s\n\n",
+    "stderr": ""
+  },
+  {
+    "mode": "archive",
+    "input": "../evidence/phase3/new331-pending.ngsa",
+    "input_sha256": "670c136b162fcbe0fdd7afa8f60090bd4978225b270d108d6a6297eb1127ad37",
+    "reader_sha256": "dcab9db5eeb488b0b58f15b4f89f2849bfc3bd3cdfa6a9a419ac59cdcc7299dd",
+    "exit": 0,
+    "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 95 filtered out; finished in 0.00s\n\n",
+    "stderr": ""
+  },
+  {
+    "mode": "public",
+    "input": "../evidence/phase3/new331-package.json",
+    "input_sha256": "dae78de1f5af349d583ea3fb1a450157a52a7081cd40570be359c25689684056",
+    "reader_sha256": "dcab9db5eeb488b0b58f15b4f89f2849bfc3bd3cdfa6a9a419ac59cdcc7299dd",
+    "exit": 0,
+    "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 95 filtered out; finished in 0.00s\n\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,25 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.26s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-523977beb66ce5e1)
+
+running 1 test
+test c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula ... FAILED
+
+failures:
+
+---- c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula stdout ----
+
+thread 'c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula' (13717421) panicked at crates/engine-native/tests/groups/../c331_damage_windows.rs:37:75:
+assertion `left == right` failed
+  left: 0
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 118 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc08`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08", "gujian_food_ordering"], "exit": 101, "locked_seconds": 1.3042769170133397, "disk_free_bytes": 99272028160}

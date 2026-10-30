@@ -1,0 +1,5 @@
+original content resources synced:
+  portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+  audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+  audio-compat: 5 files, 257.4 KiB, 0 linked, 5 copied
+{"command": ["node", "scripts/sync-original-content.mjs", "--resources-only"], "exit": 0, "locked_seconds": 21.333928584004752, "disk_free_bytes": 100433395712}

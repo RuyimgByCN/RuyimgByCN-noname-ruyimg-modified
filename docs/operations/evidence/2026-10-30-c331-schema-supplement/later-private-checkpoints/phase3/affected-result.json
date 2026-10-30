@@ -1,0 +1,12 @@
+{
+  "passed": 2892,
+  "failed": 5,
+  "ignored": 76,
+  "failure_names": [
+    "test native_ws_e2e::c331::c331_ws_process_exit_after_replace_and_uncertain_decision_two_restarts ... FAILED",
+    "test native_ws_e2e::c331::c331_real_actor_timeout_wins_and_manual_old_choice_cannot_repeat ... FAILED",
+    "test native_ws_e2e::c331::c331_ws_permissions_257_retry_and_pending_answered_restart ... FAILED",
+    "test native_ws_e2e::c331::c331_ws_all_uncertain_decision_compensation_pairs_recover_exactly_once ... FAILED",
+    "test native_ws_e2e::c331::c331_ws_all_single_storage_faults_retry_exactly_once ... FAILED"
+  ]
+}

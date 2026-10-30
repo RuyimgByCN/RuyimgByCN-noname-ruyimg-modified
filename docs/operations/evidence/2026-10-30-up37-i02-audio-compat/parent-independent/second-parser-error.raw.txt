@@ -1,0 +1,1 @@
+Second parent audit failed because it assumed a category field. The existing six-field schema uses kind=audio and source_category; inspected actual row and corrected classification to exact path prefixes. No source or product assertions changed; this is not a product failure.

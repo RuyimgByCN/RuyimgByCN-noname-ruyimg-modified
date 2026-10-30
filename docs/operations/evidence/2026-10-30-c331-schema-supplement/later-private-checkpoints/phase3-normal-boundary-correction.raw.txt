@@ -1,0 +1,32 @@
+## Review
+
+**正式补充纠正：撤回原报告中 `normal_owners:4→5` 的 P1，不转列为 P2 代码缺陷。** 原推导证明了修改显式窗口状态会改变续行行为，但没有证明该状态违反恢复合同。我此前要求验证“确实是入窗人数”，却未指出现有可信历史来源；据此要求补拒档约束，证据不足。本补充不改写原报告文件；**slot NO_FRAME／Intrinsic 绕过 P1 保持不变。**
+
+- **Correct — `normal_owners` 是保存的窗口成员状态，不能由当前玩家数天然派生。** [TriggerOrder::new:118](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:118) 在建窗时冻结顺序及人数；[sync_trigger_owners:283](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:283) 后续只追加库存，不扩展 Normal 前缀。这正是保存历史成员边界的目的。当前 `players.len()==5` 同时容许“第五人在窗前已加入”和“第五人在窗后加入”。
+
+- **Correct — 另一条合法历史能够产生 `owners=[1,2,3,0,4]、normal_owners=5`，并在原反例的暂停点收敛。** 使用 [fellow 回归:18](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/tests/c331_fellow_windows.rs:18) 的 Normal／Normal 配置：同一个四人初态、Boss 模式、current1／Play，仅 owner1 已有 grant 和 peer，fellow 尚无技能。
+
+  | 历史 | 入窗前 | 首次 `trigger_order` 暂停后 |
+  |---|---|---|
+  | A：原回归路径 | 四人、环 `[0,1,2,3]`，NextPhase 建窗 | 调用 `add_boss_fellow(4)`，得到库存 `[1,2,3,0,4]`、边界4 |
+  | B：窗前加入 | 先调用相同 addFellow；将五人环换为 `[4,1,2,3,0]`，再 NextPhase | 入窗顺 current1 排列为 `[1,2,3,0,4]`、边界5；将环恢复为 `[0,1,2,3,4]` |
+
+  B 的环变化对应获准换座语义下的窗前、窗后各一次 `swap_seat(0,4)`。冻结切片包含 [真实换座恢复调用:653](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/tests/nc08_trigger_order_counterexample.rs:653)，但没有 `swap_seat` 方法定义，因此不声称本次重核了该方法实现。上述排列也可通过现有 `state_core_mut()` 的公开 `seat_ring` 状态明确构造，两种环均满足 [排列合同:199](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/snap/validation.rs:199)；并非依赖一个尚未说明的“也许可达”顺序。
+
+  收敛理由是具体的：[add_boss_fellow:98](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/src/engine/construction.rs:98) 直接从 deck 取相同四张牌，追加相同玩家、fellows 和环，不发事件或消耗 RNG。首次询序在任何 grant／peer 执行之前；[plan_triggers:363](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution.rs:363) 从技能实例收集队列，fellow 无技能，故两条历史都只有 owner1 的同两项 Normal 候选，`order.3=0`。两者均从空 First 桶推进到 cursor1，尚未遍历边界不同的尾部桶；queue、done、asked、choice、事件／选择水位及预算推进相同。环恢复后，玩家、手牌、牌库、技能、模式、turn 等公开／私有规则状态也相同，保留的区别就是 Normal 边界。这里是源码推导，没有声称执行了新的全对象比较。
+
+- **Correct — 原先观察到的未来行为差异，在这两条历史中都有合理语义。** 此后真实 VM 向 fellow 授予 Normal 技能时，A 的新玩家没有本窗 Normal map，应跳过；B 的玩家在建窗时已存在，只是当时没有技能，应进入仍未经过的桶。[register_added:315](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:315) 依据显式边界区分两者。不能仅凭未来行为不同，把 B 判为损坏档案。
+
+- **Correct — 现有字段没有提供通用的边界反推公式。** [Frame:326](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/event.rs:326) 仅含事件身份、载荷、stage、queue、planned 和 intrinsic_done，没有玩家加入时间或入窗人数。queue 只保存技能项，没有空玩家桶占位；done 也没有记录所有空桶，故其最大 owner／order 不能恢复人数。cursor 只能约束尚可存在的桶范围；intrinsic_done 是布尔进度。当前 fellows、seat_ring 和 turn 均不是入窗时间证据。
+  检查点也不能补此证明：正常选择 Pending 明确清除 segment checkpoint，见 [commands.rs:256](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/src/engine/commands.rs:256)。即便存在段前检查点，它也不天然等于每个祖先窗口创建时的状态。
+
+- **Correct — 现有恢复合同要求结构、绑定及内容一致性，没有据此要求任意档案的完整历史可达性认证。** [restore:37](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/src/engine/snapshot.rs:37) 及其调用链检查版本、ID、牌归属、窗口／队列／choice、模块等关系；我未找到要求证明每个允许域内显式状态都未被人为改写的合同。原任务要求核查边界篡改，并不自动建立这种历史认证要求。字段进入 hash 能区分两份状态，也不等于 restore 持有一个可信原值。
+
+- **Fixed — 原 owners 截断问题仍已关闭，所有真实结构约束应保留。** [trigger_order.rs:527](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:527) 的库存长度等于当前玩家数、唯一／界限、非零边界且不超过库存、前缀集合及追加 PID 顺序，均有当前状态依据。[队列检查:456](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:456) 的 Normal order 必须位于前缀、order 元组匹配，以及 cursor／queue／done／choice 关系，同样不应放松。原截断 red 不受本纠正影响。
+
+- **Finding — 原 `4→5` P1 撤回。** 我没有可提出的、无第二历史权威且能普遍区分 A／B 的最小拒档约束。要求拒绝 A 被改成 B，同时接受合法 B，需要新增可信历史依据或改变恢复合同；这属于另行设计范围，不能作为当前最小 C 修复要求，也不应为此增加历史 ledger。
+
+- **Merge verdict：本 Normal 边界定向复核为 OK with notes；原切片整体仍 BLOCK。** slot NO_FRAME／Intrinsic 的明确结构绑定 P1 保持；整 C331 的90项来源及最新全量未绿边界保持。本补充只移除原报告对 Normal 边界的无依据阻塞，不批准 author 当前新版本或整 C331。
+
+未 build、运行测试／新实验、读取 author 当前源码或修改原 review；换座方法定义不在冻结133文件中，未冒称重核其实现。
+剩余边界是 restore 接受自洽的显式状态，而非认证档案全部历史；当前不得据此要求新增历史权威。

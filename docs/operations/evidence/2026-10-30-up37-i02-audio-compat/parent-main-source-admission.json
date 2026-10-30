@@ -1,0 +1,43 @@
+{
+  "base": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "accepted_parent_tree": "abb64b4d7aeabc3f1e2525887b88bca46b0e9133",
+  "patch_sha256": "2605af4b6a8fff48a76be560ed9d7f7cfd3b3a5e24218fb23dc7c53c90bf5264",
+  "source14": {
+    ".github/workflows/ci.yml": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+    "apps/web-client/scripts/original-resources.test.mjs": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2",
+    "apps/web-client/src/engine/originalResources.ts": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+    "content/original/asset-manifest.json": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493",
+    "scripts/original-audio-resources.mjs": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759",
+    "scripts/sync-original-content.mjs": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0",
+    "scripts/test_original_audio_resources.mjs": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873",
+    "scripts/test_original_resources.mjs": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+    "content/original-audio-compat/provenance.json": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+  },
+  "exact_candidate_matches": {
+    ".github/workflows/ci.yml": true,
+    "apps/web-client/scripts/original-resources.test.mjs": true,
+    "apps/web-client/src/engine/originalResources.ts": true,
+    "content/original/asset-manifest.json": true,
+    "scripts/original-audio-resources.mjs": true,
+    "scripts/sync-original-content.mjs": true,
+    "scripts/test_original_audio_resources.mjs": true,
+    "scripts/test_original_resources.mjs": true,
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": true,
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": true,
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": true,
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": true,
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": true,
+    "content/original-audio-compat/provenance.json": true
+  },
+  "private_p2_review_closed": true,
+  "source_only_patch_read": "/tmp/noname-audio-compat-source-only.patch",
+  "source_only_lines": 680,
+  "versions": "330/105/758/WS6/asset2",
+  "no_catalog_package_frozen_changes": true,
+  "main_acceptance_pending": true
+}

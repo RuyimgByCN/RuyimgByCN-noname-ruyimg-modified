@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "source14_exact": true,
+  "artifact_digests_verified": 64,
+  "wrapper_commands": 17,
+  "all_exit_zero": true,
+  "old_direct_prefix": 12359,
+  "unaffected_aliases_exact_order": 23383,
+  "changed_aliases": 10,
+  "new_backings": 5,
+  "new_backing_bytes": 263579,
+  "new_manifest_rows": 35757,
+  "vue_full_decodes_and_ended": 5,
+  "vue_recovery_snapshots": 8,
+  "http_identities": 17,
+  "bytes_capture_limitation": "decoded[*].bytes is 0 because decodeAudioData detached the buffer after the pre-decode status/SHA/size assertion; actual full sizes independently bound by http-identities.json and manifest. Raw evidence retained.",
+  "no_new_media_or_build_execution": true,
+  "fullpreflight_not_yet_run": true
+}

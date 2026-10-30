@@ -1,0 +1,2 @@
+{"character":"key:key_tsumugi","name":"紬文德斯","selected":5,"allTen":10,"backing":5,"rawAudioCount":9652}
+{"command": ["node", "--import", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/selection.mjs"], "exit": 0, "locked_seconds": 0.22460299998056144, "disk_free_bytes": 100163944448}

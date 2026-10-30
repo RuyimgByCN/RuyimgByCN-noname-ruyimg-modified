@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import ts from "../apps/web-client/node_modules/typescript/lib/typescript.js";
 import { compareContentNames, compareFileNames, listFiles } from "./original-content-order.mjs";
 import { parseObjectFile, parseJavaScript, propertyName, safeLiteral } from "./original-source-ast.mjs";
-import { assertUniqueAssetPaths, declaredAudioAssets, loadAudioDeclarations, resolveAudioDeclarations, syncDeclaredAudio } from "./original-audio-resources.mjs";
+import { assertUniqueAssetPaths, declaredAudioAssets, loadAudioDeclarations, resolveAudioDeclarations, syncDeclaredAudio, validateAudioCompat } from "./original-audio-resources.mjs";
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
@@ -160,6 +160,7 @@ const crossPackagePortedSkills = new Map([
   ["shenhua:twjuxiang", { referencedBy: ["shenhua:zhangxiu"], source: "legacy-source/character/shenhua/character.js" }],
 ]);
 
+const compatRoot = path.join(repoRoot, "content/original-audio-compat");
 const trees = [
   {
     name: "legacy-source",
@@ -186,6 +187,16 @@ const trees = [
     source: path.join(coreSourceRoot, "audio"),
     target: path.join(assetRoot, "audio"),
     hardlink: true,
+    required: true,
+  },
+  {
+    name: "audio-compat",
+    assetKind: "audio",
+    sourceCategory: "compat",
+    sourceRoot: compatRoot,
+    source: path.join(compatRoot, "audio"),
+    target: path.join(assetRoot, "audio-compat"),
+    hardlink: false,
     required: true,
   },
   {
@@ -263,6 +274,7 @@ if (astSelfCheck) {
   process.exit(0);
 }
 
+const compatBindings = await validateAudioCompat(coreSourceRoot, compatRoot, sha256);
 const audioSubstitutes = await coreCharacterSubstitutes(packNames);
 const audioPlan = resolveAudioDeclarations(await loadAudioDeclarations(coreSourceRoot), audioSubstitutes);
 
@@ -276,7 +288,10 @@ if (resourcesOnly) {
   assertUniqueAssetPaths(manifest.assets);
   // Resource refreshes must stay on the already adopted source and skin policy.
   const provenance = await contentProvenance();
-  assertJsonEqual("resource source provenance", manifest.sources, provenance);
+  const resourceSources = resourceProvenance(provenance);
+  // First adoption may only add the fully prevalidated static compat source.
+  assertJsonEqual("resource source provenance", manifest.sources,
+    !verifyOnly && !Object.hasOwn(manifest.sources, "compat") ? provenance : resourceSources);
   assertJsonEqual("catalog source provenance", catalog.source.provenance, provenance);
   await verifyNoStaleOptionalTargets();
   const results = [];
@@ -294,7 +309,7 @@ if (resourcesOnly) {
     assertJsonEqual("asset manifest tree summaries", manifest.trees, summaries);
     assertJsonEqual("asset manifest entries", manifest.assets, assets);
   } else {
-    await writeJson(manifestFile, { ...manifest, trees: summaries, assets });
+    await writeJson(manifestFile, { ...manifest, sources: resourceSources, trees: summaries, assets });
   }
   printResults(verifyOnly ? "resources verified" : "resources synced", results);
   process.exit(0);
@@ -359,7 +374,7 @@ const provenance = await contentProvenance();
 await writeJson(path.join(outputRoot, "asset-manifest.json"), {
   schema_version: 2,
   source: sourceLabel(),
-  sources: provenance,
+  sources: resourceProvenance(provenance),
   trees: synced.map(({ name, sourceCategory, files, bytes, hardlinked, copied }) => ({
     name,
     source_category: sourceCategory,
@@ -1063,8 +1078,8 @@ async function dynamicSkinCatalog() {
 
 async function resourceAssets(verify) {
   const direct = await assetEntries();
-  const { assets } = declaredAudioAssets(audioPlan, direct);
-  await syncDeclaredAudio(assetRoot, assets, verify, sha256);
+  const { assets } = declaredAudioAssets(audioPlan, direct, compatBindings);
+  await syncDeclaredAudio(assetRoot, assets, direct, verify, sha256);
   return [...direct, ...assets];
 }
 
@@ -1078,7 +1093,7 @@ async function assetEntries() {
         const targetFile = path.join(tree.target, relative);
         const info = await stat(targetFile);
         return {
-          kind: tree.name,
+          kind: tree.assetKind ?? tree.name,
           path: `${tree.name}/${relative.split(path.sep).join("/")}`,
           size: info.size,
           source_category: tree.sourceCategory,
@@ -1337,6 +1352,14 @@ function managedSkinFileEnabled(managedFile) {
   );
 }
 
+function resourceProvenance(provenance) {
+  return { ...provenance, compat: {
+    category: "compat", root: path.relative(repoRoot, compatRoot).split(path.sep).join("/"), repository: null, repository_root: null,
+    head: null, dirty: false, tracked_changes: [], tracked_change_count: 0, untracked_count: 0,
+    redistribution_status: "preserved_from_source_requires_review",
+  } };
+}
+
 async function contentProvenance() {
   if (!provenanceCache) {
     provenanceCache = {
@@ -1505,7 +1528,7 @@ async function verifyCatalog(results) {
   }
   const provenance = await contentProvenance();
   assertJsonEqual("catalog provenance", catalog.source.provenance, provenance);
-  assertJsonEqual("asset manifest provenance", manifest.sources, provenance);
+  assertJsonEqual("asset manifest provenance", manifest.sources, resourceProvenance(provenance));
   if (catalog.counts.characters !== catalog.characters.length) throw new Error("catalog character count mismatch");
   if (catalog.counts.skills !== catalog.skills.length) throw new Error("catalog skill count mismatch");
   if (catalog.counts.migrated_characters !== catalog.characters.filter((entry) => entry.migration_status === "ported").length) throw new Error("catalog migrated character count mismatch");

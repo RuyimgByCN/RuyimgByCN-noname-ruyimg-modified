@@ -1,0 +1,81 @@
+{
+  "recipe": {
+    "steps": [
+      [
+        "ffmpeg",
+        "-hide_banner",
+        "-nostdin",
+        "-loglevel",
+        "warning",
+        "-i",
+        "SOURCE",
+        "-map",
+        "0:a:0",
+        "-c:a",
+        "copy",
+        "-bsf:a",
+        "noise=drop=eq(n\\,0)",
+        "-movflags",
+        "+faststart",
+        "FILTERED"
+      ],
+      [
+        "ffmpeg",
+        "-hide_banner",
+        "-nostdin",
+        "-loglevel",
+        "warning",
+        "-i",
+        "FILTERED",
+        "-map",
+        "0:a:0",
+        "-c:a",
+        "copy",
+        "-use_editlist",
+        "0",
+        "-movflags",
+        "+faststart",
+        "DERIVATIVE"
+      ]
+    ],
+    "summary": "Remove only the initial 2-byte ASC packet (1190, zero decoded frames); retain all effective AAC packets and timing; omit edit list. No re-encoding or PCM trimming."
+  },
+  "tool": {
+    "ffmpeg": "9.0.2",
+    "muxer": "Lavf63.1.102",
+    "ffmpegBinarySHA256": "22d737fd90bf26deffa72513486819e0ac00bccee6ae1ff630cb045a04c4fba3",
+    "ffmpegVersionTextSHA256": "a583243d5d97a24bf1e571a99b9b5ddc3bb4d0a84a078c5c42d191e0519bcca1"
+  },
+  "bindings": [
+    {
+      "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+      "source_sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+      "derivative_path": "audio/skill/tsumugi_mugyu1.m4a",
+      "derivative_sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+      "source_sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+      "derivative_path": "audio/skill/tsumugi_mugyu2.m4a",
+      "derivative_sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+      "source_sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+      "derivative_path": "audio/skill/tsumugi_mugyu3.m4a",
+      "derivative_sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+      "source_sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+      "derivative_path": "audio/skill/tsumugi_mugyu4.m4a",
+      "derivative_sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+      "source_sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+      "derivative_path": "audio/skill/tsumugi_mugyu5.m4a",
+      "derivative_sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {originalCharacterAudio} from '../../../../../apps/web-client/src/engine/originalResources.ts';
+const root=process.cwd(),out=path.dirname(new URL(import.meta.url).pathname);
+const catalog=JSON.parse(fs.readFileSync(path.join(root,'content/original/catalog.json'))),manifest=JSON.parse(fs.readFileSync(path.join(root,'content/original/asset-manifest.json')));
+const character=catalog.characters.find(c=>c.id==='key:key_tsumugi');assert.ok(character);
+const selected=originalCharacterAudio(manifest,character);assert.equal(selected.length,5);assert.ok(selected.every(a=>a.source_category==='compat'&&a.path.startsWith('audio-declared/key/character/key_tsumugi/')&&a.path.endsWith('.m4a')));
+const allTen=manifest.assets.filter(a=>a.source_category==='compat'&&a.path.startsWith('audio-declared/'));const backing=manifest.assets.filter(a=>a.source_category==='compat'&&!a.path.startsWith('audio-declared/'));const originals=manifest.assets.filter(a=>a.source_category==='core'&&/^audio\/skill\/tsumugi_mugyu[1-5]\.mp3$/.test(a.path));assert.equal(allTen.length,10);assert.equal(backing.length,5);assert.equal(originals.length,5);
+assert.equal(manifest.assets.filter(a=>a.kind==='audio'&&a.path===a.source_path&&a.source_category==='core').length,9652);assert.equal(selected.reduce((n,a)=>n+a.size,0),263579);
+fs.writeFileSync(path.join(out,'selection.json'),JSON.stringify({character,selected,allTen,backing,originals,rawAudioCount:9652,source:'current main maintained helper; actual Vue E2E separately required'},null,2)+'\n');console.log(JSON.stringify({character:character.id,name:character.display_name,selected:selected.length,allTen:allTen.length,backing:backing.length,rawAudioCount:9652}));

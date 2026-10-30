@@ -1,0 +1,25 @@
+{
+  "all_evidence_diff_check_exit": 2,
+  "maintained_source_and_navigation_diff_check_exit": 0,
+  "paths": [
+    "docs/operations/evidence/2026-10-30-c331-schema-supplement/later-private-checkpoints/phase3/server-final-serial.log",
+    "docs/operations/evidence/2026-10-30-nc10-continuations/private-ephemeral-checkpoint/focused-effect-read-review.raw.txt",
+    "docs/operations/evidence/2026-10-30-nc10-continuations/private-ephemeral-checkpoint/implicit-effects-repair/independent-review.raw.txt",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768563-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768677-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768689-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768707-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768715-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768734-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216768760-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/final-stage/job-124216769050-raw-log.stdout",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/raw/push-snapshot/push.stderr",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication/push.stderr",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/isolated-p2-review.raw.txt",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/pcm-common.js",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-combined-independent-review.raw.txt"
+  ],
+  "raw_evidence_preserved_byte_exact": true,
+  "additional_raw_harness": "main-acceptance/pcm-common.js is an immutable recorded harness copy, not maintained production source",
+  "parent_initial_classifier_error": "Initially matched only raw.txt/log/raw CI suffixes; expanded classification to the exact recorded push.stderr and pcm-common.js copies after inspecting all 16 paths, with no evidence normalization or product change."
+}

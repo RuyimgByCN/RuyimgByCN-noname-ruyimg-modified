@@ -1,0 +1,167 @@
+已在专有工作树实现五条 AAC 兼容资源接入及 CI 测试注册，限定本次 reviewed no-elst 设计。核验时间 2026-10-31（本机时区）；Git base `da7e4c019461a6c467a9dd2de849f3b1a7494b86`，起点为父提供且逐 SHA 核对的 alias9 九文件 overlay。源码冻结位于 [source-freeze](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/source-freeze)，完整路径/SHA 与初始九文件 SHA 见 [checkpoint.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/checkpoint.json)。未集成 main、stage、commit 或 push；独立复审 gate 待父安排。
+
+compat-only 改动为 **8 个现有文件 + 6 个新输入文件**。其中 [音频模块](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/original-audio-resources.mjs:24) 在任何同步写入之前验证固定 sidecar 字节摘要、五行四字段绑定、原源 SHA、派生大小/SHA、realpath 边界、根目录/文件 symlink 逃逸、重复身份及输入文件集合。文件级固定摘要同时钉住 recipe 和实际 ffmpeg9.0.2/tool SHA；CI 只读取已提交字节。Windows 路径分隔符已沿现有遍历方式归一化。
+
+[中央 backing resolver](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/original-audio-resources.mjs:371) 以 logical core source_path 和已钉住的原 direct SHA 选择 compat，随后 [同步器](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/sync-original-content.mjs:1079) 与 [前端 helper](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/apps/web-client/src/engine/originalResources.ts:25) 都按 `(source_category, source_path)` 取真实 backing.path。树名 audio-compat、assetKind audio；没有角色特例、runtime provenance 读取或新播放注册表。Collection 的模板、URL 校验和现有错误隔离代码保持 alias9 字节。
+
+资源来源记录新增 `sources.compat`，root 固定为仓内 `content/original-audio-compat`，head/repository/repository_root 均为 null；复用既有 source-map 形状，无主仓 HEAD 自引用。首次资源刷新仅在完整静态绑定通过、原 core/skin 来源一致时增加此记录；后续 verify 精确匹配。catalog 的 core/skin 来源检查独立保留。资源 schema2 六字段、catalog schema4、规则330/archive105/ABI758/WS6 均保持。
+
+五个输入来自已复审 `alignment-run/*-no-elst.m4a`，合计 **263,579 B**；未使用旧 filtered5 SHA：
+
+| 文件 | bytes | derivative SHA256 |
+| --- | ---: | --- |
+| tsumugi_mugyu1.m4a | 18716 | `292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263` |
+| tsumugi_mugyu2.m4a | 114531 | `c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8` |
+| tsumugi_mugyu3.m4a | 10188 | `838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f` |
+| tsumugi_mugyu4.m4a | 39091 | `58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84` |
+| tsumugi_mugyu5.m4a | 81053 | `e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7` |
+
+四字段原 source SHA/派生 SHA、实际两阶段 recipe 和工具摘要见 [provenance.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/content/original-audio-compat/provenance.json)。有效 AAC packet 字节、顺序及 PTS/DTS/duration/有效 frames 的既有独立证明随本次派生字节身份继承；本次没有再执行 ffmpeg/ffprobe 或重生成候选。移除的仅是首个2B ASC packet（零音频 frame），不宣称原文件无损替换。
+
+[manifest-protection-proof.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/manifest-protection-proof.json) 证明原 **12,359 direct prefix objects** 逐项完全一致、其余 **23,383 aliases** 逐项完全一致，仅十条原 alias 切换来源、payload 身份和末段 `.m4a` basename。最终 **35,757 = 12,359 + 5 + 23,393** 行，Collection raw audio count 仍 **9,652**。AST loader/global owner 算法及79 substitute 数据保持。[source-protection-proof.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/source-protection-proof.json) 对全部12,359条原素材重新核对 canonical/served SHA，并确认上游 HEAD `1a548c95acdf8ac1ef44d74473403eda2ac86cf0`、工作区 clean。catalog、原 direct/source provenance、immutable packages 和旧锁与起始 base 保持。
+
+验证证据：
+
+- [node-targeted-portable.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/node-targeted-portable.log)：Node 三入口 **14/14**，包括十 alias/owner、合法 fixture 先 sync/verify，再逐字段反例；源/派生漂移、size、SHA、recipe/tool、重复、路径及 source/derivative/root symlink 逃逸全部拒绝，并逐字节保护旧 manifest、资源、catalog、包、旧锁。
+- [pnpm-test-with-inputs.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/pnpm-test-with-inputs.log)：完整前端 **169/169**；[typecheck-with-inputs.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/typecheck-with-inputs.log)：typecheck exit0。前端新增 category/source/size/hash/basename/duplicate、m4a URL、角色隔离、实际五条选取及9,652计数回归。
+- [line-tests.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/line-tests.log)：行数检查单测 **2/2**；[final-line-gate.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/final-line-gate.log)：8,986文件通过。同步器1,850行，音频模块439行。
+- [resource-sync-final.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/resource-sync-final.log)：真实 resources-only sync；[final-resource-verify.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/final-resource-verify.log) 与 [final-full-verify.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/final-full-verify.log)：资源及完整 verify exit0。
+- [vite-build-fixed.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/vite-build-fixed.log)：真实 private Vite production build，`--configLoader runner`、正确显式 `__dirname`，输出仅 own evidence/production-dist。两个未改动的 WASM 输入先核完整 SHA 再复制到 owninput；摘要见 [runtime-input-shas.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/runtime-input-shas.log)，native `2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b`、legacy `2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355`。
+- CI Gate4 已注册独立 `scripts/test_original_audio_resources.mjs`，沿用现有 prepare-original-content 静态资源刷新与完整 verify，没有新 dependency 或媒体工具安装步骤。
+
+浏览器使用 retained Rust ServeDir binary `9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489`、已有147.7KB WK helper，均核 SHA 且未重编译。实际角色 `key:key_tsumugi` 通过本次 production helper 选出五条新角色 alias；十条 pool/角色 alias 和原五条及两个控制合计17个真实 HTTP 身份全部核长度/SHA，见 [browser/http-identities.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/http-identities.json)、[browser/selection.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/selection.json)。
+
+本次 Chrome156.0.8078.74 的五条原 raw 仍 decode/HTML失败；新五条角色 alias 完整 decode、真实 muted HTML播放并 ended。macOS27.2/WebKit22625.2.8.11.9 的五组原件/派生在同次完整 PCM 帧数及两个声道 Float32 SHA 全等，maxAbs=0，原件及派生 HTML均 ended。两 decoder 对五条逐项同一 audio 元素执行错误URL→成功URL恢复，另各跑1 M4A/1 MP3控制，全部通过；[browser/acceptance.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/acceptance.json)、[browser/wk.jsonl](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/wk.jsonl)、[browser/chrome/chrome-five.jsonl](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/chrome/chrome-five.jsonl) 保留全量统计及实际时钟。Chrome仍多2,112帧/44ms稳定前导；本次不裁PCM，也不声称跨 decoder 位等、物理听感或全平台时钟一致。构建后的 Collection Vue屏幕未作点击E2E，所验证的是实际生产选择 helper、真实 manifest/HTTP资源和 HTMLAudioElement播放/恢复。
+
+所有全量 sync/verify/hash、媒体和 build 通过 `/tmp/noname-run-serialized.py` 全局锁。最终 [final-command-ledger.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/final-command-ledger.json) 记录 queue0.512s、lock27.380s及freeDisk；浏览器 [browser/lock-acquired.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/lock-acquired.json)、[browser/run.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/run.log) 记录queue起点/获得锁、lock107.372s及freeDisk。实际 own port65067，own stores/profile；[browser/cleanup.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/cleanup.json)、[browser/chrome/chrome-cleanup.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/chrome/chrome-cleanup.json)、[final-process-and-status.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/final-process-and-status.json) 确认own Rust/WK/Chrome PID均退出、store/profile已清理，staged为空。没有7700、TCC、用户窗口/OS输入、物理听感或Cargo/Rust/Swift编译。
+
+原始红灯和配置失败保留，不能当作同次全绿：[red-audio.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/red-audio.log) 是原collector仍选core MP3；[red-frontend.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/red-frontend.log) 是合法compat backing被原UI拒绝；[red-resource.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/red-resource.log) 在先能成功sync/verify的原alias9 fixture上证明缺少compat且源drift未拒。[green-resource-fixture.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/green-resource-fixture.log) 保留首次测试恢复源文件后硬链接计数变化的fixture失败，后续以refresh恢复统计再verify。[pnpm-test.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/pnpm-test.log)、[typecheck.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/typecheck.log) 保留缺少ignored WASM输入时的首跑失败；[resource-sync-stable-root.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/resource-sync-stable-root.log) 保留过渡root值被既有来源策略拒绝；[vite-build.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/vite-build.log) 保留第一次私有Vite配置把CJS当内联ESM的错误。后续通过日志分别列明，没有覆盖旧失败。
+
+交付两份可独立审查的补丁，均在own非Git临时目录执行check、apply、逐文件回放，未使用index；见 [patch-roundtrip-proof.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/patch-roundtrip-proof.json)：
+
+| 补丁 | bytes | SHA256 |
+| --- | ---: | --- |
+| [compat-only.incremental.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/compat-only.incremental.patch) | 378783 | `11ab8a2c89f80d96c304ae9849b04c6348fee1dfa78c9c18ee49e67cf4e43144` |
+| [relative-da7e.total.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/relative-da7e.total.patch) | 7937062 | `80db7f0bb8172a3879541a847d9ec4e1c0cf36b7b7c69868b51fa899cdaa1e1b` |
+
+compat-only incremental 仅包含本次8个现有文件差异及6个新输入；relative-da7e total 包含原alias9 overlay及本次compat，不能将原九文件修复混称本批新增。全部源码SHA见 [checkpoint.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/checkpoint.json)；原始命令脚本和日志摘要见 [evidence-sha256.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/evidence-sha256.json)。初始快照00:22:21、首次代码/manifest/真实结果checkpoint00:35:25，均在45min范围内；最终freeze已随路径归一化重新生成。
+
+未运行本次远端Windows/Linux CI，也未重跑12k/23k浏览器全库或修改Rust；这些不属于本轮五条限定验收。父需先独立复审冻结源码/证据后集成，尚无 main 发布、整I02/37或整个Goal完成结论。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Eight compat changes to existing alias9/CI files plus exactly five approved no-elst M4A inputs and one internal provenance sidecar; no runtime fields, AST/owner changes, dependency installation, Rust compile, catalog/package/lock changes."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Source-freeze, SHA ledger, meaningful red/green logs, 14 Node +169 frontend tests, typecheck/line checks, real sync/full verify, private Vite production build, real ServeDir Chrome/WK acceptance, all12359 source protection and two independently replayed patches provided. Independent reviewer gate remains pending."
+    }
+  ],
+  "changedFiles": [
+    ".github/workflows/ci.yml",
+    "apps/web-client/scripts/original-resources.test.mjs",
+    "apps/web-client/src/engine/originalResources.ts",
+    "content/original/asset-manifest.json",
+    "scripts/original-audio-resources.mjs",
+    "scripts/sync-original-content.mjs",
+    "scripts/test_original_audio_resources.mjs",
+    "scripts/test_original_resources.mjs",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+    "content/original-audio-compat/provenance.json"
+  ],
+  "testsAddedOrUpdated": [
+    "scripts/test_original_audio_resources.mjs",
+    "scripts/test_original_resources.mjs",
+    "apps/web-client/scripts/original-resources.test.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "node --test scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs",
+      "result": "passed",
+      "summary": "14/14; latest node-targeted-portable.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client test",
+      "result": "passed",
+      "summary": "169/169 with hash-verified retained WASM inputs; pnpm-test-with-inputs.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client typecheck",
+      "result": "passed",
+      "summary": "vue-tsc --noEmit exit0; typecheck-with-inputs.log"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'",
+      "result": "passed",
+      "summary": "2/2; line-tests.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "8986 files within limits; synchronizer1850 lines; audio module439 lines"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py node scripts/sync-original-content.mjs --resources-only",
+      "result": "passed",
+      "summary": "Actual adopted resource sync; resource-sync-final.log"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py python3 ../evidence/final-checks.py",
+      "result": "passed",
+      "summary": "Final resource-only verify + full verify + line gate + all12359 source/served SHA protection + both patch roundtrips; final-checks-portable.log"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py node apps/web-client/node_modules/vite/bin/vite.js build apps/web-client --config ../evidence/vite.compat.config.mjs --configLoader runner --outDir ../evidence/production-dist --emptyOutDir",
+      "result": "passed",
+      "summary": "Actual private production build, correct explicit __dirname; vite-build-fixed.log"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py python3 ../evidence/browser/run-browser.py",
+      "result": "passed",
+      "summary": "107.37s lock; HTTP17 identities; ten aliases; Chrome/WK media acceptance; browser/acceptance.json"
+    },
+    {
+      "command": "git diff --check; git diff --cached --name-only",
+      "result": "passed",
+      "summary": "No whitespace errors; staged output empty"
+    },
+    {
+      "command": "Original alias9 collector/UI tests with new positive compat cases",
+      "result": "failed",
+      "summary": "Expected meaningful red: collector kept core MP3, UI rejected valid compat backing; red-audio.log and red-frontend.log"
+    },
+    {
+      "command": "node --test ../evidence/red-baseline/worktree/scripts/test_original_resources.mjs",
+      "result": "failed",
+      "summary": "Expected meaningful red: valid baseline fixture syncs but produces0 compat instead of15; source drift is accepted by baseline; red-resource.log"
+    }
+  ],
+  "validationOutput": [
+    "Original12359 direct prefix objects exact; unaffected23383 aliases exact; ten affected aliases now use compat M4A; total35757=12359+5+23393; raw audio count9652.",
+    "Chrome156 five raw sources still fail decode/HTML; five derived role aliases decode fully and reach ended; WK22625 five original/derived full PCM frame counts and channel SHAs equal, both HTML paths ended; same-element failed URL then recovery passes for each derived in both decoders; M4A+MP3 controls pass.",
+    "Final source/served hashes for all12359 original rows match original manifest; core HEAD1a548c95acdf8ac1ef44d74473403eda2ac86cf0 clean; source provenance exact; staged empty.",
+    "Source line gates pass; rules330/archive105/ABI758/WS6 and catalog schema4/runtime schema2 unchanged."
+  ],
+  "residualRisks": [
+    "Chrome retains2112 frames/44ms extra leading preroll; no PCM trimming or cross-decoder bit equality or physical-hearing claim.",
+    "Actual media acceptance is local macOS27.2/Chrome156/WebKit22625; Windows/Linux GitHub CI was not run for this private patch.",
+    "The built Collection Vue screen was not driven end-to-end; actual production selection helper, manifest aliases, DOM HTMLAudioElement failure/recovery, and production build were validated.",
+    "Independent acceptance reviewer and parent integration remain required; this does not close I02/37 or the overall Goal."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Static five-file compat binding preflight before mutations, category/source backing resolution in collector/sync/frontend, five checked-in assets and schema2 manifest refresh, targeted negative coverage and CI registration.",
+  "reviewFindings": [
+    "No blockers found in implementation self-check; independent reviewer gate pending."
+  ],
+  "manualNotes": "No Cargo/Rust/Swift/ffmpeg invocation or dependency install. Read-only dependency/archive symlinks and privateguard remain; symlinks/guard are excluded from both deliverable patches. Initial missing-WASM, fixture-hardlink, transitional source-policy rejection and Vite-CJS setup failures retained as logs, separate from final passing checks."
+}
+```

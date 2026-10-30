@@ -1,0 +1,6 @@
+{
+  "at_utc": "2026-10-30T17:49:10.721696+00:00",
+  "direction": "One additional same-run HTTP1 read-only watch within unchanged deadline; if another502 immediate checkpoint/transport-blocked handoff; no indefinite restarts",
+  "run_id": 41100475767,
+  "head_sha": "a1f7250815eee803d931301ab46207719cb9a15b"
+}

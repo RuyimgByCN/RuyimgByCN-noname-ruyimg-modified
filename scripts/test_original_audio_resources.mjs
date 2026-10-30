@@ -156,3 +156,25 @@ test("substitutes resolve one global exact owner across declaration packs and re
   source.characters.set('different-declaring-pack:actor', { id: 'different-declaring-pack:actor', pack: 'different-declaring-pack', name: 'actor', data: {} });
   assert.throws(() => resolveAudioDeclarations(source, [declaration]), /ambiguous substitute owner/);
 });
+
+test("five static bindings select ten AST aliases without changing global owners", async (t) => {
+  const { readFileSync } = await import('node:fs');
+  const bindings = JSON.parse(readFileSync(new URL('../content/original-audio-compat/provenance.json', import.meta.url))).bindings;
+  const baseline = JSON.parse(readFileSync(new URL('../content/original/asset-manifest.json', import.meta.url)));
+  const core = bindings.map(row => baseline.assets.find(asset => asset.path === row.source_path));
+  const sizes = [18716, 114531, 10188, 39091, 81053];
+  const backing = bindings.map((row, i) => ({ kind: 'audio', path: row.derivative_path.replace('audio/', 'audio-compat/'),
+    source_category: 'compat', source_path: row.derivative_path, sha256: row.derivative_sha256, size: sizes[i] }));
+  const root = fixture(t, 'tsumugi_mugyu: { audio: 5 }', 'actor: { skills: ["tsumugi_mugyu"], dieAudios: ["actor"] }');
+  const plan = resolveAudioDeclarations(await loadAudioDeclarations(root));
+  const result = declaredAudioAssets(plan, [...core, ...backing], bindings);
+  assert.equal(result.assets.length, 10);
+  assert.ok(result.assets.every(row => row.source_category === 'compat' && row.path.endsWith('.m4a')));
+  assert.equal(result.assets.filter(row => row.path.includes('/character/actor/')).length, 5);
+  for (const row of result.assets) {
+    const source = backing.find(source => source.source_path === row.source_path);
+    assert.deepEqual({ ...row, path: source.path }, source);
+  }
+  assert.throws(() => declaredAudioAssets(plan, [{ ...core[0], sha256: 'a'.repeat(64) }, ...core.slice(1), ...backing], bindings), /binding/);
+  assert.throws(() => declaredAudioAssets(plan, [...core, ...backing, { ...backing[0], path: 'audio-compat/other.m4a' }], bindings), /duplicate.*backing/);
+});

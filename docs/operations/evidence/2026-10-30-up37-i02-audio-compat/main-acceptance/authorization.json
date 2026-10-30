@@ -1,0 +1,5 @@
+{
+  "generated_trees": "Supervisor corrected original prohibition and explicitly authorized normal reviewed resources-only rm/relink for Main ignored audio/portraits/audio-declared/audio-compat; canonical and checked-in inputs/catalog/packages/locks remain read-only.",
+  "no_source_changes": true,
+  "no_fs_preload_or_new_sync_flag": true
+}

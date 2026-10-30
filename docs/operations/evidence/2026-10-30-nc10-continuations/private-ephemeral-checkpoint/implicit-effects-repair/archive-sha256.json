@@ -1,0 +1,10 @@
+{
+  "source-manifest.json": "ef49ac2e65072fde0e60fc9eaf9202b38c95d6858b6a7854818dae59c35e56ba",
+  "handoff.raw.txt": "8de919e97544151eac7dd6625966d080749e49a25a4b1f3a108dd911180de42b",
+  "checkpoint.json": "c904f12348610211dafbc6981d7b051068472a5db7f9fc67a9cfa2838e1ceeee",
+  "native-full-counts.json": "f2735d0f1752ef56358ddb9c08ac8fddbd866e56904e90358d55ca6342d6264b",
+  "delivery-invariance.json": "b8d1e1ae4898e31bd4e9282bfaf3282a1487a7f12e05ee00f3734c5e839df5fe",
+  "independent-review.raw.txt": "0dfeb9575b28009fc99d138bc78e893e730c2168e54de73287eac37c7c7b5c22",
+  "archive-manifest.json": "74949f31825439a2eb8bcfa6f4c715aa35e59700d4c39c93cced966a0640189c",
+  "command-index.json": "228fc1c8201b9ee80092720d88518c87cac10a6d8366ac20257b5a746be8b836"
+}

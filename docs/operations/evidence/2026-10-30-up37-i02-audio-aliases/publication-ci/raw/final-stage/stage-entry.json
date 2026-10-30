@@ -1,0 +1,7 @@
+{
+  "started_utc": "2026-10-30T18:17:59.824779+00:00",
+  "parent_capture_utc": "2026-10-30T18:15:57.390492+00:00",
+  "head_sha": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "run_id": 41100475767,
+  "scope": "Completed-state API/job logs/artifact metadata collection only; no watch/push/main writes; earlier72file stage retained"
+}

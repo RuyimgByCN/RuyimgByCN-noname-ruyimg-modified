@@ -1,0 +1,82 @@
+{
+  "result": "PASS",
+  "record_count": 545,
+  "counts": {
+    "archive": 268,
+    "view": 261,
+    "choice": 261,
+    "hash": 261,
+    "event_suffix": 256,
+    "outcome": 256,
+    "invalid": 5
+  },
+  "continuation_steps": 255,
+  "json_comparison": "all keys and scalar types, object key ordering ignored only",
+  "matched_archives_include_full_rng_state": true,
+  "source_projection": "manual independent translation of frozen native_envelope.rs snapshot/choice",
+  "binary_matches_recorded_sha": true,
+  "unverified": [
+    "legal_actions have no Native expected in the supplied vector",
+    "five pre-fixture start envelopes only checked ok, not Native compared",
+    "event labels not retranslated, every code compared",
+    "missing closed-resource request id31 inferred from driver and id gap, no failed invoke record",
+    "binary/source build provenance depends on recorded argv/freeze review, binary hash alone does not prove reproducible source build"
+  ],
+  "files": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-ipc-full-replies.json",
+      "bytes": 18861671,
+      "sha256": "1e79fd93c42f69a9564b8d6955420f424bf92a8ac54d85120549ea0c8d435517"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/author257-full-vector.json",
+      "bytes": 12489386,
+      "sha256": "41047843087b396a6c84d45700e7ce340cbe4e852ba6cf2786e322107f873afa"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-web/projection.json",
+      "bytes": 287631,
+      "sha256": "d210f1f7bcb37ec867e10d786adf167bbe9bf5c2a1668de15004d3769863b021"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-web/index.html",
+      "bytes": 5202,
+      "sha256": "1bfae261f27d903625b08c6fc938f26af9df60facc086829bb1f72f2e4a4298c"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-run.py",
+      "bytes": 1974,
+      "sha256": "75b0878e697a7aa9bb2517da0bf3fe155da5304054416f2418e177d712f0b2c1"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/private-wasm-preload.mjs",
+      "bytes": 953,
+      "sha256": "601d4e0d9d39ebca7d034ce4cdc40835b249600a7b009e184484586db088d4de"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/platform-commands.json",
+      "bytes": 1575,
+      "sha256": "53720672362e075c763ec1fbdc9b0eedc3cc50b2a9b9b3c1641b00d8582a0028"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/final-freeze3/source-freeze.json",
+      "bytes": 24050,
+      "sha256": "32c3b156ebdffa6d9f1c167e0c855d46c05352ccbe4a3afd1c9a6245c7ec60fa"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/noname-next-desktop",
+      "bytes": 49531976,
+      "sha256": "dea8d3415dd02108c67111c0c9cadeab461d816ab8b3976a7339b17008a63770"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/native-pkg/engine_native_wasm.js",
+      "bytes": 21179,
+      "sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/native-pkg/engine_native_wasm_bg.wasm",
+      "bytes": 3674798,
+      "sha256": "1a80edaaba714f14f8d43085015af6decc722a935707781b9f80a9ed872b7e00"
+    }
+  ]
+}

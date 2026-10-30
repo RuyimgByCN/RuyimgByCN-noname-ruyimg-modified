@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-30T18:58:13.226094+00:00",
+  "kind": "source freeze completed before 40-minute checkpoint",
+  "runtime": "BLOCK",
+  "head": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "sourceManifest": "source-manifest.json",
+  "sourceProductCount": 63,
+  "changedFiles": [
+    "crates/engine-native-kernel/src/simulation.rs",
+    "crates/engine-native/src/engine/simulation.rs",
+    "crates/engine-native-kernel/src/rvm_bridge.rs",
+    "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_implicit_effect_privacy.rs"
+  ],
+  "incrementPatchSha256": "b72e8a2794b88195178350a380c184aadc21e692ef769b311b4acff51cb14d74",
+  "nativeFull": {
+    "passed": 1697,
+    "failed": 19,
+    "ignored": 75
+  },
+  "kernelContentFull": {
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0
+  },
+  "same19Failures": true,
+  "newP1": "default dev/test two Ok full Plans differed only in sim_faults at budget48; repaired budget0/48 both Ok NextPhase, full Plans and stats equal, byte-restored apply Accepted",
+  "drawnCounter": "second implicit read from kernel/events.rs:662 now classified before execute; formal B overflow and green pair verified",
+  "readSiteBoundary": "catalog full module bytes, unique declared name, verified query opcode PC/tag and module hash bound; public handler-route proof NOT complete",
+  "nativeJiJi": "source-only: generic trigger_confirm public tuple does not prove ancestor/following closure; unchanged",
+  "noStagedFiles": true,
+  "reportPath": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d4884f99-617a-4b09-9c2f-d593f5401a4b/implementation/nc10-implicit-effect-read-bounded-repair.md"
+}

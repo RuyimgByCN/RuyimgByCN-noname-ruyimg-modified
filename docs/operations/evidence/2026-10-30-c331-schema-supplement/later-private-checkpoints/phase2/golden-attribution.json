@@ -1,0 +1,203 @@
+{
+  "status": "all 14 state differences enumerated; original 330 expectations remain unchanged",
+  "rows": [
+    {
+      "scenario": "aoe_response_queue",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "c381be37337082ef0ddb440c4bcb5ebb97732bde751f1ee42587bc1fac9632e7",
+      "new_archive_sha256": "fde2c1255bb20f4800eb4f10658fc7f0fa391467bec3bded011cccc7d9dab09c"
+    },
+    {
+      "scenario": "chain_fire_propagation",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "bf9f87276b14e9dd688f0e3d6d7f2a560c63fb783eda726d6f1cf335339e76e0",
+      "new_archive_sha256": "c470dea58900bc459510bca3d998eedbf8d284e56e2dbebc5911981c7b3fe675"
+    },
+    {
+      "scenario": "death_terminal_single",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "bc49110dff84ee68a2e7a53969a5969340415aecfab05d186f7117d510684064",
+      "new_archive_sha256": "a393a8b217daf9502e6975125433168d8cd8c9b0e80f072fb51e7c751af43cd1"
+    },
+    {
+      "scenario": "discard_to_limit",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "94423859e0f9f6160ed62b9a939b3d7ceecffa15be1850a847c888a70417bea7",
+      "new_archive_sha256": "979cc2b78d9c863681d4d693b4f410e27c6bfa10e91da72795689330978de334"
+    },
+    {
+      "scenario": "duel_alternating_response",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "01fcbf6ee90c65735e5d11d071a5ee5618d0094cc167759417ad6423a715c25f",
+      "new_archive_sha256": "7234b5eb3c03bc6f280ba52a6378377f8b166aed2f8c30a846fd3bf69944e8a2"
+    },
+    {
+      "scenario": "equip_distance_matrix",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "09e8f121390b71b2035a98e4eff75a77cac367f597c1bb7472b26ccb5a1fdae7",
+      "new_archive_sha256": "1027a996056e39e88bc472f22a1cca6363933256ce6c0f04f12cdf2dabb5d035"
+    },
+    {
+      "scenario": "judge_phase_delayed_tricks",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "db1c4c8da8b1e867b13e4b98231d231be4a3a3fb493ba905db8e96c5894fbcde",
+      "new_archive_sha256": "aedbd3672bdf4be5cc097250edc9c0f4e290cf60e1d3f806e1bd0953edf7c7d9"
+    },
+    {
+      "scenario": "nullify_chain_on_savage",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "70501399879552f5f46b16616f3162a40321fba6a8bd7b59d107409b57d04fb7",
+      "new_archive_sha256": "c20113ab9c8b608a596d8820321d1f1b8c2d696b8c976973c089d7be9f04e9da"
+    },
+    {
+      "scenario": "rollback_invariants",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331",
+        "one persistent tag83 TriggerOrder park; original OptionalGate remains identical"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "b8d65897d443887951568621aab93f75cabe9d91af834fb902cafa3b42ad988f",
+      "new_archive_sha256": "2558a32bd3e6fe1c17fa55902222adbe3cef06c81b669a654a4ee7caf177bad5"
+    },
+    {
+      "scenario": "sancai_nested_chain",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "5c3917ac2e795630504796da6b2f28dc760be73b74e45ff780513685d9e16481",
+      "new_archive_sha256": "834c348fb7b172edc978d9d18cc7356040596d5fd07b4802b34535386d805f19"
+    },
+    {
+      "scenario": "sha_dodge_then_damage",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "af47f0a95484b62c28fa704d5f02494e8144c2183551fa0639c7f92ad51c5955",
+      "new_archive_sha256": "f6a587d4745d64a9331d6774f84c1513274da5ef85330656974adad1654e9433"
+    },
+    {
+      "scenario": "shouyi_dynamic_skill",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "d097465834415f2f25c2db4443ca6d76adf27a00e2682b8671212bc9857ef764",
+      "new_archive_sha256": "22e124bc9d13289ced9b6aca13e279dac74cb39df9a9a0530640284d5fac1a53"
+    },
+    {
+      "scenario": "suidun_window_matrix",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331",
+        "final resolution budget 4075 -> 4076"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "7eabc1aa21a8290f85cadfe0dd915a123d438200beae3697586db7f7b436ab9e",
+      "new_archive_sha256": "fe5ad50099a077fb44388f2589a53fde12574b2f2836aa73c36da68d29497403"
+    },
+    {
+      "scenario": "yishang_redirect",
+      "all_snapshot_fields_except_explicit_axes": "identical, including complete RNG state and call count, queue, events, choices, budgets not listed below",
+      "allowed_axes": [
+        "ruleset version 330 -> 331"
+      ],
+      "observable_proof": {
+        "events": "identical",
+        "choices": "identical",
+        "views": "identical except exposed ruleset version on each of four seats"
+      },
+      "old_archive_sha256": "460a62e144d27e8ec733d1d7361d4fcd14cacdd051e3276e64e8582d79129d40",
+      "new_archive_sha256": "7c35d1767ce04cc404e3676877a4442c5b7e55a6e4130e9fde2f08a2fceacc46"
+    }
+  ]
+}

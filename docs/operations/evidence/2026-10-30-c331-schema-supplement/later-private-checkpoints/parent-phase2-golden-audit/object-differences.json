@@ -1,0 +1,1382 @@
+{
+  "method": "Full token consumption recursive Rust Debug AST preserving named type, each struct field, enum/tuple/list shape, ordered map pairs and exact scalar/string tokens; rejects unknown syntax and duplicate fields. No field exclusions.",
+  "parser_assertions": 3,
+  "scenarios": [
+    {
+      "scenario": "aoe_response_queue",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "1265417949887206549"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "chain_fire_propagation",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "8289512394470851372"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "death_terminal_single",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 2,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "16930857494348051193"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "discard_to_limit",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "3680544952468072701"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "duel_alternating_response",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "5991090734001129309"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "equip_distance_matrix",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "10773024173978216776"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "judge_phase_delayed_tricks",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "7996334322814865188"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "nullify_chain_on_savage",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "13091852744745905465"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "rollback_invariants",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.resolution.$fields.parks.$list",
+          "old": [
+            {
+              "$type": "ParkSnapshot",
+              "$fields": {
+                "resume_depth": {
+                  "$atom": "2"
+                },
+                "slot": {
+                  "$type": "Trigger",
+                  "$fields": {
+                    "frame": {
+                      "$atom": "22"
+                    }
+                  }
+                },
+                "machine": {
+                  "$type": "OptionalGate",
+                  "$fields": {
+                    "owner": {
+                      "$atom": "0"
+                    },
+                    "def": {
+                      "$atom": "0"
+                    },
+                    "event": {
+                      "$type": "Damage",
+                      "$args": [
+                        {
+                          "$type": "DamageData",
+                          "$fields": {
+                            "source": {
+                              "$type": "Some",
+                              "$args": [
+                                {
+                                  "$atom": "1"
+                                }
+                              ]
+                            },
+                            "target": {
+                              "$atom": "0"
+                            },
+                            "amount": {
+                              "$atom": "1"
+                            },
+                            "nature": {
+                              "$atom": "Normal"
+                            },
+                            "prevented": {
+                              "$atom": "false"
+                            },
+                            "redirect_chain": {
+                              "$list": []
+                            },
+                            "card": {
+                              "$type": "Some",
+                              "$args": [
+                                {
+                                  "$atom": "21"
+                                }
+                              ]
+                            },
+                            "from_chain": {
+                              "$atom": "false"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "asked": {
+                      "$atom": "true"
+                    },
+                    "inner": {
+                      "$type": "Some",
+                      "$args": [
+                        {
+                          "$type": "SanCai",
+                          "$fields": {
+                            "owner": {
+                              "$atom": "0"
+                            },
+                            "stage": {
+                              "$atom": "GiveCard"
+                            },
+                            "target": {
+                              "$atom": "None"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "new": [
+            {
+              "$type": "ParkSnapshot",
+              "$fields": {
+                "resume_depth": {
+                  "$atom": "2"
+                },
+                "slot": {
+                  "$type": "Trigger",
+                  "$fields": {
+                    "frame": {
+                      "$atom": "22"
+                    }
+                  }
+                },
+                "machine": {
+                  "$type": "TriggerOrder",
+                  "$fields": {
+                    "frame": {
+                      "$atom": "22"
+                    },
+                    "owner": {
+                      "$atom": "0"
+                    },
+                    "candidates": {
+                      "$list": []
+                    },
+                    "asked": {
+                      "$atom": "false"
+                    },
+                    "cursor": {
+                      "$atom": "4"
+                    },
+                    "done": {
+                      "$list": [
+                        {
+                          "$tuple": [
+                            {
+                              "$atom": "0"
+                            },
+                            {
+                              "$atom": "0"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "owners": {
+                      "$list": [
+                        {
+                          "$atom": "1"
+                        },
+                        {
+                          "$atom": "2"
+                        },
+                        {
+                          "$atom": "3"
+                        },
+                        {
+                          "$atom": "0"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "$type": "ParkSnapshot",
+              "$fields": {
+                "resume_depth": {
+                  "$atom": "2"
+                },
+                "slot": {
+                  "$type": "Trigger",
+                  "$fields": {
+                    "frame": {
+                      "$atom": "22"
+                    }
+                  }
+                },
+                "machine": {
+                  "$type": "OptionalGate",
+                  "$fields": {
+                    "owner": {
+                      "$atom": "0"
+                    },
+                    "def": {
+                      "$atom": "0"
+                    },
+                    "event": {
+                      "$type": "Damage",
+                      "$args": [
+                        {
+                          "$type": "DamageData",
+                          "$fields": {
+                            "source": {
+                              "$type": "Some",
+                              "$args": [
+                                {
+                                  "$atom": "1"
+                                }
+                              ]
+                            },
+                            "target": {
+                              "$atom": "0"
+                            },
+                            "amount": {
+                              "$atom": "1"
+                            },
+                            "nature": {
+                              "$atom": "Normal"
+                            },
+                            "prevented": {
+                              "$atom": "false"
+                            },
+                            "redirect_chain": {
+                              "$list": []
+                            },
+                            "card": {
+                              "$type": "Some",
+                              "$args": [
+                                {
+                                  "$atom": "21"
+                                }
+                              ]
+                            },
+                            "from_chain": {
+                              "$atom": "false"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "asked": {
+                      "$atom": "true"
+                    },
+                    "inner": {
+                      "$type": "Some",
+                      "$args": [
+                        {
+                          "$type": "SanCai",
+                          "$fields": {
+                            "owner": {
+                              "$atom": "0"
+                            },
+                            "stage": {
+                              "$atom": "GiveCard"
+                            },
+                            "target": {
+                              "$atom": "None"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rollback_new_window": {
+        "index": 0,
+        "complete_park": {
+          "$type": "ParkSnapshot",
+          "$fields": {
+            "resume_depth": {
+              "$atom": "2"
+            },
+            "slot": {
+              "$type": "Trigger",
+              "$fields": {
+                "frame": {
+                  "$atom": "22"
+                }
+              }
+            },
+            "machine": {
+              "$type": "TriggerOrder",
+              "$fields": {
+                "frame": {
+                  "$atom": "22"
+                },
+                "owner": {
+                  "$atom": "0"
+                },
+                "candidates": {
+                  "$list": []
+                },
+                "asked": {
+                  "$atom": "false"
+                },
+                "cursor": {
+                  "$atom": "4"
+                },
+                "done": {
+                  "$list": [
+                    {
+                      "$tuple": [
+                        {
+                          "$atom": "0"
+                        },
+                        {
+                          "$atom": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "owners": {
+                  "$list": [
+                    {
+                      "$atom": "1"
+                    },
+                    {
+                      "$atom": "2"
+                    },
+                    {
+                      "$atom": "3"
+                    },
+                    {
+                      "$atom": "0"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "all_other_parks_exact": true
+      },
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "2921548169355871607"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "sancai_nested_chain",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "14427068663967224718"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "sha_dodge_then_damage",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "1284281882455361930"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "shouyi_dynamic_skill",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "9812940321615181919"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "suidun_window_matrix",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.resolution.$fields.budget.$atom",
+          "old": "4075",
+          "new": "4076"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "13204619921686087743"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "yishang_redirect",
+      "snapshot_diff": [
+        {
+          "path": "$.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$fields.core.$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "events_byte_equal": true,
+      "events_diff": [],
+      "choices_byte_equal": true,
+      "choices_diff": [],
+      "views_byte_equal": false,
+      "views_diff": [
+        {
+          "path": "$.$list[0].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[1].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[2].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        },
+        {
+          "path": "$.$list[3].$fields.ruleset_version.$atom",
+          "old": "330",
+          "new": "331"
+        }
+      ],
+      "core_field_names": [
+        "revision",
+        "ruleset_version",
+        "mode",
+        "players",
+        "seat_ring",
+        "deck",
+        "discard",
+        "table",
+        "rng",
+        "turn",
+        "skills",
+        "declared_kinds",
+        "declared_slots",
+        "card_natures",
+        "current_land",
+        "outcome",
+        "vm_aux"
+      ],
+      "seat_views_count": 4,
+      "rng_full_fields": {
+        "rng": {
+          "$type": "RuleRng",
+          "$fields": {
+            "state": {
+              "$atom": "17823440156241175534"
+            },
+            "calls": {
+              "$atom": "123"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "pairs": 14,
+  "no_binary_probe_execution_or_golden_update": true
+}

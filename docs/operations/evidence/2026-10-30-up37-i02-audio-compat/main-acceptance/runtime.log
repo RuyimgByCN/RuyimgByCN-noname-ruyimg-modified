@@ -1,0 +1,2 @@
+actual Main Vue5 ended/decode/error recovery; retained WK5 ended/fullPCM; no raw5 decode repeated
+{"command": ["python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/runtime.py"], "exit": 0, "locked_seconds": 37.22143274999689, "disk_free_bytes": 99269165056}

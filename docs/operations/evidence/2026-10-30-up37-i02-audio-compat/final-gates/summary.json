@@ -1,0 +1,136 @@
+{
+  "result": "PASS",
+  "completed_utc": "2026-10-30T19:09:02.430873+00:00",
+  "head": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 6,
+    "asset_schema": 2,
+    "catalog_schema": 4
+  },
+  "scope": "compat_slice only; does not close whole I02 / 37 sources / Goal / default switch",
+  "commands": "commands.json",
+  "mandatory_gates": 4,
+  "actual_gates": 4,
+  "passed_gates": 4,
+  "failed_gates": [],
+  "preflight": {
+    "default_argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "configured_checks": 21,
+    "reported_checks": 21,
+    "checks": [
+      "✅ 本地链接（核心）",
+      "✅ 本地链接（全部）",
+      "✅ 旧值扫描",
+      "✅ 近 20 轮索引新鲜",
+      "✅ 包→来源映射",
+      "✅ 规则登记表",
+      "✅ 过滤臂↔元数据一致",
+      "✅ 牌名 vs 牌种比较",
+      "✅ 台账账目（移出必留痕）",
+      "✅ 相位枚举（REVIEW=0）",
+      "✅ 来源覆盖三分",
+      "✅ host 键普查（U05=314）",
+      "✅ 卡面覆盖（201/128）",
+      "✅ 台账↔枚举一致",
+      "✅ 已登记差异口径（20/54）",
+      "✅ 守卫引用名存在",
+      "✅ 注释计数=台账",
+      "✅ 脚本单测",
+      "✅ 文档 file:line 引用",
+      "✅ 行数门禁",
+      "✅ 原生分层棘轮"
+    ],
+    "skips": 0,
+    "retries": 0,
+    "raw_stdout": "full-preflight.stdout.raw.txt",
+    "raw_stderr": "full-preflight.stderr.raw.txt",
+    "nested_capture_limit": "Unmodified preflight.py captures child stdout/stderr internally and prints only check status/failure tails; this run preserves all bytes that its default interface actually emitted, without claiming suppressed child output was collected."
+  },
+  "source_comparison": "source-comparison.json",
+  "entry": "narrow-entry.json",
+  "exit": "narrow-exit.json",
+  "identity_equal": true,
+  "source14_exact": true,
+  "source14_aggregate_sha256": "2dd4b54caf8ade53b66c71c45d3e16453c764de8fbb2ad7ad657d78f7ccf6bea",
+  "admitted_total_patch_sha256": "2605af4b6a8fff48a76be560ed9d7f7cfd3b3a5e24218fb23dc7c53c90bf5264",
+  "temporary_patch_pointer": {
+    "path": "/tmp/noname-audio-compat-source-only.patch",
+    "sha256_observed": "a22ecc3e903e382de5ab350376eda09936d2388774d19bbab367e143cee96ee4",
+    "qualification": "Temporary source-only patch pointer is not the immutable total patch record. Current SHA differs from admitted total patch SHA; source14 individual SHA and aggregate are the authority for this run. No patch file was modified."
+  },
+  "protected_files": 75,
+  "module_files": 18,
+  "default_dist_files": 37,
+  "native_wasm_sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+  "legacy_wasm_sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+  "parent_docs_baseline": "Current entry-to-exit equality; earlier authorized parent docs changes are recorded in narrow-entry.json and are not treated as new drift.",
+  "historical_parent_docs_deltas": {
+    "docs/operations/native-ci.md": {
+      "functional_before": "02962346ecc393e5ca4302fe7e6170df17352a837748c9c96dc2d6ffb1bdab51",
+      "current": "282b7fed5429315b081966acdf3b31654d5c0c4a2dd0f2594238ce64fc7dd707"
+    }
+  },
+  "functional_artifacts_reverified_readonly": 64,
+  "functional_artifact_index_unchanged": true,
+  "functional_execution_repeated": false,
+  "source_line_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "source_line_files": 8992,
+  "strict_docrefs": {
+    "references": 1065,
+    "missing_file_hint_classes": 6,
+    "out_of_range": 0,
+    "stderr_preserved": "strict-docrefs.stderr.raw.txt"
+  },
+  "warnings_and_errors": {
+    "all_emitted_stdout_stderr_preserved": true,
+    "strict_missing_hints_retained": true,
+    "no_normalization_or_retry_after_failure": true,
+    "earlier_resource_warnings_ignored_tests_transport_queue_errors": "Historical raw evidence remains untouched. No old failure or ignored test is relabeled as passed by this run."
+  },
+  "timing": {
+    "locked_seconds_total": 339.1531580830051,
+    "wall_seconds_total": 339.41470795701025,
+    "queue_estimate_seconds_total": 0.26154987400514074,
+    "queue_estimate_includes_wrapper_startup": true,
+    "hard_driver_deadline_seconds": 1200
+  },
+  "global_wrapper": {
+    "path": "/tmp/noname-run-serialized.py",
+    "sha256": "d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_disk_min_observed_bytes": 98878771200,
+  "minimum_required_free_bytes": 3221225472,
+  "index_empty": true,
+  "index_bytes_unchanged": true,
+  "no_source_or_docs_body_edits": true,
+  "guard_unchanged_and_disabled": true,
+  "no_new_build_or_media_collection": true,
+  "not_run": [
+    "Cargo build/native3/workspace tests",
+    "Rust/Swift/WASM/ffmpeg compilation",
+    "12000 codec audit",
+    "new media/HTTP/browser collection",
+    "extra 17000-source or all-asset body hash scan",
+    "new remote CI",
+    "stage/commit/push/default switch"
+  ],
+  "inherited_limits": [
+    "decoded bytes=0 was read after decodeAudioData detached the ArrayBuffer; pre-decode assertions plus independent17HTTP identities establish real lengths; raw unchanged",
+    "Original raw5 failures retained; no media rerun",
+    "Chrome extra2112 frames/44ms versus WK remains; no cross-decoder PCM/physical listening claim",
+    "Original generated resource tree relink authorization remains valid; no relink performed by this task"
+  ],
+  "review_gate": "independent reviewer required"
+}

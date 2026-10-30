@@ -1,0 +1,8 @@
+{
+  "pid": 42199,
+  "argv": [
+    "python3",
+    "-B",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/final-gates/run_gates.py"
+  ]
+}

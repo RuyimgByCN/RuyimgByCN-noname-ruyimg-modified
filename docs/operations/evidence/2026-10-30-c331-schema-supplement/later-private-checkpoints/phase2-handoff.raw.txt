@@ -1,0 +1,82 @@
+# C331 phase2 — 2026-10-30 最终交付
+
+六项冻结预审P1均已形成最小修复及真实red→green证据；K4使用明确拒绝不支持组合的保守方案。完整适配器回归、14个旧golden逐状态/逐hash归因、真实生产Chrome/Worker第257项选择均已完成。**整C331仍未达到可集成状态**：当前测试保留原330期望而红，98个host触发分支来源尚未证，实际桌面IPC和C331专用server/WAL/timeout竞争与提交失败矩阵未完成，独立复审仍须通过。
+
+本报告是phase2权威交付位置。45分钟检查点已在17:27写入；原检查点留在 `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase2/checkpoint-1715.md`、`checkpoint-1727.md`。本轮没有更新golden期望、主仓/index/提交/远端/global配置，没有引入未合并NC10 Result/opaque改动；format1/API1/ABI758/NGSA105/WS6保持。
+
+## 修复与边界
+
+| 项 | 最终实现 | 验证 |
+|---|---|---|
+| K1 | 每个planned触发窗反向绑定唯一顶层TriggerOrder；所有window深度精确绑定frame；拒绝嵌套机器树窗口；关闭窗口与stage推进同一步完成 | 非asked窗口删除/复制/depth0全部拒档；Rvm.following藏窗口拒档；实际子帧below-stack可恢复；每个slice字节恢复后完整对象一致 |
+| K2 | 新tag83增加最小冻结owner顺序；初始队列、恢复、新grant共用同一桶依据，已过桶不回退 | 真实SetTurnState current1→0、swap_seat、嵌套Damage授技回到祖先窗口；直接/byteRestore全对象和后续完整日志一致 |
+| K3 | RevealGeneral命令授技通知共享register_added；当前待答组变化则走正常事务，发布新choice id | 真实国战隐藏武将明置：当前桶/未来桶恰一次，已过桶不回退；旧choice/revision拒绝且完整存档不变；直接/byteRestore一致 |
+| K4 | trigger-only多handler装载明确拒绝包含DamageBefore的组合，与既有active路径一致 | 原混合before/after被错误接受的red→green；**尚未支持有效窗口身份贯穿该组合的filter/start/resume** |
+| S1 | 幂等早退前同时保留新schema门和旧validate_vm_effect_abi，不对嵌入rules-only包误做presentation fullvalidate | effect772/ABI757实际red→green；schema/幂等2项绿；misc pa12_tag656_compat 3项绿，覆盖ABI754–757/effect656和冻结旧快照 |
+| S2 | Handlers getter读取保留的Declared maxHP手牌上限，不依赖本次trigger匹配 | HP2/max4实际Discard不错误弃牌；两个handler均执行；byteRestore全对象一致 |
+
+关键实现：[窗口/恢复校验](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel/src/resolution/trigger_order.rs:371)、[冻结owner依据](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel/src/resolution/trigger_order.rs:113)、[RevealGeneral授技](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native/src/engine/apply_command.rs:47)、[旧ABI门](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-core/src/content/registry/load_package_checks.rs:12)、[不支持组合拒绝](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-native-loader/src/vm_active.rs:219)、[多handler modifier](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel/src/rvm_bridge.rs:494)。codec/机器hash/恢复构造/a0 tag样本同步更新。
+
+`review-green8.log`中8个新review回归全绿；增加欢乐卡牌来源回归后 `order-all-final.log` 排序整组 **21 passed**。旧below-stack测试不再盲改新增window所在parks[0]，改用真实子帧slice证明合法低深度park；该用例定向通过且包含最终全量。
+
+## 完整验证与失败保留
+
+最终统一命令：
+
+```sh
+CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 CARGO_TARGET_DIR=<owned target> \
+python3 /tmp/noname-run-serialized.py cargo test --offline --no-fail-fast \
+-p engine-native-kernel -p engine-native-content -p engine-native \
+-p engine-native-wasm -p game-server -p desktop-client \
+-p content-schema -p content-compiler -p content-runtime -p content-native-loader
+```
+
+结果 **2887 passed / 1 failed / 76 ignored**，唯一失败是 `replay_scenarios::replay_scenarios_match_golden` 内保留的14个330期望。原生三包子集为 **1733/1/75**；WASM/server/desktop子集为 **545/0/1**；compiler/loader/runtime/schema子集为 **609/0/0**。完整日志 `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase2/affected-full-final.log` SHA256=`a6279aa7eda8736face0dc79961b2ca125bc6cc9dc24b05ea1433bedccab0f25`，结构结果 `affected-full-result.json`、`package-totals.json`。
+
+此前完整native3第一次1730/2/75、原始6个red、below-stack旧测试失败、后续所有定向/整组日志均保留；后续单项绿没有被写作原失败全量已绿。
+
+额外完成：workspace check通过；vue-tsc通过；前端全量 **162 passed/0 failed**；源码行数unit门禁、源码行数门禁通过，F7 layering=0，diff whitespace检查通过。存在项目既有编译警告，未声称LSP clean。
+
+## 14个golden归因
+
+真实base330源码运行原golden **通过**；live331保持原期望 **失败**。两侧每场景完整snapshot、真实NGSA、完整事件、完整Choice、四座位views保存在 `golden330/`、`golden331/`，没有伪造330头。
+
+严格全字段比较 `attribute-goldens.py` 已通过：12项只差330→331；suidun_window_matrix另有budget4075→4076；rollback_invariants另有一个持久tag83窗口park。全部事件/Choice相同，56个座位views只差公开版本，完整RNG状态及调用数相同，其余所有snapshot字段相同。suidun的差异来自失效候选由新窗口过滤而省去旧单项队列调度步；rollback的新park保存OptionalGate挂起时仍未结束的窗口权威。
+
+owned私有probe进一步逐轴复现全部14个旧hash：12项只归一化版本；suidun额外恢复原budget；rollback额外移除新window的摘要。只修改private probe中的hash实验，没有改变产品规则、旧reader或存档。见 `golden-attribution.json`、`golden-hash-attribution.json`、逐场景snapshot.diff及 `golden-lab/`；最终全量中的14个live hash与这些已归因向量逐一相同，见 `golden-final-source-binding.json`。旧330期望没有重录，新331候选仍留待父会话/独立复审按已批准语义决定。
+
+## 元数据来源
+
+核对实际Rust match arms后共有290个triggering host variants。原203来源行中187条对应当前触发分支；旧88未证清单漏了15个grouped boss分支，正确未证数原为103。本轮新增5项欢乐卡牌真实来源：kuwu、jiuwei、mianju、monkey、xuelunyang，equipSkill=true使effective priority=-25，非空显示名由实际translate.js证明；没有从optional/locale猜值。真实同owner两项priority0 VM先于jiuwei询序的反例red→green，包含byteRestore全对象对比。
+
+当前来源行208，其中 **192/290触发分支已取证，98未证**，另16行是非当前触发载体，不能计作触发完成。原203行的inherit审计为0个inherit；group/subSkill/native合并的剩余来源仍不能用默认元数据算完成。详见 `host-trigger-inventory.json`、`host-inheritance-audit.json`、`huanle-order-source-proof.json`。PhaseBegin VM-before/host-after、dieBegin/dieAfter压缩差异仍显式保留；forceDie/out/indexed/hidden/filterStop来源阻塞未宣称消除。
+
+## 实际跨端
+
+正式schema4作者包通过正式武将赋值产生257项，owner0/owner1两条NativeSession向量均通过。最新生产WASM release --no-opt、Vite生产包及真实Chrome headless CDP验证了实际BattleView和engine.native.worker：
+
+- 257个真实DOM按钮全部可达，Home/End焦点有效；真实鼠标点击第257项，发送actor1、token256，候选重建为256。
+- 注入100ms消息延迟后，busy期间第二次真实点击被禁止，只产生一次UI提交。
+- 四个独立真实Worker的授权视图逐字段等于Native投影；非owner没有选择候选；每个完整save NGSA与Native向量逐字节相同。
+- 错误actor、空选、多选、越界、旧choice共5项均拒绝，完整存档不变。
+- 最终hash、完整NGSA、事件后缀与Native一致，browser errors=[]；Node实际WASM+生产adapter还比较完整四座位视图/Choice/事件/存档及独立恢复分支。
+
+证据：`browser-result.json`、`browser-four-worker-privacy.json`、`browser-invalid-requests.json`、`browser-after.ngsa`、`browser-257th-click.png`、`browser-acceptance-final.log`、`author257-wasm-result-final.json`、`node-wasm-cross-target-final2.log`。`compiled-artifact-binding.json`绑定源manifest与实际浏览器WASM SHA。首轮浏览器证据留在browser-first/。测试脚本曾因新Worker缺module、Node调用cwd错误失败/停等；owned进程已终止、测试脚本/调用修正后定向复跑通过，原失败日志未删；这些没有冒充产品失败或将整条早期脚本记成全绿。
+
+实际桌面IPC、C331专用server/WAL中timeout/manual竞争、提交失败/重试、restart exactly-once完整轨迹仍未执行。545个适配器测试含既有WAL/timeout和Skill值序列化回归，但不能代替该C331专项验收。
+
+## 封存、状态与后续
+
+最终 `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase2/source-freeze2/`：完整124文件、相对原118封存增量22文件；全/增量tar、tracked patch、对原118 patch与每文件SHA齐备。全部124文件最终与live逐一匹配。
+
+| 文件 | SHA256 |
+|---|---|
+| source-freeze.json | 62817e80dd78dc1139f1c2db5ce0d0a3ba78433cd63cdd130e7d3be5906071df |
+| source-files.tar.gz | 4144bb1e6742a60460cb27c048685ca3f8818bdf68ced66d7df3a36ff59f3774 |
+| incremental-files.tar.gz | 74d18004a88947347950a88716588f7009e0670f96effbedb0963d811194dcc1 |
+| tracked-source.patch | 2fe3e52a536ecfed569e7ad7578563fcc2fad549f67b8e5082d06b1f05eecae7 |
+| vs-first-freeze.patch | 356ca2eb103097503dacb4e46a5447f0f1c2f99bb1dcdf634984399dfd15ed11 |
+
+17:06的P1独立快照仍在p1-freeze/，manifest SHA d25e3f51f1790a8344899f9cb2adff76c2ea981caecd40f004fb00167e8e244e。原第一轮三个SHA仍为5db74a…/34a63c…/199410…，完整值记录在freeze2 manifest。HEAD保持38ab1678df9b4b7b991d3b3122b1d937fd2648a1，staged-files.txt为空。Cargo.lock只给engine-native-content接已有workspace blake3，无新增第三方包/版本。原始命令与结果索引为commandindex.json、platform-commands.json；pid文件均仅为历史启动记录。
+
+下一步：先对freeze2独立复审六P1及新增5项元数据，再基于已完成14项归因决定331 golden；继续98项来源与实际IPC/server-WAL专项矩阵。未完成与风险：独立复审未返回，整C331不可集成；没有声称NC08/57组/37来源完成或与上游全规则等价。

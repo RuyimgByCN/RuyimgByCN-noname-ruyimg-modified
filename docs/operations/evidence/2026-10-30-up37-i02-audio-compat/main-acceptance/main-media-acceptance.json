@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "actualMainProductionVue": true,
+  "role": "key:key_tsumugi",
+  "Vue_m4a_count": 5,
+  "raw_audio_count": 9652,
+  "Chrome_full_decode_controls_ended": 5,
+  "WK_full_decode_controls_ended": 5,
+  "Vue_real404_error_recovery_and_character_isolation": true,
+  "HTTP_identity_count": 17,
+  "checks": [
+    {
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+      "main_WK_full_PCM_equal_prior_derived": true,
+      "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+      "WK_ended": true,
+      "Chrome_Vue_ended": true,
+      "chrome_extra_frames": 2112,
+      "chrome_extra_ms_at48k": 44
+    },
+    {
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+      "main_WK_full_PCM_equal_prior_derived": true,
+      "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+      "WK_ended": true,
+      "Chrome_Vue_ended": true,
+      "chrome_extra_frames": 2112,
+      "chrome_extra_ms_at48k": 44
+    },
+    {
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+      "main_WK_full_PCM_equal_prior_derived": true,
+      "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+      "WK_ended": true,
+      "Chrome_Vue_ended": true,
+      "chrome_extra_frames": 2112,
+      "chrome_extra_ms_at48k": 44
+    },
+    {
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+      "main_WK_full_PCM_equal_prior_derived": true,
+      "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+      "WK_ended": true,
+      "Chrome_Vue_ended": true,
+      "chrome_extra_frames": 2112,
+      "chrome_extra_ms_at48k": 44
+    },
+    {
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+      "main_WK_full_PCM_equal_prior_derived": true,
+      "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+      "WK_ended": true,
+      "Chrome_Vue_ended": true,
+      "chrome_extra_frames": 2112,
+      "chrome_extra_ms_at48k": 44
+    }
+  ],
+  "original_raw5_not_redecoded": true,
+  "private_original_WK_PCM_proof": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/wk.jsonl",
+  "cross_decoder_PCM_equality_claimed": false,
+  "OS_HID_or_physical_listening_claimed": false
+}

@@ -1,0 +1,93 @@
+{
+  "result": "PASS",
+  "artifact_digests_verified": 23,
+  "commands": [
+    {
+      "name": "source-line-tests",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "source-lines",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "strict-docrefs",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "full-preflight",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "preflight": {
+    "default_argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "configured_checks": 21,
+    "reported_checks": 21,
+    "checks": [
+      "\u2705 \u672c\u5730\u94fe\u63a5\uff08\u6838\u5fc3\uff09",
+      "\u2705 \u672c\u5730\u94fe\u63a5\uff08\u5168\u90e8\uff09",
+      "\u2705 \u65e7\u503c\u626b\u63cf",
+      "\u2705 \u8fd1 20 \u8f6e\u7d22\u5f15\u65b0\u9c9c",
+      "\u2705 \u5305\u2192\u6765\u6e90\u6620\u5c04",
+      "\u2705 \u89c4\u5219\u767b\u8bb0\u8868",
+      "\u2705 \u8fc7\u6ee4\u81c2\u2194\u5143\u6570\u636e\u4e00\u81f4",
+      "\u2705 \u724c\u540d vs \u724c\u79cd\u6bd4\u8f83",
+      "\u2705 \u53f0\u8d26\u8d26\u76ee\uff08\u79fb\u51fa\u5fc5\u7559\u75d5\uff09",
+      "\u2705 \u76f8\u4f4d\u679a\u4e3e\uff08REVIEW=0\uff09",
+      "\u2705 \u6765\u6e90\u8986\u76d6\u4e09\u5206",
+      "\u2705 host \u952e\u666e\u67e5\uff08U05=314\uff09",
+      "\u2705 \u5361\u9762\u8986\u76d6\uff08201/128\uff09",
+      "\u2705 \u53f0\u8d26\u2194\u679a\u4e3e\u4e00\u81f4",
+      "\u2705 \u5df2\u767b\u8bb0\u5dee\u5f02\u53e3\u5f84\uff0820/54\uff09",
+      "\u2705 \u5b88\u536b\u5f15\u7528\u540d\u5b58\u5728",
+      "\u2705 \u6ce8\u91ca\u8ba1\u6570=\u53f0\u8d26",
+      "\u2705 \u811a\u672c\u5355\u6d4b",
+      "\u2705 \u6587\u6863 file:line \u5f15\u7528",
+      "\u2705 \u884c\u6570\u95e8\u7981",
+      "\u2705 \u539f\u751f\u5206\u5c42\u68d8\u8f6e"
+    ],
+    "skips": 0,
+    "retries": 0,
+    "raw_stdout": "full-preflight.stdout.raw.txt",
+    "raw_stderr": "full-preflight.stderr.raw.txt",
+    "nested_capture_limit": "Unmodified preflight.py captures child stdout/stderr internally and prints only check status/failure tails; this run preserves all bytes that its default interface actually emitted, without claiming suppressed child output was collected."
+  },
+  "source14_exact": true,
+  "identity_equal": true,
+  "index_empty_and_unchanged": true,
+  "source_comparison_sha256": "e122eaab4d3747019a4e35ae0d040c4e6fe4ca0dc09c38e8f28be1d6426e732a",
+  "full_preflight_stdout_sha256": "be980ecafc01457db784cd2d30b555516322b3ae95b8b140d9b6e001c826df1b",
+  "no_repeat_of_gates_or_functional_media": true,
+  "parent_initial_parser_error": "Initially expected literal 21/21 in default console; default output emits 21 individual check lines and success. Corrected to count and compare all 21 exact check lines; no product change or gate rerun."
+}

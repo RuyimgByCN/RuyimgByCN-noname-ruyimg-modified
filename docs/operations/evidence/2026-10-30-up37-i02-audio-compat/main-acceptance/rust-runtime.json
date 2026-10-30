@@ -1,0 +1,27 @@
+{
+  "pid": 71913,
+  "base": "http://127.0.0.1:64033",
+  "binary": "/tmp/noname-resource-server-329",
+  "binary_sha256": "9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489",
+  "source_build_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "source_versions": "329/105/758/WS5 retained static ServeDir only; not current330WS/room acceptance",
+  "actual_frontend": "main a1f7250815eee803d931301ab46207719cb9a15b + reviewedcompat14",
+  "env": {
+    "GAME_SERVER_ADDR": "127.0.0.1:64033",
+    "NONAME_ORIGINAL_CONTENT_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/content/original",
+    "NONAME_CONTENT_STORE_ROOT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/runtime-store/legacy-store",
+    "NONAME_NATIVE_STORE_ROOT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/runtime-store/native-store",
+    "NONAME_NATIVE_ROOM_STORE": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/runtime-store/rooms",
+    "NONAME_EXTENSIONS_ROOT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/runtime-store/empty-extensions",
+    "NONAME_NATIVE_PACKAGES_ROOT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/runtime-store/empty-packages",
+    "NONAME_NATIVE_ROOMS": "false"
+  },
+  "wk_binary": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/bin/wk-probe",
+  "wk_sha256": "e68c7cdede30d50d087ba704f5b1200c677d30a65d6aace5a47e3730f92d2108",
+  "no_compile": true,
+  "wk_pid": 72239,
+  "server_exit": -15,
+  "server_waited": true,
+  "wk_exit": 0,
+  "stores_removed": true
+}

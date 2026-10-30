@@ -1,4 +1,5 @@
-import { copyFile, link, mkdir, readdir, rm, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { copyFile, link, mkdir, readFile, readdir, realpath, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import ts from "../apps/web-client/node_modules/typescript/lib/typescript.js";
 import { compareFileNames, listFiles } from "./original-content-order.mjs";
@@ -14,6 +15,78 @@ export function assertAudioPath(value) {
     throw new Error(`invalid audio path: ${value}`);
   }
   return value;
+}
+
+// Pins the reviewed five-file input, including recipe, tool digest and original source SHAs.
+const compatProvenanceSHA256 = "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313";
+const compatSizes = [18716, 114531, 10188, 39091, 81053];
+
+export async function validateAudioCompat(coreRoot, compatRoot, sha256) {
+  const roots = await Promise.all([realpath(coreRoot), realpath(compatRoot)]);
+  if (roots[1] !== path.join(await realpath(path.dirname(compatRoot)), path.basename(compatRoot))) {
+    throw new Error("audio compat input root must be checked in, not a symlink");
+  }
+  async function boundedFile(root, relative) {
+    assertAudioPath(relative);
+    const file = await realpath(path.join(root, relative));
+    if (!file.startsWith(`${root}${path.sep}`) || !(await stat(file)).isFile()) {
+      throw new Error(`audio compat realpath escapes root: ${relative}`);
+    }
+    return file;
+  }
+  const provenanceFile = await boundedFile(roots[1], "provenance.json");
+  const bytes = await readFile(provenanceFile);
+  const provenance = JSON.parse(bytes);
+  const bindings = provenance.bindings;
+  if (!Array.isArray(bindings) || bindings.length !== 5) throw new Error("invalid audio compat bindings");
+  const sources = new Set(), derivatives = new Set();
+  for (const [index, row] of bindings.entries()) {
+    if (Object.keys(row).sort().join() !== "derivative_path,derivative_sha256,source_path,source_sha256" ||
+      !row.source_path.startsWith("audio/") || !row.derivative_path.startsWith("audio/") ||
+      !/^[a-f0-9]{64}$/.test(row.source_sha256) || !/^[a-f0-9]{64}$/.test(row.derivative_sha256)) {
+      throw new Error("invalid audio compat binding");
+    }
+    if (sources.has(row.source_path) || derivatives.has(row.derivative_path)) throw new Error("duplicate audio compat binding");
+    sources.add(row.source_path); derivatives.add(row.derivative_path);
+    const source = await boundedFile(roots[0], row.source_path);
+    const derivative = await boundedFile(roots[1], row.derivative_path);
+    if (await sha256(source) !== row.source_sha256) throw new Error(`${row.source_path}: audio compat source SHA differs`);
+    if ((await stat(derivative)).size !== compatSizes[index] || await sha256(derivative) !== row.derivative_sha256) {
+      throw new Error(`${row.derivative_path}: audio compat derivative size/SHA differs`);
+    }
+  }
+  if (createHash("sha256").update(bytes).digest("hex") !== compatProvenanceSHA256) {
+    throw new Error("audio compat fixed provenance/recipe/tool binding differs");
+  }
+  const expected = ["provenance.json", ...derivatives].sort(compareFileNames);
+  const actual = [];
+  async function visit(directory, prefix = "") {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const relative = `${prefix}${entry.name}`;
+      if (entry.isDirectory()) await visit(path.join(directory, entry.name), `${relative}/`);
+      else if (entry.isFile()) actual.push(relative);
+      else throw new Error(`${relative}: audio compat non-regular input`);
+    }
+  }
+  await visit(roots[1]);
+  actual.sort(compareFileNames);
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error("audio compat input file list differs");
+  return bindings;
+}
+
+export function audioBackingIndex(assets) {
+  assertUniqueAssetPaths(assets);
+  const backing = new Map();
+  for (const asset of assets) {
+    if (asset.kind !== "audio" || asset.path.startsWith("audio-declared/")) continue;
+    const key = `${asset.source_category}:${asset.source_path}`;
+    if (backing.has(key)) throw new Error(`duplicate audio backing: ${key}`);
+    const expected = asset.source_category === "core" ? asset.source_path :
+      asset.source_category === "compat" ? asset.source_path.replace(/^audio\//, "audio-compat/") : null;
+    if (asset.path !== expected || !asset.source_path.startsWith("audio/")) throw new Error("invalid audio backing identity");
+    backing.set(key, asset);
+  }
+  return backing;
 }
 
 // The same data-only TS parser is used by catalog generation; source JS is never executed.
@@ -305,32 +378,38 @@ export function resolveAudioDeclarations({ skills, characters, dynamic = [], dec
   return { mappings, issues, dynamic, declarations };
 }
 
-export function declaredAudioAssets(result, directAssets) {
-  const direct = new Map();
-  for (const asset of directAssets) {
-    if (direct.has(asset.path)) throw new Error(`duplicate canonical asset path: ${asset.path}`);
-    direct.set(asset.path, asset);
+export function declaredAudioAssets(result, directAssets, bindings = []) {
+  const backing = audioBackingIndex(directAssets);
+  const bySource = new Map();
+  for (const row of bindings) {
+    if (bySource.has(row.source_path)) throw new Error("duplicate audio compat binding");
+    bySource.set(row.source_path, row);
   }
-  const assets = [], missing = [], paths = new Set();
+  const assets = [], missing = [];
   for (const mapping of result.mappings) {
     assertAudioPath(mapping.path);
-    if (paths.has(mapping.path)) throw new Error(`duplicate canonical audio path: ${mapping.path}`);
-    paths.add(mapping.path);
-    const source = direct.get(mapping.source_path);
-    if (!source || source.kind !== "audio" || source.source_category !== "core" || source.path !== source.source_path) {
-      missing.push(mapping);
-      continue;
+    let source = backing.get(`core:${mapping.source_path}`);
+    const binding = bySource.get(mapping.source_path);
+    if (binding) {
+      if (!source || source.sha256 !== binding.source_sha256) throw new Error("audio compat original binding differs");
+      source = backing.get(`compat:${binding.derivative_path}`);
+      if (!source || source.sha256 !== binding.derivative_sha256) throw new Error("audio compat derivative binding differs");
     }
-    assets.push({ ...source, path: mapping.path });
+    if (!source) { missing.push(mapping); continue; }
+    assets.push({ ...source, path: `${path.posix.dirname(mapping.path)}/${path.posix.basename(source.path)}` });
   }
+  assertUniqueAssetPaths(assets);
   return { ...result, assets, missing };
 }
 
-export async function syncDeclaredAudio(assetRoot, assets, verifyOnly, sha256) {
+export async function syncDeclaredAudio(assetRoot, assets, directAssets, verifyOnly, sha256) {
   assertUniqueAssetPaths(assets);
+  const backing = audioBackingIndex(directAssets);
   for (const asset of assets) {
     assertAudioPath(asset.path);
     assertAudioPath(asset.source_path);
+    const source = backing.get(`${asset.source_category}:${asset.source_path}`);
+    if (!source || source.sha256 !== asset.sha256 || source.size !== asset.size) throw new Error("declared audio backing differs");
     if (!asset.path.startsWith("audio-declared/") || !asset.source_path.startsWith("audio/")) throw new Error("invalid declared audio namespace");
   }
   const targetRoot = path.join(assetRoot, "audio-declared");
@@ -345,7 +424,7 @@ export async function syncDeclaredAudio(assetRoot, assets, verifyOnly, sha256) {
     await rm(targetRoot, { recursive: true, force: true });
   }
   for (const asset of assets) {
-    const source = path.join(assetRoot, assertAudioPath(asset.source_path));
+    const source = path.join(assetRoot, assertAudioPath(backing.get(`${asset.source_category}:${asset.source_path}`).path));
     const target = path.join(assetRoot, assertAudioPath(asset.path));
     if (!verifyOnly) {
       await mkdir(path.dirname(target), { recursive: true });

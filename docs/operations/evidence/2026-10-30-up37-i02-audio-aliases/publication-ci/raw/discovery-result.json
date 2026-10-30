@@ -1,0 +1,10 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?branch=native-convergence&head_sha=a1f7250815eee803d931301ab46207719cb9a15b&event=push&per_page=100"
+  ],
+  "exit": 0,
+  "evidence_directory": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj"
+}

@@ -23,8 +23,8 @@
 
 ## 验收边界与最终门禁
 
-原Chrome失败 `audio/skill/tsumugi_mugyu1..5.mp3` 本轮按既有失败SHA过滤，未重测、未记成功，也没有导入派生件；121份样本均先核对旧成功码流，再执行本轮真实解码／播放。五条no-elst兼容接入另在私有树审查，不能混成此九文件验收。
+原Chrome失败 `audio/skill/tsumugi_mugyu1..5.mp3` 本轮按既有失败SHA过滤，未重测、未记成功，也没有导入派生件；121份样本均先核对旧成功码流，再执行本轮真实解码／播放。五条no-elst兼容件在本批之后精确接入主树，当前主树功能验证尚未完成；它们不计入本九文件验收，最新状态以[进度主稿](../../../architecture/native-progress.md#delivery-2026-10-24)为准。
 
 最终四项门禁均exit0：行数自测2/2、8992维护文件、strict docrefs1065引用/越界0、完整preflight21/21（锁内327.392秒，脚本单测192/192、零跳过）；本地链接1910文件/坏链0。[原始命令与窄身份](final-gates/summary.json)及[完整交接](final-gates-handoff.raw.txt)保留98次ResourceWarning、六类路径提示和原cleanup失败。仅Cargo offline metadata，没有编译；source9、CI4、批准覆盖后的A53、两WASM镜像、37 tracked dist及guard/index均保持。
 
-[主树独立复核](main-combined-independent-review.raw.txt)确认107份功能与69份最终门禁索引、实际Vue/HTTP及旧成功样本来源，未发现新增P0/P1/P2，结论OK with notes。父[独立派生结果](independent-review/browser-and-mapping-results.json)与[最终身份核对](independent-review/final-gates-independent-results.json)保全；首次派生器漏形态阵亡前缀／索引外层结构的错误日志亦保留，均未改变产品断言或旧结果。本批按裁决18收口，后续发布按裁决25单独登记；不将已有da7e十绿CI扩张至本增量。
+[主树独立复核](main-combined-independent-review.raw.txt)确认107份功能与69份最终门禁索引、实际Vue/HTTP及旧成功样本来源，未发现新增P0/P1/P2，结论OK with notes。父[独立派生结果](independent-review/browser-and-mapping-results.json)与[最终身份核对](independent-review/final-gates-independent-results.json)保全；首次派生器漏形态阵亡前缀／索引外层结构的错误日志亦保留，均未改变产品断言或旧结果。本批已按裁决18入库`a1f7250815eee803d931301ab46207719cb9a15b`并依裁决25发布同一native-convergence分支。随后真实run41100475767十个job成功，经API／原日志／父指纹解析及独立登记核对；三次watch502与18条step null保留，详见[独立CI登记](publication-ci/README.md)。既有da7e十绿仍是另一历史运行，不扩张到当前未验收的compat14。

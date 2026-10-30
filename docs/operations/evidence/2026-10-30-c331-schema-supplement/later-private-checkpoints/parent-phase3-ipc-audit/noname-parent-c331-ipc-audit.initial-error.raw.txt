@@ -1,0 +1,1 @@
+Initial parent parser failed at save payload comparison: assumed kind=NGSA. Actual product response has kind=save; native_envelope response contract inspected before correcting parser. This is a parent parser error, not product or test failure.

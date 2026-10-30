@@ -1,0 +1,49 @@
+What this change does: 此候选把受控试算、Opaque 和 root certificate 分开，并使 Planner 返回 `Result`。本次只读审查证书与 VM 权限路径；结论仍为 **BLOCK**，不能据现有证书宣称完整 Plan 隐私已成立。
+
+## Review
+
+- **Correct：**已完整读取指定 40 行 checkpoint、`core-blockers.md`、19 项失败 JSON、canonical AGENTS/SPEC，并使用 `ponytail-review`。Parent Desktop 两处 Result 消费者的 `result.json` 记录 compile check exit 0；本次没有重新运行。
+- **Correct：**`trial_certifies_root` 只接受 Complete Accepted/Pending，Opaque 不发证；root/reply attempts 在执行前计数。见 `crates/engine-native/src/engine/certification.rs:11`、`ai.rs:628`、`ai.rs:751`、`ai/trial.rs:129`。
+- **Correct：**旧 VM 构造／恢复均令 `simulation_fresh=false`，`VmMachine::step` 在读取 paused/commit buffers 前拒绝；OptionalGate 的已有 inner 直接委托，不会被后面的 fresh 标记重新授权。见 `crates/engine-native-kernel/src/rvm_bridge/machine.rs:56`、`:220`，`resolution.rs:237`。
+- **Correct：**实际故障链是 VM Err → `res.fault` → scheduler Fault → `finish_segment` 回滚并 Rejected(VmFault)，不是所有 diagnostic fault 都必然拒绝。见 `rvm_bridge/machine.rs:462`、`resolution.rs:472`、`crates/engine-native/src/engine/commands.rs:270`。
+- **Fixed：**无；本任务禁止实现及运行新实验。
+
+- **Finding P1 — Complete-Plan privacy：允许的效果仍能隐式读取私有缓存，改变两个真正 Ok Plan。**
+  - 入口：[pump_commit](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/rvm_bridge/machine.rs:491) 将 `DealDamage` 列为受控允许效果；[commit_effect](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/rvm_ops.rs:297) 随后在 query gate 外执行私有 `flags[(source,"lifetime")] += amount`。
+  - **源码 witness，未实跑：**无开放选择、无装备／判定区、公开技能只有一个无 triggers／无次数限制的 active VM；模块只执行常量 `deal_damage(self,1,1)`。两状态仅令 source 的 lifetime 为 `0`／`u32::MAX`，其完整 PolicyInput/events 相同；redaction 不清除此 flags。
+  - 默认 dev/test 溢出检查下，A 伤害成功、评分 +8，active-only 分支给 Accepted 发证；B 在该私有加法处 unwind，被 `ai.rs:662–674` 捕获、增加 `sim_faults` 并跳过。variant 2、浅层、足够预算时，A 选 active，B 选可认证的 NextPhase；**两者 Ok，action 和 sim_faults 不同**。证书接受位置为 `engine/certification.rs:108`。
+  - `archive/auxiliary.rs:158` 将 flags 值解码为任意 u32，`snap/validation.rs:190` 未建立 lifetime 上界；这是现有恢复允许域内的源码推导，不是新完成的 archive 反例，也未证明该 pair 自然可达。关闭 overflow checks 的 release wrapping 配置不能据此宣称同一结果。
+  - **最小 repair：**把该隐式读纳入同一个 execute/resume 前置 footprint 分类；没有公共证明时，对含此风险效果的 family 在读取缓存前返回 kernelOpaque。可复用现有 `module_uses_effect_tag` 做保守分类；不能改正式 `+=` 语义、清零缓存、读取其当前值挑动作或隐藏 `sim_faults`。此项证明的是 Plan 隐私缺口，未证明一个已返回 Plan 在正式 apply 时非法。
+
+- **Finding P2 — 已知 ReadSite 缺口的合同判断：freshness 尚不能替代 module/handler/PC 授权。**
+  - [ObserverQueryGate](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/simulation.rs:78) 忽略 module 参数及 ReadSite；`allow_resume=true`。VM 确实在 `vm.rs:243` 生成 module_hash/opcode_pc/tag，但这些字段当前只用于记录。
+  - 实际依据是本任务明确约定的“可信 module/handler/PC”，以及 `rule-vm/src/vm/controlled.rs:34` 对“整个 saved frame 已获许可”和 certified prefix 的接口合同；SPEC §6.3、§7.2 另要求 AI 不借规则接口取得隐藏信息。不能把它改写成仓库原本就要求某种新 PC 白名单系统。
+  - **未证明仅忽略 site 就能绕过当前旧帧阻断并获得非法 Ok。**当前 marker 来源核查支持 fresh 路径；但它只表达“在本次试算新建”，没有表达 handler 路由、metadata 和 native 效果的公共依赖证明，P1 正是后者的具体缺口。
+  - 最小边界是复用已有 catalog 模块／handler 授权方法、VerifiedModule 和 ReadSite，把公共路由证明带到现有前置 gate；旧帧继续默认拒绝。仅比较两个来自同一实际模块的 hash，或按私有 saved PC 放行，都不能补齐合同。
+
+- **事件闭包复核：**普通 Sha 列表确实未列 `CardsLost`、`ShaDodged`、`DyingSaved`；后两者有真实内核发射点，但本次没有证明其造成当前 root 的非法 Ok，因此不另报 P1。尤其 DeathMachine 清牌直接 `to_discard`，不能编造“死亡清牌→CardsLost→VmFault”链。普通 Sha 来源／目标约束与 active-only 子集仍须按实际可达事件证明，不能靠列表名称作保证。
+
+19 个 positive 的最小 repair 边界如下；这是命名实施边界，不是承诺补一个条件便会全部变绿：
+
+| 子集 | 当前能支持的最小判断 |
+|---|---|
+| **1 项：`plan_enumerates_confirm_and_cancel_fallbacks`** | 首批只修 VM-free、可识别的 native 遗计确认路径。`OptionalGate` Confirm 后启动 `JiJiMachine::Draw`，固定摸 2 后进入合法目标窗；见 `resolution.rs:255`、`engine-native-content/src/content/standard/skills/ji_ji.rs:69`。这是可复用的共享内核路径；不能把整个 `trigger_confirm` 字符串加入通用白名单。 |
+| **3 项：live commit、pending_store、pending_move** | 对应 `real_vm_commit_window_uses_equal_public_plans_with_conservative_helper` 与两个 sentinel guard。模块正文可证明固定 Halted 提交路径，值得作为下一小批；还必须证明所有可能 ancestor/following、剩余效果及触发尾链，且保持非零 card sentinel、原 ownership 和完整 apply。 |
+| **2 项：author pending effects、J2 cached damage** | 队列已含私有派生伤害，J2 还含 content `commit_state`。公开选牌可生成确定性动作，但当前 tuple 不足以证明整段不会拒绝；须等待这些具体提交 family 的合法性／控制依赖合同。不得执行私有尾链评分。 |
+| **1 项：`opaque_vm_private_local_does_not_change_choice`** | saved HOST_CHOICE 必须继续 NoCert，直到解决旧帧合同；同模块、完整公开输入和选项仍不约束 private remaining fuel。不能用公共默认 fuel 替代，也不能收紧 restore 消灭已有 fuel proof。 |
+| **12 项 driver／warm-up 失败** | 当时失败窗口和 stats 未保存，不能从最终 `.expect` 定位 certificate 分支；目前不能承诺任何一项安全绿化，也不能整体豁免。 |
+
+必须保留的证书前置：
+
+1. **先分类所有公共 catalog 可能 family，再看实际实例／匹配结果。**native 遗计路径也须排除其它可能祖先；若现有公共 tuple 不能唯一约束允许集合，维持 NoCert，不能凭实际 park 类型暗中缩小证明域。
+2. **Halted 不等于公共队列。**`snap/restore.rs:290` 和 `machine_validation.rs:416` 校验了结构及部分 composite 绑定，没有证明任意恢复队列由该 module 的公共执行派生。3 项固定提交测试不能仅凭“模块没有查询”获证；缺的是队列来源和所有 tail 的具体合同。
+3. **StorageGet/Has 的现有放行只限同 trial 已提交写。**`known_storage` 按 owner/name/key 记录；zero 对应真实删除，Has 应为 false；queued write 不入账，旧 storage 或 ownerless mirror 的存在不作知识证明。源码未发现此处独立的具体假证书；它仍依赖写操作的控制前缀可信，不能绕过 P1 所示的隐式读审计。
+4. **保留真正正向验收：**每个恢复 family 都要求 Ok、完整 Plan 相等、authority 不变、byte restore 后正式 apply 非 Rejected；不能改成两个 Err。当前 sampled pending-fault 测试已选择真正合法替代 Plan，仍是有效正向 guard。
+
+若 Parent 已有失败现场，只需按 `root-certificate-failures.json` 的 12 个 driver 名展开 bounded JSON：`test, seat, revision, PolicyInput, public events, prompt/kind/min/max, CertificationStats/opaque_sites, candidate/outcome/certificate reason`；不需要 archive binary、全字节 hash 或重新执行整套实验。
+
+- **风险归类：**root legality 本次没有新增、已闭合的非法 Ok 反例；complete-Plan privacy 有上述配置限定的源码 witness；64×512×fresh fuel 约束的是尝试／调度／VM 指令，不是一般 native 分配或硬时限证明。质量与 direct-WASM 覆盖限制沿用 checkpoint，未作新发现。
+- **Merge verdict：BLOCK。**先补隐式效果读的公共边界与现有 gate 的授权证明；正向恢复先限定 native 遗计一项，再逐个证明固定提交 family，不授权盲做 90 分钟的全门放宽。
+
+未运行 build/tests/新实验，未修改 Main、privateSource、index、协议、正式 VM 或恢复语义；未全审 62 文件、全部 Host、14C golden 或 CI。  
+剩余风险：新 P1 是默认 dev/test 下的源码 witness，尚无实跑／自然可达证据；不得把它或条件性的 repair 子集写成已完成验收。

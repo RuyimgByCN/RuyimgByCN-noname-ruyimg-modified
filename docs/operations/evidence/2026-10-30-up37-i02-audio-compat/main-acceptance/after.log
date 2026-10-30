@@ -1,0 +1,2 @@
+{"head": true, "index": true, "source14": true, "protected": true, "guard": true, "modules": true, "dist": true, "frozen_packages_locks_diff": true, "upstream_head": true, "global_owner_resolver_sha256": true}
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/accept.py", "after"], "exit": 0, "locked_seconds": 0.19792574999155477, "disk_free_bytes": 99290386432}

@@ -1,0 +1,27 @@
+✔ AST maps true upstream reference/count/list/variant/death forms without executing source (9.582792ms)
+✔ unknown and absent source voices never borrow another skill's bytes (2.077417ms)
+✔ cycles, ambiguous references, duplicate declarations and unsafe paths fail closed (14.649958ms)
+✔ real diy:liangji immediate self reference uses upstream default; a multi-skill cycle rejects (2.390541ms)
+✔ static card/mode dependencies and unknown character death references follow source declarations (2.678292ms)
+✔ an equivalent top-level helper and finishSkill subskill share one audio identity; conflicts reject (2.12325ms)
+✔ character bindings use actual tempname priority and only declared substitute forms (2.088416ms)
+✔ dynamic actor inputs produce no guessed binding and substitute death reference cycles reject (2.856ms)
+✔ equivalent dependency leaves are provable; identical indirect metadata cannot hide different source contexts (3.0815ms)
+✔ substitutes resolve one global exact owner across declaration packs and reject ambiguity (1.630709ms)
+✔ five static bindings select ten AST aliases without changing global owners (22.961083ms)
+✔ content traversal and index ordering ignore the process locale (125.244875ms)
+✔ resources-only refresh preserves catalog, legacy source, immutable packages and old locks and verifies bytes (1298.465417ms)
+✔ static compat drift, paths, duplicate bindings, size, SHA, recipe and tool fail before any resource write (5027.741583ms)
+▶ unbound compat symlinks fail before writes after a valid sync and verify
+  ✔ file (635.251833ms)
+  ✔ dir (626.588917ms)
+✔ unbound compat symlinks fail before writes after a valid sync and verify (1262.2565ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7628.472125
+{"command": ["node", "--test", "scripts/test_original_content_order.mjs", "scripts/test_original_audio_resources.mjs", "scripts/test_original_resources.mjs"], "exit": 0, "locked_seconds": 7.65664379199734, "disk_free_bytes": 100441010176}

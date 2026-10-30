@@ -97,8 +97,10 @@ remains Chinese on all platforms. All default bundle targets remain enabled;
 macOS identity, targets, security capabilities and signing settings are retained.
 
 Local configuration/schema checks and the build-pipeline regressions cover
-these metadata changes. Actual MSI/RPM production requires a subsequent CI run
-on those systems. The first run's successful macOS desktop artifact
+these metadata changes. Subsequent actual runs and uploaded corrected bundles
+are registered in the [current progress](../architecture/native-progress.md#delivery-2026-10-24)
+and the [independent alias-publication CI record](evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/README.md).
+The first run's successful macOS desktop artifact
 `installer-macos-latest` (32,791,200 bytes), three OS build jobs and native-web
 job do not establish a fully green workflow or validate these corrected bundles.
 

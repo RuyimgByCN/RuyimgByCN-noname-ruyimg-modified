@@ -1,0 +1,199 @@
+[
+  {
+    "name": "source-line-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "started_utc": "2026-10-30T19:03:13.069098+00:00",
+    "stdout": "source-line-tests.stdout.raw.txt",
+    "stderr": "source-line-tests.stderr.raw.txt",
+    "free_disk_before_bytes": 98879971328,
+    "status": "PASS",
+    "exit": 0,
+    "wall_seconds": 0.153900707984576,
+    "locked_seconds": 0.06415037499391474,
+    "queue_estimate_seconds": 0.08975033299066126,
+    "queue_estimate_includes_wrapper_startup": true,
+    "wrapper_result": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.06415037499391474,
+      "disk_free_bytes": 98879946752
+    },
+    "free_disk_after_bytes": 98879942656
+  },
+  {
+    "name": "source-lines",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "started_utc": "2026-10-30T19:03:13.580469+00:00",
+    "stdout": "source-lines.stdout.raw.txt",
+    "stderr": "source-lines.stderr.raw.txt",
+    "free_disk_before_bytes": 98879750144,
+    "status": "PASS",
+    "exit": 0,
+    "wall_seconds": 7.696253666013945,
+    "locked_seconds": 7.65125925000757,
+    "queue_estimate_seconds": 0.044994416006375104,
+    "queue_estimate_includes_wrapper_startup": true,
+    "wrapper_result": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.65125925000757,
+      "disk_free_bytes": 98878922752
+    },
+    "free_disk_after_bytes": 98878922752
+  },
+  {
+    "name": "strict-docrefs",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "started_utc": "2026-10-30T19:03:21.610335+00:00",
+    "stdout": "strict-docrefs.stdout.raw.txt",
+    "stderr": "strict-docrefs.stderr.raw.txt",
+    "free_disk_before_bytes": 98878771200,
+    "status": "PASS",
+    "exit": 0,
+    "wall_seconds": 7.556958500004839,
+    "locked_seconds": 7.474993208015803,
+    "queue_estimate_seconds": 0.0819652919890359,
+    "queue_estimate_includes_wrapper_startup": true,
+    "wrapper_result": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.474993208015803,
+      "disk_free_bytes": 98889097216
+    },
+    "free_disk_after_bytes": 98889097216
+  },
+  {
+    "name": "full-preflight",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "env_overrides": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "started_utc": "2026-10-30T19:03:29.495352+00:00",
+    "stdout": "full-preflight.stdout.raw.txt",
+    "stderr": "full-preflight.stderr.raw.txt",
+    "free_disk_before_bytes": 98888929280,
+    "status": "PASS",
+    "exit": 0,
+    "wall_seconds": 324.0075950830069,
+    "locked_seconds": 323.9627552499878,
+    "queue_estimate_seconds": 0.044839833019068465,
+    "queue_estimate_includes_wrapper_startup": true,
+    "wrapper_result": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 323.9627552499878,
+      "disk_free_bytes": 99685396480
+    },
+    "free_disk_after_bytes": 99685396480
+  }
+]

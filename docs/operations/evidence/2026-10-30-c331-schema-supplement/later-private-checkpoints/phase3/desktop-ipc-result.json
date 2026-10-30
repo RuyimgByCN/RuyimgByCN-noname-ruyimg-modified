@@ -1,0 +1,18 @@
+{
+  "binary_sha256": "dea8d3415dd02108c67111c0c9cadeab461d816ab8b3976a7339b17008a63770",
+  "passed": true,
+  "actualTauriIPC": true,
+  "actualProductCommands": true,
+  "hiddenOwnedWindow": true,
+  "owner": 1,
+  "privacySeats": 4,
+  "skillOptions": 257,
+  "selectedToken": 256,
+  "invalid": 5,
+  "duplicateRejected": true,
+  "resourceCloseReopen": true,
+  "continuationChoices": 255,
+  "fullArchiveEveryStep": true,
+  "hashEveryStep": true,
+  "eventsEveryStep": true
+}

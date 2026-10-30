@@ -1,0 +1,172 @@
+{
+  "triggering_total": 290,
+  "source_verified_triggering": 200,
+  "remaining": 90,
+  "source_rows": 216,
+  "phase3_verified": [
+    {
+      "variant": "GujianFoodGudonggeng",
+      "skill": "gudonggeng",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1262,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodLiyutang",
+      "skill": "liyutang",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1345,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodMapodoufu",
+      "skill": "mapodoufu",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1491,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodQingtuan",
+      "skill": "qingtuan",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1308,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodTanhuadong",
+      "skill": "tanhuadong",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1458,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodXiajiao",
+      "skill": "xiajiao",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1144,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodYougeng",
+      "skill": "yougeng",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1372,
+        "props": {}
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    },
+    {
+      "variant": "GujianFoodZiyangdan",
+      "skill": "ziyangdan",
+      "source": {
+        "path": "archive/upstream/noname-liuli/noname/card/gujian.js",
+        "line": 1087,
+        "props": {
+          "silent": "true"
+        }
+      },
+      "fingerprint": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+      "source_instance": "noname-liuli",
+      "priority": 1,
+      "timing": "Normal",
+      "order_selectable": false,
+      "formula_source": {
+        "path": "archive/upstream/noname-liuli/noname/game/game.js",
+        "lines": "32348-32365",
+        "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+      },
+      "formula": "priority*100 + silent1 - equipSkill30 - ruleSkill30; all absent contributions zero. Exact display translation is nonempty; ziyangdan silent=true -> priority1, selectable=false."
+    }
+  ],
+  "direct_candidate_search_found": 68,
+  "candidate_is_not_source_acceptance": true
+}

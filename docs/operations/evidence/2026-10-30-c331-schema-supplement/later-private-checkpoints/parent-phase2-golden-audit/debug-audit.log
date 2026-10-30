@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/parent-c331-golden-review/audit-debug-objects.py", line 109, in <module>
+    record[kind + '_diff'] = differences(parse(a), parse(b))
+  File "/tmp/parent-c331-golden-review/audit-debug-objects.py", line 82, in parse
+    return DebugParser(path.read_text()).parse()
+  File "/tmp/parent-c331-golden-review/audit-debug-objects.py", line 17, in __init__
+    assert not text[pos:].strip(), text[pos:pos+100]
+AssertionError: =None

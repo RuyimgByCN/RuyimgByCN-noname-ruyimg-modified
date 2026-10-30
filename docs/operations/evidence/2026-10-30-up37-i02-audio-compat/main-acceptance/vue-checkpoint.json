@@ -1,0 +1,291 @@
+[
+  {
+    "case": "actual Vue key:key_tsumugi initial selection",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": null
+  },
+  {
+    "case": "real Rust missing path404 creates row error",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [
+      {
+        "text": "语音加载或解码失败，请检查本地资源。",
+        "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+      }
+    ],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": 4,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "connected": true,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "other compat path succeeds without clearing failed path",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [
+      {
+        "text": "语音加载或解码失败，请检查本地资源。",
+        "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+      }
+    ],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": 4,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "connected": true,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "different character has no residual error",
+    "title": "刘备",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/standard/die/liubei/0001/liubei.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/standard/character/liubei/skill/rende/base/0001/rende1.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/standard/character/liubei/skill/rende/base/0002/rende2.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/standard/character/liubei/skill/jijiang/base/0001/jijiang11.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/standard/character/liubei/skill/jijiang/base/0002/jijiang12.mp3",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "connected": false,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "no-audio character has no residual error",
+    "title": "唐棠",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [],
+    "audio": [],
+    "originalA": {
+      "connected": false,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "return retains only original failed path",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [
+      {
+        "text": "语音加载或解码失败，请检查本地资源。",
+        "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+      }
+    ],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "connected": false,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "same actual compat path loadeddata clears its error",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "connected": false,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  },
+  {
+    "case": "five actual Vue native controls fully ended",
+    "title": "紬文德斯",
+    "counts": "26 包 · 2582 武将 · 6209 技能 · 0 静态皮肤 · 0 动态皮肤 · 9652 音频资源 ",
+    "alerts": [],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "error": null,
+        "readyState": 4
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "error": null,
+        "readyState": 4
+      }
+    ],
+    "originalA": {
+      "connected": false,
+      "error": 4,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a"
+    }
+  }
+]

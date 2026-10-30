@@ -1,0 +1,139 @@
+{
+  "run_id": 41100475767,
+  "head_sha": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "run_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767",
+  "started_utc": "2026-10-30T17:49:10.761385+00:00",
+  "commands": [
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767"
+      ],
+      "name": "run-initial",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767/jobs?per_page=100"
+      ],
+      "name": "jobs-initial",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "run",
+        "watch",
+        "41100475767",
+        "--repo",
+        "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+        "--exit-status",
+        "--interval",
+        "30",
+        "--compact"
+      ],
+      "name": "watch",
+      "http1": true,
+      "exit": 1
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767"
+      ],
+      "name": "run-final",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767/jobs?per_page=100"
+      ],
+      "name": "jobs-final",
+      "http1": true,
+      "exit": 1
+    }
+  ],
+  "cleanup": "watch process exited/reaped; no local compiled products or background child remaining",
+  "deadline_basis": "Conservative five-minute allowance before scope creation; checkpoint at scope+40min, watch stop at scope+44min, harvest stop scope+48min",
+  "checkpoint_at_utc": "2026-10-30T18:17:33.412733+00:00",
+  "watch_stop_at_utc": "2026-10-30T18:21:33.412733+00:00",
+  "elapsed_seconds": 34.686150333989644,
+  "initial_jobs": [
+    {
+      "id": 124216768563,
+      "name": "build-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768677,
+      "name": "desktop-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768689,
+      "name": "perf-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768707,
+      "name": "native-web",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768715,
+      "name": "build-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768734,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768760,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768777,
+      "name": "build-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216768968,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124216769050,
+      "name": "perf-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "watch_pid": 38911,
+  "error": "RuntimeError: jobs-final: API failure; original logs preserved",
+  "finished_utc": "2026-10-30T17:49:45.447484+00:00"
+}

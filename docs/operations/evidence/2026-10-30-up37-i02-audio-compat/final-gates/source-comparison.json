@@ -1,0 +1,29 @@
+{
+  "entry": "narrow-entry.json",
+  "exit": "narrow-exit.json",
+  "equal": {
+    "head": true,
+    "index": true,
+    "source14": true,
+    "protected": true,
+    "guard": true,
+    "modules": true,
+    "dist": true,
+    "frozen_packages_locks_diff": true,
+    "upstream_head": true,
+    "global_owner_resolver_sha256": true,
+    "accepted_prior_parent_docs_delta": true,
+    "source14_aggregate_sha256": true,
+    "index_sha256": true,
+    "tracked_diff_sha256": true,
+    "maintained_docs": true,
+    "entry_fixed_untracked_source_paths": true,
+    "tracked_status": true,
+    "functional_artifacts": true,
+    "functional_artifact_index_sha256": true,
+    "admission_sha256": true,
+    "independent_results_sha256": true
+  },
+  "all_equal": true,
+  "no_staged_files": true
+}

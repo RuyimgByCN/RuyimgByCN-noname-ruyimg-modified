@@ -1,0 +1,112 @@
+{
+  "utc": "2026-10-30T18:15:57.390492+00:00",
+  "read_only_no_watch_rerun_or_dispatch": true,
+  "commands": [
+    {
+      "name": "run",
+      "exit": 0
+    },
+    {
+      "name": "jobs",
+      "exit": 0
+    },
+    {
+      "name": "artifacts",
+      "exit": 0
+    }
+  ],
+  "evidence": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f-parent-read-pi4g4ef4",
+  "run": {
+    "id": 41100475767,
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "a1f7250815eee803d931301ab46207719cb9a15b",
+    "run_attempt": 1,
+    "updated_at": "2026-10-30T18:06:33Z"
+  },
+  "jobs": [
+    {
+      "id": 124216768563,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768677,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768689,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768707,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768715,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768734,
+      "name": "gates-ubuntu",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768760,
+      "name": "desktop-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768777,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216768968,
+      "name": "desktop-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124216769050,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12998118328,
+      "name": "installer-macos-latest",
+      "size_in_bytes": 32802940,
+      "expired": false,
+      "digest": "sha256:add7868181f107bc5ff3c2d80e05df7e78816d8b876de54c4b3203fadf35161f"
+    },
+    {
+      "id": 12997584073,
+      "name": "installer-ubuntu-latest",
+      "size_in_bytes": 266340325,
+      "expired": false,
+      "digest": "sha256:4ac4d2e21fd712f1f73aee7887bfb3c7761c9325767fda3323d6b4b7c5a3bf06"
+    },
+    {
+      "id": 12997069742,
+      "name": "installer-windows-latest",
+      "size_in_bytes": 26272381,
+      "expired": false,
+      "digest": "sha256:4b3e9a8044bd475ed7a3766c9a78e17cb0846d4a0325939b90472d944fde8c4a"
+    }
+  ]
+}

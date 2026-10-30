@@ -1,0 +1,31 @@
+## Review
+
+**原 P2 已关闭。** 本轮仅对两文件修正做只读定向回审，已完整读取 [作者交接报告](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3e901f61-40f9-4d58-9b35-5cd201562a8e/implementation/up37-five-no-elst-compat-p2-correction.md)、实际 diff／源码／测试及原始 red→green 证据。
+
+- **Fixed（作者修复，本 reviewer 核验）：未绑定 symlink 不再从库存中漏掉。**  
+  [original-audio-resources.mjs:61](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/original-audio-resources.mjs:61) 改为局部 `readdir({withFileTypes:true})` 递归：仅普通目录可进入、普通文件可计入，其他条目明确抛出 `audio compat non-regular input`，随后排序比较固定六文件集合。文件／目录 symlink 均不会被跟随或忽略；共享 `listFiles()` 未修改。
+
+- **Correct：拒绝仍发生在同步写入之前。**  
+  [sync-original-content.mjs:277](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/sync-original-content.mjs:277) 先等待完整 validator 返回，随后才进入资源 syncTree、manifest write 或完整生成 mkdir。原 SHA、size、provenance、路径与根目录校验保留，未引入新契约、播放注册表或依赖。
+
+- **Correct：反例真实且先有合法正例。**  
+  [新增测试:161](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/test_original_resources.mjs:161) 对外部文件、外部目录各建立独立 fixture，先成功 sync／verify，再仅加入未绑定逃逸 symlink。修复前 [red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/red.log) 明列两 case 的 sync／verify **四次均 status0**；首轮只执行至第一个断言的 `red-initial.log` 也保留。修复后要求两入口非零且命中明确错误，并逐字节保护 manifest、所有已采用资源输出、catalog、immutable package、legacy sentinel 和旧锁。
+
+- **Correct：实际绿灯与冻结身份对应。**  
+  已读取 [green-regression.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/green-regression.log) 的 **3/3**（父测试及两个子 case）、[green-node-related.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/green-node-related.log) 的 **17/17**、行数单测 **2/2** 及 **8,986 文件**门禁通过记录；这些是作者运行结果，本轮未重跑。
+
+父会话的限定只读 [独立身份核对](/tmp/parent-audio-compat-review/p2-independent-results.json) 确认 live／checkpoint2／新 freeze 的 14 项身份一致，仅以下两项变化，其余十二项和共享遍历器保持原 SHA：
+
+| 文件 | 物理行 | checkpoint2 SHA256 |
+| --- | ---: | --- |
+| `original-audio-resources.mjs` | 449 | `1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759` |
+| `test_original_resources.mjs` | 182 | `755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42` |
+
+已核对 before-proof、checkpoint2 及实际补丁回放脚本／结果：旧 freeze、checkpoint 和旧补丁保留；P2-only／累计 compat-only／累计 da7e total 分别回放 **2／16／16 项**，不使用 index。新补丁 SHA 分别为 `d4978c3e426179c040c04b5ed71fe0bfe8a18043b14b72df873ff7afdfa5f403`、`2605af4b6a8fff48a76be560ed9d7f7cfd3b3a5e24218fb23dc7c53c90bf5264`、`d570b4d8be7d4f15fbeb7fe49f1cfa484b2ce64026d4ae5d1736124f8e66023f`。
+
+**新增问题：** No issues found.
+
+**Merge verdict: OK with notes。** P2 修正通过本次源码定向回审，可供父下一轮 Main 接入；此前 codec／mapping 证据仍只支持原限定范围。本结论不包含 Mainalias9 的另一独立 review／final gates，也不构成 Main 产品验收或整 I02/37／Goal 完成证明。
+
+未重跑 tests／build／codec／CI／12k hash，未写 source、Main 或 index；本轮只读源码和已有证据，父会话另做限定输入身份核对。  
+Main 后续仍须验证真实 Collection Vue 五条选择及错误恢复；既有跨 decoder 44ms 差异与平台验收边界继续保留。

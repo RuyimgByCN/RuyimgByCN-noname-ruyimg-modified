@@ -1,0 +1,51 @@
+# C331 phase3 最终交接 — 2026-10-30T18:42:54.871464+00:00
+
+本轮修复owners截断P1并补全合法fellow库存/Normal成员边界；实现trigger-only DamageBefore多handler真实窗口身份；完成实际Tauri IPC及较完整的真实WS/actor/WAL/timeout专项，按父授权更新331 goldens。**整C331仍未完成，不可宣整体验收**：90个host触发来源分支尚未闭环，最终十包默认并行运行失败，修复测试deadline后仅专项串行复跑通过，未把它写成全量绿。
+
+## 源码封存与约束
+
+最终源码在 `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/final-freeze3/`，完整133文件、相对不可变freeze2增量25文件。manifest SHA256=`32c3b156ebdffa6d9f1c167e0c855d46c05352ccbe4a3afd1c9a6245c7ec60fa`。完整tar SHA=`d70b34974cceefb6a2ad040ced87375abd6ad7dfb998542d0bbca92ab18a1137`，增量tar SHA=`946c7f14de44bdaee02ceb1c6925ccf86087e42d0d6135cdafbfa6608fe0287d`。完整tracked patch、vs-phase2.patch、每文件SHA同目录；133/133 live SHA匹配，index为空，HEAD仍38ab1678df9b4b7b991d3b3122b1d937fd2648a1。45分钟检查点source-freeze3/和checkpoint3.md保留不覆盖；最终仅另改WS非计时测试fixture为90秒，真实timer专项仍10秒。
+
+原118、freeze2、旧330档/期望/14red/3轴probe全部保留。未改main/index/commit/push/全局配置，未合并alias9/CI13/NC10私有API。format1/API1/ABI758/archive105/WS6保持；新增字段仅在本批未发布83内部。重命令均全局串行、inc0/jobs2、owned target，磁盘始终>90GiB。源码行数门禁及unit门禁通过，F7=0，未声称LSP clean。
+
+## owners P1与真实fellow
+
+合法pending窗口删一个无candidate owner的真实byteRestore反例在owners-red.log失败，完整覆盖检查后owners-green.log通过。核实构造使用全部玩家，也核实运行中host::sixiang_add_fellow和Engine::add_boss_fellow会push玩家，故不能只加len校验而使合法API拒档。
+
+按父确认的真实gameEvent.ts:344–425 addTrigger语义：Normal只能找到入窗已有doing map，新player没有；First/Last仍取存在的全局map。在既有83中保存normal_owners:u16作为入窗前缀边界，owners为完整当前库存；新fellow仅追加库存，不新建本窗Normal桶。同步正式API及step/commit回调；cursor/queue/codec/hash/restore一致绑定，库存长度、唯一、界限、入窗前缀、附加PID次序均校验。
+
+真实add_boss_fellow无skill保存恢复、真实VM向新fellow授技，First/Normal/Last跨三种当前stage九组合direct/byteRestore完整对象与日志通过。Normal不会凭空触发，First只在尚存First桶接入，Last仍存则接入，无回退/重复。源与fingerprint在fellow-window-source.json。
+
+## K4功能闭环范围
+
+filter/start/following eligibility均接收既有Frame的有效window kind，恢复把现有handler模块身份绑定Slot::Trigger所属frame/stage；Damage载荷本身仍不伪装成另一事件。没有新增RvmSnapshot字段、事件或第二窗口权威。
+
+真实Damage前storage写入、两个Before handler、after只draw一次、前后各commit pause的byteRestore、把合法兄弟module换到错误window时拒档均通过。active+DamageBefore旧不支持边界保持并有测试；本轮支持的是trigger-only组合，没有偷偷放宽active。初始安全拒绝反例及编译/测试迭代日志保留。
+
+## 实际产品矩阵
+
+**桌面IPC：通过。** 真正产品Tauri bin、真正隐藏WKWebView、native_engine_open/request/close，非mock、非仅NativeHost行协议。独立identifier org.noname.c331.privatephase3、owned5198/PID/隐藏窗口；未操控用户窗口或TCC。隐藏WK节流曾停等，改私有配置backgroundThrottling=disabled后完整跑通。四资源授权投影、257项和token256、五种非法、重复答拒绝、资源close/reopen及255次完整尾续行，每一步NGSA/hash/events与Native相同。完整原始回复18MB在desktop-ipc-full-replies.json，结果desktop-ipc-result.json。最终产品bin重新编译并再次通过。
+
+**真正WebSocket/actor/持久化：串行专项5/5通过，展开如下：** 原生seat1（wire PlayerId2）owner、readonly Referee、observer与noowner、伪造actor；257th token、空/多/越界拒绝；同key同body重放/异body拒绝；pending/answered恢复；10个单提交故障；9种decision/compensation双故障；replace后及decision/compensation不确定点的真正进程退出（86/87）、各两次重启；真实10秒timeout先赢、旧manual不重复。managed自动后续可能继续多个Choice，逐条读取实际持久WAL的TimeoutAction/Answer，用Native执行记录动作而非重算AI，核每条hash与完整终态。完整WS6双向回复保留server-ws-wire.jsonl；每故障/重启记录存server-*.json。
+
+手动先赢包含接受后重试/旧答拒绝、重启与deadline重绑定；未另完成一个专门等待旧deadline到达的手动先赢计时样本。旧WAL未知Skill的实际旧server reader未跑，不把新serde值roundtrip当旧读者验收。
+
+**最新WASM：通过。** 保留原release/web/--no-opt argv，输出只在phase3/native-pkg；私有Node preload将实际生产adapter的模块读取定向到新包，无main/defaultdist/共享deps写入。完整Native/WASM存档/四座位投影/choice/events/恢复分支通过。命令及结果platform-commands.json、platform-final.log、author257-wasm-result.json；本轮没有重跑新的Chrome UI，phase2实浏览器结果仅为历史证据。
+
+**实际旧读者：通过指定拒绝门。** SHA5ec8147491571b7c0145b2a31b8ab003d37fb5c9839ba1a31a668e83712abac4的原330 reader读取保留的真实330 NGSA成功；读取本轮真实331 pending档受控Err(BadTag(machine,83))；原public bridge拒绝schema4。无改头。old-reader-phase3.json绑定reader/data SHA。一次误调用旧test binary只筛出0 tests的输出另存wrong-test-binary，未当验证。
+
+## golden与来源
+
+父独立完整AST/hash复审授权后，本轮14个完整对象对freeze2仍完全一致，唯rollback park新增normal_owners=4；events/choice/54views全字节同，RNG全字段同。golden-audit/phase2-to-phase3.json记录精确新增字段；按此更新14个331 expected，旧值在golden-update.json和旧封存。定向golden及聚合中的golden均绿。**更正旧交接56 views为54**：death_terminal_single只有两player，其余13各4；旧原件不悄改。
+
+新增8个Liuli古剑食品分支真实行/fingerprint/旧addList公式与译名资格证明；不能外推core装备-25。紫阳丹silent=true，实际priority1/不可选，旧native0/true真实red已保留并修正；其余七个默认tuple经源码核对正确，新增回归在聚合中通过。当前来源行216，其中200/290实际触发分支已来源取证，**90仍未证**；68个直接候选仅候选，不计已证。gujian-source-proof.json与host-source-status.json给精确数字。group/subskill/inherit/合并窗口、PhaseBegin VM-before/host-after、dieBegin/dieAfter压窗及forceDie/out/indexed/hidden/filterStop仍不能宣全规则等价，未以differences名义删范围。
+
+## 验证结果的实际边界
+
+一次最终十包聚合：**2892 passed / 5 failed / 76 ignored**，所有失败都是新增C331 WS专项在默认并行压力下，10秒fixture期限先于权限/故障断言到期并进入managed自动链，引发选择已前进/连接背压关闭。Native三包、goldens及其他受影响包无失败。原全量失败affected-final.log保留；这不是全绿。
+
+已把非计时fixture设为合法90秒，真实timer样本仍10秒，最新串行专项 **5 passed / 0 failed**（server-final-serial.log，71.86秒）。最新源尚未重跑一次完整默认并行十包，不能用专项绿覆盖全量红；建议父以合适测试并发再次完整跑。源码最终只有该测试deadline改动晚于全量命令，产品实现未再改。
+
+最终平台流水全通过，实际桌面完整255步、最新WASM+生产adapter及真实旧reader均有原始证据。core-all2.log本轮12项通过；聚合也涵盖新紫阳丹回归。源码行数/F7/diff/index检查通过。完整命令索引commandindex.json，源码最终final-freeze3，45min检查点保留source-freeze3。
+
+下一步：独立复审新增83边界、fellow、K4回调及数据恢复约束；重跑最终并行全量；继续90项来源，以及显式手动先赢旧deadline到达、实际旧WAL reader等剩余矩阵。整C331尚未满足完成条件。

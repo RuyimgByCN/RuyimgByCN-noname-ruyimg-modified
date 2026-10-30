@@ -1,0 +1,10 @@
+{
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot",
+  "source_count": 133,
+  "source133_all_exact": true,
+  "base": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "manifest_sha256": "32c3b156ebdffa6d9f1c167e0c855d46c05352ccbe4a3afd1c9a6245c7ec60fa",
+  "tar_sha256": "d70b34974cceefb6a2ad040ced87375abd6ad7dfb998542d0bbca92ab18a1137",
+  "vs_phase2_sha256": "0079c3df3c8493a0c6e9e8e17a2dfff7b23a2602796da2f4dff9bcdf61e68721",
+  "phase2_increment_count": 25
+}

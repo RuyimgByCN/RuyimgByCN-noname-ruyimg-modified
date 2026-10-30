@@ -1,0 +1,14 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "-H",
+    "Cache-Control: no-cache",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767/attempts/1/jobs?per_page=100"
+  ],
+  "started_utc": "2026-10-30T18:22:32.778591+00:00",
+  "finished_utc": "2026-10-30T18:22:33.745095+00:00",
+  "exit": 0,
+  "http1": true
+}

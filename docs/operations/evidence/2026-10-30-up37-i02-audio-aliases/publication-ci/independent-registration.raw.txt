@@ -1,0 +1,45 @@
+## Review
+
+- **Correct：可登记本次 CI 完成成功。** 对象仅为 [run 41100475767](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41100475767)、attempt **1**、exact head **`a1f7250815eee803d931301ab46207719cb9a15b`**；原始 [run API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/run-final-fetch.stdout:1) 为 `completed/success`，`updated_at=2026-10-30T18:06:33Z`。
+- 已完整读取 producer 登记、manifest、producer verifier、父独立 parser 与结果；另独立读取原始 run/jobs/artifact API、四份补充 step API，并定向核对关键原日志。未声称独立全文复核全部日志。
+- 采集时间分别保留：父 API **18:15:57Z**；新主采集 **18:18:20–18:19:23Z**；补充 step 读取至 **18:23:20Z**。不将旧时段 `queued/in_progress` 快照重写成最终状态。
+
+[整 job API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/jobs-final-fetch.stdout:1) 的 **10/10 job 均为 completed/success**：
+
+| Job | ID |
+| --- | ---: |
+| build-ubuntu-latest | 124216768563 |
+| desktop-ubuntu-latest | 124216768677 |
+| perf-ubuntu-latest | 124216768689 |
+| native-web | 124216768707 |
+| build-macos-latest | 124216768715 |
+| gates-ubuntu | 124216768734 |
+| desktop-macos-latest | 124216768760 |
+| build-windows-latest | 124216768777 |
+| desktop-windows-latest | 124216768968 |
+| perf-macos-latest | 124216769050 |
+
+- **Step API 单独登记：**producer 合并的 125 条返回记录仍有 **18 个 null conclusion**：native-web **1**、gates **9**、macOS desktop **6**、Windows desktop **2**；已读取对应补充原 API，与 [限制清单](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/verified-final-summary.json:9745) 一致。不能由 job success 推填 step success；父 parser 初始 jobs 快照的 step 计数也不能替代此合并口径。
+- **前三次 watch 仍全部失败：**原 stderr 均为 HTTP 502；exit **1/1/1** 由已读 producer verifier 及登记支持。本次成功依据 API/log，不产生 watch exit0 结论。
+- **证据完整性引用父 parser PASS：**[脚本](/tmp/noname-parent-ci41100475767-audit.py:7)及[结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41100475767-audit-d3qnf84u/independent-results.json:1)核过 **146 项 bytes/SHA256**、10 job detail 与日志采集绑定、逐 job Rust 汇总及三 artifact 身份。完整 root **147 文件含 manifest 自身**；本 reviewer 未重复 hash。
+- **Rust 范围引用父 parser：**gates **6894/0/77**；native regressions **1815/0/75**；Ubuntu/macOS/Windows build 各 **838/0/0**，顺序均为 passed/failed/ignored。范围重叠，**不得相加为 unique tests**。
+- **独立核原日志：**[Worker 段](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/job-124216768707-raw-log.stdout:4444)含 `total=82, failed=0`；frontend **167 passed/0 failed/0 skipped**。alias 四例均 `ok`：N01/周瑜声明、精确数字技能与 backing bytes/重复拒绝、当前角色 owner 隔离、真实 tempname 与缺失绑定不借共享池（同日志 **5284、5289、5294、5299** 行）。
+- **独立核原日志：**[conformance](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/job-124216768734-raw-log.stdout:15865)为 **19 cases / ALL PASS**；同日志 **21628** 行为 `ALL CROSS-TARGET CHECKS PASSED`。五个资源准备 job 均检出 sync、verify、`git diff --exit-code -- content/original`；[Gate4](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/job-124216768734-raw-log.stdout:21629)为 Node **2/2**，full verify 为 legacy **366**、portraits **2707**、audio **9652**。
+- **独立核性能原日志：**按 start-hash-p50 / distance-query-p95 / snapshot-restore / observer-projection，Ubuntu **48/0/45/19 μs**、macOS **68/0/59/27 μs**，预算 **100/300/200/100 μs**；两份 `server-baseline` 均 `PASS`（Ubuntu 日志 **2100** 行、macOS 日志 **2126** 行）。仅支持本次预算通过，无同设备前后收益结论。
+
+独立读取 [artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-a1f72508-observation-gjutdrsj/final-stage/artifacts-final-fetch.stdout:1)；三者采集时均未过期，绑定上述 exact run/head；与先前父 API 全身份一致由父 parser 核验：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| macOS | 12998118328 / 32802940 | `add7868181f107bc5ff3c2d80e05df7e78816d8b876de54c4b3203fadf35161f` |
+| Ubuntu | 12997584073 / 266340325 | `4ac4d2e21fd712f1f73aee7887bfb3c7761c9325767fda3323d6b4b7c5a3bf06` |
+| Windows | 12997069742 / 26272381 | `4b3e9a8044bd475ed7a3766c9a78e17cb0846d4a0325939b90472d944fde8c4a` |
+
+- **保留限制：**producer 计数 **3628 warning loglines**，包括重复 compiler summaries，非 unique warnings；ignored tests 保留；原 step API 明示 macOS/Windows 两处 Linux Tauri dependencies skipped。父 parser 核得日志 **4,721,558 bytes**、Windows build/desktop CRLF **3821/2212**，本 review 未转换原文件。
+- **历史与范围：**本登记只覆盖本 run；不覆盖 da7e 旧 10 绿与 first 9dbc5 failure，不改写 progress 的旧采集状态。a1f 之后 dirty Main、当前 compat14 及其运行资格均未验；不作 whole37 或全 goal 完成结论。
+- **Fixed：**无修改；未运行 network/watch/tests/build、生产脚本或 Git 操作。
+- No issues found.
+- **Merge verdict：OK with notes**，仅指本次 CI 证据可纳入 docs/evidence；安装产物只证明产出/上传及 API 身份，未 download/install。
+
+未检查：安装、signing、device、真实音频/浏览器验收、native default、whole37、当前 Main compatibility。
+风险：18 个 step null、warnings/ignored/skips 仍保留；临时证据 root 的完整 147 文件需持久保存。

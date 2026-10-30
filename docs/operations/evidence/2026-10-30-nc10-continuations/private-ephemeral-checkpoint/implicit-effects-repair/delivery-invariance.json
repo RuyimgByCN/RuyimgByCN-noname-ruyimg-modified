@@ -1,0 +1,379 @@
+{
+  "utc": "2026-10-30T18:57:41.239680+00:00",
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "guardUnchanged": true,
+  "noStagedFiles": true,
+  "untouchedBeforeProductSources": [
+    "crates/engine-native-content/src/content/host/simulation.rs",
+    "crates/engine-native/src/ai/trial.rs",
+    "crates/engine-native/src/engine/certification.rs",
+    "crates/engine-native/tests/nc10_empty_choice.rs",
+    "crates/engine-native/tests/nc10_host_privacy.rs",
+    "crates/engine-native/tests/nc10_private_scalar.rs",
+    "crates/rule-vm/src/vm/controlled.rs",
+    "crates/rule-vm/tests/controlled.rs",
+    "apps/desktop-client/tests/native_planner_measurement.rs",
+    "apps/game-server/src/native.rs",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+    "crates/engine-native-content/src/content/host.rs",
+    "crates/engine-native-kernel/src/catalog.rs",
+    "crates/engine-native-kernel/src/lib.rs",
+    "crates/engine-native-kernel/src/machine.rs",
+    "crates/engine-native-kernel/src/resolution.rs",
+    "crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+    "crates/engine-native-kernel/src/rvm_named.rs",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native-wasm/tests/pa09_native_session.rs",
+    "crates/engine-native/examples/nc12_bench.rs",
+    "crates/engine-native/examples/nc12_bench/scenarios.rs",
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native/src/ai/redact.rs",
+    "crates/engine-native/src/ai/remap.rs",
+    "crates/engine-native/src/ai_pool.rs",
+    "crates/engine-native/src/engine.rs",
+    "crates/engine-native/src/engine/commands.rs",
+    "crates/engine-native/src/engine/legal_actions.rs",
+    "crates/engine-native/src/lib.rs",
+    "crates/engine-native/tests/adr0786_j2_effect_choices.rs",
+    "crates/engine-native/tests/ai_content_tuning.rs",
+    "crates/engine-native/tests/ai_planner.rs",
+    "crates/engine-native/tests/l01_ai_tuning_eight.rs",
+    "crates/engine-native/tests/native_kernel/n10.rs",
+    "crates/engine-native/tests/nc03_ai_consistency.rs",
+    "crates/engine-native/tests/nc07_discard_duplicate_probe.rs",
+    "crates/engine-native/tests/nc10_ai_boundary_and_cancel.rs",
+    "crates/engine-native/tests/nc10_ai_bounds.rs",
+    "crates/engine-native/tests/nc10_ai_information_boundary.rs",
+    "crates/engine-native/tests/nc10_duel_nullify_privacy.rs",
+    "crates/engine-native/tests/nc10_j2_vm_privacy.rs",
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+    "crates/engine-native/tests/nc10_multiple_hidden_traps.rs",
+    "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+    "crates/engine-native/tests/nc10_pending_duel_privacy.rs",
+    "crates/engine-native/tests/nc10_planner_pool.rs",
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+    "crates/engine-native/tests/nc10_single_hidden_trap.rs",
+    "crates/engine-native/tests/nc10_skill_pile_conservation.rs",
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs",
+    "crates/engine-native/tests/nc12_dangling_reference_probe.rs",
+    "crates/engine-native/tests/nc12_dangling_reference_repro.rs",
+    "crates/engine-native/tests/nc12_swd_authoritative_stability.rs",
+    "crates/engine-native/tests/t9_d5_surface.rs",
+    "crates/rule-vm/src/lib.rs",
+    "crates/rule-vm/src/vm.rs"
+  ],
+  "untouchedCount": 57,
+  "parentDesktopCallerSha256": "21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f",
+  "formalRvmOpsUnchangedFromHead": true,
+  "formalKernelEventsUnchangedFromHead": true,
+  "frozenBoundaries": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "ee2c34fd5e1af005b8fe9b9198e4d1557b2be9469fba1574b4fd321a1c4baf6b",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-api/src/version.rs",
+      "sha256": "ea99d3dc6c2c3b4f4ee59ccc9a0532f29aa5f9b17816e003c7abda8b29257fe1",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard.rs",
+      "sha256": "46036c83fc7326f0015524c122961551aa1c260786785e7a7c3fda1eef96df93",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive.rs",
+      "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/auxiliary.rs",
+      "sha256": "fa93561ae184816df76021b47a9adfb0d1c64eeba0430a1b0546870325eeaa2b",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/card_codes.rs",
+      "sha256": "af3b033693b873934c889e91287e78f8edcc236b5732b6a53929b3c061f1b214",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/io.rs",
+      "sha256": "2b861a6cc38d9c7adfdbb830c976a3f3c4bc2745fde1b6b28c14477770b1e055",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "d23d0b4295f089bd5ceea637dabeaf60b1a64bf18f03ca7b06bbe26a7e451edf",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "63a0dab319a93cf0de518005d6f2f497437dd7278cfbcc2c029d82008042d987",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+      "sha256": "51ad02256a57e6c0a0461a5a41da85db0f7d3982252416255be1481b0d998ee2",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_decode.rs",
+      "sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_encode.rs",
+      "sha256": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "sha256": "2db7ba73e96859dbbf80fa3ac7fd719c93954f8ab9cab2075aad05e264817a5c",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "sha256": "669f83ffaa58a9d9a3f7da4bfc413e8664c0626b8acba84a13d8578008882a1f",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "f9ad7f4d978a009c30b035bf1434bc2fc944f3fe6b60a3cce01ad041de322ebc",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/ownership.rs",
+      "sha256": "92f8c82ad0569d431c5ab5bcc55961380c99fc3ba4bcd686e91f2d7c15297e48",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "e9b71d05b5e182cfa6a0e90416a7679c26fa5668b9453dffa6667af0596de0cd",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "318ed470d8dd93cb3e4aa3fbf74664064b1c73e7745298c04d031864c2de915c",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "ec43392afd60f8e1d0e80a677e583a608f6227e48633041548fe5d0042d97956",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state.rs",
+      "sha256": "8a54eef1a239f93ab3fdac77e10be1c3a70382c6d806176dcbdb2279ed5f2177",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash.rs",
+      "sha256": "b8a4243a87f4987ce852480eb9758c981a55e1d670676b9e8fe027511063edd3",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "fa5d301d91a41971e7ef2b5ea054ce1cfca3f737e32e15cefd12413f98b4f4d8",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-protocol/Cargo.toml",
+      "sha256": "fa98b0027b2111d301806e938e348700bd4f321f4b85db151ab53c14843c114b",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-protocol/src/lib.rs",
+      "sha256": "f5b81695c40a16ca378df3a8af0e2e360553d83ccb78f871225943d4c92ad630",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-protocol/src/messages.rs",
+      "sha256": "c297877fbc98e34a7e7caa05ad37f1149d8631430dded62f1dfcd0f09849480a",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/engine-protocol/src/wire.rs",
+      "sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/Cargo.toml",
+      "sha256": "f62fdf5bdb891820070cbffac4b46eef45045c9c5067747d0a7337a7e5166d70",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect.rs",
+      "sha256": "633401a2cd9162b55002c8b1c7af134ac36b93055a2b3bfe81a5bbe5d105a8fe",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/card_movement.rs",
+      "sha256": "5cc6c99c832429dff6e2c5163d80f272c904789d5ef8f5c28695d1ecbf75f149",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/choices.rs",
+      "sha256": "e4a4cf126b2f9a95a38675efc733368a6b5f03cd754af948d01e167f473e08e4",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/clan_generals.rs",
+      "sha256": "b268b1387d04b130d3ddccfc670874b6ffd7e167b970909479321d8bd085edaa",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/classic_generals.rs",
+      "sha256": "a795f0ea82b71d8762d80fa49efaf3e476cade4bb551da30fb4f7003c2c0a317",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/damage_and_recovery.rs",
+      "sha256": "8e528acada7d764dc570725b4b655d1d7b8958da6f91687d3c6f9818ab8c8036",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/draw_and_gain.rs",
+      "sha256": "1dcd4eed988bc9ee4870b011228011b543bed39806b123e3fa3f366652b5387b",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/events.rs",
+      "sha256": "cc344998fa1cfa7fb5ff58dee350b04ca0b7d47d39f25c1ae7137bfaece70ae4",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/extension_generals.rs",
+      "sha256": "7f0e30fa002f82f06e6f82cf79976de708bdac6defe14e4539a542af6d9e2207",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/general_resolvers.rs",
+      "sha256": "266f00fbc54dc8cc4eceb31344b2bcc91ca0c45a0017067bbf69e33d0f4235f5",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/jsrg_generals.rs",
+      "sha256": "e5bda1d64a368cd32880b42f2d13a22be46f8f2a94e56f6d45ec50110d102162",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/judgment.rs",
+      "sha256": "201234c2df9d1feddc5856a03732eef02e2837087974b5c6844d64682af91d4c",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/life_cycle.rs",
+      "sha256": "0eea14c11992fc62b45d03d8b196b4dbb536f7348c947cfeec5cad8a3cf9d332",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/mobile_generals.rs",
+      "sha256": "7cfb254557a23e67e2c95165144ee5f4cc2f9d36912467fac33ccbb39c145e9f",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/online_generals.rs",
+      "sha256": "f0c145d14bd9964682bc170e3e61149303e917cda5c56de58b9257b07a7902d3",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/pot_generals.rs",
+      "sha256": "399ac54a84adb709ea1acbdf542ce62c2e87943f00741ef18a1b3bba9bd30ad0",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/remastered_generals.rs",
+      "sha256": "df06a4099219dc3a34bf4c1f19bd20556d97fb4d87d198ece6d964353c0b0fca",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/sha_resolution.rs",
+      "sha256": "36c8d70710e881bd4b0b557438fad1cdb1598ab0c0acbcccc4e9664bcfc430d2",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/skills_and_marks.rs",
+      "sha256": "660ac4cdcb162566d3f501f722a24237526dfc565d06ce292b5420aecbfd4e75",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/sp_generals.rs",
+      "sha256": "a10a343b34f3be5e6d311e8b0bdf0d1cf22eaaf614db375f970731ac5b88a893",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/staged_resolvers.rs",
+      "sha256": "030a3de8535a7acc4b107eb4e01a6457c9f8027f45dcc911c55d2dd85d08dc76",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/taiwan_generals.rs",
+      "sha256": "627e3cc8412ad628554f338c858125214122d3841400df1f9a97ab8fda686689",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/targeting.rs",
+      "sha256": "a7f1d95886399203d9ba647f2c45c793c7c6567e4f9f213f7b45f288e2d17ae4",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/effect/turn_flow.rs",
+      "sha256": "4120aecca0ca6c9a867bb8982477f2422801f0b43585bd13247f2b081be32871",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/host.rs",
+      "sha256": "f1faaba77a9cae4bcdb904e6d17eb94f4cc9965982df47980769085243b4754a",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/lib.rs",
+      "sha256": "48023111c1fa414fcbf3ff5ac529cf523ad0d2634001d6c7c47df92f864f4392",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/src/query.rs",
+      "sha256": "4ba2a5ee6de2d7634a11a81ff3a9c8f10c43a15bca4c25c4efc5d8d0920e3c21",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/tests/effect_wire_compat.rs",
+      "sha256": "160a9b04f42245788f35a294bdef943ab730f76f8bf68f13a1e3e8987b2614c5",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-api/tests/effect_wire_v322.json",
+      "sha256": "2700412a1e0b96a8bc01d7f6d13f806606f79e35e81a71dddc2ca2580f336e87",
+      "matchesCheckpoint": true
+    },
+    {
+      "path": "crates/rule-vm/src/bytecode.rs",
+      "sha256": "64dd4e60d99a3ab4d5f3c6c697f39bf1d7f7216ee4cbca444c2575636bb88bb1",
+      "matchesCheckpoint": true
+    }
+  ],
+  "same19Failures": true,
+  "newFailNames": []
+}

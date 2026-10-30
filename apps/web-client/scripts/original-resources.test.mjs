@@ -125,3 +125,30 @@ test("cross-pack substitute declaration binds to its global exact character owne
     assert.ok(voices.some((row) => row.source_path === source), `declared cross-pack voice missing: ${source}`);
   }
 });
+
+test("compat backing uses category and source identity while preserving role isolation", () => {
+  const backing = { kind: 'audio', path: 'audio-compat/skill/voice1.m4a', source_category: 'compat',
+    source_path: 'audio/skill/voice1.m4a', size: 18716, sha256: 'c'.repeat(64) };
+  const alias = { ...backing, path: 'audio-declared/fixture/character/actor/skill/voice/base/0001/voice1.m4a' };
+  const character = { pack: 'fixture', name: 'actor', skills: ['voice'] };
+  assert.deepEqual(originalCharacterAudio({ assets: [backing, alias] }, character), [alias], 'positive valid compat fixture');
+  assert.equal(originalResourceUrl(base, `assets/${alias.path}`), `${base}/assets/${alias.path}`);
+  for (const change of [{ source_category: 'core' }, { source_path: 'audio/skill/other.m4a' }, { size: 1 },
+    { sha256: 'a'.repeat(64) }, { path: backing.path.replace('voice1', 'other') }]) {
+    assert.deepEqual(originalCharacterAudio({ assets: [{ ...backing, ...change }, alias] }, character), []);
+  }
+  assert.deepEqual(originalCharacterAudio({ assets: [backing, alias, { ...backing, path: 'audio-compat/duplicate.m4a' }] }, character), []);
+  assert.deepEqual(originalCharacterAudio({ assets: [backing, alias] }, { ...character, name: 'other' }), []);
+});
+
+
+test("checked-in compat reaches actual role aliases and preserves original raw audio count", () => {
+  assert.equal(manifest.schema_version, 2);
+  assert.equal(manifest.assets.length, 35757);
+  assert.equal(manifest.assets.filter(row => row.kind === 'audio' && row.path === row.source_path).length, 9652);
+  const actor = catalog.characters.find(row => row.id === 'key:key_tsumugi');
+  const compat = originalCharacterAudio(manifest, actor).filter(row => row.source_category === 'compat');
+  assert.equal(compat.length, 5);
+  assert.ok(compat.every(row => row.path.includes('/character/key_tsumugi/') && row.path.endsWith('.m4a')));
+  assert.equal(manifest.assets.filter(row => row.source_category === 'compat' && row.path.startsWith('audio-declared/')).length, 10);
+});

@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/native-pkg"
+    ],
+    "exit": 0,
+    "seconds": 29.238387583987787,
+    "log": "wasm-release-final.log"
+  },
+  {
+    "command": [
+      "node",
+      "--import",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/private-wasm-preload.mjs",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/c331-trigger-order-cross-target.mjs",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/author257-vector.json",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/author257-wasm-result.json"
+    ],
+    "exit": 0,
+    "seconds": 0.27995099997497164,
+    "log": "node-current-wasm-final.log"
+  },
+  {
+    "command": [
+      "python3",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-build.py"
+    ],
+    "exit": 0,
+    "seconds": 10.420401750016026,
+    "log": "desktop-build-final.log"
+  },
+  {
+    "command": [
+      "python3",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-run.py"
+    ],
+    "exit": 0,
+    "seconds": 29.552142958011245,
+    "log": "desktop-ipc-final.log"
+  }
+]

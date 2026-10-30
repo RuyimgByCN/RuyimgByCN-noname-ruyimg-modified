@@ -1,0 +1,15 @@
+{
+  "original_direct_objects_exact": 12359,
+  "original_stat_qualification_reused": 35742,
+  "unaffected_alias_objects_order_exact": 23383,
+  "only_affected_aliases": 10,
+  "new_backings": 5,
+  "new_input_bytes": 263579,
+  "new_targeted_identity_checks": 15,
+  "unaffected_rehashed_anomalies": 0,
+  "raw_audio_count": 9652,
+  "alias_count": 23393,
+  "total_manifest_rows": 35757,
+  "original_raw5_decode_repeated": false,
+  "generated_directory_metadata_relinked_as_authorized": true
+}

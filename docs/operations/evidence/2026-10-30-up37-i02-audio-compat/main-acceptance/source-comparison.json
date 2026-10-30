@@ -1,0 +1,12 @@
+{
+  "head": true,
+  "index": true,
+  "source14": true,
+  "protected": true,
+  "guard": true,
+  "modules": true,
+  "dist": true,
+  "frozen_packages_locks_diff": true,
+  "upstream_head": true,
+  "global_owner_resolver_sha256": true
+}

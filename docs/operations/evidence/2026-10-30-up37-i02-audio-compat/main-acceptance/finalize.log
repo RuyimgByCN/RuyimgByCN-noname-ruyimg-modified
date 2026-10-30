@@ -1,0 +1,64 @@
+{
+  "source14_all_protected_unchanged": {
+    "head": true,
+    "index": true,
+    "source14": true,
+    "protected": true,
+    "guard": true,
+    "modules": true,
+    "dist": true,
+    "frozen_packages_locks_diff": true,
+    "upstream_head": true,
+    "global_owner_resolver_sha256": true
+  },
+  "pipeline": {
+    "tests": 17,
+    "failed": 0
+  },
+  "frontend": {
+    "tests": 169,
+    "failed": 0,
+    "typecheck_exit": 0
+  },
+  "actualVue": {
+    "role": "key:key_tsumugi",
+    "display_name": "紬文德斯",
+    "five_m4a_full_decode_and_nativecontrols_ended": 5,
+    "error_recovery_snapshots": 8,
+    "real404_injections": 1,
+    "normal_resources_mocked": false,
+    "runtime_provenance_sidecar_requests": 0,
+    "CDP_not_OS_HID": true
+  },
+  "resources": {
+    "original_direct_objects_exact": 12359,
+    "original_stat_qualification_reused": 35742,
+    "unaffected_alias_objects_order_exact": 23383,
+    "only_affected_aliases": 10,
+    "new_backings": 5,
+    "new_input_bytes": 263579,
+    "new_targeted_identity_checks": 15,
+    "unaffected_rehashed_anomalies": 0,
+    "raw_audio_count": 9652,
+    "alias_count": 23393,
+    "total_manifest_rows": 35757,
+    "original_raw5_decode_repeated": false,
+    "generated_directory_metadata_relinked_as_authorized": true
+  },
+  "command_count": 16,
+  "source14_aggregate": "2dd4b54caf8ade53b66c71c45d3e16453c764de8fbb2ad7ad657d78f7ccf6bea",
+  "artifact_count": 61,
+  "private_product_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/production-dist",
+  "cleanup": {
+    "Rust_and_WK_waited": true,
+    "Chrome_waited": true,
+    "stores_removed": true,
+    "Chrome_profile_removed": true,
+    "no_owned_active_Chrome": true,
+    "own_tmp_products_inputs_WK_helper_retained": "Actual production artifact/byte identity and near-term acceptance review; no unused Rust cache or sharedtarget was created",
+    "private_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c",
+    "shared_targets_untouched": true,
+    "free_disk_bytes": 99122896896
+  }
+}
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/finalize.py"], "exit": 0, "locked_seconds": 0.16386858298210427, "disk_free_bytes": 99122872320}

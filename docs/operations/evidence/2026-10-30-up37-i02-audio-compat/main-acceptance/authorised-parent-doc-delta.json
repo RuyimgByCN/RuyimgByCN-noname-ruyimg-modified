@@ -1,0 +1,12 @@
+{
+  "captured_utc": "2026-10-30T18:45:48.953794+00:00",
+  "authorisation": "Mid-run parent steering: independent CI/C/NC evidence, native-progress.md, alias README, remaining ledger and possible navigation docs only; parent excludes source14/manifest/this main-acceptance/workflow/WASM/dist/index/HEAD",
+  "observed_tracked_doc_paths": [],
+  "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "diff_bytes": 0,
+  "raw_diff": "authorised-parent-doc-delta.diff.raw.txt",
+  "classification": "authorised parent doc delta, separate from producer/source14 drift",
+  "not_claimed_frozen": "Parent documentation may continue changing after this read-only snapshot",
+  "untracked_parent_evidence": "Not attributed as newly-created without an initial untracked baseline; parent-declared independent evidence changes remain out of this producer freeze",
+  "functional_or_media_rerun_due_to_docs": false
+}

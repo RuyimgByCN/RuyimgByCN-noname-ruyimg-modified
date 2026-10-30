@@ -1,0 +1,35 @@
+## Review
+
+范围仅限 phase3 冻结切片的 owners／normal_owners／fellow、trigger-only DamageBefore 窗口身份及14 golden 新字段。依据 [identity.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/identity.json:1)、完整 `vs-phase2.patch`、指定交接与既有记录；接受父核的133/133 byteSHA、base `38ab1678`、tar `d70b3497…`。保留 phase2 正式 task1、S1/S2 task2 的既有关闭结论。
+
+- **Fixed — 原 owners 截断 P1 可关闭。** [trigger_order.rs:527](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:527) 现要求库存长度等于全部玩家数，并检查唯一、界限、Normal 前缀集合及追加 PID 顺序。真实 codec→restore 截断反例在 [owners-red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/owners-red.log:1) 失败、[owners-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/owners-green.log:1) 通过；不是仅补断言而无真实 red。
+
+- **Correct — 合法新增 fellow 已接通。** [construction.rs:98](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/src/engine/construction.rs:98) 的正式 API 追加玩家后立即同步库存；host `sixiang_add_fellow` 的新增由 [resolution.rs:655](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution.rs:655) 的 step／commit 共享边界同步并注册新增技能。`register_added` 保留 First／Last 全局桶，只允许前缀成员进入 Normal，且受 cursor／done／队列去重约束，追加库存不会移动 Last 桶。
+  [九组合回归:83](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/tests/c331_fellow_windows.rs:83) 覆盖真实 `add_boss_fellow`、无技能恢复及 VM 授技，比较 direct／byteRestore 的完整 save 和后续日志；[core-all2.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/core-all2.log:1) 对应通过。host 路径这里为源码核对，未冒称九组合直接执行了 host 生成。
+  上游 [gameEvent.ts:359](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts:359) 查找已有 doing map、缺 map 跳过，与该 Normal 边界意图一致。
+
+- **Finding — P1：`normal_owners` 本身可被扩大，恢复后给新增 fellow 凭空建立本窗 Normal 成员资格。**
+  [校验入口:527](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:527) 只验证字段与当前库存自洽，没有验证它确实是入窗人数。
+  具体源码推导：取九组合的 **Normal／Normal** 合法 pending 档，新增 fellow 后 `owners=[1,2,3,0,4]、normal_owners=4`；仅把后者改成5。前缀现在仍是合法完整排列，后缀为空，现有队列没有 fellow 的 Normal 项，原 cursor／候选／choice 均仍满足检查。恢复后回归中真实 `add_skill(5,new_def)` 到达 [register_added:315](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:315)，seat4 被当作已有 Normal map，于未来桶多触发一次；原字段4时应为零次。
+  此为新字段引入的具体拒档缺口，未执行新 probe。最小修复目标是补 `4→5` 的 codec→restore 拒档约束及回归，并让边界可核验于可信入窗信息；仅入 hash 或重复保存同值不能证明入窗身份。**owners 原截断已 Fixed，整个新边界只能记 Partial。**
+
+- **Correct — 新字段的表示链完整。** tag83 的 [encode:33](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/archive/machine_encode.rs:33)、decode、snapshot／fork、restore 均保留 `normal_owners:u16`；[hash:37](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/src/engine/hash/machine.rs:37) 明确绑定该值。新问题是恢复语义约束不足，不是字段漏存或漏摘要。
+
+- **Partial — K4 正常执行功能成立，恢复身份尚未闭环。** filter／start 使用现有 Frame 的 effective kind；[handlers.rs:77](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/rvm_bridge/handlers.rs:77) 按传入 kind 匹配，Following 再匹配也传入有效窗口。恢复对已绑定真实 Trigger frame 的头模块及 Following 递归检查窗口，Following 另要求同 owner／skill／event、无嵌套。
+  [k4-red.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/k4-red.log:1) 记录旧 loader 拒绝；[k4-green4.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/k4-green4.log:1) 及最终 core 记录覆盖两个 Before handler、After 仅 draw 一次、前后 commit pause 的恢复和兄弟模块错窗拒绝。active＋DamageBefore 的明确拒绝仍在，未增加 Rvm 字段或第二 Frame 权威。
+
+- **Finding — P1：trigger-only Rvm 可改槽位绕过整个窗口恢复检查。**
+  [trigger_order.rs:473](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:473) 仅在 `Slot::Trigger` 且 `frame != NO_FRAME` 时调用 `validate_vm_window`；Intrinsic 同样跳过。
+  具体源码推导：沿用 [wrong_window_rejects:36](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native/tests/c331_damage_windows.rs:36) 的 Before commit-pause 档，把头模块换成合法 After 兄弟模块，再将该 Rvm park 的 slot 改为 `Trigger { frame: NO_FRAME }`。原窗口机器仍在，窗口数量检查不受影响；[validate_resolution:467](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/crates/engine-native-kernel/src/snap/validation.rs:467) 豁免哨兵帧存在，active_ask 不看 slot，普通 Rvm restore 只验证技能模块授权及 Following 关系，因此错窗身份不再被拒绝。
+  新 trigger-only Before／After 组合由本 diff 解除拒装而变得可达；这是恢复合同缺口，不宣称已经实跑出错误伤害结果。最小修复是在现有 catalog／park／frame 上强制 trigger-only handler 的真实 Trigger 归属，拒绝无帧或 Intrinsic 伪装，并补上述组合篡改拒档例；不能只在已通过 slot 分支后递归检查 Following。
+
+- **Correct — 14 golden 新字段绑定与 expected 更新相符。** 在父已完成 phase2 独立 AST／hash 归因的前提下，我核对了本轮 [审计脚本](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/audit-current-goldens.py:1)、[14项完整差异记录](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/golden-audit/phase2-to-phase3.json:1) 和 rollback 原文：唯一新增项确为 [park.machine.normal_owners=4:775](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/golden331/rollback_invariants.snapshot.txt:775)，原 park 字段全部保留。
+  审计遍历全部 snapshot 字段，events／choices／54 views 逐字节比较；无额外 RNG 差异。`vs-phase2.patch` 中 replay source 仅替换14个 expected，逐项对应 [golden-update.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/golden-update.json:1)，没有改场景或比较逻辑。[golden-green.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/golden-green.log:1) 通过。原330 expected 明确保留；旧 golden330／331 red／三轴 probe 文件仍在 phase2 目录，本轮未重跑或覆盖。该更新依据可接受，不抵销上述 P1。
+
+- **Correct — 门禁与验收边界保持。** 本增量未改 format1／API1／ABI758／archive105／WS6；[sourcecaps-final.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/sourcecaps-final.log:1) 记录≤2000行／Rust≤1000 effective，通过记录另含行数单测与 layering=0。
+  [最新十包结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/affected-result.json:1) 仍是 **2892 passed／5 failed／76 ignored**；非计时 fixture 改90秒后仅 [专项串行5/5](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/server-final-serial.log:1164)，没有最新默认并行十包全绿。[来源状态](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/host-source-status.json:1) 仍余90个触发分支未证。
+
+- **Merge verdict：BLOCK。** 原 owners 截断具体 P1 已关闭，合法 fellow 与 K4 正常执行有真实记录，golden 更新绑定可接受；新增 Normal 边界和 trigger-only 槽位恢复各有一项 P1，整 C331 亦未满足来源与全量验收条件。
+
+未 build、运行测试或新实验，未改 source／index／Main，未读取 writer 新 live 作为本切片；两项新增反例均明确为源码推导。
+未扩审全部37、重审 phase2 已关闭项或读取18MB Tauri全文；实际平台矩阵不由本报告批准。

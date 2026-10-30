@@ -1,0 +1,32 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+warning: unused import: `ChoiceOption`
+ --> crates/engine-native/tests/groups/../c331_damage_windows.rs:2:66
+  |
+2 | use engine_native::{Engine,GameCommand,GameAction,CommandOutcome,ChoiceOption};
+  |                                                                  ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08") generated 1 warning (run `cargo fix --test "nc08" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.15s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-523977beb66ce5e1)
+
+running 1 test
+test c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses ... FAILED
+
+failures:
+
+---- c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses stdout ----
+
+thread 'c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses' (13579747) panicked at crates/engine-native/tests/groups/../c331_damage_windows.rs:7:217:
+trigger-only before/after handlers can bind the existing frame window: InvalidField { field: "trigger_index.event", reason: "multi-handler damage_before windows are unsupported" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 115 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc08`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08", "c331_damage_windows"], "exit": 101, "locked_seconds": 1.216190415987512, "disk_free_bytes": 99197005824}

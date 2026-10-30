@@ -1,0 +1,40 @@
+{
+  "utc": "2026-10-30T19:16:51.593423+00:00",
+  "commands": [
+    {
+      "name": "links",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "strict",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "maintained-format",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "docs/architecture/native-progress.md",
+        "docs/architecture/native-remaining-ledger.md",
+        "docs/operations/native-ci.md",
+        "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/README.md"
+      ],
+      "exit": 0
+    }
+  ],
+  "scope": "Only documentation/evidence appends after final four gates; no runtime changes or gate/media reruns"
+}

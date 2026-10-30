@@ -1,0 +1,180 @@
+{
+  "completed_utc": "2026-10-30T18:40:56.758496+00:00",
+  "head": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 6,
+    "asset_schema": 2,
+    "catalog_schema": 4,
+    "catalog4_is_old_character_directory_not_C331_package_schema": true
+  },
+  "source14_aggregate_sha256": "2dd4b54caf8ade53b66c71c45d3e16453c764de8fbb2ad7ad657d78f7ccf6bea",
+  "source14_and_all_protection_equal": {
+    "head": true,
+    "index": true,
+    "source14": true,
+    "protected": true,
+    "guard": true,
+    "modules": true,
+    "dist": true,
+    "frozen_packages_locks_diff": true,
+    "upstream_head": true,
+    "global_owner_resolver_sha256": true
+  },
+  "protected_narrow_files": 75,
+  "no_extra_whole_source_or_media_audit_rehash": true,
+  "maintained_sync_verify_builtin_checks": "Executed unchanged as requested; independent protection audit reused original inode-size-mtime qualifications and rehashed zero anomalies",
+  "generated_directory_relink_authorized": "authorization.json; supervisor clarified original generated-tree restriction",
+  "resource": {
+    "original_direct_objects_exact": 12359,
+    "original_stat_qualification_reused": 35742,
+    "unaffected_alias_objects_order_exact": 23383,
+    "only_affected_aliases": 10,
+    "new_backings": 5,
+    "new_input_bytes": 263579,
+    "new_targeted_identity_checks": 15,
+    "unaffected_rehashed_anomalies": 0,
+    "raw_audio_count": 9652,
+    "alias_count": 23393,
+    "total_manifest_rows": 35757,
+    "original_raw5_decode_repeated": false,
+    "generated_directory_metadata_relinked_as_authorized": true
+  },
+  "pipeline": {
+    "tests": 17,
+    "failed": 0
+  },
+  "frontend": {
+    "tests": 169,
+    "failed": 0,
+    "typecheck_exit": 0
+  },
+  "media": {
+    "passed": true,
+    "actualMainProductionVue": true,
+    "role": "key:key_tsumugi",
+    "Vue_m4a_count": 5,
+    "raw_audio_count": 9652,
+    "Chrome_full_decode_controls_ended": 5,
+    "WK_full_decode_controls_ended": 5,
+    "Vue_real404_error_recovery_and_character_isolation": true,
+    "HTTP_identity_count": 17,
+    "checks": [
+      {
+        "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+        "main_WK_full_PCM_equal_prior_derived": true,
+        "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+        "WK_ended": true,
+        "Chrome_Vue_ended": true,
+        "chrome_extra_frames": 2112,
+        "chrome_extra_ms_at48k": 44
+      },
+      {
+        "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+        "main_WK_full_PCM_equal_prior_derived": true,
+        "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+        "WK_ended": true,
+        "Chrome_Vue_ended": true,
+        "chrome_extra_frames": 2112,
+        "chrome_extra_ms_at48k": 44
+      },
+      {
+        "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+        "main_WK_full_PCM_equal_prior_derived": true,
+        "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+        "WK_ended": true,
+        "Chrome_Vue_ended": true,
+        "chrome_extra_frames": 2112,
+        "chrome_extra_ms_at48k": 44
+      },
+      {
+        "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+        "main_WK_full_PCM_equal_prior_derived": true,
+        "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+        "WK_ended": true,
+        "Chrome_Vue_ended": true,
+        "chrome_extra_frames": 2112,
+        "chrome_extra_ms_at48k": 44
+      },
+      {
+        "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+        "main_WK_full_PCM_equal_prior_derived": true,
+        "prior_WK_raw_derived_equality_inherited_not_redecoded": true,
+        "WK_ended": true,
+        "Chrome_Vue_ended": true,
+        "chrome_extra_frames": 2112,
+        "chrome_extra_ms_at48k": 44
+      }
+    ],
+    "original_raw5_not_redecoded": true,
+    "private_original_WK_PCM_proof": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/browser/wk.jsonl",
+    "cross_decoder_PCM_equality_claimed": false,
+    "OS_HID_or_physical_listening_claimed": false
+  },
+  "actual_Vue": {
+    "role": "key:key_tsumugi",
+    "display_name": "紬文德斯",
+    "five_m4a_full_decode_and_nativecontrols_ended": 5,
+    "error_recovery_snapshots": 8,
+    "real404_injections": 1,
+    "normal_resources_mocked": false,
+    "runtime_provenance_sidecar_requests": 0,
+    "CDP_not_OS_HID": true
+  },
+  "production_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c/production-dist",
+  "production_root_is_outside_Main": true,
+  "native_wasm": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+  "legacy_wasm": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+  "raw_five_current_decode_repeated": false,
+  "new_compiles_Cargo_Rust_Swift_WASM_ffmpeg": 0,
+  "current_command_count": 17,
+  "current_failed_commands": [],
+  "warnings": {
+    "node_experimental": 2,
+    "docrefs_log": "\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n{\"command\": [\"python3\", \"-B\", \"scripts/check_doc_line_refs.py\", \"--strict\"], \"exit\": 0, \"locked_seconds\": 7.780495624989271, \"disk_free_bytes\": 99289710592}\n"
+  },
+  "cleanup": {
+    "Rust_and_WK_waited": true,
+    "Chrome_waited": true,
+    "stores_removed": true,
+    "Chrome_profile_removed": true,
+    "no_owned_active_Chrome": true,
+    "own_tmp_products_inputs_WK_helper_retained": "Actual production artifact/byte identity and near-term acceptance review; no unused Rust cache or sharedtarget was created",
+    "private_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-five-compat-main-q2qbgs3c",
+    "shared_targets_untouched": true,
+    "free_disk_bytes": 99122896896
+  },
+  "no_staged_files": true,
+  "no_maintained_edits_or_remote_actions": true,
+  "final_fullpreflight": "Explicitly deferred to parent after documentation closure; not run",
+  "scope_limits": [
+    "No current330WS/room acceptance: retained329binary static route only",
+    "Private originalWK raw/derived PCM proof inherited; currentderived PCM checked exact",
+    "Chrome2112frames/44ms extra leading remains; no PCM trim or crossdecoder equality claim",
+    "No physicalhearing/OSHID/newWindowsLinuxCI/wholeI02/37/Goal claim"
+  ],
+  "private_original_reds_and_P2_evidence": "Read-only, untouched; currentmain no command failures observed",
+  "commands_all_actual_exits_zero": true,
+  "authorised_parent_doc_delta": {
+    "captured_utc": "2026-10-30T18:45:48.953794+00:00",
+    "authorisation": "Mid-run parent steering: independent CI/C/NC evidence, native-progress.md, alias README, remaining ledger and possible navigation docs only; parent excludes source14/manifest/this main-acceptance/workflow/WASM/dist/index/HEAD",
+    "observed_tracked_doc_paths": [],
+    "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diff_bytes": 0,
+    "raw_diff": "authorised-parent-doc-delta.diff.raw.txt",
+    "classification": "authorised parent doc delta, separate from producer/source14 drift",
+    "not_claimed_frozen": "Parent documentation may continue changing after this read-only snapshot",
+    "untracked_parent_evidence": "Not attributed as newly-created without an initial untracked baseline; parent-declared independent evidence changes remain out of this producer freeze",
+    "functional_or_media_rerun_due_to_docs": false
+  },
+  "independent_parent_CI_context": {
+    "commit": "a1f7250815eee803d931301ab46207719cb9a15b",
+    "run": 41100475767,
+    "outcome": "10success as independently registered by parent",
+    "coverage": "Accepted alias9/base only, not current uncommitted compat14",
+    "transport_502_not_test_failure": true,
+    "this_worker_reobserved_remote": false
+  }
+}

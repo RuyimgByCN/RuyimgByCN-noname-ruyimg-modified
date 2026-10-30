@@ -1,0 +1,46 @@
+{
+  "base": "http://127.0.0.1:64033/original-content",
+  "assets": [
+    {
+      "kind": "audio",
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0001/tsumugi_mugyu1.m4a",
+      "size": 18716,
+      "source_category": "compat",
+      "source_path": "audio/skill/tsumugi_mugyu1.m4a",
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "kind": "audio",
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0002/tsumugi_mugyu2.m4a",
+      "size": 114531,
+      "source_category": "compat",
+      "source_path": "audio/skill/tsumugi_mugyu2.m4a",
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "kind": "audio",
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0003/tsumugi_mugyu3.m4a",
+      "size": 10188,
+      "source_category": "compat",
+      "source_path": "audio/skill/tsumugi_mugyu3.m4a",
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "kind": "audio",
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0004/tsumugi_mugyu4.m4a",
+      "size": 39091,
+      "source_category": "compat",
+      "source_path": "audio/skill/tsumugi_mugyu4.m4a",
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "kind": "audio",
+      "path": "audio-declared/key/character/key_tsumugi/skill/tsumugi_mugyu/base/0005/tsumugi_mugyu5.m4a",
+      "size": 81053,
+      "source_category": "compat",
+      "source_path": "audio/skill/tsumugi_mugyu5.m4a",
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    }
+  ],
+  "probeSHA": "eefccf5d3a03d06c868536df62fc40ec85faa477d2db33de65d1990901e547ec"
+}

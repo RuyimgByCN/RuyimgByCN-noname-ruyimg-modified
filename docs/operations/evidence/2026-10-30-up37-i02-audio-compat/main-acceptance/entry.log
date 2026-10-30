@@ -1,0 +1,2 @@
+source14/protection/module checked; old35752 inode stats captured; owninput copied
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/main-acceptance/accept.py", "entry"], "exit": 0, "locked_seconds": 1.0871591249888297, "disk_free_bytes": 100442161152}

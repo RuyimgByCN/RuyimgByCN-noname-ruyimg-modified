@@ -1,0 +1,109 @@
+{
+  "totals": {
+    "passed": 1697,
+    "failed": 19,
+    "ignored": 75
+  },
+  "suites": [
+    {
+      "suite": "Running unittests src/lib.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/engine_native-93e440f1e35a06a2)",
+      "passed": 19,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/g1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/g1-d7db121f3fa3a4da)",
+      "passed": 166,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "suite": "Running tests/groups/g1_shahai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/g1_shahai-2d3ade89d410b9c7)",
+      "passed": 174,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/kernel.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/kernel-c66fa1d4f3fdb655)",
+      "passed": 435,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/l_rounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/l_rounds-e35cd4abfe202ac1)",
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/misc-6bce960f507446bf)",
+      "passed": 218,
+      "failed": 2,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/nc08.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/nc08-367a7dcb703d082a)",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 50
+    },
+    {
+      "suite": "Running tests/groups/nc08_upstream_a_k.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/nc08_upstream_a_k-c488c8c59d700f27)",
+      "passed": 130,
+      "failed": 0,
+      "ignored": 9
+    },
+    {
+      "suite": "Running tests/groups/nc08_upstream_l_z.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/nc08_upstream_l_z-1df529cf4fcbbe12)",
+      "passed": 199,
+      "failed": 0,
+      "ignored": 8
+    },
+    {
+      "suite": "Running tests/groups/nc_rounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/nc_rounds-fb18dbc55758dba6)",
+      "passed": 133,
+      "failed": 17,
+      "ignored": 7
+    },
+    {
+      "suite": "Running tests/groups/swd.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/swd-255d311151fe4f95)",
+      "passed": 134,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Running tests/groups/test_registry.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/target/debug/deps/test_registry-aa71ab4f4fe36d6c)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "suite": "Doc-tests engine_native",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "failures": [
+    "ai_planner::plan_enumerates_confirm_and_cancel_fallbacks",
+    "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic",
+    "nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores",
+    "nc10_ai_bounds::nc10_planner_is_deterministic",
+    "nc10_ai_bounds::nc10_tiny_budget_still_legal",
+    "nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan",
+    "nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information",
+    "nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order",
+    "nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper",
+    "nc10_ai_information_boundary::planner_detects_own_hand_change",
+    "nc10_ai_bounds::nc10_leak_surface_quantified",
+    "nc10_ai_information_boundary::planner_is_invariant_under_hidden_information",
+    "nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf",
+    "nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice",
+    "nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract",
+    "nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract",
+    "nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics",
+    "nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free",
+    "nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free"
+  ],
+  "rawLog": "native-full.log"
+}

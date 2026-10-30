@@ -85,7 +85,7 @@ jobs:
         run: bash scripts/cross-target-hash.sh
       - name: Gate 4 — original content sync verify
         run: |
-          node --test scripts/test_original_content_order.mjs scripts/test_original_resources.mjs
+          node --test scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs
           node scripts/sync-original-content.mjs --verify-only
 
   # 独立于源码行数/旧线门禁：从本次源码重建 native-pkg 后验正式 Worker 与前端。

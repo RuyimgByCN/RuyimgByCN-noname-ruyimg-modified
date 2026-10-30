@@ -1,0 +1,51 @@
+What this change does: 这 6 文件增量在受控 VM 路径阻断两类隐式计数器读取，并补上 catalog 模块身份与 query site 的绑定。**原 lifetime P1 在已实跑的限定面可判 Fixed；NC10/runtime 仍为 BLOCK。**
+
+## Review
+
+- **Correct — 范围与证据：**完整读取新交接，复审冻结 `implicit-effects-phase3/source/` 中的 6 文件增量及必要连接代码；核对 `increment.patch`、manifest/invariance、完整 Plan 对象和关键原始日志。基底为 `977cdf1f`、329/105/758/WS5；交付 manifest 记录增量 SHA `b72e8a2794b88195178350a380c184aadc21e692ef769b311b4acff51cb14d74`，Parent Desktop caller 保持 `214393…`。本次未重新计算全源 hash。
+
+- **原报告勘误，追加记录、不覆盖原文：**我原先把 `deal_damage(self,1,1)` 推导为伤害对手并导致动作分歧，这一步不正确：rule player 1 对应 native seat 0，实际伤害自身。实跑 budget 48 的两个 Ok **都为 NextPhase、nodes 都为 2，差异为 sim_faults 0/1**；完整 Plan 隐私 P1 仍成立，但不能继续声称该 fixture 已证明动作分歧。
+- budget 0 的 red 是 A Ok ActivateSkill、B fallback overflow panic，**不是两个 Ok**。MAX pair 自然可达未证明；结论限定默认 dev/test overflow checks，不外推为 release wrapping 的同一结果。
+
+- **Fixed — lifetime P1 的受控读取入口已关闭。**
+  - [kernel simulation.rs:138](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/source/crates/engine-native-kernel/src/simulation.rs:138) 复用指令边界扫描，保守拒绝含 `DEAL_DAMAGE`／`DRAW_CARDS` 的模块，扫描失败也拒绝；没有读取 counter 当前值决定动作。
+  - `rvm_bridge.rs:516` 先执行 footprint 分类，再进入公开排除及实际 filter；activation 在 `:536` 先分类 active module，再调用正式 activation。旧正式 `+=`、恢复格式及故障语义均未在此增量改动。
+  - [VM step:220](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/source/crates/engine-native-kernel/src/rvm_bridge/machine.rs:220) 将 freshness 放在短路判断首位；旧帧仍在 paused／commit buffers 前拒绝。提交泵 `:500` 按真实 `EffectRequest` 只允许 RecoverHp／StorageSet，DealDamage／DrawCards 不能落到私有累加器。
+  - [completePlan.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/completePlan.json) 与最终 registered 原始日志一致：green budget 48／0 都有两个真正 Ok NextPhase，完整 Plan 和完整 stats 相等；测试断言 authority bytes 不变，byte restore 后 apply 均 Accepted。budget 0 的 attempts=2、steps=15、VM instructions=0、opaque=1。
+  - 这修复了已证明的 **complete-Plan privacy** 路径；没有修复正式 ActivateSkill 的 overflow，也没有把 red budget 48 的返回 Plan 描述成非法。
+
+- **Correct — multi-handler 分类没有先按实际匹配缩小集合。**
+  - `simulation.rs:146` 对 HandlerSet 先按公共 event 与 `trigger_kind(true)` 的并集选出候选，再 `.all()` 检查模块；包含 Damage／DamageBefore 共用载荷，不依赖 instance 存在或实际 filter 为真。
+  - 新测试 `nc10_implicit_effect_privacy.rs:156` 明确构造无 owner 实例、两个实际 filter 均 false，仍要求 simulation_filter 返回 None。初次 `green-final-p1.log` 中 Some(false)≠None 的失败保留；最终 registered 日志该项通过。
+  - 源码顺序支持“这些候选先分类”；该直接 behavior 测试不等于已证明全部 scheduler／公共 handler 路由。
+
+- **Correct — 实际 payload 与队列没有重新打开这两个累加器。**
+  - 静态扫描覆盖两种 HOST_EFFECT 编码中的上述 tag。其它 tag 即使解码成 DealDamage，例如 `DEAL_NATURE_DAMAGE`，实际提交泵仍按 DealDamage payload 拒绝；composite 效果也先被 payload gate 拒绝，再进入 content hook。
+  - `following` 后继仍回到 step gate；旧帧 freshness 默认拒绝保持。未找到通过这些路径重新提交 lifetime／drawn 隐式读而得到新 unsafe Ok 的证据。
+  - RecoverHp 的 native callback 闭包、StorageSet 的一般控制来源及 metadata 依赖仍未完整封闭；本增量没有据此扩大 root certificate 的授权。
+
+- **Correct — query 回归换效果后仍检验原目的。**
+  - `engine/simulation.rs:193` 仍要求真正的 `OpaqueRead::Query`、owner/skill/module、精确 PC=20/tag=38、无 fault；新增 flags/storage 不变断言，证明前面的 queued StorageSet 没有提前提交。
+  - `:276` 用当前本人手牌查询派生 StorageSet，仍将受控结果的完整 core/resolution 与正式执行对比；`:376` 仍证明 queued write 不能为后面的 StorageGet 提供知识。
+  - 因新前置分类会提前拒绝 Draw/Damage，换成 StorageSet/Recover 才能继续到达 query seam；没有把这些测试弱化成任意 Opaque 或两个 Err。PC 19 的中间失败也保留，最终为真实 PC 20。
+
+- **Correct — ReadSite 身份绑定有实质补强，但原公共路由 P2 仍 Open。**
+  - `simulation.rs:66` 要求 catalog 唯一声明技能名与完整 module bytes 授权；`:88` 的 allow_resume 不再无条件 true，`:91` 绑定 hash、VM 提供的 query PC、HOST_QUERY opcode/tag。
+  - 相同 claimed hash、不同非授权 bytes 的负向测试拒绝；真实 query 的 request 由同一个 VM tag 解码，gate 不向内容侧暴露可伪造 site 的入口。
+  - 当前仍证明“模块属于登记集合＋来自该模块的可信 query 指令”，没有证明当前公共 event/handler/ancestor 路由、全部控制前缀或任意手造 PC 的可达性。不能标为完整 public handler/PC routing certificate。
+
+- **drawn 证据边界：**已检查其 formal overflow 与 green 两 Ok 全 Plan／stats、restore/apply 断言；没有独立 red Planner 对比，不能记作第二个完整 red→green。`completePublicPreEvents` 为两侧执行前的 `[]`；未把后日志当 pretrace。首次两个 red panic 日志和各轮中间失败均保留。
+
+- **Finding — 本 6 文件增量未发现新的、证据成立的 P1/P2。**
+
+No issues found.
+
+下一小步 native confirm 继续 **Open**：现 `ChoiceView::Own`（`view.rs:89`）只有 kind/prompt/options/min/max/cancel 等，没有绑定声明技能、事件和祖先来源；`OptionalGate`（`resolution.rs:246`）统一发 `trigger_confirm`，Host `step/skills_status.rs:334` 也使用同 prompt。不能凭字符串或实际私有 park 类型泛开白名单。
+
+即使公共来源能绑定遗计，`JiJiMachine::Draw`（`standard/skills/ji_ji.rs:69`）固定摸 2 仍经过 native deck／RNG、CardsDrawn 的私有 drawn 累加及后续 callbacks。本次 VM Draw 阻断没有替它完成证明。先尝试用现有公开 tuple／公开事件约束全部可能 family 和尾链；约束不足便保留 NoCert，不改恢复语义、不新增协议／持久字段，也不承诺该 positive 已可安全绿化。
+
+- **验证口径：**只读取已有结果：target 3/0、simulation lib 11/0、scalar 2/0、registry 1/0；完整 native 三包合计 **1707/19/75**，19 名称集合与旧清单一致、均在取得 Plan 前 NoCertifiedRoot。它们仍是未恢复的 positive，不能按两个 Err 豁免。
+- **Merge verdict：OK with notes（仅本 6 文件 bounded repair）；整个 NC10/runtime 继续 BLOCK。**原 lifetime P1 限定面 Fixed；公共路由、旧帧 fuel、恢复队列来源、J2 commit_state、正向恢复及质量验收仍开放。
+
+未运行新实验/build/tests、未写源码，未重审全 63 文件、全部 Host、WASM 或 binaries；原报告保留。  
+风险：已有 red→green 只覆盖指定配置和恢复允许域内的 fixture，不证明自然可达，也不构成完整 root legality、Plan privacy 或 native boundedness 验收。

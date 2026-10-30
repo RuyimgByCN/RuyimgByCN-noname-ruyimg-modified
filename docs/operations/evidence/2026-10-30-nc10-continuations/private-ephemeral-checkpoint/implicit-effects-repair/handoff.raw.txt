@@ -1,0 +1,65 @@
+本轮已实施 NC10 有界隐式效果读修复，并完成新 P1 的实跑 red→green。**runtime 仍为 BLOCK**：完整 native 验证仍有原 19 项 NoCertifiedRoot；本轮没有完成公共 handler／PC 路由、旧帧 fuel、恢复队列来源、J2 commit_state 合法性或产品质量验收。
+
+核验日期：2026-10-30 UTC。HEAD 为 `977cdf1f35bc3f08aba137528a3672f3dad5f391`，rules 329／archive 105／ABI 758／WS 5。本轮只写 private worktree，未修改 Main、index、版本、正式 VM 算术、快照／恢复语义；未 stage、commit、push。指定 review 已完整读取 49 个逻辑行（末行无换行，故 wc -l 为 48），其引用的 `6f507…` checkpoint 已完整读取 40 行；canonical AGENTS 和 NONAME_NEXT_AGENT_SPEC 亦已读取。
+
+证据根目录：[implicit-effects-phase3](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3)。冻结与集成入口：
+
+- [checkpoint.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/checkpoint.json)：在 40min checkpoint 前完成的实体与实际结果，runtime BLOCK。
+- [source-manifest.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/source-manifest.json)：完整 63 份候选产品源的 SHA／字节数／行数；`source/` 是完整冻结副本，`before-source/` 是本轮前 62 源副本。
+- [increment.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/increment.patch)：相对本轮入口的 6 文件增量，SHA256 `b72e8a2794b88195178350a380c184aadc21e692ef769b311b4acff51cb14d74`。基底包含 source62 checkpoint 和 Parent 两处 Desktop caller 修补。
+- [delivery-invariance.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/delivery-invariance.json)：HEAD、index、guard 未变，未 staged；57 份入口产品源逐字节未变，61 个既有边界文件保持 checkpoint SHA。Parent Desktop caller SHA 保持 `21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f`。
+- [command-index.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/command-index.json)、[completePlan.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/completePlan.json)、[archive-manifest.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/archive-manifest.json)：全部命令／退出码／原始日志位置、完整 PolicyInput＋public pre-events＋完整 Plan＋结果字段，以及真实 archive bytes 的索引。PolicyInput/events/Plan 保留完整 Rust Debug 字符串，没有只挑 action 或 nodes 重组结果。
+
+实际反例与修复后的结果如下。fixture 是初始 debug 布置，随后真实编码、解码、带同一扩展恢复；仅私有 `flags[(0,"lifetime")]` 为 0／u32::MAX。完整 PolicyInput 和执行前 public events 相同；两边预事件确为 `[]`，不是误用执行后日志。**没有证明此 pair 自然可达**。结论限定于本次默认 dev/test overflow-check 配置，不能转述为 release wrapping 的同一结果。
+
+| 场景 | A／B 的实际结果 | 完整性和正式 apply |
+|---|---|---|
+| red，budget 48、variant 2、lookahead 1 | 两个真正 Ok；动作均 NextPhase；nodes_used 均 2；sim_faults 为 0／1 | 完整 Plan 不相等；各自 byte restore 后 apply 均 Accepted |
+| red，budget 0 | A 为 Ok ActivateSkill，nodes_used 0；B 在 fallback 认证中溢出 panic | 此行不是两 Ok 反例，未计作 Plan 隐私比较通过 |
+| green，budget 48 | 两个 Ok NextPhase；nodes_used 均 2；sim_faults 均 0 | 完整 Plan、完整 CertificationStats 相等；authority bytes 未变；byte restore＋apply 均 Accepted |
+| green，budget 0 | 两个 Ok NextPhase；nodes_used 均 0；budget_exhausted 均 true；sim_faults 均 0 | 完整 Plan、完整 stats 相等；attempts 均 2、scheduler_steps 均 15、vm_instructions 均 0、opaque 均 1；byte restore＋apply 均 Accepted |
+
+实跑没有复现 reviewer 推导的动作分歧：源码 `deal_damage(self,1,1)` 的 rule player id 1 映射到内核座位 0，实际伤害自身，因此 A 在 budget 48 也选择 NextPhase。`sim_faults` 的真实差异已足以构成完整 Plan 的 P1。没有为凑出评审推导而修改效果目标。直接正式 ActivateSkill 的 A 为 Accepted、B 在 `rvm_ops.rs:297` 的原 `+=` 处 panic；此事实修复前后均保留。修复没有声称消除了正式引擎溢出，也没有声称 budget 48 的返回 Plan 本来非法。
+
+原始 red：[red-p1-witness.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/red-p1-witness.log) 与 `red-witness/completePlan.json`、`lifetime-0.archive`／`lifetime-1.archive`。首次两次实验在收集完整结果之前被 budget-zero fallback panic 打断，分别原样保留为 `red-p1.log` 和 `red-p1-complete.log`，没有拿它们代替成功收集的两 Ok witness。
+
+最终定向 green：[green-final-registered.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/green-final-registered.log)，3 passed／0 failed；完整最终对象在 `green-final-registered/lifetime/` 和 `green-final-registered/drawn/`。前面的 `green-p1.log` 是只分类 DealDamage 时的中间绿，`green-final-p1.log` 则保留了新增 handler 测试初次失败，均未覆盖或混作最终验收。
+
+有界源码复查还发现了第二个同类隐式读：`DrawCards → Ctx::draw_cards → CardsDrawn → kernel/events.rs:662` 对私有 `vm_aux.drawn[player]` 做 `+= cards.len() as u32`。最终 gate 因此同时分类 `DEAL_DAMAGE` 和 `DRAW_CARDS`。新增 drawn fixture 亦经实际 byte restore，正式 active A Accepted、B 在该原加法处 panic；green budget 0／48 均有两个 Ok、完整 Plan＋stats 相等与恢复后 Accepted。**本轮未单独实跑 drawn 的 red Planner 对比**，没有把它写成第二个已完成的 red→green。DrawCards 另有牌库／洗牌 RNG 依赖；本轮阻断其 VM family，并未重构整个 native 摸牌系统。
+
+同一旧白名单中的 RecoverHp 直接读 hp／max_hp／alive，StorageSet 是赋值／删除，未找到与上述两个私有累加器相同的直接读改写。Recover 的 native callback 闭包、一般 native 计数／RNG／资源界限并未因此获得完整公共证明。未泛审、重构全部 62 源。
+
+实现边界与改动文件：
+
+1. [kernel simulation.rs](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/simulation.rs) 复用已经验证指令边界的 `module_uses_effect_tag`，对上述两种效果作保守分类。HandlerSet 先遍历公共 event family 的所有可能模块，再进入任何实际实例／滤镜匹配；Damage 与 DamageBefore 的共用载荷作保守并集。未知验证结果拒绝，未运行探秘试算。
+2. [rvm_bridge.rs](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/rvm_bridge.rs) 把静态 footprint 接入已有 filter 和 activation 前置 gate。不能因实际模块／实际实例的私密匹配结果而缩小候选 family 后放行。
+3. [VM machine](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/rvm_bridge/machine.rs) 在旧帧／paused／commit buffers 读取前，沿既有 step gate 检查 freshness、module footprint 和 catalog 身份；提交泵同步不再允许这两种效果。正式 execute/resume、`+=`、恢复校验、fault 传播和持久布局保持原样。
+4. [engine simulation tests](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/src/engine/simulation.rs) 新增 damage／draw 在零 VM 指令前 Opaque、缓存不变的测试。原 query PC、queued write 不作知识证明、本人当前手牌查询正向仍保留；因两种效果现在整体 Opaque，query 测试改用已有 StorageSet／RecoverHp 保持其原测试目的，精确 query PC 更新为真实编译后的 20。sampled pending-fault 的合法替代 Plan 正向测试保持原断言并通过。
+5. [nc10_implicit_effect_privacy.rs](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/tests/nc10_implicit_effect_privacy.rs) 新增 3 个集成测试：lifetime 完整两 Ok、drawn 完整两 Ok，以及所有公共 handler 候选先分类（包括无实际技能实例且实际滤镜均不匹配的情形）。[nc_rounds registry](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/tests/groups/nc_rounds.rs) 注册新文件；registry 守卫通过。无新依赖、配置、VM、全局 state、持久字段、fresh 标志、ABI／wire／opcode。
+
+ReadSite 本轮只作最小身份绑定：唯一声明技能名必须在 catalog 中存在，完整 module bytes 必须获现有 `vm_module_is_authorized` 接受；gate 的 module hash、VM 提供的 query 指令 PC、opcode/tag 必须绑定该 VerifiedModule。相同 claimed hash、不同模块 bytes 的负向测试会拒绝。`allow_resume` 不再无条件 true；旧帧仍先由已有 freshness 默认拒绝，没有读 private saved PC 放行。
+
+**这不是完整权限闭环。**catalog 方法仍只证明模块属于已登记 handler 集合；当前 event/handler 的公共路由、控制前缀及所有剩余 native 效果的公共依赖证明仍 open。PC 的指令边界来源于可信 RuleVm 本身；新增检查不宣称静态证明任意可伪造 site 的可达性。代码和测试均没有把 actual hash 与自身相等冒充授权。
+
+native 遗计 confirm 仅做源级判断，未改白名单：`ChoiceView::Own` 的 typed public tuple 包含 kind／prompt／options／min／max／allow_cancel，没有直接绑定声明技能、事件和祖先机器来源。`OptionalGate` 统一发 `trigger_confirm`，另有 Host 路径使用同 prompt；仅看到实际 OptionalGate 或该字符串不足以证明 catalog 所有可能 family、ancestor／following 与 tail。`JiJiMachine::Draw` 固定摸 2 的源码事实没有补齐这层公共来源证明，因此该 1 项继续 NoCert。3 项 Halted／pending store／move 的队列来源、旧帧 private fuel、J2 commit_state 与公共 routing 继续 open。
+
+验证记录（全部为本次源码，原始输出保留）：
+
+| 命令／范围 | 结果 |
+|---|---|
+| `cargo test --offline -p engine-native --test nc_rounds nc10_implicit_effect_privacy -- --nocapture` | 最终 3 passed／0 failed |
+| `cargo test --offline -p engine-native-kernel -p engine-native --lib simulation:: -- --nocapture` | 最终 native 8／0、kernel 3／0，共 11／0 |
+| `cargo test --offline -p engine-native --test nc_rounds nc10_private_scalar -- --nocapture` | 2／0；原受控 Scalar 与自然 18-command／restart 测试保留；本次 natural budget48 的完整 Plan nodes 均 11，未硬留旧观测数字 |
+| `cargo test --offline -p engine-native --test test_registry` | 1／0 |
+| `cargo test --offline -p engine-native --no-fail-fast` | **1697 passed／19 failed／75 ignored，exit 101** |
+| `cargo test --offline -p engine-native-kernel -p engine-native-content --no-fail-fast` | 10 passed／0 failed／0 ignored，exit 0 |
+| 合计上述完整 native 三包（两条完整命令） | **1707 passed／19 failed／75 ignored**；不称全绿 |
+| source-line 单元测试／全仓行数检查／`git diff --check` | 全部通过；修改的 Rust 非测试源最高 817 effective lines，所有修改文件均低于 2000 物理行 |
+
+完整 suite、19 项名称：[native-full-counts.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/native-full-counts.json)；其名称集合与旧 checkpoint 的 19 项逐项相同，无新增失败。原始 [native-full.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/implicit-effects-phase3/native-full.log) 中 19 项均在获取 Plan 前 NoCertifiedRoot，不能算作 Plan 相等、privacy green 或正向恢复通过。本轮未为搜原因重复全套／整局，未新增 driver context；原 12 driver 失败现场缺失的 prompt／stats 仍未补齐。没有修改原 Scalar、natural 反例测试文件或旧 probe／evidence，也没有删除原 red。
+
+heavy 均经 `/tmp/noname-run-serialized.py` 和 `/tmp/noname-phase4-heavy-command.lock`；每次锁内编译前检查剩余空间 ≥3GiB，使用已核对归属的 private `../target`，`CARGO_INCREMENTAL=0`、jobs 2。未使用共享 target 或清理任何他人／active 产品。遇到其它目录持锁时正常排队；例如初次 affected 命令 wall 121.971s、wrapper locked 7.409s，差值含锁等待与 wrapper 开销，不能称纯 queue；locked 也不是纯测试执行时间。所有早期失败、最终 exit、warnings／ignored、transport 日志和 raw archive bytes 分别保留，没有用单项 green 改写完整失败。
+
+建议 Parent 仅据本次冻结增量复审、再决定集成。恢复 family 的公共授权与合法性证书、全部 positive、direct WASM 两例以及 VM／Host 实际对局质量条件齐备前，runtime 继续 BLOCK。
+
+未跑 WASM、UI、media、正式整局、全 Host／全部 native 隐式读审计；未证明 MAX counter pair 自然可达，也未把最小 ReadSite 身份检查称作完整 PC／handler 公共路由证明。

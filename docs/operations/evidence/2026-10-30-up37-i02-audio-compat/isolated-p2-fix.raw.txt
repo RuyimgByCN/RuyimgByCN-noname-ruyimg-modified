@@ -1,0 +1,116 @@
+已修复独立复审要求的 P2：compat 输入根中未绑定的 symlink 现在会在资源写入前被拒绝。本次只修改 `scripts/original-audio-resources.mjs` 和 `scripts/test_original_resources.mjs`，范围限于已批准的构建期库存检查。完整读取原复审稿，原文副本保留为 [p2-raw-review.md](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/p2-raw-review.md)；同 reviewer 回审尚待父安排。
+
+真实红灯见 [red.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/red.log)：合法 provenance 和五个派生文件先完成 fixture sync/verify，然后仅增加 `audio/skill/extra.m4a` symlink。分别指向输入根外普通文件、目录的两个 case，修复前 sync 和 verify **四次均 status0**。初次红灯仅执行至首个sync断言的记录另保留在 [red-initial.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/red-initial.log)；后一次先运行两条命令，日志明确列出两者status。
+
+修复位于 [compat validator](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/original-audio-resources.mjs:61)：使用局部 `readdir(..., {withFileTypes:true})` 递归普通目录，记录普通文件，其他条目统一抛出 `audio compat non-regular input`，再排序比较固定六文件集合。symlink 不会被跟随或静默漏掉；FIFO/socket 等其他非普通条目同样落在拒绝分支。共享 `original-content-order.mjs/listFiles()` 和其其他消费者保持字节一致，无新 helper模块、framework、dependency 或 metadata。
+
+新增 [边界回归](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/worktree/scripts/test_original_resources.mjs:161) 对 file/dir 两种目标各自建立合法 fixture，先 sync、verify 成功，再只加入该 symlink。修复后 sync、verify 均非零退出且命中明确拒绝信息；随后逐字节比对 manifest、全部已采用资源输出、catalog、immutable package、legacy sentinel 和旧锁。[green-regression.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/green-regression.log) 为 **3/3**（父测试+两个子case），[green-node-related.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/green-node-related.log) 为相关三入口 **17/17**。
+
+行数检查单测 [line-tests.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/line-tests.log) **2/2**，[line-gate.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/line-gate.log) 8,986文件通过；音频模块439→449行，资源测试159→182行。同步器仍1,850行。[diff-check.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/diff-check.log) 无 whitespace 错误，[final-status.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/final-status.json) 确认 staged为空。
+
+checkpoint2 已形成实体，证据均位于独立目录 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction。[before-proof.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/before-proof.json) 钉住修正前14项source及旧freeze/patch摘要；[checkpoint2.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/checkpoint2.json) 列出修正后全部14项SHA、两项差异、其余12项不变、共享遍历不变，以及旧证据原样保留的逐文件摘要。新的 [source-freeze](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/source-freeze) 为本次14项冻结副本，未覆盖前一版freeze。
+
+两项新源码身份：
+
+| 文件 | checkpoint2 SHA256 |
+| --- | --- |
+| `scripts/original-audio-resources.mjs` | `1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759` |
+| `scripts/test_original_resources.mjs` | `755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42` |
+
+前端helper/测试、type输入、CI、同步器、完整manifest、五个媒体、sidecar及audio resolver测试均与原checkpoint精确相同。manifest本身不变，因此十alias、五backing及总行数/全部schema记录保持。只作了有界身份核对：五个原canonical文件和十五个已采用compat payload SHA仍匹配原sidecar/manifest；详见checkpoint2的 `protectedCanonicalAndAdoptedPayloadSHA256`，没有重跑12,359素材hash。
+
+旧补丁保持：compat-only SHA `11ab8a2c89f80d96c304ae9849b04c6348fee1dfa78c9c18ee49e67cf4e43144`，原relative-da7e total SHA `80db7f0bb8172a3879541a847d9ec4e1c0cf36b7b7c69868b51fa899cdaa1e1b`。本次新增三份补丁：
+
+| 新补丁 | 用途 | bytes | SHA256 |
+| --- | --- | ---: | --- |
+| [p2-only.incremental.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/p2-only.incremental.patch) | 相对原compat checkpoint，仅P2两文件 | 2882 | `d4978c3e426179c040c04b5ed71fe0bfe8a18043b14b72df873ff7afdfa5f403` |
+| [compat-only.checkpoint2.incremental.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/compat-only.checkpoint2.incremental.patch) | 相对alias9，累计compat+P2 | 380720 | `2605af4b6a8fff48a76be560ed9d7f7cfd3b3a5e24218fb23dc7c53c90bf5264` |
+| [relative-da7e.checkpoint2.total.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/relative-da7e.checkpoint2.total.patch) | 相对da7e，累计alias9+compat+P2 | 7938999 | `d570b4d8be7d4f15fbeb7fe49f1cfa484b2ce64026d4ae5d1736124f8e66023f` |
+
+[patch-roundtrip-proof.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/patch-roundtrip-proof.json) 证明三者均在own非Git目录中通过 `git apply --check`、实际apply、逐文件字节回放；分别比较2/16/16项，不使用index。补丁/身份生成及回放分别经全局serialized锁执行，日志见 [checkpoint2.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/checkpoint2.log)、[patch-roundtrip.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-compat-o2uoxbq1/evidence/p2-correction/patch-roundtrip.log)。本次只写原private worktree及own evidence/p2-correction，原review/main/source/旧freeze/旧patch均未写入。
+
+未重跑169项前端、typecheck、真实全量sync/verify、Vite build、媒体decode/playback、ffmpeg/ffprobe、Cargo/Rust/Swift或12khash；上述代码/输入未变，本轮相关验证只针对局部preflight缺口。此前媒体证据及44ms口径边界仍保留，不能把这次Node结果写成新媒体或main产品验收。父下一步交同reviewer定向回审，再在main独立验证实际Collection Vue五条选择和错误恢复。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Only compat validator inventory traversal and the requested boundary regression changed; shared listFiles and the other12 frozen sources remain byte-identical."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Real two-case red, focused green3/3, related Node17/17, line checks, checkpoint2 before/after SHAs and old-artifact proofs, three new replayed patches and frozen source provided. Same-reviewer acceptance pending."
+    }
+  ],
+  "changedFiles": [
+    "scripts/original-audio-resources.mjs",
+    "scripts/test_original_resources.mjs"
+  ],
+  "testsAddedOrUpdated": [
+    "scripts/test_original_resources.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "node --test --test-name-pattern='unbound compat symlinks' scripts/test_original_resources.mjs (before fix)",
+      "result": "failed",
+      "summary": "Expected real red: outside-file and outside-directory symlinks each accepted by sync and verify with status0; red.log"
+    },
+    {
+      "command": "node --test --test-name-pattern='unbound compat symlinks' scripts/test_original_resources.mjs (after fix)",
+      "result": "passed",
+      "summary": "3/3 including file and dir cases; valid fixture first syncs/verifies, both rejection paths preserve all protected bytes"
+    },
+    {
+      "command": "node --test scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs",
+      "result": "passed",
+      "summary": "17/17; green-node-related.log"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'",
+      "result": "passed",
+      "summary": "2/2; line-tests.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "8986 files pass; audio module449 lines, resource tests182 lines"
+    },
+    {
+      "command": "git diff --check; git diff --cached --name-only",
+      "result": "passed",
+      "summary": "No whitespace errors, staged empty"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py python3 ../evidence/p2-correction/create-checkpoint2.py",
+      "result": "passed",
+      "summary": "14 source SHAs before/after, old freeze/patch preservation, bounded20-file identity proof and new three patches"
+    },
+    {
+      "command": "python3 /tmp/noname-run-serialized.py python3 ../evidence/p2-correction/check-patches.py",
+      "result": "passed",
+      "summary": "P2-only2-file and cumulative16-file patch check/apply/byte roundtrips pass without index"
+    }
+  ],
+  "validationOutput": [
+    "Before fix, extra symlink to outside file or directory was accepted by both sync and verify (status0 in all four attempts).",
+    "After fix, both cases first pass valid sync/verify, then reject sync/verify for the extra link and preserve manifest, every adopted output, catalog, immutable package, legacy sentinel and old lock bytes.",
+    "Related Node17/17, source line tests2/2, source line gate and diff check pass.",
+    "Exactly2/14 source items changed; frontend, CI, synchronizer, full manifest, five M4A inputs, provenance and audio resolver tests remain exact; shared traversal unchanged.",
+    "All original freeze/checkpoint/patch hashes still match; bounded five canonical source plus fifteen adopted compat payload hashes match existing bindings/manifest; staged empty."
+  ],
+  "residualRisks": [
+    "Independent same-reviewer recheck and parent main integration remain pending.",
+    "Frontend169/typecheck/live full sync/build/decoder/ffmpeg/Cargo/12359-file hash were intentionally not rerun for this local preflight-only change.",
+    "Existing44ms cross-decoder timing difference and pending real Collection Vue selection/error-recovery acceptance remain the prior scope boundaries."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Replace shared permissive file inventory use inside compat validator with a local directory-entry walk that rejects symlinks and other non-regular entries; add file/directory escape regression after a valid fixture.",
+  "reviewFindings": [
+    "P2 inventory omission reproduced and repaired; no new blockers found in self-check; reviewer gate pending."
+  ],
+  "manualNotes": "Old source-freeze, checkpoint.json and old patch files were not overwritten. All new snapshots, patches, proofs, raw reviewer report and logs are under own evidence/p2-correction. No new metadata fields, dependencies, media changes or source/index/main writes."
+}
+```

@@ -1,0 +1,29 @@
+[
+  {
+    "mode": "archive",
+    "input": "../evidence/real330-pending.ngsa",
+    "input_sha256": "b16abfe4ec21ee97d33a7f91505d0791e3f7d508a257484e5bff1ba07dbeb522",
+    "reader_sha256": "5ec8147491571b7c0145b2a31b8ab003d37fb5c9839ba1a31a668e83712abac4",
+    "exit": 0,
+    "stdout": "Ok(10421607006216812160)\n",
+    "stderr": ""
+  },
+  {
+    "mode": "archive",
+    "input": "../evidence/phase3/new331-pending.ngsa",
+    "input_sha256": "670c136b162fcbe0fdd7afa8f60090bd4978225b270d108d6a6297eb1127ad37",
+    "reader_sha256": "5ec8147491571b7c0145b2a31b8ab003d37fb5c9839ba1a31a668e83712abac4",
+    "exit": 0,
+    "stdout": "Err(BadTag(\"machine\", 83))\n",
+    "stderr": ""
+  },
+  {
+    "mode": "public",
+    "input": "../evidence/phase3/new331-package.json",
+    "input_sha256": "dae78de1f5af349d583ea3fb1a450157a52a7081cd40570be359c25689684056",
+    "reader_sha256": "5ec8147491571b7c0145b2a31b8ab003d37fb5c9839ba1a31a668e83712abac4",
+    "exit": 0,
+    "stdout": "Err(InvalidField { field: \"manifest.rule_vm_abi_version\", reason: \"incompatible: content_schema host=3 package=4\" })\n",
+    "stderr": ""
+  }
+]

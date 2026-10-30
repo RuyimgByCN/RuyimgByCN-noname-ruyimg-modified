@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.01s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-523977beb66ce5e1)
+
+running 1 test
+test nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates ... FAILED
+
+failures:
+
+---- nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates stdout ----
+
+thread 'nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates' (13606247) panicked at crates/engine-native/tests/groups/../nc08_trigger_order_counterexample.rs:1067:5:
+every player is a future owner bucket even without a current candidate
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 116 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc08`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08", "c331_review_owner_ring"], "exit": 101, "locked_seconds": 1.0523854579951148, "disk_free_bytes": 99121664000}

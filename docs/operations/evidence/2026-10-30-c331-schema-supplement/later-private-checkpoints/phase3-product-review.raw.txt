@@ -1,0 +1,39 @@
+## Review
+
+本次产品证据可作 **bounded evidence OK with notes**；**整 C331 仍 BLOCK**。已完整读取指定 producer 51 行，并核对冻结差异、驱动源码及原始日志；未执行构建、探针、网络或修改操作。
+
+冻结源码根为 `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/`；下文证据根 E 为 `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/`。
+
+- **Correct — source 实现与冻结身份：** 审核以 `vs-phase2.patch` 及冻结 snapshot 为准。[identity.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/identity.json:1) 记录 133/133、base `38ab1678…`、manifest `32c3b156…`、tar `d70b3497…`；这些 SHA/文件一致性接受父独立复核，本 reviewer 未自行计算。未把续写中的 live 来源或 phase4 算入本批。
+
+- **Correct — deadline 修正范围：** [c331.rs:16](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:16) 将非计时 fixture 设为合法 90 秒；真实 timeout 专项在同文件 333 行仍显式传入 10 秒。专项通过 `a.pushed(0).await` 等待实际 WS 推送，随后检查 revision、持久 WAL、每条 hash、完整 Native 终态和旧答拒绝。未见 mock timer、`unwrap_or(true)` 或取消断言来换取通过。
+
+- **Correct — 比较白名单：** `equal_snapshot` 仅将双方 `auth_generation` 归零后比较完整 `StateSnapshot`（c331.rs:154）；生产 WAL 校验也仅对恢复时旋转的认证代际作对应处理，再比较完整 archive（[wal.rs:203](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/game-server/src/room_native/wal.rs:203)）。未见删除规则状态字段的宽泛白名单。
+
+- **Correct — 实际 Tauri IPC 资格：** [desktop-web/index.html:6](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-web/index.html:6) 调用真实 `__TAURI_INTERNALS__.invoke` 的 open/request/close；`desktop-run.py` 启动产品 binary、独占 loopback 5198 并仅终止其 Popen 子进程，PID 记录为 79864。私有 identifier 为 `org.noname.c331.privatephase3`，隐藏窗口仅在私有配置中关闭 background throttling。调用链对应产品 WebView ResourceTable，具备真实 IPC 资格。
+
+- **Correct — IPC 记录覆盖：** 驱动检查四个资源的授权 seat 投影、257 项/token256、五种非法答、重复答、close 后旧资源拒绝、reopen 恢复，以及 255 次尾续行的完整 NGSA/hash/events；[desktop-ipc-final.log:32](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/desktop-ipc-final.log:32) 保留最终 report，结果记录 binary SHA `dea8d341…`。这是一次隐藏 WK 产品运行，不能外推为四平台覆盖。
+
+- **Correct — WS/actor/WAL 资格：** [native_ws_e2e.rs:33](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/game-server/src/native_ws_e2e.rs:33) bootstrap 后使用生产 router、真实 TCP listener 和 tungstenite peer。原始 wire 含 WS6 Welcome/Hello/JoinRoom、seat1→PlayerId2；测试检查 readonly Referee、observer/noowner、伪造 actor、非法 selections、同 key/body 重试及异 body 拒绝。10 单故障、9 decision/compensation 双故障均读取真实 store 并比较 Native 完整状态。
+
+- **Correct — 真实退出与 timeout 记录：** [commit_crash.rs:32](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/game-server/src/native_ws_e2e/commit_crash.rs:32) spawn 当前 test executable 子进程，等待真实 exit code 86/87；C331 用例各再启动两次并校验重放。store hook 在实际 replace/补偿失败位置调用 `process::exit`；清理只操作持有的 Child。`server-real-timeout.json` 保留 10 秒期限及 choice3 的 TimeoutAction、choice4–6 的 Answer，符合 timeout 后 managed 链可继续推进的实际行为。
+
+- **Correct — 已记录测试结果：** [server-final-serial.log:1167](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/server-final-serial.log:1167) 为最终串行专项 5 passed / 0 failed，71.86 秒。原十包结果仍为 **2892 passed / 5 failed / 76 ignored**；不与专项或其他重叠测试相加。
+
+- **Correct — old reader：** [old-reader-phase3.json:1](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/old-reader-phase3.json:1) 将 reader SHA `5ec814749157…` 与输入 SHA 绑定，记录真实 330 档成功、新 331 pending 档受控 `BadTag("machine",83)`、原 public bridge 拒绝 schema4。`old-reader-wrong-test-binary.json` 的 “0 tests” 单独保留，不能算通过；本 reviewer 未重执行 reader。
+
+- **Correct — WASM 边界：** [platform-commands.json:1](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/platform-commands.json:1) 保留 `wasm-pack --target web --release --no-opt` argv、独立输出目录及 exit0；preload 仅重定向生产 adapter 使用的 JS/wasm 路径。[跨目标脚本:12](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/web-client/scripts/c331-trigger-order-cross-target.mjs:12) 比较完整 archive/hash/四座位 views/choices/events、首答及独立恢复分支；脚本没有执行 255 次尾续行，也没有本轮 Chrome UI 验证。
+
+- **Finding — P2，timeout replay 未原样保留 WAL action variant：** [c331.rs:360](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase3-review-889j0g98/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:360) 接受记录中的 TimeoutAction 或 Answer，却统一重建为 TimeoutAction，并手工读取 Skill。真实日志确有两种 variant，所以“逐条原样回放实际记录动作”的证据表述过强。当前 Native `apply_command.rs:114` 对两者共用实现，现样本 hash/fullstate 相等仍有价值；这是测试资格问题，未证实产品规则错误。最小修正是直接 `expected.submit(entry.command())`，保留现有 choice 去重、逐条 hash 与完整终态断言。
+
+- **未测／待父 bounded 复核：** 18MB 单行 `desktop-ipc-full-replies.json` 超出 read 工具限制，本 reviewer 未独立解析全量。父需逐字段核 `records[*].request/response` 的 id/ok、save hex、hash_hex、events suffix、四 seat view，对照 `author257-full-vector.json` 的 before/after/restart_before/continuation[*].after/terminal 及 `desktop-web/projection.json`；不能只采信 result 或文件 hash。也需将最终 desktop bin、`native-pkg` JS/wasm digest、驱动/adapter SHA 与冻结源码及已有 argv 绑定；无需重跑产品。
+
+- **未测／既有 open：** 当前 90 秒 fixture 源码没有完整十包重跑记录。尤其原 [affected-final.log:5953](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/affected-final.log:5953) 中真实 timer 自身也曾 replay rejected；只放宽其他 fixture 并获得串行绿，不能证明默认并行问题全部根治。手动先赢后等待旧 deadline、实际旧 WAL 未知 Skill reader 继续保持原 open，不重复列为新增 finding。
+
+- **上游等价边界：** 标准目录 331/archive105 与扩展 lock-derived u64 identity 是不同层次；`content_lock_id` 明确哈希扩展元数据，不能要求所有包 identity 都等于 331。冻结来源状态仍为 200/290 已取证、90 未证；产品专项不能证明全部 host 来源、group/subskill/inherit 或其他未闭环规则与上游等价。
+
+- **Fixed：** 无；只读审核。
+- **Merge verdict：BLOCK。** 限定产品证据具备实测资格并附以上 notes；90 来源未证、最终 aggregate 验收未闭环、current main 未合并，均禁止宣称整 C331 完成或 source-equivalent。
+
+未重审新增83核心恢复逻辑（由另一 reviewer 负责），未运行任何实验，也未独立计算二进制 SHA。
+主要风险是把专项串行绿、旧 Chrome 历史或 summary 字段外推成当前冻结批次的完整验收。
