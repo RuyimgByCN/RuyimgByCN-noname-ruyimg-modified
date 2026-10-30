@@ -1,0 +1,173 @@
+{
+  "passed": true,
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "abi": 758,
+    "ws": 6
+  },
+  "sourceHashes": {
+    "crates/engine-native-content/src/content/standard.rs": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+    "crates/engine-native-kernel/src/archive.rs": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+    "crates/engine-api/src/version.rs": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+    "crates/engine-protocol/src/lib.rs": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f"
+  },
+  "newNativeHeader": {
+    "archive": 105,
+    "rules": "330"
+  },
+  "bArchives": 14,
+  "catalogs": [
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "ordinary-dual-def-zero"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "kingdoms-dark"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "kingdoms-primary-revealed"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "kingdoms-both-revealed"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "confirm"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "select_players"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "select_cards"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "respond_card"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "pick_tag-fanjian"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "machine-XunXun"
+    },
+    {
+      "actualPacks": 0,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "330",
+      "headerRules": "330",
+      "lock": "0",
+      "name": "machine-JiJie"
+    },
+    {
+      "actualPacks": 1,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "9699176272500769735",
+      "headerRules": "9699176272500769735",
+      "lock": "9699176272500769421",
+      "name": "machine-GaiMing"
+    },
+    {
+      "actualPacks": 1,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "18039999305147582805",
+      "headerRules": "18039999305147582805",
+      "lock": "18039999305147582495",
+      "name": "machine-HaoTianTa"
+    },
+    {
+      "actualPacks": 1,
+      "archiveVersion": 105,
+      "base": 330,
+      "catalogRules": "18039999305147582805",
+      "headerRules": "18039999305147582805",
+      "lock": "18039999305147582495",
+      "name": "machine-Liaoyuan"
+    }
+  ],
+  "rejections": [
+    {
+      "name": "real329",
+      "file": "apps/game-server/tests/fixtures/adr0787-room329.json",
+      "sha256": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+      "old": {
+        "archive": 105,
+        "rules": "329"
+      },
+      "error": "RuleVersionMismatch { snapshot: 329, catalog: 330 }",
+      "currentUnchanged": true
+    },
+    {
+      "name": "real328",
+      "file": "docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json",
+      "sha256": "86c0dc473253a769c906f59a0626755d46aa21f672827749d565d87089e77367",
+      "old": {
+        "archive": 105,
+        "rules": "328"
+      },
+      "error": "RuleVersionMismatch { snapshot: 328, catalog: 330 }",
+      "currentUnchanged": true
+    }
+  ],
+  "legacy": "fresh production current-source SDK build; independent engine-core axis validated by nativeCLI/WASM crosshash; not a native NGSA archive"
+}

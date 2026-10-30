@@ -75,6 +75,12 @@ const autoTimer = ref<number | null>(null);
 const autoRunning = ref(false);
 const statusLine = ref("未连接");
 const roomRoster = ref<RoomRoster | null>(null);
+const countdownTick = ref(0);
+const countdownTimer = setInterval(() => { countdownTick.value++; }, 250);
+const choiceSecondsLeft = computed(() => {
+  countdownTick.value;
+  return networkClient.secondsUntilServerDeadline(store.choice?.deadline_unix_ms);
+});
 const roomId = ref(0);
 const roomStarted = ref(false);
 const isOnline = computed(() => route.query.mode === "online");
@@ -89,6 +95,7 @@ interface OnlineIntent {
   wsUrl: string;
   displayName: string;
   password: string;
+  choiceTimeoutSecs?: number;
   roomId: number;
   players: number;
   seed: number;
@@ -381,7 +388,8 @@ async function connectOnline(intent: OnlineIntent) {
     session = await networkClient.createRoom(
       intent.players,
       intent.seed,
-      intent.password
+      intent.password,
+      intent.choiceTimeoutSecs ?? 30
     );
   } else if (intent.action === "spectate") {
     session = await networkClient.spectate(intent.roomId);
@@ -603,6 +611,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  clearInterval(countdownTimer);
   window.removeEventListener("keydown", onKeydown);
   window.removeEventListener("pagehide", releaseMatchLocks);
   releaseMatchLocks();
@@ -762,6 +771,7 @@ const turnInfo = computed(() => {
     <section v-if="isOnline && roomRoster" class="panel online-roster" aria-label="联机房间座位">
       <div class="row online-roster-head">
         <h2>房间 #{{ roomRoster.room_id }}</h2>
+        <span v-if="roomRoster.choice_timeout_secs">选择时限 {{ roomRoster.choice_timeout_secs }} 秒</span>
         <span :class="roomRoster.started ? 'started' : 'waiting'">
           {{ roomRoster.started ? "对局进行中" : "等待玩家" }}
         </span>
@@ -769,6 +779,7 @@ const turnInfo = computed(() => {
       <div class="row online-seats">
         <span v-for="seat in roomRoster.seats" :key="seat.seat" class="online-seat">
           {{ seat.seat + 1 }} · {{ seat.display_name }}
+          <strong v-if="seat.managed">托管中</strong>
           <i :class="seat.connected ? 'connected' : 'offline'">{{ seat.connected ? "在线" : "离线" }}</i>
         </span>
       </div>
@@ -776,6 +787,7 @@ const turnInfo = computed(() => {
 
     <section v-if="store.choice" class="panel choice" aria-label="待选择">
       <h2>{{ choicePromptLabel(store.choice) }}</h2>
+      <p v-if="store.choice.deadline_unix_ms != null" role="timer">{{ choiceSecondsLeft === null ? "正在校准服务器时间…" : `剩余 ${choiceSecondsLeft} 秒 · 到时托管` }}</p>
       <p class="muted">
         choice #{{ store.choice.choice_id }} · 玩家
         {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}

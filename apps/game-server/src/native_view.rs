@@ -302,6 +302,7 @@ pub fn choice_for(
         max_count: max as u8,
         allow_cancel,
         timeout_policy: engine_api::TimeoutPolicy::None,
+        deadline_unix_ms: None,
         revision: engine.revision(),
     })
 }
@@ -349,7 +350,7 @@ pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction>
                 targets: Vec::new(),
                 card_targets: Vec::new(),
             }),
-            GameAction::RevealGeneral { .. } => None,
+            GameAction::RevealGeneral { .. } | GameAction::TimeoutAction { .. } => None,
         })
         .collect()
 }

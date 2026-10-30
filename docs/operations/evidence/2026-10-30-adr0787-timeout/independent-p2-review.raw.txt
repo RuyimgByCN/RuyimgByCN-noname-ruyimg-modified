@@ -1,0 +1,41 @@
+## Review
+
+- **Merge verdict: OK。** 本次六路径增量中，两个原 P2 均确认关闭；未发现新的 P1/P2。
+- **No issues found.**
+- 本次仅只读复审修正 patch、相关调用链及已有关键证明；没有修改源码、文档、索引、main、stage、remote 或缓存，没有运行构建。
+
+**范围与指纹**
+
+基准仍为 `255bbfbd7f6916ee77bd29799826a225bd10871f`，规则330／存档105／ABI758／WS6不变。六个修正路径全部属于原已审56路径，其他50路径保持原指纹。原56路径审查结论及原始证据继续保留，本次未重做全仓审查。
+
+父执行的纯只读[入口核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/review-identity-entry.json)与[出口核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/review-identity-exit.json)均通过：56/56文件匹配 `total-source-sha256.json`，相对原 checkpoint 恰六路径变化，三份 patch 均精确匹配：
+
+- 原已审 patch：`4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81`
+- 纯 P2 修正：`b2214851cea99c04e1cf53c8b7736fd8b8bba137a8086be76dbebc13581a5e29`
+- 当前完整候选：`3ca2d2c777c3736377cdceb923b5be824678c94fe989c0334ca50733aea4f26f`
+
+**Fixed：原 P2-1，Recover 未恢复自动调度——关闭**
+
+[room_native_actor.rs:735](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native_actor.rs:735)仅在 `recover_wal()` 成功且 `durability.commit()` 成功之后清除 `paused_revision`。checkpoint 拒绝、回放失败和 commit 失败均无法到达该语句；requires_restart 仍在 checkpoint 处阻断。修正未重新生成期限、改变 choice 或绕过原事务回滚。
+
+[新增回归:482](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/tests/adr0787_timeout.rs:482)驱动生产 actor 和实际 RoomStore 故障注入：首次自动 FileSync 失败、失败 Recover 不放行、成功 Recover 后原 choice 恰一条 TimeoutAction；另测 DecisionWrite／补偿 PrepareSync 失败后的 requires_restart 阻断。断言涵盖原投影、原截止、原 revision、磁盘不继续写入及 WAL choice 身份。
+
+原根因由[真实红灯日志:1750](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/recover-red.log:1750)重现：Recover 成功后等待重试超时，exit101；[绿灯日志:1750](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/recover-green.log:1750)及 recover-proof.json 支持修复后的原窗单次重试。这里验证的是**内部宿主 Recover 消息**，没有新增或证明公网恢复入口。
+
+**Fixed：原 P2-2，客户端时钟偏差使倒计时错误——关闭**
+
+[networkClient.ts:230](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/src/engine/networkClient.ts:230)在 Hello 后立即发送既有 Heartbeat；602行仅接受当前待匹配 probe 的 WS6、conn_seq 和 room_id，以及正的安全整数 server_time_ms、非负 RTT。conn_seq 复用为请求匹配标识；200行的当前 socket 身份守卫隔离旧连接，即使重连后序号重用也不能校准。有效样本加入 RTT/2 后消费 probe，重复样本不再移动锚点。
+
+234行的共享估算只使用服务端 Unix 锚点和 `performance.now()` 经过时间；连接开始、断连和 dispose 均清空 probe／锚点。非法或未匹配样本不会覆盖既有锚点；初始未校准返回 null。[BattleView.vue:78](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/src/views/BattleView.vue:78)消费该共享估算，250ms tick 只触发重算，790行显示校准中；没有修改服务器 deadline 或发送超时控制命令。卸载仍清除 interval。
+
+[协议注释:191](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-protocol/src/messages.rs:191)仅将既有 server_time_ms 的说明纠正为 Unix 毫秒；字段、序列化结构与协议号未变。修复集中在 NetworkEngineClient 的共享时间估算，页面调用者已同步，没有另造页面校时逻辑。
+
+**证明粒度与验证边界**
+
+- **源码／Node：** [network-client.test.mjs:563](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/scripts/network-client.test.mjs:563)提取实际 SFC 计算，配合真实 NetworkEngineClient 和模拟 WebSocket，覆盖±60秒、正反 wall-clock 跳变、单调经过时间、RTT/2、错协议／序号／房号、非法时间、负 RTT、重复 Pong、旧 socket、断连和原截止重连。它不是实际浏览器恶意报文矩阵；dispose 清锚点由源码确认，没有新增专门的校时断言。
+- **真实 Chrome：** 原页面快60秒显示0，exit1；原计算另证明快／慢60秒分别为0／70。[快60秒报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/browser-fast/report.json)与[慢60秒报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/browser-slow/report.json)均记录初始10秒、随后+1小时 wall-clock 跳变仍与服务器余时相符、断连校准中、同窗重连约6秒、原 deadline 不变、每局一条 TimeoutAction、异常0。Chrome 没有覆盖上述全部非法 Pong 分支。
+- **已有隔离验收：** [command-index.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/command-index.json)及抽核日志记录 workspace **6891/0/77**、server/protocol **451/0/0**、frontend **158/0**、typecheck／私有 Vite／strict native3通过、完整 preflight **21/21**。77 ignored 保持为 ignored；workspace 782、server-suite 345条 warningLines（含重复）仍保留。红灯和失败日志未被最终绿色覆盖。本次复审没有重新执行这些命令。
+- **WASM／main：** 本次未改变 native/kernel/content/native-wasm 等输入；[wasm-provenance.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/wasm-provenance.json)明确复用原 A330 产物与证明，不属于本次新 WASM 验收。上述结果全部属于隔离候选，不代表父 main 的资源增量或合并后组合验收。
+
+跳过：原56路径全量重审、重复构建／WASM矩阵、C331／改命332、物理设备／CI／37来源整包；未处理缓存。  
+风险：RTT/2存在网络不对称导致的显示误差，服务器截止始终权威；父 main 合并后的组合验收仍待完成。

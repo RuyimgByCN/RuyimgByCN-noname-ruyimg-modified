@@ -1,0 +1,138 @@
+[
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/Cargo.toml",
+    "sourceSha256": "588cd2c4a0ae7531f5d57ea5852eabf4ce1dd902a54cb455ec68f5a3f3cec415",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.toml",
+    "privateSha256": "588cd2c4a0ae7531f5d57ea5852eabf4ce1dd902a54cb455ec68f5a3f3cec415",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/Cargo.lock",
+    "sourceSha256": "b62c91d7a6d930a4b4a482baf57292ceeb712ee8d0c86021a0f7a83dab5fe442",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.lock",
+    "privateSha256": "b62c91d7a6d930a4b4a482baf57292ceeb712ee8d0c86021a0f7a83dab5fe442",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/main.rs",
+    "sourceSha256": "9dce8d18c6d93ca931a67c2bf317ae942fa04d3f7c40ceffbb06a3899be965d8",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/src/main.rs",
+    "privateSha256": "9dce8d18c6d93ca931a67c2bf317ae942fa04d3f7c40ceffbb06a3899be965d8",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/lib.rs",
+    "sourceSha256": "edbacbf0be7bdf4fe00e00cfbfc72421a47f3232597bdb94108f018275b85f87",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/src/lib.rs",
+    "privateSha256": "4d65bf88412521b3dd2e29576587626fe603e2e0bd42743e245be7cd6b322bb7",
+    "patch": "--- \n+++ \n@@ -2,8 +2,8 @@\n use engine_native::ai::BoundedPlanner;\n use engine_native_wasm::{engine_from_packs, engine_from_archive, hex_encode};\n use serde_json::{json,Value};\n-const PACKS:&str=include_str!(\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/author-packs.json\");\n-const MATRIX:&str=include_str!(\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json\");\n+const PACKS:&str=include_str!(\"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/author-packs.json\");\n+const MATRIX:&str=include_str!(\"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-native-matrix.json\");\n fn archive(e:&Engine)->String{hex_encode(&engine_native::archive::encode_archive(&e.save()))}\n fn public(e:&Engine,seat:u8)->Value{json!({\"input\":format!(\"{:?}\",e.ai_session(seat).input()),\"choice\":format!(\"{:?}\",e.ai_session(seat).choice()),\"events\":format!(\"{:?}\",e.ai_session(seat).events())})}\n fn submit(engine: &mut Engine, action: GameAction) {\n",
+    "sameBytes": false
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/author-packs.json",
+    "sourceSha256": "d0669e41696479f76412f737157d1f405b5631e74708f76ff5db6f33ffb0784f",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/author-packs.json",
+    "privateSha256": "d0669e41696479f76412f737157d1f405b5631e74708f76ff5db6f33ffb0784f",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/b-j2-direct-planner-verify.mjs",
+    "sourceSha256": "1cb2305a76643185eea40dfde64c880e3665ff643df1ba928f1dc1d02d0dc0e7",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/b-j2-direct-planner-verify.mjs",
+    "privateSha256": "1cb2305a76643185eea40dfde64c880e3665ff643df1ba928f1dc1d02d0dc0e7",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/Cargo.toml",
+    "sourceSha256": "40d640a9e3043a0cbcc32feb88943fa204a0224370fbf20c5e6e74a77cb3f7f9",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/Cargo.toml",
+    "privateSha256": "40d640a9e3043a0cbcc32feb88943fa204a0224370fbf20c5e6e74a77cb3f7f9",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/Cargo.lock",
+    "sourceSha256": "fee2ac2ed63ab9815dfaf24e0adf743c4033c3bdd5c40ad2fc6d97e66964ec6c",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/Cargo.lock",
+    "privateSha256": "fee2ac2ed63ab9815dfaf24e0adf743c4033c3bdd5c40ad2fc6d97e66964ec6c",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/main.rs",
+    "sourceSha256": "1a59166ac6e86d1b89680f25820fafa04c640f1f03217a99b7572c9b3638e22f",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/src/main.rs",
+    "privateSha256": "1a59166ac6e86d1b89680f25820fafa04c640f1f03217a99b7572c9b3638e22f",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/verify.mjs",
+    "sourceSha256": "d572ac1018eb721b40cabe41931b87b8c403ba52e435ce56241e76a0e162b950",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/verify.mjs",
+    "privateSha256": "d572ac1018eb721b40cabe41931b87b8c403ba52e435ce56241e76a0e162b950",
+    "patch": "",
+    "sameBytes": true
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/cross-target-hash.sh",
+    "sourceSha256": "c6905bbeb9c79ab5baab8a3e4cb7648c0c8978c32ba0f5f639a4a00f7c8dc342",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-hash.py",
+    "privateSha256": "c95ac7f4bf7ad5ac62f7311c6853f045681d245a58afacbd1b24db7157615209",
+    "scope": "same hash2/manifest hash+chain/skillVM checks; Phase1 conformance reused, productionlegacy build separate; no rustup settings operation"
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/lib.rs",
+    "sourceSha256": "edbacbf0be7bdf4fe00e00cfbfc72421a47f3232597bdb94108f018275b85f87",
+    "private": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/src/lib.rs",
+    "privateSha256": "4d65bf88412521b3dd2e29576587626fe603e2e0bd42743e245be7cd6b322bb7",
+    "patch": "--- \n+++ \n@@ -2,8 +2,8 @@\n use engine_native::ai::BoundedPlanner;\n use engine_native_wasm::{engine_from_packs, engine_from_archive, hex_encode};\n use serde_json::{json,Value};\n-const PACKS:&str=include_str!(\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/author-packs.json\");\n-const MATRIX:&str=include_str!(\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json\");\n+const PACKS:&str=include_str!(\"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/author-packs.json\");\n+const MATRIX:&str=include_str!(\"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-native-matrix.json\");\n fn archive(e:&Engine)->String{hex_encode(&engine_native::archive::encode_archive(&e.save()))}\n fn public(e:&Engine,seat:u8)->Value{json!({\"input\":format!(\"{:?}\",e.ai_session(seat).input()),\"choice\":format!(\"{:?}\",e.ai_session(seat).choice()),\"events\":format!(\"{:?}\",e.ai_session(seat).events())})}\n fn submit(engine: &mut Engine, action: GameAction) {\n"
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-native-wasm-cross-target.py",
+    "sourceSha256": "db31806f3b8d5a9ae034ea63cfa0725026ecb1dc9a6bce2ccb6fed6377b8024e",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/formal-trajectories.py",
+    "privateSha256": "d4149718b935daeae09ab3a2dd4b45d6ee0b1cef975fbe5dd31d31d847656e5e",
+    "patch": "--- \n+++ \n@@ -14,7 +14,7 @@\n import tempfile\n from pathlib import Path\n \n-ROOT = Path(__file__).resolve().parents[1]\n+ROOT = Path('/Users/ruyimg/Documents/Claude/sanguosha/noname-next')\n EVIDENCE = ROOT / \"docs/operations/evidence/2026-10-24-native-wasm-cross-target\"\n \n \n@@ -25,7 +25,8 @@\n \n \n def main() -> None:\n-    with tempfile.TemporaryDirectory(prefix=\"native-wasm-cross-target-\") as tmp:\n+    if True:\n+        tmp = '/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/formal'\n         native_out = Path(tmp) / \"native.json\"\n         wasm_out = Path(tmp) / \"wasm.json\"\n         env = dict(os.environ)\n"
+  },
+  {
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/real-ws.mjs",
+    "sourceSha256": "5db4891194e2d576bac5ff361fd3a8c4bfa4345b648f5b28ed00020129c4be20",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/real-ws.mjs",
+    "privateSha256": "c575ca58719e3b9ced5085651bafc56f4c11e2a56df82e22779144b142b8fc38",
+    "patch": "--- \n+++ \n@@ -1,4 +1,5 @@\n import fs from 'node:fs';\n+import {createServer as createPortServer} from 'node:net';\n import path from 'node:path';\n import assert from 'node:assert/strict';\n import { spawn } from 'node:child_process';\n@@ -10,12 +11,12 @@\n const pause=ms=>new Promise(r=>setTimeout(r,ms));\n const version=mode==='baseline'?5:6;\n const bundle={engine_api:1,rule_vm_abi:167,content_schema:3,network_protocol:version,replay_schema:1,snapshot_schema:1,package_format:1,engine_build_id:'a330-proof'};\n-let server;\n-let port=17887;\n+let server;const owned=[];\n+const reservation=createPortServer();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));let port=reservation.address().port;await new Promise(r=>reservation.close(r));\n function start(){\n  const out=fs.openSync(path.join(root,'server.log'),'a');\n- server=spawn(binary,[],{cwd:process.cwd(),env:{...process.env,GAME_SERVER_ADDR:`127.0.0.1:${port}`,NONAME_NATIVE_ROOMS:'1',NONAME_NATIVE_ROOM_PACKAGES:'',NONAME_NATIVE_PACKAGES_ROOT:path.join(root,'packages'),NONAME_NATIVE_STORE_ROOT:path.join(root,'native-store'),NONAME_NATIVE_ROOM_STORE:path.join(root,'rooms'),NONAME_ORIGINAL_CONTENT_ROOT:path.join(root,'original'),NONAME_CONTENT_STORE_ROOT:path.join(root,'legacy-store'),NONAME_EXTENSIONS_ROOT:path.join(root,'extensions')},stdio:['ignore',out,out]});\n- fs.closeSync(out);\n+ server=spawn(binary,[],{cwd:process.cwd(),env:{...process.env,GAME_SERVER_ADDR:`127.0.0.1:${port}`,NONAME_NATIVE_ROOMS:'1',NONAME_NATIVE_ROOM_PACKAGES:'',NONAME_NATIVE_PACKAGES_ROOT:\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions\",NONAME_NATIVE_STORE_ROOT:path.join(root,'native-store'),NONAME_NATIVE_ROOM_STORE:path.join(root,'rooms'),NONAME_ORIGINAL_CONTENT_ROOT:\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/content/original\",NONAME_CONTENT_STORE_ROOT:path.join(root,'legacy-store'),NONAME_EXTENSIONS_ROOT:path.join(root,'extensions')},stdio:['ignore',out,out]});\n+ owned.push(server.pid);fs.closeSync(out);\n }\n async function stop(){ if(server && server.exitCode===null && server.signalCode===null){server.kill('SIGKILL');await new Promise(r=>server.once('exit',r));} }\n class Peer {\n@@ -38,7 +39,7 @@\n function record(room){return JSON.parse(fs.readFileSync(path.join(root,'rooms',`${room}.json`),'utf8'));}\n try{\n  for(const d of ['packages','original','extensions'])fs.mkdirSync(path.join(root,d),{recursive:true});\n- start();const host=await ready();\n+ start();const host=await ready();const loaded=await fetch(`http://127.0.0.1:${port}/native/packages`).then(r=>r.json());fs.writeFileSync(path.join(root,'actual-packages.json'),JSON.stringify({count:loaded.length,packages:loaded},null,2));assert.equal(loaded.length,41,'actual imported native package count');\n  if(mode==='baseline'){\n   host.send('CreateRoom',{players:4,seed:4242,password:''});const joined=(await host.until(m=>m.type==='JoinOk')).payload;\n   fs.writeFileSync(path.join(root,'actual329-room.json'),JSON.stringify(record(joined.room_id),null,2));\n@@ -83,4 +84,4 @@\n   fs.writeFileSync(path.join(root,'report.json'),JSON.stringify({passed:true,room:host.room,deadline,timeout:timeouts[0],downtimeCounted:true,reconnectDidNotExtend:true,privilegedActionRejected:true,forgedControlRejected:true,ws5Rejected:true,noHelloRejected:true,zeroVersionRejected:true,timeoutFirstHumanRaceRejected:true},null,2));\n  }\n }catch(error){fs.writeFileSync(path.join(root,'failure.txt'),error.stack);throw error;}\n-finally{await stop();fs.writeFileSync(path.join(root,'wire.json'),JSON.stringify(trace,null,2));}\n+finally{await stop();fs.writeFileSync(path.join(root,'owned-cleanup.json'),JSON.stringify({ownedServerPids:owned,waited:true,user7700Untouched:true,serverPort:port},null,2));fs.writeFileSync(path.join(root,'wire.json'),JSON.stringify(trace,null,2));}\n"
+  },
+  {
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/ui-skew.mjs",
+    "sourceSha256": "9042f1a899d88cdb5a5aed9d1c6d91481bf6b77d158c3be45588784bc55df5a2",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ui-skew.mjs",
+    "privateSha256": "52d356d91aca26576729a033b4a6b35501220c3f9fd996e574761c389d47357c",
+    "patch": "--- \n+++ \n@@ -9,10 +9,12 @@\n const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.wasm':'application/wasm','.json':'application/json'};\n const http=createServer((req,res)=>{let file=path.join(build,new URL(req.url,'http://x').pathname);if(!fs.existsSync(file)||fs.statSync(file).isDirectory())file=path.join(build,'index.html');try{res.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream'}).end(fs.readFileSync(file));}catch{res.writeHead(404).end();}});\n await new Promise(r=>http.listen(0,'127.0.0.1',r));\n-const port=17889;for(const d of ['packages','original','extensions'])fs.mkdirSync(path.join(out,d),{recursive:true});\n+const reservation=createServer();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));const port=reservation.address().port;await new Promise(r=>reservation.close(r));for(const d of ['packages','original','extensions'])fs.mkdirSync(path.join(out,d),{recursive:true});\n const log=fs.openSync(path.join(out,'server.log'),'a');\n-const server=spawn(binary,[],{env:{...process.env,GAME_SERVER_ADDR:`127.0.0.1:${port}`,NONAME_NATIVE_ROOMS:'1',NONAME_NATIVE_ROOM_PACKAGES:'',NONAME_NATIVE_PACKAGES_ROOT:path.join(out,'packages'),NONAME_NATIVE_STORE_ROOT:path.join(out,'native-store'),NONAME_NATIVE_ROOM_STORE:path.join(out,'rooms'),NONAME_ORIGINAL_CONTENT_ROOT:path.join(out,'original'),NONAME_CONTENT_STORE_ROOT:path.join(out,'legacy-store'),NONAME_EXTENSIONS_ROOT:path.join(out,'extensions')},stdio:['ignore',log,log]});fs.closeSync(log);\n+const server=spawn(binary,[],{env:{...process.env,GAME_SERVER_ADDR:`127.0.0.1:${port}`,NONAME_NATIVE_ROOMS:'1',NONAME_NATIVE_ROOM_PACKAGES:'',NONAME_NATIVE_PACKAGES_ROOT:\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions\",NONAME_NATIVE_STORE_ROOT:path.join(out,'native-store'),NONAME_NATIVE_ROOM_STORE:path.join(out,'rooms'),NONAME_ORIGINAL_CONTENT_ROOT:\"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/content/original\",NONAME_CONTENT_STORE_ROOT:path.join(out,'legacy-store'),NONAME_EXTENSIONS_ROOT:path.join(out,'extensions')},stdio:['ignore',log,log]});fs.closeSync(log);\n+let loaded;for(let i=0;i<100;i++){try{loaded=await fetch(`http://127.0.0.1:${port}/native/packages`).then(r=>r.json());break;}catch{await new Promise(r=>setTimeout(r,50));}}assert.equal(loaded?.length,41,'actual native imports');fs.writeFileSync(path.join(out,'actual-packages.json'),JSON.stringify({count:loaded.length,packages:loaded},null,2));\n const chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--disable-gpu','--no-sandbox',`--user-data-dir=${profile}`,'--remote-debugging-port=0','--window-size=1280,1000','about:blank'],{stdio:'ignore'});\n+fs.writeFileSync(path.join(out,'owned-processes.json'),JSON.stringify({serverPid:server.pid,chromePid:chrome.pid,serverPort:port,httpPort:http.address().port,profile},null,2));\n const wait=ms=>new Promise(r=>setTimeout(r,ms));let ws,id=0;const pending=new Map(),exceptions=[],checks=[];\n try{\n  for(let i=0;i<100&&!fs.existsSync(path.join(profile,'DevToolsActivePort'));i++)await wait(50);\n@@ -50,4 +52,4 @@\n  fs.writeFileSync(path.join(out,'wire.json'),JSON.stringify(wire,null,2));\n  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({passed:true,skew,deadline,checks,reconnectDeadlineUnchanged:true,uncalibratedVisible:true,exceptions,wal:saved.state.wal.entries},null,2));\n }catch(error){fs.writeFileSync(path.join(out,'failure.txt'),error.stack);throw error;}\n-finally{ws?.close();chrome.kill('SIGKILL');server.kill('SIGKILL');await new Promise(r=>http.close(r));fs.writeFileSync(path.join(out,'exceptions.json'),JSON.stringify(exceptions,null,2));}\n+finally{ws?.close();for(const child of [chrome,server]){if(child.exitCode===null&&child.signalCode===null){const exited=new Promise(r=>child.once('exit',r));child.kill('SIGKILL');await exited;}}await new Promise(r=>http.close(r));fs.writeFileSync(path.join(out,'exceptions.json'),JSON.stringify(exceptions,null,2));fs.writeFileSync(path.join(out,'owned-cleanup.json'),JSON.stringify({serverPid:server.pid,serverExit:server.exitCode,serverSignal:server.signalCode,chromePid:chrome.pid,chromeExit:chrome.exitCode,chromeSignal:chrome.signalCode,waited:true,httpClosed:true},null,2));}\n"
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/drivers/noname-resource-browser-audio.mjs",
+    "sourceSha256": "79f1f7459d1441714d79ea6b68201438e7aa9d7ca74ce4588cb18675ee587e09",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/noname-resource-browser-audio.mjs",
+    "privateSha256": "402e23ccdda6a847b9308fb3e13af4feb59767eb8b683fc991c47c816222117a",
+    "patch": "--- \n+++ \n@@ -13,7 +13,7 @@\n  const url=new URL(req.url,'http://localhost');\n  const resource=url.pathname.startsWith('/original-content/');\n  assert.equal(resource,false,'Resource requests must go directly to actual Rust HTTP process');\n- const root=resource?path.join(repo,'content/original'):path.join(out,'validated-dist');\n+ const root=resource?path.join(repo,'content/original'):\"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist\";\n  let file=path.resolve(root, '.'+decodeURIComponent(resource?url.pathname.slice('/original-content'.length):url.pathname));\n  if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}\n  if(!resource&&!existsSync(file))file=path.join(root,'index.html');\n"
+  },
+  {
+    "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/drivers/noname-resource-browser-errors.mjs",
+    "sourceSha256": "ad74fd91184bbf10a672f3f1eb7bc1767468afd1fcbc46c6ee0f172fb3b97758",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/noname-resource-browser-errors.mjs",
+    "privateSha256": "ad74fd91184bbf10a672f3f1eb7bc1767468afd1fcbc46c6ee0f172fb3b97758",
+    "patch": ""
+  },
+  {
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-wasm.mjs",
+    "sourceSha256": "6baefaaaf98a3688318ece69ecbc79270df978f1afd8394606e02f095aaab18a",
+    "private": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/timeout-wasm.mjs",
+    "privateSha256": "6baefaaaf98a3688318ece69ecbc79270df978f1afd8394606e02f095aaab18a",
+    "patch": ""
+  }
+]

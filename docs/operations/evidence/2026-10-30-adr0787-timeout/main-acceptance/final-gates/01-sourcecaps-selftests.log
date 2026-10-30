@@ -1,0 +1,6 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.010s
+
+OK
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "exit": 0, "locked_seconds": 0.07595558400498703, "disk_free_bytes": 125914107904}

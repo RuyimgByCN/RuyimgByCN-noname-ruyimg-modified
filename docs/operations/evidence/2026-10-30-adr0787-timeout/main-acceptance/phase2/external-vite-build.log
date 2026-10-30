@@ -1,0 +1,14 @@
+vite v6.4.3 building for production...
+transforming...
+✓ 117 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/index.html                                       0.46 kB │ gzip:     0.30 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/engine.worker-DF5gc_e9.js                 9.01 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/engine.native.worker-BIwpD907.js         22.08 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/engine_native_wasm_bg-u6T604pW.wasm   3,560.41 kB │ gzip: 1,029.08 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/engine_wasm_bg-1RaHVOmb.wasm         15,376.55 kB │ gzip: 3,404.90 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/index-DtaP1kkT.css                       28.13 kB │ gzip:     6.03 kB
+../../../../../../../../var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist/assets/index-DrNtT8wv.js                       411.84 kB │ gzip:   110.13 kB
+✓ built in 940ms
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/vite-external-build.mjs"], "exit": 0, "locked_seconds": 1.16263129102299, "disk_free_bytes": 142364647424}

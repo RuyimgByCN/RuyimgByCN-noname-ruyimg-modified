@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "oldServerRejected": true,
+  "status": "服务端协议版本不兼容：需要 WS6",
+  "exceptions": []
+}

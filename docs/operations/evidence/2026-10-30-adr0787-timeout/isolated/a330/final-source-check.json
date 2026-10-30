@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-30T16:36:47.358829",
+  "sourceDrift": [],
+  "noStagedFiles": true,
+  "activeOwnedHeavyProcesses": [],
+  "reversePatchCheck": "exit0",
+  "diffCheck": "exit0",
+  "guardRemoved": true,
+  "lookupLinksRemoved": true,
+  "sourceTargetExists": false,
+  "cacheReleasedToParent": true
+}

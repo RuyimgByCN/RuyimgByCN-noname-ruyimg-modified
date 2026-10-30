@@ -1,0 +1,1244 @@
+//! 阶段 1 交付：固化可重放场景（ADR 0703 "固定基线"）。
+//!
+//! 每个场景 = 命名 + 确定性命令脚本 + 终态 blake3 哈希（golden）。
+//! golden 变化 = 内核语义变化，必须先登记行为差异/ADR 再更新。
+//! 场景名必须在 `docs/native-coverage-manifest.md` 中登记（linkage 测试守护）。
+
+use std::sync::atomic::{AtomicU64, Ordering};
+
+use engine_native::catalog::CardKind;
+use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
+
+// ---------------------------------------------------------------------------
+// 脚手架（与 native_kernel.rs 同约定：清手/放牌必须在推进之后，保证确定性）
+// ---------------------------------------------------------------------------
+
+/// 进程级去重键发生器：命令信任边界要求 dedup_id 严格递增。
+static DEDUP: AtomicU64 = AtomicU64::new(1);
+
+fn fresh_dedup() -> u64 {
+    DEDUP.fetch_add(1, Ordering::Relaxed)
+}
+
+fn submit_cmd(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
+    let expected_revision = e.revision();
+    e.submit(GameCommand {
+        actor,
+        expected_revision,
+        dedup_id: fresh_dedup(),
+        action,
+    })
+}
+
+fn next_phase(e: &mut Engine) -> CommandOutcome {
+    let actor = e.turn().current;
+    submit_cmd(e, actor, GameAction::NextPhase)
+}
+
+fn advance_to_play(e: &mut Engine, player: u8) {
+    for _ in 0..64 {
+        let t = e.turn();
+        if t.current == player && t.phase == Phase::Play {
+            return;
+        }
+        match next_phase(e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                answer_min_cards(e, &choice);
+            }
+            other => panic!("advance rejected: {other:?}"),
+        }
+    }
+    panic!("advance_to_play did not converge");
+}
+
+fn answer_sel(e: &mut Engine, selection: Vec<ChoiceOption>) -> CommandOutcome {
+    let choice = e.open_choice().expect("choice open").clone();
+    submit_cmd(
+        e,
+        choice.observer,
+        GameAction::Answer {
+            choice_id: choice.id,
+            selection,
+        },
+    )
+}
+
+fn answer_min_cards(e: &mut Engine, choice: &engine_native::OpenChoice) -> CommandOutcome {
+    let sel: Vec<ChoiceOption> = choice
+        .spec
+        .options
+        .iter()
+        .filter(|o| matches!(o, ChoiceOption::Card(_)))
+        .copied()
+        .take(choice.spec.min.max(1))
+        .collect();
+    answer_sel(e, sel)
+}
+
+fn answer(e: &mut Engine, opt: ChoiceOption) -> CommandOutcome {
+    answer_sel(e, vec![opt])
+}
+
+fn play(e: &mut Engine, card: u32, targets: Vec<u8>) -> CommandOutcome {
+    let actor = e.turn().current;
+    submit_cmd(e, actor, GameAction::PlayCard { card, targets })
+}
+
+fn play_sha_at(e: &mut Engine, attacker: u8, target: u8) -> CommandOutcome {
+    let sha = e
+        .debug_hand(attacker)
+        .iter()
+        .copied()
+        .find(|c| e.catalog().card_kind(*c) == CardKind::Sha)
+        .expect("attacker holds a sha");
+    let actor = e.turn().current;
+    submit_cmd(
+        e,
+        actor,
+        GameAction::PlayCard {
+            card: sha,
+            targets: vec![target],
+        },
+    )
+}
+
+// ---------------------------------------------------------------------------
+// 场景（名称 = 覆盖清单登记键）
+// ---------------------------------------------------------------------------
+
+/// 出牌/闪/伤害/限一次/距离：闪避与受伤两回合。
+fn scenario_sha_dodge_then_damage() -> [u8; 32] {
+    let mut e = Engine::new(11, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    let shan = e.debug_place(1, "shan");
+    e.debug_place(0, "sha");
+    play_sha_at(&mut e, 0, 1);
+    answer(&mut e, ChoiceOption::Card(shan));
+    // 回合交给 1：1 反击 0，0 无闪直接受伤
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(1);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    e.state_hash()
+}
+
+/// 濒死/无人救援/死亡/终局条件（单挑终局）。
+fn scenario_death_terminal_single() -> [u8; 32] {
+    let mut e = Engine::new(71, 2);
+    e.debug_set_hp(0, 1);
+    advance_to_play(&mut e, 1);
+    for p in 0..2 {
+        e.debug_clear_hand(p);
+    }
+    let _sha = e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    assert!(e.outcome().is_some(), "single mode must end after kill");
+    e.state_hash()
+}
+
+/// 嵌套选择链（散财：确认→摸牌→目标→牌）。
+fn scenario_sancai_nested_chain() -> [u8; 32] {
+    let mut e = Engine::new(23, 4);
+    e.debug_grant(0, "散财");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    answer(&mut e, ChoiceOption::Confirm);
+    answer(&mut e, ChoiceOption::Player(2));
+    let card = match e.open_choice().expect("card choice").spec.options[0] {
+        ChoiceOption::Card(c) => c,
+        _ => panic!("first option must be a card"),
+    };
+    answer(&mut e, ChoiceOption::Card(card));
+    e.state_hash()
+}
+
+/// 伤害转移（移伤：前置窗口改写载荷）。
+fn scenario_yishang_redirect() -> [u8; 32] {
+    let mut e = Engine::new(31, 4);
+    e.debug_grant(0, "移伤");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    answer(&mut e, ChoiceOption::Confirm);
+    answer(&mut e, ChoiceOption::Player(2));
+    e.state_hash()
+}
+
+/// 防止/每回合限一次/窗口内禁用（碎盾×肃清矩阵）。
+fn scenario_suidun_window_matrix() -> [u8; 32] {
+    let mut e = Engine::new(53, 4);
+    e.debug_grant(0, "碎盾");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0); // 第一段被碎盾防止
+    advance_to_play(&mut e, 3);
+    e.debug_clear_hand(0);
+    e.debug_place(3, "sha");
+    play_sha_at(&mut e, 3, 0); // 限一次已用 → 生效
+    e.debug_grant(2, "肃清");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0); // 肃清禁用已入队碎盾 → 生效
+    e.state_hash()
+}
+
+/// 动态获得/到期（授艺→移伤→回合结束移除）。
+fn scenario_shouyi_dynamic_skill() -> [u8; 32] {
+    let mut e = Engine::new(61, 4);
+    e.debug_grant(0, "授艺");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    assert!(e.debug_has_skill(0, "移伤"));
+    advance_to_play(&mut e, 3);
+    e.debug_clear_hand(0);
+    play_sha_at(&mut e, 3, 0);
+    answer(&mut e, ChoiceOption::Confirm);
+    answer(&mut e, ChoiceOption::Player(1));
+    // 推进到 0 的回合（临时技能应存续），再走到其回合结束到期
+    advance_to_play(&mut e, 0);
+    assert!(e.debug_has_skill(0, "移伤"));
+    for _ in 0..5 {
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                answer_min_cards(&mut e, &choice);
+            }
+            other => panic!("{other:?}"),
+        }
+        if !e.debug_has_skill(0, "移伤") {
+            break;
+        }
+    }
+    assert!(!e.debug_has_skill(0, "移伤"));
+    e.state_hash()
+}
+
+/// 弃牌上限。
+fn scenario_discard_to_limit() -> [u8; 32] {
+    let mut e = Engine::new(91, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_set_hp(0, 2);
+    for _ in 0..4 {
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                answer_min_cards(&mut e, &choice);
+            }
+            other => panic!("{other:?}"),
+        }
+    }
+    assert_eq!(e.debug_hand(0).len(), 2);
+    e.state_hash()
+}
+
+/// 拒绝整段回滚（非法应答 + 预算耗尽后哈希不变）。
+fn scenario_rollback_invariants() -> [u8; 32] {
+    let mut e = Engine::new(81, 4);
+    e.debug_grant(0, "散财");
+    advance_to_play(&mut e, 1);
+    e.debug_clear_hand(0);
+    e.debug_place(1, "sha");
+    play_sha_at(&mut e, 1, 0);
+    let (id, _) = {
+        let c = e.open_choice().expect("choice open");
+        (c.id, c.spec.prompt)
+    };
+    let before = e.state_hash();
+    assert!(matches!(
+        e.submit(GameCommand {
+            actor: e.open_choice().unwrap().observer,
+            expected_revision: e.revision(),
+            dedup_id: fresh_dedup(),
+            action: GameAction::Answer {
+                choice_id: id,
+                selection: vec![ChoiceOption::Card(9999)],
+            },
+        }),
+        CommandOutcome::Rejected(engine_native::RejectReason::InvalidChoice)
+    ));
+    assert_eq!(e.state_hash(), before);
+    // budget 字段入哈希：改预算后以其为新基准
+    e.debug_set_budget(2);
+    let before_small_budget = e.state_hash();
+    assert!(matches!(
+        e.submit(GameCommand {
+            actor: e.open_choice().unwrap().observer,
+            expected_revision: e.revision(),
+            dedup_id: fresh_dedup(),
+            action: GameAction::Answer {
+                choice_id: id,
+                selection: vec![ChoiceOption::Confirm],
+            },
+        }),
+        CommandOutcome::Rejected(engine_native::RejectReason::BudgetExhausted)
+    ));
+    assert_eq!(e.state_hash(), before_small_budget);
+    e.debug_set_budget(4096);
+    answer(&mut e, ChoiceOption::Confirm);
+    e.state_hash()
+}
+
+/// 装备栏与距离/攻击范围：±马修饰、武器射程、同栏替换、跨回合打击。
+fn scenario_equip_distance_matrix() -> [u8; 32] {
+    let mut e = Engine::new(101, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(2);
+    let sha = e.debug_place(0, "sha");
+    // 基础距离 2 → 非法（拒绝不改状态）；-1 马 → 距离 1 → 命中
+    play(&mut e, sha, vec![2]);
+    let hm = e.debug_place(0, "horse_minus");
+    play(&mut e, hm, vec![]);
+    play(&mut e, sha, vec![2]);
+    let w2 = e.debug_place(0, "weapon2");
+    play(&mut e, w2, vec![]);
+    // 2 号出 +1 马
+    advance_to_play(&mut e, 2);
+    e.debug_clear_hand(0);
+    let hp_card = e.debug_place(2, "horse_plus");
+    play(&mut e, hp_card, vec![]);
+    // 0 借武器射程 2 跨 +1 马打击
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    e.debug_clear_hand(2);
+    let sha2 = e.debug_place(0, "sha");
+    play(&mut e, sha2, vec![2]);
+    // 同栏替换：weapon3 换下 weapon2
+    e.debug_clear_hand(0);
+    let w3 = e.debug_place(0, "weapon3");
+    play(&mut e, w3, vec![]);
+    e.state_hash()
+}
+
+/// 铁索连环与属性伤害：横置 → 火杀传导 → 解链；普通杀不传导。
+fn scenario_chain_fire_propagation() -> [u8; 32] {
+    let mut e = Engine::new(113, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let chain = e.debug_place(0, "chain");
+    play(&mut e, chain, vec![1, 2]);
+    let fsha = e.debug_place(0, "fire_sha");
+    play(&mut e, fsha, vec![1]); // 传导给 2，随后解链
+    // 普通杀不再传导
+    let sha = e.debug_place(0, "sha");
+    play(&mut e, sha, vec![1]);
+    // 雷伤验证（无链者不再传导）
+    e.debug_deal_damage(
+        None,
+        2,
+        1,
+        engine_native::event::DamageNature::Thunder,
+    );
+    e.state_hash()
+}
+
+/// AOE 多目标响应队列：南蛮（免伤/跳过/Pass）→ 万箭（全 Pass 受伤）。
+fn scenario_aoe_response_queue() -> [u8; 32] {
+    let mut e = Engine::new(131, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    for p in [1u8, 2, 3] {
+        e.debug_clear_hand(p);
+    }
+    let savage = e.debug_place(0, "savage");
+    let sha1 = e.debug_place(1, "sha");
+    let _sha3 = e.debug_place(3, "sha");
+    play(&mut e, savage, vec![]);
+    answer(&mut e, ChoiceOption::Card(sha1)); // 1 免伤；2 跳过；询问 3
+    answer(&mut e, ChoiceOption::Pass); // 3 受伤 → 南蛮完结
+    // 万箭：仅 1 持闪（Pass 受伤），2/3 无闪直接跳过受伤
+    e.debug_clear_hand(1);
+    let _shan1 = e.debug_place(1, "shan");
+    let archery = e.debug_place(0, "archery");
+    play(&mut e, archery, vec![]);
+    answer(&mut e, ChoiceOption::Pass);
+    e.state_hash()
+}
+
+/// 决斗交替出杀：目标先出、来源出、目标无杀即败；无距离限制（0→2）。
+fn scenario_duel_alternating_response() -> [u8; 32] {
+    let mut e = Engine::new(141, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let duel = e.debug_place(0, "duel");
+    let sha_t1 = e.debug_place(2, "sha");
+    let sha_s = e.debug_place(0, "sha");
+    play(&mut e, duel, vec![2]);
+    answer(&mut e, ChoiceOption::Card(sha_t1));
+    answer(&mut e, ChoiceOption::Card(sha_s));
+    // 目标再无杀：不询问直接受伤，决斗结束
+    e.state_hash()
+}
+
+/// 无懈响应链：南蛮被无懈抵消 → 反无懈恢复生效（含交替询问）。
+fn scenario_nullify_chain_on_savage() -> [u8; 32] {
+    let mut e = Engine::new(153, 4);
+    advance_to_play(&mut e, 0);
+    e.debug_clear_hand(0);
+    for p in [1u8, 2, 3] {
+        e.debug_clear_hand(p);
+    }
+    let savage = e.debug_place(0, "savage");
+    let nul1 = e.debug_place(1, "nullify");
+    let nul2 = e.debug_place(2, "nullify");
+    let sha1 = e.debug_place(1, "sha");
+    play(&mut e, savage, vec![]);
+    answer(&mut e, ChoiceOption::Card(nul1)); // 抵消
+    answer(&mut e, ChoiceOption::Card(nul2)); // 反无懈 → 恢复
+    // 南蛮生效：1 出杀免伤；2、3 跳过受伤
+    answer(&mut e, ChoiceOption::Card(sha1));
+    e.state_hash()
+}
+
+/// 判定区与延时锦囊：乐跳过出牌阶段（黑桃判定）、判定牌入弃堆。
+fn scenario_judge_phase_delayed_tricks() -> [u8; 32] {
+    let mut e = Engine::new(161, 4);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    // 黑桃判定 → 乐生效 → 1 跳过出牌阶段（无人持无懈，窗口不开询问）
+    e.debug_set_deck_top_by(|def| def.suit.is_spade() && def.kind == CardKind::Sha);
+    let le = e.debug_place(0, "le");
+    play(&mut e, le, vec![1]);
+    // 推进 1 的回合：Draw 之后直接 Discard
+    loop {
+        let t = e.turn();
+        if t.current == 1 && t.phase == Phase::Draw {
+            break;
+        }
+        match next_phase(&mut e) {
+            CommandOutcome::Accepted { .. } => {}
+            CommandOutcome::Pending { choice } => {
+                answer_min_cards(&mut e, &choice);
+            }
+            other => panic!("{other:?}"),
+        }
+    }
+    next_phase(&mut e);
+    e.state_hash()
+}
+
+// ---------------------------------------------------------------------------
+// golden 表 + 联动守护
+// ---------------------------------------------------------------------------
+
+type ScenarioFn = fn() -> [u8; 32];
+
+/// (场景名, 运行函数, 覆盖清单机制键, golden 哈希 hex)
+/// golden 变更 = 语义变化，须先在清单登记行为差异/ADR。
+/// 2026-09-24 重录依据（v60）：规则版本 59→60（祖墨手铠封印，版本字段
+/// 入 canonical_hash 必变全部哈希；v60 行为分支仅经 gwent 牌种，标准场景
+/// 不可达）+ standard_catalog_parts 拆牌循环重复入目录修复（顺/酒/雷杀
+/// 8/4/4 → 4/2/2，改变建局发牌）。轨迹语义未变，逐场景命令与断言不变；
+/// 证据见 docs/operations/evidence/2026-09-24-replay-golden-v60/。
+/// 2026-10-07 重录依据（v61/v4）：E03 翻面原语——PlayerState 尾部追加
+/// face_down 编码（初始 false，行为无变化，纯状态扩展）+ 规则版本 60→61 +
+/// 存档格式 3→4。既有场景无翻面事件，轨迹语义不变。
+/// 2026-10-10 重录依据（v192 事故恢复收尾）：golden 原值为 v188 批重录；
+/// 其后 v191 勾魂锣（gouhunluo 字段入 canonical_hash）与 v192 机关桶
+///（版本 191→192）两批的重录因 host.rs 误清零事故未及完成，事故恢复后
+/// 补齐。版本回退探针（192→188 复跑仍 mismatch）证明位移含 v191 哈希
+/// 字段扩展，非单一版本号；场景轨迹语义经探针（杀→闪响应→弃牌序）与
+/// 全量行为测试（524 passed）核验未变，逐场景命令与断言不变。
+/// 2026-10-10 重录依据（v193 机关桶收尾）：规则版本 192→193（机关桶
+/// 补上游 reverseOrder 逆序 + contentAfter 无人受伤摸一）。版本回退探
+/// 针（193→192 复跑 golden 全绿）证明位移唯一来源是版本字段入
+/// canonical_hash；jiguantong 行为分支仅经 swd 扩展牌种，标准场景不可
+/// 达，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-10-t10-jiguantong-v193/。
+/// 2026-10-11 重录依据（v194 掠影对齐，T11 子项）：规则版本 193→194
+/// （掠影补"另有其他有牌角色"过滤与非强制确认）+ 存档格式 41→42
+///（MachineSnapshot::Sha 尾部追加 lueying_declined）。双版本回退探针
+///（194/42→193/41 复跑 golden 全绿）证明位移唯一来源是版本字段；
+/// 掠影分支仅经 xianjian 扩展牌种，标准场景不可达，逐场景命令与断言
+/// 不变。证据见 docs/operations/evidence/2026-10-11-t11-lueying-v194/。
+/// 2026-10-11 重录依据（v195 机关凤，T12 切片）：规则版本 194→195
+/// （机关凤=新机关牌切片，仅经 swd 牌种可达）。版本回退探针（195→194
+/// 复跑 golden 全绿）证明位移唯一来源是版本字段；标准场景不可达，逐场
+/// 景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t12-jiguanfeng-v195/。
+/// 2026-10-11 重录依据（v196 机关怨，T12 切片）：规则版本 195→196
+/// （机关怨=新机关牌切片+存档 v43 PlayerState.jiguanyuan_cards）。版本
+/// 回退探针（196→195 复跑 golden 全绿）证明位移唯一来源是版本字段；
+/// 机关怨分支仅经 swd 牌种，标准场景不可达，逐场景命令与断言不变。
+/// 证据见 docs/operations/evidence/2026-10-11-t12-jiguanyuan-v196/。
+/// 2026-10-11 重录依据（v197 机关妖术，T12 切片）：规则版本 196→197
+/// （机关妖术=新机关牌切片，仅经 swd 牌种可达）。版本回退探针（197→196
+/// 复跑 golden 全绿）证明位移唯一来源是版本字段；标准场景不可达，逐场
+/// 景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t12-jiguanyaoshu-v197/。
+/// 2026-10-11 重录依据（v198 机关术批，T12）：规则版本 197→198（灵剑池
+/// 7 张+机关妖术补偿+CardKind::Hslingjian）+ 存档格式 43→44（灵剑状态
+/// 四字段）。双版本回退探针（198/44→197/43 复跑 golden 全绿）证明位移
+/// 唯一来源是版本字段；灵剑/补偿分支仅经 swd 牌种，标准场景不可达，逐
+/// 场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t12-jiguanshu-v198/。
+/// 2026-10-11 重录依据（v199 机关术×2，T18）：规则版本 198→199（机关术
+/// 转正+CardMod 伴随表）+ 存档格式 44→45（card_mods）。双版本回退探针
+///（199/45→198/44 复跑 golden 全绿）证明位移唯一来源是版本字段；机关术
+/// 分支仅经 swd 牌种，标准场景不可达，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t18-jiguanshu-primitive-v199/。
+/// 2026-10-11 重录依据（v200 阵法三张，T19a）：规则版本 199→200（天覆/
+/// 七星/鸟翔阵 + 国战派生判定原语）。版本回退探针（200→199 复跑 golden
+/// 全绿）证明位移唯一来源是版本字段；阵法分支仅经 zhenfa 牌种，标准场
+/// 景不可达，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t19-zhenfa-v200/。
+/// 2026-10-11 重录依据（v201 长蛇阵，T19b）：规则版本 200→201（长蛇阵
+/// 转正+swapSeat 座位环）+ 存档格式 45→46（GameStateCore.seat_ring）。
+/// 双版本回退探针（201/46→200/45 复跑 golden 全绿）证明位移唯一来源是
+/// 版本字段；长蛇阵分支仅经 zhenfa 牌种，标准场景不可达，逐场景命令与
+/// 断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t19b-swapseat-v201/。
+/// 2026-10-11 重录依据（v202 标准差异消除批，T11）：规则版本 201→202
+/// （倾国改黑手牌、救援补主公资格+用桃者吴势力、结姻目标改受伤男性、
+/// 急救限持有者回合外——均为标准技能条件修正）。版本回退探针（202→201
+/// 复跑 golden 全绿）证明位移唯一来源是版本字段；14 个标准场景均不触
+/// 发这四个技能的修改分支，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-standard-diff-v202/。
+/// 2026-10-11 重录依据（v203 反间对齐，T11）：规则版本 202→203（反间补
+/// 目标选花色询问+花色相符不受伤）+ 存档格式 46→47（FanJian 机器
+/// chosen_suit 字段与 SuitAsk 阶段）。版本回退探针（203→202 复跑 golden
+/// 全绿）证明位移唯一来源是版本字段；反间分支不在标准场景可达路径，逐
+/// 场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-fanjian-v203/。
+/// 2026-10-11 重录依据（v204 护驾对齐，T11）：规则版本 203→204（护驾
+/// 询问改持牌者自选一张闪打出——SelectCards 含倾国转化黑手牌，空选=
+/// 拒绝；撤销「弃置+计数」登记差异的自动弃牌面）。版本回退探针（204→
+/// 203 复跑 golden 全绿）证明位移唯一来源是版本字段；护驾分支不在标准
+/// 场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-hujia-v204/。
+/// 2026-10-11 重录依据（v205 斗地主 binglin 变体，T11）：规则版本
+/// 204→205（GameMode 增 DoudizhuVariant 建局面：binglin 地主 5/农民 4，
+/// 变体不入模式编码）。版本回退探针（205→204 复跑 golden 全绿）证明
+/// 位移唯一来源是版本字段；斗地主分支不在标准场景可达路径，逐场景命
+/// 令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-doudizhu-binglin-v205/。
+/// 2026-10-11 重录依据（v206 versus 替补，T11）：规则版本 205→206
+/// （Versus 增替补武将池：死亡座位从本队池弹队首换将复活+摸 4，死亡
+/// 不结算；池空照常死亡）。版本回退探针（206→205 复跑 golden 全绿）
+/// 证明位移唯一来源是版本字段；versus 分支不在标准场景可达路径，逐场
+/// 景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-versus-substitute-v206/。
+/// 2026-10-11 重录依据（v207 Boss 关卡骨架，T11）：规则版本 206→207
+/// （Boss 关卡开局面：gameDraw boss/挑战者分列发牌数+loopFirst 回合起
+/// 点座位，OpeningPlan 建局面、变体不入模式编码）。版本回退探针
+/// （207→206 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss 分支
+/// 不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-stage-v207/。
+/// 2026-10-11 重录依据（v208 boss 内容落包首批，T11）：规则版本
+/// 207→208（BOSS_GENERALS 烛阴+共有技凶兽入目录——杀伤条件+1/距离-1/
+/// 不可翻面三面；技能表尾追加）。版本回退探针（208→207 复跑 golden
+/// 全绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，
+/// 逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-zhuyin-v208/。
+/// 2026-10-11 重录依据（v209 boss 内容第二批首片：混沌无脏，T11）：
+/// 规则版本 208→209（BOSS_GENERALS 增混沌 hp25+无脏两面——摸牌基数
+/// max(5,hp/2) 与手牌上限基数 0；hand_limit 签名增 catalog）。版本回
+/// 退探针（209→208 复跑 golden 全绿）证明位移唯一来源是版本字段；
+/// Boss 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-hundun-wuzang-v209/。
+/// 2026-10-11 重录依据（v210 boss 内容第二批续片：相德+隐贼，T11）：
+/// 规则版本 209→210（混沌补全四技——相德 DamageBefore 触发机（新
+/// MachineSnapshot::BossXiangde 变体 tag61/哈希 62）+隐贼激活门控与伤
+/// 害后弃牌双臂）。版本回退探针（210→209 复跑 golden 全绿）证明位移
+/// 唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐场景命令与
+/// 断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-xiangde-yinzei-v210/。
+/// 2026-10-11 重录依据（v211 boss 内容第三批首片：穷奇逐厄，T11）：
+/// 规则版本 210→211（BOSS_GENERALS 增穷奇 hp20+逐厄单技——global
+/// damageEnd 穷奇与来源双摸；穷奇 maxHp25 登记差异暂=hp20）。版本回
+/// 退探针（211→210 复跑 golden 全绿）证明位移唯一来源是版本字段；
+/// Boss 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-qiongqi-zhue-v211/。
+/// 2026-10-11 重录依据（v212 boss 内容第三批续片：穷奇覆泰，T11）：
+/// 规则版本 211→212（覆泰——准备阶段[判定阶段开始锚点]全体受伤者按
+/// 座位序各回 1；新 MachineSnapshot::BossFutai 变体 tag62/哈希 63）。
+/// 版本回退探针（212→211 复跑 golden 全绿）证明位移唯一来源是版本字
+/// 段；Boss 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-qiongqi-futai-v212/。
+/// 2026-10-11 重录依据（v213 boss 内容第三批再续片：穷奇延妒，T11）：
+/// 规则版本 212→213（延妒——体力首次≤一半激活[SkillInstance.enabled
+/// 同隐贼先例]+其他角色无伤害统计的结束阶段穷奇获得其首张手牌[确定性
+/// 近似]）。版本回退探针（213→212 复跑 golden 全绿）证明位移唯一来源
+/// 是版本字段；Boss 分支不在标准场景可达路径，逐场景命令与断言不变。
+/// 证据见 docs/operations/evidence/2026-10-11-t11-boss-yandu-v213/。
+/// 2026-10-11 重录依据（v214 覆泰2 全场禁桃，T11）：规则版本 213→214
+/// （覆泰2——穷奇持覆泰且非其回合时桃不可用[PlayCard 校验]/不可救
+/// [is_tao_like]两面；穷奇回合禁令解除）。版本回退探针（214→213 复
+/// 跑 golden 全绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景
+/// 可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-futai2-v214/。
+/// 2026-10-11 重录依据（v215 boss 内容第四批首片：饕餮贪欲，T11）：
+/// 规则版本 214→215（贪欲两面——跳过弃牌阶段+结束阶段全场最多手牌
+/// 失 1 体[is_max 判定抽函数]；BOSS_GENERALS 增饕餮 hp20）。版本回退
+/// 探针（215→214 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss
+/// 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-taotie-v215/。
+/// 2026-10-11 重录依据（v216 boss 内容第四批续片：饕餮藏目+积财，
+/// T11）：规则版本 215→216（藏目——摸牌基数=存活角色数[Draw 臂无脏
+/// 同位]；积财——激活门控[延妒并列]+回复结算后双摸[新 commit_recover
+/// 臂；debug_recover 测试面]）。版本回退探针（216→215 复跑 golden 全
+/// 绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐
+/// 场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-cangmu-jicai-v216/。
+/// 2026-10-11 重录依据（v217 boss 内容第五批首片：梼杌拟态，T11）：
+/// 规则版本 216→217（拟态两面——回合内受伤防止[commit 入口直读]与
+/// 回合外火伤 +1[amount 链]；BOSS_GENERALS 增梼杌 hp25）。版本回退探
+/// 针（217→216 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss
+/// 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-taowu-nitai-v217/。
+/// 2026-10-11 重录依据（v218 boss 内容第五批续片：梼杌乱常，T11）：
+/// 规则版本 217→218（乱常——激活门控[SkillInstance.enabled 同隐贼先
+/// 例]+准备阶段虚拟南蛮/结束阶段虚拟万箭[use_virtual_card 载体 AOE；
+/// 新 MachineSnapshot::BossLuanchang 变体 tag63/哈希 64]）。版本回退
+/// 探针（218→217 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss
+/// 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-luanchang-v218/。
+/// 2026-10-11 重录依据（v223 相柳批末片：毒妒+蛇毒链+邪酬，T11）：
+/// 规则版本 222→223（毒妒——相柳受击来源获蛇毒标记；邪酬——hp≤半激
+/// 活+他人桃/酒获标记；蛇毒标记=PlayerState.shedu 新字段[存档
+/// 48→49→50]+其回合开始弃 X 或失 X 结算机[Shedu 触发技，新快照变体
+/// tag64/哈希 65]）。版本回退探针（223→222 复跑 golden 全绿）证明位
+/// 移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐场景命令与
+/// 断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-duqu-v223/。
+/// **版本断链审计（v224 批发现）**：v220–v223 四批的 bump/restore 脚
+/// 本链存在断链（restore 锚失效致运行时版本停留 222，四批「重录」实
+/// 为 222 版+各批代码的哈希——自洽但名义版本与运行时不符）。本批修正
+/// 至 224 并如实登记：各批行为面回归不受影响（以各自代码状态运行并录
+/// 制），仅名义版本号断层。
+/// 2026-10-11 重录依据（v224 朱厌批首片：兵先，T11）：规则版本
+/// 222→**224**（运行时版本从实际 222 修正至 224+兵先——他人无出杀回
+/// 合结束被虚拟杀）。探针形态变化：223 版运行≠v223 批哈希（目录表序
+/// 已含各批 def 追加）——探针口径自本批起以「223 版+本批代码」的 14
+/// 全位移佐证（Boss 分支不可达，场景命令与断言不变）。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-bingxian-v224/。
+/// 2026-10-11 重录依据（v227 毕方批首片：招祸，T11）：规则版本
+/// 222→227（断链批合并录——v225 虚失+门控七臂/v226 巨源+存档 v51/
+/// v227 招祸两面[毕方伤害视为火 DamageBefore 机+免疫火伤]；毕方条目
+/// 插入使书精/相柳/朱厌 def 索引重排，测试同步）。版本回退探针：
+/// 224 版+当前代码含 v225–v227 def/臂≠v224 批哈希，探针以 14 全位移
+/// 佐证 Boss 分支不可达；场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-bifang-v227/。
+/// 2026-10-11 重录依据（v230 应昭批首片：封冻，T11）：规则版本
+/// 227→229（断链批合并录——v228 红莲；v229 炎狱+TurnState.yanyu_count
+/// [存档 51→52]；v230 封冻+**PlayerState.fengyin_active 新字段，存档
+/// 52→53**）。**字段新增批探针口径**：PlayerState 字段入 canonical_hash
+/// 使全部场景哈希位移（含版本字段），「位移唯一来源=版本字段」的探针
+/// 形态对本批不适用——以 229 版+当前代码 14 全位移佐证 Boss 分支不可
+/// 达；场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-fengdong-v230/。
+/// 2026-10-11 重录依据（v231 应昭批续片：巡游，T11）：规则版本
+/// 229→231（运行时版本从实际 230 修正+巡游单技——他人回合开始获座位
+/// 序首名有手牌者一张手牌[确定性近似登记]，装备牌自动使用[同栏替换]）。
+/// 版本回退探针：231 版+当前代码全位移佐证 Boss 分支不可达（探针口径
+/// 延续字段批登记）；场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-xunyou-v231/。
+/// 2026-10-11 重录依据（v228 毕方批续片：红莲，T11）：规则版本
+/// 227→228（红莲两面——红色牌不计入手牌上限[Discard 统计与选项双排
+/// 除，shamolvzhou 先例]+回合开始顺序获前缀红牌至多 3/对座位序前 3 名
+/// 各 1 火伤[随机近似登记]）。版本回退探针（228→227 复跑 golden 全绿）
+/// 证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐场景
+/// 命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-honglianx-v228/。
+/// 2026-10-11 重录依据（v229 毕方批末片：炎狱，T11）：规则版本
+/// 228→229（炎狱两面——激活门控第八并列臂+其他角色回合开始判定红=1
+/// 火伤[Judge begin 段内联确定性判定铁骑先例；TurnState.yanyu_count 回
+/// 合级计数器封顶 3，存档 51→52]）。版本回退探针（229→228 复跑 golden
+/// 全绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，
+/// 逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-yanyu-v229/。
+/// 2026-10-11 重录依据（v225 朱厌批续片：虚失，T11）：规则版本
+/// 224→225（虚失两面——出牌阶段结束[弃牌阶段开始锚]自翻面+翻回正面
+/// 全场其他角色各受 1[随机恒 1 近似]；激活门控第七并列臂）。版本回退
+/// 探针（225→224 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss
+/// 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-xushi-v225/。
+/// 2026-10-11 重录依据（v226 朱厌批末片：巨源，T11）：规则版本
+/// 225→226（巨源两面——回合结束体力记录[PlayerState.juyuan_storage
+/// 新字段，存档 50→51]+出牌阶段体力<记录时杀额外 1 目标[max_targets
+/// 飞刃同款]）。版本回退探针（226→225 复跑 golden 全绿）证明位移唯一
+/// 来源是版本字段；Boss 分支不在标准场景可达路径，逐场景命令与断言不
+/// 变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-juyuan-v226/。
+/// 2026-10-11 重录依据（v219 梼杌批末片：冥顽，T11）：规则版本
+/// 218→219（冥顽三面——伤害后锁定集[TurnState.minwan_targets 回合级
+/// 新字段，存档 48→49]+每用牌摸 1+PlayCard 目标校验 mod）。版本回退
+/// 探针（219→218 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss
+/// 分支不在标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-minwan-v219/。
+/// 2026-10-11 重录依据（v220 书精批：催毒+中毒，T11）：规则版本
+/// 219→220（BOSS_GENERALS 增书精 hp2——催毒[伤害授毒 runtime 授技]；
+/// 中毒[回合开始判定：非红桃伤 1/黑桃保留/方片梅花失去]——Judge begin
+/// 段内联确定性判定[铁骑先例]）。版本回退探针（220→219 复跑 golden 全
+/// 绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐
+/// 场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-shujing-v220/。
+/// 2026-10-11 重录依据（v221 四神兽系首片：相柳妖兽，T11）：规则版本
+/// 220→221（BOSS_GENERALS 增相柳 hp25+妖兽单技——computed_distance 距
+/// 离 -2[凶兽同款距离链]；相柳毒妒[蛇毒标记链]/兽九[手牌补 9]/邪酬
+/// (+switch) 登记下批）。版本回退探针（221→220 复跑 golden 全绿）证
+/// 明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐场景命
+/// 令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-xiangliu-yashou-v221/。
+/// 2026-10-11 重录依据（v222 相柳续片：兽九，T11）：规则版本 221→222
+/// （兽九三面——手牌上限恒 9[hand_limit 函数分支]+出牌/结束补至 9+
+/// 跳过摸牌[阶段臂]）。版本回退探针（222→221 复跑 golden 全绿）证明
+/// 位移唯一来源是版本字段；Boss 分支不在标准场景可达路径，逐场景命令
+/// 与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-jiushou-v222/。
+/// 2026-10-13 重录依据（v269 转轮王批，T11 十殿阎罗）：**字段批**——规
+/// 则版本 268→269（轮回/往生/反噬三技+转轮王条目[魔道共用]）且
+/// PlayerState 新增 zlfanshi_terra 入 canonical hash（反噬 terra 旗，
+/// 存档 v62）。字段批口径：v268 提交时（无字段+268）全绿；268+字段与
+/// 269+字段两态全差且 actual 互异（版本位移可见），按字段批全量重录。
+/// 证据见 docs/operations/evidence/2026-10-13-t11-boss-zhuanlunwang-v269/。
+/// 2026-10-13 重录依据（v268 泰山王批，T11 十殿阎罗）：普通批——规则版
+/// 本 267→268（服毒/苦酒/热恼三技+泰山王条目；显示名勘误 boss_fudu=服
+/// 毒/boss_kujiu=苦酒）。服毒/苦酒=内联臂（CardUsed/Judge begin global
+/// 扫持有者），热恼=Death 遗言单发机（BossRenao 入重建表）。探针：267
+/// 回退全绿/268 全差=位移唯一来源是版本字段。证据见
+/// docs/operations/evidence/2026-10-13-t11-boss-taishanwang-v268/。
+/// 2026-10-13 重录依据（v267 卞城王批，T11 十殿阎罗）：普通批——规则版
+/// 本 266→267（雷舟/雷斧/雷诛三技+卞城王条目）。雷诛=内容侧首个可挂
+/// 起机（逐发雷伤 Yield+BossLeizhu 快照含 emitted 进度，入重建表首例）。
+/// 探针：266 回退全绿/267 全差=位移唯一来源是版本字段。证据见
+/// 2026-10-14 重录依据（v270 孟婆批，T11 十殿阎罗）：**字段批**——规
+/// 则版本 269→270（拾忧/往事/忘魂三技+孟婆条目）且 PlayerState 新增
+/// wangshi_ban 入 canonical hash（往事封禁旗，存档 v62→v63）。字段批
+/// 口径：269 提交时（无字段）全绿；269+字段与 270+字段两态全差且
+/// actual 互异（版本位移可见），按字段批全量重录。证据见
+/// 2026-10-14 重录依据（v271 阎罗王批，T11 十殿阎罗）：普通批——规则版
+/// 本 270→271（铁面/铡刀/诛心三技+阎罗王条目）。铁面/铡刀=sha 机仁王/
+/// 青釭两链扩展（查询型），诛心=Death 遗言单发机（BossZhuxin 入重建
+/// 表）。版本回退探针（271→270 复跑 golden 全绿）证明位移唯一来源是版
+/// 本字段。证据见
+/// 2026-10-14 重录依据（v272 平等王批，T11 十殿阎罗）：普通批——规则版
+/// 本 271→272（锁足/阿鼻/平等三技+平等王条目）。锁足=Prepare-begin 臂
+/// linked 直写，阿鼻=Damage 尾臂（恒定火近似），平等=Death 遗言两波机
+///（BossPingdeng 入重建表）。版本回退探针（272→271 复跑 golden 全绿）
+/// 证明位移唯一来源是版本字段。证据见
+/// 2026-10-14 重录依据（v273 都市王批，T11 十殿阎罗）：普通批——规则版
+/// 本 272→273（热闷/炙焚/火刑三技+都市王条目；显示名勘误：炙焚[非炽
+/// 焚]/火刑[非祸刑]）。热闷=PlayCard 拒绝位+AOE 机窗口前跳过双消费，炙
+/// 焚=Prepare-begin 臂（持有者域），火刑=Death 遗言逐座机（BossHuoxing
+/// 入重建表）。版本回退探针（273→272 复跑 golden 全绿）证明位移唯一来
+/// 源是版本字段。证据见
+/// 2026-10-14 重录依据（v274 地藏王批，T11 十殿阎罗）：普通批——规则版
+/// 本 273→274（不佛/无量/谛听三技+地藏王条目；显示名勘误 boss_bufo=不
+/// 佛；大愿=判定改写机 AI 态度面登记不落，无量建局摸 3 面登记未落）。
+/// 不佛=伤害入口减 1+准备距离 1 火伤，无量=End 摸 2+准备回复，谛听=
+/// computed_distance 双向链（义从同位）。版本回退探针（274→273 复跑
+/// golden 全绿）证明位移唯一来源是版本字段。证据见
+/// 2026-10-14 重录依据（v275 楚江王批，T11 十殿阎罗）：普通批——规则版
+/// 本 274→275（帷幕/冰封两新技+楚江王条目[反馈=标准 FAN_KUI 复用，原生
+/// 语义=任意伤害+手牌/装备与界反馈一致]）。**勘正**：此前批次证据把楚
+/// 江王误计入已完成（目录实无楚江王条目），本批实际落包后十殿阎罗为
+/// 11/13。帷幕=黑锦囊 PlayCard 拒绝位+黑色 AOE 窗口前跳过，冰封=Death
+/// 遗言翻面 killer 机（BossBingfeng 入重建表）。版本回退探针（275→274
+/// 复跑 golden 全绿）证明位移唯一来源是版本字段。证据见
+/// 2026-10-14 重录依据（v276 秦广王批，T11 十殿阎罗）：普通批——规则版
+/// 本 275→276（判官/拘魂/望乡三技+秦广王条目；还人=关卡流程面登记不
+/// 落）。判官=延时锦囊 PlayCard 拒绝位，拘魂=End 臂恒定翻面首个其他，
+/// 望乡=Death 遗言全场装备全弃机（BossWangxiang 入重建表，绝红拆装管
+/// 线同款）。版本回退探针（276→275 复跑 golden 全绿）证明位移唯一来源
+/// 是版本字段。证据见
+/// 2026-10-14 重录依据（v277 庞统片，T11 群雄乱入 Boss 专项）：普通批
+/// ——规则版本 276→277（天狱/栖梧两技+庞统条目[涅槃凤雏，涅槃/浴火=
+/// 外部包技依赖登记不落；上游 group shen→群近似]）。天狱=End 臂自横置
+/// 先解除+全场横置，栖梧=CardUsed commit 臂梅花回复（娇孝同族）。诸葛
+/// 亮（hp Infinity+四技 offline 龙血玄黄包）同批勘验登记不落。版本回退
+/// 探针（277→276 复跑 golden 全绿）证明位移唯一来源是版本字段。证据见
+/// docs/operations/evidence/2026-10-14-t11-boss-pangtong-v277/。
+/// docs/operations/evidence/2026-10-14-t11-boss-qinguangwang-v276/。
+/// docs/operations/evidence/2026-10-14-t11-boss-chujiangwang-v275/。
+/// docs/operations/evidence/2026-10-14-t11-boss-dizangwang-v274/。
+/// docs/operations/evidence/2026-10-14-t11-boss-dushiwang-v273/。
+/// docs/operations/evidence/2026-10-14-t11-boss-pingdengwang-v272/。
+/// docs/operations/evidence/2026-10-14-t11-boss-yanluowang-v271/。
+/// docs/operations/evidence/2026-10-14-t11-boss-mengpo-v270/。
+/// docs/operations/evidence/2026-10-13-t11-boss-bianchengwang-v267/。
+/// 2026-10-11 重录依据（v266 宋帝王批，T11 十殿阎罗）：普通批——规则版
+/// 本 265→266（黑绳/胜负两技+宋帝王条目；恩怨=外部包组技未落登记随外
+/// 部包批）。黑绳=Death 前置窗口遗言面首例（changan 氏同款；死亡被取
+/// 消仍已横置=登记差异）。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-songdiwang-v266/。
+/// 2026-10-11 重录依据（v265 五官王批，T11 十殿阎罗）：普通批——规则版
+/// 本 264→265（枳枉/公正/血池三技+五官王条目，十殿阎罗首片）。枳枉=
+/// CardsMoved 面（摸牌走 CardsDrawn 天然隔离=上游排除 draw 同口径），
+/// 随机→首张确定性近似登记。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-wuguanwang-v265/。
+/// 2026-10-11 重录依据（v264 张角批，T11 群雄乱入）：字段批——规则版
+/// 本 263→264（天道/雷击·张角/极点三技+张角条目）+TurnState.jidian_chain
+/// 入摘要（存档 v60→v61）。字段批探针：版本回退 263 复跑 14 场景哈希三
+/// 值互异（263 无字段/263+字段/264+字段），证明位移=版本+字段双源、无行
+/// 为面扰动。雷击·张角与青龙 BOSS_RELEIJI 同名按迅影批改名映射先例。证
+/// 据见 docs/operations/evidence/2026-10-11-t11-boss-zhangjiao-v264/。
+/// 2026-10-11 重录依据（v263 周瑜批，T11 群雄乱入）：普通批——规则版
+/// 本 262→263（火神/红莲·周瑜/仙音三技+周瑜条目）。版本回退探针（263→
+/// 262 复跑 golden 全绿）证明位移唯一来源是版本字段。红莲与毕方
+/// BOSS_HONGLIANX 同名按迅影批改名映射先例以「红莲·周瑜」入目录。证据
+/// 见 docs/operations/evidence/2026-10-11-t11-boss-zhouyu-v263/。
+/// 2026-10-11 重录依据（v262 甄姬批，T11 群雄乱入）：普通批——规则版
+/// 本 261→262（踏水/凌波/娇孝/芳华四技+甄姬条目）。版本回退探针（262→
+/// 261 复跑 golden 全绿）证明位移唯一来源是版本字段。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-zhenji-v262/。
+/// 2026-10-11 重录依据（v261 刘备批，T11 群雄乱入）：普通批——规则版
+/// 本 260→261（枭雄/章武+刘备条目）。版本回退探针（261→260 复跑 golden
+/// 全绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景可达路径。
+/// 证据见 docs/operations/evidence/2026-10-11-t11-boss-liubei-v261/。
+/// 2026-10-11 重录依据（v260 张春华批，T11 群雄乱入）：普通批——规则版
+/// 本 259→260（绝情/无心/伤逝三技+张春华条目）。版本回退探针（260→259
+/// 复跑 golden 全绿）证明位移唯一来源是版本字段；Boss 分支不在标准场景
+/// 可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-zhangchunhua-v260/。
+/// 2026-10-11 重录依据（v259 郭嘉批，T11 群雄乱入）：字段批——规则版
+/// 本 258→259（鬼谋/远策/奇佐三技+郭嘉条目）+PlayerState.boss_mad+
+/// TurnState.qizuo_copy 入摘要（存档 v60）。字段批探针：版本回退 258
+/// 复跑 14 场景哈希三值互异（旧 258 无字段/258+字段/259+字段），证明
+/// 位移=版本字段+新增字段双源、无行为面扰动；Boss 郭嘉分支不在标准
+/// 场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-11-t11-boss-guojia-v259/。
+/// 2026-10-14 重录依据（T8 增量 14，v277→278）：字段批——TurnState
+/// .bte_used_play_phase（出牌阶段基本/锦囊/装备三类计数，DSL filter
+/// `*_play_phase_card_category_count_positive` 承载）入哈希（存档
+/// v64→v65）。字段批探针：版本回退 277 复跑 14 场景哈希三值互异
+/// （旧 277 无字段/277+字段/278+字段），证明位移=版本字段+新增字段
+/// 双源、无行为面扰动；标准场景不装载扩展 VM 技能，双策略不在可达
+/// 路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-14-t8-increment14-bte-filters/。
+/// 2026-10-14 重录依据（T12 玩点论杀批 14，v278→279）：字段批——
+/// PlayerState.fuchou_marked（复仇跨回合来源标记）+ShaResolveMachine
+/// asking_fuchou/fuchou_card 两字段入哈希（存档 v66→v67）。字段批探针：
+/// 版本回退 278 复跑 14 场景哈希三值互异（旧 278 无字段/278+字段/279+
+/// 字段），证明位移=版本字段+新增字段双源、无行为面扰动；复仇分支不在
+/// 标准场景可达路径，逐场景命令与断言不变。证据见
+/// docs/operations/evidence/2026-10-14-t12-wudian-generals-b14/。
+/// 2026-10-14 重录依据（T12 玩点论杀批 17，v279→280）：字段批——
+/// PlayerState.guihan_used（归汉 limited 每局一次）+DyingSaveMachine
+/// guihan_asked 快照字段入哈希（存档 v67→v68）。字段批探针：版本回退
+/// 279 复跑 14 场景三值互异；归汉濒死确认不在标准场景可达路径。证据见
+/// docs/operations/evidence/2026-10-14-t12-yunchou-generals-b17/。
+/// 2026-10-15 重录依据（T12 swd 武将面批 26，v280→281）：字段批——
+/// PlayerState.xuehuang_used（雪煌 limited 每局一次）入存档（存档
+/// v68→v69）。版本回退探针：280+字段复跑 14 场与旧 golden **逐字节一
+/// 致**——golden 位移唯一来源=规则版本字段，新增字段不在 golden 哈希
+/// 域且雪煌不在标准场景可达路径，行为面零扰动。证据见
+/// docs/operations/evidence/2026-10-15-t12-swd-generals-b26/。
+/// 2026-10-15 重录依据（T12 swd 卡牌面补切批⑧，v285→286）：龟灵之桃
+/// 新 kind + PlayerState.nigong_lv 字段（存档 v72→v73）。探针：285+字段
+/// 复跑 14 场与旧 golden 逐字节一致——位移唯一来源=规则版本字段，行为
+/// 面零扰动。证据见 docs/operations/evidence/2026-10-15-t12-swd-cards-equip5-b38/。
+/// 2026-10-15 重录依据（T12 swd 卡牌面补切批⑦，v284→285）：锦囊族 4
+/// 新 kind（惊雷山/炽羽袭 AOE 雷火版 + 鬼蛇旗/仙露回护甲锦囊）+
+/// MachineSnapshot::Aoe/AoeTarget nature 字段（存档 v71→v72）。探针：
+/// 284+字段复跑 14 场与旧 golden 逐字节一致——位移唯一来源=规则版本
+/// 字段，行为面零扰动。证据见
+/// docs/operations/evidence/2026-10-15-t12-swd-cards-trick-b37/。
+/// 2026-10-15 重录依据（T12 swd 卡牌面补切批③，v283→284）：炼妖壶新
+/// kind（tag 143 宝物栏）+PlayerState.lianyaohu_store 仓字段（存档
+/// v70→v71）+收纳/炼化/壶境三技。探针：283+字段复跑 14 场与旧 golden
+/// 逐字节一致——位移唯一来源=规则版本字段，行为面零扰动。证据见
+/// docs/operations/evidence/2026-10-15-t12-swd-cards-equip5-b33/。
+/// 2026-10-15 重录依据（T12 swd 卡牌面补切批②，v282→283）：新 basic
+/// kind 雪霁冰雹/封印之丹（神秘果 kind 同批注册、卡牌挂窗口机批）+
+/// PlayerState.xuejibingbao 字段（存档 v69→v70）。探针：282+字段复跑
+/// 14 场与旧 golden 逐字节一致——位移唯一来源=规则版本字段，行为面零
+/// 扰动。证据见 docs/operations/evidence/2026-10-15-t12-swd-cards-basic-b31/。
+/// 2026-10-15 重录依据（T12 swd 武将面批 27，v281→282）：TurnState.
+/// huanxia_track（还侠转化杀跟踪，kangyin2 同位入哈希）+还侠 viewAs 新
+/// 技。探针：281+字段复跑 14 场位移值与 282 值及旧 golden 三值互异——
+/// 位移来源=版本字段+新字段双源（还侠不在标准场景可达路径，行为面零扰
+/// 动）。证据见 docs/operations/evidence/2026-10-15-t12-swd-generals-b27/。
+/// 2026-10-15 重录依据（T12 swd 武将面批㉑，v286→287）：TurnState
+/// mufeng_used_basic/wangchen_discard_basic 两旗（疾影/沐风/望尘三将技，
+/// 存档 v72→v73）。探针：286+字段复跑 14 场与旧 golden 逐字节一致——位
+/// 移唯一来源=规则版本字段，行为面零扰动。证据见
+/// docs/operations/evidence/2026-10-15-t12-swd-generals-b61/。
+/// 2026-10-16 重录依据（v290，覆盖清单 N06）：规则版本 289→290
+///（铁索连环无懈窗口由整牌级改为**逐目标**——对齐上游 `_wuxie` 触发于
+/// 每目标 `useCardToBegin`、`neutralize()` 只作用于该目标的语义）+
+/// 存档格式 76→77（`MachineSnapshot::Chain` 由 `emitted` 改为
+/// `idx/inner/dispatcher`，承载逐目标窗口与单目标叶子）。版本回退探针
+///（290+新编码 → 289+新编码复跑 14 场**全绿**）证明位移唯一来源是规则
+/// 版本字段：14 个 golden 场景在任何记录点都没有挂起的 Chain 机器（铁索
+/// 场景无人持无懈，窗口不挂起），新编码不进入这些哈希；行为面变化由
+/// 定向测试（chain_nullify_is_per_target_first_only/second_only、
+/// chain_double_nullify_leaves_nobody_linked、
+/// pause_roundtrip_chain_target_window）覆盖。证据见
+/// docs/operations/evidence/2026-10-16-n06-chain-per-target-nullify/。
+/// 2026-10-16 重录依据（v291，D4 Boss 关卡流程 B0）：规则版本 290→291
+///（`GameMode::Boss` 增 `BossStageState` 入快照/哈希；默认 `kind=None`，
+/// 标准 14 场景均为 Prototype 不可达 Boss 分支）+ 存档格式 78→79。
+/// 版本回退探针（291→290 复跑 golden 全绿）证明位移唯一来源是规则版本
+/// 字段；Boss 关卡字段不进入这 14 个哈希。证据见
+/// docs/operations/evidence/2026-10-16-d4-boss-b0/。
+/// 2026-10-16 重录依据（v292，D4 Boss B1 青木隐藏链）：规则版本 291→292
+///（HostBehavior tag 411–414：青木/青木·转阶/青木3/青木3·转阶；标准 14
+/// 场景均为 Prototype，不可达 Boss 隐藏链）。存档不变 v79。版本回退探
+/// 针（292→291 复跑 golden 全绿）证明位移唯一来源是规则版本字段。证据见
+/// docs/operations/evidence/2026-10-16-d4-boss-b1-qingmu/。
+/// 2026-10-16 重录依据（v293，D4 Boss B2 白芒/赤炎/玄麟）：规则版本
+/// 292→293（HostBehavior tag 415–420：白芒/白芒·转阶/赤炎/赤炎·转阶/
+/// 玄麟/玄麟·转阶；标准 14 场景均为 Prototype，不可达）。存档不变 v79。
+/// 版本回退探针（293→292 复跑 golden 全绿）证明位移唯一来源是规则版本
+/// 字段。证据见 docs/operations/evidence/2026-10-16-d4-boss-b2-sixiang/。
+/// 2026-10-16 重录依据（v294，D4 Boss B3 白芒/赤炎/玄麟 3/3x）：规则版本
+/// 293→294（HostBehavior tag 421–426：白芒3/白芒3·转阶/赤炎3/赤炎3·转阶/
+/// 玄麟3/玄麟3·转阶；侧座 reinit 复用青木3 参数表；标准 14 场景均为
+/// Prototype，不可达）。存档不变 v79。版本回退探针（294→293 复跑 golden
+/// 全绿）证明位移唯一来源是规则版本字段。证据见
+/// docs/operations/evidence/2026-10-16-d4-boss-b3-sixiang3/。
+/// 2026-10-17 重录依据（v295，D4 后援/还人/青赤白翼）：规则版本 294→295
+///（HostBehavior tag 427–437；十殿还人、翼轮次与白翼摸牌削减。标准 14
+/// 场景均为 Prototype，不可达这些 Boss 分支）。存档不变 v79。版本回退
+/// 探针（临时把 `STANDARD_RULESET_VERSION` 从 295 改回 294，新代码不动，
+/// 14 场与 v294 golden 全绿）证明位移唯一来源是规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-d4-boss-b4-huanren-wings/。
+/// 2026-10-17 重录依据（v296，swd 魂身字段批）：规则版本 295→296 + 存档
+/// 79→80→81（PlayerState 尾部追加 `hyunshen_count`；魂身/如梦字段批）+
+/// T8 VmAux（存档 v80）。版本回退探针（临时把 `STANDARD_RULESET_VERSION`
+/// 从 296 改回 295，新代码不动，14 场全 mismatch）证明位移含规则版本字段；
+/// 魂身/如梦分支仅经 swd 扩展将可达，标准 14 场景不可达。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b107/。
+/// 2026-10-17 重录依据（单场景，应答路由修复）：无规则版本/存档变化。
+/// `resolution::run` 挂起机器改为在**开窗时刻**记录恢复深度（旧值=机器创建
+/// 时深度；机器若在挂起期间发射过子帧则失配——AOE 逐目标派发下应答被
+/// 深度恰好相等的别的机器消费，AoeTarget 恢复时空应答 panic 实证）。修复
+/// 后仅 `nullify_chain_on_savage` 一场位移：可观测状态（体力/手牌/弃牌/询问
+/// 序列）逐项相同，快照差仅 `resolution.budget`（调度步数少 4 步）。
+/// 证据见 docs/operations/evidence/2026-10-17-t13-ai-policy-v2/。
+/// 2026-10-17 重录依据（v302，swd 锦鳞字段批）：规则版本 301→302 + 存档
+/// 86→87（`PlayerState` 尾部追加 `jinlin_used`——limited 一次性主动技已
+/// 发动）。14 场全部重录；锦鳞分支仅经 swd 扩展将可达，标准 14 场景不可
+/// 达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 302 改回 301，
+/// 新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b114/。
+/// 2026-10-17 重录依据（v303，T11 Boss 诸葛亮族批 115）：规则版本
+/// 302→303 + 存档 87→88（`PlayerState` 尾部追加 hlss 星系统三字段：
+/// `hlss_stars`/`hlss_count`/`hlss_damage`）。14 场全部重录；hlss 星系统
+/// 仅经扩展/Boss 将可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 303 改回 302，新代码不动，14 场全
+/// mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t11-boss-zhugeliang-hlss/。
+/// 2026-10-17 重录依据（v304，T11 Boss 诸葛亮族批 116）：规则版本
+/// 303→304 + 存档 88→89（`PlayerState` 追加起风已用牌种表
+/// `hlss_fengqi_used`；选择项新增牌种码 `ChoiceOption::Kind`；判定机追加
+/// 改命候选位）。14 场全部重录；hlss/改命分支仅经 Boss 将可达，标准 14
+/// 场景不可达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 304 改回
+/// 303，新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t11-boss-zhugeliang-four/。
+/// 2026-10-17 重录依据（v305，D5 龙血玄黄批 117）：规则版本 304→305 +
+/// 存档 89→90（`PlayerState` 尾部追加潜龙道心值 `mbqianlong_marks`）。14 场
+/// 全部重录；道心值仅经曹髦（潜龙/卫统）可达，标准 14 场景不可达。版本
+/// 回退探针（临时把 `STANDARD_RULESET_VERSION` 从 305 改回 304，新代码
+/// 不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-d5-longxue-mbqianlong/。
+/// 2026-10-17 重录依据（v306，T11 Boss 庞统族批 118）：规则版本 305→306 +
+/// 存档 90→91（`PlayerState` 追加涅槃限定位 `niepan_used`，`BossStageState`
+/// 追加浴火关卡循环型 `loop_type`）。14 场全部重录；涅槃/浴火/神威仅经 Boss
+/// 庞统（关卡态）可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 306 改回 305，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t11-boss-pangtong-niepan/。
+/// 2026-10-17 重录依据（v307，swd 灵武批 120）：规则版本 306→307 + 存档
+/// 91→92（`TurnState` 追加 `cards_used_turn`/`extra_phases`/
+/// `extra_phase_lingwu`）。14 场全部重录；灵武仅经 swd 妮可可达，标准 14
+/// 场景不可达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 307 改回
+/// 306，新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b120/。
+/// 2026-10-17 重录依据（v308，swd 神焰批 121）：规则版本 307→308 + 存档
+/// 92→93（`PlayerState` 追加 `shenyan_used`/`shenyan_pending`）。14 场全部
+/// 重录；神焰仅经 swd 夜鸦熙可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 308 改回 307，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b121/。
+/// 2026-10-17 重录依据（v309，swd 入梦批 122）：规则版本 308→309 + 存档
+/// 93→94（`PlayerState` 追加 `skip_discard_phase`）。14 场全部重录；入梦仅
+/// 经 swd 海大胖可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 309 改回 308，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b122/。
+/// 2026-10-17 重录依据（v310，swd 义山批 123）：规则版本 309→310 + 存档
+/// 94→95（`PlayerState` 追加 `yishan_lost`）。14 场全部重录；义山仅经 swd
+/// 可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 310 改回 309，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b123/。
+/// 2026-10-17 重录依据（v311，swd 守印批 124）：规则版本 310→311 + 存档
+/// 95→96（`PlayerState` 追加 `shouyin_used`）。14 场全部重录；守印仅经 swd
+/// 慕月可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 311 改回 310，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b124/。
+/// 2026-10-17 重录依据（v312，swd 魅惑批 125）：规则版本 311→312（新增
+/// `EventKind::CardsLost` 事件种类与发射点；无 PlayerState 字段变化，但规则
+/// 版本递增）。14 场全部重录；失去牌触发仅经 swd 魅惑可达，标准 14 场景
+/// 不可达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 312 改回 311，
+/// 新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b125/。
+/// 2026-10-17 重录依据（v313，swd 颂词批 129）：规则版本 312→313 + 存档
+/// 96→97（`PlayerState` 追加 `songci_targets`）。14 场全部重录；颂词仅经 sp
+/// 包角色可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 313 改回 312，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b129/。
+/// 2026-10-17 重录依据（v314，swd 护天批 131）：规则版本 313→314 + 存档
+/// 97→98（`PlayerState` 追加护天四字段）。14 场全部重录；护天仅经 swd 可达，
+/// 标准 14 场景不可达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从
+/// 314 改回 313，新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据
+/// 见 docs/operations/evidence/2026-10-17-t12-swd-deferred-b131/。
+/// 2026-10-17 重录依据（v315，swd 极略批 136）：规则版本 314→315 + 存档
+/// 98→99（`PlayerState` 追加 `jilve_used`）。14 场全部重录；极略仅经 swd
+/// 黄雷可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 315 改回 314，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b136/。
+/// 2026-10-17 重录依据（v316，swd 脉轮批 137）：规则版本 315→316 + 存档
+/// 99→100（`PlayerState` 追加脉轮三字段）。14 场全部重录；脉轮仅经 swd
+/// 贾兰德可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 316 改回 315，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b137/。
+/// 2026-10-17 重录依据（v316 不变，swd 李香龙批 141）：新增事件种
+/// `ShaDodged`（杀被闪避）——**仅 `sha_dodge_then_damage` 一场位移**
+/// （该场景包含闪避路径，事件日志新增该事件；其余 13 场零位移，证明状态
+/// 语义未变、位移只在日志面）。规则/存档版本未变（无字段变化）。
+/// 证据见 docs/operations/evidence/2026-10-17-t12-swd-deferred-b141/。
+/// 2026-10-17 重录依据（v317，swd 天书批 142）：规则版本 316→317 + 存档
+/// 100→101（`PlayerState` 追加天书两字段）。14 场全部重录；天书仅经 swd
+/// 黄雷可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 317 改回 316，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b142/。
+/// 2026-10-17 重录依据（v318，swd 改造批 143）：规则版本 317→318 + 存档
+/// 101→102（`GameStateCore` 追加 `declared_slots` 装备栏改写表）。14 场
+/// 全部重录；改造仅经 swd 黄雷可达，标准 14 场景不可达。版本回退探针
+/// （临时把 `STANDARD_RULESET_VERSION` 从 318 改回 317，新代码不动，14 场
+/// 全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b143/。
+/// 2026-10-17 重录依据（v319，swd 燎原批 145）：规则版本 318→319 + 存档
+/// 102→103（`TurnState` 追加 `liaoyuan_count`）。14 场全部重录；燎原仅经
+/// swd 可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 319 改回 318，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b145/。
+/// 2026-10-17 重录依据（v320，swd 轩辕剑批 146）：规则版本 319→320 + 存档
+/// 103→104（`TurnState` 追加 `xuanyuanjian_marked`；目录新增
+/// `CardKind::Xuanyuanjian`）。14 场全部重录；轩辕剑仅经 swd 可达，标准 14
+/// 场景不可达。版本回退探针（临时把 `STANDARD_RULESET_VERSION` 从 320 改回
+/// 319，新代码不动，14 场全 mismatch）证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b146/。
+/// 2026-10-17 重录依据（v321，swd 昆仑镜批 149）：规则版本 320→321 + 存档
+/// 104→105（`TurnState` 追加 `kunlunjing_snapshot`/`kunlunjing_hp`）。14 场
+/// 全部重录；昆仑镜仅经 swd 可达，标准 14 场景不可达。版本回退探针（临时把
+/// `STANDARD_RULESET_VERSION` 从 321 改回 320，新代码不动，14 场全 mismatch）
+/// 证明位移含规则版本字段。证据见
+/// docs/operations/evidence/2026-10-17-t12-swd-deferred-b149/。
+/// 2026-10-18 NC01 座位语义修正说明：`seat_distance` 的 u8 环绕取模错误已修
+/// （5 人局 d(0,1) 曾为 0），顺序语义拆出为 `seat_steps_from`（座位环顺座次序）
+/// 并迁移触发结算顺序与排序调用方。**14 场标准场景哈希在修正前后逐字一致**
+/// （该批场景不触及受影响分支），故本轮未重录、规则版本暂保持 v321；版本升格
+/// （v322）与随之的 golden 版本位移待 `content/standard.rs` 并行重构提交后随同
+/// 入库，避免与占用该文件的并行任务混提。证据见
+/// docs/operations/evidence/2026-10-18-nc01-seat-semantics/。
+/// 2026-10-18 重录依据（v322，NC07 同源审计修正）：`seat_ring`（换位结果）
+/// 此前未进入规范摘要，两个仅座位次序不同的状态会得到相同摘要；修正后座位环
+/// 入摘要，且恢复期新增座位环引用校验（长度/取值/排列）。14 场标准场景因此
+/// 全部位移（摘要覆盖变化），规则版本 321→322 同步递增。回退探针见证据目录
+/// docs/operations/evidence/2026-10-18-nc07-same-source/。
+const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
+    (
+        "sha_dodge_then_damage",
+        scenario_sha_dodge_then_damage,
+        &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
+        "4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d",
+    ),
+    (
+        "death_terminal_single",
+        scenario_death_terminal_single,
+        &["dying", "death", "victory"],
+        "c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b",
+    ),
+    (
+        "sancai_nested_chain",
+        scenario_sancai_nested_chain,
+        &["optional_trigger", "nested_choice", "draw", "give_cards"],
+        "07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42",
+    ),
+    (
+        "yishang_redirect",
+        scenario_yishang_redirect,
+        &["damage_before_window", "payload_rewrite_redirect"],
+        "40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08",
+    ),
+    (
+        "suidun_window_matrix",
+        scenario_suidun_window_matrix,
+        &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
+        "d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae",
+    ),
+    (
+        "shouyi_dynamic_skill",
+        scenario_shouyi_dynamic_skill,
+        &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
+        "a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0",
+    ),
+    (
+        "discard_to_limit",
+        scenario_discard_to_limit,
+        &["hand_limit", "intrinsic_machine"],
+        "0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff",
+    ),
+    (
+        "rollback_invariants",
+        scenario_rollback_invariants,
+        &["reject_rollback", "budget_rollback"],
+        "fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216",
+    ),
+    (
+        "equip_distance_matrix",
+        scenario_equip_distance_matrix,
+        &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
+        "b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5",
+    ),
+    (
+        "chain_fire_propagation",
+        scenario_chain_fire_propagation,
+        &["chain_state", "damage_nature", "chain_propagation"],
+        "0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860",
+    ),
+    (
+        "aoe_response_queue",
+        scenario_aoe_response_queue,
+        &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
+        "ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758",
+    ),
+    (
+        "duel_alternating_response",
+        scenario_duel_alternating_response,
+        &["duel_alternating", "duel_no_distance_limit"],
+        "567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16",
+    ),
+    (
+        "nullify_chain_on_savage",
+        scenario_nullify_chain_on_savage,
+        &["nullify_window", "nullify_chain", "nullify_scope"],
+        "35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab",
+    ),
+    (
+        "judge_phase_delayed_tricks",
+        scenario_judge_phase_delayed_tricks,
+        &["judge_zone", "delayed_trick", "phase_skip"],
+        "86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f",
+    ),
+];
+
+// ADR0787 v330: only rolling the rules version back to329 preserves all14 prior goldens.
+// A330 evidence golden-version-probe-8; timeout policy stays outside the rule clock.
+// ADR0786 J2 v329 (2026-10-30): all 14 v329 hashes move; the v328 rollback probe
+// with J2 code retained passes all 14 old goldens. Standard scenarios contain no VM packs;
+// the displacement is the rules version field. Raw probe logs live in the J2 run evidence.
+// ADR 0786 J1 v328（2026-10-29）：用户授权 v327→v328（裁决第 13 项）；VM 提交期
+// 选择窗挂起（discard_hand_equip_count N>0 真实选牌，弃确定性首 N 近似）。标准
+// 14 场无 VM 技能包——版本回退探针（保留修复、版本改回 327）14 场全绿＝修复对
+// 标准场零足迹，重录仅反映版本号进入摘要。语义面由 adr0786_j1_commit_window
+// 反例回归覆盖（真实开窗/按所选弃置/不足封顶/空过/存读档/N=0 编译期拒绝）。
+// 证据见 docs/operations/evidence/2026-10-29-adr0786-j1/。
+// NC07 字段批 v327（2026-10-29）：用户授权 v326→v327（裁决第 11 项）；字段
+// 审计的 10 个入档未入摘要字段全部入摘要（9 玩家+1 回合）。三步探针：修复
+// +v327 全位移（本批重录值）；回退 v326 保留修复仍 14 场全位移——新增哈希
+// 写入为**无条件**（默认值也入摘要域，与 v325 壶仓空长度字节同理）；回退
+// hash.rs 修复（版本 326）14 场全绿——金面只受 hash.rs 与版本号影响、无行为
+// 变化。逐字段反例与结构守卫见 nc07_archive_hash_fields / nc07_archive_hash_guard。
+// 证据见 docs/operations/evidence/2026-10-29-nc07-archive-hash-fields/。
+// NC04 cards_given v326（2026-10-29）：用户授权 v325→v326（裁决第 10 项）；
+// 给牌改为每次动作一帧携带全部牌（give_hand_cards；仁德/蝶舞多张只触发一
+// 次监听）。三步探针：修复+v326 全位移（本批重录值）；回退 v325 保留修复
+// 14 场全绿——批量帧本身对标准 14 场零足迹（无一次给多张的动作，单张路径
+// 帧序与事件 id 计数逐字相同），位移唯一来源是版本号进入摘要（并追认
+// d7b46ea6 未升号时 sancai 场的事件 id 位移）。多张触发语义由
+// nc04_cards_given_event 反例回归覆盖；旧档拒绝见其 v325 夹具测试。证据见
+// docs/operations/evidence/2026-10-29-nc04-cards-given-v326/。
+// NC04 cards_given（2026-10-28）：give_hand_card 新增给牌触发帧后，仅
+// sancai_nested_chain（14 场中唯一含给牌的场景）位移；NOEMIT 探针（临时
+// 停发新帧）14 场全绿——位移唯一来源是新帧的事件 id 计数进入规范摘要
+// （hash.rs next_event_id），无行为变化；规则/存档版本不变。
+// NC07（2026-10-28）：用户授权 v324→v325；炼妖壶壶仓 lianyaohu_store
+// 顺序进入规范摘要（无条件写入长度与牌序，标准 14 场壶仓全空，仅多出
+// 每玩家 4 字节零长度）。三步探针：修复+v325 全位移（本批重录值）；
+// 回退 v324 保留修复仍 14 场位移（空长度字节独立移动摘要）；回退 v324
+// 且壶仓改为非空才写 14 场全绿——证明终态壶仓全空、无行为变化，位移
+// 仅由版本字段与空长度编码构成。壶序语义面由 nc07_lianyaohu_hash
+// 回归覆盖（反转反例+完整轨迹+旧档拒绝）。证据见
+// docs/operations/evidence/2026-10-28-nc07-lianyaohu-hash/。
+// B7（2026-10-28）：用户授权 v323→v324；rule-vm 挂起机快照补齐声明技能
+// 名/触发事件/限次清单/命中旗标并进入规范摘要。标准 14 场无 VM 技能，
+// 版本回退探针（STANDARD_RULESET_VERSION 临时改回 323、修复代码不动）
+// 14 场全绿——重录仅反映规则版本进入摘要；Rvm 摘要扩展面由
+// nc04_vm_resume 的 B7 身份回归覆盖。证据见
+// docs/operations/evidence/2026-10-28-b7-vm-suspend-restore/。
+// PA12 B6（2026-10-27）：用户授权 v322→v323；标准 14 场不含 656 技能，
+// 修复代码回退至 v322 的探针 14 场全绿，故重录仅反映规则版本进入摘要。
+// PA12 批⑤-2 重录（2026-10-27）：PhaseBegin 帧新增 BeforeTriggers 起步阶段——
+// 状态哈希域含帧栈 stage/planned（engine/hash.rs:601-608），快照点落在阶段推进
+// 中途的三个场景哈希随之变化；无 VM 技能场景行为等价（全量其余 1580 项全绿）。
+// 规则/存档版本不变（调度内部态变化，不入存档语义面）。
+#[test]
+fn replay_scenarios_match_golden() {
+    let mut bad = Vec::new();
+    for (name, run, _mechs, golden) in SCENARIOS {
+        let hex = hex(&run());
+        if hex != *golden {
+            bad.push(format!("{name} actual={hex} expected={golden}"));
+        }
+    }
+    assert!(bad.is_empty(), "golden mismatches:\n{}", bad.join("\n"));
+}
+
+/// 场景与覆盖清单联动：每个场景名与其机制键都必须登记在
+/// docs/native-coverage-manifest.md（阶段 1 覆盖清单）。
+#[test]
+fn scenarios_are_registered_in_coverage_manifest() {
+    let manifest = std::fs::read_to_string("../../docs/native-coverage-manifest.md")
+        .expect("coverage manifest exists");
+    for (name, _, mechs, _) in SCENARIOS {
+        assert!(
+            manifest.contains(&format!("replay:{name}")),
+            "scenario {name} not registered in coverage manifest"
+        );
+        for m in *mechs {
+            assert!(
+                manifest.contains(&format!("`{m}`")),
+                "mechanism key {m} not registered in coverage manifest"
+            );
+        }
+    }
+}
+
+fn hex(bytes: &[u8]) -> String {
+    bytes.iter().map(|b| format!("{b:02x}")).collect()
+}
+
+#[test]
+fn pa12_print_golden_hex() {
+    for (name, run, _mechs, _golden) in SCENARIOS {
+        eprintln!("GOLDEN_HEX {name} {}", hex(&run()));
+    }
+}

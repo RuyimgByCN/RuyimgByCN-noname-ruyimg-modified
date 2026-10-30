@@ -140,8 +140,11 @@ fn actual_ws5_snapshot_bytes_round_trip_old_and_new_rust_readers() {
     submit(&mut engine, GameAction::ActivateSkill { skill });
     let id = engine.open_choice().unwrap().id;
     submit(&mut engine, GameAction::Answer { choice_id: id, selection: vec![engine_native::ChoiceOption::Player(1)] });
+    // Keep the original WS5 reader sample after the current protocol advances.
+    let mut header = engine_protocol::MessageHeader::new(909, 1, engine.revision());
+    header.protocol_version = 5;
     let message = engine_protocol::ServerMessage::Snapshot {
-        header: engine_protocol::MessageHeader::new(909, 1, engine.revision()),
+        header,
         view: observer_snapshot_for(&engine, RoomRole::Referee, None),
         legal_actions: vec![],
         choice: choice_for(&engine, RoomRole::Referee, None),

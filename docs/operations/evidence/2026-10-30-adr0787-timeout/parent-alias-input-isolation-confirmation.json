@@ -1,0 +1,68 @@
+{
+  "actual_pkg_file_count": 12,
+  "all_equal": true,
+  "rows": [
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/engine_native_wasm.d.ts",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/engine_native_wasm_bg.wasm.d.ts",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/engine_native_wasm.js",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/engine_native_wasm_bg.wasm",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/.gitignore",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/.gitignore",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/worker/native-pkg/package.json",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/native-pkg/package.json",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/engine_wasm_bg.wasm",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/engine_wasm.d.ts",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/engine_wasm.d.ts",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/.gitignore",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/.gitignore",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/package.json",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/package.json",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/engine_wasm_bg.wasm.d.ts",
+      "equal": true
+    },
+    {
+      "original_input": "apps/web-client/src/wasm-pkg/engine_wasm.js",
+      "private_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/b-cross-pack/inputs-329/wasm-pkg/engine_wasm.js",
+      "equal": true
+    }
+  ],
+  "parent_may_rebuild_own_ignored_modules": true,
+  "scope": "12 files in two pkg directories, not the distinct broader 16-input source audit"
+}

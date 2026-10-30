@@ -15,6 +15,8 @@ pub(super) fn record(room_id: u64, snapshot: &str) -> StoredRoom {
             frozen_packages: Some(Vec::new()),
             members: Vec::new(),
             command_receipts: Vec::new(),
+            timeout: None,
+            wal: None,
         },
     }
 }

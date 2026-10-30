@@ -1,0 +1,450 @@
+{
+  "scenarios": 36,
+  "checkpoints": 189,
+  "retries": 114,
+  "full_archive_equality": true,
+  "native_wasm_events_choices_hashes_match": true,
+  "results": [
+    {
+      "name": "danshou-option-1",
+      "steps": 7,
+      "final_hash": "adf0206c0e1935e9bc8292e22a128a84169ddd2a1e3c91417d717d9604c2c236",
+      "hashes": [
+        "5958d58506581acd336a27bf310c80171ce64594f539e0a47f897dd90b18f887",
+        "d8b8db70f92ef0112fed43aaf8ef16ba1f9e68d84c0f61fb5102fcebeeb8e086",
+        "cf0b73414409f6da2533fa092d98a6bd1b43cb9353d658155a8dca4a33723582",
+        "b97b0771a6fd8b4affc7683bb82d556768733fcce3a8714fd8048e256c7ede08",
+        "9c1ae200c96132b6dc2d765b1d40a2dd574ba442f3bcf795723bed9fcbe0b105",
+        "a13670f9549c91ed1be934a435c1339a0c24bcd74c5707d0dd55677e036f0109",
+        "adf0206c0e1935e9bc8292e22a128a84169ddd2a1e3c91417d717d9604c2c236"
+      ]
+    },
+    {
+      "name": "danshou-option-2",
+      "steps": 7,
+      "final_hash": "09b65e2230fca808ce8be2ea8fd6577cce203f5308a1226ab1068172f0f35739",
+      "hashes": [
+        "39bd6b6db61215c7b263c01797624a2e4b74aec5bf060f077c9d04224f91d6b5",
+        "a881bc64210074c5c5865fe8bffa099ddbdd4c5b5a5331173badb2548ccf48b9",
+        "1c13747c2cb868e92be08673be87f5942128af04fb38bac5d7b501f467ed88e6",
+        "433e1b69c50b4c40b13376d3f71cf8d3eadf19deca54474c934cc112c8525dc0",
+        "bc0c128ecdd1f9de615ca91193603abff9ecf9f8c054799fa13749e1bbd5f34a",
+        "ba0a6e7fd6c3586b2f24b48d6e3fdb2389a57e20e0542ec69bf40b68369f5dec",
+        "09b65e2230fca808ce8be2ea8fd6577cce203f5308a1226ab1068172f0f35739"
+      ]
+    },
+    {
+      "name": "danshou-option-3",
+      "steps": 6,
+      "final_hash": "e9aefddb718602a1c033a736bea53c3e205e09028df189eba5d288573744b6f2",
+      "hashes": [
+        "48e1e667b9a5d729ba1a04814dc61c41a849c72357466a5aeff20cde2e102b32",
+        "7870f5fca3fa8dfb706ecad2e5f7a075a25cd7b72af13f5a458b46a4fa140b2e",
+        "930954678c4f7782fd91b322ddfb5d7803c43237ce48a3afed5a69164bf49cb8",
+        "77ba3de070a4d29c4add11cce0adc90309bc25a4b69ad4e0b12c66904eeaf092",
+        "3ac75b9a8d93f6107bc720f75303c0ebbc6eceb50545ead9c9d8b660d7dbc35e",
+        "e9aefddb718602a1c033a736bea53c3e205e09028df189eba5d288573744b6f2"
+      ]
+    },
+    {
+      "name": "danshou-option-4",
+      "steps": 6,
+      "final_hash": "b799f15fe9225e2057044f8b5a003f15fdeaca67a692f6e97edda0f11e366c40",
+      "hashes": [
+        "fd20dd880ae345e6a216d6990ca15e4f2f27729bffaa4144f91c812d85b11f0d",
+        "4d386f2a898b3d6267738a80bbfcdb5d5fc578fe60b2dc423f39565333df2ea4",
+        "2aa459a60526d092beb94a7d9772d4945dc5fbbd506edb9a9231db39564df408",
+        "1eac711af0d482d02b28e9b2b21382caf4945fe94978334ebca7ea8b42a87531",
+        "df6f790e5a8f6305cd7fb88a4949a6909b232043cc2c41d00525b73099b75846",
+        "b799f15fe9225e2057044f8b5a003f15fdeaca67a692f6e97edda0f11e366c40"
+      ]
+    },
+    {
+      "name": "danshou-cancel",
+      "steps": 2,
+      "final_hash": "3ab80c20eb4a1ceeba7693fc29d7d98295363c18fed2c4d85769c203e6e9d5d2",
+      "hashes": [
+        "504fad79584a6f925f39d1a42f09984d9631e962c2fa1d74a176847027833835",
+        "3ab80c20eb4a1ceeba7693fc29d7d98295363c18fed2c4d85769c203e6e9d5d2"
+      ]
+    },
+    {
+      "name": "danshou-insufficient",
+      "steps": 4,
+      "final_hash": "7e2e7fd6203c89c904851bc5d62156f572ad71b57e54eb34a10658c88e3d34dd",
+      "hashes": [
+        "6ef485fbbe4dde86b3e94a620ea71c348234db43c9c3edcc45d80fc1cb521aed",
+        "295da736d63dd38f52f1a93444c437680cfcfeac64148b94b4b19cfb8ad155da",
+        "78a9582d06478fcc05c24045527538c50a581a15b116fff6e44a93b8793db294",
+        "7e2e7fd6203c89c904851bc5d62156f572ad71b57e54eb34a10658c88e3d34dd"
+      ]
+    },
+    {
+      "name": "danshou-self-draw",
+      "steps": 4,
+      "final_hash": "909aa2c3e1ad894efc0eaf3f95b6b67cefea78d216f7f4416d90a33309f294c0",
+      "hashes": [
+        "fa15e777562bba00b2ad3fb2b051f387ccb4051ee0c533172734b72d98d802ed",
+        "a5b0ef4d55a29bbcb9962b7c9e395fc5e86f62023e05330e14a4c062343fa17c",
+        "a1c32a073c82eb10966b054662ef6bdf26fd548f208b71d5e4022fab14fd65d4",
+        "909aa2c3e1ad894efc0eaf3f95b6b67cefea78d216f7f4416d90a33309f294c0"
+      ]
+    },
+    {
+      "name": "danshou-dying-death",
+      "steps": 4,
+      "final_hash": "af45e5d0e666216a0ca767945a2eb59f462cfa86cfaf6de6eb928021293f48d1",
+      "hashes": [
+        "492dd447bfbc17df7db71510e5b92a803bf19c883ae93cf666aafa86389b130f",
+        "9ca66c8712e8b89ddbea3c0b3406a5bf1a818d7f3d24081e07fc393d2b8e5a50",
+        "73845bb2cd22a5dabc2bd96f011fc651f093af50832ec499a25065722167dfae",
+        "af45e5d0e666216a0ca767945a2eb59f462cfa86cfaf6de6eb928021293f48d1"
+      ]
+    },
+    {
+      "name": "danshou-dying-save",
+      "steps": 5,
+      "final_hash": "3aa1ae3857ff8418f56156c96b541cc9911ea5caaec8d6d0f63d950d436627e9",
+      "hashes": [
+        "d4711ef9fefe7b3c8a5d549683aa36684af105f235e650c1149b017a0005afd4",
+        "aeb9f1147e13f4f461c162831c6896cbf1b3bb288366c41262ed2d4360247be5",
+        "973ee2fa77f3aa9edb418390500d178a618cee85cc143a1cc3cbacdbb1c0644d",
+        "88ce0e9af06d2e85e0d43f151f1c472e5da94b1fcffc17afcfb0105c0016a989",
+        "3aa1ae3857ff8418f56156c96b541cc9911ea5caaec8d6d0f63d950d436627e9"
+      ]
+    },
+    {
+      "name": "danshou-four-options-and-reset",
+      "steps": 41,
+      "final_hash": "653bdc1d9589ef1ef28148acc199209051ab9b9c144497b69cc09bdbd28064a8",
+      "hashes": [
+        "eaca4f7f8375998a62354590c682a558d279224fef2e06759f678dded1a6486e",
+        "293409bd042492eddfd8448ed60bd0108dada2699bbee761c59910f14fe1c9e0",
+        "6ea946cd63344f187ed653a7fd2e147e29c6ecc7e378d252e6acaa0bcf57c8f4",
+        "4645cd24606e70337a86541ad4c4d7d4fd0d311f93bf5566d3eb6646546663fe",
+        "494a708d28c58ce8ec0de18336f44028525ee5ad869dc057726db19eaaa1067e",
+        "e906fbd4360e4f27b32c02194465e231977cc51f054093d539d0d5cf4a7b33b5",
+        "25f0b0364c2bdad9624ca1080f667aec29de567607212fb65cbd5fb868d86cbd",
+        "f5159f3f6fb2cffa8813f38c8158ea57eac210d66482626d96506f6bf81e2c98",
+        "57375d105e4168bcf06e2a24f4db966a11be8d6fc8486a2c18d746ef4b3dacc9",
+        "d059ef7b7f4e49ea52281efd96e05ab71b830018694ec9f275cc5572cdca7174",
+        "2284af8b59192faec7130f41fc943e264988e3c599fd19505be566587e37f62d",
+        "170899c0c36cad9e16b1e141b49abed0de63188b0107cc8fc038bec17a07cb1b",
+        "a20b861f060758fc5f3e916cb3821ef54968c74bec1bfe2f82b34c5a9f80fdd8",
+        "5329b5fa2625c3f2039a9d090c8a40d8c3bd365f2cd8ef85b489ede19fccdcba",
+        "911ed8d0c6a5a8863396b3ac3c450ceeb4d9da09ed8b5d34b8405963777f92fa",
+        "2ae671f693e219f99579c2554adb4d3b366713e14b9ba921c4bad34d544c963b",
+        "c593e7720656fc8e499d86bd9493bf57f271de7fd68ecf21d9dfaffc1cd40046",
+        "fedea1e8ca3f587594f38f26f46e0b1aeca567e005ad5b73a28729b228d0c357",
+        "4ab465961a3a3d178011dbaff3d890b905a2d3ca31bd98d52b3ec18e43d5d81e",
+        "8274e863a1514c712448671f94dfa39c4ec4e4e01af711f200de76a57831e7fb",
+        "b4a6d71d75964fccf3309ab1334cb447e77178077aa3ce872b59734519dd352e",
+        "b926add3f09170085b44b6ce7eef2916f710184a7ab0054edec57a31ef013596",
+        "d0b6f14f465d4ab486cf5ccbed6c1dde8cce93a78d074204bc0e40202bba5980",
+        "abf31fb59e1d992b6f9a1f0118519fb66743062625c54a38b34c6479de5d4cde",
+        "405dfb69bb5948920e2a8d8cd60a1cefa57a148154e4d0d38880e0162a492d1f",
+        "5e72d95d13aa080ab1e644df0fb9e532bc2a6fda35788c79e375f4eed66298f2",
+        "1aeb2fffcf3d29f4e617835ff9669b151448d302db590a51b67d7ed50a121228",
+        "eb280b8adf9f91a2452c51da8d8b7df62918ed303dcb3d57224f6d8d7f91863e",
+        "4fd2ee3e63f357c0d3d890e30829414475fcc044a37d810868c02b41c6c3b01b",
+        "58f9627058854bfad984507f874550db2a275371c994614f7c8d408aca1d5b8e",
+        "8a216a807ae7caeb16e6d49944b99b55c02a1c53afa3587f19d72a9eda1f374c",
+        "d7518f505f1f4e38a0a516326de4b302db97c58f2ca596df7763ca00f2738d3c",
+        "40b4fe2a462d88b5373b12aa274ebc62726a6595ca9c8a55688c2c79f1c621f4",
+        "532b9d56b947e876cacf8ca656917e270c9c95c115bd3b7ddbbcd474ad457681",
+        "dbf69b5c1adca5fa19cd2d75b4626c804c0cbbf0af672347c4388c1415a33489",
+        "9cfd0f34034bc2c383a18ac299b03ebe14b96541337e7bf5d36dd0468ad65d56",
+        "c1442517cad772e071485007edef7a1891f08f0d06d2a762e17d6497739bd237",
+        "7bbfe50d7f86f83cc82d0244a829aab922fcc4b2e109590af6e339113406050c",
+        "1cbb3b3ff09d63b6c261b8dfeafa64c6cae0593ccfb3d5f69887491f93641f30",
+        "9a944be6b3c18a040b831d0771f81660f0753393eb19c7aa89f47b4c351ba51f",
+        "653bdc1d9589ef1ef28148acc199209051ab9b9c144497b69cc09bdbd28064a8"
+      ]
+    },
+    {
+      "name": "fenghe-give-owned-disabled-yingba",
+      "steps": 4,
+      "final_hash": "7534bd30346d914109326e704b92cbb2e213ba6e392adab57b9233c9cfeaca2a",
+      "hashes": [
+        "83c245e5d09e50ddec878554e8aa2b33f195659a3f187d90e3c99aebca96ecc3",
+        "89facc6995006280020391de651a8e7299fc622066e9e5d8ffe763362563958a",
+        "246738fbef00498bed2fb7054c8273c3e0cc4781d91f2c4754ea24a5f33bb465",
+        "7534bd30346d914109326e704b92cbb2e213ba6e392adab57b9233c9cfeaca2a"
+      ]
+    },
+    {
+      "name": "fenghe-give-no-yingba",
+      "steps": 4,
+      "final_hash": "97cf5b5300bb2729bbbe7883f28f5a165978ee23e54a4a16a6f78e74bf850cdc",
+      "hashes": [
+        "d35b4bd7b1139d64912e6b314982aa4b768199b9d8332bddfcb5cd96fdc133cd",
+        "9ce5e1ee52e30a4fc82017b5687b1c7b3d9115cde401fd338d5877879c8ade48",
+        "1aeb9fce9c297af36459c56c831ca91a1a7a074c1bad2f1e3c371a14ebe33491",
+        "97cf5b5300bb2729bbbe7883f28f5a165978ee23e54a4a16a6f78e74bf850cdc"
+      ]
+    },
+    {
+      "name": "fenghe-recast",
+      "steps": 3,
+      "final_hash": "27a36d2700ee15d7d1cdcd6addb3961dcde3d2b48d2f76f32b9462d4b20794b5",
+      "hashes": [
+        "36dd0122fadb667644323dd93f413fdcfeafd712626141f9fcfeab181e85ba94",
+        "771cfd7259fb83a6027c8aeebce77ba98c92e2403fc496ef3117e132cc402b90",
+        "27a36d2700ee15d7d1cdcd6addb3961dcde3d2b48d2f76f32b9462d4b20794b5"
+      ]
+    },
+    {
+      "name": "fenghe-source-dies-during-give",
+      "steps": 4,
+      "final_hash": "c01ee8aba2c1782fde4e2a6c1c7cbcd1192245482748eb92e82815d25b83c1d0",
+      "hashes": [
+        "cfa899d19bd5b2eebb52d2a34160843e0cc06625aeb759e32f5b6fa89de9a1c7",
+        "7cb79b9fdab3f323649b244072841ae2db749838b4a006e478c088278913c7ed",
+        "7657e0e727bc6eeb4bf2921ba9135a580a00cc05791743fc0c4278d59b5f53ea",
+        "c01ee8aba2c1782fde4e2a6c1c7cbcd1192245482748eb92e82815d25b83c1d0"
+      ]
+    },
+    {
+      "name": "fenghe-self-source",
+      "steps": 1,
+      "final_hash": "fc7e7512069a96b9c86b5cad66051db0158e36c9a2a9e36ed3787d56ef395402",
+      "hashes": [
+        "fc7e7512069a96b9c86b5cad66051db0158e36c9a2a9e36ed3787d56ef395402"
+      ]
+    },
+    {
+      "name": "fenghe-missing-source",
+      "steps": 1,
+      "final_hash": "af2df0f51b3a7d8a0e98333c42dd79ca0e34a7d9832649ae55dca3a981cad10e",
+      "hashes": [
+        "af2df0f51b3a7d8a0e98333c42dd79ca0e34a7d9832649ae55dca3a981cad10e"
+      ]
+    },
+    {
+      "name": "fenghe-dead-source",
+      "steps": 1,
+      "final_hash": "11aaaf032a958612a273a4248595940e43a0555aa2547efaf0b8249db439d99f",
+      "hashes": [
+        "11aaaf032a958612a273a4248595940e43a0555aa2547efaf0b8249db439d99f"
+      ]
+    },
+    {
+      "name": "fenghe-max-hp-one",
+      "steps": 2,
+      "final_hash": "49e47eacac467fb57165cb73539ad23afb92ffb6d245e1f267266968bf4b59ff",
+      "hashes": [
+        "e5ed89ddb2497e750093c0373e121ba261afd6b1c3f090739b263af4e7502231",
+        "49e47eacac467fb57165cb73539ad23afb92ffb6d245e1f267266968bf4b59ff"
+      ]
+    },
+    {
+      "name": "fenghe-empty-hand",
+      "steps": 1,
+      "final_hash": "89c7ae0123a3af425a1583a4b8d8e7ec4c9eb230b0a63c38c71502af36606b5b",
+      "hashes": [
+        "89c7ae0123a3af425a1583a4b8d8e7ec4c9eb230b0a63c38c71502af36606b5b"
+      ]
+    },
+    {
+      "name": "pingkou-real-three-skips",
+      "steps": 9,
+      "final_hash": "16cd144c6cc6414fbb748d9e29da32abc2821923d876d78b1b1c47edc9295d3d",
+      "hashes": [
+        "e1d2ff00e7a0f051e6dd1bb23ddbcaf99baecc77825dd21f18932ec0e229cb47",
+        "0d9f4cb5c3a2046941c18979ec05b655b8779af005f02c399487c90de8645df3",
+        "1ffd5dcfcfdcf5952837893a7f3486210c8655dae5da16cfcea379cbbd6c055a",
+        "bd580dba4272110d4e4e987d78aebb44b930d8f832d155b23c6722c6e004dcb4",
+        "67caf587504d53df09c618b725a844065167e10f0a7be07718bdeaabd2120c06",
+        "a92fba489d9be460e6a6ad32431030b58eee76985bc433ef81b1a23fd836510b",
+        "a971a69ea90bd258d40bb01915de92ab7b3226049a027a7a60e95129acb576cb",
+        "c16c75ba5d40977504725e1b5ffb3cc5da21bedd937b36fccb0855efc9b5cf0a",
+        "16cd144c6cc6414fbb748d9e29da32abc2821923d876d78b1b1c47edc9295d3d"
+      ]
+    },
+    {
+      "name": "pingkou-prevention-and-save",
+      "steps": 10,
+      "final_hash": "1c106f5eee8455f07f650ae7f8fb3e6dd73a7ab53bb51810c42ee23f5d287cd9",
+      "hashes": [
+        "f402a54c3b36803e604768a10f240648a70c728174cb2101ee3a5343d32e335c",
+        "f0c6f750745534d19860f3c63396eeac36bf41f4df1ed6bfcad135492d3130be",
+        "bea9f4b6bc3771683887a6ca97b3eef635743c72a56ea9d7bc8c5ee8c3654517",
+        "a430044a79e407bf08641801c3ad1618310231c6a2acb0aca7d254bd142d5712",
+        "72115f7194864e1f970e90fd7739c76888ed14843ffb0ab4f2b31b785ac82c24",
+        "7ef8d1e2a0b823e631b2968b9a0b3a22154f8228b4290342bd29a9343b80cadb",
+        "490822cf3a14e117211806ef9adc37e7fc26bd0e7e4066fc26d73617c612030c",
+        "74b04707a6bed402111c450891c4b61927dde57bddf1569e7bd93e5d5d9e9f20",
+        "227e87422d19057c72c1676b019211412d164b7d2313d8dc6bf2b4cb6fe5bce4",
+        "1c106f5eee8455f07f650ae7f8fb3e6dd73a7ab53bb51810c42ee23f5d287cd9"
+      ]
+    },
+    {
+      "name": "pingkou-prevention-and-death",
+      "steps": 9,
+      "final_hash": "413c90d3b57ea49f86ee31db494e16c49cf6333312ff5bbbd8821d2b94103195",
+      "hashes": [
+        "404229b6f24c08e0c6fbd048750ed72383fc417aa33a4ec810c4b252e6da380e",
+        "fe70240cd7c8aa30179e49bb789735d9cb226477c91bf8f0039926def17db46d",
+        "1260f111ea74771b64fb0ff0b7acd866be5c310990e5c130b7b95178df637385",
+        "ce7ed650f89dc3327830f380e77766aea081cfbdca53f9b94e0f0d2f0302865b",
+        "c2190c5cee018323093f82294ba54d67074b4787e7a9550274d92d2ad8c6ddd4",
+        "f9ed399c535d8bb7f9bf566e7e2fb836d3c8bc451bd6acc343a71a8e1785e3e7",
+        "c05480dcc19a08ac659f628227cf9276a29cc2ee3779205be4af212d74dd7faf",
+        "d0ab91eab9523da16ecd122b06292ebecff9a7669411e0e9df3d4c22236f0e4c",
+        "413c90d3b57ea49f86ee31db494e16c49cf6333312ff5bbbd8821d2b94103195"
+      ]
+    },
+    {
+      "name": "pingkou-cancel",
+      "steps": 9,
+      "final_hash": "520d410a864858f468bf2c1f2309703d3ae648bd92a862131b6be6b912b8b02c",
+      "hashes": [
+        "f975a294eca307fc2b292ff51c443d58efdc92b18bcd069833037278945f7da5",
+        "5a5e553e6635fcd6e7a7eec8201dfd571b2a1f320cec00223ba260a6724e9ed2",
+        "8d354372c9dc395d771d726102bdfe14e8f0f961195e35e35f78397c29b57778",
+        "a7c0c49ddc6f22a09e67b5be10c21bcf58df8d9688a8967f03acca685f965950",
+        "17dbd42ac17f0fc58c6e6c190eb45c2464bfb3c5a1b65b5e5081e126b1f71e2c",
+        "9174b8499cebd9a8afe0f32a315fc1a8a4066ae25ce68af53c18f63fd4bc8eed",
+        "9a4ec03599b6bc556e945a0ea21151149f0aae6ee1b0342d5dba232ce95676d6",
+        "07a65faced0c0df0d2960126ccfb33b451bc66d7c107259d257079b7113dcd63",
+        "520d410a864858f468bf2c1f2309703d3ae648bd92a862131b6be6b912b8b02c"
+      ]
+    },
+    {
+      "name": "pingkou-next-target-dies-before-damage",
+      "steps": 9,
+      "final_hash": "617e4dd728431059a2bfd087876eab62f6b78e9a5cc9f6eb1cddbad9aa1414ef",
+      "hashes": [
+        "78428c616636cb34e135d2ff6d955da09327b64f98863f3fa411f3dd9a3d8f0f",
+        "4fccff2dbd3c7de728af3098ad0e042210943a834200a64766337f3d9e57cead",
+        "09646e634e7ca31caf068310feb0c495777e1a72483c78cd42632484a38824f2",
+        "9ef24bfb3ee186f8d67fb4fa6286e6939e81a9697d68effa6cd5170349b92957",
+        "78958d53ba6e305f635a320305a1c2e9f337108a66301bd53118ffe03ed6e6c4",
+        "789676150db2240a6f24474baf174859fc3363203e342a9c08aa0409bde8ef81",
+        "d0aa8964a0636b6cf3b17054f0bed22ebf0a205f5d8235d121c0b8a92dd4c572",
+        "152035c0b82631aac8ba3fcee5124634828c9018ff7c0d39a8a83346796785a8",
+        "617e4dd728431059a2bfd087876eab62f6b78e9a5cc9f6eb1cddbad9aa1414ef"
+      ]
+    },
+    {
+      "name": "danshou-owner-draw-nested-choice-order",
+      "steps": 6,
+      "final_hash": "bea243c807ae9202270390718911962f4a91edab219f70b368695e9eac1f935b",
+      "hashes": [
+        "e8038fc25f3e48f68f4121e2871c2644013a5a0833c84e6541b75b289f4b6a3f",
+        "0b7c4a88452ef0e79c0ff9947d621e697a80775047aecff9ce8be07bb65791f6",
+        "a0bebeb38f2eb42142d8b1ba254dd82cf495a335dba7a24873b57f5740f9ef01",
+        "746198c0d906cff096968c45f3e74c2370925747a1e4d4728d54a3be869a26c3",
+        "8818c2ea029e97abb68dcc037eb0dd605eb41ac1ca70a591145a43f453eff4c0",
+        "bea243c807ae9202270390718911962f4a91edab219f70b368695e9eac1f935b"
+      ]
+    },
+    {
+      "name": "danshou-owner-draw-kills-target",
+      "steps": 4,
+      "final_hash": "fb4717c3c94607959a8430977a376d5ac355140e26c8ffb7385ebede10813b2c",
+      "hashes": [
+        "3451ee57b02e0a77473ca13e5f449db338ab2c9d628e9cee1faf6c66f03424e0",
+        "88c432c524bde17b3d8b37c17b3b6afa0fe9f234e61777b0cedb5e931728bc74",
+        "6cf0c5d4abc1f2e2f13efccdfae8df3274d261a09d034d8b35fba9d668d46879",
+        "fb4717c3c94607959a8430977a376d5ac355140e26c8ffb7385ebede10813b2c"
+      ]
+    },
+    {
+      "name": "grouped-owner-dead-after-choice",
+      "steps": 3,
+      "final_hash": "292c4540928d7ed28c382a9b34d49c2f3d2e7d0fe009eb1ba96486b2eb7c4a04",
+      "hashes": [
+        "65f1fa9e80dc53d6e2afe6f227ffd72f8b042060159e1978b3d261331f6043f7",
+        "bb1ae572c0be13a7eac92dd85c003db5b82722071cde67fcc6fee7c76e9cd540",
+        "292c4540928d7ed28c382a9b34d49c2f3d2e7d0fe009eb1ba96486b2eb7c4a04"
+      ]
+    },
+    {
+      "name": "grouped-handler-removed-after-choice",
+      "steps": 3,
+      "final_hash": "2cc9a11341730c3d9f271dbe9ab6e337634cfdce62d2379cb4c24007f1b712cc",
+      "hashes": [
+        "39dffdef114f1a6d5443c09578cf98b98b3451cadea595f8769599dcfd65d52e",
+        "563b1857beb4cb333d06ade6036d89d7645e679ca93d0a898df391f02dac038a",
+        "2cc9a11341730c3d9f271dbe9ab6e337634cfdce62d2379cb4c24007f1b712cc"
+      ]
+    },
+    {
+      "name": "grouped-instance-disabled-at-checkpoint",
+      "steps": 1,
+      "final_hash": "66ced0ed232720e736cf3c550be895063d06dd235d5204520574cfa17b539091",
+      "hashes": [
+        "66ced0ed232720e736cf3c550be895063d06dd235d5204520574cfa17b539091"
+      ]
+    },
+    {
+      "name": "storage-trigger-active-owner-identity",
+      "steps": 1,
+      "final_hash": "7ab01ab6a62326b3626e4696823c470140e10aebef2be0f4820ebd5583606f45",
+      "hashes": [
+        "7ab01ab6a62326b3626e4696823c470140e10aebef2be0f4820ebd5583606f45"
+      ]
+    },
+    {
+      "name": "storage-two-owner-no-mark-fallback",
+      "steps": 1,
+      "final_hash": "feb70243c1e6200d7f2a9f4e86b6985892ac2cd641768431b89e1573b521a374",
+      "hashes": [
+        "feb70243c1e6200d7f2a9f4e86b6985892ac2cd641768431b89e1573b521a374"
+      ]
+    },
+    {
+      "name": "active-preceding-draw-danshou",
+      "steps": 2,
+      "final_hash": "f910911e884cd4c7d315609b87905e614a6d2b4161224583630d41ff5c87343e",
+      "hashes": [
+        "925a1ac01fce46df027aa174f8859271cfa736980479bf0dce47ef1f69a76792",
+        "f910911e884cd4c7d315609b87905e614a6d2b4161224583630d41ff5c87343e"
+      ]
+    },
+    {
+      "name": "active-unreachable-danshou",
+      "steps": 1,
+      "final_hash": "a3c885f5c78bf8f12d7e03269b693e788e5a54b58c47079735df91120a74d264",
+      "hashes": [
+        "a3c885f5c78bf8f12d7e03269b693e788e5a54b58c47079735df91120a74d264"
+      ]
+    },
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "final_hash": "b6ed834cfc6203131f6826bd4b16e5a569df76099ce955fc09b9a65368c74304",
+      "hashes": [
+        "f1de798adafa582f93a6d05df9cc0916eb21216870805ac3d35346042e5ae07d",
+        "bb0168ff3d036045fe45d7f1c2dbb5e5daeb8e3743fcace20402ac6a8ff02e2f",
+        "7d3a3086aab49d1015cd729ddbcad5fc7e6c4273e26083f20d7db16194018e3c",
+        "9882ab253c67dde87fd69788ff39bedd6789bd392ce3f8ba7a824c4b3d63246b",
+        "b6ed834cfc6203131f6826bd4b16e5a569df76099ce955fc09b9a65368c74304"
+      ]
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "final_hash": "402d6507dd89d01f74396d6978496de5f7dfe4abad0a80d87f599f390e8873b5",
+      "hashes": [
+        "02e1c872ba30fbb950ff9a0357b83e938ede716fef2b3918aadbf4fab2dce7a1",
+        "bbebc31219b31f48fc6a0a87a1ec5ac99a764a3ff4e152de32d968f2eea2e12e",
+        "f0b6dd4e9e53fb497e0688da703eb2f70a079a088d0146a8f32250743cc6963f",
+        "9d460360de04fac4dba5b1b040a5fc155eafcaacf70daeedacb5e0acd1992a34",
+        "402d6507dd89d01f74396d6978496de5f7dfe4abad0a80d87f599f390e8873b5"
+      ]
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "final_hash": "bcc0b1866857aa2d8dffc768a673ac89cd4be5d7bdaabd670792d85c0821225d",
+      "hashes": [
+        "7820737946a8ed9c913c030434d7dfa243bf1fe262ba46a6d50ca883987ad69f",
+        "fad0f4085e95271ad587ce330c3a691304b90af5e4f5796405f6d81b4fa613f3",
+        "3cca00777eaf2ddcfb9c8fe55d87b240482381d1953e9be180215fa4dac38cea",
+        "bcc0b1866857aa2d8dffc768a673ac89cd4be5d7bdaabd670792d85c0821225d"
+      ]
+    }
+  ]
+}

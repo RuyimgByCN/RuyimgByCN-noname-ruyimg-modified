@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-30T20:33:32.779280",
+  "sourceCountBefore": 31808,
+  "sourceCountAfter": 31808,
+  "sourceDrift": {},
+  "headBefore": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "headAfter": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "indexBefore": [],
+  "indexAfter": [],
+  "guardUnchanged": true,
+  "completed": 10,
+  "expected": 10,
+  "allPassed": true,
+  "elapsedSeconds": 811.9453812910069,
+  "diskFreeBytes": 142181343232,
+  "cacheRetainedForPhase2": true
+}

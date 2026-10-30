@@ -1,0 +1,69 @@
+{
+  "at_utc": "2026-10-30T13:18:38.062487+00:00",
+  "private_raw_directory": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-device-recheck-private-va6299f6",
+  "raw_devices_not_committed": true,
+  "adb_available": true,
+  "results": {
+    "apple": {
+      "exit": 0
+    },
+    "hid-query": {
+      "exit": 1
+    },
+    "android": {
+      "exit": 0
+    }
+  },
+  "android_device_states": [],
+  "apple_devices": [
+    {
+      "device_type": "iPhone",
+      "product_type": "iPhone17,2",
+      "name_redacted": true,
+      "connection": null,
+      "state": "unavailable",
+      "availability": null
+    },
+    {
+      "device_type": "iPad",
+      "product_type": "iPad17,2",
+      "name_redacted": true,
+      "connection": "sameMachine",
+      "state": "disconnected",
+      "availability": "shutdown"
+    },
+    {
+      "device_type": "iPhone",
+      "product_type": "iPhone18,3",
+      "name_redacted": true,
+      "connection": "sameMachine",
+      "state": "disconnected",
+      "availability": "shutdown"
+    },
+    {
+      "device_type": "iPhone",
+      "product_type": "iPhone18,1",
+      "name_redacted": true,
+      "connection": "sameMachine",
+      "state": "disconnected",
+      "availability": "shutdown"
+    },
+    {
+      "device_type": "iPhone",
+      "product_type": "iPhone19,2",
+      "name_redacted": true,
+      "connection": "sameMachine",
+      "state": "disconnected",
+      "availability": "shutdown"
+    },
+    {
+      "device_type": "iPhone",
+      "product_type": "iPhone19,4",
+      "name_redacted": true,
+      "connection": "sameMachine",
+      "state": "disconnected",
+      "availability": "shutdown"
+    }
+  ],
+  "scope": "Read-only detection; no prompt requested, event posted, device installation or power/thermal measurement"
+}

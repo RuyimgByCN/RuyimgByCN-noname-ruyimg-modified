@@ -1,0 +1,644 @@
+{
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "workingTreeVersions": {
+    "rules": 330,
+    "archive": 105,
+    "nativeAbi": 758,
+    "ws": 6
+  },
+  "commands": [
+    {
+      "name": "native3",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "exit": 0,
+      "log": "native3.log",
+      "rustTestCounts": [
+        1706,
+        0,
+        75
+      ],
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native-kernel",
+          "-p",
+          "engine-native-content",
+          "-p",
+          "engine-native"
+        ],
+        "exit": 0,
+        "locked_seconds": 54.69672025000909,
+        "disk_free_bytes": 147554820096
+      },
+      "diskFreeBytes": 147554820096,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "rawLogSha256": "fde90f3838feca08f67dc87319312845041adf3ec5551581c28257ec571c1458"
+    },
+    {
+      "name": "affected6-tauri",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-api",
+        "-p",
+        "engine-core",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "game-server",
+        "-p",
+        "desktop-client",
+        "--features",
+        "desktop-client/tauri-shell"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-api",
+        "-p",
+        "engine-core",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "game-server",
+        "-p",
+        "desktop-client",
+        "--features",
+        "desktop-client/tauri-shell"
+      ],
+      "exit": 0,
+      "log": "affected6-tauri.log",
+      "rustTestCounts": [
+        6097,
+        0,
+        77
+      ],
+      "warningLines": 761,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-api",
+          "-p",
+          "engine-core",
+          "-p",
+          "engine-native",
+          "-p",
+          "engine-native-wasm",
+          "-p",
+          "game-server",
+          "-p",
+          "desktop-client",
+          "--features",
+          "desktop-client/tauri-shell"
+        ],
+        "exit": 0,
+        "locked_seconds": 291.7515345000138,
+        "disk_free_bytes": 146397741056
+      },
+      "diskFreeBytes": 146397741056,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 714,
+      "warningSummaryHeaders": 47,
+      "rawLogSha256": "cc1c8310360f81b01d87cd3fd4dcebe604c022801d3780c5d09359eb9b58c6db"
+    },
+    {
+      "name": "workspace",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "log": "workspace.log",
+      "rustTestCounts": [
+        6891,
+        0,
+        77
+      ],
+      "warningLines": 782,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "test",
+          "--offline",
+          "--workspace",
+          "--no-fail-fast"
+        ],
+        "exit": 0,
+        "locked_seconds": 365.2615358339972,
+        "disk_free_bytes": 143259586560
+      },
+      "diskFreeBytes": 143258488832,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 727,
+      "warningSummaryHeaders": 55,
+      "rawLogSha256": "cbcf5c21c9acf0a0cac35f2f8cfc83a45128c58ba25419c6bf39acdf9d6a5538"
+    },
+    {
+      "name": "strict-native3",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {
+        "RUSTFLAGS": "-Dwarnings"
+      },
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "log": "strict-native3.log",
+      "rustTestCounts": null,
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "check",
+          "--offline",
+          "-p",
+          "engine-native-kernel",
+          "-p",
+          "engine-native-content",
+          "-p",
+          "engine-native",
+          "--all-targets"
+        ],
+        "exit": 0,
+        "locked_seconds": 18.958313833980355,
+        "disk_free_bytes": 142078459904
+      },
+      "diskFreeBytes": 142078459904,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "rawLogSha256": "74d3b652b899e230799b4aa3da01a1f8be33afe209c6eadf90bc2a12d871ecd5"
+    },
+    {
+      "name": "workspace-all-targets",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "--workspace",
+        "--all-targets"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "check",
+        "--offline",
+        "--workspace",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "log": "workspace-all-targets.log",
+      "rustTestCounts": null,
+      "warningLines": 780,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "check",
+          "--offline",
+          "--workspace",
+          "--all-targets"
+        ],
+        "exit": 0,
+        "locked_seconds": 45.26618591599981,
+        "disk_free_bytes": 142109855744
+      },
+      "diskFreeBytes": 142109855744,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 725,
+      "warningSummaryHeaders": 55,
+      "rawLogSha256": "fabb0c3b3b0718304f58a39868ddd0b45febcb1174156ace2a1bec9293ced926"
+    },
+    {
+      "name": "native-layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "log": "native-layering.log",
+      "rustTestCounts": null,
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "python3",
+          "-B",
+          "scripts/check-native-layering.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 0.11935133300721645,
+        "disk_free_bytes": 142109835264
+      },
+      "diskFreeBytes": 142109835264,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "rawLogSha256": "12b59bdbd6eedb9bd7ccf291e4b60fcf8885aa6a370b0d85e0d764edee305752"
+    },
+    {
+      "name": "source-lines-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "log": "source-lines-unit.log",
+      "rustTestCounts": null,
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_check_source_lines.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 0.07143312500556931,
+        "disk_free_bytes": 142109810688
+      },
+      "diskFreeBytes": 142109810688,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "rawLogSha256": "badc4d62fc9a477f2b0d44397fa66d2bf56dd2635c18392356fba1da6f81f4ea"
+    },
+    {
+      "name": "source-lines",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "log": "source-lines.log",
+      "rustTestCounts": null,
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "python3",
+          "-B",
+          "scripts/check-source-lines.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 3.9238158329972066,
+        "disk_free_bytes": 142150721536
+      },
+      "diskFreeBytes": 142150721536,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "rawLogSha256": "bd8fb03e79007c291de36476c0e97dbeb50649c70d995dbd74323016ea368e79"
+    },
+    {
+      "name": "conformance",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "conformance"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "conformance"
+      ],
+      "exit": 0,
+      "log": "conformance.log",
+      "rustTestCounts": null,
+      "warningLines": 110,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "cargo",
+          "run",
+          "--offline",
+          "-p",
+          "conformance"
+        ],
+        "exit": 0,
+        "locked_seconds": 23.085441833012737,
+        "disk_free_bytes": 142154289152
+      },
+      "diskFreeBytes": 142154289152,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 108,
+      "warningSummaryHeaders": 2,
+      "rawLogSha256": "811ae0a5568c1c5de0d5404cd6baf966adafe25282622e525ed0989ec1273275"
+    },
+    {
+      "name": "frontend-node-typecheck",
+      "argv": [
+        "bash",
+        "-c",
+        "cd apps/web-client && npm test && node_modules/.bin/vue-tsc --noEmit"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "extraEnv": {},
+      "execution": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+        "bash",
+        "-c",
+        "cd apps/web-client && npm test && node_modules/.bin/vue-tsc --noEmit"
+      ],
+      "exit": 0,
+      "log": "frontend-node-typecheck.log",
+      "rustTestCounts": null,
+      "warningLines": 0,
+      "wrapper": {
+        "command": [
+          "/usr/bin/sandbox-exec",
+          "-f",
+          "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb",
+          "bash",
+          "-c",
+          "cd apps/web-client && npm test && node_modules/.bin/vue-tsc --noEmit"
+        ],
+        "exit": 0,
+        "locked_seconds": 2.3062034159956966,
+        "disk_free_bytes": 142155489280
+      },
+      "diskFreeBytes": 142155489280,
+      "incrementalBytes": 0,
+      "cacheRetainedFor": "Parent Phase2 current-WASM/WS/UI acceptance; do not retire",
+      "warningDiagnosticHeadersIncludingRepeats": 0,
+      "warningSummaryHeaders": 0,
+      "nodeTestCounts": {
+        "tests": 161,
+        "pass": 161,
+        "fail": 0,
+        "skipped": 0
+      },
+      "typecheckExit": 0,
+      "rawLogSha256": "989426332d4990f77f71ae607f3444d3ae9963354f05a872cbaec8b5cf383eb5"
+    }
+  ],
+  "warningDefinition": "warningLines counts ^warning: lines, including duplicate diagnostics and cargo summaries; diagnostic/summary headers additionally separated. Raw warnings retained.",
+  "readonlyScope": "OS deny writes under main except phase1 evidence; target and normal test temporary outputs permitted; main guard unchanged",
+  "sourceHashDiff": "hash-diff.json",
+  "nativeWasmFrontendBuildPerformed": false,
+  "phase2NotRun": true
+}

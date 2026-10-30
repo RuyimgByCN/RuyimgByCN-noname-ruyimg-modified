@@ -94,13 +94,21 @@ impl Engine {
         if cmd.actor as usize >= self.state.core.players.len() {
             return CommandOutcome::Rejected(RejectReason::UnknownActor);
         }
-        if self.state.core.outcome.is_some() && !matches!(cmd.action, GameAction::Answer { .. }) {
+        if self.state.core.outcome.is_some()
+            && !matches!(
+                cmd.action,
+                GameAction::Answer { .. } | GameAction::TimeoutAction { .. }
+            )
+        {
             return CommandOutcome::Rejected(RejectReason::MatchOver);
         }
         // 补偿明置（ADR 0762）：成为牌的目标时的明置窗口与挂起询问
         // 并行——RevealGeneral 不受 ChoicePending 拦截（其余命令照旧）。
         if self.state.resolution.open_choice.is_some()
-            && !matches!(cmd.action, GameAction::Answer { .. })
+            && !matches!(
+                cmd.action,
+                GameAction::Answer { .. } | GameAction::TimeoutAction { .. }
+            )
             && !matches!(cmd.action, GameAction::RevealGeneral { .. })
         {
             return CommandOutcome::Rejected(RejectReason::ChoicePending);
@@ -269,10 +277,9 @@ impl Engine {
                 self.log.truncate(log_mark);
                 if self.segment_open {
                     if let Some((checkpoint, _)) = self.segment_checkpoint.take() {
-                        if let Ok(restored) = Engine::restore_with_catalog(
-                            &checkpoint,
-                            self.catalog.clone(),
-                        ) {
+                        if let Ok(restored) =
+                            Engine::restore_with_catalog(&checkpoint, self.catalog.clone())
+                        {
                             self.state = restored.state;
                         }
                     }

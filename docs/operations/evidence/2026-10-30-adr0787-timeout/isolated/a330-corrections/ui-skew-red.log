@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: initial-skew: 剩余 0 秒 · 到时托管, expected 10
+    at check (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/ui-skew.mjs:37:234)
+    at async file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/ui-skew.mjs:38:2 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+{"command": ["node", "../evidence/a330-corrections/ui-skew.mjs", "../evidence/a330-corrections/browser-red-fast", "../evidence/a330/ui-dist-final", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server", "60000"], "exit": 1, "locked_seconds": 2.1724455000075977, "disk_free_bytes": 149002858496}

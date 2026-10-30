@@ -1,0 +1,28 @@
+{
+  "all_staged_bytes_exact": true,
+  "count": 692,
+  "additional_staging_attempt": "Adding .gitattributes alone retained the stat-cached LF index blob, so the second exact-byte guard rejected it again before commit. Explicit git add --renormalize of the one raw log applied -text and restored exact original bytes.",
+  "raw_log_sha256": "f1db45af81ad893e7c7cf82e013a7ed2929a28d7a760c971329c0405a9f78193",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/parent-post-attribute-links.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/parent-post-attribute-docrefs.log"
+    }
+  ]
+}

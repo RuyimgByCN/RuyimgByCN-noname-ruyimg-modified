@@ -1,0 +1,6972 @@
+[
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 1,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 2,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "CreateRoom",
+    "payload": {
+      "players": 4,
+      "seed": 4242,
+      "password": "",
+      "choice_timeout_secs": 10
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Error",
+    "payload": {
+      "code": "VersionMismatch",
+      "message": "WS6 Hello required",
+      "room_id": null
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 5,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "old"
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Error",
+    "payload": {
+      "code": "VersionMismatch",
+      "message": "protocol version mismatch",
+      "room_id": null
+    }
+  },
+  {
+    "direction": "out",
+    "type": "CreateRoom",
+    "payload": {
+      "players": 4,
+      "seed": 4242,
+      "password": "",
+      "choice_timeout_secs": 11
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Error",
+    "payload": {
+      "code": "BadMessage",
+      "message": "choice_timeout_secs must be 10, 15, 30, 60 or 90",
+      "room_id": null
+    }
+  },
+  {
+    "direction": "out",
+    "type": "CreateRoom",
+    "payload": {
+      "players": 4,
+      "seed": 4242,
+      "password": "",
+      "choice_timeout_secs": 10
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomCreated",
+    "payload": {
+      "room_id": 1,
+      "host_hint": "proof"
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 1,
+      "seat": 0,
+      "role": "Player",
+      "reconnect_token": "6dd18738-0dfe-41d9-84b6-38955220de55",
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 3,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "out",
+    "type": "JoinRoom",
+    "payload": {
+      "room_id": 1,
+      "password": "",
+      "preferred_seat": 1,
+      "reconnect_token": null
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 2,
+      "seat": 1,
+      "role": "Player",
+      "reconnect_token": "7ef5a8a2-1f58-4cfd-8ba5-fd3a8bccb486",
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 2
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 111,
+            "def": 93,
+            "suit": "Club",
+            "rank": 12,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 72,
+            "def": 12,
+            "suit": "Club",
+            "rank": 13,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 5,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 10,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 97,
+            "def": 7,
+            "suit": "Spade",
+            "rank": 1,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "ShaFire"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": []
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 4,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "out",
+    "type": "JoinRoom",
+    "payload": {
+      "room_id": 1,
+      "password": "",
+      "preferred_seat": 2,
+      "reconnect_token": null
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 3,
+      "seat": 2,
+      "role": "Player",
+      "reconnect_token": "fc863908-5680-47f9-a12b-5396a5a4b6a9",
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 3
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 102,
+            "def": 10,
+            "suit": "Heart",
+            "rank": 1,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 12,
+            "def": 0,
+            "suit": "Club",
+            "rank": 7,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 1,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 8,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 107,
+            "def": 90,
+            "suit": "Heart",
+            "rank": 11,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": []
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 5,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "out",
+    "type": "JoinRoom",
+    "payload": {
+      "room_id": 1,
+      "password": "",
+      "preferred_seat": 3,
+      "reconnect_token": null
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 4,
+      "seat": 3,
+      "role": "Player",
+      "reconnect_token": "6d4d1032-c44f-427e-bc7f-b75945cf6e33",
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 4
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 7,
+            "def": 0,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 47,
+            "def": 2,
+            "suit": "Heart",
+            "rank": 6,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 17,
+            "def": 0,
+            "suit": "Club",
+            "rank": 10,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 41,
+            "def": 1,
+            "suit": "Diamond",
+            "rank": 9,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": []
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 1,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 1,
+        "revision": 0
+      },
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 2,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 2,
+        "revision": 0
+      },
+      "view": {
+        "revision": 0,
+        "state_hash": [
+          222,
+          67,
+          165,
+          227,
+          75,
+          28,
+          2,
+          189,
+          95,
+          30,
+          37,
+          207,
+          35,
+          142,
+          54,
+          172,
+          216,
+          43,
+          87,
+          12,
+          185,
+          64,
+          6,
+          32,
+          158,
+          72,
+          123,
+          205,
+          120,
+          29,
+          77,
+          19
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Judge",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "SubmitCommand",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 3,
+        "revision": 0
+      },
+      "command": {
+        "actor": 1,
+        "expected_revision": 0,
+        "idempotency_key": 3,
+        "kind": "EndPhase"
+      },
+      "idempotency_key": 3,
+      "replay": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 1
+      },
+      "idempotency_key": 3,
+      "result": {
+        "Accepted": {
+          "new_revision": 1,
+          "state_hash": [
+            250,
+            156,
+            198,
+            202,
+            84,
+            17,
+            95,
+            195,
+            29,
+            203,
+            8,
+            102,
+            201,
+            62,
+            243,
+            186,
+            62,
+            214,
+            166,
+            223,
+            36,
+            118,
+            26,
+            164,
+            75,
+            213,
+            252,
+            132,
+            119,
+            208,
+            96,
+            119
+          ]
+        }
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 3
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 102,
+            "def": 10,
+            "suit": "Heart",
+            "rank": 1,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 12,
+            "def": 0,
+            "suit": "Club",
+            "rank": 7,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 1,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 8,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 107,
+            "def": 90,
+            "suit": "Heart",
+            "rank": 11,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        2
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 3,
+        "revision": 1
+      },
+      "idempotency_key": 3,
+      "result": {
+        "Accepted": {
+          "new_revision": 1,
+          "state_hash": [
+            250,
+            156,
+            198,
+            202,
+            84,
+            17,
+            95,
+            195,
+            29,
+            203,
+            8,
+            102,
+            201,
+            62,
+            243,
+            186,
+            62,
+            214,
+            166,
+            223,
+            36,
+            118,
+            26,
+            164,
+            75,
+            213,
+            252,
+            132,
+            119,
+            208,
+            96,
+            119
+          ]
+        }
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [
+        "EndPhase"
+      ],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        2
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 1
+      },
+      "idempotency_key": 3,
+      "result": {
+        "Accepted": {
+          "new_revision": 1,
+          "state_hash": [
+            250,
+            156,
+            198,
+            202,
+            84,
+            17,
+            95,
+            195,
+            29,
+            203,
+            8,
+            102,
+            201,
+            62,
+            243,
+            186,
+            62,
+            214,
+            166,
+            223,
+            36,
+            118,
+            26,
+            164,
+            75,
+            213,
+            252,
+            132,
+            119,
+            208,
+            96,
+            119
+          ]
+        }
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 2
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 111,
+            "def": 93,
+            "suit": "Club",
+            "rank": 12,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 72,
+            "def": 12,
+            "suit": "Club",
+            "rank": 13,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 5,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 10,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 97,
+            "def": 7,
+            "suit": "Spade",
+            "rank": 1,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "ShaFire"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        2
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 1
+      },
+      "idempotency_key": 3,
+      "result": {
+        "Accepted": {
+          "new_revision": 1,
+          "state_hash": [
+            250,
+            156,
+            198,
+            202,
+            84,
+            17,
+            95,
+            195,
+            29,
+            203,
+            8,
+            102,
+            201,
+            62,
+            243,
+            186,
+            62,
+            214,
+            166,
+            223,
+            36,
+            118,
+            26,
+            164,
+            75,
+            213,
+            252,
+            132,
+            119,
+            208,
+            96,
+            119
+          ]
+        }
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 4
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 7,
+            "def": 0,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 47,
+            "def": 2,
+            "suit": "Heart",
+            "rank": 6,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 17,
+            "def": 0,
+            "suit": "Club",
+            "rank": 10,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 41,
+            "def": 1,
+            "suit": "Diamond",
+            "rank": 9,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        2
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 4,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 4,
+        "revision": 1
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 5,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 5,
+        "revision": 1
+      },
+      "view": {
+        "revision": 1,
+        "state_hash": [
+          250,
+          156,
+          198,
+          202,
+          84,
+          17,
+          95,
+          195,
+          29,
+          203,
+          8,
+          102,
+          201,
+          62,
+          243,
+          186,
+          62,
+          214,
+          166,
+          223,
+          36,
+          118,
+          26,
+          164,
+          75,
+          213,
+          252,
+          132,
+          119,
+          208,
+          96,
+          119
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Draw",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "SubmitCommand",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 6,
+        "revision": 1
+      },
+      "command": {
+        "actor": 1,
+        "expected_revision": 1,
+        "idempotency_key": 6,
+        "kind": "EndPhase"
+      },
+      "idempotency_key": 6,
+      "replay": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 2
+      },
+      "idempotency_key": 6,
+      "result": {
+        "Accepted": {
+          "new_revision": 2,
+          "state_hash": [
+            211,
+            224,
+            31,
+            127,
+            162,
+            10,
+            137,
+            38,
+            15,
+            82,
+            242,
+            115,
+            93,
+            179,
+            21,
+            32,
+            103,
+            36,
+            143,
+            107,
+            195,
+            36,
+            38,
+            221,
+            39,
+            233,
+            195,
+            9,
+            114,
+            137,
+            128,
+            220
+          ]
+        }
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 3
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 102,
+            "def": 10,
+            "suit": "Heart",
+            "rank": 1,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 12,
+            "def": 0,
+            "suit": "Club",
+            "rank": 7,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 1,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 8,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 107,
+            "def": 90,
+            "suit": "Heart",
+            "rank": 11,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 6,
+        "revision": 2
+      },
+      "idempotency_key": 6,
+      "result": {
+        "Accepted": {
+          "new_revision": 2,
+          "state_hash": [
+            211,
+            224,
+            31,
+            127,
+            162,
+            10,
+            137,
+            38,
+            15,
+            82,
+            242,
+            115,
+            93,
+            179,
+            21,
+            32,
+            103,
+            36,
+            143,
+            107,
+            195,
+            36,
+            38,
+            221,
+            39,
+            233,
+            195,
+            9,
+            114,
+            137,
+            128,
+            220
+          ]
+        }
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [
+        {
+          "PlayCard": {
+            "card": 113,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 86,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              2
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              4
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 119,
+            "targets": []
+          }
+        },
+        "EndPhase"
+      ],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 2
+      },
+      "idempotency_key": 6,
+      "result": {
+        "Accepted": {
+          "new_revision": 2,
+          "state_hash": [
+            211,
+            224,
+            31,
+            127,
+            162,
+            10,
+            137,
+            38,
+            15,
+            82,
+            242,
+            115,
+            93,
+            179,
+            21,
+            32,
+            103,
+            36,
+            143,
+            107,
+            195,
+            36,
+            38,
+            221,
+            39,
+            233,
+            195,
+            9,
+            114,
+            137,
+            128,
+            220
+          ]
+        }
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 2
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 111,
+            "def": 93,
+            "suit": "Club",
+            "rank": 12,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 72,
+            "def": 12,
+            "suit": "Club",
+            "rank": 13,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 5,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 10,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 97,
+            "def": 7,
+            "suit": "Spade",
+            "rank": 1,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "ShaFire"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 2
+      },
+      "idempotency_key": 6,
+      "result": {
+        "Accepted": {
+          "new_revision": 2,
+          "state_hash": [
+            211,
+            224,
+            31,
+            127,
+            162,
+            10,
+            137,
+            38,
+            15,
+            82,
+            242,
+            115,
+            93,
+            179,
+            21,
+            32,
+            103,
+            36,
+            143,
+            107,
+            195,
+            36,
+            38,
+            221,
+            39,
+            233,
+            195,
+            9,
+            114,
+            137,
+            128,
+            220
+          ]
+        }
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 4
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 7,
+            "def": 0,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 47,
+            "def": 2,
+            "suit": "Heart",
+            "rank": 6,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 17,
+            "def": 0,
+            "suit": "Club",
+            "rank": 10,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 41,
+            "def": 1,
+            "suit": "Diamond",
+            "rank": 9,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 7,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 7,
+        "revision": 2
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        {
+          "PlayCard": {
+            "card": 113,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 86,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              2
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              4
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 119,
+            "targets": []
+          }
+        },
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 8,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 8,
+        "revision": 2
+      },
+      "view": {
+        "revision": 2,
+        "state_hash": [
+          211,
+          224,
+          31,
+          127,
+          162,
+          10,
+          137,
+          38,
+          15,
+          82,
+          242,
+          115,
+          93,
+          179,
+          21,
+          32,
+          103,
+          36,
+          143,
+          107,
+          195,
+          36,
+          38,
+          221,
+          39,
+          233,
+          195,
+          9,
+          114,
+          137,
+          128,
+          220
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Play",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        {
+          "PlayCard": {
+            "card": 113,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 86,
+            "targets": []
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              2
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 21,
+            "targets": [
+              4
+            ]
+          }
+        },
+        {
+          "PlayCard": {
+            "card": 119,
+            "targets": []
+          }
+        },
+        "EndPhase"
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "SubmitCommand",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 9,
+        "revision": 2
+      },
+      "command": {
+        "actor": 1,
+        "expected_revision": 2,
+        "idempotency_key": 9,
+        "kind": "EndPhase"
+      },
+      "idempotency_key": 9,
+      "replay": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 9,
+        "revision": 3
+      },
+      "idempotency_key": 9,
+      "result": {
+        "Accepted": {
+          "new_revision": 3,
+          "state_hash": [
+            193,
+            37,
+            144,
+            123,
+            198,
+            102,
+            33,
+            105,
+            241,
+            11,
+            225,
+            125,
+            71,
+            113,
+            50,
+            34,
+            104,
+            26,
+            226,
+            236,
+            215,
+            247,
+            41,
+            172,
+            88,
+            220,
+            46,
+            162,
+            223,
+            228,
+            150,
+            80
+          ]
+        }
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [
+        {
+          "ResolveChoice": {
+            "choice_id": 1,
+            "selections": [
+              0,
+              1
+            ],
+            "cancelled": false
+          }
+        }
+      ],
+      "choice": {
+        "choice_id": 1,
+        "observer": 1,
+        "options": [
+          {
+            "token": 0,
+            "label_key": "card:113"
+          },
+          {
+            "token": 1,
+            "label_key": "card:86"
+          },
+          {
+            "token": 2,
+            "label_key": "card:21"
+          },
+          {
+            "token": 3,
+            "label_key": "card:31"
+          },
+          {
+            "token": 4,
+            "label_key": "card:52"
+          },
+          {
+            "token": 5,
+            "label_key": "card:119"
+          }
+        ],
+        "min_count": 2,
+        "max_count": 2,
+        "allow_cancel": false,
+        "timeout_policy": "Standard",
+        "deadline_unix_ms": 1793347253027,
+        "revision": 3,
+        "continuation_id": 1,
+        "kind": "SelectCards",
+        "prompt": "discard_to_limit",
+        "native_kind": "select_cards"
+      },
+      "public_event_codes": [
+        8,
+        8,
+        10
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 3
+      },
+      "idempotency_key": 9,
+      "result": {
+        "Accepted": {
+          "new_revision": 3,
+          "state_hash": [
+            193,
+            37,
+            144,
+            123,
+            198,
+            102,
+            33,
+            105,
+            241,
+            11,
+            225,
+            125,
+            71,
+            113,
+            50,
+            34,
+            104,
+            26,
+            226,
+            236,
+            215,
+            247,
+            41,
+            172,
+            88,
+            220,
+            46,
+            162,
+            223,
+            228,
+            150,
+            80
+          ]
+        }
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 3
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 102,
+            "def": 10,
+            "suit": "Heart",
+            "rank": 1,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 12,
+            "def": 0,
+            "suit": "Club",
+            "rank": 7,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 1,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 8,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 107,
+            "def": 90,
+            "suit": "Heart",
+            "rank": 11,
+            "owner": 3,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        10
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 3
+      },
+      "idempotency_key": 9,
+      "result": {
+        "Accepted": {
+          "new_revision": 3,
+          "state_hash": [
+            193,
+            37,
+            144,
+            123,
+            198,
+            102,
+            33,
+            105,
+            241,
+            11,
+            225,
+            125,
+            71,
+            113,
+            50,
+            34,
+            104,
+            26,
+            226,
+            236,
+            215,
+            247,
+            41,
+            172,
+            88,
+            220,
+            46,
+            162,
+            223,
+            228,
+            150,
+            80
+          ]
+        }
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 2
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 111,
+            "def": 93,
+            "suit": "Club",
+            "rank": 12,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 72,
+            "def": 12,
+            "suit": "Club",
+            "rank": 13,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 5,
+            "def": 0,
+            "suit": "Spade",
+            "rank": 10,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 97,
+            "def": 7,
+            "suit": "Spade",
+            "rank": 1,
+            "owner": 2,
+            "zone": "Hand",
+            "kind": "ShaFire"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        10
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "CommandOutcome",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 0,
+        "revision": 3
+      },
+      "idempotency_key": 9,
+      "result": {
+        "Accepted": {
+          "new_revision": 3,
+          "state_hash": [
+            193,
+            37,
+            144,
+            123,
+            198,
+            102,
+            33,
+            105,
+            241,
+            11,
+            225,
+            125,
+            71,
+            113,
+            50,
+            34,
+            104,
+            26,
+            226,
+            236,
+            215,
+            247,
+            41,
+            172,
+            88,
+            220,
+            46,
+            162,
+            223,
+            228,
+            150,
+            80
+          ]
+        }
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 4
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 7,
+            "def": 0,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 47,
+            "def": 2,
+            "suit": "Heart",
+            "rank": 6,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 17,
+            "def": 0,
+            "suit": "Club",
+            "rank": 10,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 41,
+            "def": 1,
+            "suit": "Diamond",
+            "rank": 9,
+            "owner": 4,
+            "zone": "Hand",
+            "kind": "Shan"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "legal_actions": [],
+      "choice": null,
+      "public_event_codes": [
+        8,
+        8,
+        10
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 10,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 10,
+        "revision": 3
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": {
+        "choice_id": 1,
+        "observer": 1,
+        "options": [
+          {
+            "token": 0,
+            "label_key": "card:113"
+          },
+          {
+            "token": 1,
+            "label_key": "card:86"
+          },
+          {
+            "token": 2,
+            "label_key": "card:21"
+          },
+          {
+            "token": 3,
+            "label_key": "card:31"
+          },
+          {
+            "token": 4,
+            "label_key": "card:52"
+          },
+          {
+            "token": 5,
+            "label_key": "card:119"
+          }
+        ],
+        "min_count": 2,
+        "max_count": 2,
+        "allow_cancel": false,
+        "timeout_policy": "Standard",
+        "deadline_unix_ms": 1793347253027,
+        "revision": 3,
+        "continuation_id": 1,
+        "kind": "SelectCards",
+        "prompt": "discard_to_limit",
+        "native_kind": "select_cards"
+      },
+      "legal_actions": [
+        {
+          "ResolveChoice": {
+            "choice_id": 1,
+            "selections": [
+              0,
+              1
+            ],
+            "cancelled": false
+          }
+        }
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "RequestSnapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 11,
+        "revision": 0
+      },
+      "last_revision": 0
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Snapshot",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 11,
+        "revision": 3
+      },
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": {
+        "choice_id": 1,
+        "observer": 1,
+        "options": [
+          {
+            "token": 0,
+            "label_key": "card:113"
+          },
+          {
+            "token": 1,
+            "label_key": "card:86"
+          },
+          {
+            "token": 2,
+            "label_key": "card:21"
+          },
+          {
+            "token": 3,
+            "label_key": "card:31"
+          },
+          {
+            "token": 4,
+            "label_key": "card:52"
+          },
+          {
+            "token": 5,
+            "label_key": "card:119"
+          }
+        ],
+        "min_count": 2,
+        "max_count": 2,
+        "allow_cancel": false,
+        "timeout_policy": "Standard",
+        "deadline_unix_ms": 1793347253027,
+        "revision": 3,
+        "continuation_id": 1,
+        "kind": "SelectCards",
+        "prompt": "discard_to_limit",
+        "native_kind": "select_cards"
+      },
+      "legal_actions": [
+        {
+          "ResolveChoice": {
+            "choice_id": 1,
+            "selections": [
+              0,
+              1
+            ],
+            "cancelled": false
+          }
+        }
+      ]
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": false,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": false,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": false,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 6,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "out",
+    "type": "JoinRoom",
+    "payload": {
+      "room_id": 1,
+      "password": "",
+      "preferred_seat": 0,
+      "reconnect_token": "6dd18738-0dfe-41d9-84b6-38955220de55"
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 1,
+      "seat": 0,
+      "role": "Player",
+      "reconnect_token": "6dd18738-0dfe-41d9-84b6-38955220de55",
+      "view": {
+        "revision": 3,
+        "state_hash": [
+          193,
+          37,
+          144,
+          123,
+          198,
+          102,
+          33,
+          105,
+          241,
+          11,
+          225,
+          125,
+          71,
+          113,
+          50,
+          34,
+          104,
+          26,
+          226,
+          236,
+          215,
+          247,
+          41,
+          172,
+          88,
+          220,
+          46,
+          162,
+          223,
+          228,
+          150,
+          80
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 6,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Jiu"
+          },
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": {
+        "choice_id": 1,
+        "observer": 1,
+        "options": [
+          {
+            "token": 0,
+            "label_key": "card:113"
+          },
+          {
+            "token": 1,
+            "label_key": "card:86"
+          },
+          {
+            "token": 2,
+            "label_key": "card:21"
+          },
+          {
+            "token": 3,
+            "label_key": "card:31"
+          },
+          {
+            "token": 4,
+            "label_key": "card:52"
+          },
+          {
+            "token": 5,
+            "label_key": "card:119"
+          }
+        ],
+        "min_count": 2,
+        "max_count": 2,
+        "allow_cancel": false,
+        "timeout_policy": "Standard",
+        "deadline_unix_ms": 1793347253027,
+        "revision": 3,
+        "continuation_id": 1,
+        "kind": "SelectCards",
+        "prompt": "discard_to_limit",
+        "native_kind": "select_cards"
+      },
+      "legal_actions": [
+        {
+          "ResolveChoice": {
+            "choice_id": 1,
+            "selections": [
+              0,
+              1
+            ],
+            "cancelled": false
+          }
+        }
+      ]
+    }
+  },
+  {
+    "direction": "out",
+    "type": "SubmitCommand",
+    "payload": {
+      "header": {
+        "protocol_version": 6,
+        "room_id": 1,
+        "conn_seq": 1,
+        "revision": 3
+      },
+      "command": {
+        "actor": 1,
+        "expected_revision": 3,
+        "idempotency_key": 9001,
+        "kind": {
+          "TimeoutAction": {
+            "choice_id": 1
+          }
+        }
+      },
+      "idempotency_key": 9001,
+      "replay": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Error",
+    "payload": {
+      "code": "Unauthorized",
+      "message": "internal command is not available to clients",
+      "room_id": 1
+    }
+  },
+  {
+    "direction": "out",
+    "type": "CreateRoom",
+    "payload": {
+      "players": 4,
+      "seed": 1,
+      "password": "",
+      "choice_timeout_secs": 10,
+      "managed": true,
+      "wal": []
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Error",
+    "payload": {
+      "code": "BadMessage",
+      "message": "json: unknown field `managed`, expected one of `choice_timeout_secs`, `players`, `seed`, `password` at line 1 column 101",
+      "room_id": null
+    }
+  },
+  {
+    "direction": "in",
+    "type": "Welcome",
+    "payload": {
+      "connection_id": 7,
+      "protocol_version": 6,
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 758,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 2,
+        "package_format": 1,
+        "engine_build_id": "noname-next-0.1.0-m2"
+      }
+    }
+  },
+  {
+    "direction": "out",
+    "type": "Hello",
+    "payload": {
+      "versions": {
+        "engine_api": 1,
+        "rule_vm_abi": 167,
+        "content_schema": 3,
+        "network_protocol": 6,
+        "replay_schema": 1,
+        "snapshot_schema": 1,
+        "package_format": 1,
+        "engine_build_id": "a330-proof"
+      },
+      "display_name": "proof"
+    }
+  },
+  {
+    "direction": "out",
+    "type": "JoinRoom",
+    "payload": {
+      "room_id": 1,
+      "password": "",
+      "preferred_seat": 0,
+      "reconnect_token": "6dd18738-0dfe-41d9-84b6-38955220de55"
+    }
+  },
+  {
+    "direction": "in",
+    "type": "RoomRoster",
+    "payload": {
+      "choice_timeout_secs": 10,
+      "room_id": 1,
+      "seats": [
+        {
+          "seat": 0,
+          "player_id": 1,
+          "display_name": "proof",
+          "connected": true,
+          "managed": false
+        },
+        {
+          "seat": 1,
+          "player_id": 2,
+          "display_name": "player",
+          "connected": false,
+          "managed": false
+        },
+        {
+          "seat": 2,
+          "player_id": 3,
+          "display_name": "player",
+          "connected": false,
+          "managed": false
+        },
+        {
+          "seat": 3,
+          "player_id": 4,
+          "display_name": "player",
+          "connected": false,
+          "managed": false
+        }
+      ],
+      "started": true,
+      "finished": false
+    }
+  },
+  {
+    "direction": "in",
+    "type": "JoinOk",
+    "payload": {
+      "room_id": 1,
+      "player_id": 1,
+      "seat": 0,
+      "role": "Player",
+      "reconnect_token": "6dd18738-0dfe-41d9-84b6-38955220de55",
+      "view": {
+        "revision": 4,
+        "state_hash": [
+          117,
+          150,
+          132,
+          61,
+          144,
+          189,
+          124,
+          218,
+          12,
+          77,
+          215,
+          125,
+          69,
+          90,
+          231,
+          33,
+          102,
+          132,
+          29,
+          187,
+          88,
+          106,
+          232,
+          218,
+          241,
+          126,
+          38,
+          183,
+          238,
+          83,
+          218,
+          94
+        ],
+        "observer": {
+          "Player": 1
+        },
+        "round": 1,
+        "current_player": 1,
+        "phase": "Discard",
+        "seats": [
+          {
+            "player": 1,
+            "character_def": 0,
+            "seat": 0,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 2,
+            "character_def": 0,
+            "seat": 1,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 3,
+            "character_def": 0,
+            "seat": 2,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          },
+          {
+            "player": 4,
+            "character_def": 0,
+            "seat": 3,
+            "hp": 4,
+            "max_hp": 4,
+            "alive": true,
+            "turned_over": false,
+            "hand_count": 4,
+            "identity": null,
+            "skills": [],
+            "generals": [
+              null,
+              null
+            ]
+          }
+        ],
+        "known_cards": [
+          {
+            "id": 21,
+            "def": 0,
+            "suit": "Heart",
+            "rank": 10,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Sha"
+          },
+          {
+            "id": 31,
+            "def": 1,
+            "suit": "Heart",
+            "rank": 2,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Shan"
+          },
+          {
+            "id": 52,
+            "def": 2,
+            "suit": "Diamond",
+            "rank": 12,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Tao"
+          },
+          {
+            "id": 119,
+            "def": 100,
+            "suit": "Diamond",
+            "rank": 5,
+            "owner": 1,
+            "zone": "Hand",
+            "kind": "Other"
+          },
+          {
+            "id": 113,
+            "def": 94,
+            "suit": "Club",
+            "rank": 2,
+            "owner": null,
+            "zone": "DiscardPile",
+            "kind": "Other"
+          },
+          {
+            "id": 86,
+            "def": 18,
+            "suit": "Club",
+            "rank": 9,
+            "owner": null,
+            "zone": "DiscardPile",
+            "kind": "Jiu"
+          }
+        ],
+        "outcome": "InProgress"
+      },
+      "choice": null,
+      "legal_actions": [
+        "EndPhase"
+      ]
+    }
+  }
+]

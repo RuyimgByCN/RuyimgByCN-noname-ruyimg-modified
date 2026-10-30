@@ -1,0 +1,274 @@
+{
+  "worker": {
+    "passed": 82,
+    "failed": 0
+  },
+  "targetedRust": {
+    "passed": 23,
+    "failed": 0,
+    "ignored": 0
+  },
+  "formalTrajectories": {
+    "standard": {
+      "direct": 40,
+      "beforeRestore": 20,
+      "afterRestore": 20
+    },
+    "huanle": {
+      "direct": 20,
+      "beforeRestore": 10,
+      "afterRestore": 10
+    },
+    "entireEnginePayloadEqualAndProvenanceLocatorSeparatelyValidated": true
+  },
+  "J2": {
+    "scenarios": 36,
+    "checkpoints": 189,
+    "retries": 114,
+    "full_archive_equality": true,
+    "native_wasm_events_choices_hashes_match": true
+  },
+  "machine": {
+    "windows": 5,
+    "stateComparisons": 75,
+    "seatChecks": 270,
+    "commands": 35,
+    "archiveRestarts": 40
+  },
+  "ordinary": {
+    "fixtures": 5,
+    "comparisons": 40,
+    "privacyChecks": 32
+  },
+  "B": {
+    "fixtures": 14,
+    "authorizedBridgeComparisons": 98,
+    "base330Headers": 11,
+    "exactContentLockDerivedHeaders": 3,
+    "archive": 105
+  },
+  "planner": {
+    "passed": true,
+    "actualWasm": true,
+    "entrypoint": "Engine::plan_action",
+    "pairedCallsPerTarget": 4,
+    "sevenRealPromptCallsPerTarget": 14,
+    "queuedDamage": [
+      1,
+      5
+    ],
+    "budgets": [
+      0,
+      48
+    ],
+    "policyVariant": 1,
+    "depth": 2,
+    "fullNativeWasmOutputEqual": true,
+    "allSourceArchivesImmutable": true,
+    "allRestoredAppliesValid": true,
+    "nodes": 0,
+    "simFaults": 0,
+    "prompts": [
+      {
+        "prompt": "rvm_danshou_option",
+        "scenario": "danshou-option-1",
+        "checkpoint": "step0"
+      },
+      {
+        "prompt": "rvm_danshou_target",
+        "scenario": "danshou-option-1",
+        "checkpoint": "step1"
+      },
+      {
+        "prompt": "rvm_danshou_card",
+        "scenario": "danshou-option-1",
+        "checkpoint": "step2"
+      },
+      {
+        "prompt": "rvm_danshou_discard",
+        "scenario": "danshou-option-1",
+        "checkpoint": "step3"
+      },
+      {
+        "prompt": "rvm_fenghe_card",
+        "scenario": "fenghe-give-owned-disabled-yingba",
+        "checkpoint": "step1"
+      },
+      {
+        "prompt": "rvm_fenghe_destination",
+        "scenario": "fenghe-give-owned-disabled-yingba",
+        "checkpoint": "step2"
+      },
+      {
+        "prompt": "rvm_pingkou_targets",
+        "scenario": "pingkou-real-three-skips",
+        "checkpoint": "step7"
+      }
+    ],
+    "scope": "Current J2 cached scalar paired case and seven real J2 public prompt leaves; not full NC10/no-choice/Host privacy"
+  },
+  "emptyHujia": {
+    "passed": true,
+    "runtime": "actual wasm32 web-target artifact loaded by generated JavaScript in Node",
+    "players": 8,
+    "seed": 45000,
+    "fixtureSteps": 11,
+    "prompt": "hujia_respond",
+    "options": [],
+    "min": 0,
+    "cancel": false,
+    "exactReply": true,
+    "exactArchiveAgainstNativeManualEmptyAnswer": true,
+    "exactRestoredAuthGeneration": true,
+    "hash": "bb27a3feaf2c2baebe15b02fd0fca02d3431dc32e4023ca3e8bd523abfac5a23",
+    "revision": "12",
+    "choicesCompared": 16,
+    "eventCodes": [
+      10,
+      4,
+      10
+    ]
+  },
+  "ws": {
+    "passed": true,
+    "room": 1,
+    "deadline": 1793366642979,
+    "timeout": {
+      "actor": 0,
+      "expected_revision": 3,
+      "dedup_id": 4,
+      "action": {
+        "TimeoutAction": {
+          "choice_id": 1,
+          "selection": [
+            {
+              "Card": 113
+            },
+            {
+              "Card": 86
+            }
+          ]
+        }
+      },
+      "revision": 4,
+      "state_hash": [
+        117,
+        150,
+        132,
+        61,
+        144,
+        189,
+        124,
+        218,
+        12,
+        77,
+        215,
+        125,
+        69,
+        90,
+        231,
+        33,
+        102,
+        132,
+        29,
+        187,
+        88,
+        106,
+        232,
+        218,
+        241,
+        126,
+        38,
+        183,
+        238,
+        83,
+        218,
+        94
+      ]
+    },
+    "downtimeCounted": true,
+    "reconnectDidNotExtend": true,
+    "privilegedActionRejected": true,
+    "forgedControlRejected": true,
+    "ws5Rejected": true,
+    "noHelloRejected": true,
+    "zeroVersionRejected": true,
+    "timeoutFirstHumanRaceRejected": true
+  },
+  "chrome": {
+    "chrome-fast": {
+      "passed": true,
+      "skew": 60000,
+      "deadline": 1793366698054,
+      "checks": [
+        {
+          "name": "initial-skew",
+          "text": "\u5269\u4f59 10 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 10,
+          "remainingUnixMs": 9745
+        },
+        {
+          "name": "wall-clock-jump",
+          "text": "\u5269\u4f59 10 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 10,
+          "remainingUnixMs": 9342
+        },
+        {
+          "name": "midwindow-reconnect",
+          "text": "\u5269\u4f59 6 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 6,
+          "remainingUnixMs": 5440
+        }
+      ],
+      "reconnectDeadlineUnchanged": true,
+      "uncalibratedVisible": true,
+      "exceptions": [],
+      "TimeoutActionCount": 1
+    },
+    "chrome-slow": {
+      "passed": true,
+      "skew": -60000,
+      "deadline": 1793366781241,
+      "checks": [
+        {
+          "name": "initial-skew",
+          "text": "\u5269\u4f59 10 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 10,
+          "remainingUnixMs": 9746
+        },
+        {
+          "name": "wall-clock-jump",
+          "text": "\u5269\u4f59 10 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 10,
+          "remainingUnixMs": 9358
+        },
+        {
+          "name": "midwindow-reconnect",
+          "text": "\u5269\u4f59 6 \u79d2 \u00b7 \u5230\u65f6\u6258\u7ba1",
+          "expected": 6,
+          "remainingUnixMs": 5426
+        }
+      ],
+      "reconnectDeadlineUnchanged": true,
+      "uncalibratedVisible": true,
+      "exceptions": [],
+      "TimeoutActionCount": 1
+    }
+  },
+  "resources": {
+    "happyRepresentatives": 5,
+    "actualDecodedVoices": 20,
+    "distinctAudioByteHashes": 20,
+    "errorRecoveryCases": 9,
+    "scope": "representative actual Rust GET+byte equality/image/audio codec/playback/case-switch/mediaerror+manifest503; no claim all9652codec/wholeI02/HID",
+    "nativeImportedOrListed": 41,
+    "nativeRoomSelectedPackages": []
+  },
+  "externalReferee": {
+    "passed": true,
+    "visibleCards": 124,
+    "TimeoutAction": "Unauthorized: internal command is not available to clients",
+    "EndPhase": "Internal: room error: spectator cannot submit",
+    "entireStoredStateUnchanged": true
+  }
+}

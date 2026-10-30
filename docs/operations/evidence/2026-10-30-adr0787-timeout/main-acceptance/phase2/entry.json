@@ -1,0 +1,34 @@
+{
+  "time": "2026-10-30T20:56:50.262641",
+  "allowedGeneratedPaths": [
+    "apps/web-client/src/worker/native-pkg",
+    "apps/web-client/src/worker/.native-pkg-tmp",
+    "apps/web-client/src/wasm-pkg",
+    "apps/web-client/src/.wasm-pkg-tmp",
+    "apps/web-client/public/pkg"
+  ],
+  "allUntrackedAndNotSymlinks": true,
+  "oldGeneratedSha256": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "01fcd113f5c812d263b564ed768a4d9fa14de80d1186b7eceb30b16115747169",
+    "apps/web-client/src/worker/native-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/worker/native-pkg/package.json": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": "2905028b85234b9535184418f39838b30b5e79be2f8b0e82baebc78ccbc3425b",
+    "apps/web-client/src/wasm-pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/src/wasm-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/wasm-pkg/package.json": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/src/wasm-pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm": "2905028b85234b9535184418f39838b30b5e79be2f8b0e82baebc78ccbc3425b",
+    "apps/web-client/public/pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/public/pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/public/pkg/package.json": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/public/pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+  },
+  "aliasPrivate12StillEqual": true,
+  "legacyPublicMirrorExtraAuthorization": "parent need_decision reply permits production existing public/pkg mirror only;tracked/symlink checked",
+  "guardSha": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1"
+}

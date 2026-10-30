@@ -1,0 +1,2 @@
+engine-native layering passed: 0 upward references <= 0
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb", "python3", "-B", "scripts/check-native-layering.py"], "exit": 0, "locked_seconds": 0.11935133300721645, "disk_free_bytes": 142109835264}

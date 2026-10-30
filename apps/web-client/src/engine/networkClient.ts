@@ -7,7 +7,7 @@ import type {
   ObserverSnapshot,
 } from "../types/engine";
 
-const NETWORK_PROTOCOL_VERSION = 5;
+const NETWORK_PROTOCOL_VERSION = 6;
 
 type CommandKind =
   | "EndPhase"
@@ -44,7 +44,9 @@ export interface RoomRoster {
     player_id: number;
     display_name: string;
     connected: boolean;
+    managed: boolean;
   }[];
+  choice_timeout_secs: number | null;
   started: boolean;
   finished: boolean;
 }
@@ -161,6 +163,8 @@ export class NetworkEngineClient {
   private rosterListeners = new Set<(roster: RoomRoster) => void>();
   private closeListeners = new Set<() => void>();
   private heartbeat: number | null = null;
+  private clockProbe: { connSeq: number; roomId: number; sentAt: number } | null = null;
+  private serverTimeAnchor: { unixMs: number; monotonicMs: number } | null = null;
   private disposed = false;
   /// NC09 自动重连：最近一次连接参数（断开后按退避重试）
   private lastUrl: string | null = null;
@@ -172,6 +176,8 @@ export class NetworkEngineClient {
   async connect(url: string, displayName: string): Promise<void> {
     if (this.socket?.readyState === WebSocket.OPEN) return;
     this.disposed = false;
+    this.clockProbe = null;
+    this.serverTimeAnchor = null;
     this.lastUrl = url;
     this.lastName = displayName;
 
@@ -221,10 +227,18 @@ export class NetworkEngineClient {
         display_name: displayName,
       },
     });
+    this.sendHeartbeat();
   }
 
-  createRoom(players: number, seed: number, password = ""): Promise<OnlineSession> {
-    return this.joinRequest({ type: "CreateRoom", payload: { players, seed, password } }, password);
+  /** Display estimate only; server deadlines remain authoritative. */
+  secondsUntilServerDeadline(deadline: number | undefined): number | null {
+    if (deadline == null || !this.serverTimeAnchor) return null;
+    const elapsed = performance.now() - this.serverTimeAnchor.monotonicMs;
+    return Math.max(0, Math.ceil((deadline - this.serverTimeAnchor.unixMs - elapsed) / 1000));
+  }
+
+  createRoom(players: number, seed: number, password = "", choiceTimeoutSecs = 30): Promise<OnlineSession> {
+    return this.joinRequest({ type: "CreateRoom", payload: { players, seed, password, choice_timeout_secs: choiceTimeoutSecs } }, password);
   }
 
   joinRoom(
@@ -373,6 +387,8 @@ export class NetworkEngineClient {
       window.clearInterval(this.heartbeat);
     }
     this.heartbeat = null;
+    this.clockProbe = null;
+    this.serverTimeAnchor = null;
     const socket = this.socket;
     this.socket = null;
     socket?.close(1000, "client dispose");
@@ -510,6 +526,11 @@ export class NetworkEngineClient {
 
     switch (message.type) {
       case "Welcome":
+        if (payload.protocol_version !== NETWORK_PROTOCOL_VERSION || (payload.versions as { network_protocol?: number } | undefined)?.network_protocol !== NETWORK_PROTOCOL_VERSION) {
+          this.rejectOutstanding(new Error("服务端协议版本不兼容：需要 WS6"));
+          this.socket?.close();
+          return;
+        }
         this.connectionId = Number(payload.connection_id ?? 0);
         this.welcomeWaiter?.resolve();
         this.welcomeWaiter = null;
@@ -549,6 +570,9 @@ export class NetworkEngineClient {
       }
       case "RoomRoster": {
         const roster = payload as unknown as RoomRoster;
+        if ((roster.choice_timeout_secs !== null && ![10, 15, 30, 60, 90].includes(roster.choice_timeout_secs)) || !Array.isArray(roster.seats) || roster.seats.some((seat) => typeof seat.managed !== "boolean")) {
+          this.rejectOutstanding(new Error("服务端房间超时配置无效")); return;
+        }
         for (const listener of this.rosterListeners) listener(roster);
         break;
       }
@@ -573,6 +597,20 @@ export class NetworkEngineClient {
           null
         );
         for (const listener of this.envelopeListeners) listener(envelope);
+        break;
+      }
+      case "Pong": {
+        const header = payload.header as MessageHeader | undefined;
+        const probe = this.clockProbe;
+        const receivedAt = performance.now();
+        const serverTime = payload.server_time_ms;
+        if (probe && header?.protocol_version === NETWORK_PROTOCOL_VERSION &&
+            header.conn_seq === probe.connSeq && header.room_id === probe.roomId &&
+            typeof serverTime === "number" && Number.isSafeInteger(serverTime) && serverTime > 0 &&
+            receivedAt >= probe.sentAt) {
+          this.serverTimeAnchor = { unixMs: serverTime + (receivedAt - probe.sentAt) / 2, monotonicMs: receivedAt };
+          this.clockProbe = null;
+        }
         break;
       }
       case "Error": {
@@ -625,12 +663,19 @@ export class NetworkEngineClient {
     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
     this.heartbeat = window.setInterval(() => {
       if (this.socket?.readyState !== WebSocket.OPEN) return;
-      const header = this.nextHeader();
-      this.send({ type: "Heartbeat", payload: { header } });
+      this.sendHeartbeat();
     }, 15_000);
   }
 
+  private sendHeartbeat(): void {
+    const header = this.nextHeader();
+    this.clockProbe = { connSeq: header.conn_seq, roomId: header.room_id, sentAt: performance.now() };
+    this.send({ type: "Heartbeat", payload: { header } });
+  }
+
   private handleClose(): void {
+    this.clockProbe = null;
+    this.serverTimeAnchor = null;
     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
     // NC09：断线必须**可见**——此前服务端中途崩溃时界面保持旧状态、无任何提示。
     // 这里向监听者广播一次「已断开」，由界面写入状态行与日志。

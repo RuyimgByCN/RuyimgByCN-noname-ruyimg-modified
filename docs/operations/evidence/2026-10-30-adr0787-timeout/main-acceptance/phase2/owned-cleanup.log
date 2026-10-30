@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py", line 4, in <module>
+    ps=subprocess.check_output(['ps','-Ao','pid=,ppid=,command='],text=True);active=[]
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 421, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 1847, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+PermissionError: [Errno 1] Operation not permitted: 'ps'
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py"], "exit": 1, "locked_seconds": 0.09119266702327877, "disk_free_bytes": 132997562368}

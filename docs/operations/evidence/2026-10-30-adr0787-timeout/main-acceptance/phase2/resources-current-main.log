@@ -1,0 +1,3 @@
+resource happy exit=0
+resource errors exit=0
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/resource-smoke.py"], "exit": 0, "locked_seconds": 3.6591874999867287, "disk_free_bytes": 133153325056}

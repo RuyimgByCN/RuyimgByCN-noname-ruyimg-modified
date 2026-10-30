@@ -1,0 +1,2139 @@
+{
+  "new_copies": [
+    {
+      "source": "a330/j2-wasm-matrix.json",
+      "destination": "isolated/a330/j2-wasm-matrix.json",
+      "sha256": "2f4be1e18dba007f9049051d83c934e494b915e0c00f506a4c0f4ab72574589b"
+    },
+    {
+      "source": "a330/safe-checkpoint.json",
+      "destination": "isolated/a330/safe-checkpoint.json",
+      "sha256": "5f9b986205f24c83802ca5c036af646ec8b47bc74645aefc0f97587c44624890"
+    },
+    {
+      "source": "a330/real-ws-final-29.log",
+      "destination": "isolated/a330/real-ws-final-29.log",
+      "sha256": "04abe6dfad02f5cbcec2413a9732f23fccff71f08ce0d1a7c461e051e338c575"
+    },
+    {
+      "source": "a330/final-source-check.json",
+      "destination": "isolated/a330/final-source-check.json",
+      "sha256": "566d7ca70e40b788ed0a19b98fbd46b5f6e15b47f299063b8ecd1af7a732c3d7"
+    },
+    {
+      "source": "a330/current-window-matrices-31.log",
+      "destination": "isolated/a330/current-window-matrices-31.log",
+      "sha256": "eb637be6b3a6d4ddb621d0e0f8316d13224c5e0c2a23948c2d21f848dfebc303"
+    },
+    {
+      "source": "a330/current-window-matrices-31-launch.log",
+      "destination": "isolated/a330/current-window-matrices-31-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/reveal-targeted-35.log",
+      "destination": "isolated/a330/reveal-targeted-35.log",
+      "sha256": "625637ec08d71331a2fdb9cf9a239b85d7a2d4ba41a528cd8900232db1ef75a6"
+    },
+    {
+      "source": "a330/browser-oldserver-33.log",
+      "destination": "isolated/a330/browser-oldserver-33.log",
+      "sha256": "9ddf1480ac0a7d3c3866859a6d3eaa6a1d35ab2d4ecfebef30dd639b89164506"
+    },
+    {
+      "source": "a330/server-protocol-17.log",
+      "destination": "isolated/a330/server-protocol-17.log",
+      "sha256": "dfd3ca9298690141b32c199f50c833c7b33e8c5967f6e6217ce0a8ab361678e1"
+    },
+    {
+      "source": "a330/run.py",
+      "destination": "isolated/a330/run.py",
+      "sha256": "31fff68e99aac69e5bf96decd887bef414ccb02a203e07972d21c64fd2d6fae4"
+    },
+    {
+      "source": "a330/wasm-build-10-launch.log",
+      "destination": "isolated/a330/wasm-build-10-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/red-actor.log",
+      "destination": "isolated/a330/red-actor.log",
+      "sha256": "57fd5f1e29fce39e9512d368c00ecaee67d1cc2b3af703eb5c65e3e5a73a72d6"
+    },
+    {
+      "source": "a330/checkpoint-source.json",
+      "destination": "isolated/a330/checkpoint-source.json",
+      "sha256": "ba1de8f1165ee23e91b84411f633391cb6d395cbb3a6c68ed5e5cf6823093bd1"
+    },
+    {
+      "source": "a330/real329-archive-7.log",
+      "destination": "isolated/a330/real329-archive-7.log",
+      "sha256": "f333a07801b34dd033a43b785bcaf8604a86505e19eb19d20b3c3b1f0638b007"
+    },
+    {
+      "source": "a330/timeout-wasm.mjs",
+      "destination": "isolated/a330/timeout-wasm.mjs",
+      "sha256": "6baefaaaf98a3688318ece69ecbc79270df978f1afd8394606e02f095aaab18a"
+    },
+    {
+      "source": "a330/window-matrices.py",
+      "destination": "isolated/a330/window-matrices.py",
+      "sha256": "8ec8b769769d089b827d22ed62fef535389037d721bb22e0913eaa0f33ca4007"
+    },
+    {
+      "source": "a330/frontend-final-39-launch.log",
+      "destination": "isolated/a330/frontend-final-39-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/frontend-build-20-launch.log",
+      "destination": "isolated/a330/frontend-build-20-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/post-wasm.py",
+      "destination": "isolated/a330/post-wasm.py",
+      "sha256": "efab979aa91978278640f39a3fdf93d43bcae9458de355fcf6e8b02e48351715"
+    },
+    {
+      "source": "a330/typecheck-1.log",
+      "destination": "isolated/a330/typecheck-1.log",
+      "sha256": "76d2cea3de758fbd2bd46d9f4b1e77527dc43fc7613036258a971b8386e965df"
+    },
+    {
+      "source": "a330/strict-native3-19-launch.log",
+      "destination": "isolated/a330/strict-native3-19-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/local-links-details.log",
+      "destination": "isolated/a330/local-links-details.log",
+      "sha256": "3997643f394256671be1e526de84c1dc76038bffeb2af15cc4dbb095d560ac48"
+    },
+    {
+      "source": "a330/browser-ui-26.log",
+      "destination": "isolated/a330/browser-ui-26.log",
+      "sha256": "23d40d15fe181df432c0613767a49d0492b6c355ffb21407deb10959387c829c"
+    },
+    {
+      "source": "a330/server-protocol-13.log",
+      "destination": "isolated/a330/server-protocol-13.log",
+      "sha256": "ea3224d20913a5251d84c4c339b574c4c1df61beaeecc75c249526f86c2eb5af"
+    },
+    {
+      "source": "a330/browser-oldserver-37.log",
+      "destination": "isolated/a330/browser-oldserver-37.log",
+      "sha256": "1c060015f4540625346b0e8455dfddb62c0fb0c975f596f2957687c911e29f0b"
+    },
+    {
+      "source": "a330/build-runner.mjs",
+      "destination": "isolated/a330/build-runner.mjs",
+      "sha256": "46db18337b0fa461707a0cca47f7b240a6e3011050f35cdafbfa6dc4808eead4"
+    },
+    {
+      "source": "a330/layering.log",
+      "destination": "isolated/a330/layering.log",
+      "sha256": "a3ace901f75e478b721fcf4c44872d5018603966a215b00b24b328dbdeadda9e"
+    },
+    {
+      "source": "a330/typecheck-final.log",
+      "destination": "isolated/a330/typecheck-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/typecheck-2.log",
+      "destination": "isolated/a330/typecheck-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/candidate.patch",
+      "destination": "isolated/a330/candidate.patch",
+      "sha256": "4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81"
+    },
+    {
+      "source": "a330/preflight-final-30.log",
+      "destination": "isolated/a330/preflight-final-30.log",
+      "sha256": "ed48fc6ec742498656eedc90d976957a8836d6202cc22c0377539b2a4337a64a"
+    },
+    {
+      "source": "a330/timeout-wasm-report.json",
+      "destination": "isolated/a330/timeout-wasm-report.json",
+      "sha256": "3f1211bb37ebbdcb9b890bb960e896fa305916db81e20dca7ae61fe413572010"
+    },
+    {
+      "source": "a330/real-ws.mjs",
+      "destination": "isolated/a330/real-ws.mjs",
+      "sha256": "5db4891194e2d576bac5ff361fd3a8c4bfa4345b648f5b28ed00020129c4be20"
+    },
+    {
+      "source": "a330/server-protocol-11.log",
+      "destination": "isolated/a330/server-protocol-11.log",
+      "sha256": "74f83882fb948faa57273280d7d77dde85bca5adbfb70d35eb7424b02d933c18"
+    },
+    {
+      "source": "a330/cross-target-24.log",
+      "destination": "isolated/a330/cross-target-24.log",
+      "sha256": "7d000611a3a67e36b1b54f003ac0309f2a291332ec9c8264d730c507af878798"
+    },
+    {
+      "source": "a330/golden-source.json",
+      "destination": "isolated/a330/golden-source.json",
+      "sha256": "281f8232b36fcbf3862d6c753e2991dd63f2a1c63b65245fea899d45a1797cb2"
+    },
+    {
+      "source": "a330/workspace-final-32-launch.log",
+      "destination": "isolated/a330/workspace-final-32-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/wasm-target-preload.cjs",
+      "destination": "isolated/a330/wasm-target-preload.cjs",
+      "sha256": "5b5016e3f88bfc2bf2477b4c6ce0f7a591793544d9b854095a92977c3a5ff6be"
+    },
+    {
+      "source": "a330/patch-sha256.txt",
+      "destination": "isolated/a330/patch-sha256.txt",
+      "sha256": "66d1ec61a9d1a066beb05d04d8f39483dc134a7263b38dc6de9142ac2c3aca31"
+    },
+    {
+      "source": "a330/workspace-18.log",
+      "destination": "isolated/a330/workspace-18.log",
+      "sha256": "7ae57677ccb474a3ffca09dc93200274ba23fe6608c8b40119e3c2b68ff67006"
+    },
+    {
+      "source": "a330/source-lines-3.log",
+      "destination": "isolated/a330/source-lines-3.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330/timeout-wasm.log",
+      "destination": "isolated/a330/timeout-wasm.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/final-ui.py",
+      "destination": "isolated/a330/final-ui.py",
+      "sha256": "2422d08afcd0ce8ea235af374b6adaea7a03eaee8d4351400dbde43894b364a2"
+    },
+    {
+      "source": "a330/source-lines-2.log",
+      "destination": "isolated/a330/source-lines-2.log",
+      "sha256": "3e81e45ad10fd17b7842e15ff0bc59cf14c3ee00e54f2a785221f405679723cc"
+    },
+    {
+      "source": "a330/golden-probe-launch.log",
+      "destination": "isolated/a330/golden-probe-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/wasm-final-34-launch.log",
+      "destination": "isolated/a330/wasm-final-34-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/j2-matrix.json",
+      "destination": "isolated/a330/j2-matrix.json",
+      "sha256": "5e5d365b5ccd113351a15f5be7bfa91e98ff3f07c2e63f94e87519b51f57ea05"
+    },
+    {
+      "source": "a330/patch-reverse-check.log",
+      "destination": "isolated/a330/patch-reverse-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/real-ws-restart-15.log",
+      "destination": "isolated/a330/real-ws-restart-15.log",
+      "sha256": "49bf3d57482428ca5af347b13b05d16d938478dc0d831c9cf4d6e13427d5b856"
+    },
+    {
+      "source": "a330/preflight-final-30-launch.log",
+      "destination": "isolated/a330/preflight-final-30-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/ui-tests-16-launch.log",
+      "destination": "isolated/a330/ui-tests-16-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/source-lines-1.log",
+      "destination": "isolated/a330/source-lines-1.log",
+      "sha256": "69b05ae5cda19bc362be982db6059be76025c70dff72506bb007496da16acfb8"
+    },
+    {
+      "source": "a330/timeout-tests-6.log",
+      "destination": "isolated/a330/timeout-tests-6.log",
+      "sha256": "6252dd2bd83d03b8f465d1d308abebc992d6a3b38dea25edd0d76d18766f4c77"
+    },
+    {
+      "source": "a330/server-protocol-17-launch.log",
+      "destination": "isolated/a330/server-protocol-17-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/workspace-18-launch.log",
+      "destination": "isolated/a330/workspace-18-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/source-lines-5.log",
+      "destination": "isolated/a330/source-lines-5.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330/commands.jsonl",
+      "destination": "isolated/a330/commands.jsonl",
+      "sha256": "8ef23e7be2af11d7c0957b657d4b00c0599e0926229f7418fb017d740477bd5b"
+    },
+    {
+      "source": "a330/wasm-build-10.log",
+      "destination": "isolated/a330/wasm-build-10.log",
+      "sha256": "ffeee165a210b00778828200fe839455839d876d4b75cbdbfcdee8b6ec7d621c"
+    },
+    {
+      "source": "a330/wasm-final-34.log",
+      "destination": "isolated/a330/wasm-final-34.log",
+      "sha256": "75ec9b7e6a3264db7e023bdb8b3b5e3a3f2e0b31ecc3be9d7e026c5ff536fcc3"
+    },
+    {
+      "source": "a330/real-ws-15-launch.log",
+      "destination": "isolated/a330/real-ws-15-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/source-lines-4.log",
+      "destination": "isolated/a330/source-lines-4.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330/reveal-targeted-35-launch.log",
+      "destination": "isolated/a330/reveal-targeted-35-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/post-wasm-final-38-launch.log",
+      "destination": "isolated/a330/post-wasm-final-38-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/final-validation.json",
+      "destination": "isolated/a330/final-validation.json",
+      "sha256": "9bab2b0f8cdad0c7d0a2ca0eb4990e8a17e7265c017e332ff39d4c3a95ef7c04"
+    },
+    {
+      "source": "a330/browser-oldserver-33-launch.log",
+      "destination": "isolated/a330/browser-oldserver-33-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/current-ui-tests-16.log",
+      "destination": "isolated/a330/current-ui-tests-16.log",
+      "sha256": "7869dddbc1c2a76f60782cd60d0386c87d9ffba7baa233b896ae4f6d6d5eb92f"
+    },
+    {
+      "source": "a330/doclinks-details.log",
+      "destination": "isolated/a330/doclinks-details.log",
+      "sha256": "7c42fa3071cbc9609f9a4a1c1ccff76eb71f958c3a8dbf5d2881e0b5622d341f"
+    },
+    {
+      "source": "a330/parity-native-22-launch.log",
+      "destination": "isolated/a330/parity-native-22-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/local-links-green.log",
+      "destination": "isolated/a330/local-links-green.log",
+      "sha256": "7b3467a665f3f59294d281b0a4adc72f207fe39f5577ceba63aa1a6b833c6940"
+    },
+    {
+      "source": "a330/timeout-tests-4.log",
+      "destination": "isolated/a330/timeout-tests-4.log",
+      "sha256": "bcf20dd298b4a8483c97699e0f91dc6fdd350014a54fdf23e7fc76a639e16f00"
+    },
+    {
+      "source": "a330/real-ws-restart-21.log",
+      "destination": "isolated/a330/real-ws-restart-21.log",
+      "sha256": "1406eb5ce3e4afe8a3808fcb7b9a57f6c7ed836bf431b2fd47d05d3a7d59677c"
+    },
+    {
+      "source": "a330/cleanup.json",
+      "destination": "isolated/a330/cleanup.json",
+      "sha256": "7e789e546caf75fe0e62cd9e7411d9ef786ef00d5fb28aba7c9614c7089f92a2"
+    },
+    {
+      "source": "a330/network-test-1.log",
+      "destination": "isolated/a330/network-test-1.log",
+      "sha256": "973463db88c637f60d1f51d10925320c51f44dfc5e8d1f8658d0488ec50a23f1"
+    },
+    {
+      "source": "a330/real-ws-21-launch.log",
+      "destination": "isolated/a330/real-ws-21-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/workspace-final-32.log",
+      "destination": "isolated/a330/workspace-final-32.log",
+      "sha256": "ae0656804f093655547f7cfaf5f1fbf09bf5d78ce0f6248f7a1a881cf3b70c75"
+    },
+    {
+      "source": "a330/source-freeze-check.json",
+      "destination": "isolated/a330/source-freeze-check.json",
+      "sha256": "3f4ac17b86fb8840b40f4cf082d52727b74b6e47b09fb28ee54bc7a4bbdf09de"
+    },
+    {
+      "source": "a330/preflight-25-launch.log",
+      "destination": "isolated/a330/preflight-25-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/initial-commands.json",
+      "destination": "isolated/a330/initial-commands.json",
+      "sha256": "7b1173b9526487f7ef0725e9f4b19d1519568d6bd21d66fe0327e2af902fa720"
+    },
+    {
+      "source": "a330/wasm-legacy-14-launch.log",
+      "destination": "isolated/a330/wasm-legacy-14-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/final-workspace-23.log",
+      "destination": "isolated/a330/final-workspace-23.log",
+      "sha256": "7b3193e3ac223b11ed53686dacae8706024aef6c83efcb6d8e0f78a509ef6189"
+    },
+    {
+      "source": "a330/wasm-legacy-build-14.log",
+      "destination": "isolated/a330/wasm-legacy-build-14.log",
+      "sha256": "240f1f1b8af06651143085f548c2b386a720485e133e57e56ccea5dbfd419ee8"
+    },
+    {
+      "source": "a330/frontend-all-direct-1.log",
+      "destination": "isolated/a330/frontend-all-direct-1.log",
+      "sha256": "03506d914f812f93248084fedcd3c2886ecfa8da5e6cabcd77d28fbbbf9f5229"
+    },
+    {
+      "source": "a330/network-test-2.log",
+      "destination": "isolated/a330/network-test-2.log",
+      "sha256": "2a4b1deb5c45634c5b056a69b24311ad660ba07106842947eca0073b6b10f922"
+    },
+    {
+      "source": "a330/j2-wasm-final.json",
+      "destination": "isolated/a330/j2-wasm-final.json",
+      "sha256": "2f4be1e18dba007f9049051d83c934e494b915e0c00f506a4c0f4ab72574589b"
+    },
+    {
+      "source": "a330/strict-native3-19.log",
+      "destination": "isolated/a330/strict-native3-19.log",
+      "sha256": "b1a1b3b93428f956309a201edc9e9bfa564b57fb2560f28a20e876980c0347e5"
+    },
+    {
+      "source": "a330/timeout-parity.json",
+      "destination": "isolated/a330/timeout-parity.json",
+      "sha256": "739b7f07c83768b2aa1f15428ee353c81e6687e06ea824472f95104635e5b702"
+    },
+    {
+      "source": "a330/frontend-final-39.log",
+      "destination": "isolated/a330/frontend-final-39.log",
+      "sha256": "d47a2c2fb3f94e34cc469b26717e62327308ffcb73e96f443b758bd92d2d4efd"
+    },
+    {
+      "source": "a330/frontend-build-20.log",
+      "destination": "isolated/a330/frontend-build-20.log",
+      "sha256": "2b58e27095bf72424604a79813d3755cb3594ff3581c780194adfa2ff8d9d62f"
+    },
+    {
+      "source": "a330/timeout-tests-4-launch.log",
+      "destination": "isolated/a330/timeout-tests-4-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/golden-print-9.log",
+      "destination": "isolated/a330/golden-print-9.log",
+      "sha256": "642c8ac3da06783ff1bb5d7e75a80aebdd46f547dc3f998e604885a4b0acc103"
+    },
+    {
+      "source": "a330/ui-real.mjs",
+      "destination": "isolated/a330/ui-real.mjs",
+      "sha256": "f81708bd4ee35b26f1e48a32ad23b5d1ee7ea2edbce6387b8f4b1b859e78cf19"
+    },
+    {
+      "source": "a330/guidance-lookup.json",
+      "destination": "isolated/a330/guidance-lookup.json",
+      "sha256": "f6a74f78084dd229ffeac7756d4cb31b42e19442ee8bebf507faa934a9ab997f"
+    },
+    {
+      "source": "a330/version-probe.py",
+      "destination": "isolated/a330/version-probe.py",
+      "sha256": "4b3a33af892d14a338709f7932373a994bf239e458cbc7c9d5feadc3b7a04e96"
+    },
+    {
+      "source": "a330/cross-target-24-launch.log",
+      "destination": "isolated/a330/cross-target-24-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/post-wasm-final-38.log",
+      "destination": "isolated/a330/post-wasm-final-38.log",
+      "sha256": "e2d2dde576790393465cce1e7508dd1e006f2dd1a2abcb4149fe9cd9a4591b50"
+    },
+    {
+      "source": "a330/native3-5.log",
+      "destination": "isolated/a330/native3-5.log",
+      "sha256": "3b65103bb781d647370896ed79a44635819beceed0221a1ab5d78a6e7332c85e"
+    },
+    {
+      "source": "a330/targeted-3.log",
+      "destination": "isolated/a330/targeted-3.log",
+      "sha256": "dcf64c0963ef5ffc21ffe0a35910f60c886b78c719e645e252b8df312145c580"
+    },
+    {
+      "source": "a330/workspace-final-36-launch.log",
+      "destination": "isolated/a330/workspace-final-36-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/native3-12.log",
+      "destination": "isolated/a330/native3-12.log",
+      "sha256": "50df10dde3d45761c2b95201e4b4694fd1c34418a49c1d95504b51f5cb838515"
+    },
+    {
+      "source": "a330/targeted-3-launch.log",
+      "destination": "isolated/a330/targeted-3-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/final-document-links.log",
+      "destination": "isolated/a330/final-document-links.log",
+      "sha256": "7b3467a665f3f59294d281b0a4adc72f207fe39f5577ceba63aa1a6b833c6940"
+    },
+    {
+      "source": "a330/source-lines-final.log",
+      "destination": "isolated/a330/source-lines-final.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330/workspace-final-36.log",
+      "destination": "isolated/a330/workspace-final-36.log",
+      "sha256": "9b56ae8b471ea1232d04febabeed8052a5e03c76523817ffee58f22bc36732ff"
+    },
+    {
+      "source": "a330/server-protocol-11-launch.log",
+      "destination": "isolated/a330/server-protocol-11-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/removed-temporary-pi-lens-guard.json",
+      "destination": "isolated/a330/removed-temporary-pi-lens-guard.json",
+      "sha256": "8bcd88b7bfe13c710c341178eed453c19885f6b57d9ee98fce0d0a78bef31a3d"
+    },
+    {
+      "source": "a330/compile-2.log",
+      "destination": "isolated/a330/compile-2.log",
+      "sha256": "5a07c1a956f3c23eee86509e34ba326fb84aebc2fae740a2e2fb35e4e268aa31"
+    },
+    {
+      "source": "a330/versions-artifacts-interim.json",
+      "destination": "isolated/a330/versions-artifacts-interim.json",
+      "sha256": "d0909cc703cd20730e72e23a0f458775a24c4cb1d0796633b7612287cc8c7fee"
+    },
+    {
+      "source": "a330/legacy-cross-28-launch.log",
+      "destination": "isolated/a330/legacy-cross-28-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/command-index.json",
+      "destination": "isolated/a330/command-index.json",
+      "sha256": "c8a1280ce5010799d4303c42c3f6b4d33b224065ed533ff030698cc1ab09bead"
+    },
+    {
+      "source": "a330/worker-smoke-27.log",
+      "destination": "isolated/a330/worker-smoke-27.log",
+      "sha256": "96aab46a456ebcf4732f5e54e87a92d00ec46c0fd617cf626571d3e9074a1634"
+    },
+    {
+      "source": "a330/native3-12-launch.log",
+      "destination": "isolated/a330/native3-12-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/compatibility-sha256.json",
+      "destination": "isolated/a330/compatibility-sha256.json",
+      "sha256": "e522bcf09f7e4940464fc5ca1a21df44dabe70abfc276ad02eb468b7c9a0d7ea"
+    },
+    {
+      "source": "a330/acceptance-report.json",
+      "destination": "isolated/a330/acceptance-report.json",
+      "sha256": "862d70b12d8016d7b99fc7a95ebd683d6200d289341fb89b883355a2a00b6e69"
+    },
+    {
+      "source": "a330/real-ws-final-29-launch.log",
+      "destination": "isolated/a330/real-ws-final-29-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/check-1.log",
+      "destination": "isolated/a330/check-1.log",
+      "sha256": "50640700fbd1c54a6ccb68879513677baccd3ac7cee24b05ed0054e022228eed"
+    },
+    {
+      "source": "a330/legacy-cross-28.log",
+      "destination": "isolated/a330/legacy-cross-28.log",
+      "sha256": "6048ff41588262f5340ddbc4a3a26f1a5082ad2dc11a2a18258bc090f935928a"
+    },
+    {
+      "source": "a330/source-lines-unittest.log",
+      "destination": "isolated/a330/source-lines-unittest.log",
+      "sha256": "30b7db73967acdb055ef826f6af2556d423ce2ebb08c1494e1a654e3b2b89a3a"
+    },
+    {
+      "source": "a330/final-artifact-sha256.json",
+      "destination": "isolated/a330/final-artifact-sha256.json",
+      "sha256": "09a5d9e8471393b9d3a1dc5d689cd23e890df77dacf460a4635ba8435d4cc014"
+    },
+    {
+      "source": "a330/golden-version-probe-8.log",
+      "destination": "isolated/a330/golden-version-probe-8.log",
+      "sha256": "b2847246d85956972afefd19e783fe90b01999dca8723e31aa7239337ef8b1bf"
+    },
+    {
+      "source": "a330/resume.json",
+      "destination": "isolated/a330/resume.json",
+      "sha256": "73b1e31dd0aa21666c7da6a428fb255f35ec9a4cd0697d6f1c8d47c8f2f2bcff"
+    },
+    {
+      "source": "a330/browser-ui-26-launch.log",
+      "destination": "isolated/a330/browser-ui-26-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/format-only-pruned.json",
+      "destination": "isolated/a330/format-only-pruned.json",
+      "sha256": "d5b08f26afc60ffe576751c4145e3800bc422a123a1296c9bdb8e696bd003caa"
+    },
+    {
+      "source": "a330/preflight-25.log",
+      "destination": "isolated/a330/preflight-25.log",
+      "sha256": "2eb3dd0424c20f92ca1dacb1771ab405a9ebdac0aec0f157be0de702ca700b73"
+    },
+    {
+      "source": "a330/timeout-tests-6-launch.log",
+      "destination": "isolated/a330/timeout-tests-6-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/unrequested-runner-stop.txt",
+      "destination": "isolated/a330/unrequested-runner-stop.txt",
+      "sha256": "b470f274198507de347658ab55ff094ce923241b3ffb8e13e20eb345023d864e"
+    },
+    {
+      "source": "a330/parity-native-22.log",
+      "destination": "isolated/a330/parity-native-22.log",
+      "sha256": "0bc89ae446fd259e9b82c07796b4cd0c6c96eb8c00af90dc9b93fb9f918c5e65"
+    },
+    {
+      "source": "a330/final-workspace-23-launch.log",
+      "destination": "isolated/a330/final-workspace-23-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/server-protocol-13-launch.log",
+      "destination": "isolated/a330/server-protocol-13-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/golden-print-9-launch.log",
+      "destination": "isolated/a330/golden-print-9-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/native3-5-launch.log",
+      "destination": "isolated/a330/native3-5-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/worker-smoke-27-launch.log",
+      "destination": "isolated/a330/worker-smoke-27-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/real329-launch.log",
+      "destination": "isolated/a330/real329-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/browser-oldserver-37-launch.log",
+      "destination": "isolated/a330/browser-oldserver-37-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330/timeout-wasm-final.json",
+      "destination": "isolated/a330/timeout-wasm-final.json",
+      "sha256": "3f1211bb37ebbdcb9b890bb960e896fa305916db81e20dca7ae61fe413572010"
+    },
+    {
+      "source": "a330/real330/failure.txt",
+      "destination": "isolated/a330/real330/failure.txt",
+      "sha256": "1f9098eaf649a61a79bc2501c9c7db39783316c8b9663e35d4ebd2fb5ea3a969"
+    },
+    {
+      "source": "a330/real330/server.log",
+      "destination": "isolated/a330/real330/server.log",
+      "sha256": "7f5eb7dfab6f440923aeb731cf9be8ce92a7b0d4ed8ae0057990af312e83e8ca"
+    },
+    {
+      "source": "a330/real330/wire.json",
+      "destination": "isolated/a330/real330/wire.json",
+      "sha256": "128d10c36f83572f2e6cb6e02148453f870b427bb98a951c55babbf581807df2"
+    },
+    {
+      "source": "a330/real330/native-store/state/revoke.json",
+      "destination": "isolated/a330/real330/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330/native-store/state/active.json",
+      "destination": "isolated/a330/real330/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330/native-store/state/history.json",
+      "destination": "isolated/a330/real330/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real330/rooms/1.json.journal",
+      "destination": "isolated/a330/real330/rooms/1.json.journal",
+      "sha256": "43435f2cc3bd4d1ca64d1d8eb3c837f4ed8bd150ef094f42e3df3890133ef5dc"
+    },
+    {
+      "source": "a330/real330/rooms/1.json",
+      "destination": "isolated/a330/real330/rooms/1.json",
+      "sha256": "0a26bcb3ca508c133ca9b930f1801d83791a9dc0d73a49d8dfe513815c9bf0bc"
+    },
+    {
+      "source": "a330/real330/rooms/.writer.lock",
+      "destination": "isolated/a330/real330/rooms/.writer.lock",
+      "sha256": "3f735353c7c34fa2ff32dade578a8e9b72d24a747b849946b9eae10f04dec880"
+    },
+    {
+      "source": "a330/real330/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/real330/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330/legacy-store/state/active.json",
+      "destination": "isolated/a330/real330/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330/legacy-store/state/history.json",
+      "destination": "isolated/a330/real330/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/artifacts/native-pkg330/engine_native_wasm.d.ts",
+      "destination": "isolated/a330/artifacts/native-pkg330/engine_native_wasm.d.ts",
+      "sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df"
+    },
+    {
+      "source": "a330/artifacts/native-pkg330/engine_native_wasm_bg.wasm.d.ts",
+      "destination": "isolated/a330/artifacts/native-pkg330/engine_native_wasm_bg.wasm.d.ts",
+      "sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8"
+    },
+    {
+      "source": "a330/artifacts/native-pkg330/engine_native_wasm.js",
+      "destination": "isolated/a330/artifacts/native-pkg330/engine_native_wasm.js",
+      "sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a"
+    },
+    {
+      "source": "a330/artifacts/native-pkg330/.gitignore",
+      "destination": "isolated/a330/artifacts/native-pkg330/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "source": "a330/artifacts/native-pkg330/package.json",
+      "destination": "isolated/a330/artifacts/native-pkg330/package.json",
+      "sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+    },
+    {
+      "source": "a330/browser-oldserver-37/report.json",
+      "destination": "isolated/a330/browser-oldserver-37/report.json",
+      "sha256": "12a9fb9a00c566b315df1a3d2754a1075d5825cb95d5c0554dbfb14bb4b9273c"
+    },
+    {
+      "source": "a330/browser-oldserver-37/exceptions.json",
+      "destination": "isolated/a330/browser-oldserver-37/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser-oldserver-37/server.log",
+      "destination": "isolated/a330/browser-oldserver-37/server.log",
+      "sha256": "966bc010ab07e7f10833cf98e2816693a40e9b568e59667c927514bc9d984e81"
+    },
+    {
+      "source": "a330/browser-oldserver-37/native-store/state/revoke.json",
+      "destination": "isolated/a330/browser-oldserver-37/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser-oldserver-37/native-store/state/active.json",
+      "destination": "isolated/a330/browser-oldserver-37/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser-oldserver-37/native-store/state/history.json",
+      "destination": "isolated/a330/browser-oldserver-37/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser-oldserver-37/rooms/.writer.lock",
+      "destination": "isolated/a330/browser-oldserver-37/rooms/.writer.lock",
+      "sha256": "f78096a5024d0008cd8f50453d22caa661c80010a656d7e7c0175df9c0f2e27b"
+    },
+    {
+      "source": "a330/browser-oldserver-37/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/browser-oldserver-37/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser-oldserver-37/legacy-store/state/active.json",
+      "destination": "isolated/a330/browser-oldserver-37/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser-oldserver-37/legacy-store/state/history.json",
+      "destination": "isolated/a330/browser-oldserver-37/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser-final/report.json",
+      "destination": "isolated/a330/browser-final/report.json",
+      "sha256": "59227b23b76d3e66e54e198f6454e430d7ce404ed4c6c3b557dc4bb577a2eee5"
+    },
+    {
+      "source": "a330/browser-final/exceptions.json",
+      "destination": "isolated/a330/browser-final/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser-final/server.log",
+      "destination": "isolated/a330/browser-final/server.log",
+      "sha256": "baf02df6aff97e629ddc3c1699467b4be37a728e65b13b4968c57227fd26f6a6"
+    },
+    {
+      "source": "a330/browser-final/native-store/state/revoke.json",
+      "destination": "isolated/a330/browser-final/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser-final/native-store/state/active.json",
+      "destination": "isolated/a330/browser-final/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser-final/native-store/state/history.json",
+      "destination": "isolated/a330/browser-final/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser-final/rooms/1.json.journal",
+      "destination": "isolated/a330/browser-final/rooms/1.json.journal",
+      "sha256": "29277341a04f29937e43ebf53bfe62bbcb8370ebaacc589f831528fa62f10a33"
+    },
+    {
+      "source": "a330/browser-final/rooms/1.json",
+      "destination": "isolated/a330/browser-final/rooms/1.json",
+      "sha256": "0e98c64a6d5fa221f3c15d37be577ebbb7d3c418b7d4641baf1d0d192d06448d"
+    },
+    {
+      "source": "a330/browser-final/rooms/.writer.lock",
+      "destination": "isolated/a330/browser-final/rooms/.writer.lock",
+      "sha256": "bf9b4c84d480ad789aa00e497d9c46041e865365830d9259db34ae44dd56e598"
+    },
+    {
+      "source": "a330/browser-final/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/browser-final/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser-final/legacy-store/state/active.json",
+      "destination": "isolated/a330/browser-final/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser-final/legacy-store/state/history.json",
+      "destination": "isolated/a330/browser-final/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/machine-traces/Liaoyuan.json",
+      "destination": "isolated/a330/machine-traces/Liaoyuan.json",
+      "sha256": "5a3337a303f72bb261bfa19c5518c05d847a10777261d8d83a53546dddced83c"
+    },
+    {
+      "source": "a330/machine-traces/HaoTianTa.json",
+      "destination": "isolated/a330/machine-traces/HaoTianTa.json",
+      "sha256": "857470baa5f2d02034e9a4f3f19af1fefb70a73adf2cd7eb5fb61150b4fcbc5c"
+    },
+    {
+      "source": "a330/machine-traces/GaiMing.json",
+      "destination": "isolated/a330/machine-traces/GaiMing.json",
+      "sha256": "6f403598ce16cd53403fe27c75e33567b74ed6205965323bb1b959721dfa6fe4"
+    },
+    {
+      "source": "a330/machine-traces/JiJie.json",
+      "destination": "isolated/a330/machine-traces/JiJie.json",
+      "sha256": "6c4aaaff8605c8ab11ac8c086f13a05a6e35c66712816861c1227554570cf482"
+    },
+    {
+      "source": "a330/machine-traces/XunXun.json",
+      "destination": "isolated/a330/machine-traces/XunXun.json",
+      "sha256": "5c774f2a19d4cd50810414e5ca1e7427a43017e273b3d1b6a1124cb02b33a2f3"
+    },
+    {
+      "source": "a330/real330-final/report.json",
+      "destination": "isolated/a330/real330-final/report.json",
+      "sha256": "ee6f094265024f220adb005007d89835e31fd8e00c82ec97895c11c966bc8963"
+    },
+    {
+      "source": "a330/real330-final/after-restart.json",
+      "destination": "isolated/a330/real330-final/after-restart.json",
+      "sha256": "c3c2650d28542b129bd5af19dcfb3ee860cca7ac28ee6fee1d01d84d404b67f7"
+    },
+    {
+      "source": "a330/real330-final/before-kill.json",
+      "destination": "isolated/a330/real330-final/before-kill.json",
+      "sha256": "119116111d1eeb42bede0e724a190a41effde90248c1a736db43fb823ebede89"
+    },
+    {
+      "source": "a330/real330-final/server.log",
+      "destination": "isolated/a330/real330-final/server.log",
+      "sha256": "777ae187890b5b809878615963e0f68c4494544718ea3651c14abddab881f46b"
+    },
+    {
+      "source": "a330/real330-final/wire.json",
+      "destination": "isolated/a330/real330-final/wire.json",
+      "sha256": "d6a201c538ccc46fa1a153219f21cb99599823d37a9e093be005a00c04ddd7a3"
+    },
+    {
+      "source": "a330/real330-final/native-store/state/revoke.json",
+      "destination": "isolated/a330/real330-final/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330-final/native-store/state/active.json",
+      "destination": "isolated/a330/real330-final/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330-final/native-store/state/history.json",
+      "destination": "isolated/a330/real330-final/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real330-final/rooms/1.json.journal",
+      "destination": "isolated/a330/real330-final/rooms/1.json.journal",
+      "sha256": "b088fc2a908bbe1583afe43c0a8ebd950ba704e12420c1a1b212cad063984fcb"
+    },
+    {
+      "source": "a330/real330-final/rooms/1.json",
+      "destination": "isolated/a330/real330-final/rooms/1.json",
+      "sha256": "c3c2650d28542b129bd5af19dcfb3ee860cca7ac28ee6fee1d01d84d404b67f7"
+    },
+    {
+      "source": "a330/real330-final/rooms/.writer.lock",
+      "destination": "isolated/a330/real330-final/rooms/.writer.lock",
+      "sha256": "b82392f3fa696c34660b9c0a222d81eea9bd9bcce252e116953a25799387aeab"
+    },
+    {
+      "source": "a330/real330-final/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/real330-final/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330-final/legacy-store/state/active.json",
+      "destination": "isolated/a330/real330-final/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330-final/legacy-store/state/history.json",
+      "destination": "isolated/a330/real330-final/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real330-21/report.json",
+      "destination": "isolated/a330/real330-21/report.json",
+      "sha256": "abb8d71bf5a67b3c31cc98dccaf05aa2b241b84f603f5ef3244140279f15bd77"
+    },
+    {
+      "source": "a330/real330-21/after-restart.json",
+      "destination": "isolated/a330/real330-21/after-restart.json",
+      "sha256": "48afd643afb6813089dcd4251f582a176f8641dc18fe027dd161653b3673dbd4"
+    },
+    {
+      "source": "a330/real330-21/before-kill.json",
+      "destination": "isolated/a330/real330-21/before-kill.json",
+      "sha256": "af3de5340a42843be6c427c237047ebc593b3a7c8e35d8bcbcd7406615ac34a4"
+    },
+    {
+      "source": "a330/real330-21/server.log",
+      "destination": "isolated/a330/real330-21/server.log",
+      "sha256": "12c241149b32636e3eeda2efc899aae8f0a7e49aa3ecaf1e9c8d2e9d6f9a561b"
+    },
+    {
+      "source": "a330/real330-21/wire.json",
+      "destination": "isolated/a330/real330-21/wire.json",
+      "sha256": "d13c3c651d639a7f35694ec7209c99c652f3c21cca1e2435f0df552e9bf8b9c7"
+    },
+    {
+      "source": "a330/real330-21/native-store/state/revoke.json",
+      "destination": "isolated/a330/real330-21/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330-21/native-store/state/active.json",
+      "destination": "isolated/a330/real330-21/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330-21/native-store/state/history.json",
+      "destination": "isolated/a330/real330-21/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real330-21/rooms/1.json.journal",
+      "destination": "isolated/a330/real330-21/rooms/1.json.journal",
+      "sha256": "c62cee4b3761c0de0eeb1d795801fe58d6ae9e8cf43c3d592f43c3dd82fe6648"
+    },
+    {
+      "source": "a330/real330-21/rooms/1.json",
+      "destination": "isolated/a330/real330-21/rooms/1.json",
+      "sha256": "48afd643afb6813089dcd4251f582a176f8641dc18fe027dd161653b3673dbd4"
+    },
+    {
+      "source": "a330/real330-21/rooms/.writer.lock",
+      "destination": "isolated/a330/real330-21/rooms/.writer.lock",
+      "sha256": "3258b8ae21d62f93c49b6cd76e035c711322714d369be76802ff8b8e2cab68a8"
+    },
+    {
+      "source": "a330/real330-21/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/real330-21/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real330-21/legacy-store/state/active.json",
+      "destination": "isolated/a330/real330-21/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real330-21/legacy-store/state/history.json",
+      "destination": "isolated/a330/real330-21/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/ui-dist-final/index.html",
+      "destination": "isolated/a330/ui-dist-final/index.html",
+      "sha256": "2afcb83c9e998589a02bc6f4a4bfe161a3ce112026a97feb96f5f63c5dedf2a7"
+    },
+    {
+      "source": "a330/ui-dist-final/assets/index-Bmp6m7Og.css",
+      "destination": "isolated/a330/ui-dist-final/assets/index-Bmp6m7Og.css",
+      "sha256": "b861c9a5860db12b462ed7ae060212c1d3641fbb32772019bf857f6fddb61088"
+    },
+    {
+      "source": "a330/ui-dist-final/assets/engine.native.worker-BIwpD907.js",
+      "destination": "isolated/a330/ui-dist-final/assets/engine.native.worker-BIwpD907.js",
+      "sha256": "20aa19b91968fd2ccb1712966d7280d34b176ea0f51cd4cee11699d4c564b08a"
+    },
+    {
+      "source": "a330/ui-dist-final/assets/engine.worker-DF5gc_e9.js",
+      "destination": "isolated/a330/ui-dist-final/assets/engine.worker-DF5gc_e9.js",
+      "sha256": "af7f14a3222d20f848772e8b7f5ad8a214d6c063df239fa155208c0a4731ae32"
+    },
+    {
+      "source": "a330/ui-dist-final/assets/index-jRdvmhJg.js",
+      "destination": "isolated/a330/ui-dist-final/assets/index-jRdvmhJg.js",
+      "sha256": "f577529657f436b187713515177340494566ef9377e4ba77acf9f37cb6bb4f4d"
+    },
+    {
+      "source": "a330/ui-dist-final/pkg/engine_wasm.d.ts",
+      "destination": "isolated/a330/ui-dist-final/pkg/engine_wasm.d.ts",
+      "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604"
+    },
+    {
+      "source": "a330/ui-dist-final/pkg/.gitignore",
+      "destination": "isolated/a330/ui-dist-final/pkg/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "source": "a330/ui-dist-final/pkg/package.json",
+      "destination": "isolated/a330/ui-dist-final/pkg/package.json",
+      "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f"
+    },
+    {
+      "source": "a330/ui-dist-final/pkg/engine_wasm_bg.wasm.d.ts",
+      "destination": "isolated/a330/ui-dist-final/pkg/engine_wasm_bg.wasm.d.ts",
+      "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a"
+    },
+    {
+      "source": "a330/ui-dist-final/pkg/engine_wasm.js",
+      "destination": "isolated/a330/ui-dist-final/pkg/engine_wasm.js",
+      "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+    },
+    {
+      "source": "a330/tool-runner-logs/extension.log",
+      "destination": "isolated/a330/tool-runner-logs/extension.log",
+      "sha256": "ea039ecb5155db9df9c7bc4fdafd01a7398286ea10c7b52a9f7cc5c18fb28301"
+    },
+    {
+      "source": "a330/tool-runner-logs/review-graph.log",
+      "destination": "isolated/a330/tool-runner-logs/review-graph.log",
+      "sha256": "619ccc1c07367c785ebf47cd916f14af3239abcb1302bf7ba18be603a9129fad"
+    },
+    {
+      "source": "a330/tool-runner-logs/read-guard.log",
+      "destination": "isolated/a330/tool-runner-logs/read-guard.log",
+      "sha256": "473ad6a9ddd5699660ca6578e328adbc67426c8155e7b26ece0f6ddc140345ba"
+    },
+    {
+      "source": "a330/tool-runner-logs/sessionstart.log",
+      "destination": "isolated/a330/tool-runner-logs/sessionstart.log",
+      "sha256": "5aa2336c6fb2f7c912a07cac46327ffcb6c7d120b795fcd8c1496ace4ca93360"
+    },
+    {
+      "source": "a330/tool-runner-logs/word-index.log",
+      "destination": "isolated/a330/tool-runner-logs/word-index.log",
+      "sha256": "e1be2e9e3b0b303d555dece3bed0259afc8622d2f750dc58e7a95ed1654eab15"
+    },
+    {
+      "source": "a330/tool-runner-logs/tree-sitter.log",
+      "destination": "isolated/a330/tool-runner-logs/tree-sitter.log",
+      "sha256": "666c80f116a63c0a2679723cfea1f6cebfa0a8bd0cc41f0e4903ce8fad33bd69"
+    },
+    {
+      "source": "a330/tool-runner-logs/cascade.log",
+      "destination": "isolated/a330/tool-runner-logs/cascade.log",
+      "sha256": "2dc21be2d26f0b5a428abe3613846fd47bc402461e09eddb2a98d06a92fcc1ae"
+    },
+    {
+      "source": "a330/tool-runner-logs/bus-events.log",
+      "destination": "isolated/a330/tool-runner-logs/bus-events.log",
+      "sha256": "7df95fe15f8dd087bf03618d9b0f69df2be6f466c19c7695b5a11e67a5baf12b"
+    },
+    {
+      "source": "a330/tool-runner-logs/latency.log",
+      "destination": "isolated/a330/tool-runner-logs/latency.log",
+      "sha256": "b0962550474db72845d77a7744a4e7b2b56e303ffd41a4baa0480acaf5be9821"
+    },
+    {
+      "source": "a330/tool-runner-logs/logs/2026-10-30.jsonl",
+      "destination": "isolated/a330/tool-runner-logs/logs/2026-10-30.jsonl",
+      "sha256": "7bc2b71c0393ecd8f87946708a55d4ea827d009c2397cb13937c9f5960ff8346"
+    },
+    {
+      "source": "a330/browser/report.json",
+      "destination": "isolated/a330/browser/report.json",
+      "sha256": "708d649b25ffc4bf719d5b510fc9941facc34ec49ed9bd0ad8acd40195b2b310"
+    },
+    {
+      "source": "a330/browser/exceptions.json",
+      "destination": "isolated/a330/browser/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser/server.log",
+      "destination": "isolated/a330/browser/server.log",
+      "sha256": "474d1793a7df01044ba71b9f6bed9d013388ff415ebf65ddab60c1bba9a52402"
+    },
+    {
+      "source": "a330/browser/native-store/state/revoke.json",
+      "destination": "isolated/a330/browser/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser/native-store/state/active.json",
+      "destination": "isolated/a330/browser/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser/native-store/state/history.json",
+      "destination": "isolated/a330/browser/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/browser/rooms/1.json.journal",
+      "destination": "isolated/a330/browser/rooms/1.json.journal",
+      "sha256": "f3491a2c1b9dd6a2ccfef333190c6dd9ebd7211d6e0d6b434f7f138658adff7b"
+    },
+    {
+      "source": "a330/browser/rooms/1.json",
+      "destination": "isolated/a330/browser/rooms/1.json",
+      "sha256": "d2a435b5643b8b241a08ec823734cca0b2f4518f75ea04738a16f85cc6ca1d6c"
+    },
+    {
+      "source": "a330/browser/rooms/.writer.lock",
+      "destination": "isolated/a330/browser/rooms/.writer.lock",
+      "sha256": "1b02594a5255a84abe2d7e5d8beac4be5dfda21400212a6fd2c7c9f2e78f9355"
+    },
+    {
+      "source": "a330/browser/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/browser/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/browser/legacy-store/state/active.json",
+      "destination": "isolated/a330/browser/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/browser/legacy-store/state/history.json",
+      "destination": "isolated/a330/browser/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real329/report.json",
+      "destination": "isolated/a330/real329/report.json",
+      "sha256": "e40615204a8284664a197c74caa982ebb91bc1d9d5696115b570f99cbe9dfac6"
+    },
+    {
+      "source": "a330/real329/actual329-room.json",
+      "destination": "isolated/a330/real329/actual329-room.json",
+      "sha256": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c"
+    },
+    {
+      "source": "a330/real329/server.log",
+      "destination": "isolated/a330/real329/server.log",
+      "sha256": "6e60e45c37a6ef86fff6d7f6c5bd3d616e6de3ee4dc6e8a529d3b846df34db15"
+    },
+    {
+      "source": "a330/real329/native-store/state/revoke.json",
+      "destination": "isolated/a330/real329/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real329/native-store/state/active.json",
+      "destination": "isolated/a330/real329/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real329/native-store/state/history.json",
+      "destination": "isolated/a330/real329/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330/real329/rooms/1.json.journal",
+      "destination": "isolated/a330/real329/rooms/1.json.journal",
+      "sha256": "db4fed9473a67336f936205dba28076574e537a8bda211f4e7b9196f4553f2fa"
+    },
+    {
+      "source": "a330/real329/rooms/1.json",
+      "destination": "isolated/a330/real329/rooms/1.json",
+      "sha256": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c"
+    },
+    {
+      "source": "a330/real329/rooms/.writer.lock",
+      "destination": "isolated/a330/real329/rooms/.writer.lock",
+      "sha256": "238b197beeee6fdd57380bd623dc8e88355c39db0688d5977d3b9f55f2201975"
+    },
+    {
+      "source": "a330/real329/legacy-store/state/revoke.json",
+      "destination": "isolated/a330/real329/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330/real329/legacy-store/state/active.json",
+      "destination": "isolated/a330/real329/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330/real329/legacy-store/state/history.json",
+      "destination": "isolated/a330/real329/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/strict-native3.log",
+      "destination": "isolated/a330-corrections/strict-native3.log",
+      "sha256": "5cde590f0041660b0e12ddfd4dc9089d7fc3501bbb9db5ccd0de101ea3e153f6"
+    },
+    {
+      "source": "a330-corrections/entry.json",
+      "destination": "isolated/a330-corrections/entry.json",
+      "sha256": "a3b3e3fc30827afb1ac46eddc18a8322ab31a8e834b48131c381aeaea732a393"
+    },
+    {
+      "source": "a330-corrections/run.py",
+      "destination": "isolated/a330-corrections/run.py",
+      "sha256": "31fff68e99aac69e5bf96decd887bef414ccb02a203e07972d21c64fd2d6fae4"
+    },
+    {
+      "source": "a330-corrections/frontend-final-launch.log",
+      "destination": "isolated/a330-corrections/frontend-final-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/lines-1.log",
+      "destination": "isolated/a330-corrections/lines-1.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330-corrections/typecheck-1.log",
+      "destination": "isolated/a330-corrections/typecheck-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/layering.log",
+      "destination": "isolated/a330-corrections/layering.log",
+      "sha256": "a3ace901f75e478b721fcf4c44872d5018603966a215b00b24b328dbdeadda9e"
+    },
+    {
+      "source": "a330-corrections/full-workspace.log",
+      "destination": "isolated/a330-corrections/full-workspace.log",
+      "sha256": "c96039e60a4f462ab5e62822640c76a72d7315a4ef941aba8951bffd4fbcc2dd"
+    },
+    {
+      "source": "a330-corrections/original-countdown-red-launch.log",
+      "destination": "isolated/a330-corrections/original-countdown-red-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/ui-skew-red-launch.log",
+      "destination": "isolated/a330-corrections/ui-skew-red-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/server-suite-launch.log",
+      "destination": "isolated/a330-corrections/server-suite-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/removed-autofix-guard.json",
+      "destination": "isolated/a330-corrections/removed-autofix-guard.json",
+      "sha256": "8bcd88b7bfe13c710c341178eed453c19885f6b57d9ee98fce0d0a78bef31a3d"
+    },
+    {
+      "source": "a330-corrections/review-identity-entry.json",
+      "destination": "isolated/a330-corrections/review-identity-entry.json",
+      "sha256": "4bdca65c541b716a801cb6e9ea15cecd5996e7db9a5dad5298ecb41b68159880"
+    },
+    {
+      "source": "a330-corrections/ui-both.py",
+      "destination": "isolated/a330-corrections/ui-both.py",
+      "sha256": "f1d11ec1bd952f2e6859483b905d582d25261a5a28aae732e246a93595230e44"
+    },
+    {
+      "source": "a330-corrections/artifact-sha256.json",
+      "destination": "isolated/a330-corrections/artifact-sha256.json",
+      "sha256": "7a457009d3b99789f963ab7c57709da8a45b221faf445660b1d1faa4d44d5817"
+    },
+    {
+      "source": "a330-corrections/private-web-build.log",
+      "destination": "isolated/a330-corrections/private-web-build.log",
+      "sha256": "a0639b34d0607a194f0508725937d14c076d3cc8f7772dbf89733fdbfe6f76ef"
+    },
+    {
+      "source": "a330-corrections/p2-corrections.patch",
+      "destination": "isolated/a330-corrections/p2-corrections.patch",
+      "sha256": "b2214851cea99c04e1cf53c8b7736fd8b8bba137a8086be76dbebc13581a5e29"
+    },
+    {
+      "source": "a330-corrections/a330-total-with-p2.patch",
+      "destination": "isolated/a330-corrections/a330-total-with-p2.patch",
+      "sha256": "3ca2d2c777c3736377cdceb923b5be824678c94fe989c0334ca50733aea4f26f"
+    },
+    {
+      "source": "a330-corrections/total-source-sha256.json",
+      "destination": "isolated/a330-corrections/total-source-sha256.json",
+      "sha256": "97e76545fc4f7050dd43a30ccb05e81b4157a51e411b3f361dcf0044e6df66b5"
+    },
+    {
+      "source": "a330-corrections/countdown-green-1.log",
+      "destination": "isolated/a330-corrections/countdown-green-1.log",
+      "sha256": "5b5a48f5b1a98408c1ab17f48df4da837ebdf8ecdd8f1a7b31a2b3207249382e"
+    },
+    {
+      "source": "a330-corrections/recover-red.log",
+      "destination": "isolated/a330-corrections/recover-red.log",
+      "sha256": "7dee83fcfc3864f7b5d549e7b7fd54facd4db9e1627126d88d68b2faa19b9b28"
+    },
+    {
+      "source": "a330-corrections/ui-skew-green-launch.log",
+      "destination": "isolated/a330-corrections/ui-skew-green-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/ui-skew-red.log",
+      "destination": "isolated/a330-corrections/ui-skew-red.log",
+      "sha256": "a1b3f405ce489f2bc976a8e0c3779eede5038672b0936db7656aecfc8c966a63"
+    },
+    {
+      "source": "a330-corrections/commands.jsonl",
+      "destination": "isolated/a330-corrections/commands.jsonl",
+      "sha256": "05acceb448900bafd75e4b43b21e256069eef0e3a419e3c6c270bb188e0f0388"
+    },
+    {
+      "source": "a330-corrections/server-suite.log",
+      "destination": "isolated/a330-corrections/server-suite.log",
+      "sha256": "2fa045c64cc27fc807c2c739d84162959228c99c96a020f4897b2cf128582002"
+    },
+    {
+      "source": "a330-corrections/private-web-build-launch.log",
+      "destination": "isolated/a330-corrections/private-web-build-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/ui-skew-green.log",
+      "destination": "isolated/a330-corrections/ui-skew-green.log",
+      "sha256": "83737dd5ccea35eaea40fdcbd0413052f005cae28ccc513d3f59337cf09dc00d"
+    },
+    {
+      "source": "a330-corrections/final-check.json",
+      "destination": "isolated/a330-corrections/final-check.json",
+      "sha256": "2b1d047514241e30134499570a18d4b07138fd6ee5b6f4124a53e85a71686c8a"
+    },
+    {
+      "source": "a330-corrections/recover-red-launch.log",
+      "destination": "isolated/a330-corrections/recover-red-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/full-preflight.log",
+      "destination": "isolated/a330-corrections/full-preflight.log",
+      "sha256": "cb69af2983d1afcdac56850abf8d56f4f274f27083a038c357b9034b9362638a"
+    },
+    {
+      "source": "a330-corrections/cleanup.json",
+      "destination": "isolated/a330-corrections/cleanup.json",
+      "sha256": "1b1f9fc5cc0945bd99dcb5f87051a6e6f9ad7d39548ea503cf0eb4f83a7fb745"
+    },
+    {
+      "source": "a330-corrections/frontend-all-1.log",
+      "destination": "isolated/a330-corrections/frontend-all-1.log",
+      "sha256": "9b8915af9b7fe2a8b80204b2b84f38d5fa4a997df032261423942f50d01b4a49"
+    },
+    {
+      "source": "a330-corrections/recover-green-launch.log",
+      "destination": "isolated/a330-corrections/recover-green-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/review-handoff.json",
+      "destination": "isolated/a330-corrections/review-handoff.json",
+      "sha256": "5c8c0c10b99df1c52c8ed1239e97211937bf76107dc67b9392f8c923df165582"
+    },
+    {
+      "source": "a330-corrections/source-checkpoint.json",
+      "destination": "isolated/a330-corrections/source-checkpoint.json",
+      "sha256": "abc850b80e176863b93101225d018221ee94a9b3b607228991fa553b4d18612d"
+    },
+    {
+      "source": "a330-corrections/full-workspace-launch.log",
+      "destination": "isolated/a330-corrections/full-workspace-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/source-lines-final.log",
+      "destination": "isolated/a330-corrections/source-lines-final.log",
+      "sha256": "49b50e98440311f773ab1f966b1ee5f8836d3bdfeb539c4079c9ec199fa202b4"
+    },
+    {
+      "source": "a330-corrections/ui-skew.mjs",
+      "destination": "isolated/a330-corrections/ui-skew.mjs",
+      "sha256": "9042f1a899d88cdb5a5aed9d1c6d91481bf6b77d158c3be45588784bc55df5a2"
+    },
+    {
+      "source": "a330-corrections/original-countdown-red.log",
+      "destination": "isolated/a330-corrections/original-countdown-red.log",
+      "sha256": "df4153be52406b0bbd0b6d41884e8cce9e5d5f4f8dd4587f29cd74cd96c366ab"
+    },
+    {
+      "source": "a330-corrections/command-index.json",
+      "destination": "isolated/a330-corrections/command-index.json",
+      "sha256": "5fd2f9dbc5573b6a5e81530a4d6023a0a3b2dc46a2d87076bac1b1c81182fccc"
+    },
+    {
+      "source": "a330-corrections/frontend-final.log",
+      "destination": "isolated/a330-corrections/frontend-final.log",
+      "sha256": "f9d242788c5d5d98bc20c0a49090e30224b2ca07ae079ff606c0104081a1c77f"
+    },
+    {
+      "source": "a330-corrections/strict-native3-launch.log",
+      "destination": "isolated/a330-corrections/strict-native3-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/wasm-provenance.json",
+      "destination": "isolated/a330-corrections/wasm-provenance.json",
+      "sha256": "b9e26681f7794a9a6683388da7da437d0f3f59b9a2e2afb7e5147bfcff9f3e0b"
+    },
+    {
+      "source": "a330-corrections/countdown-red.log",
+      "destination": "isolated/a330-corrections/countdown-red.log",
+      "sha256": "e8d4d8ad366f4bd1b15228f05466257e5c6150f7472ecd51f6a76b213d40158f"
+    },
+    {
+      "source": "a330-corrections/review-identity-exit.json",
+      "destination": "isolated/a330-corrections/review-identity-exit.json",
+      "sha256": "7a7df758e48c8ea862ffe712e9f5812e6ef4401746f93ed31357f4711f6338ce"
+    },
+    {
+      "source": "a330-corrections/acceptance-report.json",
+      "destination": "isolated/a330-corrections/acceptance-report.json",
+      "sha256": "cb4f64f67faa552782c0c317e1ac78356a2f6da3ccaa47eb2d2813875a98c6ab"
+    },
+    {
+      "source": "a330-corrections/recover-green.log",
+      "destination": "isolated/a330-corrections/recover-green.log",
+      "sha256": "51f66e54fe998a15e56763af321c644ef40a3d1353b1d2208ac63d440bb71a60"
+    },
+    {
+      "source": "a330-corrections/full-preflight-launch.log",
+      "destination": "isolated/a330-corrections/full-preflight-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "a330-corrections/countdown-original-red.mjs",
+      "destination": "isolated/a330-corrections/countdown-original-red.mjs",
+      "sha256": "d3b9a822216773c453454a087a50d2ae26585fa42de5b8dd33258b4c92f66b32"
+    },
+    {
+      "source": "a330-corrections/validation-summary.json",
+      "destination": "isolated/a330-corrections/validation-summary.json",
+      "sha256": "d1b067de442a9e3caff68e34b1876571e75d939ba4fbcb72cec0b9ae63f699e5"
+    },
+    {
+      "source": "a330-corrections/recover-proof.json",
+      "destination": "isolated/a330-corrections/recover-proof.json",
+      "sha256": "e0f2e33b93a6769491c1bbfa1d7355b5680fe6d763518c65130ed4ea6cca3d2d"
+    },
+    {
+      "source": "a330-corrections/browser-fast/report.json",
+      "destination": "isolated/a330-corrections/browser-fast/report.json",
+      "sha256": "982f40c9da1c04e250171cedc0d3d46ab8eddc2d0e357e5effcee6f6dbbb8576"
+    },
+    {
+      "source": "a330-corrections/browser-fast/exceptions.json",
+      "destination": "isolated/a330-corrections/browser-fast/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-fast/server.log",
+      "destination": "isolated/a330-corrections/browser-fast/server.log",
+      "sha256": "24f7786496dddf7afc673688ab5cdf88737374e9da7e5fca41cbab4bb562e957"
+    },
+    {
+      "source": "a330-corrections/browser-fast/wire.json",
+      "destination": "isolated/a330-corrections/browser-fast/wire.json",
+      "sha256": "e360db0fa097f5c6f8151f721c84fac75584d826ee56101cb22a630b972f6a3d"
+    },
+    {
+      "source": "a330-corrections/browser-fast/native-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-fast/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-fast/native-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-fast/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-fast/native-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-fast/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-fast/rooms/1.json.journal",
+      "destination": "isolated/a330-corrections/browser-fast/rooms/1.json.journal",
+      "sha256": "f7fa906b9606ab1ab8993830034d9f205a8998dff803ed2b6c7437ce3559ebaa"
+    },
+    {
+      "source": "a330-corrections/browser-fast/rooms/1.json",
+      "destination": "isolated/a330-corrections/browser-fast/rooms/1.json",
+      "sha256": "c688a2dcc0cfe922b6fa401661bbc091d4509776ebde795c198da2359dedff26"
+    },
+    {
+      "source": "a330-corrections/browser-fast/rooms/.writer.lock",
+      "destination": "isolated/a330-corrections/browser-fast/rooms/.writer.lock",
+      "sha256": "929734d976c37ecce60960928cf4384e6386976c200eb2ee58fb9afe21039e4b"
+    },
+    {
+      "source": "a330-corrections/browser-fast/legacy-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-fast/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-fast/legacy-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-fast/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-fast/legacy-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-fast/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-slow/report.json",
+      "destination": "isolated/a330-corrections/browser-slow/report.json",
+      "sha256": "6f1bc9398935d60394fc01efe6115b6c8471cc9a3935f35e5ba277933ce0ced0"
+    },
+    {
+      "source": "a330-corrections/browser-slow/exceptions.json",
+      "destination": "isolated/a330-corrections/browser-slow/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-slow/server.log",
+      "destination": "isolated/a330-corrections/browser-slow/server.log",
+      "sha256": "30678b32c38f62eaf3c63957e8b39e56ee445448fe7ce9b194a2ed41827fdd41"
+    },
+    {
+      "source": "a330-corrections/browser-slow/wire.json",
+      "destination": "isolated/a330-corrections/browser-slow/wire.json",
+      "sha256": "f74047d16b917bc7893665eeed5c589cfa93b27e59a1f0f599600e3570cc1d8e"
+    },
+    {
+      "source": "a330-corrections/browser-slow/native-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-slow/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-slow/native-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-slow/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-slow/native-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-slow/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-slow/rooms/1.json.journal",
+      "destination": "isolated/a330-corrections/browser-slow/rooms/1.json.journal",
+      "sha256": "d4ee099787a09fc4d1c5596dfe8b862a4bd46b835fb1834d3c0c4ea0a13e568f"
+    },
+    {
+      "source": "a330-corrections/browser-slow/rooms/1.json",
+      "destination": "isolated/a330-corrections/browser-slow/rooms/1.json",
+      "sha256": "1e54c1b641585861cb2120d78ba41f25fb9f08efdb9ab5be0579f7e1cbe90605"
+    },
+    {
+      "source": "a330-corrections/browser-slow/rooms/.writer.lock",
+      "destination": "isolated/a330-corrections/browser-slow/rooms/.writer.lock",
+      "sha256": "bde4fbcd48b477c0a119196e620009c81242ac6dcb787ad82a8ea782c2178713"
+    },
+    {
+      "source": "a330-corrections/browser-slow/legacy-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-slow/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-slow/legacy-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-slow/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-slow/legacy-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-slow/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-api/src/choice.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-api/src/choice.rs",
+      "sha256": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-api/src/version.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-api/src/version.rs",
+      "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-api/src/command.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-api/src/command.rs",
+      "sha256": "4d0c0cf9047a7e50cb2dbd0aa2e345d544c14e491170d64f9a1c9c6b53f8832c"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native-content/src/content/standard.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native-content/src/content/standard.rs",
+      "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+      "sha256": "0e811fe0dc639ef867dbe95a0fcf03b069460758884b386e35ff80149997ff1b"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/replay_scenarios.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/replay_scenarios.rs",
+      "sha256": "b41a409610028bbe1664a52df4f2ef7da952aa773361dfc6c19b7d240b4ecc68"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+      "sha256": "defca16798e3c3a3bb7d828625359ae3f08766b22430f9280cffc3a0c6a84998"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/nc07_archive_hash_fields.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/nc07_archive_hash_fields.rs",
+      "sha256": "19835f516cfeddbb908dd272565ca49e2154a1435dc421a1f4f17b6160a5056e"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/nc04_vm_resume.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/nc04_vm_resume.rs",
+      "sha256": "c96aafe8030ce00ffb0662aac6a03ee2ba98bd0d6f203c76834567d1d06d1c4d"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/nc04_cards_given_event.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/nc04_cards_given_event.rs",
+      "sha256": "034cccf7b1e9927b342e50af1302bde342c39ee3b4bc4758010d1ea11b99d5cb"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/tests/pa12_tag656_version.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/tests/pa12_tag656_version.rs",
+      "sha256": "39a36a849ec2495c9304ee180d78302a8f63f757eb81da8eca72bc77edf9c9b9"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/src/engine.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/src/engine.rs",
+      "sha256": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/src/engine/apply_command.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/src/engine/apply_command.rs",
+      "sha256": "24c3638cedbde91c05295a6b99b4ae639e39aa69f7cb831c75c7e64c4774d72b"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native/src/engine/commands.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native/src/engine/commands.rs",
+      "sha256": "c90a989d6b1a5882b5ac50109e26deeacddd5696c7ed015ee8b8fff8d395f32b"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-core/src/snapshot.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-core/src/snapshot.rs",
+      "sha256": "0a64cbb3ca80acc7daba5f3c4897596971e9cf40a447d4dc851bebab34c3d0c7"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+      "sha256": "7b3295622c2cf1259f4ccb4fcab517c1536a1065a8622d7326e49e5e666b461c"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-native-wasm/src/session.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-native-wasm/src/session.rs",
+      "sha256": "99064278c5afe72f839c926376be782daed78fdadbf18a877fbd593473e59206"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-protocol/src/lib.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-protocol/src/lib.rs",
+      "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f"
+    },
+    {
+      "source": "a330-corrections/before/crates/engine-protocol/src/messages.rs",
+      "destination": "isolated/a330-corrections/before/crates/engine-protocol/src/messages.rs",
+      "sha256": "95078aea95a17d9f657adb7200b0d079e8286f6bf766de990d03311578f168ad"
+    },
+    {
+      "source": "a330-corrections/before/docs/operations/evidence/2026-10-30-adr0787-timeout/README.md",
+      "destination": "isolated/a330-corrections/before/docs/operations/evidence/2026-10-30-adr0787-timeout/README.raw.txt",
+      "sha256": "4fa0be812ecb97b5a5be355726fb3a2f946f6ff4bdadc2516a7c661c4a72c751"
+    },
+    {
+      "source": "a330-corrections/before/docs/architecture/native-rules-baseline.md",
+      "destination": "isolated/a330-corrections/before/docs/architecture/native-rules-baseline.raw.txt",
+      "sha256": "26b8d36be49f9087ea3644961eebcd4c6e47c81d08e625ddd44f6d5a7bdbe8bd"
+    },
+    {
+      "source": "a330-corrections/before/docs/architecture/native-progress.md",
+      "destination": "isolated/a330-corrections/before/docs/architecture/native-progress.raw.txt",
+      "sha256": "84fdb4875bc1d1841d7066b23a08836e40829707d0b73cef5d452294e0bf6226"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/scripts/nc12-online-rtt.mjs",
+      "destination": "isolated/a330-corrections/before/apps/web-client/scripts/nc12-online-rtt.mjs",
+      "sha256": "e5b38de6989245584797d26b57caf05ea4a111cc006faaf47cfad9de6a36ab1f"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/scripts/network-client.test.mjs",
+      "destination": "isolated/a330-corrections/before/apps/web-client/scripts/network-client.test.mjs",
+      "sha256": "4da684ff5fefeb4da100d160ccbc44b8c99af3a14eadb0caea7feb18d56a9f60"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/src/types/engine.ts",
+      "destination": "isolated/a330-corrections/before/apps/web-client/src/types/engine.ts",
+      "sha256": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/src/views/BattleView.vue",
+      "destination": "isolated/a330-corrections/before/apps/web-client/src/views/BattleView.vue",
+      "sha256": "1ad6afa667ecf1c48919f838151f5de79af3c6057a50036aedfbc0a055d44dce"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/src/views/HomeView.vue",
+      "destination": "isolated/a330-corrections/before/apps/web-client/src/views/HomeView.vue",
+      "sha256": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/src/engine/observerMetadata.ts",
+      "destination": "isolated/a330-corrections/before/apps/web-client/src/engine/observerMetadata.ts",
+      "sha256": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd"
+    },
+    {
+      "source": "a330-corrections/before/apps/web-client/src/engine/networkClient.ts",
+      "destination": "isolated/a330-corrections/before/apps/web-client/src/engine/networkClient.ts",
+      "sha256": "df8526d45477f5c6a98b70c86d7282cbeb375a847498b76d862fe3308bbda5e1"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/nc09_projection_parity.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/nc09_projection_parity.rs",
+      "sha256": "dd6d44ac2e8d09ece51f866288f772b716acfecba87658755b29547c9aee859c"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/nc09_referee_projection.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/nc09_referee_projection.rs",
+      "sha256": "d12b2cb1d1aca22b83da1863add7e3be125b5e1ce79c53b2ab9f1ed0cd0f7cd1"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/approved_b_metadata.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/approved_b_metadata.rs",
+      "sha256": "a70797a47478c17ffeae9cc221125af873d45e728130ed96ef210ee7d5d94326"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/nc09_native_durability.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/nc09_native_durability.rs",
+      "sha256": "6d465afbc5a227dd2c3737f864c4b4061d1e22c5b8acaf3fd2769f13f93d750b"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/nc09_native_actor.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/nc09_native_actor.rs",
+      "sha256": "1daef0e1d3b8aecfb8349f125f525435a5f2195923224f84b636bfcd02034c8e"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/nc09_native_room_session.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/nc09_native_room_session.rs",
+      "sha256": "8532ab0d8c4d2323fb60b074a0bfd1a1d90173d94c4ca0b902c9bf4409db1ec4"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/adr0787_timeout.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/adr0787_timeout.rs",
+      "sha256": "e03a5cc6038b4d6c3bf4173b4b9327ff13e83e4128235c6aad5efaebfabe52e6"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/tests/fixtures/adr0787-room329.json",
+      "destination": "isolated/a330-corrections/before/apps/game-server/tests/fixtures/adr0787-room329.json",
+      "sha256": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/session.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/session.rs",
+      "sha256": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e.rs",
+      "sha256": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room.rs",
+      "sha256": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_view.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_view.rs",
+      "sha256": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/lobby.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/lobby.rs",
+      "sha256": "ac9c875407e9e1847d7d4219c777157f7fcc51479adb701b9817373e2cdd45b9"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/main.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/main.rs",
+      "sha256": "757e222fee8c0dd1c6a1cc3d90afb556a35030607acdea5ad618b2e98a965569"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native_actor.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native_actor.rs",
+      "sha256": "25224dbddd50e505406a6201424c5ac573d9fd46fc5ae2b246a9f6823fce055f"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native.rs",
+      "sha256": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native_actor/timeout.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native_actor/timeout.rs",
+      "sha256": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native_actor/durability.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native_actor/durability.rs",
+      "sha256": "326593a4426bd812f5524d8478766366cb97ba2d3b8197eb1368d72d56301f49"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native/timeout.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native/timeout.rs",
+      "sha256": "65e8230aa0b4f5fed51cff85172972a7c86d65233f451d1d6ca7021166645495"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/room_native/wal.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/room_native/wal.rs",
+      "sha256": "3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_room_store/tests.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_room_store/tests.rs",
+      "sha256": "35b5b2769e6b3fa2cec7fe015a6800d92ebf40b919dea73e1e2acdf5cb23b00f"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/referee.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/referee.rs",
+      "sha256": "df433618fd856febd3c93c400801f7f61b500efe888ae0b7c20844009167d816"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/authority.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/authority.rs",
+      "sha256": "2a0af2f59c2bbc558fcd16a16ec602be65cf58ab6645fe1c1d3af7839a74317f"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/commit_crash.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/commit_crash.rs",
+      "sha256": "b61c5a21ce8d350f3097d439d0ff4a59ef2c8c7c859ad5568a2cd963bdcc9a14"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/double_failure.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/double_failure.rs",
+      "sha256": "d39598b959a664a7f704d3729c792a3a8d105f7dd290d17fd6399ea462200620"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/durability.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/durability.rs",
+      "sha256": "4507d1f44f5b7456e6203f7b2348587202853bd34f1a3645eec91839ebfac30c"
+    },
+    {
+      "source": "a330-corrections/before/apps/game-server/src/native_ws_e2e/peer.rs",
+      "destination": "isolated/a330-corrections/before/apps/game-server/src/native_ws_e2e/peer.rs",
+      "sha256": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/exceptions.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/exceptions.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/failure.txt",
+      "destination": "isolated/a330-corrections/browser-red-fast/failure.txt",
+      "sha256": "cf19e9b71131b0c635a17ff9aa70b0c81ae8d1b992cea5b9c54086e8f37d56f9"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/server.log",
+      "destination": "isolated/a330-corrections/browser-red-fast/server.log",
+      "sha256": "1edbeec34b30adc3cbd249102c73b9d7e595f7d4716c8e885c6d173dbd661f85"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/native-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/native-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/native-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/native-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/native-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/native-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/rooms/1.json.journal",
+      "destination": "isolated/a330-corrections/browser-red-fast/rooms/1.json.journal",
+      "sha256": "eb1ea1353a5e63ac91562c06fd75c602bf4e396be56d866a220c206dc73723d9"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/rooms/1.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/rooms/1.json",
+      "sha256": "c7292c3847eb0e6a26de97cadd1d7fea8118ce4049df286d7a08baf158eb54b9"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/rooms/.writer.lock",
+      "destination": "isolated/a330-corrections/browser-red-fast/rooms/.writer.lock",
+      "sha256": "8202a2bc770e82b3bd0aca51f7e7947e2418ab874b979254e584641a849deb07"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/legacy-store/state/revoke.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/legacy-store/state/revoke.json",
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/legacy-store/state/active.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/legacy-store/state/active.json",
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    {
+      "source": "a330-corrections/browser-red-fast/legacy-store/state/history.json",
+      "destination": "isolated/a330-corrections/browser-red-fast/legacy-store/state/history.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "review-a330/identity-entry.json",
+      "destination": "isolated/review-a330/identity-entry.json",
+      "sha256": "36f6063e0fa5c6a120da647b49e5c952694e42e422865214ff719726377d4399"
+    },
+    {
+      "source": "review-a330/identity-exit.json",
+      "destination": "isolated/review-a330/identity-exit.json",
+      "sha256": "cda07e1c09d61c7ac81b1f552def7374bcc787d465f6c70659263067052bda59"
+    }
+  ],
+  "binary_or_runtime_products_kept_locally_not_committed": [
+    "a330/artifacts/game-server330",
+    "a330/artifacts/native-pkg330/engine_native_wasm_bg.wasm",
+    "a330/browser-oldserver-37/config.png",
+    "a330/browser-oldserver-37/old-server-rejected.png",
+    "a330/browser-final/countdown.png",
+    "a330/browser-final/config.png",
+    "a330/browser-final/managed.png",
+    "a330/ui-dist/index.html",
+    "a330/ui-dist/original/portraits/3366235136.jpg",
+    "a330/ui-dist/original/portraits/3041549837.jpg",
+    "a330/ui-dist/original/portraits/4123573742.jpg",
+    "a330/ui-dist/original/portraits/8.jpg",
+    "a330/ui-dist/original/portraits/9.jpg",
+    "a330/ui-dist/original/portraits/14.jpg",
+    "a330/ui-dist/original/portraits/15.jpg",
+    "a330/ui-dist/original/portraits/17.jpg",
+    "a330/ui-dist/original/portraits/16.jpg",
+    "a330/ui-dist/original/portraits/12.jpg",
+    "a330/ui-dist/original/portraits/13.jpg",
+    "a330/ui-dist/original/portraits/11.jpg",
+    "a330/ui-dist/original/portraits/3561346810.jpg",
+    "a330/ui-dist/original/portraits/10.jpg",
+    "a330/ui-dist/original/portraits/21.jpg",
+    "a330/ui-dist/original/portraits/4192370611.jpg",
+    "a330/ui-dist/original/portraits/20.jpg",
+    "a330/ui-dist/original/portraits/22.jpg",
+    "a330/ui-dist/original/portraits/23.jpg",
+    "a330/ui-dist/original/portraits/4212795236.jpg",
+    "a330/ui-dist/original/portraits/18.jpg",
+    "a330/ui-dist/original/portraits/24.jpg",
+    "a330/ui-dist/original/portraits/25.jpg",
+    "a330/ui-dist/original/portraits/19.jpg",
+    "a330/ui-dist/original/portraits/4.jpg",
+    "a330/ui-dist/original/portraits/5.jpg",
+    "a330/ui-dist/original/portraits/7.jpg",
+    "a330/ui-dist/original/portraits/3319399999.jpg",
+    "a330/ui-dist/original/portraits/6.jpg",
+    "a330/ui-dist/original/portraits/2.jpg",
+    "a330/ui-dist/original/portraits/3.jpg",
+    "a330/ui-dist/original/portraits/1.jpg",
+    "a330/ui-dist/assets/engine_wasm_bg-1RaHVOmb.wasm",
+    "a330/ui-dist/assets/index-Bmp6m7Og.css",
+    "a330/ui-dist/assets/engine_native_wasm_bg-DENbyQl_.wasm",
+    "a330/ui-dist/assets/engine.native.worker-Dy3Pgjdt.js",
+    "a330/ui-dist/assets/engine.worker-DF5gc_e9.js",
+    "a330/ui-dist/assets/index-DPQu-RB7.js",
+    "a330/ui-dist/pkg/engine_wasm_bg.wasm",
+    "a330/ui-dist/pkg/engine_wasm.d.ts",
+    "a330/ui-dist/pkg/.gitignore",
+    "a330/ui-dist/pkg/package.json",
+    "a330/ui-dist/pkg/engine_wasm_bg.wasm.d.ts",
+    "a330/ui-dist/pkg/engine_wasm.js",
+    "a330/ui-dist-final/original/portraits/3366235136.jpg",
+    "a330/ui-dist-final/original/portraits/3041549837.jpg",
+    "a330/ui-dist-final/original/portraits/4123573742.jpg",
+    "a330/ui-dist-final/original/portraits/8.jpg",
+    "a330/ui-dist-final/original/portraits/9.jpg",
+    "a330/ui-dist-final/original/portraits/14.jpg",
+    "a330/ui-dist-final/original/portraits/15.jpg",
+    "a330/ui-dist-final/original/portraits/17.jpg",
+    "a330/ui-dist-final/original/portraits/16.jpg",
+    "a330/ui-dist-final/original/portraits/12.jpg",
+    "a330/ui-dist-final/original/portraits/13.jpg",
+    "a330/ui-dist-final/original/portraits/11.jpg",
+    "a330/ui-dist-final/original/portraits/3561346810.jpg",
+    "a330/ui-dist-final/original/portraits/10.jpg",
+    "a330/ui-dist-final/original/portraits/21.jpg",
+    "a330/ui-dist-final/original/portraits/4192370611.jpg",
+    "a330/ui-dist-final/original/portraits/20.jpg",
+    "a330/ui-dist-final/original/portraits/22.jpg",
+    "a330/ui-dist-final/original/portraits/23.jpg",
+    "a330/ui-dist-final/original/portraits/4212795236.jpg",
+    "a330/ui-dist-final/original/portraits/18.jpg",
+    "a330/ui-dist-final/original/portraits/24.jpg",
+    "a330/ui-dist-final/original/portraits/25.jpg",
+    "a330/ui-dist-final/original/portraits/19.jpg",
+    "a330/ui-dist-final/original/portraits/4.jpg",
+    "a330/ui-dist-final/original/portraits/5.jpg",
+    "a330/ui-dist-final/original/portraits/7.jpg",
+    "a330/ui-dist-final/original/portraits/3319399999.jpg",
+    "a330/ui-dist-final/original/portraits/6.jpg",
+    "a330/ui-dist-final/original/portraits/2.jpg",
+    "a330/ui-dist-final/original/portraits/3.jpg",
+    "a330/ui-dist-final/original/portraits/1.jpg",
+    "a330/ui-dist-final/assets/engine_wasm_bg-1RaHVOmb.wasm",
+    "a330/ui-dist-final/assets/engine_native_wasm_bg-u6T604pW.wasm",
+    "a330/ui-dist-final/pkg/engine_wasm_bg.wasm",
+    "a330/browser/countdown.png",
+    "a330/browser/config.png",
+    "a330/browser/managed.png",
+    "a330-corrections/browser-fast/initial-skew.png",
+    "a330-corrections/browser-fast/wall-clock-jump.png",
+    "a330-corrections/browser-fast/midwindow-reconnect.png",
+    "a330-corrections/browser-fast/managed.png",
+    "a330-corrections/browser-fast/disconnected-uncalibrated.png",
+    "a330-corrections/artifacts/game-server330-p2",
+    "a330-corrections/browser-slow/initial-skew.png",
+    "a330-corrections/browser-slow/wall-clock-jump.png",
+    "a330-corrections/browser-slow/midwindow-reconnect.png",
+    "a330-corrections/browser-slow/managed.png",
+    "a330-corrections/browser-slow/disconnected-uncalibrated.png",
+    "a330-corrections/ui-dist/index.html",
+    "a330-corrections/ui-dist/original/portraits/3366235136.jpg",
+    "a330-corrections/ui-dist/original/portraits/3041549837.jpg",
+    "a330-corrections/ui-dist/original/portraits/4123573742.jpg",
+    "a330-corrections/ui-dist/original/portraits/8.jpg",
+    "a330-corrections/ui-dist/original/portraits/9.jpg",
+    "a330-corrections/ui-dist/original/portraits/14.jpg",
+    "a330-corrections/ui-dist/original/portraits/15.jpg",
+    "a330-corrections/ui-dist/original/portraits/17.jpg",
+    "a330-corrections/ui-dist/original/portraits/16.jpg",
+    "a330-corrections/ui-dist/original/portraits/12.jpg",
+    "a330-corrections/ui-dist/original/portraits/13.jpg",
+    "a330-corrections/ui-dist/original/portraits/11.jpg",
+    "a330-corrections/ui-dist/original/portraits/3561346810.jpg",
+    "a330-corrections/ui-dist/original/portraits/10.jpg",
+    "a330-corrections/ui-dist/original/portraits/21.jpg",
+    "a330-corrections/ui-dist/original/portraits/4192370611.jpg",
+    "a330-corrections/ui-dist/original/portraits/20.jpg",
+    "a330-corrections/ui-dist/original/portraits/22.jpg",
+    "a330-corrections/ui-dist/original/portraits/23.jpg",
+    "a330-corrections/ui-dist/original/portraits/4212795236.jpg",
+    "a330-corrections/ui-dist/original/portraits/18.jpg",
+    "a330-corrections/ui-dist/original/portraits/24.jpg",
+    "a330-corrections/ui-dist/original/portraits/25.jpg",
+    "a330-corrections/ui-dist/original/portraits/19.jpg",
+    "a330-corrections/ui-dist/original/portraits/4.jpg",
+    "a330-corrections/ui-dist/original/portraits/5.jpg",
+    "a330-corrections/ui-dist/original/portraits/7.jpg",
+    "a330-corrections/ui-dist/original/portraits/3319399999.jpg",
+    "a330-corrections/ui-dist/original/portraits/6.jpg",
+    "a330-corrections/ui-dist/original/portraits/2.jpg",
+    "a330-corrections/ui-dist/original/portraits/3.jpg",
+    "a330-corrections/ui-dist/original/portraits/1.jpg",
+    "a330-corrections/ui-dist/assets/engine_wasm_bg-1RaHVOmb.wasm",
+    "a330-corrections/ui-dist/assets/engine.native.worker-BIwpD907.js",
+    "a330-corrections/ui-dist/assets/engine_native_wasm_bg-u6T604pW.wasm",
+    "a330-corrections/ui-dist/assets/index-DEC1PAvD.css",
+    "a330-corrections/ui-dist/assets/engine.worker-DF5gc_e9.js",
+    "a330-corrections/ui-dist/assets/index-C5_ZGiAA.js",
+    "a330-corrections/ui-dist/pkg/engine_wasm_bg.wasm",
+    "a330-corrections/ui-dist/pkg/engine_wasm.d.ts",
+    "a330-corrections/ui-dist/pkg/.gitignore",
+    "a330-corrections/ui-dist/pkg/package.json",
+    "a330-corrections/ui-dist/pkg/engine_wasm_bg.wasm.d.ts",
+    "a330-corrections/ui-dist/pkg/engine_wasm.js"
+  ],
+  "originals_preserved": true,
+  "markdown_raw_bytes_not_local_links": true
+}

@@ -1,0 +1,3869 @@
+diff --git a/apps/game-server/src/lobby.rs b/apps/game-server/src/lobby.rs
+index 501e8597..a41ea7ec 100644
+--- a/apps/game-server/src/lobby.rs
++++ b/apps/game-server/src/lobby.rs
+@@ -316,20 +316,36 @@ impl Lobby {
+         session: &mut Session,
+         msg: ClientMessage,
+     ) -> Result<(), HandlerError> {
++        if !matches!(&msg, ClientMessage::Hello { .. }) && !session.handshake_complete {
++            return Err(HandlerError::new(
++                ErrorCode::VersionMismatch,
++                "WS6 Hello required",
++            ));
++        }
++        let header = match &msg {
++            ClientMessage::SubmitCommand { header, .. }
++            | ClientMessage::RequestSnapshot { header, .. }
++            | ClientMessage::Heartbeat { header } => Some(header),
++            _ => None,
++        };
++        if header.is_some_and(|h| h.protocol_version != NETWORK_PROTOCOL_VERSION) {
++            return Err(HandlerError::new(
++                ErrorCode::VersionMismatch,
++                "protocol version mismatch",
++            ));
++        }
+         match msg {
+             ClientMessage::Hello {
+                 versions,
+                 display_name,
+             } => {
+-                if versions.network_protocol != 0
+-                    && versions.network_protocol != NETWORK_PROTOCOL_VERSION
+-                {
+-                    // allow 0 as "unspecified"
++                if versions.network_protocol != NETWORK_PROTOCOL_VERSION {
+                     return Err(HandlerError::new(
+                         ErrorCode::VersionMismatch,
+                         "protocol version mismatch",
+                     ));
+                 }
++                session.handshake_complete = true;
+                 if !display_name.is_empty() {
+                     session.display_name = sanitize_name(&display_name);
+                 }
+@@ -340,7 +356,17 @@ impl Lobby {
+                 players,
+                 seed,
+                 password,
++                choice_timeout_secs,
+             } => {
++                let secs = choice_timeout_secs.unwrap_or(30);
++                crate::room_native::validate_timeout_secs(secs)
++                    .map_err(|e| HandlerError::new(ErrorCode::BadMessage, e))?;
++                if !self.cfg.native_rooms && secs != 30 {
++                    return Err(HandlerError::new(
++                        ErrorCode::BadMessage,
++                        "legacy rooms do not support choice timeouts",
++                    ));
++                }
+                 if !(2..=8).contains(&players) {
+                     return Err(HandlerError::new(
+                         ErrorCode::BadMessage,
+@@ -380,6 +406,7 @@ impl Lobby {
+                         &self.cfg.native_room_namespace,
+                         &self.cfg.native_room_packages,
+                         self.native_room_store.clone(),
++                        secs,
+                     )
+                     .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                     let handle = match native_handle {
+@@ -465,6 +492,16 @@ impl Lobby {
+                 idempotency_key,
+                 replay,
+             } => {
++                if matches!(
++                    command.kind,
++                    engine_api::CommandKind::TimeoutAction { .. }
++                        | engine_api::CommandKind::AdminAbortMatch { .. }
++                ) {
++                    return Err(HandlerError::new(
++                        ErrorCode::Unauthorized,
++                        "internal command is not available to clients",
++                    ));
++                }
+                 let room_id = session
+                     .room_id
+                     .ok_or_else(|| HandlerError::new(ErrorCode::NotInRoom, "not in room"))?;
+diff --git a/apps/game-server/src/main.rs b/apps/game-server/src/main.rs
+index 863a9b8d..2ca05c54 100644
+--- a/apps/game-server/src/main.rs
++++ b/apps/game-server/src/main.rs
+@@ -2,14 +2,14 @@
+ 
+ mod config;
+ mod lobby;
+-mod native_room_store;
+ mod native;
++mod native_room_store;
+ mod native_view;
+-mod room_native;
+-mod room_native_actor;
+ mod outbox;
+ mod persist;
+ mod room;
++mod room_native;
++mod room_native_actor;
+ mod session;
+ 
+ use axum::{
+@@ -204,11 +204,11 @@ async fn native_activate_handler(
+     State(lobby): State<Arc<Lobby>>,
+     Json(body): Json<NativePackageBody>,
+ ) -> Result<StatusCode, (StatusCode, String)> {
+-    if body.namespace.is_empty()
+-        || body.package_id.is_empty()
+-        || body.version.is_empty()
+-    {
+-        return Err((StatusCode::BAD_REQUEST, "namespace/package_id/version required".into()));
++    if body.namespace.is_empty() || body.package_id.is_empty() || body.version.is_empty() {
++        return Err((
++            StatusCode::BAD_REQUEST,
++            "namespace/package_id/version required".into(),
++        ));
+     }
+     lobby
+         .native_activate(&body.namespace, &body.package_id, &body.version)
+@@ -529,6 +529,7 @@ async fn handle_socket(socket: WebSocket, lobby: Arc<Lobby>) {
+         role: None,
+         reconnect_token: None,
+         last_conn_seq: 0,
++        handshake_complete: false,
+         outbound: outbound.clone(),
+         slow: outbound.slow_signal(),
+     };
+@@ -649,7 +650,11 @@ mod net_smoke {
+         let dir = tempfile::tempdir().unwrap();
+         let ready = dir.path().join("ready");
+         let mut child = ProcessCommand::new(std::env::current_exe().unwrap())
+-            .args(["--exact", "net_smoke::store_writer_lock_child", "--nocapture"])
++            .args([
++                "--exact",
++                "net_smoke::store_writer_lock_child",
++                "--nocapture",
++            ])
+             .env(LOCK_CHILD_DIR, dir.path())
+             .stdin(Stdio::null())
+             .stdout(Stdio::null())
+@@ -830,11 +835,11 @@ mod net_smoke {
+     /// **不含**整局机器人（那是 `long_run_bot.rs` 走直连 `RoomMsg` 的面）、TLS、跨机与浏览器。
+     #[test]
+     fn websocket_creates_joins_and_submits_over_wire() {
+-        use futures_util::{SinkExt, StreamExt};
++        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+         use engine_protocol::{
+             decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+         };
+-        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
++        use futures_util::{SinkExt, StreamExt};
+ 
+         let cfg = test_cfg("wsgame");
+         let lobby = bootstrap(&cfg);
+@@ -855,8 +860,10 @@ mod net_smoke {
+             // --- A：连接 + Welcome + 建局 ---
+             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A connect");
+             let _welcome = next_text(&mut a).await;
++            send_test_hello(&mut a).await;
+             a.send(tokio_tungstenite::tungstenite::Message::Text(
+                 encode_c2s(&ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed: 424_242,
+                     password: String::new(),
+@@ -890,6 +897,7 @@ mod net_smoke {
+             // --- B：连接 + 加入同一房间 ---
+             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B connect");
+             let _welcome_b = next_text(&mut b).await;
++            send_test_hello(&mut b).await;
+             b.send(tokio_tungstenite::tungstenite::Message::Text(
+                 encode_c2s(&ClientMessage::JoinRoom {
+                     room_id,
+@@ -957,11 +965,33 @@ mod net_smoke {
+     }
+ 
+     /// 读一条文本帧（10s 超时）。
++    async fn send_test_hello<S>(ws: &mut S)
++    where
++        S: futures_util::Sink<tokio_tungstenite::tungstenite::Message> + Unpin,
++        S::Error: std::fmt::Debug,
++    {
++        use futures_util::SinkExt;
++        ws.send(tokio_tungstenite::tungstenite::Message::Text(
++            engine_protocol::encode_c2s(&engine_protocol::ClientMessage::Hello {
++                versions: engine_api::VersionBundle::current(),
++                display_name: "wire-test".into(),
++            })
++            .unwrap()
++            .into(),
++        ))
++        .await
++        .unwrap();
++    }
++
+     async fn next_text<S>(ws: &mut S) -> String
+     where
+         S: futures_util::Sink<tokio_tungstenite::tungstenite::Message>
+-            + futures_util::Stream<Item = Result<tokio_tungstenite::tungstenite::Message, tokio_tungstenite::tungstenite::Error>>
+-            + Unpin,
++            + futures_util::Stream<
++                Item = Result<
++                    tokio_tungstenite::tungstenite::Message,
++                    tokio_tungstenite::tungstenite::Error,
++                >,
++            > + Unpin,
+     {
+         use futures_util::StreamExt;
+         let frame = tokio::time::timeout(std::time::Duration::from_secs(10), ws.next())
+@@ -978,7 +1008,9 @@ mod net_smoke {
+     /// **不是**强 AI，只用于驱动推进。
+     #[test]
+     fn websocket_plays_match_to_completion() {
+-        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId};
++        use engine_api::{
++            Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId,
++        };
+         use engine_protocol::{
+             decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+         };
+@@ -1027,8 +1059,10 @@ mod net_smoke {
+             // A 建局
+             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+             let _ = next_text(&mut a).await;
++            send_test_hello(&mut a).await;
+             a.send(Message::Text(
+                 encode_c2s(&ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed: 20_260_101,
+                     password: String::new(),
+@@ -1050,6 +1084,7 @@ mod net_smoke {
+             // B 加入
+             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+             let _ = next_text(&mut b).await;
++            send_test_hello(&mut b).await;
+             b.send(Message::Text(
+                 encode_c2s(&ClientMessage::JoinRoom {
+                     room_id,
+@@ -1125,7 +1160,9 @@ mod net_smoke {
+                             }
+                         }
+                     }
+-                    let Some(action) = pick(&legal[conn]) else { continue };
++                    let Some(action) = pick(&legal[conn]) else {
++                        continue;
++                    };
+                     let cmd = action.to_command(actors[conn], rev);
+                     seq += 1;
+                     ws.send(Message::Text(
+@@ -1246,8 +1283,10 @@ mod net_smoke {
+             // ① 建局
+             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+             let _ = next_text(&mut a).await;
++            send_test_hello(&mut a).await;
+             a.send(Message::Text(
+                 encode_c2s(&ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed: 20_260_102,
+                     password: String::new(),
+@@ -1274,6 +1313,7 @@ mod net_smoke {
+             // ①.5 第二名玩家加入（房间需凑齐座位才接受命令）
+             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+             let _ = next_text(&mut b).await;
++            send_test_hello(&mut b).await;
+             b.send(Message::Text(
+                 encode_c2s(&ClientMessage::JoinRoom {
+                     room_id,
+@@ -1335,6 +1375,7 @@ mod net_smoke {
+             // ④ 用 token 重连
+             let (mut a2, _) = tokio_tungstenite::connect_async(&url).await.expect("A2");
+             let _ = next_text(&mut a2).await;
++            send_test_hello(&mut a2).await;
+             a2.send(Message::Text(
+                 encode_c2s(&ClientMessage::JoinRoom {
+                     room_id,
+@@ -1380,7 +1421,9 @@ mod net_smoke {
+     #[test]
+     fn websocket_submit_before_match_start_returns_error() {
+         use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+-        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
++        use engine_protocol::{
++            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
++        };
+         use futures_util::SinkExt;
+         use tokio_tungstenite::tungstenite::Message;
+ 
+@@ -1401,8 +1444,10 @@ mod net_smoke {
+             let url = format!("ws://{addr}/ws");
+             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+             let _ = next_text(&mut a).await;
++            send_test_hello(&mut a).await;
+             a.send(Message::Text(
+                 encode_c2s(&ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed: 20_260_103,
+                     password: String::new(),
+@@ -1478,7 +1523,9 @@ mod net_smoke {
+     #[test]
+     fn websocket_multi_room_isolation() {
+         use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+-        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
++        use engine_protocol::{
++            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
++        };
+         use futures_util::SinkExt;
+         use tokio_tungstenite::tungstenite::Message;
+ 
+@@ -1489,13 +1536,15 @@ mod net_smoke {
+         async fn open(url: &str) -> Ws {
+             let (ws, _) = tokio_tungstenite::connect_async(url).await.expect("ws");
+             let mut ws = ws;
+-            let _ = next_text(&mut ws).await; // Welcome
++            let _ = next_text(&mut ws).await;
++            send_test_hello(&mut ws).await; // Welcome
+             ws
+         }
+ 
+         async fn create_room(ws: &mut Ws, seed: u64) -> (u64, u32) {
+             ws.send(Message::Text(
+                 encode_c2s(&ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed,
+                     password: String::new(),
+@@ -1689,12 +1738,16 @@ mod native_lifecycle_http_tests {
+         let imported = native_import_handler(State(lobby.clone())).await.unwrap();
+         assert!(imported.0.iter().any(|p| p.package_id == "http-lifecycle-probe"));
+ 
+-        let body = || Json(NativePackageBody {
+-            namespace: namespace.clone(),
+-            package_id: "http-lifecycle-probe".into(),
+-            version: "0.1.0".into(),
+-        });
+-        native_disable_handler(State(lobby.clone()), body()).await.unwrap();
++        let body = || {
++            Json(NativePackageBody {
++                namespace: namespace.clone(),
++                package_id: "http-lifecycle-probe".into(),
++                version: "0.1.0".into(),
++            })
++        };
++        native_disable_handler(State(lobby.clone()), body())
++            .await
++            .unwrap();
+         assert!(native.load("http-lifecycle-probe").is_err());
+         native_uninstall_handler(State(lobby.clone()), body()).await.unwrap();
+         assert!(lobby
+@@ -1738,7 +1791,9 @@ mod native_lifecycle_http_tests {
+ 
+         let mut stream = tokio::net::TcpStream::connect(addr).await.unwrap();
+         stream
+-            .write_all(b"GET /native/packages HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
++            .write_all(
++                b"GET /native/packages HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n",
++            )
+             .await
+             .unwrap();
+         let mut response = Vec::new();
+diff --git a/apps/game-server/src/native_room_store/tests.rs b/apps/game-server/src/native_room_store/tests.rs
+index e9551081..c85930f1 100644
+--- a/apps/game-server/src/native_room_store/tests.rs
++++ b/apps/game-server/src/native_room_store/tests.rs
+@@ -15,6 +15,8 @@ pub(super) fn record(room_id: u64, snapshot: &str) -> StoredRoom {
+             frozen_packages: Some(Vec::new()),
+             members: Vec::new(),
+             command_receipts: Vec::new(),
++            timeout: None,
++            wal: None,
+         },
+     }
+ }
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+index e70f9fa2..99fd66dd 100644
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -302,6 +302,7 @@ pub fn choice_for(
+         max_count: max as u8,
+         allow_cancel,
+         timeout_policy: engine_api::TimeoutPolicy::None,
++        deadline_unix_ms: None,
+         revision: engine.revision(),
+     })
+ }
+@@ -349,7 +350,7 @@ pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction>
+                 targets: Vec::new(),
+                 card_targets: Vec::new(),
+             }),
+-            GameAction::RevealGeneral { .. } => None,
++            GameAction::RevealGeneral { .. } | GameAction::TimeoutAction { .. } => None,
+         })
+         .collect()
+ }
+diff --git a/apps/game-server/src/native_ws_e2e.rs b/apps/game-server/src/native_ws_e2e.rs
+index d0bf3a0b..4fa0965b 100644
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -1,9 +1,9 @@
+ //! Production native rooms over loopback TCP/WebSocket, including restart and content locks.
+ 
+-mod durability;
++mod authority;
+ mod commit_crash;
+ mod double_failure;
+-mod authority;
++mod durability;
+ mod referee;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+@@ -134,208 +134,7 @@ impl State {
+     }
+ }
+ 
+-impl Peer {
+-    async fn connect(server: &Server) -> Self {
+-        Self::connect_url(&server.url).await
+-    }
+-
+-    async fn connect_url(url: &str) -> Self {
+-        let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
+-        assert_eq!(response.status().as_u16(), 101);
+-        let mut peer = Self {
+-            ws,
+-            room: 0,
+-            player: PlayerId::NONE,
+-            token: String::new(),
+-            seq: 0,
+-        };
+-        peer.until(|message| matches!(message, ServerMessage::Welcome { .. }))
+-            .await;
+-        peer
+-    }
+-
+-    async fn send(&mut self, message: ClientMessage) {
+-        self.ws
+-            .send(Message::Text(encode_c2s(&message).unwrap().into()))
+-            .await
+-            .unwrap();
+-    }
+-
+-    async fn until(&mut self, matches: impl Fn(&ServerMessage) -> bool) -> ServerMessage {
+-        for _ in 0..40 {
+-            let frame = tokio::time::timeout(Duration::from_secs(10), self.ws.next())
+-                .await
+-                .expect("WS response timeout")
+-                .expect("WS remains open")
+-                .unwrap();
+-            if let Message::Text(text) = frame {
+-                let message = decode_s2c(text.as_ref()).expect("valid server protocol");
+-                if matches(&message) {
+-                    return message;
+-                }
+-                assert!(
+-                    !matches!(message, ServerMessage::Error { .. }),
+-                    "unexpected {message:?}"
+-                );
+-            }
+-        }
+-        panic!("expected WS response within 40 frames");
+-    }
+-
+-    async fn join_result(&mut self) -> State {
+-        let message = self
+-            .until(|message| matches!(message, ServerMessage::JoinOk { .. }))
+-            .await;
+-        if let ServerMessage::JoinOk {
+-            room_id,
+-            player_id,
+-            reconnect_token,
+-            role,
+-            seat,
+-            ..
+-        } = &message
+-        {
+-            match role {
+-                ClientRole::Player => assert_eq!(*seat as u32 + 1, *player_id),
+-                ClientRole::Spectator | ClientRole::Referee => {
+-                    assert_eq!(*player_id, 0);
+-                    assert_eq!(*seat, u8::MAX);
+-                }
+-            }
+-            self.room = *room_id;
+-            self.player = PlayerId::new(*player_id);
+-            self.token = reconnect_token.clone();
+-        }
+-        State::from_message(message)
+-    }
+-
+-    async fn create(&mut self) -> State {
+-        self.send(ClientMessage::CreateRoom {
+-            players: 2,
+-            seed: SEED,
+-            password: PASSWORD.into(),
+-        })
+-        .await;
+-        self.join_result().await
+-    }
+-
+-    async fn join(&mut self, room_id: u64, seat: u8, token: Option<String>) -> State {
+-        self.send(ClientMessage::JoinRoom {
+-            room_id,
+-            password: PASSWORD.into(),
+-            preferred_seat: Some(seat),
+-            reconnect_token: token,
+-        })
+-        .await;
+-        self.join_result().await
+-    }
+-
+-    async fn spectate(&mut self, room_id: u64) -> State {
+-        self.send(ClientMessage::Spectate { room_id }).await;
+-        self.join_result().await
+-    }
+-
+-    async fn snapshot(&mut self) -> State {
+-        self.seq += 1;
+-        let sequence = self.seq;
+-        self.send(ClientMessage::RequestSnapshot {
+-            header: MessageHeader::new(self.room, sequence, 0),
+-            last_revision: 0,
+-        })
+-        .await;
+-        State::from_message(self.until(|message| {
+-            matches!(message, ServerMessage::Snapshot { header, .. } if header.conn_seq == sequence)
+-        }).await)
+-    }
+-
+-    async fn submit(
+-        &mut self,
+-        actor: PlayerId,
+-        expected: u64,
+-        key: u64,
+-        kind: CommandKind,
+-    ) -> (CommandResult, State) {
+-        self.seq += 1;
+-        let sequence = self.seq;
+-        self.send(ClientMessage::SubmitCommand {
+-            header: MessageHeader::new(self.room, sequence, expected),
+-            command: Command {
+-                actor,
+-                expected_revision: ExpectedRevision(expected),
+-                idempotency_key: IdempotencyKey(key),
+-                kind,
+-            },
+-            idempotency_key: IdempotencyKey(key),
+-        replay: false,
+-})
+-        .await;
+-        let message = self.until(|message| {
+-            matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)
+-        }).await;
+-        let result = match &message {
+-            ServerMessage::CommandOutcome { result, .. } => result.clone(),
+-            _ => unreachable!(),
+-        };
+-        (result, State::from_message(message))
+-    }
+-
+-    async fn submit_replay(
+-        &mut self,
+-        actor: PlayerId,
+-        expected: u64,
+-        key: u64,
+-        kind: CommandKind,
+-    ) -> (CommandResult, State) {
+-        self.seq += 1;
+-        let sequence = self.seq;
+-        self.send(ClientMessage::SubmitCommand {
+-            header: MessageHeader::new(self.room, sequence, expected),
+-            command: Command {
+-                actor,
+-                expected_revision: ExpectedRevision(expected),
+-                idempotency_key: IdempotencyKey(key),
+-                kind,
+-            },
+-            idempotency_key: IdempotencyKey(key),
+-            replay: true,
+-        })
+-        .await;
+-        let message = self
+-            .until(|message| {
+-                matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)
+-            })
+-            .await;
+-        let result = match &message {
+-            ServerMessage::CommandOutcome { result, .. } => result.clone(),
+-            _ => unreachable!(),
+-        };
+-        (result, State::from_message(message))
+-    }
+-
+-    async fn pushed(&mut self, key: u64) -> State {
+-        State::from_message(
+-            self.until(|message| {
+-                matches!(message, ServerMessage::CommandOutcome { header, idempotency_key, .. }
+-                if header.conn_seq == 0 && idempotency_key.0 == key)
+-            })
+-            .await,
+-        )
+-    }
+-
+-    async fn error(&mut self, expected: ErrorCode) {
+-        let message = self
+-            .until(|message| matches!(message, ServerMessage::Error { .. }))
+-            .await;
+-        assert!(
+-            matches!(message, ServerMessage::Error { code, .. } if code == expected),
+-            "{message:?}"
+-        );
+-    }
+-
+-    async fn close(mut self) {
+-        self.ws.close(None).await.unwrap();
+-    }
+-}
++mod peer;
+ 
+ fn config(base: &Path) -> ServerConfig {
+     let mut cfg = ServerConfig::default();
+@@ -907,6 +706,7 @@ fn native_extensions_ws_fails_closed_for_invalid_frozen_content() {
+                 "no fallback room"
+             );
+             peer.send(ClientMessage::CreateRoom {
++                choice_timeout_secs: None,
+                 players: 2,
+                 seed: SEED,
+                 password: PASSWORD.into(),
+diff --git a/apps/game-server/src/native_ws_e2e/authority.rs b/apps/game-server/src/native_ws_e2e/authority.rs
+index ca08131c..a488db1f 100644
+--- a/apps/game-server/src/native_ws_e2e/authority.rs
++++ b/apps/game-server/src/native_ws_e2e/authority.rs
+@@ -22,7 +22,8 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
+         ))
+         .await
+         .unwrap();
+-    let player = peer.join_result().await;
++    peer.error(ErrorCode::BadMessage).await;
++    let player = peer.join(owner.room, 1, None).await;
+     player.assert_player(peer.player);
+     assert_ne!(player.view.observer, ObserverKind::Referee);
+     let mut spectator = Peer::connect(&server).await;
+@@ -39,7 +40,8 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
+         ))
+         .await
+         .unwrap();
+-    spectator.join_result().await.assert_spectator();
++    spectator.error(ErrorCode::BadMessage).await;
++    spectator.spectate(owner.room).await.assert_spectator();
+     spectator.snapshot().await.assert_spectator();
+     peer.snapshot().await.assert_player(peer.player);
+     server.stop().await;
+diff --git a/apps/game-server/src/native_ws_e2e/commit_crash.rs b/apps/game-server/src/native_ws_e2e/commit_crash.rs
+index 800f595d..6be3f65e 100644
+--- a/apps/game-server/src/native_ws_e2e/commit_crash.rs
++++ b/apps/game-server/src/native_ws_e2e/commit_crash.rs
+@@ -302,6 +302,7 @@ fn native_vm_frozen_room_recovers_after_process_exit_and_uninstall() {
+             "official",
+             &["vm-fixture".into()],
+             Some(store.clone()),
++            30,
+         )
+         .unwrap()
+         .unwrap();
+diff --git a/apps/game-server/src/native_ws_e2e/double_failure.rs b/apps/game-server/src/native_ws_e2e/double_failure.rs
+index 99c233fa..040398e0 100644
+--- a/apps/game-server/src/native_ws_e2e/double_failure.rs
++++ b/apps/game-server/src/native_ws_e2e/double_failure.rs
+@@ -35,7 +35,7 @@ pub(super) fn saved_state(cfg: &ServerConfig, record: &StoredRoom, token: &str)
+         legal: player
+             .map(|id| crate::native_view::legal_actions_for(session.engine(), id))
+             .unwrap_or_default(),
+-        choice: crate::native_view::choice_for(session.engine(), member.role.into(), player),
++        choice: session.choice_for(member.role.into(), player),
+     }
+ }
+ 
+@@ -200,6 +200,7 @@ fn native_extensions_ws_double_initial_failure_restores_only_committed_creation(
+                     .fail_next_write_with_compensation(primary, compensation);
+                 let mut peer = Peer::connect(&server).await;
+                 peer.send(ClientMessage::CreateRoom {
++                    choice_timeout_secs: None,
+                     players: 2,
+                     seed: SEED,
+                     password: PASSWORD.into(),
+diff --git a/apps/game-server/src/native_ws_e2e/durability.rs b/apps/game-server/src/native_ws_e2e/durability.rs
+index eca00728..a9b31c86 100644
+--- a/apps/game-server/src/native_ws_e2e/durability.rs
++++ b/apps/game-server/src/native_ws_e2e/durability.rs
+@@ -173,7 +173,14 @@ fn restart_after_uncertain_rename_restores_only_confirmed_choice(fault: StoreFau
+             drop(b);
+             drop(spectator);
+             server.stop().await;
+-            (room, tokens, before_a, before_b, before_spectator, confirmed)
++            (
++                room,
++                tokens,
++                before_a,
++                before_b,
++                before_spectator,
++                confirmed,
++            )
+         });
+ 
+     disable_packages(&cfg);
+@@ -237,6 +244,7 @@ fn uncertain_initial_save_is_not_restored_as_a_room(fault: StoreFault) {
+             .fail_next_write(fault);
+         let mut peer = Peer::connect(&server).await;
+         peer.send(ClientMessage::CreateRoom {
++            choice_timeout_secs: None,
+             players: 2,
+             seed: SEED,
+             password: PASSWORD.into(),
+@@ -472,7 +480,7 @@ fn native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps(
+         let (outcome, continued) = a.submit(a.player, before.view.revision, 704, answer(&before, a.player)).await;
+         assert!(matches!(outcome, CommandResult::Accepted { new_revision, .. } if new_revision > before.view.revision));
+         let mut active = Peer::connect(&restarted).await;
+-        active.send(ClientMessage::CreateRoom { players: 2, seed: SEED, password: PASSWORD.into() }).await;
++        active.send(ClientMessage::CreateRoom { choice_timeout_secs: None, players: 2, seed: SEED, password: PASSWORD.into() }).await;
+         active.error(ErrorCode::Internal).await;
+         assert_eq!(restarted.lobby.stats().active_rooms, 2, "disabled packs cannot create a new room");
+         println!("NATIVE_WS crash_recovery=pass healthy_rooms=2 corrupt_rooms=2 orphan_room=102 committed_revision={} continued_revision={}", before.view.revision, continued.view.revision);
+@@ -517,7 +525,9 @@ fn native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe(
+         if failure == "unreadable-directory" {
+             match crate::try_bootstrap(&cfg) {
+                 Ok(_) => panic!("存档目录不是目录时必须拒绝启动"),
+-                Err(error) => println!("NATIVE_WS recovery_inventory={failure} startup=refused ({error})"),
++                Err(error) => {
++                    println!("NATIVE_WS recovery_inventory={failure} startup=refused ({error})")
++                }
+             }
+             continue;
+         }
+@@ -532,6 +542,7 @@ fn native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe(
+             let server = Server { url, lobby, task };
+             let mut peer = Peer::connect(&server).await;
+             peer.send(ClientMessage::CreateRoom {
++                choice_timeout_secs: None,
+                 players: 2,
+                 seed: SEED,
+                 password: PASSWORD.into(),
+diff --git a/apps/game-server/src/native_ws_e2e/referee.rs b/apps/game-server/src/native_ws_e2e/referee.rs
+index ef0f3c7f..11730234 100644
+--- a/apps/game-server/src/native_ws_e2e/referee.rs
++++ b/apps/game-server/src/native_ws_e2e/referee.rs
+@@ -33,6 +33,7 @@ fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
+     let other = session.join(2, Some(1), None).unwrap();
+     session.spectate(90);
+     session.spectate(91);
++    session.sync_deadline().unwrap();
+     let mut state = session.export_state(&session.snapshot_hex());
+     state.next_dedup = snapshot.last_dedup + 1;
+     let referee = state
+@@ -55,7 +56,7 @@ fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
+     let spectator_token = spectator.reconnect_token.clone();
+     let expected = State {
+         view: observer_snapshot_for(session.engine(), RoomRole::Referee, None),
+-        choice: choice_for(session.engine(), RoomRole::Referee, None),
++        choice: session.choice_for(RoomRole::Referee, None),
+         legal: vec![],
+     };
+     let room_id = 909;
+diff --git a/apps/game-server/src/room.rs b/apps/game-server/src/room.rs
+index 493c20ff..f8fa8da2 100644
+--- a/apps/game-server/src/room.rs
++++ b/apps/game-server/src/room.rs
+@@ -623,10 +623,12 @@ async fn broadcast_roster(
+             player_id: m.player_id.raw(),
+             display_name: m.display_name.clone(),
+             connected: m.connected,
++            managed: false,
+         })
+         .collect();
+     seats.sort_by_key(|s| s.seat);
+     let msg = ServerMessage::RoomRoster {
++        choice_timeout_secs: None,
+         room_id,
+         seats,
+         started,
+diff --git a/apps/game-server/src/room_native.rs b/apps/game-server/src/room_native.rs
+index 714b7c6a..18e00a17 100644
+--- a/apps/game-server/src/room_native.rs
++++ b/apps/game-server/src/room_native.rs
+@@ -20,7 +20,14 @@ use std::collections::HashMap;
+ #[path = "room_native/receipts.rs"]
+ mod receipts;
+ use receipts::CommandReceipts;
++#[path = "room_native/wal.rs"]
++mod wal;
++pub use wal::{NativeWalEntry, NativeWalState};
++#[path = "room_native/timeout.rs"]
++mod timeout;
+ pub use receipts::NativeCommandReceipt;
++pub(crate) use timeout::unix_ms;
++pub use timeout::{validate_timeout_secs, NativeChoiceDeadline, NativeTimeoutState};
+ 
+ /// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
+ #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+@@ -45,6 +52,10 @@ pub struct NativeRoomState {
+     /// 按重连身份固定已接受请求；旧档没有历史收据时保持空集。
+     #[serde(default, skip_serializing_if = "Vec::is_empty")]
+     pub command_receipts: Vec<NativeCommandReceipt>,
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub timeout: Option<NativeTimeoutState>,
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub wal: Option<NativeWalState>,
+ }
+ 
+ /// hex 编码（小写）。
+@@ -93,6 +104,8 @@ pub struct NativeRoomSession {
+     command_receipts: CommandReceipts,
+     /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
+     event_cursor: usize,
++    timeout: NativeTimeoutState,
++    wal: NativeWalState,
+ }
+ 
+ /// IO 提交前保存可变会话；包定义与原局资产在 actor 生命周期内不变。
+@@ -106,6 +119,8 @@ pub(crate) struct NativeRoomCheckpoint {
+     command_receipts: CommandReceipts,
+     /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
+     event_cursor: usize,
++    timeout: NativeTimeoutState,
++    wal: NativeWalState,
+ }
+ 
+ /// 入座/观战结果。
+@@ -130,6 +145,8 @@ impl NativeRoomSession {
+             next_dedup: self.next_dedup,
+             command_receipts: self.command_receipts.clone(),
+             event_cursor: self.event_cursor,
++            timeout: self.timeout.clone(),
++            wal: self.wal.clone(),
+         }
+     }
+ 
+@@ -142,6 +159,8 @@ impl NativeRoomSession {
+         self.next_dedup = before.next_dedup;
+         self.command_receipts = before.command_receipts;
+         self.event_cursor = before.event_cursor;
++        self.timeout = before.timeout;
++        self.wal = before.wal;
+     }
+ 
+     /// 以原生引擎为模板建会话（模板状态即开局状态）。
+@@ -156,7 +175,15 @@ impl NativeRoomSession {
+         max_seats: u8,
+     ) -> Self {
+         let event_cursor = engine.log().len();
++        let wal = NativeWalState::new(&engine);
++        let next_dedup = engine.save().last_dedup.saturating_add(1);
+         Self {
++            timeout: NativeTimeoutState {
++                choice_timeout_secs: 30,
++                managed_seats: vec![],
++                deadline: None,
++            },
++            wal,
+             engine,
+             packs,
+             frozen_packages: None,
+@@ -165,7 +192,7 @@ impl NativeRoomSession {
+             by_token: HashMap::new(),
+             started: true, // 原生引擎建局即已开局（赛前大厅阶段未建模，登记待办）
+             next_token: 1,
+-            next_dedup: 1,
++            next_dedup,
+             command_receipts: CommandReceipts::default(),
+             event_cursor,
+         }
+@@ -229,6 +256,9 @@ impl NativeRoomSession {
+                 }
+                 if let Some(mut m) = self.members.remove(&old) {
+                     m.connection_id = connection_id;
++                    if m.role == ClientRole::Player {
++                        self.timeout.managed_seats.retain(|s| *s != m.seat);
++                    }
+                     let reply = self.reply_for(&m);
+                     self.by_token.insert(token, connection_id);
+                     self.members.insert(connection_id, m);
+@@ -317,6 +347,9 @@ impl NativeRoomSession {
+         self.engine
+             .assign_general_named(m.seat, name)
+             .map_err(|e| format!("选将被拒绝: {e:?}"))?;
++        self.timeout.managed_seats.retain(|s| *s != m.seat);
++        self.wal = NativeWalState::new(&self.engine);
++        self.sync_deadline()?;
+         Ok((
+             self.engine.revision(),
+             self.engine
+@@ -346,6 +379,8 @@ impl NativeRoomSession {
+             frozen_packages: self.frozen_packages.clone(),
+             members: self.members.values().cloned().collect(),
+             command_receipts: self.command_receipts.entries(),
++            timeout: Some(self.timeout.clone()),
++            wal: Some(self.wal.clone()),
+         }
+     }
+ 
+@@ -391,7 +426,14 @@ impl NativeRoomSession {
+             }
+         }
+         let event_cursor = engine.log().len();
+-        Ok(Self {
++        let timeout = state
++            .timeout
++            .clone()
++            .ok_or("missing native timeout metadata")?;
++        let wal = state.wal.clone().ok_or("missing native WAL")?;
++        let restored = Self {
++            timeout,
++            wal,
+             engine,
+             packs,
+             frozen_packages: state.frozen_packages.clone(),
+@@ -403,7 +445,20 @@ impl NativeRoomSession {
+             next_dedup: state.next_dedup,
+             command_receipts,
+             event_cursor,
+-        })
++        };
++        if restored.next_dedup
++            != restored
++                .engine
++                .save()
++                .last_dedup
++                .checked_add(1)
++                .ok_or("dedup exhausted")?
++        {
++            return Err("invalid next dedup".into());
++        }
++        restored.validate_timeout()?;
++        restored.validate_wal()?;
++        Ok(restored)
+     }
+ 
+     /// 当前引擎归档字节（hex）——落盘用。
+@@ -454,32 +509,51 @@ impl NativeRoomSession {
+             if *player_count as usize != self.engine.state_core().players.len() {
+                 return Err("StartGame 座位数与已创建的原生对局不一致".into());
+             }
++            self.timeout.managed_seats.retain(|s| *s != m.seat);
+             return Ok(CommandResult::Accepted {
+                 new_revision: self.engine.revision(),
+                 state_hash: self.engine.state_hash(),
+             });
+         }
+         let action = self.action_for(kind)?;
+-        let dedup = self.next_dedup;
+-        self.next_dedup += 1;
+-        let outcome = self.engine.submit(GameCommand {
+-            actor: m.seat,
++        let result = self.submit_native(m.seat, action, expected_revision)?;
++        if matches!(result, CommandResult::Accepted { .. }) {
++            self.timeout.managed_seats.retain(|s| *s != m.seat);
++        }
++        Ok(result)
++    }
++
++    pub(crate) fn submit_native(
++        &mut self,
++        seat: u8,
++        action: GameAction,
++        expected_revision: u64,
++    ) -> Result<CommandResult, String> {
++        let next = self.next_dedup.checked_add(1).ok_or("dedup exhausted")?;
++        let command = GameCommand {
++            actor: seat,
+             expected_revision,
+-            dedup_id: dedup,
++            dedup_id: self.next_dedup,
+             action,
+-        });
+-        Ok(match outcome {
+-            CommandOutcome::Accepted { state_hash } => CommandResult::Accepted {
+-                new_revision: self.engine.revision(),
+-                state_hash,
+-            },
+-            CommandOutcome::Pending { .. } | CommandOutcome::Suspended => CommandResult::Accepted {
+-                new_revision: self.engine.revision(),
+-                state_hash: self.engine.state_hash(),
+-            },
+-            CommandOutcome::Rejected(reason) => CommandResult::Rejected {
++        };
++        let before = self.checkpoint();
++        let outcome = self.engine.submit(command.clone());
++        if let CommandOutcome::Rejected(reason) = outcome {
++            return Ok(CommandResult::Rejected {
+                 reason: map_reject(&reason, self.engine.revision(), expected_revision),
+-            },
++            });
++        }
++        self.next_dedup = next;
++        self.wal
++            .entries
++            .push(NativeWalEntry::new(command, &self.engine));
++        if let Err(error) = self.sync_deadline() {
++            self.rollback(before);
++            return Err(error);
++        }
++        Ok(CommandResult::Accepted {
++            new_revision: self.engine.revision(),
++            state_hash: self.engine.state_hash(),
+         })
+     }
+ 
+@@ -503,7 +577,7 @@ impl NativeRoomSession {
+                     })
+                     .collect::<Result<Vec<_>, _>>()?,
+             },
+-            CommandKind::EndPhase {} => GameAction::NextPhase,
++            CommandKind::EndPhase => GameAction::NextPhase,
+             CommandKind::ActivateSkill {
+                 skill,
+                 targets,
+@@ -576,79 +650,6 @@ impl NativeRoomSession {
+     }
+ }
+ 
+-/// 原生权威房间的持久化面（NC09：存档/录像/跨进程恢复）。
+-///
+-/// 与旧线 `RoomPersist` 的区别：快照用**原生归档字节**（`encode_archive`），
+-/// WAL 记录**内核动作**（`GameAction`）与提交后的修订/摘要；恢复时先载入快照再
+-/// 顺序重放 WAL，重放结束的修订号与摘要必须与记录一致——否则明确失败。
+-#[derive(Default)]
+-pub struct NativeRoomPersist {
+-    /// 快照：修订号 → 归档字节。
+-    pub snapshots: std::collections::BTreeMap<u64, Vec<u8>>,
+-    /// WAL：`(修订号, 座位, 动作, 提交后摘要)`。
+-    pub wal: Vec<(u64, u8, GameAction, [u8; 32])>,
+-}
+-
+-impl NativeRoomPersist {
+-    /// 空持久化面。
+-    pub fn new() -> Self {
+-        Self::default()
+-    }
+-
+-    /// 记录一次**被接受**的提交。
+-    pub fn record(&mut self, revision: u64, seat: u8, action: GameAction, hash: [u8; 32]) {
+-        self.wal.push((revision, seat, action, hash));
+-    }
+-
+-    /// 写入快照（原生归档字节）。
+-    pub fn put_snapshot(&mut self, revision: u64, bytes: Vec<u8>) {
+-        self.snapshots.insert(revision, bytes);
+-    }
+-
+-    /// 按快照 + WAL 重放恢复（返回恢复后的引擎与重放条数）。
+-    ///
+-    /// `from_revision` 之后（严格大于）的 WAL 条目会被重放；每条重放后的摘要必须
+-    /// 与记录一致，否则返回错误（**不得静默接受**不一致的录像）。
+-    pub fn recover(
+-        &self,
+-        from_revision: u64,
+-        packs: &[&engine_native::content::extension::ExtensionPack],
+-    ) -> Result<(Engine, usize), String> {
+-        let bytes = self
+-            .snapshots
+-            .get(&from_revision)
+-            .ok_or_else(|| format!("缺少修订 {from_revision} 的快照"))?;
+-        let snapshot =
+-            engine_native::archive::decode_archive(bytes).map_err(|e| format!("{e:?}"))?;
+-        let mut engine = if packs.is_empty() {
+-            Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
+-        } else {
+-            Engine::restore_with_extensions(&snapshot, packs).map_err(|e| format!("{e:?}"))?
+-        };
+-        let mut replayed = 0usize;
+-        for (revision, seat, action, hash) in &self.wal {
+-            if *revision <= from_revision {
+-                continue;
+-            }
+-            let dedup = revision.wrapping_mul(2).max(1);
+-            let out = engine.submit(GameCommand {
+-                actor: *seat,
+-                expected_revision: engine.revision(),
+-                dedup_id: dedup,
+-                action: action.clone(),
+-            });
+-            if let CommandOutcome::Rejected(reason) = out {
+-                return Err(format!("重放修订 {revision} 被拒绝: {reason:?}"));
+-            }
+-            if engine.state_hash() != *hash {
+-                return Err(format!("重放修订 {revision} 摘要不一致（录像或内容不符）"));
+-            }
+-            replayed += 1;
+-        }
+-        Ok((engine, replayed))
+-    }
+-}
+-
+ /// 内核拒绝原因 → 协议拒绝原因（协议枚举较小，未覆盖形态归入 `IllegalAction`
+ /// 并带稳定短码；不得把故障伪装成成功）。
+ fn map_reject(
+diff --git a/apps/game-server/src/room_native_actor.rs b/apps/game-server/src/room_native_actor.rs
+index a476daa7..fd5964cb 100644
+--- a/apps/game-server/src/room_native_actor.rs
++++ b/apps/game-server/src/room_native_actor.rs
+@@ -10,10 +10,10 @@
+ //! 断开、名册广播、按 `snapshot_every` 落原生归档快照、WAL 重放恢复。
+ 
+ use crate::native_room_store::{NativeRoomStore, StoredRoom};
+-use crate::native_view::{choice_for, legal_actions_for, observer_snapshot_for, RoomRole};
++use crate::native_view::{legal_actions_for, observer_snapshot_for, RoomRole};
+ use crate::persist::RoomPersist;
+ use crate::room::{JoinReply, RoomHandle, RoomMsg};
+-use crate::room_native::{NativeRoomPersist, NativeRoomSession};
++use crate::room_native::NativeRoomSession;
+ use crate::session::SendStatus;
+ use engine_api::{CommandResult, ExpectedRevision, IdempotencyKey};
+ use engine_protocol::{ClientRole, MessageHeader, SeatPresence, ServerMessage};
+@@ -33,6 +33,8 @@ pub fn set_seat_timeout_secs(secs: u64) {
+ #[path = "room_native_actor/durability.rs"]
+ mod durability;
+ use durability::RoomDurability;
++#[path = "room_native_actor/timeout.rs"]
++mod timeout;
+ 
+ /// 原生房间成员（含广播句柄）。
+ struct NativeActorMember {
+@@ -75,7 +77,7 @@ fn legacy_replay_rejection(
+         },
+         view,
+         legal_actions: legal_actions_for(session.engine(), player_id),
+-        choice: choice_for(session.engine(), RoomRole::Player, Some(player_id)),
++        choice: session.choice_for(RoomRole::Player, Some(player_id)),
+         public_event_codes: vec![],
+     })
+ }
+@@ -181,7 +183,6 @@ async fn native_room_loop(
+     // 该时限的成员（0 = 关闭）。时限来自环境变量 `NONAME_NATIVE_SEAT_TIMEOUT_SECS`
+     // （默认 600 秒），由 spawn 侧读取后传入，避免在生产源码里直接读环境变量。
+     let seat_timeout_secs = SEAT_TIMEOUT_SECS.load(std::sync::atomic::Ordering::Relaxed);
+-    let mut persist = NativeRoomPersist::new();
+     let mut durability = RoomDurability::new(id, room_password.clone(), store);
+     // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
+     let _legacy_wal = RoomPersist::new();
+@@ -203,12 +204,91 @@ async fn native_room_loop(
+         })
+         .collect();
+     let mut last_revision = session.engine().revision();
+-    persist.put_snapshot(
+-        last_revision,
+-        engine_native::archive::encode_archive(&session.engine().save()),
+-    );
+-
+-    while let Some(msg) = rx.recv().await {
++    if let Err(error) = session
++        .sync_deadline()
++        .and_then(|_| durability.commit(&mut session, None))
++    {
++        tracing::error!(room = id, %error, "initial choice deadline could not be persisted");
++        return;
++    }
++    let mut automatic_allowed = true;
++    let mut paused_revision = None;
++    loop {
++        let revision = session.engine().revision();
++        let now = crate::room_native::unix_ms();
++        if paused_revision != Some(revision) {
++            match now {
++                Ok(now) => {
++                    if let Some(candidate) = session.automatic_command(now, automatic_allowed) {
++                        if let Err(error) = timeout::automatic_step(
++                            id,
++                            &mut session,
++                            &mut durability,
++                            &mut members,
++                            snapshot_every,
++                            candidate,
++                        )
++                        .await
++                        {
++                            tracing::warn!(room = id, %error, "automatic input paused");
++                            paused_revision = Some(session.engine().revision());
++                        }
++                        last_revision = session.engine().revision();
++                        automatic_allowed = false;
++                        continue;
++                    }
++                }
++                Err(ref error) => {
++                    tracing::error!(room = id, %error, "automatic clock unavailable");
++                    paused_revision = Some(revision);
++                }
++            }
++        }
++        let now = now.ok();
++        let managed_ready = now.is_some_and(|now| session.automatic_command(now, true).is_some());
++        let wait = if paused_revision == Some(revision) {
++            None
++        } else if managed_ready {
++            Some(std::time::Duration::ZERO)
++        } else {
++            session.timeout_state().deadline.as_ref().map(|d| {
++                std::time::Duration::from_millis(
++                    d.deadline_unix_ms
++                        .saturating_sub(now.expect("clock checked before timer")),
++                )
++            })
++        };
++        // Expiry was checked before removing a message; managed successors yield to queued people.
++        let msg = tokio::select! {
++            biased;
++            _ = async {
++                if !managed_ready {
++                    match wait {
++                        Some(delay) => tokio::time::sleep(delay).await,
++                        None => std::future::pending::<()>().await,
++                    }
++                } else {
++                    std::future::pending::<()>().await
++                }
++            } => {
++                automatic_allowed = true;
++                continue;
++            },
++            msg = rx.recv() => match msg {
++                Some(msg) => msg,
++                None => break,
++            },
++            _ = async {
++                match wait {
++                    Some(delay) => tokio::time::sleep(delay).await,
++                    None => std::future::pending::<()>().await,
++                }
++            } => {
++                automatic_allowed = true;
++                continue;
++            }
++        };
++        automatic_allowed = true;
+         match msg {
+             RoomMsg::Join {
+                 connection_id,
+@@ -263,6 +343,7 @@ async fn native_room_loop(
+                 }
+                 match session.join(connection_id, preferred_seat, reconnect_token) {
+                     Ok(joined) => {
++                        paused_revision = None;
+                         if let Err(error) = durability.commit(&mut session, before) {
+                             let _ = reply.send(Err(error));
+                             continue;
+@@ -286,15 +367,17 @@ async fn native_room_loop(
+                             role: joined.member.role,
+                             reconnect_token: joined.member.reconnect_token.clone(),
+                             view: joined.view,
+-                            choice: choice_for(session.engine(), joined.member.role.into(), Some(joined.member.player_id)),
++                            choice: session.choice_for(
++                                joined.member.role.into(),
++                                Some(joined.member.player_id),
++                            ),
+                             legal_actions: joined.legal_actions,
+                         };
+                         members.retain(|connection, _| {
+                             session.members().any(|member| member.connection_id == *connection)
+                         });
+                         members.insert(connection_id, m);
+-                        broadcast_roster_native(id, &mut members, session.engine().outcome().is_some())
+-                            .await;
++                        broadcast_roster_native(id, &mut members, &session).await;
+                         let _ = reply.send(Ok(reply_payload));
+                     }
+                     Err(e) => {
+@@ -337,7 +420,7 @@ async fn native_room_loop(
+                     outbound: Some(outbound),
+                 };
+                 members.insert(connection_id, m);
+-                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
++                broadcast_roster_native(id, &mut members, &session).await;
+                 let _ = reply.send(Ok(JoinReply {
+                     player_id: 0,
+                     seat: u8::MAX,
+@@ -394,7 +477,7 @@ async fn native_room_loop(
+                             result: prev,
+                             view,
+                             legal_actions: legal_actions_for(session.engine(), m.player_id),
+-                            choice: choice_for(session.engine(), m.role.into(), Some(m.player_id)),
++                            choice: session.choice_for(m.role.into(), Some(m.player_id)),
+                             public_event_codes: vec![],
+                         }));
+                         continue;
+@@ -432,7 +515,6 @@ async fn native_room_loop(
+                     continue;
+                 }
+                 let before = session.engine().revision();
+-                let action = session.action_for(&command.kind).ok();
+                 let result = match session.submit(connection_id, &command.kind, expected) {
+                     Ok(r) => r,
+                     Err(e) => {
+@@ -445,7 +527,7 @@ async fn native_room_loop(
+                 };
+                 if let CommandResult::Accepted {
+                     new_revision,
+-                    state_hash,
++                    state_hash: _,
+                 } = &result
+                 {
+                     if let Err(error) = session.remember_command(
+@@ -460,21 +542,13 @@ async fn native_room_loop(
+                         let _ = reply.send(Err(error));
+                         continue;
+                     }
++                    session.compact_wal(snapshot_every);
+                     if let Err(error) = durability.commit(&mut session, checkpoint) {
+                         let _ = reply.send(Err(error));
+                         continue;
+                     }
++                    paused_revision = None;
+                     if *new_revision > before {
+-                        // 记录已接受的原生动作，保证所有命令都能从快照重放。
+-                        if let Some(action) = action {
+-                            persist.record(*new_revision, m.seat, action, *state_hash);
+-                        }
+-                        if snapshot_every > 0 && *new_revision % snapshot_every == 0 {
+-                            persist.put_snapshot(
+-                                *new_revision,
+-                                engine_native::archive::encode_archive(&session.engine().save()),
+-                            );
+-                        }
+                         last_revision = *new_revision;
+                     }
+                 } else if let Some(before) = checkpoint {
+@@ -485,7 +559,7 @@ async fn native_room_loop(
+                     observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
+                 });
+                 let legal = legal_actions_for(session.engine(), m.player_id);
+-                let choice = choice_for(session.engine(), m.role.into(), Some(m.player_id));
++                let choice = session.choice_for(m.role.into(), Some(m.player_id));
+                 let _ = reply.send(Ok(ServerMessage::CommandOutcome {
+                     header: MessageHeader::new(id, header.conn_seq, last_revision),
+                     idempotency_key,
+@@ -525,7 +599,7 @@ async fn native_room_loop(
+                         } else {
+                             Vec::new()
+                         },
+-                        choice: choice_for(session.engine(), role, seat),
++                        choice: session.choice_for(role, seat),
+                         public_event_codes: public_event_codes.clone(),
+                     };
+                     if out.try_send(&msg) == SendStatus::Full {
+@@ -533,7 +607,7 @@ async fn native_room_loop(
+                     }
+                 }
+                 drop_stalled(&mut members, stalled);
+-                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
++                broadcast_roster_native(id, &mut members, &session).await;
+             }
+             RoomMsg::Snapshot {
+                 connection_id,
+@@ -554,7 +628,7 @@ async fn native_room_loop(
+                             session.engine().revision(),
+                         ),
+                         view,
+-                        choice: choice_for(session.engine(), role, seat),
++                        choice: session.choice_for(role, seat),
+                         legal_actions: if is_player {
+                             legal_actions_for(session.engine(), seat.expect("player seat"))
+                         } else {
+@@ -586,11 +660,8 @@ async fn native_room_loop(
+                             let _ = reply.send(Err(error));
+                             continue;
+                         }
+-                        // 选将不推进 revision，覆盖恢复点并保留已接受请求的收据。
+-                        persist.put_snapshot(
+-                            revision,
+-                            engine_native::archive::encode_archive(&session.engine().save()),
+-                        );
++
++                        paused_revision = None;
+                         let mut stalled = Vec::new();
+                         for other in members.values() {
+                             let Some(out) = other.outbound.as_ref() else {
+@@ -609,7 +680,7 @@ async fn native_room_loop(
+                             let msg = ServerMessage::Snapshot {
+                                 header: MessageHeader::new(id, 0, revision),
+                                 view: observer_snapshot_for(session.engine(), role, seat),
+-                                choice: choice_for(session.engine(), role, seat),
++                                choice: session.choice_for(role, seat),
+                                 legal_actions: if other.role == ClientRole::Player {
+                                     legal_actions_for(session.engine(), seat.expect("player seat"))
+                                 } else {
+@@ -645,21 +716,9 @@ async fn native_room_loop(
+                         "native member disconnected"
+                     );
+                 }
+-                broadcast_roster_native(id, &mut members, session.engine().outcome().is_some()).await;
++                broadcast_roster_native(id, &mut members, &session).await;
+             }
+             RoomMsg::Recover { reply } => {
+-                // NC09：按「快照 + WAL 重放」恢复（内容不符/摘要不符都会明确失败）。
+-                // 快照点取持久化面中最新的、不晚于最后已接受修订号的快照。
+-                let from = persist
+-                    .snapshots
+-                    .keys()
+-                    .filter(|r| **r <= last_revision)
+-                    .next_back()
+-                    .copied();
+-                let Some(from) = from else {
+-                    let _ = reply.send(Err("无可用于恢复的快照".into()));
+-                    continue;
+-                };
+                 let before = match durability.checkpoint(&session) {
+                     Ok(before) => before,
+                     Err(error) => {
+@@ -667,15 +726,14 @@ async fn native_room_loop(
+                         continue;
+                     }
+                 };
+-                match persist.recover(from, &session.pack_refs()) {
+-                    Ok((engine, replayed)) => {
+-                        session.replace_engine(engine);
++                match session.recover_wal() {
++                    Ok(()) => {
+                         if let Err(error) = durability.commit(&mut session, before) {
+                             let _ = reply.send(Err(error));
+                             continue;
+                         }
+                         last_revision = session.engine().revision();
+-                        debug!(room = id, from, replayed, "native room recovered");
++                        debug!(room = id, "native room recovered");
+                         let _ = reply.send(Ok(()));
+                     }
+                     Err(e) => {
+@@ -691,7 +749,7 @@ async fn native_room_loop(
+ fn roster_message(
+     room_id: u64,
+     members: &HashMap<u64, NativeActorMember>,
+-    finished: bool,
++    session: &NativeRoomSession,
+ ) -> ServerMessage {
+     let mut seats: Vec<SeatPresence> = members
+         .values()
+@@ -701,6 +759,7 @@ fn roster_message(
+             player_id: m.player_id.raw(),
+             display_name: m.display_name.clone(),
+             connected: m.outbound.is_some(),
++            managed: session.timeout_state().managed_seats.contains(&m.seat),
+         })
+         .collect();
+     seats.sort_by_key(|s| s.seat);
+@@ -708,7 +767,8 @@ fn roster_message(
+         room_id,
+         seats,
+         started: true,
+-        finished,
++        finished: session.engine().outcome().is_some(),
++        choice_timeout_secs: Some(session.timeout_state().choice_timeout_secs),
+     }
+ }
+ 
+@@ -730,9 +790,9 @@ fn drop_stalled(members: &mut HashMap<u64, NativeActorMember>, stalled: Vec<u64>
+ async fn broadcast_roster_native(
+     room_id: u64,
+     members: &mut HashMap<u64, NativeActorMember>,
+-    finished: bool,
++    session: &NativeRoomSession,
+ ) {
+-    let msg = roster_message(room_id, members, finished);
++    let msg = roster_message(room_id, members, session);
+     let mut stalled = Vec::new();
+     for m in members.values() {
+         if let Some(out) = &m.outbound {
+@@ -746,7 +806,7 @@ async fn broadcast_roster_native(
+     }
+     drop_stalled(members, stalled);
+     // 已断开的连接不应再出现在名册的 connected=true 中；仅对剩余连接重发。
+-    let msg = roster_message(room_id, members, finished);
++    let msg = roster_message(room_id, members, session);
+     for m in members.values() {
+         if let Some(out) = &m.outbound {
+             let _ = out.try_send(&msg);
+@@ -771,6 +831,7 @@ pub fn spawn_native_room_if_configured(
+     namespace: &str,
+     packages: &[String],
+     store: Option<NativeRoomStore>,
++    choice_timeout_secs: u8,
+ ) -> Result<Option<RoomHandle>, String> {
+     if !native {
+         return Ok(None);
+@@ -791,6 +852,8 @@ pub fn spawn_native_room_if_configured(
+     };
+     let mut session = NativeRoomSession::new_with_packs(engine, packs, players);
+     session.set_frozen_packages(frozen);
++    session.set_choice_timeout_secs(choice_timeout_secs)?;
++    session.sync_deadline()?;
+     let hash = crate::native_room_store::password_hash(id, &password);
+     let mut durability = RoomDurability::new(id, hash, store.clone());
+     durability.commit(&mut session, None)?;
+diff --git a/apps/game-server/src/room_native_actor/durability.rs b/apps/game-server/src/room_native_actor/durability.rs
+index 0f1765fd..b353b639 100644
+--- a/apps/game-server/src/room_native_actor/durability.rs
++++ b/apps/game-server/src/room_native_actor/durability.rs
+@@ -44,7 +44,7 @@ impl RoomDurability {
+             }
+             self.uncertain = false;
+         }
+-        Ok(self.store.as_ref().map(|_| session.checkpoint()))
++        Ok(Some(session.checkpoint()))
+     }
+ 
+     pub(super) fn commit(
+diff --git a/apps/game-server/src/session.rs b/apps/game-server/src/session.rs
+index 6180139d..c77d1a2c 100644
+--- a/apps/game-server/src/session.rs
++++ b/apps/game-server/src/session.rs
+@@ -90,6 +90,8 @@ pub struct Session {
+     pub reconnect_token: Option<String>,
+     /// Last accepted conn_seq from client.
+     pub last_conn_seq: u64,
++    /// Only an exact WS6 Hello enables public room operations.
++    pub handshake_complete: bool,
+     /// Outbound.
+     pub outbound: Outbound,
+     /// 慢连接信号：socket writer 超时或房间广播队列满时置 `true`。
+diff --git a/apps/game-server/tests/approved_b_metadata.rs b/apps/game-server/tests/approved_b_metadata.rs
+index f8ec3c6a..db192a5d 100644
+--- a/apps/game-server/tests/approved_b_metadata.rs
++++ b/apps/game-server/tests/approved_b_metadata.rs
+@@ -140,8 +140,11 @@ fn actual_ws5_snapshot_bytes_round_trip_old_and_new_rust_readers() {
+     submit(&mut engine, GameAction::ActivateSkill { skill });
+     let id = engine.open_choice().unwrap().id;
+     submit(&mut engine, GameAction::Answer { choice_id: id, selection: vec![engine_native::ChoiceOption::Player(1)] });
++    // Keep the original WS5 reader sample after the current protocol advances.
++    let mut header = engine_protocol::MessageHeader::new(909, 1, engine.revision());
++    header.protocol_version = 5;
+     let message = engine_protocol::ServerMessage::Snapshot {
+-        header: engine_protocol::MessageHeader::new(909, 1, engine.revision()),
++        header,
+         view: observer_snapshot_for(&engine, RoomRole::Referee, None),
+         legal_actions: vec![],
+         choice: choice_for(&engine, RoomRole::Referee, None),
+diff --git a/apps/game-server/tests/nc09_native_actor.rs b/apps/game-server/tests/nc09_native_actor.rs
+index 7ab14da4..1a872f6d 100644
+--- a/apps/game-server/tests/nc09_native_actor.rs
++++ b/apps/game-server/tests/nc09_native_actor.rs
+@@ -109,6 +109,7 @@ async fn nc09_configured_actor_keeps_password_packages_general_and_seat_ownershi
+         "upstream-noname",
+         &["shahai-swd".into(), "huanle-cards".into()],
+         Some(store.clone()),
++        30,
+     )
+     .unwrap()
+     .unwrap();
+@@ -362,6 +363,7 @@ async fn nc09_backend_selection_is_explicit() {
+         "upstream-noname",
+         &["shahai-swd".to_string()],
+         None,
++        30,
+     )
+     .expect("未启用不应报错");
+     assert!(none.is_none(), "未启用原生后端时不得接管");
+@@ -379,6 +381,7 @@ async fn nc09_backend_selection_is_explicit() {
+         "upstream-noname",
+         &["shahai-swd".to_string()],
+         None,
++        30,
+     )
+     .expect("启用后应成功")
+     .expect("应返回原生句柄");
+@@ -412,6 +415,7 @@ async fn nc09_backend_selection_is_explicit() {
+         "upstream-noname",
+         &["no-such-package".to_string()],
+         None,
++        30,
+     ) {
+         Ok(_) => panic!("包缺失必须报错"),
+         Err(e) => e,
+diff --git a/apps/game-server/tests/nc09_native_durability.rs b/apps/game-server/tests/nc09_native_durability.rs
+index c32e6292..ec8880d1 100644
+--- a/apps/game-server/tests/nc09_native_durability.rs
++++ b/apps/game-server/tests/nc09_native_durability.rs
+@@ -379,6 +379,7 @@ async fn nc09_configured_creation_rejects_failed_initial_save() {
+         "test",
+         &[],
+         Some(store.clone()),
++        30,
+     );
+     assert!(
+         matches!(created,Err(error) if error.starts_with("native room persistence failed:")),
+diff --git a/apps/game-server/tests/nc09_native_room_session.rs b/apps/game-server/tests/nc09_native_room_session.rs
+index 9e04db17..1c67b5cc 100644
+--- a/apps/game-server/tests/nc09_native_room_session.rs
++++ b/apps/game-server/tests/nc09_native_room_session.rs
+@@ -150,7 +150,12 @@ fn nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions() {
+     let mut room = session_with_choice();
+     let open = room.engine().open_choice().unwrap().clone();
+     let joined = room.join(1, Some(open.observer), None).unwrap();
+-    let choice = native_view::choice_for(room.engine(), joined.member.role.into(), Some(joined.member.player_id)).unwrap();
++    let choice = native_view::choice_for(
++        room.engine(),
++        joined.member.role.into(),
++        Some(joined.member.player_id),
++    )
++    .unwrap();
+     assert_eq!(
+         choice.options.iter().map(|o| o.token).collect::<Vec<_>>(),
+         (0..open.spec.options.len() as u32).collect::<Vec<_>>()
+@@ -265,14 +270,6 @@ fn nc09_room_wal_replay_recovers_identically() {
+         .expect("装载");
+ 
+     let mut room = session(20261410, 4);
+-    let mut persist = room_native::NativeRoomPersist::new();
+-
+-    // 快照点：初始状态
+-    let start_rev = room.engine().revision();
+-    persist.put_snapshot(
+-        start_rev,
+-        engine_native::archive::encode_archive(&room.engine().save()),
+-    );
+ 
+     // 逐命令推进并记录 WAL（只记录被接受的动作）
+     let mut accepted = 0usize;
+@@ -293,12 +290,6 @@ fn nc09_room_wal_replay_recovers_identically() {
+         } = out
+         {
+             if new_revision > before {
+-                persist.record(
+-                    new_revision,
+-                    seat,
+-                    engine_native::GameAction::NextPhase,
+-                    state_hash,
+-                );
+                 accepted += 1;
+             }
+         }
+@@ -311,28 +302,35 @@ fn nc09_room_wal_replay_recovers_identically() {
+     let final_rev = room.engine().revision();
+     let final_hash = room.engine().state_hash();
+ 
+-    // 从快照重放 WAL → 修订与摘要必须一致
+-    let packs = [&loaded.pack];
+-    let (restored, replayed) = persist.recover(start_rev, &packs).expect("WAL 重放恢复");
+-    assert_eq!(replayed, accepted, "重放条数一致");
+-    assert_eq!(restored.revision(), final_rev, "重放后修订一致");
+-    assert_eq!(restored.state_hash(), final_hash, "重放后摘要一致");
+-
+-    // 受控变异：篡改一条 WAL 的期望摘要 → 必须明确失败（录像不可信）
+-    let mut tampered = room_native::NativeRoomPersist::new();
+-    for (i, (rev, seat, action, hash)) in persist.wal.iter().enumerate() {
+-        let mut h = *hash;
+-        if i == 0 {
+-            h[0] ^= 0xFF; // 篡改期望摘要
+-        }
+-        tampered.record(*rev, *seat, action.clone(), h);
+-    }
+-    tampered.snapshots = persist.snapshots.clone();
+-    let err = match tampered.recover(start_rev, &packs) {
++    // The actor and disk now share the exact recorded commands and dedup values.
++    let state = room.export_state(&room.snapshot_hex());
++    assert_eq!(state.wal.as_ref().unwrap().entries.len(), accepted);
++    let restored = NativeRoomSession::from_saved(&state, vec![loaded.pack]).expect("WAL 重放恢复");
++    assert_eq!(restored.engine().revision(), final_rev, "重放后修订一致");
++    assert_eq!(restored.engine().state_hash(), final_hash, "重放后摘要一致");
++    let mut actual = restored.engine().save();
++    actual.auth_generation = room.engine().save().auth_generation;
++    assert_eq!(
++        engine_native::archive::encode_archive(&actual),
++        engine_native::archive::encode_archive(&room.engine().save())
++    );
++
++    // 篡改一条 WAL 期望摘要仍须明确失败，不能只信最终完整快照。
++    let mut tampered = state;
++    tampered.wal.as_mut().unwrap().entries[0].state_hash[0] ^= 0xff;
++    let error = match NativeRoomSession::from_saved(
++        &tampered,
++        vec![
++            content
++                .load_scoped(Some("upstream-noname"), "shahai-swd")
++                .unwrap()
++                .pack,
++        ],
++    ) {
+         Ok(_) => panic!("摘要不符必须失败"),
+-        Err(e) => e,
++        Err(error) => error,
+     };
+-    assert!(err.contains("摘要不一致"), "{err}");
++    assert!(error.contains("摘要不一致"), "{error}");
+ }
+ 
+ /// NC05/NC09 房间级选将：原生后端支持（按入座座位、观战者拒绝、未知武将报错、
+@@ -577,6 +575,8 @@ async fn nc09_room_store_is_removed_on_match_end() {
+         checksum: String::new(),
+         state: room_native::NativeRoomState {
+             command_receipts: Vec::new(),
++            timeout: None,
++            wal: None,
+             snapshot_hex: String::new(),
+             max_seats: 4,
+             started: true,
+@@ -622,6 +622,8 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
+         checksum: String::new(),
+         state: room_native::NativeRoomState {
+             command_receipts: Vec::new(),
++            timeout: None,
++            wal: None,
+             snapshot_hex: String::new(),
+             max_seats: 4,
+             started: false,
+@@ -747,10 +749,60 @@ fn nc09_choice_visibility_requires_trusted_role_even_with_a_valid_seat() {
+     let room = session_with_choice();
+     let open = room.engine().open_choice().unwrap();
+     let owner = ApiPlayerId::new(open.observer as u32 + 1);
+-    for seat in [None, Some(ApiPlayerId::NONE), Some(owner), Some(ApiPlayerId::new(257))] {
+-        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat).is_none());
+-        let choice = native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
++    for seat in [
++        None,
++        Some(ApiPlayerId::NONE),
++        Some(owner),
++        Some(ApiPlayerId::new(257)),
++    ] {
++        assert!(
++            native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat)
++                .is_none()
++        );
++        let choice =
++            native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
+         assert_eq!(choice.observer, owner);
+         assert_eq!(choice.options.len(), open.spec.options.len());
+     }
+ }
++
++// Temporarily appended to nc09_native_room_session.rs, removed after capturing red.
++#[tokio::test]
++async fn nc09_timeout_default_deadline_answers_pending_choice() {
++    let room = session_with_choice();
++    let choice = room.engine().open_choice().unwrap().clone();
++    let revision = room.engine().revision();
++    let handle = room_native_actor::spawn_room_native(98, room, 8, 4);
++    let (tx, mut rx) = mpsc::channel(32);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle
++        .send(room::RoomMsg::Join {
++            connection_id: 1,
++            display_name: "timeout-observer".into(),
++            preferred_seat: Some(choice.observer),
++            reconnect_token: None,
++            password: String::new(),
++            outbound: session::Outbound::new(tx),
++            reply,
++        })
++        .await
++        .unwrap();
++    assert!(response.await.unwrap().unwrap().choice.is_some());
++    let answer = tokio::time::timeout(std::time::Duration::from_secs(31), async {
++        while let Some(message) = rx.recv().await {
++            if let engine_protocol::ServerMessage::CommandOutcome { view, .. } =
++                serde_json::from_str(&message).unwrap()
++            {
++                if view.revision > revision {
++                    return;
++                }
++            }
++        }
++        panic!("actor closed before the choice was answered");
++    })
++    .await;
++    assert!(
++        answer.is_ok(),
++        "default 30-second room timeout must submit AI answer through ordinary actor command flow"
++    );
++}
+diff --git a/apps/game-server/tests/nc09_projection_parity.rs b/apps/game-server/tests/nc09_projection_parity.rs
+index d8d355be..2d841cea 100644
+--- a/apps/game-server/tests/nc09_projection_parity.rs
++++ b/apps/game-server/tests/nc09_projection_parity.rs
+@@ -215,7 +215,7 @@ fn nc09_invalid_seat_cannot_wrap_to_a_private_projection() {
+ }
+ 
+ #[test]
+-fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
++fn nc09_projection_uses_ws6_snapshot_and_existing_card_fields() {
+     let engine = fixture();
+     let view = observer_snapshot_for(&engine, RoomRole::Player, Some(PlayerId::new(1)));
+     let message = engine_protocol::ServerMessage::Snapshot {
+@@ -224,7 +224,7 @@ fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
+         choice: native_view::choice_for(&engine, RoomRole::Player, Some(PlayerId::new(1))),
+         legal_actions: native_view::legal_actions_for(&engine, PlayerId::new(1)),
+     };
+-    assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 5);
++    assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 6);
+     let wire = engine_protocol::encode_s2c(&message).unwrap();
+     let engine_protocol::ServerMessage::Snapshot {
+         header,
+@@ -234,7 +234,7 @@ fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
+     else {
+         panic!("snapshot");
+     };
+-    assert_eq!(header.protocol_version, 5);
++    assert_eq!(header.protocol_version, 6);
+     assert_eq!(decoded, view);
+ }
+ 
+diff --git a/apps/game-server/tests/nc09_referee_projection.rs b/apps/game-server/tests/nc09_referee_projection.rs
+index efaf2b91..47f78aa9 100644
+--- a/apps/game-server/tests/nc09_referee_projection.rs
++++ b/apps/game-server/tests/nc09_referee_projection.rs
+@@ -159,7 +159,7 @@ fn assert_choice_kind(engine: &Engine, kind: engine_api::ChoiceKind) {
+     else {
+         panic!("snapshot")
+     };
+-    assert_eq!(header.protocol_version, 5);
++    assert_eq!(header.protocol_version, 6);
+     assert_eq!(decoded, Some(choice));
+ }
+ 
+diff --git a/apps/web-client/scripts/nc12-online-rtt.mjs b/apps/web-client/scripts/nc12-online-rtt.mjs
+index 22618ce5..7b445c28 100644
+--- a/apps/web-client/scripts/nc12-online-rtt.mjs
++++ b/apps/web-client/scripts/nc12-online-rtt.mjs
+@@ -53,7 +53,7 @@ send("Hello", {
+     engine_api: 1,
+     rule_vm_abi: 167,
+     content_schema: 3,
+-    network_protocol: 5,
++    network_protocol: 6,
+     replay_schema: 1,
+     snapshot_schema: 1,
+     package_format: 1,
+@@ -111,7 +111,7 @@ socket2.send(
+         engine_api: 1,
+         rule_vm_abi: 167,
+         content_schema: 3,
+-        network_protocol: 5,
++        network_protocol: 6,
+         replay_schema: 1,
+         snapshot_schema: 1,
+         package_format: 1,
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+index ce4407df..851315e7 100644
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -24,7 +24,7 @@ function fixture(t) {
+     open(id = sockets.length) {
+       this.readyState = 1;
+       this.onopen?.();
+-      this.receive("Welcome", { connection_id: id, protocol_version: 5 });
++      this.receive("Welcome", { connection_id: id, protocol_version: 6, versions: { network_protocol: 6 } });
+     }
+     receive(type, payload) { this.onmessage?.({ data: JSON.stringify({ type, payload }) }); }
+     close() { this.readyState = 3; this.onclose?.(); }
+@@ -534,3 +534,28 @@ test("B metadata is preserved on real network consumer messages and malformed me
+   socket.receive("JoinOk", { view: snapshot, choice: { ...choice, native_kind: "invented_kind" } });
+   await assert.rejects(rejected, /元数据无效/);
+ });
++
++test("WS6 rejects an old Welcome before creating rooms", async (t) => {
++  const { client, sockets } = fixture(t);
++  const pending = client.connect("ws://localhost:7700/ws", "old-server");
++  const socket = sockets.at(-1);
++  socket.readyState = 1;
++  socket.onopen?.();
++  socket.receive("Welcome", { connection_id: 1, protocol_version: 5, versions: { network_protocol: 5 } });
++  await assert.rejects(pending, /WS6/);
++});
++
++test("WS6 room configuration and deadline reach the actual network consumer", async (t) => {
++  const { client, connect } = fixture(t);
++  const socket = await connect();
++  const pending = client.createRoom(4, 42, "", 10);
++  assert.equal(socket.sent.at(-1).payload.choice_timeout_secs, 10);
++  const choice = { choice_id: 1, observer: 1, deadline_unix_ms: Date.now() + 10000 };
++  socket.receive("JoinOk", { room_id: 7, player_id: 1, seat: 0, role: "Player", view: view(), choice, legal_actions: [] });
++  assert.deepEqual((await pending).envelope.choice, choice);
++  let roster;
++  client.onRoster(value => { roster = value; });
++  socket.receive("RoomRoster", { room_id: 7, choice_timeout_secs: 10, started: true, finished: false, seats: [{ seat: 0, player_id: 1, display_name: "p", connected: true, managed: true }] });
++  assert.equal(roster.seats[0].managed, true);
++  assert.equal(roster.choice_timeout_secs, 10);
++});
+diff --git a/apps/web-client/src/engine/networkClient.ts b/apps/web-client/src/engine/networkClient.ts
+index 65abdeb2..376571eb 100644
+--- a/apps/web-client/src/engine/networkClient.ts
++++ b/apps/web-client/src/engine/networkClient.ts
+@@ -7,7 +7,7 @@ import type {
+   ObserverSnapshot,
+ } from "../types/engine";
+ 
+-const NETWORK_PROTOCOL_VERSION = 5;
++const NETWORK_PROTOCOL_VERSION = 6;
+ 
+ type CommandKind =
+   | "EndPhase"
+@@ -44,7 +44,9 @@ export interface RoomRoster {
+     player_id: number;
+     display_name: string;
+     connected: boolean;
++    managed: boolean;
+   }[];
++  choice_timeout_secs: number | null;
+   started: boolean;
+   finished: boolean;
+ }
+@@ -223,8 +225,8 @@ export class NetworkEngineClient {
+     });
+   }
+ 
+-  createRoom(players: number, seed: number, password = ""): Promise<OnlineSession> {
+-    return this.joinRequest({ type: "CreateRoom", payload: { players, seed, password } }, password);
++  createRoom(players: number, seed: number, password = "", choiceTimeoutSecs = 30): Promise<OnlineSession> {
++    return this.joinRequest({ type: "CreateRoom", payload: { players, seed, password, choice_timeout_secs: choiceTimeoutSecs } }, password);
+   }
+ 
+   joinRoom(
+@@ -510,6 +512,11 @@ export class NetworkEngineClient {
+ 
+     switch (message.type) {
+       case "Welcome":
++        if (payload.protocol_version !== NETWORK_PROTOCOL_VERSION || (payload.versions as { network_protocol?: number } | undefined)?.network_protocol !== NETWORK_PROTOCOL_VERSION) {
++          this.rejectOutstanding(new Error("服务端协议版本不兼容：需要 WS6"));
++          this.socket?.close();
++          return;
++        }
+         this.connectionId = Number(payload.connection_id ?? 0);
+         this.welcomeWaiter?.resolve();
+         this.welcomeWaiter = null;
+@@ -549,6 +556,9 @@ export class NetworkEngineClient {
+       }
+       case "RoomRoster": {
+         const roster = payload as unknown as RoomRoster;
++        if ((roster.choice_timeout_secs !== null && ![10, 15, 30, 60, 90].includes(roster.choice_timeout_secs)) || !Array.isArray(roster.seats) || roster.seats.some((seat) => typeof seat.managed !== "boolean")) {
++          this.rejectOutstanding(new Error("服务端房间超时配置无效")); return;
++        }
+         for (const listener of this.rosterListeners) listener(roster);
+         break;
+       }
+diff --git a/apps/web-client/src/engine/observerMetadata.ts b/apps/web-client/src/engine/observerMetadata.ts
+index eb65145d..2fe296d6 100644
+--- a/apps/web-client/src/engine/observerMetadata.ts
++++ b/apps/web-client/src/engine/observerMetadata.ts
+@@ -49,5 +49,8 @@ export function choicePromptLabel(choice: ChoiceRequest): string {
+ /** Check optional metadata before an IPC/network payload enters the view store. */
+ export function validateObserverMetadata(view: ObserverSnapshot, choice: ChoiceRequest | null): void {
+   for (const seat of view.seats ?? []) generalSlots(seat.generals);
+-  if (choice) choiceMetadata(choice);
++  if (choice) {
++    choiceMetadata(choice);
++    if (choice.deadline_unix_ms != null && (!Number.isSafeInteger(choice.deadline_unix_ms) || choice.deadline_unix_ms <= 0)) throw new Error("native: choice deadline invalid");
++  }
+ }
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+index ff2739cc..03fc52ba 100644
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -87,6 +87,7 @@ export interface ObserverSnapshot {
+ }
+ 
+ export interface ChoiceRequest {
++  deadline_unix_ms?: number;
+   choice_id: number;
+   observer: number;
+   options?: { token: number; label_key: string }[];
+diff --git a/apps/web-client/src/views/BattleView.vue b/apps/web-client/src/views/BattleView.vue
+index 150b881a..ceecd247 100644
+--- a/apps/web-client/src/views/BattleView.vue
++++ b/apps/web-client/src/views/BattleView.vue
+@@ -75,6 +75,9 @@ const autoTimer = ref<number | null>(null);
+ const autoRunning = ref(false);
+ const statusLine = ref("未连接");
+ const roomRoster = ref<RoomRoster | null>(null);
++const countdownNow = ref(Date.now());
++const countdownTimer = setInterval(() => { countdownNow.value = Date.now(); }, 250);
++const choiceSecondsLeft = computed(() => store.choice?.deadline_unix_ms == null ? null : Math.max(0, Math.ceil((store.choice.deadline_unix_ms - countdownNow.value) / 1000)));
+ const roomId = ref(0);
+ const roomStarted = ref(false);
+ const isOnline = computed(() => route.query.mode === "online");
+@@ -89,6 +92,7 @@ interface OnlineIntent {
+   wsUrl: string;
+   displayName: string;
+   password: string;
++  choiceTimeoutSecs?: number;
+   roomId: number;
+   players: number;
+   seed: number;
+@@ -381,7 +385,8 @@ async function connectOnline(intent: OnlineIntent) {
+     session = await networkClient.createRoom(
+       intent.players,
+       intent.seed,
+-      intent.password
++      intent.password,
++      intent.choiceTimeoutSecs ?? 30
+     );
+   } else if (intent.action === "spectate") {
+     session = await networkClient.spectate(intent.roomId);
+@@ -603,6 +608,7 @@ onMounted(() => {
+ });
+ 
+ onUnmounted(() => {
++  clearInterval(countdownTimer);
+   window.removeEventListener("keydown", onKeydown);
+   window.removeEventListener("pagehide", releaseMatchLocks);
+   releaseMatchLocks();
+@@ -762,6 +768,7 @@ const turnInfo = computed(() => {
+     <section v-if="isOnline && roomRoster" class="panel online-roster" aria-label="联机房间座位">
+       <div class="row online-roster-head">
+         <h2>房间 #{{ roomRoster.room_id }}</h2>
++        <span v-if="roomRoster.choice_timeout_secs">选择时限 {{ roomRoster.choice_timeout_secs }} 秒</span>
+         <span :class="roomRoster.started ? 'started' : 'waiting'">
+           {{ roomRoster.started ? "对局进行中" : "等待玩家" }}
+         </span>
+@@ -769,6 +776,7 @@ const turnInfo = computed(() => {
+       <div class="row online-seats">
+         <span v-for="seat in roomRoster.seats" :key="seat.seat" class="online-seat">
+           {{ seat.seat + 1 }} · {{ seat.display_name }}
++          <strong v-if="seat.managed">托管中</strong>
+           <i :class="seat.connected ? 'connected' : 'offline'">{{ seat.connected ? "在线" : "离线" }}</i>
+         </span>
+       </div>
+@@ -776,6 +784,7 @@ const turnInfo = computed(() => {
+ 
+     <section v-if="store.choice" class="panel choice" aria-label="待选择">
+       <h2>{{ choicePromptLabel(store.choice) }}</h2>
++      <p v-if="choiceSecondsLeft !== null" role="timer">剩余 {{ choiceSecondsLeft }} 秒 · 到时托管</p>
+       <p class="muted">
+         choice #{{ store.choice.choice_id }} · 玩家
+         {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
+diff --git a/apps/web-client/src/views/HomeView.vue b/apps/web-client/src/views/HomeView.vue
+index 4fdd383c..e4b59a5e 100644
+--- a/apps/web-client/src/views/HomeView.vue
++++ b/apps/web-client/src/views/HomeView.vue
+@@ -14,6 +14,7 @@ const mode = ref<"prototype" | "identity">("prototype");
+ const displayName = ref(`player-${Math.floor(Math.random() * 900 + 100)}`);
+ const password = ref("");
+ const roomId = ref(1);
++const choiceTimeoutSecs = ref(30);
+ const wsUrl = ref(defaultWsUrl());
+ const onlineError = ref("");
+ const desktopPlatform = ref<DesktopPlatformInfo | null>(null);
+@@ -54,6 +55,7 @@ function goOnline(action: "create" | "join" | "spectate") {
+       roomId: roomId.value,
+       players: players.value,
+       seed: seed.value,
++      choiceTimeoutSecs: choiceTimeoutSecs.value,
+     })
+   );
+   void router.push({
+@@ -132,6 +134,12 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
+           昵称
+           <input v-model.trim="displayName" maxlength="24" autocomplete="nickname" />
+         </label>
++        <label>
++          选择时限
++          <select v-model.number="choiceTimeoutSecs" aria-label="选择时限">
++            <option v-for="secs in [10, 15, 30, 60, 90]" :key="secs" :value="secs">{{ secs }} 秒</option>
++          </select>
++        </label>
+         <label>
+           房间密码
+           <input v-model="password" type="password" autocomplete="current-password" />
+diff --git a/crates/engine-api/src/choice.rs b/crates/engine-api/src/choice.rs
+index 86c742f4..cc99157c 100644
+--- a/crates/engine-api/src/choice.rs
++++ b/crates/engine-api/src/choice.rs
+@@ -20,6 +20,9 @@ pub struct ChoiceRequest {
+     pub allow_cancel: bool,
+     /// Timeout policy identifier (ruleset-defined).
+     pub timeout_policy: TimeoutPolicy,
++    /// Server Unix deadline; absent for offline and legacy rules.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub deadline_unix_ms: Option<u64>,
+     /// Associated state revision when the choice was published.
+     pub revision: u64,
+     /// VM / effect continuation handle (opaque to clients).
+diff --git a/crates/engine-api/src/command.rs b/crates/engine-api/src/command.rs
+index bf346989..117fa2df 100644
+--- a/crates/engine-api/src/command.rs
++++ b/crates/engine-api/src/command.rs
+@@ -17,6 +17,7 @@ pub struct ExpectedRevision(pub u64);
+ ///
+ /// Only accepted commands enter the deterministic command log.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
+ pub struct Command {
+     /// Submitting player (or system actor).
+     pub actor: PlayerId,
+@@ -30,6 +31,7 @@ pub struct Command {
+ 
+ /// Command variants that advance (or attempt to advance) rule state.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
+ pub enum CommandKind {
+     /// Create and start a match from configuration.
+     StartGame {
+diff --git a/crates/engine-api/src/version.rs b/crates/engine-api/src/version.rs
+index 8bae86a6..6afcbb8e 100644
+--- a/crates/engine-api/src/version.rs
++++ b/crates/engine-api/src/version.rs
+@@ -44,7 +44,7 @@ impl VersionBundle {
+             engine_api: 1,
+             rule_vm_abi: RULE_VM_ABI_VERSION,
+             content_schema: CONTENT_SCHEMA_VERSION,
+-            network_protocol: 5,
++            network_protocol: 6,
+             replay_schema: crate::REPLAY_SCHEMA_VERSION,
+             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
+             package_format: PACKAGE_FORMAT_VERSION,
+diff --git a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+index 5ea66c44..b06b0364 100644
+--- a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
++++ b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+@@ -274,6 +274,7 @@ pub(crate) fn request_choice(
+         max_count,
+         allow_cancel,
+         timeout_policy: TimeoutPolicy::None,
++        deadline_unix_ms: None,
+         revision: tx.state().revision,
+         continuation_id,
+         kind,
+diff --git a/crates/engine-core/src/snapshot.rs b/crates/engine-core/src/snapshot.rs
+index 4e65869a..8b4cc3fb 100644
+--- a/crates/engine-core/src/snapshot.rs
++++ b/crates/engine-core/src/snapshot.rs
+@@ -282,6 +282,7 @@ mod tests {
+             max_count: 1,
+             allow_cancel: false,
+             timeout_policy: engine_api::TimeoutPolicy::None,
++            deadline_unix_ms: None,
+             revision: 11,
+             continuation_id: 19,
+             kind: engine_api::ChoiceKind::SelectCards,
+diff --git a/crates/engine-native-content/src/content/standard.rs b/crates/engine-native-content/src/content/standard.rs
+index 665ca869..32a895ce 100644
+--- a/crates/engine-native-content/src/content/standard.rs
++++ b/crates/engine-native-content/src/content/standard.rs
+@@ -159,7 +159,8 @@ use crate::snap::{
+ /// 协议不变。
+ /// v329: ADR0786 J2 active bridge and content-owned effect choices (ABI758); v328 archives reject.
+ /// Archive v105 keeps the existing Rvm tail mechanism and command/choice variants.
+-pub const STANDARD_RULESET_VERSION: u64 = 329;
++/// v330: ADR0787 explicit host timeout answers; v329 archives reject.
++pub const STANDARD_RULESET_VERSION: u64 = 330;
+ 
+ pub use crate::vocabulary::generals::*;
+ pub use crate::vocabulary::names::*;
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+index c5853d7c..10194aa1 100644
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -192,7 +192,7 @@ fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Va
+             }))
+         }
+         // 权威查询当前不产出明置候选（国战门控未接线）；出现也不投影。
+-        GameAction::RevealGeneral { .. } => None,
++        GameAction::RevealGeneral { .. } | GameAction::TimeoutAction { .. } => None,
+     }
+ }
+ 
+diff --git a/crates/engine-native/src/engine.rs b/crates/engine-native/src/engine.rs
+index 4a4bcd8b..e4d8e385 100644
+--- a/crates/engine-native/src/engine.rs
++++ b/crates/engine-native/src/engine.rs
+@@ -42,6 +42,11 @@ pub enum GameAction {
+         choice_id: u64,
+         selection: Vec<ChoiceOption>,
+     },
++    /// Trusted host takeover; the recorded selection uses the ordinary answer validation.
++    TimeoutAction {
++        choice_id: u64,
++        selection: Vec<ChoiceOption>,
++    },
+ }
+ 
+ /// 玩家命令（外部信任边界信封）。
+diff --git a/crates/engine-native/src/engine/apply_command.rs b/crates/engine-native/src/engine/apply_command.rs
+index 34367bf6..03a567ab 100644
+--- a/crates/engine-native/src/engine/apply_command.rs
++++ b/crates/engine-native/src/engine/apply_command.rs
+@@ -109,6 +109,10 @@ pub(super) fn apply_command(
+         GameAction::Answer {
+             choice_id,
+             selection,
++        }
++        | GameAction::TimeoutAction {
++            choice_id,
++            selection,
+         } => {
+             let Some(open) = state.resolution.open_choice.as_ref() else {
+                 return Err(RejectReason::NoSuchChoice);
+diff --git a/crates/engine-native/src/engine/commands.rs b/crates/engine-native/src/engine/commands.rs
+index c3f66b44..4e957dd2 100644
+--- a/crates/engine-native/src/engine/commands.rs
++++ b/crates/engine-native/src/engine/commands.rs
+@@ -94,13 +94,21 @@ impl Engine {
+         if cmd.actor as usize >= self.state.core.players.len() {
+             return CommandOutcome::Rejected(RejectReason::UnknownActor);
+         }
+-        if self.state.core.outcome.is_some() && !matches!(cmd.action, GameAction::Answer { .. }) {
++        if self.state.core.outcome.is_some()
++            && !matches!(
++                cmd.action,
++                GameAction::Answer { .. } | GameAction::TimeoutAction { .. }
++            )
++        {
+             return CommandOutcome::Rejected(RejectReason::MatchOver);
+         }
+         // 补偿明置（ADR 0762）：成为牌的目标时的明置窗口与挂起询问
+         // 并行——RevealGeneral 不受 ChoicePending 拦截（其余命令照旧）。
+         if self.state.resolution.open_choice.is_some()
+-            && !matches!(cmd.action, GameAction::Answer { .. })
++            && !matches!(
++                cmd.action,
++                GameAction::Answer { .. } | GameAction::TimeoutAction { .. }
++            )
+             && !matches!(cmd.action, GameAction::RevealGeneral { .. })
+         {
+             return CommandOutcome::Rejected(RejectReason::ChoicePending);
+@@ -269,10 +277,9 @@ impl Engine {
+                 self.log.truncate(log_mark);
+                 if self.segment_open {
+                     if let Some((checkpoint, _)) = self.segment_checkpoint.take() {
+-                        if let Ok(restored) = Engine::restore_with_catalog(
+-                            &checkpoint,
+-                            self.catalog.clone(),
+-                        ) {
++                        if let Ok(restored) =
++                            Engine::restore_with_catalog(&checkpoint, self.catalog.clone())
++                        {
+                             self.state = restored.state;
+                         }
+                     }
+diff --git a/crates/engine-native/tests/adr0786_j2_active_bridge.rs b/crates/engine-native/tests/adr0786_j2_active_bridge.rs
+index c4cd7e79..5987c539 100644
+--- a/crates/engine-native/tests/adr0786_j2_active_bridge.rs
++++ b/crates/engine-native/tests/adr0786_j2_active_bridge.rs
+@@ -146,7 +146,7 @@ fn current_gate_rejects_native_rules328_archive_without_migration() {
+         Engine::restore(&decoded),
+         Err(engine_native::snap::SnapshotError::RuleVersionMismatch {
+             snapshot: 328,
+-            catalog: 329
++            catalog: 330
+         })
+     ));
+ }
+diff --git a/crates/engine-native/tests/nc04_cards_given_event.rs b/crates/engine-native/tests/nc04_cards_given_event.rs
+index a4a6e5a8..eed56d0a 100644
+--- a/crates/engine-native/tests/nc04_cards_given_event.rs
++++ b/crates/engine-native/tests/nc04_cards_given_event.rs
+@@ -348,7 +348,7 @@ fn v325_and_earlier_archives_are_rejected_by_rule_version() {
+     assert_eq!(snap.ruleset_version, 325);
+     assert!(matches!(
+         Engine::restore(&snap),
+-        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 329 })
++        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 330 })
+     ));
+     // 挂起档：目录版本 = 标准版本 ^ 内容锁；与当前目录的差异只来自标准版本位。
+     let pack = cards_given_pack(true);
+@@ -357,7 +357,7 @@ fn v325_and_earlier_archives_are_rejected_by_rule_version() {
+         .ruleset_version();
+     let snap =
+         decode_archive(&std::fs::read(ev.join("cards-given-v325.ngsa")).unwrap()).unwrap();
+-    assert_eq!(snap.ruleset_version ^ catalog_version, 325 ^ 329);
++    assert_eq!(snap.ruleset_version ^ catalog_version, 325 ^ 330);
+     let given_frames = snap
+         .resolution
+         .stack
+diff --git a/crates/engine-native/tests/nc04_vm_resume.rs b/crates/engine-native/tests/nc04_vm_resume.rs
+index a909014a..11f7095b 100644
+--- a/crates/engine-native/tests/nc04_vm_resume.rs
++++ b/crates/engine-native/tests/nc04_vm_resume.rs
+@@ -600,7 +600,7 @@ fn b7_plain_v323_archive_is_rejected_by_rule_version() {
+     assert_eq!(snapshot.ruleset_version, 323);
+     assert!(matches!(
+         Engine::restore(&snapshot),
+-        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 329 })
++        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 330 })
+     ));
+ }
+ 
+diff --git a/crates/engine-native/tests/nc07_archive_hash_fields.rs b/crates/engine-native/tests/nc07_archive_hash_fields.rs
+index 0c017124..44287a8d 100644
+--- a/crates/engine-native/tests/nc07_archive_hash_fields.rs
++++ b/crates/engine-native/tests/nc07_archive_hash_fields.rs
+@@ -130,6 +130,6 @@ fn v326_and_earlier_archives_are_rejected_by_rule_version() {
+     assert_eq!(snap.ruleset_version, 326);
+     assert!(matches!(
+         Engine::restore(&snap),
+-        Err(SnapshotError::RuleVersionMismatch { snapshot: 326, catalog: 329 })
++        Err(SnapshotError::RuleVersionMismatch { snapshot: 326, catalog: 330 })
+     ));
+ }
+diff --git a/crates/engine-native/tests/nc07_lianyaohu_hash.rs b/crates/engine-native/tests/nc07_lianyaohu_hash.rs
+index 977132ce..ba7ccc82 100644
+--- a/crates/engine-native/tests/nc07_lianyaohu_hash.rs
++++ b/crates/engine-native/tests/nc07_lianyaohu_hash.rs
+@@ -135,7 +135,7 @@ fn v324_and_earlier_archives_are_rejected_by_rule_version() {
+         assert!(matches!(
+             Engine::restore(&snap),
+             Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
+-                if snapshot == version && catalog == 329
++                if snapshot == version && catalog == 330
+         ));
+     }
+     // 壶仓档：目录版本 = 标准版本 ^（内容锁 | 高位）。v324 壶仓档正是
+@@ -147,7 +147,7 @@ fn v324_and_earlier_archives_are_rejected_by_rule_version() {
+     for (name, version) in [("lianyaohu-v323.ngsa", 323u64), ("lianyaohu-v324.ngsa", 324u64)] {
+         let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
+         // 壶仓档与当前目录的差异只来自标准版本位（内容锁互相抵消）。
+-        assert_eq!(snap.ruleset_version ^ catalog_version, version ^ 329);
++        assert_eq!(snap.ruleset_version ^ catalog_version, version ^ 330);
+         assert!(matches!(
+             Engine::restore_with_extensions(&snap, &[&pack]),
+             Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
+diff --git a/crates/engine-native/tests/pa12_tag656_version.rs b/crates/engine-native/tests/pa12_tag656_version.rs
+index b488db84..9a0b101e 100644
+--- a/crates/engine-native/tests/pa12_tag656_version.rs
++++ b/crates/engine-native/tests/pa12_tag656_version.rs
+@@ -6,10 +6,10 @@ fn v322_archive_is_rejected_and_current_archive_round_trips() {
+     let snapshot = decode_archive(old).unwrap();
+     assert_eq!(snapshot.ruleset_version, 322);
+     // B6（v323）→ B7（v324）→ NC07（v325）：目录规则版本已升，322 旧档仍按版本拒绝。
+-    assert!(matches!(Engine::restore(&snapshot), Err(SnapshotError::RuleVersionMismatch { snapshot: 322, catalog: 329 })));
++    assert!(matches!(Engine::restore(&snapshot), Err(SnapshotError::RuleVersionMismatch { snapshot: 322, catalog: 330 })));
+     assert_eq!(ARCHIVE_FORMAT_VERSION, 105);
+     let engine = Engine::new(65101, 4);
+     let snapshot = decode_archive(&encode_archive(&engine.save())).unwrap();
+-    assert_eq!(snapshot.ruleset_version, 329);
++    assert_eq!(snapshot.ruleset_version, 330);
+     assert_eq!(Engine::restore(&snapshot).unwrap().state_hash(), engine.state_hash());
+ }
+diff --git a/crates/engine-native/tests/replay_scenarios.rs b/crates/engine-native/tests/replay_scenarios.rs
+index 795b3dee..3c031cdb 100644
+--- a/crates/engine-native/tests/replay_scenarios.rs
++++ b/crates/engine-native/tests/replay_scenarios.rs
+@@ -1068,88 +1068,90 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
+         "sha_dodge_then_damage",
+         scenario_sha_dodge_then_damage,
+         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
+-        "09899af8f1547fe186184a7b2eb335310d0ca4a2077261449473166093dfa911",
++        "4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d",
+     ),
+     (
+         "death_terminal_single",
+         scenario_death_terminal_single,
+         &["dying", "death", "victory"],
+-        "b2aed937abba1485b147ade3c1f0129d9a87034de429ece5e88cc0cf527fbc64",
++        "c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b",
+     ),
+     (
+         "sancai_nested_chain",
+         scenario_sancai_nested_chain,
+         &["optional_trigger", "nested_choice", "draw", "give_cards"],
+-        "85f60f51f69d7dc5882b74d2b9cdbb3992da301a0d23a253d2402e872b6bbae0",
++        "07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42",
+     ),
+     (
+         "yishang_redirect",
+         scenario_yishang_redirect,
+         &["damage_before_window", "payload_rewrite_redirect"],
+-        "2e612e2c48a09fa0fb4847debba2b163ea30147933d6adfd615a30798225c6e3",
++        "40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08",
+     ),
+     (
+         "suidun_window_matrix",
+         scenario_suidun_window_matrix,
+         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
+-        "c4c47664654fcf41b26475aa3611cb843525b6d63b7818a1a3c269f9a08b5efc",
++        "d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae",
+     ),
+     (
+         "shouyi_dynamic_skill",
+         scenario_shouyi_dynamic_skill,
+         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
+-        "ba4d11c0379c985010a458fab649360d11dfb4db9e0445ad386b3f8e0d92c1f5",
++        "a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0",
+     ),
+     (
+         "discard_to_limit",
+         scenario_discard_to_limit,
+         &["hand_limit", "intrinsic_machine"],
+-        "ebbb7d809fa0bdd9c19e639e0dc3691553e31980da8387bcebfdcf468b143390",
++        "0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff",
+     ),
+     (
+         "rollback_invariants",
+         scenario_rollback_invariants,
+         &["reject_rollback", "budget_rollback"],
+-        "cc5533fd1d8e6ecd67067d421ee22cd5d67c8af47c1a497f236f3cb209588885",
++        "fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216",
+     ),
+     (
+         "equip_distance_matrix",
+         scenario_equip_distance_matrix,
+         &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
+-        "777cdb5c5b06ba63d44b4008c591524dc5525a55438c3ac67593831f812cfc5f",
++        "b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5",
+     ),
+     (
+         "chain_fire_propagation",
+         scenario_chain_fire_propagation,
+         &["chain_state", "damage_nature", "chain_propagation"],
+-        "d273a42dd8025d8ef29b9fb35c8ffb23c9a9ac37d753a8d07d9b84cc9c0b35dd",
++        "0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860",
+     ),
+     (
+         "aoe_response_queue",
+         scenario_aoe_response_queue,
+         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
+-        "4deacdb7962db6b57e25b7916b21dc87861b504152b4fcad84441cd83bd1f4d3",
++        "ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758",
+     ),
+     (
+         "duel_alternating_response",
+         scenario_duel_alternating_response,
+         &["duel_alternating", "duel_no_distance_limit"],
+-        "8501c02ccd164a26b97f2e46b30afcfa322028ace8ccffc7b424b4fa0a96582b",
++        "567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16",
+     ),
+     (
+         "nullify_chain_on_savage",
+         scenario_nullify_chain_on_savage,
+         &["nullify_window", "nullify_chain", "nullify_scope"],
+-        "541384b5889b71ed5cd3d8337d9dd550db7e266d26c82b02d41f862ed36a942e",
++        "35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab",
+     ),
+     (
+         "judge_phase_delayed_tricks",
+         scenario_judge_phase_delayed_tricks,
+         &["judge_zone", "delayed_trick", "phase_skip"],
+-        "1ab143e19dc7cf7f66e893a9207b5f16cff72ec9add32315bf6010edaa75e2fd",
++        "86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f",
+     ),
+ ];
+ 
++// ADR0787 v330: only rolling the rules version back to329 preserves all14 prior goldens.
++// A330 evidence golden-version-probe-8; timeout policy stays outside the rule clock.
+ // ADR0786 J2 v329 (2026-10-30): all 14 v329 hashes move; the v328 rollback probe
+ // with J2 code retained passes all 14 old goldens. Standard scenarios contain no VM packs;
+ // the displacement is the rules version field. Raw probe logs live in the J2 run evidence.
+diff --git a/crates/engine-protocol/src/lib.rs b/crates/engine-protocol/src/lib.rs
+index dc074d81..741a7cf9 100644
+--- a/crates/engine-protocol/src/lib.rs
++++ b/crates/engine-protocol/src/lib.rs
+@@ -14,7 +14,7 @@ pub use messages::*;
+ pub use wire::{decode_c2s, decode_s2c, encode_c2s, encode_s2c};
+ 
+ /// Network protocol version axis (bump on breaking wire changes).
+-pub const NETWORK_PROTOCOL_VERSION: u32 = 5;
++pub const NETWORK_PROTOCOL_VERSION: u32 = 6;
+ 
+ /// Maximum JSON message size (bytes) accepted by server.
+ pub const MAX_MESSAGE_BYTES: usize = 256 * 1024;
+diff --git a/crates/engine-protocol/src/messages.rs b/crates/engine-protocol/src/messages.rs
+index 1104bf87..b16916fe 100644
+--- a/crates/engine-protocol/src/messages.rs
++++ b/crates/engine-protocol/src/messages.rs
+@@ -35,7 +35,7 @@ impl MessageHeader {
+ 
+ /// Client → Server.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+-#[serde(tag = "type", content = "payload")]
++#[serde(tag = "type", content = "payload", deny_unknown_fields)]
+ pub enum ClientMessage {
+     /// Capability / version hello.
+     Hello {
+@@ -46,6 +46,9 @@ pub enum ClientMessage {
+     },
+     /// Create a new identity room.
+     CreateRoom {
++        /// Native choice window, default 30 seconds.
++        #[serde(default)]
++        choice_timeout_secs: Option<u8>,
+         /// Seat count 2..=8.
+         players: u8,
+         /// Rule RNG seed.
+@@ -159,6 +162,8 @@ pub enum ServerMessage {
+     },
+     /// Room public roster update.
+     RoomRoster {
++        /// Native room window; legacy rooms have no choice timer.
++        choice_timeout_secs: Option<u8>,
+         /// Room id.
+         room_id: u64,
+         /// Seats filled.
+@@ -219,6 +224,8 @@ pub struct SeatPresence {
+     pub display_name: String,
+     /// Connected now.
+     pub connected: bool,
++    /// Server-controlled seat takeover.
++    pub managed: bool,
+ }
+ 
+ /// Safe error codes (no hidden-state leakage).
+diff --git a/docs/architecture/native-progress.md b/docs/architecture/native-progress.md
+index e248fa29..4bd8b9d0 100644
+--- a/docs/architecture/native-progress.md
++++ b/docs/architecture/native-progress.md
+@@ -9,6 +9,8 @@
+ 
+ ## 当前交付与带日期核验记录
+ 
++**ADR0787 A隔离功能验收（2026-10-30；基线 `255bbfbd`，未提交）**：候选规则330／WS6、存档105／ABI758保持，真实TimeoutAction及房间事务内WAL／deadline／托管已接线。329真实31秒actor红→绿留证；330实际10秒、SIGKILL跨截止恢复、重连不续时、人工竞态与伪造拒绝、Chrome倒计时／托管均实测。原生三包1706/0/75、最终完整workspace6889/0/77、严格三包／分层0、前端155/0/typecheck、fresh330 WASM／Worker82/0、五窗75状态／270座位／40重启及J2的36场景／189检查点／114重试通过；完整preflight在补齐隔离只读规范lookup后21/21，首次19/21与所有中途失败保留。尚未独立复审或父集成，不宣称NC09／NC10／37来源整体完成。见[A候选证据与边界](../operations/evidence/2026-10-30-adr0787-timeout/README.md)。
++
+ **B/J2主树功能验收（2026-10-30；`44982f4` + B/J2及集成修复，329/105/758/WS5）**：两个隔离候选复审通过后逐块接入，保留Referee九参数HostAsk、全部prompt和测试登记；集成NC10私有缓存P1经真实弃桃52/弃闪44反事实红→绿修复并复审关闭。修复后原生三包 **1706/0/75**、影响六包 **6035/0/77**、完整workspace **6829/0/77**；严格三包/all-targets/分层0、前端153/0/typecheck/build、当前WASM/Worker82/0、正式轨迹与旧线cross-target通过。实际J2 WASM36场景/189检查点/114重试、五窗75/270/35/40、B14档/98对照及Chrome/WKWebView各16流程通过；直接native/WASM规划对缓存伤害1/5及七个真实J2窗口每目标4+14调用完整输出相等、nodes/faults0。完整preflight首跑19项过、两项因同一个父文档URL错误失败，原结果保留；修正后父完整重跑 **21/21、exit0**（317.65s），两项行数门禁亦过，运行前后20752维护文件指纹一致。按裁决18准备本地入库。见[J2/B合并证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)及[B字段与兼容证据](../operations/evidence/2026-10-30-observer-metadata/README.md)。330/WS6→331→332依前置验收推进；NC10其他Host/no-choice/私有续行、整包和平台门槛保持。
+ 
+ **NC10局部验收快照（2026-10-30；`5ec62ae` + 纯12路径，规则328/存档105/ABI753/WS5）**：两项helper缺陷复审通过后接入，主树定向53/0/4、原生三包 **1679/0/75**、完整workspace **6796/0/77**；16条功能命令均exit0，严格三包/分层0、conformance、当前生成WASM/Worker82/0、前端146/0/typecheck及跨目标正式包轨迹通过。一个真实opaque `rvm_choice`反事实在native/实际WASM直接规划，local0=0/4、预算0/48、每目标4规划/4恢复应用，完整输出一致、nodes/faults0；不代表其他Host/no-choice/storage或完整NC10已通过。见[证据与边界](../operations/evidence/2026-10-30-nc10-continuations/README.md)。B的31路径元数据候选已独立复审通过、尚未接入；J2 theft修正已返回并待最后复审。改命取消已获[裁决24](../operations/evidence/2026-10-28-user-decisions/README.md)规则332授权，排在329→330→331实际验收后，当前未升号。WASM默认及真机/CI/37来源等门槛保持。
+diff --git a/docs/architecture/native-rules-baseline.md b/docs/architecture/native-rules-baseline.md
+index 8c285624..5164fc0f 100644
+--- a/docs/architecture/native-rules-baseline.md
++++ b/docs/architecture/native-rules-baseline.md
+@@ -2,6 +2,9 @@
+ 
+ <a id="-当前值第-568-轮实测2026-10-19"></a>
+ 
++> **ADR0787隔离候选（2026-10-30）**：基于已入库329，当前候选源码为规则330／WS6，存档105及ABI758不变；内部显式超时动作与耐久控制按裁决20实施。14个golden的版本回退探针全匹配旧值后重录；真实329原档及WS5读者样本保留。尚待独立复审和父集成，不覆盖下方已验收主树329历史快照。见[A候选证据](../operations/evidence/2026-10-30-adr0787-timeout/README.md)。
++
++
+ > ## 当前源码（2026-10-30；`44982f4` + 已复审B/J2合并，功能及最终门禁通过）
+ >
+ > `STANDARD_RULESET_VERSION = 329`（[内容目录](../../crates/engine-native-content/src/content/standard.rs#L162)）、存档格式105、全局原生宿主ABI758、WS5。J2的329/758升号由[裁决17](../operations/evidence/2026-10-28-user-decisions/README.md)授权：active_index→既有ActivateSkill、同逻辑技能共享身份/存储/限次，756冯河交牌/重铸、757胆守、758平寇经内容回调与可恢复效果级选择落地。Rvm尾部following/commit_state/committing参与恢复与摘要，静态prompt继续按字符串编码，白名单尾加本批键；v328及更早原生规则档按门禁拒绝，原包/旧档/冻结锁保留，不伪造迁移。当前源码的14个golden来自已独立审查的J2候选；版本/语义归因和直接/恢复原生-WASM36场景证据见[J2合并证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)，主树修复后的原生三包1706/0/75、workspace6829/0/77及实际矩阵通过；父修正坏链后独立完整preflight重跑21/21、exit0，原19过2失败不改写。隔离6757/0/74与主树结果分别归属，不以补跑冒充原全量通过。
+diff --git a/apps/game-server/src/native_ws_e2e/peer.rs b/apps/game-server/src/native_ws_e2e/peer.rs
+new file mode 100644
+index 00000000..093bb453
+--- /dev/null
++++ b/apps/game-server/src/native_ws_e2e/peer.rs
+@@ -0,0 +1,211 @@
++//! Shared authenticated production WebSocket test peer.
++use super::*;
++
++impl Peer {
++    pub(super) async fn connect(server: &Server) -> Self {
++        Self::connect_url(&server.url).await
++    }
++
++    pub(super) async fn connect_url(url: &str) -> Self {
++        let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
++        assert_eq!(response.status().as_u16(), 101);
++        let mut peer = Self {
++            ws,
++            room: 0,
++            player: PlayerId::NONE,
++            token: String::new(),
++            seq: 0,
++        };
++        peer.until(|message| matches!(message, ServerMessage::Welcome { .. }))
++            .await;
++        peer.send(ClientMessage::Hello {
++            versions: engine_api::VersionBundle::current(),
++            display_name: "ws-test".into(),
++        })
++        .await;
++        peer
++    }
++
++    pub(super) async fn send(&mut self, message: ClientMessage) {
++        self.ws
++            .send(Message::Text(encode_c2s(&message).unwrap().into()))
++            .await
++            .unwrap();
++    }
++
++    pub(super) async fn until(&mut self, matches: impl Fn(&ServerMessage) -> bool) -> ServerMessage {
++        for _ in 0..40 {
++            let frame = tokio::time::timeout(Duration::from_secs(10), self.ws.next())
++                .await
++                .expect("WS response timeout")
++                .expect("WS remains open")
++                .unwrap();
++            if let Message::Text(text) = frame {
++                let message = decode_s2c(text.as_ref()).expect("valid server protocol");
++                if matches(&message) {
++                    return message;
++                }
++                assert!(
++                    !matches!(message, ServerMessage::Error { .. }),
++                    "unexpected {message:?}"
++                );
++            }
++        }
++        panic!("expected WS response within 40 frames");
++    }
++
++    pub(super) async fn join_result(&mut self) -> State {
++        let message = self
++            .until(|message| matches!(message, ServerMessage::JoinOk { .. }))
++            .await;
++        if let ServerMessage::JoinOk {
++            room_id,
++            player_id,
++            reconnect_token,
++            role,
++            seat,
++            ..
++        } = &message
++        {
++            match role {
++                ClientRole::Player => assert_eq!(*seat as u32 + 1, *player_id),
++                ClientRole::Spectator | ClientRole::Referee => {
++                    assert_eq!(*player_id, 0);
++                    assert_eq!(*seat, u8::MAX);
++                }
++            }
++            self.room = *room_id;
++            self.player = PlayerId::new(*player_id);
++            self.token = reconnect_token.clone();
++        }
++        State::from_message(message)
++    }
++
++    pub(super) async fn create(&mut self) -> State {
++        self.send(ClientMessage::CreateRoom {
++            choice_timeout_secs: None,
++            players: 2,
++            seed: SEED,
++            password: PASSWORD.into(),
++        })
++        .await;
++        self.join_result().await
++    }
++
++    pub(super) async fn join(&mut self, room_id: u64, seat: u8, token: Option<String>) -> State {
++        self.send(ClientMessage::JoinRoom {
++            room_id,
++            password: PASSWORD.into(),
++            preferred_seat: Some(seat),
++            reconnect_token: token,
++        })
++        .await;
++        self.join_result().await
++    }
++
++    pub(super) async fn spectate(&mut self, room_id: u64) -> State {
++        self.send(ClientMessage::Spectate { room_id }).await;
++        self.join_result().await
++    }
++
++    pub(super) async fn snapshot(&mut self) -> State {
++        self.seq += 1;
++        let sequence = self.seq;
++        self.send(ClientMessage::RequestSnapshot {
++            header: MessageHeader::new(self.room, sequence, 0),
++            last_revision: 0,
++        })
++        .await;
++        State::from_message(self.until(|message| {
++            matches!(message, ServerMessage::Snapshot { header, .. } if header.conn_seq == sequence)
++        }).await)
++    }
++
++    pub(super) async fn submit(
++        &mut self,
++        actor: PlayerId,
++        expected: u64,
++        key: u64,
++        kind: CommandKind,
++    ) -> (CommandResult, State) {
++        self.seq += 1;
++        let sequence = self.seq;
++        self.send(ClientMessage::SubmitCommand {
++            header: MessageHeader::new(self.room, sequence, expected),
++            command: Command {
++                actor,
++                expected_revision: ExpectedRevision(expected),
++                idempotency_key: IdempotencyKey(key),
++                kind,
++            },
++            idempotency_key: IdempotencyKey(key),
++            replay: false,
++        })
++        .await;
++        let message = self.until(|message| {
++            matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)
++        }).await;
++        let result = match &message {
++            ServerMessage::CommandOutcome { result, .. } => result.clone(),
++            _ => unreachable!(),
++        };
++        (result, State::from_message(message))
++    }
++
++    pub(super) async fn submit_replay(
++        &mut self,
++        actor: PlayerId,
++        expected: u64,
++        key: u64,
++        kind: CommandKind,
++    ) -> (CommandResult, State) {
++        self.seq += 1;
++        let sequence = self.seq;
++        self.send(ClientMessage::SubmitCommand {
++            header: MessageHeader::new(self.room, sequence, expected),
++            command: Command {
++                actor,
++                expected_revision: ExpectedRevision(expected),
++                idempotency_key: IdempotencyKey(key),
++                kind,
++            },
++            idempotency_key: IdempotencyKey(key),
++            replay: true,
++        })
++        .await;
++        let message = self
++            .until(|message| {
++                matches!(message, ServerMessage::CommandOutcome { header, .. } if header.conn_seq == sequence)
++            })
++            .await;
++        let result = match &message {
++            ServerMessage::CommandOutcome { result, .. } => result.clone(),
++            _ => unreachable!(),
++        };
++        (result, State::from_message(message))
++    }
++
++    pub(super) async fn pushed(&mut self, key: u64) -> State {
++        State::from_message(
++            self.until(|message| {
++                matches!(message, ServerMessage::CommandOutcome { header, idempotency_key, .. }
++                if header.conn_seq == 0 && idempotency_key.0 == key)
++            })
++            .await,
++        )
++    }
++
++    pub(super) async fn error(&mut self, expected: ErrorCode) {
++        let message = self
++            .until(|message| matches!(message, ServerMessage::Error { .. }))
++            .await;
++        assert!(
++            matches!(message, ServerMessage::Error { code, .. } if code == expected),
++            "{message:?}"
++        );
++    }
++
++    pub(super) async fn close(mut self) {
++        self.ws.close(None).await.unwrap();
++    }
++}
+diff --git a/apps/game-server/src/room_native/timeout.rs b/apps/game-server/src/room_native/timeout.rs
+new file mode 100644
+index 00000000..299af3be
+--- /dev/null
++++ b/apps/game-server/src/room_native/timeout.rs
+@@ -0,0 +1,190 @@
++//! Durable room control; clocks remain outside the deterministic engine.
++use super::*;
++use engine_native::view::PolicyInput;
++use engine_native::ChoiceView;
++
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct NativeTimeoutState {
++    pub choice_timeout_secs: u8,
++    pub managed_seats: Vec<u8>,
++    pub deadline: Option<NativeChoiceDeadline>,
++}
++#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct NativeChoiceDeadline {
++    pub choice_id: u64,
++    pub observer: u8,
++    pub deadline_unix_ms: u64,
++}
++
++pub(crate) fn unix_ms() -> Result<u64, String> {
++    let elapsed = std::time::SystemTime::now()
++        .duration_since(std::time::UNIX_EPOCH)
++        .map_err(|_| "server clock before Unix epoch")?;
++    u64::try_from(elapsed.as_millis()).map_err(|_| "server clock overflow".into())
++}
++pub fn validate_timeout_secs(secs: u8) -> Result<(), String> {
++    if [10, 15, 30, 60, 90].contains(&secs) {
++        Ok(())
++    } else {
++        Err("choice_timeout_secs must be 10, 15, 30, 60 or 90".into())
++    }
++}
++
++/// Minimum legal candidates from the seat's authorized projection, without planning.
++fn baseline(input: &PolicyInput) -> Option<GameAction> {
++    match &input.choice {
++        Some(ChoiceView::Own {
++            id, options, min, ..
++        }) => {
++            let mut selection = Vec::new();
++            for option in options {
++                if selection.len() == *min {
++                    break;
++                }
++                if !selection.contains(option) {
++                    selection.push(*option);
++                }
++            }
++            Some(GameAction::Answer {
++                choice_id: *id,
++                selection,
++            })
++        }
++        Some(ChoiceView::Other { .. }) => None,
++        None => Some(GameAction::NextPhase),
++    }
++}
++
++impl NativeRoomSession {
++    pub fn set_choice_timeout_secs(&mut self, secs: u8) -> Result<(), String> {
++        validate_timeout_secs(secs)?;
++        self.timeout.choice_timeout_secs = secs;
++        Ok(())
++    }
++    pub fn timeout_state(&self) -> &NativeTimeoutState {
++        &self.timeout
++    }
++    pub(crate) fn sync_deadline(&mut self) -> Result<(), String> {
++        let current = self.engine.open_choice();
++        if current.map(|c| (c.id, c.observer))
++            == self
++                .timeout
++                .deadline
++                .as_ref()
++                .map(|d| (d.choice_id, d.observer))
++        {
++            return Ok(());
++        }
++        self.timeout.deadline = match current {
++            Some(c) => Some(NativeChoiceDeadline {
++                choice_id: c.id,
++                observer: c.observer,
++                deadline_unix_ms: unix_ms()?
++                    .checked_add(u64::from(self.timeout.choice_timeout_secs) * 1000)
++                    .ok_or("deadline overflow")?,
++            }),
++            None => None,
++        };
++        Ok(())
++    }
++    pub(crate) fn validate_timeout(&self) -> Result<(), String> {
++        validate_timeout_secs(self.timeout.choice_timeout_secs)?;
++        if self
++            .timeout
++            .managed_seats
++            .iter()
++            .any(|s| *s >= self.max_seats)
++            || self.timeout.managed_seats.windows(2).any(|s| s[0] >= s[1])
++        {
++            return Err("invalid managed seats".into());
++        }
++        if self.engine.open_choice().map(|c| (c.id, c.observer))
++            != self
++                .timeout
++                .deadline
++                .as_ref()
++                .map(|d| (d.choice_id, d.observer))
++            || self
++                .timeout
++                .deadline
++                .as_ref()
++                .is_some_and(|d| d.deadline_unix_ms == 0)
++        {
++            return Err("deadline does not match current choice".into());
++        }
++        Ok(())
++    }
++    pub(crate) fn choice_for(
++        &self,
++        role: RoomRole,
++        player: Option<PlayerId>,
++    ) -> Option<engine_api::ChoiceRequest> {
++        let mut choice = crate::native_view::choice_for(&self.engine, role, player)?;
++        // A trusted Referee retains complete choice metadata, but no control capability.
++        choice.deadline_unix_ms = self
++            .timeout
++            .deadline
++            .as_ref()
++            .filter(|d| d.choice_id == u64::from(choice.choice_id.raw()))
++            .map(|d| d.deadline_unix_ms);
++        if choice.deadline_unix_ms.is_some() {
++            choice.timeout_policy = engine_api::TimeoutPolicy::Standard;
++        }
++        Some(choice)
++    }
++    pub(crate) fn automatic_command(
++        &self,
++        now: u64,
++        allow_managed: bool,
++    ) -> Option<(u8, GameAction, bool)> {
++        let seat = self
++            .engine
++            .open_choice()
++            .map(|c| c.observer)
++            .unwrap_or(self.engine.turn().current);
++        let managed = self.timeout.managed_seats.contains(&seat);
++        let expired = self
++            .timeout
++            .deadline
++            .as_ref()
++            .is_some_and(|d| d.deadline_unix_ms <= now);
++        if managed && !allow_managed {
++            return None;
++        }
++        if !expired && !managed {
++            return None;
++        }
++        if self.engine.outcome().is_some() && self.engine.open_choice().is_none() {
++            return None;
++        }
++        let action = baseline(&self.engine.ai_session(seat).input())?;
++        let takeover = expired && !managed;
++        let action = match action {
++            GameAction::Answer {
++                choice_id,
++                selection,
++            } if takeover => GameAction::TimeoutAction {
++                choice_id,
++                selection,
++            },
++            other => other,
++        };
++        Some((seat, action, takeover))
++    }
++    pub(crate) fn submit_automatic(
++        &mut self,
++        seat: u8,
++        action: GameAction,
++        takeover: bool,
++    ) -> Result<CommandResult, String> {
++        let result = self.submit_native(seat, action, self.engine.revision())?;
++        if matches!(result, CommandResult::Accepted { .. }) && takeover {
++            self.timeout.managed_seats.push(seat);
++            self.timeout.managed_seats.sort_unstable();
++            self.timeout.managed_seats.dedup();
++        }
++        Ok(result)
++    }
++}
+diff --git a/apps/game-server/src/room_native/wal.rs b/apps/game-server/src/room_native/wal.rs
+new file mode 100644
+index 00000000..a3f4bdec
+--- /dev/null
++++ b/apps/game-server/src/room_native/wal.rs
+@@ -0,0 +1,240 @@
++//! Server-private, exhaustive command codec. Recovery never reruns a policy.
++use super::*;
++use engine_native::ChoiceOption;
++
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct NativeWalState {
++    pub base_snapshot_hex: String,
++    pub entries: Vec<NativeWalEntry>,
++}
++
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct NativeWalEntry {
++    pub actor: u8,
++    pub expected_revision: u64,
++    pub dedup_id: u64,
++    action: StoredNativeAction,
++    pub revision: u64,
++    pub state_hash: [u8; 32],
++}
++
++#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
++#[serde(deny_unknown_fields)]
++enum StoredNativeAction {
++    PlayCard {
++        card: u32,
++        targets: Vec<u8>,
++    },
++    NextPhase,
++    ActivateSkill {
++        skill: u16,
++    },
++    RevealGeneral {
++        slot: u8,
++    },
++    Answer {
++        choice_id: u64,
++        selection: Vec<StoredChoiceOption>,
++    },
++    TimeoutAction {
++        choice_id: u64,
++        selection: Vec<StoredChoiceOption>,
++    },
++}
++
++#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]
++enum StoredChoiceOption {
++    Confirm,
++    Pass,
++    Card(u32),
++    Player(u8),
++    Tag(u8),
++    Kind(u16),
++}
++
++impl From<ChoiceOption> for StoredChoiceOption {
++    fn from(value: ChoiceOption) -> Self {
++        match value {
++            ChoiceOption::Confirm => Self::Confirm,
++            ChoiceOption::Pass => Self::Pass,
++            ChoiceOption::Card(v) => Self::Card(v),
++            ChoiceOption::Player(v) => Self::Player(v),
++            ChoiceOption::Tag(v) => Self::Tag(v),
++            ChoiceOption::Kind(v) => Self::Kind(v),
++        }
++    }
++}
++impl From<StoredChoiceOption> for ChoiceOption {
++    fn from(value: StoredChoiceOption) -> Self {
++        match value {
++            StoredChoiceOption::Confirm => Self::Confirm,
++            StoredChoiceOption::Pass => Self::Pass,
++            StoredChoiceOption::Card(v) => Self::Card(v),
++            StoredChoiceOption::Player(v) => Self::Player(v),
++            StoredChoiceOption::Tag(v) => Self::Tag(v),
++            StoredChoiceOption::Kind(v) => Self::Kind(v),
++        }
++    }
++}
++impl From<GameAction> for StoredNativeAction {
++    fn from(value: GameAction) -> Self {
++        match value {
++            GameAction::PlayCard { card, targets } => Self::PlayCard { card, targets },
++            GameAction::NextPhase => Self::NextPhase,
++            GameAction::ActivateSkill { skill } => Self::ActivateSkill { skill },
++            GameAction::RevealGeneral { slot } => Self::RevealGeneral { slot },
++            GameAction::Answer {
++                choice_id,
++                selection,
++            } => Self::Answer {
++                choice_id,
++                selection: selection.into_iter().map(Into::into).collect(),
++            },
++            GameAction::TimeoutAction {
++                choice_id,
++                selection,
++            } => Self::TimeoutAction {
++                choice_id,
++                selection: selection.into_iter().map(Into::into).collect(),
++            },
++        }
++    }
++}
++impl From<StoredNativeAction> for GameAction {
++    fn from(value: StoredNativeAction) -> Self {
++        match value {
++            StoredNativeAction::PlayCard { card, targets } => Self::PlayCard { card, targets },
++            StoredNativeAction::NextPhase => Self::NextPhase,
++            StoredNativeAction::ActivateSkill { skill } => Self::ActivateSkill { skill },
++            StoredNativeAction::RevealGeneral { slot } => Self::RevealGeneral { slot },
++            StoredNativeAction::Answer {
++                choice_id,
++                selection,
++            } => Self::Answer {
++                choice_id,
++                selection: selection.into_iter().map(Into::into).collect(),
++            },
++            StoredNativeAction::TimeoutAction {
++                choice_id,
++                selection,
++            } => Self::TimeoutAction {
++                choice_id,
++                selection: selection.into_iter().map(Into::into).collect(),
++            },
++        }
++    }
++}
++
++impl NativeWalEntry {
++    pub(super) fn new(command: GameCommand, engine: &Engine) -> Self {
++        Self {
++            actor: command.actor,
++            expected_revision: command.expected_revision,
++            dedup_id: command.dedup_id,
++            action: command.action.into(),
++            revision: engine.revision(),
++            state_hash: engine.state_hash(),
++        }
++    }
++    pub fn command(&self) -> GameCommand {
++        GameCommand {
++            actor: self.actor,
++            expected_revision: self.expected_revision,
++            dedup_id: self.dedup_id,
++            action: self.action.clone().into(),
++        }
++    }
++}
++
++impl NativeWalState {
++    pub(super) fn new(engine: &Engine) -> Self {
++        Self {
++            base_snapshot_hex: hex_encode(&engine_native::archive::encode_archive(&engine.save())),
++            entries: vec![],
++        }
++    }
++    pub(super) fn recover(
++        &self,
++        packs: &[&engine_native::content::extension::ExtensionPack],
++    ) -> Result<Engine, String> {
++        let bytes = hex_decode(&self.base_snapshot_hex).ok_or("WAL base hex invalid")?;
++        let snapshot =
++            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
++        let mut engine = if packs.is_empty() {
++            Engine::restore(&snapshot)
++        } else {
++            Engine::restore_with_extensions(&snapshot, packs)
++        }
++        .map_err(|e| format!("{e:?}"))?;
++        for entry in &self.entries {
++            let command = entry.command();
++            if let GameAction::Answer { selection, .. }
++            | GameAction::TimeoutAction { selection, .. } = &command.action
++            {
++                if selection.len() > 4096 || selection.iter().any(|o| matches!(o, ChoiceOption::Kind(k) if engine_native::archive::kind_from_code(*k).is_err())) {
++                    return Err("invalid WAL selection".into());
++                }
++            }
++            // All values, including Kind, must be present in the restored authorized choice.
++            // submit validates candidates, count, duplicates, observer, revision and dedup.
++            if matches!(engine.submit(command), CommandOutcome::Rejected(_))
++                || engine.revision() != entry.revision
++                || engine.state_hash() != entry.state_hash
++            {
++                return Err("WAL command/revision/摘要不一致".into());
++            }
++        }
++        Ok(engine)
++    }
++}
++
++impl NativeRoomSession {
++    pub(crate) fn compact_wal(&mut self, every: u64) {
++        if every > 0 && self.engine.revision() % every == 0 {
++            self.wal = NativeWalState::new(&self.engine);
++        }
++    }
++    pub(super) fn validate_wal(&self) -> Result<engine_native::snap::StateSnapshot, String> {
++        let engine = self.wal.recover(&self.pack_refs())?;
++        let mut replayed = engine.save();
++        // restore rotates authentication tokens; generation is session security, not rule state.
++        replayed.auth_generation = self.engine.save().auth_generation;
++        if engine_native::archive::encode_archive(&replayed)
++            != engine_native::archive::encode_archive(&self.engine.save())
++        {
++            return Err("WAL final full snapshot mismatch".into());
++        }
++        Ok(replayed)
++    }
++    pub(crate) fn recover_wal(&mut self) -> Result<(), String> {
++        let snapshot = self.validate_wal()?;
++        let packs = self.pack_refs();
++        let engine = if packs.is_empty() { Engine::restore(&snapshot) }
++            else { Engine::restore_with_extensions(&snapshot, &packs) }.map_err(|e| format!("{e:?}"))?;
++        self.replace_engine(engine);
++        Ok(())
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn stored_actions_and_all_six_choice_values_round_trip_without_debug_encoding() {
++        let selection = vec![ChoiceOption::Confirm, ChoiceOption::Pass, ChoiceOption::Card(42),
++            ChoiceOption::Player(3), ChoiceOption::Tag(4), ChoiceOption::Kind(0)];
++        for action in [GameAction::PlayCard { card: 42, targets: vec![1, 3] }, GameAction::NextPhase,
++            GameAction::ActivateSkill { skill: 65535 }, GameAction::RevealGeneral { slot: 1 },
++            GameAction::Answer { choice_id: u64::MAX, selection: selection.clone() },
++            GameAction::TimeoutAction { choice_id: u64::MAX, selection }] {
++            let encoded = serde_json::to_vec(&StoredNativeAction::from(action.clone())).unwrap();
++            let decoded: StoredNativeAction = serde_json::from_slice(&encoded).unwrap();
++            assert_eq!(GameAction::from(decoded), action);
++        }
++        assert!(serde_json::from_str::<StoredNativeAction>(r#"{"TimeoutAction":{"choice_id":1,"selection":[{"Skill":1}]}}"#).is_err());
++        assert!(serde_json::from_str::<StoredNativeAction>(r#"{"TimeoutAction":{"choice_id":1,"selection":[],"managed":true}}"#).is_err());
++    }
++}
+diff --git a/apps/game-server/src/room_native_actor/timeout.rs b/apps/game-server/src/room_native_actor/timeout.rs
+new file mode 100644
+index 00000000..db6be805
+--- /dev/null
++++ b/apps/game-server/src/room_native_actor/timeout.rs
+@@ -0,0 +1,159 @@
++//! One automatic command per scheduling turn, with the same durable transaction as people.
++use super::*;
++
++pub(super) async fn automatic_step(
++    id: u64,
++    session: &mut NativeRoomSession,
++    durability: &mut RoomDurability,
++    members: &mut HashMap<u64, NativeActorMember>,
++    snapshot_every: u64,
++    candidate: (u8, engine_native::GameAction, bool),
++) -> Result<(), String> {
++    let before = durability
++        .checkpoint(session)?
++        .or_else(|| Some(session.checkpoint()));
++    let (seat, action, takeover) = candidate;
++    match session.submit_automatic(seat, action, takeover) {
++        Ok(result @ CommandResult::Accepted { .. }) => {
++            session.compact_wal(snapshot_every);
++            durability.commit(session, before)?;
++            let public_event_codes = session.take_public_event_codes();
++            let mut stalled = Vec::new();
++            for member in members.values() {
++                let Some(out) = &member.outbound else {
++                    continue;
++                };
++                let role = member.role.into();
++                let player = (member.role == ClientRole::Player).then_some(member.player_id);
++                let message = ServerMessage::CommandOutcome {
++                    header: MessageHeader::new(id, 0, session.engine().revision()),
++                    // No player receipt is created for this unsolicited authoritative update.
++                    idempotency_key: IdempotencyKey(0),
++                    result: result.clone(),
++                    view: observer_snapshot_for(session.engine(), role, player),
++                    choice: session.choice_for(role, player),
++                    legal_actions: player
++                        .map(|p| legal_actions_for(session.engine(), p))
++                        .unwrap_or_default(),
++                    public_event_codes: public_event_codes.clone(),
++                };
++                if out.try_send(&message) == SendStatus::Full {
++                    stalled.push(member.connection_id);
++                }
++            }
++            drop_stalled(members, stalled);
++            broadcast_roster_native(id, members, session).await;
++            Ok(())
++        }
++        other => {
++            if let Some(before) = before {
++                session.rollback(before);
++            }
++            match other {
++                Ok(_) => Err("automatic command rejected; window paused".into()),
++                Err(error) => Err(error),
++            }
++        }
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::native_room_store::{NativeRoomStore, StoreFault};
++
++    fn pending() -> NativeRoomSession {
++        let mut session = NativeRoomSession::new(engine_native::Engine::new(4242, 4), 4);
++        for _ in 0..1000 {
++            if session.engine().open_choice().is_some() {
++                return session;
++            }
++            let seat = session.engine().turn().current;
++            let action = session
++                .engine()
++                .legal_actions(seat)
++                .into_iter()
++                .next()
++                .unwrap();
++            assert!(matches!(
++                session
++                    .submit_native(seat, action, session.engine().revision())
++                    .unwrap(),
++                CommandResult::Accepted { .. }
++            ));
++        }
++        panic!("real choice required");
++    }
++
++    #[tokio::test]
++    async fn automatic_storage_faults_rollback_engine_control_deadline_wal_and_dedup() {
++        for fault in [
++            StoreFault::PartialWrite,
++            StoreFault::FileSync,
++            StoreFault::Rename,
++            StoreFault::DirectorySync,
++            StoreFault::PrepareWrite,
++            StoreFault::PrepareSync,
++            StoreFault::PrepareDirectorySync,
++            StoreFault::DecisionWrite,
++            StoreFault::DecisionSync,
++            StoreFault::DecisionDirectorySync,
++        ] {
++            for compensation in [None, Some(StoreFault::PrepareSync)] {
++                if compensation.is_some()
++                    && !matches!(
++                        fault,
++                        StoreFault::DecisionWrite
++                            | StoreFault::DecisionSync
++                            | StoreFault::DecisionDirectorySync
++                    )
++                {
++                    continue;
++                }
++                let mut session = pending();
++                let dir = tempfile::tempdir().unwrap();
++                let store = NativeRoomStore::new(dir.path());
++                let mut durability = RoomDurability::new(787, String::new(), Some(store.clone()));
++                durability.commit(&mut session, None).unwrap();
++                let confirmed = crate::native_room_store::state_checksum(
++                    &session.export_state(&session.snapshot_hex()),
++                );
++                let deadline = session
++                    .timeout_state()
++                    .deadline
++                    .as_ref()
++                    .unwrap()
++                    .deadline_unix_ms;
++                let candidate = session.automatic_command(deadline, true).unwrap();
++                match compensation {
++                    Some(other) => store.fail_next_write_with_compensation(fault, other),
++                    None => store.fail_next_write(fault),
++                }
++                assert!(
++                    automatic_step(
++                        787,
++                        &mut session,
++                        &mut durability,
++                        &mut HashMap::new(),
++                        1000,
++                        candidate
++                    )
++                    .await
++                    .is_err(),
++                    "{fault:?}/{compensation:?}"
++                );
++                assert_eq!(
++                    crate::native_room_store::state_checksum(
++                        &session.export_state(&session.snapshot_hex())
++                    ),
++                    confirmed,
++                    "{fault:?}/{compensation:?}"
++                );
++                assert!(session.timeout_state().managed_seats.is_empty());
++                for record in NativeRoomStore::new(dir.path()).load_all().unwrap() {
++                    NativeRoomSession::from_saved(&record.state, vec![]).unwrap();
++                }
++            }
++        }
++    }
++}
+diff --git a/apps/game-server/tests/adr0787_timeout.rs b/apps/game-server/tests/adr0787_timeout.rs
+new file mode 100644
+index 00000000..70e967b3
+--- /dev/null
++++ b/apps/game-server/tests/adr0787_timeout.rs
+@@ -0,0 +1,466 @@
++//! ADR0787: actual commands, durable control and the public actor timer.
++#[path = "../src/native.rs"]
++mod native;
++#[path = "../src/native_room_store.rs"]
++mod native_room_store;
++#[path = "../src/native_view.rs"]
++mod native_view;
++#[path = "../src/persist.rs"]
++mod persist;
++#[path = "../src/room.rs"]
++mod room;
++#[path = "../src/room_native.rs"]
++mod room_native;
++#[path = "../src/room_native_actor.rs"]
++mod room_native_actor;
++#[path = "../src/session.rs"]
++mod session;
++use engine_api::{CommandKind, CommandResult};
++use engine_native::{ChoiceOption, Engine, GameAction, GameCommand};
++use room_native::NativeRoomSession;
++
++fn pending() -> NativeRoomSession {
++    let mut session = NativeRoomSession::new(Engine::new(4242, 4), 4);
++    for seat in 0..4 {
++        session
++            .join(10 + u64::from(seat), Some(seat), None)
++            .unwrap();
++    }
++    for _ in 0..1000 {
++        if session.engine().open_choice().is_some() {
++            return session;
++        }
++        let seat = session.engine().turn().current;
++        let action = session
++            .engine()
++            .legal_actions(seat)
++            .into_iter()
++            .next()
++            .unwrap();
++        let result = session
++            .submit_native(seat, action, session.engine().revision())
++            .unwrap();
++        assert!(matches!(result, CommandResult::Accepted { .. }));
++    }
++    panic!("fixture must open a real machine choice");
++}
++fn bytes(session: &NativeRoomSession) -> Vec<u8> {
++    let mut saved = session.engine().save();
++    saved.auth_generation = 0;
++    engine_native::archive::encode_archive(&saved)
++}
++
++#[test]
++fn timeout_uses_answer_validation_and_recorded_command_replays_full_snapshot() {
++    let mut session = pending();
++    let choice = session.engine().open_choice().unwrap().clone();
++    let before = bytes(&session);
++    let deadline = session.timeout_state().deadline.clone().unwrap();
++    assert!(session
++        .automatic_command(deadline.deadline_unix_ms - 1, true)
++        .is_none());
++    let (seat, action, takeover) = session
++        .automatic_command(deadline.deadline_unix_ms, true)
++        .unwrap();
++    assert!(takeover);
++    assert!(matches!(action, GameAction::TimeoutAction { .. }));
++    for (actor, action) in [
++        ((seat + 1) % 4, action.clone()),
++        (
++            seat,
++            GameAction::TimeoutAction {
++                choice_id: choice.id + 1,
++                selection: vec![],
++            },
++        ),
++        (
++            seat,
++            GameAction::TimeoutAction {
++                choice_id: choice.id,
++                selection: vec![ChoiceOption::Card(u32::MAX)],
++            },
++        ),
++    ] {
++        assert!(matches!(
++            session.submit_automatic(actor, action, true).unwrap(),
++            CommandResult::Rejected { .. }
++        ));
++        assert_eq!(bytes(&session), before);
++        assert!(session.timeout_state().managed_seats.is_empty());
++    }
++    let mut answer = session.engine().clone();
++    let GameAction::TimeoutAction {
++        choice_id,
++        selection,
++    } = action.clone()
++    else {
++        unreachable!()
++    };
++    let expected = answer.revision();
++    let dedup = answer.save().last_dedup + 1;
++    assert!(!matches!(
++        answer.submit(GameCommand {
++            actor: seat,
++            expected_revision: expected,
++            dedup_id: dedup,
++            action: GameAction::Answer {
++                choice_id,
++                selection
++            }
++        }),
++        engine_native::CommandOutcome::Rejected(_)
++    ));
++    assert!(matches!(
++        session.submit_automatic(seat, action, takeover).unwrap(),
++        CommandResult::Accepted { .. }
++    ));
++    assert_eq!(
++        bytes(&session),
++        engine_native::archive::encode_archive(&answer.save())
++    );
++    assert_eq!(session.engine().log(), answer.log());
++    assert!(session.timeout_state().managed_seats.contains(&seat));
++    let state = session.export_state(&session.snapshot_hex());
++    let json = serde_json::to_value(&state).unwrap();
++    assert!(json["wal"]["entries"]
++        .as_array()
++        .unwrap()
++        .iter()
++        .any(|e| e["action"].get("TimeoutAction").is_some()));
++    let restored =
++        NativeRoomSession::from_saved(&serde_json::from_value(json.clone()).unwrap(), vec![])
++            .unwrap();
++    assert_eq!(bytes(&session), bytes(&restored));
++    for key in ["actor", "expected_revision", "dedup_id", "revision"] {
++        let mut corrupt = json.clone();
++        let entries = corrupt["wal"]["entries"].as_array_mut().unwrap();
++        entries.last_mut().unwrap()[key] = serde_json::json!(u64::MAX);
++        assert!(
++            serde_json::from_value::<room_native::NativeRoomState>(corrupt)
++                .map_or(true, |state| NativeRoomSession::from_saved(&state, vec![])
++                    .is_err()),
++            "{key}"
++        );
++    }
++}
++
++#[test]
++fn durable_deadline_configuration_reconnect_illegal_and_receipt_rules() {
++    let mut session = pending();
++    let deadline = session.timeout_state().deadline.clone().unwrap();
++    for secs in [10, 15, 30, 60, 90] {
++        session.set_choice_timeout_secs(secs).unwrap();
++    }
++    for secs in [0, 9, 11, 91, 255] {
++        assert!(session.set_choice_timeout_secs(secs).is_err());
++    }
++    assert_eq!(session.timeout_state().deadline.as_ref(), Some(&deadline));
++    let (seat, action, takeover) = session
++        .automatic_command(deadline.deadline_unix_ms, true)
++        .unwrap();
++    let conn = 10 + u64::from(seat);
++    let token = session
++        .members()
++        .find(|m| m.seat == seat)
++        .unwrap()
++        .reconnect_token
++        .clone();
++    session.submit_automatic(seat, action, takeover).unwrap();
++    assert!(session.timeout_state().managed_seats.contains(&seat));
++    let snapshot = session.snapshot_hex();
++    let state = session.export_state(&snapshot);
++    let mut restored = NativeRoomSession::from_saved(&state, vec![]).unwrap();
++    assert_eq!(
++        serde_json::to_value(restored.timeout_state()).unwrap(),
++        serde_json::to_value(session.timeout_state()).unwrap()
++    );
++    let current_deadline = restored.timeout_state().deadline.clone();
++    assert!(restored.join(100, None, Some("invalid".into())).is_err());
++    assert!(restored.timeout_state().managed_seats.contains(&seat));
++    assert!(restored
++        .submit(
++            conn,
++            &CommandKind::TimeoutAction { choice_id: None },
++            restored.engine().revision()
++        )
++        .is_err());
++    assert!(restored.timeout_state().managed_seats.contains(&seat));
++    restored.join(100, Some(seat), Some(token)).unwrap();
++    assert!(!restored.timeout_state().managed_seats.contains(&seat));
++    assert_eq!(restored.timeout_state().deadline, current_deadline);
++    assert!(restored
++        .submit(conn, &CommandKind::EndPhase, restored.engine().revision())
++        .is_err());
++    // Optional aggregates preserve the exact legacy checksum shape, but cannot restore new rules.
++    let mut missing = serde_json::to_value(&state).unwrap();
++    missing.as_object_mut().unwrap().remove("timeout");
++    missing.as_object_mut().unwrap().remove("wal");
++    let old: room_native::NativeRoomState = serde_json::from_value(missing.clone()).unwrap();
++    assert_eq!(serde_json::to_value(&old).unwrap(), missing);
++    assert!(NativeRoomSession::from_saved(&old, vec![]).is_err());
++}
++
++#[tokio::test]
++async fn real_actor_ten_seconds_commits_timeout_to_disk() {
++    let mut session = pending();
++    session.set_choice_timeout_secs(10).unwrap();
++    // Fixture already opened a default window: set configuration before creating the actor window.
++    let mut state = session.export_state(&session.snapshot_hex());
++    let deadline = state.timeout.as_mut().unwrap().deadline.as_mut().unwrap();
++    deadline.deadline_unix_ms = room_native::unix_ms().unwrap() + 10_000;
++    let seat = deadline.observer;
++    let choice_id = deadline.choice_id;
++    let session = NativeRoomSession::from_saved(&state, vec![]).unwrap();
++    let dir = tempfile::tempdir().unwrap();
++    let store = native_room_store::NativeRoomStore::new(dir.path());
++    let handle = room_native_actor::spawn_room_native_persisted(
++        787,
++        session,
++        16,
++        1000,
++        String::new(),
++        Some(store.clone()),
++    );
++    let (tx, mut rx) = tokio::sync::mpsc::channel(128);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    let token = state
++        .members
++        .iter()
++        .find(|m| m.seat == seat)
++        .unwrap()
++        .reconnect_token
++        .clone();
++    handle
++        .send(room::RoomMsg::Join {
++            connection_id: 999,
++            display_name: "timeout".into(),
++            preferred_seat: Some(seat),
++            reconnect_token: Some(token),
++            password: String::new(),
++            outbound: session::Outbound::new(tx),
++            reply,
++        })
++        .await
++        .unwrap();
++    let joined = response.await.unwrap().unwrap();
++    let started = std::time::Instant::now();
++    let choice = joined.choice.unwrap();
++    assert_eq!(u64::from(choice.choice_id.raw()), choice_id);
++    assert_eq!(
++        choice.deadline_unix_ms,
++        state
++            .timeout
++            .as_ref()
++            .unwrap()
++            .deadline
++            .as_ref()
++            .map(|d| d.deadline_unix_ms)
++    );
++    tokio::time::timeout(std::time::Duration::from_secs(12), async {
++        while let Some(text) = rx.recv().await {
++            if let engine_protocol::ServerMessage::CommandOutcome { .. } =
++                engine_protocol::decode_s2c(&text).unwrap()
++            {
++                break;
++            }
++        }
++    })
++    .await
++    .expect("10 second deadline must run actual actor");
++    assert!(started.elapsed() >= std::time::Duration::from_secs(9));
++    let saved = store.load_all().unwrap().pop().unwrap();
++    let wal = serde_json::to_value(&saved.state.wal).unwrap();
++    assert_eq!(
++        wal["entries"]
++            .as_array()
++            .unwrap()
++            .iter()
++            .filter(|e| e["action"].get("TimeoutAction").is_some())
++            .count(),
++        1
++    );
++    NativeRoomSession::from_saved(&saved.state, vec![]).unwrap();
++}
++
++#[test]
++fn real_329_archive_rejects_without_rewriting_its_original_room_checksum() {
++    let raw = include_bytes!("fixtures/adr0787-room329.json");
++    let record: native_room_store::StoredRoom = serde_json::from_slice(raw).unwrap();
++    assert_eq!(
++        native_room_store::state_checksum(&record.state),
++        record.checksum
++    );
++    let error = match NativeRoomSession::from_saved(&record.state, vec![]) {
++        Ok(_) => panic!("329 must reject"),
++        Err(e) => e,
++    };
++    assert!(error.contains("RuleVersionMismatch"), "{error}");
++    assert!(record.state.timeout.is_none());
++    assert!(record.state.wal.is_none());
++}
++
++#[test]
++fn timeout_and_human_races_commit_once_and_replayed_receipt_does_not_release_control() {
++    let mut session = pending();
++    let deadline = session.timeout_state().deadline.clone().unwrap();
++    let (seat, timeout, _) = session
++        .automatic_command(deadline.deadline_unix_ms, true)
++        .unwrap();
++    let GameAction::TimeoutAction {
++        choice_id,
++        selection,
++    } = timeout.clone()
++    else {
++        unreachable!()
++    };
++    let conn = 10 + u64::from(seat);
++    let before = session.export_state(&session.snapshot_hex());
++    let command = CommandKind::ResolveChoice {
++        choice_id: engine_api::ChoiceId::new(choice_id as u32),
++        selections: (0..selection.len() as u32).collect(),
++        cancelled: selection.is_empty(),
++    };
++    let result = session
++        .submit(conn, &command, session.engine().revision())
++        .unwrap();
++    assert!(matches!(result, CommandResult::Accepted { .. }));
++    session
++        .remember_command(conn, 787, &command, &result)
++        .unwrap();
++    assert!(matches!(
++        session
++            .submit_automatic(seat, timeout.clone(), true)
++            .unwrap(),
++        CommandResult::Rejected { .. }
++    ));
++    assert!(session.timeout_state().managed_seats.is_empty());
++    let mut managed = session.export_state(&session.snapshot_hex());
++    managed.timeout.as_mut().unwrap().managed_seats = vec![seat];
++    let mut managed = NativeRoomSession::from_saved(&managed, vec![]).unwrap();
++    assert_eq!(
++        managed.command_receipt(conn, 787, &command).unwrap(),
++        Some(result)
++    );
++    assert!(managed.timeout_state().managed_seats.contains(&seat));
++    assert!(managed
++        .submit(
++            conn,
++            &CommandKind::TimeoutAction { choice_id: None },
++            managed.engine().revision()
++        )
++        .is_err());
++    assert!(managed.timeout_state().managed_seats.contains(&seat));
++    let mut timeout_first = NativeRoomSession::from_saved(&before, vec![]).unwrap();
++    timeout_first.submit_automatic(seat, timeout, true).unwrap();
++    let committed = timeout_first.snapshot_hex();
++    assert!(timeout_first
++        .submit(
++            conn,
++            &command,
++            before.wal.unwrap().entries.last().unwrap().revision
++        )
++        .map_or(true, |r| matches!(r, CommandResult::Rejected { .. })));
++    assert_eq!(timeout_first.snapshot_hex(), committed);
++    assert!(timeout_first.timeout_state().managed_seats.contains(&seat));
++    let resumed = timeout_first
++        .submit(
++            conn,
++            &CommandKind::StartGame {
++                player_count: 4,
++                rng_seed: 4242,
++                ruleset: String::new(),
++            },
++            timeout_first.engine().revision(),
++        )
++        .unwrap();
++    assert!(matches!(resumed, CommandResult::Accepted { .. }));
++    assert!(!timeout_first.timeout_state().managed_seats.contains(&seat));
++}
++
++#[test]
++fn recorded_timeout_selection_matches_current_wasm_answer_full_archive() {
++    let session = pending();
++    let before = session.engine().save();
++    let choice = session.engine().open_choice().unwrap();
++    let (_, action, _) = session.automatic_command(session.timeout_state().deadline.as_ref().unwrap().deadline_unix_ms, true).unwrap();
++    let GameAction::TimeoutAction { selection, .. } = &action else { unreachable!() };
++    let selection = selection.clone();
++    let tokens: Vec<u32> = selection.iter().map(|value| choice.spec.options.iter().position(|option| option == value).unwrap() as u32).collect();
++    let mut native = Engine::restore(&before).unwrap();
++    let mut answer = Engine::restore(&before).unwrap();
++    // Existing WASM adapter owns this command counter; use the same counter for exact archive parity.
++    let dedup = native.revision().wrapping_mul(2).max(1);
++    let revision = native.revision();
++    let result = native.submit(GameCommand { actor: choice.observer, expected_revision: revision, dedup_id: dedup, action });
++    assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)));
++    answer.submit(GameCommand { actor: choice.observer, expected_revision: revision, dedup_id: dedup, action: GameAction::Answer { choice_id: choice.id, selection: selection.clone() } });
++    assert_eq!(native.save(), answer.save());
++    assert_eq!(native.log(), answer.log());
++    if let Some(path) = std::env::var_os("A330_WASM_PARITY_OUT") {
++        let hex = |bytes: Vec<u8>| bytes.iter().map(|b| format!("{b:02x}")).collect::<String>();
++        std::fs::write(path, serde_json::to_vec_pretty(&serde_json::json!({
++            "before_hex": hex(engine_native::archive::encode_archive(&before)),
++            "after_hex": hex(engine_native::archive::encode_archive(&native.save())),
++            "hash": hex(native.state_hash().to_vec()), "codes": native.public_event_codes_from(0),
++            "actor": choice.observer, "choice_id": choice.id, "tokens": tokens
++        })).unwrap()).unwrap();
++    }
++}
++
++#[test]
++fn all_five_configurations_create_a_deadline_once_and_preserve_that_window() {
++    let pending = pending();
++    for secs in [10, 15, 30, 60, 90] {
++        let mut session = NativeRoomSession::new(Engine::restore(&pending.engine().save()).unwrap(), 4);
++        assert_eq!(session.timeout_state().choice_timeout_secs, 30);
++        session.set_choice_timeout_secs(secs).unwrap();
++        let start = room_native::unix_ms().unwrap();
++        session.sync_deadline().unwrap();
++        let deadline = session.timeout_state().deadline.clone().unwrap();
++        assert!(deadline.deadline_unix_ms >= start + u64::from(secs) * 1000);
++        assert!(deadline.deadline_unix_ms <= room_native::unix_ms().unwrap() + u64::from(secs) * 1000);
++        session.sync_deadline().unwrap();
++        assert_eq!(session.timeout_state().deadline.as_ref(), Some(&deadline));
++        let restored = NativeRoomSession::from_saved(&session.export_state(&session.snapshot_hex()), vec![]).unwrap();
++        assert_eq!(restored.timeout_state().deadline.as_ref(), Some(&deadline));
++    }
++}
++
++#[test]
++fn compensatory_reveal_keeps_same_choice_deadline_and_timeout_uses_latest_revision() {
++    let mut engine = Engine::new_identity(2, 4);
++    engine.assign_general_named(1, "刘备").unwrap();
++    engine.debug_set_turn(0, engine_native::Phase::Play, 1);
++    let sha = engine.debug_place(0, "sha");
++    engine.debug_place(1, "shan");
++    let mut snapshot = engine.save();
++    snapshot.core.mode = engine_native::GameMode::Kingdoms;
++    snapshot.core.player_mut(1).revealed_generals[0] = false;
++    let mut session = NativeRoomSession::new(Engine::restore(&snapshot).unwrap(), 4);
++    assert!(matches!(session.submit_native(0, GameAction::PlayCard { card: sha, targets: vec![1] }, 0).unwrap(), CommandResult::Accepted { .. }));
++    let deadline = session.timeout_state().deadline.clone().unwrap();
++    let revision = session.engine().revision();
++    assert!(matches!(session.submit_native(1, GameAction::RevealGeneral { slot: 0 }, revision).unwrap(), CommandResult::Accepted { .. }));
++    assert!(session.engine().revision() > revision);
++    assert_eq!(session.timeout_state().deadline.as_ref(), Some(&deadline));
++    let (seat, action, takeover) = session.automatic_command(deadline.deadline_unix_ms, true).unwrap();
++    assert!(matches!(session.submit_automatic(seat, action, takeover).unwrap(), CommandResult::Accepted { .. }));
++}
++
++#[tokio::test]
++async fn continuous_managed_steps_yield_to_queued_human_snapshot() {
++    let session = NativeRoomSession::new(Engine::new(4242, 4), 4);
++    let mut state = session.export_state(&session.snapshot_hex());
++    state.timeout.as_mut().unwrap().managed_seats = vec![0, 1, 2, 3];
++    let session = NativeRoomSession::from_saved(&state, vec![]).unwrap();
++    let handle = room_native_actor::spawn_room_native(789, session, 16, 1000);
++    let (tx, _rx) = tokio::sync::mpsc::channel(128);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(room::RoomMsg::Join { connection_id: 1, display_name: "human".into(), preferred_seat: Some(0), reconnect_token: None, password: String::new(), outbound: session::Outbound::new(tx), reply }).await.unwrap();
++    response.await.unwrap().unwrap();
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(room::RoomMsg::Snapshot { connection_id: 1, header: engine_protocol::MessageHeader::new(789, 1, 0), reply }).await.unwrap();
++    let result = tokio::time::timeout(std::time::Duration::from_secs(1), response).await.unwrap().unwrap().unwrap();
++    let engine_protocol::ServerMessage::Snapshot { view, .. } = result else { unreachable!() };
++    assert!(view.revision <= 4, "automatic processing must yield every command: {}", view.revision);
++}
+diff --git a/apps/game-server/tests/fixtures/adr0787-room329.json b/apps/game-server/tests/fixtures/adr0787-room329.json
+new file mode 100644
+index 00000000..f7814a67
+--- /dev/null
++++ b/apps/game-server/tests/fixtures/adr0787-room329.json
+@@ -0,0 +1,24 @@
++{
++  "room_id": 1,
++  "password_hash": "",
++  "state": {
++    "snapshot_hex": "4e47534169004901000000000000320700000000000049010000000000000000000000000000490100000000000000040000000000000000010203040000000000000001040000000400000004000000000000007100000056000000150000001f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001040000000400000004000000000000006f00000048000000050000006100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000104000000040000000400000000000000660000000c000000010000006b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000104000000040000000400000000000000070000002f000000110000002900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006c000000000000005500000024000000490000005400000058000000630000003e0000005e0000002300000051000000650000005c000000000000005300000059000000260000004e000000300000004c0000001e00000073000000390000001c0000002c000000430000005a0000003b000000160000005d000000640000004f0000000300000068000000410000001b0000001a0000004200000074000000170000002800000006000000570000003200000020000000120000002a0000006e00000013000000370000000a000000330000001800000025000000790000007500000062000000080000005b0000000e000000190000002b0000007a00000002000000470000007b0000000d00000021000000400000004b0000003f0000007000000050000000520000004a00000010000000310000000b0000001d000000040000006d0000003d00000036000000460000000f000000450000006c00000067000000440000006a0000000900000072000000780000002e000000380000004d00000076000000600000003a0000002200000035000000270000002d0000003c000000690000005f000000140000007700000034000000000000000000000000000000000000002ad7c3f5251225347b00000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000000000000000000000000000000000000000010000000c8b7a9304511560435f7c8c5326d643572894d361ef9c4dade636d8d63f91df3",
++    "max_seats": 4,
++    "started": true,
++    "next_token": 2,
++    "next_dedup": 1,
++    "pack_refs": [],
++    "frozen_packages": [],
++    "members": [
++      {
++        "connection_id": 1,
++        "player_id": 1,
++        "seat": 0,
++        "role": "Player",
++        "reconnect_token": "d8d497cb-2c6d-4eaa-9fe5-efb2c941d023"
++      }
++    ]
++  },
++  "checksum": "9d8c85986cac722ddf16fbbba11b5fca8620500a5a9b3d48989c7cdef1bcb0bf",
++  "commit_id": "cc6d88e1-0df0-44f6-8110-85ffc1dd3a05"
++}
+\ No newline at end of file
+diff --git a/docs/operations/evidence/2026-10-30-adr0787-timeout/README.md b/docs/operations/evidence/2026-10-30-adr0787-timeout/README.md
+new file mode 100644
+index 00000000..2aa0f6b2
+--- /dev/null
++++ b/docs/operations/evidence/2026-10-30-adr0787-timeout/README.md
+@@ -0,0 +1,15 @@
++# ADR0787 A：规则330／WS6隔离候选
++
++核验日期2026-10-30，基线 `255bbfbd7f6916ee77bd29799826a225bd10871f`。本目录描述隔离候选；不表示主树已接入或NC09整体完成。授权为[裁决20](../2026-10-28-user-decisions/README.md)及[ADR0787](../../../adr/0787-native-choice-timeout-durable-control.md)，不包含C331、改命332或新的ABI／存档格式。
++
++规则329→330，存档105、原生宿主ABI758保持。`TimeoutAction { choice_id, selection }`复用Answer的观察者／候选／数量／revision／dedup／故障事务校验，计时器不进入规则核。所有实际动作以穷举服务器DTO保存真实actor／expected_revision／dedup／选值／接受后revision及hash，和托管／deadline／收据在同一个房间耐久事务提交；恢复逐条重放并比较完整归档，唯一归一字段为既有恢复令牌轮换的auth_generation。显式Recover仍轮换认证代次，磁盘恢复不多轮换一次。
++
++原生三包首轮因14个golden版本域变化失败；只将版本常量临时退回329、保留修复时，14个旧golden全部匹配。恢复330后按实际输出重录。实际329服务端生成的原始房间JSON在 `apps/game-server/tests/fixtures/adr0787-room329.json`；新读者保持其原checksum且按RuleVersionMismatch拒绝，未重写头／冻结包／旧锁。已有WS5字节读者样本保留header5，当前房间协议明确拒绝WS5、未Hello及header0绕过，不向旧服静默降级。
++
++本次运行的原始命令／退出码、31秒actor红、330真实WS与SIGKILL重启、WAL前后字节、当前WASM字节对照、浏览器截图和候选patch保存在隔离工作区相邻的 `../evidence/a330`。两次provider SSE解析中断及恢复单独记录，不算测试结果。完整执行索引是该目录的 `commands.jsonl`；所有初次失败保留，不能以定向补跑改写初次全量失败。
++
++已实测的边界包括：默认30秒actor红→绿、10秒真实actor与磁盘WAL、五档／非法配置、恢复不延当前窗、人工／timeout两序及历史收据不解除托管、客户端伪造控制拒绝、逐条WAL篡改拒绝，以及既有Prepared／Committed和补偿失败路径。后继托管只用授权PolicyInput最少合法项的Answer或NextPhase，每条归还actor调度，不代表NC10强AI质量或永久录像历史完成。
++
++本候选须由父任务独立复审后集成，并在合并后重跑组合验收。真机、CI、37来源整包、玩家选序331与改命332均不由本批宣称完成。
++
++最终隔离回归：原生三包1706/0/75；完整workspace最终6889/0/77、exit0；strict native3/all-targets、分层0、源码门禁通过。前端155/0及typecheck、最终fresh330 WASM／Worker82/0、五窗75/270/35/40、J2的36/189/114及完整归档相等、正式跨目标和旧线cross-target均通过。实际Chrome创建五档／10秒倒计时／托管与旧329服务端反向拒绝均留证。完整preflight首跑19/21仅因隔离仓外lookup缺失，父批准临时只读链接后完整补跑21/21；所有首次失败、夹具修正和provider中断保留，不回写原退出码。最终纯patch及每file SHA在运行证据中，待父独立源码审查和合并后的组合验收。

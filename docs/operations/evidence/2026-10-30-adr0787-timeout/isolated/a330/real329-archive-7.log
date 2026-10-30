@@ -1,0 +1,7 @@
+Warning: Detected unsettled top-level await at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/real-ws.mjs:86
+finally{await stop();fs.writeFileSync(path.join(root,'wire.json'),JSON.stringify(trace,null,2));}
+        ^
+
+
+
+{"command": ["node", "../evidence/a330/real-ws.mjs", "../evidence/a330/real329", "/tmp/noname-resource-server-329", "baseline"], "exit": 13, "locked_seconds": 0.19515800001681782, "disk_free_bytes": 161438003200}

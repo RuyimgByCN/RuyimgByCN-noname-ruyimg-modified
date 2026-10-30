@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "room": 1,
+  "deadline": 1793348214185,
+  "timeout": {
+    "actor": 0,
+    "expected_revision": 3,
+    "dedup_id": 4,
+    "action": {
+      "TimeoutAction": {
+        "choice_id": 1,
+        "selection": [
+          {
+            "Card": 113
+          },
+          {
+            "Card": 86
+          }
+        ]
+      }
+    },
+    "revision": 4,
+    "state_hash": [
+      117,
+      150,
+      132,
+      61,
+      144,
+      189,
+      124,
+      218,
+      12,
+      77,
+      215,
+      125,
+      69,
+      90,
+      231,
+      33,
+      102,
+      132,
+      29,
+      187,
+      88,
+      106,
+      232,
+      218,
+      241,
+      126,
+      38,
+      183,
+      238,
+      83,
+      218,
+      94
+    ]
+  },
+  "downtimeCounted": true,
+  "reconnectDidNotExtend": true,
+  "privilegedActionRejected": true,
+  "forgedControlRejected": true,
+  "ws5Rejected": true,
+  "noHelloRejected": true,
+  "zeroVersionRejected": true,
+  "timeoutFirstHumanRaceRejected": true
+}

@@ -1,0 +1,18 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/ui-real.mjs:42
+  }
+  ^
+
+SyntaxError: Missing catch or finally after try
+    at compileSourceTextModule (node:internal/modules/esm/utils:354:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:90:18)
+    at #translate (node:internal/modules/esm/loader:437:20)
+    at afterLoad (node:internal/modules/esm/loader:505:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:510:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:563:36)
+    at afterResolve (node:internal/modules/esm/loader:610:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:616:12)
+    at node:internal/modules/esm/loader:635:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:539:22)
+
+Node.js v26.4.0
+{"command": ["node", "../evidence/a330/ui-real.mjs", "../evidence/a330/browser-oldserver", "../evidence/a330/ui-dist", "/tmp/noname-resource-server-329", "old"], "exit": 1, "locked_seconds": 0.02983570800279267, "disk_free_bytes": 157962788864}

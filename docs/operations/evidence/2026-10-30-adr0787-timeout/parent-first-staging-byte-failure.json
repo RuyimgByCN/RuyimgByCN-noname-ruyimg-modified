@@ -1,0 +1,12 @@
+{
+  "first_staging_rejected": true,
+  "path": "docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication/run41053688083-desktop-windows-raw.log",
+  "original_sha256": "f1db45af81ad893e7c7cf82e013a7ed2929a28d7a760c971329c0405a9f78193",
+  "first_normalized_index_sha256": "bcb56310be39c10622c357fcf8d5d700316dee98b771a9108cdaada4825ddc03",
+  "original_bytes": 306032,
+  "first_index_bytes": 302075,
+  "cause": "Git text clean conversion removed CR bytes; exact staged-byte comparison failed before commit",
+  "resolution": ".gitattributes: only this exact evidence path -text; retain original bytes, no global/local Git setting or hook change",
+  "additional_maintained_input": ".gitattributes",
+  "runtime53_unchanged": true
+}

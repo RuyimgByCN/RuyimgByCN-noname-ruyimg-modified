@@ -14,6 +14,7 @@ const mode = ref<"prototype" | "identity">("prototype");
 const displayName = ref(`player-${Math.floor(Math.random() * 900 + 100)}`);
 const password = ref("");
 const roomId = ref(1);
+const choiceTimeoutSecs = ref(30);
 const wsUrl = ref(defaultWsUrl());
 const onlineError = ref("");
 const desktopPlatform = ref<DesktopPlatformInfo | null>(null);
@@ -54,6 +55,7 @@ function goOnline(action: "create" | "join" | "spectate") {
       roomId: roomId.value,
       players: players.value,
       seed: seed.value,
+      choiceTimeoutSecs: choiceTimeoutSecs.value,
     })
   );
   void router.push({
@@ -131,6 +133,12 @@ const roomLabel = computed(() => (roomId.value > 0 ? `#${roomId.value}` : "—")
         <label>
           昵称
           <input v-model.trim="displayName" maxlength="24" autocomplete="nickname" />
+        </label>
+        <label>
+          选择时限
+          <select v-model.number="choiceTimeoutSecs" aria-label="选择时限">
+            <option v-for="secs in [10, 15, 30, 60, 90]" :key="secs" :value="secs">{{ secs }} 秒</option>
+          </select>
         </label>
         <label>
           房间密码

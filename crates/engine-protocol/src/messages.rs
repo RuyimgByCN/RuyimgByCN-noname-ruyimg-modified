@@ -35,7 +35,7 @@ impl MessageHeader {
 
 /// Client → Server.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "type", content = "payload")]
+#[serde(tag = "type", content = "payload", deny_unknown_fields)]
 pub enum ClientMessage {
     /// Capability / version hello.
     Hello {
@@ -46,6 +46,9 @@ pub enum ClientMessage {
     },
     /// Create a new identity room.
     CreateRoom {
+        /// Native choice window, default 30 seconds.
+        #[serde(default)]
+        choice_timeout_secs: Option<u8>,
         /// Seat count 2..=8.
         players: u8,
         /// Rule RNG seed.
@@ -159,6 +162,8 @@ pub enum ServerMessage {
     },
     /// Room public roster update.
     RoomRoster {
+        /// Native room window; legacy rooms have no choice timer.
+        choice_timeout_secs: Option<u8>,
         /// Room id.
         room_id: u64,
         /// Seats filled.
@@ -183,7 +188,7 @@ pub enum ServerMessage {
     Pong {
         /// Header.
         header: MessageHeader,
-        /// Server monotonic millis (not used by rules).
+        /// Server Unix milliseconds (not used by rules).
         server_time_ms: u64,
     },
     /// Error that is safe to show (never includes hidden cards/identity of others).
@@ -219,6 +224,8 @@ pub struct SeatPresence {
     pub display_name: String,
     /// Connected now.
     pub connected: bool,
+    /// Server-controlled seat takeover.
+    pub managed: bool,
 }
 
 /// Safe error codes (no hidden-state leakage).

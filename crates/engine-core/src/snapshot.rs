@@ -282,6 +282,7 @@ mod tests {
             max_count: 1,
             allow_cancel: false,
             timeout_policy: engine_api::TimeoutPolicy::None,
+            deadline_unix_ms: None,
             revision: 11,
             continuation_id: 19,
             kind: engine_api::ChoiceKind::SelectCards,

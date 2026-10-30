@@ -1,0 +1,87 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Two reviewed P2 roots fixed in6 original56 paths. Recover pause clears only after successful durable commit; countdown uses existing matchedPong+RTT/2 server anchor and monotonic elapsed.330/105/758/WS6, fields, goldens, packages and frozen readers unchanged."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Registered real actor red101→green, readonly old-page0/70 red and actual browser0 red→±60s green; fullworkspace6891/0/77, server451/0/0, frontend158/0/typecheck/build, strict/preflight21/21; correction+total patches and all file SHA supplied."
+    }
+  ],
+  "changedFiles": [
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "crates/engine-protocol/src/messages.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/web-client/scripts/network-client.test.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p game-server --test adr0787_timeout recover_after_automatic_write_failure_retries_original_expired_choice_once -- --exact --nocapture",
+      "result": "failed",
+      "summary": "Expected pre-fix red: timeout after successful Recover,exit101; recover-red.log preserved."
+    },
+    {
+      "command": "cargo test --offline -p game-server --test adr0787_timeout recover_ -- --nocapture",
+      "result": "passed",
+      "summary": "Real actor retry, failedRecover/requires_restart protection and existing persist regression:3/0,exit0."
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6891 passed,0 failed,77 ignored; final source full run,exit0."
+    },
+    {
+      "command": "cargo test --offline -p game-server -p engine-protocol --no-fail-fast",
+      "result": "passed",
+      "summary": "451 passed,0 failed,0 ignored; includes actor/durability/realWS/Referee/compatibility."
+    },
+    {
+      "command": "RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "exit0."
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "21/21,exit0; canonical readonly lookup links removed afterward."
+    },
+    {
+      "command": "npm test && node_modules/.bin/vue-tsc --noEmit; Vite configLoader runner private build",
+      "result": "passed",
+      "summary": "158/0 frontend tests; typecheck/build exit0. Isolated tree excludes main resource increment."
+    },
+    {
+      "command": "Real Chrome/actual330 server at client wall-clock+60000/-60000, then+1hour jump and same-choice reconnect",
+      "result": "passed",
+      "summary": "Both display10sec then6sec after reconnect,deadline unchanged,uncalibrated visible,exactly1TimeoutAction each,console0; ui-skew-green.log."
+    }
+  ],
+  "validationOutput": [
+    "workspace6891/0/77",
+    "server+protocol451/0/0",
+    "frontend158/0; typecheck/build0",
+    "fullpreflight21/21; strictnative3 exit0; layering0; source line gate0",
+    "P2-1 actual automatic disk fault→failedRecover blocked→successfulRecover→one original-choice timeout retry",
+    "P2-2 oldactual page+60s shows0 and-60s shows70; corrected realUIboth10,midwindowreconnect6; serverdeadlineunchanged"
+  ],
+  "residualRisks": [
+    "Original independent reviewer must re-review these corrections; parent integration/main combined acceptance not performed.",
+    "Server time is an estimate corrected by RTT/2; asymmetric network delay bounds display precision, while server deadline remains sole authority.",
+    "Unchanged native/WASM input hashes are tied to preserved original artifacts/proofs; this correction did not rebuild or rerun unrelatedWASM matrices."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Six-path correction: one-line durable Recover release, ephemeral connection-bound Pong calibration and monotonic deadline display, registered actor/clock regressions, and correction of the existing Pong documentation frommonotonictoUnix milliseconds. Total candidate remains56 source paths.",
+  "reviewFindings": [
+    "Both reported P2 roots implemented and runtime-validated; no known remaining blocker from worker self-check; required original-reviewer gate pending."
+  ],
+  "manualNotes": "Original reviewed patch SHA4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81 and all original proofs preserved. No stage/commit/push/main writes. Final binary/private web artifacts preserved; worker no longer needs stage3 cache after re-review. Temporary own lookup links and guard removed at cleanup."
+}

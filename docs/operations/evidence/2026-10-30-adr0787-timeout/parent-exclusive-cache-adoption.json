@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30T12:12:41.780889+00:00",
+  "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+  "previous_owner": "A330 isolated writer 0bae1f5b completed; handoff explicitly relinquished cache",
+  "new_owner": "parent current-main A330 acceptance validator only",
+  "lsof_checked_no_users": true,
+  "incremental": "0",
+  "jobs": 2,
+  "global_heavy_lock": "/tmp/noname-phase4-heavy-command.lock",
+  "reason_retained": "Immediate current-main native3/affected/workspace/strict/WASM acceptance, no other use permitted",
+  "disk_free_bytes": 148320788480
+}

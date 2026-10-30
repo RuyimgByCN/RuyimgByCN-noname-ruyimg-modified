@@ -1,0 +1,4 @@
+[2m2026-10-30T08:32:27.643433Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m content ready [3mpackages[0m[2m=[0m0 [3mextensions[0m[2m=[0m0 [3mcontent_lock[0m[2m=[0ma6cd5606ddabd11575f25d991b9410418047ca7c2a91fbf1068c1cd747111415
+[2m2026-10-30T08:32:27.644959Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m native content ready [3mpackages[0m[2m=[0m0
+[2m2026-10-30T08:32:27.648941Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m game-server listening [3maddr[0m[2m=[0m127.0.0.1:17888
+[2m2026-10-30T08:32:28.127884Z[0m [32m INFO[0m [2mgame_server::lobby[0m[2m:[0m room created [3mroom[0m[2m=[0m1 [3mplayers[0m[2m=[0m4

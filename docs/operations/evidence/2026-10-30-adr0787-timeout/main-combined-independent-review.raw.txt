@@ -1,0 +1,33 @@
+## Review
+
+**结论：OK with notes，仅适用于本地主树 A330 组合验收。** 已有功能与产物证据可接受，未发现新的 P1/P2；本地提交仍须等待父会话正在执行的最终 full preflight 收口，本报告不计为 21/21。
+
+本轮仅复核证据、驱动来源与产物身份，没有修改文件、构建、重跑测试或操作缓存，也没有重复此前的完整源码审查。
+
+- **Correct — 来源身份闭环。** 对象为 HEAD `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 加已复审 A 的 runtime53，版本保持 `330/105/758/WS6`。父执行的入口、出口纯读核验均确认 runtime53、CI4、三个生成 WASM 匹配 admission／Phase2 checkpoint，出口 index 为空、`all_equal=true`；Net3、perf、installer、alias 未混入。证据：[出口身份记录](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/review-main-acceptance/identity-exit.json:1)。
+
+- **Correct — Phase1 结果与限制一致。** 10/10 命令 exit0；native3 为 **1706/0/75**，affected6＋tauri 为 **6097/0/77**，workspace 为 **6891/0/77**，顺序均为 passed/failed/ignored，存在重叠，不能相加。strict native3 all-targets `-Dwarnings`、workspace all-targets check、layering、sourcegate、conformance、Node161 与 typecheck 通过。两阶段记录的 31,808 项维护输入均零漂移。证据：[Phase1 命令索引](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/command-index.json:1)、[输入指纹差异](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/hash-diff.json:1)。
+
+- **Correct — 失败与 warning 没有被抹去。** Phase2 是 **39 次尝试、34 次 exit0、5 次失败**，随后对应范围通过，不能写成“39 次全通过”。五次分别为私有 Cargo 布局、版本解析正则、过宽版本断言、过宽 Referee 错误码断言、sandbox 拒绝 `ps`；另保留清理路径 `/var` 与 `/private/var` 的 containment guard 失败。Phase1 原始 warning 行数包含重复及汇总：affected761、workspace782、all-targets780、conformance110，不能宣称全范围无 warning。证据：[Phase2 完整尝试记录](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/command-index.json:1)、[私有适配记录](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/private-adaptations.json:1)。
+
+- **Correct — 使用本次主树生产产物。** native 使用正式 web/release/`--no-opt` 路径，legacy 保持维护脚本的 profile／wasm-opt 行为；preload 仅重定向已有 `CARGO_TARGET_DIR`。新 WASM、外部 Vite、Worker **82/0**、typecheck 通过。授权的两个 pkg 和 public 镜像中，仅三个 ignored WASM 字节改变；实际 WS／Chrome 使用本次 `current-server-build` 复制的 server，SHA 为 `f5bcb178…feede077`。证据：[生产产物 checkpoint](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/production-artifacts-checkpoint.json:1)、[server 来源](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/server-artifact.json:1)。
+
+- **Correct — 对象比较没有泛删 metadata。** 父补充的纯读独立比较确认 standard40、huanle20 的全部已记录 JSON key、类型和值一致；唯一排除的 WASM 顶层 `$.wasm` 是单独精确验证路径及当前产物 SHA 的 locator。该轨迹 payload 本身记录 revision/hash/codes，不能称为完整 engine state。Planner native/WASM 完整输出、Referee 拒绝前后完整 state 均无字段排除且相等。14 份存档中，11 份为规则330，3 份按实际 lock 精确核验 `330 ^ (lock | (1u64 << 63))`，archive105；没有用 Number 舍入或改写原数据。证据：[独立比较结果及范围](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/review-main-acceptance/formal-object-check.json:1)。
+
+- **Correct — 兼容矩阵与 Planner 范围有实测支持。** J2 为36场景／189 checkpoint／114 retry；five 为75状态比较／270座位检查／35命令／40重启；ordinary 为5 fixtures／40比较／32隐私检查；B 为14 fixtures／98授权比较。DirectPlanner 使用真实 WASM，覆盖 queuedDamage1/5、7个真实 public prompt、budget0/48，并检查完整 Plan、源档不变及 restored apply；seed45000 的空 Hujia 通过。Phase2 定向 Rust 为 **23/0/0**。这些结果不扩展为整个 NC09／NC10 或 Host 隐私验收。证据：[实际统计](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/actual-counts.json:1)。
+
+- **Correct — 真实 WS／WAL／Referee 链路成立。** 当前330 server 实际列出41个导入包，测试房间选择 `packs=[]`。真实 socket、SIGKILL、重启与 WAL 记录支持停机计时、重连不延长、恰好一次 TimeoutAction，以及旧人工回答在 timeout 已提交后被拒绝；未 Hello、WS5、零版本、伪造控制字段与客户端 TimeoutAction 均被拒绝。Referee 使用可信存储 fixture 恢复角色，按既有命令分别严格检查 Unauthorized／Internal，并验证完整 state 不变；这不证明存在公开 Referee 授权端点。证据：[真实 WS 报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/real-ws/report.json:1)。
+
+- **Correct — Chrome 与资源证据范围准确。** 两次真实 Chrome 覆盖初始 ±60秒及随后增加1小时的客户端时钟跳变，均显示约10秒；中途断线出现校准状态，重连约6秒且 deadline 不变，每局仅一次 TimeoutAction、异常0。资源验证为5个代表对象、20次音频 decode 与9项错误／恢复场景，普通资源来自实际 Rust HTTP；不是全资源或37来源验收。证据：[快时钟报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-fast/report.json:1)、[慢时钟报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-slow/report.json:1)、[资源错误报告](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/resources/errors/browser-result.json:1)。
+
+- **Correct — 清理有边界。** owned 服务均已停止并 wait，owned Chrome profiles 已移除，无 owned 活跃进程，incrementalBytes 为0；用户7700与其他服务未动。stage3 因后续最终门禁及复验用途保留，不能描述为全部缓存已清空。证据：[清理与保留用途记录](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/owned-cleanup.json:1)。
+
+**Finding：本轮指定的本地 A330 组合证据范围内，无新增 P1/P2。**
+
+No issues found.
+
+**本地提交条件：** 功能及产物证据已具备；父须收齐当前主树最终 full preflight 的真实完成结果，确认身份仍一致，并据实更新验收状态后再收口提交。出口时该独立任务仍在执行，本报告不预宣 21/21。
+
+**Merge verdict：OK with notes，限本地 A330。** 首轮 GitHub `9dbc329` 基线的 run410…既有登记为5绿5红，不能用于证明本次 A330 跨平台通过。Net3 Linux 修正尚未取得真实 CI 结果，macOS 绿不能关闭原 Linux 失败；本轮也不签署 PA09、全平台或整个 NC09／NC10 验收。
+
+未重跑构建、测试或远端 CI；最终 preflight 与 Linux CI 结果仍须分别收口。

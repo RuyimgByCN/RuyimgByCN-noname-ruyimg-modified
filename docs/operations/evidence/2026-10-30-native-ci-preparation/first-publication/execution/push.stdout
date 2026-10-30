@@ -1,0 +1,1 @@
+{"command": ["git", "-c", "credential.helper=", "-c", "credential.helper=!gh auth git-credential", "-c", "pack.threads=2", "push", "--progress", "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git", "9dbc65530feb695688d3160dc38b6cf64ad39ecd:refs/heads/native-convergence"], "exit": 1, "locked_seconds": 1.083177833002992, "disk_free_bytes": 147731103744}

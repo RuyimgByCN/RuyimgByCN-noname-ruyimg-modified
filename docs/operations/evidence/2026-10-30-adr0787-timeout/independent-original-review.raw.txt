@@ -1,0 +1,47 @@
+## Review
+
+- **Merge verdict: OK with notes。** 未发现 P1 源码阻断；有两个当前候选引入的 P2 功能缺口，详见下文。此结论仅覆盖隔离 A330/WS6 候选，不代表 main 组合验收。
+- **Fixed：无。** 本次独立只读审查，没有修改 candidate、main、文档、包、上游、索引或 remote，没有编译、提交、推送或处理 stage3 cache。
+
+**范围与身份**
+
+已读 canonical AGENTS.md、NONAME_NEXT_AGENT_SPEC.md、完整 ADR0787、裁决20、批准原稿及 timeout 原 proposal，以及完整 sourcewriter handoff（含 acceptance JSON）。完整读取 56 路径 patch，并沿共享应答校验、服务器 WAL/事务/恢复、actor 调度、Worker/WASM 边界及前端消费者追查调用者。
+
+基准 HEAD 确认为 `255bbfbd7f6916ee77bd29799826a225bd10871f`；候选为规则330／存档105／ABI758／WS6。父执行的纯只读[入口核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/review-a330/identity-entry.json)和[出口核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/review-a330/identity-exit.json)均为 **56/56 文件匹配 checkpoint**，patch SHA256 均为 `4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81`，没有额外源码路径。冻结 Rust WS5 reader 与保留329 server 的 SHA 也分别匹配 `c5c8d115…`、`9ef4b495…`。
+
+**Correct：源码证据**
+
+- **共享校验与权限边界成立。** [apply_command.rs:109](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native/src/engine/apply_command.rs:109)将 TimeoutAction/Answer 合并为同一分支；choice id、observer、数量、候选、重复值校验及 revision/dedup/故障回滚仍走现有内核路径。[lobby.rs:319](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/lobby.rs:319)要求精确 WS6 Hello 并校验消息 header；493行拒绝公开 TimeoutAction/AdminAbortMatch。Command/ClientMessage 拒未知控制字段，native `action_for` 不映射内部超时动作；Worker 无该请求分支，WASM 不导出该动作，Referee 提交仍按可信成员角色拒绝。
+- **截止与托管规则接线正确。** [timeout.rs:68](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native/timeout.rs:68)按当前 `(choice_id, observer)` 保留期限，同窗 RevealGeneral、快照和重连不续时；Unix 读取失败返回错误，actor 暂停自动输入，未转换为零剩余时间。进程内等待使用 Tokio timer，跨重启使用已落盘绝对期限。普通旁观者不获得私有 choice/deadline。
+- **真实动作与同事务提交成立。** [room_native.rs:526](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native.rs:526)记录实际 actor、expected_revision、dedup、动作、接受后 revision/hash；穷举 DTO 覆盖当前六类动作和六类 ChoiceOption。checkpoint 包含引擎、收据、dedup、托管、deadline、WAL 和事件游标；自动路径先 commit 再广播，不创建玩家令牌或玩家收据。旧 receipt 命中在人工提交之前返回，因此不会解除托管；新合法人工输入及有效令牌重连才清除。
+- **回放与恢复比较边界准确。** [wal.rs:158](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native/wal.rs:158)逐条提交保存的真实命令，校验 revision/hash，不重跑 AI，也不制造 `revision*2` dedup。199行最终比较完整归档，仅归一顶层 `auth_generation`；未归一私有牌区、RNG、续行或规则状态。磁盘恢复保留最终快照恢复件，WAL 回放件只作验证；显式 Recover 再次调用 Engine::restore，仍轮换认证代次并清空旧内核 token 表。assign_general 成功后重设 WAL 基准，覆盖不推进 revision 的状态变化。
+- **调度和失败事务主体成立。** [room_native_actor.rs:216](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native_actor.rs:216)先检查已到期窗口；每条自动 Answer/NextPhase 后重新经过 mailbox 调度。自动失败设置暂停，避免零延迟重试；RoomDurability 保留 Prepared/Committed、replacement_visible 和 requires_restart 门禁。新增存储故障测试比较完整导出状态，覆盖各写入阶段及补偿失败。
+- **旧档及版本边界保留。** 旧329 JSON 的新增 aggregate 使用 default/skip-none，真实夹具测试先核对原 checksum，再得到 RuleVersionMismatch；没有补默认元数据伪造迁移。冻结 WS5 reader 未改写，历史 Snapshot 样本显式保留 header5；当前客户端同时检查 Welcome 的两处协议版本。14个 golden 的重录有仅回退规则常量的旧值匹配探针支持。
+
+**Finding：P2 — 显式 Recover 成功后仍保持自动暂停**
+
+位置：[room_native_actor.rs:735](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/game-server/src/room_native_actor.rs:735)，关联234、249行及 `wal.rs:211`。
+
+实际触发：某窗口自动提交因一次存储故障失败，actor 保存 `paused_revision = Some(R)` 并停用 timer；故障解除后宿主发送 Recover，恢复和耐久 commit 均成功，但规则 revision 仍为 R。成功分支只更新 last_revision，没有清除 paused_revision，所以下一轮仍跳过自动输入并无限等外部消息。批准原 proposal 明确要求在“新操作/恢复后再评估”；当前只有人工接受、入座或选将路径能够解除暂停。此结论来自完整控制流证明，本次没有另编译运行反例。
+
+最小根修：在 **Recover 的 durability.commit 成功之后**设置 `paused_revision = None`；补“单次自动写入失败→Recover 成功→原窗口按原截止恰重试一次”的定向回归，保留恢复失败和 requires_restart 时不放行的断言。
+
+**Finding：P2 — 倒计时受客户端系统时钟偏差直接影响**
+
+位置：[BattleView.vue:78](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/src/views/BattleView.vue:78)，关联80、787行；`networkClient.ts` 尚未消费 Pong.server_time_ms。
+
+实际触发：服务端创建10秒窗口，客户端时钟快60秒，计算式 `deadline_unix_ms - Date.now()` 从窗口开始即为负数，页面持续显示“剩余0秒”，服务端实际仍等待10秒；客户端慢60秒则初始显示约70秒。本批新增的直接跨机器时钟相减导致该问题；服务端接管时间和权限不受影响。已有 Chrome proof 使用正常时钟，没有覆盖此反例。
+
+最小根修：复用现有 Pong 获取服务端时间偏移，连接后立即取样，显示端以单调经过时间推进估算；保持服务端 deadline 权威。补客户端快／慢60秒的倒计时回归，无需新增 WS 字段。
+
+**验证层次与保留项**
+
+- **srcproof：** 本次独立读完整 patch、关键实现和调用链，并核对上述反例；未执行新的构建或运行测试。两个 P2 均未修复，也未宣称已有测试覆盖。
+- **isolated runtime：** 抽查了测试源码、原始日志及关键 proof。[workspace-final-36.log:12920](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/workspace-final-36.log:12920)包含五档、Reveal 不续时、托管让出、旧档、竞态和真实10秒用例；存储故障测试亦在最终日志通过。31秒329红灯及330绿灯均保留。
+- 真实 server proof 的 SIGKILL 跨截止恢复记录了一条 TimeoutAction，保存实际 actor/revision/dedup/selection/hash；同批拒绝未Hello、WS5、0版本和伪造控制字段。真实 WASM proof 比较1906字节完整归档、hash、事件码及四席恢复投影；其适配器计数约定与服务端真实 WAL dedup 已明确区分。
+- 既有隔离最终结果为 workspace **6889/0/77**、native3 **1706/0/75**、前端 **155/0**、Worker **82/0**、J2 **36/189/114**、五窗 **75/270/35/40**、strict 三包及 preflight **21/21**。77／75 ignored 仍是 ignored；最终 workspace 索引记录782条 warningLines（含重复），没有宣称全仓零警告。
+- [command-index.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/command-index.json)保留全部初次失败与退出码：编译可见性、codec/夹具、golden、协议常量遗漏、Reveal 两人身份局夹具、外部证明脚本，以及 preflight 首次19/21 lookup失败。provider 两次 SSE 中断另存，不算测试通过；最终绿色未覆盖这些历史记录。
+- **main acceptance：未发生。** 本基准不含父 main 的977资源增量，隔离前端155不能改称 main156。集成后仍须父完成组合验收；本报告未审 C331/Gaiming332。
+
+跳过：重复 fullworkspace/WASM/npm/UI 构建、物理设备、GitHub CI及37来源整包验收；未触碰 stage3 cache。  
+风险：两个 P2 仍待修；最少合法项代答只证明授权基线，不能据此宣布强AI、永久录像或 NC09/NC10 整体完成。

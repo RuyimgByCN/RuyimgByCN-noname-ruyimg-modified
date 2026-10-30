@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "nc09_native_room_session",
+      "nc09_timeout_default_deadline_answers_pending_choice",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 77.13958804201684,
+    "disk_free_bytes": 163542102016,
+    "log": "red-actor.log"
+  },
+  {
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "game-server",
+      "-p",
+      "engine-native-wasm"
+    ],
+    "exit": 101,
+    "locked_seconds": 28.043435083003715,
+    "disk_free_bytes": 161178406912,
+    "log": "check-1.log"
+  },
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "nc09_native_room_session",
+      "--no-run"
+    ],
+    "exit": 0,
+    "locked_seconds": 44.40797841697349,
+    "disk_free_bytes": 164402208768,
+    "log": "compile-2.log"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "reason": "ruleset domain 329\u2192330 only for existing 14 scenarios; rollback version probe passes old values",
+  "before": {
+    "sha_dodge_then_damage": "09899af8f1547fe186184a7b2eb335310d0ca4a2077261449473166093dfa911",
+    "death_terminal_single": "b2aed937abba1485b147ade3c1f0129d9a87034de429ece5e88cc0cf527fbc64",
+    "sancai_nested_chain": "85f60f51f69d7dc5882b74d2b9cdbb3992da301a0d23a253d2402e872b6bbae0",
+    "yishang_redirect": "2e612e2c48a09fa0fb4847debba2b163ea30147933d6adfd615a30798225c6e3",
+    "suidun_window_matrix": "c4c47664654fcf41b26475aa3611cb843525b6d63b7818a1a3c269f9a08b5efc",
+    "shouyi_dynamic_skill": "ba4d11c0379c985010a458fab649360d11dfb4db9e0445ad386b3f8e0d92c1f5",
+    "discard_to_limit": "ebbb7d809fa0bdd9c19e639e0dc3691553e31980da8387bcebfdcf468b143390",
+    "rollback_invariants": "cc5533fd1d8e6ecd67067d421ee22cd5d67c8af47c1a497f236f3cb209588885",
+    "equip_distance_matrix": "777cdb5c5b06ba63d44b4008c591524dc5525a55438c3ac67593831f812cfc5f",
+    "chain_fire_propagation": "d273a42dd8025d8ef29b9fb35c8ffb23c9a9ac37d753a8d07d9b84cc9c0b35dd",
+    "aoe_response_queue": "4deacdb7962db6b57e25b7916b21dc87861b504152b4fcad84441cd83bd1f4d3",
+    "duel_alternating_response": "8501c02ccd164a26b97f2e46b30afcfa322028ace8ccffc7b424b4fa0a96582b",
+    "nullify_chain_on_savage": "541384b5889b71ed5cd3d8337d9dd550db7e266d26c82b02d41f862ed36a942e",
+    "judge_phase_delayed_tricks": "1ab143e19dc7cf7f66e893a9207b5f16cff72ec9add32315bf6010edaa75e2fd"
+  },
+  "after": {
+    "sha_dodge_then_damage": "4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d",
+    "death_terminal_single": "c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b",
+    "sancai_nested_chain": "07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42",
+    "yishang_redirect": "40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08",
+    "suidun_window_matrix": "d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae",
+    "shouyi_dynamic_skill": "a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0",
+    "discard_to_limit": "0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff",
+    "rollback_invariants": "fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216",
+    "equip_distance_matrix": "b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5",
+    "chain_fire_propagation": "0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860",
+    "aoe_response_queue": "ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758",
+    "duel_alternating_response": "567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16",
+    "nullify_chain_on_savage": "35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab",
+    "judge_phase_delayed_tricks": "86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f"
+  }
+}

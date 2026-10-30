@@ -274,6 +274,7 @@ pub(crate) fn request_choice(
         max_count,
         allow_cancel,
         timeout_policy: TimeoutPolicy::None,
+        deadline_unix_ms: None,
         revision: tx.state().revision,
         continuation_id,
         kind,

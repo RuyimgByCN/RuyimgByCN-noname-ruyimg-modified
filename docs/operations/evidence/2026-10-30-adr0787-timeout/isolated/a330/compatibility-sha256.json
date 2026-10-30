@@ -1,0 +1,7 @@
+{
+  "/tmp/noname-resource-server-329": "9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489",
+  "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+  "apps/game-server/tests/support/ws5_metadata_readers.rs": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+  "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "efe60602f77b3705c9147d0a37458988bd60e728d107ddb32fa28d2fe7fef7b6",
+  "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": "d1955bd0a06560c326650ee6654aea6d56200964d07f2343b9ff4601be6d6785"
+}

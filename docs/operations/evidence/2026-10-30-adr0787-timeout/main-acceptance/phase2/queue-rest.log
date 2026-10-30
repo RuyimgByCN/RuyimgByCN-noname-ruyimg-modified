@@ -1,0 +1,10 @@
+START planner-native-layout-retry
+END planner-native-layout-retry exit=0
+START planner-wasm-build
+END planner-wasm-build exit=0
+START planner-wasm
+END planner-wasm exit=0
+START hujia-native
+END hujia-native exit=0
+START hujia-wasm
+END hujia-wasm exit=0

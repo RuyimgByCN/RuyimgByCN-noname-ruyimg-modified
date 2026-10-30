@@ -2,7 +2,9 @@
 
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
-> ## 当前源码（2026-10-30；`44982f4` + 已复审B/J2合并，功能及最终门禁通过）
+> **当前本地验收源码（2026-10-30；验收对象`9dbc655` + ADR0787 A，按裁决18收口入库）**：规则330／存档105／ABI758／WS6，53个源码/测试/fixture路径逐字节等于已复审候选。Recover仅成功耐久commit后解除自动暂停，现有Pong校准倒计时按单调经过时间推进，两个P2已有实际红绿及独立复审。主树原生/workspace、实际当前WASM/Worker、WS/WAL/跨进程恢复及校时页面均完成，最终完整preflight21/21、组合复审OK with notes；命令、计数、保留失败与未验证边界集中见[进度主稿](native-progress.md)及[集成证据](../operations/evidence/2026-10-30-adr0787-timeout/README.md)。14 golden经旧规则常量回退探针匹配后重录，真实329档和WS5读者保留。标准无包规则号330；已安装包规则身份继续按既有`330 ^ (lock | (1u64 << 63))`派生并以完整u64保存。WS6拒旧，archive105/ABI758未升；后续331及332仍须依次实际验收，新增schema4合同另待批准。
+>
+> ## 最近已验收主树历史快照（2026-10-30；`44982f4` + 已复审B/J2合并，329功能及最终门禁通过）
 >
 > `STANDARD_RULESET_VERSION = 329`（[内容目录](../../crates/engine-native-content/src/content/standard.rs#L162)）、存档格式105、全局原生宿主ABI758、WS5。J2的329/758升号由[裁决17](../operations/evidence/2026-10-28-user-decisions/README.md)授权：active_index→既有ActivateSkill、同逻辑技能共享身份/存储/限次，756冯河交牌/重铸、757胆守、758平寇经内容回调与可恢复效果级选择落地。Rvm尾部following/commit_state/committing参与恢复与摘要，静态prompt继续按字符串编码，白名单尾加本批键；v328及更早原生规则档按门禁拒绝，原包/旧档/冻结锁保留，不伪造迁移。当前源码的14个golden来自已独立审查的J2候选；版本/语义归因和直接/恢复原生-WASM36场景证据见[J2合并证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)，主树修复后的原生三包1706/0/75、workspace6829/0/77及实际矩阵通过；父修正坏链后独立完整preflight重跑21/21、exit0，原19过2失败不改写。隔离6757/0/74与主树结果分别归属，不以补跑冒充原全量通过。
 >

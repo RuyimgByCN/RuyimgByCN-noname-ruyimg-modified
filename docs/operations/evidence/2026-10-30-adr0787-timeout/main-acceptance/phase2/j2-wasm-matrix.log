@@ -1,0 +1,190 @@
+{
+  "scenarios": 36,
+  "checkpoints": 189,
+  "retries": 114,
+  "full_archive_equality": true,
+  "native_wasm_events_choices_hashes_match": true,
+  "results": [
+    {
+      "name": "danshou-option-1",
+      "steps": 7,
+      "final_hash": "adf0206c0e1935e9bc8292e22a128a84169ddd2a1e3c91417d717d9604c2c236"
+    },
+    {
+      "name": "danshou-option-2",
+      "steps": 7,
+      "final_hash": "09b65e2230fca808ce8be2ea8fd6577cce203f5308a1226ab1068172f0f35739"
+    },
+    {
+      "name": "danshou-option-3",
+      "steps": 6,
+      "final_hash": "e9aefddb718602a1c033a736bea53c3e205e09028df189eba5d288573744b6f2"
+    },
+    {
+      "name": "danshou-option-4",
+      "steps": 6,
+      "final_hash": "b799f15fe9225e2057044f8b5a003f15fdeaca67a692f6e97edda0f11e366c40"
+    },
+    {
+      "name": "danshou-cancel",
+      "steps": 2,
+      "final_hash": "3ab80c20eb4a1ceeba7693fc29d7d98295363c18fed2c4d85769c203e6e9d5d2"
+    },
+    {
+      "name": "danshou-insufficient",
+      "steps": 4,
+      "final_hash": "7e2e7fd6203c89c904851bc5d62156f572ad71b57e54eb34a10658c88e3d34dd"
+    },
+    {
+      "name": "danshou-self-draw",
+      "steps": 4,
+      "final_hash": "909aa2c3e1ad894efc0eaf3f95b6b67cefea78d216f7f4416d90a33309f294c0"
+    },
+    {
+      "name": "danshou-dying-death",
+      "steps": 4,
+      "final_hash": "af45e5d0e666216a0ca767945a2eb59f462cfa86cfaf6de6eb928021293f48d1"
+    },
+    {
+      "name": "danshou-dying-save",
+      "steps": 5,
+      "final_hash": "3aa1ae3857ff8418f56156c96b541cc9911ea5caaec8d6d0f63d950d436627e9"
+    },
+    {
+      "name": "danshou-four-options-and-reset",
+      "steps": 41,
+      "final_hash": "653bdc1d9589ef1ef28148acc199209051ab9b9c144497b69cc09bdbd28064a8"
+    },
+    {
+      "name": "fenghe-give-owned-disabled-yingba",
+      "steps": 4,
+      "final_hash": "7534bd30346d914109326e704b92cbb2e213ba6e392adab57b9233c9cfeaca2a"
+    },
+    {
+      "name": "fenghe-give-no-yingba",
+      "steps": 4,
+      "final_hash": "97cf5b5300bb2729bbbe7883f28f5a165978ee23e54a4a16a6f78e74bf850cdc"
+    },
+    {
+      "name": "fenghe-recast",
+      "steps": 3,
+      "final_hash": "27a36d2700ee15d7d1cdcd6addb3961dcde3d2b48d2f76f32b9462d4b20794b5"
+    },
+    {
+      "name": "fenghe-source-dies-during-give",
+      "steps": 4,
+      "final_hash": "c01ee8aba2c1782fde4e2a6c1c7cbcd1192245482748eb92e82815d25b83c1d0"
+    },
+    {
+      "name": "fenghe-self-source",
+      "steps": 1,
+      "final_hash": "fc7e7512069a96b9c86b5cad66051db0158e36c9a2a9e36ed3787d56ef395402"
+    },
+    {
+      "name": "fenghe-missing-source",
+      "steps": 1,
+      "final_hash": "af2df0f51b3a7d8a0e98333c42dd79ca0e34a7d9832649ae55dca3a981cad10e"
+    },
+    {
+      "name": "fenghe-dead-source",
+      "steps": 1,
+      "final_hash": "11aaaf032a958612a273a4248595940e43a0555aa2547efaf0b8249db439d99f"
+    },
+    {
+      "name": "fenghe-max-hp-one",
+      "steps": 2,
+      "final_hash": "49e47eacac467fb57165cb73539ad23afb92ffb6d245e1f267266968bf4b59ff"
+    },
+    {
+      "name": "fenghe-empty-hand",
+      "steps": 1,
+      "final_hash": "89c7ae0123a3af425a1583a4b8d8e7ec4c9eb230b0a63c38c71502af36606b5b"
+    },
+    {
+      "name": "pingkou-real-three-skips",
+      "steps": 9,
+      "final_hash": "16cd144c6cc6414fbb748d9e29da32abc2821923d876d78b1b1c47edc9295d3d"
+    },
+    {
+      "name": "pingkou-prevention-and-save",
+      "steps": 10,
+      "final_hash": "1c106f5eee8455f07f650ae7f8fb3e6dd73a7ab53bb51810c42ee23f5d287cd9"
+    },
+    {
+      "name": "pingkou-prevention-and-death",
+      "steps": 9,
+      "final_hash": "413c90d3b57ea49f86ee31db494e16c49cf6333312ff5bbbd8821d2b94103195"
+    },
+    {
+      "name": "pingkou-cancel",
+      "steps": 9,
+      "final_hash": "520d410a864858f468bf2c1f2309703d3ae648bd92a862131b6be6b912b8b02c"
+    },
+    {
+      "name": "pingkou-next-target-dies-before-damage",
+      "steps": 9,
+      "final_hash": "617e4dd728431059a2bfd087876eab62f6b78e9a5cc9f6eb1cddbad9aa1414ef"
+    },
+    {
+      "name": "danshou-owner-draw-nested-choice-order",
+      "steps": 6,
+      "final_hash": "bea243c807ae9202270390718911962f4a91edab219f70b368695e9eac1f935b"
+    },
+    {
+      "name": "danshou-owner-draw-kills-target",
+      "steps": 4,
+      "final_hash": "fb4717c3c94607959a8430977a376d5ac355140e26c8ffb7385ebede10813b2c"
+    },
+    {
+      "name": "grouped-owner-dead-after-choice",
+      "steps": 3,
+      "final_hash": "292c4540928d7ed28c382a9b34d49c2f3d2e7d0fe009eb1ba96486b2eb7c4a04"
+    },
+    {
+      "name": "grouped-handler-removed-after-choice",
+      "steps": 3,
+      "final_hash": "2cc9a11341730c3d9f271dbe9ab6e337634cfdce62d2379cb4c24007f1b712cc"
+    },
+    {
+      "name": "grouped-instance-disabled-at-checkpoint",
+      "steps": 1,
+      "final_hash": "66ced0ed232720e736cf3c550be895063d06dd235d5204520574cfa17b539091"
+    },
+    {
+      "name": "storage-trigger-active-owner-identity",
+      "steps": 1,
+      "final_hash": "7ab01ab6a62326b3626e4696823c470140e10aebef2be0f4820ebd5583606f45"
+    },
+    {
+      "name": "storage-two-owner-no-mark-fallback",
+      "steps": 1,
+      "final_hash": "feb70243c1e6200d7f2a9f4e86b6985892ac2cd641768431b89e1573b521a374"
+    },
+    {
+      "name": "active-preceding-draw-danshou",
+      "steps": 2,
+      "final_hash": "f910911e884cd4c7d315609b87905e614a6d2b4161224583630d41ff5c87343e"
+    },
+    {
+      "name": "active-unreachable-danshou",
+      "steps": 1,
+      "final_hash": "a3c885f5c78bf8f12d7e03269b693e788e5a54b58c47079735df91120a74d264"
+    },
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "final_hash": "b6ed834cfc6203131f6826bd4b16e5a569df76099ce955fc09b9a65368c74304"
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "final_hash": "402d6507dd89d01f74396d6978496de5f7dfe4abad0a80d87f599f390e8873b5"
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "final_hash": "bcc0b1866857aa2d8dffc768a673ac89cd4be5d7bdaabd670792d85c0821225d"
+    }
+  ]
+}
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "apps/web-client/scripts/adr0786-j2-cross-target.mjs", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-native-matrix.json", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-wasm-matrix-result.json"], "exit": 0, "locked_seconds": 0.280036582989851, "disk_free_bytes": 142339653632}

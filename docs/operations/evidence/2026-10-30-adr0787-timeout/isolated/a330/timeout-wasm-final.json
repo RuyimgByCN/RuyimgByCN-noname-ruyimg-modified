@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "outcome": {
+    "finished": false,
+    "outcome": "accepted",
+    "reason": null,
+    "revision": 14
+  },
+  "fullArchiveBytes": 1906,
+  "hash": "46dbaccfb891b3bb050eeca604d6b71774f9feada267f895a66753231872a427",
+  "publicCodes": [
+    10
+  ],
+  "restoredAllSeats": true
+}

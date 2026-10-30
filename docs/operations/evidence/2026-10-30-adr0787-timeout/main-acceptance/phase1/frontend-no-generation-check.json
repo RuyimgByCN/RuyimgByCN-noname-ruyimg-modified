@@ -1,0 +1,21 @@
+{
+  "time": "2026-10-30T20:28:20.260791",
+  "test": "apps/web-client/scripts/build-pipeline.test.mjs",
+  "sha256": "cbff2bfdab005616d775c99f1d297ee40aeda867e1467d04176be4ed0ce45825",
+  "readSourceEvidence": [
+    "fixture copies requested build script into mkdtemp checkout, not main",
+    "tool-stub.cjs replaces child_process.execFileSync/spawnSync and writes fresh.wasm only to temporary fixture",
+    "tauri hooks test only reads tauri.conf.json"
+  ],
+  "tsconfigNoEmit": true,
+  "tsconfigIncremental": false,
+  "mainGeneratedModulesWriteDeniedBy": "readonly.sb",
+  "notRun": [
+    "build-native.mjs in main",
+    "build-wasm.mjs in main",
+    "Vite/frontend build",
+    "Worker smoke",
+    "actualWS/browser/matrices",
+    "fullpreflight"
+  ]
+}

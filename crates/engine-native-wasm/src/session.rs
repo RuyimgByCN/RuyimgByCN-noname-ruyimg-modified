@@ -192,7 +192,7 @@ fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Va
             }))
         }
         // 权威查询当前不产出明置候选（国战门控未接线）；出现也不投影。
-        GameAction::RevealGeneral { .. } => None,
+        GameAction::RevealGeneral { .. } | GameAction::TimeoutAction { .. } => None,
     }
 }
 

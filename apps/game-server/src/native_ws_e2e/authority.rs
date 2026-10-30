@@ -22,7 +22,8 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
         ))
         .await
         .unwrap();
-    let player = peer.join_result().await;
+    peer.error(ErrorCode::BadMessage).await;
+    let player = peer.join(owner.room, 1, None).await;
     player.assert_player(peer.player);
     assert_ne!(player.view.observer, ObserverKind::Referee);
     let mut spectator = Peer::connect(&server).await;
@@ -39,7 +40,8 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
         ))
         .await
         .unwrap();
-    spectator.join_result().await.assert_spectator();
+    spectator.error(ErrorCode::BadMessage).await;
+    spectator.spectate(owner.room).await.assert_spectator();
     spectator.snapshot().await.assert_spectator();
     peer.snapshot().await.assert_player(peer.player);
     server.stop().await;

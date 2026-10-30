@@ -20,7 +20,14 @@ use std::collections::HashMap;
 #[path = "room_native/receipts.rs"]
 mod receipts;
 use receipts::CommandReceipts;
+#[path = "room_native/wal.rs"]
+mod wal;
+pub use wal::{NativeWalEntry, NativeWalState};
+#[path = "room_native/timeout.rs"]
+mod timeout;
 pub use receipts::NativeCommandReceipt;
+pub(crate) use timeout::unix_ms;
+pub use timeout::{validate_timeout_secs, NativeChoiceDeadline, NativeTimeoutState};
 
 /// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -45,6 +52,10 @@ pub struct NativeRoomState {
     /// 按重连身份固定已接受请求；旧档没有历史收据时保持空集。
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub command_receipts: Vec<NativeCommandReceipt>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<NativeTimeoutState>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wal: Option<NativeWalState>,
 }
 
 /// hex 编码（小写）。
@@ -93,6 +104,8 @@ pub struct NativeRoomSession {
     command_receipts: CommandReceipts,
     /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
     event_cursor: usize,
+    timeout: NativeTimeoutState,
+    wal: NativeWalState,
 }
 
 /// IO 提交前保存可变会话；包定义与原局资产在 actor 生命周期内不变。
@@ -106,6 +119,8 @@ pub(crate) struct NativeRoomCheckpoint {
     command_receipts: CommandReceipts,
     /// 已投影给客户端的 native 事件日志长度（会话数据，不入存档）。
     event_cursor: usize,
+    timeout: NativeTimeoutState,
+    wal: NativeWalState,
 }
 
 /// 入座/观战结果。
@@ -130,6 +145,8 @@ impl NativeRoomSession {
             next_dedup: self.next_dedup,
             command_receipts: self.command_receipts.clone(),
             event_cursor: self.event_cursor,
+            timeout: self.timeout.clone(),
+            wal: self.wal.clone(),
         }
     }
 
@@ -142,6 +159,8 @@ impl NativeRoomSession {
         self.next_dedup = before.next_dedup;
         self.command_receipts = before.command_receipts;
         self.event_cursor = before.event_cursor;
+        self.timeout = before.timeout;
+        self.wal = before.wal;
     }
 
     /// 以原生引擎为模板建会话（模板状态即开局状态）。
@@ -156,7 +175,15 @@ impl NativeRoomSession {
         max_seats: u8,
     ) -> Self {
         let event_cursor = engine.log().len();
+        let wal = NativeWalState::new(&engine);
+        let next_dedup = engine.save().last_dedup.saturating_add(1);
         Self {
+            timeout: NativeTimeoutState {
+                choice_timeout_secs: 30,
+                managed_seats: vec![],
+                deadline: None,
+            },
+            wal,
             engine,
             packs,
             frozen_packages: None,
@@ -165,7 +192,7 @@ impl NativeRoomSession {
             by_token: HashMap::new(),
             started: true, // 原生引擎建局即已开局（赛前大厅阶段未建模，登记待办）
             next_token: 1,
-            next_dedup: 1,
+            next_dedup,
             command_receipts: CommandReceipts::default(),
             event_cursor,
         }
@@ -229,6 +256,9 @@ impl NativeRoomSession {
                 }
                 if let Some(mut m) = self.members.remove(&old) {
                     m.connection_id = connection_id;
+                    if m.role == ClientRole::Player {
+                        self.timeout.managed_seats.retain(|s| *s != m.seat);
+                    }
                     let reply = self.reply_for(&m);
                     self.by_token.insert(token, connection_id);
                     self.members.insert(connection_id, m);
@@ -317,6 +347,9 @@ impl NativeRoomSession {
         self.engine
             .assign_general_named(m.seat, name)
             .map_err(|e| format!("选将被拒绝: {e:?}"))?;
+        self.timeout.managed_seats.retain(|s| *s != m.seat);
+        self.wal = NativeWalState::new(&self.engine);
+        self.sync_deadline()?;
         Ok((
             self.engine.revision(),
             self.engine
@@ -346,6 +379,8 @@ impl NativeRoomSession {
             frozen_packages: self.frozen_packages.clone(),
             members: self.members.values().cloned().collect(),
             command_receipts: self.command_receipts.entries(),
+            timeout: Some(self.timeout.clone()),
+            wal: Some(self.wal.clone()),
         }
     }
 
@@ -391,7 +426,14 @@ impl NativeRoomSession {
             }
         }
         let event_cursor = engine.log().len();
-        Ok(Self {
+        let timeout = state
+            .timeout
+            .clone()
+            .ok_or("missing native timeout metadata")?;
+        let wal = state.wal.clone().ok_or("missing native WAL")?;
+        let restored = Self {
+            timeout,
+            wal,
             engine,
             packs,
             frozen_packages: state.frozen_packages.clone(),
@@ -403,7 +445,20 @@ impl NativeRoomSession {
             next_dedup: state.next_dedup,
             command_receipts,
             event_cursor,
-        })
+        };
+        if restored.next_dedup
+            != restored
+                .engine
+                .save()
+                .last_dedup
+                .checked_add(1)
+                .ok_or("dedup exhausted")?
+        {
+            return Err("invalid next dedup".into());
+        }
+        restored.validate_timeout()?;
+        restored.validate_wal()?;
+        Ok(restored)
     }
 
     /// 当前引擎归档字节（hex）——落盘用。
@@ -454,32 +509,51 @@ impl NativeRoomSession {
             if *player_count as usize != self.engine.state_core().players.len() {
                 return Err("StartGame 座位数与已创建的原生对局不一致".into());
             }
+            self.timeout.managed_seats.retain(|s| *s != m.seat);
             return Ok(CommandResult::Accepted {
                 new_revision: self.engine.revision(),
                 state_hash: self.engine.state_hash(),
             });
         }
         let action = self.action_for(kind)?;
-        let dedup = self.next_dedup;
-        self.next_dedup += 1;
-        let outcome = self.engine.submit(GameCommand {
-            actor: m.seat,
+        let result = self.submit_native(m.seat, action, expected_revision)?;
+        if matches!(result, CommandResult::Accepted { .. }) {
+            self.timeout.managed_seats.retain(|s| *s != m.seat);
+        }
+        Ok(result)
+    }
+
+    pub(crate) fn submit_native(
+        &mut self,
+        seat: u8,
+        action: GameAction,
+        expected_revision: u64,
+    ) -> Result<CommandResult, String> {
+        let next = self.next_dedup.checked_add(1).ok_or("dedup exhausted")?;
+        let command = GameCommand {
+            actor: seat,
             expected_revision,
-            dedup_id: dedup,
+            dedup_id: self.next_dedup,
             action,
-        });
-        Ok(match outcome {
-            CommandOutcome::Accepted { state_hash } => CommandResult::Accepted {
-                new_revision: self.engine.revision(),
-                state_hash,
-            },
-            CommandOutcome::Pending { .. } | CommandOutcome::Suspended => CommandResult::Accepted {
-                new_revision: self.engine.revision(),
-                state_hash: self.engine.state_hash(),
-            },
-            CommandOutcome::Rejected(reason) => CommandResult::Rejected {
+        };
+        let before = self.checkpoint();
+        let outcome = self.engine.submit(command.clone());
+        if let CommandOutcome::Rejected(reason) = outcome {
+            return Ok(CommandResult::Rejected {
                 reason: map_reject(&reason, self.engine.revision(), expected_revision),
-            },
+            });
+        }
+        self.next_dedup = next;
+        self.wal
+            .entries
+            .push(NativeWalEntry::new(command, &self.engine));
+        if let Err(error) = self.sync_deadline() {
+            self.rollback(before);
+            return Err(error);
+        }
+        Ok(CommandResult::Accepted {
+            new_revision: self.engine.revision(),
+            state_hash: self.engine.state_hash(),
         })
     }
 
@@ -503,7 +577,7 @@ impl NativeRoomSession {
                     })
                     .collect::<Result<Vec<_>, _>>()?,
             },
-            CommandKind::EndPhase {} => GameAction::NextPhase,
+            CommandKind::EndPhase => GameAction::NextPhase,
             CommandKind::ActivateSkill {
                 skill,
                 targets,
@@ -573,79 +647,6 @@ impl NativeRoomSession {
             view,
             legal_actions,
         }
-    }
-}
-
-/// 原生权威房间的持久化面（NC09：存档/录像/跨进程恢复）。
-///
-/// 与旧线 `RoomPersist` 的区别：快照用**原生归档字节**（`encode_archive`），
-/// WAL 记录**内核动作**（`GameAction`）与提交后的修订/摘要；恢复时先载入快照再
-/// 顺序重放 WAL，重放结束的修订号与摘要必须与记录一致——否则明确失败。
-#[derive(Default)]
-pub struct NativeRoomPersist {
-    /// 快照：修订号 → 归档字节。
-    pub snapshots: std::collections::BTreeMap<u64, Vec<u8>>,
-    /// WAL：`(修订号, 座位, 动作, 提交后摘要)`。
-    pub wal: Vec<(u64, u8, GameAction, [u8; 32])>,
-}
-
-impl NativeRoomPersist {
-    /// 空持久化面。
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    /// 记录一次**被接受**的提交。
-    pub fn record(&mut self, revision: u64, seat: u8, action: GameAction, hash: [u8; 32]) {
-        self.wal.push((revision, seat, action, hash));
-    }
-
-    /// 写入快照（原生归档字节）。
-    pub fn put_snapshot(&mut self, revision: u64, bytes: Vec<u8>) {
-        self.snapshots.insert(revision, bytes);
-    }
-
-    /// 按快照 + WAL 重放恢复（返回恢复后的引擎与重放条数）。
-    ///
-    /// `from_revision` 之后（严格大于）的 WAL 条目会被重放；每条重放后的摘要必须
-    /// 与记录一致，否则返回错误（**不得静默接受**不一致的录像）。
-    pub fn recover(
-        &self,
-        from_revision: u64,
-        packs: &[&engine_native::content::extension::ExtensionPack],
-    ) -> Result<(Engine, usize), String> {
-        let bytes = self
-            .snapshots
-            .get(&from_revision)
-            .ok_or_else(|| format!("缺少修订 {from_revision} 的快照"))?;
-        let snapshot =
-            engine_native::archive::decode_archive(bytes).map_err(|e| format!("{e:?}"))?;
-        let mut engine = if packs.is_empty() {
-            Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
-        } else {
-            Engine::restore_with_extensions(&snapshot, packs).map_err(|e| format!("{e:?}"))?
-        };
-        let mut replayed = 0usize;
-        for (revision, seat, action, hash) in &self.wal {
-            if *revision <= from_revision {
-                continue;
-            }
-            let dedup = revision.wrapping_mul(2).max(1);
-            let out = engine.submit(GameCommand {
-                actor: *seat,
-                expected_revision: engine.revision(),
-                dedup_id: dedup,
-                action: action.clone(),
-            });
-            if let CommandOutcome::Rejected(reason) = out {
-                return Err(format!("重放修订 {revision} 被拒绝: {reason:?}"));
-            }
-            if engine.state_hash() != *hash {
-                return Err(format!("重放修订 {revision} 摘要不一致（录像或内容不符）"));
-            }
-            replayed += 1;
-        }
-        Ok((engine, replayed))
     }
 }
 

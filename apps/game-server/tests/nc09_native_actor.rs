@@ -109,6 +109,7 @@ async fn nc09_configured_actor_keeps_password_packages_general_and_seat_ownershi
         "upstream-noname",
         &["shahai-swd".into(), "huanle-cards".into()],
         Some(store.clone()),
+        30,
     )
     .unwrap()
     .unwrap();
@@ -362,6 +363,7 @@ async fn nc09_backend_selection_is_explicit() {
         "upstream-noname",
         &["shahai-swd".to_string()],
         None,
+        30,
     )
     .expect("未启用不应报错");
     assert!(none.is_none(), "未启用原生后端时不得接管");
@@ -379,6 +381,7 @@ async fn nc09_backend_selection_is_explicit() {
         "upstream-noname",
         &["shahai-swd".to_string()],
         None,
+        30,
     )
     .expect("启用后应成功")
     .expect("应返回原生句柄");
@@ -412,6 +415,7 @@ async fn nc09_backend_selection_is_explicit() {
         "upstream-noname",
         &["no-such-package".to_string()],
         None,
+        30,
     ) {
         Ok(_) => panic!("包缺失必须报错"),
         Err(e) => e,

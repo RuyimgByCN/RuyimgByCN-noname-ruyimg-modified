@@ -1,0 +1,305 @@
+diff --git a/apps/game-server/src/room_native_actor.rs b/apps/game-server/src/room_native_actor.rs
+--- a/apps/game-server/src/room_native_actor.rs
++++ b/apps/game-server/src/room_native_actor.rs
+@@ -732,6 +732,7 @@
+                             let _ = reply.send(Err(error));
+                             continue;
+                         }
++                        paused_revision = None;
+                         last_revision = session.engine().revision();
+                         debug!(room = id, "native room recovered");
+                         let _ = reply.send(Ok(()));
+diff --git a/apps/game-server/tests/adr0787_timeout.rs b/apps/game-server/tests/adr0787_timeout.rs
+--- a/apps/game-server/tests/adr0787_timeout.rs
++++ b/apps/game-server/tests/adr0787_timeout.rs
+@@ -464,3 +464,88 @@
+     let engine_protocol::ServerMessage::Snapshot { view, .. } = result else { unreachable!() };
+     assert!(view.revision <= 4, "automatic processing must yield every command: {}", view.revision);
+ }
++
++async fn control_snapshot(handle: &room::RoomHandle) -> engine_protocol::ServerMessage {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(room::RoomMsg::Snapshot { connection_id: 999,
++        header: engine_protocol::MessageHeader::new(handle.id, 1, 0), reply }).await.unwrap();
++    response.await.unwrap().unwrap()
++}
++
++async fn control_recover(handle: &room::RoomHandle) -> Result<(), String> {
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(room::RoomMsg::Recover { reply }).await.unwrap();
++    response.await.unwrap()
++}
++
++#[tokio::test]
++async fn recover_after_automatic_write_failure_retries_original_expired_choice_once() {
++    automatic_failure_then_recover(false).await;
++}
++
++#[tokio::test]
++async fn recover_cannot_release_automatic_pause_when_restart_is_required() {
++    automatic_failure_then_recover(true).await;
++}
++
++async fn automatic_failure_then_recover(restart_required: bool) {
++    use native_room_store::StoreFault;
++    let pending = pending();
++    let mut initial = pending.export_state(&pending.snapshot_hex());
++    // A short absolute test deadline drives the production actor timer, not a synthetic submit.
++    let deadline = initial.timeout.as_mut().unwrap().deadline.as_mut().unwrap();
++    deadline.deadline_unix_ms = room_native::unix_ms().unwrap() + 500;
++    let deadline = deadline.clone();
++    let token = initial.members.iter().find(|m| m.seat == deadline.observer).unwrap().reconnect_token.clone();
++    let session = NativeRoomSession::from_saved(&initial, vec![]).unwrap();
++    let dir = tempfile::tempdir().unwrap();
++    let store = native_room_store::NativeRoomStore::new(dir.path());
++    let handle = room_native_actor::spawn_room_native_persisted(790, session, 16, 1000, String::new(), Some(store.clone()));
++    let (tx, mut rx) = tokio::sync::mpsc::channel(128);
++    let (reply, response) = tokio::sync::oneshot::channel();
++    handle.send(room::RoomMsg::Join { connection_id: 999, display_name: "recover".into(), preferred_seat: Some(deadline.observer), reconnect_token: Some(token), password: String::new(), outbound: session::Outbound::new(tx), reply }).await.unwrap();
++    let joined = response.await.unwrap().unwrap();
++    let confirmed = std::fs::read(dir.path().join("790.json")).unwrap();
++    if restart_required { store.fail_next_write_with_compensation(StoreFault::DecisionWrite, StoreFault::PrepareSync); }
++    else { store.fail_next_write(StoreFault::FileSync); }
++    tokio::time::sleep(std::time::Duration::from_millis(deadline.deadline_unix_ms.saturating_sub(room_native::unix_ms().unwrap()))).await;
++    let failed = control_snapshot(&handle).await;
++    let engine_protocol::ServerMessage::Snapshot { view, choice, .. } = failed else { unreachable!() };
++    assert_eq!(view, joined.view);
++    assert_eq!(choice.as_ref().unwrap().deadline_unix_ms, Some(deadline.deadline_unix_ms));
++    if restart_required {
++        let bytes = std::fs::read(dir.path().join("790.json")).unwrap();
++        assert!(control_recover(&handle).await.unwrap_err().contains("restart required"));
++        assert_eq!(std::fs::read(dir.path().join("790.json")).unwrap(), bytes);
++        assert_eq!(control_snapshot(&handle).await, engine_protocol::ServerMessage::Snapshot {
++            header: engine_protocol::MessageHeader::new(790, 1, view.revision), view, choice,
++            legal_actions: joined.legal_actions,
++        });
++        return;
++    }
++    assert_eq!(std::fs::read(dir.path().join("790.json")).unwrap(), confirmed);
++    // A failed Recover must not clear the pause or retry an expired timer.
++    store.fail_next_write(StoreFault::Rename);
++    assert!(control_recover(&handle).await.is_err());
++    let engine_protocol::ServerMessage::Snapshot { view: retry_view, .. } = control_snapshot(&handle).await else { unreachable!() };
++    assert_eq!(retry_view, joined.view);
++    let saved = store.load_all().unwrap().pop().unwrap();
++    assert_eq!(saved.state.timeout.as_ref().unwrap().deadline.as_ref(), Some(&deadline));
++    control_recover(&handle).await.unwrap();
++    let update = tokio::time::timeout(std::time::Duration::from_secs(2), async {
++        while let Some(text) = rx.recv().await {
++            let message = engine_protocol::decode_s2c(&text).unwrap();
++            if matches!(message, engine_protocol::ServerMessage::CommandOutcome { .. }) { return message; }
++        }
++        panic!("actor closed before retry");
++    }).await.expect("successful durable Recover must release the original expired timer");
++    let saved = store.load_all().unwrap().pop().unwrap();
++    let entries = saved.state.wal.as_ref().unwrap().entries.iter().filter(|entry| matches!(entry.command().action, GameAction::TimeoutAction { .. })).collect::<Vec<_>>();
++    assert_eq!(entries.len(), 1);
++    assert_eq!(entries[0].expected_revision, joined.view.revision);
++    assert!(matches!(entries[0].command().action, GameAction::TimeoutAction { choice_id, .. } if choice_id == deadline.choice_id));
++    if let Some(output) = std::env::var_os("A330_RECOVER_PROOF") {
++        std::fs::write(output, serde_json::to_vec_pretty(&serde_json::json!({"original_deadline": deadline, "before": initial, "after": saved, "pushed": update})).unwrap()).unwrap();
++    }
++    NativeRoomSession::from_saved(&saved.state, vec![]).unwrap();
++}
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -2,7 +2,7 @@
+ import { readFileSync } from "node:fs";
+ import { test } from "node:test";
+ import ts from "typescript";
+-import { computed } from "vue";
++import { computed, ref } from "vue";
+ import { matchOutcomePresentation } from "../src/engine/outcome.ts";
+ import { NetworkEngineClient, onlineReconnectKey } from "../src/engine/networkClient.ts";
+ import { applyEnvelope, clearEffects, createViewStore } from "../src/engine/viewStore.ts";
+@@ -559,3 +559,61 @@
+   assert.equal(roster.seats[0].managed, true);
+   assert.equal(roster.choice_timeout_secs, 10);
+ });
++
++function battleCountdown(client, deadline) {
++  const sfc = readFileSync(new URL('../src/views/BattleView.vue', import.meta.url), 'utf8');
++  const script = sfc.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
++  const ast = ts.createSourceFile('BattleView.ts', script, ts.ScriptTarget.Latest, true);
++  const names = new Set(['countdownNow', 'countdownTick', 'countdownTimer', 'choiceSecondsLeft']);
++  const declarations = ast.statements.filter(statement => ts.isVariableStatement(statement) &&
++    statement.declarationList.declarations.some(decl => names.has(decl.name.getText(ast)))).map(statement => statement.getText(ast)).join('\n');
++  let tick;
++  const compiled = ts.transpileModule(declarations + '\nreturn choiceSecondsLeft;', {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
++  const value = new Function('ref', 'computed', 'store', 'networkClient', 'setInterval', compiled)(ref, computed,
++    {choice: {deadline_unix_ms: deadline}}, client, callback => {tick=callback; return 1;});
++  return {value, tick: () => tick()};
++}
++
++for (const skew of [60_000, -60_000]) {
++  test(`server countdown ignores client wall clock skew ${skew} and later jumps`, async (t) => {
++    let wall = 1_000_000 + skew;
++    let monotonic = 100;
++    t.mock.method(Date, 'now', () => wall);
++    t.mock.method(performance, 'now', () => monotonic);
++    const f = fixture(t);
++    const socket = await f.connect();
++    const probe = socket.sent.find(message => message.type === 'Heartbeat');
++    socket.receive('Pong', {header:probe?.payload.header ?? {protocol_version:6,room_id:0,conn_seq:1,revision:0},server_time_ms:1_000_000});
++    const countdown = battleCountdown(f.client, 1_010_000);
++    assert.equal(countdown.value.value, 10, 'actual BattleView calculation must use the server anchor');
++    assert.ok(probe, 'connect immediately samples the existing Heartbeat/Pong protocol');
++    monotonic += 2_000;wall += 3_600_000;countdown.tick();assert.equal(countdown.value.value, 8);
++    wall -= 7_200_000;monotonic += 1_000;countdown.tick();assert.equal(countdown.value.value, 7);
++  });
++}
++
++test('clock calibration requires matching Pong, measures RTT, and resets across reconnect', async (t) => {
++  let now = 100;
++  t.mock.method(performance, 'now', () => now);
++  const f = fixture(t);const socket = await f.connect();
++  const probe = socket.sent.find(message => message.type === 'Heartbeat');
++  const countdown = battleCountdown(f.client, 1_010_000);
++  assert.equal(countdown.value.value, null, 'uncalibrated display must not invent a duration');
++  for (const header of [{...probe.payload.header,conn_seq:99},{...probe.payload.header,room_id:99},{...probe.payload.header,protocol_version:5}]) {
++    socket.receive('Pong',{header,server_time_ms:1_000_000});countdown.tick();assert.equal(countdown.value.value,null);
++  }
++  for (const serverTime of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "1000000", null]) {
++    socket.receive('Pong',{header:probe.payload.header,server_time_ms:serverTime});countdown.tick();assert.equal(countdown.value.value,null);
++  }
++  now=50;socket.receive('Pong',{header:probe.payload.header,server_time_ms:1_000_000});countdown.tick();assert.equal(countdown.value.value,null,'negative RTT cannot calibrate');
++  now=300;socket.receive('Pong',{header:probe.payload.header,server_time_ms:1_000_000});
++  assert.equal(f.client.secondsUntilServerDeadline(1_010_100),10,'RTT/2 is accounted for at receipt');
++  now=400;socket.receive('Pong',{header:probe.payload.header,server_time_ms:9_000_000});
++  assert.equal(f.client.secondsUntilServerDeadline(1_010_100),10,'duplicate Pong cannot move the accepted anchor');
++  socket.close();countdown.tick();assert.equal(countdown.value.value,null);
++  const replacement=f.reconnect();replacement.open(2);await new Promise(resolve=>setImmediate(resolve));
++  const newProbe=replacement.sent.find(message=>message.type==='Heartbeat');assert.ok(newProbe);
++  socket.receive('Pong',{header:probe.payload.header,server_time_ms:9_000_000});countdown.tick();assert.equal(countdown.value.value,null,'old connection samples are ignored');
++  now=500;replacement.receive('Pong',{header:newProbe.payload.header,server_time_ms:1_004_000});countdown.tick();
++  assert.equal(countdown.value.value,6,'same deadline resumes with actual remaining time, not a full window');
++});
+diff --git a/apps/web-client/src/engine/networkClient.ts b/apps/web-client/src/engine/networkClient.ts
+--- a/apps/web-client/src/engine/networkClient.ts
++++ b/apps/web-client/src/engine/networkClient.ts
+@@ -163,6 +163,8 @@
+   private rosterListeners = new Set<(roster: RoomRoster) => void>();
+   private closeListeners = new Set<() => void>();
+   private heartbeat: number | null = null;
++  private clockProbe: { connSeq: number; roomId: number; sentAt: number } | null = null;
++  private serverTimeAnchor: { unixMs: number; monotonicMs: number } | null = null;
+   private disposed = false;
+   /// NC09 自动重连：最近一次连接参数（断开后按退避重试）
+   private lastUrl: string | null = null;
+@@ -174,6 +176,8 @@
+   async connect(url: string, displayName: string): Promise<void> {
+     if (this.socket?.readyState === WebSocket.OPEN) return;
+     this.disposed = false;
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
+     this.lastUrl = url;
+     this.lastName = displayName;
+ 
+@@ -223,6 +227,14 @@
+         display_name: displayName,
+       },
+     });
++    this.sendHeartbeat();
++  }
++
++  /** Display estimate only; server deadlines remain authoritative. */
++  secondsUntilServerDeadline(deadline: number | undefined): number | null {
++    if (deadline == null || !this.serverTimeAnchor) return null;
++    const elapsed = performance.now() - this.serverTimeAnchor.monotonicMs;
++    return Math.max(0, Math.ceil((deadline - this.serverTimeAnchor.unixMs - elapsed) / 1000));
+   }
+ 
+   createRoom(players: number, seed: number, password = "", choiceTimeoutSecs = 30): Promise<OnlineSession> {
+@@ -375,6 +387,8 @@
+       window.clearInterval(this.heartbeat);
+     }
+     this.heartbeat = null;
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
+     const socket = this.socket;
+     this.socket = null;
+     socket?.close(1000, "client dispose");
+@@ -585,6 +599,20 @@
+         for (const listener of this.envelopeListeners) listener(envelope);
+         break;
+       }
++      case "Pong": {
++        const header = payload.header as MessageHeader | undefined;
++        const probe = this.clockProbe;
++        const receivedAt = performance.now();
++        const serverTime = payload.server_time_ms;
++        if (probe && header?.protocol_version === NETWORK_PROTOCOL_VERSION &&
++            header.conn_seq === probe.connSeq && header.room_id === probe.roomId &&
++            typeof serverTime === "number" && Number.isSafeInteger(serverTime) && serverTime > 0 &&
++            receivedAt >= probe.sentAt) {
++          this.serverTimeAnchor = { unixMs: serverTime + (receivedAt - probe.sentAt) / 2, monotonicMs: receivedAt };
++          this.clockProbe = null;
++        }
++        break;
++      }
+       case "Error": {
+         const error = new Error(String(payload.message ?? "服务端错误"));
+         if (this.joinWaiter) {
+@@ -635,12 +663,19 @@
+     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
+     this.heartbeat = window.setInterval(() => {
+       if (this.socket?.readyState !== WebSocket.OPEN) return;
+-      const header = this.nextHeader();
+-      this.send({ type: "Heartbeat", payload: { header } });
++      this.sendHeartbeat();
+     }, 15_000);
+   }
+ 
++  private sendHeartbeat(): void {
++    const header = this.nextHeader();
++    this.clockProbe = { connSeq: header.conn_seq, roomId: header.room_id, sentAt: performance.now() };
++    this.send({ type: "Heartbeat", payload: { header } });
++  }
++
+   private handleClose(): void {
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
+     if (this.heartbeat != null) window.clearInterval(this.heartbeat);
+     // NC09：断线必须**可见**——此前服务端中途崩溃时界面保持旧状态、无任何提示。
+     // 这里向监听者广播一次「已断开」，由界面写入状态行与日志。
+diff --git a/apps/web-client/src/views/BattleView.vue b/apps/web-client/src/views/BattleView.vue
+--- a/apps/web-client/src/views/BattleView.vue
++++ b/apps/web-client/src/views/BattleView.vue
+@@ -75,9 +75,12 @@
+ const autoRunning = ref(false);
+ const statusLine = ref("未连接");
+ const roomRoster = ref<RoomRoster | null>(null);
+-const countdownNow = ref(Date.now());
+-const countdownTimer = setInterval(() => { countdownNow.value = Date.now(); }, 250);
+-const choiceSecondsLeft = computed(() => store.choice?.deadline_unix_ms == null ? null : Math.max(0, Math.ceil((store.choice.deadline_unix_ms - countdownNow.value) / 1000)));
++const countdownTick = ref(0);
++const countdownTimer = setInterval(() => { countdownTick.value++; }, 250);
++const choiceSecondsLeft = computed(() => {
++  countdownTick.value;
++  return networkClient.secondsUntilServerDeadline(store.choice?.deadline_unix_ms);
++});
+ const roomId = ref(0);
+ const roomStarted = ref(false);
+ const isOnline = computed(() => route.query.mode === "online");
+@@ -784,7 +787,7 @@
+ 
+     <section v-if="store.choice" class="panel choice" aria-label="待选择">
+       <h2>{{ choicePromptLabel(store.choice) }}</h2>
+-      <p v-if="choiceSecondsLeft !== null" role="timer">剩余 {{ choiceSecondsLeft }} 秒 · 到时托管</p>
++      <p v-if="store.choice.deadline_unix_ms != null" role="timer">{{ choiceSecondsLeft === null ? "正在校准服务器时间…" : `剩余 ${choiceSecondsLeft} 秒 · 到时托管` }}</p>
+       <p class="muted">
+         choice #{{ store.choice.choice_id }} · 玩家
+         {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
+diff --git a/crates/engine-protocol/src/messages.rs b/crates/engine-protocol/src/messages.rs
+--- a/crates/engine-protocol/src/messages.rs
++++ b/crates/engine-protocol/src/messages.rs
+@@ -188,7 +188,7 @@
+     Pong {
+         /// Header.
+         header: MessageHeader,
+-        /// Server monotonic millis (not used by rules).
++        /// Server Unix milliseconds (not used by rules).
+         server_time_ms: u64,
+     },
+     /// Error that is safe to show (never includes hidden cards/identity of others).

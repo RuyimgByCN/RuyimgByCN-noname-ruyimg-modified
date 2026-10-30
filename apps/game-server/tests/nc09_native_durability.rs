@@ -379,6 +379,7 @@ async fn nc09_configured_creation_rejects_failed_initial_save() {
         "test",
         &[],
         Some(store.clone()),
+        30,
     );
     assert!(
         matches!(created,Err(error) if error.starts_with("native room persistence failed:")),

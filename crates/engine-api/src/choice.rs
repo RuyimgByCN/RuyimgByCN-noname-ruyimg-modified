@@ -20,6 +20,9 @@ pub struct ChoiceRequest {
     pub allow_cancel: bool,
     /// Timeout policy identifier (ruleset-defined).
     pub timeout_policy: TimeoutPolicy,
+    /// Server Unix deadline; absent for offline and legacy rules.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deadline_unix_ms: Option<u64>,
     /// Associated state revision when the choice was published.
     pub revision: u64,
     /// VM / effect continuation handle (opaque to clients).

@@ -1,0 +1,7 @@
+PASS XunXun: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS JiJie: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS GaiMing: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS HaoTianTa: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS Liaoyuan: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+{"windows":5,"stateComparisons":75,"seatChecks":270,"commands":35,"archiveRestarts":40,"failed":0}
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/machine"], "exit": 0, "locked_seconds": 0.10644595898338594, "disk_free_bytes": 142339440640}

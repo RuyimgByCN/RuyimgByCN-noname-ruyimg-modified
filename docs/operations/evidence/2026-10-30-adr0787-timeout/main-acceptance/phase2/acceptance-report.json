@@ -1,0 +1,245 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Current main Phase2 authorized scope completed; no maintained source edits;31808/53/CI4/Cargo/frozen/assets/guard unchanged; only authorized generatedpkg/mirror outputs +owned external products/evidence written."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "39 exact serialized attempts:34exit0/5resolved private-driver failures preserved, plus manual cleanup guard preserved; full command/env/rawlogs/counts/SHA/before-after/runtimeWAL/CDP/cleanup evidence indexed."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/evidence-files.json"
+  ],
+  "testsAddedOrUpdated": [
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs",
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-command.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "env NODE_OPTIONS=--require=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/target-preload.cjs WASM_PACK_TARGET=web node apps/web-client/scripts/build-native.mjs",
+      "result": "passed",
+      "summary": "0; production-native-build.log"
+    },
+    {
+      "command": "env NODE_OPTIONS=--require=/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/target-preload.cjs node apps/web-client/scripts/build-wasm.mjs",
+      "result": "passed",
+      "summary": "0; production-legacy-build.log"
+    },
+    {
+      "command": "bash -c cd apps/web-client && npm run smoke:native",
+      "result": "passed",
+      "summary": "0; worker82.log"
+    },
+    {
+      "command": "bash -c cd apps/web-client && node_modules/.bin/vue-tsc --noEmit",
+      "result": "passed",
+      "summary": "0; typecheck.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/vite-external-build.mjs",
+      "result": "passed",
+      "summary": "0; external-vite-build.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/formal-trajectories.py",
+      "result": "passed",
+      "summary": "0; formal-trajectories.log"
+    },
+    {
+      "command": "env J2_CROSS_NATIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-native-matrix.json cargo test --offline -p engine-native-wasm --test adr0786_j2_cross_target -- --nocapture",
+      "result": "passed",
+      "summary": "0; j2-native-matrix.log"
+    },
+    {
+      "command": "node apps/web-client/scripts/adr0786-j2-cross-target.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-native-matrix.json /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/j2-wasm-matrix-result.json",
+      "result": "passed",
+      "summary": "0; j2-wasm-matrix.log"
+    },
+    {
+      "command": "env NC09_MACHINE_TRACE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/machine/machine-traces NC09_MACHINE_ARCHIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/machine/archives cargo test --offline -p engine-native --test misc nc09_machine_ownership:: -- --nocapture",
+      "result": "passed",
+      "summary": "0; machine-native.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs /Users/ruyimg/Documents/Claude/sanguosha/noname-next /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/machine",
+      "result": "passed",
+      "summary": "0; machine-wasm.log"
+    },
+    {
+      "command": "cargo run --offline -p game-server --example emit_projection_fixture -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ordinary-projection.json",
+      "result": "passed",
+      "summary": "0; ordinary-native.log"
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/native-server-projection-parity.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ordinary-projection.json",
+      "result": "passed",
+      "summary": "0; ordinary-wasm.log"
+    },
+    {
+      "command": "cargo run --offline -p game-server --example emit_approved_b_metadata -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/b-metadata-fixtures.json",
+      "result": "passed",
+      "summary": "0; b-native.log"
+    },
+    {
+      "command": "cargo build --offline -p desktop-client --example pa09_native_bridge",
+      "result": "passed",
+      "summary": "0; b-bridge-build.log"
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/approved-b-parity.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge",
+      "result": "passed",
+      "summary": "0; b-parity.log"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.toml -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/native-output.json",
+      "result": "failed",
+      "summary": "101; planner-native.log private flattened exported Cargo files omitted conventional src layout; error101; moved identical private sources into src; planner-native-layout-retry passed"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.toml -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/native-output.json",
+      "result": "passed",
+      "summary": "0; planner-native-layout-retry.log"
+    },
+    {
+      "command": "wasm-pack build /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner --target web --release --no-opt --out-dir /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner-web",
+      "result": "passed",
+      "summary": "0; planner-wasm-build.log"
+    },
+    {
+      "command": "node /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/b-j2-direct-planner-verify.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner-web /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/native-output.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/wasm-output.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/report.json",
+      "result": "passed",
+      "summary": "0; planner-wasm.log"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/Cargo.toml -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/vector.json",
+      "result": "passed",
+      "summary": "0; hujia-native.log"
+    },
+    {
+      "command": "node /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/verify.mjs /Users/ruyimg/Documents/Claude/sanguosha/noname-next /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/vector.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/hujia/report.json",
+      "result": "passed",
+      "summary": "0; hujia-wasm.log"
+    },
+    {
+      "command": "cargo build --offline -p game-server --bin game-server",
+      "result": "passed",
+      "summary": "0; current-server-build.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-hash.py",
+      "result": "passed",
+      "summary": "0; legacy-crosshash.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs",
+      "result": "failed",
+      "summary": "1; artifact-versions.log own JS regexp escaping typo; no product check reached; preserved first source; literal constant reader used"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs",
+      "result": "failed",
+      "summary": "1; artifact-versions-parser-retry.log own overbroad bare330 assertion for package-derived rule identities; parent approved real catalog/content_lock verification; corrected full14 gate passed with exactu64"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/catalog-version/Cargo.toml -- /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/catalog-version/report.json",
+      "result": "passed",
+      "summary": "0; catalog-versions-native.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs",
+      "result": "passed",
+      "summary": "0; artifact-versions-catalog-corrected.log"
+    },
+    {
+      "command": "env A330_WASM_PARITY_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/timeout-vector.json cargo test --offline -p game-server --test adr0787_timeout recorded_timeout_selection_matches_current_wasm_answer_full_archive -- --exact --nocapture",
+      "result": "passed",
+      "summary": "0; timeout-native-fixture.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/timeout-wasm.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/timeout-vector.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/timeout-wasm-report.json",
+      "result": "passed",
+      "summary": "0; timeout-wasm.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/real-ws.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/real-ws /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/artifacts/game-server330-main current",
+      "result": "passed",
+      "summary": "0; real-ws-restart.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ui-skew.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-fast /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/artifacts/game-server330-main 60000",
+      "result": "passed",
+      "summary": "0; chrome-fast.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ui-skew.mjs /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-slow /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ui-dist /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/artifacts/game-server330-main -60000",
+      "result": "passed",
+      "summary": "0; chrome-slow.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/resource-smoke.py",
+      "result": "passed",
+      "summary": "0; resources-current-main.log"
+    },
+    {
+      "command": "cargo test --offline -p game-server native_ws_e2e::referee:: -- --nocapture",
+      "result": "passed",
+      "summary": "0; actual-ws-referee-targeted.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external.py",
+      "result": "failed",
+      "summary": "1; external-referee-timeout-reject.log TimeoutAction Unauthorized passed; own EndPhase assertion wrongly expected same code; canonical readonly Internal/spectator cannot submit now checked exactly +full stored state unchanged"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external.py",
+      "result": "passed",
+      "summary": "0; external-referee-corrected.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py",
+      "result": "failed",
+      "summary": "1; owned-cleanup.log macOS sandbox disallowed ps before deletion; readonly filtered ps captured outside sandbox; main write-deny retained; cleanup retry passed"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py",
+      "result": "passed",
+      "summary": "0; owned-cleanup-snapshot-retry.log"
+    },
+    {
+      "command": "python3 -B /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-index.py",
+      "result": "passed",
+      "summary": "0; artifact-sha-index.log"
+    }
+  ],
+  "validationOutput": [
+    "worker82/0;type/Vite external build exit0; targetRust23/0/0",
+    "formal native/WASM40+20 andlegacycrosshash passed",
+    "J2 36/189/114;fiveWindows75/270/35/40;ordinary5/40/32;B14/98 passed",
+    "11 base330 headers +3 actualcatalog/contentlock-derived u64 validated exactly;archive105/ABI758/WS6",
+    "DirectPlanner direct Engine::plan_action paired1/5+7realpublicprompts budgets0/48, fullobjects/immutable/restoredapply passed;seed45000 emptyHujia passed",
+    "actual current330server imported/listed41;rooms selected[];realWS/SIGKILL/WAL exactlyone/reconnect/forgery/Referee passed",
+    "Chrome±60s =>10s,+1h=>10s,reconnect=>6s,same deadline,each exactlyone TimeoutAction,exceptions0",
+    "resources5representatives20decode calls and9error-recovery cases passed;actual Rust GET bytes matchdisk",
+    "source31808/53/CI4/asset/Cargo/frozen/guard/head/index unchanged;stage3 retained; owned process0;incremental0"
+  ],
+  "residualRisks": [
+    "Current330 cross-platform CI acceptance not claimed; tracked remote CI failures/private fixes remain parent-owned.",
+    "Fullpreflight21 intentionally deferred; Phase1 fullRust/conformance/Node161 not rerun.",
+    "Resource checks are representatives, not all9652codec/wholeI02; CDP evidence is not OS-HID/isTrusted acceptance.",
+    "RTT/2 display estimation remains approximate; serverdeadline remains authoritative."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Maintained source0;3 ignoredWASM byte deltas;12 rebuilt sourcepkgfiles and6 publicmirrorfiles;owned phase2 evidence/products only.",
+  "reviewFindings": [
+    "No product failure observed in completed Phase2 scopes; five driver/setup failures and one manual cleanup guard failure preserved with exact root causes and corrected checks.",
+    "Independent reviewer/parent integration gate remains required."
+  ],
+  "manualNotes": "Full39 exact command records in command-index.json; all evidence files listed by evidence-files.json,1021 artifact files SHA indexed. No stage/commit/push/remote/settings/expectation changes. stage3 retained for current acceptance/finalpreflight/integration revalidation, worker has no further heavy use pending."
+}

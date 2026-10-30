@@ -1,0 +1,803 @@
+{
+  "initial": [
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_room_session",
+        "nc09_timeout_default_deadline_answers_pending_choice",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "locked_seconds": 77.13958804201684,
+      "disk_free_bytes": 163542102016,
+      "log": "red-actor.log"
+    },
+    {
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-native-wasm"
+      ],
+      "exit": 101,
+      "locked_seconds": 28.043435083003715,
+      "disk_free_bytes": 161178406912,
+      "log": "check-1.log"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_room_session",
+        "--no-run"
+      ],
+      "exit": 0,
+      "locked_seconds": 44.40797841697349,
+      "disk_free_bytes": 164402208768,
+      "log": "compile-2.log"
+    }
+  ],
+  "serialized": [
+    {
+      "name": "targeted-3",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_room_session",
+        "--test",
+        "nc09_native_durability",
+        "--test",
+        "nc09_native_actor"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161927204864,
+      "finished_unix": 1793346247.727752,
+      "log": "targeted-3.log",
+      "rustTestCounts": [
+        43,
+        1,
+        0
+      ],
+      "warningLines": 241
+    },
+    {
+      "name": "timeout-tests-4",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161447256064,
+      "finished_unix": 1793346276.832219,
+      "log": "timeout-tests-4.log",
+      "rustTestCounts": [
+        39,
+        2,
+        0
+      ],
+      "warningLines": 234
+    },
+    {
+      "name": "native3-5",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161435021312,
+      "finished_unix": 1793346324.83814,
+      "log": "native3-5.log",
+      "rustTestCounts": [
+        785,
+        1,
+        1
+      ],
+      "warningLines": 0
+    },
+    {
+      "name": "timeout-tests-6",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "--test",
+        "nc09_native_room_session",
+        "--test",
+        "nc09_native_durability",
+        "--test",
+        "nc09_native_actor",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161441308672,
+      "finished_unix": 1793346428.318943,
+      "log": "timeout-tests-6.log",
+      "rustTestCounts": [
+        186,
+        1,
+        0
+      ],
+      "warningLines": 251
+    },
+    {
+      "name": "real329-archive-7",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real329",
+        "/tmp/noname-resource-server-329",
+        "baseline"
+      ],
+      "exit": 13,
+      "disk_free_bytes": 161438003200,
+      "finished_unix": 1793346503.28807,
+      "log": "real329-archive-7.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "golden-version-probe-8",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/version-probe.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161420734464,
+      "finished_unix": 1793346571.958409,
+      "log": "golden-version-probe-8.log",
+      "rustTestCounts": [
+        1,
+        0,
+        0
+      ],
+      "warningLines": 0
+    },
+    {
+      "name": "server-protocol-11",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161388179456,
+      "finished_unix": 1793346652.895092,
+      "log": "server-protocol-11.log",
+      "rustTestCounts": null,
+      "warningLines": 291
+    },
+    {
+      "name": "golden-print-9",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios::pa12_print_golden_hex",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161396940800,
+      "finished_unix": 1793346660.0499132,
+      "log": "golden-print-9.log",
+      "rustTestCounts": [
+        1,
+        0,
+        0
+      ],
+      "warningLines": 0
+    },
+    {
+      "name": "wasm-build-10",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "node",
+        "apps/web-client/scripts/build-native.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161405169664,
+      "finished_unix": 1793346707.928892,
+      "log": "wasm-build-10.log",
+      "rustTestCounts": null,
+      "warningLines": 18
+    },
+    {
+      "name": "native3-12",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161267793920,
+      "finished_unix": 1793346779.560353,
+      "log": "native3-12.log",
+      "rustTestCounts": [
+        1706,
+        0,
+        75
+      ],
+      "warningLines": 0
+    },
+    {
+      "name": "server-protocol-13",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161362862080,
+      "finished_unix": 1793346898.7992399,
+      "log": "server-protocol-13.log",
+      "rustTestCounts": [
+        502,
+        13,
+        0
+      ],
+      "warningLines": 345
+    },
+    {
+      "name": "wasm-legacy-build-14",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "node",
+        "apps/web-client/scripts/build-wasm.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161329750016,
+      "finished_unix": 1793347006.883012,
+      "log": "wasm-legacy-build-14.log",
+      "rustTestCounts": null,
+      "warningLines": 110
+    },
+    {
+      "name": "real-ws-restart-15",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 1,
+      "disk_free_bytes": 161326874624,
+      "finished_unix": 1793347022.4225862,
+      "log": "real-ws-restart-15.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "server-protocol-17",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161317818368,
+      "finished_unix": 1793347154.544678,
+      "log": "server-protocol-17.log",
+      "rustTestCounts": [
+        513,
+        3,
+        0
+      ],
+      "warningLines": 351
+    },
+    {
+      "name": "current-ui-tests-16",
+      "argv": [
+        "bash",
+        "-c",
+        "cd apps/web-client && npm test"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161317638144,
+      "finished_unix": 1793347155.466495,
+      "log": "current-ui-tests-16.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "workspace-18",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161265823744,
+      "finished_unix": 1793347219.254996,
+      "log": "workspace-18.log",
+      "rustTestCounts": null,
+      "warningLines": 367
+    },
+    {
+      "name": "strict-native3-19",
+      "argv": [
+        "env",
+        "RUSTFLAGS=-Dwarnings",
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161242230784,
+      "finished_unix": 1793347241.2697558,
+      "log": "strict-native3-19.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "frontend-build-20",
+      "argv": [
+        "node",
+        "../evidence/a330/build-runner.mjs",
+        "apps/web-client",
+        "../evidence/a330/ui-dist"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161201147904,
+      "finished_unix": 1793347242.570566,
+      "log": "frontend-build-20.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "real-ws-restart-21",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330-21",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161191030784,
+      "finished_unix": 1793347253.390642,
+      "log": "real-ws-restart-21.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "parity-native-22",
+      "argv": [
+        "env",
+        "A330_WASM_PARITY_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-parity.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "recorded_timeout_selection_matches_current_wasm_answer_full_archive",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161164554240,
+      "finished_unix": 1793347297.464326,
+      "log": "parity-native-22.log",
+      "rustTestCounts": [
+        1,
+        0,
+        0
+      ],
+      "warningLines": 228
+    },
+    {
+      "name": "cross-target-24",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161025003520,
+      "finished_unix": 1793347337.961358,
+      "log": "cross-target-24.log",
+      "rustTestCounts": [
+        2,
+        0,
+        0
+      ],
+      "warningLines": 19
+    },
+    {
+      "name": "preflight-25",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 1,
+      "disk_free_bytes": 158163472384,
+      "finished_unix": 1793347656.831616,
+      "log": "preflight-25.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "final-workspace-23",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 157958590464,
+      "finished_unix": 1793348020.23379,
+      "log": "final-workspace-23.log",
+      "rustTestCounts": [
+        6880,
+        1,
+        77
+      ],
+      "warningLines": 782
+    },
+    {
+      "name": "browser-ui-26",
+      "argv": [
+        "node",
+        "../evidence/a330/ui-real.mjs",
+        "../evidence/a330/browser",
+        "../evidence/a330/ui-dist",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158018109440,
+      "finished_unix": 1793348032.35862,
+      "log": "browser-ui-26.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "worker-smoke-27",
+      "argv": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/native-worker-smoke.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158018019328,
+      "finished_unix": 1793348032.674772,
+      "log": "worker-smoke-27.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "legacy-cross-28",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "bash",
+        "scripts/cross-target-hash.sh"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158020636672,
+      "finished_unix": 1793348203.654359,
+      "log": "legacy-cross-28.log",
+      "rustTestCounts": null,
+      "warningLines": 753
+    },
+    {
+      "name": "real-ws-final-29",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330-final",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158016286720,
+      "finished_unix": 1793348214.630582,
+      "log": "real-ws-final-29.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "preflight-final-30",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158000844800,
+      "finished_unix": 1793348535.7882729,
+      "log": "preflight-final-30.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "current-window-matrices-31",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/window-matrices.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157981908992,
+      "finished_unix": 1793348566.1426141,
+      "log": "current-window-matrices-31.log",
+      "rustTestCounts": [
+        19,
+        0,
+        0
+      ],
+      "warningLines": 19
+    },
+    {
+      "name": "workspace-final-32",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 157962866688,
+      "finished_unix": 1793348825.5964868,
+      "log": "workspace-final-32.log",
+      "rustTestCounts": [
+        6888,
+        1,
+        77
+      ],
+      "warningLines": 782
+    },
+    {
+      "name": "browser-oldserver-33",
+      "argv": [
+        "node",
+        "../evidence/a330/ui-real.mjs",
+        "../evidence/a330/browser-oldserver",
+        "../evidence/a330/ui-dist",
+        "/tmp/noname-resource-server-329",
+        "old"
+      ],
+      "exit": 1,
+      "disk_free_bytes": 157962788864,
+      "finished_unix": 1793348825.626634,
+      "log": "browser-oldserver-33.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "wasm-final-34",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "node",
+        "apps/web-client/scripts/build-native.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157934592000,
+      "finished_unix": 1793348894.385349,
+      "log": "wasm-final-34.log",
+      "rustTestCounts": null,
+      "warningLines": 18
+    },
+    {
+      "name": "reveal-targeted-35",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "compensatory_reveal_keeps_same_choice_deadline_and_timeout_uses_latest_revision",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157929144320,
+      "finished_unix": 1793348903.387406,
+      "log": "reveal-targeted-35.log",
+      "rustTestCounts": [
+        1,
+        0,
+        0
+      ],
+      "warningLines": 226
+    },
+    {
+      "name": "workspace-final-36",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157932183552,
+      "finished_unix": 1793349144.0835981,
+      "log": "workspace-final-36.log",
+      "rustTestCounts": [
+        6889,
+        0,
+        77
+      ],
+      "warningLines": 782
+    },
+    {
+      "name": "browser-oldserver-37",
+      "argv": [
+        "node",
+        "../evidence/a330/ui-real.mjs",
+        "../evidence/a330/browser-oldserver-37",
+        "../evidence/a330/ui-dist",
+        "/tmp/noname-resource-server-329",
+        "old"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157931941888,
+      "finished_unix": 1793349145.58223,
+      "log": "browser-oldserver-37.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "post-wasm-final-38",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/post-wasm.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157932015616,
+      "finished_unix": 1793349146.365759,
+      "log": "post-wasm-final-38.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    },
+    {
+      "name": "frontend-final-39",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/final-ui.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157879427072,
+      "finished_unix": 1793349158.973682,
+      "log": "frontend-final-39.log",
+      "rustTestCounts": null,
+      "warningLines": 0
+    }
+  ],
+  "local": [
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/*.test.mjs",
+      "exit": 0,
+      "log": "frontend-all-direct-1.log",
+      "tests": "155/0/0"
+    },
+    {
+      "command": "cd apps/web-client && node_modules/.bin/vue-tsc --noEmit",
+      "exit": 0,
+      "log": "typecheck-final.log"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit": 0,
+      "log": "source-lines-unittest.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit": 0,
+      "log": "source-lines-final.log"
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "exit": 0,
+      "log": "layering.log",
+      "result": "0 upward references <=0"
+    },
+    {
+      "command": "python3 -B scripts/check_local_links.py --all (approved temporary canonical readonly lookups)",
+      "exit": 0,
+      "log": "final-document-links.log",
+      "result": "1901 files,0 bad links"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    },
+    {
+      "command": "git apply --check --reverse --binary ../evidence/a330/candidate.patch",
+      "exit": 0
+    }
+  ],
+  "providerInterruptions": "resume.json",
+  "allInitialFailuresRetained": true
+}

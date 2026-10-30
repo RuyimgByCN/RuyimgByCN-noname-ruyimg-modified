@@ -44,7 +44,7 @@ impl RoomDurability {
             }
             self.uncertain = false;
         }
-        Ok(self.store.as_ref().map(|_| session.checkpoint()))
+        Ok(Some(session.checkpoint()))
     }
 
     pub(super) fn commit(

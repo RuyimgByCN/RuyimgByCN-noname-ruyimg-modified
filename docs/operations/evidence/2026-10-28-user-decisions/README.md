@@ -63,6 +63,10 @@
 
 **24. GaiMing取消修复规则332**：用户对[具体提案](../2026-10-30-nc09-referee/gaiming-cancel-proposal.md)的问题明确选择“批准改命修复 v332 (Recommended)”。已验收J2规则329、超时330和选序331之后，单独执行 **331→332**；修复真实取消后124→125张/牌65重复、恢复报`card_in_multiple_zones`，复用正常判定初始化，归还候选后正常抽牌，保留改判/天妒/昊天塔及所有权拒绝。既有原生取消归还牌堆的登记差异不变，不新增状态/命令/选择/prompt。预计维持存档105及届时ABI758/WS6；旧规则档按现行门禁拒绝且原字节/包/冻结锁保留，不承诺修复既有坏档。先红后绿、完整直接/恢复轨迹、物理多重集、版本/golden归因、原生/WASM及全影响面验收按提案执行。332若先被其他批占用或需改变存档/ABI/协议，再报具体方案；不自动顺延。授权不等于实现；当前主树仍328/105/753/WS5，J2等接入顺序不变，无依赖工作继续。
 
+## 补充裁决（2026-10-30，原生CI发布）
+
+**25. 现有仓库持续发布许可**：用户对完整、可审查的本地提交`9dbc65530feb695688d3160dc38b6cf64ad39ecd`明确选择“本次及后续验收增量（推荐）”。允许将该完整tracked树及远端缺失的必要可达历史推送到现有公开仓库`RuyimgByCN/RuyimgByCN-noname-ruyimg-modified`的新分支`native-convergence`，并持续推送后续通过本地验收的提交、运行现有CI及安装器artifact上传。首次树41879路径、37个dist、9207个证据文件已明确纳入；可达历史对象解压约3.41GB不是网络传输估计。不force、不修改远端main/default branch、不新增remote、不创建PR/release/comment、不修改持久设置或secrets；协议/规则/存档/ABI超出现有批准范围仍需具体审批。本项明确取代裁决18对该仓库/分支的旧NoPush限制，不授权其他仓库或未验收改动。原无条件local-only钩子保留，首次明确目标用命令级、精确SHA/新分支的检查执行，七项自检和旧拒绝日志均保留。见[明确授权原文](../2026-10-30-native-ci-preparation/parent-user-publication-decision25.json)与[完整树审计](../2026-10-30-native-ci-preparation/parent-final-publication-scope.json)。授权不表示push或平台验收已成功，实际结果继续单独登记。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

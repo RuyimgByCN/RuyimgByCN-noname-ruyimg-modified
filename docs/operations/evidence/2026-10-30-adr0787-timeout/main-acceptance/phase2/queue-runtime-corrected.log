@@ -1,0 +1,18 @@
+START catalog-versions-native
+END catalog-versions-native exit=0
+START artifact-versions-catalog-corrected
+END artifact-versions-catalog-corrected exit=0
+START timeout-native-fixture
+END timeout-native-fixture exit=0
+START timeout-wasm
+END timeout-wasm exit=0
+START real-ws-restart
+END real-ws-restart exit=0
+START chrome-fast
+END chrome-fast exit=0
+START chrome-slow
+END chrome-slow exit=0
+START resources-current-main
+END resources-current-main exit=0
+START actual-ws-referee-targeted
+END actual-ws-referee-targeted exit=0

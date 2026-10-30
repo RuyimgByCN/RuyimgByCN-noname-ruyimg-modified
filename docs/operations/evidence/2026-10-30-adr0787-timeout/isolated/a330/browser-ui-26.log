@@ -1,0 +1,1 @@
+{"command": ["node", "../evidence/a330/ui-real.mjs", "../evidence/a330/browser", "../evidence/a330/ui-dist", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"], "exit": 0, "locked_seconds": 12.124014917004388, "disk_free_bytes": 158018117632}

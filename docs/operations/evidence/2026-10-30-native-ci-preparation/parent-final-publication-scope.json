@@ -1,0 +1,39 @@
+{
+  "at_utc": "2026-10-30T10:09:27.509317+00:00",
+  "accepted_commit": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "tree": "445e25cd7461da580e4bcd12c11a429420cb257f",
+  "local_branch": "main",
+  "repo": "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+  "repo_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+  "proposed_new_branch": "native-convergence",
+  "tracked_paths": 41879,
+  "tracked_dist": 37,
+  "tracked_evidence": 9207,
+  "tracked_target": 0,
+  "tracked_ignored_original_assets": 0,
+  "guard_tracked": false,
+  "reachable_objects": 55576,
+  "objects_by_type": {
+    "commit": 1773,
+    "tree": 16553,
+    "blob": 37250
+  },
+  "reachable_uncompressed_bytes": 3405085587,
+  "objects_over_50MiB": [
+    {
+      "oid": "b84c1f13eba36ccb664bca5f5854e6a5725c8666",
+      "bytes": 55265367
+    },
+    {
+      "oid": "9712919c725970127ac1c9133f4912ec60043db1",
+      "bytes": 73040213
+    }
+  ],
+  "objects_over_100MiB": [],
+  "wire_size": "not measured; uncompressed bytes do not estimate network transfer",
+  "publication_scope": "complete tracked tree including tracked dist and raw evidence; missing necessary reachable history; no filtering/orphan/rewrite",
+  "external_pushes": 0,
+  "actual_github_runs": 0,
+  "remote_branches_api_exit": 0,
+  "index_empty": true
+}

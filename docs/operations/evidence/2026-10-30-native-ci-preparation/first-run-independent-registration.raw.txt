@@ -1,0 +1,40 @@
+# 首次真实 GitHub Actions 全结果独立登记
+
+**整体结果：completed / failure；10 个 job 全部完成，5 success、5 failure。不是 CI 全绿，也不代表 Goal 整体验收。**
+运行：[41053688083](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41053688083)，attempt 1、push 事件、native-convergence；head=`9dbc65530feb695688d3160dc38b6cf64ad39ecd`，创建于 2026-10-30 12:13:07Z，最终 API updated_at=12:44:25Z。登记输入仅为已保存的 later-run/jobs/artifacts 与七份 raw log；当前父 A330 未提交内容、隔离 CI 工作树及之后本地结果均不是本 run 输入。
+
+| Job 名 | Job ID | status | conclusion | 已有证据范围 |
+| --- | --- | --- | --- | --- |
+| native-web | 124055758892 | completed | success | raw + API：fresh native/legacy WASM、原生回归、Worker、前端通过 |
+| build-windows-latest | 124055758985 | completed | success | API：Build workspace / Unit tests steps success |
+| perf-ubuntu-latest | 124055759027 | completed | failure | raw：debug tier-report 超预算，exit 1 |
+| build-ubuntu-latest | 124055759097 | completed | success | API：Build workspace / Unit tests steps success |
+| desktop-macos-latest | 124055759101 | completed | success | raw：app/DMG 打包及 artifact 上传成功 |
+| desktop-windows-latest | 124055759151 | completed | failure | raw：WiX MSI codepage 1252，exit 1 |
+| perf-macos-latest | 124055759196 | completed | failure | raw：debug tier-report 超预算，exit 1 |
+| build-macos-latest | 124055759242 | completed | success | API：Build workspace / Unit tests steps success |
+| desktop-ubuntu-latest | 124055759285 | completed | failure | raw：RPM package name 非法，exit 1 |
+| gates-ubuntu | 124055759355 | completed | failure | raw：workspace WS 慢观战连接测试，exit 101 |
+
+实际失败与跳过步骤：
+
+- **gates-ubuntu**：`native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands` 在 `apps/game-server/src/native_ws_e2e.rs:1045:10` panic：`慢连接应在期限内被断开: Elapsed(())`。该 game-server binary 汇总 75 passed/1 failed，**不是整个 workspace 总计**；cargo step exit101。prepare action、源码行数及 layering steps 已成功。后续 **Gate1b strict all-targets、Gate2 conformance、Install wasm-pack、Gate3 cross-target hash、Gate4 original content full verify 均 skipped**；不能称四道门禁全部实际运行。prepare 内 resources-only verify 成功不替代完整 Gate4。
+- **两个 perf**：原始实际 argv 均为 `cargo run -q -p benchmark-runner -- tier-report server-baseline`，未启用 release，Tier list 成功；start/restore/projection 三项超预算，distance 通过，report exit1。Ubuntu 数值为 `5541/100、3/300、1925/200、677/100 µs`；macOS 为 `1737/100、23/300、425/200、205/100 µs`。这是首轮旧线 debug 报告，不能被后续 profile 补丁或本机测量改记为通过。
+- **desktop-windows**：可执行文件已编译，进入 x64/en-US MSI 打包；WiX Linker 3.14.1.8722 的 `light.exe` 报 `LGHT0311`，字符串字符不能表示在数据库 code page `1252`（中文产品文本相关）。Produce installer step exit1，Upload installer artifact skipped；没有 Windows 安装器上传成功证据。
+- **desktop-ubuntu**：可执行文件已编译，日志先出现 deb、再进入 RPM bundling；失败为 `invalid name "无名杀-next": must start with an alphanumeric character, '_', or '%'`，Produce installer exit1，Upload skipped。不能把出现 deb 路径记作 Linux installer 已交付/安装验收。
+
+成功范围与版本：
+
+- **native-web**：raw 记录 checkout 精确为 9dbc，`pnpm build:native`/`build:wasm` 从本次源码构建并部署，指定 native/kernel/content/wasm/loader 回归 step success；`smoke:native` 汇总 **82/0**，含真实 worker init/包安装/存读档等；前端 `pnpm test` **156 pass/0 fail/0 skipped**，`vue-tsc --noEmit && vite build` 成功。适用于已发布的 329 源码基准；raw 未单独打印 RULE_VERSION=329，不能把当前 A330 当作测试输入。
+- 七份 raw 均记录 checkout9dbc 与 rustc **1.99.1**；gates/native-web/三个 desktop 的应用环境为 **Node20.20.2、pnpm9.15.9**。native-web/desktop 实际安装 wasm-pack **0.15.0**，desktop Tauri CLI **2.12.4**。末尾 forced Node24 warning 针对 checkout/setup-node/pnpm 等 Actions JS runtime，**不表示应用前端改在 Node24 测试**。成功步骤的结论来自实际 job/step API，并与 raw 执行序列相符；三个 build 没有提供 raw，本登记不编造其测试数量或更宽验收范围。
+- **唯一 artifact**：保存的 artifacts API 为 `installer-macos-latest`，ID **12975739911**，**32,791,200 B**，快照 `expired=false`；[artifact 入口](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41053688083/artifacts/12975739911)。raw 确认 app+aarch64 DMG、8 files 上传完成，ZIP digest=`sha256:62de6bf188d39338b66dcaf659640a8884f45647e5fd93669175eeff903ff7d5`。此 digest 引用 API/raw，未下载或重新计算。成功仅为打包/上传，**未证明 app 启动、游戏 runtime、真机安装、签名信任或公证**；也不证明 Windows/Linux 安装成功。
+
+发布与观察过程边界：
+
+- 已读 `parent-user-publication-decision25.json`：裁决25明确授权既有仓库 native-convergence 的完整已验收树/必要历史与后续已验收增量、CI及既有 installer artifacts；仍禁止 force、改变 remote main/default、新 remote、PR/release/comment、settings/secrets，协议/规则等仍依原授权范围。**不再沿用“公开发布从未授权”的旧状态**，本登记也不新增或执行发布授权。
+- `execution/result.json` 保留最初普通 push 被原 local-only pre-push hook 拒绝的 exit1；`decision25-scoped-execution/result.json` 记录命令级受限 hook 校验后的普通无force push exit0，新分支精确指向9dbc，远端 main 前后均 `47347c6608d651660ae9459e59eb529b3cef277f`。push raw 的 **921.26 MiB** 是传输进度；授权审计 **3,405,085,587 B** 是可达对象解压量，两者不同，均不是测试结果。
+- scoped push 后立即查询 `actions_total_count=0` 是当时尚未观察到 run，later API 已登记 run41053688083；HTTP2 EOF、之后按命令 `GODEBUG=http2client=0` 恢复只读观测，以及三次默认拒绝 ANSI 的取 log 失败，都是观测执行过程。原失败文件保留；后来使用 allow-escape 输出到 raw 文件。这些错误不计为 CI job 失败，也不抹去首次记录。
+
+证据：[主树 first-publication](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication)；自己的 [registration.json 与带 raw 行号摘录](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/perf-profile/review-first-run/registration.json)。本次 `python3 -B ../evidence/perf-profile/review-first-run/register.py` 的十 job/五失败/step跳过/artifact/head/raw断言通过，仅登记既有结果，没有执行测试。SHA 仅引用父 `first-run-record-sha256.json`，**未声称独立重算**。
+未运行/未验证：被跳过的完整 gates、任何新 run/重试、artifact 下载安装及真实设备/runtime/公证；本次无 GitHub 网络/写入、无 build/watchloop、无 Git/source/main/index/target/cache/config 修改，仅写自有证据和此报告。
+最终登记：首次真实运行确已发生，当前结论仍为 **failure**；后续修复与新运行须按各自 commit/run 独立验收，不能覆盖9dbc这次失败或扩大为 Goal 全部完成。

@@ -44,7 +44,7 @@ impl VersionBundle {
             engine_api: 1,
             rule_vm_abi: RULE_VM_ABI_VERSION,
             content_schema: CONTENT_SCHEMA_VERSION,
-            network_protocol: 5,
+            network_protocol: 6,
             replay_schema: crate::REPLAY_SCHEMA_VERSION,
             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
             package_format: PACKAGE_FORMAT_VERSION,

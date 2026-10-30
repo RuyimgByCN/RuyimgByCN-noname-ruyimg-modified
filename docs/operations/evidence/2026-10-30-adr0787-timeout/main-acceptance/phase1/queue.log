@@ -1,0 +1,21 @@
+START native3
+FINISH native3 0 [1706, 0, 75]
+START affected6-tauri
+FINISH affected6-tauri 0 [6097, 0, 77]
+START workspace
+FINISH workspace 0 [6891, 0, 77]
+START strict-native3
+FINISH strict-native3 0 None
+START workspace-all-targets
+FINISH workspace-all-targets 0 None
+START native-layering
+FINISH native-layering 0 None
+START source-lines-unit
+FINISH source-lines-unit 0 None
+START source-lines
+FINISH source-lines 0 None
+START conformance
+FINISH conformance 0 None
+START frontend-node-typecheck
+FINISH frontend-node-typecheck 0 None
+FINAL {"time": "2026-10-30T20:33:32.779280", "sourceCountBefore": 31808, "sourceCountAfter": 31808, "sourceDrift": {}, "headBefore": "9dbc65530feb695688d3160dc38b6cf64ad39ecd", "headAfter": "9dbc65530feb695688d3160dc38b6cf64ad39ecd", "indexBefore": [], "indexAfter": [], "guardUnchanged": true, "completed": 10, "expected": 10, "allPassed": true, "elapsedSeconds": 811.9453812910069, "diskFreeBytes": 142181343232, "cacheRetainedForPhase2": true}

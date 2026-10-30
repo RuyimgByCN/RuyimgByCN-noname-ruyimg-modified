@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-30T16:34:13.864103",
+  "removed": [
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/browser-oldserver-37/chrome-EGpUTD",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/browser-final/chrome-yOcEFb",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/browser/chrome-4GN5fr",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/archive",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/node_modules",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/.pi-lens.json"
+  ],
+  "sourceTargetExists": false,
+  "ownIncrementalBytes": 0,
+  "diskFreeBytes": 154799001600,
+  "cache": "All owned build/test commands complete. Final binary/native-pkg and web build copied to evidence. Parent may retire the handed-off stage3 target after independent review; no more worker use planned.",
+  "autofixFormatGuardRemoved": "2026-10-30T16:36:47.160422",
+  "allLookupLinksRemoved": true
+}

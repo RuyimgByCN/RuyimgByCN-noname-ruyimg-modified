@@ -1,0 +1,7 @@
+PASS identity-public-zones: every seat, two archive restores, server/generated-WASM32 parity
+PASS dead-identity: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-hidden: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-revealed: every seat, two archive restores, server/generated-WASM32 parity
+PASS all-kinds: every seat, two archive restores, server/generated-WASM32 parity
+{"fixtures":5,"comparisons":40,"privateChecks":32,"kinds":["Jiu","Other","Sha","ShaFire","ShaThunder","Shan","Tao"],"zones":["DiscardPile","Equip","Hand","Judge","Processing"],"failed":0}
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/native-server-projection-parity.mjs", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/ordinary-projection.json"], "exit": 0, "locked_seconds": 0.23267341600148939, "disk_free_bytes": 142337482752}

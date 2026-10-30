@@ -42,6 +42,11 @@ pub enum GameAction {
         choice_id: u64,
         selection: Vec<ChoiceOption>,
     },
+    /// Trusted host takeover; the recorded selection uses the ordinary answer validation.
+    TimeoutAction {
+        choice_id: u64,
+        selection: Vec<ChoiceOption>,
+    },
 }
 
 /// 玩家命令（外部信任边界信封）。

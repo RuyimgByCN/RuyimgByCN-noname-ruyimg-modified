@@ -1,0 +1,21 @@
+{
+  "time": "2026-10-30T20:35:35.845931",
+  "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+  "incrementalBytes": 0,
+  "remainingDiskBytes": 142448734208,
+  "retainedFor": "Parent Phase2 current main WASM/server/Worker/UI acceptance, including tauri-shell dependencies and new main executables; do not retire this target",
+  "retired": false,
+  "phase1CommandsComplete": true,
+  "noUnusedIncrementalCreated": true,
+  "newSourceTargetCreated": false,
+  "executables": {
+    "debug/game-server": {
+      "bytes": 77319488,
+      "sha256": "e8a6712d5f6333e29c8478e8736cf1ff44250a4cd3a58ee7f5791a4786ddc675"
+    },
+    "debug/conformance": {
+      "bytes": 42928688,
+      "sha256": "c3d45a70b3221d1dc11d47132e0f583e7409b86de766b946ce451ce8bb68136e"
+    }
+  }
+}

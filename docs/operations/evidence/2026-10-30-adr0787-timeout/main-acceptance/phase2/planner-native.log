@@ -1,0 +1,5 @@
+error: failed to parse manifest at `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.toml`
+
+Caused by:
+  can't find library `j2_direct_planner_matrix`, rename file to `src/lib.rs` or specify lib.path
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "cargo", "run", "--offline", "--manifest-path", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/Cargo.toml", "--", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/planner/native-output.json"], "exit": 101, "locked_seconds": 0.026128542027436197, "disk_free_bytes": 142311518208}

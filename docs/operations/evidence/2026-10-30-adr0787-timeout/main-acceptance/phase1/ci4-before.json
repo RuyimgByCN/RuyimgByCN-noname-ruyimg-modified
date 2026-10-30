@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-30T20:23:34.511066",
+  "note": "Three GitHub configuration inputs already in source-before; fourth reviewed CI input is docs/operations/native-ci.md, explicitly protected separately despite general docs exclusion. All4 match immutable admission hashes.",
+  "expected": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+  },
+  "observed": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+  },
+  "allMatchReviewedCI4": true
+}

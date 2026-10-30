@@ -1,0 +1,46 @@
+✖ server countdown ignores client wall clock skew 60000 and later jumps (14.580542ms)
+✖ server countdown ignores client wall clock skew -60000 and later jumps (3.856416ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 293.199583
+
+✖ failing tests:
+
+test at apps/web-client/scripts/network-client.test.mjs:578:3
+✖ server countdown ignores client wall clock skew 60000 and later jumps (14.580542ms)
+  AssertionError [ERR_ASSERTION]: actual BattleView calculation must use the server anchor
+  
+  0 !== 10
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/scripts/network-client.test.mjs:588:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 10,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/network-client.test.mjs:578:3
+✖ server countdown ignores client wall clock skew -60000 and later jumps (3.856416ms)
+  AssertionError [ERR_ASSERTION]: actual BattleView calculation must use the server anchor
+  
+  70 !== 10
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/scripts/network-client.test.mjs:588:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 70,
+    expected: 10,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

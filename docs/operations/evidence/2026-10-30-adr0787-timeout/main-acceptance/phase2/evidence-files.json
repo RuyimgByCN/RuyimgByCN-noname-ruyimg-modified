@@ -1,0 +1,464 @@
+{
+  "time": "2026-10-30T21:45:24.159642",
+  "authoritativeReport": {
+    "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/74b87cb1-3a66-4508-bb29-d0d8915bd409/verification/adr0787-main-phase2-wasm-ws-ui.md",
+    "sha256": "1bd36b76f734e99c0ea7b6a5f546eec1fbb228210bc42880e33c6ec462b3fb8d",
+    "physicalLines": 35
+  },
+  "mainGeneratedByteChangedFiles": [
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm"
+  ],
+  "evidenceFiles": {
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/acceptance-report.json": {
+      "bytes": 17068,
+      "sha256": "bfa9249cf5abc30d40e75ad9e9b3c07202ea9b1851489c1b330dc5c597af3b56"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/actual-counts.json": {
+      "bytes": 6576,
+      "sha256": "ab1502bf498d7f4bcc56759c865b98f44f8905b26742d07115608d95c8032220"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/actual-ws-referee-targeted.log": {
+      "bytes": 105388,
+      "sha256": "55206c9537ae99324151ca4ee541ef759fcc1ffd1e23c057abdf99d12cb105bb"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-index-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-index.py": {
+      "bytes": 1173,
+      "sha256": "ba35bf3618a2eb40d2be937ab2d414351f894a1bcd9eb150cc8d713a77389c42"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-sha-index.log": {
+      "bytes": 479,
+      "sha256": "da2b8e5bcaf25b52074cea41721404b61da46a43a52e8a8ee929e97b72633d46"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-sha256.json": {
+      "bytes": 279832,
+      "sha256": "e6079200b8007f3f9cc4cc644927ebc0d5f6e481c0b7c1d9a656788f0d6658b9"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-versions-catalog-corrected.log": {
+      "bytes": 427,
+      "sha256": "4120b75f112b85dc8953bed96a066353d58042aa0aa98fb2ee655098ad30cb5e"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-versions-parser-retry.log": {
+      "bytes": 1051,
+      "sha256": "5e7eba3fe55c1b067956ff9184978c713297472c89ecb6d3f341e5e091e5dc44"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-versions.json": {
+      "bytes": 4504,
+      "sha256": "4fb1a6c501ec016aab14a99b171d93d7b202f1e20d44c25ccf5f73ba973c5f5f"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-versions.log": {
+      "bytes": 1493,
+      "sha256": "6c2c3193da543bcb78686557fed2ac2d414a21c38a6f2fd9864b449581f6f1a8"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/authorization-exceptions.json": {
+      "bytes": 579,
+      "sha256": "a26908b954ce6ae1fd957fda7ddcfb4b5c32451f96c57e6e1f4be93d07169c52"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/b-bridge-build.log": {
+      "bytes": 5473,
+      "sha256": "9c649e4d1e2ceb49447bd30f6f540da7bbe5d3ea5f494be48c89c0e0f3582fa2"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/b-native.log": {
+      "bytes": 40194,
+      "sha256": "257be6ca2ac61b91612088d18c6c5a88c3ce3368b0836c66e4c314b199138641"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/b-parity.log": {
+      "bytes": 2324,
+      "sha256": "38e383a920bf9f32852a738aa5c02087e9f3e22dab09870672ca3ae0eb0459db"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/catalog-versions-native.log": {
+      "bytes": 7875,
+      "sha256": "c12a34c3d8c03317db9646edbfd0d1ff5e6f194f30526fccd90c9a7866cd6904"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/chrome-fast.log": {
+      "bytes": 734,
+      "sha256": "4c5e5512363777404649580df3726e96ae191997e8153a927ed818d4a1cf6834"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/chrome-slow.log": {
+      "bytes": 735,
+      "sha256": "e0cc2f6ec6adc0c39a57f9b07edfa3a7fe11bd6c569b90ccda5460fa224e75f1"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ci4-before.json": {
+      "bytes": 462,
+      "sha256": "0b151a768db3941f505de4ed6f518d90106a58f89fd998594810448e0c5f98c9"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup-initial-failure.json": {
+      "bytes": 466,
+      "sha256": "4f3fa94bdb0bf7f1cede9d90f02f1769a01daf6937cb88e786fe784b5df8719e"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup-retry-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py": {
+      "bytes": 2129,
+      "sha256": "a758559382c78aa675d03b8802ba478884e6c250485a353216684e156dc083c3"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/command-index.json": {
+      "bytes": 108762,
+      "sha256": "97d8ee401b126f3b6311afc1eaf4ec5e450bc8b0e20709cd8f8c43d87cb902c6"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/commands.jsonl": {
+      "bytes": 66379,
+      "sha256": "9c4612a22da49d2ad53d73b4eafbaeb3db0fd685c38d8219ddb687070e2514c0"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/current-server-build.log": {
+      "bytes": 46527,
+      "sha256": "51292596f37cbc40acca0c4583d20d67903d5c2bd1c626b63e8845140685ef5f"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/entry.json": {
+      "bytes": 2860,
+      "sha256": "598a4b49bdd3cb9ffb542e0e384a007f10491e08300f1e4f7a858237855c4e69"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/environment.json": {
+      "bytes": 1501,
+      "sha256": "96ebfb8111cd36f78ffb6ca7f36bdae864425555ab386f3635319982f6691692"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/external-referee-corrected.log": {
+      "bytes": 438,
+      "sha256": "b06fa4025bc7478cc2083cf0fa93054fb50ee316ece5f06b6fdce77ec03148e9"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/external-referee-timeout-reject.log": {
+      "bytes": 1391,
+      "sha256": "b158335200e7971a12d4df0cf25100237a2c43f6610ec46412a55863cea97328"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/external-vite-build.log": {
+      "bytes": 1877,
+      "sha256": "2bbef78284971644d70a724baa78b64a1326b720a85a36c062d48c4d9e8f3913"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/final.json": {
+      "bytes": 975,
+      "sha256": "7f277efa0f5ceb7b0054f0a9259afe57baefe50d45d60ccdbd6bad7236025cbd"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/formal-full-object.json": {
+      "bytes": 1240,
+      "sha256": "3a37515dad222c97e9de2a9019fcc0137625a6f449ae1ed5b2187acf7380dadf"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/formal-trajectories.log": {
+      "bytes": 6953,
+      "sha256": "2d78f6f0a875e5000ae08e7509724cd5473ce1289e64863c7b83982e2be53875"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/formal-trajectories.py": {
+      "bytes": 3238,
+      "sha256": "d4149718b935daeae09ab3a2dd4b45d6ee0b1cef975fbe5dd31d31d847656e5e"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/frozen-extra-sha256.json": {
+      "bytes": 541,
+      "sha256": "09acaa0d66164d376022b3a8d05255918534bfcb487d462b507d64bdb9e7c251"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/generated-diff.json": {
+      "bytes": 4836,
+      "sha256": "db7a0291506001ba47a4c328cb1adac29aaa503f2458f688d18546123627bf13"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/hash-diff.json": {
+      "bytes": 6034,
+      "sha256": "71e05eb4a45658c4f98cddc6f37bf78e2970dd1a11c5864b0f8a7818692dcc3e"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/hujia-native.log": {
+      "bytes": 5795,
+      "sha256": "b1c74493af7b1cf20da0a99e2cbe9dbe94b14812f9d8fb0025f6e0af7bfcc674"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/hujia-wasm.log": {
+      "bytes": 1086,
+      "sha256": "30f61cf0923cce97e88a4935bcf7a0a319810d9eb41308ec66af03f6b4afd4e1"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/j2-native-matrix.log": {
+      "bytes": 4812,
+      "sha256": "d6f89dec592bef03f3b80687b7b7d491a67b1995bfe3e2ca41da0054014b6ea6"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/j2-wasm-matrix.log": {
+      "bytes": 6596,
+      "sha256": "5b99f92c2443459f332f5364ee7087fbcb27daeb4cba51f622f64f6b8e2d0767"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-child-commands.json": {
+      "bytes": 138601,
+      "sha256": "0927847820d6495db26bf1c933d01f323829a61a27a058ff8b6ecf52cb92033c"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-crosshash.json": {
+      "bytes": 1399,
+      "sha256": "b468521401f446675a117b2b09bea41d00560366ebfd5650cd1849119b90e941"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-crosshash.log": {
+      "bytes": 134272,
+      "sha256": "4bf0983659a78b8f763bd3af87ff72466baad62478d7792a45abf079e215cc51"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/legacy-hash.py": {
+      "bytes": 1611,
+      "sha256": "c95ac7f4bf7ad5ac62f7311c6853f045681d245a58afacbd1b24db7157615209"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/machine-native.log": {
+      "bytes": 2562,
+      "sha256": "e5d900dc2ec8e7c33d5640b5c3ae075ef11bf0bd6cc706dbbaa8e07c4ab1c854"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/machine-wasm.log": {
+      "bytes": 1200,
+      "sha256": "3039c85d9078d9ccbc18f395aaf4e710e838958aa8813fe04f18b7ea861a94a7"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/midpoint-source-check.json": {
+      "bytes": 91,
+      "sha256": "1ff37bbf093aba5b587f95312e1cac4ed43c37362df297ac597a5cbf3586496a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/native-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/noname-resource-browser-audio.mjs": {
+      "bytes": 6919,
+      "sha256": "402e23ccdda6a847b9308fb3e13af4feb59767eb8b683fc991c47c816222117a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/noname-resource-browser-errors.mjs": {
+      "bytes": 10104,
+      "sha256": "ad74fd91184bbf10a672f3f1eb7bc1767468afd1fcbc46c6ee0f172fb3b97758"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ordinary-native.log": {
+      "bytes": 39670,
+      "sha256": "05bb924ff6eca71761a0d3f936460396e5c54cdf95d535b0ac68781863139b99"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ordinary-wasm.log": {
+      "bytes": 1132,
+      "sha256": "aa6ec4faec62aa70b3659a22f5c520202a4a9bfee71099e34ce3b52deafc8d44"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/owned-cleanup-snapshot-retry.log": {
+      "bytes": 497,
+      "sha256": "7da668d50f0220429bd800f294f880db7d8eb61439327db0bf651135f9b1b7ac"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/owned-cleanup.json": {
+      "bytes": 2441,
+      "sha256": "37e40eb3711535da979cd387732ec862c0a0ddae9c95f371f69e28784976add0"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/owned-cleanup.log": {
+      "bytes": 1480,
+      "sha256": "698165200f6f45a1c9d123d32c6746c0795b9615a29986262f5f02c659207896"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/owned-process-check.json": {
+      "bytes": 195,
+      "sha256": "a684899a8048e5cec84bd4276b7609830f7d14a62a30d11ae2c351eaa39a7a3d"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/planner-native-layout-retry.log": {
+      "bytes": 6825,
+      "sha256": "6d294b5e2b492bdefd80c3446aaf26c20d0cbf8de486cb2b74197c06554a2288"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/planner-native.log": {
+      "bytes": 791,
+      "sha256": "5d8af1863fc7ce5ec42003cea2a8607170fb7b4ab20ca4a0f3b1fcdbe8fe673a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/planner-wasm-build.log": {
+      "bytes": 6919,
+      "sha256": "cb7f14b18e681ba814191c02f935078714f5c8354b49f47092c6c8c8ad49d67b"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/planner-wasm.log": {
+      "bytes": 1904,
+      "sha256": "d55f1c9dab7aeaa179bd09ad86cc7d8ad76891abce3d8a67a408ca88815970d4"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/private-adaptations.json": {
+      "bytes": 14496,
+      "sha256": "28d877fff4d5dd78cc5bbf0c588fce89f84a2ac6c93077e608bae9d8580befbb"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/private-source-provenance.json": {
+      "bytes": 21451,
+      "sha256": "461426baf28881c45df411269df42409c2a80f1b1d1310870fa027160593ec6c"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/product-root.json": {
+      "bytes": 201,
+      "sha256": "65c2b84d1f51155ffeebd705a1e44bb4447f7cec1c872ce249306cdbd2bdd5ab"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/production-artifacts-checkpoint.json": {
+      "bytes": 2621,
+      "sha256": "fb6ff03d82f7651049df4c9068ff8ba738f8cb986e5761829a2275889b97e758"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/production-legacy-build.log": {
+      "bytes": 35891,
+      "sha256": "0626925d79a1652466b4348972c96b33f1040ce1058c1fa149e92f87a542233c"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/production-native-build.log": {
+      "bytes": 5917,
+      "sha256": "7b9ea7d729e3c2ede3302d6771740974f332eb959e713cf90a1c25167e575970"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-rest.json": {
+      "bytes": 2152,
+      "sha256": "0e4c1de214fb1eecb7408efd717a0cdca046ed96588ccf8f697ddffec808819f"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-rest.log": {
+      "bytes": 253,
+      "sha256": "9100365c70d6fbb0f2ee390af3e6749c3b311a7035878c7bfb7ce2c95a555e94"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-rest.py": {
+      "bytes": 334,
+      "sha256": "723dcdf3e44b37fba39735ff5367cc9266d8785651f456613ebbe378882dc08f"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-corrected.json": {
+      "bytes": 3561,
+      "sha256": "24a200443767157b3e3f2cbbad35f15a9b004a9174b2819b66121d585746ce11"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-corrected.log": {
+      "bytes": 525,
+      "sha256": "bbb25883319a17095a39dfe3740829d3b913a42c2b8eef4cdd9c626e45d500f0"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-corrected.py": {
+      "bytes": 347,
+      "sha256": "030a18e50cbdcb384f0dee84bf95279bc5a66b13e2ad210b1e9d26b04814c654"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-rest.json": {
+      "bytes": 3068,
+      "sha256": "523c3ea119fb267ade69ee12e102f6793712c62c1d9dcb9c3d8ac23b9e627f9f"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-rest.log": {
+      "bytes": 79,
+      "sha256": "79fb822917565c619d9ae3702b1aabee47bde1d8c718c00cf25574010faa3f15"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime-rest.py": {
+      "bytes": 342,
+      "sha256": "4e98c39c4d38b6be1fc3d18c4504e27aee08ebae99dd0719b28c11e84bcf380d"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime.json": {
+      "bytes": 3280,
+      "sha256": "f7c9f849b1c4383f4bffb276583f204b5a76eca63cd7e316c89e1bf9ebe26612"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime.log": {
+      "bytes": 104,
+      "sha256": "2cd7ba9322e496c40252d2c2d6f0ade99c388a6828f1a61787292f183c437200"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue-runtime.py": {
+      "bytes": 337,
+      "sha256": "588554ecf8fbb03739fda5bff4a4cafadc6e92ef859eab57bbf632fa7c658215"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue.json": {
+      "bytes": 6325,
+      "sha256": "06b395f3367eafb22b37de31cd6c8b62aea2b36cecf3ea68db505be77ea45f4a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue.log": {
+      "bytes": 699,
+      "sha256": "a51926be7df5c35e06400a031472065767e047550970ff48a341779b4a96f765"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/queue.py": {
+      "bytes": 329,
+      "sha256": "351a74cf1be414200bb66e879139d5f012c5ccb0f3cbed8dc58e247a0d6e9ca9"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb": {
+      "bytes": 790,
+      "sha256": "281d15f718acc2ede937dc8b6d484a8de20333534abbca839672f992b8e5ceb0"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/real-ws-restart.log": {
+      "bytes": 640,
+      "sha256": "3ce367bcf33573aba4a33978392237e9a7e121bed5ec157596efd6b7b18ef784"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/real-ws.mjs": {
+      "bytes": 9827,
+      "sha256": "c575ca58719e3b9ced5085651bafc56f4c11e2a56df82e22779144b142b8fc38"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-command-first-attempt.mjs": {
+      "bytes": 2365,
+      "sha256": "7f3cb1abefba5bd7c782cce7a6361d6b0a17c7a1f470e3aea49c0dbfdd80dc88"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-command.mjs": {
+      "bytes": 3095,
+      "sha256": "b2e70ec4776564b2294782b97372d5d59dd45caba7de929db357acde88e97741"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-corrected-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external-first-attempt.py": {
+      "bytes": 3847,
+      "sha256": "8ce8dfe9adff7f2b5dfd7db3b7c2b8661537efbd67fad8ac9bd4c6c25cee04e4"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external.py": {
+      "bytes": 3942,
+      "sha256": "49c0208145c960df97465a019f11269faddab9d90ab9d94b476d577c147e321a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/resource-smoke.py": {
+      "bytes": 2845,
+      "sha256": "77c8ca4e86c1d52d88cb7261486a0f6d1547ca528d39895044837589c024c81e"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/resources-current-main.log": {
+      "bytes": 481,
+      "sha256": "9ee805aa6a8dd1f50a35ba4514e884f902ee7624c37048c766b0ce72150c3ad8"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/run.py": {
+      "bytes": 1920,
+      "sha256": "d3e83e813c774c8fb7623a8332fc4923a78377800036b2dc8bd7af1e15cab065"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/server-artifact.json": {
+      "bytes": 628,
+      "sha256": "1ebe56b54dda17d0318d7af71775580ecb7796f123938ffa095164540367eb08"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/server-build-launch.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/source-after.json": {
+      "bytes": 6292745,
+      "sha256": "19ee6bd03ccea609fb030746ca6d6c269ca6d0eb1254a87ca0f83a034c5a7d0c"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/source-before.json": {
+      "bytes": 6292366,
+      "sha256": "c694c16c8ccbc3a4791128131213d672fe7e0927be6a82f3a5b03f25965d4a78"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/source-final-check.log": {
+      "bytes": 78,
+      "sha256": "021d238b15474610d5a85c6d52880aecb9ac294cb63708c731603734bef13daa"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/source-final-check.py": {
+      "bytes": 4016,
+      "sha256": "1c0146b19d0a727d0b06e047b02cbef28d24179be44ec978e37df334e6df0e14"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/target-preload.cjs": {
+      "bytes": 388,
+      "sha256": "78fb79b7a3da6deee993815fa338bbd445113fd689e5cc95e72a28e717a60a68"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/timeout-native-fixture.log": {
+      "bytes": 67205,
+      "sha256": "4b073d24787420ab2648017d584462078b09611117100f99c384a3430f9ba9f4"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/timeout-wasm.log": {
+      "bytes": 642,
+      "sha256": "ee035b2361017a527d9082a8516cf1134dfbb15674bd90f9edf6f86aac373876"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/timeout-wasm.mjs": {
+      "bytes": 1529,
+      "sha256": "6baefaaaf98a3688318ece69ecbc79270df978f1afd8394606e02f095aaab18a"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/typecheck.log": {
+      "bytes": 344,
+      "sha256": "7e8d013ca4ae7b9cf58bd5f410cef48c9b915b7e74c0b975b635eb7c6f213eb5"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/ui-skew.mjs": {
+      "bytes": 8471,
+      "sha256": "52d356d91aca26576729a033b4a6b35501220c3f9fd996e574761c389d47357c"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate-first-attempt.mjs": {
+      "bytes": 2843,
+      "sha256": "ffcdbb2429d391242fc26eeed2fb728ae09ed672748c3912fda420e38065e14d"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate-overbroad-attempt.mjs": {
+      "bytes": 2851,
+      "sha256": "52dc34351dae8e6308f45b3c361ece429c6982a67f2dac20ad19d560eec1246b"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs": {
+      "bytes": 3278,
+      "sha256": "3829fabc4d707151f7c658e0384d8936b9384480cb589593d49a89446bfe2247"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/vite-external-build.mjs": {
+      "bytes": 462,
+      "sha256": "a2f314083629c38f77a055ba7b78cb01a47bc98e6838cc4545efbaada38b3003"
+    },
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/worker82.log": {
+      "bytes": 9912,
+      "sha256": "8a8ed3b9df7e7f1455fd666db0caf3712afa376484483f4a5c03ce78ccdc1e0b"
+    }
+  },
+  "selfManifestNotSelfHashed": true
+}

@@ -1,0 +1,25 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'Internal'
+- 'Unauthorized'
+
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-command.mjs:5:356 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Internal',
+  expected: 'Unauthorized',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external.py", line 19, in <module>
+    before=json.loads((store/'989.json').read_text())['state'];res=subprocess.run(['node',str(E/'referee-command.mjs'),base,token,str(out/'report.json')],cwd=ROOT,env=env);assert res.returncode==0
+AssertionError
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/referee-external.py"], "exit": 1, "locked_seconds": 0.370841834024759, "disk_free_bytes": 136147681280}

@@ -1,0 +1,446 @@
+{
+  "time": "2026-10-30T16:23:01.179061",
+  "sourceFreeze": "checkpoint-source.json",
+  "patch": "candidate.patch",
+  "drift": [],
+  "completedCommands": [
+    {
+      "name": "targeted-3",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_room_session",
+        "--test",
+        "nc09_native_durability",
+        "--test",
+        "nc09_native_actor"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161927204864,
+      "finished_unix": 1793346247.727752
+    },
+    {
+      "name": "timeout-tests-4",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161447256064,
+      "finished_unix": 1793346276.832219
+    },
+    {
+      "name": "native3-5",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161435021312,
+      "finished_unix": 1793346324.83814
+    },
+    {
+      "name": "timeout-tests-6",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "--test",
+        "nc09_native_room_session",
+        "--test",
+        "nc09_native_durability",
+        "--test",
+        "nc09_native_actor",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161441308672,
+      "finished_unix": 1793346428.318943
+    },
+    {
+      "name": "real329-archive-7",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real329",
+        "/tmp/noname-resource-server-329",
+        "baseline"
+      ],
+      "exit": 13,
+      "disk_free_bytes": 161438003200,
+      "finished_unix": 1793346503.28807
+    },
+    {
+      "name": "golden-version-probe-8",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/version-probe.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161420734464,
+      "finished_unix": 1793346571.958409
+    },
+    {
+      "name": "server-protocol-11",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161388179456,
+      "finished_unix": 1793346652.895092
+    },
+    {
+      "name": "golden-print-9",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios::pa12_print_golden_hex",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161396940800,
+      "finished_unix": 1793346660.0499132
+    },
+    {
+      "name": "wasm-build-10",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "node",
+        "apps/web-client/scripts/build-native.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161405169664,
+      "finished_unix": 1793346707.928892
+    },
+    {
+      "name": "native3-12",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161267793920,
+      "finished_unix": 1793346779.560353
+    },
+    {
+      "name": "server-protocol-13",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161362862080,
+      "finished_unix": 1793346898.7992399
+    },
+    {
+      "name": "wasm-legacy-build-14",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "node",
+        "apps/web-client/scripts/build-wasm.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161329750016,
+      "finished_unix": 1793347006.883012
+    },
+    {
+      "name": "real-ws-restart-15",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 1,
+      "disk_free_bytes": 161326874624,
+      "finished_unix": 1793347022.4225862
+    },
+    {
+      "name": "server-protocol-17",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "-p",
+        "engine-protocol",
+        "-p",
+        "engine-native-wasm",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161317818368,
+      "finished_unix": 1793347154.544678
+    },
+    {
+      "name": "current-ui-tests-16",
+      "argv": [
+        "bash",
+        "-c",
+        "cd apps/web-client && npm test"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161317638144,
+      "finished_unix": 1793347155.466495
+    },
+    {
+      "name": "workspace-18",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 161265823744,
+      "finished_unix": 1793347219.254996
+    },
+    {
+      "name": "strict-native3-19",
+      "argv": [
+        "env",
+        "RUSTFLAGS=-Dwarnings",
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161242230784,
+      "finished_unix": 1793347241.2697558
+    },
+    {
+      "name": "frontend-build-20",
+      "argv": [
+        "node",
+        "../evidence/a330/build-runner.mjs",
+        "apps/web-client",
+        "../evidence/a330/ui-dist"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161201147904,
+      "finished_unix": 1793347242.570566
+    },
+    {
+      "name": "real-ws-restart-21",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330-21",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161191030784,
+      "finished_unix": 1793347253.390642
+    },
+    {
+      "name": "parity-native-22",
+      "argv": [
+        "env",
+        "A330_WASM_PARITY_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-parity.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "adr0787_timeout",
+        "recorded_timeout_selection_matches_current_wasm_answer_full_archive",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161164554240,
+      "finished_unix": 1793347297.464326
+    },
+    {
+      "name": "cross-target-24",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 161025003520,
+      "finished_unix": 1793347337.961358
+    },
+    {
+      "name": "preflight-25",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 1,
+      "disk_free_bytes": 158163472384,
+      "finished_unix": 1793347656.831616
+    },
+    {
+      "name": "final-workspace-23",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "disk_free_bytes": 157958590464,
+      "finished_unix": 1793348020.23379
+    },
+    {
+      "name": "browser-ui-26",
+      "argv": [
+        "node",
+        "../evidence/a330/ui-real.mjs",
+        "../evidence/a330/browser",
+        "../evidence/a330/ui-dist",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158018109440,
+      "finished_unix": 1793348032.35862
+    },
+    {
+      "name": "worker-smoke-27",
+      "argv": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/native-worker-smoke.mjs"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158018019328,
+      "finished_unix": 1793348032.674772
+    },
+    {
+      "name": "legacy-cross-28",
+      "argv": [
+        "env",
+        "NODE_OPTIONS=--require=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/wasm-target-preload.cjs",
+        "bash",
+        "scripts/cross-target-hash.sh"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158020636672,
+      "finished_unix": 1793348203.654359
+    },
+    {
+      "name": "real-ws-final-29",
+      "argv": [
+        "node",
+        "../evidence/a330/real-ws.mjs",
+        "../evidence/a330/real330-final",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158016286720,
+      "finished_unix": 1793348214.630582
+    },
+    {
+      "name": "preflight-final-30",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 158000844800,
+      "finished_unix": 1793348535.7882729
+    },
+    {
+      "name": "current-window-matrices-31",
+      "argv": [
+        "python3",
+        "-B",
+        "../evidence/a330/window-matrices.py"
+      ],
+      "exit": 0,
+      "disk_free_bytes": 157981908992,
+      "finished_unix": 1793348566.1426141
+    }
+  ],
+  "activeProcesses": [
+    "11530     1       08:30 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B ../evidence/a330/run.py workspace-final-32 cargo test --offline --workspace --no-fail-fast",
+    "11532 11530       08:30 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B /tmp/noname-run-serialized.py cargo test --offline --workspace --no-fail-fast",
+    "14212     1       06:56 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B ../evidence/a330/run.py browser-oldserver-33 node ../evidence/a330/ui-real.mjs ../evidence/a330/browser-oldserver ../evidence/a330/ui-dist /tmp/noname-resource-server-329 old",
+    "14219 14212       06:56 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B /tmp/noname-run-serialized.py node ../evidence/a330/ui-real.mjs ../evidence/a330/browser-oldserver ../evidence/a330/ui-dist /tmp/noname-resource-server-329 old",
+    "15278 15231       06:29 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B /tmp/noname-run-serialized.py node scripts/sync-original-content.mjs --resources-only",
+    "24374     1       00:40 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python /tmp/noname-run-serialized.py python3 ../evidence/corrections/verify-original-inputs.py",
+    "24712 11532       00:15 /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo test --offline --workspace --no-fail-fast"
+  ],
+  "pending": [
+    "preflight-final-30: full 21 gates running",
+    "current-window-matrices-31: queued real five machine windows and J2 fresh330 WASM",
+    "workspace-final-32: queued final complete workspace",
+    "browser-oldserver-33: queued actual frontend rejection of old329 WS5 server"
+  ],
+  "cacheOwnership": "still worker exclusive; required by final validation queue; do not retire",
+  "noStagedFiles": true
+}

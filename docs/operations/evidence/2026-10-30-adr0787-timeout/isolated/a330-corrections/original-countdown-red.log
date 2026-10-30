@@ -1,0 +1,17 @@
+{"source":"preserved reviewed BattleView","actual":[{"skew":60000,"seconds":0,"expected":10},{"skew":-60000,"seconds":70,"expected":10}]}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: original countdown must reflect server time
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/countdown-original-red.mjs:15:106 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+{"command": ["node", "../evidence/a330-corrections/countdown-original-red.mjs"], "exit": 1, "locked_seconds": 0.16975383399403654, "disk_free_bytes": 148978601984}

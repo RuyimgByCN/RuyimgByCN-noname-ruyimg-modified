@@ -1,0 +1,22 @@
+{
+  "decision": 25,
+  "date": "2026-10-30",
+  "origin": "Explicit ask_user_question selection in parent session",
+  "user_selected_verbatim": "本次及后续验收增量（推荐）",
+  "approved_repository": "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+  "approved_branch": "native-convergence",
+  "first_accepted_commit": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "first_tree": "445e25cd7461da580e4bcd12c11a429420cb257f",
+  "scope": "Publish this complete accepted tracked tree and necessary reachable history missing remotely; continue publishing later locally validated accepted commits to the same repository and branch and run CI, including existing installer artifact uploads",
+  "first_tree_paths": 41879,
+  "first_tree_tracked_dist": 37,
+  "first_tree_tracked_evidence": 9207,
+  "reachable_uncompressed_bytes_not_wire_estimate": 3405085587,
+  "no_force": true,
+  "no_remote_main_or_default_branch_change": true,
+  "no_new_remote": true,
+  "no_pr_release_comment": true,
+  "no_settings_or_secrets_change": true,
+  "protocol_rules_archive_abi_changes_still_require_existing_approved_scope": true,
+  "preserves_local_acceptance_and_full_goal_boundaries": true
+}

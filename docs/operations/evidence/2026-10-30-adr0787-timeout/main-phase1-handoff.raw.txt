@@ -1,0 +1,25 @@
+Phase1只读验收完成：10/10命令exit0；无维护源码、guard、Git index/HEAD修改。
+当前main工作树330/105/758/WS6；HEAD仍9dbc65530feb695688d3160dc38b6cf64ad39ecd，未提交。
+证据目录：[phase1](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1)；原argv/env/执行argv/锁时/空间/原始warnings：[command-index.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/command-index.json)。
+统计顺序为passed/failed/ignored；W为原始`^warning:`行数，含重复诊断与Cargo汇总，不是独立警告数。
+| 命令范围 | 真实结果 | W |
+|---|---|---:|
+| native3 full offline | 1706/0/75 | 0 |
+| 影响6 full offline + desktop-client/tauri-shell | 6097/0/77 | 761 |
+| 完整workspace offline --no-fail-fast | 6891/0/77 | 782 |
+| strictnative3 --all-targets -Dwarnings | exit0 | 0 |
+| workspace --all-targets check | exit0 | 780 |
+| native layering | 0 upward references | 0 |
+| 行数单测／源码门禁 | 2/0；8989文件通过 | 0 |
+| conformance offline | ALL PASS，exit0 | 110 |
+| 当前main npm test + typecheck | **161/0/0**；typecheck exit0 | 0 |
+入口／出口：[source-before.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/source-before.json)、[source-after.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/source-after.json)、[hash-diff.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/hash-diff.json)。
+31808份维护输入hash差异0；53/53接入SHA匹配；CI4四份（含单列native-ci.md）、assetManifest、guard均未变；index前后为空、HEAD未变。
+维护输入聚合SHA：`bb93273b96b98837a39f8ec2dfaf9b364eb398ce270bfbee70f0e193db70dce6`；范围排docs/evidence/node_modules/ignored runtime，CI4另校。
+所有命令加OS只读保护，main仅phase1证据可写；mock构建测试只在临时夹具造假WASM，未重建main任何module或dist。
+缓存：[cache-phase2-handoff.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/cache-phase2-handoff.json)；stage3保留dependencies/executables供父Phase2，incremental0字节，未退休，无owned重型进程。
+跳过：Phase2的WASM构建／Smoke／真实WS／Chrome／skew／J2／五窗／B／资源／完整preflight及任何remote操作；本线程等待父明确resume。
+风险：本结果仅Phase1，不把75/77 ignored或保留警告称作通过项，不代替Phase2产品及平台验收。
+```acceptance-report
+{"criteriaSatisfied":[{"id":"criterion-1","status":"satisfied","evidence":"Read-only mainPhase1 only;53/53 admitted paths match;31808 maintenance inputs unchanged,CI4 separately unchanged; guard/HEAD/index unchanged; no module/build/source writes outside evidence."},{"id":"criterion-2","status":"satisfied","evidence":"All10 specified/allowedcommands exit0; exact original argv/env, sandbox execution, lockedseconds, disk, ignored counts and raw warnings preserved in command-index.json; before/after hashdiff0."}],"changedFiles":[],"testsAddedOrUpdated":[],"commandsRun":[{"command":"cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native","result":"passed","summary":"[1706, 0, 75]"},{"command":"cargo test --offline -p engine-api -p engine-core -p engine-native -p engine-native-wasm -p game-server -p desktop-client --features desktop-client/tauri-shell","result":"passed","summary":"[6097, 0, 77]"},{"command":"cargo test --offline --workspace --no-fail-fast","result":"passed","summary":"[6891, 0, 77]"},{"command":"cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets","result":"passed","summary":"exit0"},{"command":"cargo check --offline --workspace --all-targets","result":"passed","summary":"exit0"},{"command":"python3 -B scripts/check-native-layering.py","result":"passed","summary":"exit0"},{"command":"python3 -B -m unittest discover -s scripts -p test_check_source_lines.py","result":"passed","summary":"exit0"},{"command":"python3 -B scripts/check-source-lines.py","result":"passed","summary":"exit0"},{"command":"cargo run --offline -p conformance","result":"passed","summary":"exit0"},{"command":"bash -c cd apps/web-client && npm test && node_modules/.bin/vue-tsc --noEmit","result":"passed","summary":"Node161/0/typecheck0"}],"validationOutput":["native3 1706/0/75","affected6+tauri-shell 6097/0/77","workspace6891/0/77","strictnative3/all-targets and workspacealltargets exit0","source line unit2/0;8989 linegate;layer0;conformanceALLPASS","main frontendNode161/0/typecheck0","maintenance hash drift0;CI4/53SHA pass;HEAD/index/guardunchanged"],"residualRisks":["Phase2 WASM/Worker/browser/actualWS/state matrices/resource/runtime proofs/fullpreflight deferred as explicitly requested.","Warnings remain: raw warning-prefixed lines include duplicate diagnostics and crate summaries; ignored75/77 remain ignored."],"noStagedFiles":true,"diffSummary":"No maintained source changes; phase1 evidence only.","reviewFindings":["No Phase1 failure or source drift observed; main Phase2 acceptance remains pending."],"manualNotes":"No remoteAPI,stage,commit,push,source/guard/dist/npack/generatedWASM modifications. All Rust used exclusive stage3,CARGO_INCREMENTAL0/jobs2/global lock. Target retained for parentPhase2,not retired; no owned heavy process remains."}
+```

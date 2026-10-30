@@ -1,0 +1,2 @@
+owned0, allwait true, profiles removed 2 incremental0; freeGiB 122.7
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/cleanup.py"], "exit": 0, "locked_seconds": 0.439772042009281, "disk_free_bytes": 131743485952}

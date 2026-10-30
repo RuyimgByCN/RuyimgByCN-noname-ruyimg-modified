@@ -1,0 +1,31 @@
+[
+  {
+    "native": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/formal/native.json",
+    "wasm": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/formal/wasm.json",
+    "completePayloadFields": [
+      "direct",
+      "players",
+      "restore",
+      "seed"
+    ],
+    "entireEnginePayloadEqual": true,
+    "separateArtifactLocator": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "artifactLocatorValidated": true,
+    "rawObjectsUnchanged": true
+  },
+  {
+    "native": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/formal/native-package.json",
+    "wasm": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/formal/wasm-package.json",
+    "completePayloadFields": [
+      "direct",
+      "package",
+      "players",
+      "restore",
+      "seed"
+    ],
+    "entireEnginePayloadEqual": true,
+    "separateArtifactLocator": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "artifactLocatorValidated": true,
+    "rawObjectsUnchanged": true
+  }
+]

@@ -1,0 +1,29 @@
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (9.107584ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (0.5425ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (1.95325ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.669833ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.461416ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.261916ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.089333ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (6.834959ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (4.788917ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.063334ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (0.493375ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.333542ms)
+✔ 取消待确认命令会清除刷新持久化 (0.155667ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.115667ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.162875ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (0.479292ms)
+✔ network SingleWin stays one-based with all authoritative projection fields unchanged (0.208042ms)
+✔ finished status shares the banner's view and MatchEnded fallback wording (3.926791ms)
+✔ B metadata is preserved on real network consumer messages and malformed metadata refuses join (0.229916ms)
+✔ WS6 rejects an old Welcome before creating rooms (0.130458ms)
+✔ WS6 room configuration and deadline reach the actual network consumer (0.140084ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.046375

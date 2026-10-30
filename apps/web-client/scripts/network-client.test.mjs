@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { matchOutcomePresentation } from "../src/engine/outcome.ts";
 import { NetworkEngineClient, onlineReconnectKey } from "../src/engine/networkClient.ts";
 import { applyEnvelope, clearEffects, createViewStore } from "../src/engine/viewStore.ts";
@@ -24,7 +24,7 @@ function fixture(t) {
     open(id = sockets.length) {
       this.readyState = 1;
       this.onopen?.();
-      this.receive("Welcome", { connection_id: id, protocol_version: 5 });
+      this.receive("Welcome", { connection_id: id, protocol_version: 6, versions: { network_protocol: 6 } });
     }
     receive(type, payload) { this.onmessage?.({ data: JSON.stringify({ type, payload }) }); }
     close() { this.readyState = 3; this.onclose?.(); }
@@ -533,4 +533,87 @@ test("B metadata is preserved on real network consumer messages and malformed me
   const rejected = client.joinRoom(7);
   socket.receive("JoinOk", { view: snapshot, choice: { ...choice, native_kind: "invented_kind" } });
   await assert.rejects(rejected, /元数据无效/);
+});
+
+test("WS6 rejects an old Welcome before creating rooms", async (t) => {
+  const { client, sockets } = fixture(t);
+  const pending = client.connect("ws://localhost:7700/ws", "old-server");
+  const socket = sockets.at(-1);
+  socket.readyState = 1;
+  socket.onopen?.();
+  socket.receive("Welcome", { connection_id: 1, protocol_version: 5, versions: { network_protocol: 5 } });
+  await assert.rejects(pending, /WS6/);
+});
+
+test("WS6 room configuration and deadline reach the actual network consumer", async (t) => {
+  const { client, connect } = fixture(t);
+  const socket = await connect();
+  const pending = client.createRoom(4, 42, "", 10);
+  assert.equal(socket.sent.at(-1).payload.choice_timeout_secs, 10);
+  const choice = { choice_id: 1, observer: 1, deadline_unix_ms: Date.now() + 10000 };
+  socket.receive("JoinOk", { room_id: 7, player_id: 1, seat: 0, role: "Player", view: view(), choice, legal_actions: [] });
+  assert.deepEqual((await pending).envelope.choice, choice);
+  let roster;
+  client.onRoster(value => { roster = value; });
+  socket.receive("RoomRoster", { room_id: 7, choice_timeout_secs: 10, started: true, finished: false, seats: [{ seat: 0, player_id: 1, display_name: "p", connected: true, managed: true }] });
+  assert.equal(roster.seats[0].managed, true);
+  assert.equal(roster.choice_timeout_secs, 10);
+});
+
+function battleCountdown(client, deadline) {
+  const sfc = readFileSync(new URL('../src/views/BattleView.vue', import.meta.url), 'utf8');
+  const script = sfc.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
+  const ast = ts.createSourceFile('BattleView.ts', script, ts.ScriptTarget.Latest, true);
+  const names = new Set(['countdownNow', 'countdownTick', 'countdownTimer', 'choiceSecondsLeft']);
+  const declarations = ast.statements.filter(statement => ts.isVariableStatement(statement) &&
+    statement.declarationList.declarations.some(decl => names.has(decl.name.getText(ast)))).map(statement => statement.getText(ast)).join('\n');
+  let tick;
+  const compiled = ts.transpileModule(declarations + '\nreturn choiceSecondsLeft;', {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+  const value = new Function('ref', 'computed', 'store', 'networkClient', 'setInterval', compiled)(ref, computed,
+    {choice: {deadline_unix_ms: deadline}}, client, callback => {tick=callback; return 1;});
+  return {value, tick: () => tick()};
+}
+
+for (const skew of [60_000, -60_000]) {
+  test(`server countdown ignores client wall clock skew ${skew} and later jumps`, async (t) => {
+    let wall = 1_000_000 + skew;
+    let monotonic = 100;
+    t.mock.method(Date, 'now', () => wall);
+    t.mock.method(performance, 'now', () => monotonic);
+    const f = fixture(t);
+    const socket = await f.connect();
+    const probe = socket.sent.find(message => message.type === 'Heartbeat');
+    socket.receive('Pong', {header:probe?.payload.header ?? {protocol_version:6,room_id:0,conn_seq:1,revision:0},server_time_ms:1_000_000});
+    const countdown = battleCountdown(f.client, 1_010_000);
+    assert.equal(countdown.value.value, 10, 'actual BattleView calculation must use the server anchor');
+    assert.ok(probe, 'connect immediately samples the existing Heartbeat/Pong protocol');
+    monotonic += 2_000;wall += 3_600_000;countdown.tick();assert.equal(countdown.value.value, 8);
+    wall -= 7_200_000;monotonic += 1_000;countdown.tick();assert.equal(countdown.value.value, 7);
+  });
+}
+
+test('clock calibration requires matching Pong, measures RTT, and resets across reconnect', async (t) => {
+  let now = 100;
+  t.mock.method(performance, 'now', () => now);
+  const f = fixture(t);const socket = await f.connect();
+  const probe = socket.sent.find(message => message.type === 'Heartbeat');
+  const countdown = battleCountdown(f.client, 1_010_000);
+  assert.equal(countdown.value.value, null, 'uncalibrated display must not invent a duration');
+  for (const header of [{...probe.payload.header,conn_seq:99},{...probe.payload.header,room_id:99},{...probe.payload.header,protocol_version:5}]) {
+    socket.receive('Pong',{header,server_time_ms:1_000_000});countdown.tick();assert.equal(countdown.value.value,null);
+  }
+  for (const serverTime of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "1000000", null]) {
+    socket.receive('Pong',{header:probe.payload.header,server_time_ms:serverTime});countdown.tick();assert.equal(countdown.value.value,null);
+  }
+  now=50;socket.receive('Pong',{header:probe.payload.header,server_time_ms:1_000_000});countdown.tick();assert.equal(countdown.value.value,null,'negative RTT cannot calibrate');
+  now=300;socket.receive('Pong',{header:probe.payload.header,server_time_ms:1_000_000});
+  assert.equal(f.client.secondsUntilServerDeadline(1_010_100),10,'RTT/2 is accounted for at receipt');
+  now=400;socket.receive('Pong',{header:probe.payload.header,server_time_ms:9_000_000});
+  assert.equal(f.client.secondsUntilServerDeadline(1_010_100),10,'duplicate Pong cannot move the accepted anchor');
+  socket.close();countdown.tick();assert.equal(countdown.value.value,null);
+  const replacement=f.reconnect();replacement.open(2);await new Promise(resolve=>setImmediate(resolve));
+  const newProbe=replacement.sent.find(message=>message.type==='Heartbeat');assert.ok(newProbe);
+  socket.receive('Pong',{header:probe.payload.header,server_time_ms:9_000_000});countdown.tick();assert.equal(countdown.value.value,null,'old connection samples are ignored');
+  now=500;replacement.receive('Pong',{header:newProbe.payload.header,server_time_ms:1_004_000});countdown.tick();
+  assert.equal(countdown.value.value,6,'same deadline resumes with actual remaining time, not a full window');
 });

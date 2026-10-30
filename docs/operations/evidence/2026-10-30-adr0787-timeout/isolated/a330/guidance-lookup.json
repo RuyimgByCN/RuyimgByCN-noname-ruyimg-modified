@@ -1,0 +1,16 @@
+[
+  {
+    "path": "../AGENTS.md",
+    "target": "/Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md",
+    "sha256": "15299d19f85be9e2cbe924692e886a23205d2f2a536c5e6ee19c06f78586a4c3",
+    "authorization": "supervisor need_decision reply 2026-10-30 limited readonly lookup",
+    "removed_after_full_preflight": "2026-10-30T16:23:49.461465"
+  },
+  {
+    "path": "../NONAME_NEXT_AGENT_SPEC.md",
+    "target": "/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md",
+    "sha256": "61ff6423d955b3164e6059c52996f2720c09afcf7dd102bed87079d355be6b60",
+    "authorization": "supervisor need_decision reply 2026-10-30 limited readonly lookup",
+    "removed_after_full_preflight": "2026-10-30T16:23:49.461775"
+  }
+]

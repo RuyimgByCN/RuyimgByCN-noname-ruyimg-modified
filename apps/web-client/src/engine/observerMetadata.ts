@@ -49,5 +49,8 @@ export function choicePromptLabel(choice: ChoiceRequest): string {
 /** Check optional metadata before an IPC/network payload enters the view store. */
 export function validateObserverMetadata(view: ObserverSnapshot, choice: ChoiceRequest | null): void {
   for (const seat of view.seats ?? []) generalSlots(seat.generals);
-  if (choice) choiceMetadata(choice);
+  if (choice) {
+    choiceMetadata(choice);
+    if (choice.deadline_unix_ms != null && (!Number.isSafeInteger(choice.deadline_unix_ms) || choice.deadline_unix_ms <= 0)) throw new Error("native: choice deadline invalid");
+  }
 }

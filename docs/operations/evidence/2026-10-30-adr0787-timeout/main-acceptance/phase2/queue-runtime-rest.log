@@ -1,0 +1,2 @@
+START artifact-versions-parser-retry
+END artifact-versions-parser-retry exit=1

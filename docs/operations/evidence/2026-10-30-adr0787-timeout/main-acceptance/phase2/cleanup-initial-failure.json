@@ -1,0 +1,8 @@
+{
+  "exit": 1,
+  "scope": "manual cleanup containment guard; not a product test or heavy command",
+  "cause": "compared profile.resolve() /private/var to un-resolved owned product /var root; Python is_relative_to correctly refused lexical mismatch",
+  "output": "Traceback (most recent call last): File <stdin>, line 15, in <module>; AssertionError",
+  "deletedAnyProfile": false,
+  "resolvedBy": "canonicalize both profile and owned root; no permission widening"
+}

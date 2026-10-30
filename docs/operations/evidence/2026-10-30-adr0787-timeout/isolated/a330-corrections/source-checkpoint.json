@@ -1,0 +1,16 @@
+{
+  "time": "2026-10-30T17:30:28.096509",
+  "correctionFiles": {
+    "apps/game-server/src/room_native_actor.rs": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+    "apps/game-server/tests/adr0787_timeout.rs": "73b8d1eb54be76c2ba87b6a3abf6ab13b61fc92ef85d425d026663048ce2019c",
+    "apps/web-client/scripts/network-client.test.mjs": "d168782f0a626188d2e8f5850a0e205a4331812351678eca0aa01e03b37b121e",
+    "apps/web-client/src/engine/networkClient.ts": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+    "apps/web-client/src/views/BattleView.vue": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79",
+    "crates/engine-protocol/src/messages.rs": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e"
+  },
+  "originalPatchSha": "4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81",
+  "correctionPatchSha": "b2214851cea99c04e1cf53c8b7736fd8b8bba137a8086be76dbebc13581a5e29",
+  "versions": "330/105/758/WS6 unchanged",
+  "status": "All requested gates/proofs completed; ready for original reviewer re-review",
+  "completedAt": "2026-10-30T17:39:21.744820"
+}

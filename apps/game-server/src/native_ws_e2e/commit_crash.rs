@@ -302,6 +302,7 @@ fn native_vm_frozen_room_recovers_after_process_exit_and_uninstall() {
             "official",
             &["vm-fixture".into()],
             Some(store.clone()),
+            30,
         )
         .unwrap()
         .unwrap();

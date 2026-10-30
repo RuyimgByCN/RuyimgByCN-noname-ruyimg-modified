@@ -33,6 +33,7 @@ fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
     let other = session.join(2, Some(1), None).unwrap();
     session.spectate(90);
     session.spectate(91);
+    session.sync_deadline().unwrap();
     let mut state = session.export_state(&session.snapshot_hex());
     state.next_dedup = snapshot.last_dedup + 1;
     let referee = state
@@ -55,7 +56,7 @@ fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
     let spectator_token = spectator.reconnect_token.clone();
     let expected = State {
         view: observer_snapshot_for(session.engine(), RoomRole::Referee, None),
-        choice: choice_for(session.engine(), RoomRole::Referee, None),
+        choice: session.choice_for(RoomRole::Referee, None),
         legal: vec![],
     };
     let room_id = 909;

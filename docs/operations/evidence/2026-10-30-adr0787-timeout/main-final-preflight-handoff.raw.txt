@@ -1,0 +1,9 @@
+当前主树 A 最终静态门禁完成：HEAD `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 未改，未提交工作树版本330／archive105／ABI758／WS6。
+四命令 actual exits＝0／0／0／0：sourcecaps自测2/2，行数门禁8989文件，strict docrefs1065引用／越界0，完整preflight21/21。
+锁内耗时依次0.076／4.618／6.377／328.674秒；首项queue估计37.996秒，其他各约0.03秒（含wrapper启动开销）；每项freeSpace保存在index，最终125434884096B。
+53 runtime SHA前后均精确匹配parent admission，CI4前后均等于phase2值，frozen-extra4亦不变；guard SHA不变且三项autofix/format=false，HEAD不变，index始终空，tracked非docs/dist差异摘要不变。
+phase2的31808输入／零漂移／aggregate `bb93273b96b98837a39f8ec2dfaf9b364eb398ce270bfbee70f0e193db70dce6`仅复核既有摘要；本轮未重跑全树或资源大hash，不冒称新一次31808全量证明。
+证据：[summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/summary.json)、[index.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/index.json)、[完整21项日志](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/04-full-preflight.log)；所有新log均以exclusive-create写入，原失败未覆盖。
+strict docrefs虽exit0仍报告6类未定位文件：`path.rs`、`.../gujian/skill.js`、`character/offline/.../offline_piracyS.js`、`.../swd/skill.js`、`schema/package.rs`、`step_skills_status.rs`；未删除或修文档，不宣全部引用clean。
+仅新增final-gates日志／index／summary及本报告；未写维护源码、期望、guard、Git index/HEAD、dist/target或他人cache；环境GIT_OPTIONAL_LOCKS=0／GIT_NO_LAZY_FETCH=1／CARGO_INCREMENTAL=0。
+未重Cargo/WASM/Node/Browser或资源链；既有ignored生成输入保留不清理；Windows/Linux CI候选与Alias9未接入；CI2/perf2/installer5未来候选源码保持本轮入口状态，不上调为330跨平台CI或whole-goal green。建议父据本轮21/21及六类docrefs提示完成复审登记。

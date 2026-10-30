@@ -109,6 +109,10 @@ pub(super) fn apply_command(
         GameAction::Answer {
             choice_id,
             selection,
+        }
+        | GameAction::TimeoutAction {
+            choice_id,
+            selection,
         } => {
             let Some(open) = state.resolution.open_choice.as_ref() else {
                 return Err(RejectReason::NoSuchChoice);

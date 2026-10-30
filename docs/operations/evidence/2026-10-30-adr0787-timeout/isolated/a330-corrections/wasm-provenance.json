@@ -1,0 +1,19 @@
+{
+  "reusedArtifact": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/artifacts/native-pkg330/engine_native_wasm_bg.wasm",
+  "sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+  "changedFromReviewedCandidate": [
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "crates/engine-protocol/src/messages.rs"
+  ],
+  "nativeWasmInputsChanged": [],
+  "basis": "All corrected paths are server actor/test, web network/UI/test or existing engine-protocol Pong documentation only. All engine-native/kernel/content/native-wasm/engine-api/runtime/schema/package sources and Cargo files retain the reviewed candidate bytes. Original 56-path hashes and proof retained.",
+  "reusedProofs": [
+    "a330/post-wasm-final-38.log",
+    "a330/timeout-wasm-final.json",
+    "a330/j2-wasm-final.json"
+  ]
+}

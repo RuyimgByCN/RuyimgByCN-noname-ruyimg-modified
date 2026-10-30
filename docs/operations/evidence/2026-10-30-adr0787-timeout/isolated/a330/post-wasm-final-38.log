@@ -1,0 +1,283 @@
+RUN ['node', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-wasm.mjs', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-parity.json', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/timeout-wasm-final.json']
+RUN ['node', '--import', './apps/web-client/scripts/ts-register.mjs', 'apps/web-client/scripts/native-worker-smoke.mjs']
+PASS init_web
+PASS create
+PASS observer_view
+PASS endPhase
+PASS autoStep_progress | steps=40
+PASS save_hex | bytes=1921
+PASS restore_hex | rev=41
+PASS playCard_shape | rev=41
+PASS extension_package_inventory | packs=41 dirs=41 no_npack=0
+PASS extension_catalog_consistent | catalog=15 uncovered=26
+PASS pack_enters_match | hnl_=7
+PASS missing_pack_refused
+PASS same_pack_restore
+PASS wrong_version_refused | 恢复失败: RuleVersionMismatch { snapshot: 11753449270702291373, catalog: 11737545934517934770 }
+PASS adapter_choice_token_roundtrip | choice=2 options=5 label=card:113 token=0 submission=[0] outcome=accepted value_as_token_refused=true
+PASS legal_actions_shape | seat=0 revision=2 n=6
+PASS legal_actions_revision_matches_engine | json=2 engine=2
+PASS legal_actions_non_empty | n=6 kinds=["PlayCard","PlayCard","PlayCard","PlayCard","PlayCard","EndPhase"]
+PASS adapter_passes_kernel_actions_verbatim | adapter=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"] kernel=[{"PlayCard":{"card":113,"targets":[]}},{"PlayCard":{"card":86,"targets":[]}},{"PlayCard":{"card":21,"targets":[1]}},{"PlayCard":{"card":21,"targets":[3]}},{"PlayCard":{"card":119,"targets":[]}},"EndPhase"]
+PASS adapter_hash_hex_authoritative | hash=c125907bc6662169f10be17d47713222681ae2ecd7f729ac58dc2ea2dfe49650
+PASS adapter_events_authoritative | codes=[8,8,10]
+PASS adapter_observer_does_not_drain_events | events=0 hash=c125907bc6662169f10be17d47713222681ae2ecd7f729ac58dc2ea2dfe49650
+PASS legal_actions_sampled_all_accepted | sampled=6 refused=[]
+PASS forged_card_rejected_with_reason | result={"finished":false,"outcome":"rejected","reason":"CardNotInHand","revision":2}
+PASS legal_actions_seat_boundary_refused | legal_actions: 座位越界（9 ≥ 4）
+PASS general_candidates_from_catalog | count=93 before_skills=[]
+PASS choose_general_changes_skills | name=样例·张角组合 skills=["天妒","鬼道"]
+PASS choose_general_assignment_shape | seat=0 revision=0 hash=a88d058c1d63…
+PASS choose_general_unknown_refused | Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral
+PASS choose_general_seat_boundary_refused | Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）
+PASS worker_native_init | {"id":901,"ok":true,"data":"native ready"}
+PASS worker_installed_cards_and_pile_enter_start | deck=228 standard=108 error=
+PASS worker_installed_general_candidate
+PASS worker_installed_general_assignment | ["dddjinggou","dddmoyan"]
+PASS worker_installed_save
+PASS worker_installed_missing_refused
+PASS worker_installed_exact_version_refused
+PASS worker_installed_changed_asset_refused
+PASS worker_duplicate_slot_refused_without_changing_match | ["packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select","packs[3]: 重复包槽位 upstream-noname/d3-select"]
+PASS worker_invalid_identity_refused_without_changing_match | ["packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段","packs[0]: manifest.namespace 须为有效的身份字段"]
+PASS worker_installed_same_lock_restore
+PASS worker_dependency_valid_start_and_restore
+PASS worker_dependency_refused_without_changing_match | {"errors":["packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[0]: 缺少依赖 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@wrong","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0","packs[1]: 依赖版本或指纹不匹配 upstream-noname/huanle-cards@1.0.0"],"immediateRestorePreservesBytes":false,"rejectedCommandsPreserveBytes":true}
+PASS worker_identity_keeps_packs_and_lord_bonus | hp=5 error=
+PASS worker_identity_projection_filtered_not_placeholder | seats=["Lord",null,null,null]
+PASS worker_visible_general_definition_reaches_seat_view | expected=37 actual=37
+PASS worker_identity_selection_keeps_lord_bonus_and_global_skills | hp=5 skills=["dddjinggou","dddmoyan","wuxing_shengke"]
+PASS worker_identity_invalid_seats_refused
+PASS worker_vm_formal_import_installed_copy_reaches_match | {"lifecycle":"active","dir":"imported","version":"0.1.0"}
+PASS worker_visible_hand_faces_not_placeholder | hand=[{"id":42,"def":1,"suit":"Diamond","rank":10,"owner":0,"zone":"Hand","kind":"Shan"},{"id":96,"def":7,"suit":"Spade","rank":1,"owner":0,"zone":"Hand","kind":"ShaFire"},{"id":122,"def":103,"suit":"Spade","rank":2,"owner":0,"zone":"Hand","kind":"Other"}]
+PASS worker_vm_formal_install_start_identity_and_restore | start=true identity=true restore=true hash=c0c0c080ba37dc5067521b5fe60336675a243114d642db46587df26446f3b1ec
+PASS worker_vm_only_corrupt_module_refused_without_mutation | ["packs[0]: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","packs[0]: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch"]
+PASS worker_vm_unmapped_general_skill_refused | packs[0]: 包数据字段 generals[].skills[].name 非法: VM 包的武将技能 missing_vm_skill 未映射
+PASS worker_vm_changed_trigger_hash_refused | packs[0]: npack: logic_hash mismatch
+PASS worker_vm_changed_trigger_restore_refused_without_mutation | packs[0]: npack: logic_hash mismatch
+PASS worker_vm_changed_module_hash_refused_without_mutation | ["packs[0]: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","packs[0]: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch","packs[0]: npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch"]
+PASS worker_vm_jump_invalid_control_flow_refused | ["packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary","packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary","packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: jump target 6 is not an instruction boundary"]
+PASS worker_vm_entry_invalid_control_flow_refused | ["packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary","packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary","packs[0]: npack: module nc04_control_probe_phase_end: invalid bytecode: entry_pc 1 is not an instruction boundary"]
+PASS worker_vm_general_owns_module | vm_fixture_phase_end_phase_end
+PASS worker_vm_effect_at_end_phase | delta=1
+PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+PASS worker_validate_package_accepts_valid_fixture | {"id":12780,"ok":true,"data":{"valid":true}}
+PASS worker_validate_package_rejects_corrupt_module_local_count | npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+PASS worker_validate_package_rejects_tampered_trigger_event | npack: logic_hash mismatch
+PASS worker_validate_package_rejects_entry_pc_out_of_range | npack: module vm_fixture_phase_end_phase_end: invalid bytecode: entry_pc out of range
+PASS worker_validate_package_rejects_trigger_unknown_module | npack: logic_hash mismatch
+PASS worker_validate_package_rejects_invalid_identity | manifest.package_id 须为有效的身份字段
+PASS worker_validate_package_rejects_same_version_different_content | npack: module vm_fixture_phase_end_phase_end: logic_hash mismatch
+PASS worker_validate_package_rejects_abi_window | 包数据字段 trigger_index.event 非法: VM 技能事件名 phase_prepare 未映射（增量 3 严格面）
+PASS worker_validate_package_does_not_touch_current_match | {"id":12789,"ok":true,"data":{"kind":"status","revision":5,"finished":false}}
+PASS worker_vm_import_upgrade_keeps_history_and_old_copy | {"version":"0.1.1","history":["0.1.0","0.1.1"]}
+PASS worker_vm_upgrade_new_match_uses_new_version | delta=2
+PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+PASS worker_vm_old_save_with_new_version_copy_refused | 恢复失败: RuleVersionMismatch { snapshot: 11357499154503455066, catalog: 10920015845420300057 }
+PASS worker_vm_rollback_restores_old_version_for_new_matches | 0.1.0
+PASS worker_vm_disabled_absent_from_new_match_but_old_save_restores | Error: native: 选将失败(seat=0, name=vm_fixture): assign_general 被拒绝: NoSuchGeneral
+PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+PASS worker_standard_restart
+PASS worker_general_candidates | count=93 error=
+PASS worker_choose_general_reply | name=样例·张角组合 skills=["天妒","鬼道"] hash=a88d058c1d63…
+PASS worker_choose_general_unknown_refused | reply={"id":904,"ok":false,"error":"Error: native: 选将失败(seat=0, name=查无此将): assign_general 被拒绝: NoSuchGeneral"}
+PASS worker_choose_general_seat_refused | reply={"id":905,"ok":false,"error":"Error: native: 选将失败(seat=9, name=样例·张角组合): assign_general: 座位越界（9 ≥ 4）"}
+{"total":82,"failed":0}
+RUN ['node', 'docs/operations/evidence/2026-10-30-nc09-referee/review-fix/wasm-machine-windows.mjs', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330']
+PASS XunXun: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS JiJie: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS GaiMing: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS HaoTianTa: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS Liaoyuan: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+{"windows":5,"stateComparisons":75,"seatChecks":270,"commands":35,"archiveRestarts":40,"failed":0}
+RUN ['node', 'apps/web-client/scripts/adr0786-j2-cross-target.mjs', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/j2-matrix.json', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/src/worker/native-pkg', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/j2-wasm-final.json']
+{
+  "scenarios": 36,
+  "checkpoints": 189,
+  "retries": 114,
+  "full_archive_equality": true,
+  "native_wasm_events_choices_hashes_match": true,
+  "results": [
+    {
+      "name": "danshou-option-1",
+      "steps": 7,
+      "final_hash": "adf0206c0e1935e9bc8292e22a128a84169ddd2a1e3c91417d717d9604c2c236"
+    },
+    {
+      "name": "danshou-option-2",
+      "steps": 7,
+      "final_hash": "09b65e2230fca808ce8be2ea8fd6577cce203f5308a1226ab1068172f0f35739"
+    },
+    {
+      "name": "danshou-option-3",
+      "steps": 6,
+      "final_hash": "e9aefddb718602a1c033a736bea53c3e205e09028df189eba5d288573744b6f2"
+    },
+    {
+      "name": "danshou-option-4",
+      "steps": 6,
+      "final_hash": "b799f15fe9225e2057044f8b5a003f15fdeaca67a692f6e97edda0f11e366c40"
+    },
+    {
+      "name": "danshou-cancel",
+      "steps": 2,
+      "final_hash": "3ab80c20eb4a1ceeba7693fc29d7d98295363c18fed2c4d85769c203e6e9d5d2"
+    },
+    {
+      "name": "danshou-insufficient",
+      "steps": 4,
+      "final_hash": "7e2e7fd6203c89c904851bc5d62156f572ad71b57e54eb34a10658c88e3d34dd"
+    },
+    {
+      "name": "danshou-self-draw",
+      "steps": 4,
+      "final_hash": "909aa2c3e1ad894efc0eaf3f95b6b67cefea78d216f7f4416d90a33309f294c0"
+    },
+    {
+      "name": "danshou-dying-death",
+      "steps": 4,
+      "final_hash": "af45e5d0e666216a0ca767945a2eb59f462cfa86cfaf6de6eb928021293f48d1"
+    },
+    {
+      "name": "danshou-dying-save",
+      "steps": 5,
+      "final_hash": "3aa1ae3857ff8418f56156c96b541cc9911ea5caaec8d6d0f63d950d436627e9"
+    },
+    {
+      "name": "danshou-four-options-and-reset",
+      "steps": 41,
+      "final_hash": "653bdc1d9589ef1ef28148acc199209051ab9b9c144497b69cc09bdbd28064a8"
+    },
+    {
+      "name": "fenghe-give-owned-disabled-yingba",
+      "steps": 4,
+      "final_hash": "7534bd30346d914109326e704b92cbb2e213ba6e392adab57b9233c9cfeaca2a"
+    },
+    {
+      "name": "fenghe-give-no-yingba",
+      "steps": 4,
+      "final_hash": "97cf5b5300bb2729bbbe7883f28f5a165978ee23e54a4a16a6f78e74bf850cdc"
+    },
+    {
+      "name": "fenghe-recast",
+      "steps": 3,
+      "final_hash": "27a36d2700ee15d7d1cdcd6addb3961dcde3d2b48d2f76f32b9462d4b20794b5"
+    },
+    {
+      "name": "fenghe-source-dies-during-give",
+      "steps": 4,
+      "final_hash": "c01ee8aba2c1782fde4e2a6c1c7cbcd1192245482748eb92e82815d25b83c1d0"
+    },
+    {
+      "name": "fenghe-self-source",
+      "steps": 1,
+      "final_hash": "fc7e7512069a96b9c86b5cad66051db0158e36c9a2a9e36ed3787d56ef395402"
+    },
+    {
+      "name": "fenghe-missing-source",
+      "steps": 1,
+      "final_hash": "af2df0f51b3a7d8a0e98333c42dd79ca0e34a7d9832649ae55dca3a981cad10e"
+    },
+    {
+      "name": "fenghe-dead-source",
+      "steps": 1,
+      "final_hash": "11aaaf032a958612a273a4248595940e43a0555aa2547efaf0b8249db439d99f"
+    },
+    {
+      "name": "fenghe-max-hp-one",
+      "steps": 2,
+      "final_hash": "49e47eacac467fb57165cb73539ad23afb92ffb6d245e1f267266968bf4b59ff"
+    },
+    {
+      "name": "fenghe-empty-hand",
+      "steps": 1,
+      "final_hash": "89c7ae0123a3af425a1583a4b8d8e7ec4c9eb230b0a63c38c71502af36606b5b"
+    },
+    {
+      "name": "pingkou-real-three-skips",
+      "steps": 9,
+      "final_hash": "16cd144c6cc6414fbb748d9e29da32abc2821923d876d78b1b1c47edc9295d3d"
+    },
+    {
+      "name": "pingkou-prevention-and-save",
+      "steps": 10,
+      "final_hash": "1c106f5eee8455f07f650ae7f8fb3e6dd73a7ab53bb51810c42ee23f5d287cd9"
+    },
+    {
+      "name": "pingkou-prevention-and-death",
+      "steps": 9,
+      "final_hash": "413c90d3b57ea49f86ee31db494e16c49cf6333312ff5bbbd8821d2b94103195"
+    },
+    {
+      "name": "pingkou-cancel",
+      "steps": 9,
+      "final_hash": "520d410a864858f468bf2c1f2309703d3ae648bd92a862131b6be6b912b8b02c"
+    },
+    {
+      "name": "pingkou-next-target-dies-before-damage",
+      "steps": 9,
+      "final_hash": "617e4dd728431059a2bfd087876eab62f6b78e9a5cc9f6eb1cddbad9aa1414ef"
+    },
+    {
+      "name": "danshou-owner-draw-nested-choice-order",
+      "steps": 6,
+      "final_hash": "bea243c807ae9202270390718911962f4a91edab219f70b368695e9eac1f935b"
+    },
+    {
+      "name": "danshou-owner-draw-kills-target",
+      "steps": 4,
+      "final_hash": "fb4717c3c94607959a8430977a376d5ac355140e26c8ffb7385ebede10813b2c"
+    },
+    {
+      "name": "grouped-owner-dead-after-choice",
+      "steps": 3,
+      "final_hash": "292c4540928d7ed28c382a9b34d49c2f3d2e7d0fe009eb1ba96486b2eb7c4a04"
+    },
+    {
+      "name": "grouped-handler-removed-after-choice",
+      "steps": 3,
+      "final_hash": "2cc9a11341730c3d9f271dbe9ab6e337634cfdce62d2379cb4c24007f1b712cc"
+    },
+    {
+      "name": "grouped-instance-disabled-at-checkpoint",
+      "steps": 1,
+      "final_hash": "66ced0ed232720e736cf3c550be895063d06dd235d5204520574cfa17b539091"
+    },
+    {
+      "name": "storage-trigger-active-owner-identity",
+      "steps": 1,
+      "final_hash": "7ab01ab6a62326b3626e4696823c470140e10aebef2be0f4820ebd5583606f45"
+    },
+    {
+      "name": "storage-two-owner-no-mark-fallback",
+      "steps": 1,
+      "final_hash": "feb70243c1e6200d7f2a9f4e86b6985892ac2cd641768431b89e1573b521a374"
+    },
+    {
+      "name": "active-preceding-draw-danshou",
+      "steps": 2,
+      "final_hash": "f910911e884cd4c7d315609b87905e614a6d2b4161224583630d41ff5c87343e"
+    },
+    {
+      "name": "active-unreachable-danshou",
+      "steps": 1,
+      "final_hash": "a3c885f5c78bf8f12d7e03269b693e788e5a54b58c47079735df91120a74d264"
+    },
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "final_hash": "b6ed834cfc6203131f6826bd4b16e5a569df76099ce955fc09b9a65368c74304"
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "final_hash": "402d6507dd89d01f74396d6978496de5f7dfe4abad0a80d87f599f390e8873b5"
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "final_hash": "bcc0b1866857aa2d8dffc768a673ac89cd4be5d7bdaabd670792d85c0821225d"
+    }
+  ]
+}
+{"command": ["python3", "-B", "../evidence/a330/post-wasm.py"], "exit": 0, "locked_seconds": 0.7837844169989694, "disk_free_bytes": 157932015616}

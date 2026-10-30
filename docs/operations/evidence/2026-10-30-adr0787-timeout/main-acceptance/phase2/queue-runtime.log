@@ -1,0 +1,4 @@
+START legacy-crosshash
+END legacy-crosshash exit=0
+START artifact-versions
+END artifact-versions exit=1

@@ -1,0 +1,12 @@
+{
+  "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/artifacts/game-server330-main",
+  "sha256": "f5bcb17839878744e948c1f6c08ed920819b50c5f23a4e4be57e8fcafeede077",
+  "sourceBinary": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server",
+  "sourceSha256": "f5bcb17839878744e948c1f6c08ed920819b50c5f23a4e4be57e8fcafeede077",
+  "builtFromCurrentMainCommand": "current-server-build",
+  "phase1Original": {
+    "bytes": 77319488,
+    "sha256": "e8a6712d5f6333e29c8478e8736cf1ff44250a4cd3a58ee7f5791a4786ddc675"
+  },
+  "sameAsPhase1": false
+}

@@ -1,0 +1,360 @@
+RUN ['cargo', 'test', '--offline', '-p', 'engine-native', '--test', 'misc', 'nc09_machine_ownership::', '--', '--nocapture']
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.65s
+     Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-6bce960f507446bf)
+
+running 18 tests
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... ok
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 202 filtered out; finished in 0.03s
+
+RUN ['node', 'docs/operations/evidence/2026-10-30-nc09-referee/review-fix/wasm-machine-windows.mjs', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330']
+PASS XunXun: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS JiJie: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS GaiMing: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS HaoTianTa: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS Liaoyuan: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+{"windows":5,"stateComparisons":75,"seatChecks":270,"commands":35,"archiveRestarts":40,"failed":0}
+RUN ['cargo', 'test', '--offline', '-p', 'engine-native-wasm', '--test', 'adr0786_j2_cross_target', '--', '--nocapture']
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-api)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-compiler)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-wasm)
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:236:4
+    |
+236 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:297:4
+    |
+297 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:359:4
+    |
+359 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:368:4
+    |
+368 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:394:4
+    |
+394 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:403:4
+    |
+403 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:442:4
+    |
+442 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:451:4
+    |
+451 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:459:4
+    |
+459 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:467:4
+    |
+467 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:475:4
+    |
+475 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:483:4
+    |
+483 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:491:4
+    |
+491 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:499:4
+    |
+499 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:507:4
+    |
+507 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:515:4
+    |
+515 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:523:4
+    |
+523 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.87s
+     Running tests/adr0786_j2_cross_target.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/adr0786_j2_cross_target-f88c870dac86d996)
+
+running 1 test
+J2_NATIVE_MATRIX scenarios=36 steps=189
+test j2_author_primitives_native_and_every_checkpoint_replay_vectors ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+RUN ['node', 'apps/web-client/scripts/adr0786-j2-cross-target.mjs', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/j2-matrix.json', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/apps/web-client/src/worker/native-pkg', '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/j2-wasm-matrix.json']
+{
+  "scenarios": 36,
+  "checkpoints": 189,
+  "retries": 114,
+  "full_archive_equality": true,
+  "native_wasm_events_choices_hashes_match": true,
+  "results": [
+    {
+      "name": "danshou-option-1",
+      "steps": 7,
+      "final_hash": "adf0206c0e1935e9bc8292e22a128a84169ddd2a1e3c91417d717d9604c2c236"
+    },
+    {
+      "name": "danshou-option-2",
+      "steps": 7,
+      "final_hash": "09b65e2230fca808ce8be2ea8fd6577cce203f5308a1226ab1068172f0f35739"
+    },
+    {
+      "name": "danshou-option-3",
+      "steps": 6,
+      "final_hash": "e9aefddb718602a1c033a736bea53c3e205e09028df189eba5d288573744b6f2"
+    },
+    {
+      "name": "danshou-option-4",
+      "steps": 6,
+      "final_hash": "b799f15fe9225e2057044f8b5a003f15fdeaca67a692f6e97edda0f11e366c40"
+    },
+    {
+      "name": "danshou-cancel",
+      "steps": 2,
+      "final_hash": "3ab80c20eb4a1ceeba7693fc29d7d98295363c18fed2c4d85769c203e6e9d5d2"
+    },
+    {
+      "name": "danshou-insufficient",
+      "steps": 4,
+      "final_hash": "7e2e7fd6203c89c904851bc5d62156f572ad71b57e54eb34a10658c88e3d34dd"
+    },
+    {
+      "name": "danshou-self-draw",
+      "steps": 4,
+      "final_hash": "909aa2c3e1ad894efc0eaf3f95b6b67cefea78d216f7f4416d90a33309f294c0"
+    },
+    {
+      "name": "danshou-dying-death",
+      "steps": 4,
+      "final_hash": "af45e5d0e666216a0ca767945a2eb59f462cfa86cfaf6de6eb928021293f48d1"
+    },
+    {
+      "name": "danshou-dying-save",
+      "steps": 5,
+      "final_hash": "3aa1ae3857ff8418f56156c96b541cc9911ea5caaec8d6d0f63d950d436627e9"
+    },
+    {
+      "name": "danshou-four-options-and-reset",
+      "steps": 41,
+      "final_hash": "653bdc1d9589ef1ef28148acc199209051ab9b9c144497b69cc09bdbd28064a8"
+    },
+    {
+      "name": "fenghe-give-owned-disabled-yingba",
+      "steps": 4,
+      "final_hash": "7534bd30346d914109326e704b92cbb2e213ba6e392adab57b9233c9cfeaca2a"
+    },
+    {
+      "name": "fenghe-give-no-yingba",
+      "steps": 4,
+      "final_hash": "97cf5b5300bb2729bbbe7883f28f5a165978ee23e54a4a16a6f78e74bf850cdc"
+    },
+    {
+      "name": "fenghe-recast",
+      "steps": 3,
+      "final_hash": "27a36d2700ee15d7d1cdcd6addb3961dcde3d2b48d2f76f32b9462d4b20794b5"
+    },
+    {
+      "name": "fenghe-source-dies-during-give",
+      "steps": 4,
+      "final_hash": "c01ee8aba2c1782fde4e2a6c1c7cbcd1192245482748eb92e82815d25b83c1d0"
+    },
+    {
+      "name": "fenghe-self-source",
+      "steps": 1,
+      "final_hash": "fc7e7512069a96b9c86b5cad66051db0158e36c9a2a9e36ed3787d56ef395402"
+    },
+    {
+      "name": "fenghe-missing-source",
+      "steps": 1,
+      "final_hash": "af2df0f51b3a7d8a0e98333c42dd79ca0e34a7d9832649ae55dca3a981cad10e"
+    },
+    {
+      "name": "fenghe-dead-source",
+      "steps": 1,
+      "final_hash": "11aaaf032a958612a273a4248595940e43a0555aa2547efaf0b8249db439d99f"
+    },
+    {
+      "name": "fenghe-max-hp-one",
+      "steps": 2,
+      "final_hash": "49e47eacac467fb57165cb73539ad23afb92ffb6d245e1f267266968bf4b59ff"
+    },
+    {
+      "name": "fenghe-empty-hand",
+      "steps": 1,
+      "final_hash": "89c7ae0123a3af425a1583a4b8d8e7ec4c9eb230b0a63c38c71502af36606b5b"
+    },
+    {
+      "name": "pingkou-real-three-skips",
+      "steps": 9,
+      "final_hash": "16cd144c6cc6414fbb748d9e29da32abc2821923d876d78b1b1c47edc9295d3d"
+    },
+    {
+      "name": "pingkou-prevention-and-save",
+      "steps": 10,
+      "final_hash": "1c106f5eee8455f07f650ae7f8fb3e6dd73a7ab53bb51810c42ee23f5d287cd9"
+    },
+    {
+      "name": "pingkou-prevention-and-death",
+      "steps": 9,
+      "final_hash": "413c90d3b57ea49f86ee31db494e16c49cf6333312ff5bbbd8821d2b94103195"
+    },
+    {
+      "name": "pingkou-cancel",
+      "steps": 9,
+      "final_hash": "520d410a864858f468bf2c1f2309703d3ae648bd92a862131b6be6b912b8b02c"
+    },
+    {
+      "name": "pingkou-next-target-dies-before-damage",
+      "steps": 9,
+      "final_hash": "617e4dd728431059a2bfd087876eab62f6b78e9a5cc9f6eb1cddbad9aa1414ef"
+    },
+    {
+      "name": "danshou-owner-draw-nested-choice-order",
+      "steps": 6,
+      "final_hash": "bea243c807ae9202270390718911962f4a91edab219f70b368695e9eac1f935b"
+    },
+    {
+      "name": "danshou-owner-draw-kills-target",
+      "steps": 4,
+      "final_hash": "fb4717c3c94607959a8430977a376d5ac355140e26c8ffb7385ebede10813b2c"
+    },
+    {
+      "name": "grouped-owner-dead-after-choice",
+      "steps": 3,
+      "final_hash": "292c4540928d7ed28c382a9b34d49c2f3d2e7d0fe009eb1ba96486b2eb7c4a04"
+    },
+    {
+      "name": "grouped-handler-removed-after-choice",
+      "steps": 3,
+      "final_hash": "2cc9a11341730c3d9f271dbe9ab6e337634cfdce62d2379cb4c24007f1b712cc"
+    },
+    {
+      "name": "grouped-instance-disabled-at-checkpoint",
+      "steps": 1,
+      "final_hash": "66ced0ed232720e736cf3c550be895063d06dd235d5204520574cfa17b539091"
+    },
+    {
+      "name": "storage-trigger-active-owner-identity",
+      "steps": 1,
+      "final_hash": "7ab01ab6a62326b3626e4696823c470140e10aebef2be0f4820ebd5583606f45"
+    },
+    {
+      "name": "storage-two-owner-no-mark-fallback",
+      "steps": 1,
+      "final_hash": "feb70243c1e6200d7f2a9f4e86b6985892ac2cd641768431b89e1573b521a374"
+    },
+    {
+      "name": "active-preceding-draw-danshou",
+      "steps": 2,
+      "final_hash": "f910911e884cd4c7d315609b87905e614a6d2b4161224583630d41ff5c87343e"
+    },
+    {
+      "name": "active-unreachable-danshou",
+      "steps": 1,
+      "final_hash": "a3c885f5c78bf8f12d7e03269b693e788e5a54b58c47079735df91120a74d264"
+    },
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "final_hash": "b6ed834cfc6203131f6826bd4b16e5a569df76099ce955fc09b9a65368c74304"
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "final_hash": "402d6507dd89d01f74396d6978496de5f7dfe4abad0a80d87f599f390e8873b5"
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "final_hash": "bcc0b1866857aa2d8dffc768a673ac89cd4be5d7bdaabd670792d85c0821225d"
+    }
+  ]
+}
+{"command": ["python3", "-B", "../evidence/a330/window-matrices.py"], "exit": 0, "locked_seconds": 29.51638924999861, "disk_free_bytes": 157981908992}

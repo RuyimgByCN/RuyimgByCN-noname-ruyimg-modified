@@ -1,0 +1,56 @@
+{
+  "time": "2026-10-30T21:24:10.448551",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "architecture": "arm64",
+  "tools": [
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "v26.4.0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/ruyimg/.cargo/bin/rustc",
+        "-Vv"
+      ],
+      "exit": 0,
+      "stdout": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/ruyimg/.cargo/bin/cargo",
+        "-V"
+      ],
+      "exit": 0,
+      "stdout": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "wasm-pack",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout": "wasm-pack 0.15.0\n",
+      "stderr": ""
+    }
+  ],
+  "chromeVersion": "156.0.8078.74",
+  "buildEnv": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_NET_OFFLINE": "true",
+    "WASM_PACK_TARGET": "web(native producer)",
+    "NODE_OPTIONS": "private execFile child env target override only"
+  },
+  "defaultTargetForbidden": true,
+  "mainSourceReadOnlySandbox": "readonly.sb",
+  "currentMain330CrossPlatformCiPassClaimed": false,
+  "hidOrIsTrustedClaimed": false
+}

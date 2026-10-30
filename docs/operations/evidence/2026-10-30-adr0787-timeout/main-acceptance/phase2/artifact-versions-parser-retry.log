@@ -1,0 +1,24 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    archive: 105,
++   rules: 9699176272500769000
+-   rules: 330
+  }
+
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs:8:243 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: { archive: 105, rules: 9699176272500769000 },
+  expected: { archive: 105, rules: 330 },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs"], "exit": 1, "locked_seconds": 0.05783175001852214, "disk_free_bytes": 135319879680}

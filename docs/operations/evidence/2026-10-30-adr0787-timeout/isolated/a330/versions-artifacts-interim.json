@@ -1,0 +1,8 @@
+{
+  "crates/engine-native-kernel/src/archive.rs": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+  "crates/engine-native-content/src/content/standard.rs": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+  "crates/rule-api/src/lib.rs": "48023111c1fa414fcbf3ff5ac529cf523ad0d2634001d6c7c47df92f864f4392",
+  "crates/engine-protocol/src/lib.rs": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+  "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "efe60602f77b3705c9147d0a37458988bd60e728d107ddb32fa28d2fe7fef7b6",
+  "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": "d1955bd0a06560c326650ee6654aea6d56200964d07f2343b9ff4601be6d6785"
+}

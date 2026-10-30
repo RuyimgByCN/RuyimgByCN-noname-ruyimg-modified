@@ -1,0 +1,330 @@
+{
+  "started_utc": "2026-10-30T14:08:36.939026+00:00",
+  "status": "completed",
+  "before": {
+    "runtime53": {
+      "apps/game-server/src/lobby.rs": "ac9c875407e9e1847d7d4219c777157f7fcc51479adb701b9817373e2cdd45b9",
+      "apps/game-server/src/main.rs": "757e222fee8c0dd1c6a1cc3d90afb556a35030607acdea5ad618b2e98a965569",
+      "apps/game-server/src/native_room_store/tests.rs": "35b5b2769e6b3fa2cec7fe015a6800d92ebf40b919dea73e1e2acdf5cb23b00f",
+      "apps/game-server/src/native_view.rs": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4",
+      "apps/game-server/src/native_ws_e2e.rs": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa",
+      "apps/game-server/src/native_ws_e2e/authority.rs": "2a0af2f59c2bbc558fcd16a16ec602be65cf58ab6645fe1c1d3af7839a74317f",
+      "apps/game-server/src/native_ws_e2e/commit_crash.rs": "b61c5a21ce8d350f3097d439d0ff4a59ef2c8c7c859ad5568a2cd963bdcc9a14",
+      "apps/game-server/src/native_ws_e2e/double_failure.rs": "d39598b959a664a7f704d3729c792a3a8d105f7dd290d17fd6399ea462200620",
+      "apps/game-server/src/native_ws_e2e/durability.rs": "4507d1f44f5b7456e6203f7b2348587202853bd34f1a3645eec91839ebfac30c",
+      "apps/game-server/src/native_ws_e2e/peer.rs": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3",
+      "apps/game-server/src/native_ws_e2e/referee.rs": "df433618fd856febd3c93c400801f7f61b500efe888ae0b7c20844009167d816",
+      "apps/game-server/src/room.rs": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+      "apps/game-server/src/room_native.rs": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+      "apps/game-server/src/room_native/timeout.rs": "65e8230aa0b4f5fed51cff85172972a7c86d65233f451d1d6ca7021166645495",
+      "apps/game-server/src/room_native/wal.rs": "3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e",
+      "apps/game-server/src/room_native_actor.rs": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+      "apps/game-server/src/room_native_actor/durability.rs": "326593a4426bd812f5524d8478766366cb97ba2d3b8197eb1368d72d56301f49",
+      "apps/game-server/src/room_native_actor/timeout.rs": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+      "apps/game-server/src/session.rs": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533",
+      "apps/game-server/tests/adr0787_timeout.rs": "73b8d1eb54be76c2ba87b6a3abf6ab13b61fc92ef85d425d026663048ce2019c",
+      "apps/game-server/tests/approved_b_metadata.rs": "a70797a47478c17ffeae9cc221125af873d45e728130ed96ef210ee7d5d94326",
+      "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+      "apps/game-server/tests/nc09_native_actor.rs": "1daef0e1d3b8aecfb8349f125f525435a5f2195923224f84b636bfcd02034c8e",
+      "apps/game-server/tests/nc09_native_durability.rs": "6d465afbc5a227dd2c3737f864c4b4061d1e22c5b8acaf3fd2769f13f93d750b",
+      "apps/game-server/tests/nc09_native_room_session.rs": "8532ab0d8c4d2323fb60b074a0bfd1a1d90173d94c4ca0b902c9bf4409db1ec4",
+      "apps/game-server/tests/nc09_projection_parity.rs": "dd6d44ac2e8d09ece51f866288f772b716acfecba87658755b29547c9aee859c",
+      "apps/game-server/tests/nc09_referee_projection.rs": "d12b2cb1d1aca22b83da1863add7e3be125b5e1ce79c53b2ab9f1ed0cd0f7cd1",
+      "apps/web-client/scripts/nc12-online-rtt.mjs": "e5b38de6989245584797d26b57caf05ea4a111cc006faaf47cfad9de6a36ab1f",
+      "apps/web-client/scripts/network-client.test.mjs": "d168782f0a626188d2e8f5850a0e205a4331812351678eca0aa01e03b37b121e",
+      "apps/web-client/src/engine/networkClient.ts": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "apps/web-client/src/engine/observerMetadata.ts": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd",
+      "apps/web-client/src/types/engine.ts": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c",
+      "apps/web-client/src/views/BattleView.vue": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79",
+      "apps/web-client/src/views/HomeView.vue": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2",
+      "crates/engine-api/src/choice.rs": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6",
+      "crates/engine-api/src/command.rs": "4d0c0cf9047a7e50cb2dbd0aa2e345d544c14e491170d64f9a1c9c6b53f8832c",
+      "crates/engine-api/src/version.rs": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs": "7b3295622c2cf1259f4ccb4fcab517c1536a1065a8622d7326e49e5e666b461c",
+      "crates/engine-core/src/snapshot.rs": "0a64cbb3ca80acc7daba5f3c4897596971e9cf40a447d4dc851bebab34c3d0c7",
+      "crates/engine-native-content/src/content/standard.rs": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+      "crates/engine-native-wasm/src/session.rs": "99064278c5afe72f839c926376be782daed78fdadbf18a877fbd593473e59206",
+      "crates/engine-native/src/engine.rs": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd",
+      "crates/engine-native/src/engine/apply_command.rs": "24c3638cedbde91c05295a6b99b4ae639e39aa69f7cb831c75c7e64c4774d72b",
+      "crates/engine-native/src/engine/commands.rs": "c90a989d6b1a5882b5ac50109e26deeacddd5696c7ed015ee8b8fff8d395f32b",
+      "crates/engine-native/tests/adr0786_j2_active_bridge.rs": "defca16798e3c3a3bb7d828625359ae3f08766b22430f9280cffc3a0c6a84998",
+      "crates/engine-native/tests/nc04_cards_given_event.rs": "034cccf7b1e9927b342e50af1302bde342c39ee3b4bc4758010d1ea11b99d5cb",
+      "crates/engine-native/tests/nc04_vm_resume.rs": "c96aafe8030ce00ffb0662aac6a03ee2ba98bd0d6f203c76834567d1d06d1c4d",
+      "crates/engine-native/tests/nc07_archive_hash_fields.rs": "19835f516cfeddbb908dd272565ca49e2154a1435dc421a1f4f17b6160a5056e",
+      "crates/engine-native/tests/nc07_lianyaohu_hash.rs": "0e811fe0dc639ef867dbe95a0fcf03b069460758884b386e35ff80149997ff1b",
+      "crates/engine-native/tests/pa12_tag656_version.rs": "39a36a849ec2495c9304ee180d78302a8f63f757eb81da8eca72bc77edf9c9b9",
+      "crates/engine-native/tests/replay_scenarios.rs": "b41a409610028bbe1664a52df4f2ef7da952aa773361dfc6c19b7d240b4ecc68",
+      "crates/engine-protocol/src/lib.rs": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "crates/engine-protocol/src/messages.rs": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e"
+    },
+    "ci4": {
+      ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+      ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+      "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+    },
+    "frozen_extra": {
+      "apps/game-server/tests/support/ws5_metadata_readers.rs": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+      "apps/web-client/scripts/approved-b-old-reader.ts": "b84da7fb4a4957113049cb50e100c2bdb338470979d2b3d8da131847c7b8dc2f",
+      "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+      "docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json": "86c0dc473253a769c906f59a0626755d46aa21f672827749d565d87089e77367"
+    },
+    "guard_sha256": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1",
+    "guard": {
+      "autofix": {
+        "enabled": false
+      },
+      "format": {
+        "enabled": false
+      },
+      "actionableWarnings": {
+        "autoFix": {
+          "enabled": false
+        }
+      }
+    },
+    "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+    "staged_files": [],
+    "tracked_non_docs_diff_sha256": "2d8b774863990de508bedb5669bfc9ba4f1ae8b227ef60e4cb6484eb9dbaff64"
+  },
+  "entry_checks": {
+    "runtime53_exact": true,
+    "runtime_count53": true,
+    "ci4_phase2_exact": true,
+    "frozen_extra_exact": true,
+    "phase2_no_drift": true,
+    "guard_false": true,
+    "index_empty": true,
+    "head_exact": true
+  },
+  "admission_versions": {
+    "rules": 330,
+    "archive": 105,
+    "nativeAbi": 758,
+    "ws": 6
+  },
+  "phase2_reference": {
+    "path": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/hash-diff.json",
+    "count": 31808,
+    "aggregate": "bb93273b96b98837a39f8ec2dfaf9b364eb398ce270bfbee70f0e193db70dce6",
+    "not_rehashed_this_run": true
+  },
+  "environment": {
+    "GIT_OPTIONAL_LOCKS": "0",
+    "GIT_NO_LAZY_FETCH": "1",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "commands": [
+    {
+      "name": "sourcecaps-selftests",
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "wall_seconds": 38.07233162500779,
+      "locked_seconds": 0.07595558400498703,
+      "queue_estimate_seconds": 37.996376041002804,
+      "queue_estimate_includes_wrapper_startup": true,
+      "free_disk_bytes": 125914107904,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/01-sourcecaps-selftests.log",
+      "completed_utc": "2026-10-30T14:09:38.986680+00:00"
+    },
+    {
+      "name": "source-lines",
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "wall_seconds": 4.647055874986108,
+      "locked_seconds": 4.617628792009782,
+      "queue_estimate_seconds": 0.029427082976326346,
+      "queue_estimate_includes_wrapper_startup": true,
+      "free_disk_bytes": 126839799808,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/02-source-lines.log",
+      "completed_utc": "2026-10-30T14:09:53.887691+00:00"
+    },
+    {
+      "name": "strict-docrefs",
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "wall_seconds": 6.406504458020208,
+      "locked_seconds": 6.377057165984297,
+      "queue_estimate_seconds": 0.029447292035911232,
+      "queue_estimate_includes_wrapper_startup": true,
+      "free_disk_bytes": 126881853440,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/03-strict-docrefs.log",
+      "completed_utc": "2026-10-30T14:10:12.866941+00:00"
+    },
+    {
+      "name": "full-preflight",
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0,
+      "wall_seconds": 328.7056284159771,
+      "locked_seconds": 328.6742447090219,
+      "queue_estimate_seconds": 0.03138370695523918,
+      "queue_estimate_includes_wrapper_startup": true,
+      "free_disk_bytes": 126724599808,
+      "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/04-full-preflight.log",
+      "completed_utc": "2026-10-30T14:15:50.266260+00:00"
+    }
+  ],
+  "no_cargo_wasm_node_browser_resource_builds": true,
+  "source_writes_authorized": false,
+  "ignored_scope": "Existing generated WASM/resources/dist/targets and other worker caches are not regenerated, hashed in bulk, or cleaned; Windows/Linux CI candidates and Alias9 remain unintegrated; future CI2/perf2/installer5 source inputs retain their entry state.",
+  "completed_utc": "2026-10-30T14:16:15.984956+00:00",
+  "after": {
+    "runtime53": {
+      "apps/game-server/src/lobby.rs": "ac9c875407e9e1847d7d4219c777157f7fcc51479adb701b9817373e2cdd45b9",
+      "apps/game-server/src/main.rs": "757e222fee8c0dd1c6a1cc3d90afb556a35030607acdea5ad618b2e98a965569",
+      "apps/game-server/src/native_room_store/tests.rs": "35b5b2769e6b3fa2cec7fe015a6800d92ebf40b919dea73e1e2acdf5cb23b00f",
+      "apps/game-server/src/native_view.rs": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4",
+      "apps/game-server/src/native_ws_e2e.rs": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa",
+      "apps/game-server/src/native_ws_e2e/authority.rs": "2a0af2f59c2bbc558fcd16a16ec602be65cf58ab6645fe1c1d3af7839a74317f",
+      "apps/game-server/src/native_ws_e2e/commit_crash.rs": "b61c5a21ce8d350f3097d439d0ff4a59ef2c8c7c859ad5568a2cd963bdcc9a14",
+      "apps/game-server/src/native_ws_e2e/double_failure.rs": "d39598b959a664a7f704d3729c792a3a8d105f7dd290d17fd6399ea462200620",
+      "apps/game-server/src/native_ws_e2e/durability.rs": "4507d1f44f5b7456e6203f7b2348587202853bd34f1a3645eec91839ebfac30c",
+      "apps/game-server/src/native_ws_e2e/peer.rs": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3",
+      "apps/game-server/src/native_ws_e2e/referee.rs": "df433618fd856febd3c93c400801f7f61b500efe888ae0b7c20844009167d816",
+      "apps/game-server/src/room.rs": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+      "apps/game-server/src/room_native.rs": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+      "apps/game-server/src/room_native/timeout.rs": "65e8230aa0b4f5fed51cff85172972a7c86d65233f451d1d6ca7021166645495",
+      "apps/game-server/src/room_native/wal.rs": "3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e",
+      "apps/game-server/src/room_native_actor.rs": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+      "apps/game-server/src/room_native_actor/durability.rs": "326593a4426bd812f5524d8478766366cb97ba2d3b8197eb1368d72d56301f49",
+      "apps/game-server/src/room_native_actor/timeout.rs": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+      "apps/game-server/src/session.rs": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533",
+      "apps/game-server/tests/adr0787_timeout.rs": "73b8d1eb54be76c2ba87b6a3abf6ab13b61fc92ef85d425d026663048ce2019c",
+      "apps/game-server/tests/approved_b_metadata.rs": "a70797a47478c17ffeae9cc221125af873d45e728130ed96ef210ee7d5d94326",
+      "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+      "apps/game-server/tests/nc09_native_actor.rs": "1daef0e1d3b8aecfb8349f125f525435a5f2195923224f84b636bfcd02034c8e",
+      "apps/game-server/tests/nc09_native_durability.rs": "6d465afbc5a227dd2c3737f864c4b4061d1e22c5b8acaf3fd2769f13f93d750b",
+      "apps/game-server/tests/nc09_native_room_session.rs": "8532ab0d8c4d2323fb60b074a0bfd1a1d90173d94c4ca0b902c9bf4409db1ec4",
+      "apps/game-server/tests/nc09_projection_parity.rs": "dd6d44ac2e8d09ece51f866288f772b716acfecba87658755b29547c9aee859c",
+      "apps/game-server/tests/nc09_referee_projection.rs": "d12b2cb1d1aca22b83da1863add7e3be125b5e1ce79c53b2ab9f1ed0cd0f7cd1",
+      "apps/web-client/scripts/nc12-online-rtt.mjs": "e5b38de6989245584797d26b57caf05ea4a111cc006faaf47cfad9de6a36ab1f",
+      "apps/web-client/scripts/network-client.test.mjs": "d168782f0a626188d2e8f5850a0e205a4331812351678eca0aa01e03b37b121e",
+      "apps/web-client/src/engine/networkClient.ts": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "apps/web-client/src/engine/observerMetadata.ts": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd",
+      "apps/web-client/src/types/engine.ts": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c",
+      "apps/web-client/src/views/BattleView.vue": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79",
+      "apps/web-client/src/views/HomeView.vue": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2",
+      "crates/engine-api/src/choice.rs": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6",
+      "crates/engine-api/src/command.rs": "4d0c0cf9047a7e50cb2dbd0aa2e345d544c14e491170d64f9a1c9c6b53f8832c",
+      "crates/engine-api/src/version.rs": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs": "7b3295622c2cf1259f4ccb4fcab517c1536a1065a8622d7326e49e5e666b461c",
+      "crates/engine-core/src/snapshot.rs": "0a64cbb3ca80acc7daba5f3c4897596971e9cf40a447d4dc851bebab34c3d0c7",
+      "crates/engine-native-content/src/content/standard.rs": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+      "crates/engine-native-wasm/src/session.rs": "99064278c5afe72f839c926376be782daed78fdadbf18a877fbd593473e59206",
+      "crates/engine-native/src/engine.rs": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd",
+      "crates/engine-native/src/engine/apply_command.rs": "24c3638cedbde91c05295a6b99b4ae639e39aa69f7cb831c75c7e64c4774d72b",
+      "crates/engine-native/src/engine/commands.rs": "c90a989d6b1a5882b5ac50109e26deeacddd5696c7ed015ee8b8fff8d395f32b",
+      "crates/engine-native/tests/adr0786_j2_active_bridge.rs": "defca16798e3c3a3bb7d828625359ae3f08766b22430f9280cffc3a0c6a84998",
+      "crates/engine-native/tests/nc04_cards_given_event.rs": "034cccf7b1e9927b342e50af1302bde342c39ee3b4bc4758010d1ea11b99d5cb",
+      "crates/engine-native/tests/nc04_vm_resume.rs": "c96aafe8030ce00ffb0662aac6a03ee2ba98bd0d6f203c76834567d1d06d1c4d",
+      "crates/engine-native/tests/nc07_archive_hash_fields.rs": "19835f516cfeddbb908dd272565ca49e2154a1435dc421a1f4f17b6160a5056e",
+      "crates/engine-native/tests/nc07_lianyaohu_hash.rs": "0e811fe0dc639ef867dbe95a0fcf03b069460758884b386e35ff80149997ff1b",
+      "crates/engine-native/tests/pa12_tag656_version.rs": "39a36a849ec2495c9304ee180d78302a8f63f757eb81da8eca72bc77edf9c9b9",
+      "crates/engine-native/tests/replay_scenarios.rs": "b41a409610028bbe1664a52df4f2ef7da952aa773361dfc6c19b7d240b4ecc68",
+      "crates/engine-protocol/src/lib.rs": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "crates/engine-protocol/src/messages.rs": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e"
+    },
+    "ci4": {
+      ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+      ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+      "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+    },
+    "frozen_extra": {
+      "apps/game-server/tests/support/ws5_metadata_readers.rs": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+      "apps/web-client/scripts/approved-b-old-reader.ts": "b84da7fb4a4957113049cb50e100c2bdb338470979d2b3d8da131847c7b8dc2f",
+      "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+      "docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json": "86c0dc473253a769c906f59a0626755d46aa21f672827749d565d87089e77367"
+    },
+    "guard_sha256": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1",
+    "guard": {
+      "autofix": {
+        "enabled": false
+      },
+      "format": {
+        "enabled": false
+      },
+      "actionableWarnings": {
+        "autoFix": {
+          "enabled": false
+        }
+      }
+    },
+    "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+    "staged_files": [],
+    "tracked_non_docs_diff_sha256": "2d8b774863990de508bedb5669bfc9ba4f1ae8b227ef60e4cb6484eb9dbaff64"
+  },
+  "exit_checks": {
+    "runtime53_matches_admission": true,
+    "runtime53_unchanged": true,
+    "ci4_matches_phase2": true,
+    "ci4_unchanged": true,
+    "frozen_extra_unchanged": true,
+    "guard_unchanged": true,
+    "guard_false": true,
+    "head_unchanged": true,
+    "index_empty": true,
+    "tracked_non_docs_delta_unchanged": true
+  },
+  "preflight_passed_gates": 21,
+  "preflight_failed_gates": 0,
+  "no_staged_files": true,
+  "free_disk_bytes_final": 125434884096,
+  "log_sha256": {
+    "03-strict-docrefs.log": "cacc81c596d94b13300e703422cdac7495fda45442b866beeaffbc15ff21c894",
+    "02-source-lines.log": "6ddb62c5313e5ce8e5fa2bf97f1f8c69ed4ceb95e7562ddc82fdc87ee33b3e56",
+    "01-sourcecaps-selftests.log": "7a500db7aa0e09c0a8b5ee18412c3a9187a50c864e44b0890d130fddae61da26",
+    "04-full-preflight.log": "2b60022a3937f3856aaebcd5f322426ef6445c586cd3579cb168abf575947b45"
+  },
+  "passed": true,
+  "strict_docrefs_notes": {
+    "exit": 0,
+    "references_checked": 1065,
+    "out_of_range": 0,
+    "unresolved_file_kinds": 6,
+    "unresolved_files": [
+      "path.rs",
+      ".../gujian/skill.js",
+      "character/offline/.../offline_piracyS.js",
+      ".../swd/skill.js",
+      "schema/package.rs",
+      "step_skills_status.rs"
+    ],
+    "unresolved_not_silently_cleared": true
+  }
+}

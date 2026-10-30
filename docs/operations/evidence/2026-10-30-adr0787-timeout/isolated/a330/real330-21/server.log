@@ -1,0 +1,15 @@
+[2m2026-10-30T08:00:42.633089Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m content ready [3mpackages[0m[2m=[0m0 [3mextensions[0m[2m=[0m0 [3mcontent_lock[0m[2m=[0ma6cd5606ddabd11575f25d991b9410418047ca7c2a91fbf1068c1cd747111415
+[2m2026-10-30T08:00:42.634492Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m native content ready [3mpackages[0m[2m=[0m0
+[2m2026-10-30T08:00:42.638647Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m game-server listening [3maddr[0m[2m=[0m127.0.0.1:17887
+[2m2026-10-30T08:00:42.674254Z[0m [33m WARN[0m [2mgame_server[0m[2m:[0m client handler error [3mconn[0m[2m=[0m2 [3merror[0m[2m=[0mVersionMismatch: WS6 Hello required
+[2m2026-10-30T08:00:42.686512Z[0m [33m WARN[0m [2mgame_server[0m[2m:[0m client handler error [3mconn[0m[2m=[0m2 [3merror[0m[2m=[0mVersionMismatch: protocol version mismatch
+[2m2026-10-30T08:00:42.698516Z[0m [33m WARN[0m [2mgame_server[0m[2m:[0m client handler error [3mconn[0m[2m=[0m1 [3merror[0m[2m=[0mBadMessage: choice_timeout_secs must be 10, 15, 30, 60 or 90
+[2m2026-10-30T08:00:42.698768Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m connection closed [3mconn[0m[2m=[0m2
+[2m2026-10-30T08:00:42.751472Z[0m [32m INFO[0m [2mgame_server::lobby[0m[2m:[0m room created [3mroom[0m[2m=[0m1 [3mplayers[0m[2m=[0m4
+[2m2026-10-30T08:00:43.074186Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m connection closed [3mconn[0m[2m=[0m1
+[2m2026-10-30T08:00:43.118602Z[0m [33m WARN[0m [2mgame_server[0m[2m:[0m client handler error [3mconn[0m[2m=[0m6 [3merror[0m[2m=[0mUnauthorized: internal command is not available to clients
+[2m2026-10-30T08:00:53.241624Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m content ready [3mpackages[0m[2m=[0m0 [3mextensions[0m[2m=[0m0 [3mcontent_lock[0m[2m=[0ma6cd5606ddabd11575f25d991b9410418047ca7c2a91fbf1068c1cd747111415
+[2m2026-10-30T08:00:53.242228Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m native content ready [3mpackages[0m[2m=[0m0
+[2m2026-10-30T08:00:53.294462Z[0m [32m INFO[0m [2mgame_server::lobby[0m[2m:[0m 原生房间已从落盘恢复 [3mroom[0m[2m=[0m1
+[2m2026-10-30T08:00:53.294866Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m 已恢复落盘原生房间 [3mrooms[0m[2m=[0m1
+[2m2026-10-30T08:00:53.295310Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m game-server listening [3maddr[0m[2m=[0m127.0.0.1:17887

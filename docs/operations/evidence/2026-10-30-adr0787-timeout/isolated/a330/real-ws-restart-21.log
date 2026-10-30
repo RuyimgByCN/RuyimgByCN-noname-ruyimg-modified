@@ -1,0 +1,1 @@
+{"command": ["node", "../evidence/a330/real-ws.mjs", "../evidence/a330/real330-21", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/game-server"], "exit": 0, "locked_seconds": 10.816141166986199, "disk_free_bytes": 161191038976}

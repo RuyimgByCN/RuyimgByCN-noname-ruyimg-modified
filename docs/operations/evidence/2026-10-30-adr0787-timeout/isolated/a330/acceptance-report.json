@@ -1,0 +1,143 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Implemented only approved ADR0787 A,329→330/WS5→6; archive105/ABI758 retained; no package or C331/332 changes. Workspace6889/0/77 and full preflight21/21 exit0."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "candidate.patch reverse check passes;56 file SHA manifest; complete command-index with original failures; actual WS/SIGKILL/WAL/UI/old-version rejection and fresh WASM artifacts available."
+    }
+  ],
+  "changedFiles": [
+    "apps/game-server/src/lobby.rs",
+    "apps/game-server/src/main.rs",
+    "apps/game-server/src/native_room_store/tests.rs",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/authority.rs",
+    "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+    "apps/game-server/src/native_ws_e2e/double_failure.rs",
+    "apps/game-server/src/native_ws_e2e/durability.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs",
+    "apps/game-server/src/native_ws_e2e/referee.rs",
+    "apps/game-server/src/room.rs",
+    "apps/game-server/src/room_native.rs",
+    "apps/game-server/src/room_native/timeout.rs",
+    "apps/game-server/src/room_native/wal.rs",
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/src/room_native_actor/durability.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/game-server/src/session.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/fixtures/adr0787-room329.json",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/tests/nc09_native_durability.rs",
+    "apps/game-server/tests/nc09_native_room_session.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/nc09_referee_projection.rs",
+    "apps/web-client/scripts/nc12-online-rtt.mjs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/engine/observerMetadata.ts",
+    "apps/web-client/src/types/engine.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "apps/web-client/src/views/HomeView.vue",
+    "crates/engine-api/src/choice.rs",
+    "crates/engine-api/src/command.rs",
+    "crates/engine-api/src/version.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "crates/engine-core/src/snapshot.rs",
+    "crates/engine-native-content/src/content/standard.rs",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native/src/engine.rs",
+    "crates/engine-native/src/engine/apply_command.rs",
+    "crates/engine-native/src/engine/commands.rs",
+    "crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "crates/engine-native/tests/pa12_tag656_version.rs",
+    "crates/engine-native/tests/replay_scenarios.rs",
+    "crates/engine-protocol/src/lib.rs",
+    "crates/engine-protocol/src/messages.rs",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/README.md"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/src/room_native/wal.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/fixtures/adr0787-room329.json",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/tests/nc09_native_durability.rs",
+    "apps/game-server/tests/nc09_native_room_session.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/nc09_referee_projection.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "crates/engine-native/tests/pa12_tag656_version.rs",
+    "crates/engine-native/tests/replay_scenarios.rs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "result": "passed",
+      "summary": "1706 passed,0 failed,75 ignored; native3-12.log; also included in final workspace."
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6889 passed,0 failed,77 ignored; workspace-final-36.log,exit0. Earlier full failures retained."
+    },
+    {
+      "command": "RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "strict-native3-19.log,exit0."
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "preflight-final-30.log,21/21,exit0. Initial19/21 topology failure retained; temporary canonical links removed."
+    },
+    {
+      "command": "current frontend155 tests/typecheck; actual final330 WASM Worker82, full archive parity, five windows and J2 matrices; Chrome UI and WS5 reverse rejection",
+      "result": "passed",
+      "summary": "post-wasm-final-38.log,frontend-final-39.log,browser-oldserver-37.log; command-index.json has exact argv/exit/log."
+    },
+    {
+      "command": "actual server10-second room+WS+SIGKILL crossing deadline+reconnect+forged/zero/WS5/noHello+timeout-first race",
+      "result": "passed",
+      "summary": "real-ws-final-29.log; real330-final/{before-kill,after-restart,wire,report}.json."
+    }
+  ],
+  "validationOutput": [
+    "workspace6889/0/77",
+    "native3 1706/0/75",
+    "frontend155/0; Worker82/0",
+    "five windows75 states/270 seat checks/35 commands/40 byte restarts",
+    "J2 36 scenarios/189 checkpoints/114 retries; complete archive equality",
+    "full preflight21/21; layering0; source lines passed; no staged files"
+  ],
+  "residualRisks": [
+    "Independent supervisor source review and merged-main combined acceptance remain pending; no commit or integration performed.",
+    "Simple authorized minimum-choice policy is not NC10 AI quality acceptance; absolute deadlines rely on server Unix clock; WAL segments compact at confirmed checkpoints.",
+    "Physical-device/CI/37-source package completion and C331/332 were outside this batch."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Explicit TimeoutAction shares Answer validation; durable typed actual-command WAL and deadline/managed metadata live in the existing room transaction; bounded actor scheduling and WS6 configuration/countdown/managed UI are connected. Real329 archive and WS5 reader samples retained.",
+  "reviewFindings": [
+    "No known source blocker from worker self-review; required independent supervisor review remains open."
+  ],
+  "manualNotes": "Both provider SSE failures were resumed in place. All original test/compile/probe failures retained. Temporary readonly links and autofix guard removed at final cleanup; stage3 cache no longer needed by worker, final binary/WASM/web artifacts copied to evidence, parent may retire after review."
+}

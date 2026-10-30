@@ -1,0 +1,6 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.010s
+
+OK
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb", "python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "exit": 0, "locked_seconds": 0.07143312500556931, "disk_free_bytes": 142109810688}

@@ -1,0 +1,78 @@
+{
+  "started_utc": "2026-10-30T11:59:06.999805+00:00",
+  "accepted_commit": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "accepted_tree": "445e25cd7461da580e4bcd12c11a429420cb257f",
+  "push_attempts": 1,
+  "hooks_before": {
+    "original_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_sha256": "7af2deb960d1f482e98a6b8a08cccadd9eafa0f3dc40d25f78aa15ee497aa6bf",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "local_head_before": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "local_main_before": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "index_sha256_before": "cb8fc32c9caedae9927416f48ae375da5e9ccedc8533d6a765792335fb5b1d30",
+  "committed_ci_sha256": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+  },
+  "tree_counts": {
+    "tracked": 41879,
+    "dist": 37,
+    "evidence": 9207
+  },
+  "remote_before_exit": 0,
+  "elapsed_seconds": 671.3938334159902,
+  "remote_before_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "hooks_immediately_before_push": {
+    "original_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_sha256": "7af2deb960d1f482e98a6b8a08cccadd9eafa0f3dc40d25f78aa15ee497aa6bf",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "preflight_passed": true,
+  "push_command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "git",
+    "-c",
+    "credential.helper=",
+    "-c",
+    "credential.helper=!gh auth git-credential",
+    "-c",
+    "pack.threads=2",
+    "-c",
+    "core.hooksPath=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-decision25-scoped-hooks-2do3mk5s",
+    "push",
+    "--progress",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "9dbc65530feb695688d3160dc38b6cf64ad39ecd:refs/heads/native-convergence"
+  ],
+  "push_pid": 29891,
+  "push_exit": 0,
+  "remote_after_exit": 0,
+  "remote_after_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "9dbc65530feb695688d3160dc38b6cf64ad39ecd"
+  },
+  "remote_verified": true,
+  "actions_runs_exit": 0,
+  "actions_total_count": 0,
+  "actions_runs": [],
+  "hooks_after": {
+    "original_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_sha256": "7af2deb960d1f482e98a6b8a08cccadd9eafa0f3dc40d25f78aa15ee497aa6bf",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "local_head_after": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "local_main_after": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "index_sha256_after": "cb8fc32c9caedae9927416f48ae375da5e9ccedc8533d6a765792335fb5b1d30",
+  "no_staged_files": true,
+  "finished_utc": "2026-10-30T12:10:18.390316+00:00"
+}

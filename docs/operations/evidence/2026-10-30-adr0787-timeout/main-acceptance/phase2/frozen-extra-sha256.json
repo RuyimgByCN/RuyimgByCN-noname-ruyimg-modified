@@ -1,0 +1,6 @@
+{
+  "apps/game-server/tests/support/ws5_metadata_readers.rs": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+  "apps/web-client/scripts/approved-b-old-reader.ts": "b84da7fb4a4957113049cb50e100c2bdb338470979d2b3d8da131847c7b8dc2f",
+  "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+  "docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json": "86c0dc473253a769c906f59a0626755d46aa21f672827749d565d87089e77367"
+}

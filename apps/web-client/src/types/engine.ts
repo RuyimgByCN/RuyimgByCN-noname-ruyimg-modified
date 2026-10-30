@@ -87,6 +87,7 @@ export interface ObserverSnapshot {
 }
 
 export interface ChoiceRequest {
+  deadline_unix_ms?: number;
   choice_id: number;
   observer: number;
   options?: { token: number; label_key: string }[];

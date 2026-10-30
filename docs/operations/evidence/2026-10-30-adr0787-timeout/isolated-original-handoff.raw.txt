@@ -1,0 +1,182 @@
+Implemented ADR0787 A：原生选择超时、耐久托管、真实命令WAL及WS6／网页展示。隔离候选已完整验证，可交父独立源码审查；未暂存、未提交、未集成、未push。基线 `255bbfbd7f6916ee77bd29799826a225bd10871f`，规则330／存档105／原生宿主ABI758／WS6，仅A，未提前C331或改命332。
+
+Changed files: 56个，全部每file SHA见 [checkpoint-source.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/checkpoint-source.json)。纯base→candidate补丁 [candidate.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/candidate.patch)，SHA256 `4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81`，`git apply --check --reverse --binary`通过。包／冻结锁没有源码变更；真实329房间JSON夹具保持原checksum并按RuleVersionMismatch拒绝，冻结WS5 reader源码保持原SHA，历史WS5字节样本显式保留header5。
+
+实现沿用现有facade→content→kernel和单写actor：内部TimeoutAction与Answer共用观察者、候选／数量、revision、dedup和故障回滚；实际actor／expected_revision／dedup／选值／接受后revision及hash用穷举DTO写入同一房间JSON事务。timeout/config/managed/deadline/WAL和玩家收据均随checkpoint回滚，commit后才广播。恢复按原命令逐条重放、校验最终完整归档；唯一归一字段是既有安全令牌轮换auth_generation，显式Recover仍正常轮换，磁盘恢复不重复轮换。自动后继只用授权PolicyInput的最少合法项Answer／NextPhase，每条归还actor调度。绝对Unix期限落盘，进程内Tokio单调计时；停机计入，重连、同窗明将不续时；新合法人工操作／有效重连清托管，非法动作与旧收据不清。
+
+Validation（所有命令原始退出均保留于 [command-index.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/command-index.json)／[commands.jsonl](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/commands.jsonl)）：
+
+| 范围 | 最终真实结果 | 原始证据 |
+|---|---|---|
+| 原生三包 | 1706/0/75 | native3-12.log；最终workspace也包含 |
+| 完整workspace | **6889/0/77，exit0** | workspace-final-36.log |
+| 严格native3 all-targets | exit0，-Dwarnings | strict-native3-19.log |
+| 完整preflight | **21/21，exit0** | preflight-final-30.log |
+| 分层／源码门禁 | upward references0；8983文件行数门禁通过；源码门禁单测2项 | layering.log、source-lines-final.log、source-lines-unittest.log |
+| 当前前端 | 155/0；typecheck exit0；own Vite runner build exit0 | frontend-all-direct-1.log、typecheck-final.log、frontend-final-39.log |
+| 最终fresh330 WASM／Worker | 82/0 | wasm-final-34.log、post-wasm-final-38.log |
+| TimeoutAction／WASM Answer | 同选值1906归档字节、hash、事件码、四席恢复投影全部相等；测试使用已有WASM命令计数约定做精确字节对照，服务端WAL另按真实dedup回放 | timeout-parity.json、timeout-wasm-final.json |
+| 当前五个机器窗口 | 75状态／270座位／35命令／40次归档重启，0失败 | post-wasm-final-38.log |
+| 当前J2真实VM矩阵 | 36场景／189检查点／114重试，完整归档相等 | j2-wasm-final.json |
+| 正式native/WASM轨迹及旧线 | exit0；ALL CROSS-TARGET CHECKS PASSED | cross-target-24.log、legacy-cross-28.log |
+| 真实330 server／WS／跨进程 | 10秒配置、有效重连不续时、SIGKILL停机跨截止后恰1条TimeoutAction；actual actor/revision/dedup/selection/hash入WAL；timeout-first人工旧答拒绝；WS5／0／未Hello／伪造控制拒绝 | real330-final/report.json、wire.json、before-kill.json、after-restart.json |
+| 真实当前Chrome产品 | 五档下拉、10秒创建、当前倒计时、到时托管；实际WAL；console异常0 | browser-final/report.json及config/countdown/managed.png |
+| 真实反向兼容拒绝 | 当前网页连接保留329／WS5旧服，显示“服务端协议版本不兼容：需要WS6”，异常0 | browser-oldserver-37/report.json及截图 |
+
+真正先红保留 [red-actor.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/red-actor.log)：基线329等待31秒仍不推进，exit101；330同默认actor用例转绿。五档／默认／非法配置、人工优先与超时优先、同窗RevealGeneral不续时、重复收据与非法动作不解除、真实后继托管让出人类快照、六类ChoiceOption DTO、WAL篡改、旧档／缺失元数据拒绝及全部存储阶段／补偿双故障都有当前回归。可信Referee及session membership保护保留，完整workspace中的真实WS Referee只读／恢复／重连测试通过。
+
+初次失败没有被改写：原生golden先失败，保留新增动作而只回退版本329时14个旧golden全匹配，恢复330后据实际输出重录；[golden-source.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/golden-source.json)保存前后值。workspace中先后捕获Peer拆分方法可见性编译错、漏改当前协议常量断言5，以及我新增RevealGeneral测试误用两人身份局的夹具错，逐项修正后最终完整6889/0/77；另有codec／注入测试夹具、外部证明脚本的首次失败，全部在命令索引与原日志。preflight首跑19/21只因隔离父目录缺canonical两份规范lookup，父明确批准临时只读symlink后完整补跑21/21；最终两条链接已删除，最终文档事实更新后1901文件本地链接0坏链。两次provider SSE解析失败及沿同会话恢复记录在resume.json，不算测试pass。所有warnings保留，未做无关lint修复。
+
+原始329 server SHA为 `9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489`。最终独立330 server、fresh330 native-pkg和Web最终产物已复制到 [artifacts](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/artifacts)／ui-dist-final，全部SHA见 [final-artifact-sha256.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/final-artifact-sha256.json)。各build仅使用正式交接stage3 target、incremental0／jobs2及全局重型锁；wasm preload只改child CARGO_TARGET_DIR，保留原argv／profile／codegen。Vite使用runner及own正常__dirname，未把构建写穿canonical node_modules。
+
+Open risks/questions: 没有已知源码阻断，独立review仍必须由父完成；这是隔离功能验收，不是main组合验收。最小合法代答不等于强AI／NC10质量，Unix绝对期限依赖服务端校时，WAL按确认检查点压缩不等于永久录像。未跑物理真机、GitHub CI或37来源整包；未缩减NC09／NC10原门槛。
+
+Recommended next step: 父对56文件纯patch独立review，按实际main资源增量重做合并后的完整组合验收，再由父集成／提交。本线程没有source交叉写入、stage、commit、push或新remote。临时archive／node_modules／规范lookup链接和format/autofix guard均移除；自动runner初次越界生成的own3.1GiB target已停止回收，原日志移到evidence。最终own target不存在，incremental0字节；无本任务活动重型进程。stage3 cache后续worker不再使用，最终二进制与WASM已保全，父可在独立review后安全退休；详见cleanup.json。
+
+跳过：C331、改命332、强AI、真机／CI／37来源整包。风险：仍须父独立源码review及main合并后组合验收。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Implemented only approved ADR0787 A,329→330/WS5→6; archive105/ABI758 retained; no package or C331/332 changes. Workspace6889/0/77 and full preflight21/21 exit0."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "candidate.patch reverse check passes;56 file SHA manifest; complete command-index with original failures; actual WS/SIGKILL/WAL/UI/old-version rejection and fresh WASM artifacts available."
+    }
+  ],
+  "changedFiles": [
+    "apps/game-server/src/lobby.rs",
+    "apps/game-server/src/main.rs",
+    "apps/game-server/src/native_room_store/tests.rs",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/authority.rs",
+    "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+    "apps/game-server/src/native_ws_e2e/double_failure.rs",
+    "apps/game-server/src/native_ws_e2e/durability.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs",
+    "apps/game-server/src/native_ws_e2e/referee.rs",
+    "apps/game-server/src/room.rs",
+    "apps/game-server/src/room_native.rs",
+    "apps/game-server/src/room_native/timeout.rs",
+    "apps/game-server/src/room_native/wal.rs",
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/src/room_native_actor/durability.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/game-server/src/session.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/fixtures/adr0787-room329.json",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/tests/nc09_native_durability.rs",
+    "apps/game-server/tests/nc09_native_room_session.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/nc09_referee_projection.rs",
+    "apps/web-client/scripts/nc12-online-rtt.mjs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/engine/observerMetadata.ts",
+    "apps/web-client/src/types/engine.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "apps/web-client/src/views/HomeView.vue",
+    "crates/engine-api/src/choice.rs",
+    "crates/engine-api/src/command.rs",
+    "crates/engine-api/src/version.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "crates/engine-core/src/snapshot.rs",
+    "crates/engine-native-content/src/content/standard.rs",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native/src/engine.rs",
+    "crates/engine-native/src/engine/apply_command.rs",
+    "crates/engine-native/src/engine/commands.rs",
+    "crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "crates/engine-native/tests/pa12_tag656_version.rs",
+    "crates/engine-native/tests/replay_scenarios.rs",
+    "crates/engine-protocol/src/lib.rs",
+    "crates/engine-protocol/src/messages.rs",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-30-adr0787-timeout/README.md"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/src/room_native/wal.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/fixtures/adr0787-room329.json",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/tests/nc09_native_durability.rs",
+    "apps/game-server/tests/nc09_native_room_session.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/nc09_referee_projection.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "crates/engine-native/tests/adr0786_j2_active_bridge.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "crates/engine-native/tests/pa12_tag656_version.rs",
+    "crates/engine-native/tests/replay_scenarios.rs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "result": "passed",
+      "summary": "1706 passed,0 failed,75 ignored; native3-12.log; also included in final workspace."
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6889 passed,0 failed,77 ignored; workspace-final-36.log,exit0. Earlier full failures retained."
+    },
+    {
+      "command": "RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "strict-native3-19.log,exit0."
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "preflight-final-30.log,21/21,exit0. Initial19/21 topology failure retained; temporary canonical links removed."
+    },
+    {
+      "command": "current frontend155 tests/typecheck; actual final330 WASM Worker82, full archive parity, five windows and J2 matrices; Chrome UI and WS5 reverse rejection",
+      "result": "passed",
+      "summary": "post-wasm-final-38.log,frontend-final-39.log,browser-oldserver-37.log; command-index.json has exact argv/exit/log."
+    },
+    {
+      "command": "actual server10-second room+WS+SIGKILL crossing deadline+reconnect+forged/zero/WS5/noHello+timeout-first race",
+      "result": "passed",
+      "summary": "real-ws-final-29.log; real330-final/{before-kill,after-restart,wire,report}.json."
+    }
+  ],
+  "validationOutput": [
+    "workspace6889/0/77",
+    "native3 1706/0/75",
+    "frontend155/0; Worker82/0",
+    "five windows75 states/270 seat checks/35 commands/40 byte restarts",
+    "J2 36 scenarios/189 checkpoints/114 retries; complete archive equality",
+    "full preflight21/21; layering0; source lines passed; no staged files"
+  ],
+  "residualRisks": [
+    "Independent supervisor source review and merged-main combined acceptance remain pending; no commit or integration performed.",
+    "Simple authorized minimum-choice policy is not NC10 AI quality acceptance; absolute deadlines rely on server Unix clock; WAL segments compact at confirmed checkpoints.",
+    "Physical-device/CI/37-source package completion and C331/332 were outside this batch."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Explicit TimeoutAction shares Answer validation; durable typed actual-command WAL and deadline/managed metadata live in the existing room transaction; bounded actor scheduling and WS6 configuration/countdown/managed UI are connected. Real329 archive and WS5 reader samples retained.",
+  "reviewFindings": [
+    "No known source blocker from worker self-review; required independent supervisor review remains open."
+  ],
+  "manualNotes": "Both provider SSE failures were resumed in place. All original test/compile/probe failures retained. Temporary readonly links and autofix guard removed at final cleanup; stage3 cache no longer needed by worker, final binary/WASM/web artifacts copied to evidence, parent may retire after review."
+}
+```

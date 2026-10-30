@@ -150,7 +150,12 @@ fn nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions() {
     let mut room = session_with_choice();
     let open = room.engine().open_choice().unwrap().clone();
     let joined = room.join(1, Some(open.observer), None).unwrap();
-    let choice = native_view::choice_for(room.engine(), joined.member.role.into(), Some(joined.member.player_id)).unwrap();
+    let choice = native_view::choice_for(
+        room.engine(),
+        joined.member.role.into(),
+        Some(joined.member.player_id),
+    )
+    .unwrap();
     assert_eq!(
         choice.options.iter().map(|o| o.token).collect::<Vec<_>>(),
         (0..open.spec.options.len() as u32).collect::<Vec<_>>()
@@ -265,14 +270,6 @@ fn nc09_room_wal_replay_recovers_identically() {
         .expect("装载");
 
     let mut room = session(20261410, 4);
-    let mut persist = room_native::NativeRoomPersist::new();
-
-    // 快照点：初始状态
-    let start_rev = room.engine().revision();
-    persist.put_snapshot(
-        start_rev,
-        engine_native::archive::encode_archive(&room.engine().save()),
-    );
 
     // 逐命令推进并记录 WAL（只记录被接受的动作）
     let mut accepted = 0usize;
@@ -293,12 +290,6 @@ fn nc09_room_wal_replay_recovers_identically() {
         } = out
         {
             if new_revision > before {
-                persist.record(
-                    new_revision,
-                    seat,
-                    engine_native::GameAction::NextPhase,
-                    state_hash,
-                );
                 accepted += 1;
             }
         }
@@ -311,28 +302,35 @@ fn nc09_room_wal_replay_recovers_identically() {
     let final_rev = room.engine().revision();
     let final_hash = room.engine().state_hash();
 
-    // 从快照重放 WAL → 修订与摘要必须一致
-    let packs = [&loaded.pack];
-    let (restored, replayed) = persist.recover(start_rev, &packs).expect("WAL 重放恢复");
-    assert_eq!(replayed, accepted, "重放条数一致");
-    assert_eq!(restored.revision(), final_rev, "重放后修订一致");
-    assert_eq!(restored.state_hash(), final_hash, "重放后摘要一致");
+    // The actor and disk now share the exact recorded commands and dedup values.
+    let state = room.export_state(&room.snapshot_hex());
+    assert_eq!(state.wal.as_ref().unwrap().entries.len(), accepted);
+    let restored = NativeRoomSession::from_saved(&state, vec![loaded.pack]).expect("WAL 重放恢复");
+    assert_eq!(restored.engine().revision(), final_rev, "重放后修订一致");
+    assert_eq!(restored.engine().state_hash(), final_hash, "重放后摘要一致");
+    let mut actual = restored.engine().save();
+    actual.auth_generation = room.engine().save().auth_generation;
+    assert_eq!(
+        engine_native::archive::encode_archive(&actual),
+        engine_native::archive::encode_archive(&room.engine().save())
+    );
 
-    // 受控变异：篡改一条 WAL 的期望摘要 → 必须明确失败（录像不可信）
-    let mut tampered = room_native::NativeRoomPersist::new();
-    for (i, (rev, seat, action, hash)) in persist.wal.iter().enumerate() {
-        let mut h = *hash;
-        if i == 0 {
-            h[0] ^= 0xFF; // 篡改期望摘要
-        }
-        tampered.record(*rev, *seat, action.clone(), h);
-    }
-    tampered.snapshots = persist.snapshots.clone();
-    let err = match tampered.recover(start_rev, &packs) {
+    // 篡改一条 WAL 期望摘要仍须明确失败，不能只信最终完整快照。
+    let mut tampered = state;
+    tampered.wal.as_mut().unwrap().entries[0].state_hash[0] ^= 0xff;
+    let error = match NativeRoomSession::from_saved(
+        &tampered,
+        vec![
+            content
+                .load_scoped(Some("upstream-noname"), "shahai-swd")
+                .unwrap()
+                .pack,
+        ],
+    ) {
         Ok(_) => panic!("摘要不符必须失败"),
-        Err(e) => e,
+        Err(error) => error,
     };
-    assert!(err.contains("摘要不一致"), "{err}");
+    assert!(error.contains("摘要不一致"), "{error}");
 }
 
 /// NC05/NC09 房间级选将：原生后端支持（按入座座位、观战者拒绝、未知武将报错、
@@ -577,6 +575,8 @@ async fn nc09_room_store_is_removed_on_match_end() {
         checksum: String::new(),
         state: room_native::NativeRoomState {
             command_receipts: Vec::new(),
+            timeout: None,
+            wal: None,
             snapshot_hex: String::new(),
             max_seats: 4,
             started: true,
@@ -622,6 +622,8 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
         checksum: String::new(),
         state: room_native::NativeRoomState {
             command_receipts: Vec::new(),
+            timeout: None,
+            wal: None,
             snapshot_hex: String::new(),
             max_seats: 4,
             started: false,
@@ -747,10 +749,60 @@ fn nc09_choice_visibility_requires_trusted_role_even_with_a_valid_seat() {
     let room = session_with_choice();
     let open = room.engine().open_choice().unwrap();
     let owner = ApiPlayerId::new(open.observer as u32 + 1);
-    for seat in [None, Some(ApiPlayerId::NONE), Some(owner), Some(ApiPlayerId::new(257))] {
-        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat).is_none());
-        let choice = native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
+    for seat in [
+        None,
+        Some(ApiPlayerId::NONE),
+        Some(owner),
+        Some(ApiPlayerId::new(257)),
+    ] {
+        assert!(
+            native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat)
+                .is_none()
+        );
+        let choice =
+            native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
         assert_eq!(choice.observer, owner);
         assert_eq!(choice.options.len(), open.spec.options.len());
     }
+}
+
+// Temporarily appended to nc09_native_room_session.rs, removed after capturing red.
+#[tokio::test]
+async fn nc09_timeout_default_deadline_answers_pending_choice() {
+    let room = session_with_choice();
+    let choice = room.engine().open_choice().unwrap().clone();
+    let revision = room.engine().revision();
+    let handle = room_native_actor::spawn_room_native(98, room, 8, 4);
+    let (tx, mut rx) = mpsc::channel(32);
+    let (reply, response) = tokio::sync::oneshot::channel();
+    handle
+        .send(room::RoomMsg::Join {
+            connection_id: 1,
+            display_name: "timeout-observer".into(),
+            preferred_seat: Some(choice.observer),
+            reconnect_token: None,
+            password: String::new(),
+            outbound: session::Outbound::new(tx),
+            reply,
+        })
+        .await
+        .unwrap();
+    assert!(response.await.unwrap().unwrap().choice.is_some());
+    let answer = tokio::time::timeout(std::time::Duration::from_secs(31), async {
+        while let Some(message) = rx.recv().await {
+            if let engine_protocol::ServerMessage::CommandOutcome { view, .. } =
+                serde_json::from_str(&message).unwrap()
+            {
+                if view.revision > revision {
+                    return;
+                }
+            }
+        }
+        panic!("actor closed before the choice was answered");
+    })
+    .await;
+    assert!(
+        answer.is_ok(),
+        "default 30-second room timeout must submit AI answer through ordinary actor command flow"
+    );
 }

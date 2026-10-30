@@ -623,10 +623,12 @@ async fn broadcast_roster(
             player_id: m.player_id.raw(),
             display_name: m.display_name.clone(),
             connected: m.connected,
+            managed: false,
         })
         .collect();
     seats.sort_by_key(|s| s.seat);
     let msg = ServerMessage::RoomRoster {
+        choice_timeout_secs: None,
         room_id,
         seats,
         started,

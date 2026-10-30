@@ -35,7 +35,7 @@ pub(super) fn saved_state(cfg: &ServerConfig, record: &StoredRoom, token: &str) 
         legal: player
             .map(|id| crate::native_view::legal_actions_for(session.engine(), id))
             .unwrap_or_default(),
-        choice: crate::native_view::choice_for(session.engine(), member.role.into(), player),
+        choice: session.choice_for(member.role.into(), player),
     }
 }
 
@@ -200,6 +200,7 @@ fn native_extensions_ws_double_initial_failure_restores_only_committed_creation(
                     .fail_next_write_with_compensation(primary, compensation);
                 let mut peer = Peer::connect(&server).await;
                 peer.send(ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed: SEED,
                     password: PASSWORD.into(),

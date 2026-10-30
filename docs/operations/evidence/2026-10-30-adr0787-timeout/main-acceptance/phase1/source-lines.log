@@ -1,0 +1,2 @@
+Source line limit passed: 8989 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase1/readonly.sb", "python3", "-B", "scripts/check-source-lines.py"], "exit": 0, "locked_seconds": 3.9238158329972066, "disk_free_bytes": 142150721536}

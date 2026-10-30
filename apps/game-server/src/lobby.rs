@@ -316,20 +316,36 @@ impl Lobby {
         session: &mut Session,
         msg: ClientMessage,
     ) -> Result<(), HandlerError> {
+        if !matches!(&msg, ClientMessage::Hello { .. }) && !session.handshake_complete {
+            return Err(HandlerError::new(
+                ErrorCode::VersionMismatch,
+                "WS6 Hello required",
+            ));
+        }
+        let header = match &msg {
+            ClientMessage::SubmitCommand { header, .. }
+            | ClientMessage::RequestSnapshot { header, .. }
+            | ClientMessage::Heartbeat { header } => Some(header),
+            _ => None,
+        };
+        if header.is_some_and(|h| h.protocol_version != NETWORK_PROTOCOL_VERSION) {
+            return Err(HandlerError::new(
+                ErrorCode::VersionMismatch,
+                "protocol version mismatch",
+            ));
+        }
         match msg {
             ClientMessage::Hello {
                 versions,
                 display_name,
             } => {
-                if versions.network_protocol != 0
-                    && versions.network_protocol != NETWORK_PROTOCOL_VERSION
-                {
-                    // allow 0 as "unspecified"
+                if versions.network_protocol != NETWORK_PROTOCOL_VERSION {
                     return Err(HandlerError::new(
                         ErrorCode::VersionMismatch,
                         "protocol version mismatch",
                     ));
                 }
+                session.handshake_complete = true;
                 if !display_name.is_empty() {
                     session.display_name = sanitize_name(&display_name);
                 }
@@ -340,7 +356,17 @@ impl Lobby {
                 players,
                 seed,
                 password,
+                choice_timeout_secs,
             } => {
+                let secs = choice_timeout_secs.unwrap_or(30);
+                crate::room_native::validate_timeout_secs(secs)
+                    .map_err(|e| HandlerError::new(ErrorCode::BadMessage, e))?;
+                if !self.cfg.native_rooms && secs != 30 {
+                    return Err(HandlerError::new(
+                        ErrorCode::BadMessage,
+                        "legacy rooms do not support choice timeouts",
+                    ));
+                }
                 if !(2..=8).contains(&players) {
                     return Err(HandlerError::new(
                         ErrorCode::BadMessage,
@@ -380,6 +406,7 @@ impl Lobby {
                         &self.cfg.native_room_namespace,
                         &self.cfg.native_room_packages,
                         self.native_room_store.clone(),
+                        secs,
                     )
                     .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
                     let handle = match native_handle {
@@ -465,6 +492,16 @@ impl Lobby {
                 idempotency_key,
                 replay,
             } => {
+                if matches!(
+                    command.kind,
+                    engine_api::CommandKind::TimeoutAction { .. }
+                        | engine_api::CommandKind::AdminAbortMatch { .. }
+                ) {
+                    return Err(HandlerError::new(
+                        ErrorCode::Unauthorized,
+                        "internal command is not available to clients",
+                    ));
+                }
                 let room_id = session
                     .room_id
                     .ok_or_else(|| HandlerError::new(ErrorCode::NotInRoom, "not in room"))?;

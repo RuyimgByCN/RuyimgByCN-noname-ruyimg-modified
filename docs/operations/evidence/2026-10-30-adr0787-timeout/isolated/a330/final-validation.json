@@ -1,0 +1,81 @@
+{
+  "time": "2026-10-30T16:34:49.784670",
+  "base": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "rules": 330,
+  "archive": 105,
+  "nativeAbi": 758,
+  "ws": 6,
+  "workspacePackageVersion": "0.1.0 unchanged",
+  "contentPackageFilesChanged": [],
+  "gates": {
+    "native3-12": {
+      "exit": 0,
+      "counts": [
+        1706,
+        0,
+        75
+      ]
+    },
+    "strict-native3-19": {
+      "exit": 0,
+      "counts": null
+    },
+    "cross-target-24": {
+      "exit": 0,
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    "preflight-final-30": {
+      "exit": 0,
+      "counts": null
+    },
+    "current-window-matrices-31": {
+      "exit": 0,
+      "counts": [
+        19,
+        0,
+        0
+      ]
+    },
+    "workspace-final-36": {
+      "exit": 0,
+      "counts": [
+        6889,
+        0,
+        77
+      ]
+    },
+    "browser-oldserver-37": {
+      "exit": 0,
+      "counts": null
+    },
+    "post-wasm-final-38": {
+      "exit": 0,
+      "counts": null
+    },
+    "frontend-final-39": {
+      "exit": 0,
+      "counts": null
+    },
+    "real-ws-final-29": {
+      "exit": 0,
+      "counts": null
+    },
+    "wasm-final-34": {
+      "exit": 0,
+      "counts": null
+    },
+    "legacy-cross-28": {
+      "exit": 0,
+      "counts": null
+    }
+  },
+  "sourceFreezeDrift": [],
+  "files": 56,
+  "noStagedFiles": true,
+  "review": "ready for independent supervisor source review; not integrated or committed",
+  "scope": "ADR0787 A only; C331 and332 untouched"
+}

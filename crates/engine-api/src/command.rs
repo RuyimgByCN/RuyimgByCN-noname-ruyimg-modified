@@ -17,6 +17,7 @@ pub struct ExpectedRevision(pub u64);
 ///
 /// Only accepted commands enter the deterministic command log.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Command {
     /// Submitting player (or system actor).
     pub actor: PlayerId,
@@ -30,6 +31,7 @@ pub struct Command {
 
 /// Command variants that advance (or attempt to advance) rule state.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum CommandKind {
     /// Create and start a match from configuration.
     StartGame {

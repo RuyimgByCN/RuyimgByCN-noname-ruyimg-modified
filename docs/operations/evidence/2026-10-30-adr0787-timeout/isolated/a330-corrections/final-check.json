@@ -1,0 +1,14 @@
+{
+  "time": "2026-10-30T17:40:21.534062",
+  "sourceDrift": [],
+  "sourcePaths": 56,
+  "noStagedFiles": true,
+  "ownedHeavyProcesses": [],
+  "sourceTargetExists": false,
+  "lookupLinksRemoved": true,
+  "guardRemoved": true,
+  "oldPatchPreserved": true,
+  "correctionPatchSha": "b2214851cea99c04e1cf53c8b7736fd8b8bba137a8086be76dbebc13581a5e29",
+  "totalPatchSha": "3ca2d2c777c3736377cdceb923b5be824678c94fe989c0334ca50733aea4f26f",
+  "cacheReleasedToParent": true
+}

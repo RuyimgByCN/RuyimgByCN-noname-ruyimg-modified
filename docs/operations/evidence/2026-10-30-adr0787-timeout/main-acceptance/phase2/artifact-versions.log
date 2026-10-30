@@ -1,0 +1,12 @@
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs:4
+for(const [key,[file,name]] of Object.entries(sources)){const text=fs.readFileSync(path.join(root,file),'utf8');versions[key]=Number(text.match(new RegExp('pub const '+name+':[^=]+=(\s*\d+);'))[1]);sourceHashes[file]=crypto.createHash('sha256').update(text).digest('hex');}
+                                                                                                                                                                                                 ^
+
+TypeError: Cannot read properties of null (reading '1')
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs:4:194
+    at ModuleJob.run (node:internal/modules/esm/module_job:447:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.4.0
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/version-gate.mjs"], "exit": 1, "locked_seconds": 0.03653829198447056, "disk_free_bytes": 137028030464}

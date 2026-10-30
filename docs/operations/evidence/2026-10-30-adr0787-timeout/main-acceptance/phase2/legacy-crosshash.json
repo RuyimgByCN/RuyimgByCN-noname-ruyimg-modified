@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "players": 4,
+      "seed": 42,
+      "nativeHash": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff",
+      "wasmHash": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff"
+    },
+    {
+      "players": 2,
+      "seed": 1,
+      "nativeHash": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8",
+      "wasmHash": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8"
+    }
+  ],
+  "manifestChain": "manifest_version=1\nsemantics=noname-next/semantics/v1\nsemantics_revision=255\nrule_ir=129\nvm_abi=3\nruleset=identity-standard\ncontent_lock=990e23c8a0988b1172eb54f5fcb1e2994f87a73572a8c1d3efc8a2131e5e507f\nrng_seed=42\neffect_budget=10000\ntrigger_budget=1000\nplayers=4\nmanifest_hash=3c859d6278d54521db4d1461338ad0035f109855ad38f1f554eef385e576a4d4\nrecords=1\ncommands=1\nchain=ok",
+  "skillVm": "package=content/standard/jianxiong.skill\ncontent_lock=f9ce2e7e8f329c3851249f9caacfbdb0ed51e505a00dfe62da4b28d3310effeb\nhand_before=6\ndamage_opened_choice=true\nhand_after=7\ngained_carrier=true\nok=true",
+  "conformance": "reused Phase1 currentmain ALLPASS; not rerun",
+  "productionWasmBuild": "production-legacy-build exact maintained script already ran",
+  "adaptation": "All original hash/manifest/chain/skillVM checks; omit redundant Phase1 conformance/build/installed rustup add"
+}

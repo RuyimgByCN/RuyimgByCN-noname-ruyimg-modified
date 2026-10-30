@@ -1,0 +1,6 @@
+{
+  "publicMirror": "Supervisor explicitly authorized production build-wasm.mjs existing public/pkg mirror after tracked/symlink check and old byte preservation; no other public/defaultdist paths allowed",
+  "derivedPackageVersions": "Supervisor confirmed standard330 vs nonzero content_lock derivedu64; current native catalog actualsamepacks lock plus BigInt exact decimal strings; no metadata removal",
+  "originalAliasInputIsolation": "parent-alias-input-isolation-confirmation.json actual12files all_equal checked beforeproducer writes",
+  "sourceChangesAuthorized": false
+}

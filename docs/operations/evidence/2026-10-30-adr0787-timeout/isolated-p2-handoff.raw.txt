@@ -1,0 +1,137 @@
+Implemented 独立审查指出的两个P2修正，均先实际红再修复验证。当前候选仍基于 `255bbfbd7f6916ee77bd29799826a225bd10871f`，规则330／存档105／ABI758／WS6不变；未暂存、提交、合并、push，未写main或其他worktree。
+
+Changed files: 相对已审查A候选只改6个原56内路径：
+
+- `apps/game-server/src/room_native_actor.rs`：Recover的durability.commit成功之后才清`paused_revision`，失败／requires_restart路径不放行。
+- `apps/game-server/tests/adr0787_timeout.rs`：注册真实actor自动写盘故障→失败Recover→成功Recover原窗恰重试一次，以及requires_restart不放行的回归；原choice／deadline／revision／WAL均有断言。
+- `apps/web-client/src/engine/networkClient.ts`：Hello之后立即发既有Heartbeat；按当前socket、header.conn_seq／room_id／protocol绑定Pong，计入RTT/2，以serverUnix锚点加performance.now单调经过时间估算。无匹配／重复／非法值／负RTT不能校准；断连、重连、dispose清空锚点。
+- `apps/web-client/src/views/BattleView.vue`：倒计时消费上述共享估算，250ms tick只触发重算；未校准显示“正在校准服务器时间…”，不造0秒／满时长，不发超时控制命令、不改deadline。
+- `apps/web-client/scripts/network-client.test.mjs`：直接提取实际BattleView计算做±60秒／正反跳时验证，覆盖Pong匹配、RTT、重复、旧连接、断连与原deadline余时重连。
+- `crates/engine-protocol/src/messages.rs`：仅把现有Pong字段注释从“monotonic”纠正为其现实现的Unix毫秒；没有新字段／schema／协议版本。
+
+补丁及SHA（两份均`git apply --check --reverse --binary`通过）：
+
+| 产物 | SHA256 |
+|---|---|
+| 原已审查56路径补丁，未覆盖 | `4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81` |
+| [纯P2修正补丁](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/p2-corrections.patch) | `b2214851cea99c04e1cf53c8b7736fd8b8bba137a8086be76dbebc13581a5e29` |
+| [base→当前完整56路径补丁](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/a330-total-with-p2.patch) | `3ca2d2c777c3736377cdceb923b5be824678c94fe989c0334ca50733aea4f26f` |
+
+当前全部56文件SHA、版本与原补丁身份：[total-source-sha256.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/total-source-sha256.json)。6个修正文件SHA及原审查候选影子副本分别在source-checkpoint.json、before/；原a330证据及4e94b补丁未覆盖。
+
+Validation：
+
+| 范围 | 真实结果 | 证据 |
+|---|---|---|
+| P2-1修前真实actor | 自动一次FileSync失败后Recover成功仍不重试，exit101 | recover-red.log |
+| P2-1修后真实actor | 失败Recover不放行；成功Recover不改原窗／原截止，恰1条原choice TimeoutAction；requires_restart阻断 | recover-green.log、recover-proof.json、已注册Rust回归 |
+| P2-2原实际页面计算 | 快60秒→0，慢60秒→70，期望10；exit1 | original-countdown-red.log；原countdown-red.log保留 |
+| P2-2原真实Chrome页面 | 快60秒显示“剩余0秒”，服务端窗口仍有10秒；exit1 | ui-skew-red.log、browser-red-fast/ |
+| P2-2新真实Chrome+当前330server | ±60秒均10秒；随后+1小时wall跳变仍正确；中途断连显示校准中；同窗重连剩余约6秒；原Unix deadline完全未变；每局1条实际TimeoutAction；console异常0 | ui-skew-green.log、browser-fast/report.json、browser-slow/report.json及各截图／wire.json |
+| 完整workspace | **6891/0/77，exit0** | full-workspace.log |
+| 服务端／协议专项 | **451/0/0，exit0**；包括actor、durability、真实WS、Referee只读与旧边界 | server-suite.log |
+| 前端Node／typecheck | **158/0**及typecheck exit0；原隔离155+3，不冒充main资源线计数 | frontend-final.log |
+| 私有Vite构建 | exit0；runner+正常own__dirname，没有bundle-config写穿共享node_modules | private-web-build.log、ui-dist/ |
+| strictnative3/all-targets | -Dwarnings，exit0 | strict-native3.log |
+| 完整preflight | **21/21，exit0**；最终source一次完整跑，无单项补跑替代 | full-preflight.log |
+| 源码门禁／层 | 8983文件行数门禁过；layer0 | source-lines-final.log、layering.log |
+
+确切argv／退出码／warnings与测试统计见 [command-index.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/command-index.json)及commands.jsonl；所有红／失败原日志保留，不把预期红说成pass。完整workspace中的77 ignored仍计ignored。Recover proof通过真实生产actor、实际RoomStore故障注入和个性化Outbound执行；Recover是内部宿主控制消息，本批没有新增公网恢复入口。
+
+本次没有改变native/kernel/content/native-wasm/engine-api的输入源码、Cargo文件、包、golden、冻结WS5 reader或旧329 server字节。未重跑旧WASM全矩阵；原最终WASM／Worker／矩阵的精确源码归属与artifactSHA写在 [wasm-provenance.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330-corrections/wasm-provenance.json)，仍引用原a330证明，不把本次Rust actor改动误记成新WASM构建。新330-p2 server独立副本与本次Web构建SHA在artifacts/和artifact-sha256.json。
+
+Open risks/questions: 两个P2根因已修且实际覆盖，仍待原独立reviewer复审确认；没有已知新的源码阻断。Pong估算采用RTT/2，网络不对称会影响显示精度，服务端deadline始终唯一权威。本隔离树不含main的资源／CI增量，父合并后仍须组合验收。
+
+Recommended next step: 原reviewer只读复审纯P2修正及对应红绿；随后父决定集成当前main、组合验收及提交。原56候选、4e94b补丁和所有旧proof保留。没有stage／commit／push／新remote／设置或他树写入；所有Rust命令复用专属stage3、incremental0／jobs2／全局锁。最终worker无需继续用stage3；新binary／Web产物已保全，父可在复审后退休或重新交接；临时只读lookup与guard已按cleanup.json移除，无source下新target，incremental0字节。
+
+跳过：未变化的旧WASM全矩阵、C331／改命332、物理设备／CI／37来源整包。风险：仍须原reviewer复审和父main组合验收。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Two reviewed P2 roots fixed in6 original56 paths. Recover pause clears only after successful durable commit; countdown uses existing matchedPong+RTT/2 server anchor and monotonic elapsed.330/105/758/WS6, fields, goldens, packages and frozen readers unchanged."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Registered real actor red101→green, readonly old-page0/70 red and actual browser0 red→±60s green; fullworkspace6891/0/77, server451/0/0, frontend158/0/typecheck/build, strict/preflight21/21; correction+total patches and all file SHA supplied."
+    }
+  ],
+  "changedFiles": [
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "crates/engine-protocol/src/messages.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/tests/adr0787_timeout.rs",
+    "apps/web-client/scripts/network-client.test.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p game-server --test adr0787_timeout recover_after_automatic_write_failure_retries_original_expired_choice_once -- --exact --nocapture",
+      "result": "failed",
+      "summary": "Expected pre-fix red: timeout after successful Recover,exit101; recover-red.log preserved."
+    },
+    {
+      "command": "cargo test --offline -p game-server --test adr0787_timeout recover_ -- --nocapture",
+      "result": "passed",
+      "summary": "Real actor retry, failedRecover/requires_restart protection and existing persist regression:3/0,exit0."
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6891 passed,0 failed,77 ignored; final source full run,exit0."
+    },
+    {
+      "command": "cargo test --offline -p game-server -p engine-protocol --no-fail-fast",
+      "result": "passed",
+      "summary": "451 passed,0 failed,0 ignored; includes actor/durability/realWS/Referee/compatibility."
+    },
+    {
+      "command": "RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "exit0."
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "21/21,exit0; canonical readonly lookup links removed afterward."
+    },
+    {
+      "command": "npm test && node_modules/.bin/vue-tsc --noEmit; Vite configLoader runner private build",
+      "result": "passed",
+      "summary": "158/0 frontend tests; typecheck/build exit0. Isolated tree excludes main resource increment."
+    },
+    {
+      "command": "Real Chrome/actual330 server at client wall-clock+60000/-60000, then+1hour jump and same-choice reconnect",
+      "result": "passed",
+      "summary": "Both display10sec then6sec after reconnect,deadline unchanged,uncalibrated visible,exactly1TimeoutAction each,console0; ui-skew-green.log."
+    }
+  ],
+  "validationOutput": [
+    "workspace6891/0/77",
+    "server+protocol451/0/0",
+    "frontend158/0; typecheck/build0",
+    "fullpreflight21/21; strictnative3 exit0; layering0; source line gate0",
+    "P2-1 actual automatic disk fault→failedRecover blocked→successfulRecover→one original-choice timeout retry",
+    "P2-2 oldactual page+60s shows0 and-60s shows70; corrected realUIboth10,midwindowreconnect6; serverdeadlineunchanged"
+  ],
+  "residualRisks": [
+    "Original independent reviewer must re-review these corrections; parent integration/main combined acceptance not performed.",
+    "Server time is an estimate corrected by RTT/2; asymmetric network delay bounds display precision, while server deadline remains sole authority.",
+    "Unchanged native/WASM input hashes are tied to preserved original artifacts/proofs; this correction did not rebuild or rerun unrelatedWASM matrices."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Six-path correction: one-line durable Recover release, ephemeral connection-bound Pong calibration and monotonic deadline display, registered actor/clock regressions, and correction of the existing Pong documentation frommonotonictoUnix milliseconds. Total candidate remains56 source paths.",
+  "reviewFindings": [
+    "Both reported P2 roots implemented and runtime-validated; no known remaining blocker from worker self-check; required original-reviewer gate pending."
+  ],
+  "manualNotes": "Original reviewed patch SHA4e94b51f6011ae6e8e91f1dd1db5f1dfe4b094455e72ffe705f7135d66d8eb81 and all original proofs preserved. No stage/commit/push/main writes. Final binary/private web artifacts preserved; worker no longer needs stage3 cache after re-review. Temporary own lookup links and guard removed at cleanup."
+}
+```

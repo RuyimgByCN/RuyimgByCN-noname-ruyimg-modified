@@ -1068,88 +1068,90 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
         "sha_dodge_then_damage",
         scenario_sha_dodge_then_damage,
         &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
-        "09899af8f1547fe186184a7b2eb335310d0ca4a2077261449473166093dfa911",
+        "4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d",
     ),
     (
         "death_terminal_single",
         scenario_death_terminal_single,
         &["dying", "death", "victory"],
-        "b2aed937abba1485b147ade3c1f0129d9a87034de429ece5e88cc0cf527fbc64",
+        "c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b",
     ),
     (
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "85f60f51f69d7dc5882b74d2b9cdbb3992da301a0d23a253d2402e872b6bbae0",
+        "07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42",
     ),
     (
         "yishang_redirect",
         scenario_yishang_redirect,
         &["damage_before_window", "payload_rewrite_redirect"],
-        "2e612e2c48a09fa0fb4847debba2b163ea30147933d6adfd615a30798225c6e3",
+        "40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08",
     ),
     (
         "suidun_window_matrix",
         scenario_suidun_window_matrix,
         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
-        "c4c47664654fcf41b26475aa3611cb843525b6d63b7818a1a3c269f9a08b5efc",
+        "d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae",
     ),
     (
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "ba4d11c0379c985010a458fab649360d11dfb4db9e0445ad386b3f8e0d92c1f5",
+        "a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "ebbb7d809fa0bdd9c19e639e0dc3691553e31980da8387bcebfdcf468b143390",
+        "0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff",
     ),
     (
         "rollback_invariants",
         scenario_rollback_invariants,
         &["reject_rollback", "budget_rollback"],
-        "cc5533fd1d8e6ecd67067d421ee22cd5d67c8af47c1a497f236f3cb209588885",
+        "fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216",
     ),
     (
         "equip_distance_matrix",
         scenario_equip_distance_matrix,
         &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
-        "777cdb5c5b06ba63d44b4008c591524dc5525a55438c3ac67593831f812cfc5f",
+        "b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5",
     ),
     (
         "chain_fire_propagation",
         scenario_chain_fire_propagation,
         &["chain_state", "damage_nature", "chain_propagation"],
-        "d273a42dd8025d8ef29b9fb35c8ffb23c9a9ac37d753a8d07d9b84cc9c0b35dd",
+        "0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860",
     ),
     (
         "aoe_response_queue",
         scenario_aoe_response_queue,
         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
-        "4deacdb7962db6b57e25b7916b21dc87861b504152b4fcad84441cd83bd1f4d3",
+        "ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758",
     ),
     (
         "duel_alternating_response",
         scenario_duel_alternating_response,
         &["duel_alternating", "duel_no_distance_limit"],
-        "8501c02ccd164a26b97f2e46b30afcfa322028ace8ccffc7b424b4fa0a96582b",
+        "567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16",
     ),
     (
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "541384b5889b71ed5cd3d8337d9dd550db7e266d26c82b02d41f862ed36a942e",
+        "35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab",
     ),
     (
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "1ab143e19dc7cf7f66e893a9207b5f16cff72ec9add32315bf6010edaa75e2fd",
+        "86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f",
     ),
 ];
 
+// ADR0787 v330: only rolling the rules version back to329 preserves all14 prior goldens.
+// A330 evidence golden-version-probe-8; timeout policy stays outside the rule clock.
 // ADR0786 J2 v329 (2026-10-30): all 14 v329 hashes move; the v328 rollback probe
 // with J2 code retained passes all 14 old goldens. Standard scenarios contain no VM packs;
 // the displacement is the rules version field. Raw probe logs live in the J2 run evidence.

@@ -1,0 +1,8 @@
+{
+  "time": "2026-10-30T15:36:07.393594",
+  "provider_failure": "Error reading response malformed server-sent event JSON; prior run terminal confirmed by parent",
+  "resume": "same cwd/source/cache; red-actor.log preserved",
+  "owned_heavy_active": false,
+  "second_provider_failure": "Same SSE parsing failure, supervisor confirmed terminal; resumed same cwd/model/tool",
+  "second_resume": "2026-10-30T15:39:57.649632"
+}

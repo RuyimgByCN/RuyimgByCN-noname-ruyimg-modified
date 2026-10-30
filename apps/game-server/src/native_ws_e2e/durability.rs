@@ -173,7 +173,14 @@ fn restart_after_uncertain_rename_restores_only_confirmed_choice(fault: StoreFau
             drop(b);
             drop(spectator);
             server.stop().await;
-            (room, tokens, before_a, before_b, before_spectator, confirmed)
+            (
+                room,
+                tokens,
+                before_a,
+                before_b,
+                before_spectator,
+                confirmed,
+            )
         });
 
     disable_packages(&cfg);
@@ -237,6 +244,7 @@ fn uncertain_initial_save_is_not_restored_as_a_room(fault: StoreFault) {
             .fail_next_write(fault);
         let mut peer = Peer::connect(&server).await;
         peer.send(ClientMessage::CreateRoom {
+            choice_timeout_secs: None,
             players: 2,
             seed: SEED,
             password: PASSWORD.into(),
@@ -472,7 +480,7 @@ fn native_extensions_ws_restart_isolates_corrupt_saves_and_ignores_orphan_temps(
         let (outcome, continued) = a.submit(a.player, before.view.revision, 704, answer(&before, a.player)).await;
         assert!(matches!(outcome, CommandResult::Accepted { new_revision, .. } if new_revision > before.view.revision));
         let mut active = Peer::connect(&restarted).await;
-        active.send(ClientMessage::CreateRoom { players: 2, seed: SEED, password: PASSWORD.into() }).await;
+        active.send(ClientMessage::CreateRoom { choice_timeout_secs: None, players: 2, seed: SEED, password: PASSWORD.into() }).await;
         active.error(ErrorCode::Internal).await;
         assert_eq!(restarted.lobby.stats().active_rooms, 2, "disabled packs cannot create a new room");
         println!("NATIVE_WS crash_recovery=pass healthy_rooms=2 corrupt_rooms=2 orphan_room=102 committed_revision={} continued_revision={}", before.view.revision, continued.view.revision);
@@ -517,7 +525,9 @@ fn native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe(
         if failure == "unreadable-directory" {
             match crate::try_bootstrap(&cfg) {
                 Ok(_) => panic!("存档目录不是目录时必须拒绝启动"),
-                Err(error) => println!("NATIVE_WS recovery_inventory={failure} startup=refused ({error})"),
+                Err(error) => {
+                    println!("NATIVE_WS recovery_inventory={failure} startup=refused ({error})")
+                }
             }
             continue;
         }
@@ -532,6 +542,7 @@ fn native_extensions_ws_refuses_room_creation_when_recovery_inventory_is_unsafe(
             let server = Server { url, lobby, task };
             let mut peer = Peer::connect(&server).await;
             peer.send(ClientMessage::CreateRoom {
+                choice_timeout_secs: None,
                 players: 2,
                 seed: SEED,
                 password: PASSWORD.into(),

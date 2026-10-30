@@ -1,0 +1,26 @@
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.10s
+     Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/kernel-c66fa1d4f3fdb655)
+
+running 1 test
+GOLDEN_HEX sha_dodge_then_damage 4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d
+GOLDEN_HEX death_terminal_single c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b
+GOLDEN_HEX sancai_nested_chain 07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42
+GOLDEN_HEX yishang_redirect 40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08
+GOLDEN_HEX suidun_window_matrix d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae
+GOLDEN_HEX shouyi_dynamic_skill a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0
+GOLDEN_HEX discard_to_limit 0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff
+GOLDEN_HEX rollback_invariants fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216
+GOLDEN_HEX equip_distance_matrix b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5
+GOLDEN_HEX chain_fire_propagation 0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860
+GOLDEN_HEX aoe_response_queue ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758
+GOLDEN_HEX duel_alternating_response 567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16
+GOLDEN_HEX nullify_chain_on_savage 35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab
+GOLDEN_HEX judge_phase_delayed_tricks 86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f
+test replay_scenarios::pa12_print_golden_hex ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 434 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "replay_scenarios::pa12_print_golden_hex", "--", "--exact", "--nocapture"], "exit": 0, "locked_seconds": 7.154570084006991, "disk_free_bytes": 161396948992}

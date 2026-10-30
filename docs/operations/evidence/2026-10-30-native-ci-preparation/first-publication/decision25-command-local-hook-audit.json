@@ -1,0 +1,53 @@
+{
+  "scope": "Command-local replacement check implements newer explicit user decision25; original unconditional local-only hook is unchanged; no persistent Git setting is modified",
+  "hook_directory": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-decision25-scoped-hooks-2do3mk5s",
+  "hook_sha256": "7af2deb960d1f482e98a6b8a08cccadd9eafa0f3dc40d25f78aa15ee497aa6bf",
+  "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "original_hook_bytes": "#!/bin/sh\n# noname-next \u4ed3\u5e93\u4ec5\u5728\u672c\u5730\u4f7f\u7528\uff08\u57fa\u7ebf/\u68c0\u67e5\u70b9/\u56de\u9000\uff09\uff0c\u6309\u7ea6\u5b9a\u4e0d\u63a8\u9001\u5230\u4efb\u4f55\u8fdc\u7aef\u3002\necho \"noname-next: \u672c\u4ed3\u5e93\u4ec5\u672c\u5730\u4f7f\u7528\uff0c\u5df2\u963b\u6b62 push\u3002\" >&2\nexit 1\n",
+  "checks": [
+    {
+      "case": "approved",
+      "exit": 0,
+      "expected": 0,
+      "stderr": "decision25 scoped check accepted exact repository, new branch and accepted commit\n"
+    },
+    {
+      "case": "wrong_repo",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: repository does not match explicit approval\n"
+    },
+    {
+      "case": "wrong_commit",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "case": "wrong_branch",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "case": "existing_ref",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: first publication requires the new branch to be absent\n"
+    },
+    {
+      "case": "multi_ref",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: expected exactly one ref update\n"
+    },
+    {
+      "case": "delete",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    }
+  ],
+  "all_negative_ref_tests_rejected": true,
+  "credential_values_logged": false
+}

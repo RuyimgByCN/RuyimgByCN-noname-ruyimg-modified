@@ -1,0 +1,12 @@
+    Checking engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-api)
+    Checking rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/rule-api)
+    Checking rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/rule-vm)
+    Checking engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-kernel)
+    Checking content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-schema)
+    Checking engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native-content)
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/engine-native)
+    Checking content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-compiler)
+    Checking content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/worktree/crates/content-native-loader)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.25s
+{"command": ["env", "RUSTFLAGS=-Dwarnings", "cargo", "check", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 18.302516458003083, "disk_free_bytes": 149060837376}

@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {spawn} from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+const out=path.resolve(process.argv[2]),build=path.resolve(process.argv[3]),binary=process.argv[4],skew=Number(process.argv[5]);
+fs.mkdirSync(out,{recursive:true});
+const profile=fs.mkdtempSync(path.join(out,'chrome-'));
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.wasm':'application/wasm','.json':'application/json'};
+const http=createServer((req,res)=>{let file=path.join(build,new URL(req.url,'http://x').pathname);if(!fs.existsSync(file)||fs.statSync(file).isDirectory())file=path.join(build,'index.html');try{res.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream'}).end(fs.readFileSync(file));}catch{res.writeHead(404).end();}});
+await new Promise(r=>http.listen(0,'127.0.0.1',r));
+const reservation=createServer();await new Promise(r=>reservation.listen(0,'127.0.0.1',r));const port=reservation.address().port;await new Promise(r=>reservation.close(r));for(const d of ['packages','original','extensions'])fs.mkdirSync(path.join(out,d),{recursive:true});
+const log=fs.openSync(path.join(out,'server.log'),'a');
+const server=spawn(binary,[],{env:{...process.env,GAME_SERVER_ADDR:`127.0.0.1:${port}`,NONAME_NATIVE_ROOMS:'1',NONAME_NATIVE_ROOM_PACKAGES:'',NONAME_NATIVE_PACKAGES_ROOT:"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions",NONAME_NATIVE_STORE_ROOT:path.join(out,'native-store'),NONAME_NATIVE_ROOM_STORE:path.join(out,'rooms'),NONAME_ORIGINAL_CONTENT_ROOT:"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/content/original",NONAME_CONTENT_STORE_ROOT:path.join(out,'legacy-store'),NONAME_EXTENSIONS_ROOT:path.join(out,'extensions')},stdio:['ignore',log,log]});fs.closeSync(log);
+let loaded;for(let i=0;i<100;i++){try{loaded=await fetch(`http://127.0.0.1:${port}/native/packages`).then(r=>r.json());break;}catch{await new Promise(r=>setTimeout(r,50));}}assert.equal(loaded?.length,41,'actual native imports');fs.writeFileSync(path.join(out,'actual-packages.json'),JSON.stringify({count:loaded.length,packages:loaded},null,2));
+const chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--disable-gpu','--no-sandbox',`--user-data-dir=${profile}`,'--remote-debugging-port=0','--window-size=1280,1000','about:blank'],{stdio:'ignore'});
+fs.writeFileSync(path.join(out,'owned-processes.json'),JSON.stringify({serverPid:server.pid,chromePid:chrome.pid,serverPort:port,httpPort:http.address().port,profile},null,2));
+const wait=ms=>new Promise(r=>setTimeout(r,ms));let ws,id=0;const pending=new Map(),exceptions=[],checks=[];
+try{
+ for(let i=0;i<100&&!fs.existsSync(path.join(profile,'DevToolsActivePort'));i++)await wait(50);
+ const debugPort=fs.readFileSync(path.join(profile,'DevToolsActivePort'),'utf8').split('\n')[0];
+ const pages=await fetch(`http://127.0.0.1:${debugPort}/json/list`).then(r=>r.json());ws=new WebSocket(pages.find(p=>p.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j;});
+ const send=(method,params={})=>new Promise((resolve,reject)=>{const key=++id;pending.set(key,{resolve,reject});ws.send(JSON.stringify({id:key,method,params}));});
+ ws.onmessage=({data})=>{const m=JSON.parse(data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);if(p)m.error?p.reject(m.error):p.resolve(m.result);}else if(m.method==='Runtime.exceptionThrown')exceptions.push(m.params);};
+ const evaluate=async expression=>{const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});assert.ok(!result.exceptionDetails,JSON.stringify(result.exceptionDetails));return result.result.value;};
+ const until=async expression=>{for(let i=0;i<240;i++){if(await evaluate(expression))return;await wait(50);}throw Error('UI timeout '+expression);};
+ const screenshot=async name=>{const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true});fs.writeFileSync(path.join(out,name+'.png'),Buffer.from(shot.data,'base64'));};
+ await send('Runtime.enable');await send('Page.enable');
+ await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__wallSkew=${skew};const actualNow=Date.now.bind(Date);Date.now=()=>actualNow()+window.__wallSkew;window.__gameSockets=[];window.__wire=[];const NativeSocket=WebSocket;window.WebSocket=class extends NativeSocket{constructor(...args){super(...args);window.__gameSockets.push(this);this.addEventListener('message',e=>window.__wire.push({direction:'in',...JSON.parse(e.data)}));}send(data){window.__wire.push({direction:'out',...JSON.parse(data)});return super.send(data);}};`});
+ await send('Page.navigate',{url:`http://127.0.0.1:${http.address().port}/`});
+ await until('document.querySelector(\'[aria-label="选择时限"]\')');
+ await evaluate(`(()=>{document.querySelector('[aria-label="选择时限"]').value='10';document.querySelector('[aria-label="选择时限"]').dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('input[type="url"]').value='ws://127.0.0.1:${port}/ws';document.querySelector('input[type="url"]').dispatchEvent(new Event('input',{bubbles:true}));})()`);
+ await evaluate(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent.includes('创建并入座')).click()`);
+ await until(`document.querySelector('.online-roster')?.textContent.includes('选择时限 10 秒')`);
+ for(let i=0;i<3;i++){await until(`Array.from(document.querySelectorAll('button')).some(b=>b.textContent.trim()==='结束阶段'&&!b.disabled)`);await evaluate(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='结束阶段').click()`);await wait(250);}
+ await until(`document.querySelector('[role="timer"]')?.textContent.includes('剩余')`);
+ const record=()=>JSON.parse(fs.readFileSync(path.join(out,'rooms','1.json'),'utf8'));
+ const deadline=record().state.timeout.deadline.deadline_unix_ms;
+ const check=async name=>{const text=await evaluate(`document.querySelector('[role="timer"]')?.textContent`);const seconds=Number(text.match(/剩余 (\d+) 秒/)?.[1]);const expected=Math.max(0,Math.ceil((deadline-Date.now())/1000));assert.ok(Number.isFinite(seconds)&&Math.abs(seconds-expected)<=1,`${name}: ${text}, expected ${expected}`);checks.push({name,text,expected,remainingUnixMs:deadline-Date.now()});await screenshot(name);};
+ await check('initial-skew');
+ await evaluate(`window.__wallSkew=${skew+3_600_000}`);await wait(300);await check('wall-clock-jump');
+ await wait(Math.max(0,deadline-Date.now()-6500));
+ await evaluate(`window.__gameSockets.at(-1).close()`);
+ await until(`document.querySelector('[role="timer"]')?.textContent.includes('校准')`);await screenshot('disconnected-uncalibrated');
+ await until(`window.__wire.filter(m=>m.direction==='in'&&m.type==='JoinOk').length>=2 && document.querySelector('[role="timer"]')?.textContent.includes('剩余')`);
+ assert.equal(record().state.timeout.deadline.deadline_unix_ms,deadline,'reconnect cannot extend the actual room deadline');
+ await check('midwindow-reconnect');assert.ok(checks.at(-1).expected<9);
+ await until(`document.querySelector('.online-roster')?.textContent.includes('托管中')`);await screenshot('managed');
+ const saved=record();assert.equal(saved.state.wal.entries.filter(e=>e.action.TimeoutAction).length,1);
+ assert.equal(exceptions.length,0,JSON.stringify(exceptions));
+ const wire=await evaluate('window.__wire');
+ fs.writeFileSync(path.join(out,'wire.json'),JSON.stringify(wire,null,2));
+ fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({passed:true,skew,deadline,checks,reconnectDeadlineUnchanged:true,uncalibratedVisible:true,exceptions,wal:saved.state.wal.entries},null,2));
+}catch(error){fs.writeFileSync(path.join(out,'failure.txt'),error.stack);throw error;}
+finally{ws?.close();for(const child of [chrome,server]){if(child.exitCode===null&&child.signalCode===null){const exited=new Promise(r=>child.once('exit',r));child.kill('SIGKILL');await exited;}}await new Promise(r=>http.close(r));fs.writeFileSync(path.join(out,'exceptions.json'),JSON.stringify(exceptions,null,2));fs.writeFileSync(path.join(out,'owned-cleanup.json'),JSON.stringify({serverPid:server.pid,serverExit:server.exitCode,serverSignal:server.signalCode,chromePid:chrome.pid,chromeExit:chrome.exitCode,chromeSignal:chrome.signalCode,waited:true,httpClosed:true},null,2));}

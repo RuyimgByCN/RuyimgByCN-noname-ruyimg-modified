@@ -1,0 +1,54 @@
+{
+  "started_utc": "2026-10-30T11:52:28.228042+00:00",
+  "accepted_commit": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "accepted_tree": "445e25cd7461da580e4bcd12c11a429420cb257f",
+  "push_attempts": 1,
+  "local_head_before": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "local_main_before": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "index_sha256_before": "b4472d823ba2eec3c458414583eb058f2bf147913ab87c1b36e8d81916afb1d2",
+  "committed_ci_sha256": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+  },
+  "tree_counts": {
+    "tracked": 41879,
+    "dist": 37,
+    "evidence": 9207
+  },
+  "remote_before_exit": 0,
+  "elapsed_seconds": 3.373829582997132,
+  "remote_before_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "preflight_passed": true,
+  "push_command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "git",
+    "-c",
+    "credential.helper=",
+    "-c",
+    "credential.helper=!gh auth git-credential",
+    "-c",
+    "pack.threads=2",
+    "push",
+    "--progress",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "9dbc65530feb695688d3160dc38b6cf64ad39ecd:refs/heads/native-convergence"
+  ],
+  "push_pid": 21201,
+  "push_exit": 1,
+  "remote_after_exit": 0,
+  "remote_after_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "stopped_reason": "Single push failed or timed out; remote state recorded; no retry or CLI switch",
+  "local_head_after": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "local_main_after": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "index_sha256_after": "b4472d823ba2eec3c458414583eb058f2bf147913ab87c1b36e8d81916afb1d2",
+  "no_staged_files": true,
+  "finished_utc": "2026-10-30T11:52:31.601846+00:00"
+}

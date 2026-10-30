@@ -1,0 +1,7 @@
+{
+  "query": "JXA explicit public C API binding; preflight only, no permission prompt requested or event posted",
+  "exit": 0,
+  "stdout": "{\"accessibility\":true,\"postEvents\":true,\"listenEvents\":true}\n",
+  "stderr": "",
+  "prior_failure": "Old JXA BridgeSupport lacks automatic CGPreflightPostEventAccess binding; failure not a permission denial"
+}

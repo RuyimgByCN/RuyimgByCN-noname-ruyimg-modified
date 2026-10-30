@@ -1,0 +1,2 @@
+artifact files hashed 1021 bytes 218706613
+{"command": ["/usr/bin/sandbox-exec", "-f", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/readonly.sb", "python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/phase2/artifact-index.py"], "exit": 0, "locked_seconds": 0.3340492919960525, "disk_free_bytes": 131743186944}

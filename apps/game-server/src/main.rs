@@ -2,14 +2,14 @@
 
 mod config;
 mod lobby;
-mod native_room_store;
 mod native;
+mod native_room_store;
 mod native_view;
-mod room_native;
-mod room_native_actor;
 mod outbox;
 mod persist;
 mod room;
+mod room_native;
+mod room_native_actor;
 mod session;
 
 use axum::{
@@ -204,11 +204,11 @@ async fn native_activate_handler(
     State(lobby): State<Arc<Lobby>>,
     Json(body): Json<NativePackageBody>,
 ) -> Result<StatusCode, (StatusCode, String)> {
-    if body.namespace.is_empty()
-        || body.package_id.is_empty()
-        || body.version.is_empty()
-    {
-        return Err((StatusCode::BAD_REQUEST, "namespace/package_id/version required".into()));
+    if body.namespace.is_empty() || body.package_id.is_empty() || body.version.is_empty() {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "namespace/package_id/version required".into(),
+        ));
     }
     lobby
         .native_activate(&body.namespace, &body.package_id, &body.version)
@@ -529,6 +529,7 @@ async fn handle_socket(socket: WebSocket, lobby: Arc<Lobby>) {
         role: None,
         reconnect_token: None,
         last_conn_seq: 0,
+        handshake_complete: false,
         outbound: outbound.clone(),
         slow: outbound.slow_signal(),
     };
@@ -649,7 +650,11 @@ mod net_smoke {
         let dir = tempfile::tempdir().unwrap();
         let ready = dir.path().join("ready");
         let mut child = ProcessCommand::new(std::env::current_exe().unwrap())
-            .args(["--exact", "net_smoke::store_writer_lock_child", "--nocapture"])
+            .args([
+                "--exact",
+                "net_smoke::store_writer_lock_child",
+                "--nocapture",
+            ])
             .env(LOCK_CHILD_DIR, dir.path())
             .stdin(Stdio::null())
             .stdout(Stdio::null())
@@ -830,11 +835,11 @@ mod net_smoke {
     /// **不含**整局机器人（那是 `long_run_bot.rs` 走直连 `RoomMsg` 的面）、TLS、跨机与浏览器。
     #[test]
     fn websocket_creates_joins_and_submits_over_wire() {
-        use futures_util::{SinkExt, StreamExt};
+        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
         use engine_protocol::{
             decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
         };
-        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+        use futures_util::{SinkExt, StreamExt};
 
         let cfg = test_cfg("wsgame");
         let lobby = bootstrap(&cfg);
@@ -855,8 +860,10 @@ mod net_smoke {
             // --- A：连接 + Welcome + 建局 ---
             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A connect");
             let _welcome = next_text(&mut a).await;
+            send_test_hello(&mut a).await;
             a.send(tokio_tungstenite::tungstenite::Message::Text(
                 encode_c2s(&ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed: 424_242,
                     password: String::new(),
@@ -890,6 +897,7 @@ mod net_smoke {
             // --- B：连接 + 加入同一房间 ---
             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B connect");
             let _welcome_b = next_text(&mut b).await;
+            send_test_hello(&mut b).await;
             b.send(tokio_tungstenite::tungstenite::Message::Text(
                 encode_c2s(&ClientMessage::JoinRoom {
                     room_id,
@@ -957,11 +965,33 @@ mod net_smoke {
     }
 
     /// 读一条文本帧（10s 超时）。
+    async fn send_test_hello<S>(ws: &mut S)
+    where
+        S: futures_util::Sink<tokio_tungstenite::tungstenite::Message> + Unpin,
+        S::Error: std::fmt::Debug,
+    {
+        use futures_util::SinkExt;
+        ws.send(tokio_tungstenite::tungstenite::Message::Text(
+            engine_protocol::encode_c2s(&engine_protocol::ClientMessage::Hello {
+                versions: engine_api::VersionBundle::current(),
+                display_name: "wire-test".into(),
+            })
+            .unwrap()
+            .into(),
+        ))
+        .await
+        .unwrap();
+    }
+
     async fn next_text<S>(ws: &mut S) -> String
     where
         S: futures_util::Sink<tokio_tungstenite::tungstenite::Message>
-            + futures_util::Stream<Item = Result<tokio_tungstenite::tungstenite::Message, tokio_tungstenite::tungstenite::Error>>
-            + Unpin,
+            + futures_util::Stream<
+                Item = Result<
+                    tokio_tungstenite::tungstenite::Message,
+                    tokio_tungstenite::tungstenite::Error,
+                >,
+            > + Unpin,
     {
         use futures_util::StreamExt;
         let frame = tokio::time::timeout(std::time::Duration::from_secs(10), ws.next())
@@ -978,7 +1008,9 @@ mod net_smoke {
     /// **不是**强 AI，只用于驱动推进。
     #[test]
     fn websocket_plays_match_to_completion() {
-        use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId};
+        use engine_api::{
+            Command, CommandKind, ExpectedRevision, IdempotencyKey, LegalAction, PlayerId,
+        };
         use engine_protocol::{
             decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
         };
@@ -1027,8 +1059,10 @@ mod net_smoke {
             // A 建局
             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
             let _ = next_text(&mut a).await;
+            send_test_hello(&mut a).await;
             a.send(Message::Text(
                 encode_c2s(&ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed: 20_260_101,
                     password: String::new(),
@@ -1050,6 +1084,7 @@ mod net_smoke {
             // B 加入
             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
             let _ = next_text(&mut b).await;
+            send_test_hello(&mut b).await;
             b.send(Message::Text(
                 encode_c2s(&ClientMessage::JoinRoom {
                     room_id,
@@ -1125,7 +1160,9 @@ mod net_smoke {
                             }
                         }
                     }
-                    let Some(action) = pick(&legal[conn]) else { continue };
+                    let Some(action) = pick(&legal[conn]) else {
+                        continue;
+                    };
                     let cmd = action.to_command(actors[conn], rev);
                     seq += 1;
                     ws.send(Message::Text(
@@ -1246,8 +1283,10 @@ mod net_smoke {
             // ① 建局
             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
             let _ = next_text(&mut a).await;
+            send_test_hello(&mut a).await;
             a.send(Message::Text(
                 encode_c2s(&ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed: 20_260_102,
                     password: String::new(),
@@ -1274,6 +1313,7 @@ mod net_smoke {
             // ①.5 第二名玩家加入（房间需凑齐座位才接受命令）
             let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
             let _ = next_text(&mut b).await;
+            send_test_hello(&mut b).await;
             b.send(Message::Text(
                 encode_c2s(&ClientMessage::JoinRoom {
                     room_id,
@@ -1335,6 +1375,7 @@ mod net_smoke {
             // ④ 用 token 重连
             let (mut a2, _) = tokio_tungstenite::connect_async(&url).await.expect("A2");
             let _ = next_text(&mut a2).await;
+            send_test_hello(&mut a2).await;
             a2.send(Message::Text(
                 encode_c2s(&ClientMessage::JoinRoom {
                     room_id,
@@ -1380,7 +1421,9 @@ mod net_smoke {
     #[test]
     fn websocket_submit_before_match_start_returns_error() {
         use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
-        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
+        use engine_protocol::{
+            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+        };
         use futures_util::SinkExt;
         use tokio_tungstenite::tungstenite::Message;
 
@@ -1401,8 +1444,10 @@ mod net_smoke {
             let url = format!("ws://{addr}/ws");
             let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
             let _ = next_text(&mut a).await;
+            send_test_hello(&mut a).await;
             a.send(Message::Text(
                 encode_c2s(&ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed: 20_260_103,
                     password: String::new(),
@@ -1478,7 +1523,9 @@ mod net_smoke {
     #[test]
     fn websocket_multi_room_isolation() {
         use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
-        use engine_protocol::{decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage};
+        use engine_protocol::{
+            decode_s2c, encode_c2s, ClientMessage, MessageHeader, ServerMessage,
+        };
         use futures_util::SinkExt;
         use tokio_tungstenite::tungstenite::Message;
 
@@ -1489,13 +1536,15 @@ mod net_smoke {
         async fn open(url: &str) -> Ws {
             let (ws, _) = tokio_tungstenite::connect_async(url).await.expect("ws");
             let mut ws = ws;
-            let _ = next_text(&mut ws).await; // Welcome
+            let _ = next_text(&mut ws).await;
+            send_test_hello(&mut ws).await; // Welcome
             ws
         }
 
         async fn create_room(ws: &mut Ws, seed: u64) -> (u64, u32) {
             ws.send(Message::Text(
                 encode_c2s(&ClientMessage::CreateRoom {
+                    choice_timeout_secs: None,
                     players: 2,
                     seed,
                     password: String::new(),
@@ -1689,12 +1738,16 @@ mod native_lifecycle_http_tests {
         let imported = native_import_handler(State(lobby.clone())).await.unwrap();
         assert!(imported.0.iter().any(|p| p.package_id == "http-lifecycle-probe"));
 
-        let body = || Json(NativePackageBody {
-            namespace: namespace.clone(),
-            package_id: "http-lifecycle-probe".into(),
-            version: "0.1.0".into(),
-        });
-        native_disable_handler(State(lobby.clone()), body()).await.unwrap();
+        let body = || {
+            Json(NativePackageBody {
+                namespace: namespace.clone(),
+                package_id: "http-lifecycle-probe".into(),
+                version: "0.1.0".into(),
+            })
+        };
+        native_disable_handler(State(lobby.clone()), body())
+            .await
+            .unwrap();
         assert!(native.load("http-lifecycle-probe").is_err());
         native_uninstall_handler(State(lobby.clone()), body()).await.unwrap();
         assert!(lobby
@@ -1738,7 +1791,9 @@ mod native_lifecycle_http_tests {
 
         let mut stream = tokio::net::TcpStream::connect(addr).await.unwrap();
         stream
-            .write_all(b"GET /native/packages HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
+            .write_all(
+                b"GET /native/packages HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n",
+            )
             .await
             .unwrap();
         let mut response = Vec::new();

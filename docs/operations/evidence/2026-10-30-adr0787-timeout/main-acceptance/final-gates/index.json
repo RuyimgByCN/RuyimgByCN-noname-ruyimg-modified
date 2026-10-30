@@ -1,0 +1,85 @@
+[
+  {
+    "name": "sourcecaps-selftests",
+    "command": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 38.07233162500779,
+    "locked_seconds": 0.07595558400498703,
+    "queue_estimate_seconds": 37.996376041002804,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 125914107904,
+    "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/01-sourcecaps-selftests.log",
+    "completed_utc": "2026-10-30T14:09:38.986680+00:00"
+  },
+  {
+    "name": "source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 4.647055874986108,
+    "locked_seconds": 4.617628792009782,
+    "queue_estimate_seconds": 0.029427082976326346,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 126839799808,
+    "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/02-source-lines.log",
+    "completed_utc": "2026-10-30T14:09:53.887691+00:00"
+  },
+  {
+    "name": "strict-docrefs",
+    "command": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "exit": 0,
+    "wall_seconds": 6.406504458020208,
+    "locked_seconds": 6.377057165984297,
+    "queue_estimate_seconds": 0.029447292035911232,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 126881853440,
+    "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/03-strict-docrefs.log",
+    "completed_utc": "2026-10-30T14:10:12.866941+00:00"
+  },
+  {
+    "name": "full-preflight",
+    "command": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 328.7056284159771,
+    "locked_seconds": 328.6742447090219,
+    "queue_estimate_seconds": 0.03138370695523918,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 126724599808,
+    "log": "docs/operations/evidence/2026-10-30-adr0787-timeout/main-acceptance/final-gates/04-full-preflight.log",
+    "completed_utc": "2026-10-30T14:15:50.266260+00:00"
+  }
+]

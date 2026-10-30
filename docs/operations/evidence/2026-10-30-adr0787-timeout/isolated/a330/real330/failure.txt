@@ -1,0 +1,4 @@
+Error: WS timeout m=>m.type==='CommandOutcome' && m.payload.header.conn_seq===this.seq
+    at Peer.until (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/real-ws.mjs:31:188)
+    at async Peer.submit (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/real-ws.mjs:34:268)
+    at async file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-3n1haacu/evidence/a330/real-ws.mjs:61:193

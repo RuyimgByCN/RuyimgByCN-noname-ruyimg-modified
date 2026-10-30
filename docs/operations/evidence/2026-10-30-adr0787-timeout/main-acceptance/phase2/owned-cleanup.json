@@ -1,0 +1,76 @@
+{
+  "time": "2026-10-30T21:39:41.747312",
+  "ownedProcessesStillActive": [],
+  "allOwnedServicesStoppedAndWaited": true,
+  "cleanupRecords": {
+    "referee-external-corrected/owned-cleanup.json": {
+      "pid": 78415,
+      "exit": -15,
+      "waited": true,
+      "port": 53927
+    },
+    "resources/cleanup.json": {
+      "ownedServerPid": 71433,
+      "exit": -15,
+      "waited": true,
+      "user7700Untouched": true
+    },
+    "referee-external/owned-cleanup.json": {
+      "pid": 74841,
+      "exit": -15,
+      "waited": true,
+      "port": 53456
+    },
+    "real-ws/owned-cleanup.json": {
+      "ownedServerPids": [
+        66438,
+        66690
+      ],
+      "waited": true,
+      "user7700Untouched": true,
+      "serverPort": 52791
+    },
+    "chrome-fast/owned-cleanup.json": {
+      "serverPid": 68241,
+      "serverExit": null,
+      "serverSignal": "SIGKILL",
+      "chromePid": 68266,
+      "chromeExit": null,
+      "chromeSignal": "SIGKILL",
+      "waited": true,
+      "httpClosed": true
+    },
+    "chrome-slow/owned-cleanup.json": {
+      "serverPid": 70932,
+      "serverExit": null,
+      "serverSignal": "SIGKILL",
+      "chromePid": 70933,
+      "chromeExit": null,
+      "chromeSignal": "SIGKILL",
+      "waited": true,
+      "httpClosed": true
+    }
+  },
+  "removedOwnedUnusedChromeProfiles": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-fast/chrome-YI7SF0",
+      "bytes": 8083725
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-a330-main-phase2-in4xi44k/chrome-slow/chrome-CH5glb",
+      "bytes": 8104783
+    }
+  ],
+  "mainGeneratedTmpAbsent": true,
+  "incrementalBytesAllTargets": 0,
+  "incrementalDirectories": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/incremental",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/incremental",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental"
+  ],
+  "stage3Retained": true,
+  "stage3Purpose": "Parent current330 acceptance, independent final preflight21 and integration revalidation; retain deps/executables/WASM caches; worker has no further heavy use pending",
+  "freeDiskBytes": 131743510528,
+  "user7700AndOtherChromeServicesUntouched": true,
+  "mainDefaultTargetWritesDenied": true
+}
