@@ -1,0 +1,52 @@
+{
+  "app": "/private/tmp/pa09-webview-5b7ad3ab/products/PA09 JS Admission.app",
+  "binary": "/private/tmp/pa09-webview-5b7ad3ab/products/PA09 JS Admission.app/Contents/MacOS/noname-next-desktop",
+  "source_binary_sha256": "049b746f6423a3c6fa6b3f2a3a32e40e99e32c0f5a83367c8348ed2a34fe081d",
+  "packaged_binary_sha256": "0f572e1d9d1c6e42d3eeff025caee5efcbb41237da8bbeb73b83a75d4bde1813",
+  "bundle": "/private/tmp/pa09-webview-5b7ad3ab/bundle",
+  "bundle_sha256": "a4b268e9716113bedd98eab63b50ddcdd67b52cd0f3dd988529f87e476161a57",
+  "bundle_files": {
+    "assets/client-BZROKSmU.js": "583f08c27382aa09c981bff4f7c41c6d478d79fdabf7581f5a4a67c8b0ba74e1",
+    "assets/client-BZROKSmU.js.map": "cdf64fe2ad0b8c1190bd314507fa7993186fed53c21ab9b305f78b8f03846755",
+    "assets/engine.native.worker-BIwpD907.js": "c9f5f639f326ce299a27c8e8eca4e5df18811b3ce10a5939d554b11faf8a1024",
+    "assets/engine.native.worker-BIwpD907.js.map": "715aadeb22005c95fa7c31c4779415157c31be70997350ae9dfabc2029365901",
+    "assets/engine.worker-DF5gc_e9.js": "b4cd63f8b619a3ccdf6ee203d264c392503fc694811e3513fe812a2020ffd86f",
+    "assets/engine.worker-DF5gc_e9.js.map": "bfc8fe9d3086fc41843333d4198e10133168039f058e953aeb34c855ff2a2c57",
+    "assets/engine_native_wasm_bg-u6T604pW.wasm": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+    "assets/engine_wasm_bg-1RaHVOmb.wasm": "d1955bd0a06560c326650ee6654aea6d56200964d07f2343b9ff4601be6d6785",
+    "assets/index-BAUJFA6P.js": "29f4144cb19a7d85e49028bbe467ddb6e2003112798fae46c60e488c3e68d77a",
+    "assets/index-BAUJFA6P.js.map": "9b898d43b84a9f81bc54ab1ed3cff48f399c8da7edeb0caf670426f9a7cf363b",
+    "assets/main-CqWflYpH.js": "2872e36a6549ba8edf33db29cabd5745b7013cf8ac56eff6343cb26e36afb147",
+    "assets/main-CqWflYpH.js.map": "39c61687d57e6a5a0a43d3a0e8f34d2b72761ccaf6d71a74c850134a4f457916",
+    "assets/main-jC10sqNn.css": "1b05590decbdef5e39ffd88e1a2439c5fb3ceac8c437f0943464262e7ee349cc",
+    "index.html": "573dd4f77191f08914da9af689be93b3a5cf913665e337f8859abf756dfc9ca3"
+  },
+  "compile_time_config_sha256": "037235b3f7aaaed55cae410761eaadb1351bddda1c802d6de69d4ebe2622be56",
+  "plist": {
+    "CFBundleIdentifier": "org.noname.pa09.jsbound5b7ad3ab",
+    "CFBundleName": "PA09 JS Admission",
+    "CFBundleDisplayName": "PA09 JS Admission",
+    "CFBundleExecutable": "noname-next-desktop",
+    "CFBundlePackageType": "APPL",
+    "CFBundleVersion": "1",
+    "CFBundleShortVersionString": "0.1.0",
+    "NSHighResolutionCapable": true,
+    "NSPrincipalClass": "NSApplication",
+    "LSUIElement": true,
+    "NSAppTransportSecurity": {
+      "NSAllowsLocalNetworking": true
+    }
+  },
+  "driver_pid": 62278,
+  "server_pid": 62278,
+  "app_pid": 62280,
+  "argv": [
+    "/private/tmp/pa09-webview-5b7ad3ab/products/PA09 JS Admission.app/Contents/MacOS/noname-next-desktop"
+  ],
+  "cwd": "/private/tmp/pa09-webview-5b7ad3ab",
+  "port": 19439,
+  "bind": "127.0.0.1",
+  "hidden_window": true,
+  "runtime_tauri_config": null,
+  "launch_utc": "2026-10-30T19:16:41.978081+00:00"
+}

@@ -1,0 +1,996 @@
+[
+  {
+    "variant": "HlssFengqi",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+      "sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "name": "hlss_fengqi",
+      "line": 456,
+      "props": {
+        "trigger": "{player:['phaseZhunbeiBegin']}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'起风'",
+        "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+        "line": 15235
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:583:            HostBehavior::HlssFengqi => self.step_skills_virtual_use(ctx),",
+      "crates/engine-native-content/src/content/host/factory.rs:269:            HostBehavior::HlssFengqi => (None, None),",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:43:            HostBehavior::HlssFengqi => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:65:            HostBehavior::HlssFengqi => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:10:            HostBehavior::HlssFengqi => match self.stage {"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 8,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "HlssXiangxing",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+      "sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "name": "hlss_xiangxing",
+      "line": 296,
+      "props": {
+        "group": "'hlss_xiangxing_hp'",
+        "trigger": "{player:['damageEnd','loseHpEnd']}",
+        "forced": "true",
+        "subSkill": "{\n\t\t\t\t    epic:{\n\t\t\t\t        forced:true,\n\t\t\t\t        skillAnimation:true,\n\t\t\t\t        animationColor:\"thunder\",\n\t\t\t\t        audio:'hlss_yueyin',\n\t\t\t\t    },\n\t\t\t\t    hp:{\n\t\t\t\t        trigger:{\n\t\t\t\t            player:[\"changeHp\",\"loseMaxHp\",\"gainMaxHp\"],\n\t\t\t\t        },\n\t\t\t\t        filter(event,player){\n\t\t\t\t            return player.getHp()<player.maxHp;\n\t\t\t\t        },\n\t\t\t         \tinit:function(player,skill){\n\t\t\t\t\t\t    var upd=lib.element.player.update.toString();\n\t\t\t\t\t\t    var ret=upd.lastIndexOf('return');\n\t\t\t\t\t\t    window.nebulaHp=function(player){\n\t\t\t\t\t\t        if(!player.node) return;\n\t\t\t\t\t\t        if(!player.node.hp) return;\n\t\t\t\t\t\t        if(!player.storage) return;\n\t\t\t\t\t\t        if(player.storage.hlss_xiangxing&&player.storage.hlss_xiangxing>0) {\n\t\t\t\t\t\t            player.node.hp.style.filter='brightness(250%) grayscale(100%)';\n\t\t\t\t\t\t        }else {\n\t\t\t\t\t\t            player.node.hp.style.filter='';\n\t\t\t\t\t\t        }\n\t\t\t\t\t    \t}\n\t\t\t\t\t    \tvar upds='('+upd.slice(0,ret)+'window.nebulaHp(this);'+upd.slice(ret)+')';\n\t\t\t\t\t    \twindow.upds=upds;\n\t\t\t\t\t    \tplayer.update=eval(upds);\n\t\t\t\t\t\t    player.update();\n\t\t\t\t        },\n\t\t\t\t        priority:-100,\n\t\t\t\t        forced:true,\n\t\t\t\t        forceDie:true,\n\t\t\t\t        silent:true,\n\t\t\t\t        charlotte:true,\n\t\t\t\t        firstDo:true,\n\t\t\t\t        content:function() {\n\t\t\t\t            player.hp=player.maxHp;\n\t\t\t\t            player.update();\n\t\t\t\t        },\n\t\t\t\t    },\n\t\t\t\t}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'禳星'",
+        "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+        "line": 15221
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:576:            HostBehavior::HlssXiangxing => self.step_skills_damage(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs:85:            HostBehavior::HlssXiangxing => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:35:            HostBehavior::HlssXiangxing => match event {",
+      "crates/engine-native-content/src/content/host/filtering.rs:62:            HostBehavior::HlssXiangxing => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:266:            HostBehavior::HlssXiangxing => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 10,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "HlssYueyin",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+      "sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "name": "hlss_yueyin",
+      "line": 181,
+      "props": {
+        "group": "'hlss_yueyin2'",
+        "trigger": "{\n\t\t\t\t    player: ['damageBegin4', 'damage'],\n\t\t\t\t}",
+        "firstDo": "true",
+        "silent": "true"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'隐月'",
+        "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+        "line": 15223
+      },
+      "tuple": {
+        "timing": "First",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 1,
+    "timing": "First",
+    "order_selectable": false,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:580:            HostBehavior::HlssYueyin => self.step_skills_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs:167:            HostBehavior::HlssYueyin => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:41:            HostBehavior::HlssYueyin => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:64:            HostBehavior::HlssYueyin => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:267:            HostBehavior::HlssYueyin => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 12,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "HlssYueyin2",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+      "sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "name": "hlss_yueyin2",
+      "line": 263,
+      "props": {
+        "trigger": "{player:'turnOverBefore'}",
+        "priority": "20",
+        "forced": "true"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'隐月'",
+        "path": "archive/upstream/noname-liuli/noname/character/extra.js",
+        "line": 15225
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 2000,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 2000,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:683:            HostBehavior::HlssYueyin2 => self.step_skills_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs:661:            HostBehavior::HlssYueyin2 => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:443:            HostBehavior::HlssYueyin2 => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:182:            HostBehavior::HlssYueyin2 => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:268:            HostBehavior::HlssYueyin2 => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 14,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "MbcmQingzheng",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "name": "mbcmqingzheng",
+      "line": 17117,
+      "props": {
+        "trigger": "{\n\t\t            player: 'phaseUseBegin'\n\t\t        }"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'清正'",
+        "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+        "line": 20199
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:679:            HostBehavior::MbcmQingzheng => self.step_skills_damage(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs:448:            HostBehavior::MbcmQingzheng => match self.stage {",
+      "crates/engine-native-content/src/content/host/factory.rs:277:            HostBehavior::MbcmQingzheng => (None, None),",
+      "crates/engine-native-content/src/content/host/filtering.rs:178:            HostBehavior::MbcmQingzheng => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:412:            HostBehavior::MbcmQingzheng => matches!(event,"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 16,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "NewMeibu",
+    "source_instance": "noname",
+    "source": {
+      "path": "archive/upstream/noname/apps/core/character/sp/skill.js",
+      "sha256": "8fa5e9958df76f6d539ef9354cfe09722719ea54e47d8e23731450c175318680",
+      "name": "new_meibu",
+      "line": 35046,
+      "props": {
+        "trigger": "{\n\t\t\tglobal: \"phaseUseBegin\",\n\t\t}",
+        "subSkill": "{\n\t\t\trange: {\n\t\t\t\tonremove: true,\n\t\t\t\tcharlotte: true,\n\t\t\t\tmod: {\n\t\t\t\t\tglobalFrom(from, to, num) {\n\t\t\t\t\t\tif (from.getStorage(\"new_meibu_range\").includes(to)) {\n\t\t\t\t\t\t\treturn -Infinity;\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t\tsub: true,\n\t\t\t},\n\t\t}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "\"魅步\"",
+        "path": "archive/upstream/noname/apps/core/character/sp/translate.js",
+        "line": 223,
+        "sha256": "a06576b54782d4029e4e4c7034e3dbfc10d8cdad22fd01cd48c5caeebeb1bc0b"
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Core get.priority -25/-50/-75"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname/apps/core/noname/get/index.ts",
+      "formula": "_priority cache or priority*100 + silent -25*equipSkill -50*cardSkill -75*ruleSkill"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:596:            HostBehavior::NewMeibu => self.step_skills_virtual_use(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:99:            HostBehavior::NewMeibu => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:88:            HostBehavior::NewMeibu => match event {",
+      "crates/engine-native-content/src/content/host/filtering.rs:83:            HostBehavior::NewMeibu => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:28:            HostBehavior::NewMeibu => match event {"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 18,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "NewZhixi",
+    "source_instance": "noname",
+    "source": {
+      "path": "archive/upstream/noname/apps/core/character/sp/skill.js",
+      "sha256": "8fa5e9958df76f6d539ef9354cfe09722719ea54e47d8e23731450c175318680",
+      "name": "new_zhixi",
+      "line": 35205,
+      "props": {
+        "trigger": "{\n\t\t\tplayer: \"useCard1\",\n\t\t}",
+        "forced": "true",
+        "firstDo": "true"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "\"止息\"",
+        "path": "archive/upstream/noname/apps/core/character/sp/translate.js",
+        "line": 227,
+        "sha256": "a06576b54782d4029e4e4c7034e3dbfc10d8cdad22fd01cd48c5caeebeb1bc0b"
+      },
+      "tuple": {
+        "timing": "First",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Core get.priority -25/-50/-75"
+    },
+    "effective_priority": 0,
+    "timing": "First",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname/apps/core/noname/get/index.ts",
+      "formula": "_priority cache or priority*100 + silent -25*equipSkill -50*cardSkill -75*ruleSkill"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:598:            HostBehavior::NewZhixi => self.step_skills_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs:241:            HostBehavior::NewZhixi => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:202:            HostBehavior::NewZhixi => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:111:            HostBehavior::NewZhixi => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:320:            HostBehavior::NewZhixi => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 20,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "Rangjie",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "name": "rangjie",
+      "line": 13342,
+      "props": {
+        "trigger": "{player:'damageEnd'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'让节'",
+        "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+        "line": 19703
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:602:            HostBehavior::Rangjie => self.step_skills_cards(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_cards.rs:9:            HostBehavior::Rangjie => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:215:            HostBehavior::Rangjie => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:115:            HostBehavior::Rangjie => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:318:            HostBehavior::Rangjie => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "additional_semantic_gap": "Core newer definition has getIndex; this Liuli source has its own repeat loop. Indexed reconstruction remains outside this ordering proof and remains in C scope.",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_cards.rs": "c9109e3232d4e94eb7fde4f6bd79ab23b2a9622d52fa28f0f1e504415176f3fc",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 22,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "SwdJiang",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "name": "jiang",
+      "line": 3841,
+      "props": {
+        "trigger": "{\n\t\t\t\t\tplayer:'useCardToPlayered',\n\t\t\t\t\ttarget:'useCardToTargeted',\n\t\t\t\t}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'激昂'",
+        "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+        "line": 7933
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:386:            HostBehavior::SwdJiang => self.step_swd_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/swd_status.rs:271:            HostBehavior::SwdJiang => {",
+      "crates/engine-native-content/src/content/host/filtering.rs:410:            HostBehavior::SwdJiang => self.filter_swd(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs:898:            HostBehavior::SwdJiang => {"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/swd_status.rs": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 24,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "SwdLieren",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "name": "lieren",
+      "line": 4710,
+      "props": {
+        "trigger": "{source:'damageSource'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'烈刃'",
+        "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+        "line": 8000
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:359:            HostBehavior::SwdLieren => self.step_swd_damage_reactions(ctx),",
+      "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:474:            HostBehavior::SwdLieren => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering.rs:400:            HostBehavior::SwdLieren => self.filter_swd(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs:839:            HostBehavior::SwdLieren => matches!(event,"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 26,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "SwdReyingzi",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/refresh.js",
+      "sha256": "f9829f4567fa975ec7116360d9da78c1eb047dc5da9dd350bf49ec23ea38349a",
+      "name": "reyingzi",
+      "line": 12865,
+      "props": {
+        "trigger": "{player:'phaseDrawBegin2'}",
+        "forced": "true"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'英姿'",
+        "path": "archive/upstream/noname-liuli/noname/character/refresh.js",
+        "line": 14540
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:266:            HostBehavior::SwdReyingzi => self.step_swd_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/swd_status.rs:138:            HostBehavior::SwdReyingzi => {",
+      "crates/engine-native-content/src/content/host/filtering.rs:326:            HostBehavior::SwdReyingzi => self.filter_swd(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs:653:            HostBehavior::SwdReyingzi => matches!(event,"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/swd_status.rs": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 28,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "SwdZhuhai",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/refresh.js",
+      "sha256": "f9829f4567fa975ec7116360d9da78c1eb047dc5da9dd350bf49ec23ea38349a",
+      "name": "zhuhai",
+      "line": 13643,
+      "props": {
+        "trigger": "{global:'phaseJieshuBegin'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'诛害'",
+        "path": "archive/upstream/noname-liuli/noname/character/refresh.js",
+        "line": 14564
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:663:            HostBehavior::SwdZhuhai => self.step_swd_virtual_cards(ctx),",
+      "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs:212:            HostBehavior::SwdZhuhai => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs:76:            HostBehavior::SwdZhuhai => match event {",
+      "crates/engine-native-content/src/content/host/filtering.rs:162:            HostBehavior::SwdZhuhai => self.filter_swd(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:286:            HostBehavior::SwdZhuhai => (None, None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "crates/engine-native-content/src/content/host/filtering/swd.rs": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 30,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "Tianxiang",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "name": "tianxiang",
+      "line": 6501,
+      "props": {
+        "trigger": "{player:'damageBegin3'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'天香'",
+        "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+        "line": 8123
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:657:            HostBehavior::Tianxiang => self.step_skills_damage(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs:338:            HostBehavior::Tianxiang => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:399:            HostBehavior::Tianxiang => matches!(event,",
+      "crates/engine-native-content/src/content/host/factory.rs:288:            HostBehavior::Tianxiang => (None, None),",
+      "crates/engine-native-content/src/content/host/filtering.rs:157:            HostBehavior::Tianxiang => self.filter_common(ctx, owner, event),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_damage.rs": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 32,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "Tianxiang2",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "name": "tianxiang2",
+      "line": 6577,
+      "props": {
+        "trigger": "{player:['damageAfter','damageCancelled','damageZero']}",
+        "forced": "true",
+        "charlotte": "true"
+      },
+      "method_flags": [],
+      "translation": null,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": null
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": false,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:659:            HostBehavior::Tianxiang2 => self.step_skills_status(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs:644:            HostBehavior::Tianxiang2 => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:408:            HostBehavior::Tianxiang2 => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:159:            HostBehavior::Tianxiang2 => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:289:            HostBehavior::Tianxiang2 => (None, None),"
+    ],
+    "translation_absence": {
+      "qualification": "exact tianxiang2 absent from the complete selected shenhua translate table; sourceSkill is not inherit and does not copy its display key",
+      "table": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "contrast": "xintianxiang2 exists and is a distinct source skill; not used as tianxiang2 name"
+    },
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_status.rs": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 34,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "YunchouBeige",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "name": "beige",
+      "line": 4163,
+      "props": {
+        "trigger": "{global:'damageEnd'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'悲歌'",
+        "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+        "line": 7939
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/activation.rs:156:            HostBehavior::YunchouBeige => self.activate_common(ctx, owner),",
+      "crates/engine-native-content/src/content/host/step.rs:471:            HostBehavior::YunchouBeige => self.step_yunchou(ctx),",
+      "crates/engine-native-content/src/content/host/step/yunchou.rs:36:            HostBehavior::YunchouBeige => match self.stage {",
+      "crates/engine-native-content/src/content/host/activation/common.rs:331:            HostBehavior::YunchouBeige => Some(Box::new(HostMachine {",
+      "crates/engine-native-content/src/content/host/factory.rs:403:            HostBehavior::YunchouBeige => match event {",
+      "crates/engine-native-content/src/content/host/factory.rs:516:            HostBehavior::YunchouBeige => match event {",
+      "crates/engine-native-content/src/content/host/filtering.rs:442:            HostBehavior::YunchouBeige => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:450:            HostBehavior::YunchouBeige => matches!(event,"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/activation.rs": "5bd87ac57772b595653ea10a70ecfa6a0a04f5b96b29d33868689bb0a029488e",
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/yunchou.rs": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "crates/engine-native-content/src/content/host/activation/common.rs": "f3ce8155a46e8fe2553e16f2526689666d1eebec975267eec5cd0bc620ba4b72",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 36,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "YunchouJiaoxia",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/mode/boss.js",
+      "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "name": "jiaoxia",
+      "line": 7147,
+      "props": {
+        "trigger": "{target:'useCardToTargeted'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'皎霞'",
+        "path": "archive/upstream/noname-liuli/noname/mode/boss.js",
+        "line": 9491
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:703:            HostBehavior::YunchouJiaoxia => self.step_yunchou(ctx),",
+      "crates/engine-native-content/src/content/host/step/yunchou.rs:317:            HostBehavior::YunchouJiaoxia => {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:482:            HostBehavior::YunchouJiaoxia => matches!(event,",
+      "crates/engine-native-content/src/content/host/filtering.rs:449:            HostBehavior::YunchouJiaoxia => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/factory.rs:227:            HostBehavior::YunchouJiaoxia => (Some(owner), None),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/yunchou.rs": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 38,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "Zhenlie",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/character/yijiang.js",
+      "sha256": "e12aee745fd63ea58fa6c7685bb6ae44426f53cf64cfdc37853c1bf7d2812b79",
+      "name": "zhenlie",
+      "line": 11678,
+      "props": {
+        "trigger": "{target:'useCardToTargeted'}"
+      },
+      "method_flags": [],
+      "translation": {
+        "truthy": true,
+        "text": "'贞烈'",
+        "path": "archive/upstream/noname-liuli/noname/character/yijiang.js",
+        "line": 14130
+      },
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "formula": "Liuli addList -30/-30"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "calculator": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "formula": "priority*100 + silent -30*equipSkill -30*ruleSkill",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:637:            HostBehavior::Zhenlie => self.step_skills_discard_costs(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs:378:            HostBehavior::Zhenlie => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:355:            HostBehavior::Zhenlie => match event {",
+      "crates/engine-native-content/src/content/host/factory.rs:300:            HostBehavior::Zhenlie => (None, None),",
+      "crates/engine-native-content/src/content/host/filtering.rs:145:            HostBehavior::Zhenlie => self.filter_common(ctx, owner, event),"
+    ],
+    "translation_absence": null,
+    "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 40,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  },
+  {
+    "variant": "FzXinKuanggu",
+    "source_instance": "noname-liuli",
+    "source": {
+      "path": "archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+      "line": 5199,
+      "sha256": "df022b56df575f5ca4df92398e1ecc5acafda4ef09805aa0e851d52c46a1176f",
+      "inherit": "xinkuanggu",
+      "own_trigger": "{\n                            source: \"damageSource\",\n                        }"
+    },
+    "inherited_source": {
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "line": 3204,
+      "props": {}
+    },
+    "inherit_and_name_copy": {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "lines": "44137-44145",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    "effective_priority": 0,
+    "timing": "Normal",
+    "order_selectable": true,
+    "qualification": "own fields override inherited definition; missing ordering fields and exact translation copied by actual finishSkill; forced/charlotte/direct do not independently sort",
+    "native_callers": [
+      "crates/engine-native-content/src/content/host/step.rs:70:            HostBehavior::FzXinKuanggu => self.step_skills_recovery(ctx),",
+      "crates/engine-native-content/src/content/host/step/skills_recovery.rs:7:            HostBehavior::FzXinKuanggu => match self.stage {",
+      "crates/engine-native-content/src/content/host/filtering.rs:98:            HostBehavior::FzXinKuanggu => self.filter_common(ctx, owner, event),",
+      "crates/engine-native-content/src/content/host/filtering/common.rs:149:            HostBehavior::FzXinKuanggu => match event {",
+      "crates/engine-native-content/src/content/host/factory.rs:337:            HostBehavior::FzXinKuanggu => (None, None),"
+    ],
+    "native_caller_file_sha256": {
+      "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+      "crates/engine-native-content/src/content/host/step/skills_recovery.rs": "41f87f863f5367867e23a2759038cbd94bd7f5e887f01f1b849cbd6335299300",
+      "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+      "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+    },
+    "native_order_binding": {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+      "line": 42,
+      "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+    }
+  }
+]

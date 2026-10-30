@@ -104,7 +104,7 @@ test("dispose during resource allocation closes it once and submits no request",
     if (command === "native_engine_open") return new Promise((resolve) => { opened = resolve; });
     return Promise.resolve();
   });
-  transport.postMessage({ id: 1, type: "init" });
+  for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "init" });
   await tick();
   transport.terminate();
   transport.terminate();
@@ -149,4 +149,118 @@ test("IPC refuses malformed B metadata before delivering a view envelope", async
   assert.equal(response.ok, false);
   assert.match(response.error, /generals metadata invalid/);
   transport.terminate();
+});
+
+for (const blockedAt of ["open", "request"]) {
+  test(`desktop admission bounds 128 submissions while ${blockedAt} is blocked, before extending the promise tail`, async () => {
+    let release;
+    const blocked = new Promise((resolve) => { release = resolve; });
+    const calls = [];
+    const transport = new DesktopEngineTransport(async (command, args) => {
+      calls.push({ command, args });
+      if (command === "native_engine_open") return blockedAt === "open" ? blocked : 40;
+      if (command === "native_engine_close") return;
+      if (blockedAt === "request" && args.request.id === 1) await blocked;
+      return { id: args.request.id, ok: true, data: args.request.id };
+    });
+    const replies = [];
+    transport.onmessage = (event) => replies.push(event.data.id);
+    const accepted = [];
+    const rejected = [];
+    for (let id = 1; id <= 128; id++) {
+      const tailBefore = transport.tail;
+      try {
+        transport.postMessage({ id, type: "autoStep" });
+        accepted.push(id);
+        if (id === 1) await tick();
+      } catch (error) {
+        assert.match(error.message, /not submitted|未提交/);
+        assert.doesNotMatch(error.message, /unknown|未知/);
+        assert.equal(transport.tail, tailBefore, "rejection must not append another promise");
+        rejected.push(id);
+      }
+    }
+    await tick();
+    const beforeRelease = calls.map((call) => call.command);
+    release(40);
+    await tick();
+    assert.deepEqual(accepted, [1, 2, 3, 4, 5, 6, 7, 8]);
+    assert.equal(rejected.length, 120);
+    assert.deepEqual(beforeRelease, blockedAt === "open" ? ["native_engine_open"] : ["native_engine_open", "native_engine_request"]);
+    assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), accepted);
+    assert.deepEqual(replies, accepted);
+    transport.postMessage({ id: 129, type: "status" });
+    await tick();
+    assert.deepEqual(replies, [...accepted, 129]);
+    transport.terminate();
+  });
+}
+
+test("IPC errors, normalization errors and a throwing listener release admission and leave the tail usable", async () => {
+  const calls = [];
+  const errors = [];
+  const originalError = console.error;
+  const transport = new DesktopEngineTransport(async (command, args) => {
+    if (command === "native_engine_open") return 41;
+    if (command === "native_engine_close") return;
+    const id = args.request.id;
+    calls.push(id);
+    if (id === 1) throw new Error("bridge lost");
+    if (id === 2) return { id, ok: false, error: "controlled failure" };
+    if (id === 3) return { id: 999, ok: true };
+    if (id === 5) return { id, ok: true, data: { view: { seats: [{ generals: [{ revealed: false }, null] }] } } };
+    return { id, ok: true, data: id };
+  });
+  const replies = [];
+  console.error = (...args) => errors.push(args);
+  transport.onmessage = (event) => {
+    replies.push(event.data);
+    if (event.data.id === 4) throw new Error("listener failed");
+  };
+  try {
+    for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "autoStep" });
+    await tick();
+    assert.deepEqual(calls, [1, 2, 3, 4, 5, 6, 7, 8]);
+    assert.match(replies[0].error, /bridge lost.*结果可能未知/);
+    assert.equal(replies[1].error, "controlled failure");
+    assert.match(replies[2].error, /invalid IPC response.*结果可能未知/);
+    assert.match(replies[4].error, /generals metadata invalid/);
+    assert.deepEqual(replies.map((reply) => reply.id), calls);
+    assert.equal(errors.length, 1);
+    assert.match(String(errors[0]), /listener failed/);
+    for (let id = 9; id <= 16; id++) transport.postMessage({ id, type: "status" });
+    await tick();
+    assert.deepEqual(calls, Array.from({ length: 16 }, (_, i) => i + 1));
+    assert.deepEqual(replies.map((reply) => reply.id), calls);
+  } finally {
+    console.error = originalError;
+    transport.terminate();
+  }
+});
+
+test("a rejected resource open drains accepted slots without submitting requests", async () => {
+  const calls = [];
+  const transport = new DesktopEngineTransport(async (command) => {
+    calls.push(command);
+    throw new Error("open unavailable");
+  });
+  const replies = [];
+  transport.onmessage = (event) => replies.push(event.data);
+  for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "init" });
+  await tick();
+  for (let id = 9; id <= 16; id++) transport.postMessage({ id, type: "status" });
+  await tick();
+  assert.deepEqual(replies.map((reply) => reply.id), Array.from({ length: 16 }, (_, i) => i + 1));
+  assert.ok(replies.every((reply) => !reply.ok && /open unavailable/.test(reply.error)));
+  assert.deepEqual(calls, ["native_engine_open"]);
+  // A failed open retains the existing resource promise; terminate still reports its failure.
+  const originalError = console.error;
+  const errors = [];
+  console.error = (...args) => errors.push(args);
+  try {
+    transport.terminate();
+    await tick();
+    assert.equal(errors.length, 1);
+    assert.match(String(errors[0]), /open unavailable/);
+  } finally { console.error = originalError; }
 });

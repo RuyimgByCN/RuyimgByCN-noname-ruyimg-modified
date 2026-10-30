@@ -1,0 +1,1710 @@
+[
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "--path-format=absolute",
+      "--git-path",
+      "index"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/000-original-read.stdout",
+    "stderr": "commands/000-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28^{tree}"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/001-original-read.stdout",
+    "stderr": "commands/001-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:.github/workflows/ci.yml"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/002-original-read.stdout",
+    "stderr": "commands/002-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:apps/web-client/scripts/original-resources.test.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/003-original-read.stdout",
+    "stderr": "commands/003-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:apps/web-client/src/engine/originalResources.ts"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/004-original-read.stdout",
+    "stderr": "commands/004-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original/asset-manifest.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/005-original-read.stdout",
+    "stderr": "commands/005-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/original-audio-resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/006-original-read.stdout",
+    "stderr": "commands/006-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/sync-original-content.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/007-original-read.stdout",
+    "stderr": "commands/007-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_audio_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/008-original-read.stdout",
+    "stderr": "commands/008-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/009-original-read.stdout",
+    "stderr": "commands/009-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/010-original-read.stdout",
+    "stderr": "commands/010-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/011-original-read.stdout",
+    "stderr": "commands/011-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/012-original-read.stdout",
+    "stderr": "commands/012-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/013-original-read.stdout",
+    "stderr": "commands/013-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/014-original-read.stdout",
+    "stderr": "commands/014-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/015-original-read.stdout",
+    "stderr": "commands/015-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/016-original-read.stdout",
+    "stderr": "commands/016-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:.gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/017-original-read.stdout",
+    "stderr": "commands/017-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "init.defaultBranch=fixture",
+      "init",
+      "."
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/018-fixture-git.stdout",
+    "stderr": "commands/018-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 193,
+    "stdin_sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf",
+    "stdout": "commands/019-fixture-blob.stdout",
+    "stderr": "commands/019-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:.gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/020-original-read.stdout",
+    "stderr": "commands/020-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,c8b364f0f5ff0956afb80a60217e1aa99adfa475,.gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/021-fixture-git.stdout",
+    "stderr": "commands/021-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/022-original-read.stdout",
+    "stderr": "commands/022-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 2713,
+    "stdin_sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+    "stdout": "commands/023-fixture-blob.stdout",
+    "stderr": "commands/023-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/024-original-read.stdout",
+    "stderr": "commands/024-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,e9a9dfa9a29f780cf6802c4c9ea5b14a4dae7e97,content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/025-fixture-git.stdout",
+    "stderr": "commands/025-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/026-original-read.stdout",
+    "stderr": "commands/026-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 18716,
+    "stdin_sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+    "stdout": "commands/027-fixture-blob.stdout",
+    "stderr": "commands/027-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/028-original-read.stdout",
+    "stderr": "commands/028-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,28d322690558d295051d28d436abc07e74807b42,content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/029-fixture-git.stdout",
+    "stderr": "commands/029-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/030-original-read.stdout",
+    "stderr": "commands/030-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 114531,
+    "stdin_sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+    "stdout": "commands/031-fixture-blob.stdout",
+    "stderr": "commands/031-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/032-original-read.stdout",
+    "stderr": "commands/032-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,4c6702dc5e5258ab8f22e54023305ea08f245ec8,content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/033-fixture-git.stdout",
+    "stderr": "commands/033-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/034-original-read.stdout",
+    "stderr": "commands/034-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 10188,
+    "stdin_sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+    "stdout": "commands/035-fixture-blob.stdout",
+    "stderr": "commands/035-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/036-original-read.stdout",
+    "stderr": "commands/036-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,0a62e382dc12a9a133918fa61a01777023ed6a66,content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/037-fixture-git.stdout",
+    "stderr": "commands/037-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/038-original-read.stdout",
+    "stderr": "commands/038-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 39091,
+    "stdin_sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+    "stdout": "commands/039-fixture-blob.stdout",
+    "stderr": "commands/039-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/040-original-read.stdout",
+    "stderr": "commands/040-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,ddf9b6045b6f2877ccc9f280424f5062026e255e,content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/041-fixture-git.stdout",
+    "stderr": "commands/041-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/042-original-read.stdout",
+    "stderr": "commands/042-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 81053,
+    "stdin_sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+    "stdout": "commands/043-fixture-blob.stdout",
+    "stderr": "commands/043-fixture-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "rev-parse",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/044-original-read.stdout",
+    "stderr": "commands/044-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--add",
+      "--cacheinfo",
+      "100644,db2217887fa4f14f17e2814e00a2706b9da39671,content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/045-fixture-git.stdout",
+    "stderr": "commands/045-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--stage"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/046-fixture-git.stdout",
+    "stderr": "commands/046-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/original-audio-resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/047-original-read.stdout",
+    "stderr": "commands/047-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/original-content-order.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/048-original-read.stdout",
+    "stderr": "commands/048-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/original-source-ast.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/049-original-read.stdout",
+    "stderr": "commands/049-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/sync-original-content.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/050-original-read.stdout",
+    "stderr": "commands/050-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_content_order.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/051-original-read.stdout",
+    "stderr": "commands/051-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_audio_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/052-original-read.stdout",
+    "stderr": "commands/052-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/053-original-read.stdout",
+    "stderr": "commands/053-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original/asset-manifest.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/054-original-read.stdout",
+    "stderr": "commands/054-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "config",
+      "--show-origin",
+      "--list"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/055-fixture-git.stdout",
+    "stderr": "commands/055-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=false",
+      "-c",
+      "core.eol=lf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "config",
+      "--show-origin",
+      "--list"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/056-fixture-git.stdout",
+    "stderr": "commands/056-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      ".gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/057-fixture-git.stdout",
+    "stderr": "commands/057-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "check-attr",
+      "text",
+      "eol",
+      "--",
+      "content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/058-fixture-git.stdout",
+    "stderr": "commands/058-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      "content/original-audio-compat/provenance.json",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/059-fixture-git.stdout",
+    "stderr": "commands/059-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/validate.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat",
+      "reject"
+    ],
+    "cwd": null,
+    "exit": 1,
+    "expected_exit": 1,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/060-windows-before-red.stdout",
+    "stderr": "commands/060-windows-before-red.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=false",
+      "-c",
+      "core.eol=lf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      "content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/061-fixture-git.stdout",
+    "stderr": "commands/061-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/validate.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat",
+      "accept"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/062-lf-before-green.stdout",
+    "stderr": "commands/062-lf-before-green.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "hash-object",
+      "-w",
+      "--stdin"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": 314,
+    "stdin_sha256": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388",
+    "stdout": "commands/063-candidate-attribute-blob.stdout",
+    "stderr": "commands/063-candidate-attribute-blob.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "update-index",
+      "--cacheinfo",
+      "100644,590aad136200d257b5bff1f535a5dedf0f411f88,.gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/064-fixture-git.stdout",
+    "stderr": "commands/064-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      ".gitattributes"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/065-fixture-git.stdout",
+    "stderr": "commands/065-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "check-attr",
+      "text",
+      "eol",
+      "--",
+      "content/original-audio-compat/provenance.json",
+      "docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication/run41053688083-desktop-windows-raw.log",
+      "content/unrelated.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/066-fixture-git.stdout",
+    "stderr": "commands/066-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=true",
+      "-c",
+      "core.eol=crlf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      "content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/067-fixture-git.stdout",
+    "stderr": "commands/067-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/validate.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat",
+      "accept"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/068-windows-after-green.stdout",
+    "stderr": "commands/068-windows-after-green.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "-c",
+      "core.autocrlf=false",
+      "-c",
+      "core.eol=lf",
+      "-c",
+      "core.attributesFile=/dev/null",
+      "checkout-index",
+      "--force",
+      "--",
+      "content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/069-fixture-git.stdout",
+    "stderr": "commands/069-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/validate.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat",
+      "accept"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/070-lf-after-green.stdout",
+    "stderr": "commands/070-lf-after-green.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--stage"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/071-fixture-git.stdout",
+    "stderr": "commands/071-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/072-fixture-git.stdout",
+    "stderr": "commands/072-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/073-fixture-git.stdout",
+    "stderr": "commands/073-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/074-fixture-git.stdout",
+    "stderr": "commands/074-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/075-fixture-git.stdout",
+    "stderr": "commands/075-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/076-fixture-git.stdout",
+    "stderr": "commands/076-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "ls-files",
+      "--format=%(objectname)",
+      "--",
+      "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/077-fixture-git.stdout",
+    "stderr": "commands/077-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "scripts/test_original_content_order.mjs",
+      "scripts/test_original_audio_resources.mjs",
+      "scripts/test_original_resources.mjs"
+    ],
+    "cwd": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source",
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/078-original-resource17.stdout",
+    "stderr": "commands/078-original-resource17.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:.github/workflows/ci.yml"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/079-original-read.stdout",
+    "stderr": "commands/079-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:apps/web-client/scripts/original-resources.test.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/080-original-read.stdout",
+    "stderr": "commands/080-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:apps/web-client/src/engine/originalResources.ts"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/081-original-read.stdout",
+    "stderr": "commands/081-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original/asset-manifest.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/082-original-read.stdout",
+    "stderr": "commands/082-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/original-audio-resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/083-original-read.stdout",
+    "stderr": "commands/083-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/sync-original-content.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/084-original-read.stdout",
+    "stderr": "commands/084-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_audio_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/085-original-read.stdout",
+    "stderr": "commands/085-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:scripts/test_original_resources.mjs"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/086-original-read.stdout",
+    "stderr": "commands/086-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/087-original-read.stdout",
+    "stderr": "commands/087-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/088-original-read.stdout",
+    "stderr": "commands/088-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/089-original-read.stdout",
+    "stderr": "commands/089-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/090-original-read.stdout",
+    "stderr": "commands/090-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/091-original-read.stdout",
+    "stderr": "commands/091-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "cat-file",
+      "blob",
+      "777bf33969e5ecc04b63971adab26be32f12fd28:content/original-audio-compat/provenance.json"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/092-original-read.stdout",
+    "stderr": "commands/092-original-read.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/093-fixture-git.stdout",
+    "stderr": "commands/093-fixture-git.stderr"
+  },
+  {
+    "argv": [
+      "node",
+      "--version"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/094-node-version.stdout",
+    "stderr": "commands/094-node-version.stderr"
+  },
+  {
+    "argv": [
+      "git",
+      "-C",
+      "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout",
+      "--version"
+    ],
+    "cwd": null,
+    "exit": 0,
+    "expected_exit": 0,
+    "stdin_bytes": null,
+    "stdin_sha256": null,
+    "stdout": "commands/095-fixture-git.stdout",
+    "stderr": "commands/095-fixture-git.stderr"
+  }
+]

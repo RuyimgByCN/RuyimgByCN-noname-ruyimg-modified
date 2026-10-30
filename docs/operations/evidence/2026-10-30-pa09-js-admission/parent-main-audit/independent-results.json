@@ -1,0 +1,33 @@
+{
+  "result": "PASS",
+  "scope": "Fresh existing-byte independent parse; no source writes/tests/builds/GUI",
+  "evidence_files": 37,
+  "artifact_index_sha256": "5c53c0376e67f3e37343f25d95e0ed67ea3aa096173369ec0b796d05e1c36670",
+  "commands": {
+    "total": 11,
+    "exit0": 9,
+    "exit1_harness": 1,
+    "not_executed_timeout": 1
+  },
+  "targeted": 20,
+  "frontend": 175,
+  "source3": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0"
+  },
+  "protected": 99,
+  "modules": 18,
+  "dist": 37,
+  "production_files": 13,
+  "production_source_modules": 35,
+  "inherited_source_seams": 8,
+  "inherited_evidence_files": 7,
+  "main_vs_a1f_native_changed_paths": "",
+  "new_main_GUI": false,
+  "limitations": [
+    "First exploratory git status precedes entry index capture; no pre-entry index invariance claim.",
+    "Private actual WK qualification inherited only for exact source3/eight seams and unchanged native sources.",
+    "Historical warnings, setup timeout, hook timing and caller-order parser failures preserved."
+  ]
+}

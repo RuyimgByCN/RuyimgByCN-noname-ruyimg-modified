@@ -1,0 +1,45 @@
+## Review
+
+- **登记结论：OK with notes（仅证据）；本次 CI 仍为 failure。** 对象仅为 [run 41114612841](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41114612841)、attempt **1**、exact head **`777bf33969e5ecc04b63971adab26be32f12fd28`**。[原 run API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/run-final.stdout:1) 为 `completed/failure`，更新于 **2026-10-30T19:44:31Z**，不是旧 a1f 的 10 绿。
+- **Correct：**完整读取 producer 登记、manifest、producer verifier、父 bounded parser 与结果；另定向读取原 API 和 private 原日志。父 [parser](/tmp/noname-parent-ci41114612841-audit.py:1) / [PASS 结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41114612841-audit-135a_anz/independent-results.json:1) 支持 **9 success / 1 failure**：
+
+| Job | ID | Conclusion |
+| --- | ---: | --- |
+| perf-macos-latest | 124265454605 | success |
+| desktop-ubuntu-latest | 124265454929 | success |
+| gates-ubuntu | 124265454931 | success |
+| build-windows-latest | 124265454943 | success |
+| build-ubuntu-latest | 124265454957 | success |
+| build-macos-latest | 124265455005 | success |
+| desktop-macos-latest | 124265455034 | success |
+| desktop-windows-latest | 124265455086 | **failure** |
+| perf-ubuntu-latest | 124265455089 | success |
+| native-web | 124265455295 | success |
+
+- **Finding P1（已知 CI 阻塞）：**[Windows detail API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-detail.stdout:1) 明示 step **7** `prepare-original-content` failure。[原日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/private-raw-downloads/job-124265455086-raw-log.stdout:840) 在资源同步命令报 `audio compat fixed provenance/recipe/tool binding differs`，栈为 `validateAudioCompat`、`original-audio-resources.mjs:59:11`，调用方 `sync-original-content.mjs:277:24`；Node **20.20.2**、process exit **1**。后续需单独修复绑定差异并取得新 CI 证据。
+- 此处是资源准备抛错，未见失败的 Rust/Node 测试断言；Windows installer production 与 upload 均 **skipped**，不能登记为通过。早期/最终失败日志一致由 producer verifier 核验，本 reviewer 未重算。
+- **Step API 与整 job 分开：**父 parser 核得 **130 = 121 success / 1 failure / 8 skipped / 0 null**。Windows 七项 skipped 为 Linuxdeps、wasm-pack、TauriCLI、installer、upload、post setup-node、post rust-cache；macOS 另跳过 Linuxdeps。
+- **根因边界：**原失败日志未记录旧 provenance SHA，不能据此宣称真实 runner 已观察到 autocrlf/CRLF 改写。父消息中的 f82 隔离 Git 复现及单路径 `.gitattributes -text` 候选属于另项；本登记未核其产物，候选未接 Main、未 rerun，不改变本次 failure。
+
+- **测试范围引用父独立 parser：**gates **6894 passed / 0 failed / 77 ignored**；native regressions **1815/0/75**；三 OS build 各 **838/0/0**。这些范围重叠，不能相加为 unique tests。
+- **独立定向核原日志：**native-web 的 [Worker 输出](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/private-raw-downloads/job-124265455295-raw-log.stdout:4544) 为 **82/0**；同日志 **5415** 行起 frontend 为 **169 passed / 0 failed / 0 skipped**。
+- **独立定向核原日志：**gates 的 conformance 为 **19**，cross-target 为 `ALL CROSS-TARGET CHECKS PASSED`；[Gate4](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/private-raw-downloads/job-124265454931-raw-log.stdout:21731) 为资源测试 **17/17**，full verify 含 legacy **366**、portraits **2707**、audio **9652**、audio-compat **5**。通过的四个准备 job 的 sync/verify/diff guard 由 producer verifier 支持。
+- **性能仅预算通过：**独立核日志按 start-hash-p50 / distance-query-p95 / snapshot-restore / observer-projection，Ubuntu **64/0/55/25 μs**、macOS **70/0/136/28 μs**，预算 **100/300/200/100 μs**，两 tier 均 PASS；无同设备前后收益结论。
+
+[原 artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/artifacts-final.stdout:1) 只有以下两项，采集时未过期且绑定 exact run/head；**无 Windows artifact**：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| macOS | 13005303729 / 32802931 | `8d2bd8a6047967cd07fa1bc1a96367c2605b93aae41ab16b9932bd463905d104` |
+| Ubuntu | 13005023345 / 266341695 | `5ce6fbea14133c6717ba88b49cde2587ec27836eb23b2b2b81294759a8078ae7` |
+
+- **发布边界：**push receipt 为 exit **0**；branch API 为 exact777/tree **`7f2d41e257dfc44072bd6a5ef68dad4cb6c70496`**、parent a1f，远端 main 仍为 **`47347c6608d651660ae9459e59eb529b3cef277f`**。365 changed paths、14 admission hashes 引用 producer/verifier，未重新检查当前源码。
+- 新 guard **`82cb5f…`** 的八项记录均符合预期；原 hook **`e349af…`** 前后相同、persistent hooksPath unset。push wall **7.938809s**、locked **7.892195s**，差值含启动；Git **306 objects / 90 deltas / 3.44 MiB** 为记录的舍入进度，非 exact wire bytes。
+- **Watch：**producer/verifier 保留唯一 default watch exit **1**，原因是实际 CI failure；无 502、fallback 或第二次 watch。Main lease 于 **19:22:05.213530Z** 释放；现 Parent PA09 三处 source dirty 与新增证据不在该 777 快照范围内。
+- **归档：**父 parser 已核 **86 项 bytes/SHA256/CRC32**、十份 API detail、gzip 解压后的 SHA/CRC/length/CRLF；本 reviewer 未重复 hash 或执行脚本。[manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/copy-manifest.json:1) 对应 **87 primary 文件含自身**；十日志解压共 **4,634,356 bytes**，Windows build/desktop CRLF **3822/898**。归档使用 gzip 原字节，11 份 private originals 不纳入 primary。
+- **保留项：**producer 的 **3480 warning loglines** 含重复 compiler summaries，ignored 与八项 skipped 均保留；初次 checker 的旧 Gate4 selector 失败也保留，后续修正 checker 不抹去该记录。
+- **Fixed：**无修改。登记未发现新增证据矛盾；历史 a1f10绿及其三次502、da7e10绿与首轮失败均不被覆盖。
+- **Merge verdict：OK with notes，仅允许登记/归档该失败结果；本次 CI acceptance 仍阻塞。**
+
+未运行新 network/watch/tests/build、producer 脚本或 source/index/Main 写入；未验下载、安装、signing、device、当前 PA09、Whole I02/37 或 default switch。
+风险：Windows provenance 校验失败仍未由新 runner 结果解除；父需保存完整 87 份 primary 证据，不能将候选受控复现写成真实 CI 已修复。

@@ -1,0 +1,64 @@
+FINAL_GATE_RESULT=PASS
+
+Implemented the verification-only final gate capture; no product source, documentation prose, configuration, index, staging, commit, or push changes.
+Changed files: 19 new evidence artifacts under `/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/`, plus this assigned report.
+Validation: all four prescribed commands actually exited 0, each serialized through `/tmp/noname-run-serialized.py` and `/tmp/noname-phase4-heavy-command.lock`.
+
+| Exact command at repository root | Exit | Wall seconds | Locked seconds | Observed result |
+|---|---:|---:|---:|---|
+| `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` | 0 | 0.514 | 0.061 | 2 tests, OK |
+| `python3 -B scripts/check-source-lines.py` | 0 | 7.616 | 7.347 | 8,992 files; both line limits pass |
+| `python3 -B scripts/check_doc_line_refs.py --strict` | 0 | 7.576 | 7.183 | 1,065 references; zero out-of-range; six missing example-path categories retained |
+| `python3 -B scripts/preflight.py` | 0 | 324.106 | 323.802 | All 21 checks report success |
+
+Window: 2026-10-30T20:25:03.214632Z–20:30:47.071061Z. HEAD `777bf33969e5ecc04b63971adab26be32f12fd28`; tree `7f2d41e257dfc44072bd6a5ef68dad4cb6c70496` unchanged. Rules330/archive105/ABI758/WS6 are inherited; no version changes.
+Entry→exit: all 18 recorded invariants pass, including 21,726 captured maintained source/documentation/text paths, source3, attributes, compat14, A53, 12 CI paths, 99 protected paths, 18 modules, 37 dist files, HEAD/tree, package trees/diff, guard, index, tracked status, and empty staging. Broad media/binary exclusions are explicit; compat14 and narrow module/dist bytes remain covered. Caller sets compare order-insensitively; file hashes compare exactly.
+The prior functionality snapshot's narrow identities also match; the parent's intervening documentation/evidence changes were accepted as the new entry baseline and remained unchanged in this window.
+Attribute SHA256: `9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388`. All three source hashes match the admission JSON and prior entry exactly.
+`CARGO_INCREMENTAL=0`, `CARGO_BUILD_JOBS=2`; sampled free disk never fell below 97,089,900,544 bytes, well above the 3 GiB stop threshold. No retries or extra builds/tests/GUI/media operations.
+
+Evidence: [summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/summary.json), [commands.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/commands.json), [source-comparison.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/source-comparison.json), [artifact-sha256.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/artifact-sha256.json).
+The artifact index binds 18 evidence files; its SHA256 is `421375373673955d7959aaf1bd54e285ff70ef9887185b4464dd1ae5952310e2`. Full separate stdout/stderr, exact argv, actual exits, wrapper records, disk samples, wall/locked times, entry/exit manifests, capture code and driver output are retained. No raw gate failures occurred; documentation example-path hints remain unedited in gate-3.stderr.log.
+Open risks/questions: preflight suppresses child logs; only its actual 21 check summaries are qualified. Earlier functional/frontend/type/production/LSP/WK results are inherited. New Windows CI and broader PA09 performance/device acceptance remain outside this gate.
+Recommended next step: parent/reviewer independently accepts the sealed evidence, then proceeds under the existing publication authorization.
+Main lease released after own evidence sealed. No staged files.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"Ran exactly the four prescribed serialized root gates; all actual exits 0; 18 entry/exit invariants pass; writes confined to assigned evidence and report."},
+    {"id":"criterion-2","status":"satisfied","evidence":"19 sealed evidence artifacts include raw stdout/stderr, exact argv/exits/timing/disk/lock records, entry/exit hashes, source comparison, summary and SHA256 index; independent review pending."}
+  ],
+  "changedFiles": [
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/artifact-sha256.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/capture-driver.stdout-stderr.log",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/capture-final-gates.py",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/commands.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/entry.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/exit.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-1.stderr.log", "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-1.stdout.log",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-2.stderr.log", "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-2.stdout.log",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-3.stderr.log", "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-3.stdout.log",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-4.stderr.log", "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/gate-4.stdout.log",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/previous-functionality-comparison.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/seal-validation.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/serialized-wrapper-observed-at-seal.py",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/source-comparison.json",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/summary.json",
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/82a63550-cb16-4e06-943f-5125e51e4167/verification/pa09-js-and-checkout-final-gates.md"
+  ],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command":"python3 -B -m unittest discover -s scripts -p test_check_source_lines.py","result":"passed","summary":"Actual exit0; 2 tests OK; serialized."},
+    {"command":"python3 -B scripts/check-source-lines.py","result":"passed","summary":"Actual exit0; 8992 files pass; serialized."},
+    {"command":"python3 -B scripts/check_doc_line_refs.py --strict","result":"passed","summary":"Actual exit0; 1065 refs, zero out-of-range, six missing example categories retained; serialized."},
+    {"command":"python3 -B scripts/preflight.py","result":"passed","summary":"Actual exit0; 21 successful check lines; unchanged preflight; serialized."}
+  ],
+  "validationOutput": ["All 18 final-window invariants and 17 entry/admission invariants pass.","All 18 indexed artifact byte counts and SHA256 identities verified; artifact index is the 19th evidence file.","Post-capture HEAD/tree/index/staged/status/attributes/source3 seal checks pass."],
+  "noStagedFiles": true,
+  "diffSummary": "Verification evidence and assigned report only; no product or maintained prose/config changes.",
+  "reviewFindings": ["No blockers in capture/self-check; independent reviewer gate remains required."],
+  "manualNotes": "Main lease released after own evidence sealed. No staged files.",
+  "residualRisks": ["No new Rust/WASM/GUI/media/Windows CI runs; earlier functional and platform evidence inherited.","Preflight child logs are suppressed; broader PA09 performance/device acceptance remains open."]
+}
+```

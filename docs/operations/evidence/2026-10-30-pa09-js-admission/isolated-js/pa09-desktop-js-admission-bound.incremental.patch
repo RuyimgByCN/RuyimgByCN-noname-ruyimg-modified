@@ -1,0 +1,323 @@
+diff --git a/apps/web-client/scripts/nc04-worker-failure.test.mjs b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+index e994dd20..b8af23c6 100644
+--- a/apps/web-client/scripts/nc04-worker-failure.test.mjs
++++ b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+@@ -30,6 +30,8 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
+     .outputText.replace(/\nexport\s*\{\};?\s*$/, "");
+   const workers = [];
+   const failed = [];
++  const sent = [];
++  const received = [];
+   class FakeWorker {
+     sent = [];
+     terminated = false;
+@@ -48,12 +50,12 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
+     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
+     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
+     "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
+-  )(FakeWorker, FakeWorker, () => desktopNative, () => {}, (id) => failed.push(id),
+-    () => {}, () => {}, () => false, () => null, { error: () => {} },
++  )(FakeWorker, FakeWorker, () => desktopNative, (id) => sent.push(id), (id) => failed.push(id),
++    (id) => received.push(id), () => {}, () => false, () => null, { error: () => {} },
+     () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
+       constructor() { super(invoke); }
+     });
+-  return { client: new EngineClient(), workers, failed };
++  return { client: new EngineClient(), workers, failed, sent, received };
+ }
+ 
+ test("Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求", async () => {
+@@ -186,3 +188,91 @@ test("desktop IPC uses the production client's sequence, pending, errors and dis
+   assert.equal(calls.filter((c) => c.command === "native_engine_close").length, 1);
+   assert.equal(f.workers.length, 0);
+ });
++
++test("desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry", async (t) => {
++  const previousDebug = globalThis.__latencySabDebug;
++  let wakes = 0;
++  let settlements = 0;
++  globalThis.__latencySabDebug = { wake: () => { wakes++; }, settle: () => { settlements++; } };
++  t.after(() => {
++    if (previousDebug === undefined) delete globalThis.__latencySabDebug;
++    else globalThis.__latencySabDebug = previousDebug;
++  });
++  let release;
++  const blocked = new Promise((resolve) => { release = resolve; });
++  const calls = [];
++  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
++    calls.push({ command, args });
++    if (command === "native_engine_open") return 51;
++    if (command === "native_engine_close") return;
++    const { request } = args;
++    if (request.type !== "init") await blocked;
++    return { id: request.id, ok: true, data: { revision: request.id } };
++  } });
++  await f.client.connect();
++  const settled = [];
++  const promises = [];
++  for (let i = 0; i < 128; i++) {
++    promises.push(f.client.autoStep().then(
++      (value) => { settled.push({ ok: true, value }); },
++      (error) => { settled.push({ ok: false, error }); },
++    ));
++    assert.ok(f.client.pending.size <= 8, "synchronous rejection must immediately delete pending");
++    if (i === 0) await new Promise((resolve) => setImmediate(resolve));
++  }
++  await new Promise((resolve) => setImmediate(resolve));
++  assert.equal(f.client.pending.size, 8);
++  assert.deepEqual([...f.client.pending.keys()], [2, 3, 4, 5, 6, 7, 8, 9]);
++  assert.equal(settled.length, 120, "only eight caller promises may remain unresolved");
++  assert.equal(wakes, 129);
++  assert.equal(settlements, 1, "rejected excess requests must not settle accepted shared waits");
++  assert.equal(f.sent.length, 129);
++  assert.deepEqual(f.received, [1]);
++  assert.ok(settled.every((result) => !result.ok && /not submitted|未提交/.test(result.error.message) && !/未知|unknown/.test(result.error.message)));
++  assert.deepEqual(f.failed, Array.from({ length: 120 }, (_, i) => i + 10));
++  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2]);
++  release();
++  await settles(Promise.all(promises));
++  assert.equal(f.client.pending.size, 0);
++  assert.equal(settled.filter((result) => result.ok).length, 8);
++  assert.deepEqual(f.received, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
++  assert.equal(settlements, 9);
++  assert.equal(f.sent.length, f.failed.length + f.received.length);
++  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
++  assert.equal((await f.client.status()).revision, 130);
++  assert.equal(f.workers.length, 0);
++  assert.equal(f.client.getTransportKind(), "desktop-native");
++  f.client.dispose();
++});
++
++test("disposing eight accepted desktop requests retires the old resource and reconnects independently", async () => {
++  let release;
++  let resource = 60;
++  const calls = [];
++  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
++    calls.push({ command, args });
++    if (command === "native_engine_open") return ++resource;
++    if (command === "native_engine_close") return;
++    if (args.resourceId === 61 && args.request.type !== "init") {
++      return new Promise((resolve) => { release = resolve; });
++    }
++    return { id: args.request.id, ok: true, data: { revision: args.resourceId } };
++  } });
++  await f.client.connect();
++  const rejected = Promise.all(Array.from({ length: 8 }, () => assert.rejects(f.client.autoStep(), /结果未知/)));
++  await new Promise((resolve) => setImmediate(resolve));
++  f.client.dispose();
++  await settles(rejected);
++  assert.equal(f.client.pending.size, 0);
++  await f.client.connect();
++  assert.equal((await f.client.status()).revision, 62);
++  release({ id: 2, ok: true, data: { revision: 999 } });
++  await new Promise((resolve) => setImmediate(resolve));
++  assert.equal(f.client.pending.size, 0);
++  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request" && call.args.resourceId === 61).map((call) => call.args.request.id), [1, 2]);
++  assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61]);
++  assert.equal(f.workers.length, 0);
++  f.client.dispose();
++  await new Promise((resolve) => setImmediate(resolve));
++  assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61, 62]);
++});
+diff --git a/apps/web-client/scripts/pa09-desktop-transport.test.mjs b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+index 384b8a54..4bc11d66 100644
+--- a/apps/web-client/scripts/pa09-desktop-transport.test.mjs
++++ b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+@@ -104,7 +104,7 @@ test("dispose during resource allocation closes it once and submits no request",
+     if (command === "native_engine_open") return new Promise((resolve) => { opened = resolve; });
+     return Promise.resolve();
+   });
+-  transport.postMessage({ id: 1, type: "init" });
++  for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "init" });
+   await tick();
+   transport.terminate();
+   transport.terminate();
+@@ -150,3 +150,117 @@ test("IPC refuses malformed B metadata before delivering a view envelope", async
+   assert.match(response.error, /generals metadata invalid/);
+   transport.terminate();
+ });
++
++for (const blockedAt of ["open", "request"]) {
++  test(`desktop admission bounds 128 submissions while ${blockedAt} is blocked, before extending the promise tail`, async () => {
++    let release;
++    const blocked = new Promise((resolve) => { release = resolve; });
++    const calls = [];
++    const transport = new DesktopEngineTransport(async (command, args) => {
++      calls.push({ command, args });
++      if (command === "native_engine_open") return blockedAt === "open" ? blocked : 40;
++      if (command === "native_engine_close") return;
++      if (blockedAt === "request" && args.request.id === 1) await blocked;
++      return { id: args.request.id, ok: true, data: args.request.id };
++    });
++    const replies = [];
++    transport.onmessage = (event) => replies.push(event.data.id);
++    const accepted = [];
++    const rejected = [];
++    for (let id = 1; id <= 128; id++) {
++      const tailBefore = transport.tail;
++      try {
++        transport.postMessage({ id, type: "autoStep" });
++        accepted.push(id);
++        if (id === 1) await tick();
++      } catch (error) {
++        assert.match(error.message, /not submitted|未提交/);
++        assert.doesNotMatch(error.message, /unknown|未知/);
++        assert.equal(transport.tail, tailBefore, "rejection must not append another promise");
++        rejected.push(id);
++      }
++    }
++    await tick();
++    const beforeRelease = calls.map((call) => call.command);
++    release(40);
++    await tick();
++    assert.deepEqual(accepted, [1, 2, 3, 4, 5, 6, 7, 8]);
++    assert.equal(rejected.length, 120);
++    assert.deepEqual(beforeRelease, blockedAt === "open" ? ["native_engine_open"] : ["native_engine_open", "native_engine_request"]);
++    assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), accepted);
++    assert.deepEqual(replies, accepted);
++    transport.postMessage({ id: 129, type: "status" });
++    await tick();
++    assert.deepEqual(replies, [...accepted, 129]);
++    transport.terminate();
++  });
++}
++
++test("IPC errors, normalization errors and a throwing listener release admission and leave the tail usable", async () => {
++  const calls = [];
++  const errors = [];
++  const originalError = console.error;
++  const transport = new DesktopEngineTransport(async (command, args) => {
++    if (command === "native_engine_open") return 41;
++    if (command === "native_engine_close") return;
++    const id = args.request.id;
++    calls.push(id);
++    if (id === 1) throw new Error("bridge lost");
++    if (id === 2) return { id, ok: false, error: "controlled failure" };
++    if (id === 3) return { id: 999, ok: true };
++    if (id === 5) return { id, ok: true, data: { view: { seats: [{ generals: [{ revealed: false }, null] }] } } };
++    return { id, ok: true, data: id };
++  });
++  const replies = [];
++  console.error = (...args) => errors.push(args);
++  transport.onmessage = (event) => {
++    replies.push(event.data);
++    if (event.data.id === 4) throw new Error("listener failed");
++  };
++  try {
++    for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "autoStep" });
++    await tick();
++    assert.deepEqual(calls, [1, 2, 3, 4, 5, 6, 7, 8]);
++    assert.match(replies[0].error, /bridge lost.*结果可能未知/);
++    assert.equal(replies[1].error, "controlled failure");
++    assert.match(replies[2].error, /invalid IPC response.*结果可能未知/);
++    assert.match(replies[4].error, /generals metadata invalid/);
++    assert.deepEqual(replies.map((reply) => reply.id), calls);
++    assert.equal(errors.length, 1);
++    assert.match(String(errors[0]), /listener failed/);
++    for (let id = 9; id <= 16; id++) transport.postMessage({ id, type: "status" });
++    await tick();
++    assert.deepEqual(calls, Array.from({ length: 16 }, (_, i) => i + 1));
++    assert.deepEqual(replies.map((reply) => reply.id), calls);
++  } finally {
++    console.error = originalError;
++    transport.terminate();
++  }
++});
++
++test("a rejected resource open drains accepted slots without submitting requests", async () => {
++  const calls = [];
++  const transport = new DesktopEngineTransport(async (command) => {
++    calls.push(command);
++    throw new Error("open unavailable");
++  });
++  const replies = [];
++  transport.onmessage = (event) => replies.push(event.data);
++  for (let id = 1; id <= 8; id++) transport.postMessage({ id, type: "init" });
++  await tick();
++  for (let id = 9; id <= 16; id++) transport.postMessage({ id, type: "status" });
++  await tick();
++  assert.deepEqual(replies.map((reply) => reply.id), Array.from({ length: 16 }, (_, i) => i + 1));
++  assert.ok(replies.every((reply) => !reply.ok && /open unavailable/.test(reply.error)));
++  assert.deepEqual(calls, ["native_engine_open"]);
++  // A failed open retains the existing resource promise; terminate still reports its failure.
++  const originalError = console.error;
++  const errors = [];
++  console.error = (...args) => errors.push(args);
++  try {
++    transport.terminate();
++    await tick();
++    assert.equal(errors.length, 1);
++    assert.match(String(errors[0]), /open unavailable/);
++  } finally { console.error = originalError; }
++});
+diff --git a/apps/web-client/src/engine/desktopEngineTransport.ts b/apps/web-client/src/engine/desktopEngineTransport.ts
+index 6932abe1..4ce3cf7a 100644
+--- a/apps/web-client/src/engine/desktopEngineTransport.ts
++++ b/apps/web-client/src/engine/desktopEngineTransport.ts
+@@ -16,6 +16,8 @@ export interface EngineTransport {
+ type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>;
+ export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
+ export type DesktopEngineChoice = "wasm" | "native";
++// Match the native queue capacity, conservatively including active/opening requests.
++const MAX_DESKTOP_OUTSTANDING = 8;
+ 
+ /** Wasm stays the default until all six PA09 conditions have evidence. */
+ export function desktopEngineChoice(): DesktopEngineChoice {
+@@ -48,6 +50,7 @@ export class DesktopEngineTransport implements EngineTransport {
+   onmessage: EngineTransport["onmessage"] = null;
+   onerror: EngineTransport["onerror"] = null;
+   private closed = false;
++  private outstanding = 0;
+   private tail: Promise<void> = Promise.resolve();
+   private resource: Promise<number> | null = null;
+ 
+@@ -55,28 +58,37 @@ export class DesktopEngineTransport implements EngineTransport {
+ 
+   postMessage(request: WorkerRequest): void {
+     if (this.closed) throw new Error("Desktop engine transport closed");
++    if (this.outstanding >= MAX_DESKTOP_OUTSTANDING) {
++      throw new Error("Desktop engine busy; request was not submitted（未提交）");
++    }
++    this.outstanding++;
+     this.tail = this.tail.then(async () => {
+-      if (this.closed) return;
+-      let response: WorkerResponse;
+       try {
+-        this.resource ??= this.call<number>("native_engine_open");
+-        const resourceId = await this.resource;
+         if (this.closed) return;
+-        response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
+-        response = normalizeResponse(response, request);
+-        if (response.id !== request.id || typeof response.ok !== "boolean") {
+-          throw new Error("invalid IPC response");
++        let response: WorkerResponse;
++        try {
++          this.resource ??= this.call<number>("native_engine_open");
++          const resourceId = await this.resource;
++          if (this.closed) return;
++          response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
++          response = normalizeResponse(response, request);
++          if (response.id !== request.id || typeof response.ok !== "boolean") {
++            throw new Error("invalid IPC response");
++          }
++        } catch (error) {
++          response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
+         }
+-      } catch (error) {
+-        response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
++        if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
++      } finally {
++        if (!this.closed) this.outstanding--;
+       }
+-      if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
+-    });
++    }).catch((error) => console.error("Desktop engine response listener failed", error));
+   }
+ 
+   terminate(): void {
+     if (this.closed) return;
+     this.closed = true;
++    this.outstanding = 0;
+     void this.resource?.then((resourceId) => this.call("native_engine_close", { resourceId }))
+       .catch((error) => console.error("Desktop engine resource close failed", error));
+   }

@@ -1,0 +1,24 @@
+## Review
+
+No issues found.
+
+- **Correct — smallest complete change:** [.gitattributes:4](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate/.gitattributes:4) adds exactly `content/original-audio-compat/provenance.json -text`, with one explanatory comment. Both original lines remain intact. The rule preserves the pinned blob bytes without changing validation or broadening attributes to other JSON files. Recorded `check-attr` output confirms provenance and the existing raw log have `text: unset`; unrelated JSON remains unspecified.
+- **Correct — original blobs and isolated index:** [selfcheck.py:78](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py:78) uses a private index in a standalone fixture. Inputs come from `git cat-file blob 777:path`; imported object IDs match the originals. Before/after index listings change only the attributes object. Fresh parent parsing independently verified seven original imports, the candidate import, 96 command records, and all 472 manifest entries.
+- **Correct — actual Git checkout reproduces and repairs the failure:** the recorded experiment uses Git `checkout-index`, followed by the unchanged original validator. Windows cases use identical `core.autocrlf=true` / `core.eol=crlf` settings.
+
+| Recorded checkout | Provenance bytes | Line endings | Original validator |
+|---|---:|---|---|
+| Original attributes, CRLF configuration | 2,794 | 81 CRLF | Expected exit 1 |
+| Candidate attributes, same configuration | 2,713 | 81 LF | Exit 0 |
+| Original attributes, LF configuration | 2,713 | 81 LF | Exit 0 |
+| Candidate attributes, LF configuration | 2,713 | 81 LF | Exit 0 |
+
+- **Correct — failure mechanism and security checks:** the red case retains equivalent JSON and passes all five source and five derivative hashes before reaching the unchanged fixed-byte guard at [original-audio-resources.mjs:58](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs:58). Its stack reports the original `:59:11` error. Green cases retain canonical SHA256 `1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313`. Path, realpath, size, hash, and file-list checks remain intact.
+- **Correct — regressions and preserved failure:** [final TAP:106](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/078-original-resource17.stdout:106) records 17 tests, 17 passes, zero failures or skips. The [first fixture failure:32](/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/077-original-resource17.stdout:32) remains preserved: 16/17 passed; one failed because the private fixture omitted the original asset manifest. The correction adds that original blob and selects TAP output; product code and test expectations remain unchanged.
+- **Correct — immutability:** fresh parsing binds source14, seven fixture scripts, provenance including recipe/tool bindings, and media to committed777 bytes. Main’s relevant14 files and original attributes match; HEAD remains777, index SHA remains `2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d`, and staged paths are empty. No committed ancestor attributes were omitted from the fixture. See [fresh results](/tmp/noname-parent-windows-byte-audit/independent-results.json:2370) and [publication invariants](/tmp/noname-parent-windows-byte-audit/publication-invariants.json:1). I reviewed both parent parser sources; hashing was performed by the parent because reviewer tools lack execution.
+- **Correct — acceptance boundaries:** I read the implementation report fully, including its acceptance block. Its two criteria are supported for this isolated candidate. Original publication receipts and Windows gzip retain their recorded hashes; run41114612841 attempt1 remains **9 success / 1 Windows desktop failure**.
+- **Fixed:** None; this review was read-only.
+- **Merge verdict: OK with notes**, limited to the exact one-path candidate.
+
+Skipped: no tests, builds, producer script, or network calls were rerun; Main integration and PA09 were outside this review.
+Risk: original runner provenance SHA remains unobserved. Historical CRLF bytes were overwritten by later fixture checkouts; fresh reconstruction only corroborates recorded metadata. Controlled checkout proves a sufficient cause; Windows prepare/installer/upload acceptance remains open.

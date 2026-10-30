@@ -1,0 +1,243 @@
+{
+  "passed": true,
+  "jsBounded": true,
+  "qualification": "this real WKWebView fixture; same-event-turn JS admission, not OS scheduling pressure or performance",
+  "burst": {
+    "resourceId": 3803825902,
+    "attempts": 128,
+    "accepted": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "notSubmitted": 120,
+    "maximumPending": 8,
+    "unresolvedAtTurnBoundary": 8,
+    "synchronousTurnOnly": true,
+    "sequentialSuccesses": 24
+  },
+  "opening": {
+    "resourceId": 3584072778,
+    "accepted": 8,
+    "queuedRequestIPC": 0,
+    "immediatePendingAfterDispose": 0,
+    "closeCount": 1
+  },
+  "active": {
+    "resourceId": 3122410059,
+    "freshResourceId": 378010373,
+    "accepted": 8,
+    "oldRequestIPC": 1,
+    "oldQueuedNeverSubmitted": 7,
+    "oldLateRawReply": {
+      "phase": "active-dispose",
+      "command": "native_engine_request",
+      "args": {
+        "resourceId": 3122410059,
+        "request": {
+          "id": 2,
+          "type": "status"
+        }
+      },
+      "settled": true,
+      "index": 41,
+      "ok": true,
+      "response": {
+        "data": {
+          "finished": false,
+          "kind": "status",
+          "revision": 0
+        },
+        "id": 2,
+        "ok": true
+      }
+    },
+    "oldClientDeliveries": 0,
+    "closeCount": 1
+  },
+  "assertions": [
+    {
+      "message": "real Tauri bootstrap exists",
+      "passed": true
+    },
+    {
+      "message": "actual EngineClient selected desktop native",
+      "passed": true
+    },
+    {
+      "message": "pending map bounded after every call",
+      "passed": true,
+      "maximum": 8
+    },
+    {
+      "message": "128 actual client status calls admit eight and reject 120 synchronously",
+      "passed": true,
+      "accepted": 8,
+      "rejected": 120
+    },
+    {
+      "message": "all excess calls reject before tail growth with not-submitted text",
+      "passed": true
+    },
+    {
+      "message": "only eight caller promises remain unresolved before returning to native callback event loop",
+      "passed": true,
+      "settled": 120,
+      "pending": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "message": "real IPC receives only accepted IDs in order",
+      "passed": true,
+      "acceptedIDs": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "sentIDs": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "message": "accepted IPC all succeed on the actual resource without unknown results",
+      "passed": true
+    },
+    {
+      "message": "accepted caller promises settle and pending is empty",
+      "passed": true
+    },
+    {
+      "message": "24 sequential completions release admission continuously",
+      "passed": true
+    },
+    {
+      "message": "burst resource closes exactly once",
+      "passed": true
+    },
+    {
+      "message": "closed resource is refused by real ResourceTable",
+      "passed": true,
+      "resourceId": 3803825902,
+      "error": "The resource id 3803825902 is invalid."
+    },
+    {
+      "message": "real open IPC outstanding before dispose; no mocked or delayed writer",
+      "passed": true
+    },
+    {
+      "message": "opening plus seven queued requests occupy eight client slots",
+      "passed": true
+    },
+    {
+      "message": "opening dispose immediately rejects and clears client pending",
+      "passed": true
+    },
+    {
+      "message": "dispose preserves existing unknown-result rejection for all pending calls",
+      "passed": true
+    },
+    {
+      "message": "opening termination sends no queued request IPC",
+      "passed": true
+    },
+    {
+      "message": "opening resource closed exactly once after late allocation",
+      "passed": true
+    },
+    {
+      "message": "opening late allocation delivers no retired client response",
+      "passed": true
+    },
+    {
+      "message": "closed resource is refused by real ResourceTable",
+      "passed": true,
+      "resourceId": 3584072778,
+      "error": "The resource id 3584072778 is invalid."
+    },
+    {
+      "message": "real request IPC outstanding before active dispose without native delay",
+      "passed": true
+    },
+    {
+      "message": "active plus seven queued requests occupy eight slots",
+      "passed": true
+    },
+    {
+      "message": "active dispose clears pending synchronously",
+      "passed": true
+    },
+    {
+      "message": "fresh client opens independent resource",
+      "passed": true,
+      "resourceId": 3122410059,
+      "freshResourceId": 378010373
+    },
+    {
+      "message": "fresh client works while old completion retires",
+      "passed": true
+    },
+    {
+      "message": "all eight old caller promises reject by production dispose",
+      "passed": true
+    },
+    {
+      "message": "only active old request reached IPC; seven queued requests were never submitted",
+      "passed": true
+    },
+    {
+      "message": "old late raw IPC callback is suppressed before client delivery",
+      "passed": true
+    },
+    {
+      "message": "active old resource closes once",
+      "passed": true
+    },
+    {
+      "message": "old late response cannot add pending or contaminate fresh client",
+      "passed": true
+    },
+    {
+      "message": "closed resource is refused by real ResourceTable",
+      "passed": true,
+      "resourceId": 3122410059,
+      "error": "The resource id 3122410059 is invalid."
+    },
+    {
+      "message": "fresh independent resource closes once",
+      "passed": true
+    },
+    {
+      "message": "closed resource is refused by real ResourceTable",
+      "passed": true,
+      "resourceId": 378010373,
+      "error": "The resource id 378010373 is invalid."
+    }
+  ],
+  "burst_unknown_results": 0,
+  "actual_webview_runs": 1
+}

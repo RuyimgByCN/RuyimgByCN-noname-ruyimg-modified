@@ -1,0 +1,48 @@
+{
+  "source_git_blobs": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "base": "6932abe1f4a6a54efb30f68427cfa580f72a8e29",
+      "current": "4ce3cf7abf83f454b6d953cfa99f775a8f6438d4"
+    },
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": {
+      "base": "384b8a548f42a0782dcadbe29f0014aa5adacb65",
+      "current": "4bc11d66d24ee01e25134bbaa26d460c89f99a0c"
+    },
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": {
+      "base": "e994dd2047f1c8c04d2f95d7811494fad1120ee9",
+      "current": "b8af23c6c05cf25fbd975c7d176cc2a8d6649d33"
+    }
+  },
+  "actual_source3_matches_admission": true,
+  "inherited_source_bindings": {
+    "src/engine/client.ts": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+    "src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "src/engine/desktopHost.ts": "5eda0a189488006b10ebf99817514be4537025e7314c934d74d56d20ed601824",
+    "src/engine/autoDrive.ts": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10",
+    "src/engine/nativeOutcome.ts": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf",
+    "src/engine/observerMetadata.ts": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd",
+    "src/engine/perfProbe.ts": "78e75aebd8799c7f0078305d42733f0d7b73008229ba932e14145ae5d202d228",
+    "src/types/engine.ts": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c"
+  },
+  "inherited_evidence_sha256": {
+    "actual-webview-report.json": "d9641e71694722b50d16a5903bae2067889b0d8741ae402d691a979f76affbfd",
+    "raw-ipc.ndjson": "a36b0f80c227107e9dd21e5ef302c801184e370432e4187fb52cdb6570777454",
+    "transport-admission.ndjson": "5f6a38b3f3cbe92c287011f56e084dde05b4796d24a647c1cbd5c58cf30ec145",
+    "pending-counts.ndjson": "d8a8cbd2ce80ed662efca7a1cc8a2333db91e0f2f02e1ad42259958be3c3b70b",
+    "native-source-baseline-proof.json": "fa0b82c677bb3fe736b8ce8b9a10918abb4c40f2a30e21d8d08d88c62ae552bd",
+    "bounded-result.json": "bb557155c8019fb9d2d09f2b01fd5aebac7be2c072ad91ffcde7ad0b48c3791f",
+    "retained-failures.json": "acdf33ea1e3c1632b004f9f227d3cd214543be1c5998a6dd113c265dd6b9abe9"
+  },
+  "private_actual_freeze_manifest_sha256": "0dfbf6f744e94dd216dc29bf6f09a30f434d559421a008dfbdc78665ac285b20",
+  "native_main_vs_a1f_changed_paths": [],
+  "transport_chunks": [
+    "assets/index-I-8R0UBL.js"
+  ],
+  "production_files": 13,
+  "production_source_modules": 35,
+  "native_wasm_exact": true,
+  "legacy_wasm_exact": true,
+  "owninput_unchanged": true,
+  "new_main_gui": false,
+  "qualification": "Inherited private hidden actual WK same-event-turn admission/lifecycle only; not a fresh Main App/GUI run. Main compat changed originalResources and other non-seam production JS; those are built here but not rerun in WK."
+}

@@ -1,0 +1,1 @@
+verify-publication-ci.py initial execution exit1: StopIteration selecting Gate4 by old command prefix. Raw CI logs unchanged. Initial checker SHA256=be398d18c49eba435785f20f131dd4b986bc61b614d58181860e583cbffff592

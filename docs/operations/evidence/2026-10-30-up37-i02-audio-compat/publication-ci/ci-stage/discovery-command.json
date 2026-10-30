@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "gh",
+    "api",
+    "--allow-escape-sequences",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?branch=native-convergence&head_sha=777bf33969e5ecc04b63971adab26be32f12fd28&event=push&per_page=100"
+  ],
+  "started_utc": "2026-10-30T19:22:40.821857+00:00",
+  "finished_utc": "2026-10-30T19:22:41.449388+00:00",
+  "exit": 0,
+  "http1": true
+}

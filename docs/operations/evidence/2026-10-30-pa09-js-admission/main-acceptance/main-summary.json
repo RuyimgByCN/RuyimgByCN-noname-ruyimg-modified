@@ -1,0 +1,112 @@
+{
+  "utc": "2026-10-30T19:50:28.406426+00:00",
+  "head": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "versions": "330/105/758/WS6; desktop transport default WASM",
+  "scope": "Main JS admission three-file integration only",
+  "counts": {
+    "targeted": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "frontend": {
+      "tests": 175,
+      "pass": 175,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "commands_passed": 9,
+  "commands_recorded": 11,
+  "latest_command_groups_passed": 8,
+  "bundle_hook_correction_products_identical": true,
+  "no_staged_files": true,
+  "source3_sha256": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0"
+  },
+  "module_count": 18,
+  "unchanged_main_dist_file_count": 37,
+  "protected_count": 99,
+  "narrow_comparison": {
+    "invariants": {
+      "head": true,
+      "tree": true,
+      "index_sha256": true,
+      "staged": true,
+      "source3": true,
+      "protected": true,
+      "groups": true,
+      "modules": true,
+      "dist": true,
+      "guard": true,
+      "frozen_package_diff_sha256": true,
+      "package_git_trees": true
+    },
+    "tracked_status_entry": " M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/scripts/pa09-desktop-transport.test.mjs\n M apps/web-client/src/engine/desktopEngineTransport.ts\n",
+    "tracked_status_exit": " M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/scripts/pa09-desktop-transport.test.mjs\n M apps/web-client/src/engine/desktopEngineTransport.ts\n",
+    "parent_docs_delta": [],
+    "interpretation": "Only parent-authorized docs/evidence deltas are allowed; no restore performed."
+  },
+  "production_root": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa09-main-js-29aa9984-7v4tna41/production-dist",
+  "production_file_count": 13,
+  "production_files_digest": "bc5db9048d3d9f655af916c303a4f15d61d7bc247b993a2f0d931f40ab03c65c",
+  "transport_chunks": [
+    "assets/index-I-8R0UBL.js"
+  ],
+  "inherited_actual_webview": "Existing private WK same-event-turn admission/lifecycle is inherited through identical source3 + eight source seams + unchanged a1f-to-Main Rust/Cargo. No new Main App/GUI run.",
+  "retained_attempts": {
+    "sourcecap_unit_first_attempt": {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/accept.py",
+        "sourcecap-unit"
+      ],
+      "tool_timeout_seconds": 60,
+      "exit": "tool timeout, no numeric command exit available",
+      "locked_seconds": null,
+      "log": "sourcecap-unit-lock-timeout.log",
+      "log_bytes": 0,
+      "ps_after_timeout": "own runner absent; shared lock held by another task cargo test PID 5072/5074; not killed or altered",
+      "interpretation": "No unit tests ran during this attempt. Retrying with asynchronous own driver."
+    },
+    "inspection_only": [
+      "cat root package.json exit1: repository root has no package.json; correct apps/web-client/package.json read.",
+      "cat src/engine/mainClient.ts exit1: actual Main client is src/engine/client.ts; corrected before execution."
+    ],
+    "initial_git_status_note": "The very first exploratory git status --short did not set GIT_OPTIONAL_LOCKS=0. Entry index SHA was captured later, so a pre-entry stat-cache refresh cannot be excluded. All formal snapshots and subsequent Git commands use --no-optional-locks. No staging command was used.",
+    "own_harness_static_diagnostics": "First finalize.py write received four optional-value type diagnostics (ModuleSpec/loader and regex match). Added explicit assertions before dereference; tool static check then clean. No source or test execution was involved.",
+    "initial_bundle_binding_failure": {
+      "exit": 1,
+      "log": "bindings.log",
+      "cause": "Evidence hook collected chunk hash in generateBundle before later Vite plugins finalized output. Source input hashes matched; one generated chunk final byte hash differed.",
+      "fix": "Move evidence hook to writeBundle; rebuild only own outside dist, retain initial module table and product hash manifest.",
+      "main_source_changed": false
+    },
+    "initial_narrow_exit_failure": {
+      "exit": 1,
+      "log": "initial-caller-order-exit.log",
+      "cause": "rg -l returns paths in nondeterministic parallel order; groups list order differed but sets and all protected SHA matched.",
+      "fix": "Compare group membership as sets, preserving initial raw lists and failed report.",
+      "source_drift": false
+    }
+  },
+  "deferred": [
+    "Parent fullpreflight after docs closure",
+    "new physical input or latency",
+    "new Main GUI/actual WK",
+    "Rust/native/WASM/Swift rebuild",
+    "fullmedia/resource resync",
+    "default transport switch",
+    "PA09 six-conditions closure"
+  ],
+  "warnings": "Node localStorage ExperimentalWarning retained in targeted/frontend raw logs; no warning filtering. This run has no deprecated/6hint output; original historical evidence remains untouched.",
+  "attempts_not_executed": 1
+}

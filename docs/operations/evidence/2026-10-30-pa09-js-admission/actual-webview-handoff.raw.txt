@@ -1,0 +1,81 @@
+已完成本轮实际隐藏 WKWebView → 生产 EngineClient/候选 DesktopEngineTransport → 真实 Tauri bridge/NativeEngineHost/ResourceTable 验证，**首轮 33/33 断言通过，`jsBounded=true` 只限定下述 fixture 的同事件轮 JS admission 边界**。未接 Main、未改变三冻结 source/test、默认 WASM、协议或版本；未做原性能实验、全局输入或 PA09 六条件验收。
+
+本轮私有根目录为 [pa09-webview-5b7ad3ab](/tmp/pa09-webview-5b7ad3ab)，实际运行时间为 2026-10-30 19:16:41–19:16:43 UTC 左右，证据冻结于本轮完成前。源基准仍为 `a1f7250815eee803d931301ab46207719cb9a15b` / tree `abb64b4d7aeabc3f1e2525887b88bca46b0e9133`，规则/存档/ABI/WS 为 **330/105/758/6**。
+
+先读了独立 [review](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/27443840-1955-4187-802b-bd15c1a5dd0b/reviews/pa09-desktop-js-admission-bound.md)，其结论为 source/test candidate “No issues / OK with notes”，不包含本轮实际 WebView 新证据的独立验收。本轮沿用已读的 canonical AGENTS/SPEC 和 Ponytail skill。
+
+**实际结果与范围：**
+
+| 场景 | 实际观察与通过断言 |
+|---|---|
+| 128 次真实 `EngineClient.status()` 连续调用 | accepted 恰好 8，IDs **2–9**；120 次在生产 transport 中同步抛明确 `not submitted（未提交）`。每次拒绝时 tail 对象不变，拒绝不追加尾链。 |
+| pending / Promise | 逐调用采样全部 128 行；EngineClient pending 最大 **8**。让同步拒绝的 Promise 回调完成、尚未返回 native callback event loop 时，120 个调用已失败，仅 **8** 个调用 Promise 未决，pending keys 为 2–9。不是只读 admission counter。 |
+| 实际 IPC | burst 实际 `native_engine_request` 恰好 IDs **2–9**、同一 resource、顺序一致，8 个 raw invoke 和 WorkerResponse 均成功；120 个拒绝 ID 无 IPC，burst 的 unknown 结果 **0**，无重试/Worker fallback。 |
+| 正常释放 | 八个完成后 pending=0，随后 **24 个顺序 await status** 全部成功，revision=0，证明容量可持续释放。 |
+| opening dispose | 已真实发出 `native_engine_open`，其原始 invoke Promise 当时未完成；此时 init + 七个 queued status 占八槽，立即 dispose，client pending 同步归零。late allocation 后真实 close **一次**，该 resource 的 request IPC **0**。 |
+| active + queued dispose | 已真实发出首个 status invoke，原始 Promise 当时未完成；再排七个 status，然后 dispose。旧 pending 八个均走生产 dispose 的既有 unknown-result 拒绝并归零；只有 active 一条进入 IPC，七个 queued 未提交。 |
+| late reply / 新 resource | dispose trace index **415**，旧 active raw 成功回包 index **422**；旧 transport 没有任何 client delivery。期间新 EngineClient 独立 open、init/status 成功且 pending=0；旧 late ID=2 与新 client ID 空间没有交叉污染。 |
+| 真实 ResourceTable | 四个自有 resource 均 close 一次；close 后分别用标明 phase 的 raw status probe 验证已退休 ID 被拒绝。probe 是生命周期核验，不计入 burst admission 数量。 |
+
+opening 和 active 未通过 mock、Rust writer 人工 delay 或第二队列制造；fixture 只在 Promise microtask 中观察真实原始 invoke 仍未完成，然后执行 dispose。**这验证同事件轮 admission 与异步桥接生命周期，不构成 OS 调度压力、Rust 队列饱和、延迟或吞吐性能结论。** dispose 的八请求 unknown 文案是原生产行为，单独与 burst 的 120 个明确未提交区分，未修改其口径。
+
+全部 raw Tauri 调用共 **49** 条：open 4、request 41、close 4；request 中 37 条是生产 transport 提交，另 4 条是 close 后的退休探针。全量 raw 请求、回包、transport accepted/rejected、pending 采样及检查代码保留：
+
+- [actual-webview-report.json](/tmp/pa09-webview-5b7ad3ab/evidence/actual-webview-report.json)：原始 WebView 报告、33 断言、完整 trace/rawCalls、UA。
+- [raw-ipc.ndjson](/tmp/pa09-webview-5b7ad3ab/evidence/raw-ipc.ndjson)、[transport-admission.ndjson](/tmp/pa09-webview-5b7ad3ab/evidence/transport-admission.ndjson)、[pending-counts.ndjson](/tmp/pa09-webview-5b7ad3ab/evidence/pending-counts.ndjson)：由原始报告无修改抽取，方便逐条审查。
+- [bounded-result.json](/tmp/pa09-webview-5b7ad3ab/evidence/bounded-result.json)、[离线复核结果](/tmp/pa09-webview-5b7ad3ab/evidence/offline-assertions.json)、[可运行离线断言](/tmp/pa09-webview-5b7ad3ab/harness/verify-actual.py)。
+- [实际 fixture](/tmp/pa09-webview-5b7ad3ab/product-web/fixture.js) 212 行：导入真实生产 class，包裹原 postMessage 仅记录调用/拒绝，观察真实 private pending/resource/tail，并原样调用实际生产方法；没有重新实现 admission 或消息 adapter。
+
+**素材选择与一次有界构建：**保留的 330 `PA09 Controlled.app` SHA 确为 `78e4d221cfc8f0dacc618cc6e04a2d4396e4ede1261ab6780d5091fe67cc1b7f`。但它使用 custom-protocol 生产构建、`FrontendDist::Directory` 编译期嵌入旧 bundle，旧 bootstrap 没有加载新外部 bundle 的入口。已查依赖源码：`tauri-codegen-2.6.3/src/context.rs:175` 将目录转为 EmbeddedAssets；`tauri-2.11.5/src/manager/mod.rs:349` 在生产模式从编译 Context 的 frontendDist URL 取 app URL；`webview/mod.rs:1698` 将相对 app URL 认作 local。不能假定运行时 `TAURI_CONFIG` 会改编译 Context，因此本轮没有运行旧 App 再声称新候选已经运行。见 [旧 App 评估](/tmp/pa09-webview-5b7ad3ab/evidence/retained-app-assessment.json)。
+
+按本轮明确授权，使用独有 target **仅一次**编译 a1f 的 `desktop-client` binary 及必要 host 依赖。原 `/tmp/pa09-js-bound-4306bc00` 已有维护文本，另只从指定 Git HEAD 精确补齐 42 个缺失 manifests/.cargo 输入，未重新全检出 9k 原证据。构建前核对 3001 个 Rust/manifest/desktop 文件与 a1f blob 完全一致；历史 retained worktree 的 424 个相关 native 非测试源码 SHA 与 a1f 亦相同（包括 desktop 五个 Rust 文件），但这不被当作旧嵌入 JS 可复用的证明。见 [native baseline proof](/tmp/pa09-webview-5b7ad3ab/evidence/native-source-baseline-proof.json)、[历史 native 比较](/tmp/pa09-webview-5b7ad3ab/evidence/historical-native-source-comparison.json)。
+
+完整构建 argv 为：
+
+```text
+python3 /tmp/noname-run-serialized.py cargo build --offline --locked --release -p desktop-client --features tauri-shell,tauri/custom-protocol --bin noname-next-desktop -j 2 --message-format=json-render-diagnostics
+cwd=/private/tmp/pa09-js-bound-4306bc00
+CARGO_TARGET_DIR=/private/tmp/pa09-webview-5b7ad3ab/target
+CARGO_INCREMENTAL=0
+CARGO_BUILD_JOBS=2
+TAURI_CONFIG=<compile-time-tauri-config.json 的完整内容>
+```
+
+构建前报告预计 5–10 分钟/<3 GiB；实际锁内 **185.628 秒**、含锁等待/monitor 墙时 **186.756 秒**。target 最终 **1,095,082,383 bytes（约 1.02 GiB）**，所有 Cargo artifact 都位于独有 target；构建前/后和运行后磁盘均远高于 3 GiB（约 91/90 GiB 以上）。没有全 workspace、wasm32/wasm-pack 或 Swift 构建。必要的 `engine-native-wasm` 被作为 **native host Rust library** 编译供真实 NativeSession 使用，并非重新构建 WASM 包。完整 argv、env 指定项、profile、所有编译产物和磁盘 monitor 见 [build owner/result](/tmp/pa09-webview-5b7ad3ab/evidence/native-build-result.json)、[Cargo artifact stdout](/tmp/pa09-webview-5b7ad3ab/evidence/native-build.stdout.jsonl)、[stderr](/tmp/pa09-webview-5b7ad3ab/evidence/native-build.stderr.log)、[monitor](/tmp/pa09-webview-5b7ad3ab/evidence/native-build-monitor.jsonl)、[工具链/成本](/tmp/pa09-webview-5b7ad3ab/evidence/toolchain-and-cost.json)。
+
+新 App 在**编译期**明确配置 `FrontendDist::Url("http://127.0.0.1:19439")`，加载本轮预构建 production Vue/fixture bundle；custom-protocol feature 和 release profile 保持真实 Tauri 路径，Rust main/native actor/resource 源码没有修改。外部 URL 是本轮隔离测试配置，不是产品默认配置。本轮没有修改旧 App 的嵌入资源，也没有运行时配置替换：launch env 显式去掉 `TAURI_CONFIG`。配置 SHA256 为 `037235b3f7aaaed55cae410761eaadb1351bddda1c802d6de69d4ebe2622be56`，见 [编译配置](/tmp/pa09-webview-5b7ad3ab/evidence/compile-time-tauri-config.json)。
+
+**实际 source→bundle→binary 绑定：**
+
+- 新编译未打包 executable SHA256：`049b746f6423a3c6fa6b3f2a3a32e40e99e32c0f5a83367c8348ed2a34fe081d`。
+- 实跑 ad-hoc signed App executable SHA256：`0f572e1d9d1c6e42d3eeff025caee5efcbb41237da8bbeb73b83a75d4bde1813`；Mach-O arm64，codesign verify 通过。
+- Production bundle 文件集合 SHA256：`a4b268e9716113bedd98eab63b50ddcdd67b52cd0f3dd988529f87e476161a57`。
+- 实际加载 client chunk SHA256：`583f08c27382aa09c981bff4f7c41c6d478d79fdabf7581f5a4a67c8b0ba74e1`；fixture entry chunk `29f4144cb19a7d85e49028bbe467ddb6e2003112798fae46c60e488c3e68d77a`，Vue main chunk `2872e36a6549ba8edf33db29cabd5745b7013cf8ac56eff6343cb26e36afb147`。
+- Vite 使用真实已安装依赖、`configFile:false`、新私有 outDir，不写默认 dist；复制的生产 source 未转换。build hook 逐模块记录转译前 SHA，实际 client/transport 与候选 source 字节一致。只将 `@tauri-apps/api/core` 的依赖解析指向 8 行 [invoke observer](/tmp/pa09-webview-5b7ad3ab/harness/invoke-observer.js)：调用原 tauriInvoke，参数不改，返回原 Promise，并附观察回调；没有 mock、延迟、替代结果或第二 adapter，也没 patch Tauri 内部。
+- fixture 实际 import `src/main.ts`、mount 正常 Vue 大厅，trace 的 brand 为“无名杀 Next”；随后使用真实 EngineClient。Worker/WASM 文件只是正常生产 bundle 依赖素材，本次未加载/执行它们，served GET 记录也无 worker/.wasm。生成 pkg 只读引用原 retained 330 素材，不作为本轮 WASM 等价验收。
+- 每个实际 HTTP served asset 的 SHA 与冻结 bundle manifest 对应，包含 index、fixture/client/Vue main JS、CSS；runtime 没有取旧嵌入 JS。见 [product source copy](/tmp/pa09-webview-5b7ad3ab/evidence/product-source-copy-proof.json)、[module source proof](/tmp/pa09-webview-5b7ad3ab/evidence/bundle-module-source-proof.json)、[served assets](/tmp/pa09-webview-5b7ad3ab/evidence/http-served-assets.json)、[served verification](/tmp/pa09-webview-5b7ad3ab/evidence/served-bundle-verification.json)、[runtime identity](/tmp/pa09-webview-5b7ad3ab/evidence/runtime-product-identity.json)。
+
+三冻结 source/test 首末仍为下列 SHA256，原 worktree 文件继续 444；它们未被本轮编辑或格式化：
+
+| 文件 | SHA256 |
+|---|---|
+| `desktopEngineTransport.ts` | `6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face` |
+| `pa09-desktop-transport.test.mjs` | `ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc` |
+| `nc04-worker-failure.test.mjs` | `6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0` |
+
+原增量 patch/source archive 的 SHA 也不变；原 evidence 未覆盖。新的 64 个 source/harness/bundle 文件已冻结 SHA、设只读，见 [本轮 actual-freeze-manifest.json](/tmp/pa09-webview-5b7ad3ab/evidence/actual-freeze-manifest.json)。
+
+**运行/清理及首末 guard：**新 App identifier 为 `org.noname.pa09.jsbound5b7ad3ab`，hidden main window + LSUIElement，实际 App PID **62280**，fixture/server driver PID **62278**，只绑定 **127.0.0.1:19439**。启动 argv 为 `/private/tmp/pa09-webview-5b7ad3ab/products/PA09 JS Admission.app/Contents/MacOS/noname-next-desktop`（单一 argv、cwd 为本轮私有根）；未操作用户窗口、7700、TCC、HID、CDP 或浏览器用户数据。macOS 27.2 (26B123)、arm64、Rust/Cargo 1.95、Node 26.4；WK UA 兼容字符串含 Intel Mac OS X 10_15_7，不据此误判设备架构。原始 [owner/argv](/tmp/pa09-webview-5b7ad3ab/evidence/run-owner.json)、[runner](/tmp/pa09-webview-5b7ad3ab/harness/run-webview.py)、[run log](/tmp/pa09-webview-5b7ad3ab/evidence/run-webview.log)。
+
+运行也持 `/tmp/noname-phase4-heavy-command.lock`，锁内 **1.228 秒**（包含 App 包装签名、启动、bridge fixture 与清理），不是 latency 指标。四个 resource IDs 为 **3803825902、3584072778、3122410059、378010373**，各 close 一次且退休探针被拒绝。结束已 terminate/wait 自有 App，driver/server 均退出，19439 无监听。三处 identifier 专属 AppData/WebKit/Cache 开始均不存在；本轮创建部分已各自归档 SHA 后删除，末检不存在，未碰真实用户库。见 [initial guard](/tmp/pa09-webview-5b7ad3ab/evidence/initial-guard.json)、[cleanup](/tmp/pa09-webview-5b7ad3ab/evidence/cleanup.json)、[offline guard](/tmp/pa09-webview-5b7ad3ab/evidence/offline-assertions.json)。保留自有 App、bundle、source、日志和约 1.02 GiB 私有 target 供复审，没有删除他人产品或共享 target/deps。
+
+**Main guard 有外部移动，不能记作 Main 首末相同。** 本 worker 未执行 Main 文件写入、stage/commit/push 或恢复操作；但初始 index SHA `806f78ea…` 到末检变为 `2b4bee80…`，Main HEAD 现为 `777bf33969e5ecc04b63971adab26be32f12fd28`，原 compat14 等 dirty 路径从 status 消失。已立即向父会话报告，保留 [main-guard-movement.json](/tmp/pa09-webview-5b7ad3ab/evidence/main-guard-movement.json)，由父确认该并行提交的归属。首次 Main status 读取未禁用 Git optional locks，首个 index SHA 在该读取之后取得，因此不能排除首次读取的 Git stat-cache refresh；末检改用 `git --no-optional-locks status`，没有尝试恢复 index。该移动不影响私有 a1f 构建：私有 HEAD、三文件 diff/blob/SHA/只读状态不变、私有 staged=0，所有 native baseline 输入和实跑 bundle 身份可独立核对；本报告不声称 Main 字节守恒。
+
+失败/warning 均保留：第一次 Vite build 因 `/tmp` 与 `/private/tmp` 的 root 路径不一致产生无效 index 输出路径而 exit1，只修正新私有 build script 为 realpath，之后 production build exit0；尚未发生 native compile，不涉及重编 native。native 构建保留 `engine-native-wasm` 在 host 目标的 **18 条 dead_code warnings**。第一次离线末检在 Main index 字节相同断言失败，随后如实分离外部 Main movement 与通过的 actual fixture/私有 source guard；未改期望把 Main 写成相同。见 [retained failures](/tmp/pa09-webview-5b7ad3ab/evidence/retained-failures.json)、[首个 web failure](/tmp/pa09-webview-5b7ad3ab/evidence/web-build.log)、[web success](/tmp/pa09-webview-5b7ad3ab/evidence/web-build-canonical-path.log)。实际 WebView 只运行一次，无原 173 tests/type/perf 重跑。
+
+旧 raw invoke burst128 的 **76 fulfilled / 52 backend not submitted、jsBounded=false** 原结论保留。它绕过 adapter，本轮通过 client 的 8/120 是另一条路径，不能替它改数或据此计算收益；原 [PA09 测量报告](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/ba44607a-3a48-49f5-89c3-9e74c9bb8d56/verification/pa09-controlled-macos-input-and-transport.md) 未修改。
+
+下一步由父独立复审本轮 raw/source/binary 绑定和 Main 外部移动，再决定三文件候选接 Main。本轮不授予 PA09 六条件、native pool 收益、全部资源/整局/跨端/真机绿色结论，不切默认。
+
+未做：新 280 步整局、全部媒体、i2p/物理输入、WASM32/Swift 构建、173 tests/type 重跑及独立新证据 review。
+风险：`jsBounded=true` 仅是本实际隐藏 WK fixture 的同事件轮 client admission；Main 首末外部变动已单列，完整 PA09 验收仍未完成。

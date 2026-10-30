@@ -1,0 +1,57 @@
+阶段4已封存：最终源码原十包默认并行 **2903通过 / 0失败 / 76忽略**，exit 0；整C331仍BLOCK，72个触发分支的排序来源未证，阶段4改动尚待独立审。
+
+恢复仅读取既有结果、核实状态、生成证据与本报告；未新发编译/测试/GUI/WASM，未改产品源码。HEAD仍`38ab1678df9b4b7b991d3b3122b1d937fd2648a1`，index空。
+实体交付：`../evidence/phase4/checkpoint-recovered/report.json`、`blockers.md`、live manifest、完整源码副本tar、增量tar、vs-freeze3 patch与原始tracked patch；路径均相对于私有worktree。
+report.json SHA256：`81718805cf88a0b673d592ae8673b31587fd06bcfbfd280b14b1500e9ae644cd`。
+
+不同源码的结果严格分开，原始失败未覆盖：
+
+| 源码/阶段 | 通过/失败/忽略 | 原始记录 |
+|---|---:|---|
+| freeze3最终133文件，fixture90后 | 2897/0/76，240.25s | `phase4/affected-default-initial.log` |
+| 阶段4中间源码，P2原变体已改 | 2901/2/76，275.93s | `phase4/affected-default-final.log` |
+| final-freeze4最终源码 | 2903/0/76，260.53s | `phase4/affected-default-final2.log`、`final-results2.json` |
+
+中间两败是真实时钟夹具在并行257模块初始化负载下提前过期；并有WAL重放错误地假定原始基线不会压缩。最终六个C331昂贵夹具共用测试锁，保持真实10秒产品计时；仍执行原十包默认并行命令，无`--test-threads=1`。重放从实际WAL base开始，逐条`entry.command()`，保留Answer/TimeoutAction等原变体、逐条hash、完整最终快照及choice唯一性断言。
+并发证据writer现互斥写完整JSON行；最终3875行全可解析。中间2583坏行原样保留，不能作为有效向量接受。
+
+P1：Before暂停中替换After sibling，再伪装Trigger/NO_FRAME或Intrinsic，两条真实codec反例先红；修复后damage-window组5/5，包括合法active Intrinsic正例。
+最小绑定位于catalog/rvm_bridge/trigger_order：按实际catalog模块用途要求真实Trigger frame、正确resume_depth及有效window，检查RVM following与已有包装机器。未新增Frame/RvmSnapshot/协议状态。
+`slot-red.log`、`slot-green1.log`保存完整命令/输出。normal_owners4→5已正式撤回，未加历史ledger或新边界约束；原owners截断P1保持已修结论。
+
+来源推进为**200→218/290，剩72**；新增18个实际定义排序档案在`host-source-batch1.json`，含源码/计算器SHA、继承/翻译资格、Native caller及元数据绑定。234 sourceRows含16非当前触发项，不能写成234/290。
+三项行为修正：HlssYueyin=First/1/不可排序选择；HlssYueyin2=Normal/2000/可选择；无独立译名的Tianxiang2=Normal/0/不可选择；其余15项为真实来源确认。定向2/2红→绿含实际First先执行再出现Normal选择及恢复。
+这只是排序来源取证，不是完整来源功能等价。`host-source-remaining72.json`保留全部未证项；PhaseBegin VM-before/Host-after、dieBegin/dieAfter压窗、indexed、forceDie/out/hidden/filterStop仍未闭，不将37来源排除为“差异”。
+
+实际manual-first样本在`final-products2/server-manual-before-real-old-deadline.json`：提交1793389515033，旧deadline1793389517146，观察1793389517747，新deadline1793389524652（均Unix ms）。
+跨旧deadline时完整持久化state/WAL/receipt未变；同幂等重放正常，fresh-key旧choice得到受控Error后仍能取相同snapshot。与Native预期的比较沿用auth_generation归一化。首个夹具末尾错误期待CommandResult而实际为Error的失败保存在`manual-real-deadline.log`，修正后定向及最终aggregate均通过。
+
+旧330受限编译已完成：原生产RoomStore::scan与六变体类型reader 1/1，原330 Engine自然生成4条WAL正控并完整恢复；随后真实重建的原330生产server在自有端口0/整目录正控成功恢复，原Skill负控受控拒绝且继续启动。
+拒绝首先来自StoredChoiceOption serde：`unknown variant Skill, expected Confirm, Pass, Card, Player, Tag, Kind`，不是声称archive解析先执行。`startup3-{positive,negative}.log`与`startup-result3.json`保存实际入口。前两次driver仅拷JSON漏journal的失败完整保留，未算恢复成功。
+生产276文件与HEAD38ab逐字相同：`old-wal-reader/base-production-audit.json`；关键生产类型前后SHA、全部输入身份及test-only harness SHA在`identity-final.json`，编译原始warnings/argv/exit在`old-wal-reader-build-run.log`。
+Skill输入SHA=`de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27`，由保留实际product record原字节区间提取，无header/variant改写；正控record SHA=`45ba9d383c5f58a931864a8f2f7e329d6ead2b28f380100110de4e4bf847d462`。
+新旧型reader二进制SHA=`0ee5e0b4b6216714be6f6ed933aa3ac3406f256c5b56d534b7a48ae89808854d`；实际旧server SHA=`d08ff4afe70d1b7b592191f507b8a08d316468bd9666d0149d2063cc41cd901c`。原`5ec814...`仅NGSA/package读者，未冒充WAL读者。
+
+19:31的45分checkpoint保留在`phase4/checkpoint4`，manifest=`1551c3aa26698bd93b0fca756654b6e64a4705499f447b5d299aa3eb62a09bcd`。
+最终freeze在`phase4/final-freeze4`：134文件全部与live逐SHA匹配，较freeze3增量9文件（新增测试1）；manifest=`6f8eabd872feb5719e3bb76cfa7f813273b81a2cddefa8924fb4d626d6d3d20e`，源码tar=`9866a12f604b8eba8af3c5da9304892e2abd12544efc1ecac56a365a4fe094c4`。旧phase3及更早freeze未覆盖。
+9文件为server c331/peer、kernel catalog/rvm_bridge/trigger_order/source_order、damage/source-metadata测试及nc08注册。scope以manifest/patch为准；恢复未写Main/alias9/NC10，证据是私有cwd、HEAD/index及全部live与恢复前freeze一致，不替Main777/PA09/当前CI作结论。
+既有sourcecaps最后通过8996文件上限及Rust有效行门禁；脚本单测2/2、F7=0。恢复只读了这些日志和9文件行数，未补跑门禁，也未称LSP clean。
+
+恢复初见5018→5072原aggregate仍运行，随后自然完成；timeout不是其test失败。19:50只读复核已无这些driver/锁持有者，盘余约91GiB，owned target为`../target`、旧目标为`../target/old330`。
+原已排队cleanup PID7528在Parent授权取消后的即时复核已不存在，未发信号、未扩大kill范围；它此前已自行完成1187184293字节新旧330缓存清理，原5ec与实际旧server保留。`old-reader-cleanup.log`及cleanup-result.json完整封存；恢复未发起新清理。
+无需再编译的下一步：Parent独立审9文件增量、两条slot红绿、18来源档案和最终aggregate/3875行wire；预计先用5–10分钟核身份与计数，再按审查深度展开。当前没有独立复审通过结论。
+
+```acceptance-report
+{
+  "criteriaSatisfied":[{"id":"criterion-1","status":"satisfied","evidence":"Recovery sealed existing phase4 only; no new product edit/build/test; live134 match pre-recovery final freeze."},{"id":"criterion-2","status":"satisfied","evidence":"Physical report.json, blockers.md, complete source copies/patches/SHA and raw command/result separation support independent review."}],
+  "changedFiles":["../evidence/phase4/checkpoint-recovered/report.json","../evidence/phase4/checkpoint-recovered/blockers.md","../evidence/phase4/checkpoint-recovered/live-source-manifest.json","authoritative checkpoint report"],
+  "testsAddedOrUpdated":[],
+  "commandsRun":[{"command":"read/seal retained original ten-package default-parallel run","result":"passed","summary":"Final source 2903 passed, 0 failed, 76 ignored; no new test launched during recovery."},{"command":"verify live source SHA and git index","result":"passed","summary":"134/134 match final-freeze4; HEAD38ab; no staged files."}],
+  "validationOutput":["Prior freeze3 2897/0/76; intermediate phase4 2901/2/76 retained; final phase4 2903/0/76.","Slot tests red2 then green5; final source metadata2/2; final wire3875 valid lines."],
+  "residualRisks":["Whole C331 BLOCK; 72/290 ordering branches remain unproven; window/indexed and other explicit mechanisms unresolved.","Phase4 source changes require independent reviewer acceptance; no claim about Main777/PA09/current CI."],
+  "noStagedFiles":true,
+  "diffSummary":"Recovery artifacts only; existing phase4 source delta9 files is preserved and separately hashed.",
+  "reviewFindings":["Independent phase4 review required; original P1 has recorded red/green proof; withdrawn normal_owners finding was not reinstated."],
+  "manualNotes":"Prior queued cleanup completed before authorized cancellation could recheck PID; no signal sent and no new cleanup launched. No new product/build/test/GUI/WASM operation in recovery."
+}
+```

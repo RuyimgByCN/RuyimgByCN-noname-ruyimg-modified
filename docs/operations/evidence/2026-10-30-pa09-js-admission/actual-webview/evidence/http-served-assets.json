@@ -1,0 +1,52 @@
+[
+  {
+    "utc": "2026-10-30T19:16:42.342389+00:00",
+    "path": "/",
+    "bytes": 458,
+    "sha256": "573dd4f77191f08914da9af689be93b3a5cf913665e337f8859abf756dfc9ca3",
+    "client": [
+      "127.0.0.1",
+      54447
+    ]
+  },
+  {
+    "utc": "2026-10-30T19:16:42.351867+00:00",
+    "path": "/assets/index-BAUJFA6P.js",
+    "bytes": 14476,
+    "sha256": "29f4144cb19a7d85e49028bbe467ddb6e2003112798fae46c60e488c3e68d77a",
+    "client": [
+      "127.0.0.1",
+      54448
+    ]
+  },
+  {
+    "utc": "2026-10-30T19:16:42.352274+00:00",
+    "path": "/assets/client-BZROKSmU.js",
+    "bytes": 106654,
+    "sha256": "583f08c27382aa09c981bff4f7c41c6d478d79fdabf7581f5a4a67c8b0ba74e1",
+    "client": [
+      "127.0.0.1",
+      54449
+    ]
+  },
+  {
+    "utc": "2026-10-30T19:16:42.415618+00:00",
+    "path": "/assets/main-CqWflYpH.js",
+    "bytes": 306140,
+    "sha256": "2872e36a6549ba8edf33db29cabd5745b7013cf8ac56eff6343cb26e36afb147",
+    "client": [
+      "127.0.0.1",
+      54450
+    ]
+  },
+  {
+    "utc": "2026-10-30T19:16:42.415964+00:00",
+    "path": "/assets/main-jC10sqNn.css",
+    "bytes": 28125,
+    "sha256": "1b05590decbdef5e39ffd88e1a2439c5fb3ceac8c437f0943464262e7ee349cc",
+    "client": [
+      "127.0.0.1",
+      54451
+    ]
+  }
+]

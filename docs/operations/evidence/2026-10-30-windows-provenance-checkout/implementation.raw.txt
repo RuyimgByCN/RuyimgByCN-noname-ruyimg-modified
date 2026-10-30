@@ -1,0 +1,189 @@
+已完成隔离最小候选和真实 Git checkout 的受控 red→green 证明；**尚未集成 Main，未触发新 CI，原 run41114612841 仍为 9 success / 1 Windows desktop failure**。核验日期 2026-10-30，最终独立复核 19:58:21Z；从任务开始到证明完成未达到 20 分钟 checkpoint / 30 分钟实体上限。
+
+已读 canonical [AGENTS.md](/Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md)、[NONAME_NEXT_AGENT_SPEC.md](/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md)、任务 ponytail 指令，以及指定 [publication 报告](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/919f7e89-ec3d-4c40-af98-9cf38ad03f3d/publication/five-audio-compat-accepted-push-and-run.md)。范围仅为固定 bytes provenance 的 Git checkout 属性；不改变玩法、存档、协议、ABI 或资源内容。
+
+**结论与证据边界。** 从提交 `777bf33969e5ecc04b63971adab26be32f12fd28`、tree `7f2d41e257dfc44072bd6a5ef68dad4cb6c70496` 的原始 blob 建立独立 Git fixture。真实 `core.autocrlf=true` / `core.eol=crlf` checkout 把 provenance 的 81 个 LF 检出为 81 个 CRLF；JSON 结构及值完全相等，全部 5 个 source SHA 和 5 个 derivative SHA 都通过原验证器，但固定 provenance bytes SHA 不匹配，原 `validateAudioCompat` 在 `original-audio-resources.mjs:59:11` 抛出与 CI 相同的错误并 exit 1。仅增加精确路径 `-text` 后，以相同 Git 配置重新检出即恢复原始 blob bytes，原验证器 exit 0。LF 配置在候选前后也都接受。
+
+这证明 checkout 换行转换是可重现且足以产生该错误的原因，与原 Windows 失败栈精确匹配。**原 runner 工作区的实际 provenance SHA 没有被观察到**：旧 CI 日志未记录该 SHA，不能反推或补造为下表的受控 CRLF SHA。本地使用 macOS 27.2 arm64、Git 2.56.0、Node v26.4.0；原 CI 是 Git 2.56.0.windows.4 / Node20.20.2。新 Windows CI 的 prepare / installer / upload 平台闭环仍需后续获准的新 run；本结果不会把 777 的旧失败改写为绿色。
+
+**最小候选。** 仅 `.gitattributes` 一个路径，保留原两行逐字不变，追加一个 why comment 和一个精确属性：
+
+```diff
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -1,2 +1,4 @@
+ # Keep the original Windows CI log bytes reproducible across checkouts.
+ docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication/run41053688083-desktop-windows-raw.log -text
++# Preserve the exact provenance bytes pinned by validateAudioCompat.
++content/original-audio-compat/provenance.json -text
+```
+
+候选文件：[.gitattributes](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate/.gitattributes)；可审查补丁：[candidate.patch](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate.patch)。补丁 SHA256 `8f81c68354401bee2807cf4cd80288c6d50cbf62d12a357a5a4f3b8474e8a4ff`。
+
+| 对象 | bytes | SHA256 |
+| --- | ---: | --- |
+| 原 `.gitattributes` blob | 193 | `e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf` |
+| 候选 `.gitattributes` | 314 | `9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388` |
+
+原 guard、固定 SHA 常量、recipe、tool、provenance 和媒体均未改动；没有 runtime JSON normalization，没有 `*.json -text`。`git check-attr` 实采显示候选 provenance `text: unset`，原 raw.log 仍 `text: unset`，无关 `content/unrelated.json` 为 `text: unspecified`。
+
+**真实 Git 方法。** 产品仓库只执行读取提交对象、路径和空 staged diff 等命令。所有 `hash-object -w`、`update-index`、`checkout-index` 只在新建的独立 `/tmp` Git 仓库执行；没有 product worktree 注册、对象写入、checkout、stage、commit 或 config 修改。未全量检出 43k 文件；Git fixture 仅装载 `.gitattributes`、provenance、5 个真实 M4A 共 7 个文件。每个导入 blob 的 Git object ID 都与 `777:path` 相等，数据来自 `git cat-file blob 777:path`，没有手工 LF→CRLF 替换。
+
+最终 fixture `F=/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout`，私有 index `I=/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/private-index`。全部 Git argv、cwd、exit、输入 SHA、stdout/stderr 相对路径都在 [commands.json](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands.json)。关键实际命令模式如下，`$F`/`$I` 指上述绝对路径；源码 blob 的导入通过 subprocess stdin 传递原 bytes：
+
+```sh
+GIT_INDEX_FILE="$I" git -C "$F" -c init.defaultBranch=fixture init .
+GIT_INDEX_FILE="$I" git -C "$F" hash-object -w --stdin
+GIT_INDEX_FILE="$I" git -C "$F" update-index --add --cacheinfo 100644,<original-blob-oid>,<exact-path>
+GIT_INDEX_FILE="$I" git -C "$F" -c core.autocrlf=true -c core.eol=crlf -c core.attributesFile=/dev/null config --show-origin --list
+GIT_INDEX_FILE="$I" git -C "$F" -c core.autocrlf=true -c core.eol=crlf -c core.attributesFile=/dev/null checkout-index --force -- .gitattributes
+GIT_INDEX_FILE="$I" git -C "$F" -c core.autocrlf=true -c core.eol=crlf -c core.attributesFile=/dev/null checkout-index --force -- content/original-audio-compat/provenance.json content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a
+# 仅在私有 index 中替换 attributes blob，重新检出属性文件，然后在相同配置下重新检出 provenance。
+GIT_INDEX_FILE="$I" git -C "$F" update-index --cacheinfo 100644,<candidate-attributes-oid>,.gitattributes
+GIT_INDEX_FILE="$I" git -C "$F" -c core.autocrlf=true -c core.eol=crlf -c core.attributesFile=/dev/null checkout-index --force -- .gitattributes
+GIT_INDEX_FILE="$I" git -C "$F" -c core.autocrlf=true -c core.eol=crlf -c core.attributesFile=/dev/null checkout-index --force -- content/original-audio-compat/provenance.json
+```
+
+进程环境固定 `GIT_CONFIG_GLOBAL=/dev/null`、`GIT_CONFIG_SYSTEM=/dev/null`、`GIT_CONFIG_NOSYSTEM=1`、`GIT_ATTR_NOSYSTEM=1`，并先清除继承的 `GIT_*` 变量，避免全局或外部 attributes 干扰；没有写 global config。LF 对照使用同一套 argv，配置换为 `-c core.autocrlf=false -c core.eol=lf`。属性文件和 provenance 都由 Git 重新检出。最终私有 index 已移除；首次失败 fixture 的 index 仅保留为非活跃的 [forensic bytes](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/first-attempt-index.bin)。
+
+**原验证器完整 red→green。** 原模块按提交 blob 不变地拷入最小 source，依赖只读使用现有 TypeScript，不安装依赖。core 输入仅复制对应原始 5 个 MP3，校验 SHA 后设为只读文件；compat 使用真实 5 个 M4A。测试封装只提供真实文件 SHA 回调并捕获结果，没有替代或修改原验证逻辑。每种调用都记录全部 10 次 SHA 回调，并断言依次匹配 provenance 绑定；原有 size/realpath/schema/file-list 校验也由原函数执行。
+
+| 受控检出状态 | provenance bytes | CRLF / bare LF | JSON 等于原 blob | 原 validator |
+| --- | ---: | ---: | --- | --- |
+| 原 attributes，Windows CRLF 配置 | 2794 | 81 / 0 | true | exit 1，原固定 provenance 错误 |
+| 原 attributes，LF 配置 | 2713 | 0 / 81 | true | exit 0，5 bindings |
+| 候选 attributes，相同 Windows CRLF 配置 | 2713 | 0 / 81 | true | exit 0，5 bindings |
+| 候选 attributes，LF 配置 | 2713 | 0 / 81 | true | exit 0，5 bindings |
+
+原 blob / 三个绿色检出的 SHA256 均为 `1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313`；受控 CRLF 检出为 `b912b07db79b7588a75fc0cb0970f98353288cb5d05e22f6c79f4268e461c821`。
+
+完整 stdout/stderr：
+
+- red：[stdout](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/060-windows-before-red.stdout)、[原 :59:11 stack stderr](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/060-windows-before-red.stderr)。exit 1 是预期 red；10 个真实 input hash 已通过。
+- Windows green：[stdout](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/068-windows-after-green.stdout)、[stderr](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/068-windows-after-green.stderr)，exit 0。
+- LF before：[stdout](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/062-lf-before-green.stdout)；LF after：[stdout](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/070-lf-after-green.stdout)。两次 exit 0。
+
+四次原验证器调用均断言 fixture 输入 bytes 未写入。原 CI gzip 日志保留不动，独立读取仍为 `audio compat fixed provenance/recipe/tool binding differs` / `:59:11` / caller `sync-original-content.mjs:277:24` / Node20.20.2 / exit1。CI prepare 在任何资源写入路径之前即被该校验挡住；原 Node 资源测试另对 refresh/verify 两入口断言拒绝时既有资源、manifest、catalog 等 bytes 不变。
+
+**原 17 项资源回归。** 在私有最小 source 内运行提交777原脚本及原 asset-manifest，不使用 Main 正在进行的175项验收。命令：
+
+```sh
+NONAME_ORIGINAL_ROOT=/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core node --test --test-reporter=tap scripts/test_original_content_order.mjs scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs
+```
+
+cwd `/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source`。结果 **17 tests / 17 pass / 0 fail / 0 cancelled / 0 skipped / 0 todo**；[完整 TAP stdout](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/078-original-resource17.stdout)、[stderr](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/078-original-resource17.stderr)。现有测试覆盖 recipe/tool、source/derivative SHA、size、绑定路径/重复、实际内容漂移、symlink/file-list，以及拒绝前后资源 bytes 不变。未新增永久 repo unit test 或维护框架。
+
+首次 selfcheck 的 Git red/green 已通过，但原资源测试为 **16/17**：最小 fixture 漏带原测试直接读取的 `content/original/asset-manifest.json`，报 ENOENT。保留 [首次原测试输出](/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/077-original-resource17.stdout)、[首次 selfcheck stderr](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.stderr) 和 [首次脚本](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-first-attempt.py)。随后仅给私有 fixture 补入777的原10,661,202B manifest blob，并显式选 TAP reporter，重新完整执行得到17/17；没有改产品或测试期望。首次失败没有被抹去或改记成功。
+
+**守恒与 no staged files。** [summary.json](/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/summary.json) 保存 source14 before/after、Main 相应14路径和 `.gitattributes` before/after、5个只读源文件 bytes/SHA、四种检出 JSON equality / CRLF counts / 全部 hash 回调。以下 source14 的 committed SHA 与 publication 原记录逐项一致，前后完全相同；加载进候选私有 source 的对应文件也复核一致：
+
+| 原 source14 路径 | SHA256，before = after = publication |
+| --- | --- |
+| `.github/workflows/ci.yml` | `354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30` |
+| `apps/web-client/scripts/original-resources.test.mjs` | `a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2` |
+| `apps/web-client/src/engine/originalResources.ts` | `5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8` |
+| `content/original/asset-manifest.json` | `7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493` |
+| `scripts/original-audio-resources.mjs` | `1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759` |
+| `scripts/sync-original-content.mjs` | `051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0` |
+| `scripts/test_original_audio_resources.mjs` | `fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873` |
+| `scripts/test_original_resources.mjs` | `755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a` | `292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a` | `c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a` | `838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a` | `58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a` | `e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7` |
+| `content/original-audio-compat/provenance.json` | `1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313` |
+
+产品 index SHA before/after 都为 `2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d`，也与旧 publication 快照一致。最后用 `GIT_OPTIONAL_LOCKS=0 git -C /Users/ruyimg/Documents/Claude/sanguosha/noname-next diff --cached --name-only`，exit0、stdout 0B：[no-staged receipt](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/independent-check.json)。未借产品仓库 staging；私有 fixture 已无活跃 index。旧 publication `copy-manifest.json`、`push-stage/result.json` 和 Windows 原 gzip 的 before/after hash 逐项相同。
+
+**可重跑材料和输出。** [selfcheck.py](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py)，SHA256 `f35b2850886a145adf76326e7b998c70fa81bf79571b318aeed69d1255068b40`。脚本每次新建独立 `/tmp/noname-ci-777-checkout-selfcheck-*`，逐次保存 argv/stdout/stderr/输入hash并执行断言；只需标准库、现有 Git/Node/TypeScript、原提交与5份既有源音频。复跑命令：
+
+```sh
+python3 -B /tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py \
+  --repo /Users/ruyimg/Documents/Claude/sanguosha/noname-next \
+  --core /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core \
+  --publication /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5
+```
+
+完整成功运行耗时 8.93722s：[selfcheck-final.stdout](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-final.stdout)、[stderr](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-final.stderr)。[evidence-manifest.json](/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/evidence-manifest.json) 列出三个自有 `/tmp` 根下472项证据/文件或symlink（常规文件共57,989,186B，不包含manifest本身），附每个常规文件的 bytes/SHA。包括首次失败、最终成功、Git配置/属性实采、完整原验证器输出、17测试输出、候选和可重跑脚本。父审查请保全这些自有 `/tmp` 根；没有往产品证据目录写入文件。
+
+Changed files: 产品仓库无改动；候选仅自有 `/tmp` 的 `.gitattributes` 与其补丁，另有自有脚本、测试 fixture、原始输出及本指定报告。
+
+Validation: 真实 Git Windows配置 red→green、LF before/after、原validator十个输入hash、原资源17/17、source14固定SHA及Main相关bytes/index守恒、旧指定证据守恒、no staged files 全部通过。独立接受复核依据已具备，正式 reviewer gate 仍由父审查执行。
+
+Recommended next step: 父审查具体补丁与输出；通过后再由父流程集成 `.gitattributes` 精确路径候选，并在后续授权的新 CI 中确认 Windows prepare / installer / upload。当前无需裁决新的产品/API行为。
+
+Skipped: ffmpeg/媒体decode、Rust/WASM/App、全量175 Node、全仓资源hash、平台构建和行数全仓门禁；本批仅4行私有属性候选及独立证据脚本，不新增维护源码/框架。未使用重负载锁，因为仅小Git fixture和定向Node资源测试，没有全库构建或资源扫描。
+Risk: 原runner实际provenance SHA未观察；受控复现匹配错误，但新的Windows CI平台闭环尚未执行。未改Main/source3/compat原bytes、产品index/config/remote，未stage/commit/push、rerun/dispatch或修改旧CI结论。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Only an isolated .gitattributes candidate adds exact provenance.json -text plus one why comment; original raw.log rule retained. No product files/index/config/objects/remote modified. True Git checkout with original777 blobs reproduces fixed provenance rejection, then same CRLF config accepts with candidate."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "commands.json preserves actual argv/config/stdout/stderr/input SHA; summary.json records byte counts/CRLF/JSON equality/all10 hash callbacks/14 admission hashes/index preservation. Original17 tests pass; first fixture failure retained; rerunnable selfcheck, exact patch and472-entry evidence manifest supplied."
+    }
+  ],
+  "changedFiles": [
+    "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate/.gitattributes",
+    "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate.patch",
+    "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py",
+    "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/evidence-manifest.json",
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f82d0c66-cf1d-4f3c-b668-f13b0ec8dd23/implementation/ci-windows-compat-provenance-byte-checkout.md"
+  ],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {
+      "command": "Standalone Git hash-object/update-index/checkout-index from original777 blobs, core.autocrlf=true core.eol=crlf before candidate; original validateAudioCompat",
+      "result": "passed",
+      "summary": "Expected red exit1 at original :59:11; 2794B/81CRLF/SHA b912b07d..., JSON equivalent; all5source and5derivative hashes pass before fixed bytes rejection."
+    },
+    {
+      "command": "Same true Git checkout and original validator after exact provenance.json -text; LF checkout before/after",
+      "result": "passed",
+      "summary": "Three accept exits0; all use original2713B/81LF/pinned SHA1bd98a3e...; ten hash callbacks verified per call."
+    },
+    {
+      "command": "First selfcheck / private original resource test run",
+      "result": "failed",
+      "summary": "16/17: fixture omitted original asset-manifest consumed by one original test. Git red/green already passed. Failure preserved; no product or assertion edits."
+    },
+    {
+      "command": "python3 -B /tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py --repo /Users/ruyimg/Documents/Claude/sanguosha/noname-next --core /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core --publication /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5",
+      "result": "passed",
+      "summary": "Full repeated check8.93722s, including original777 manifest and original3resource entrypoints:17/17, no fail/skip; source14 and Main relevant bytes/index plus old specified evidence preserved."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 git -C /Users/ruyimg/Documents/Claude/sanguosha/noname-next diff --cached --name-only; independent evidence assertions",
+      "result": "passed",
+      "summary": "exit0/empty stdout; product index2b4bee80... unchanged and matches publication snapshot. Exact attribute scope/raw.log retention/10hash calls/source copies/original :59 stack verified. Private active indexes removed."
+    }
+  ],
+  "validationOutput": [
+    "Canonical2713B/0CRLF/81LF SHA1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313.",
+    "Controlled unpatched CRLF2794B/81CRLF/0bareLF SHAb912b07db79b7588a75fc0cb0970f98353288cb5d05e22f6c79f4268e461c821; original JSON equal; exact fixed provenance error after10validhashes.",
+    "CandidateWindows andLF before/after retain canonical SHA; originalvalidator accepts5bindings.",
+    "Original3Node resource entrypoints17tests/17pass/0fail/0cancelled/0skip/0todo.",
+    "Candidate .gitattributes193B/e0e4eede... to314B/9dbbbde6...; exactly one attribute plus one why comment, original two lines retained.",
+    "Product indexSHA2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d unchanged; source14 and old specified raw evidence unchanged."
+  ],
+  "residualRisks": [
+    "OriginalWindows runner actual provenance SHA was not observed; CI logs do not contain it. Controlled reproduction is sufficient-cause evidence, not a recovered runner byte sample.",
+    "Localhost macOS/Git2.56.0/Node26.4.0 differs from originalWindows/Git2.56.0.windows.4/Node20.20.2. NewWindowsCI prepare/installer/upload closure remains for next authorized run.",
+    "Candidate not integrated; formal independent reviewer gate remains pending. Own/tmp evidence must be preserved before temporary cleanup."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Isolated reviewable candidate changes only .gitattributes: exact provenance.json -text plus one why comment. Product repository has no edits from this task; only private fixtures/evidence and requested report written.",
+  "reviewFindings": [
+    "No blocker found in controlled checkout fix or original17resource regressions; reviewer acceptance remains pending.",
+    "WindowsCI platform closure still open; old777run remains9success/1Windowsfailure."
+  ],
+  "manualNotes": "No ffmpeg/decode/Rust/WASM/App/newdeps/fullcheckout/fullresourcehash/globalconfig/remote/rerun/dispatch/stagecommit in product repo. No Main integration or product source3 edits. Test-only staging confined to standalone fixture; no active fixture index left."
+}
+```

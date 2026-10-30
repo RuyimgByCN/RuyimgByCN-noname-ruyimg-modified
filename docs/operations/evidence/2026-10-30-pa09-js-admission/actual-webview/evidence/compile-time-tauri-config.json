@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "无名杀 Next",
+  "mainBinaryName": "noname-next-desktop",
+  "version": "0.1.0",
+  "identifier": "org.noname.pa09.jsbound5b7ad3ab",
+  "build": {
+    "features": [
+      "tauri-shell"
+    ],
+    "beforeDevCommand": {
+      "script": "pnpm dev",
+      "cwd": "../web-client"
+    },
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "",
+    "frontendDist": "http://127.0.0.1:19439"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "PA09 JS admission 5b7ad3ab",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 960,
+        "minHeight": 640,
+        "resizable": true,
+        "visible": false,
+        "url": "index.html"
+      }
+    ],
+    "security": {
+      "capabilities": [
+        "main"
+      ],
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$APPDATA/content/**/*"
+        ]
+      },
+      "csp": "default-src 'self' customprotocol: asset:; connect-src 'self' http://127.0.0.1:19439 ipc: http://ipc.localhost ws: wss:; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; font-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "windows": {
+      "wix": {
+        "language": "zh-CN"
+      }
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

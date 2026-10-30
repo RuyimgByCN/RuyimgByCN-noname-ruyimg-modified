@@ -1,0 +1,2 @@
+Initial private guard invocation stopped before running tests: pathlib.Path.cwd().is_relative_to(root) failed because macOS resolves /tmp as /private/tmp. Guard corrected by resolving root. No dependency/source mocking used. Subsequent red run retained in red.log.
+A subsequent final targeted command timed out after 20s while waiting on the shared serialized lock; log remained empty and no test process ran. Other worker cargo held the lock. Validation rescheduled through same lock in private background runner.

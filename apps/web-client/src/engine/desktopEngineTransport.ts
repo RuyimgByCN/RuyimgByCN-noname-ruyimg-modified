@@ -16,6 +16,8 @@ export interface EngineTransport {
 type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>;
 export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
 export type DesktopEngineChoice = "wasm" | "native";
+// Match the native queue capacity, conservatively including active/opening requests.
+const MAX_DESKTOP_OUTSTANDING = 8;
 
 /** Wasm stays the default until all six PA09 conditions have evidence. */
 export function desktopEngineChoice(): DesktopEngineChoice {
@@ -48,6 +50,7 @@ export class DesktopEngineTransport implements EngineTransport {
   onmessage: EngineTransport["onmessage"] = null;
   onerror: EngineTransport["onerror"] = null;
   private closed = false;
+  private outstanding = 0;
   private tail: Promise<void> = Promise.resolve();
   private resource: Promise<number> | null = null;
 
@@ -55,28 +58,37 @@ export class DesktopEngineTransport implements EngineTransport {
 
   postMessage(request: WorkerRequest): void {
     if (this.closed) throw new Error("Desktop engine transport closed");
+    if (this.outstanding >= MAX_DESKTOP_OUTSTANDING) {
+      throw new Error("Desktop engine busy; request was not submitted（未提交）");
+    }
+    this.outstanding++;
     this.tail = this.tail.then(async () => {
-      if (this.closed) return;
-      let response: WorkerResponse;
       try {
-        this.resource ??= this.call<number>("native_engine_open");
-        const resourceId = await this.resource;
         if (this.closed) return;
-        response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
-        response = normalizeResponse(response, request);
-        if (response.id !== request.id || typeof response.ok !== "boolean") {
-          throw new Error("invalid IPC response");
+        let response: WorkerResponse;
+        try {
+          this.resource ??= this.call<number>("native_engine_open");
+          const resourceId = await this.resource;
+          if (this.closed) return;
+          response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
+          response = normalizeResponse(response, request);
+          if (response.id !== request.id || typeof response.ok !== "boolean") {
+            throw new Error("invalid IPC response");
+          }
+        } catch (error) {
+          response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
         }
-      } catch (error) {
-        response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
+        if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
+      } finally {
+        if (!this.closed) this.outstanding--;
       }
-      if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
-    });
+    }).catch((error) => console.error("Desktop engine response listener failed", error));
   }
 
   terminate(): void {
     if (this.closed) return;
     this.closed = true;
+    this.outstanding = 0;
     void this.resource?.then((resourceId) => this.call("native_engine_close", { resourceId }))
       .catch((error) => console.error("Desktop engine resource close failed", error));
   }

@@ -1,0 +1,725 @@
+{
+  "head": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "tree": "7f2d41e257dfc44072bd6a5ef68dad4cb6c70496",
+  "output": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo",
+  "source14_before": {
+    ".github/workflows/ci.yml": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+    "apps/web-client/scripts/original-resources.test.mjs": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2",
+    "apps/web-client/src/engine/originalResources.ts": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+    "content/original/asset-manifest.json": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493",
+    "scripts/original-audio-resources.mjs": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759",
+    "scripts/sync-original-content.mjs": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0",
+    "scripts/test_original_audio_resources.mjs": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873",
+    "scripts/test_original_resources.mjs": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+    "content/original-audio-compat/provenance.json": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+  },
+  "source14_after": {
+    ".github/workflows/ci.yml": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+    "apps/web-client/scripts/original-resources.test.mjs": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2",
+    "apps/web-client/src/engine/originalResources.ts": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+    "content/original/asset-manifest.json": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493",
+    "scripts/original-audio-resources.mjs": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759",
+    "scripts/sync-original-content.mjs": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0",
+    "scripts/test_original_audio_resources.mjs": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873",
+    "scripts/test_original_resources.mjs": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+    "content/original-audio-compat/provenance.json": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+  },
+  "product_bytes_before": {
+    ".github/workflows/ci.yml": {
+      "bytes": 7273,
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+      "crlf": 0,
+      "lf": 197,
+      "bare_lf": 197
+    },
+    "apps/web-client/scripts/original-resources.test.mjs": {
+      "bytes": 11321,
+      "sha256": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2",
+      "crlf": 0,
+      "lf": 154,
+      "bare_lf": 154
+    },
+    "apps/web-client/src/engine/originalResources.ts": {
+      "bytes": 3322,
+      "sha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+      "crlf": 0,
+      "lf": 60,
+      "bare_lf": 60
+    },
+    "content/original/asset-manifest.json": {
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493",
+      "crlf": 0,
+      "lf": 286123,
+      "bare_lf": 286123
+    },
+    "scripts/original-audio-resources.mjs": {
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759",
+      "crlf": 0,
+      "lf": 449,
+      "bare_lf": 449
+    },
+    "scripts/sync-original-content.mjs": {
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0",
+      "crlf": 0,
+      "lf": 1850,
+      "bare_lf": 1850
+    },
+    "scripts/test_original_audio_resources.mjs": {
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873",
+      "crlf": 0,
+      "lf": 180,
+      "bare_lf": 180
+    },
+    "scripts/test_original_resources.mjs": {
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42",
+      "crlf": 0,
+      "lf": 182,
+      "bare_lf": 182
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": {
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+      "crlf": 0,
+      "lf": 66,
+      "bare_lf": 66
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": {
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+      "crlf": 2,
+      "lf": 371,
+      "bare_lf": 369
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": {
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+      "crlf": 0,
+      "lf": 31,
+      "bare_lf": 31
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": {
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+      "crlf": 0,
+      "lf": 116,
+      "bare_lf": 116
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": {
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+      "crlf": 2,
+      "lf": 252,
+      "bare_lf": 250
+    },
+    "content/original-audio-compat/provenance.json": {
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+      "crlf": 0,
+      "lf": 81,
+      "bare_lf": 81
+    },
+    ".gitattributes": {
+      "bytes": 193,
+      "sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf",
+      "crlf": 0,
+      "lf": 2,
+      "bare_lf": 2
+    }
+  },
+  "product_bytes_after": {
+    ".github/workflows/ci.yml": {
+      "bytes": 7273,
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+      "crlf": 0,
+      "lf": 197,
+      "bare_lf": 197
+    },
+    "apps/web-client/scripts/original-resources.test.mjs": {
+      "bytes": 11321,
+      "sha256": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2",
+      "crlf": 0,
+      "lf": 154,
+      "bare_lf": 154
+    },
+    "apps/web-client/src/engine/originalResources.ts": {
+      "bytes": 3322,
+      "sha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+      "crlf": 0,
+      "lf": 60,
+      "bare_lf": 60
+    },
+    "content/original/asset-manifest.json": {
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493",
+      "crlf": 0,
+      "lf": 286123,
+      "bare_lf": 286123
+    },
+    "scripts/original-audio-resources.mjs": {
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759",
+      "crlf": 0,
+      "lf": 449,
+      "bare_lf": 449
+    },
+    "scripts/sync-original-content.mjs": {
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0",
+      "crlf": 0,
+      "lf": 1850,
+      "bare_lf": 1850
+    },
+    "scripts/test_original_audio_resources.mjs": {
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873",
+      "crlf": 0,
+      "lf": 180,
+      "bare_lf": 180
+    },
+    "scripts/test_original_resources.mjs": {
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42",
+      "crlf": 0,
+      "lf": 182,
+      "bare_lf": 182
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a": {
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263",
+      "crlf": 0,
+      "lf": 66,
+      "bare_lf": 66
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a": {
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8",
+      "crlf": 2,
+      "lf": 371,
+      "bare_lf": 369
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a": {
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f",
+      "crlf": 0,
+      "lf": 31,
+      "bare_lf": 31
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a": {
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84",
+      "crlf": 0,
+      "lf": 116,
+      "bare_lf": 116
+    },
+    "content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a": {
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7",
+      "crlf": 2,
+      "lf": 252,
+      "bare_lf": 250
+    },
+    "content/original-audio-compat/provenance.json": {
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+      "crlf": 0,
+      "lf": 81,
+      "bare_lf": 81
+    },
+    ".gitattributes": {
+      "bytes": 193,
+      "sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf",
+      "crlf": 0,
+      "lf": 2,
+      "bare_lf": 2
+    }
+  },
+  "product_index_unchanged": {
+    "bytes": 5676386,
+    "sha256": "2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d",
+    "crlf": 43,
+    "lf": 9381,
+    "bare_lf": 9338
+  },
+  "old_evidence_unchanged": {
+    "copy-manifest.json": {
+      "bytes": 20632,
+      "sha256": "280dc69d6f5f84608103368c2aef01e86bfc415956278611931d5272d90814c8",
+      "crlf": 0,
+      "lf": 599,
+      "bare_lf": 599
+    },
+    "push-stage/result.json": {
+      "bytes": 46426,
+      "sha256": "e810aaffbaa7829f892358506259db390fe1fbb96057aa149983cafa13fa5af6",
+      "crlf": 0,
+      "lf": 476,
+      "bare_lf": 476
+    },
+    "ci-stage/job-124265455086-raw-log.stdout.gz": {
+      "bytes": 15494,
+      "sha256": "c92943e2e4d7525b620b9c73d944c84730f2aee83ecc7e0bcb23717cee6fde5e",
+      "crlf": 0,
+      "lf": 70,
+      "bare_lf": 70
+    }
+  },
+  "candidate": {
+    "changed_paths": [
+      ".gitattributes"
+    ],
+    "before": {
+      "bytes": 193,
+      "sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf",
+      "crlf": 0,
+      "lf": 2,
+      "bare_lf": 2
+    },
+    "after": {
+      "bytes": 314,
+      "sha256": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388",
+      "crlf": 0,
+      "lf": 4,
+      "bare_lf": 4
+    }
+  },
+  "canonical_provenance": {
+    "bytes": 2713,
+    "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+    "crlf": 0,
+    "lf": 81,
+    "bare_lf": 81
+  },
+  "readonly_core5": [
+    {
+      "path": "audio/skill/tsumugi_mugyu1.mp3",
+      "bytes": 18559,
+      "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+      "crlf": 0,
+      "lf": 66,
+      "bare_lf": 66
+    },
+    {
+      "path": "audio/skill/tsumugi_mugyu2.mp3",
+      "bytes": 114374,
+      "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+      "crlf": 2,
+      "lf": 371,
+      "bare_lf": 369
+    },
+    {
+      "path": "audio/skill/tsumugi_mugyu3.mp3",
+      "bytes": 10031,
+      "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+      "crlf": 0,
+      "lf": 31,
+      "bare_lf": 31
+    },
+    {
+      "path": "audio/skill/tsumugi_mugyu4.mp3",
+      "bytes": 38934,
+      "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+      "crlf": 0,
+      "lf": 116,
+      "bare_lf": 116
+    },
+    {
+      "path": "audio/skill/tsumugi_mugyu5.mp3",
+      "bytes": 80896,
+      "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+      "crlf": 2,
+      "lf": 252,
+      "bare_lf": 250
+    }
+  ],
+  "cases": {
+    "windows-before-red": {
+      "provenance": {
+        "bytes": 2794,
+        "sha256": "b912b07db79b7588a75fc0cb0970f98353288cb5d05e22f6c79f4268e461c821",
+        "crlf": 81,
+        "lf": 81,
+        "bare_lf": 0
+      },
+      "json_equals_original": true,
+      "no_input_writes": true,
+      "validator": {
+        "accepted": false,
+        "error": "audio compat fixed provenance/recipe/tool binding differs",
+        "calls": [
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu1.mp3",
+            "bytes": 18559,
+            "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+            "bytes": 18716,
+            "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu2.mp3",
+            "bytes": 114374,
+            "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+            "bytes": 114531,
+            "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu3.mp3",
+            "bytes": 10031,
+            "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+            "bytes": 10188,
+            "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu4.mp3",
+            "bytes": 38934,
+            "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+            "bytes": 39091,
+            "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu5.mp3",
+            "bytes": 80896,
+            "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+            "bytes": 81053,
+            "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ]
+      }
+    },
+    "lf-before-green": {
+      "provenance": {
+        "bytes": 2713,
+        "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+        "crlf": 0,
+        "lf": 81,
+        "bare_lf": 81
+      },
+      "json_equals_original": true,
+      "no_input_writes": true,
+      "validator": {
+        "accepted": true,
+        "bindings": [
+          {
+            "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+            "source_sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+            "derivative_path": "audio/skill/tsumugi_mugyu1.m4a",
+            "derivative_sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+            "source_sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+            "derivative_path": "audio/skill/tsumugi_mugyu2.m4a",
+            "derivative_sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+            "source_sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+            "derivative_path": "audio/skill/tsumugi_mugyu3.m4a",
+            "derivative_sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+            "source_sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+            "derivative_path": "audio/skill/tsumugi_mugyu4.m4a",
+            "derivative_sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+            "source_sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+            "derivative_path": "audio/skill/tsumugi_mugyu5.m4a",
+            "derivative_sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ],
+        "calls": [
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu1.mp3",
+            "bytes": 18559,
+            "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+            "bytes": 18716,
+            "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu2.mp3",
+            "bytes": 114374,
+            "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+            "bytes": 114531,
+            "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu3.mp3",
+            "bytes": 10031,
+            "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+            "bytes": 10188,
+            "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu4.mp3",
+            "bytes": 38934,
+            "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+            "bytes": 39091,
+            "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu5.mp3",
+            "bytes": 80896,
+            "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+            "bytes": 81053,
+            "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ]
+      }
+    },
+    "windows-after-green": {
+      "provenance": {
+        "bytes": 2713,
+        "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+        "crlf": 0,
+        "lf": 81,
+        "bare_lf": 81
+      },
+      "json_equals_original": true,
+      "no_input_writes": true,
+      "validator": {
+        "accepted": true,
+        "bindings": [
+          {
+            "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+            "source_sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+            "derivative_path": "audio/skill/tsumugi_mugyu1.m4a",
+            "derivative_sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+            "source_sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+            "derivative_path": "audio/skill/tsumugi_mugyu2.m4a",
+            "derivative_sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+            "source_sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+            "derivative_path": "audio/skill/tsumugi_mugyu3.m4a",
+            "derivative_sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+            "source_sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+            "derivative_path": "audio/skill/tsumugi_mugyu4.m4a",
+            "derivative_sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+            "source_sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+            "derivative_path": "audio/skill/tsumugi_mugyu5.m4a",
+            "derivative_sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ],
+        "calls": [
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu1.mp3",
+            "bytes": 18559,
+            "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+            "bytes": 18716,
+            "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu2.mp3",
+            "bytes": 114374,
+            "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+            "bytes": 114531,
+            "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu3.mp3",
+            "bytes": 10031,
+            "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+            "bytes": 10188,
+            "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu4.mp3",
+            "bytes": 38934,
+            "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+            "bytes": 39091,
+            "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu5.mp3",
+            "bytes": 80896,
+            "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+            "bytes": 81053,
+            "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ]
+      }
+    },
+    "lf-after-green": {
+      "provenance": {
+        "bytes": 2713,
+        "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313",
+        "crlf": 0,
+        "lf": 81,
+        "bare_lf": 81
+      },
+      "json_equals_original": true,
+      "no_input_writes": true,
+      "validator": {
+        "accepted": true,
+        "bindings": [
+          {
+            "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+            "source_sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+            "derivative_path": "audio/skill/tsumugi_mugyu1.m4a",
+            "derivative_sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+            "source_sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+            "derivative_path": "audio/skill/tsumugi_mugyu2.m4a",
+            "derivative_sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+            "source_sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+            "derivative_path": "audio/skill/tsumugi_mugyu3.m4a",
+            "derivative_sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+            "source_sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+            "derivative_path": "audio/skill/tsumugi_mugyu4.m4a",
+            "derivative_sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+            "source_sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+            "derivative_path": "audio/skill/tsumugi_mugyu5.m4a",
+            "derivative_sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ],
+        "calls": [
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu1.mp3",
+            "bytes": 18559,
+            "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+            "bytes": 18716,
+            "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu2.mp3",
+            "bytes": 114374,
+            "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+            "bytes": 114531,
+            "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu3.mp3",
+            "bytes": 10031,
+            "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+            "bytes": 10188,
+            "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu4.mp3",
+            "bytes": 38934,
+            "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+            "bytes": 39091,
+            "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu5.mp3",
+            "bytes": 80896,
+            "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+          },
+          {
+            "file": "/private/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+            "bytes": 81053,
+            "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+          }
+        ]
+      }
+    }
+  },
+  "tests": {
+    "pass": 17,
+    "fail": 0
+  },
+  "environment": {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_SYSTEM": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_ATTR_NOSYSTEM": "1",
+    "TMPDIR": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo"
+  },
+  "private_index_removed": true,
+  "elapsed_seconds": 8.937219999992521
+}

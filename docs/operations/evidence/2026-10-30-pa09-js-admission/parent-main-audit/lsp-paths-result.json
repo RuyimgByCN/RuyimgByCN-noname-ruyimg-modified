@@ -1,0 +1,23 @@
+{
+  "tool": "pi-lens lens_diagnostics",
+  "source": "lsp",
+  "scope": "paths",
+  "mode": "full",
+  "paths": [
+    "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs"
+  ],
+  "files_checked": 3,
+  "diagnostics": 0,
+  "outcomes": {
+    "clean": 3,
+    "findings": 0,
+    "unsupported": 0,
+    "unavailable": 0,
+    "failed": 0,
+    "too_large": 0,
+    "inconclusive": 0
+  },
+  "qualification": "Parent records observed active tool response; not a separate CLI run; does not expand to Rust/workspace coverage."
+}

@@ -1,0 +1,28 @@
+{
+  "main_head_now": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "index_before": "806f78ea3a4275718ef9bbdd6508228e04d019388a2b8b5642f0a64e19f7eb4c",
+  "index_after": "2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d",
+  "status_removed": [
+    " M .github/workflows/ci.yml",
+    " M apps/web-client/scripts/original-resources.test.mjs",
+    " M apps/web-client/src/engine/originalResources.ts",
+    " M content/original/asset-manifest.json",
+    " M docs/architecture/native-progress.md",
+    " M docs/architecture/native-remaining-ledger.md",
+    " M docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/README.md",
+    " M docs/operations/native-ci.md",
+    " M scripts/original-audio-resources.mjs",
+    " M scripts/sync-original-content.mjs",
+    " M scripts/test_original_audio_resources.mjs",
+    " M scripts/test_original_resources.mjs",
+    "?? content/original-audio-compat/",
+    "?? docs/operations/evidence/2026-10-30-c331-schema-supplement/later-private-checkpoints/",
+    "?? docs/operations/evidence/2026-10-30-nc10-continuations/private-ephemeral-checkpoint/focused-effect-read-review.raw.txt",
+    "?? docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/",
+    "?? docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/publication/",
+    "?? docs/operations/evidence/2026-10-30-up37-i02-audio-compat/"
+  ],
+  "status_added": [],
+  "worker_main_writes": false,
+  "note": "Unexpected external/concurrent Main movement; no restoration attempted."
+}

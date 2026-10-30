@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-30T20:38:48.612754+00:00",
+  "source3": {
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face"
+  },
+  "attribute_sha256": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388",
+  "source4_unchanged": true,
+  "scope": "Only acceptance registration prose and evidence changed after finalgate window; no source4 edits; checks are local links,strict refs,tracked whitespace only."
+}

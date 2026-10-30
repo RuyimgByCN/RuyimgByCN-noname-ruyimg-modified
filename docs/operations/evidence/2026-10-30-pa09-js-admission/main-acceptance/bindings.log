@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/check-bindings.py", line 44, in <module>
+    if chunk['type'] == 'chunk': assert sha(products / name) == chunk['outputSha256']
+AssertionError
+{"command": ["python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/check-bindings.py"], "exit": 1, "locked_seconds": 0.11469704200862907, "disk_free_bytes": 97242972160}

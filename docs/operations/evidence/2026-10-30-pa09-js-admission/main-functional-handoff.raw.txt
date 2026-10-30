@@ -1,0 +1,83 @@
+Main PA09 三文件 JS 功能切片已通过本轮验证：定向 **20/20**、完整前端 **175/175**、typecheck、外部 Vite production bundle、标准行数自测和门禁均通过。没有改写三冻结 source/test，未 stage/commit/push。此结论不授予 PA09 六条件、默认切换或新 Main GUI 验收。
+
+核验日期 **2026-10-30 UTC**，正式窄首末检查截至 **19:50:28Z**。Main HEAD `777bf33969e5ecc04b63971adab26be32f12fd28`，tree `7f2d41e257dfc44072bd6a5ef68dad4cb6c70496`；规则/存档/ABI/WS **330/105/758/6**，desktop transport 默认仍为 **WASM**。已读 canonical AGENTS、SPEC、Ponytail 与指定四份 implementation/review/actual/review 交接材料。
+
+本 worker 仅写 [main-acceptance](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance) 与自有临时产品，以及本指定报告。没有维护 source、docs 正文/index、原 evidence、共享依赖、默认 dist。只新增证据 harness/assertions，未新增产品测试或依赖。
+
+三冻结文件的首末 SHA256 与 [父准入 manifest](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/parent-main-source-admission.json) 及 private actual WK manifest 相同；同时核对 Main HEAD old Git blob 与冻结 new Git blob：
+
+| 文件 | SHA256 |
+|---|---|
+| `apps/web-client/src/engine/desktopEngineTransport.ts` | `6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face` |
+| `apps/web-client/scripts/pa09-desktop-transport.test.mjs` | `ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc` |
+| `apps/web-client/scripts/nc04-worker-failure.test.mjs` | `6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0` |
+
+真实 Main 测试覆盖 opening/active/queued 合计八槽、128 提交中的 8 accepted/120 同步明确未提交、拒绝不追加 transport Promise 尾链、生产 EngineClient pending 同步删除且持续未决≤8、释放后继续接纳、IPC/metadata/listener/open 失败恢复、八请求 dispose 与旧 late reply 隔离。保留原 dispose/已提交 IPC 的 unknown-result 语义；无 native→WASM fallback。正常默认 WASM 的既有测试也通过。
+
+所有下表命令经 `/tmp/noname-run-serialized.py` 持共享锁，env 指定 `CARGO_INCREMENTAL=0` / `CARGO_BUILD_JOBS=2`；没有执行 Cargo。前端 cwd 为 Main `apps/web-client`，其他为 Main 根；实际 argv、exit、合并 stdout/stderr、锁内/墙时、磁盘与日志 SHA 逐次保存在 [commands.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/commands.json)。表中使用最终成功尝试，另列保留失败。
+
+| 实际命令 | 结果 | 锁内秒 / 墙秒 | 原始日志 |
+|---|---|---:|---|
+| `node --import ./scripts/ts-register.mjs --test scripts/pa09-desktop-transport.test.mjs scripts/nc04-worker-failure.test.mjs` | 20 pass / 0 fail / 0 skip | 0.3331 / 0.3592 | [targeted.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/targeted.log) |
+| `node --import ./scripts/ts-register.mjs --test` | 175 pass / 0 fail / 0 skip | 0.8296 / 0.8546 | [frontend.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/frontend.log) |
+| `node node_modules/vue-tsc/bin/vue-tsc.js --noEmit` | exit 0 | 1.2138 / 1.2393 | [typecheck.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/typecheck.log) |
+| `node <main-acceptance>/vite-build.mjs` | exit 0；117 transformed modules | 1.1940 / 1.2206 | [vite-attempt2.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/vite-attempt2.log) |
+| `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` | 2 pass | 0.0666 / 163.9018 | [sourcecap-unit.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/sourcecap-unit.log) |
+| `python3 -B scripts/check-source-lines.py` | 8992 files≤2000；Rust 非测试≤1000 effective | 7.5632 / 7.9400 | [sourcecap.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/sourcecap.log) |
+| `git --no-optional-locks diff --check` | exit 0 | 0.0515 / 0.0774 | [diffcheck.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/diffcheck.log) |
+| `python3 -B <main-acceptance>/check-bindings.py` | exit 0；最终 bundle/input/继承绑定断言通过 | 0.1007 / 0.1281 | [bindings-attempt2.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/bindings-attempt2.log) |
+
+sourcecap-unit 的 163.9018 秒墙时主要为共享锁排队，锁内仅 0.0666 秒；不是测试性能指标。11 次 command records 包含 9 次 exit0、1 次证据 harness exit1、1 次执行前锁等待 timeout。窄 exit 的另一次 harness 失败另有原始日志。最小磁盘采样约 89.5 GiB，始终高于 3 GiB。
+
+Vite 使用 **真实 Main 完整生产 JS 源码**与原 `vite.config.ts`，`globalThis.__dirname=web`、`configLoader:'runner'`；无新产品配置。只把原两 generated pkg 和 `public/pkg` 共18文件先 hash 后复制到 owninput，通过原 wasm import seam alias 引用，不复制 portraits/media，不触发内容或资源同步。真实 Main client 文件为 `src/engine/client.ts`，仓库不存在 `mainClient.ts`。
+
+本轮私有产品目录为 [production-dist](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/pa09-main-js-29aa9984-7v4tna41/production-dist)。[模块表](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/bundle-module-table.json) 包含35个 Main source 的转译前文件 SHA/输入 SHA 和最终 chunk module IDs；冻结 transport 的输入字节一致，实际位于 `assets/index-I-8R0UBL.js`，最终 SHA `89fd55b4b211a65419a79aece4aa79a7b1b0ec0bbf24721f1a466145fb1ba6a7`。两个测试文件按 source guard 绑定，不属于生产 bundle graph。
+
+13个外部产品的 [逐文件 SHA](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/production-products-sha256.json) 的 canonical files digest 为 `bc5db9048d3d9f655af916c303a4f15d61d7bc247b993a2f0d931f40ab03c65c`（sorted-key compact JSON→SHA256）。native WASM exact `2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b`，legacy WASM exact `2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355`，owninput 首末不变。这是既有 WASM 的 byte reuse，不是重编译或新的跨端等价证明。没有调用 `pnpm build`，也没有 Main `validated-dist`。
+
+[首末指纹](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/narrow-comparison.json) 全部通过：source3、compat14、A53、四组 CI 的非文档路径、catalog、包 Git tree及工作树 diff、locks、Main client/transport direct callers 合计99个文件、18 generated modules、37个 Main dist 文件、guard、HEAD/tree/index SHA 和 staged 空集保持一致。包域采用 Git tree与窄diff；没有重扫17195/12359素材。正式窗口内 tracked docs delta为空；父授权 docs/evidence 若有变动属于父域，不恢复、不冒记 source drift。初始与最终受跟踪 dirty 均恰为已接入的三个 source/test 文件。未清理任何旧 untracked 证据。
+
+**初始 index 限制：**第一次探索用了普通 `git status --short`，正式 entry SHA 在其后捕获，因此不能排除 entry前 Git stat-cache refresh。之后全部 Git 读取使用 `--no-optional-locks`；正式 entry→exit 的 index SHA 相同，staged始终0。不能把本轮描述为从第一次工具调用起已经证明 index 字节未动。
+
+本轮原始 warning、失败与修正均保留在 [retained-setup-failures.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/retained-setup-failures.json)：
+
+- Node localStorage ExperimentalWarning 原样保留于两类测试日志，未过滤 warning。本轮没有 deprecated/6hint 输出，历史原 evidence 没有覆盖或清理。
+- 首次 sourcecap-unit 等锁60秒被工具 timeout，空日志保留；当时没有执行测试。未干预占锁的其他任务；随后自有异步 driver 完成排队和测试。
+- 首次 bundle binding exit1：自有证据 hook 在 generateBundle 过早 hash，后续 Vite plugin 仍会改写 chunk。改为 writeBundle，保留原表、原产品hash与失败log，只重建自有外部dist。两次构建全部13个产品逐文件 SHA 完全相同；最终绑定通过，不是修改源码消红。
+- 首次窄 exit exit1：`rg -l` 返回顺序不同；调用方集合和所有 source/file SHA 均相同。改用集合比较，原始首末列表与失败日志保留，未改写初始快照或恢复文件。
+- 初始两个只读路径探测失败（根 package.json、mainClient.ts 不存在）及证据 finalize 脚本的四个 Optional 静态诊断/明确断言修正亦已记录。
+
+private actual WK 仅按已经通过独立审查的证据继承。[本轮 bindings-result](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/bindings-result.json) 重新核对 source3，以及 client、transport、desktopHost、autoDrive、nativeOutcome、observerMetadata、perfProbe、engine types 八个生产 seam 的 Main/actual/frozen 字节相等；核对七个原始 evidence SHA；Main a1f→777 的 Rust/Cargo changed paths为空。因此可承接已审查的3001 native blob baseline绑定，不重编 native、不重跑 GUI。原 actual WK 的49 raw calls（4open/41request/4close）、98条 sent/terminal trace、128 pending samples，以及33断言结论仍属于 private actual fixture 的同事件轮 admission/生命周期。完整 calltrace qualification 依据既有父 audit与独立actual reviewer，本轮未重复解析全trace。Main compat 的其他 UI/resource JS只经本轮 production build/Node验证，没有冒充新 WK实跑。
+
+所有37个本轮 evidence文件（不含 index自身）及外部 input/product manifests见 [artifact-sha256.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/artifact-sha256.json)，index自身 SHA256 `5c53c0376e67f3e37343f25d95e0ed67ea3aa096173369ec0b796d05e1c36670`；所有 evidence/command log hash已重算匹配。[main-summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/main-summary.json) 提供机器可读结果。
+
+下一步：父按必需独立 reviewer gate 审核这份 Main JS切片，再在 docs闭环后独立执行最终 fullpreflight。本轮没有重复 fullpreflight，也没有发布操作。
+
+未做：新 Main App/WK、物理输入/latency、Rust/WASM/Swift构建、全媒体/资源重同步、默认切换、PA09六条件闭合。风险：formal entry前 index stat-cache 无前像；actual WK只继承同源 seam 的有限资格，不代表新的 Main GUI或更广平台绿色。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id": "criterion-1", "status": "satisfied", "evidence": "Verification-only scope; three source/test SHA unchanged, 99 protected files + 18 modules + 37 Main dist files and HEAD/index invariant. Only own evidence and external products written."},
+    {"id": "criterion-2", "status": "satisfied", "evidence": "37 indexed evidence files, 11 command-attempt records, raw pass/fail/warning logs, exact source/bundle/WASM bindings, entry/exit snapshots, and external product hashes available for independent review."}
+  ],
+  "changedFiles": ["docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/**", "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/29aa9984-a400-4345-8e3e-81312ae740d9/verification/pa09-js-admission-main-functional.md"],
+  "testsAddedOrUpdated": ["Evidence-only check-bindings.py assertions; no product/source tests edited"],
+  "commandsRun": [
+    {"command": "Main targeted Node two-entry suite", "result": "passed", "summary": "20 pass, 0 fail, 0 skip"},
+    {"command": "Main full frontend Node suite", "result": "passed", "summary": "175 pass, 0 fail, 0 skip"},
+    {"command": "vue-tsc --noEmit", "result": "passed", "summary": "exit 0"},
+    {"command": "Outside Vite production build", "result": "passed", "summary": "117 transformed modules;35 traced Main source;13 outputs;two builds byte-identical"},
+    {"command": "Sourcecap script unit tests and standard cap", "result": "passed", "summary": "2 tests;8992 files <=2000 and Rust non-test <=1000 effective"},
+    {"command": "diff --check and final bounded source/bundle binding check", "result": "passed", "summary": "exit 0;all final bindings verified"},
+    {"command": "First sourcecap-unit lock attempt", "result": "not-run", "summary": "Tool timeout after60s before lock;empty log retained"},
+    {"command": "Initial evidence bundle-binding and caller-list-order checks", "result": "failed", "summary": "Own harness timing/order issues retained and corrected;final checks passed;no Main source changes"}
+  ],
+  "validationOutput": ["Final eight command groups all pass", "Formal narrow entry/exit all invariants true;staged empty", "Artifact index SHA256 5c53c0376e67f3e37343f25d95e0ed67ea3aa096173369ec0b796d05e1c36670"],
+  "residualRisks": ["Required independent reviewer gate remains pending", "First exploratory status preceded index SHA;pre-entry stat-cache refresh cannot be excluded", "Inherited private actual WK qualification is limited to same-event-turn source-bound admission/lifecycle;no new Main GUI, physical or latency claim", "Parent final fullpreflight deferred until docs closure"],
+  "noStagedFiles": true,
+  "diffSummary": "Evidence-only Main JS functional verification;source3 frozen and untouched by this worker",
+  "reviewFindings": ["No Main source functional blockers found;two evidence harness issues fixed with initial failures retained;independent review gate required"],
+  "manualNotes": "Main default WASM, versions330/105/758/WS6 unchanged;no Cargo/App/GUI/resource-sync/fullpreflight/stage/commit/push. External owninput and products retained for review."
+}
+```

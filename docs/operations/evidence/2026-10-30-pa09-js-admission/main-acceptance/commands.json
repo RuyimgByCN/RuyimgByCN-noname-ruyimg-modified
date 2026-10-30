@@ -1,0 +1,228 @@
+[
+  {
+    "name": "sourcecap-unit",
+    "attempt": 0,
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": null,
+    "result": "tool-timeout-before-lock; command did not execute",
+    "tool_timeout_seconds": 60,
+    "locked_seconds": null,
+    "stdout_stderr": "sourcecap-unit-lock-timeout.log",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "targeted",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test",
+      "scripts/pa09-desktop-transport.test.mjs",
+      "scripts/nc04-worker-failure.test.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 0.3591601669904776,
+    "locked_seconds": 0.3330581249902025,
+    "queue_plus_wrapper_seconds": 0.026102042000275105,
+    "disk_free_bytes": 96320020480,
+    "stdout_stderr": "targeted.log",
+    "log_sha256": "c90ba8251729fdd129f19d046d643bf13aa3f1f5cbb8165bce19449b8b90088a"
+  },
+  {
+    "name": "frontend",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 0.8545611669833306,
+    "locked_seconds": 0.8296068330237176,
+    "queue_plus_wrapper_seconds": 0.024954333959612995,
+    "disk_free_bytes": 96320032768,
+    "stdout_stderr": "frontend.log",
+    "log_sha256": "ba4a08b91baf07a80739227c7dc28c26cff71a9eaf42ab93218bbeb9db5f9fa6"
+  },
+  {
+    "name": "typecheck",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "node_modules/vue-tsc/bin/vue-tsc.js",
+      "--noEmit"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.23925362501177,
+    "locked_seconds": 1.213829332991736,
+    "queue_plus_wrapper_seconds": 0.025424292020034045,
+    "disk_free_bytes": 96320028672,
+    "stdout_stderr": "typecheck.log",
+    "log_sha256": "b5a550eae3fd11144206b735ba540b04b37b123c4e2258260d2a8843f880ed84"
+  },
+  {
+    "name": "vite",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/vite-build.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.193239459011238,
+    "locked_seconds": 1.1681202919862699,
+    "queue_plus_wrapper_seconds": 0.025119167024968192,
+    "disk_free_bytes": 96284672000,
+    "stdout_stderr": "vite.log",
+    "log_sha256": "ce7b57770428dba53f73c79c8a0cc7c57fb15f31b5c81354f51212e1eb6774f7"
+  },
+  {
+    "name": "sourcecap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 163.90182237498811,
+    "locked_seconds": 0.06656125001609325,
+    "queue_plus_wrapper_seconds": 163.83526112497202,
+    "disk_free_bytes": 96128397312,
+    "stdout_stderr": "sourcecap-unit.log",
+    "log_sha256": "e02b5f4df8debd6651efb8220fca3202c199a4d935085fa03a52a106adcc7283"
+  },
+  {
+    "name": "sourcecap",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 7.940008875011699,
+    "locked_seconds": 7.56318787499913,
+    "queue_plus_wrapper_seconds": 0.37682100001256913,
+    "disk_free_bytes": 97236676608,
+    "stdout_stderr": "sourcecap.log",
+    "log_sha256": "8d711800bb988d1c3c27547fbdbea9bbdffaa9ff9a684e6ca62616f9640c6838"
+  },
+  {
+    "name": "diffcheck",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "git",
+      "--no-optional-locks",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.07742041701567359,
+    "locked_seconds": 0.051459542009979486,
+    "queue_plus_wrapper_seconds": 0.025960875005694106,
+    "disk_free_bytes": 97236656128,
+    "stdout_stderr": "diffcheck.log",
+    "log_sha256": "5dfb5551959933bd8963c058d3eb237d1c31f76207d07f866735949be03411be"
+  },
+  {
+    "name": "bindings",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/check-bindings.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "wall_seconds": 0.14266141600091942,
+    "locked_seconds": 0.11469704200862907,
+    "queue_plus_wrapper_seconds": 0.027964373992290348,
+    "disk_free_bytes": 97242972160,
+    "stdout_stderr": "bindings.log",
+    "log_sha256": "b3f43694aedd1ddb3f430a532e832f17d03ad966a96ca70fd5ee3d64c64d638b"
+  },
+  {
+    "name": "vite",
+    "attempt": 2,
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/vite-build.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.2205522499862127,
+    "locked_seconds": 1.1940329589997418,
+    "queue_plus_wrapper_seconds": 0.026519290986470878,
+    "disk_free_bytes": 97247191040,
+    "stdout_stderr": "vite-attempt2.log",
+    "log_sha256": "5804d95711c530ef8d7cf34d22d47b4e4b2862c412922b9dad4d8ec78a335eaf"
+  },
+  {
+    "name": "bindings",
+    "attempt": 2,
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/check-bindings.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.1281015000131447,
+    "locked_seconds": 0.10066566601744853,
+    "queue_plus_wrapper_seconds": 0.027435833995696157,
+    "disk_free_bytes": 97248235520,
+    "stdout_stderr": "bindings-attempt2.log",
+    "log_sha256": "556fa4abecb5928dda1098b3671bce0cd8f35bdab1218814d875d204875e92a7"
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "label": "source-batch1-green3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc08",
+      "c331_host_source_metadata"
+    ],
+    "exit": 0,
+    "seconds": 0.390092134475708
+  },
+  {
+    "label": "affected-default-final2",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--no-fail-fast",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "-p",
+      "content-schema",
+      "-p",
+      "content-compiler",
+      "-p",
+      "content-runtime",
+      "-p",
+      "content-native-loader"
+    ],
+    "exit": 0,
+    "seconds": 260.5618350505829
+  }
+]

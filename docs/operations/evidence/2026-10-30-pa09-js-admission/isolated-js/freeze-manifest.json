@@ -1,0 +1,80 @@
+{
+  "frozen_at_utc": "2026-10-30T18:52:26.408387+00:00",
+  "worktree": "/tmp/pa09-js-bound-4306bc00",
+  "base_head": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "base_tree": "abb64b4d7aeabc3f1e2525887b88bca46b0e9133",
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "rule_vm_abi": 758,
+    "ws": 6
+  },
+  "changed_files": [
+    {
+      "path": "apps/web-client/src/engine/desktopEngineTransport.ts",
+      "old_git_blob_sha1": "6932abe1f4a6a54efb30f68427cfa580f72a8e29",
+      "new_git_blob_sha1": "4ce3cf7abf83f454b6d953cfa99f775a8f6438d4",
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "physical_lines": 97
+    },
+    {
+      "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+      "old_git_blob_sha1": "384b8a548f42a0782dcadbe29f0014aa5adacb65",
+      "new_git_blob_sha1": "4bc11d66d24ee01e25134bbaa26d460c89f99a0c",
+      "sha256": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+      "physical_lines": 266
+    },
+    {
+      "path": "apps/web-client/scripts/nc04-worker-failure.test.mjs",
+      "old_git_blob_sha1": "e994dd2047f1c8c04d2f95d7811494fad1120ee9",
+      "new_git_blob_sha1": "b8af23c6c05cf25fbd975c7d176cc2a8d6649d33",
+      "sha256": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0",
+      "physical_lines": 278
+    }
+  ],
+  "patch": "/tmp/pa09-js-bound-evidence-4306bc00/pa09-desktop-js-admission-bound.incremental.patch",
+  "patch_sha256": "064f0576d3f752a563ef5b9bcf672617494ffea189ac14ab514370d16b9edf41",
+  "source_archive": "/tmp/pa09-js-bound-evidence-4306bc00/pa09-desktop-js-admission-bound.source.tar.gz",
+  "source_archive_sha256": "5ceb93746f3a2ffd01ce8d7d1479a17837317b66218cc8884bf76565868622bf",
+  "staged_files": [],
+  "sourcecap_baseline_files": 8980,
+  "sourcecap_missing_files": [],
+  "dependency_inputs": [
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/node_modules/typescript/package.json",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/package.json",
+      "sha256": "822ef7ca6452205657b6288b066481ecf508bfbf43455d715cf7d3ec457561e6"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/node_modules/vue-tsc/package.json",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vue-tsc@2.2.12_typescript@5.9.3/node_modules/vue-tsc/package.json",
+      "sha256": "1651176df561df8cac64bd333e1bf500923af5e089f13627b370f0ca6c7f6479"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/node_modules/@tauri-apps/api/package.json",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@tauri-apps+api@2.11.1/node_modules/@tauri-apps/api/package.json",
+      "sha256": "e418ff5cf898e23ee7c7fd4f8f994c6cf24e0cc5c3987440c56d180dda3638d6"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+      "sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+      "sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/src/wasm-pkg/engine_wasm.js",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/wasm-pkg/engine_wasm.js",
+      "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+    },
+    {
+      "path": "/tmp/pa09-js-bound-4306bc00/apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+      "resolved_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+      "sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355"
+    }
+  ],
+  "note": "No candidate git tree object created; no staging/commit/push. Only worktree registration/sparse index setup touched Main .git. Source + patch are the frozen review inputs. Generated dependencies linked and read only; no artifact rebuild or current binary claim."
+}

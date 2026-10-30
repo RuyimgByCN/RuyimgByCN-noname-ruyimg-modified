@@ -1,0 +1,44 @@
+## Review
+
+**限定结论：真实 WS/WAL/timer、旧 WAL reader 与最终默认并行记录可接受，OK with notes；整 C331 仍 BLOCK。**
+
+范围为 phase4 冻结增量中的 server `c331.rs`／`peer.rs` 及对应产品记录。已先读指定 checkpoint 42 行，接受父核的 134 文件冻结身份：base `38ab1678…`、manifest `6f8eabd8…`、tar `9866a12f…`，见 [identity.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/identity.json:1)。本轮无构建、测试、新产品实验、网络或源码写入。
+
+- **Correct — 三段结果分界明确，未叠加定向测试：**
+
+| 源码阶段 | passed / failed / ignored | 记录 |
+|---|---:|---|
+| freeze3，非 timer fixture 已为 90 秒 | 2897 / 0 / 76 | `phase4/affected-default-initial.log` |
+| 中间 phase4，原变体 P2 已修 | 2901 / 2 / 76 | `phase4/affected-default-final.log` |
+| final-freeze4 | **2903 / 0 / 76** | [affected-default-final2.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/affected-default-final2.log:5960) |
+
+- **Correct — 最终 aggregate 有独立计数。** 已读父新写的[只读解析器](/tmp/noname-parent-c331-phase4-wire-counts.py:1)和[完整结果](/tmp/noname-parent-c331-phase4-audit/wire-and-test-counts.json:1)：103 条原始 `test result` 合计 2903/0/76；日志 SHA `ca5811a6…`。原十包 argv、exit 0 与原日志末行一致，无 `--test-threads=1`；六个 `native_ws_e2e::c331` 用例均为 `ok`。
+
+- **Correct — 默认并行资格保留。** [c331.rs:9](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:9) 的锁仅由六个 C331 fixture 取得，从昂贵构建前持有到 fixture 结束，避免其 257 模块初始化互相撞入真实 deadline。其他 WS 用例继续并行；外层串行器只锁整条 cargo 命令。两个 timer fixture 仍显式使用 **10 秒**，普通 fixture 为 90 秒；runtime 为四 worker、正常启用时间驱动。
+
+- **Correct — 原 WAL variant P2 已修。** [c331.rs:364](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:364) 从实际 `wal.base_snapshot_hex` 恢复，再逐条提交 `entry.command()`；保留 Answer／TimeoutAction、actor、revision、dedup 和全部 selection。choice 去重、逐条 hash、最终完整 `StateSnapshot` 断言均保留；[比较函数:161](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:161) 仅归一化 `auth_generation`。
+
+- **Correct — 最终 timer 原记录绑定。** [第二批独立解析](/tmp/noname-parent-c331-phase4-audit/manual-timeout-oldreader.json:249) 保留 choice3 的 `TimeoutAction(Skill215)`，以及 choices4–7 的四条 `Answer(Skill216–219)`；revision 连续 10→15，choice 无重复，每条原 hash 完整列出。实际 WS 推送来自生产 router／TCP／tungstenite 链路。
+
+- **Correct — manual-first 真正跨过旧 deadline。** [冻结用例:503](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/apps/game-server/src/native_ws_e2e/c331.rs:503) 使用产品 Unix clock 和真实 sleep。记录严格满足 `1793389515033（manual） < 1793389517146（旧 deadline） ≤ 1793389517747（观察） < 1793389524652（新 deadline）`。父[解析脚本](/tmp/noname-parent-c331-phase4-manual-oldreader.py:1) 对 accepted／after_old_deadline／final 的完整 `StoredRoom.state` 及整条 StoredRoom 比较，差异均为空；未过滤 archive、WAL、控制状态、包或 receipt。
+
+- **Correct — 重试和旧 choice 拒绝仍可继续服务。** 同 key 重放保持同一回复；fresh-key 33151 的旧 choice 实际得到 [wire:1500](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-products2/server-ws-wire.jsonl:1500) 的 `Error(Internal, “选择编号或取消载荷无效”)`，随后继续取相同快照。此处实际协议结果应写 Error。
+
+- **Correct — 最终 wire 已全量独立解析。** 11,841,224 字节、SHA `6c14fab323749b67a1ac6e37148ba032986fd6f6c192cbea023a5008ce857ca7`；**3875 行外 JSON 和内层 wire JSON 均成功解析**。这份 aggregate 包含其他 WS／故障用例及 127 条 server Error，资格是完整可解析记录，不能表述为全部请求成功。[peer.rs:218](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/apps/game-server/src/native_ws_e2e/peer.rs:218) 已互斥写入带换行的完整序列化行。
+
+- **Correct — 旧 reader 身份与输入闭合。** 父第二批逐项核了 276 个当前旧生产文件与实际 `38ab` blob／原 audit SHA，差异为零；本 reviewer 已读核验脚本。负控原输入取自保留产品 record 的零基半开区间 `[316877:606507]`，289,630 字节；negative 和 startup3-negative 均逐字节一致，SHA `de5ceca2…`，无 header／variant 改写。
+
+- **Correct — 旧生产 scan 与恢复确已运行。** [test-only harness](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/reader-harness.rs:13) 使用原 Engine 自然生成四条 WAL，通过生产 `NativeRoomStore::scan` 和 `NativeRoomSession::from_saved`；[原始构建运行日志:1974](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader-build-run.log:1974) 为 1 passed。现存 reader 重算 SHA 为 `0ee5e0b4…`，实际旧 server 为 `d08ff4af…`，均匹配 identity-final；`5ec814…` 仅保留 NGSA/package reader 的既有资格。
+
+- **Correct — 实际旧 server 启动证据成立。** [startup3-positive.log:3](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-positive.log:3) 恢复 room330／rooms1 后监听自有 `127.0.0.1:0`；[startup3-negative.log:3](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-negative.log:3) 受控报 `unknown variant Skill, expected Confirm, Pass, Card, Player, Tag, Kind`，随后继续监听。旧 `journal.rs:106` 先 serde；拒绝层不是 archive gate。
+
+- **具体异常／覆盖边界：** 最终 WAL base 是 **plain NGSA105、revision10**，SHA `38a699f0…`；initial→expired 的 base 未变。本样本未实际触发阈值 compact/rebase，也未测试压缩 archive 封装。源码从实际 base 回放的修正可接受，不能把本次绿扩写为这些分支已实测。Native 完整语义断言来自绑定的冻结 fixture 和实际测试；父只读解析未另行重播 Engine 或重算 BLAKE3。
+
+- **具体异常保留：** 中间两败分别是加入前 deadline 已过及 replay rejected；[中间 wire:2583](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-products/server-ws-wire.jsonl:2583) 确为残片，继续无资格。最早 manual 用例误期待 CommandOutcome、两次旧启动 driver 漏 journal 的失败均保留，未算成功。1,187,184,293 字节旧缓存清理按封存时序在取消复核前自然完成；恢复未新清理，不能记成测试失败或坏档。
+
+- **Fixed：** 本轮无修改；核实既有 P2 修正。
+- **Finding：** 本次限定 diff 与产品证据审查，No issues found.
+- **Merge verdict：OK with notes。** 整 C331 仍 **BLOCK**：72/290 排序来源未证，PhaseBegin／dieBegin-dieAfter／indexed／forceDie-out-hidden-filterStop 等机制未闭，且未合 Main；核心恢复及来源排序增量由相应独立审查负责。
+
+未新验 Wasm／IPC／四平台；原 phase3 task2 与父 18MB audit 仅维持既有历史资格。本轮也未独立语义解码全部 Native 字段。
+主要风险是把此次默认并行绿、完整 JSON 可解析或旧 reader 正负控，外推为阈值 rebase、当前 Wasm 或整 C331 上游等价验收。

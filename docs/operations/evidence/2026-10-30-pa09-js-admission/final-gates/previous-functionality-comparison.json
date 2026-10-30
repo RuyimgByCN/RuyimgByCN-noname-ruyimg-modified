@@ -1,0 +1,22 @@
+{
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "guard": true,
+    "index_sha256": true,
+    "staged": true,
+    "frozen_package_diff_sha256": true,
+    "package_git_trees": true,
+    "groups": true,
+    "admitted_source3": true,
+    "attribute": true,
+    "expected_head": true,
+    "no_staged_files": true,
+    "disk_at_least_3GiB": true
+  },
+  "tracked_status_note": "Parent documentation/evidence changes since functionality are legitimate; fresh final entry/exit manifest covers them."
+}

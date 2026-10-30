@@ -1,0 +1,28 @@
+vite v6.4.3 building for production...
+transforming...
+✓ 120 modules transformed.
+rendering chunks...
+✗ Build failed in 755ms
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[vite:build-html] The "fileName" or "name" properties of emitted chunks and assets must be strings that are neither absolute nor relative paths, received "../../../private/tmp/pa09-webview-5b7ad3ab/product-web/index.html".
+    at getRollupError (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at error (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+    at FileEmitter.emitFile (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:22339:24)
+    at Object.generateBundle (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:36820:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Bundle.generate (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:21082:9)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:24015:27
+    at async catchUnfinishedHookActions (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:23380:16)
+    at async buildEnvironment (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:46371:16)
+    at async file:///private/tmp/pa09-webview-5b7ad3ab/harness/build-web.mjs:23:16 {
+  code: 'PLUGIN_ERROR',
+  pluginCode: 'VALIDATION_ERROR',
+  plugin: 'vite:build-html',
+  hook: 'generateBundle'
+}
+
+Node.js v26.4.0
+{"command": ["node", "/tmp/pa09-webview-5b7ad3ab/harness/build-web.mjs"], "exit": 1, "locked_seconds": 0.9604403749981429, "disk_free_bytes": 97673281536}

@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "old_evidence": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/copy-manifest.json",
+      "bytes": 20632,
+      "sha256": "280dc69d6f5f84608103368c2aef01e86bfc415956278611931d5272d90814c8"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/result.json",
+      "bytes": 46426,
+      "sha256": "e810aaffbaa7829f892358506259db390fe1fbb96057aa149983cafa13fa5af6"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-raw-log.stdout.gz",
+      "bytes": 15494,
+      "sha256": "c92943e2e4d7525b620b9c73d944c84730f2aee83ecc7e0bcb23717cee6fde5e"
+    }
+  ],
+  "publication_source14_equals_reviewed14": true,
+  "run": {
+    "id": 41114612841,
+    "head_sha": "777bf33969e5ecc04b63971adab26be32f12fd28",
+    "run_attempt": 1,
+    "conclusion": "failure"
+  },
+  "jobs_conclusion_counts": {
+    "success": 9,
+    "failure": 1
+  },
+  "windows_job": {
+    "id": 124265455086,
+    "name": "desktop-windows-latest",
+    "conclusion": "failure"
+  },
+  "ancestor_attributes_ls_tree_stdout": "",
+  "scope": "read-only existing local bytes and ls-tree only; no network, experiments, or producer execution"
+}

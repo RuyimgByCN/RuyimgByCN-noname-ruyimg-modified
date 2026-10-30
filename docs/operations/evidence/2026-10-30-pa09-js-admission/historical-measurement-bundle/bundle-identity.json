@@ -1,0 +1,12 @@
+{
+  "bundle": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-reviewed-measurement-bundle-6m7t2qxf/historical-pa09-and-codec-evidence.tar.gz",
+  "sha256": "0a2ce017f07d1774b0d13ea4ad5380026af892b019647cba59ff5c44c4713891",
+  "stored_bytes": 10850227,
+  "payload_files": 159,
+  "archive_entries_with_manifest": 160,
+  "byte_exact_roundtrip": true,
+  "main_untouched": true,
+  "no_new_measurements": true,
+  "scope": "Historical reviewed controlled PA09 and full direct codec collection only; no current source/performance/default-switch qualification; known Chrome five failures and jsBounded=false retained",
+  "not_included": "executables/WASM/dependencies/canonical media/device inventory/private device identifiers"
+}

@@ -1,0 +1,12 @@
+{
+  "baseline": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "main": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "rust_cargo_changed_paths": [],
+  "actual_webview_source3": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0"
+  },
+  "actual_evidence": "/tmp/pa09-webview-5b7ad3ab/evidence",
+  "new_main_gui": false
+}

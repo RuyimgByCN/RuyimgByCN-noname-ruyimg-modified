@@ -1,0 +1,38 @@
+{
+  "retained_binary": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-controlled-input-m30foifd/evidence/products/PA09 Controlled.app/Contents/MacOS/noname-next-desktop",
+  "sha256": "78e4d221cfc8f0dacc618cc6e04a2d4396e4ede1261ab6780d5091fe67cc1b7f",
+  "expected_retained_sha256": "78e4d221cfc8f0dacc618cc6e04a2d4396e4ede1261ab6780d5091fe67cc1b7f",
+  "qualified_to_load_new_bundle": false,
+  "reason": "custom-protocol FrontendDist::Directory embeds assets during generate_context; old bootstrap lacks outside-bundle navigation. Runtime TAURI_CONFIG cannot replace generated Context. New private binary will instead compile FrontendDist::Url explicitly to owned HTTP production bundle.",
+  "source_evidence": [
+    "tauri-codegen-2.6.3/src/context.rs:175-203",
+    "tauri-2.11.5/src/manager/mod.rs:349-365"
+  ],
+  "native_desktop_comparison": [
+    {
+      "path": "apps/desktop-client/src/lib.rs",
+      "old_sha256": "bfb2f07e817462b797ba9cd9a16ce6c198b930059f956f8d954f54fb2faeb9c6",
+      "a1f_sha256": "bfb2f07e817462b797ba9cd9a16ce6c198b930059f956f8d954f54fb2faeb9c6"
+    },
+    {
+      "path": "apps/desktop-client/src/main.rs",
+      "old_sha256": "28959e7c6ab5d8827cef8c85a12974798a2d4da4c2706f0ca77527fd92e2312a",
+      "a1f_sha256": "28959e7c6ab5d8827cef8c85a12974798a2d4da4c2706f0ca77527fd92e2312a"
+    },
+    {
+      "path": "apps/desktop-client/src/native_engine_host.rs",
+      "old_sha256": "8c04b7e351c4e894741f9c784cf449096ec74589d1ccbb20ce5eb596aa0855dc",
+      "a1f_sha256": "8c04b7e351c4e894741f9c784cf449096ec74589d1ccbb20ce5eb596aa0855dc"
+    },
+    {
+      "path": "apps/desktop-client/src/native_engine_resource.rs",
+      "old_sha256": "ac7a0f968ce4c1746a54b74282c55d9e71f49a487bae18f0d776bec7e6f11188",
+      "a1f_sha256": "ac7a0f968ce4c1746a54b74282c55d9e71f49a487bae18f0d776bec7e6f11188"
+    },
+    {
+      "path": "apps/desktop-client/src/native_envelope.rs",
+      "old_sha256": "2a687e605d8514791d1671282f2d07d6d3e0a2f16c85dad01c4299c01739efe4",
+      "a1f_sha256": "2a687e605d8514791d1671282f2d07d6d3e0a2f16c85dad01c4299c01739efe4"
+    }
+  ]
+}

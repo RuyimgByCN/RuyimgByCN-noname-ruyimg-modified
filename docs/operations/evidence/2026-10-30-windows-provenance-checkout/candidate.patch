@@ -1,0 +1,7 @@
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -1,2 +1,4 @@
+ # Keep the original Windows CI log bytes reproducible across checkouts.
+ docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication/run41053688083-desktop-windows-raw.log -text
++# Preserve the exact provenance bytes pinned by validateAudioCompat.
++content/original-audio-compat/provenance.json -text

@@ -1,0 +1,32 @@
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (17.762041ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (12.446917ms)
+✔ 初始化错误有结果，后续可创建新 Worker (11.847584ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (9.809875ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (8.681708ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (9.93575ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (11.284375ms)
+✔ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (11.542041ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (8.769042ms)
+✔ desktop IPC preserves request order, ids, errors and continues on the same engine (2.701209ms)
+(node:20195) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dispose suppresses late IPC replies and never submits queued operations (0.472042ms)
+✔ mismatched IPC response is an explicit unknown-result error, without retry (0.160709ms)
+✔ Wasm is the default and an explicit persistent/URL fallback remains available (0.20225ms)
+✔ dispose during resource allocation closes it once and submits no request (0.545375ms)
+✔ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (23.488666ms)
+✔ IPC refuses malformed B metadata before delivering a view envelope (0.166042ms)
+✔ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (1.087125ms)
+✔ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (0.771084ms)
+✔ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (0.706834ms)
+✔ a rejected resource open drains accepted slots without submitting requests (0.516375ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.664291
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "--test", "scripts/pa09-desktop-transport.test.mjs", "scripts/nc04-worker-failure.test.mjs"], "exit": 0, "locked_seconds": 0.33751129198935814, "disk_free_bytes": 98883936256}
+{"wall_including_lock_seconds": 0.36333449999801815, "exit": 0}

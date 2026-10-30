@@ -1,0 +1,20 @@
+{
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "source3": true,
+    "protected": true,
+    "groups": true,
+    "modules": true,
+    "dist": true,
+    "guard": true,
+    "frozen_package_diff_sha256": true,
+    "package_git_trees": true
+  },
+  "tracked_status_entry": " M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/scripts/pa09-desktop-transport.test.mjs\n M apps/web-client/src/engine/desktopEngineTransport.ts\n",
+  "tracked_status_exit": " M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/scripts/pa09-desktop-transport.test.mjs\n M apps/web-client/src/engine/desktopEngineTransport.ts\n",
+  "parent_docs_delta": [],
+  "interpretation": "Only parent-authorized docs/evidence deltas are allowed; no restore performed."
+}

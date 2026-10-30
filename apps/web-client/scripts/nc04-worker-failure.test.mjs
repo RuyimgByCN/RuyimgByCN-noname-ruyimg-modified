@@ -30,6 +30,8 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
     .outputText.replace(/\nexport\s*\{\};?\s*$/, "");
   const workers = [];
   const failed = [];
+  const sent = [];
+  const received = [];
   class FakeWorker {
     sent = [];
     terminated = false;
@@ -48,12 +50,12 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
     "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
-  )(FakeWorker, FakeWorker, () => desktopNative, () => {}, (id) => failed.push(id),
-    () => {}, () => {}, () => false, () => null, { error: () => {} },
+  )(FakeWorker, FakeWorker, () => desktopNative, (id) => sent.push(id), (id) => failed.push(id),
+    (id) => received.push(id), () => {}, () => false, () => null, { error: () => {} },
     () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
       constructor() { super(invoke); }
     });
-  return { client: new EngineClient(), workers, failed };
+  return { client: new EngineClient(), workers, failed, sent, received };
 }
 
 test("Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求", async () => {
@@ -185,4 +187,92 @@ test("desktop IPC uses the production client's sequence, pending, errors and dis
   assert.deepEqual(f.failed, [4]);
   assert.equal(calls.filter((c) => c.command === "native_engine_close").length, 1);
   assert.equal(f.workers.length, 0);
+});
+
+test("desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry", async (t) => {
+  const previousDebug = globalThis.__latencySabDebug;
+  let wakes = 0;
+  let settlements = 0;
+  globalThis.__latencySabDebug = { wake: () => { wakes++; }, settle: () => { settlements++; } };
+  t.after(() => {
+    if (previousDebug === undefined) delete globalThis.__latencySabDebug;
+    else globalThis.__latencySabDebug = previousDebug;
+  });
+  let release;
+  const blocked = new Promise((resolve) => { release = resolve; });
+  const calls = [];
+  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
+    calls.push({ command, args });
+    if (command === "native_engine_open") return 51;
+    if (command === "native_engine_close") return;
+    const { request } = args;
+    if (request.type !== "init") await blocked;
+    return { id: request.id, ok: true, data: { revision: request.id } };
+  } });
+  await f.client.connect();
+  const settled = [];
+  const promises = [];
+  for (let i = 0; i < 128; i++) {
+    promises.push(f.client.autoStep().then(
+      (value) => { settled.push({ ok: true, value }); },
+      (error) => { settled.push({ ok: false, error }); },
+    ));
+    assert.ok(f.client.pending.size <= 8, "synchronous rejection must immediately delete pending");
+    if (i === 0) await new Promise((resolve) => setImmediate(resolve));
+  }
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(f.client.pending.size, 8);
+  assert.deepEqual([...f.client.pending.keys()], [2, 3, 4, 5, 6, 7, 8, 9]);
+  assert.equal(settled.length, 120, "only eight caller promises may remain unresolved");
+  assert.equal(wakes, 129);
+  assert.equal(settlements, 1, "rejected excess requests must not settle accepted shared waits");
+  assert.equal(f.sent.length, 129);
+  assert.deepEqual(f.received, [1]);
+  assert.ok(settled.every((result) => !result.ok && /not submitted|未提交/.test(result.error.message) && !/未知|unknown/.test(result.error.message)));
+  assert.deepEqual(f.failed, Array.from({ length: 120 }, (_, i) => i + 10));
+  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2]);
+  release();
+  await settles(Promise.all(promises));
+  assert.equal(f.client.pending.size, 0);
+  assert.equal(settled.filter((result) => result.ok).length, 8);
+  assert.deepEqual(f.received, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  assert.equal(settlements, 9);
+  assert.equal(f.sent.length, f.failed.length + f.received.length);
+  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  assert.equal((await f.client.status()).revision, 130);
+  assert.equal(f.workers.length, 0);
+  assert.equal(f.client.getTransportKind(), "desktop-native");
+  f.client.dispose();
+});
+
+test("disposing eight accepted desktop requests retires the old resource and reconnects independently", async () => {
+  let release;
+  let resource = 60;
+  const calls = [];
+  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
+    calls.push({ command, args });
+    if (command === "native_engine_open") return ++resource;
+    if (command === "native_engine_close") return;
+    if (args.resourceId === 61 && args.request.type !== "init") {
+      return new Promise((resolve) => { release = resolve; });
+    }
+    return { id: args.request.id, ok: true, data: { revision: args.resourceId } };
+  } });
+  await f.client.connect();
+  const rejected = Promise.all(Array.from({ length: 8 }, () => assert.rejects(f.client.autoStep(), /结果未知/)));
+  await new Promise((resolve) => setImmediate(resolve));
+  f.client.dispose();
+  await settles(rejected);
+  assert.equal(f.client.pending.size, 0);
+  await f.client.connect();
+  assert.equal((await f.client.status()).revision, 62);
+  release({ id: 2, ok: true, data: { revision: 999 } });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(f.client.pending.size, 0);
+  assert.deepEqual(calls.filter((call) => call.command === "native_engine_request" && call.args.resourceId === 61).map((call) => call.args.request.id), [1, 2]);
+  assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61]);
+  assert.equal(f.workers.length, 0);
+  f.client.dispose();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61, 62]);
 });

@@ -1,0 +1,1 @@
+{"command": ["git", "--no-optional-locks", "diff", "--check"], "exit": 0, "locked_seconds": 0.051459542009979486, "disk_free_bytes": 97236656128}

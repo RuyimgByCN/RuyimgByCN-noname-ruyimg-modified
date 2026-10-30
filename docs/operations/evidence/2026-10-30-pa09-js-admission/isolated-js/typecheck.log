@@ -1,0 +1,2 @@
+{"command": ["node", "node_modules/vue-tsc/bin/vue-tsc.js", "--noEmit"], "exit": 0, "locked_seconds": 1.0807029169809539, "disk_free_bytes": 98890907648}
+{"wall_including_lock_seconds": 1.1058019580086693, "exit": 0}

@@ -1,0 +1,39 @@
+## Review
+
+No issues found.
+
+- **Scope:** Read-only combination review of Main `777bf33969e5ecc04b63971adab26be32f12fd28` plus the three frozen PA09 source/test files, the exact `.gitattributes` append, and associated evidence/documentation. Recorded tree remains `7f2d41e257dfc44072bd6a5ef68dad4cb6c70496`; rules/archive/ABI/WS remain **330/105/758/6**.
+
+- **Correct — admission:** [desktopEngineTransport.ts:59](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/desktopEngineTransport.ts:59) checks the fixed eight-request total before extending the Promise tail or submitting IPC. Opening, active, and queued requests occupy slots. Excess requests synchronously report “not submitted,” without entering the unknown-result response wrapper or retrying.
+
+- **Correct — cleanup and lifecycle:** The transport’s `finally` releases accepted slots; listener failures leave the tail usable. Termination clears admission, suppresses late delivery, and prevents queued operations from submitting. [client.ts:252](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/client.ts:252) already removes synchronously rejected requests from pending and records failure. I read both callers, `client.ts` and `desktopHost.ts`, and found no required caller or export change.
+
+- **Correct — tests:** Fully read both changed test files. [Transport tests:155](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/pa09-desktop-transport.test.mjs:155) cover blocked opening/request, eight accepted versus 120 rejected, unchanged tail on rejection, recovery, and error paths. [Production-client tests:192](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/nc04-worker-failure.test.mjs:192) verify pending cleanup, unresolved promises, performance accounting, dispose/reconnect, and late-response isolation.
+
+- **Correct — Main functional evidence:** The retained raw logs support **20/20 targeted**, **175/175 frontend**, typecheck exit 0, and external production bundle exit 0. I reviewed the [parent parser](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/parent-main-audit/audit-existing-evidence.py:1) and its results binding 37 evidence files, 13 products, 35 production modules, eight inherited seams, and protected inputs. Setup failures and warnings remain preserved.
+
+- **Correct — actual WK qualification:** The source and actual-WK reviews support inherited same-event-turn **8 accepted/120 rejected** and asynchronous lifecycle behavior through matching source/seams and unchanged native code. This is private actual WK evidence, with **no new Main GUI claim**. Historical raw-invoke **76 fulfilled/52 not submitted**, `jsBounded=false`, remains a separate result.
+
+- **Correct — checkout repair:** [.gitattributes:3](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.gitattributes:3) appends only the explanatory comment and exact provenance-path `-text` rule. The original log rule remains intact. The unchanged [validator:58](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/original-audio-resources.mjs:58) still enforces the pinned bytes. The reviewed Windows parser/results bind 472 manifest entries and controlled Git checkout evidence: CRLF reproduces rejection, the candidate restores canonical bytes, LF passes before/after, and resource tests finish **17/17**. Original runner SHA remains unobserved; historical failure is preserved.
+
+- **Correct — current four-file identity:** I reviewed the fresh bounded [gate-audit parser](/tmp/noname-parent-pa09-final-gates-audit.py:1) and [results](/tmp/noname-parent-pa09-final-gates-audit/independent-results.json:1). Current source3 hashes match admission and gate entry. Current attributes match candidate/entry SHA256 `9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388`.
+
+- **Correct — final gates:** Read all four command records and separate raw stdout/stderr. Actual exits and wrapper terminal records agree:
+
+| Exact root command | Exit | Recorded result |
+|---|---:|---|
+| `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` | 0 | 2 tests, OK |
+| `python3 -B scripts/check-source-lines.py` | 0 | 8,992 files; both limits pass |
+| `python3 -B scripts/check_doc_line_refs.py --strict` | 0 | 1,065 references; zero out-of-range; six missing example-path categories retained |
+| `python3 -B scripts/preflight.py` | 0 | 21 success summaries; zero failure summaries |
+
+- **Correct — gate integrity:** The fresh audit rehashes all 18 indexed artifacts and index SHA256 `421375373673955d7959aaf1bd54e285ff70ef9887185b4464dd1ae5952310e2`. It independently compares all 18 entry/exit invariants, including 21,726 captured paths, 99 protected files, 18 modules, 37 dist files, index and empty staging. Only caller ordering is ignored; hashes remain exact. This compares sealed captures; it does not claim another current full-tree scan. Preflight child logs are suppressed, so qualification extends only to its actual summaries.
+
+- **Correct — documentation boundaries:** Reviewed changed progress, remaining ledger, native-CI guidance, and the PA09/Windows/compat-publication/C331 READMEs. They retain old CI **9 success/1 Windows failure**, distinguish historical/private/UI evidence, leave C331 private and unmerged with its evidence P2 open, and describe **44 static candidates without inflating 218 to 262 proven**. Overall Goal and PA09 six-condition acceptance remain incomplete; WASM remains default. Pending final-gate/review registration can now cite this review and the sealed evidence.
+
+- **Fixed:** None; no edits.
+- **Finding:** No new P0/P1/P2 issue within this combination.
+- **Merge verdict: OK with notes** — ready for local acceptance of the **PA09 JS admission plus exact one-path checkout repair**. New Windows prepare/installer/upload acceptance and broader PA09 performance/device gates remain open.
+
+Skipped: no edits, tests, builds, producer execution, network, staging, commit, or push; accepted archived scopes were not broadened.
+Risk: inherited WK evidence and local checkout proof do not establish new Main GUI, new Windows CI success, performance non-inferiority, default-switch readiness, or whole-Goal completion.

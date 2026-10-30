@@ -1,0 +1,2367 @@
+{
+  "roots": [
+    "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic",
+    "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g",
+    "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo"
+  ],
+  "files": [
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/first-attempt-index.bin",
+      "bytes": 864,
+      "sha256": "a090a95c03154211be1bd82fe917073a4df7304b559ef257c25c13ea9c5316e2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/independent-check.json",
+      "bytes": 901,
+      "sha256": "9f003d47edf50af936ea8d698a9ec0957eaef4b5012b9ba3fbeeeaa1f019dd7a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/no-staged-files.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/no-staged-files.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-final.stdout",
+      "bytes": 279,
+      "sha256": "111ca552a4de16adae3e4c5d834b709f102e97c81e5c866bb061047b34556f1f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck-first-attempt.py",
+      "bytes": 13663,
+      "sha256": "46061005d0f6055a690d882780f0c7de452489278bb008d99cc7ce1d8b9cdac5"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py",
+      "bytes": 13901,
+      "sha256": "f35b2850886a145adf76326e7b998c70fa81bf79571b318aeed69d1255068b40"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.stderr",
+      "bytes": 902,
+      "sha256": "ca45d2af0809fb39421d533eeba8df1571f36c1df6645c6b1d0366a4540bdcb2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.stdout",
+      "bytes": 47,
+      "sha256": "fb23c1f8c7e3ba2d98c9b0e84b985ff1f980115b73e5666b57ea2a37f21e2495"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/candidate/.gitattributes",
+      "bytes": 314,
+      "sha256": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/candidate.patch",
+      "bytes": 376,
+      "sha256": "8f81c68354401bee2807cf4cd80288c6d50cbf62d12a357a5a4f3b8474e8a4ff"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/HEAD",
+      "bytes": 24,
+      "sha256": "915b4fa4cb151d59ad3b20c3c43bc9ee2cb9755ed1de59c363bd64720e3297fc"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/config",
+      "bytes": 137,
+      "sha256": "cae33efdb02cf774435c1ff9cb16bcc1014606908530c6e1dc727615fe3e8cda"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/description",
+      "bytes": 73,
+      "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/applypatch-msg.sample",
+      "bytes": 478,
+      "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/commit-msg.sample",
+      "bytes": 1972,
+      "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/fsmonitor-watchman.sample",
+      "bytes": 4611,
+      "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/post-update.sample",
+      "bytes": 189,
+      "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-applypatch.sample",
+      "bytes": 424,
+      "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-commit.sample",
+      "bytes": 1649,
+      "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-merge-commit.sample",
+      "bytes": 416,
+      "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-push.sample",
+      "bytes": 1374,
+      "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-rebase.sample",
+      "bytes": 4898,
+      "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/pre-receive.sample",
+      "bytes": 544,
+      "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/prepare-commit-msg.sample",
+      "bytes": 1492,
+      "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/push-to-checkout.sample",
+      "bytes": 2783,
+      "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/sendemail-validate.sample",
+      "bytes": 2308,
+      "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/hooks/update.sample",
+      "bytes": 3650,
+      "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/info/exclude",
+      "bytes": 240,
+      "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/0a/62e382dc12a9a133918fa61a01777023ed6a66",
+      "bytes": 9403,
+      "sha256": "316a23500eb62c35dbd0dc5dee6eb4c07f4f8d1dc12e9585095bf835ba1adae3"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/28/d322690558d295051d28d436abc07e74807b42",
+      "bytes": 18002,
+      "sha256": "2fa316efce40c98e5bed3fd7c66b4330808619e4d652d254819792eb010c5c81"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/4c/6702dc5e5258ab8f22e54023305ea08f245ec8",
+      "bytes": 112334,
+      "sha256": "1c48532af9956f91cfd1e5c2a190343421c4a6cf7ef2827b743c8b7d5f12720f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/59/0aad136200d257b5bff1f535a5dedf0f411f88",
+      "bytes": 233,
+      "sha256": "afc5739b31e47e8daa1d502107b00ccb73f5c2e86a8f32d82db1a540cf1ad0af"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/c8/b364f0f5ff0956afb80a60217e1aa99adfa475",
+      "bytes": 166,
+      "sha256": "99e82d32f9bd913c6bc0de1c685320641afb63bcfa7e6e4a3bf8cd1847da56f2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/db/2217887fa4f14f17e2814e00a2706b9da39671",
+      "bytes": 79380,
+      "sha256": "a059a9bcb4741eab46543b583591d0021117cdc2499d8dc72567e0456495f746"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/dd/f9b6045b6f2877ccc9f280424f5062026e255e",
+      "bytes": 38022,
+      "sha256": "a6c151ba3f38caf26f98bb19897c3bd878e6cc65c07d5514c685617b8e1ed79a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.git/objects/e9/a9dfa9a29f780cf6802c4c9ea5b14a4dae7e97",
+      "bytes": 1073,
+      "sha256": "55fdd13d11a376e32e6737afbcc0f35d9aff00697f64744ca81a1b4d35dcf871"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/.gitattributes",
+      "bytes": 318,
+      "sha256": "1a5d17c9ba1ab23ce900c4d85570d9a49df0b05249a479c0e6a7417c8dfb5180"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/checkout/content/original-audio-compat/provenance.json",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/000-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/000-original-read.stdout",
+      "bytes": 64,
+      "sha256": "d2eff352870fdf925d24a99287202690f2a4225db1242618628296dc58119065"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/001-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/001-original-read.stdout",
+      "bytes": 41,
+      "sha256": "7fe8cb71f750597fc6430887beca4678bdf9d70dda7311605fc36524fe457157"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/002-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/002-original-read.stdout",
+      "bytes": 7273,
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/003-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/003-original-read.stdout",
+      "bytes": 11321,
+      "sha256": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/004-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/004-original-read.stdout",
+      "bytes": 3322,
+      "sha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/005-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/005-original-read.stdout",
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/006-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/006-original-read.stdout",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/007-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/007-original-read.stdout",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/008-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/008-original-read.stdout",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/009-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/009-original-read.stdout",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/010-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/010-original-read.stdout",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/011-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/011-original-read.stdout",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/012-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/012-original-read.stdout",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/013-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/013-original-read.stdout",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/014-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/014-original-read.stdout",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/015-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/015-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/016-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/016-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/017-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/017-original-read.stdout",
+      "bytes": 193,
+      "sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/018-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/018-fixture-git.stdout",
+      "bytes": 106,
+      "sha256": "e5672e5ab9643207469597babadc283ed32a9ba9d336f904574e83f897ddc573"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/019-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/019-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "bcdc774092ca9b80b14bf1a410c814f3aecb11d8a8a94ea6e8c03902d9b7a2d8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/020-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/020-original-read.stdout",
+      "bytes": 41,
+      "sha256": "bcdc774092ca9b80b14bf1a410c814f3aecb11d8a8a94ea6e8c03902d9b7a2d8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/021-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/021-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/022-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/022-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/023-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/023-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/024-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/024-original-read.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/025-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/025-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/026-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/026-original-read.stdout",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/027-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/027-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/028-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/028-original-read.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/029-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/029-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/030-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/030-original-read.stdout",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/031-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/031-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/032-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/032-original-read.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/033-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/033-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/034-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/034-original-read.stdout",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/035-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/035-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/036-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/036-original-read.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/037-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/037-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/038-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/038-original-read.stdout",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/039-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/039-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/040-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/040-original-read.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/041-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/041-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/042-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/042-original-read.stdout",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/043-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/043-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/044-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/044-original-read.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/045-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/045-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/046-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/046-fixture-git.stdout",
+      "bytes": 716,
+      "sha256": "ca355e833d4c4f65a135e4b6efb7f2f00aacf151c05189074391cee585d6bc61"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/047-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/047-original-read.stdout",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/048-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/048-original-read.stdout",
+      "bytes": 862,
+      "sha256": "8773976fe7e1d4c333ef85db01705c2056cf5d521242789cd1b027b355d08fa0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/049-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/049-original-read.stdout",
+      "bytes": 4036,
+      "sha256": "88933a4ccbc789b847a9caac430f1b2f7c3c3ba44b5c7b8400ab9f2ff68cf352"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/050-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/050-original-read.stdout",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/051-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/051-original-read.stdout",
+      "bytes": 1963,
+      "sha256": "c28c18337cbd2c39db8b3cba293808133583903ca3e6954abccddf42be0fffcf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/052-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/052-original-read.stdout",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/053-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/053-original-read.stdout",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/054-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/054-fixture-git.stdout",
+      "bytes": 349,
+      "sha256": "f898716b222becb07165e728c7c72ddfeac9661db4556af66d531041a126dfd4"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/055-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/055-fixture-git.stdout",
+      "bytes": 348,
+      "sha256": "eae6df3449a07a216a21c0c61b24ddec92bcf71ae25d9eb3dc42584c89d10fe9"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/056-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/056-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/057-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/057-fixture-git.stdout",
+      "bytes": 129,
+      "sha256": "9c5492efb7b6a004191d254d5307b4d7a999c49afc37d81c4da38cd9656e684a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/058-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/058-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/059-windows-before-red.stderr",
+      "bytes": 300,
+      "sha256": "98c72868559fbb9cca43e24de69d2157bfbc8fdc7a4b3ee32bcc95cacd699bc2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/059-windows-before-red.stdout",
+      "bytes": 2545,
+      "sha256": "87616d90bfa2cd23c323b56f9f73ed0aadc94aee7f2adb4b8e4a5f5e70838ced"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/060-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/060-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/061-lf-before-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/061-lf-before-green.stdout",
+      "bytes": 4052,
+      "sha256": "4dfaa9c7af8713f228b544084fb928e8f0f156be047f0bb7594221e30a2dec5c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/062-candidate-attribute-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/062-candidate-attribute-blob.stdout",
+      "bytes": 41,
+      "sha256": "d8bd2b2bb218a07bd5a8b21b0cf7914f2f2544bbe5865e7885105fc8bcdf896e"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/063-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/063-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/064-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/064-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/065-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/065-fixture-git.stdout",
+      "bytes": 467,
+      "sha256": "fad7bc946b536948a021cab1f990f8fc3889a6f4cca010400398721ad3d43624"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/066-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/066-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/067-windows-after-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/067-windows-after-green.stdout",
+      "bytes": 4052,
+      "sha256": "4dfaa9c7af8713f228b544084fb928e8f0f156be047f0bb7594221e30a2dec5c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/068-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/068-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/069-lf-after-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/069-lf-after-green.stdout",
+      "bytes": 4052,
+      "sha256": "4dfaa9c7af8713f228b544084fb928e8f0f156be047f0bb7594221e30a2dec5c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/070-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/070-fixture-git.stdout",
+      "bytes": 716,
+      "sha256": "f7b8343c56c960850954a91f63733377b0d24699daea518be63142ed260367ba"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/071-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/071-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/072-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/072-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/073-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/073-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/074-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/074-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/075-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/075-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/076-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/076-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/077-original-resource17.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands/077-original-resource17.stdout",
+      "bytes": 2712,
+      "sha256": "f55700e1bbbd28072599f23d19d9823f3ae57ea3193af4b24752db919ccbe54c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/commands.json",
+      "bytes": 37043,
+      "sha256": "d470ee0b6cc425fed2f8493b3b6f1a690e304b7f47d062435811ad315622e514"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/core/audio/skill/tsumugi_mugyu1.mp3",
+      "bytes": 18559,
+      "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/core/audio/skill/tsumugi_mugyu2.mp3",
+      "bytes": 114374,
+      "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/core/audio/skill/tsumugi_mugyu3.mp3",
+      "bytes": 10031,
+      "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/core/audio/skill/tsumugi_mugyu4.mp3",
+      "bytes": 38934,
+      "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/core/audio/skill/tsumugi_mugyu5.mp3",
+      "bytes": 80896,
+      "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/apps/web-client/node_modules",
+      "symlink": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/content/original-audio-compat/provenance.json",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/original-audio-resources.mjs",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/original-content-order.mjs",
+      "bytes": 862,
+      "sha256": "8773976fe7e1d4c333ef85db01705c2056cf5d521242789cd1b027b355d08fa0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/original-source-ast.mjs",
+      "bytes": 4036,
+      "sha256": "88933a4ccbc789b847a9caac430f1b2f7c3c3ba44b5c7b8400ab9f2ff68cf352"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/sync-original-content.mjs",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/test_original_audio_resources.mjs",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/test_original_content_order.mjs",
+      "bytes": 1963,
+      "sha256": "c28c18337cbd2c39db8b3cba293808133583903ca3e6954abccddf42be0fffcf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/source/scripts/test_original_resources.mjs",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-tk30ip4g/validate.mjs",
+      "bytes": 1141,
+      "sha256": "cae941561e52cf5ed0fdae1a83bcd6a420f0a3beb8754d6b2a1e3f30705cc53d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate/.gitattributes",
+      "bytes": 314,
+      "sha256": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate.patch",
+      "bytes": 376,
+      "sha256": "8f81c68354401bee2807cf4cd80288c6d50cbf62d12a357a5a4f3b8474e8a4ff"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/HEAD",
+      "bytes": 24,
+      "sha256": "915b4fa4cb151d59ad3b20c3c43bc9ee2cb9755ed1de59c363bd64720e3297fc"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/config",
+      "bytes": 137,
+      "sha256": "cae33efdb02cf774435c1ff9cb16bcc1014606908530c6e1dc727615fe3e8cda"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/description",
+      "bytes": 73,
+      "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/applypatch-msg.sample",
+      "bytes": 478,
+      "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/commit-msg.sample",
+      "bytes": 1972,
+      "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/fsmonitor-watchman.sample",
+      "bytes": 4611,
+      "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/post-update.sample",
+      "bytes": 189,
+      "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-applypatch.sample",
+      "bytes": 424,
+      "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-commit.sample",
+      "bytes": 1649,
+      "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-merge-commit.sample",
+      "bytes": 416,
+      "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-push.sample",
+      "bytes": 1374,
+      "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-rebase.sample",
+      "bytes": 4898,
+      "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/pre-receive.sample",
+      "bytes": 544,
+      "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/prepare-commit-msg.sample",
+      "bytes": 1492,
+      "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/push-to-checkout.sample",
+      "bytes": 2783,
+      "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/sendemail-validate.sample",
+      "bytes": 2308,
+      "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/hooks/update.sample",
+      "bytes": 3650,
+      "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/info/exclude",
+      "bytes": 240,
+      "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/0a/62e382dc12a9a133918fa61a01777023ed6a66",
+      "bytes": 9403,
+      "sha256": "316a23500eb62c35dbd0dc5dee6eb4c07f4f8d1dc12e9585095bf835ba1adae3"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/28/d322690558d295051d28d436abc07e74807b42",
+      "bytes": 18002,
+      "sha256": "2fa316efce40c98e5bed3fd7c66b4330808619e4d652d254819792eb010c5c81"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/4c/6702dc5e5258ab8f22e54023305ea08f245ec8",
+      "bytes": 112334,
+      "sha256": "1c48532af9956f91cfd1e5c2a190343421c4a6cf7ef2827b743c8b7d5f12720f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/59/0aad136200d257b5bff1f535a5dedf0f411f88",
+      "bytes": 233,
+      "sha256": "afc5739b31e47e8daa1d502107b00ccb73f5c2e86a8f32d82db1a540cf1ad0af"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/c8/b364f0f5ff0956afb80a60217e1aa99adfa475",
+      "bytes": 166,
+      "sha256": "99e82d32f9bd913c6bc0de1c685320641afb63bcfa7e6e4a3bf8cd1847da56f2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/db/2217887fa4f14f17e2814e00a2706b9da39671",
+      "bytes": 79380,
+      "sha256": "a059a9bcb4741eab46543b583591d0021117cdc2499d8dc72567e0456495f746"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/dd/f9b6045b6f2877ccc9f280424f5062026e255e",
+      "bytes": 38022,
+      "sha256": "a6c151ba3f38caf26f98bb19897c3bd878e6cc65c07d5514c685617b8e1ed79a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.git/objects/e9/a9dfa9a29f780cf6802c4c9ea5b14a4dae7e97",
+      "bytes": 1073,
+      "sha256": "55fdd13d11a376e32e6737afbcc0f35d9aff00697f64744ca81a1b4d35dcf871"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/.gitattributes",
+      "bytes": 318,
+      "sha256": "1a5d17c9ba1ab23ce900c4d85570d9a49df0b05249a479c0e6a7417c8dfb5180"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/checkout/content/original-audio-compat/provenance.json",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/000-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/000-original-read.stdout",
+      "bytes": 64,
+      "sha256": "d2eff352870fdf925d24a99287202690f2a4225db1242618628296dc58119065"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/001-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/001-original-read.stdout",
+      "bytes": 41,
+      "sha256": "7fe8cb71f750597fc6430887beca4678bdf9d70dda7311605fc36524fe457157"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/002-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/002-original-read.stdout",
+      "bytes": 7273,
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/003-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/003-original-read.stdout",
+      "bytes": 11321,
+      "sha256": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/004-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/004-original-read.stdout",
+      "bytes": 3322,
+      "sha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/005-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/005-original-read.stdout",
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/006-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/006-original-read.stdout",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/007-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/007-original-read.stdout",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/008-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/008-original-read.stdout",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/009-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/009-original-read.stdout",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/010-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/010-original-read.stdout",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/011-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/011-original-read.stdout",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/012-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/012-original-read.stdout",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/013-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/013-original-read.stdout",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/014-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/014-original-read.stdout",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/015-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/015-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/016-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/016-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/017-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/017-original-read.stdout",
+      "bytes": 193,
+      "sha256": "e0e4eede96fc5e4698673dfa1716c0f934f4da4b1fd0b52ea39427b7afc68ebf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/018-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/018-fixture-git.stdout",
+      "bytes": 106,
+      "sha256": "00c6c683bc08746cd056231ad09edd33d1ac424d2f03c9851f3b7d9e033d365f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/019-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/019-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "bcdc774092ca9b80b14bf1a410c814f3aecb11d8a8a94ea6e8c03902d9b7a2d8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/020-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/020-original-read.stdout",
+      "bytes": 41,
+      "sha256": "bcdc774092ca9b80b14bf1a410c814f3aecb11d8a8a94ea6e8c03902d9b7a2d8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/021-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/021-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/022-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/022-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/023-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/023-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/024-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/024-original-read.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/025-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/025-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/026-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/026-original-read.stdout",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/027-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/027-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/028-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/028-original-read.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/029-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/029-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/030-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/030-original-read.stdout",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/031-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/031-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/032-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/032-original-read.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/033-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/033-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/034-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/034-original-read.stdout",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/035-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/035-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/036-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/036-original-read.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/037-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/037-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/038-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/038-original-read.stdout",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/039-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/039-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/040-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/040-original-read.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/041-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/041-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/042-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/042-original-read.stdout",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/043-fixture-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/043-fixture-blob.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/044-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/044-original-read.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/045-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/045-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/046-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/046-fixture-git.stdout",
+      "bytes": 716,
+      "sha256": "ca355e833d4c4f65a135e4b6efb7f2f00aacf151c05189074391cee585d6bc61"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/047-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/047-original-read.stdout",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/048-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/048-original-read.stdout",
+      "bytes": 862,
+      "sha256": "8773976fe7e1d4c333ef85db01705c2056cf5d521242789cd1b027b355d08fa0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/049-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/049-original-read.stdout",
+      "bytes": 4036,
+      "sha256": "88933a4ccbc789b847a9caac430f1b2f7c3c3ba44b5c7b8400ab9f2ff68cf352"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/050-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/050-original-read.stdout",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/051-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/051-original-read.stdout",
+      "bytes": 1963,
+      "sha256": "c28c18337cbd2c39db8b3cba293808133583903ca3e6954abccddf42be0fffcf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/052-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/052-original-read.stdout",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/053-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/053-original-read.stdout",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/054-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/054-original-read.stdout",
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/055-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/055-fixture-git.stdout",
+      "bytes": 349,
+      "sha256": "f898716b222becb07165e728c7c72ddfeac9661db4556af66d531041a126dfd4"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/056-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/056-fixture-git.stdout",
+      "bytes": 348,
+      "sha256": "eae6df3449a07a216a21c0c61b24ddec92bcf71ae25d9eb3dc42584c89d10fe9"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/057-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/057-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/058-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/058-fixture-git.stdout",
+      "bytes": 129,
+      "sha256": "9c5492efb7b6a004191d254d5307b4d7a999c49afc37d81c4da38cd9656e684a"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/059-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/059-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/060-windows-before-red.stderr",
+      "bytes": 300,
+      "sha256": "ba7d4cea7febd1e89a6e3ca77a5d74ae26df49c36d0ea5e19d960435c5b197cf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/060-windows-before-red.stdout",
+      "bytes": 2545,
+      "sha256": "ff4269b9ea5d419499cb637c0ad00c109f330ce616b45e076c5b04fec08df1dc"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/061-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/061-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/062-lf-before-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/062-lf-before-green.stdout",
+      "bytes": 4052,
+      "sha256": "9d014071d73b05e7707974d03ff71f0f4d55c209de7de6058a81b2996662da39"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/063-candidate-attribute-blob.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/063-candidate-attribute-blob.stdout",
+      "bytes": 41,
+      "sha256": "d8bd2b2bb218a07bd5a8b21b0cf7914f2f2544bbe5865e7885105fc8bcdf896e"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/064-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/064-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/065-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/065-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/066-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/066-fixture-git.stdout",
+      "bytes": 467,
+      "sha256": "fad7bc946b536948a021cab1f990f8fc3889a6f4cca010400398721ad3d43624"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/067-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/067-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/068-windows-after-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/068-windows-after-green.stdout",
+      "bytes": 4052,
+      "sha256": "9d014071d73b05e7707974d03ff71f0f4d55c209de7de6058a81b2996662da39"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/069-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/069-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/070-lf-after-green.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/070-lf-after-green.stdout",
+      "bytes": 4052,
+      "sha256": "9d014071d73b05e7707974d03ff71f0f4d55c209de7de6058a81b2996662da39"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/071-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/071-fixture-git.stdout",
+      "bytes": 716,
+      "sha256": "f7b8343c56c960850954a91f63733377b0d24699daea518be63142ed260367ba"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/072-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/072-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "60f4ae3ba3ab49144987bca03ea5eb7f0e87473115df9371e4e00e77cc17542b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/073-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/073-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "2e3c6b10cf2ffa6aa44b8e812e27b962f59d163c374b3941d65cf8f9b474201f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/074-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/074-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "5906d2c0b34cd5a247d65c0d1f980acc7581e717ec6d5c7d3f15f12ecda4d21f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/075-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/075-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "564c40065b749ccbfe3f86b98e2aae32736a600fb0280e0e0ef66938a08e62cd"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/076-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/076-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "a26910dfef60accca450cc38421ed23a2efc20d8bfa411e02bf3a5b158d2572b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/077-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/077-fixture-git.stdout",
+      "bytes": 41,
+      "sha256": "07867f50cc0667c69b417a71d6cd07e9cb94dad5e102a17231147acedfc89a7d"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/078-original-resource17.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/078-original-resource17.stdout",
+      "bytes": 4041,
+      "sha256": "b71278619599f7be0969764f1f69b7ed76843b732136d1957ad4d6a174fc1409"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/079-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/079-original-read.stdout",
+      "bytes": 7273,
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/080-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/080-original-read.stdout",
+      "bytes": 11321,
+      "sha256": "a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/081-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/081-original-read.stdout",
+      "bytes": 3322,
+      "sha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/082-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/082-original-read.stdout",
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/083-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/083-original-read.stdout",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/084-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/084-original-read.stdout",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/085-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/085-original-read.stdout",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/086-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/086-original-read.stdout",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/087-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/087-original-read.stdout",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/088-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/088-original-read.stdout",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/089-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/089-original-read.stdout",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/090-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/090-original-read.stdout",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/091-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/091-original-read.stdout",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/092-original-read.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/092-original-read.stdout",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/093-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/093-fixture-git.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/094-node-version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/094-node-version.stdout",
+      "bytes": 8,
+      "sha256": "a75bc1e881900bc735e456cd684724256bcc2d09f91e04e5a42082d821a6b87b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/095-fixture-git.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands/095-fixture-git.stdout",
+      "bytes": 19,
+      "sha256": "c9e40977101870d17ec3a0ac1e444ceb5e268d1c0a37d6edd8a5ed477734a53c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands.json",
+      "bytes": 44847,
+      "sha256": "72e523074b936389236123d1f80b12abc0fe39631b5444e739bc5a4117ca32e0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu1.mp3",
+      "bytes": 18559,
+      "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu2.mp3",
+      "bytes": 114374,
+      "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu3.mp3",
+      "bytes": 10031,
+      "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu4.mp3",
+      "bytes": 38934,
+      "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/core/audio/skill/tsumugi_mugyu5.mp3",
+      "bytes": 80896,
+      "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/apps/web-client/node_modules",
+      "symlink": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original/asset-manifest.json",
+      "bytes": 10661202,
+      "sha256": "7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a",
+      "bytes": 18716,
+      "sha256": "292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a",
+      "bytes": 114531,
+      "sha256": "c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a",
+      "bytes": 10188,
+      "sha256": "838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a",
+      "bytes": 39091,
+      "sha256": "58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a",
+      "bytes": 81053,
+      "sha256": "e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/content/original-audio-compat/provenance.json",
+      "bytes": 2713,
+      "sha256": "1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-audio-resources.mjs",
+      "bytes": 26810,
+      "sha256": "1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-content-order.mjs",
+      "bytes": 862,
+      "sha256": "8773976fe7e1d4c333ef85db01705c2056cf5d521242789cd1b027b355d08fa0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/original-source-ast.mjs",
+      "bytes": 4036,
+      "sha256": "88933a4ccbc789b847a9caac430f1b2f7c3c3ba44b5c7b8400ab9f2ff68cf352"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/sync-original-content.mjs",
+      "bytes": 74774,
+      "sha256": "051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/test_original_audio_resources.mjs",
+      "bytes": 14401,
+      "sha256": "fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/test_original_content_order.mjs",
+      "bytes": 1963,
+      "sha256": "c28c18337cbd2c39db8b3cba293808133583903ca3e6954abccddf42be0fffcf"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/source/scripts/test_original_resources.mjs",
+      "bytes": 12289,
+      "sha256": "755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/summary.json",
+      "bytes": 31167,
+      "sha256": "c235b843f53d41b0e27eb2592cc8286b4ef73bae9d4024aeaa6d2350d04b9727"
+    },
+    {
+      "path": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/validate.mjs",
+      "bytes": 1141,
+      "sha256": "cae941561e52cf5ed0fdae1a83bcd6a420f0a3beb8754d6b2a1e3f30705cc53d"
+    }
+  ]
+}

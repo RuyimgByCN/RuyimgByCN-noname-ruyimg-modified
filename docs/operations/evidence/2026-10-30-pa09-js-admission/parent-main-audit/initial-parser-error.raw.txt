@@ -1,0 +1,1 @@
+Parent first parser directly compared groups list order and raised AssertionError. Entry/exit differ only groups caller enumeration order, utc and free_disk_bytes; corrected group path-set comparison while retaining all exact file SHA comparisons. No product experiment rerun or source changes.

@@ -1,0 +1,60 @@
+{
+  "versions": {
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "node": "v26.4.0",
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123",
+    "architecture": "arm64"
+  },
+  "local_compiled_packages": [
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/apps/desktop-client#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/content-native-loader#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/content-runtime#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/content-schema#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/diagnostics#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/engine-api#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/engine-native#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/engine-native-content#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/engine-native-kernel#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/engine-native-wasm#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/licensing-schema#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/resource-schema#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/rule-api#0.1.0",
+    "path+file:///private/tmp/pa09-js-bound-4306bc00/crates/rule-vm#0.1.0"
+  ],
+  "compiled_artifact_count": 396,
+  "compiler_messages_by_level": {},
+  "compile_feature_tauri": [
+    "common-controls-v6",
+    "compression",
+    "custom-protocol",
+    "dbus",
+    "default",
+    "dynamic-acl",
+    "http-range",
+    "protocol-asset",
+    "tauri-runtime-wry",
+    "webkit2gtk",
+    "webview2-com",
+    "wry",
+    "x11"
+  ],
+  "workspace_build": false,
+  "wasm32_build": false,
+  "fresh_owned_target": true,
+  "target_bytes_final": 1095082383,
+  "all_artifacts_under_owned_target": true,
+  "fixture_lines": 212,
+  "harness_line_counts": {
+    "verify-actual.py": 75,
+    "build-web.mjs": 38,
+    "invoke-observer.js": 8,
+    "launch-after-build.py": 11,
+    "run-webview.py": 111,
+    "build-native.py": 41
+  },
+  "completed_utc": "2026-10-30T19:22:05.720836+00:00",
+  "original_frozen_patch_and_source_archive_unchanged": true,
+  "rendered_stderr_warning_count": 18,
+  "warning_note": "18 dead_code warnings from native host build of engine-native-wasm retained in stderr; rendered diagnostics are not JSON compiler-message entries."
+}

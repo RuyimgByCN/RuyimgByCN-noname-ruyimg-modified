@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/accept.py", line 82, in <module>
+    assert all(checks.values()), checks
+AssertionError: {'head': True, 'tree': True, 'index_sha256': True, 'staged': True, 'source3': True, 'protected': True, 'groups': False, 'modules': True, 'dist': True, 'guard': True, 'frozen_package_diff_sha256': True, 'package_git_trees': True}

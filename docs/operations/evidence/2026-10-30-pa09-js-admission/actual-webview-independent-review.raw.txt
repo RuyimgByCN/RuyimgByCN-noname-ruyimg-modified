@@ -1,0 +1,30 @@
+## Review
+
+No issues found.
+
+- **裁决：Bounded OK with notes。** 新证据支持实际隐藏 WKWebView → 生产 EngineClient／候选 transport → 真实 Tauri／NativeEngineHost／ResourceTable 的同事件轮 admission 与异步生命周期结论；未发现需修复的 P1/P2 问题。
+- **审查方式**：完整读取 81 行报告、212 行 fixture、observer、构建／运行／离线检查脚本，以及全部三个 NDJSON。原始报告为单行 100.8 KB，超过 reviewer 单行读取限制；全 JSON 关联和哈希重算由父独立 Python 完成。我已完整审查其[脚本](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-pa09-webview-audit-q1aq9hyc/audit-frozen-evidence.py)与[结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-pa09-webview-audit-q1aq9hyc/independent-results.json)，没有以 producer 的 33 个 passed 字段代替运行记录。
+
+- **Correct — 8/120 有逐事件支持**：[admission 日志](/tmp/pa09-webview-5b7ad3ab/evidence/transport-admission.ndjson:2) 显示 burst accepted IDs 恰为 2–9，拒绝 IDs 为 10–129；120 次拒绝均明确未提交、tailUnchanged=true。[实际 IPC 日志](/tmp/pa09-webview-5b7ad3ab/evidence/raw-ipc.ndjson:5) 只有 accepted 八个 ID，顺序一致、同 resource、全部成功；没有拒绝 ID 的 IPC、重试或 unknown 回包。
+- **Correct — pending／Promise 边界**：[128 次 pending 采样](/tmp/pa09-webview-5b7ad3ab/evidence/pending-counts.ndjson:1) 从 1 增至 8 后保持八个 IDs 2–9。父 parser 将采样与完整 trace 精确比对，并核对 caller rejected=120／resolved=8；[fixture:110](/tmp/pa09-webview-5b7ad3ab/product-web/fixture.js:110) 在仅让 microtask 执行后检查 settled=120、pending=8，支持八个调用持续未决的结论。
+- **Correct — 正常释放**：burst 八个完成后 pending 清零；实际 IPC 随后出现 IDs 130–153 的 24 次顺序 status 成功回包。该结果支持槽位持续释放，没有把顺序请求误计为 burst。
+- **Correct — opening dispose**：[fixture:127](/tmp/pa09-webview-5b7ad3ab/product-web/fixture.js:127) 在真实 open 已发出、回调未完成时，使 init＋七个 queued 占八槽后 dispose；该 resource 随后只出现 open／close，没有生产 request IPC。late allocation 后 close 一次，退休 probe 返回 invalid resource。
+- **Correct — active dispose／新连接**：[fixture:153](/tmp/pa09-webview-5b7ad3ab/product-web/fixture.js:153) 先确认真实 status invoke 未完成，再排七个 queued。trace 415 记录 dispose 时 pending=[]、activeSettled=false；trace 422 为旧 call 41 的成功 raw 回包，旧 transport delivery 为零。新 resource 独立 init／status 成功；旧七个 queued 没有 IPC。
+- **Correct — 拒绝语义分开**：burst 的 120 次为 admission 同步拒绝、明确未提交；opening／active dispose 的八个调用保留生产 dispose 的既有“结果未知”拒绝。两者未混计。
+- **Correct — 调用与资源账目闭合**：完整报告的 49 rawCalls 与 98 个 invoke sent／terminal 事件逐 call 对应，command、args、结果／错误、settled 和事件顺序一致，无遗漏。总计 open=4、request=41、close=4；request 含生产 transport 的 37 条及四条退休 probe。四个 resource 各 close 成功一次、各有一次退休拒绝。
+
+- **Correct — 观测层没有实现第二套 admission**：[observer:4](/tmp/pa09-webview-5b7ad3ab/harness/invoke-observer.js:4) 先调用原 tauriInvoke，参数原样转交，并返回该原 Promise；附加回调仅记录结果。[fixture:45](/tmp/pa09-webview-5b7ad3ab/product-web/fixture.js:45) 包裹 postMessage 后调用原方法，没有复制计数、延迟 native writer 或加入第二队列。private pending/resource/tail 访问用于观测，可接受。
+- **Correct — 实跑 bundle 与源码绑定**：父重新核验 64 个 source／bundle 文件、41 个 evidence 文件、实际 executable、编译配置及 canonical bundle digest；全部匹配。已检查实跑 [client chunk:228](/tmp/pa09-webview-5b7ad3ab/bundle/assets/client-BZROKSmU.js:228) 中 admission 检查位于尾链扩展前，compiled observer 也返回原 Promise。
+- **Correct — 生产入口确实加载**：[build-web.mjs](/tmp/pa09-webview-5b7ad3ab/harness/build-web.mjs:23) 使用生产依赖、Vue 和新私有 outDir；fixture 导入真实 main.ts，产出 fixture/client/main 三 chunk。五个[实际 served assets](/tmp/pa09-webview-5b7ad3ab/evidence/http-served-assets.json:1) 的字节数与 SHA 均匹配冻结 bundle；没有 worker／.wasm GET，不能据此宣称本轮重建或验收 WASM32。
+- **Correct — native 身份与配置**：父按 a1f Git tree 和私有磁盘重算 3001 个 baseline 条目的 blob／SHA，全部 exact。一次 native release 构建使用独有 target、incremental=0、jobs=2，锁内 185.628 秒，约 1.02 GiB。实跑 executable 为 `0f572e1d…`，bundle 为 `a4b268e9…`，与[runtime identity](/tmp/pa09-webview-5b7ad3ab/evidence/runtime-product-identity.json:1)一致。
+- **Correct — 没有假用旧 App**：已核 Tauri 依赖源码，Directory frontendDist 会编译期嵌入资源；本轮明确编译 FrontendDist::Url 指向自有 19439，并在 launch 删除 TAURI_CONFIG。隐藏窗口、独立 identifier 与原 Rust main／API／capability 配合，支持真实桥接资格。该 App 仅 ad-hoc 签名，不代表产品签名或公证通过。
+- **Correct — Main movement 归属清楚**：WK 运行约 19:16:41–43Z；父授权的 compat 提交发生于 19:18:54.935996Z，见[提交记录](/tmp/noname-compat-accepted-commit.json:1)。父只读 committed diff 确认 a1f→777 无 Rust/Cargo 变化。本轮报告保留 Main index／HEAD 移动，没有声称 Main unchanged；无需恢复 Main/index，也不影响上述私有数据资格。
+- **Correct — 失败与清理如实保留**：首次 Vite realpath 失败、18 条 native dead_code warnings、首次离线 Main index 断言失败均保留。父 parser 最初把 98 trace 当成 49 calls、以及把 active-connect init 计入 active-dispose 的两处检查范围错误亦保留，修正后未改运行证据。父于 19:32:06.988756Z 只读确认自有 PID 62278／62280 已退出、19439 无监听、三个 identifier 目录不存在，cleanup 三个存档 SHA 匹配。
+
+- **Fixed**：无；本轮只读复审。
+- **Finding**：无符合证据门槛的当前 P1/P2 问题。
+- **Merge verdict：OK with notes，仅限上述 bounded runtime 证据。** `jsBounded=true` 限于该 fixture 的同事件轮 JS admission／生命周期；不能升级为 OS pressure、Rust 队列饱和、吞吐、latency、设备输入或 PA09 六条件绿色。旧 raw invoke 的 76 fulfilled／52 not submitted、`jsBounded=false` 原结论保留。
+- **整合边界**：三文件尚待父在 publication lease 释放后接入 Main，并运行主树定向 checks／gates；本审查不授予该整合结果绿色，也不切换默认 WASM。
+
+未做：重跑 173 tests、构建、GUI、网络、新测量，或写入 Main／private source；本 reviewer 的完整 JSON／哈希计算依赖已审查的父独立 parser。
+风险：证据证明的是受明确限定的实际 WK admission 与异步桥接生命周期，产品整合及更广 PA09 验收仍未完成。

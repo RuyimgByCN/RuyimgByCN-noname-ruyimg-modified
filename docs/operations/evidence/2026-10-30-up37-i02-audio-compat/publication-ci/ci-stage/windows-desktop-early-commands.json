@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124265455086"
+    ],
+    "started_utc": "2026-10-30T19:26:28.416794+00:00",
+    "finished_utc": "2026-10-30T19:26:29.101363+00:00",
+    "exit": 0,
+    "http1": true
+  },
+  {
+    "command": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124265455086/logs"
+    ],
+    "started_utc": "2026-10-30T19:26:29.101539+00:00",
+    "finished_utc": "2026-10-30T19:26:31.091194+00:00",
+    "exit": 0,
+    "http1": true
+  }
+]

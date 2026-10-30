@@ -29,6 +29,6 @@
 
 旧64份功能证据、14源码、75保护项、两WASM及18模块、37 dist、guard、HEAD／空index在门禁首末一致。preflight只保留其接口实际输出，不声称取得内部被抑制的子项日志。临时source-only补丁的SHA与total patch不同是两种不同范围的补丁；验收身份依据始终为14份文件SHA与聚合。
 
-本批按裁决18完成本地切片验收，提交／限定发布另存实际结果；整体I02及Goal未完成。基线a1f真实CI十绿另见[登记](../2026-10-30-up37-i02-audio-aliases/publication-ci/README.md)，不覆盖此14文件增量。
+本批按裁决18完成本地切片验收并提交、依裁决25普通发布为`777bf33969e5ecc04b63971adab26be32f12fd28`，实际push／guard／lease见[发布receipt](publication/result.json)。其真实run41114612841最终9成功／1Windows资源准备失败，完整原日志及独立登记见[本次CI](publication-ci/README.md)；固定provenance的精确路径检出修正另见[受控Git证据](../2026-10-30-windows-provenance-checkout/README.md)，不回填旧CI为成功。整体I02及Goal未完成。基线a1f真实CI十绿另见[登记](../2026-10-30-up37-i02-audio-aliases/publication-ci/README.md)，不覆盖此14文件增量。
 
 原两个Node ExperimentalWarning、strict六类missing-file提示与全部stderr保留；本轮没有新12k codec、性能、物理HID或新平台CI。来源／皮肤／动态表达式／自动对局语音、I02整项和37来源／整个Goal仍未完成，WASM默认不变。

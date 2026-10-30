@@ -29,6 +29,14 @@ final diff check rejects changes to tracked original content. Gate 4 still
 runs the full original-content verification, plus ordering and resource tests.
 No optional skin source is configured.
 
+The root `.gitattributes` preserves the exact bytes of
+`content/original-audio-compat/provenance.json` with a path-specific `-text`
+rule. The resource validator pins that file's SHA-256 as well as its parsed
+bindings. See the [controlled Git checkout proof](evidence/2026-10-30-windows-provenance-checkout/README.md)
+and the [777 publication's actual CI failure](evidence/2026-10-30-up37-i02-audio-compat/publication-ci/README.md).
+The historical runner did not log its provenance SHA; controlled reproduction
+and subsequent platform acceptance are recorded separately.
+
 Gates and native-web also request `integration-sources`. This checks out twelve
 specific Liuli text files from `Helasisy1984/Noname-Liuli-Modified` at immutable
 commit `8485dbb29ff16f9b258a766b1a17ef75f883aade`, under the sibling
@@ -100,6 +108,8 @@ Local configuration/schema checks and the build-pipeline regressions cover
 these metadata changes. Subsequent actual runs and uploaded corrected bundles
 are registered in the [current progress](../architecture/native-progress.md#delivery-2026-10-24)
 and the [independent alias-publication CI record](evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/README.md).
+The later [compat-publication CI record](evidence/2026-10-30-up37-i02-audio-compat/publication-ci/README.md)
+retains its Windows resource-preparation failure separately.
 The first run's successful macOS desktop artifact
 `installer-macos-latest` (32,791,200 bytes), three OS build jobs and native-web
 job do not establish a fully green workflow or validate these corrected bundles.

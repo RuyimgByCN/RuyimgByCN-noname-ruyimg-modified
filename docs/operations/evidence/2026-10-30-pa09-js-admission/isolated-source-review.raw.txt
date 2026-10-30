@@ -1,0 +1,22 @@
+## Review
+
+No issues found.
+
+- **范围**：已完整读取 61 行实施记录，并核对当前三文件 diff、冻结增量补丁、生产 EngineClient、关联 UI/探针与原始验证日志。本结论仅针对 `/tmp/pa09-js-bound-4306bc00` 的 JS source/test candidate。
+- **候选身份**：base `a1f7250815eee803d931301ab46207719cb9a15b`／tree `abb64b4d7aeabc3f1e2525887b88bca46b0e9133`；采用父已核验的三 blob `4ce3cf… / 4bc11d… / b8af23c…`。[manifest](/tmp/pa09-js-bound-evidence-4306bc00/freeze-manifest.json) 对应 sourceTar `5ceb9374…`、incremental patch `064f0576…`；当前 diff 与补丁内容一致。
+- **Correct — admission**：[desktopEngineTransport.ts:59](/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/desktopEngineTransport.ts:59) 在扩展 Promise 尾链及发起 IPC 前同步检查固定总量 8；opening、active、queued 均占槽。第九个调用明确抛“未提交”，不会经过“结果可能未知”的响应包装。
+- **Correct — client 清理**：[client.ts:252](/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/client.ts:252) 的既有 catch 同步删除 pending、调用 perfRequestFailed，并原样 reject；没有 retry 或 native→WASM fallback。调用方仍会创建随即拒绝的 Promise，受限的是 transport 尾链及持续未决请求。
+- **Correct — burst 证据**：[transport 测试:154](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:154) 分别先阻塞真实 mock open／首个 request，再继续提交至累计 128 次；断言 accepted 恰为 1–8、rejected=120、每次拒绝时 tail 为同一对象，放行后 IPC／回包顺序准确且可再次接纳。
+- **Correct — client 边界**：[client 测试:192](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/nc04-worker-failure.test.mjs:192) 逐调用检查返回后 pending≤8，并核对八个 pending ID、120 个已拒绝调用、八个持续未决调用、perf 配平及共享等待规则。fixture 转译真实 EngineClient class；新增观测未替换 request 清理逻辑。
+- **Correct — 错误恢复**：[transport:66](/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/desktopEngineTransport.ts:66) 用 finally 释放槽位，外层 catch 恢复 listener 抛错后的尾链。[异常测试:199](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:199) 覆盖 invoke reject、受控错误、错 ID、metadata error、listener throw，随后再次接受八个请求；open reject 测试还断言仅一次 open、零 request IPC，无隐式重试。
+- **Correct — terminate**：[transport:88](/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/desktopEngineTransport.ts:88) 先关闭并清零，旧任务 finally 因 closed 跳过递减，计数不会变负；重复 terminate 不重复 close，旧排队项不发 IPC。[生命周期测试:248](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/nc04-worker-failure.test.mjs:248) 覆盖八请求 dispose、独立新 resource、旧 late reply 隔离及各 resource close 一次；opening 阶段另有八请求覆盖。
+- **Correct — 用户体验与范围**：原生 [sync_channel(8)](/tmp/pa09-js-bound-4306bc00/apps/desktop-client/src/native_engine_host.rs:26) 可容纳八 queued 加一个 active；JS 总共八个是合理的保守 admission。BattleView 有 busy 门控且自动步进顺序 await，UI 保留原错误文本；host smoke／WebView 验收入口也顺序 await，document reload 的 raw invoke 绕过 adapter。未发现把新增 admission 拒绝误报 unknown 的关联路径。
+- **Correct — 最小改动**：生产源码净增 12 行，总 diff 232 insertions／16 deletions，新增六个行为测试；transport 层与 client 层断言互补，未见仅镜像实现的测试或制造绿色结果的 fixture。无需跨语言共享配置、代码生成或通用 framework，协议、导出与默认 WASM 均未改变。
+- **Correct — 已有验证证据**：只读核对 [红 16/4](/tmp/pa09-js-bound-evidence-4306bc00/red-final-active-burst.log)、[绿 20/0](/tmp/pa09-js-bound-evidence-4306bc00/green-final-active-burst.log)、[完整前端 173/0](/tmp/pa09-js-bound-evidence-4306bc00/frontend-full-final-active-burst.log)、[typecheck exit 0](/tmp/pa09-js-bound-evidence-4306bc00/typecheck.log)。计数属于本候选，未混入 Main compat 的 169 或 CI a1f 的 167。
+- **Correct — 门禁边界**：[sourcecap 日志](/tmp/pa09-js-bound-evidence-4306bc00/sourcecap-sparse-active-burst.log) 为 8980 files；[materialization](/tmp/pa09-js-bound-evidence-4306bc00/sourcecap-materialization.json) 记录补齐 7810 个维护文本、约 27 MB，manifest missing=0，不能因日志名含 sparse 认定只扫小子集。guard 路径失败、锁等待 20 秒 timeout 与 Node localStorage warning 均保留。
+- **Fixed**：无；本轮独立只读复审，未编辑文件。
+- **Finding**：无符合证据门槛的 P0/P1/P2 当前问题，无需修复。
+- **Merge verdict：OK with notes**，仅支持这三文件 JS source/test candidate 的有限整合结论。mockInvoke 不能证明 actual Tauri/WebView `jsBounded=true`；原实测仍保留 burst128＝76 fulfilled／52 not submitted、`jsBounded=false`。不授予 PA09 六条件或默认切换绿色结论，也不涵盖 Main compat14 另线整合。
+
+未做：Main 写入、构建、新实验、测试执行、stage/commit；未重复 hash 全部 8980 源文件。
+风险：固定八个总在途会明确拒绝超额请求；真实新 document retirement、WebView bounded 与产品体验仍待下一批实测。

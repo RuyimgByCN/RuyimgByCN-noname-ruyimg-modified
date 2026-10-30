@@ -1,0 +1,1 @@
+Parent first parser accepted only TAP # summary but initial16/17 fixture used Node default ℹ summary; AssertionError. Corrected parser to accept either raw reporter prefix. Original failures/logs unchanged; no product experiment rerun.

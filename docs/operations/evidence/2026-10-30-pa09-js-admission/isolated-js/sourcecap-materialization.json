@@ -1,0 +1,5 @@
+{
+  "baseline_maintained_source_files_materialized": 7810,
+  "archive_bytes": 26995971,
+  "note": "Only missing maintained text source files from frozen HEAD, no source replacements; makes sourcecap complete despite sparse checkout."
+}

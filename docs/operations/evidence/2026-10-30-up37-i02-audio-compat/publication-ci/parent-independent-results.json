@@ -1,0 +1,179 @@
+{
+  "result": "PASS",
+  "meaning": "Exact registration of9successful jobs and1realWindowsresourceprepare failure; not a green CI result",
+  "manifest_files_verified": 86,
+  "run": {
+    "id": 41114612841,
+    "head_sha": "777bf33969e5ecc04b63971adab26be32f12fd28",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "failure",
+    "updated_at": "2026-10-30T19:44:31Z"
+  },
+  "jobs": [
+    {
+      "id": 124265454605,
+      "name": "perf-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 191926,
+      "log_sha256": "e85a0a9957000755c1631a3214f4d9eed56b77d6c070c46bf33861f5a56becfa",
+      "log_crc32": "b59494dd",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265454929,
+      "name": "desktop-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 278609,
+      "log_sha256": "ed6468126659f477dea13305919f7e67d5db3a41fd46d21b796a02fceeb2f36e",
+      "log_crc32": "ad3e81f5",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265454931,
+      "name": "gates-ubuntu",
+      "conclusion": "success",
+      "log_bytes": 2157535,
+      "log_sha256": "73e8310c445627a89297f52cc26aac737f785e9c5c040d5d10321e3aa86a8897",
+      "log_crc32": "2987385a",
+      "crlf": 0,
+      "rust_totals": [
+        6894,
+        0,
+        77
+      ]
+    },
+    {
+      "id": 124265454943,
+      "name": "build-windows-latest",
+      "conclusion": "success",
+      "log_bytes": 365984,
+      "log_sha256": "fccf6f64e44118d55fc7c65c1ee962168f1d2356895070f8a5aa5000d957bdbb",
+      "log_crc32": "ad2ae504",
+      "crlf": 3822,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265454957,
+      "name": "build-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 358214,
+      "log_sha256": "11066ffa5916f2e98f264017312321fef9f3b7c41babb1950849d3e0099a9915",
+      "log_crc32": "4ce4514f",
+      "crlf": 0,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265455005,
+      "name": "build-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 360921,
+      "log_sha256": "a506e9eb8d140ca5e74e63f411868655da741b7d96cf28a23b91828170683577",
+      "log_crc32": "ae152c38",
+      "crlf": 0,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265455034,
+      "name": "desktop-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 183995,
+      "log_sha256": "0f85cd907c93234efdf562138f1d84f1bde519b30f25e06d915c5a79ce51f9fa",
+      "log_crc32": "7d7971b9",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265455086,
+      "name": "desktop-windows-latest",
+      "conclusion": "failure",
+      "log_bytes": 72451,
+      "log_sha256": "12a016163ae596af70a4050abd12b83769abdfb4ce47259349c34d36466f3a3b",
+      "log_crc32": "c3d0bf45",
+      "crlf": 898,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265455089,
+      "name": "perf-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 190009,
+      "log_sha256": "3285440f7b99a5b10b0db6dc7e8dd567a02b33faf3901fb87425e65b4f23c2ac",
+      "log_crc32": "5dc75e07",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 124265455295,
+      "name": "native-web",
+      "conclusion": "success",
+      "log_bytes": 474712,
+      "log_sha256": "9fe5fd5a026bad2417dea582e6336fc30e50b2a398a6dbd500fe7506be4c30cd",
+      "log_crc32": "0cee9662",
+      "crlf": 0,
+      "rust_totals": [
+        1815,
+        0,
+        75
+      ]
+    }
+  ],
+  "steps": {
+    "total": 130,
+    "success": 121,
+    "failure": 1,
+    "skip": 8,
+    "null": 0
+  },
+  "artifacts": [
+    {
+      "id": 13005303729,
+      "name": "installer-macos-latest",
+      "bytes": 32802931,
+      "digest": "sha256:8d2bd8a6047967cd07fa1bc1a96367c2605b93aae41ab16b9932bd463905d104"
+    },
+    {
+      "id": 13005023345,
+      "name": "installer-ubuntu-latest",
+      "bytes": 266341695,
+      "digest": "sha256:5ce6fbea14133c6717ba88b49cde2587ec27836eb23b2b2b81294759a8078ae7"
+    }
+  ],
+  "warnings_ignored_not_cleared": true,
+  "failure_root_cause_not_proved_by_original_runner_bytes": true,
+  "no_network_tests_or_builds": true
+}

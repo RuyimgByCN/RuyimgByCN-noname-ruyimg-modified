@@ -1,0 +1,56 @@
+{
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "tracked_status": true,
+    "attribute_sha256": true,
+    "guard": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "groups": true,
+    "group_hashes": true,
+    "frozen_package_diff_sha256": true,
+    "package_git_trees": true,
+    "maintained_source_docs": true,
+    "binary_exclusions_by_suffix": true,
+    "scope_note": true
+  },
+  "maintained_changed_paths": {},
+  "maintained_paths": 21726,
+  "previous_functionality_invariants": {
+    "head": true,
+    "tree": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "guard": true,
+    "index_sha256": true,
+    "staged": true,
+    "frozen_package_diff_sha256": true,
+    "package_git_trees": true,
+    "groups": true,
+    "admitted_source3": true,
+    "attribute": true,
+    "expected_head": true,
+    "no_staged_files": true,
+    "disk_at_least_3GiB": true
+  },
+  "group_comparison": "Exact caller path sets, order-insensitive only; file hashes exact.",
+  "counts": {
+    "source3": 3,
+    "protected": 99,
+    "modules": 18,
+    "dist": 37
+  },
+  "group_counts": {
+    "compat14": 14,
+    "A53": 53,
+    "CI4_groups_paths": 12,
+    "client_and_transport_callers": 13
+  }
+}

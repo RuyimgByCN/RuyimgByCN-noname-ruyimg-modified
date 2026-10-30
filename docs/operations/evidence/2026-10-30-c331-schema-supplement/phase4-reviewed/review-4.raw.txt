@@ -1,0 +1,60 @@
+# C331 phase4 laneB：remaining[36:72] 只读排序来源取证
+
+核验时间：2026-10-31T04:10:13.339925+08:00。已读 canonical AGENTS 与 NONAME_NEXT_AGENT_SPEC。只写本报告及自有 /tmp 证据，无源码、构建、测试、上游 JS 执行、Main 或 C 私有 writer 写入。
+冻结清单：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/host-source-remaining72.json`；SHA256 `525df5aa3d19ff3a784d6c8ce7bed0432420204f1c6959b4cc2d34cd15fe802e`。严格 indices 36–71 共36条，与父lane前36无重叠，source/index/freeze未改。
+父核snapshot共134文件，逐文件哈希复查未变；树摘要 `411a89ced9eb5ff723c71974a5e4fb0a2e8449b4e08f123eed0bc97b7a5d4841`。snapshot规则331；canonical Main HEAD `777bf33969e5ecc04b63971adab26be32f12fd28`、Rust规则330。
+完整 JSON（36条实际建议、源file/body SHA256/行范围/全文、parent/group/subskill链、译名实际注册位置、公式、native当前/expected tuple与逐字段diff）：[ordering-evidence.json](/tmp/c331-laneB-9f89265f/ordering-evidence.json)。
+状态：22 `proven-order`、5 `needs-runtime-translation`、9 `ambiguous-source`、0 `missing-source`。这是静态排序证据；proven218/290、sourceRows234含16非current原值保留，未把candidate自动计proven，未宣runtime已实现或全源等价。
+缺snapshot filtering文件均从canonicalMain330只读补取，JSON每个caller标 `canonicalMain330-future-C-diff-required`；已有snapshot step按文件优先。未来C授权差分须再核这些caller。
+
+Core `get.priority`：有 `_priority` 则直接返回，否则 `p*100 + silent −25*equip −50*card −75*rule`（p按JS truthy条件）；Liuli旧 `addList` 重新算 `p*100 + silent −30*equip −30*rule`，忽略缓存 `_priority` 和card。
+两源 `finishSkill` 都只在forced属性缺席时为silent默认forced=true；charlotte/forced/direct/popup不直接决定选序；子技能只回填译名，不继承父属性，普通group不会回填译名。firstDo优先于lastDo，First/Last桶不弹chooseControl。
+Normal桶须真实 `lib.translate[实际skill名]` truthy且非silent；Core同级若有silent或缺名技能先执行，Liuli filter2/3筛选同角色同优先级有译名者。get.translation缺名可返回原键字符串，不能当译名证据。
+算法完整行与指纹在JSON algorithm_evidence：Core get:621、game.finishSkill:8698/8762/8834、content:4017；Liuli game:32346/15274/44137/44198。数值/null均按实际含义保留。
+
+| index / variant | 状态 | 实际映射与最小建议 |
+| --- | --- | --- |
+| 36 MbWeitong | ambiguous-source | 同名两源实际 trigger/priority 不同：Liuli global phaseBefore/player enterGame, p10→1000；Core player mbqianlong_beginBegin, p缺→0。Native PhaseBegin First/10 对两源都不符，未授权选择来源。 先以现有已选包/技能声明确定来源语义，随后 Cwriter 将 First/10 改 Normal/1000(Liuli) 或 Normal/0(Core)；保留自定义事件差异待办。 |
+| 37 Miedao | proven-order | Native只映射 group miedao2 的弃牌面；miedao1摸牌面不作为本branch排序来源。 当前tuple相符，补来源绑定即可。 |
+| 38 Niepan | ambiguous-source | 两源 niepan 均 enable chooseToUse、无 trigger；Native Dying optional 是救援桥，不能把技能对象默认0当 arrangeTrigger排序证明。 追 native Dying/救援候选的真实调度契约；证实桥策略后再给 bridge metadata，不直接加入 source_order。 |
+| 39 SanjianWeaponDamage | ambiguous-source | sanjian_skill 两源均 equipSkill:true；Liuli addList=-30、Core get.priority=-25；Native host:sanjian_weapon 对象来源不能由路径常量决定。 按已选卡牌包/技能声明确定 -30 或 -25 后批量修 priority；不要把来源路径标签硬编码成生产 metadata。 |
+| 40 ShengkeCheck | needs-runtime-translation | 真实名 _shengke，target useCardToBegin；给定 play 包未定义 _shengke 译名；popup:false/forced:true 均不排除选序。 Normal/0 已证明；order_selectable 保留 null，核实固定加载上下文的 lib.translate._shengke，再通过已有元数据入口表达资格。 |
+| 41 Shishi | proven-order | source dieAfter→Native Death(killer=owner)；死亡子事件合并仍为功能差异。 当前tuple相符，补来源绑定即可。 |
+| 42 SwdBaishouzhihuHeld | proven-order | g_baishouzhihu player discardEnd direct→Native PhaseEnd；不是 card对象 baishouzhihu。 当前tuple相符，补来源绑定即可。 |
+| 43 SwdFengyinState | ambiguous-source | 两源 fengyin 为 charlotte 状态 blocker，无 trigger；jiguanfeng 的 addTempSkill(fengyin,{player:phaseBegin}) 是失效移除，不是技能触发项。 保持状态过期契约为单独待办；Cwriter 先核 Native PhaseBegin 清理是否应进入排序选择，不能从 charlotte 推 false。 |
+| 44 SwdGouhunluoSub | proven-order | gouhunluo global phaseBegin定向source→Native任意PhaseBegin；group gouhunluo2 global dieBegin清理另留功能待办。 当前tuple相符，补来源绑定即可。 |
+| 45 SwdHuanglinzhicongHeld | proven-order | g_huanglinzhicong player phaseBegin→Native准备阶段；phaseBegin并非每个阶段开始。 当前tuple相符，补来源绑定即可。 |
+| 46 SwdJiguanyaoGain | proven-order | jiguanyaoshu_skill player loseEnd/filter original equip→Native CardsDiscarded；缺lose/equip其他离区路径，排序取证不关闭功能缺口。 当前tuple相符，补来源绑定即可。 |
+| 47 SwdJiguanyuanGain | proven-order | jiguanyuan player phaseEnd→Native任意阶段结束；temp/popup不是silent。 当前tuple相符，补来源绑定即可。 |
+| 48 SwdJuxiCount | proven-order | juxi.subSkill.count/group juxi_count global discardAfter→Native CardsDiscarded；finishSkill真实回填父译名。 当前tuple相符，补来源绑定即可。 |
+| 49 SwdLexue | needs-runtime-translation | group lexue1/lexue2 为两个独立技能名，分别 player phaseBegin/phaseEnd；只有 lexue 译名，group 不自动继承译名；Native合并成任意角色 Judge begin 单窗。 已证明两支 Normal/0；order_selectable 保留 null，补固定加载集合 lib.translate.lexue1/lexue2 的实际元数据证据；事件合并差异另保留。 |
+| 50 SwdNigongAccumulate | ambiguous-source | Liuli nigong 未声明 equipSkill，旧 addList=0；Core nigong 明确 equipSkill:true，get.priority=-25。不能因是装备技能就替 Liuli补 equipSkill。 明确已选源；若Core将 priority 0→-25，若Liuli保留0；group nigong2/3 是主动面，不替积攒触发继承属性。 |
+| 51 SwdQinglongzhiguiHeld | proven-order | g_qinglongzhigui player phaseBegin→Native准备阶段，非card主对象。 当前tuple相符，补来源绑定即可。 |
+| 52 SwdShencaojieGuard | needs-runtime-translation | 真实名 g_shencaojie，source/player damageBegin direct；只有 card shencaojie 译名，没有证明 lib.translate.g_shencaojie。 Normal/0 已证明；保留 selectability null，补真实 g_shencaojie 注册译名或固定缺名证据；不得把 get.translation(g_shencaojie) 返回字符串当 true。 |
+| 53 SwdShenmiguoWindow | needs-runtime-translation | 真实名 g_shenmiguo，player useCardAfter direct；只有 card shenmiguo 译名，没有证明 lib.translate.g_shenmiguo。 Normal/0 已证明；保留 selectability null，补真实 g_shenmiguo 译名加载证据。 |
+| 54 SwdShouyin | ambiguous-source | shouyin 两源为 enable chooseToUse 的 dying 救援技能，无 trigger；Native Dying 队列为桥接。 与Niepan同样核救援桥选择/排序合同，不给默认 trigger tuple。 |
+| 55 SwdSxianjingDamage | proven-order | sxianjing.subSkill.damage player damageEnd→Native Damage(target=owner)；父group与译名回填均已核。 当前tuple相符，补来源绑定即可。 |
+| 56 SwdSxianjingGain | proven-order | sxianjing.subSkill.gain target useCardToBegin→Native CardUsed；目标时机合并单留功能差异。 当前tuple相符，补来源绑定即可。 |
+| 57 SwdXuanwuzhihuangHeld | proven-order | g_xuanwuzhihuang source damageEnd→Native Damage(source=owner)。 当前tuple相符，补来源绑定即可。 |
+| 58 SwdXuanying | ambiguous-source | 两源均声明 xuanying_damage(player damageEnd)，但实际parent group仅xuanying_sha/xuanying_use，不含damage；Native Damage反击虽对应声明body，却不能证明默认授技可达。 保留声明tuple Normal/0/true与父译名证据；先核已选包是否另有显式授予damage子技能的路径，再决定Native反击桥的排序来源，不能仅凭subSkill存在计proven。 |
+| 59 SwdYuchanSwap | proven-order | g_yuchan_swap player useCardAfter/silent/p-1→Normal,-99,false；上游没有lastDo，Native Last不是 useCardAfter 的等价映射。 **C授权后按JSON具体diff修tuple。** |
+| 60 SwdZhuquezhizhangHeld | proven-order | g_zhuquezhizhang player damageEnd→Native Damage(target=owner)；forced不会使选序资格false。 当前tuple相符，补来源绑定即可。 |
+| 61 WudianPaotaiFire | proven-order | paotai parent group paotai2/3；本branch为paotai2 player phaseEnd，非paotai3 damageEnd。 当前tuple相符，补来源绑定即可。 |
+| 62 WudianQiangguGuard | proven-order | qianggu content授予qianggu2；本branch target useCardToBefore→Native CardUsed，临时技能过期另保留。 当前tuple相符，补来源绑定即可。 |
+| 63 WudianZhenchaDraw | proven-order | zhencha.subSkill.sha/group zhencha_sha player shaBegin→Native CardUsed(Sha)，真实父译名回填。 当前tuple相符，补来源绑定即可。 |
+| 64 XianjianChengxin | ambiguous-source | chengxin enable chooseToUse/round4，无 dying trigger；round生成 roundcount 只监听 roundStart，不是本Native Dying候选。 保留救援桥和冷却语义待核，不能用 roundcount 的 silent/+1 为 chengxin 排序。 |
+| 65 XianjianHushaCount | proven-order | husha.subSkill.count/group husha_count source damageEnd→Native Damage；上游限自己phaseUse，Native过滤为自己turn，功能差异保留。 当前tuple相符，补来源绑定即可。 |
+| 66 XianjianShuiyun5 | ambiguous-source | shuiyun5 enable chooseToUse/dying filter，无 trigger；Native Dying optional 是救援桥。 核救援候选桥契约；不得将已存在译名和默认0提升为 trigger排序 proven。 |
+| 67 Xiefang | proven-order | 扩展覆盖 xiefang，global dieEnd/gameDrawEnd，p-1/silent→Normal,-99,false；Native Death/自己Draw PhaseEnd与gameDrawEnd不等价。 **C授权后按JSON具体diff修tuple。** |
+| 68 XiguaXueliangFanbei | proven-order | 配置xlfbmoshi授予 _xigua_xueliangfanbei_，global gameStart/silent/charlotte→Normal,1,false；Native首次PhaseBegin替代gameStart。 **C授权后按JSON具体diff修tuple。** |
+| 69 Xunmeng | proven-order | 真实 xunmeng source damageBegin→Native DamageBefore；链伤/父事件过滤仍需功能核验。 当前tuple相符，补来源绑定即可。 |
+| 70 Zaibian | proven-order | 真实 zaibian player phaseUseBegin→Native PhaseBegin(Play)；锁定forced仍可参加同优先级选序。 当前tuple相符，补来源绑定即可。 |
+| 71 ZhuWanzhongJi | needs-runtime-translation | 实际赋值名 _xigua_zhuwanzhongji_，global dieBegin，charlotte/forced；给定扩展无这个键的译名，不能用 host别名 zhuwanzhongji 查译名。 Normal/0 已证明，selectability 保留 null；核固定上下文 lib.translate._xigua_zhuwanzhongji_；死亡begin/after合并功能差异单列。 |
+
+三条无来源冲突的明确tuple修正：SwdYuchanSwap `(Last,0,true)→(Normal,-99,false)`；Xiefang `(Normal,0,true)→(Normal,-99,false)`；XiguaXueliangFanbei `(Normal,0,true)→(Normal,1,false)`。只提议，由Parent授权Cwriter批量实现与测。
+三条来源冲突：MbWeitong Liuli `(Normal,1000,true)` / Core `(Normal,0,true)`，当前 `(First,10,true)`；Sanjian Liuli `-30` / Core `-25`，当前0；Nigong Liuli0 / Core-25，当前0。必须按已选包语义解决，不能新增sourcepathlabel生产meta。
+五条译名未闭合：_shengke、lexue1/lexue2、g_shencaojie、g_shenmiguo、_xigua_zhuwanzhongji_。JSON的order_selectable保留null；juxi/sxianjing/zhencha/husha的父译名回填与group授技已核。Xuanying_damage虽回填旋影译名，但两源parent group都不授予它，单列ambiguous。
+五条非trigger桥：Niepan/Shouyin/Chengxin/Shuiyun5为chooseToUse救援；Fengyin是addTempSkill过期状态。均给真实body与Nativecaller，不捏造默认trigger tuple。
+静态自检：36精确序列、所有source指纹、134文件freeze、当前metadata唯一、无source_order既有条目、空git index均通过；未运行产品/定向/全量/平台测试，未新增测试。
+功能缺口仍在37来源总范围：phaseBegin不能当任意阶段开始；死亡begin/after/end与gameDrawEnd合并、loseEnd≠discard、phaseUse≠turn、救援/状态过期桥、forceDie/out、indexed/hidden/filterStop都不因排序证据关闭。
+跳过：源码实施、build/tests、媒体/CI与前36扩审。风险：5译名未闭合、3两源冲突、5桥语义与Xuanying伤害分支授予待核；未来C差分与Parent独立review后才能更新已证明计数。

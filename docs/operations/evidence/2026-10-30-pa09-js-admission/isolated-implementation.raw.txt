@@ -1,0 +1,61 @@
+已在独立候选中修复 PA09 的 JS Promise 尾链无界；候选未接入 Main，独立 reviewer gate 待父会话执行。冻结时间为 2026-10-30 18:52:26 UTC。本轮只实现桌面 JS admission 和对应回归，**不表示 PA09 六条件闭合，也不把实际 WebView 的 `jsBounded` 改记为 true**。
+
+候选目录：[private worktree](/tmp/pa09-js-bound-4306bc00)。使用 `git worktree add --no-checkout --detach ... a1f7250815eee803d931301ab46207719cb9a15b` 后稀疏检出，Main 只发生合法 worktree 登记及私有 worktree 配套设置；没有写 Main 产品文件、compat 域、共享 node_modules、全局 git 配置，没有 stage/commit/push。私有三文件已 chmod 444；保留 worktree 供审查。
+
+- Base HEAD：`a1f7250815eee803d931301ab46207719cb9a15b`。
+- Base tree：`abb64b4d7aeabc3f1e2525887b88bca46b0e9133`。
+- 源码核验版本：规则 330、存档 105、Rule VM ABI 758、WS 6，均未改变。分别核对 `engine-native-content/src/content/standard.rs:163`、`engine-native-kernel/src/archive.rs:113`、`engine-api/src/version.rs:17`、`engine-protocol/src/lib.rs:17`。
+- 开始与结束磁盘可用约 92 GiB，均高于 3 GiB。
+- 已读 canonical [AGENTS.md](/Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md)、[NONAME_NEXT_AGENT_SPEC.md](/Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md)、[Ponytail SKILL.md](/Users/ruyimg/.claude/plugins/cache/ponytail/ponytail/4.8.4/skills/ponytail/SKILL.md)，并从冻结 HEAD 读取 PA09 ledger/ADR0784。沿父已提供的 CodeGraph 结果，实际读取 transport、完整 EngineClient、既有测试及调用入口；本 worker 没有可用 CodeGraph 扩展工具，因此补充核对使用源码和 rg。
+
+实际改动只有三文件：
+
+| 文件 | old Git blob SHA1 | frozen Git blob SHA1 | 物理行数 |
+|---|---|---|---:|
+| [desktopEngineTransport.ts](/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/desktopEngineTransport.ts:58) | `6932abe1f4a6a54efb30f68427cfa580f72a8e29` | `4ce3cf7abf83f454b6d953cfa99f775a8f6438d4` | 97 |
+| [pa09-desktop-transport.test.mjs](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:156) | `384b8a548f42a0782dcadbe29f0014aa5adacb65` | `4bc11d66d24ee01e25134bbaa26d460c89f99a0c` | 266 |
+| [nc04-worker-failure.test.mjs](/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/nc04-worker-failure.test.mjs:192) | `e994dd2047f1c8c04d2f95d7811494fad1120ee9` | `b8af23c6c05cf25fbd975c7d176cc2a8d6649d33` | 278 |
+
+生产源码净增加 12 行；总 diff 为 232 insertions / 16 deletions，包含新增六个测试用例及既有资源打开终止测试的八请求强化。完整文件 SHA256、依赖输入及冻结信息见 [freeze-manifest.json](/tmp/pa09-js-bound-evidence-4306bc00/freeze-manifest.json)。没有生成候选 Git tree 对象，也没有使用暂存来计算候选树。
+
+`DesktopEngineTransport.postMessage` 现在先检查固定容量 8，再增加 outstanding 和 Promise 尾链。这个容量包含资源 opening、active 和 queued；原生 host 现有 `sync_channel(8)` 是八个 queued 加一个可能的 active，本候选刻意采用更保守的 JS 总共八个。正常八请求的顺序和现有 API/协议保持一致，第九个新提交在新增 Promise/IPC 前同步抛出 `Desktop engine busy; request was not submitted（未提交）`，不走 after-submission 的未知结果回包。
+
+容量只在桌面 transport 中实现，没有导出配置、增加框架/依赖，或给 Worker/SAB/network 添加全局上限。Rust 的 8 目前是另一语言中的字面量，没有可直接复用的既有共享常量；候选使用本地私有固定常量。每个已接受操作在 `finally` 释放槽位，terminate 将 admission 清零并继续原先的资源 close；旧尾链逐项看 closed，未执行项不发 IPC。listener 抛错被记录且尾链恢复，因此不再永久阻断后续请求。已有 invoke/响应校验失败的“结果可能未知”文案和 close 失败日志保留，未加入重试或 native→WASM fallback。
+
+EngineClient 无需修改。已核对其 `request` 先登记 pending，`postMessage` 同步抛错时立即 delete pending、perfFailed 并按原共享等待规则 settle；测试用既有 fixture 读取并转译真实生产 EngineClient class，新增 perf sent/received 观测，不替换其它源码来制造绿色结果。已读 `pa09-native-host-smoke.mjs`、`pa09-desktop-webview.ts` 和 `pa09-document-reload.ts`：前两者按顺序 await，后者的 raw invoke 生命周期探针直接绕过 JS adapter。本候选不改这些调用入口或原生 document retirement。
+
+最终回归明确验证：
+
+- 首个请求已实际进入 resource-open 等待或首个 request invoke 等待之后，累计发起 128 次 post；实际 accepted 恰好 8、120 次同步抛错。每次超额拒绝时 tail 对象保持同一引用，证明拒绝不追加 Promise，而非只查看计数器。
+- 阻塞时只出现允许的 open/首个 request IPC；放行后 request IDs 恰好 1–8 且顺序一致，拒绝的 ID 无 IPC，随后新请求可入。
+- 真正 EngineClient 的 pending 在每次调用返回后均 ≤8；阻塞时 pending keys 恰好 2–9、120 个调用已失败、仅 8 个调用 Promise 未决。失败均明确未提交且无“未知”。perf 的 sent = failed + received，debug shared wait 不被超额拒绝提前 settle，放行后 pending 清零；无 Worker 创建或重试。
+- invoke 抛错、受控错误回包、错 ID、metadata normalization 失败和 listener 抛错之后，后续请求正常执行，全部八个槽位可重新使用。open 失败仍沿用既有缓存 resource Promise 的行为，所有已接受调用有失败回包、容量恢复，没有偷偷重试 open。
+- terminate 覆盖八请求 opening、active + queued，资源 close 一次，旧排队项不提交。EngineClient dispose 拒绝八个 pending 并清空；新连接独立 open，旧 late reply 和旧排队请求不污染新连接。这是 JS/客户端生命周期回归，不冒充真实新 document 导航验收。
+
+所有 Node/类型/行数命令均通过 [私有 guard](/tmp/pa09-js-bound-evidence-4306bc00/guard.py) → `/tmp/noname-run-serialized.py` 获取共享锁；guard 限定私有 cwd/base HEAD/三文件 diff、无 staged，并拒绝 autoformat、build、commit/push 等命令。使用真实既有 `ts-register.mjs`/`ts-hook.mjs` 和已有依赖；只读链接 Main 的 node_modules 与已有 native/legacy generated pkg。没有 Cargo/WASM/Swift 构建、新性能实验或 GUI/App/HID 操作。完整前端套件中的既有 WASM 测试使用已有产物，不能证明这些产物与本候选 Rust 源码重新编译等价；本批未改 Rust。
+
+| 命令（前端命令 cwd 为 private `apps/web-client`，行数命令为 private 根） | 结果 | 锁内秒 / 含锁等待墙秒 | 原始证据 |
+|---|---|---|---|
+| `node --import ./scripts/ts-register.mjs --test scripts/pa09-desktop-transport.test.mjs scripts/nc04-worker-failure.test.mjs`，最终测试 + base transport | **预期红：16 pass / 4 fail / 0 skip**，exit 1 | 0.3412 / 0.3684 | [red-final-active-burst.log](/tmp/pa09-js-bound-evidence-4306bc00/red-final-active-burst.log) |
+| 同命令，最终候选 transport | **20 pass / 0 fail / 0 skip** | 0.3375 / 0.3633 | [green-final-active-burst.log](/tmp/pa09-js-bound-evidence-4306bc00/green-final-active-burst.log) |
+| `node --import ./scripts/ts-register.mjs --test` | **173 pass / 0 fail / 0 skip** | 0.9335 / 0.9629 | [frontend-full-final-active-burst.log](/tmp/pa09-js-bound-evidence-4306bc00/frontend-full-final-active-burst.log) |
+| `node node_modules/vue-tsc/bin/vue-tsc.js --noEmit` | exit 0 | 1.0807 / 1.1058 | [typecheck.log](/tmp/pa09-js-bound-evidence-4306bc00/typecheck.log) |
+| `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | **2 pass**，exit 0 | 0.0682 / 0.0939 | [sourcecap-unit.log](/tmp/pa09-js-bound-evidence-4306bc00/sourcecap-unit.log) |
+| `python3 -B scripts/check-source-lines.py` | **8980 files ≤2000；Rust 非测试 ≤1000 effective**，exit 0 | 3.2101 / 3.2363 | [sourcecap-sparse-active-burst.log](/tmp/pa09-js-bound-evidence-4306bc00/sourcecap-sparse-active-burst.log) |
+| `git diff --check`；在 untouched base 三文件副本执行 `git apply --check <incremental.patch>` | 均 exit 0 | 非 heavy，只读 | [patch-apply-check.log](/tmp/pa09-js-bound-evidence-4306bc00/patch-apply-check.log) |
+
+行数日志文件保留了早先的 `sparse` 名称，但检查不是稀疏子集：为门禁从指定 HEAD 补齐私有目录中缺失的 7810 个维护文本源码文件（约 27 MB），冻结时枚举全部 8980 个 baseline 维护文件确认 missing=0；没有覆盖已检出的候选文件或改动基线。见 [materialization](/tmp/pa09-js-bound-evidence-4306bc00/sourcecap-materialization.json)。
+
+原失败与 warning 保留：最初 guard 将 `/tmp` 与 macOS 规范路径 `/private/tmp` 直接比较而停止，随后改为 resolve root；另一次命令在等待共享锁时被 20 秒工具 timeout 中止，未执行测试，均见 [setup-failure.txt](/tmp/pa09-js-bound-evidence-4306bc00/setup-failure.txt)。后续一次完整 red/green 复验的红阶段含锁等待墙时为 158.6147 秒、锁内仅 0.3305 秒，绿色阶段墙时 7.6501 秒、锁内 0.3308 秒，详见 [validation-results.json](/tmp/pa09-js-bound-evidence-4306bc00/validation-results.json) 和 [red-final.log](/tmp/pa09-js-bound-evidence-4306bc00/red-final.log)。最终主动阻塞后 burst 的准确复验另存 [validation-results-active-burst.json](/tmp/pa09-js-bound-evidence-4306bc00/validation-results-active-burst.json)。Node 26 的 `ExperimentalWarning: localStorage is not available because --localstorage-file was not provided` 原样保留，没有隐藏 warning 或把红阶段重记为通过。
+
+冻结交付：
+
+- [增量补丁](/tmp/pa09-js-bound-evidence-4306bc00/pa09-desktop-js-admission-bound.incremental.patch)，SHA256 `064f0576d3f752a563ef5b9bcf672617494ffea189ac14ab514370d16b9edf41`。
+- [三文件源快照](/tmp/pa09-js-bound-evidence-4306bc00/pa09-desktop-js-admission-bound.source.tar.gz)，SHA256 `5ceb93746f3a2ffd01ce8d7d1479a17837317b66218cc8884bf76565868622bf`。
+- [完整 SHA/版本/依赖 manifest](/tmp/pa09-js-bound-evidence-4306bc00/freeze-manifest.json)、[最终 status](/tmp/pa09-js-bound-evidence-4306bc00/final-status.txt)、[diffstat](/tmp/pa09-js-bound-evidence-4306bc00/final-diffstat.txt)。未暂存；三个 untracked 项仅为已说明的私有只读使用依赖链接。
+
+原 PA09 [受控 macOS 测量](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/ba44607a-3a48-49f5-89c3-9e74c9bb8d56/verification/pa09-controlled-macos-input-and-transport.md) 只作背景引用，未改写其数据为当前候选结果。mockInvoke 回归证明 JS admission/Promise/client pending 边界；它不能替代 Tauri bridge、current private App/WK burst、document retirement、真实输入/呈现或六条件验收。
+
+下一步由父会话安排独立 reviewer 核对冻结补丁及上述红绿证据，再决定接 Main 与后续 current private binary/WebView 验证；本 worker 未执行整合。
+
+未做：新 App/设备/性能测量、Rust/WASM/Swift 构建及独立 reviewer 验收。风险：8 为包含 active 的保守上限，超额会明确失败；真实 WebView 的 bounded 结果仍待下一批实测。

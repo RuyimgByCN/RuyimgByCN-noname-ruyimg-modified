@@ -1,0 +1,89 @@
+{
+  "qualification": "Bounded reports/source proof/parent parsing only; original raw wire and binaries remain private with identity SHA, no claim all raw products copied",
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/cb6cbfda-227f-469a-9228-de92b30a0171/implementation/adr0788-c331-phase4-authoritative-checkpoint.md",
+      "stored": "checkpoint.raw.txt",
+      "bytes": 8660,
+      "sha256": "8bd0da719196ab702bfb6b4f3269b5421e01b71375a2568beb0c3ff3932effaf"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/9f89265f-fcc5-42c7-9684-249a767c66b2/reviews/c331-phase4-freeze-and-ordering-gaps.task-1.md",
+      "stored": "review-1.raw.txt",
+      "bytes": 8818,
+      "sha256": "0a1e3c481207bfc5592517c00725048152ede5eddf81e5f3c3ea75620ed77e3b"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/9f89265f-fcc5-42c7-9684-249a767c66b2/reviews/c331-phase4-freeze-and-ordering-gaps.task-2.md",
+      "stored": "review-2.raw.txt",
+      "bytes": 8086,
+      "sha256": "e7d56a0e3e60a0d5b5bff5d6b8301c09407434a0fb2b5faccdd4684d03244fe4"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/9f89265f-fcc5-42c7-9684-249a767c66b2/reviews/c331-phase4-freeze-and-ordering-gaps.task-3.md",
+      "stored": "review-3.raw.txt",
+      "bytes": 7926,
+      "sha256": "a5bfbafac7d78dbb041efc67390825864df4ecf4cccbc0cfa7d8ab958e360aec"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/9f89265f-fcc5-42c7-9684-249a767c66b2/reviews/c331-phase4-freeze-and-ordering-gaps.task-4.md",
+      "stored": "review-4.raw.txt",
+      "bytes": 13279,
+      "sha256": "889dd09410abe12339621c67b821d9b4d3240e4cb8f907b9ca56754630246716"
+    },
+    {
+      "source": "/tmp/noname-parent-c331-phase4-wire-counts.py",
+      "stored": "parent-wire-counts.py",
+      "bytes": 2140,
+      "sha256": "5d49209e0e15ada12972bd7ff57cb402c50f81a98e483354d535cfa6ee3db9c6"
+    },
+    {
+      "source": "/tmp/noname-parent-c331-phase4-manual-oldreader.py",
+      "stored": "parent-manual-oldreader.py",
+      "bytes": 6746,
+      "sha256": "b2008308af47f84bb8163f391a7d9a3a7640c9a8b87310716402b6fa8aafa59c"
+    },
+    {
+      "source": "/tmp/noname-parent-c331-phase4-audit/wire-and-test-counts.json",
+      "stored": "parent-wire-counts.json",
+      "bytes": 32445,
+      "sha256": "a4cd941a9c90c6be265873f2ec4ff8a1e23b778452c40a490491718f97f6fb73"
+    },
+    {
+      "source": "/tmp/noname-parent-c331-phase4-audit/manual-timeout-oldreader.json",
+      "stored": "parent-manual-oldreader.json",
+      "bytes": 86173,
+      "sha256": "33c83b6be27894084151907a09314d07935d189c2c1724013e2a144dfe7130a0"
+    },
+    {
+      "source": "/tmp/c331-laneA-9f89265f/ordering.json",
+      "stored": "laneA-ordering.json",
+      "bytes": 526506,
+      "sha256": "2f69a62182a025b16ce7a2f7ca2cb236d1a3726be52762383b181b57fc2cac00"
+    },
+    {
+      "source": "/tmp/c331-laneB-9f89265f/ordering-evidence.json",
+      "stored": "laneB-ordering.json",
+      "bytes": 512483,
+      "sha256": "34554acbe472427bdf2de6ebdd4f4900b68ae766766c52ed80a9bd93ee2976d4"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-freeze4/source-freeze.json",
+      "stored": "source-freeze.json",
+      "bytes": 23338,
+      "sha256": "6f8eabd872feb5719e3bb76cfa7f813273b81a2cddefa8924fb4d626d6d3d20e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-results2.json",
+      "stored": "final-results2.json",
+      "bytes": 843,
+      "sha256": "28c1ae20cbedb343895314c58df22fea94ead18467814064454d1e34a572ebb2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/host-source-batch1.json",
+      "stored": "original-host-source-batch1.json",
+      "bytes": 54832,
+      "sha256": "cc9cdd0ea7940736f3970a51a4cc7710b5eedcf562e6ed09d464880d7451e644"
+    }
+  ]
+}

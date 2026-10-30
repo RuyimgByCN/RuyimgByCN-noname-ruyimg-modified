@@ -1,0 +1,70 @@
+{
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f82d0c66-cf1d-4f3c-b668-f13b0ec8dd23/implementation/ci-windows-compat-provenance-byte-checkout.md",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/implementation.raw.txt",
+      "bytes": 21836,
+      "sha256": "d8584f0cfe6e519365469ded05134b2deb33e2bb91f8db99caec2d065a3f69f7"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/cfa7cc73-0f5b-4557-a0e0-6e71281418d6/reviews/ci-windows-compat-provenance-byte-checkout.md",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/independent-review.raw.txt",
+      "bytes": 4331,
+      "sha256": "87543d3b6500528ba5381bf10ba9e4d3993eccc11274f63d419b62d57b058e8f"
+    },
+    {
+      "source": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/evidence-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/original-full-private-manifest.json",
+      "bytes": 102180,
+      "sha256": "643d115e146533861e02a362ec4e3da2ee27a9debb2bdb003c6fb5cfb9ab1a60"
+    },
+    {
+      "source": "/tmp/noname-ci-777-provenance-byte-checkout-h8CFic/selfcheck.py",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/selfcheck.py",
+      "bytes": 13901,
+      "sha256": "f35b2850886a145adf76326e7b998c70fa81bf79571b318aeed69d1255068b40"
+    },
+    {
+      "source": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/summary.json",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/summary.json",
+      "bytes": 31167,
+      "sha256": "c235b843f53d41b0e27eb2592cc8286b4ef73bae9d4024aeaa6d2350d04b9727"
+    },
+    {
+      "source": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/commands.json",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/commands.json",
+      "bytes": 44847,
+      "sha256": "72e523074b936389236123d1f80b12abc0fe39631b5444e739bc5a4117ca32e0"
+    },
+    {
+      "source": "/tmp/noname-ci-777-checkout-selfcheck-nisccqfo/candidate.patch",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/candidate.patch",
+      "bytes": 376,
+      "sha256": "8f81c68354401bee2807cf4cd80288c6d50cbf62d12a357a5a4f3b8474e8a4ff"
+    },
+    {
+      "source": "/tmp/noname-parent-windows-byte-audit.py",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/parent-independent-audit.py",
+      "bytes": 6847,
+      "sha256": "a37a560d25ef80dab421552d5e397ad3bfb8cebb28b8bccc8c112beaee008412"
+    },
+    {
+      "source": "/tmp/noname-parent-windows-byte-publication-audit.py",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/parent-publication-audit.py",
+      "bytes": 1945,
+      "sha256": "72ffd133eba88af546604f1ca333b7a8a80fc84c323b805fb56df09324f37c82"
+    },
+    {
+      "source": "/tmp/noname-parent-windows-byte-audit/independent-results.json",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/parent-independent-results.json",
+      "bytes": 114455,
+      "sha256": "350e7411da9445ac8fdeb8cfd31de8ca9bf7b1e1ddcbdfabfd4347591cbadc59"
+    },
+    {
+      "source": "/tmp/noname-parent-windows-byte-audit/publication-invariants.json",
+      "stored": "docs/operations/evidence/2026-10-30-windows-provenance-checkout/parent-publication-invariants.json",
+      "bytes": 1342,
+      "sha256": "4eb8d4f917f40707ef65c8fa54a319da27536251b64e7fc134457579efc94f25"
+    }
+  ]
+}

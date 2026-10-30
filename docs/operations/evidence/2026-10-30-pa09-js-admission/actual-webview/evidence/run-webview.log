@@ -1,0 +1,2 @@
+{"passed": true, "jsBounded": true, "assertions": 33, "binary_sha256": "0f572e1d9d1c6e42d3eeff025caee5efcbb41237da8bbeb73b83a75d4bde1813", "bundle_sha256": "a4b268e9716113bedd98eab63b50ddcdd67b52cd0f3dd988529f87e476161a57"}
+{"command": ["python3", "/private/tmp/pa09-webview-5b7ad3ab/harness/run-webview.py"], "exit": 0, "locked_seconds": 1.2282326669956092, "disk_free_bytes": 96500178944}

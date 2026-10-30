@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-30T19:13:11.685730+00:00",
+  "cwd": "/private/tmp/pa09-js-bound-4306bc00",
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "--release",
+    "-p",
+    "desktop-client",
+    "--features",
+    "tauri-shell,tauri/custom-protocol",
+    "--bin",
+    "noname-next-desktop",
+    "-j",
+    "2",
+    "--message-format=json-render-diagnostics"
+  ],
+  "env_overrides": {
+    "CARGO_TARGET_DIR": "/private/tmp/pa09-webview-5b7ad3ab/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "config_sha256": "037235b3f7aaaed55cae410761eaadb1351bddda1c802d6de69d4ebe2622be56",
+  "serialized_by": "/tmp/noname-run-serialized.py",
+  "disk_before_bytes": 97651965952,
+  "driver_pid": 58008,
+  "build_estimate": "5-10 minutes, under 3 GiB target; no shared target or WASM build",
+  "wrapper_pid": 58010
+}

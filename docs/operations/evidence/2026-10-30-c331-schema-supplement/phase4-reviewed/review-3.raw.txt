@@ -1,0 +1,67 @@
+C331 phase4 lane A：前36条只读取证（2026-10-31；以实际文件哈希为准）。
+
+范围严格为 `remaining[0:36]`：BossBaimang2 → MbQianlong，36个唯一variant；未审后36条，未扩审37来源/媒体/CI。先读 canonical AGENTS.md 与 NONAME_NEXT_AGENT_SPEC.md；未修改源码、Main、C私有writer、包、ABI、ADR、freeze或git index。
+
+[完整JSON（36条；实际body、文件/body SHA256、行号、父子注册、真实译名位置、caller、逐字段diff及最小建议）](/tmp/c331-laneA-9f89265f/ordering.json)；[只读提取脚本](/tmp/c331-laneA-9f89265f/audit.py)；[哈希核对脚本](/tmp/c331-laneA-9f89265f/finish.py)。
+完整JSON SHA256 `2f69a62182a025b16ce7a2f7ca2cb236d1a3726be52762383b181b57fc2cac00`；全部36条包含具体最小建议，未写任何生产meta。
+
+结果：22 `proven-order`（14条当前tuple有差异、8条已匹配），11 `needs-runtime-translation`，3 `ambiguous-source`，0 `missing-source`。这是来源排序证据状态；不宣称runtime已实现、功能done或全源等价；基准218/290、sourceRows234（16非current）保持原计数，不能自动加22。
+
+Core get.priority：有 `_priority` 属性即返回缓存；否则 `(priority真值?priority*100:0)+silent−25*equipSkill−50*cardSkill−75*ruleSkill`。Liuli addList：`(priority真值?priority*100:0)+silent−30*equipSkill−30*ruleSkill`，真实addList忽略 `_priority/cardSkill`，尽管finishSkill另外缓存Core式值。
+两线firstDo优先于lastDo；first/last队列不询问排序。normal队列译名资格查真实 `lib.translate[skill]` 且非silent；Core同优先级发现silent/无译名时先执行该项。forced/charlotte/direct/popup本身不改变优先级或译名资格。silent的forced/popup默认值来自finishSkill；subSkill安装自身对象，只补译名，不自动继承父priority/forced/timing；sourceSkill并非inherit。
+10条x转阶及g_jinlianzhu在所选完整译名表无精确key，JSON保留unknown/null并列出有/无实际lib.translate值的两种结果；未用get.translation返回的技能key假充翻译，也未把null变false。
+
+下表tuple为 `(Timing, effective priority, order_selectable)`，N=Normal、F=First、?=真实运行组合译名未证；按原remaining索引排列。
+
+|索引|variant|status|当前 → 来源期望 / 最小处理|
+|---:|---|---|---|
+|0|BossBaimang2|proven-order|(F,0,true) → (N,1,false)|
+|1|BossBaimang2x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|2|BossBaimang3|proven-order|(F,0,true) → (N,1,false)|
+|3|BossBaimang3x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|4|BossBaiyi|proven-order|(N,0,true) → (N,0,true)|
+|5|BossBaiyiThunder|proven-order|(N,0,true) → (N,0,true)|
+|6|BossBianshen3|proven-order|(F,0,true) → (N,1,false)|
+|7|BossBianshen3x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|8|BossBianshen4|proven-order|(F,0,true) → (N,1,false)|
+|9|BossBianshen4x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|10|BossChiyan2|proven-order|(F,0,true) → (N,1,false)|
+|11|BossChiyan2x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|12|BossChiyan3|proven-order|(F,0,true) → (N,1,false)|
+|13|BossChiyan3x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|14|BossChiyi|proven-order|(N,0,true) → (N,0,true)|
+|15|BossChiyiMark|proven-order|(N,0,true) → (N,0,true)|
+|16|BossHuanren|proven-order|(N,0,true) → (N,0,true)|
+|17|BossHuanrenDie|proven-order|(N,-10,true) → (N,-999,false)|
+|18|BossQingmu2|proven-order|(F,0,true) → (N,1,false)|
+|19|BossQingmu2x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|20|BossQingmu3|proven-order|(F,0,true) → (N,1,false)|
+|21|BossQingmu3x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|22|BossQingyi|proven-order|(N,0,true) → (N,0,true)|
+|23|BossXuanlin2|proven-order|(F,0,true) → (N,1,false)|
+|24|BossXuanlin2x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|25|BossXuanlin3|proven-order|(F,0,true) → (N,1,false)|
+|26|BossXuanlin3x|needs-runtime-translation|(N,-10,true) → (N,-1000,?)|
+|27|GujianYunvyuanshen|proven-order|(N,0,true) → (N,610,true)|
+|28|GwentBirinState|proven-order|(N,0,true) → (N,1,false)|
+|29|GwentCiguState|proven-order|(N,0,true) → (N,0,true)|
+|30|GwentFengyinState|ambiguous-source|(N,0,true) → 分支/生命周期见JSON；tempSkills先清理，无source触发tuple|
+|31|GwentKunenState|proven-order|(N,0,true) → (N,0,true)|
+|32|GwentQinpenState|proven-order|(N,0,true) → (N,1,false)|
+|33|JinlianzhuCancel|needs-runtime-translation|(N,0,true) → (N,0,?)|
+|34|Kunlunjing|ambiguous-source|(N,0,true) → 分支/生命周期见JSON；begin=(N,1000,true)，after=(N,1,false)，禁止全局一tuple覆盖|
+|35|MbQianlong|ambiguous-source|(F,6,true) → 分支/生命周期见JSON；Liuli初始600/增量0，Core初始/增量0，需父裁决所选来源及分支表达|
+
+BossBaiyi实际对应boss_baiyi.discard；祖安baiyi是phaseDrawBegin2/1100，已读实际body后排除同名误配。BossBaiyiThunder对应同父thunder；子译名由finishSkill回退boss_baiyi的白仪。BossQingyi排除SP轻逸qingyi，保留Boss青仪boss_qingyi。
+BossHuanren实际boss_newhuanren/gameStart；BossHuanrenDie实际boss_newhuanren2/global die + silent + forceDie，期望−1000+1=−999，不能沿旧注释认作dieAfter/−10。玉女元参实际yunvyuanshen_skill/priority6.1，期望610。
+Gwent浓雾/大雨对应clear子技，silent→(N,1,false)；昆恩伤害本体tuple匹配，但原count子技在global phaseEnd减次数，当前native在伤害时减次数，功能缺口保留。封印由祖魔手铐addTempSkill(fengyin,{player:phaseAfter})授予；fengyin本体无trigger，Core/Liuli均在收集触发前清理到期技能，不能伪造(N,0,true)来源meta。
+昆仑镜两线都拆kunlunjing1/2，分支tuple不同；潜龙Liuli根/数字子技与Core begin/add/die/custom After/getIndex不同。JSON逐来源列出冲突、当前合并caller及diff；这三项仅给具体方案，不替父或Cwriter擅选架构/来源。
+
+Native基准为父已核snapshot134；63处caller引用来自缺失文件的canonical Main回退，每处明确标记`canonical-Main-Rust330-future-C-diff`及SHA/行，不当作snapshot或Main已331。Main standard.rs:163实读仍为330；HEAD `777bf33969e5ecc04b63971adab26be32f12fd28`。
+已静态核对全部134个snapshot文件匹配冻结manifest；manifest SHA256 `6f8eabd872feb5719e3bb76cfa7f813273b81a2cddefa8924fb4d626d6d3d20e`，tar SHA256 `9866a12f604b8eba8af3c5da9304892e2abd12544efc1ecac56a365a4fe094c4`；未重写freeze。E SHA256 `525df5aa3d19ff3a784d6c8ce7bed0432420204f1c6959b4cc2d34cd15fe802e`，原候选的55次文件hash核对一致；实际来源body另有独立hash。
+命令：`python3 -B /tmp/c331-laneA-9f89265f/audit.py`、`python3 -B /tmp/c331-laneA-9f89265f/finish.py`通过静态取证/身份/哈希断言；`git -C noname-next diff --cached --name-only`为空，index前后SHA256 `2b4bee80bdba1ccecceee3a522fadd5722901f289cda98c96eb1c5ac04348b4d`相同。完整输出与134逐文件检查在JSON validation；未执行上游JS、build或tests。
+
+建议父审查后授权Cwriter批量修14条完整可证差异；10条x优先级可单列−1000证据，但其order_selectable及g_jinlianzhu继续等待真实运行组合译名证据；三条合并/生命周期项先裁决。来源path/label仅为取证定位，禁止硬编码成生产meta。
+phaseBegin/全回合时点、dieBegin/die/dieAfter合并事件、forceDie/out、indexed、hidden、filterStop及其他功能差异仍在全部37来源范围；本lane排序取证结束不关闭这些功能项。
+
+未做：源码实现、build/tests、运行上游JS、完整安装组合译名验证或全源等价验收。风险：将本报告proven-order误当已实现，或用单tuple覆盖合并分支，会掩盖排序与生命周期缺口；须经过父review gate后再实施。

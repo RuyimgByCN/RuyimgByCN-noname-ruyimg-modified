@@ -1,0 +1,26 @@
+{
+  "wall_seconds": 0.5558052499836776,
+  "server_pid": 62278,
+  "app_pid": 62280,
+  "app_exit": -15,
+  "owned_app_waited": true,
+  "server_closed": true,
+  "owned_state_archived_then_removed": [
+    {
+      "path": "/Users/ruyimg/Library/Application Support/org.noname.pa09.jsbound5b7ad3ab",
+      "archive": "/private/tmp/pa09-webview-5b7ad3ab/evidence/owned-state-0.tar.gz",
+      "sha256": "44784a883b73969a716ee4de5cc827b471d32a5d5b63fac1844ef272a0c580ef"
+    },
+    {
+      "path": "/Users/ruyimg/Library/WebKit/org.noname.pa09.jsbound5b7ad3ab",
+      "archive": "/private/tmp/pa09-webview-5b7ad3ab/evidence/owned-state-1.tar.gz",
+      "sha256": "6c1b356d91906d456ab4a36a04bf79f19bc57c6cb14a0f0754cf62d9a0be73cc"
+    },
+    {
+      "path": "/Users/ruyimg/Library/Caches/org.noname.pa09.jsbound5b7ad3ab",
+      "archive": "/private/tmp/pa09-webview-5b7ad3ab/evidence/owned-state-2.tar.gz",
+      "sha256": "232c2451dfc91b2078a3eb5616f8dc2458ba88c574180b0226f465d36542da79"
+    }
+  ],
+  "disk_free_bytes": 96500191232
+}

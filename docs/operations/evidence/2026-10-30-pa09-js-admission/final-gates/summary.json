@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "literal_result": "FINAL_GATE_RESULT=PASS",
+  "head": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "tree": "7f2d41e257dfc44072bd6a5ef68dad4cb6c70496",
+  "entry_utc": "2026-10-30T20:25:03.214632+00:00",
+  "exit_utc": "2026-10-30T20:30:47.071061+00:00",
+  "commands_executed": 4,
+  "commands_exit0": 4,
+  "source_invariance": true,
+  "no_staged_files": true,
+  "blocker": null,
+  "preflight": {
+    "expected_checks": 21,
+    "observed_success_lines": 21,
+    "observed_failure_lines": 0,
+    "child_logs": "Suppressed by unmodified preflight; no individual child stdout/stderr claimed.",
+    "unmodified_preflight_source_sha256": "5412c73f9b2e88fbd48918b5f24977a417e628099b9e6b59c743a4f6ccebae92"
+  },
+  "write_scope": "Only final-gates evidence and assigned report; no source/docs prose/config/index/staging/commit/push changes.",
+  "lease": "Main lease released after own evidence sealed.",
+  "limitations": [
+    "No new Rust/WASM/GUI/media/resource sync/builds beyond unmodified preflight.",
+    "Earlier frontend, typecheck, production bundle, LSP and WK evidence are inherited, not rerun.",
+    "New Windows CI remains outside this local final gate."
+  ]
+}

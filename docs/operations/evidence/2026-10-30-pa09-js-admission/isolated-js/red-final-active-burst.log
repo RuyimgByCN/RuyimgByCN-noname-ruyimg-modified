@@ -1,0 +1,374 @@
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (17.742167ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (12.271584ms)
+✔ 初始化错误有结果，后续可创建新 Worker (12.21025ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (10.036167ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (8.760125ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (9.404875ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (11.2485ms)
+✖ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (10.770917ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (8.887208ms)
+✔ desktop IPC preserves request order, ids, errors and continues on the same engine (3.040166ms)
+(node:20159) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dispose suppresses late IPC replies and never submits queued operations (0.532292ms)
+✔ mismatched IPC response is an explicit unknown-result error, without retry (0.147375ms)
+✔ Wasm is the default and an explicit persistent/URL fallback remains available (0.205625ms)
+✔ dispose during resource allocation closes it once and submits no request (0.554083ms)
+✔ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (21.922208ms)
+✔ IPC refuses malformed B metadata before delivering a view envelope (0.168917ms)
+✖ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (1.812709ms)
+✖ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (1.197584ms)
+✖ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (0.505416ms)
+✔ a rejected resource open drains accepted slots without submitting requests (0.616625ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 16
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.038041
+
+✖ failing tests:
+
+test at scripts/nc04-worker-failure.test.mjs:192:1
+✖ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (10.770917ms)
+  AssertionError [ERR_ASSERTION]: synchronous rejection must immediately delete pending
+      at TestContext.<anonymous> (file:///private/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/nc04-worker-failure.test.mjs:220:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts/pa09-desktop-transport.test.mjs:155:3
+✖ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (1.812709ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      1,
+      2,
+      3,
+      4,
+  ...
+      8,
+  +   9,
+  +   10,
+  +   11,
+  +   12,
+  +   13,
+  +   14,
+  +   15,
+  +   16,
+  +   17,
+  +   18,
+  +   19,
+  +   20,
+  +   21,
+  +   22,
+  +   23,
+  +   24,
+  +   25,
+  +   26,
+  +   27,
+  +   28,
+  +   29,
+  +   30,
+  +   31,
+  +   32,
+  +   33,
+  +   34,
+  +   35,
+  +   36,
+  +   37,
+  +   38,
+  +   39,
+  +   40,
+  +   41,
+  +   42,
+  +   43,
+  +   44,
+  +   45,
+  +   46,
+  +   47,
+  +   48,
+  +   49,
+  +   50,
+  +   51,
+  +   52,
+  +   53,
+  +   54,
+  +   55,
+  +   56,
+  +   57,
+  +   58,
+  +   59,
+  +   60,
+  +   61,
+  +   62,
+  +   63,
+  +   64,
+  +   65,
+  +   66,
+  +   67,
+  +   68,
+  +   69,
+  +   70,
+  +   71,
+  +   72,
+  +   73,
+  +   74,
+  +   75,
+  +   76,
+  +   77,
+  +   78,
+  +   79,
+  +   80,
+  +   81,
+  +   82,
+  +   83,
+  +   84,
+  +   85,
+  +   86,
+  +   87,
+  +   88,
+  +   89,
+  +   90,
+  +   91,
+  +   92,
+  +   93,
+  +   94,
+  +   95,
+  +   96,
+  +   97,
+  +   98,
+  +   99,
+  +   100,
+  +   101,
+  +   102,
+  +   103,
+  +   104,
+  +   105,
+  +   106,
+  +   107,
+  +   108,
+  +   109,
+  +   110,
+  +   111,
+  +   112,
+  +   113,
+  +   114,
+  +   115,
+  +   116,
+  +   117,
+  +   118,
+  +   119,
+  +   120,
+  +   121,
+  +   122,
+  +   123,
+  +   124,
+  +   125,
+  +   126,
+  +   127,
+  +   128
+    ]
+  
+      at TestContext.<anonymous> (file:///private/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:187:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+       1,  2,  3,   4,  5,  6,  7,  8,  9, 10, 11, 12,
+      13, 14, 15,  16, 17, 18, 19, 20, 21, 22, 23, 24,
+      25, 26, 27,  28, 29, 30, 31, 32, 33, 34, 35, 36,
+      37, 38, 39,  40, 41, 42, 43, 44, 45, 46, 47, 48,
+      49, 50, 51,  52, 53, 54, 55, 56, 57, 58, 59, 60,
+      61, 62, 63,  64, 65, 66, 67, 68, 69, 70, 71, 72,
+      73, 74, 75,  76, 77, 78, 79, 80, 81, 82, 83, 84,
+      85, 86, 87,  88, 89, 90, 91, 92, 93, 94, 95, 96,
+      97, 98, 99, 100,
+      ... 28 more items
+    ],
+    expected: [
+      1, 2, 3, 4,
+      5, 6, 7, 8
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/pa09-desktop-transport.test.mjs:155:3
+✖ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (1.197584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      1,
+      2,
+      3,
+      4,
+  ...
+      8,
+  +   9,
+  +   10,
+  +   11,
+  +   12,
+  +   13,
+  +   14,
+  +   15,
+  +   16,
+  +   17,
+  +   18,
+  +   19,
+  +   20,
+  +   21,
+  +   22,
+  +   23,
+  +   24,
+  +   25,
+  +   26,
+  +   27,
+  +   28,
+  +   29,
+  +   30,
+  +   31,
+  +   32,
+  +   33,
+  +   34,
+  +   35,
+  +   36,
+  +   37,
+  +   38,
+  +   39,
+  +   40,
+  +   41,
+  +   42,
+  +   43,
+  +   44,
+  +   45,
+  +   46,
+  +   47,
+  +   48,
+  +   49,
+  +   50,
+  +   51,
+  +   52,
+  +   53,
+  +   54,
+  +   55,
+  +   56,
+  +   57,
+  +   58,
+  +   59,
+  +   60,
+  +   61,
+  +   62,
+  +   63,
+  +   64,
+  +   65,
+  +   66,
+  +   67,
+  +   68,
+  +   69,
+  +   70,
+  +   71,
+  +   72,
+  +   73,
+  +   74,
+  +   75,
+  +   76,
+  +   77,
+  +   78,
+  +   79,
+  +   80,
+  +   81,
+  +   82,
+  +   83,
+  +   84,
+  +   85,
+  +   86,
+  +   87,
+  +   88,
+  +   89,
+  +   90,
+  +   91,
+  +   92,
+  +   93,
+  +   94,
+  +   95,
+  +   96,
+  +   97,
+  +   98,
+  +   99,
+  +   100,
+  +   101,
+  +   102,
+  +   103,
+  +   104,
+  +   105,
+  +   106,
+  +   107,
+  +   108,
+  +   109,
+  +   110,
+  +   111,
+  +   112,
+  +   113,
+  +   114,
+  +   115,
+  +   116,
+  +   117,
+  +   118,
+  +   119,
+  +   120,
+  +   121,
+  +   122,
+  +   123,
+  +   124,
+  +   125,
+  +   126,
+  +   127,
+  +   128
+    ]
+  
+      at TestContext.<anonymous> (file:///private/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:187:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+       1,  2,  3,   4,  5,  6,  7,  8,  9, 10, 11, 12,
+      13, 14, 15,  16, 17, 18, 19, 20, 21, 22, 23, 24,
+      25, 26, 27,  28, 29, 30, 31, 32, 33, 34, 35, 36,
+      37, 38, 39,  40, 41, 42, 43, 44, 45, 46, 47, 48,
+      49, 50, 51,  52, 53, 54, 55, 56, 57, 58, 59, 60,
+      61, 62, 63,  64, 65, 66, 67, 68, 69, 70, 71, 72,
+      73, 74, 75,  76, 77, 78, 79, 80, 81, 82, 83, 84,
+      85, 86, 87,  88, 89, 90, 91, 92, 93, 94, 95, 96,
+      97, 98, 99, 100,
+      ... 28 more items
+    ],
+    expected: [
+      1, 2, 3, 4,
+      5, 6, 7, 8
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/pa09-desktop-transport.test.mjs:199:1
+✖ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (0.505416ms)
+  Error: listener failed
+      at transport.onmessage (file:///private/tmp/pa09-js-bound-4306bc00/apps/web-client/scripts/pa09-desktop-transport.test.mjs:218:36)
+      at file:///private/tmp/pa09-js-bound-4306bc00/apps/web-client/src/engine/desktopEngineTransport.ts:71:33
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "--test", "scripts/pa09-desktop-transport.test.mjs", "scripts/nc04-worker-failure.test.mjs"], "exit": 1, "locked_seconds": 0.3411692499939818, "disk_free_bytes": 98883788800}
+{"wall_including_lock_seconds": 0.3684258330031298, "exit": 1}

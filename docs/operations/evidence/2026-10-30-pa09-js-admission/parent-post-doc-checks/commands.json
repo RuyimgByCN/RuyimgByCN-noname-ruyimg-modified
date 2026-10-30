@@ -1,0 +1,47 @@
+[
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.4550851660023909,
+    "stdout": "check-1.stdout.raw.txt",
+    "stderr": "check-1.stderr.raw.txt",
+    "stdout_sha256": "bff9d67b9c5eba7295027567a4971ad42d2d8cd5a7a74605412800eebca1fbe0",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 8.496222457994008,
+    "stdout": "check-2.stdout.raw.txt",
+    "stderr": "check-2.stderr.raw.txt",
+    "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+    "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b"
+  },
+  {
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.3743762499943841,
+    "stdout": "check-3.stdout.raw.txt",
+    "stderr": "check-3.stderr.raw.txt",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

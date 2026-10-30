@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-30T20:39:39.690375+00:00",
+  "base_head": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "scope": "Four implementation/test paths plus four navigation files and explicitly reviewed dated evidence roots; unrelated untracked remain untouched",
+  "functional_parent_result": "PASS:37artifacts,target20,frontend175,type/build",
+  "gate_parent_result": "PASS:18artifacts+index,4actualexit0,21checklines,18invariants",
+  "combined_review_sha256": "e4ff7fc607d14e75ef0ee43345d17bc7c36b4827ecfabb4b18c1499d1de8c79b",
+  "post_doc_checks": "3actualexit0;1918files/badlinks0;strict1065/0;trackedwhitespace0",
+  "source_contract": "330/archive105/ABI758/WS6;asset2;WASMdefault",
+  "existing_pre_push_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "staging_helper": {
+    "path": "/tmp/noname-parent-stage-pa09.py",
+    "sha256": "48612da503ccdb32c7db35c214448e71b3031a8807fc7293108cdf6c5e8eba0f"
+  },
+  "authorization": "Existing Decision18 accepted local slices; Decision25 later normal publication same exactrepo/branch only",
+  "whole_goal_complete": false
+}

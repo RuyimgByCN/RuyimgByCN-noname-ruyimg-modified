@@ -1,0 +1,10 @@
+{
+  "head": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "final_gate_independent_pass": true,
+  "combined_review_accepted": true,
+  "review_path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/82a63550-cb16-4e06-943f-5125e51e4167/reviews/pa09-js-and-checkout-main-combined-review.md",
+  "review_sha256": "e4ff7fc607d14e75ef0ee43345d17bc7c36b4827ecfabb4b18c1499d1de8c79b",
+  "scope": "PA09 JS source3 and exact one-path attributes repair; docs/evidence only otherwise; no wholeGoal/native default acceptance",
+  "source_contract": "330/105/758/WS6; WASM default",
+  "utc": "2026-10-30T20:36:51.146070+00:00"
+}

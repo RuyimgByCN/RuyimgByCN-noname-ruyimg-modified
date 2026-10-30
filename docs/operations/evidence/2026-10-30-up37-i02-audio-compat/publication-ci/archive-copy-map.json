@@ -1,0 +1,551 @@
+{
+  "primary_files_including_manifest": 87,
+  "files": [
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/checker-first-failure.txt",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/checker-first-failure.txt",
+      "bytes": 214,
+      "sha256": "e00946b11c025c6d55a9818a3bbc0c41c90c67eb158313dfa741876264cffd1e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/artifacts-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/artifacts-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/artifacts-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/artifacts-final.stdout",
+      "bytes": 1543,
+      "sha256": "280cb60541861e1c6fc21349af843a89a63742ece4d81bc00442982f95591a2a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/discovery-command.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/discovery-command.json",
+      "bytes": 380,
+      "sha256": "db0ce419c2f65dcfb7ad0e3e874ece5f84e57a8b0dbb66f0db26a18fbdb8251a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/discovery.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/discovery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/discovery.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/discovery.stdout",
+      "bytes": 14978,
+      "sha256": "3acdd047ea3453482979fe47f1d5a398eea27a36695728979756e8578f7bc46e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/driver.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/driver.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/driver.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454605-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454605-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454605-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454605-detail.stdout",
+      "bytes": 2477,
+      "sha256": "c5090aa31387e95e192bdfe7de0baf1263deb7cd447796a5c15de9c9e7a2ad63"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454605-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454605-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454605-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454605-raw-log.stdout.gz",
+      "bytes": 28982,
+      "sha256": "8d8635a841ca0fa7afa93fa0fbb785449031bf5525083bd704871815c806cf24"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454929-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454929-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454929-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454929-detail.stdout",
+      "bytes": 3761,
+      "sha256": "07f1bc31623f6510b7174706184f4eb4f78aa4fc0e13c5c5b24661a9a0d3c202"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454929-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454929-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454929-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454929-raw-log.stdout.gz",
+      "bytes": 52407,
+      "sha256": "734e15c45b30772a93d5e5c2e36496b54730d1b59f869b49371b8c6e6fbdf6d9"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454931-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454931-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454931-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454931-detail.stdout",
+      "bytes": 4382,
+      "sha256": "42b6a7e2595121a14578c2f9e0c018e7cc194b3a084d7e80fa31b8b5ec61eaa4"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454931-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454931-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454931-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454931-raw-log.stdout.gz",
+      "bytes": 354647,
+      "sha256": "6b8fc999d121a7757a8cc2d7af2748bb1a6e3ec8e03213545ad5aa1c9180feff"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454943-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454943-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454943-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454943-detail.stdout",
+      "bytes": 2462,
+      "sha256": "8c81df2021de48062dc88953ead68ba9cf8088e2e682adc6373e57c253b4a8f9"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454943-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454943-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454943-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454943-raw-log.stdout.gz",
+      "bytes": 59224,
+      "sha256": "9f6db3f1ec6b45982b241bde02f22dfe06ae481c4181731ad08e5c0cd91645ec"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454957-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454957-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454957-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454957-detail.stdout",
+      "bytes": 2460,
+      "sha256": "17f91075ac25579256643363c9eb529655b3512c07d6b2575cb1ac04d071367c"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454957-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454957-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265454957-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265454957-raw-log.stdout.gz",
+      "bytes": 57507,
+      "sha256": "c00aef46b32ced2d23c6056cbbcac8a8dbaebbd6cadf8c57cf9d3f339d8c18fc"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455005-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455005-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455005-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455005-detail.stdout",
+      "bytes": 2458,
+      "sha256": "c894dcd1f364614d445a73685179f8da4fe32c7d78785b269e90e120e6e05c51"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455005-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455005-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455005-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455005-raw-log.stdout.gz",
+      "bytes": 56352,
+      "sha256": "df2c3b5ac05c532119d6ec4f091b128de02e8db57f7f843b0aee4db2fb4cc14c"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455034-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455034-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455034-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455034-detail.stdout",
+      "bytes": 3759,
+      "sha256": "74b053043c10da2339013f399dc95d825db08a3a19a4ab8011406a9b3a8f7004"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455034-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455034-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455034-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455034-raw-log.stdout.gz",
+      "bytes": 34991,
+      "sha256": "8521f408cb1a0452d747a2a997eed6aa788b72a08b300fa97c2abb672e5a6d1e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455086-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455086-detail.stdout",
+      "bytes": 3763,
+      "sha256": "66f09f26a7b58e160f6aadf81eb347d0a6897edc6c86df9f7f256a6c1be3d129"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455086-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455086-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455086-raw-log.stdout.gz",
+      "bytes": 15494,
+      "sha256": "c92943e2e4d7525b620b9c73d944c84730f2aee83ecc7e0bcb23717cee6fde5e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455089-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455089-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455089-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455089-detail.stdout",
+      "bytes": 2479,
+      "sha256": "bbd91b8b88a13105d8b446409195ed909a94a6b6454d3c09d820de3b97dd3d0b"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455089-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455089-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455089-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455089-raw-log.stdout.gz",
+      "bytes": 29600,
+      "sha256": "94390fb8e2f8dbcc3e0c9c575dc76affd5aaf16d3e1bf098965fc1403b8fd58f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455295-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455295-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455295-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455295-detail.stdout",
+      "bytes": 4110,
+      "sha256": "6c549f3329657f5ca0f08e09cb125ca4ea2500915b392d7f082453e98c50c23f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455295-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455295-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-124265455295-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-124265455295-raw-log.stdout.gz",
+      "bytes": 99078,
+      "sha256": "8e069acf7258845c4865e559fdcc3604b99655ed35befe95aab8934bdd9d947a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/job-analyzer.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/job-analyzer.json",
+      "bytes": 129326,
+      "sha256": "6ecc157c74f3986b022294089a74ee95e01a0b7e76c853f8ec805fb158c04c56"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/jobs-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/jobs-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/jobs-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/jobs-final.stdout",
+      "bytes": 32148,
+      "sha256": "b7d14a9235346364c1628619ae15c6c7265d55fcd613540319780156ba6858dd"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/jobs-initial.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/jobs-initial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/jobs-initial.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/jobs-initial.stdout",
+      "bytes": 22803,
+      "sha256": "dc67800b6b56ea7992fbb29bef00ac773d0af6bb3d97b504c209511400a6bcbc"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/monitor.py",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/monitor.py",
+      "bytes": 802,
+      "sha256": "af90cf19f8182e10192909244fb590b9db37662b269e94b5bb7f9501bd9a3588"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/observation-state.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/observation-state.json",
+      "bytes": 138542,
+      "sha256": "5b9dfd8e076a339f37476d7b7b7910989332395bebe2d175f9743e45768ce1f2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/observe-ci.py",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/observe-ci.py",
+      "bytes": 9985,
+      "sha256": "747c958343b67ad4d806c018d3976e59a8047d04ae9bbb4200c66ccc46016b3f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/run-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/run-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/run-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/run-final.stdout",
+      "bytes": 14945,
+      "sha256": "92e243be7ccbf577b142e7f53bfd7eac5f82afe2d1397e4ee06823a568adcbcd"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/run-initial.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/run-initial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/run-initial.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/run-initial.stdout",
+      "bytes": 14942,
+      "sha256": "301bba809c831f154e46ba99cb5bedc704628ad4a7d9fba80f0e6c2944faf849"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/watch.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/watch.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/watch.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/watch.stdout",
+      "bytes": 241216,
+      "sha256": "27c28e40a0e6496c6ce3b2ec9ab4bd299565b412f0eed55d5121ad803bf77348"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/windows-desktop-early-commands.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/windows-desktop-early-commands.json",
+      "bytes": 650,
+      "sha256": "51ef2258d3ea66a31a108a62029b5fbc80f9a12e286be38a3b4e0f83785663c0"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/windows-desktop-early-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/windows-desktop-early-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/windows-desktop-early-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/windows-desktop-early-detail.stdout",
+      "bytes": 3763,
+      "sha256": "66f09f26a7b58e160f6aadf81eb347d0a6897edc6c86df9f7f256a6c1be3d129"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/windows-desktop-early-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/windows-desktop-early-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/ci-stage/windows-desktop-early-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/ci-stage/windows-desktop-early-log.stdout.gz",
+      "bytes": 15494,
+      "sha256": "c92943e2e4d7525b620b9c73d944c84730f2aee83ecc7e0bcb23717cee6fde5e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/branch-after.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/branch-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/branch-after.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/branch-after.stdout",
+      "bytes": 4633,
+      "sha256": "635774a66522911c928c35ce75179a56c8b1608bd16e242a06101aaeefa314ae"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/driver.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/driver.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/driver.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/lease-release.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/lease-release.json",
+      "bytes": 488,
+      "sha256": "88d655f777a86556ed9a362f646c32cb4798c60eef10338da858a7e3ec37051f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/main-after.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/main-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/main-after.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/main-after.stdout",
+      "bytes": 4380,
+      "sha256": "d0652394531d1ae59fe48e34900876eaad0d839bc4b96b6947721fbba32eb569"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/new-objects-audit.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/new-objects-audit.json",
+      "bytes": 67789,
+      "sha256": "6e4218029229b4dcb3adbb6bc257888f22e2dc671f3cdf4d070a7eb1c8d23cae"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/publication-driver.py",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/publication-driver.py",
+      "bytes": 9982,
+      "sha256": "a99b9bd7b733cb241d98d369abc4852655e8d2c7f6b7062e2c4c18db1dfb4f5a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/push-copy-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/push-copy-manifest.json",
+      "bytes": 2898,
+      "sha256": "9c04f3eb2ff7df5242b68ae8c698648536fe5c1f56c58573af82d939d434fae4"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/push.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/push.stderr",
+      "bytes": 16100,
+      "sha256": "e246b016ae2d1d547ef38f9d3951320d24168cc5e40c930dfae25f3f746ad758"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/push.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/push.stdout",
+      "bytes": 448,
+      "sha256": "111a61a01466e8b55ed7d0bdb86c04c39998abc141f5fa068d3c968ed6bbdd01"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/remote-before.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/remote-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/remote-before.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/remote-before.stdout",
+      "bytes": 128,
+      "sha256": "cf44e335a3f067650e7ce17ffe11b1eb60ccb9ea986f50e24de90b5cb9560d07"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/result.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/result.json",
+      "bytes": 46426,
+      "sha256": "e810aaffbaa7829f892358506259db390fe1fbb96057aa149983cafa13fa5af6"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/scope.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/scope.json",
+      "bytes": 5356,
+      "sha256": "d8cd48d5bda7bfe2e6e13dfca3d21757d0e0139bc39d87152536bfe105fedf60"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/push-stage/scoped-pre-push.raw.txt",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/push-stage/scoped-pre-push.raw.txt",
+      "bytes": 1581,
+      "sha256": "82cb5f2055bdb70987a448feb67f5be43a4845c108fdd74626025d516327f5d7"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/verified-publication-ci-summary.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/verified-publication-ci-summary.json",
+      "bytes": 298370,
+      "sha256": "076d1e3fc8699ff56b560aff364513fe63dc60a481a52152581a76875447f5fa"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/verify-publication-ci.py",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/verify-publication-ci.py",
+      "bytes": 13309,
+      "sha256": "e5d6bdaf7d00507598fa1ec6650556ce6dde370fb50067cba63125457d1afe93"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-777bf339-publication-y7r1p6p5/copy-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/copy-manifest.json",
+      "bytes": 20632,
+      "sha256": "280dc69d6f5f84608103368c2aef01e86bfc415956278611931d5272d90814c8"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/919f7e89-ec3d-4c40-af98-9cf38ad03f3d/publication/five-audio-compat-accepted-push-and-run.md",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/producer.raw.txt",
+      "bytes": 14384,
+      "sha256": "70619a0c71044564f42076af568e4705fd132107e5536794769a731caee670d4"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3c638079-2039-4d3e-b21c-341b45541b8a/reviews/compat-ci41114612841-independent-registration.md",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/independent-review.raw.txt",
+      "bytes": 6930,
+      "sha256": "c546b1cf15799d7b98ed1c4789fcf512cc9aaeb6e9eb98e5e4802e53a7a14325"
+    },
+    {
+      "source": "/tmp/noname-parent-ci41114612841-audit.py",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/parent-independent-parser.py",
+      "bytes": 4045,
+      "sha256": "68de50e5201f1b879b38fefca63e66811ae711065caee5a3246640ce6f9b2937"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41114612841-audit-135a_anz/independent-results.json",
+      "stored": "docs/operations/evidence/2026-10-30-up37-i02-audio-compat/publication-ci/parent-independent-results.json",
+      "bytes": 4398,
+      "sha256": "8e3debc3feaf53f4235f36e9e698132156c981ca039f28a1e1213f25a920ac77"
+    }
+  ]
+}

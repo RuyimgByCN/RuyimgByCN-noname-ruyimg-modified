@@ -1,0 +1,211 @@
+[
+  {
+    "gate": 1,
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_utc": "2026-10-30T20:25:07.245426+00:00",
+    "finished_utc": "2026-10-30T20:25:07.759197+00:00",
+    "exit": 0,
+    "wall_seconds": 0.5135470409877598,
+    "locked_seconds": 0.0614561669935938,
+    "queue_plus_wrapper_seconds": 0.45209087399416603,
+    "disk_free_entry_bytes": 97089900544,
+    "disk_free_exit_bytes": 97090404352,
+    "disk_free_minimum_sampled_bytes": 97089900544,
+    "disk_stop": false,
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.0614561669935938,
+      "disk_free_bytes": 97089880064
+    },
+    "stdout": "gate-1.stdout.log",
+    "stderr": "gate-1.stderr.log",
+    "stdout_sha256": "050edc637b7ed4ceecaefb68e9bc324654a404a1acf177b3f0d1074aae952d10",
+    "stderr_sha256": "d1276a2d9d79b9ed0a61446aa751886a8b573a45c52c4fe838159bc8be061837",
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1"
+    }
+  },
+  {
+    "gate": 2,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_utc": "2026-10-30T20:25:07.759651+00:00",
+    "finished_utc": "2026-10-30T20:25:15.375755+00:00",
+    "exit": 0,
+    "wall_seconds": 7.615731333004078,
+    "locked_seconds": 7.3470170839864295,
+    "queue_plus_wrapper_seconds": 0.2687142490176484,
+    "disk_free_entry_bytes": 97090400256,
+    "disk_free_exit_bytes": 97092071424,
+    "disk_free_minimum_sampled_bytes": 97090367488,
+    "disk_stop": false,
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.3470170839864295,
+      "disk_free_bytes": 97092071424
+    },
+    "stdout": "gate-2.stdout.log",
+    "stderr": "gate-2.stderr.log",
+    "stdout_sha256": "8c464b1adef1c58d510b5c1675d6d33ec119f8d7cc5f0371d1f62defa1964816",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1"
+    }
+  },
+  {
+    "gate": 3,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_utc": "2026-10-30T20:25:15.376174+00:00",
+    "finished_utc": "2026-10-30T20:25:22.953718+00:00",
+    "exit": 0,
+    "wall_seconds": 7.576364665990695,
+    "locked_seconds": 7.183404417010024,
+    "queue_plus_wrapper_seconds": 0.39296024898067117,
+    "disk_free_entry_bytes": 97092071424,
+    "disk_free_exit_bytes": 97094791168,
+    "disk_free_minimum_sampled_bytes": 97092071424,
+    "disk_stop": false,
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.183404417010024,
+      "disk_free_bytes": 97094807552
+    },
+    "stdout": "gate-3.stdout.log",
+    "stderr": "gate-3.stderr.log",
+    "stdout_sha256": "cdd40ff8684b58c7ab3ef2124fdd4f36d37dc0f01753117b1cb3af22b470fb38",
+    "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b",
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1"
+    }
+  },
+  {
+    "gate": 4,
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_utc": "2026-10-30T20:25:22.955912+00:00",
+    "finished_utc": "2026-10-30T20:30:47.063234+00:00",
+    "exit": 0,
+    "wall_seconds": 324.10600720799994,
+    "locked_seconds": 323.8021813329833,
+    "queue_plus_wrapper_seconds": 0.30382587501662783,
+    "disk_free_entry_bytes": 97094778880,
+    "disk_free_exit_bytes": 97097433088,
+    "disk_free_minimum_sampled_bytes": 97094692864,
+    "disk_stop": false,
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 323.8021813329833,
+      "disk_free_bytes": 97097371648
+    },
+    "stdout": "gate-4.stdout.log",
+    "stderr": "gate-4.stderr.log",
+    "stdout_sha256": "169e419b41bed162b1401ccd5e6c02aab80079e5140c2b396af41c959ab02ddd",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1"
+    }
+  }
+]

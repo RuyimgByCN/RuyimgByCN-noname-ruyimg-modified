@@ -1,0 +1,1075 @@
+{
+  "qualification": "parent fresh read-only parsing of retained bytes; no producer execution or product experiments",
+  "wire": {
+    "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-products2/server-ws-wire.jsonl",
+    "bytes": 11841224,
+    "sha256": "6c14fab323749b67a1ac6e37148ba032986fd6f6c192cbea023a5008ce857ca7",
+    "lines": 3875,
+    "errors": [],
+    "direction_type_counts": [
+      {
+        "direction": "client",
+        "type": "CreateRoom",
+        "count": 66
+      },
+      {
+        "direction": "client",
+        "type": "Hello",
+        "count": 270
+      },
+      {
+        "direction": "client",
+        "type": "JoinRoom",
+        "count": 160
+      },
+      {
+        "direction": "client",
+        "type": "RequestSnapshot",
+        "count": 192
+      },
+      {
+        "direction": "client",
+        "type": "Spectate",
+        "count": 58
+      },
+      {
+        "direction": "client",
+        "type": "SubmitCommand",
+        "count": 567
+      },
+      {
+        "direction": "server",
+        "type": "CommandOutcome",
+        "count": 726
+      },
+      {
+        "direction": "server",
+        "type": "Error",
+        "count": 127
+      },
+      {
+        "direction": "server",
+        "type": "JoinOk",
+        "count": 234
+      },
+      {
+        "direction": "server",
+        "type": "RoomCreated",
+        "count": 48
+      },
+      {
+        "direction": "server",
+        "type": "RoomRoster",
+        "count": 967
+      },
+      {
+        "direction": "server",
+        "type": "Snapshot",
+        "count": 190
+      },
+      {
+        "direction": "server",
+        "type": "Welcome",
+        "count": 270
+      }
+    ]
+  },
+  "tests": {
+    "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/affected-default-final2.log",
+    "bytes": 381010,
+    "sha256": "ca5811a6968cf59cf4f222e29507e9ea629acfed9c18c60def667f625377bbc4",
+    "rows": [
+      {
+        "line": 3493,
+        "status": "ok",
+        "passed": 540,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 540 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 3500,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3506,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3515,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3524,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3533,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3542,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 3555,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3564,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3576,
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3583,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.45s"
+      },
+      {
+        "line": 3592,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3609,
+        "status": "ok",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3620,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3633,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3640,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3647,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.48s"
+      },
+      {
+        "line": 3658,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 3665,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3672,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3679,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 19.26s"
+      },
+      {
+        "line": 3686,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3693,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.65s"
+      },
+      {
+        "line": 3700,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3706,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3724,
+        "status": "ok",
+        "passed": 12,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 3735,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s"
+      },
+      {
+        "line": 3742,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 1,
+        "raw": "test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 3759,
+        "status": "ok",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 3932,
+        "status": "ok",
+        "passed": 166,
+        "failed": 0,
+        "ignored": 1,
+        "raw": "test result: ok. 166 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.54s"
+      },
+      {
+        "line": 4112,
+        "status": "ok",
+        "passed": 174,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 174 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.46s"
+      },
+      {
+        "line": 4553,
+        "status": "ok",
+        "passed": 435,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 435 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.94s"
+      },
+      {
+        "line": 4602,
+        "status": "ok",
+        "passed": 43,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s"
+      },
+      {
+        "line": 4836,
+        "status": "ok",
+        "passed": 228,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 228 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.82s"
+      },
+      {
+        "line": 4966,
+        "status": "ok",
+        "passed": 74,
+        "failed": 0,
+        "ignored": 50,
+        "raw": "test result: ok. 74 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.52s"
+      },
+      {
+        "line": 5111,
+        "status": "ok",
+        "passed": 130,
+        "failed": 0,
+        "ignored": 9,
+        "raw": "test result: ok. 130 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+      },
+      {
+        "line": 5324,
+        "status": "ok",
+        "passed": 199,
+        "failed": 0,
+        "ignored": 8,
+        "raw": "test result: ok. 199 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+      },
+      {
+        "line": 5478,
+        "status": "ok",
+        "passed": 141,
+        "failed": 0,
+        "ignored": 7,
+        "raw": "test result: ok. 141 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 20.07s"
+      },
+      {
+        "line": 5618,
+        "status": "ok",
+        "passed": 134,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s"
+      },
+      {
+        "line": 5625,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 5635,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 5644,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 5677,
+        "status": "ok",
+        "passed": 27,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5684,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s"
+      },
+      {
+        "line": 5691,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s"
+      },
+      {
+        "line": 5699,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+      },
+      {
+        "line": 5706,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 5715,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 5724,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+      },
+      {
+        "line": 5737,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5746,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 5757,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5766,
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5773,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5781,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 5788,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5798,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5808,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s"
+      },
+      {
+        "line": 5818,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      },
+      {
+        "line": 5825,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5832,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 5842,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s"
+      },
+      {
+        "line": 5960,
+        "status": "ok",
+        "passed": 84,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 84 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 81.63s"
+      },
+      {
+        "line": 5967,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+      },
+      {
+        "line": 6024,
+        "status": "ok",
+        "passed": 51,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.80s"
+      },
+      {
+        "line": 6034,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 6051,
+        "status": "ok",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+      },
+      {
+        "line": 6059,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 6071,
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s"
+      },
+      {
+        "line": 6082,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.02s"
+      },
+      {
+        "line": 6093,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.98s"
+      },
+      {
+        "line": 6105,
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s"
+      },
+      {
+        "line": 6118,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s"
+      },
+      {
+        "line": 6131,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+      },
+      {
+        "line": 6138,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s"
+      },
+      {
+        "line": 6154,
+        "status": "ok",
+        "passed": 10,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s"
+      },
+      {
+        "line": 6164,
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s"
+      },
+      {
+        "line": 6177,
+        "status": "ok",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s"
+      },
+      {
+        "line": 6185,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s"
+      },
+      {
+        "line": 6192,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s"
+      },
+      {
+        "line": 6200,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s"
+      },
+      {
+        "line": 6207,
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+      },
+      {
+        "line": 6215,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+      },
+      {
+        "line": 6223,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s"
+      },
+      {
+        "line": 6276,
+        "status": "ok",
+        "passed": 47,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.49s"
+      },
+      {
+        "line": 6287,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 6339,
+        "status": "ok",
+        "passed": 46,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.25s"
+      },
+      {
+        "line": 6392,
+        "status": "ok",
+        "passed": 47,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.38s"
+      },
+      {
+        "line": 6457,
+        "status": "ok",
+        "passed": 59,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 59 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.32s"
+      },
+      {
+        "line": 6468,
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s"
+      },
+      {
+        "line": 6482,
+        "status": "ok",
+        "passed": 8,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+      },
+      {
+        "line": 6490,
+        "status": "ok",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+      },
+      {
+        "line": 6502,
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+      },
+      {
+        "line": 6518,
+        "status": "ok",
+        "passed": 10,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+      },
+      {
+        "line": 6524,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6530,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6536,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6542,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6548,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6554,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6560,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6566,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      },
+      {
+        "line": 6572,
+        "status": "ok",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "raw": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      }
+    ],
+    "totals": {
+      "passed": 2903,
+      "failed": 0,
+      "ignored": 76
+    },
+    "command": {
+      "label": "affected-default-final2",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--no-fail-fast",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "game-server",
+        "-p",
+        "desktop-client",
+        "-p",
+        "content-schema",
+        "-p",
+        "content-compiler",
+        "-p",
+        "content-runtime",
+        "-p",
+        "content-native-loader"
+      ],
+      "exit": 0,
+      "seconds": 260.5618350505829
+    },
+    "explicit_serial_test_arg": false,
+    "c331_results": [
+      {
+        "line": 4643,
+        "raw": "test c331_package_schema::immutable_schema3_character_module_alias_resolves_without_rewriting_package ... ok"
+      },
+      {
+        "line": 4646,
+        "raw": "test c331_package_schema::nondefault_schema3_is_rejected_even_after_rehash ... ok"
+      },
+      {
+        "line": 4647,
+        "raw": "test c331_package_schema::order_segment_binds_each_original_position_and_handler_even_with_duplicate_trigger_ids ... ok"
+      },
+      {
+        "line": 4648,
+        "raw": "test c331_package_schema::public_bridge_validates_whole_package ... ok"
+      },
+      {
+        "line": 4649,
+        "raw": "test c331_package_schema::malformed_order_json_is_rejected ... ok"
+      },
+      {
+        "line": 4650,
+        "raw": "test c331_package_schema::real_old_default_bytes_and_logic_hash_remain_identical ... ok"
+      },
+      {
+        "line": 4651,
+        "raw": "test c331_package_schema::schema_matrix_and_native_metadata_use_real_valid_dsl_module ... ok"
+      },
+      {
+        "line": 4661,
+        "raw": "test c331_package_schema::formal_install_keeps_old_lock_bytes_and_rejects_tampered_same_version_before_idempotency ... ok"
+      },
+      {
+        "line": 4841,
+        "raw": "test c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula ... ok"
+      },
+      {
+        "line": 4842,
+        "raw": "test c331_host_source_metadata::direct_source_profiles_keep_priority_silent_and_translated_choice_qualification ... ok"
+      },
+      {
+        "line": 4843,
+        "raw": "test c331_damage_windows::trigger_only_intrinsic_slot_cannot_hide_wrong_window ... ok"
+      },
+      {
+        "line": 4844,
+        "raw": "test c331_damage_windows::trigger_only_no_frame_sentinel_cannot_hide_wrong_window ... ok"
+      },
+      {
+        "line": 4846,
+        "raw": "test c331_host_source_metadata::actual_silent_first_handler_runs_before_the_normal_order_choice_and_restores ... ok"
+      },
+      {
+        "line": 4847,
+        "raw": "test c331_damage_windows::actual_active_catalog_module_keeps_its_intrinsic_resume_path ... ok"
+      },
+      {
+        "line": 4849,
+        "raw": "test c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses ... ok"
+      },
+      {
+        "line": 4913,
+        "raw": "test c331_fellow_windows::actual_fellow_inventory_and_grants_use_only_existing_normal_and_global_maps ... ok"
+      },
+      {
+        "line": 4922,
+        "raw": "test nc08_trigger_order_counterexample::c331_huanle_equipment_priority_waits_for_normal_owner_peers ... ok"
+      },
+      {
+        "line": 4924,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k1_requires_one_window_for_nonasking_optional_continuation ... ok"
+      },
+      {
+        "line": 4925,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k1_window_authority_cannot_hide_in_vm_following ... ok"
+      },
+      {
+        "line": 4926,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k2_swapped_seats_nested_grant_rejoins_the_frozen_ancestor ... ok"
+      },
+      {
+        "line": 4928,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k2_window_survives_real_set_turn_state_and_seat_change ... ok"
+      },
+      {
+        "line": 4929,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k4_active_damage_before_remains_explicitly_unsupported ... ok"
+      },
+      {
+        "line": 4931,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates ... ok"
+      },
+      {
+        "line": 4932,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_s2_grouped_handlers_keep_max_hp_hand_limit ... ok"
+      },
+      {
+        "line": 4933,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k3_real_pending_reveal_injects_same_and_future_owner_once ... ok"
+      },
+      {
+        "line": 4943,
+        "raw": "test nc08_trigger_order_counterexample::c331_review_k1_every_window_slice_restores_without_a_lifecycle_gap ... ok"
+      },
+      {
+        "line": 5901,
+        "raw": "test native_ws_e2e::c331::c331_manual_wins_then_real_old_deadline_passes_without_another_commit ... ok"
+      },
+      {
+        "line": 5939,
+        "raw": "test native_ws_e2e::c331::c331_real_actor_timeout_wins_and_manual_old_choice_cannot_repeat ... ok"
+      },
+      {
+        "line": 5940,
+        "raw": "test native_ws_e2e::c331::c331_ws_permissions_257_retry_and_pending_answered_restart ... ok"
+      },
+      {
+        "line": 5954,
+        "raw": "test native_ws_e2e::c331::c331_ws_process_exit_after_replace_and_uncertain_decision_two_restarts ... ok"
+      },
+      {
+        "line": 5957,
+        "raw": "test native_ws_e2e::c331::c331_ws_all_uncertain_decision_compensation_pairs_recover_exactly_once ... ok"
+      },
+      {
+        "line": 5958,
+        "raw": "test native_ws_e2e::c331::c331_ws_all_single_storage_faults_retry_exactly_once ... ok"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-30T19:39:35.693276+00:00",
+  "base": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "tree": "7f2d41e257dfc44072bd6a5ef68dad4cb6c70496",
+  "source3": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0"
+  },
+  "original_blobs": {
+    "apps/web-client/src/engine/desktopEngineTransport.ts": "6932abe1f4a6a54efb30f68427cfa580f72a8e29",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs": "384b8a548f42a0782dcadbe29f0014aa5adacb65",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": "e994dd2047f1c8c04d2f95d7811494fad1120ee9"
+  },
+  "patch_sha256": "064f0576d3f752a563ef5b9bcf672617494ffea189ac14ab514370d16b9edf41",
+  "source_and_actual_WK_review_OK_with_notes": true,
+  "main_checks_pending": true,
+  "versions": "330/105/758/WS6; defaultWASM"
+}

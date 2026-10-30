@@ -1,0 +1,2182 @@
+{
+  "manual": {
+    "identity": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-products2/server-manual-before-real-old-deadline.json",
+      "exists": true,
+      "bytes": 937718,
+      "sha256": "e5276d689c82d14d38f4b0c7aad91c0fa953de71645daf929a363fc05ad2bdff"
+    },
+    "records": {
+      "accepted": {
+        "state_keys": [
+          "command_receipts",
+          "frozen_packages",
+          "max_seats",
+          "members",
+          "next_dedup",
+          "next_token",
+          "pack_refs",
+          "snapshot_hex",
+          "started",
+          "timeout",
+          "wal"
+        ],
+        "archive": {
+          "bytes": 8460,
+          "sha256": "d5aaf16ff41351a8289f64aa75eb5ed368c6b11cde6598a39d8f4390fdc2dc58",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 11,
+          "payload_bytes": 8406,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "wal_base": {
+          "bytes": 8474,
+          "sha256": "38a699f002905e2b6cdc65c87a32cb6bc928a6f97886e5c65f739c8274603ab6",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "entries": [
+          {
+            "variant": "Answer",
+            "choice_id": 3,
+            "selection": [
+              {
+                "Skill": 471
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 11,
+            "expected_revision": 10,
+            "revision": 11,
+            "state_hash_hex": "f0117fb05aa468ced8fb946939b63511bd395ff8b62be6260d03be19252f9c38"
+          }
+        ],
+        "timeout": {
+          "choice_timeout_secs": 10,
+          "deadline": {
+            "choice_id": 4,
+            "deadline_unix_ms": 1793389524652,
+            "observer": 1
+          },
+          "managed_seats": []
+        },
+        "receipt_count": 1,
+        "wal_revision_contiguous": true
+      },
+      "after_old_deadline": {
+        "state_keys": [
+          "command_receipts",
+          "frozen_packages",
+          "max_seats",
+          "members",
+          "next_dedup",
+          "next_token",
+          "pack_refs",
+          "snapshot_hex",
+          "started",
+          "timeout",
+          "wal"
+        ],
+        "archive": {
+          "bytes": 8460,
+          "sha256": "d5aaf16ff41351a8289f64aa75eb5ed368c6b11cde6598a39d8f4390fdc2dc58",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 11,
+          "payload_bytes": 8406,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "wal_base": {
+          "bytes": 8474,
+          "sha256": "38a699f002905e2b6cdc65c87a32cb6bc928a6f97886e5c65f739c8274603ab6",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "entries": [
+          {
+            "variant": "Answer",
+            "choice_id": 3,
+            "selection": [
+              {
+                "Skill": 471
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 11,
+            "expected_revision": 10,
+            "revision": 11,
+            "state_hash_hex": "f0117fb05aa468ced8fb946939b63511bd395ff8b62be6260d03be19252f9c38"
+          }
+        ],
+        "timeout": {
+          "choice_timeout_secs": 10,
+          "deadline": {
+            "choice_id": 4,
+            "deadline_unix_ms": 1793389524652,
+            "observer": 1
+          },
+          "managed_seats": []
+        },
+        "receipt_count": 1,
+        "wal_revision_contiguous": true
+      },
+      "final": {
+        "state_keys": [
+          "command_receipts",
+          "frozen_packages",
+          "max_seats",
+          "members",
+          "next_dedup",
+          "next_token",
+          "pack_refs",
+          "snapshot_hex",
+          "started",
+          "timeout",
+          "wal"
+        ],
+        "archive": {
+          "bytes": 8460,
+          "sha256": "d5aaf16ff41351a8289f64aa75eb5ed368c6b11cde6598a39d8f4390fdc2dc58",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 11,
+          "payload_bytes": 8406,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "wal_base": {
+          "bytes": 8474,
+          "sha256": "38a699f002905e2b6cdc65c87a32cb6bc928a6f97886e5c65f739c8274603ab6",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "entries": [
+          {
+            "variant": "Answer",
+            "choice_id": 3,
+            "selection": [
+              {
+                "Skill": 471
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 11,
+            "expected_revision": 10,
+            "revision": 11,
+            "state_hash_hex": "f0117fb05aa468ced8fb946939b63511bd395ff8b62be6260d03be19252f9c38"
+          }
+        ],
+        "timeout": {
+          "choice_timeout_secs": 10,
+          "deadline": {
+            "choice_id": 4,
+            "deadline_unix_ms": 1793389524652,
+            "observer": 1
+          },
+          "managed_seats": []
+        },
+        "receipt_count": 1,
+        "wal_revision_contiguous": true
+      }
+    },
+    "state_comparisons": {
+      "after_old_deadline": [],
+      "final": []
+    },
+    "stored_room_comparisons": {
+      "after_old_deadline": [],
+      "final": []
+    },
+    "times": {
+      "old_deadline": 1793389517146,
+      "manual_committed_at": 1793389515033,
+      "observed_after_old_deadline": 1793389517747,
+      "new_choice_deadline": 1793389524652
+    }
+  },
+  "timer": {
+    "identity": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/final-products2/server-real-timeout.json",
+      "exists": true,
+      "bytes": 638598,
+      "sha256": "c8fb16e9c8f579db3fddbd5e4153b2a8af610ec9912b56adf9fdb34db1c6c112"
+    },
+    "records": {
+      "initial": {
+        "state_keys": [
+          "frozen_packages",
+          "max_seats",
+          "members",
+          "next_dedup",
+          "next_token",
+          "pack_refs",
+          "snapshot_hex",
+          "started",
+          "timeout",
+          "wal"
+        ],
+        "archive": {
+          "bytes": 8474,
+          "sha256": "43cc1afb05f62f43582d1c8e324812908c5f0595bb977673322852cbb83bcf98",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "wal_base": {
+          "bytes": 8474,
+          "sha256": "38a699f002905e2b6cdc65c87a32cb6bc928a6f97886e5c65f739c8274603ab6",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "entries": [],
+        "timeout": {
+          "choice_timeout_secs": 10,
+          "deadline": {
+            "choice_id": 3,
+            "deadline_unix_ms": 1793389528895,
+            "observer": 1
+          },
+          "managed_seats": []
+        },
+        "receipt_count": 0,
+        "wal_revision_contiguous": true
+      },
+      "expired": {
+        "state_keys": [
+          "frozen_packages",
+          "max_seats",
+          "members",
+          "next_dedup",
+          "next_token",
+          "pack_refs",
+          "snapshot_hex",
+          "started",
+          "timeout",
+          "wal"
+        ],
+        "archive": {
+          "bytes": 8404,
+          "sha256": "e515b5b5a3c4dc5a8cc67fb066156a6d454dfd6f66e36f51385097fb13bd0429",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 15,
+          "payload_bytes": 8350,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "wal_base": {
+          "bytes": 8474,
+          "sha256": "38a699f002905e2b6cdc65c87a32cb6bc928a6f97886e5c65f739c8274603ab6",
+          "magic": "NGSA",
+          "format": 105,
+          "rule_u64": "17832349773236677224",
+          "revision": 10,
+          "payload_bytes": 8420,
+          "container": "plain NGSA hex, not a compression format",
+          "checksum_scope": "length/header consistency verified; no fresh BLAKE3 or semantic Native decode"
+        },
+        "entries": [
+          {
+            "variant": "TimeoutAction",
+            "choice_id": 3,
+            "selection": [
+              {
+                "Skill": 215
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 11,
+            "expected_revision": 10,
+            "revision": 11,
+            "state_hash_hex": "0cb65115c6abc5b09ae6427af34d165899c369d677840dfb95c70160895a47fd"
+          },
+          {
+            "variant": "Answer",
+            "choice_id": 4,
+            "selection": [
+              {
+                "Skill": 216
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 12,
+            "expected_revision": 11,
+            "revision": 12,
+            "state_hash_hex": "1eecd0e28002ac225eb7c293f89bfeb1354093ca46687d40ce604b3c00f5403f"
+          },
+          {
+            "variant": "Answer",
+            "choice_id": 5,
+            "selection": [
+              {
+                "Skill": 217
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 13,
+            "expected_revision": 12,
+            "revision": 13,
+            "state_hash_hex": "3405034b8b225f9c1cac946ccecdfe5339f5bd102ccfd1d9caa36550d6faac9b"
+          },
+          {
+            "variant": "Answer",
+            "choice_id": 6,
+            "selection": [
+              {
+                "Skill": 218
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 14,
+            "expected_revision": 13,
+            "revision": 14,
+            "state_hash_hex": "c8e9794f27d084fa1f15cc0091c7d7e5bc6dbf95d03dbc548fcfbae74b26672a"
+          },
+          {
+            "variant": "Answer",
+            "choice_id": 7,
+            "selection": [
+              {
+                "Skill": 219
+              }
+            ],
+            "actor": 1,
+            "dedup_id": 15,
+            "expected_revision": 14,
+            "revision": 15,
+            "state_hash_hex": "adfbae7fdaf65fed4c4f6ff1d2b8912a88529b164ce35153b337bb8b13e62100"
+          }
+        ],
+        "timeout": {
+          "choice_timeout_secs": 10,
+          "deadline": {
+            "choice_id": 8,
+            "deadline_unix_ms": 1793389539999,
+            "observer": 1
+          },
+          "managed_seats": []
+        },
+        "receipt_count": 0,
+        "wal_revision_contiguous": true
+      }
+    },
+    "initial_snapshot_equals_initial_base": false,
+    "base_identical_initial_expired": true
+  },
+  "old_reader": {
+    "identity_final": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/identity-final.json",
+      "exists": true,
+      "bytes": 1950,
+      "sha256": "7d2a34ed4bbcb2f63558c7f4552deb95348e0681ea173127c45c8c77a5d82e26"
+    },
+    "source_record": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase3/server-ws-permissions-retry.json",
+      "exists": true,
+      "bytes": 606509,
+      "sha256": "32a3793432a16de5c2d3a0b96f11b510148a9a2e0b310bfcf3bc6938ed018319"
+    },
+    "embedded_byte_range_zero_based_halfopen": [
+      316877,
+      606507
+    ],
+    "embedded_bytes": 289630,
+    "embedded_sha256": "de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27",
+    "exact_input_copies": [
+      {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/negative/331.json",
+        "exists": true,
+        "bytes": 289630,
+        "sha256": "de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27"
+      },
+      {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-negative/rooms/331.json",
+        "exists": true,
+        "bytes": 289630,
+        "sha256": "de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27"
+      }
+    ],
+    "production_audit_identity": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/base-production-audit.json",
+      "exists": true,
+      "bytes": 80441,
+      "sha256": "8e6b8eee38baa95926c9eeb8106fc831d425fef2666a86e04bd531fe74985257"
+    },
+    "production_file_count": 276,
+    "production_files": [
+      {
+        "path": "apps/game-server/src/config.rs",
+        "bytes": 4781,
+        "sha256": "bc1617542c19f10daa962ee8d500b22e1867b8a8228805bbc8784dde2f1ca1f7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/lobby.rs",
+        "bytes": 30015,
+        "sha256": "ac9c875407e9e1847d7d4219c777157f7fcc51479adb701b9817373e2cdd45b9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/main.rs",
+        "bytes": 70718,
+        "sha256": "757e222fee8c0dd1c6a1cc3d90afb556a35030607acdea5ad618b2e98a965569",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native.rs",
+        "bytes": 22869,
+        "sha256": "364aac554308e4acbecdab5aca17fcdcdbaad17499f047cc2e8bf89dd3ca96e3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native/frozen.rs",
+        "bytes": 8641,
+        "sha256": "fa9f8fb6074509478bdb4b9f00302dc81fd65bbe2b6d74853cc4e5f71d1f5847",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_room_store.rs",
+        "bytes": 19806,
+        "sha256": "d2d2ad1c610fd113e8ed943da03d67c2714d15457ba71ec0cee57af628672b80",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_room_store/commit_tests.rs",
+        "bytes": 13987,
+        "sha256": "9607bc358cac28012830ad2f2f7b7b98ea395c550fa857b8a978b9e9fa80d7ee",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_room_store/journal.rs",
+        "bytes": 13732,
+        "sha256": "31c71d94ef7bb718bd0aa670829d6af74636021422efcc1a78a7ebd0e95fd586",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_room_store/lock.rs",
+        "bytes": 5583,
+        "sha256": "e43b5ce001154af0c4095e88595e4483154fbb5f51f6573b10c358540ddb9bed",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_room_store/tests.rs",
+        "bytes": 10614,
+        "sha256": "35b5b2769e6b3fa2cec7fe015a6800d92ebf40b919dea73e1e2acdf5cb23b00f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_view.rs",
+        "bytes": 15951,
+        "sha256": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e.rs",
+        "bytes": 33710,
+        "sha256": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/authority.rs",
+        "bytes": 2709,
+        "sha256": "2a0af2f59c2bbc558fcd16a16ec602be65cf58ab6645fe1c1d3af7839a74317f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/commit_crash.rs",
+        "bytes": 18444,
+        "sha256": "b61c5a21ce8d350f3097d439d0ff4a59ef2c8c7c859ad5568a2cd963bdcc9a14",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/double_failure.rs",
+        "bytes": 10884,
+        "sha256": "d39598b959a664a7f704d3729c792a3a8d105f7dd290d17fd6399ea462200620",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/durability.rs",
+        "bytes": 24940,
+        "sha256": "4507d1f44f5b7456e6203f7b2348587202853bd34f1a3645eec91839ebfac30c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/peer.rs",
+        "bytes": 6921,
+        "sha256": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/native_ws_e2e/referee.rs",
+        "bytes": 11610,
+        "sha256": "df433618fd856febd3c93c400801f7f61b500efe888ae0b7c20844009167d816",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/outbox.rs",
+        "bytes": 6897,
+        "sha256": "391a25d1840365b56a13e7a8dcabcc778d0473fd5dad549f381823a9a8b1030b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/persist.rs",
+        "bytes": 20297,
+        "sha256": "d93f529ac0a9d5a4826639e6c7234f54266a6b045e036a27394e7748680b445f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room.rs",
+        "bytes": 23894,
+        "sha256": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native.rs",
+        "bytes": 26235,
+        "sha256": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native/receipts.rs",
+        "bytes": 9814,
+        "sha256": "17b8965765c860855f1125c960b941beec0103b5a8af767d08b879f0a6a2081e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native/timeout.rs",
+        "bytes": 6298,
+        "sha256": "65e8230aa0b4f5fed51cff85172972a7c86d65233f451d1d6ca7021166645495",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native/wal.rs",
+        "bytes": 8953,
+        "sha256": "3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native_actor.rs",
+        "bytes": 37820,
+        "sha256": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native_actor/durability.rs",
+        "bytes": 3390,
+        "sha256": "326593a4426bd812f5524d8478766366cb97ba2d3b8197eb1368d72d56301f49",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/room_native_actor/timeout.rs",
+        "bytes": 6316,
+        "sha256": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "apps/game-server/src/session.rs",
+        "bytes": 4820,
+        "sha256": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/extension.rs",
+        "bytes": 11941,
+        "sha256": "b6817a89e057f3f816b57a870f6adcbda11e763f992df5b2a99099e403db464f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/hooks.rs",
+        "bytes": 2600,
+        "sha256": "45d562ac58640245cd1a574526fbc013c9f1264280b487208d1b8a0f5177a11d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host.rs",
+        "bytes": 11063,
+        "sha256": "f17654cefe0bf7b904299b77a10f63ae16063256fbf8124e27625d4d483eefdb",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation.rs",
+        "bytes": 14828,
+        "sha256": "5bd87ac57772b595653ea10a70ecfa6a0a04f5b96b29d33868689bb0a029488e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation/common.rs",
+        "bytes": 19666,
+        "sha256": "f3ce8155a46e8fe2553e16f2526689666d1eebec975267eec5cd0bc620ba4b72",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation/swd_artifacts.rs",
+        "bytes": 8980,
+        "sha256": "18e8c4fe73475f7687ffb49d36923e6da0aa7ff6f0f792f1c643f58b0dd6ef35",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation/swd_skills.rs",
+        "bytes": 39164,
+        "sha256": "86fa8bded7d67e6b63ad7b50539556b47b426d68b99c9fed75094e15d6c68442",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation/wudian.rs",
+        "bytes": 12240,
+        "sha256": "e833802ff51c384db1a41aecfc0d226f2f4c419c898dadf709ab04c2973a2e36",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/activation/xianjian.rs",
+        "bytes": 12063,
+        "sha256": "531b5f65a964c88cd8862f126a36513ce98b9bae96b42abebfed3e983c1bbb96",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/asks.rs",
+        "bytes": 26841,
+        "sha256": "b38f15f68e81b7398890976de08b944c4791439d4f37ff9c885e826a62e653db",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/asks_mtg.rs",
+        "bytes": 11346,
+        "sha256": "6c220d8ba833513d1376b91be96a293201167262e19ed4fc8f11c94b1ded6255",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/asks_wudian.rs",
+        "bytes": 18375,
+        "sha256": "55d1a344e59888899bee9cf5434335bbac9bb07dee02f511555e9ac15086853c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/boss.rs",
+        "bytes": 19086,
+        "sha256": "06f2c18169af9653b810639f85248010a2e3d9772e7f49b741200ff0fdc26f3c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/constants.rs",
+        "bytes": 1533,
+        "sha256": "38502339997e9329b458c78c43c94628b54b5abcb2abb6c07484ac8f783463a3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/factory.rs",
+        "bytes": 25798,
+        "sha256": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/filtering.rs",
+        "bytes": 51753,
+        "sha256": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+        "bytes": 46833,
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/filtering/swd.rs",
+        "bytes": 60408,
+        "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/filtering/xianjian.rs",
+        "bytes": 24193,
+        "sha256": "e2fb2ed77be221994c3b7f8b08b0727d09422631a727dd962db62591e8fb80e5",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/intrinsic.rs",
+        "bytes": 50403,
+        "sha256": "684de2830e12253ec1a66be955dcd49cb9953e32f122f68de1105ef4fd95d971",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step.rs",
+        "bytes": 79071,
+        "sha256": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/boss.rs",
+        "bytes": 8377,
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/gujian.rs",
+        "bytes": 26468,
+        "sha256": "e9378467d3a8f0e929b1a8cdae37e015ed9b66c8d2481b5033a37cb14335df78",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+        "bytes": 19322,
+        "sha256": "1170d56df68bcc656052c121d0ad909be6ca1bb6ee19c5811297977d15fe983e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/hearth.rs",
+        "bytes": 11814,
+        "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/jiguan.rs",
+        "bytes": 20563,
+        "sha256": "0189920b9df928e956e33c76f85a5995392a50fab2002b0857904befd79a244f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/mtg.rs",
+        "bytes": 45634,
+        "sha256": "e788c73c053480641c718afa1a25d6693753b5271cb0323e803ab67e2a2a413b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_card_use.rs",
+        "bytes": 20331,
+        "sha256": "2e90466f19f53052f3f0dcf27f34d53150353fc49b7580efdfae197ebd608b5e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "bytes": 21173,
+        "sha256": "c9109e3232d4e94eb7fde4f6bd79ab23b2a9622d52fa28f0f1e504415176f3fc",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "bytes": 39814,
+        "sha256": "0bc340bb8cbc2c1cf9732761f66ce131c5ea8460c626299b8e2a1324599591d7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "bytes": 20358,
+        "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+        "bytes": 14877,
+        "sha256": "15cf5b8a4230e748edb22d4cb097abb82d980656aed04f4a8a1680f0d87009a3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+        "bytes": 42943,
+        "sha256": "a1625aef35bb53bad30b8ba9476e0652ef08813d06ee6eb07fe413c2ce290b7e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "bytes": 14409,
+        "sha256": "07beb547681224e99c78df53a8abfa0404449e4393cf946bf89e8120f9807cb4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "bytes": 25263,
+        "sha256": "9725ae48dcdb058ae5067b6752a8735c67a1e18049a4594ec141cab5222f4415",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "bytes": 20263,
+        "sha256": "00a3a16438713117ff54f297ccda5758e3c02d747a69ad33f826dee45280f933",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "bytes": 12477,
+        "sha256": "a7bfcaaca5b48d851315bcf1163a6e504759efd0aa2bd3fc6a376eee7d08b392",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "bytes": 29162,
+        "sha256": "1eb495f03416b4cd8b8b41af55ef152dacc476bb4e8e99001ddc21b586704f9e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "bytes": 28503,
+        "sha256": "3bc713a157091a1f8245c3b3ff6ae8db6140ee8ccd9040ec5cad8e8d9f6594ec",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "bytes": 19818,
+        "sha256": "f4ffbbc3c199589faf77560d5c55f7b60bf568834c607f403170a65d01532020",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "bytes": 24476,
+        "sha256": "a784374ad07da1ca6c74b65c11e7be188614f9d7e783f83f6dc4f572e6bb369f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "bytes": 27732,
+        "sha256": "8cb00f9bf7fdd71087579fb912ea2a24a529e3efcfcc7dd778a7ad7a7247a9c7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "bytes": 34896,
+        "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "bytes": 22680,
+        "sha256": "1de0579ae26f3b43c08c4aa452b1be55790ff087d9e953132d752b0cd042ff1b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "bytes": 41188,
+        "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "bytes": 10622,
+        "sha256": "8ffdf2f2ceb731b1b155c7fec9119a36aab9be8ddb2b299e76f41d657279a25a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "bytes": 28314,
+        "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs",
+        "bytes": 24410,
+        "sha256": "a0fd510b1b6bb6ac62150dc0b63f7e4b95295894fd03e11abf2ae4e63e8de580",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+        "bytes": 18904,
+        "sha256": "6e350332f675f02918796b618476458c76398ffd90832639b63a6f98d59c7b5f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_lingjian_cards.rs",
+        "bytes": 9960,
+        "sha256": "c86a7db9c1ed82a1c9bd08a2f947c530f5e1ee86fefdbeb5d51c150216f6a2f1",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "bytes": 26429,
+        "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "bytes": 17074,
+        "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+        "bytes": 37057,
+        "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "bytes": 28043,
+        "sha256": "3e164758b1ecd887b386ec26bfe3eb2a27175546cbbd032138e5dbbfca41e975",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+        "bytes": 12086,
+        "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+        "bytes": 14555,
+        "sha256": "621c9fa75658da189a68d0329663b57b5f67f77e0e86acd6aa7adc71641752f4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+        "bytes": 17736,
+        "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_damage.rs",
+        "bytes": 5720,
+        "sha256": "aaaf18348716bfa3d294cfabb8ad3cad23cac59411ae6b8a3f60eb494e1c6994",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs",
+        "bytes": 37619,
+        "sha256": "cead25691f4e277870076172ac3fb0deb90e3b6bb7ba6be0964819f61462314a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+        "bytes": 13025,
+        "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+        "bytes": 16056,
+        "sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/wudian_targets.rs",
+        "bytes": 6086,
+        "sha256": "d8df7da0dae11082467bcd383fcc0d4b47c558b5d67bcb266f7e2c3b3e0ef5d8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_card_use.rs",
+        "bytes": 19947,
+        "sha256": "01fc55b0294cc372c06d2651d77c3f870a6525cff92c778027ba4090098006a5",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+        "bytes": 41295,
+        "sha256": "70a8c2bb6821e6931cc11c720587f68123869e88002dc6937f9a31dda72012f6",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+        "bytes": 22375,
+        "sha256": "061d91c6d3ffcd08cd9794464fb71393d8bb73c3155870113fd1256205ac5bda",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_recovery.rs",
+        "bytes": 22135,
+        "sha256": "d90342502b780949a4bd82491e8f648f47f3b5a6cadbf1b90b3362d8aee34461",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+        "bytes": 23677,
+        "sha256": "3a732164b8182c2ce4672e912ec249ec384f5716483272d2a62bb92883ce8dda",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+        "bytes": 16708,
+        "sha256": "4d2229c77af39c96e0de030d7ae67e0ca8c5562f9aadb40b299ffedfa2153986",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/yunchou.rs",
+        "bytes": 20688,
+        "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/support.rs",
+        "bytes": 38417,
+        "sha256": "b796a9589d85476dd601c90500b1df9a81ac6cad5ac15a56ae539473b94a231c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/mod.rs",
+        "bytes": 276,
+        "sha256": "397303bda9c96f182e28138518860c55741f0fc0f18cd12035a1f7412b03f104",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/names.rs",
+        "bytes": 3114,
+        "sha256": "cbaa9e1ab9702ade251b04939762367814317b09e5c2dd86bdf9ee14e9c89f3a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/pile.rs",
+        "bytes": 13646,
+        "sha256": "549739165cb7de99b283bb5e2f2677009cfdc572f63eb6dd957f13147a8812ff",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard.rs",
+        "bytes": 27913,
+        "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/boss_skills.rs",
+        "bytes": 51006,
+        "sha256": "bf69acf66122d9323dba8ccb29e0bea7a12af2a6552848187daa6451b6590f84",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/cards.rs",
+        "bytes": 9364,
+        "sha256": "b93816573c9b0c0edd752e5a0363a2f1dc76288a8199af3bf0c76401676b9a73",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills.rs",
+        "bytes": 3108,
+        "sha256": "ab1c65b2ff45793ef8908db28a40841e8480668315131c25f867cf4a1942d3b3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/bi_yue.rs",
+        "bytes": 1001,
+        "sha256": "7bd96409661a06006e06b2e11d03402f0327a205d1c61cbec9c641489f4d51fc",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/bingfeng.rs",
+        "bytes": 1890,
+        "sha256": "ed4605efc5ddad14c406e9d8850deeae83c4721be22f3b152d0cafedcd9b605b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/buchun.rs",
+        "bytes": 6501,
+        "sha256": "7df34c85fd495f053a77cc81fc962974df18db64b5ee1c33c8b0f55a2d6a008a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/fan_jian.rs",
+        "bytes": 7014,
+        "sha256": "7d2fb426948bc7498c6d9256c43d7f80a7aea5dc852d5742ab2586511e7c06d7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/fan_kui.rs",
+        "bytes": 2655,
+        "sha256": "dcadfcc69d861b47aad5e6c4beea56008d121b872150bc00c95d906b7dd25771",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/futai.rs",
+        "bytes": 1293,
+        "sha256": "31495fbe2fe057db5f2ca5c5d73083e3d6b271a9d73879f2acd5531eeb16a4f6",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/gang_lie.rs",
+        "bytes": 1977,
+        "sha256": "6de77721ae47298608c6cfd3885e2456620fcc49b3988dab2cafb33dd0f77137",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/guan_xing.rs",
+        "bytes": 3859,
+        "sha256": "5bb52c2368c0aeb377bdb2d72b3d334e35d25a68d4da8258be217d8df4031cd8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/heisheng.rs",
+        "bytes": 1567,
+        "sha256": "76c12ca54c959f000b2274cf0a7b0b76f303ea39283ddbf48da5ef0ea22a1771",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/huoxing.rs",
+        "bytes": 1800,
+        "sha256": "193500ff61c6de52a0cd6bb3b7a492926b46803c99a9e5c3ff63567ce9a72695",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ji_ji.rs",
+        "bytes": 5827,
+        "sha256": "48ff1a5f25a94488d0f53279993003ca8ab09607f1cc88c94a136d273e3fcbd3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ji_jie.rs",
+        "bytes": 3554,
+        "sha256": "b669dc4b4b34d0e4b9d721c8ba86dc3dc1e9e250a15e53c5bece15fe45f68391",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ji_yuan.rs",
+        "bytes": 1292,
+        "sha256": "d9d3521ffde36ac4911124c5662af5e0b821f0b5d7281889e5acaea6c0364d64",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ji_zhi.rs",
+        "bytes": 1324,
+        "sha256": "34bd732875d8002f19b17dde220087572f707c6fa0dfc81d193a23c5a7723adc",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/jian_xiong.rs",
+        "bytes": 2046,
+        "sha256": "22396142e296a33cb3871f279331bd913334766b169009186d50fcc08c5403f5",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/jie_yin.rs",
+        "bytes": 5434,
+        "sha256": "beac3d9bd07d750ca6a7e5ba7f694d681d127cb5ff7276d5c180602022e386cd",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/jijiang.rs",
+        "bytes": 12308,
+        "sha256": "d432417c57742bfc3bef2266a9f12f6fc2d54b92efed250e311167b48005af92",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/jushou.rs",
+        "bytes": 1573,
+        "sha256": "d8a98c2dbae62aaaee86a9d1b10976ab4cbfe83fb63dd42d748df7af11335639",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ku_rou.rs",
+        "bytes": 2396,
+        "sha256": "2a3d06850778ba4d5253c51c95678e23c5dd471a14c98912711c4d33fc8d5f4e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/kuang_fu.rs",
+        "bytes": 2526,
+        "sha256": "edd408eded415cdfa0e827347dd2006627673c3a5e97ff80a6ed8ade29715397",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/leizhu.rs",
+        "bytes": 2081,
+        "sha256": "0889be02000459e85310f629f803b6a201e86ef49e7cbb5b53affcb05c03ba3e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/li_jian.rs",
+        "bytes": 6449,
+        "sha256": "3d8b3fc73d6ea37c4f0582d26856725d1588c8fdcd78f4d747ea3d61ad95a82a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/lian_ying.rs",
+        "bytes": 1757,
+        "sha256": "1e1a7d2f4dd32ceb926cbb30460f2ea9b52076e4a99f24cca7b2c3b1357c996a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/lingbo.rs",
+        "bytes": 1485,
+        "sha256": "fff2f602c158a44fcf6f1311caddf0d408b87d81f6d7aabfbb97c3232bdb953f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/luan_chang.rs",
+        "bytes": 1625,
+        "sha256": "15c30ef2dc70f359ed333a3cb97574738011aa91aac51fe6e1ced03585e07291",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/luo_shen.rs",
+        "bytes": 1770,
+        "sha256": "172f2cd6ee9a58699082e6e8df709c23dea46dc6e245e8cd4b97f69f2b608d03",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/luo_yi.rs",
+        "bytes": 1772,
+        "sha256": "73c242b28cc71395c691ed0de888049707bd5ef5255cf59079caee908d20160a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/noop.rs",
+        "bytes": 677,
+        "sha256": "9be9ab733210294cc45a08f26602096d41314889de156514521996829c16f2bd",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/pingdeng.rs",
+        "bytes": 2470,
+        "sha256": "852d5898219afe8309fe7d4c6397ee9e16daed05622e1207835c2ebb8160ae1b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/qing_nang.rs",
+        "bytes": 5201,
+        "sha256": "76bcd8f71dc5a131689cbd3eeffc22aca88fa30848b2073bfff7e57426ab3bc1",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/qizuo.rs",
+        "bytes": 3952,
+        "sha256": "5197fef1ae6f2ecfae801425019bc77c84110c351597d883a04dc4fff4d8bf2d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/renao.rs",
+        "bytes": 1935,
+        "sha256": "948a0273a6d6bdce64a6560513e8b3f43090b7283af0ffc92e635331a446c750",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/rende.rs",
+        "bytes": 5622,
+        "sha256": "074fdeb0eaff9742f20f8945396c0c5fa845eafcb7a9a43723e1f52dbe660e85",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/san_cai.rs",
+        "bytes": 4381,
+        "sha256": "13fd252e0537e9bb2f6199dd5f73ff7fa4844007a0e3170b2d48f59dc7d2ed0d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shed_u.rs",
+        "bytes": 2865,
+        "sha256": "c5810e29610676716cc042733bba38c3f9d7050031a57fd58ad21ba154efb5c7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shen_zhi.rs",
+        "bytes": 1643,
+        "sha256": "ee265f81f25721aa5c6d76682af2ca64b480c9a32f5f482dadcc157c8adecf1e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shou_yi.rs",
+        "bytes": 1274,
+        "sha256": "9b0f02ff3d4fbba5f64d92aabf9dc2168a560fe77654b59b1ba0db3e676741f7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shu_shen.rs",
+        "bytes": 3170,
+        "sha256": "03345c5cf068fe36c425f8382a5f5931360601785252ce854a8902d9ae8b3d1a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/su_qing.rs",
+        "bytes": 1477,
+        "sha256": "1b456ce04194a234b03558b5c22cb8b7b9748f5106b2387920f2a0e83e50f9a4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/sui_dun.rs",
+        "bytes": 954,
+        "sha256": "a373a060ce9a9919c905b03f9bc7a72c87c739d5cbf47c0adecbe50bf2f0428a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/tashui.rs",
+        "bytes": 2139,
+        "sha256": "f29db29dacc6832f52ebb68034d1858a16b6c3fe982c3aaf928da44affedb90c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/tong_ji.rs",
+        "bytes": 5366,
+        "sha256": "ee42266a8d41bcddf8063b1eca3e3cebf0312515f67477c6a1524de656d49e14",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/tu_xi.rs",
+        "bytes": 4556,
+        "sha256": "e7eb93d573776024048149e49d68f7618c16c7f117c049950e114f0e89d9e4d0",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/wang_xi.rs",
+        "bytes": 2048,
+        "sha256": "ba5b8394c2e10a3197bd6e131b1ea9bf6fc955fba32ebae84bde20090d870973",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/wang_zun.rs",
+        "bytes": 2274,
+        "sha256": "3caa63b43065bfdfa482b9a76d82f4a6a9e5229abc28753b82bfbb4fbeb826ca",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/wanghun.rs",
+        "bytes": 2794,
+        "sha256": "e18c068357653c1f5573d410e42ecefbf58c9d3d25a81cb1e38498636954bf50",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/wangxiang.rs",
+        "bytes": 1670,
+        "sha256": "7aaeb8166a9dbebb0792d5d317fddc5c549e2866fc40452eff350c270cb47366",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xiang_de.rs",
+        "bytes": 1476,
+        "sha256": "e226fac3ee8c64adcab182248aea512841852feee3374c6e9f7c0c52c8d5cd5f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xiao_guo.rs",
+        "bytes": 4277,
+        "sha256": "a925d6a9ebe25f4a2411c1b2f3d51c83ec535126c1aba68c834292e10c8edf4d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xiao_ji.rs",
+        "bytes": 1034,
+        "sha256": "7f3b0db3cb282609f17380575f98dc0e9d05534a99a056a48561e06874367d48",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xiaoxiong.rs",
+        "bytes": 2689,
+        "sha256": "81c2a1d49983abc395932ffd465714ce338c1441b4f86eef2b36e6a03c384b41",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xingxia.rs",
+        "bytes": 7645,
+        "sha256": "2856d26401dc746d3f687f96b9e8a081c30bfe14aa5f940ee4fb815171218590",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xun_xun.rs",
+        "bytes": 4173,
+        "sha256": "2d8dc2a9cd8aa5a81c72e57aaefb59bb98e1bc1909a73dd3951269b01b65000c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/yao_wu.rs",
+        "bytes": 3634,
+        "sha256": "2f9643a0ff0dd72785d0ad1ca33272998176dd33f763afb451f36e1b608ef235",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/yi_shang.rs",
+        "bytes": 2406,
+        "sha256": "fbbf9f8e09a846206b054a9a031d9251969bfe1b56662e4a16544ee0f14f166a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/ying_zi.rs",
+        "bytes": 1014,
+        "sha256": "578a27f2baa76c0cf4fbc53ac2936f63c8e8260e5ea6577677e47d4b7e097148",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhangba.rs",
+        "bytes": 6305,
+        "sha256": "fbf3c4c62ed028641f62d3926b46a7ba185a7324d1d547fcbe3f809aa5a77a20",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhao_huo.rs",
+        "bytes": 1426,
+        "sha256": "d1d4cbc874a8a09a32299064903aac7e67b0e5541c1e1bc219bd62d75cc784bb",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhi_heng.rs",
+        "bytes": 3291,
+        "sha256": "6b01fe7a61eeb17fb0b2db6d1317f9325a6b45527dffdf6938e38842c07b2e4f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhuxin.rs",
+        "bytes": 2270,
+        "sha256": "13b066ad414af596cc0e9bf2a5f2137e75bc4ab3f9e3e9fc073ed7b472fccced",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zj_leiji.rs",
+        "bytes": 2478,
+        "sha256": "7f930c70aad374868add89633c970f78b66d0009d57ebe3a920951051f41f971",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/standard_skills.rs",
+        "bytes": 21289,
+        "sha256": "e2b190f7b9762628dc4baee127ba9116cbceaea6f1564368ec7e07b392dd1f0e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/vm_effects.rs",
+        "bytes": 6131,
+        "sha256": "75227374fd7d4a0a861824355f38c428d7fa4ea62b984615b5501715d51e3a21",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/vm_effects/danshou.rs",
+        "bytes": 5784,
+        "sha256": "764cd72f4127dec44bd5facfa16aca14283b6e105aa55d688cd4083982771c55",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/vm_effects/fenghe.rs",
+        "bytes": 4938,
+        "sha256": "46e735fb935e735f9abd90c359b8def60484dca7dce36c05e22771844194d41a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+        "bytes": 3062,
+        "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-content/src/lib.rs",
+        "bytes": 328,
+        "sha256": "ac525ae0db8f4ced210e18062ac22bd7295f8018635bdf64d68f677a8a974047",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive.rs",
+        "bytes": 14538,
+        "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/auxiliary.rs",
+        "bytes": 5153,
+        "sha256": "fa93561ae184816df76021b47a9adfb0d1c64eeba0430a1b0546870325eeaa2b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/card_codes.rs",
+        "bytes": 10107,
+        "sha256": "af3b033693b873934c889e91287e78f8edcc236b5732b6a53929b3c061f1b214",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/events.rs",
+        "bytes": 13270,
+        "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/io.rs",
+        "bytes": 3606,
+        "sha256": "2b861a6cc38d9c7adfdbb830c976a3f3c4bc2745fde1b6b28c14477770b1e055",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/machine_decode.rs",
+        "bytes": 31879,
+        "sha256": "d23d0b4295f089bd5ceea637dabeaf60b1a64bf18f03ca7b06bbe26a7e451edf",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "bytes": 27570,
+        "sha256": "63a0dab319a93cf0de518005d6f2f497437dd7278cfbcc2c029d82008042d987",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+        "bytes": 9664,
+        "sha256": "51ad02256a57e6c0a0461a5a41da85db0f7d3982252416255be1481b0d998ee2",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/state_decode.rs",
+        "bytes": 19402,
+        "sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/state_encode.rs",
+        "bytes": 17626,
+        "sha256": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/archive/values.rs",
+        "bytes": 6966,
+        "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/catalog.rs",
+        "bytes": 51874,
+        "sha256": "c9717b9aaf4b6c7fcadf048360efc44e919f7065714d4988ec853b8d33bac243",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/catalog/card_kind.rs",
+        "bytes": 21675,
+        "sha256": "41e7e53b5df05f2bd54693dc24edb268a3ff36107ea712e3038b5fae6c20ca1b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/choice.rs",
+        "bytes": 3420,
+        "sha256": "3dc40e6c661844e6ddce7fc4f9593abfef6a4f28828917681673302a77178448",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/event.rs",
+        "bytes": 12000,
+        "sha256": "67b9884d45934eded9d4724d55ce56c4d39755bee8fd3ad0aa93190340bad014",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/ids.rs",
+        "bytes": 496,
+        "sha256": "1d0dbe342e095b6af06112bc97ad6b4098a02250eaa884008de0f133b2074b2f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel.rs",
+        "bytes": 2600,
+        "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/aoe.rs",
+        "bytes": 10149,
+        "sha256": "cea0c6c3d1cbe759f1060938f31d3f92e6e702215147e583e812739671083947",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/combat_rules.rs",
+        "bytes": 5239,
+        "sha256": "47a01f07387267edb4c30869566a523faf54d230562c9389d97551a6a47be4ed",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+        "bytes": 47252,
+        "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/death.rs",
+        "bytes": 21216,
+        "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/discard.rs",
+        "bytes": 5906,
+        "sha256": "36bd7c6e098ef9e0791bc5e341b43ee2121dd8c25ac5526d62621ff5a3900a92",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/duel.rs",
+        "bytes": 5418,
+        "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/dying.rs",
+        "bytes": 10109,
+        "sha256": "7d657643ad1086665160dbfb17988c7b3a7be6454a2f3a5dc9d08524a5430fa6",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+        "bytes": 4397,
+        "sha256": "55fb8b94c6ea92e39345c98a459b76c1cd66941ea681853f06ee27c7390de2d2",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/events.rs",
+        "bytes": 35877,
+        "sha256": "3fcb028e0712c05ede1a6f662ab038c6d9885265d002dc83932a0a69b8d46707",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/intrinsic.rs",
+        "bytes": 23116,
+        "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/judge.rs",
+        "bytes": 40287,
+        "sha256": "3c3af9caff49f0deecc917027ee885f10cb0995002d9a57086e5951f3e525221",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/monkey.rs",
+        "bytes": 4478,
+        "sha256": "6ecb00e31c8de8626dfc4e33f12959d1361d38419542d5f156a76e57621293d7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/nullify.rs",
+        "bytes": 14992,
+        "sha256": "67b64465de7969191e8cef8d0d5b05640a06d72561662b7cc155d2744106bc38",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase.rs",
+        "bytes": 13726,
+        "sha256": "2290609f8754472555f475f519216275958f5873567d8e44a552d7ed475708b2",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/discard.rs",
+        "bytes": 2110,
+        "sha256": "8ba5a03c79488ce73f0301e77561ac39aa57dd66af5a28bc519e35b31ccf52a4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/draw.rs",
+        "bytes": 10338,
+        "sha256": "a2de84aa9bad18ee16cede77794a372fe61316bbf32287fe3a5c239e985450b9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/end.rs",
+        "bytes": 19368,
+        "sha256": "c94ee9643f20bc0c2bf7a95e1a4b5aaf38a208614fc0f015bd4d24b428e368eb",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+        "bytes": 34335,
+        "sha256": "fed735ba1a0fa722980aa4cdb53d93b47158611148b19952f0c99e2b609012d8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/play.rs",
+        "bytes": 5413,
+        "sha256": "44a09c88384a8cd285d5bfb195272c013d47ffd9b0fef364a640da222ebec8e3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha.rs",
+        "bytes": 15737,
+        "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/liuli.rs",
+        "bytes": 4706,
+        "sha256": "765d2692089e95a94c2a41daf9195b905996065d7a0aa841a323b6024f91f583",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+        "bytes": 18643,
+        "sha256": "c3a86bf0c7e823a7349fb3058aa9078fa44d3bd63dd3c1a9fe919ddbe7ce70b8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "bytes": 50582,
+        "sha256": "4674f9ba870bd2b83674ab4378ef118f1e349303ce63f9912b6241e4ca80155e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/tricks.rs",
+        "bytes": 17591,
+        "sha256": "2229d4b711fbb71e030b946c25482cb280acc1d93aaeb7cb7fbfaecb4a468612",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/lib.rs",
+        "bytes": 377,
+        "sha256": "20b54beebab62a70694357b2286aff2ed79b2aab84539bb7e39e8415465dcb61",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/machine.rs",
+        "bytes": 28896,
+        "sha256": "693b2908496542e8d7311235c69ef8bfbef6728e5683d2cc930de746c6fa5eb8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/resolution.rs",
+        "bytes": 23167,
+        "sha256": "d18731229a547a03a161c95e46cc3a9dd53ee3843e6f53d56e3137aaede1c104",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rng.rs",
+        "bytes": 2013,
+        "sha256": "b6db4e24d8ca95b7e059d4d82ee835da6372ebda272fa7f62a5fbf951d2f2136",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_bridge.rs",
+        "bytes": 44152,
+        "sha256": "16f9763893cfd6e3879e493bc58a72afc62f63a9c3067864c45eb1086354d8c9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+        "bytes": 3643,
+        "sha256": "9e9f250f94e9b60cc5fbb54ff8b081a6a9d66dae5d4909e096d802cf91230083",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+        "bytes": 22306,
+        "sha256": "8e669a8c4635d5e7e37a939171142976bc42c16def5ea24581f8c84b26cfaf5b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_named.rs",
+        "bytes": 37115,
+        "sha256": "37d3a1c5eb87e983f1eda711e5dcfb516d8e37d1bfa93e98757193cd2567a81a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_ops.rs",
+        "bytes": 27905,
+        "sha256": "51ec86fe8b74b185f4aff2d8f7cc3a8a8f8ba73bdefdf532c44d5c1f8668b045",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_ops/codec.rs",
+        "bytes": 16111,
+        "sha256": "10d3fa0a8609743b6e2316f4689ba454d35a1e1e0553c5fa9392ffe1465e0ec2",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/rvm_ops/query.rs",
+        "bytes": 14564,
+        "sha256": "08f8086a672716b72a46cecd4030567ea673386a3a4b05ec2b227915de20b784",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap.rs",
+        "bytes": 1573,
+        "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/asks.rs",
+        "bytes": 35335,
+        "sha256": "2db7ba73e96859dbbf80fa3ac7fd719c93954f8ab9cab2075aad05e264817a5c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+        "bytes": 2829,
+        "sha256": "669f83ffaa58a9d9a3f7da4bfc413e8664c0626b8acba84a13d8578008882a1f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "bytes": 16433,
+        "sha256": "f9ad7f4d978a009c30b035bf1434bc2fc944f3fe6b60a3cce01ad041de322ebc",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/ownership.rs",
+        "bytes": 2047,
+        "sha256": "92f8c82ad0569d431c5ab5bcc55961380c99fc3ba4bcd686e91f2d7c15297e48",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/restore.rs",
+        "bytes": 13872,
+        "sha256": "e9b71d05b5e182cfa6a0e90416a7679c26fa5668b9453dffa6667af0596de0cd",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/types.rs",
+        "bytes": 23692,
+        "sha256": "318ed470d8dd93cb3e4aa3fbf74664064b1c73e7745298c04d031864c2de915c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/snap/validation.rs",
+        "bytes": 17023,
+        "sha256": "ec43392afd60f8e1d0e80a677e583a608f6227e48633041548fe5d0042d97956",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/state.rs",
+        "bytes": 45257,
+        "sha256": "8a54eef1a239f93ab3fdac77e10be1c3a70382c6d806176dcbdb2279ed5f2177",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/state/core_ops.rs",
+        "bytes": 39210,
+        "sha256": "15a4e9c0507d6abaa3763dcbebd59254ce14a86bb6f08477f68c66138f562822",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/state/general_assembly.rs",
+        "bytes": 2559,
+        "sha256": "fb5e097ec74895f92ab7526dd9c94f7b74bbb70859e1b43bf8b9ba7da777c174",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary.rs",
+        "bytes": 158,
+        "sha256": "eeb3e893dde68748075870e74035eb90d44056503817fe59a2939d702c719b6d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/card_skills.rs",
+        "bytes": 12742,
+        "sha256": "441df69328fdc686b19d0755c34fe2cf63aa9eee3be92ce13ee23a24d22230a3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/generals.rs",
+        "bytes": 21078,
+        "sha256": "e040883bd2a6301efc15380ce49776c9b9c9b5afb30502588eea9e6b1c8ab10f",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host.rs",
+        "bytes": 524,
+        "sha256": "b9ced17d87750d76f94df2b24a19d867c09f3aa1cd566cae2806e69dfd3bfb66",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/behavior.rs",
+        "bytes": 90183,
+        "sha256": "ddde9bb0f2c8e445ede3d8776f78484952992bdc91ae22fcb22e255b09ab703a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/behavior_list.rs",
+        "bytes": 19894,
+        "sha256": "2e30e5355d4cd92a197a77997f0cc28ef69267c6d892d84ddcfb8d24c38a648e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/constants.rs",
+        "bytes": 28961,
+        "sha256": "100a46e54d2e87c26eb20716c2883c903f6095a3944778467ec78f59a93d57a3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/keys.rs",
+        "bytes": 34552,
+        "sha256": "a3ba0bdc72ae90b383a0166a5e6b95537f171b8ff2f3dbb48f31e95fd5ba4a09",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata.rs",
+        "bytes": 59644,
+        "sha256": "387f9e4f55ecad769b59d2717ddd0b85640c6d2335c74bddafd2c339f046fead",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "bytes": 44283,
+        "sha256": "96393d168b5abc7b8201f38adc831988251a96c1193bd7308a303eae1101d86c",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "bytes": 49433,
+        "sha256": "db21179db071bea9a622923b03359b5faf12845f94fb4309ba65a79eff153502",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/xianjian.rs",
+        "bytes": 16477,
+        "sha256": "ed4146688abf0c7233c2386a798e33a5d68dd534048b3ece21b45998810094c2",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/tag_decode.rs",
+        "bytes": 25718,
+        "sha256": "55c09762deec8070684c72e8168c9e4768a653b06332992e2845229766f60314",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/tags.rs",
+        "bytes": 25984,
+        "sha256": "40005422c1ab1d213d7dc65be57e2fd5aab58563f1691f10876230518528d5c0",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/names.rs",
+        "bytes": 51951,
+        "sha256": "997418acd5cfe5741a088957482d62836805499deb8fd409215e74a559b321d7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/ai.rs",
+        "bytes": 35034,
+        "sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/ai/redact.rs",
+        "bytes": 16533,
+        "sha256": "c703619118324360fe4e8522f6172a158cf1f5d83429b72b2c833bfc3635b2ee",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/ai/remap.rs",
+        "bytes": 9614,
+        "sha256": "07fbbd6f6664b1f11f5b603837478df988088564720027a74136176fa55956c9",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/ai_pool.rs",
+        "bytes": 6013,
+        "sha256": "bfa5acfb692a3bdf65e60f16bca204d63ebab8daf4f0809af7a0d24c03bbc929",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine.rs",
+        "bytes": 19318,
+        "sha256": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/accessors.rs",
+        "bytes": 2592,
+        "sha256": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/apply_command.rs",
+        "bytes": 6468,
+        "sha256": "24c3638cedbde91c05295a6b99b4ae639e39aa69f7cb831c75c7e64c4774d72b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/boss_campaign.rs",
+        "bytes": 2497,
+        "sha256": "048cf4912a2a23a6892c5aeed69c5ad9ad12f6c1fda8c892915f4e7c0a3d8cad",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/commands.rs",
+        "bytes": 16344,
+        "sha256": "c90a989d6b1a5882b5ac50109e26deeacddd5696c7ed015ee8b8fff8d395f32b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/construction.rs",
+        "bytes": 18909,
+        "sha256": "065366ea6c3061b7de28704a232b98632f421e67ceaac9ea043dd0bc8bfacd3d",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/debug.rs",
+        "bytes": 31691,
+        "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/general_select.rs",
+        "bytes": 4524,
+        "sha256": "ff90869468ff0a62069323eb5c8775b8e60f85d113dca6f20f3b141c5a1c686e",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/hash.rs",
+        "bytes": 33950,
+        "sha256": "b8a4243a87f4987ce852480eb9758c981a55e1d670676b9e8fe027511063edd3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/hash/machine.rs",
+        "bytes": 26211,
+        "sha256": "fa5d301d91a41971e7ef2b5ea054ce1cfca3f737e32e15cefd12413f98b4f4d8",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/legal_actions.rs",
+        "bytes": 12145,
+        "sha256": "6a3b692a0958a59214b2ad2e66aaef4cb43b8a863863aa48bc4071de581ebb4a",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/play_card.rs",
+        "bytes": 53728,
+        "sha256": "9a4f4b0c041b84d0ef1922fe7ecebebbfbe1006aa19e61165e4afa7afa234b18",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/play_card_targets.rs",
+        "bytes": 8586,
+        "sha256": "ac16969d96c0752b21e4357bbcbf0283f0d9d3ca42d660040347a5d1acd16dd3",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/play_rules.rs",
+        "bytes": 23651,
+        "sha256": "f506ce6516545f22233cdd0c704591bc89cd9db6a4a329f91ff3d8fea5aab3b7",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/play_sha.rs",
+        "bytes": 22214,
+        "sha256": "40238952241cccfb572fe6d8dae83558fef077f6f201c94ba7e51caed810f3f4",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/sessions.rs",
+        "bytes": 2281,
+        "sha256": "4f4b4b6fa8cec163e8749320e4a613aa3ee1394f47947af447f208d42b2f1630",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/snapshot.rs",
+        "bytes": 29796,
+        "sha256": "e69cb4600b172114cac2e2bbc0426d63a4399522b3757b464f1828a4372a6f7b",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/engine/views.rs",
+        "bytes": 9010,
+        "sha256": "971e26121ce21309bdad093c55209e1f0966c1621d87d68ef122f8ee7ab66b64",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/lib.rs",
+        "bytes": 6159,
+        "sha256": "11590e0931e59c0a94d921986b857b1bcdfa9acdc41b615b61b54fe4a622fbff",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/presentation.rs",
+        "bytes": 18537,
+        "sha256": "c47ae103084615bf4eb9ab606814eace47ffd8786971da7ffa49a813c73a4151",
+        "matches_actual_git_base": true
+      },
+      {
+        "path": "crates/engine-native/src/view.rs",
+        "bytes": 9071,
+        "sha256": "4b1dcd2d1e2c7c0e557d37cdd1348ba01b04cc7804249f1e01215102906242fe",
+        "matches_actual_git_base": true
+      }
+    ],
+    "production_recorded_differences": [],
+    "binaries": [
+      {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/original330-wal-reader",
+        "exists": true,
+        "bytes": 61469816,
+        "sha256": "0ee5e0b4b6216714be6f6ed933aa3ac3406f256c5b56d534b7a48ae89808854d",
+        "recorded_sha256": "0ee5e0b4b6216714be6f6ed933aa3ac3406f256c5b56d534b7a48ae89808854d",
+        "matches_recorded": true
+      },
+      {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/old330/debug/game-server",
+        "exists": true,
+        "bytes": 76926256,
+        "sha256": "d08ff4afe70d1b7b592191f507b8a08d316468bd9666d0149d2063cc41cd901c",
+        "recorded_sha256": "d08ff4afe70d1b7b592191f507b8a08d316468bd9666d0149d2063cc41cd901c",
+        "matches_recorded": true
+      }
+    ],
+    "reader_result": {
+      "negative_error": "\u89e3\u6790\u5931\u8d25: unknown variant `Skill`, expected one of `Confirm`, `Pass`, `Card`, `Player`, `Tag`, `Kind` at line 6181 column 3",
+      "negative_records": 0,
+      "original_positive_wal_entries": 4,
+      "original_source_fixture_created_by_production_engine": true,
+      "positive_full_restore": true,
+      "positive_store_scan": true,
+      "qualification": "original production NativeRoomStore::scan and NativeRoomState/StoredChoiceOption serde, compiled test-only harness; no claim of server startup in this test"
+    },
+    "startup_result3": [
+      {
+        "case": "positive",
+        "pid": 79778,
+        "input_sha256": "45ba9d383c5f58a931864a8f2f7e329d6ead2b28f380100110de4e4bf847d462",
+        "binary_sha256": "d08ff4afe70d1b7b592191f507b8a08d316468bd9666d0149d2063cc41cd901c",
+        "source_production_unchanged": true,
+        "bind": "127.0.0.1:0",
+        "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-positive.log",
+        "qualification": "actual rebuilt original330 production server startup on owned unmodified record copy; no version/header edits",
+        "fresh_input_identity": {
+          "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/positive/330.json",
+          "exists": true,
+          "bytes": 11275,
+          "sha256": "45ba9d383c5f58a931864a8f2f7e329d6ead2b28f380100110de4e4bf847d462"
+        },
+        "log_identity": {
+          "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-positive.log",
+          "exists": true,
+          "bytes": 782,
+          "sha256": "988058f02dfc91b7d0cc092a67368d84a29715e8f6019c5d614250b56294b740"
+        }
+      },
+      {
+        "case": "negative",
+        "pid": 79779,
+        "input_sha256": "de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27",
+        "binary_sha256": "d08ff4afe70d1b7b592191f507b8a08d316468bd9666d0149d2063cc41cd901c",
+        "source_production_unchanged": true,
+        "bind": "127.0.0.1:0",
+        "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-negative.log",
+        "qualification": "actual rebuilt original330 production server startup on owned unmodified record copy; no version/header edits",
+        "fresh_input_identity": {
+          "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/negative/331.json",
+          "exists": true,
+          "bytes": 289630,
+          "sha256": "de5ceca29bd698822556d366d47281109754e601faf9a0c4a84c459d7d405a27"
+        },
+        "log_identity": {
+          "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/startup3-negative.log",
+          "exists": true,
+          "bytes": 1035,
+          "sha256": "415d738e715e8224d2c614b00bea4235648a138e787cb1ecf7dc659637c3facf"
+        }
+      }
+    ],
+    "harness": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/reader-harness.rs",
+      "exists": true,
+      "bytes": 2664,
+      "sha256": "3f05435a04b2d7eb607f44136937c9aad9adb8a362ab165667cbf1015cf73720"
+    }
+  },
+  "scope": [
+    "No experiments, producer execution, builds, or tests run.",
+    "Base is a compacted WAL starting checkpoint revision10, plain NGSA105; these retained cases do not exercise threshold-triggered rebase.",
+    "Complete stored state comparisons are exact with no excluded fields, including full archive hex, WAL, packages, control, receipts.",
+    "Rust frozen fixture equal_snapshot clears only auth_generation before complete StateSnapshot assert_eq; parent has not independently semantically decoded all Native snapshot fields or replayed WAL. Per-entry original variant, choice, hash and revision chains independently parsed here."
+  ]
+}

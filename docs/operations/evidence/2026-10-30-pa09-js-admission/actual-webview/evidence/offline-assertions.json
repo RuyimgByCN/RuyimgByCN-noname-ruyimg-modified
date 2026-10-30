@@ -1,0 +1,73 @@
+{
+  "verified_utc": "2026-10-30T19:20:57.613083+00:00",
+  "assertions": 33,
+  "jsBounded_this_fixture": true,
+  "actual_burst_sent_ids": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "not_submitted": 120,
+  "max_pending": 8,
+  "unresolved_at_turn_boundary": 8,
+  "raw_calls_by_command": {
+    "native_engine_open": 4,
+    "native_engine_request": 41,
+    "native_engine_close": 4
+  },
+  "owned_resource_ids": [
+    3803825902,
+    3584072778,
+    3122410059,
+    378010373
+  ],
+  "close_counts": {
+    "3803825902": 1,
+    "3584072778": 1,
+    "3122410059": 1,
+    "378010373": 1
+  },
+  "old_disposed_trace_index": 415,
+  "old_late_raw_callback_trace_index": 422,
+  "old_late_raw_result": {
+    "phase": "active-dispose",
+    "command": "native_engine_request",
+    "args": {
+      "resourceId": 3122410059,
+      "request": {
+        "id": 2,
+        "type": "status"
+      }
+    },
+    "settled": true,
+    "index": 41,
+    "ok": true,
+    "response": {
+      "data": {
+        "finished": false,
+        "kind": "status",
+        "revision": 0
+      },
+      "id": 2,
+      "ok": true
+    }
+  },
+  "source3_unchanged_readonly": true,
+  "candidate_diff_only_frozen3": true,
+  "candidate_staged_files": [],
+  "actual_client_transport_modules_match_frozen_source": true,
+  "owned_pids_stopped": [
+    62280,
+    62278
+  ],
+  "private_state_absent_and_archived": true,
+  "main_index_same_as_initial": false,
+  "main_head_now": "777bf33969e5ecc04b63971adab26be32f12fd28",
+  "main_movement": "External commit/index movement retained separately; this worker did not write Main, restore or stage anything.",
+  "qualification": "this real WKWebView fixture; same-event-turn JS admission, not OS scheduling pressure or performance"
+}

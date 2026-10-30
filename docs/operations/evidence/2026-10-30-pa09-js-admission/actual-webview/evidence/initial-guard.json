@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-30T19:08:52.663243+00:00",
+  "base_head": "a1f7250815eee803d931301ab46207719cb9a15b",
+  "base_tree": "abb64b4d7aeabc3f1e2525887b88bca46b0e9133",
+  "source3": [
+    {
+      "path": "apps/web-client/src/engine/desktopEngineTransport.ts",
+      "old_git_blob_sha1": "6932abe1f4a6a54efb30f68427cfa580f72a8e29",
+      "new_git_blob_sha1": "4ce3cf7abf83f454b6d953cfa99f775a8f6438d4",
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "physical_lines": 97
+    },
+    {
+      "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+      "old_git_blob_sha1": "384b8a548f42a0782dcadbe29f0014aa5adacb65",
+      "new_git_blob_sha1": "4bc11d66d24ee01e25134bbaa26d460c89f99a0c",
+      "sha256": "ec7df9a24cd8713f46d4db047a801541955957ae5aa13cabe14234cdfcd556dc",
+      "physical_lines": 266
+    },
+    {
+      "path": "apps/web-client/scripts/nc04-worker-failure.test.mjs",
+      "old_git_blob_sha1": "e994dd2047f1c8c04d2f95d7811494fad1120ee9",
+      "new_git_blob_sha1": "b8af23c6c05cf25fbd975c7d176cc2a8d6649d33",
+      "sha256": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0",
+      "physical_lines": 278
+    }
+  ],
+  "disk_free_bytes": 99685634048,
+  "private_identifier": "org.noname.pa09.jsbound5b7ad3ab",
+  "private_state_before": {
+    "/Users/ruyimg/Library/Application Support/org.noname.pa09.jsbound5b7ad3ab": false,
+    "/Users/ruyimg/Library/WebKit/org.noname.pa09.jsbound5b7ad3ab": false,
+    "/Users/ruyimg/Library/Caches/org.noname.pa09.jsbound5b7ad3ab": false
+  },
+  "main_status_sha256": "22e2aa6199cc67e035d86286e6201d25303c15b065f5232b7d15b1ec99fbe0af",
+  "main_index_sha256": "806f78ea3a4275718ef9bbdd6508228e04d019388a2b8b5642f0a64e19f7eb4c",
+  "materialized_missing_manifests": 42
+}

@@ -1,0 +1,14 @@
+{
+  "web_setup_failed": {
+    "log": "web-build.log",
+    "error": "Vite root /tmp vs realpath /private/tmp caused invalid output index.html path; fixed only private build script to realpath before native compile",
+    "native_compile_attempts_before_fix": 0
+  },
+  "first_offline_guard_failed": {
+    "check": "Main index byte identity",
+    "observed": "Main moved to 777bf33969e5ecc04b63971adab26be32f12fd28 externally during run",
+    "followup": "Parent notified; preserved main-guard-movement.json. Actual WebView 33 assertions and private frozen source guard passed. No Main restoration attempted."
+  },
+  "native_build_warnings_retained": true,
+  "actual_webview_attempts": 1
+}

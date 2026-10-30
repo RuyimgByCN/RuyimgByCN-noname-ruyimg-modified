@@ -1,0 +1,49 @@
+[
+  {
+    "name": "red-final",
+    "args": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test",
+      "scripts/pa09-desktop-transport.test.mjs",
+      "scripts/nc04-worker-failure.test.mjs"
+    ],
+    "exit": 1,
+    "wall_seconds": 0.4642149159917608
+  },
+  {
+    "name": "green-final",
+    "args": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test",
+      "scripts/pa09-desktop-transport.test.mjs",
+      "scripts/nc04-worker-failure.test.mjs"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.4311715409858152
+  },
+  {
+    "name": "frontend-full-final",
+    "args": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test"
+    ],
+    "exit": 0,
+    "wall_seconds": 1.0340192500152625
+  },
+  {
+    "name": "sourcecap-sparse",
+    "args": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 3.3050581669958774
+  }
+]

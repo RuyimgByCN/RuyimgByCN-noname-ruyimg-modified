@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-30T20:31:31.708302+00:00",
+  "checks": {
+    "head": true,
+    "tree": true,
+    "index": true,
+    "no_staged_files": true,
+    "tracked_status": true,
+    "attribute": true,
+    "source3": true
+  },
+  "artifact_identity_selfcheck": "All initial 15 artifact bytes and SHA identities verified; four exact argv/wrapper exit0 records, 18 final-window invariants and 17 entry-admission invariants passed.",
+  "preflight_qualification": "21 observed check-success lines, zero failure lines; child logs suppressed by unchanged preflight.",
+  "review": "Independent parent/reviewer acceptance still required.",
+  "wrapper_copy_note": "Wrapper content observed at seal; execution argv and serialization timing are in commands.json."
+}
