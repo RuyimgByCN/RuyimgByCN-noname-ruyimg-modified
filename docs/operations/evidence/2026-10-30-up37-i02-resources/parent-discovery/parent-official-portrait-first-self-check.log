@@ -1,0 +1,1 @@
+First self-check failed before any network extraction: AttributeError: RangeFile has no attribute seekable, raised by zipfile._SharedFile. Corrected standard file-like API; original metadata-only range probe remained valid.

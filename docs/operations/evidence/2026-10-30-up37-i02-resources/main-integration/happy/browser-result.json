@@ -1,0 +1,256 @@
+{
+  "base": "http://127.0.0.1:53389",
+  "rustBase": "http://127.0.0.1:53383",
+  "sourceRouting": "CDP redirects original-content URL directly to owned actual Rust game-server ServeDir; frontend-only Node HTTP; no resource fabrication or proxy",
+  "matrix": [
+    {
+      "name": "star_dongyun",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3",
+          "sha256": "70657b7a6d286349600a489d04a6810e5aac2845b93ae612f772473a8ec4bddb",
+          "byteLength": 38764,
+          "duration": 4.768666666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi1.mp3",
+          "sha256": "2c3198f789376604d08a15de62c537315047c73abd726425e836563d71ee3e52",
+          "byteLength": 29740,
+          "duration": 3.627666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi2.mp3",
+          "sha256": "82ea207d1cefa7df318ce829c1d7ea95f7ec4f9c2113f905310bdabce0e5d2d8",
+          "byteLength": 32620,
+          "duration": 3.9899791666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting1.mp3",
+          "sha256": "417a550ddacbba41f1df591f552e4cbae29a1bc5b4fedecb8bafeb4b9c08192a",
+          "byteLength": 28204,
+          "duration": 3.453291666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting2.mp3",
+          "sha256": "90ed22d659c2ba1503725fedff8cef184bfd161e1ba20c502a88c213577dfac9",
+          "byteLength": 32428,
+          "duration": 3.96225,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入",
+      "clickedPlayback": {
+        "paused": false,
+        "time": 0.020623,
+        "duration": 4.768667,
+        "readyState": 4,
+        "error": null
+      }
+    },
+    {
+      "name": "ol_sb_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/ol_sb_zhouyu.mp3",
+          "sha256": "165ca7f11af10a7fd2862219a2032fbb6ab251fe427291933aa10c5f495befdb",
+          "byteLength": 71724,
+          "duration": 7.031333333333333,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbguqu1.mp3",
+          "sha256": "f5fc5bea2dbe0c7867d8a4fbc6240f2665a07ac8e59580575a3ca9ec6fec9a95",
+          "byteLength": 35623,
+          "duration": 2.917375,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbguqu2.mp3",
+          "sha256": "2682e7901170afe3459fe02e9a992340d500ede0713e75770f1b679b3cc52289",
+          "byteLength": 41413,
+          "duration": 3.1685416666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbzuifeng1.mp3",
+          "sha256": "012cc17a41bcf3213a737eeeb1121439c04f150fa112e37be423fb1372d37f47",
+          "byteLength": 81095,
+          "duration": 6.967854166666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbzuifeng2.mp3",
+          "sha256": "40f288eb3bf767dc12204ea9662dd65dfca675b4f2a6c40db78f89d329d190ec",
+          "byteLength": 57889,
+          "duration": 4.9595625,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "huan_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/huan_zhouyu.mp3",
+          "sha256": "deb9021c03ead382435858b643546f6ce9c2e48f26b93664d3544b7fccea9eaf",
+          "byteLength": 49324,
+          "duration": 6.080666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twdumou1.mp3",
+          "sha256": "dc6b274d727cee000a6ae07bceda1626fa79ba8245ce55ee3d7f271952e2ae31",
+          "byteLength": 30700,
+          "duration": 3.764666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twdumou2.mp3",
+          "sha256": "3ee73a7488e2d34a9ddc1cf5c589c969c42988a42f84b9eebad47806111a3120",
+          "byteLength": 28780,
+          "duration": 3.5250625,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twhantian1.mp3",
+          "sha256": "ee894a383063af4fb512117516a5edaea215dccbee0ea4021b1e83990774a27b",
+          "byteLength": 27052,
+          "duration": 3.3025416666666665,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twhantian2.mp3",
+          "sha256": "16043a14474d461ce69bb8c1da97a383dad8fd5ebcd02a502fe3b8c9131dcfde",
+          "byteLength": 31852,
+          "duration": 3.8906666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "dc_sb_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/dc_sb_zhouyu.mp3",
+          "sha256": "4ce970b28ccfde52ab98b8f98bf44306623dcc372e84be1e6bdc9dbaa8e26e69",
+          "byteLength": 83194,
+          "duration": 5.043125,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbronghuo1.mp3",
+          "sha256": "314ca18446e09fbd05fcfc6564264b136aca1702ca4f655593a9da116583937b",
+          "byteLength": 68123,
+          "duration": 3.8657083333333335,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbronghuo2.mp3",
+          "sha256": "4efe0aeda5cb64ce8a6a7ed4648e25a33dc46ce3230552950c4021cf3902eb92",
+          "byteLength": 66407,
+          "duration": 3.7931666666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbyingmou1.mp3",
+          "sha256": "199ba10d973cfce400fd2d53d219de797056b584c1e1eda0e2b0bda81152e3c5",
+          "byteLength": 126942,
+          "duration": 6.851229166666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbyingmou2.mp3",
+          "sha256": "12ab0f92ab344a92e62937d6e855935b71acf65c2e4e228dd60104dbb6582c1e",
+          "byteLength": 84508,
+          "duration": 4.729104166666667,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "tangtang",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [],
+      "status": "待完整移植"
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "/collection",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    },
+    {
+      "url": "/assets/index-B0z4TyMS.css",
+      "status": 200,
+      "bytes": 28125,
+      "mime": "text/css"
+    },
+    {
+      "url": "/assets/index-6bxkoIZ_.js",
+      "status": 200,
+      "bytes": 408723,
+      "mime": "text/javascript"
+    },
+    {
+      "url": "/favicon.ico",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    },
+    {
+      "url": "/favicon.ico",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    }
+  ]
+}

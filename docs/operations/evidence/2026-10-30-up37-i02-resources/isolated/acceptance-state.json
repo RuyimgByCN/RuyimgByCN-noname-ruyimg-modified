@@ -1,0 +1,23 @@
+{
+  "head": "44982f45edfb1a365163ecdacc08fa972219684e",
+  "changed_files": [
+    "apps/web-client/scripts/original-resources.test.mjs",
+    "apps/web-client/src/engine/originalResources.ts",
+    "apps/web-client/src/views/CollectionView.vue",
+    "content/original/asset-manifest.json",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+    "scripts/sync-original-content.mjs",
+    "scripts/test_original_resources.mjs"
+  ],
+  "staged_files": [],
+  "original_asset_rows_unchanged": 2707,
+  "old_manifest_tree_summaries_unchanged": true,
+  "sources_unchanged": true,
+  "temporary_links_removed": true,
+  "tracked_dist_restored": true,
+  "patch_sha256": "718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b",
+  "patch_bytes": 2699727
+}

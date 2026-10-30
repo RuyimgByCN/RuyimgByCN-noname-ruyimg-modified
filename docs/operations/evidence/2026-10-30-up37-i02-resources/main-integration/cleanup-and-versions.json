@@ -1,0 +1,89 @@
+{
+  "verified_utc": "2026-10-30T07:41:49Z",
+  "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "versions": {
+    "rules": 329,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 5,
+    "backend": "WASM default"
+  },
+  "version_source_hashes": {
+    "crates/engine-native-content/src/content/standard.rs": "46036c83fc7326f0015524c122961551aa1c260786785e7a7c3fda1eef96df93",
+    "crates/engine-native-kernel/src/archive.rs": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+    "crates/engine-api/src/version.rs": "ea99d3dc6c2c3b4f4ee59ccc9a0532f29aa5f9b17816e003c7abda8b29257fe1",
+    "crates/engine-protocol/src/lib.rs": "f5b81695c40a16ca378df3a8af0e2e360553d83ccb78f871225943d4c92ad630",
+    "apps/web-client/package.json": "0c8adc61dbc34980378b7b0147917cd297efeaaf282c81a7b9a04c23cb5489c1"
+  },
+  "manifest_schema": 2,
+  "old_rows_preserved_in_order": 2707,
+  "audio_rows": 9652,
+  "audio_bytes": 651011056,
+  "catalog_source": {
+    "repository": "archive/upstream/noname/apps/core",
+    "version": "1.11.7",
+    "code_license": "GPL-3.0-only",
+    "asset_license": "preserved_from_core_source; redistribution requires source-license review",
+    "skin_asset_policy": "not_configured",
+    "provenance": {
+      "core": {
+        "category": "core",
+        "root": "archive/upstream/noname/apps/core",
+        "repository": "https://github.com/libnoname/noname.git",
+        "repository_root": "archive/upstream/noname",
+        "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+        "dirty": false,
+        "tracked_changes": [],
+        "tracked_change_count": 0,
+        "untracked_count": 0,
+        "redistribution_status": "preserved_from_source_requires_review"
+      },
+      "skin": null
+    }
+  },
+  "asset_sources": {
+    "core": {
+      "category": "core",
+      "root": "archive/upstream/noname/apps/core",
+      "repository": "https://github.com/libnoname/noname.git",
+      "repository_root": "archive/upstream/noname",
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "dirty": false,
+      "tracked_changes": [],
+      "tracked_change_count": 0,
+      "untracked_count": 0,
+      "redistribution_status": "preserved_from_source_requires_review"
+    },
+    "skin": null
+  },
+  "CARGO_INCREMENTAL": "0",
+  "no_compile_of_rust_or_wasm": true,
+  "npm_test_warnings": [
+    "2 ExperimentalWarning localStorage unavailable without --localstorage-file"
+  ],
+  "adapters_failed": [
+    "initial guard preceded deliberate fault injection",
+    "first retry used wrong admission parent directory"
+  ],
+  "dist_default_build_transient_write": true,
+  "dist_restored_count": 37,
+  "removed_own_generated_dist_paths": [
+    "apps/web-client/dist/assets/engine_native_wasm_bg-CsS8HJ_i.wasm",
+    "apps/web-client/dist/assets/engine.worker-g2DGqgiu.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-DSvRYqT8.wasm",
+    "apps/web-client/dist/assets/index-B0z4TyMS.css",
+    "apps/web-client/dist/assets/engine.native.worker-CanPr44R.js",
+    "apps/web-client/dist/assets/index-6bxkoIZ_.js",
+    "apps/web-client/dist/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/dist/pkg/engine_wasm.d.ts",
+    "apps/web-client/dist/pkg/.gitignore",
+    "apps/web-client/dist/pkg/package.json",
+    "apps/web-client/dist/pkg/engine_wasm_bg.wasm.d.ts",
+    "apps/web-client/dist/pkg/engine_wasm.js"
+  ],
+  "retained_product_bundle": "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist",
+  "asset_directory_retained_reason": "Canonical ignored resources are required by the real main product HTTP service; do not treat as unused build cache",
+  "ignored_assets_bytes": 1057396874,
+  "disk_free_bytes": 164476321792,
+  "staged_files": []
+}

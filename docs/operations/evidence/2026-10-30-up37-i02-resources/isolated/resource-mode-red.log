@@ -1,0 +1,12 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/sync-original-content.mjs:1728
+      throw new Error(`unknown option ${arg}`);
+            ^
+
+Error: unknown option --resources-only
+    at validateCliArgs (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/sync-original-content.mjs:1728:13)
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/sync-original-content.mjs:35:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:447:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.4.0

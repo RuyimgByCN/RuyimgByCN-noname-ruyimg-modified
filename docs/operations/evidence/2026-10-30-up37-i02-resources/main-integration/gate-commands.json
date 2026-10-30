@@ -1,0 +1,73 @@
+[
+  {
+    "name": "fullpreflight",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 322.15711784362793,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164474580992
+  },
+  {
+    "name": "sourcecaps-selftests",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 49.41109919548035,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164402180096
+  },
+  {
+    "name": "sourcecaps",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 5.88323712348938,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164482842624
+  },
+  {
+    "name": "links-all",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.7838590145111084,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164483420160
+  }
+]

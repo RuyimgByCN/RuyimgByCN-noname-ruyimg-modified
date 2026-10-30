@@ -1,0 +1,184 @@
+Implemented a bounded UP37-I02 resource increment: the existing original-content pipeline now imports upstream audio, and the real Collection page resolves and plays available voices. This does **not** close I02, UP37, N02–N07 gameplay, or the 37-source goal.
+
+Changed files: 10. Validation: frontend 149/149, pipeline/ordering 2/2, typecheck and Vite build passed, full original-content verification passed, and a real Chrome page fetched/decoded 20 voices and started playback after a physical mouse event. Open risks: source aliases, skins, automatic game audio and dependent UI resources remain incomplete. Recommended next step: independent review, apply the pure patch to current B/J2, regenerate its local assets, then repeat affected client checks.
+
+## Scope and compatibility
+
+- Isolated source baseline: `44982f45edfb1a365163ecdacc08fa972219684e` (accepted NC10), rules **328**, archive **105**, native ABI **753**, WS **5**. This checkout predates the parent's B/J2 candidate **329/758/105/WS5**.
+- Adopted upstream remains `1a548c95acdf8ac1ef44d74473403eda2ac86cf0`; no upstream sync/reset/update was performed. Canonical guidance and both upstream repositories were read only. Liuli's seven local modifications remain present; their observed hashes are recorded.
+- No Rust, rule behavior, roster, definition IDs, protocol, schema version, ABI, package versions, old package bytes or content-lock identities changed. No staging, commit, stash, reset, clean, push, new remote or child agent was used.
+- Source guidance read: canonical `AGENTS.md` and `NONAME_NEXT_AGENT_SPEC.md`, with supervisor clarification that these guidance files are outside the Git checkout; the three architecture ledgers, original-resource contracts, native extension contract, relevant ADRs and actual source/consumer code were inspected.
+
+## Implementation
+
+`sync-original-content.mjs` now includes the existing core `audio/` tree in the schema-2 asset manifest. This adds **9,652 files / 651,011,056 bytes** using the existing `kind`, `path`, `size`, `source_category`, `source_path` and `sha256` fields. All **2,707 previous portrait entries and both previous tree summaries remain identical and in their original order**. The source-provenance objects are identical.
+
+The necessary `--resources-only` mode checks the adopted schemas and exact provenance before writing, then reuses the existing asset-tree and manifest functions. It does not invoke cargo or regenerate the catalog, gameplay sources, packages, frozen archives or web standard-character catalog. Its regression verifies protected-file preservation, rejection of a corrupt target without altering its source, and rejection of an unadopted source before asset writes.
+
+The real isolated source lookup exposed a shared provenance bug: `git status` received the logical symlink path relative to the physical repository root and failed with an outside-repository error. The fix runs status from the supplied root and preserves the logical archive label for the repository root. The actual archive-link run changed from failure to passing resource/full verification. Two unused bindings in the existing script were also removed after the editor's lint gate flagged them; no rule logic changed.
+
+`CollectionView.vue` reads the same asset manifest served by the existing game-server `/original-content` ServeDir. A small resource helper matches declared direct skill/death identities, rejects invalid resource paths and invalid manifest rows, and builds encoded local resource URLs. Native audio controls provide play/pause/volume with `preload="none"`; loading/decoding failures are visible. The page shows the manifest audio count. It does not activate characters or synthesize game-event audio.
+
+No second resource registry, scraper, dependency, Settings panel, unused appearance helper or B-owned component was added. No asset was invented, downloaded or externally published. Core asset provenance remains `preserved_from_source_requires_review`; import is not a new redistribution-license determination.
+
+## Changed files and patch
+
+The implementation files are:
+
+- `scripts/sync-original-content.mjs`
+- `scripts/test_original_resources.mjs`
+- `content/original/asset-manifest.json`
+- `apps/web-client/src/engine/originalResources.ts`
+- `apps/web-client/src/views/CollectionView.vue`
+- `apps/web-client/scripts/original-resources.test.mjs`
+- `docs/architecture/native-progress.md`
+- `docs/architecture/native-remaining-ledger.md`
+- `docs/architecture/native-rules-baseline.md`
+- `docs/operations/evidence/2026-10-30-up37-i02-resources/README.md`
+
+The handoff evidence directory is `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence`.
+
+- [Pure patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/up37-i02-resources.patch): **2,699,727 bytes**, SHA256 `718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b`. Reverse apply check passed against the final tree.
+- [Per-file base/final SHA256 and lengths](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/changed-files.json).
+- [Acceptance/worktree state](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/acceptance-state.json): no staged files, old manifest rows unchanged, all temporary links removed, tracked dist restored.
+- [All 54 UP37 changed resource paths with original path/SHA/MIME/import status](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/up37-resource-coverage.json).
+- [Actual catalog/skill/source metadata matrix](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/source-case-matrix.json).
+
+The local asset bytes remain in this checkout's ignored `content/original/assets/`. They are reproducible from the existing local upstream with `node scripts/sync-original-content.mjs --resources-only`; the patch carries source paths and hashes, not another committed copy of roughly 1 GiB of assets. Current B/J2 must run that command in its own authorized tree after integration so its existing resource service has the actual files.
+
+## Source and runtime case matrix
+
+These are resource findings, not native character-assignment or playability assertions. Catalog migration status was preserved.
+
+| Actual catalog identity | Available direct preview voices | Portrait/source result | Runtime result |
+|---|---:|---|---|
+| `onlyOL:ol_jie_zhuran` | 0 | No matching source portrait; `ol_jie_danshou` declares `audio: "xindanshou"` | Alias unresolved; not falsely replaced |
+| `onlyOL:ol_zhuhuan` | 0 | No matching source portrait or direct voices | Missing retained |
+| `sp:tangtang` | 0 | Explicit `tangtang.png` present | Browser rendered portrait; no audio; still 待完整移植 |
+| `collab:tw_dm_zhangliang` | 4 | Portrait present; inherited `twjianming` / `relonghun` voices available | Public helper regression covers all four; still source_synced |
+| `sp:ol_sunhanhua` | 0 | No matching source portrait/direct voices | Missing retained |
+| `collab:ol_chitu` | 5 | Portrait and declared direct audio present | Public helper regression; still source_synced |
+| `collab:ol_le_menghuo` | 5 | Portrait and declared direct audio present | Public helper regression; still source_synced |
+| `sp:ol_xushao` | 0 | No matching source portrait/direct skill voices | UI-resource dependencies retained |
+| `sp2:star_dongyun` | 5 | Source portrait and audio present | All five HTTP fetched/decoded; real control click started playback |
+| `tw:huan_zhouyu` | 5 | UP37 portrait and audio present | All five HTTP fetched/decoded; image rendered |
+| `onlyOL:ol_sb_zhouyu` | 5 | UP37 portrait and audio present | All five HTTP fetched/decoded; image rendered |
+| `xianding:dc_sb_zhouyu` | 5 | Portrait/direct voices present; shadow audioname variants also declared | Direct five fetched/decoded; shadow mapping unresolved |
+| `offline:hm_yudu` | 0 | Correct explicit source `image/character/yudu.jpg` already retained | No invented default image |
+| `huicui:dc_zhugejun` | 5 | Existing portrait/direct voices present | Source matrix only |
+| `tw:tw_zhugejun` | 7 | Existing portrait/direct voices present | Source matrix only |
+| `xianding:wufan` | 5 | Existing portrait/direct voices present | Source matrix only |
+
+Full source-byte verification checked **12,359 manifest rows twice** (source and installed target): **24,718 length/SHA checks, zero differences**. All **16,623 protected catalog/ported/packages files** remain byte-identical. See [source bytes](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/source-bytes.json) and [protected files](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/immutable-result.json).
+
+Source audio-tree MIME counts are audio/mpeg 8,811; application/octet-stream 742; audio/ogg 16; audio/x-wav 67; audio/x-m4a 9; audio/x-hx-aac-adts 1; video/mp4 6. Original bytes are preserved. Only the named 20 browser voices have decoding evidence; import does not establish universal codec/file validity.
+
+## Validation and original failures
+
+| Command/check | Final result | Evidence |
+|---|---|---|
+| `node --test scripts/test_original_resources.mjs scripts/test_original_content_order.mjs` | 2 passed, 0 failed | `pipeline-final.log` |
+| `cd apps/web-client && npm test` | 149 passed, 0 failed | `frontend-final.log` |
+| `cd apps/web-client && npm run build` | vue-tsc and Vite passed | `frontend-build-02.log` |
+| `node scripts/sync-original-content.mjs --resources-only --verify-only` | Passed | `resources-verify.log` |
+| `node scripts/sync-original-content.mjs --verify-only` | Passed, legacy366 / portraits2707 / audio9652 | `full-sync-verify.log` |
+| Real built-page Chrome resource check | 20 decoded, portraits loaded, one real click started playback; no runtime exceptions | `browser-run-02.log`, `browser-result.json`, `collection-audio.png` |
+| Full source/target length+SHA and source MIME checks | 24,718 checks, 0 mismatch | `source-bytes.log`, `audio-mime.json` |
+| `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | 2 passed | `source-line-tests.log` |
+| `python3 -B scripts/check-source-lines.py` | 8,946 files within limits | `source-lines.log` |
+| Changed-document links compared with baseline | No new broken links | `doc-links-02.log` |
+| `git diff --check`; patch reverse check | Passed | `diff-check.log`, `patch-reverse-check.log` |
+
+Retained failures/setup results:
+
+1. `frontend-red.log`: missing new helper at initial setup. The meaningful subsequent red is `missing-audio-red.log`: actual `sp2:star_dongyun` voice lookup and `starbishi1.mp3` manifest assertion failed (2 failed / 1 passed) before audio import.
+2. `resource-mode-red.log`: old script rejected `--resources-only`, establishing the absent resource-only entry point.
+3. `resource-sync.log`: symlink provenance outside-repository error; fixed in the shared provenance function, then `resource-sync-02.log` and both verifiers passed.
+4. `pipeline-tests.log`: fixture inherited the surrounding Git repository and failed its provenance expectation; the fixture now bounds Git discovery with `GIT_CEILING_DIRECTORIES`; its real entry-point checks pass.
+5. `frontend-build.log`: ignored legacy/native generated module directories absent. No Rust rebuild was started. Supervisor-authorized temporary read-only lookup links used canonical main's generated **329/758** modules only to satisfy imports for the Collection page build. Complete input SHA256 is in `borrowed-wasm-sha256.json`, output SHA256 in `build-output-sha256.json`; built WASM byte hashes were checked against the recorded borrowed inputs. No game-rule execution/equivalence is claimed for the older 328 source with these modules.
+6. `doc-links.log`: the isolated tree's pre-existing `../../../AGENTS.md` link is absent outside this checkout. Comparison with HEAD proves no new broken links in any changed document; canonical guidance was read separately.
+7. An attempted repeat suite waited for the parent's global serialized-command lock and timed out before starting, leaving `pipeline-tests-final.log` empty. Subsequent lightweight suites completed directly in under one second each. Heavy sync/build/source-byte/browser operations ran through `/tmp/noname-run-serialized.py` and its global lock.
+
+The browser used a private random HTTP port and Chrome profile/debug port. CDP redirected only the original-content requests from the page's normal port7700 URL to this worker's private static server, serving actual manifest/assets equivalent to the existing ServeDir; it did not fabricate catalogs, audio bytes or engine outcomes. The first player's final observed state was paused=false, currentTime=0.004349, duration=4.768667, readyState=4, error=null. The rebuilt Collection client assets and screenshots are retained; borrowed engine WASM binaries are fingerprinted, not duplicated in the retained build artifact. Browser/profile/server were stopped. Physical audibility was not assessed.
+
+All four own lookup links (`../archive`, web node_modules, legacy wasm-pkg, native-pkg) were logged and removed. All 37 tracked dist files were restored from exact base bytes; no build-output delta remains. No Rust target/cache was created. Disk remained above 157 GiB free. Runtime-created `.pi-lens-probe-home` logs were present at entry and left alone.
+
+## Remaining inputs and next implementation seams
+
+**Available but not yet consumed:** of 54 UP37 resource-change paths, 35 current assets are represented in the existing manifest, one portrait was deleted upstream, and 18 available inputs remain outside this increment: `image/card/mashiro.png`, `image/card/ol_cailian.png`, the 15 `image/olxushao/*` UI images/button audio, and `layout/others/skill.css`. The coverage JSON supplies each original path, source SHA, length and MIME. Their consumers depend on the N04/N06 derived-card presentation and N07 complex selection UI; existing rules/roster/choice contracts were not widened here.
+
+**Declared voice aliases:** available N01 source `audio: "xindanshou"` and `dc_sb_zhouyu_shadow` audioname variants remain unbound. A concrete resource-only follow-up can reuse the current safe TypeScript AST parser to derive proven aliases and materialize manifest alias paths with the existing distinct `path` / `source_path` fields, together with source hashes and conflict/cycle tests. The direct-preview helper would then need explicit validated alias semantics instead of its current `path === source_path` guard. This proposal needs no second registry or invented voices; it has not been implemented or accepted as complete in this increment.
+
+**Missing source inputs:** N01 Zhuran/Zhuhuan, N04 Sunhanhua and N07 Xushao have no matching core portraits; several new skills have no matching core voice files. No substitute was chosen without a declaration. `hm_yudu`'s explicit yudu image is already correct.
+
+**Skins:** adopted catalog skin source is null; static/dynamic skins and shared aliases are zero. Original published npacks have no real skin_index payloads; schema/test examples do not provide a real author package. A permitted skin source, true stable package dependencies/bindings and PackageStore install/activate/upgrade/rollback/uninstall verification remain required. Liuli's seven modifications were not discarded.
+
+**Runtime/platform:** automatic game skill/death audio still needs a real authorized visible-event-to-resource-key consumer. It was not replaced by the Collection preview. Actual game-server HTTP integration was not rebuilt; existing ServeDir was inspected and a private equivalent served the real bytes. Physical listening, desktop/mobile devices, other browsers, current B/J2 client integration and upstream rule equivalence remain unproven. R10's other display/AI requirements, I02 mode migration, I03/I04 and the remaining I05/37-source G0–G5 gates retain their full scope.
+
+Independent reviewer approval remains required. Apply/review the 10-path patch, regenerate resources using the adopted source in current B/J2, and rerun its affected public-resource/frontend checks before the parent's authorized integration commit.
+
+Skipped: Rust/WASM compilation, game-rule execution, author skin-package lifecycle and physical platform/listening checks. Risk: this older-baseline resource candidate needs combined validation with current B/J2; unresolved aliases and 18 dependent UI/card/CSS inputs remain explicit work.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Implemented the supervisor-approved bounded existing-manifest audio import and real Collection preview; no schema/Rust/rule/roster/ABI or frozen package changes; complete remaining scope retained."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Pure patch, per-file base/final hashes, all-source asset hashes/MIME, actual catalog case matrix, meaningful red, final test/build/verifier logs, real browser playback evidence and no-staged state are provided."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/scripts/original-resources.test.mjs",
+    "apps/web-client/src/engine/originalResources.ts",
+    "apps/web-client/src/views/CollectionView.vue",
+    "content/original/asset-manifest.json",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+    "scripts/sync-original-content.mjs",
+    "scripts/test_original_resources.mjs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/web-client/scripts/original-resources.test.mjs",
+    "scripts/test_original_resources.mjs"
+  ],
+  "commandsRun": [
+    {"command": "npm test (apps/web-client)", "result": "passed", "summary": "149 passed / 0 failed"},
+    {"command": "node --test scripts/test_original_resources.mjs scripts/test_original_content_order.mjs", "result": "passed", "summary": "2 passed / 0 failed"},
+    {"command": "npm run build (apps/web-client)", "result": "passed", "summary": "vue-tsc and Vite; borrowed generated module input hashes recorded"},
+    {"command": "node scripts/sync-original-content.mjs --resources-only --verify-only", "result": "passed", "summary": "2707 portraits and 9652 audio files verified"},
+    {"command": "node scripts/sync-original-content.mjs --verify-only", "result": "passed", "summary": "Complete original-content verifier passed"},
+    {"command": "browser-audio.mjs using the built Collection page", "result": "passed", "summary": "20 real audio fetch/decode results, portraits rendered and control click started playback"},
+    {"command": "source/target SHA256, length and audio MIME verification", "result": "passed", "summary": "24718 checks; zero asset mismatches; 16623 protected files unchanged"},
+    {"command": "source line tests and check-source-lines.py", "result": "passed", "summary": "2 tests and 8946 files within limits"},
+    {"command": "git diff --check and git apply --reverse --check", "result": "passed", "summary": "Patch whitespace and final-tree reversibility passed"},
+    {"command": "pre-import actual catalog resource lookup regression", "result": "failed", "summary": "Expected meaningful red: star_dongyun/starbishi voice absent from manifest; original log retained"},
+    {"command": "first npm run build without generated modules", "result": "failed", "summary": "Setup missing ignored legacy/native module imports; rerun passed with authorized read-only links"}
+  ],
+  "validationOutput": [
+    "Frontend149/149; pipeline/ordering2/2; typecheck/build and both resource verifiers passed.",
+    "Chrome20 audio decodes and one actual audio-control click passed; physical audibility untested.",
+    "9652 source audio files imported; 2707 original portrait rows and original provenance unchanged.",
+    "Four temporary lookup links removed, tracked dist restored, no Rust target created."
+  ],
+  "residualRisks": [
+    "Independent review and integration validation with current B/J2 required; baseline is328/753 and borrowed engine import bytes are329/758.",
+    "Declared voice aliases, skins/author-package lifecycle and automatic in-game audio remain incomplete.",
+    "18 available UP37 UI/card/CSS resource inputs still need their presentation consumers; source-missing portraits/voices retained.",
+    "Physical audibility, devices, other browsers and upstream rule equivalence are unproven."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Ten-path resource-only candidate: existing audio manifest tree and guarded asset sync, real Collection voice controls, public lookup regression tests and bounded ledger updates.",
+  "reviewFindings": [
+    "Independent review gate pending; no claim of reviewer acceptance or whole-I02 completion."
+  ],
+  "manualNotes": "Pure patch SHA256 718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b. Logs, source matrices and all per-file hashes are in the isolated sibling evidence directory."
+}
+```

@@ -1,0 +1,18 @@
+{
+  "verified_asset_rows": 12359,
+  "hash_checks": 24718,
+  "counts": {
+    "portraits": 2707,
+    "audio": 9652
+  },
+  "audio_mime_counts": {
+    "audio/mpeg": 8811,
+    "application/octet-stream": 742,
+    "audio/ogg": 16,
+    "audio/x-wav": 67,
+    "audio/x-m4a": 9,
+    "audio/x-hx-aac-adts": 1,
+    "video/mp4": 6
+  },
+  "failures": []
+}

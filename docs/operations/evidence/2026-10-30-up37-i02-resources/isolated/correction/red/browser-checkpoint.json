@@ -1,0 +1,43 @@
+[
+  {
+    "case": "A genuine media error from HTML response",
+    "alerts": [
+      {
+        "text": "语音加载或解码失败，请检查本地资源。",
+        "voice": null
+      }
+    ],
+    "audio": [
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3",
+        "error": 4,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi1.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi2.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting1.mp3",
+        "error": null,
+        "readyState": 0
+      },
+      {
+        "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting2.mp3",
+        "error": null,
+        "readyState": 0
+      }
+    ],
+    "originalA": {
+      "error": 4,
+      "connected": true,
+      "src": "http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3"
+    }
+  }
+]

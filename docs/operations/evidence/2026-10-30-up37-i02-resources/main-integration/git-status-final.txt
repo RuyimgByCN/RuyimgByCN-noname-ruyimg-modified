@@ -1,0 +1,19 @@
+ M apps/web-client/src/views/CollectionView.vue
+ M content/original/asset-manifest.json
+ M scripts/sync-original-content.mjs
+?? .pi-lens.json
+?? apps/web-client/scripts/original-resources.test.mjs
+?? apps/web-client/src/engine/originalResources.ts
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/artifacts/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-before-B-choice-adaptation/archives/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-phase-B/archives/
+?? docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine/archives/
+?? docs/operations/evidence/2026-10-30-nc10-continuations/isolated/liaoyuan-restore-repro.archive
+?? docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/github-related-repositories-readonly.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/physical-devices-recheck.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine/archives/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-production-frontend.tar.gz
+?? docs/operations/evidence/2026-10-30-up37-i02-resources/
+?? scripts/test_original_resources.mjs

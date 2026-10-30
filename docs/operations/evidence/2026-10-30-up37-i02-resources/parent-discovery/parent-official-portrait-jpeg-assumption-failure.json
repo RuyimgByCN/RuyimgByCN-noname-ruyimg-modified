@@ -1,0 +1,14 @@
+{
+  "source": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.full.zip",
+  "release": "v1.11.6.1",
+  "archive_expected_sha256": "cb9fa579ae1abbd98d36208acc2937a8166d29466418a2d8ddf98d8118b376dc",
+  "full_archive_sha256_verified": false,
+  "reader_self_check": true,
+  "status": "failed",
+  "named_entries": [
+    "image/character/hm_yudu.jpg"
+  ],
+  "error": "Expected a JPEG",
+  "bytes_transferred": 2093754,
+  "asset_etag": "\"0x8DF33169FFFEF32\""
+}

@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync,spawnSync} from 'node:child_process';
+import {pathToFileURL} from 'node:url';
+const repo=process.cwd(), out=path.resolve('../evidence/review');
+const {originalCharacterAudio,originalResourceUrl}=await import(pathToFileURL(path.join(repo,'apps/web-client/src/engine/originalResources.ts')));
+const manifest=JSON.parse(fs.readFileSync('content/original/asset-manifest.json'));
+const catalog=JSON.parse(fs.readFileSync('content/original/catalog.json'));
+const base='http://127.0.0.1:7700/original-content';
+const row=manifest.assets.find(a=>a.path==='audio/skill/starbishi1.mp3');
+const ch={name:'star_dongyun',skills:['starbishi']};
+const invalidPaths=['../secret','/audio/a.mp3','//evil/a.mp3','audio/%2fsecret.mp3','audio/%252fsecret.mp3','audio/a?x','audio/a#x','audio/a\\b','audio/./a','audio/../a','audio//a','https://evil/a','audio/\u0000a'];
+for(const v of invalidPaths)assert.equal(originalResourceUrl(base,v),'',v);
+for(const patch of [{size:-1},{size:1.2},{size:Number.MAX_SAFE_INTEGER+1},{size:'1'},{sha256:'f'.repeat(63)},{source_path:'audio/other.mp3'},{source_category:'skin'},{kind:'portraits'},{path:'audio/skill/starbishi1.ogg',source_path:'audio/skill/starbishi1.ogg'}])assert.deepEqual(originalCharacterAudio({assets:[{...row,...patch}]},ch),[]);
+assert.deepEqual(originalCharacterAudio({assets:[]},ch),[]);
+const unknown=[{...row,source_category:'skin'},row];assert.deepEqual(originalCharacterAudio({assets:unknown},ch),[row]);
+const repeated=originalCharacterAudio({assets:[row,{...row,sha256:'f'.repeat(64)}]},ch);
+const numeric=originalCharacterAudio({assets:[{...row,path:'audio/skill/voice21.mp3',source_path:'audio/skill/voice21.mp3'}]},{name:'actor',skills:['voice']});
+const ordered=originalCharacterAudio(manifest,catalog.characters.find(c=>c.id==='sp2:star_dongyun')).map(a=>a.path);
+
+const result={passed:true,invalidPaths:invalidPaths.length,metadataRejects:9,orderedPaths:ordered,numericAmbiguity:numeric.map(a=>a.path),conflictingDuplicateCount:repeated.length};fs.writeFileSync(path.join(out,'helper-result.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));

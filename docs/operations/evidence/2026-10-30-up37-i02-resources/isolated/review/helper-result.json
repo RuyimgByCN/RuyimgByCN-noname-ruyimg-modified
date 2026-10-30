@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "invalidPaths": 13,
+  "metadataRejects": 9,
+  "orderedPaths": [
+    "audio/die/star_dongyun.mp3",
+    "audio/skill/starbishi1.mp3",
+    "audio/skill/starbishi2.mp3",
+    "audio/skill/starzhengting1.mp3",
+    "audio/skill/starzhengting2.mp3"
+  ],
+  "numericAmbiguity": [
+    "audio/skill/voice21.mp3"
+  ],
+  "conflictingDuplicateCount": 2
+}

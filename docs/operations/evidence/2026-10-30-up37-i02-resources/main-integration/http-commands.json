@@ -1,0 +1,55 @@
+[
+  {
+    "name": "catalog-url-audit",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-url-audit.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.23222708702087402
+  },
+  {
+    "name": "helper-aux",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-helper-review.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.19610595703125
+  },
+  {
+    "name": "browser-happy",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-audio.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy",
+      "http://127.0.0.1:53383"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 2.973607063293457
+  },
+  {
+    "name": "browser-errors",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-errors.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/errors",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy/validated-dist",
+      "http://127.0.0.1:53383"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "seconds": 0.5756993293762207
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "base_head": "44982f45edfb1a365163ecdacc08fa972219684e",
+  "reviewed_candidate_sha256": "718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b",
+  "corrected_total_patch": {
+    "path": "../evidence/correction/up37-i02-resources-corrected.patch",
+    "files": 10,
+    "bytes": 2702237,
+    "sha256": "489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658"
+  },
+  "correction_patch": {
+    "path": "../evidence/correction/up37-i02-resources-error-correction.patch",
+    "files": 2,
+    "bytes": 5858,
+    "sha256": "361dfa51fb17404658783c38534e5861aaafc3f9636aeda4410ff7c36dc37c8f"
+  },
+  "other_eight_candidate_files_unchanged": true,
+  "staged_files": []
+}

@@ -1,0 +1,51 @@
+{
+  "verdict": "OK with notes: accept bounded main resource increment",
+  "basis_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "recorded_hash_groups_crosschecked_without_rehash": {
+    "protected": 17124,
+    "source": 31799,
+    "wasm": 16,
+    "upstream_assets": 12359,
+    "runtime": 6
+  },
+  "source_aggregate_sha256": "9331596a49cfa98a617ddff5654248a6d85c4aff688630b8f844f7d6fe125b07",
+  "admitted_candidate_paths": 7,
+  "runtime_paths_unchanged": 6,
+  "rust_port": 54420,
+  "rust_pid": 43762,
+  "binary_sha256": "9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489",
+  "http_gets": 27,
+  "audio_metadata_http_browser_recorded_source_equal": 20,
+  "p2_cases": 9,
+  "retained_product_inventory_entries_equal": 45,
+  "dist_entry_head_equal": 37,
+  "dist_restore_count": 37,
+  "own_new_dist_removed": 12,
+  "external_outdir_rebuild_required": false,
+  "execution_deviation": "Default dist was transiently overwritten; original verification criterion-1 remains not-satisfied. Exact restoration and retained tested product suffice for technical acceptance.",
+  "no_staged_files_recorded": true,
+  "owned_processes_stopped_recorded": true,
+  "commands_passed_in_records": [
+    "pipeline",
+    "resources-sync",
+    "resources-verify",
+    "full-sync-verify",
+    "frontend-test",
+    "frontend-typecheck",
+    "frontend-build",
+    "fullpreflight",
+    "sourcecaps"
+  ],
+  "recorded_failures_preserved": {
+    "initial_guard_order": 1,
+    "retry_admission_path": 1
+  },
+  "review_actions": "Read/parse evidence and drivers only; no browser/build/source or binary hash recomputation, no main writes.",
+  "remaining_notes": [
+    "numeric ID ambiguity",
+    "duplicate core metadata not rejected",
+    "aliases/skins/18 resources and all-I02/37 unclosed",
+    "no physical HID/listening",
+    "two simultaneous failures not a separate runtime case"
+  ]
+}

@@ -1,0 +1,41 @@
+✔ content traversal and index ordering ignore the process locale (122.81875ms)
+✖ resources-only refresh preserves catalog, legacy source and immutable packages and verifies bytes (168.344ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 209.909583
+
+✖ failing tests:
+
+test at scripts/test_original_resources.mjs:9:1
+✖ resources-only refresh preserves catalog, legacy source and immutable packages and verifies bytes (168.344ms)
+  AssertionError [ERR_ASSERTION]: file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/.scratch/resource-sync-J6bBUQ/worktree/scripts/sync-original-content.mjs:1854
+      throw new Error(`${label} mismatch`);
+            ^
+  
+  Error: resource source provenance mismatch
+      at assertJsonEqual (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/.scratch/resource-sync-J6bBUQ/worktree/scripts/sync-original-content.mjs:1854:11)
+      at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/.scratch/resource-sync-J6bBUQ/worktree/scripts/sync-original-content.mjs:273:3
+  
+  Node.js v26.4.0
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/test_original_resources.mjs:43:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+{"command": ["node", "--test", "scripts/test_original_resources.mjs", "scripts/test_original_content_order.mjs"], "exit": 1, "locked_seconds": 0.24138329198467545, "disk_free_bytes": 169081004032}

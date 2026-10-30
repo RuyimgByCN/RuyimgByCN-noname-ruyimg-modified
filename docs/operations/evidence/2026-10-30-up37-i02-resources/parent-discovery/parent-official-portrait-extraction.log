@@ -1,0 +1,26 @@
+{
+  "source": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.full.zip",
+  "release": "v1.11.6.1",
+  "archive_expected_sha256": "cb9fa579ae1abbd98d36208acc2937a8166d29466418a2d8ddf98d8118b376dc",
+  "full_archive_sha256_verified": false,
+  "reader_self_check": true,
+  "status": "complete",
+  "named_entries": [
+    "image/character/hm_yudu.jpg"
+  ],
+  "entry": "image/character/hm_yudu.jpg",
+  "bytes": 298137,
+  "crc32": "8f7c2d0e",
+  "entry_crc_verified": true,
+  "portrait_sha256": "b67250ecb85c757ddffbd1dc417ac807c93af187038c1331433ab1bd5671c2ef",
+  "local_file": "hm_yudu.jpg",
+  "actual_encoding": "PNG",
+  "dimensions": [
+    350,
+    464
+  ],
+  "pixels_decoded": true,
+  "scope": "Official resource release supplemental image only; adopted gameplay source unchanged",
+  "bytes_transferred": 2093754,
+  "asset_etag": "\"0x8DF33169FFFEF32\""
+}

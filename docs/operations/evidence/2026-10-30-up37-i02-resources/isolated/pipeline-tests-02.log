@@ -1,0 +1,11 @@
+✔ content traversal and index ordering ignore the process locale (124.173583ms)
+✔ resources-only refresh preserves catalog, legacy source and immutable packages and verifies bytes (447.826417ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 486.216917
+{"command": ["node", "--test", "scripts/test_original_resources.mjs", "scripts/test_original_content_order.mjs"], "exit": 0, "locked_seconds": 0.5154370839882176, "disk_free_bytes": 169063780352}

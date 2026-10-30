@@ -1,0 +1,13 @@
+[
+  {
+    "case": "actual corrupt response",
+    "error": 4,
+    "alert": "语音加载或解码失败，请检查本地资源。"
+  },
+  {
+    "case": "new character valid loadeddata",
+    "error": null,
+    "readyState": 4,
+    "alert": "语音加载或解码失败，请检查本地资源。"
+  }
+]

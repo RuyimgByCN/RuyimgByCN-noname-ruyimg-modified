@@ -1,0 +1,63 @@
+diff --git a/apps/web-client/src/views/CollectionView.vue b/apps/web-client/src/views/CollectionView.vue
+--- a/apps/web-client/src/views/CollectionView.vue
++++ b/apps/web-client/src/views/CollectionView.vue
+@@ -41,7 +41,8 @@
+ 
+ const catalog = ref<Catalog | null>(null);
+ const assetManifest = ref<{ assets: OriginalAudioAsset[] }>({ assets: [] });
+-const audioError = ref("");
++const manifestError = ref("");
++const audioErrors = ref(new Set<string>());
+ const error = ref("");
+ const loading = ref(false);
+ const query = ref("");
+@@ -94,7 +95,7 @@
+       if (manifest.schema_version !== 2 || !Array.isArray(manifest.assets)) throw new Error("资源清单无效");
+       assetManifest.value = manifest;
+     } catch (cause) {
+-      audioError.value = `无法读取语音资源清单（${String(cause)}）。`;
++      manifestError.value = `无法读取语音资源清单（${String(cause)}）。`;
+     }
+   } catch (cause) {
+     error.value = `无法读取原仓库内容目录（${String(cause)}）。请先启动 game-server。`;
+@@ -182,7 +183,7 @@
+         <p v-else class="muted">没有可解析的武将包技能。</p>
+ 
+         <h3>语音试听（{{ selectedAudio.length }}）</h3>
+-        <p v-if="audioError" class="error" role="alert">{{ audioError }}</p>
++        <p v-if="manifestError" class="error" role="alert">{{ manifestError }}</p>
+         <ul v-if="selectedAudio.length" class="skills">
+           <li v-for="voice in selectedAudio" :key="voice.path">
+             <label>
+@@ -192,9 +193,11 @@
+                 preload="none"
+                 :src="assetUrl(`assets/${voice.path}`)"
+                 :aria-label="`${selected.display_name} · ${voice.source_path}`"
+-                @error="audioError = '语音加载或解码失败，请检查本地资源。'"
++                @error="audioErrors.add(voice.path)"
++                @loadeddata="audioErrors.delete(voice.path)"
+               ></audio>
+             </label>
++            <div v-if="audioErrors.has(voice.path)" class="error" role="alert">语音加载或解码失败，请检查本地资源。</div>
+           </li>
+         </ul>
+         <p v-else class="muted">当前资源清单未提供该武将的直接技能或阵亡语音。</p>
+diff --git a/docs/operations/evidence/2026-10-30-up37-i02-resources/README.md b/docs/operations/evidence/2026-10-30-up37-i02-resources/README.md
+--- a/docs/operations/evidence/2026-10-30-up37-i02-resources/README.md
++++ b/docs/operations/evidence/2026-10-30-up37-i02-resources/README.md
+@@ -28,3 +28,15 @@
+ - catalog皮肤源未配置，静态／动态皮肤和共享别名均0；现有原包未发布skin_index。Liuli七份本地修改只读保留。合法皮肤源、真实作者包/稳定依赖与PackageStore生命周期验收仍缺，不能拿schema测试样本补数。
+ - UP37的54条资源变化路径已逐条保留来源路径／SHA／MIME和导入状态：35条当前可用资源已在清单，1条源画像已删除；另18条可用输入尚未导入或消费（`image/card/mashiro.png`、`image/card/ol_cailian.png`、`image/olxushao/*`的15份界面图片/按钮音效、`layout/others/skill.css`）。它们依赖N04/N06衍生牌与N07复合选择界面的真实呈现/交互契约，不因本次音频树导入被标成已支持。
+ - 自动对局技能／阵亡播放仍缺授权事件到资源键的消费链；N02–N07规则、模式迁移、R10剩余显示／AI、I03–I05验收与37来源G0–G5保持原范围。物理听感、桌面／移动真机、跨浏览器以及上游规则等价未在本批证明。
++
++## 独立审查P2-01修正补记（2026-10-30）
++
++独立审查实际复现：A音频失败后，全局`audioError`会污染正常B和无音频唐棠。现只改Collection局部错误状态：`manifestError`专门保留清单失败；媒体错误以`voice.path`记录并只显示在相应试听行；该行成功`loadeddata`删除该路径错误，不清其他行或清单错误。没有新增播放器、绑定、别名、皮肤、规则或schema。
++
++相同真实Vue浏览器回归在旧保留bundle上先红（A错误不属于任何voice行），在本次构建上九场景全绿：A真实HTML坏响应产生MediaError4；A另一条真实语音成功不清A错误；成功B/无音频T不显示A错误；原A媒体对象仍error4且src不变、已离开DOM；回到A仅原路径显示错误；A重新取得真实字节并loadeddata后清除自身错误；真实清单503及切换B/T均保留清单提示。没有通过修改源音频构造失败。
++
++本次重新执行隔离候选前端Node全套149/0、vue-tsc通过，Vite production构建通过。该149是当前隔离基线328/753的本轮结果，不能代替current main329/758的计数或验收。Vite runner初轮因原配置依赖`__dirname`失败；第二轮仅在自有构建启动器提供原配置目录的正常值，避免在共享node_modules写临时bundle配置。构建产物在自有evidence/correction目录，借用生成包只满足资源页导入、没有运行引擎规则。原日志不改，补记与新证据另存；未重复无关9652资源/16623保护文件全hash或全同步。
++
++措辞更正：原交接中“physical mouse event”实际为CDP `Input.dispatchMouseEvent`注入浏览器输入，不是OS-HID。原脚本没有记录`event.isTrusted`，不作独立可信输入断言；物理听感仍未测。私有静态服务也不是实际Rust ServeDir运行证据。
++
++保留审查限制：合成数字尾缀可有身份歧义，合成重复core metadata未被拒绝；目前没有已证明错配的现有角色案例，不扩写为当前数据错误。本批不扩数据绑定。汉末于毒继续使用明确的`image/character/yudu.jpg`，不导入或替换父线程研究的同名release文件。P2修正仍需原reviewer小diff复审，再由父线程完成current main集成/preflight。

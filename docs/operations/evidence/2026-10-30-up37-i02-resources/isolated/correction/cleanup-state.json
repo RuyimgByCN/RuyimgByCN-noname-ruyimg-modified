@@ -1,0 +1,25 @@
+{
+  "removed_own_links": [
+    {
+      "path": "apps/web-client/node_modules",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/wasm-pkg"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg"
+    }
+  ],
+  "borrowed_generated_inputs_unchanged": true,
+  "retired_unused_copied_wasm": true,
+  "browser_profiles_removed": true,
+  "dist_source_untouched": true,
+  "rust_target_created": false,
+  "no_staged_files": true,
+  "original_patch_sha256": "718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b",
+  "original_report_sha256": "4c5e10d2852d9552818f3df1289b061721f52b7889e73ad1752249018cd6ed22",
+  "disk_free_bytes": 168443121664
+}

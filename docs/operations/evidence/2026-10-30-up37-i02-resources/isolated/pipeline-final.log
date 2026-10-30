@@ -1,0 +1,10 @@
+✔ content traversal and index ordering ignore the process locale (124.986542ms)
+✔ resources-only refresh preserves catalog, legacy source and immutable packages and verifies bytes (611.591208ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 650.598292

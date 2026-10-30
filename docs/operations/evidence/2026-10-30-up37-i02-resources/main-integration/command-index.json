@@ -1,0 +1,359 @@
+[
+  {
+    "name": "hash-before",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/tmp/noname-resource-main-hashes.py",
+      "before"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 12.92088007926941,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161265397760,
+    "index": "commands.json"
+  },
+  {
+    "name": "pipeline",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--test",
+      "scripts/test_original_resources.mjs",
+      "scripts/test_original_content_order.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.7364418506622314,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161258905600,
+    "index": "commands.json"
+  },
+  {
+    "name": "resources-sync",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 4.906318187713623,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161217933312,
+    "index": "commands.json"
+  },
+  {
+    "name": "resources-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 8.00703477859497,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161223475200,
+    "index": "commands.json"
+  },
+  {
+    "name": "full-sync-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 3.7216062545776367,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161222787072,
+    "index": "commands.json"
+  },
+  {
+    "name": "frontend-test",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 0.8824319839477539,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161222504448,
+    "index": "commands.json"
+  },
+  {
+    "name": "frontend-typecheck",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 1.3797669410705566,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161221906432,
+    "index": "commands.json"
+  },
+  {
+    "name": "frontend-build",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 2.4026737213134766,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161228558336,
+    "index": "commands.json"
+  },
+  {
+    "name": "fullpreflight",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 322.15711784362793,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164474580992,
+    "index": "gate-commands.json"
+  },
+  {
+    "name": "sourcecaps-selftests",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 49.41109919548035,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164402180096,
+    "index": "gate-commands.json"
+  },
+  {
+    "name": "sourcecaps",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 5.88323712348938,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164482842624,
+    "index": "gate-commands.json"
+  },
+  {
+    "name": "links-all",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.7838590145111084,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 164483420160,
+    "index": "gate-commands.json"
+  },
+  {
+    "name": "catalog-url-audit",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-url-audit.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.23222708702087402,
+    "index": "http-commands.json"
+  },
+  {
+    "name": "helper-aux",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-helper-review.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.19610595703125,
+    "index": "http-commands.json"
+  },
+  {
+    "name": "browser-happy",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-audio.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy",
+      "http://127.0.0.1:53383"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 2.973607063293457,
+    "index": "http-commands.json"
+  },
+  {
+    "name": "browser-errors",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-errors.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/errors",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy/validated-dist",
+      "http://127.0.0.1:53383"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "seconds": 0.5756993293762207,
+    "index": "http-commands.json"
+  },
+  {
+    "name": "catalog-url-audit",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-url-audit.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.21318888664245605,
+    "index": "retry-real-http/http-commands.json"
+  },
+  {
+    "name": "helper-aux",
+    "argv": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/tmp/noname-resource-helper-review.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.19371509552001953,
+    "index": "retry-real-http/http-commands.json"
+  },
+  {
+    "name": "browser-happy",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-audio.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy",
+      "http://127.0.0.1:54420"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 2.914566993713379,
+    "index": "retry-real-http/http-commands.json"
+  },
+  {
+    "name": "browser-errors",
+    "argv": [
+      "node",
+      "/tmp/noname-resource-browser-errors.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/errors",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist",
+      "http://127.0.0.1:54420"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 1.1107711791992188,
+    "index": "retry-real-http/http-commands.json"
+  },
+  {
+    "index": "real-http-stage.log",
+    "exit": 1,
+    "wrapper": "/tmp/noname-run-serialized.py",
+    "details": "Exact argv, exit and locked duration are preserved in the final JSON line of this log."
+  },
+  {
+    "index": "real-http-retry-stage.log",
+    "exit": 1,
+    "wrapper": "/tmp/noname-run-serialized.py",
+    "details": "Exact argv, exit and locked duration are preserved in the final JSON line of this log."
+  },
+  {
+    "index": "real-http-retry-02-stage.log",
+    "exit": 0,
+    "wrapper": "/tmp/noname-run-serialized.py",
+    "details": "Exact argv, exit and locked duration are preserved in the final JSON line of this log."
+  },
+  {
+    "index": "finalize.log",
+    "exit": 0,
+    "wrapper": "/tmp/noname-run-serialized.py",
+    "details": "Exact argv, exit and locked duration are preserved in the final JSON line of this log."
+  },
+  {
+    "index": "hash-after.log",
+    "exit": 0,
+    "wrapper": "/tmp/noname-run-serialized.py",
+    "details": "Exact argv, exit and locked duration are preserved in the final JSON line of this log."
+  }
+]

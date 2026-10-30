@@ -1,0 +1,81 @@
+{
+  "head": "44982f45edfb1a365163ecdacc08fa972219684e",
+  "changed_two_verified": [
+    {
+      "path": "apps/web-client/src/views/CollectionView.vue",
+      "sha256": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+      "bytes": 11656
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+      "sha256": "0165d8e2a382fd106ae8d537aa9f0f208f662d56770e48729508565d5fe0b62b",
+      "bytes": 7550
+    }
+  ],
+  "other_eight_manifest_matches_original_entry": true,
+  "other_eight_not_rehashed": true,
+  "patches": [
+    {
+      "path": "../evidence/correction/up37-i02-resources-error-correction.patch",
+      "sha256": "361dfa51fb17404658783c38534e5861aaafc3f9636aeda4410ff7c36dc37c8f",
+      "bytes": 5858
+    },
+    {
+      "path": "../evidence/correction/up37-i02-resources-corrected.patch",
+      "sha256": "489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658",
+      "bytes": 2702237
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/up37-i02-resources-error-correction.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/up37-i02-resources-corrected.patch"
+      ],
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "stderr": ""
+    }
+  ],
+  "browser_cases_reviewed": 9,
+  "browser_rerun": false,
+  "bundle_fingerprints_verified": [
+    {
+      "path": "index.html",
+      "sha256": "7a073f50d53fc007644fb4cc66d06a1e20cc3b44034110739792f95b2b345b95"
+    },
+    {
+      "path": "assets/index-D-Mh7RdJ.js",
+      "sha256": "98150b87e897263efe00d610fa655ca6bfa8d6ff18c83bb55e67fb33c0c02291"
+    },
+    {
+      "path": "assets/index-D88M9ba_.css",
+      "sha256": "1984f5c2202527050a63043a80420c4e457a5080cf042f62272ae3cec6312dd4"
+    }
+  ],
+  "staged_files": [],
+  "source_edits": [],
+  "test_scope_note": "Two simultaneous failures are not in the nine recorded runtime cases; Set.add/delete(path) identity inspected statically."
+}

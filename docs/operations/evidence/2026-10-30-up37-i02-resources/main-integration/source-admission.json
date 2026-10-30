@@ -1,0 +1,33 @@
+{
+  "runtime_matches_admission": true,
+  "runtime": {
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "scripts/test_original_resources.mjs": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "apps/web-client/src/engine/originalResources.ts": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+    "apps/web-client/src/views/CollectionView.vue": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+    "apps/web-client/scripts/original-resources.test.mjs": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47"
+  },
+  "protected_count": 17124,
+  "legacy_protected_count": 16623,
+  "source_count": 31799,
+  "upstream_asset_count": 12359,
+  "wasm_inputs": {
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": "2905028b85234b9535184418f39838b30b5e79be2f8b0e82baebc78ccbc3425b",
+    "apps/web-client/src/wasm-pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/src/wasm-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/wasm-pkg/package.json": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/src/wasm-pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm": "2905028b85234b9535184418f39838b30b5e79be2f8b0e82baebc78ccbc3425b",
+    "apps/web-client/public/pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/public/pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+    "apps/web-client/scripts/nc12-wasm-bench.mjs": "7ac87591d0e7d5c9ef8e4a790d90d7206806a02c4c900dd4e7932feb73fd7a12",
+    "apps/web-client/scripts/build-wasm.mjs": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "01fcd113f5c812d263b564ed768a4d9fa14de80d1186b7eceb30b16115747169"
+  }
+}

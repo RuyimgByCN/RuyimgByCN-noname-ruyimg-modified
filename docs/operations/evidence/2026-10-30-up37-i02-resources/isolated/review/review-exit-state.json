@@ -1,0 +1,69 @@
+{
+  "files": [
+    {
+      "path": "apps/web-client/scripts/original-resources.test.mjs",
+      "sha256": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "apps/web-client/src/engine/originalResources.ts",
+      "sha256": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "apps/web-client/src/views/CollectionView.vue",
+      "sha256": "39bfe12bccf04156ba78e351116942a89aa58c2706b243618d29d0a384673343",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "content/original/asset-manifest.json",
+      "sha256": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "sha256": "d7db1e72722c601ca2c6e827341403f126f0aefde0b8918d91d5991dade9e0f5",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "docs/architecture/native-remaining-ledger.md",
+      "sha256": "c7ce2f9f84ef4fc29060849c2fdc63994fd2059f272bf1e8b1456935a5cf718d",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "docs/architecture/native-rules-baseline.md",
+      "sha256": "677ec6a476f1f9b21147ffb82f16b106871810721d6902edfea172c65f0439c4",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+      "sha256": "f430b07429fb34a677a95ce952ebe49750f99752a360bb9682bf4517232d4149",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "scripts/sync-original-content.mjs",
+      "sha256": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    },
+    {
+      "path": "scripts/test_original_resources.mjs",
+      "sha256": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+      "unchanged_since_entry": true,
+      "matches_handoff": true
+    }
+  ],
+  "status_paths_unchanged": true,
+  "staged_files": [],
+  "patch_sha256": "718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b",
+  "patch_reverse_check_exit": 0,
+  "diff_check_exit": 0
+}

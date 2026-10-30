@@ -1,0 +1,14 @@
+{
+  "owned_active_chrome_or_servers": [],
+  "initial_failed_runner_orphan_chrome_pid": 34152,
+  "initial_orphan_terminated_and_profile_removed": true,
+  "native_room_stores_removed": true,
+  "source_target_created": false,
+  "borrowed_binary_and_serialization_wrapper_preserved": true,
+  "A330_cache_untouched": true,
+  "no_staged_files": true,
+  "tracked_dist_exact_HEAD": true,
+  "CARGO_INCREMENTAL": "0",
+  "disk_free_bytes": 161891774464,
+  "retained_product_bytes": 40386193
+}

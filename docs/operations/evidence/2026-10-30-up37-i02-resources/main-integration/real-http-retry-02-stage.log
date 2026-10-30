@@ -1,0 +1,2 @@
+real HTTP and browser acceptance passed
+{"command": ["python3", "-B", "/tmp/noname-resource-real-http-retry.py"], "exit": 0, "locked_seconds": 4.933140291977907, "disk_free_bytes": 164431024128}

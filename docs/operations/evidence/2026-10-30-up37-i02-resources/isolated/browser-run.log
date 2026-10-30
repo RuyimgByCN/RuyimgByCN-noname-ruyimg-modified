@@ -1,0 +1,2 @@
+{"passed":true,"cases":[{"name":"star_dongyun","decoded":5,"clickedPlayback":{"paused":false,"time":0.018963,"duration":4.768667,"readyState":4,"error":null}},{"name":"ol_sb_zhouyu","decoded":5},{"name":"dc_sb_zhouyu","decoded":5},{"name":"tangtang","decoded":0}]}
+{"command": ["node", "../evidence/browser-audio.mjs", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree", "../evidence"], "exit": 0, "locked_seconds": 2.677958624990424, "disk_free_bytes": 169060880384}

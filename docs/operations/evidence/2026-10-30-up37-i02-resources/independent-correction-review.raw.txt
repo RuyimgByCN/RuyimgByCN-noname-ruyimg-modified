@@ -1,0 +1,29 @@
+# UP37-I02 resources 错误状态增量复审
+
+**Source verdict：OK with notes。原P2-01关闭，本次增量未发现新P1/P2。**
+本结论覆盖修正后的隔离10path候选；基线仍为`44982f45`、328/105/753/WS5，不等于current main集成或完整I02验收。
+
+已读取新handoff、5858-byte两路径补丁、当前Collection、完整浏览器脚本/九场景JSON、旧bundle red及本轮149/0、typecheck/build日志。
+`CollectionView.vue:44–45,98,186`将manifest错误独立保存；`:196–200`按`voice.path`添加、显示及删除媒体错误，成功一项不会清空其他项或manifest状态。
+真实Vue九场景证据足够支持关闭原P2：A产生MediaError4且仅对应行报错；A另一语音成功不清A错误；B成功/无audio唐棠不受污染；返回A保留原路径错误，A恢复真实字节并loadeddata后清除。
+manifest真实503后的提示在切B/T后保留；旧A媒体对象在切换后已离开DOM、仍保留其原src/error4，证明没有靠改旧对象伪造成功。
+**证据边界**：九场景没有“两个路径同时失败再恢复一个”的独立runtime场景；本项由`Set.add/delete(voice.path)`及逐行条件静态确认，不能写成已跑该双失败场景。原审查的移除暂停/离页生命周期证据沿用，本轮没有新增卸载钩子。
+
+本次独立执行：两patch的`git apply --reverse --check`、`git diff --check`、两路径/补丁/页面JS-CSS指纹比较，均通过；无本次运行失败。
+保留bundle首页及JS/CSS的SHA与`final-build-sha256.json`一致；九场景green记录无Runtime异常。无需重复build、浏览器全流程或资产hash。
+实现方日志中的149/0、vue-tsc、Vite113模块通过只属于本隔离候选；旧bundle red及首次runner因`__dirname`失败的日志均保留，不改记为全程成功。
+
+新Collection SHA256：`44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf`。
+新证据README SHA256：`0165d8e2a382fd106ae8d537aa9f0f208f662d56770e48729508565d5fe0b62b`。
+其余8path复用原review entry指纹，并与corrected manifest逐项一致，未重新hash；总候选仍10path。
+correction patch：5858 bytes，SHA256 `361dfa51fb17404658783c38534e5861aaafc3f9636aeda4410ff7c36dc37c8f`。
+corrected total patch：2702237 bytes，SHA256 `489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658`。
+本次检查证据：[review-correction/checks.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review-correction/checks.json)；九场景：[green/browser-result.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/green/browser-result.json)。
+
+README只追加修正与CDP措辞补记：CDP输入不是OS-HID，原脚本没有独立`event.isTrusted`记录，更不代表物理听感。
+数字ID尾缀歧义、重复core metadata未拒绝等原限制保留；没有新证实的当前角色错配，也不声称本次解决aliases/skin或18份其他资源。
+预览仍是CDP将7700请求导向私有静态服务，**真实Rust ServeDir运行链与current main/B/J2组合验收仍待**。
+本次只写自有review-correction证据及本报告；未改候选源码/文档/包、main、上游或Git暂存区，无commit、Rust/WASM编译或链接恢复。
+建议下一步：父线程可接收此corrected total patch作为source已复审候选，再在授权主树完成资源生成及受影响的集成/preflight；不关闭全I02。
+
+Skipped：未重复build/runtime/9652资产hash；双失败归属只作静态核查。Risk：main集成、真实ServeDir与物理平台/听感仍未验收。

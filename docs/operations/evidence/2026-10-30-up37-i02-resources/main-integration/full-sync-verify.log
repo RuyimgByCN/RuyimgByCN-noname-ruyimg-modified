@@ -1,0 +1,5 @@
+original content verified:
+  legacy-source: 366 files, 14.9 MiB, 0 linked, 366 copied
+  portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+  audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+{"command": ["node", "scripts/sync-original-content.mjs", "--verify-only"], "exit": 0, "locked_seconds": 3.6773032500059344, "disk_free_bytes": 161222787072}

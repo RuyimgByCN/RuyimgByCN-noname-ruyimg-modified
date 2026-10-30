@@ -1,0 +1,102 @@
+# UP37-I02 resources 独立只读审查
+
+**Source verdict：CHANGES REQUESTED，P2 × 1；未发现P1。** 音频导入及受限同步路径整体符合本切片边界，但试听错误状态会串到后续武将，应先做下面的最小修复并复审。此结论只覆盖所列10路径；不是current main、B/J2、完整I02、UP37或37来源验收。
+
+审查日期：2026-10-30。候选HEAD `44982f45edfb1a365163ecdacc08fa972219684e`，328/105/753/WS5；主树329/758的B/J2独立冻结。本次完整读取185行实现交接、canonical AGENTS/NONAME_NEXT_AGENT_SPEC及10个文件，继续读取同步器共享函数、排序器、catalog、实际上游技能声明、Collection路由与App生命周期、game-server装配/config、Vite与保留的production bundle。没有修改候选源码、文档、包、上游或主树，没有staging/commit；自有证据仅写入候选兄弟 `evidence/review/`，本报告按本轮指定绝对路径输出。
+
+## P1 / P2 findings
+
+### P2-01：音频加载错误永久污染其他武将的试听区
+
+- **位置**：`apps/web-client/src/views/CollectionView.vue:195`，关联`:43`、`:185`及`:147`的选中武将切换。
+- **原因与影响**：所有audio的error写入同一个`audioError`。切换selected、其他音频成功加载或原失败audio卸载均不清除它；该错误同时承载manifest读取错误。一次失败以后，正常武将甚至无音频武将也显示“语音加载或解码失败，请检查本地资源”，用户无法判断当前资源是否真的有错。
+- **真实复现**：在交接保留的production bundle上选`star_dongyun`，让其第一个audio请求得到非音频HTML响应（200），浏览器产生`MediaError.code=4`；随后选`huan_zhouyu`并加载其真实阵亡音频，观察到`readyState=4, error=null`，错误提示仍存在；再选`tangtang`，当前audio数量0，提示仍存在。不是只靠阅读推测，也没有损坏源资产。
+- **最小修法**：将manifest读取错误与每条audio的加载错误分开；audio错误按`voice.path`记录并仅在相应当前试听项旁显示，成功`loadeddata`时清除该项。这样切换武将不会携带无关失败，也不会误清除仍存在的manifest读取错误。补一项“失败A → 成功B/无音频角色”的组件或浏览器回归即可；不需要播放器框架。
+- **证据**：[浏览器结果](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/browser-result.json)、[日志](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/browser-lifecycle.log)、[可重跑脚本](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/browser-lifecycle.mjs)。
+
+## 已核查的调用链与边界
+
+| 检查面 | 结论与证据界限 |
+|---|---|
+| resources-only / Cargo / catalog / frozen包 | `scripts/sync-original-content.mjs:264`分支仅读取manifest/catalog、精确比较两处provenance、检查可选树残留、同步/验证非legacy资源树、生成assets并写asset-manifest；`:295`直接退出。Cargo在`:321`，catalog/ported/Web标准资产生成在后续普通分支，均不可达。`syncTree`目标仅由固定trees定义；此分支没有catalog、ported、npacks或frozen写入。未启动Rust。 |
+| SHA / corrupt target / unadopted source | `verifyTree`比较文件列表、长度，不同inode时比较SHA；同inode仍由`assetEntries`重算SHA并与已采用manifest比较，不能凭hardlink跳过最终清单checksum。验证模式拒绝坏目标；普通sync模式按设计重建目标。provenance比较发生在任何`syncTree`写入前。已读入口回归和原始pipeline日志，包含断开目标hardlink后腐坏、源字节不变及未采用head写入前拒绝。本次未重跑该pipeline（原因见失败/未验证）。 |
+| symlink / Git status修复 | `sourceProvenance:1458`改为`git -C root status --porcelain=v1 -z --untracked-files=all -- .`，Git在physical cwd解释`.`，不再把logical绝对路径交给physical repo；不是忽略status错误。HEAD/remote获取及`parseGitStatus`仍保留；tracked修改仍计入列表，新增目录中文件仍因`--untracked-files=all`计数；repo根标签由realpath相对关系映射回logical路径。不同HEAD/remote/逻辑root或相关status会导致精确比较失败。不同physical副本若相同remote/HEAD/status且占同一个logical路径，并非此provenance协议可区分的身份；它没有新增physical路径或dirty文件内容指纹。本次仅静态核查该边界；动态反例夹具未成功建立，不能宣称三类反例均独立重跑通过。canonical core只读status为空，HEAD为采用的`1a548c95…`。 |
+| manifest兼容与顺序 | 独立JSON比较：既有2707条assets保持原内容与原序，既有两个tree summary及相对顺序不变，sources对象不变；新增9652条/651011056 bytes；全12359个path唯一，音频均core、`path===source_path`。没有新schema/注册表。`manifest-structure.json`记录结果。16623份保护hash不变是实现证据，本次未全量重复hash；独立diff/patch检查没有保护路径变更。 |
+| URL / 恶意metadata | `originalResources.ts:11`逐段拒绝空段、`.`/`..`、反斜杠、百分号（含encoded separator和双编码）、query/fragment、colon/控制字符，再逐段encodeURIComponent；固定contentBase与安全相对path组合不会由asset字段跳到其他origin/root。`:23`拒绝非core、非audio、非相等source_path、坏SHA格式、非正safe integer大小和非`.mp3`。本次13条恶意path及9类metadata断言通过，包括alias不支持时的`source_path!==path`拒绝。SHA在客户端只做格式检查，实际字节完整性由同步验证证据提供，不应把前端称为下载后验签。 |
+| actual IDs / direct lookup | 实际catalog skills直接参与筛选，death采用完整`audio/die/<name>.mp3`，没有把pack/display_name当身份；普通`star`不会命中`starbishi1`，非数字尾缀也不会误命中。星董允结果顺序稳定为death、starbishi1/2、starzhengting1/2（沿manifest）。上游明确的其他audio别名与audioname不由此helper解析。 |
+| production / ServeDir | `apps/game-server/src/main.rs:68`以`cfg.original_content_root`创建ServeDir，`:163`真实挂载`/original-content`；config默认`content/original`并支持`NONAME_ORIGINAL_CONTENT_ROOT`。前端URL落在`/original-content/assets/audio/...`，无需Vite把651MB资源放入bundle。保留JS/CSS的SHA与原build-output-sha256一致。本次浏览器用该保留bundle及真实manifest/audio字节；没有重建或运行实际game-server。 |
+| audio生命周期 / A11y | 实测两个原生audio可同时播放（不是自动互斥播放器；本切片未承诺互斥）；切换到无audio角色及离开Collection后，旧DOM均断开且暂停。native controls、preload=none与含角色/路径的aria-label存在；错误有role=alert。未独立做键盘、屏幕阅读器和真机A11y验收。唯一复现的问题是上述共享错误状态。 |
+| 老manifest降级 | schema2且只有旧portrait rows时，helper筛选为空、audioCount为0，画像/catalog路径仍可用；清单缺失/无效则局部catch显示audio错误，catalog保持显示。helper空assets断言通过；本次未再做老manifest全页浏览器替换。 |
+
+## 必须保留的限制，勿写成已证明
+
+1. **数字歧义和冲突并未获得强身份保证**：helper允许任意正整数尾缀。合成`audio/skill/voice21.mp3`会被`skills:["voice"]`接受，也无法仅凭basename区分“voice第21条”与“voice2第1条”。本次未发现一个已证明串错其他武将的当前catalog案例，不把合成歧义夸大成现有角色错误。实际`jijiang → jijiang1`、`baonue → baonue2`、`huoshou → huoshou1`上游还确实声明了这些映射，因此也不能把这些现有匹配误报为错音频。若后续要求严格排除数字ID歧义，需要沿AST声明确定完整音频基名/数量，歧义时拒绝；不能宣称本helper已经证明所有别名语义。
+2. **多源边界是拒绝非core，而不是通用冲突解决**：合成skin+core同path只保留core；两条core同path但不同SHA则都被返回（实测2条），会导致相同Vue key。当前清单path全部唯一，所以未列为当前数据触发的P2；不得据此声称任意恶意重复清单已被拒绝。未来接alias/多源时应按完整path检测冲突并拒绝，不能first-wins。
+3. 合法positive safe integer的“大文件”不会因尺寸上限被拒绝；目前size不用于分配缓冲区，原生audio还是preload=none。格式校验是`.mp3`扩展名，不是浏览器codec有效性证明。非MP3字节被保留在原树，失败通过audio事件报告。
+4. aliases、source-missing及18份其他UI/card/CSS资源仍未关闭；现有npacks无真实skin_index载荷，schema样本不能替代真实作者包生命周期。`hm_yudu`明确`image/character/yudu.jpg`且已正确保留，不存在因缺`hm_yudu.jpg`而判定其画像缺失的依据。父线程研究的同名远程release文件不在本候选审查范围。
+
+## 证据措辞复核
+
+- 实现交接第一段“physical mouse event”应改称 **CDP `Input.dispatchMouseEvent`注入浏览器输入**。原脚本`:49`直接证明来源。它可建立renderer用户激活/可信浏览器输入效果，但不是OS-HID，也没有本次记录`event.isTrusted`的独立断言；绝不能记入PA09物理HID或实际听感通过。本次生命周期补测也使用同类CDP输入。
+- 原20 decode仅证明所列20份样本的HTTP/WebAudio结果；不推导9652份全部codec有效。本次没有重复20份，更没有全音频解码。
+- 原浏览器及本次浏览器只重定向`http://127.0.0.1:7700/original-content/*`至自己的随机端口静态服务。页面构建产物与资产真实，但该私有服务不是Rust ServeDir进程；实际server HTTP链只能记“源码装配已核查，运行验收仍待”。
+- 原149/0、pipeline2/0、full/resource verify、type/build及24718次长度/SHA结果均限于交接基线的历史日志。本次未把这些计数替代current main 153或B/J2验收。原build借329/758生成模块仅为资源页导入取证，仍不能宣称328引擎组合正确。
+
+## 本次定向命令、失败与未验证
+
+实际补测仅两类轻量检查（资源helper反例、保留bundle的生命周期），没有全套重复验证：
+
+| 命令/动作 | 结果 |
+|---|---|
+| `node ../evidence/review/helper-review.mjs` | exit0；13条path、9类metadata拒绝断言、空清单/多源过滤/顺序通过，并记录数字歧义、core重复未拒绝。`helper-run.log`、`helper-result.json`。 |
+| `node ../evidence/review/browser-lifecycle.mjs "$PWD" "$PWD/../evidence/review"` | 最终exit0；实际坏响应、成功切换后旧错误、两控件播放、移除暂停及离页均记录。初次exit1为未建立用户激活时程序调用play产生NotAllowedError，保留`browser-lifecycle-initial-failure.log`；加CDP点击后完成，同一播放器代码未改。 |
+| `node ../evidence/review/focused-review.mjs` | exit1，原计划夹具在`git clone --shared --no-checkout <canonical upstream> <own evidence fixture>`阶段失败。Git exit128：promisor缺对象`2103d96648a21da9c119edc38398c1d59ce944fe`、lazy fetching disabled/early EOF。`focused-run.log`保留原文；这是审查夹具环境失败，不是候选source结论，也不据Git错误文字宣称上游仓实际损坏。没有改换同步CLI、修上游或创建提交；该夹具的sync/verify/修改文件/新目录反例均未执行。 |
+| `git apply --reverse --check ../evidence/up37-i02-resources.patch`；`git diff --check`；`git apply --numstat ...` | 均exit0；补丁准确覆盖10path（7代码/清单/测试 + 3docs），候选可反向检查。 |
+| JSON/sha检查与`GIT_OPTIONAL_LOCKS=0 git ... status/rev-parse` | exit0；manifest结构及来源HEAD符合交接；保留bundle JS/CSS哈希与原构建记录一致。 |
+
+初始只读探测还遇到`rg apps/web-client/src/router`不存在（实际为`router.ts`）及`ls ../archive apps/web-client/node_modules`缺失；这是交接已移除的lookup链接/文件定位问题，未恢复链接。源码读取后用真实`router.ts`检查调用关系。没有运行npm全套、build、Cargo/Rust/WASM、资源全量再hash、全量decode，也没有修改官方CLI。符号链接下真实modified/new-directory/different-root的动态反例、完整old-manifest浏览器回归、真实ServeDir、其他浏览器/设备、屏幕阅读器、物理输入和听感均仍未独立验证。
+
+## 10路径SHA与未改动证明
+
+纯补丁2699727 bytes，SHA256 **`718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b`**。以下10个文件在审查入口及出口均与`changed-files.json` final_sha256一致；补丁reverse check通过。入口/出口status路径集合相同，staged为空。参见`review-entry-state.json`、`review-exit-state.json`；运行时既有`.pi-lens-probe-home`由宿主产生，本审查没有操作它。
+
+| 文件 | SHA256 |
+|---|---|
+| apps/web-client/scripts/original-resources.test.mjs | `1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47` |
+| apps/web-client/src/engine/originalResources.ts | `0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1` |
+| apps/web-client/src/views/CollectionView.vue | `39bfe12bccf04156ba78e351116942a89aa58c2706b243618d29d0a384673343` |
+| content/original/asset-manifest.json | `41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434` |
+| docs/architecture/native-progress.md | `d7db1e72722c601ca2c6e827341403f126f0aefde0b8918d91d5991dade9e0f5` |
+| docs/architecture/native-remaining-ledger.md | `c7ce2f9f84ef4fc29060849c2fdc63994fd2059f272bf1e8b1456935a5cf718d` |
+| docs/architecture/native-rules-baseline.md | `677ec6a476f1f9b21147ffb82f16b106871810721d6902edfea172c65f0439c4` |
+| docs/operations/evidence/2026-10-30-up37-i02-resources/README.md | `f430b07429fb34a677a95ce952ebe49750f99752a360bb9682bf4517232d4149` |
+| scripts/sync-original-content.mjs | `97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7` |
+| scripts/test_original_resources.mjs | `6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568` |
+
+建议下一步：只修P2-01并复审该小diff；校正交接的physical mouse措辞。之后再由父线程决定将10path资源候选整合到B/J2，在获授权的主树重新生成实际资源并跑相应集成检查。当前不批准合并main或关闭完整I02。
+
+Skipped：没有重跑全量构建/资源hash/Rust/WASM或真机验收。风险：P2错误状态、数字身份/重复恶意清单的有限保证、来源动态反例未完成以及current main集成未验收。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"完成指定10路径只读审查；候选文件入口/出口SHA一致，未改源码/文档/包/主树/上游，未staging或commit。"},
+    {"id":"criterion-2","status":"satisfied","evidence":"报告给出P2具体file:line、真实浏览器触发与最小修法，保留轻量反例、所有失败及10文件SHA/补丁校验和未验证边界。"}
+  ],
+  "changedFiles": [],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command":"node ../evidence/review/helper-review.mjs","result":"passed","summary":"13条path与9类metadata拒绝；顺序/空清单/多源边界及合成限制记录。"},
+    {"command":"node ../evidence/review/browser-lifecycle.mjs $PWD $PWD/../evidence/review","result":"passed","summary":"P2旧错误复现；成功加载readyState4/error=null仍显示，移除音频暂停。"},
+    {"command":"initial browser-lifecycle.mjs without user activation","result":"failed","summary":"NotAllowedError；保留原log，CDP点击后同一播放器完成定向检查。"},
+    {"command":"node ../evidence/review/focused-review.mjs","result":"failed","summary":"本地Git夹具克隆失败，promisor缺对象/early EOF；未执行动态provenance与sync反例。"},
+    {"command":"git apply --reverse --check ../evidence/up37-i02-resources.patch; git diff --check; manifest/per-file SHA comparison","result":"passed","summary":"10path匹配交接，原2707rows/2tree/provenance不变，审查前后无候选文件变化。"}
+  ],
+  "validationOutput": ["无P1；P2-01待修，source verdict CHANGES REQUESTED。","staged为空，status路径集合及10path SHA均未变。","原149/0、pipeline2/0、20decode等仅引用实现基线证据，不是current main验收。"],
+  "residualRisks": ["P2-01共享错误串角色。","数字ID歧义/重复core metadata没有严格拒绝保证，当前唯一清单未发现已证实错角色案例。","provenance动态反例夹具失败；真实ServeDir、真机/物理HID/听感和main集成未验证。","aliases/skin_index真实作者包/18份其他资源及完整I02仍待。"],
+  "noStagedFiles": true,
+  "diffSummary": "本次仅新增自有审查证据和指定输出报告；候选10path未改。",
+  "reviewFindings": ["P2: apps/web-client/src/views/CollectionView.vue:195 - 音频错误在成功切换角色后仍永久显示。"],
+  "manualNotes": "审查发现P2后未越权修源码；建议小修复审，再独立做B/J2集成。跳过全量重复验证；CDP输入不能记物理HID/听感。"
+}
+```

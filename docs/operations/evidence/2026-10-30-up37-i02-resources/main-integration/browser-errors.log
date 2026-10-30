@@ -1,0 +1,11 @@
+file:///private/tmp/noname-resource-browser-errors.mjs:26
+  if(resource) { res.writeHead(500).end("Unexpected non-injected local resource request"); throw new Error(url.pathname); }
+                                                                                           ^
+
+Error: /original-content/assets/audio/die/star_dongyun.mp3
+    at Server.<anonymous> (file:///private/tmp/noname-resource-browser-errors.mjs:26:98)
+    at Server.emit (node:events:509:20)
+    at parserOnIncoming (node:_http_server:1383:12)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)
+
+Node.js v26.4.0

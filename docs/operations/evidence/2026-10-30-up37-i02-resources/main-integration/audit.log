@@ -1,0 +1,2 @@
+{"artifact_count": 119, "no_staged_files": true, "owned_processes": 0, "disk_free_bytes": 161874161664}
+{"command": ["python3", "-B", "/tmp/noname-resource-audit.py"], "exit": 0, "locked_seconds": 0.20570087499800138, "disk_free_bytes": 161873195008}

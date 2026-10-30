@@ -1,0 +1,12 @@
+[
+  {
+    "path": "apps/web-client/src/views/CollectionView.vue",
+    "reviewed_base_sha256": "39bfe12bccf04156ba78e351116942a89aa58c2706b243618d29d0a384673343",
+    "corrected_sha256": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf"
+  },
+  {
+    "path": "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+    "reviewed_base_sha256": "f430b07429fb34a677a95ce952ebe49750f99752a360bb9682bf4517232d4149",
+    "corrected_sha256": "0165d8e2a382fd106ae8d537aa9f0f208f662d56770e48729508565d5fe0b62b"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "protected": {
+    "before": 17124,
+    "after": 17124,
+    "equal": true,
+    "aggregate_sha256": "d0283cc5ccdcc7deb7454c4e70a9ac4dde8e297fcf5a63c3a5c4d90107bb7681",
+    "changed": []
+  },
+  "source": {
+    "before": 31799,
+    "after": 31799,
+    "equal": true,
+    "aggregate_sha256": "9331596a49cfa98a617ddff5654248a6d85c4aff688630b8f844f7d6fe125b07",
+    "changed": []
+  },
+  "wasm": {
+    "before": 16,
+    "after": 16,
+    "equal": true,
+    "aggregate_sha256": "a7e892b558a80aa214cf76530a45fa607460ca4e754031dd3c7fbf9c6fd457dc",
+    "changed": []
+  },
+  "upstream_assets": {
+    "before": 12359,
+    "after": 12359,
+    "equal": true,
+    "aggregate_sha256": "ebb5e2e60ee3ab363e87480a7cfca82746ba872dd66f5e514a71f38f61de5602",
+    "changed": []
+  },
+  "runtime": {
+    "before": 6,
+    "after": 6,
+    "equal": true,
+    "aggregate_sha256": "60c80a948e2468d049990386a8b3f861f8ec3ccffa7d721fe7abeaa9b6e5a64f",
+    "changed": []
+  }
+}

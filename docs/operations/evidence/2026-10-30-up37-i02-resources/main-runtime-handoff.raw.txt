@@ -1,0 +1,50 @@
+当前 main 资源增量的功能验证通过；维护源码、测试、包及上游输入前后不变。核验日期 2026-10-30，HEAD `255bbfbd7f6916ee77bd29799826a225bd10871f`，329／archive105／ABI758／WS5／WASM default。未运行 Rust/WASM 编译，未动 A330 缓存、7700 服务、房间数据、guard 或暂存区。
+
+证据根：[main-integration](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration)。[命令索引](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/command-index.json)保存逐命令 argv／cwd／exit；对应日志保留原失败及警告。[artifact-sha256.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/artifact-sha256.json)固定119份产物，最终 audit.log 为生成该清单后的独立日志。
+
+- 7个准入路径均匹配父 admission；6个代码／数据路径前后 SHA 不变。既有16,623保护路径自采当前main字节，扩大到17,124保护文件全部不变；未拿隔离候选旧摘要冒充B329。2707旧manifest rows、两tree、provenance及顺序保留；新增9652 audio／651011056B。
+- `node --test scripts/test_original_resources.mjs scripts/test_original_content_order.mjs`：2/2；canonical `--resources-only` sync、同模式 verify、完整 `--verify-only` 均exit0。完整verify分支已读源码，未进入Cargo。
+- main `npm test`：156/156，包含现有B完整字段/outcome断言；typecheck与标准npm build均exit0，Vite117模块。两条Node localStorage ExperimentalWarning保留。现成native／legacy WASM输入只读；16项WASM相关输入前后完全相同，完整生成模块输入另有HTTP前后SHA记录。
+- 真实Rust binary SHA `9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489`；读取实际config/main后以独立全新store启动，最终成功进程PID43762、`http://127.0.0.1:54420`，original_content_root为main/content/original。旧引擎扩展根为空隔离目录，native包根为main/packages/extensions（启动装载41包）；未创建对局或触碰既有房间。
+- 真实ServeDir直接27 GET＝catalog＋manifest＋5画像＋20音频。20音频HTTP长度/SHA＝源文件＝manifest＝浏览器输入；四武将各5份WebAudio解码成功、画像naturalWidth>0；星董允CDP点击后paused=false／time=0.020821／readyState4／error=null；唐棠无audio且保持待完整移植。页面JS/CSS为本次main生产构建，普通资源CDP直接改URL到真实Rust进程，没有静态资源mock或fabrication。
+- 九错误场景通过：A真实坏HTML响应产生MediaError4、另一A语音成功保留原错误、正常B与无audio唐棠不污染、回A保留原path、A恢复真实Rust字节loadeddata清自身、manifest503跨B/T保留。仅指定A坏响应及manifest503由独立注入服务提供；普通响应直达Rust。无Runtime exception。两个路径同时失败再恢复一个未独立runtime重测。
+- 所有实际catalog非空portrait及skin/substitute asset共2614路径经过shared URL helper，0拒绝、0缺文件；46空portrait另列。hm_yudu仍为assets/portraits/yudu.jpg。辅助13非法path／9 metadata拒绝通过；数字ID尾缀歧义、重复core未拒绝如实保留，不能称全身份保证。
+- 最终 `python3 -B scripts/preflight.py`：21项全通过／322.120秒；额外sourcecaps自测2/2、行数门禁8984文件通过、全链接1901文件／坏链0。未重复Rust6829，也不称本轮运行了它。
+
+源码聚合SHA `9331596a49cfa98a617ddff5654248a6d85c4aff688630b8f844f7d6fe125b07`（31,799输入，排除允许父整理的docs和生成dist）；保护文件聚合 `d0283cc5ccdcc7deb7454c4e70a9ac4dde8e297fcf5a63c3a5c4d90107bb7681`。12,359上游资源输入、16WASM输入与6runtime路径均前后一致，明细见hash-comparison.json及before/after-hashes.json。
+
+原失败没有抹去：本轮自有runner先因guard放在指定故障注入之前而exit1；第一次retry又因证据子目录的admission父路径错误而exit1。仅修tmp runner，第二次retry全绿。原isolated red／P2 correction和上游失败证据保持原样。所有重任务经 `/tmp/noname-run-serialized.py` 与全局锁，CARGO_INCREMENTAL=0。
+
+执行偏差需明确：标准 `npm run build` 曾临时写默认dist，未遵守“不覆盖dist”的最严格字面要求；入口已证明37个tracked dist等于255HEAD，现37项精确恢复并删除12项自己生成的新dist路径。未改其他用户文件。实际验证的生产bundle保留在retry-real-http/happy/validated-dist，production-products-sha256.json记录全部SHA；首轮相同冗余bundle已清理。
+
+两个自有Rust进程均停止、全新store删除，初轮runner异常遗留的自有Chrome PID34152也已停止并删除profile；最终无自有Chrome/server。临时driver与log保留证据副本后清理；父binary、串行器、其他agent缓存保留。canonical ignored assets约1.0GiB明确保留，是真实产品ServeDir必需输入。
+
+仍不关闭I02或37来源整包：35/54资源变化覆盖、其余18项及skins/aliases、自动对局语音、独立扩展生命周期、物理平台及听感仍待。未重复20平台UI或B/J2矩阵；CDP不代表OS-HID或听感。建议独立review审阅当前main证据及上述dist执行偏差，再由父更新主稿。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"not-satisfied","evidence":"All maintained inputs unchanged and generated dist restored exactly, but standard npm build transiently wrote default dist despite the strict no-overwrite wording."},
+    {"id":"criterion-2","status":"satisfied","evidence":"119 SHA-indexed artifacts, exact command/exit logs, current-main before/after hashes, real Rust HTTP bytes, 156 Node tests and full preflight evidence retained."}
+  ],
+  "changedFiles": ["docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/** (verification evidence only)","content/original/assets/** (canonical ignored product resources generated and retained)"],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command":"node --test scripts/test_original_resources.mjs scripts/test_original_content_order.mjs","result":"passed","summary":"2/2"},
+    {"command":"node scripts/sync-original-content.mjs --resources-only; same with --verify-only; full --verify-only (three separate serialized invocations)","result":"passed","summary":"All exit0; no Cargo"},
+    {"command":"npm test; npm run typecheck; npm run build (three separate serialized invocations)","result":"passed","summary":"156/156; typecheck0; Vite117 modules"},
+    {"command":"python3 -B /tmp/noname-resource-real-http.py","result":"failed","summary":"Own guard ordering error; raw red preserved"},
+    {"command":"python3 -B /tmp/noname-resource-real-http-retry.py (first invocation)","result":"failed","summary":"Own admission parent-path error; raw red preserved"},
+    {"command":"python3 -B /tmp/noname-resource-real-http-retry.py (corrected invocation)","result":"passed","summary":"Real Rust 27 GET, 20 audio byte/decode checks, CDP playback and nine failure cases"},
+    {"command":"python3 -B scripts/preflight.py","result":"passed","summary":"21 gates, exit0, 322.120s"},
+    {"command":"sourcecaps selftests; source line gate; local links --all (separate serialized invocations)","result":"passed","summary":"2 tests; 8984 files; 1901 files/0 broken links"},
+    {"command":"serialized finalize, hash-after and final audit","result":"passed","summary":"37 dist restored; all input hash groups equal; no owned processes or staged files"}
+  ],
+  "validationOutput": ["Node156/156; pipeline2/2; HTTP20 audio SHA/length/decode; nine P2 scenes; fullpreflight21/21; current source unchanged"],
+  "residualRisks": ["Transient default dist write was restored but remains an execution deviation for reviewer assessment.","Aliases/skins, remaining18 resources, autoplay, all37 acceptance and physical listening/platforms remain outside this slice.","Synthetic numeric suffix ambiguity and duplicate core metadata remain known helper limits."],
+  "noStagedFiles": true,
+  "diffSummary": "No maintained-source edits; only allowed evidence and ignored canonical assets remain. Tracked dist equals255HEAD.",
+  "reviewFindings": ["No current-main source/runtime blocker observed; independent reviewer gate remains required.","Execution deviation: standard build transiently wrote default dist; exact restoration and actual validated bundle retained."],
+  "manualNotes": "All exact argv/cwd/exit details are in command-index.json and raw logs. Skipped Rust/WASM builds, broader matrices, dual-failure runtime and physical listening; no claim of full I02/37-source acceptance."
+}
+```

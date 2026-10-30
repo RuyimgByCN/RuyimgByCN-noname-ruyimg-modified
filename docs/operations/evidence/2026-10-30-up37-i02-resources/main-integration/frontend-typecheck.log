@@ -1,0 +1,3 @@
+npm notice run noname-next-web-client@0.1.0 typecheck
+npm notice run vue-tsc --noEmit
+{"command": ["npm", "run", "typecheck"], "exit": 0, "locked_seconds": 1.3520533749833703, "disk_free_bytes": 161221906432}

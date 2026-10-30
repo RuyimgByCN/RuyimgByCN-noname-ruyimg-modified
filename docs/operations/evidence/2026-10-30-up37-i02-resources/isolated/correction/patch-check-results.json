@@ -1,0 +1,36 @@
+[
+  {
+    "command": [
+      "git",
+      "apply",
+      "--reverse",
+      "--check",
+      "../evidence/correction/up37-i02-resources-error-correction.patch"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "apply",
+      "--reverse",
+      "--check",
+      "../evidence/correction/up37-i02-resources-corrected.patch"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

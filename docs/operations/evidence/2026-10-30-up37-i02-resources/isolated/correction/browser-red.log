@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A error belongs to A's own voice row
++ actual - expected
+
++ null
+- 'http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3'
+
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/browser-errors.mjs:89:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: 'http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.4.0
+{"command": ["node", "../evidence/correction/browser-errors.mjs", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree", "../evidence/correction/red", "../evidence/validated-dist"], "exit": 1, "locked_seconds": 1.393112125020707, "disk_free_bytes": 168439840768}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { originalCharacterAudio, originalResourceUrl, type OriginalAudioAsset } from "../engine/originalResources";
 
 interface Character {
   id: string;
@@ -39,6 +40,9 @@ interface Catalog {
 }
 
 const catalog = ref<Catalog | null>(null);
+const assetManifest = ref<{ assets: OriginalAudioAsset[] }>({ assets: [] });
+const manifestError = ref("");
+const audioErrors = ref(new Set<string>());
 const error = ref("");
 const loading = ref(false);
 const query = ref("");
@@ -68,6 +72,12 @@ const selectedDynamicSkins = computed(() =>
   (catalog.value?.skins.dynamic ?? []).filter((skin) => skin.character === selected.value?.name),
 );
 
+const selectedAudio = computed(() => selected.value
+  ? originalCharacterAudio(assetManifest.value, selected.value)
+  : [],
+);
+const audioCount = computed(() => assetManifest.value.assets.filter((asset) => asset?.kind === "audio").length);
+
 onMounted(loadCatalog);
 
 async function loadCatalog() {
@@ -78,6 +88,15 @@ async function loadCatalog() {
     if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
     catalog.value = await response.json() as Catalog;
     selected.value = catalog.value.characters[0] ?? null;
+    try {
+      const assets = await fetch(`${contentBase}/asset-manifest.json`);
+      if (!assets.ok) throw new Error(`${assets.status} ${assets.statusText}`);
+      const manifest = await assets.json();
+      if (manifest.schema_version !== 2 || !Array.isArray(manifest.assets)) throw new Error("资源清单无效");
+      assetManifest.value = manifest;
+    } catch (cause) {
+      manifestError.value = `无法读取语音资源清单（${String(cause)}）。`;
+    }
   } catch (cause) {
     error.value = `无法读取原仓库内容目录（${String(cause)}）。请先启动 game-server。`;
   } finally {
@@ -86,7 +105,7 @@ async function loadCatalog() {
 }
 
 function assetUrl(asset: string | null | undefined): string {
-  return asset ? encodeURI(`${contentBase}/${asset}`) : "";
+  return originalResourceUrl(contentBase, asset);
 }
 
 function defaultContentBase(): string {
@@ -107,7 +126,7 @@ function defaultContentBase(): string {
       <p v-if="catalog" class="counts">
         {{ catalog.counts.packs }} 包 · {{ catalog.counts.characters }} 武将 ·
         {{ catalog.counts.skills }} 技能 · {{ catalog.counts.static_skins }} 静态皮肤 ·
-        {{ catalog.counts.dynamic_skins }} 动态皮肤
+        {{ catalog.counts.dynamic_skins }} 动态皮肤 · {{ audioCount }} 音频资源
       </p>
       <p v-if="loading" class="muted" role="status">正在加载目录…</p>
       <p v-if="error" class="error" role="alert">{{ error }}</p>
@@ -162,6 +181,26 @@ function defaultContentBase(): string {
           </li>
         </ul>
         <p v-else class="muted">没有可解析的武将包技能。</p>
+
+        <h3>语音试听（{{ selectedAudio.length }}）</h3>
+        <p v-if="manifestError" class="error" role="alert">{{ manifestError }}</p>
+        <ul v-if="selectedAudio.length" class="skills">
+          <li v-for="voice in selectedAudio" :key="voice.path">
+            <label>
+              <span>{{ voice.source_path.startsWith('audio/die/') ? '阵亡' : voice.source_path.slice('audio/skill/'.length, -4) }}</span>
+              <audio
+                controls
+                preload="none"
+                :src="assetUrl(`assets/${voice.path}`)"
+                :aria-label="`${selected.display_name} · ${voice.source_path}`"
+                @error="audioErrors.add(voice.path)"
+                @loadeddata="audioErrors.delete(voice.path)"
+              ></audio>
+            </label>
+            <div v-if="audioErrors.has(voice.path)" class="error" role="alert">语音加载或解码失败，请检查本地资源。</div>
+          </li>
+        </ul>
+        <p v-else class="muted">当前资源清单未提供该武将的直接技能或阵亡语音。</p>
 
         <h3>静态皮肤（{{ selectedStaticSkins.length }}）</h3>
         <div v-if="selectedStaticSkins.length" class="skins">

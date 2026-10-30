@@ -1,0 +1,16 @@
+{
+  "base": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "corrected_total_patch_sha256": "489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658",
+  "applied_paths": {
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "scripts/test_original_resources.mjs": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "apps/web-client/src/engine/originalResources.ts": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+    "apps/web-client/src/views/CollectionView.vue": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+    "apps/web-client/scripts/original-resources.test.mjs": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md": "0165d8e2a382fd106ae8d537aa9f0f208f662d56770e48729508565d5fe0b62b"
+  },
+  "three_architecture_docs_not_overwritten": true,
+  "versions_unchanged": "329/105/758/WS5",
+  "not_yet_main_accepted": true
+}

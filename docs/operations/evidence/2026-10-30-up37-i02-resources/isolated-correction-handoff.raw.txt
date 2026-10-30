@@ -1,0 +1,133 @@
+已修复独立审查的 **P2-01：试听错误跨武将残留**，真实Vue浏览器九场景回归通过。原交接中的“physical mouse event”在此明确更正为 **CDP `Input.dispatchMouseEvent`注入浏览器输入**，不是OS-HID；原脚本未记录`event.isTrusted`，不据此作独立可信输入断言，物理听感仍未测试。原实现报告、原补丁和全部原始red/review日志保留，没有改写历史证据。
+
+Changed files：本次小修仅2个候选文件；更新后的总候选仍为原10path。Validation：本次隔离候选前端Node全套149/0、vue-tsc、Vite构建、真实浏览器九场景和两个补丁检查通过。Open risks：待原reviewer对小diff复审及父线程current main集成/preflight；原有aliases/skin和其他资源范围不变。Recommended next step：复审下面5858-byte correction patch，再由父线程集成10path corrected total patch。
+
+## 范围与代码修正
+
+源码仍为隔离基线 `44982f45edfb1a365163ecdacc08fa972219684e`，规则328／存档105／原生ABI753／WS5。本次149是该隔离候选的**重新执行结果**，不替代current main329／758的测试计数或运行验收。
+
+已完整读取独立审查报告 `e43a212e-81bc-403c-8076-8557a5280373`、当前Collection组件及审查浏览器脚本/结果。根因是manifest失败与所有媒体失败共用永久的`audioError`；切换角色和其他音频成功均不能归属或清理它。
+
+最小修正位于 [CollectionView.vue](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/apps/web-client/src/views/CollectionView.vue:43)：
+
+- `manifestError`只承载真正的清单读取/校验失败，继续显示在试听区域。
+- `audioErrors`是Vue响应式`Set<string>`，键为已有`voice.path`。
+- 每条audio的`error`只添加自身路径；提示只出现在该路径所属的当前试听行。
+- 该条audio成功`loadeddata`时只删除自身路径，不清其他语音或manifest错误。
+
+没有添加watcher清空全部错误，没有播放器框架、helper抽象、新schema字段或数据绑定。原有媒体控件、preload、URL校验、manifest消费与角色状态不变。
+
+另一个修改是原10path中的证据README，**仅追加**P2修正与措辞纠正补记；原正文保留。没有修改main、Rust/WASM源码、规则、schema、package、roster、aliases或skin。汉末于毒继续使用明确的`image/character/yudu.jpg`；没有导入或替换父线程研究的同名release素材，也没有将其误列为画像缺失。
+
+## 真实回归证据
+
+新脚本 [browser-errors.mjs](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/browser-errors.mjs) 在独立随机端口/Chrome profile上加载实际production Vue bundle，并通过与原取证相同的CDP路由，将页面的original-content请求指向自有静态服务。它使用实际catalog/manifest和原音频字节，仅为指定A请求返回HTML、另在独立场景为manifest返回503；没有损坏或重写任何源资源。
+
+[本次red日志](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/browser-red.log) 证明同一新回归在保留旧bundle上失败：A出现MediaError4，但错误提示不在A语音行，`voice=null`。审查原有“A→成功B/无音频T仍残留”结果与脚本也原样保留于 `../evidence/review/`。
+
+[最终green结果](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/green/browser-result.json) 和 [green日志](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/browser-green-final.log) 覆盖九个真实组件场景：
+
+| 场景 | 断言结果 |
+|---|---|
+| A=`star_dongyun`首条阵亡音频得到HTML响应 | 实际MediaError.code=4；仅A对应语音行显示1条错误 |
+| A的另一条真实语音成功加载 | 另一条readyState≥2；A原路径错误仍在，不被其他行成功误清 |
+| 切换B=`huan_zhouyu`并加载真实音频 | B error=null、readyState≥2；当前无错误；保存的原A媒体对象仍error4、src原样且已离开DOM |
+| 切换无音频T=`tangtang` | audio数量0、无无关错误 |
+| 返回A但尚未重新加载 | 只在原失败路径行保留其错误 |
+| A取得恢复后的真实字节并成功loadeddata | A error=null；仅该路径错误被清除 |
+| 重新载页，真实manifest请求503 | manifest提示显示，未归属任何语音行 |
+| manifest失败后切B | 清单错误保留，没有伪造可用audio |
+| manifest失败后切T | 清单错误继续保留，不被角色切换清空 |
+
+测试没有通过直接写Vue内部状态造绿，也没有用虚假的原生N02 roster、模拟规则或改资源绑定。回归测试媒体加载生命周期，不重复宣称播放、听感或物理输入通过。本次没有新测`event.isTrusted`。私有静态服务不是实际Rust ServeDir进程；服务器链路运行验收仍沿用原限制。
+
+## 本次命令和结果
+
+证据均位于 `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/`。
+
+| 命令 | 结果/证据 |
+|---|---|
+| `cd apps/web-client && npm test` | **149 passed / 0 failed**，本次最终重跑；`frontend-suite-final.log` |
+| `cd apps/web-client && npm run typecheck` | exit0；`typecheck-final.log` |
+| `node ../evidence/correction/build-runner.mjs apps/web-client ../evidence/correction/validated-dist` | Vite production构建exit0，113模块；`build-final.log` |
+| `node ../evidence/correction/browser-errors.mjs "$PWD" ../evidence/correction/green ../evidence/correction/validated-dist` | 九场景exit0，无Runtime异常；`browser-green-final.log` |
+| 同一browser-errors脚本运行于旧保留bundle | 预期exit1，行归属断言失败；`browser-red.log`及`red/browser-checkpoint.json` |
+| 初轮`vite build --configLoader runner --outDir ...` | setup exit1：已有vite.config.ts依赖`__dirname`；`build.log`原文保留 |
+| `python3 -B scripts/check-source-lines.py` | 8946文件均通过；`source-lines.log` |
+| 修改证据README本地链接检查 | 无坏链；`doc-links.log` |
+| `git apply --reverse --check`两个新补丁、`git diff --check` | 均exit0；`patch-check-results.json` |
+
+为避免在共享node_modules中写Vite临时bundle配置，本次采用runner loader。首次runner因既有配置的`__dirname`未定义而失败；自有构建启动器随后仅提供该配置目录正常应有的值，并继续读取**未改的原配置**，构建通过。外部outDir“不自动清空”的warning保留。最后一次小模板标签调整前的构建已记录SHA并退役其自有产物，然后重建并重跑浏览器、typecheck和Node套件；没有覆盖历史日志。
+
+必要deps、legacy wasm-pkg、native-pkg通过三个自有只读查找symlink取得，已全部移除。借用的生成包329／758只是满足基线328／753资源页的静态导入，未执行其引擎规则；原始输入SHA及最终输出SHA分别在 `borrowed-generated-sha256.json`、`final-build-sha256.json`，输入在本次出口复核未变。无需也没有编译Rust/WASM。重型构建和浏览器命令使用 `/tmp/noname-run-serialized.py` 全局锁。
+
+本次没有重复无关9652资产全hash、16623保护文件全hash或全同步。进入/离开时对10个候选文件的SHA比较证明**其余8个候选路径完全不变**，包括asset-manifest和同步器；没有执行资源写入命令。原全量资源证据仍为历史证据，不冒称本次重新执行。
+
+## 两个补丁与SHA清单
+
+[补丁manifest](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/patch-manifest.json) 汇总两个补丁、原reviewed补丁身份及无stage状态。
+
+| 产物 | 路径数 / bytes | SHA256 |
+|---|---:|---|
+| [更新后的总patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/up37-i02-resources-corrected.patch) | 10 / 2702237 | `489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658` |
+| [本次小correction patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/up37-i02-resources-error-correction.patch) | 2 / 5858 | `361dfa51fb17404658783c38534e5861aaafc3f9636aeda4410ff7c36dc37c8f` |
+| 原reviewed patch，未修改 | 10 / 2699727 | `718d1922d274230cba54f6d989e7f5e6afd49135e5e4e6d8ec70fb3c4f3f9c3b` |
+
+- [两路径reviewed-base/final SHA](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/correction-files.json)。
+- [总10路径HEAD-base/reviewed/corrected SHA及长度](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/changed-files-corrected.json)。
+
+本次两个候选文件：
+
+1. `apps/web-client/src/views/CollectionView.vue`：四个小hunk，拆分并归属错误状态。
+2. `docs/operations/evidence/2026-10-30-up37-i02-resources/README.md`：只追加修正、验证和限制补记。
+
+原reviewed补丁、originalreport和review原始证据不改。原实现报告当前SHA记录在cleanup-state，不以新报告覆盖它。原有8个其他候选文件保持原reviewed SHA。完整候选仍是原来的10path，没有额外产品组件或新公开API。
+
+## 清理、限制和复审交接
+
+[cleanup-state.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/correction/cleanup-state.json) 记录三个自有lookup links已移除、借用输入未改、Chrome profiles已删除、浏览器/私有服务已关闭、无源dist变更、无Rust target、staged为空。构建后用过的自有WASM拷贝已在记录SHA后退役；保留页面JS/CSS和回归脚本/日志。每次编译后的磁盘检查保持约157GiB可用，出口168443121664 bytes。
+
+P2代码修正与回归已完成，**原reviewer小diff复审仍待**。不以本工作线程的green替代独立source approval；父线程随后独立集成current main并立即重跑其preflight。
+
+保留的真实限制没有扩大成现有角色错误：合成数字尾缀有身份歧义，合成重复core metadata未被拒绝，但本次没有证实一个当前角色错配。aliases/skin、18项其他UI/card/CSS输入、自动游戏音频及完整I02/37来源仍按原范围待办。`hm_yudu`的既有显式yudu画像绑定正确，父研究输入不在本修正内。
+
+Skipped：未重复无关资源全hash/全同步、Rust/WASM编译、current main验收、OS-HID或物理听感。Risk：P2修正须原reviewer复审，随后仍需父线程的current main组合验收。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"仅Collection媒体错误归属和既有证据追加补记两个文件变化；按voice.path记录，loadeddata只清自身，manifest失败独立保留。其余八个候选文件SHA不变。"},
+    {"id":"criterion-2","status":"satisfied","evidence":"提供真实旧bundle red/新构建九场景green、149/0新跑Node全suite、typecheck/build、两个patch及SHA/文件manifest、清理和no-stage证据。"}
+  ],
+  "changedFiles": [
+    "apps/web-client/src/views/CollectionView.vue",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md"
+  ],
+  "testsAddedOrUpdated": ["../evidence/correction/browser-errors.mjs"],
+  "commandsRun": [
+    {"command":"npm test (isolated apps/web-client)","result":"passed","summary":"本次149 passed / 0 failed；不是current-main计数。"},
+    {"command":"npm run typecheck (isolated apps/web-client)","result":"passed","summary":"vue-tsc --noEmit exit0。"},
+    {"command":"node ../evidence/correction/build-runner.mjs apps/web-client ../evidence/correction/validated-dist","result":"passed","summary":"原配置runner加载，Vite113模块production构建通过。"},
+    {"command":"browser-errors.mjs against corrected production bundle","result":"passed","summary":"九场景：行归属、A其他语音成功、成功B/无音频T隔离、A保留、loadeddata恢复、清单503保持。"},
+    {"command":"browser-errors.mjs against preserved reviewed bundle","result":"failed","summary":"预期red：A错误提示没有归属自身voice行；原review的B/T污染证据也保留。"},
+    {"command":"initial Vite --configLoader runner build","result":"failed","summary":"setup: 既有配置__dirname未定义；自有启动器提供配置目录正常值后通过，未改配置源。"},
+    {"command":"source-line gate, changed-document links, both patch reverse checks and git diff --check","result":"passed","summary":"8946源文件行数通过、无新增坏链，两个patch及whitespace检查exit0。"}
+  ],
+  "validationOutput": [
+    "实际MediaError4只显示于A路径；B成功和无audioT没有无关错误。",
+    "返回A保留A错误，A实际loadeddata成功后仅清自身路径。",
+    "真正manifest503错误在B/T切换后保持。",
+    "本次Node149/0、typecheck/build和真实组件浏览器九场景通过。",
+    "三个lookup链接移除，借用生成包SHA未变，copied WASM退役，无stage/commit。"
+  ],
+  "residualRisks": [
+    "原reviewer小diff复审和父线程current-main集成/preflight尚待。",
+    "原数字尾缀/重复core metadata合成限制、aliases/skin和其他资源范围不在本轮扩展。",
+    "CDP输入不是OS-HID；event.isTrusted无独立记录；物理听感未测。"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "原10path候选上的两路径小修：按voice.path隔离媒体错误，manifest错误独立保留，追加纠正说明。",
+  "reviewFindings": ["P2-01修正及真实回归已完成；独立复审门禁仍待，不自称source获批。"],
+  "manualNotes": "总patch SHA489d5d398d45ff0fc743798907261e574cb669743e038f22cff1b1175b4c9658；correction SHA361dfa51fb17404658783c38534e5861aaafc3f9636aeda4410ff7c36dc37c8f。原报告/patch/review red日志保留。"
+}
+```

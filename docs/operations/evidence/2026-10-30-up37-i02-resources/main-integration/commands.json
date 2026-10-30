@@ -1,0 +1,132 @@
+[
+  {
+    "name": "hash-before",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/tmp/noname-resource-main-hashes.py",
+      "before"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 12.92088007926941,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161265397760
+  },
+  {
+    "name": "pipeline",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--test",
+      "scripts/test_original_resources.mjs",
+      "scripts/test_original_content_order.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 0.7364418506622314,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161258905600
+  },
+  {
+    "name": "resources-sync",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 4.906318187713623,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161217933312
+  },
+  {
+    "name": "resources-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 8.00703477859497,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161223475200
+  },
+  {
+    "name": "full-sync-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "seconds": 3.7216062545776367,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161222787072
+  },
+  {
+    "name": "frontend-test",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 0.8824319839477539,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161222504448
+  },
+  {
+    "name": "frontend-typecheck",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 1.3797669410705566,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161221906432
+  },
+  {
+    "name": "frontend-build",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "seconds": 2.4026737213134766,
+    "CARGO_INCREMENTAL": "0",
+    "disk_free_bytes": 161228558336
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "scope": "Read-only scan of both full preserved upstream source trees; no downloads or source edits",
+  "exact_named_portrait_hits": [],
+  "source_origins": [
+    {
+      "source": "noname",
+      "origin_without_auth": "https://github.com/libnoname/noname.git",
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0"
+    },
+    {
+      "source": "noname-liuli",
+      "origin_without_auth": "https://github.com/Helasisy1984/Noname-Liuli-Modified.git",
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade"
+    }
+  ]
+}

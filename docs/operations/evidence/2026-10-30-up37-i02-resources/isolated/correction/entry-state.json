@@ -1,0 +1,76 @@
+{
+  "baseline": "44982f45edfb1a365163ecdacc08fa972219684e",
+  "ten_candidate_paths_match_prior_report": true,
+  "candidate_file_hashes": [
+    {
+      "path": "apps/web-client/scripts/original-resources.test.mjs",
+      "base_sha256": null,
+      "final_sha256": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47",
+      "base_bytes": 0,
+      "final_bytes": 3450
+    },
+    {
+      "path": "apps/web-client/src/engine/originalResources.ts",
+      "base_sha256": null,
+      "final_sha256": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+      "base_bytes": 0,
+      "final_bytes": 1471
+    },
+    {
+      "path": "apps/web-client/src/views/CollectionView.vue",
+      "base_sha256": "71d00fc11e77a9f14546a2b2f17fa51934cdaa52a525d7fedae6ddf0bd1b6bfb",
+      "final_sha256": "39bfe12bccf04156ba78e351116942a89aa58c2706b243618d29d0a384673343",
+      "base_bytes": 9575,
+      "final_bytes": 11441
+    },
+    {
+      "path": "content/original/asset-manifest.json",
+      "base_sha256": "a7290888acc537d0e47521f2106d0f0408eea680121bcaf81bd906333926de38",
+      "final_sha256": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+      "base_bytes": 747822,
+      "final_bytes": 3335336
+    },
+    {
+      "path": "docs/architecture/native-progress.md",
+      "base_sha256": "57b756b466cfac348c6654b48d5ffa9b3b19e5b22d706408524ec37ac65b86cf",
+      "final_sha256": "d7db1e72722c601ca2c6e827341403f126f0aefde0b8918d91d5991dade9e0f5",
+      "base_bytes": 786662,
+      "final_bytes": 787442
+    },
+    {
+      "path": "docs/architecture/native-remaining-ledger.md",
+      "base_sha256": "4020fe1961a29d730142ca816468952ed008dc8231a3d4b14851c6d68105d3ad",
+      "final_sha256": "c7ce2f9f84ef4fc29060849c2fdc63994fd2059f272bf1e8b1456935a5cf718d",
+      "base_bytes": 97766,
+      "final_bytes": 98061
+    },
+    {
+      "path": "docs/architecture/native-rules-baseline.md",
+      "base_sha256": "e6a9bc973173d4187f68a99c63e400937bdc9bc2bfd5f7c4c27e3ead1b958245",
+      "final_sha256": "677ec6a476f1f9b21147ffb82f16b106871810721d6902edfea172c65f0439c4",
+      "base_bytes": 584476,
+      "final_bytes": 584810
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-up37-i02-resources/README.md",
+      "base_sha256": null,
+      "final_sha256": "f430b07429fb34a677a95ce952ebe49750f99752a360bb9682bf4517232d4149",
+      "base_bytes": 0,
+      "final_bytes": 5270
+    },
+    {
+      "path": "scripts/sync-original-content.mjs",
+      "base_sha256": "97a80b271bf5f32c8dc75f5ebc7bd5e0c3687b63ce46bb4a52af110159794f01",
+      "final_sha256": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+      "base_bytes": 74571,
+      "final_bytes": 76329
+    },
+    {
+      "path": "scripts/test_original_resources.mjs",
+      "base_sha256": null,
+      "final_sha256": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+      "base_bytes": 0,
+      "final_bytes": 4285
+    }
+  ]
+}

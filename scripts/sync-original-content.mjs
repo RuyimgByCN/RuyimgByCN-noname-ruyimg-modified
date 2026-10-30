@@ -8,6 +8,7 @@ import {
   mkdir,
   readFile,
   readdir,
+  realpath,
   rm,
   stat,
   writeFile,
@@ -27,6 +28,7 @@ Options:
   --core-source PATH   Core noname repository or apps/core directory
   --source PATH        Alias of --core-source
   --skin-source PATH   Optional local skin repository
+  --resources-only     Sync/verify assets and their manifest without rules or catalog regeneration
   --verify-only        Verify generated output without changing it
   --ast-self-check     Parse supported data-only JS and print counts
   --help, -h           Show this help`);
@@ -48,6 +50,7 @@ const coreSourceRoot = await resolveContentRoot(
 const skinSourceRoot = skinSourceInput
   ? await resolveContentRoot(skinSourceInput)
   : null;
+const resourcesOnly = cliArgs.includes("--resources-only");
 const verifyOnly = process.argv.includes("--verify-only");
 const astSelfCheck = process.argv.includes("--ast-self-check");
 let provenanceCache = null;
@@ -175,6 +178,15 @@ const trees = [
     required: true,
   },
   {
+    name: "audio",
+    sourceCategory: "core",
+    sourceRoot: coreSourceRoot,
+    source: path.join(coreSourceRoot, "audio"),
+    target: path.join(assetRoot, "audio"),
+    hardlink: true,
+    required: true,
+  },
+  {
     name: "static-skins",
     sourceCategory: "skin",
     sourceRoot: skinSourceRoot,
@@ -246,6 +258,39 @@ const packNames = (await readdir(path.join(coreSourceRoot, "character"), { withF
 
 if (astSelfCheck) {
   await runAstSelfCheck(packNames);
+  process.exit(0);
+}
+
+if (resourcesOnly) {
+  const manifestFile = path.join(outputRoot, "asset-manifest.json");
+  const manifest = JSON.parse(await readFile(manifestFile, "utf8"));
+  const catalog = JSON.parse(await readFile(path.join(outputRoot, "catalog.json"), "utf8"));
+  if (manifest.schema_version !== 2 || catalog.schema_version !== 4) {
+    throw new Error("resource refresh requires the adopted manifest and catalog schemas");
+  }
+  // Resource refreshes must stay on the already adopted source and skin policy.
+  const provenance = await contentProvenance();
+  assertJsonEqual("resource source provenance", manifest.sources, provenance);
+  assertJsonEqual("catalog source provenance", catalog.source.provenance, provenance);
+  await verifyNoStaleOptionalTargets();
+  const results = [];
+  for (const tree of availableTrees.filter((tree) => tree.name !== "legacy-source")) {
+    results.push(verifyOnly ? await verifyTree(tree) : await syncTree(tree));
+  }
+  const summaries = [
+    ...manifest.trees.filter((tree) => tree.name === "legacy-source"),
+    ...results.map(({ name, sourceCategory, files, bytes, hardlinked, copied }) => ({
+      name, source_category: sourceCategory, files, bytes, hardlinked, copied,
+    })),
+  ];
+  const assets = await assetEntries();
+  if (verifyOnly) {
+    assertJsonEqual("asset manifest tree summaries", manifest.trees, summaries);
+    assertJsonEqual("asset manifest entries", manifest.assets, assets);
+  } else {
+    await writeJson(manifestFile, { ...manifest, trees: summaries, assets });
+  }
+  printResults(verifyOnly ? "resources verified" : "resources synced", results);
   process.exit(0);
 }
 
@@ -527,7 +572,7 @@ async function buildCatalog(packs, treeResults) {
     character.migration_status = complete ? "ported" : "source_synced";
   }
 
-  for (const [skillKey, defId] of migrated.skills) {
+  for (const skillKey of migrated.skills.keys()) {
     // The bootstrap standard package predates stable original-content IDs.
     if (skillKey.startsWith("standard:")) continue;
     if (skillByPackAndName.has(skillKey)) continue;
@@ -687,11 +732,6 @@ function profileHasRuleSurface(profile) {
 // is not authoritative), such a skill is correctly an empty DSL body — it is ported, not a
 // placeholder. The metadata-key allowlist above only covers simple shapes; this catches the broader
 // set of skills whose JS carries only `ai:`, `init:`-without-effect, `subSkill:` containers, etc.
-const authoritativeRuleKeys = new Set([
-  "trigger", "filter", "content", "mod", "viewAs", "enable", "usable", "filterTarget",
-  "filterCard", "selectCard", "selectTarget", "check", "cost", "onUse", "onLose",
-  " popup ", // placeholder to avoid false matches; real check below
-]);
 function legacySkillHasAuthoritativeRuleSurface(property) {
   if (!ts.isPropertyAssignment(property) || !ts.isObjectLiteralExpression(property.initializer)) {
     return false;
@@ -1417,13 +1457,13 @@ async function sourceProvenance(category, root) {
       .catch(() => null),
     runCapture("git", [
       "-C",
-      repositoryRoot,
+      root,
       "status",
       "--porcelain=v1",
       "-z",
       "--untracked-files=all",
       "--",
-      path.relative(repositoryRoot, root) || ".",
+      ".",
     ]),
   ]);
   const status = parseGitStatus(statusOutput);
@@ -1431,7 +1471,7 @@ async function sourceProvenance(category, root) {
     category,
     root: sourceLabel(root),
     repository: remote ? sanitizeRepository(remote) : sourceLabel(repositoryRoot),
-    repository_root: sourceLabel(repositoryRoot),
+    repository_root: sourceLabel(path.resolve(root, path.relative(await realpath(root), repositoryRoot))),
     head,
     dirty: status.trackedChanges.length > 0 || status.untrackedCount > 0,
     tracked_changes: status.trackedChanges,
@@ -1716,7 +1756,7 @@ function pathFlag(name) {
 
 function validateCliArgs(args) {
   const pathOptions = new Set(["--source", "--core-source", "--skin-source"]);
-  const switches = new Set(["--verify-only", "--ast-self-check"]);
+  const switches = new Set(["--verify-only", "--ast-self-check", "--resources-only"]);
   for (let index = 0; index < args.length; index++) {
     const arg = args[index];
     if (pathOptions.has(arg)) {

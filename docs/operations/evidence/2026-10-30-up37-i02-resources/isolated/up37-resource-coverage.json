@@ -1,0 +1,467 @@
+[
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/die/huan_zhouyu.mp3",
+    "present_in_import_manifest": true,
+    "size": 49324,
+    "sha256": "deb9021c03ead382435858b643546f6ce9c2e48f26b93664d3544b7fccea9eaf",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/huan_zhouyu.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/die/ol_chitu.mp3",
+    "present_in_import_manifest": true,
+    "size": 41328,
+    "sha256": "cf48f95e8cc3a2577c41ca7adad535211c2cb05e2a009ac6c2f399772c8b32a9",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/ol_chitu.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/die/ol_le_menghuo.mp3",
+    "present_in_import_manifest": true,
+    "size": 64864,
+    "sha256": "4fd86ab5290c2821ef40bcb4a0de9a2b7ec5518b334d549223fc79e2ef62e443",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/ol_le_menghuo.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/die/ol_sb_zhouyu.mp3",
+    "present_in_import_manifest": true,
+    "size": 71724,
+    "sha256": "165ca7f11af10a7fd2862219a2032fbb6ab251fe427291933aa10c5f495befdb",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/ol_sb_zhouyu.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/die/star_dongyun.mp3",
+    "present_in_import_manifest": true,
+    "size": 38764,
+    "sha256": "70657b7a6d286349600a489d04a6810e5aac2845b93ae612f772473a8ec4bddb",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/star_dongyun.mp3"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/audio/die/xinxianying.mp3",
+    "present_in_import_manifest": true,
+    "size": 50573,
+    "sha256": "6d41f9e33cad724ebb75e56b2323ad6394c2b008ef304f1c01da6a9e69781712",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/die/xinxianying.mp3"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/audio/skill/caishi1.mp3",
+    "present_in_import_manifest": true,
+    "size": 60186,
+    "sha256": "fe515ebaff87171bb2bb6933dabcd4b9a5593c5cf62d8172cabe4ad2b69f916a",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/caishi1.mp3"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/audio/skill/caishi2.mp3",
+    "present_in_import_manifest": true,
+    "size": 50573,
+    "sha256": "583e30796abee05bd6d3ed3c6765daf4422bc8afc3eadfde21121c27859ced9d",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/caishi2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olfangma1.mp3",
+    "present_in_import_manifest": true,
+    "size": 35625,
+    "sha256": "ef18678f77089b4428fe7031fcb03378ef010507c59551deb63c8aec7235b54f",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olfangma1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olfangma2.mp3",
+    "present_in_import_manifest": true,
+    "size": 31038,
+    "sha256": "73f8a74be242208e5e546841d6ce164b1b0a1adc17a8f9470c789ae83510b162",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olfangma2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/oljingxian1.mp3",
+    "present_in_import_manifest": true,
+    "size": 48687,
+    "sha256": "301260e174da0c79fa29ebc73c61c56598ab028126a1c5989072f79fe67c9c26",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/oljingxian1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/oljingxian2.mp3",
+    "present_in_import_manifest": true,
+    "size": 44370,
+    "sha256": "266e3a333f87f42a5ed0fa6326dfd1689719ac0272104adbcc7ad1e265332d6f",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/oljingxian2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/oljunzhu1.mp3",
+    "present_in_import_manifest": true,
+    "size": 117945,
+    "sha256": "5c8600ae2ac4e21bc94442ee75affd5b199851f6509c66a170b54364e043bc67",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/oljunzhu1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/oljunzhu2.mp3",
+    "present_in_import_manifest": true,
+    "size": 82836,
+    "sha256": "c02a6e4bf50f50328f99a614d15058659ff4ace1702d96a6fe3433678fe8161e",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/oljunzhu2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olrehuanshi1.mp3",
+    "present_in_import_manifest": true,
+    "size": 105824,
+    "sha256": "69480f0a4476f3b3b712822bff9a10b5b2d1532b363168b1e8375907150ce509",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olrehuanshi1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olrehuanshi2.mp3",
+    "present_in_import_manifest": true,
+    "size": 111258,
+    "sha256": "ce47de3899a4024e37f9eeb2fa63972e0bb1a80d4cae343dd1c952917c1ea360",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olrehuanshi2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olsbguqu1.mp3",
+    "present_in_import_manifest": true,
+    "size": 35623,
+    "sha256": "f5fc5bea2dbe0c7867d8a4fbc6240f2665a07ac8e59580575a3ca9ec6fec9a95",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olsbguqu1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olsbguqu2.mp3",
+    "present_in_import_manifest": true,
+    "size": 41413,
+    "sha256": "2682e7901170afe3459fe02e9a992340d500ede0713e75770f1b679b3cc52289",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olsbguqu2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olsbzuifeng1.mp3",
+    "present_in_import_manifest": true,
+    "size": 81095,
+    "sha256": "012cc17a41bcf3213a737eeeb1121439c04f150fa112e37be423fb1372d37f47",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olsbzuifeng1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/olsbzuifeng2.mp3",
+    "present_in_import_manifest": true,
+    "size": 57889,
+    "sha256": "40f288eb3bf767dc12204ea9662dd65dfca675b4f2a6c40db78f89d329d190ec",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/olsbzuifeng2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/starbishi1.mp3",
+    "present_in_import_manifest": true,
+    "size": 29740,
+    "sha256": "2c3198f789376604d08a15de62c537315047c73abd726425e836563d71ee3e52",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/starbishi1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/starbishi2.mp3",
+    "present_in_import_manifest": true,
+    "size": 32620,
+    "sha256": "82ea207d1cefa7df318ce829c1d7ea95f7ec4f9c2113f905310bdabce0e5d2d8",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/starbishi2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/starzhengting1.mp3",
+    "present_in_import_manifest": true,
+    "size": 28204,
+    "sha256": "417a550ddacbba41f1df591f552e4cbae29a1bc5b4fedecb8bafeb4b9c08192a",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/starzhengting1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/starzhengting2.mp3",
+    "present_in_import_manifest": true,
+    "size": 32428,
+    "sha256": "90ed22d659c2ba1503725fedff8cef184bfd161e1ba20c502a88c213577dfac9",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/starzhengting2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/twdumou1.mp3",
+    "present_in_import_manifest": true,
+    "size": 30700,
+    "sha256": "dc6b274d727cee000a6ae07bceda1626fa79ba8245ce55ee3d7f271952e2ae31",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/twdumou1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/twdumou2.mp3",
+    "present_in_import_manifest": true,
+    "size": 28780,
+    "sha256": "3ee73a7488e2d34a9ddc1cf5c589c969c42988a42f84b9eebad47806111a3120",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/twdumou2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/twhantian1.mp3",
+    "present_in_import_manifest": true,
+    "size": 27052,
+    "sha256": "ee894a383063af4fb512117516a5edaea215dccbee0ea4021b1e83990774a27b",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/twhantian1.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/audio/skill/twhantian2.mp3",
+    "present_in_import_manifest": true,
+    "size": 31852,
+    "sha256": "16043a14474d461ce69bb8c1da97a383dad8fd5ebcd02a502fe3b8c9131dcfde",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/twhantian2.mp3"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/audio/skill/zhongjian1.mp3",
+    "present_in_import_manifest": true,
+    "size": 63111,
+    "sha256": "60b7c8dfcf72e3f3712b4ed9c710daa9aa87e3c150a3cbf694a76708055b8aa3",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/zhongjian1.mp3"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/audio/skill/zhongjian2.mp3",
+    "present_in_import_manifest": true,
+    "size": 63529,
+    "sha256": "3052b246375dc0c417fe9b4d89ec8b0c341e60b2f5e20865d65e82eef8dd25a8",
+    "mime": "audio/mpeg",
+    "manifest_path": "audio/skill/zhongjian2.mp3"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/card/mashiro.png",
+    "present_in_import_manifest": false,
+    "size": 58228,
+    "sha256": "56e616f88ef78fa5304461320dfeb0c34e570474036d03efcd0bbf2ba004a262",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/card/ol_cailian.png",
+    "present_in_import_manifest": false,
+    "size": 192740,
+    "sha256": "522f84e334e7cfbfd23910ff16f11b95e066c25d333ae288c915b2f07e0cb64b",
+    "mime": "image/png"
+  },
+  {
+    "change": "D",
+    "source_path": "apps/core/image/character/hm_yudu.jpg",
+    "present_in_import_manifest": false,
+    "state": "deleted in adopted source"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/character/huan_zhouyu.jpg",
+    "present_in_import_manifest": true,
+    "size": 184205,
+    "sha256": "f734806e0b1af7804d14857a149ea2e6928e897be019a4db8487614af8d1daae",
+    "mime": "image/jpeg",
+    "manifest_path": "portraits/huan_zhouyu.jpg"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/character/ol_sb_zhouyu.jpg",
+    "present_in_import_manifest": true,
+    "size": 217789,
+    "sha256": "71599e707dbc003d8ebfd1ddc587c3d5018c90d048112672977e39bdd8b314e2",
+    "mime": "image/jpeg",
+    "manifest_path": "portraits/ol_sb_zhouyu.jpg"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/character/star_dongyun.jpg",
+    "present_in_import_manifest": true,
+    "size": 204130,
+    "sha256": "787a564a260ac6ed48779dabe9d7d672ba802dbd5871bf91325625c8bdfaef1c",
+    "mime": "image/jpeg",
+    "manifest_path": "portraits/star_dongyun.jpg"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/character/tangtang.png",
+    "present_in_import_manifest": true,
+    "size": 356487,
+    "sha256": "447c78b5b495c5206c9c4795b7e129c0fd520af65b60bf1ca23994ce4a62e8fd",
+    "mime": "image/png",
+    "manifest_path": "portraits/tangtang.png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/character/tw_dm_zhangliang.jpg",
+    "present_in_import_manifest": true,
+    "size": 81315,
+    "sha256": "763d876ab028cb9953e2758cb83a83f7bae73c03f9ded5d503461eca6fde3107",
+    "mime": "image/jpeg",
+    "manifest_path": "portraits/tw_dm_zhangliang.jpg"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/btnn1.png",
+    "present_in_import_manifest": false,
+    "size": 1771,
+    "sha256": "69c9d7f9a2251f29e66928570ec4bbe929c3fdd795637d1be4d1ebddd95f2031",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/button.mp3",
+    "present_in_import_manifest": false,
+    "size": 4598,
+    "sha256": "f2cd62af089252b6d9598082d84a5a369c6adc04fe15b2aa39b3efe0cf39a859",
+    "mime": "audio/mpeg"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/newStyleBaseUIMask.png",
+    "present_in_import_manifest": false,
+    "size": 97,
+    "sha256": "075a969bf228f40a1925294e840a1d2a3c936930fb842ec8dc6188e096a6a05f",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_btn_help.png",
+    "present_in_import_manifest": false,
+    "size": 24699,
+    "sha256": "e61077b2867107759595f128b0ae685ad7a8deb47c052b0e5d2257a1a0bf8a6c",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_btn_hide.png",
+    "present_in_import_manifest": false,
+    "size": 24556,
+    "sha256": "3e721be23738662b684f5c000e92af4cd3507af708c0b81bfa074abe61eca9ef",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_close.png",
+    "present_in_import_manifest": false,
+    "size": 2365,
+    "sha256": "eef2c43f29a4b52f5a609af635f166b797b67157fcab8d0343e6a34f1b676465",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_item_bg.png",
+    "present_in_import_manifest": false,
+    "size": 2849,
+    "sha256": "de2bf2b76bb9abec5d9597f0b8e8a9bf20a4a189840b2c9edf86c360dc0d47d4",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_item_bg_help.png",
+    "present_in_import_manifest": false,
+    "size": 2746,
+    "sha256": "16709aa824834d0eafee676ca1a757dbbf2febaa7a6de2edefcb45091441d288",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_item_bg_link.png",
+    "present_in_import_manifest": false,
+    "size": 2942,
+    "sha256": "0568f3066cd3d7da4282f62009151baf314bc0199e481a9882e3e3246e8c6cb1",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/pingjian_skillitem_bg.png",
+    "present_in_import_manifest": false,
+    "size": 3270,
+    "sha256": "4ae0a80e9025549e40445fc74d943a166552b18c2ee1340f87923f93f881dc64",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/selfSeatCountDown2.png",
+    "present_in_import_manifest": false,
+    "size": 423,
+    "sha256": "95b061305fb597982a7d19a5aff26dd05a13add95a53630f6cc9c4300c49af36",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/selfSeatCountdownBg.png",
+    "present_in_import_manifest": false,
+    "size": 215,
+    "sha256": "6569c3027effd065e5b4aeee88e44011d93dd88a7659ff6cc52ecdc99308da32",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/skill_pingjian_bg.png",
+    "present_in_import_manifest": false,
+    "size": 1094755,
+    "sha256": "12a58bc17b9fddc4a0a8e26f85c2182866969d2d1e838266c779938e9f31f165",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/skill_pingjian_selected.png",
+    "present_in_import_manifest": false,
+    "size": 1253,
+    "sha256": "49bd5f8e1855ee848abcb3dfbaab050fae6a72c9e237b9e345674a51d6f742a8",
+    "mime": "image/png"
+  },
+  {
+    "change": "A",
+    "source_path": "apps/core/image/olxushao/skill_pingjian_unknown.png",
+    "present_in_import_manifest": false,
+    "size": 4738,
+    "sha256": "f8b50c24d831497a2a841ede60efd395ecb65121af01a2fff45db254255d327a",
+    "mime": "image/png"
+  },
+  {
+    "change": "M",
+    "source_path": "apps/core/layout/others/skill.css",
+    "present_in_import_manifest": false,
+    "size": 8521,
+    "sha256": "002821b7eda3beaf98084d87bcf759758f7f8411e3b80e8516fb05bf4931af69",
+    "mime": "text/plain"
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "source": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.full.zip",
+  "archive_bytes": 1216103840,
+  "archive_expected_sha256": "cb9fa579ae1abbd98d36208acc2937a8166d29466418a2d8ddf98d8118b376dc",
+  "full_archive_sha256_verified": false,
+  "scope": "Read-only bounded ZIP-directory range requests, no full download or repository mutation",
+  "status": "complete",
+  "entries": 16061,
+  "named_portraits": [
+    {
+      "entry": "image/character/hm_yudu.jpg",
+      "bytes": 298137,
+      "compressed_bytes": 298137,
+      "crc32": "8f7c2d0e"
+    }
+  ],
+  "bytes_transferred": 1795560,
+  "range_identity_etag": "\"0x8DF33169FFFEF32\"",
+  "range_reader_self_check": true
+}

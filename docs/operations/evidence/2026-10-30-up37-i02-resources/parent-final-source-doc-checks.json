@@ -1,0 +1,95 @@
+{
+  "checks": {
+    "all-links": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "output": "检查 1902 个文件，坏链 0\n"
+    },
+    "strict-docrefs": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "output": "检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n"
+    },
+    "maintained-whitespace": {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "output": ""
+    }
+  },
+  "runtime_paths_match_reviewed": {
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "scripts/test_original_resources.mjs": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "apps/web-client/src/engine/originalResources.ts": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+    "apps/web-client/src/views/CollectionView.vue": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+    "apps/web-client/scripts/original-resources.test.mjs": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47"
+  },
+  "guard_removed_owned_only": true,
+  "binary_build_products_kept_local": [
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/parent-discovery/parent-official-resources/hm_yudu.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy/collection-audio.png",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/collection-audio.png",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/index.html",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/3366235136.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/3041549837.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/4123573742.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/8.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/9.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/14.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/15.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/17.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/16.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/12.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/13.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/11.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/3561346810.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/10.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/21.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/4192370611.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/20.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/22.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/23.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/4212795236.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/18.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/24.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/25.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/19.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/4.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/5.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/7.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/3319399999.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/6.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/2.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/3.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/original/portraits/1.jpg",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/engine_native_wasm_bg-CsS8HJ_i.wasm",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/engine.worker-g2DGqgiu.js",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/engine_wasm_bg-DSvRYqT8.wasm",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/index-B0z4TyMS.css",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/engine.native.worker-CanPr44R.js",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/assets/index-6bxkoIZ_.js",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/engine_wasm_bg.wasm",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/engine_wasm.d.ts",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/.gitignore",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/package.json",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/engine_wasm_bg.wasm.d.ts",
+    "docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/pkg/engine_wasm.js"
+  ],
+  "versions": "329/105/758/WS5",
+  "preflight_source_unchanged": true,
+  "disk_free_bytes": 161203273728
+}

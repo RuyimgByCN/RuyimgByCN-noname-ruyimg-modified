@@ -1,0 +1,2 @@
+{"mode": "after", "protected": 17124, "source": 31799, "wasm": 16, "upstream_assets": 12359}
+{"command": ["python3", "-B", "/tmp/noname-resource-main-hashes.py", "after"], "exit": 0, "locked_seconds": 11.985934999975143, "disk_free_bytes": 164489109504}

@@ -1,0 +1,253 @@
+[
+  {
+    "repository": "libnoname/noname",
+    "exit": 0,
+    "releases": [
+      {
+        "tag": "v1.11.6.1",
+        "published_at": "2026-10-26T04:11:52Z",
+        "assets": [
+          {
+            "name": "noname.android.apk",
+            "bytes": 1297743006,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.android.apk",
+            "digest": "sha256:5d37e6d20a11eab6a00cddd516386780550a9eb6aa7adbd88704d6303d87cb39"
+          },
+          {
+            "name": "noname.android.apk.sha256",
+            "bytes": 93,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.android.apk.sha256",
+            "digest": "sha256:d0a499a79372eebb85487ce4fb05ce875e18483fbb810fcea011079783f6a8ec"
+          },
+          {
+            "name": "noname.core.zip",
+            "bytes": 40087216,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.core.zip",
+            "digest": "sha256:0acf048be28abbd80fa5e93bd5e8e9864c40895bd70e817f6f472d5a00c928b2"
+          },
+          {
+            "name": "noname.core.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.core.zip.sha256",
+            "digest": "sha256:6ac525bccfe8135c9d4d3a1bd461d323f7880971d3d7c804554e312567e1a9b8"
+          },
+          {
+            "name": "noname.full.zip",
+            "bytes": 1216103840,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.full.zip",
+            "digest": "sha256:cb9fa579ae1abbd98d36208acc2937a8166d29466418a2d8ddf98d8118b376dc"
+          },
+          {
+            "name": "noname.full.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.full.zip.sha256",
+            "digest": "sha256:36ff4cb36586fc4830a002bc2361a69da4e783c1f307f0516409a216981db5a4"
+          },
+          {
+            "name": "noname.ios.experimental.ipa",
+            "bytes": 293243369,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.ios.experimental.ipa",
+            "digest": "sha256:bf92be1d1641a398053f3837107b3b93426557ca9dd06f64e12d7e4d2368308f"
+          },
+          {
+            "name": "noname.ios.experimental.ipa.sha256",
+            "bytes": 94,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.ios.experimental.ipa.sha256",
+            "digest": "sha256:87bf8b0817f0ecc71ec75749eff6caaee6a76456d4f0cf955fbc8c8cef14a4bc"
+          },
+          {
+            "name": "noname.Setup.1.11.6.1.exe",
+            "bytes": 1305736319,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.Setup.1.11.6.1.exe",
+            "digest": "sha256:ac768435bafd2103734354c73013788e856e63790384026aefb9e4dbe4e45f8c"
+          },
+          {
+            "name": "noname.Setup.1.11.6.1.exe.sha256",
+            "bytes": 100,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6.1/noname.Setup.1.11.6.1.exe.sha256",
+            "digest": "sha256:41b03abaee7531169e953b30cfdf8a72485a28354b91193882710fe396256dad"
+          }
+        ]
+      },
+      {
+        "tag": "v1.11.6",
+        "published_at": "2026-10-01T02:53:19Z",
+        "assets": [
+          {
+            "name": "noname.android.apk",
+            "bytes": 1297736066,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.android.apk",
+            "digest": "sha256:66cf06bebd2c2dcc6aeb6f386b417c2bdf761ec1c94d6ef0adc81f0c44200fc1"
+          },
+          {
+            "name": "noname.android.apk.sha256",
+            "bytes": 93,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.android.apk.sha256",
+            "digest": "sha256:fd5894844577ca6cbc642dd0df143d0c98ad5e85e476d4179c2f6d38cc184fab"
+          },
+          {
+            "name": "noname.core.zip",
+            "bytes": 40085634,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.core.zip",
+            "digest": "sha256:d35538c702f5acc4a18be805a0f15d2639613dbe0805bf62e4d574db5bbb869e"
+          },
+          {
+            "name": "noname.core.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.core.zip.sha256",
+            "digest": "sha256:00e20c3b3425c0fa1a5b9c2447ab3c96f385b58e5a3c8225ebb8958fde6a3277"
+          },
+          {
+            "name": "noname.full.zip",
+            "bytes": 1216102258,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.full.zip",
+            "digest": "sha256:55a046e2889ed3554829e7da202b7335b653863149ccc601540050862b3720ea"
+          },
+          {
+            "name": "noname.full.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.full.zip.sha256",
+            "digest": "sha256:94796144fe14bc30684e0cfe655cb6bd24d1a8bf034dde3cb67cfb872180d64e"
+          },
+          {
+            "name": "noname.Setup.1.11.6.exe",
+            "bytes": 1305734636,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.Setup.1.11.6.exe",
+            "digest": "sha256:f687979fe5dccf38454f2e4d4ace25856d0720145c2c997efd79183d59e0fbc7"
+          },
+          {
+            "name": "noname.Setup.1.11.6.exe.sha256",
+            "bytes": 98,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.6/noname.Setup.1.11.6.exe.sha256",
+            "digest": "sha256:6bdde6f64fe4c29deded324c3500cf2949410268c9c3fcab0ab6935384605503"
+          }
+        ]
+      },
+      {
+        "tag": "v1.11.5.2",
+        "published_at": "2026-09-10T10:19:57Z",
+        "assets": [
+          {
+            "name": "noname.android.apk",
+            "bytes": 1268369587,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.android.apk",
+            "digest": "sha256:7b33f8875071067f49e9456909f6ff6bcfe6295e1680091d7d17c4ee54e2721f"
+          },
+          {
+            "name": "noname.android.apk.sha256",
+            "bytes": 93,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.android.apk.sha256",
+            "digest": "sha256:06dc0e8d551379b71be28f24d71040ed50f10a3d588759402619c3f8143995de"
+          },
+          {
+            "name": "noname.core.zip",
+            "bytes": 37788634,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.core.zip",
+            "digest": "sha256:4cab34ed6736aa25bdae615ce7a2acfa18bd30e1a2ac0dce924a395726360dc5"
+          },
+          {
+            "name": "noname.core.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.core.zip.sha256",
+            "digest": "sha256:d2e06dfda71ae9cd3ea95d86d941e37cb606d8f1265210fac0fb247161b020b5"
+          },
+          {
+            "name": "noname.full.zip",
+            "bytes": 1189115478,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.full.zip",
+            "digest": "sha256:2fb7f148d0c62b5e62364ecaca3453c41895cc3f1c1593af8eb4ad7146d5f715"
+          },
+          {
+            "name": "noname.full.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.full.zip.sha256",
+            "digest": "sha256:9f66712b8b0ef0769f3484b82040a475b8788edd38f3922bc5c235941e7c130e"
+          },
+          {
+            "name": "noname.Setup.1.11.5.2.exe",
+            "bytes": 1279381102,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.Setup.1.11.5.2.exe",
+            "digest": "sha256:a7457936e3fd025117d1a6ee141948b20faae04b7440441dfce4da2010a2ab61"
+          },
+          {
+            "name": "noname.Setup.1.11.5.2.exe.sha256",
+            "bytes": 100,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.2/noname.Setup.1.11.5.2.exe.sha256",
+            "digest": "sha256:51cf07a8bb749b29842750d042a3f742d199cf56f9e4675eccd43af7acb82830"
+          }
+        ]
+      },
+      {
+        "tag": "v1.11.5.1",
+        "published_at": "2026-08-15T01:29:32Z",
+        "assets": [
+          {
+            "name": "noname.core.zip",
+            "bytes": 37782327,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.core.zip",
+            "digest": "sha256:4232c4b2f318aff0b014a8f562b1f0ef1c89e66543d602b3d29725286ebb75f4"
+          },
+          {
+            "name": "noname.core.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.core.zip.sha256",
+            "digest": "sha256:4881bc0ed44d67dbb8be3fd6786c7ffcc8343d286eb4a3a26716b51b690bf865"
+          },
+          {
+            "name": "noname.full.zip",
+            "bytes": 1189270286,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.full.zip",
+            "digest": "sha256:8c98f868d39a86fad63d067346a28054c9fe5c52794d88369a2e205ff51da4ff"
+          },
+          {
+            "name": "noname.full.zip.sha256",
+            "bytes": 82,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.full.zip.sha256",
+            "digest": "sha256:d4826ce6c7b877539c2e825ab38c7db57abd0e5b88a9a51277f674f957e81c75"
+          },
+          {
+            "name": "noname.Setup.1.11.5.1.exe",
+            "bytes": 1279537155,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.Setup.1.11.5.1.exe",
+            "digest": "sha256:c302e42fc3fcfd1f5e88deb9ac21068f971e3fca6b2b2499288d269969f370c1"
+          },
+          {
+            "name": "noname.Setup.1.11.5.1.exe.sha256",
+            "bytes": 100,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5.1/noname.Setup.1.11.5.1.exe.sha256",
+            "digest": "sha256:716bd991fdbff8c96464fdffb9571e593220a91883dd8ba61f2e4b224817c639"
+          }
+        ]
+      },
+      {
+        "tag": "v1.11.5",
+        "published_at": "2026-07-30T12:42:34Z",
+        "assets": [
+          {
+            "name": "noname.core.zip",
+            "bytes": 37780320,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5/noname.core.zip",
+            "digest": "sha256:fe26bad74f1038fa5bc1ceb4e502e19729a6a76cf78389f7b42643811e99a47c"
+          },
+          {
+            "name": "noname.full.zip",
+            "bytes": 1188980105,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5/noname.full.zip",
+            "digest": "sha256:355f48b52b744fe4f082da942932c8b15965a00eaecd9a04404c37814f016872"
+          },
+          {
+            "name": "noname.Setup.1.11.5.exe",
+            "bytes": 1279250901,
+            "url": "https://github.com/libnoname/noname/releases/download/v1.11.5/noname.Setup.1.11.5.exe",
+            "digest": "sha256:9b734d6b5ac3c524edca4ba722f5fa5ebba3116e1356dbac2e12c3c3a64bf0b8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "repository": "libnoname/libnoname.github.io",
+    "exit": 0,
+    "releases": []
+  }
+]

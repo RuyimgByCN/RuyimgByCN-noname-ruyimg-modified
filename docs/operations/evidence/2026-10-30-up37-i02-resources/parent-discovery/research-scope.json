@@ -1,0 +1,12 @@
+{
+  "status": "research only, not imported",
+  "declared_hm_yudu_binding": "image/character/yudu.jpg already exists; no missing-image conclusion from literal-name scan",
+  "official_same_name_file": "PNG bytes named hm_yudu.jpg, independently retained, no replacement authorized or needed",
+  "four_other_named_portraits": "not in preserved repositories or latest official release directory",
+  "web_search_attempts": [
+    "empty model rejected",
+    "model unsupported for Exa provider",
+    "gpt-5-mini unavailable to Codex ChatGPT account; read-only official GitHub API used instead"
+  ],
+  "gameplay_snapshot_unchanged": true
+}

@@ -1,0 +1,54 @@
+node:internal/errors:998
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git clone --shared --no-checkout /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/fixture/physical
+Cloning into '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/fixture/physical'...
+remote: warning: lazy fetching disabled; some objects may not be available        
+remote: fatal: could not fetch 2103d96648a21da9c119edc38398c1d59ce944fe from promisor remote        
+error: git upload-pack: git-pack-objects died with error.
+fatal: git upload-pack: aborting due to possible repository corruption on the remote side.
+remote: aborting due to possible repository corruption on the remote side.
+fatal: early EOF
+fatal: fetch-pack: invalid index-pack output
+
+    at genericNodeError (node:internal/errors:998:15)
+    at wrappedFn (node:internal/errors:543:14)
+    at checkExecSyncError (node:child_process:926:11)
+    at execFileSync (node:child_process:962:15)
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/focused-review.mjs:24:43 {
+  status: 128,
+  signal: null,
+  output: [
+    null,
+    Buffer(0) [Uint8Array] [],
+    Buffer(606) [Uint8Array] [
+       67, 108, 111, 110, 105, 110, 103,  32, 105, 110, 116, 111,
+       32,  39,  47, 112, 114, 105, 118,  97, 116, 101,  47, 118,
+       97, 114,  47, 102, 111, 108, 100, 101, 114, 115,  47,  98,
+       53,  47,  50, 109, 104,  95, 106,  53, 116, 106,  55, 109,
+       55,  49, 120, 104,  99, 106, 115, 107,  50, 122,  49, 116,
+       52,  99,  48,  48,  48,  48, 103, 110,  47,  84,  47, 110,
+      111, 110,  97, 109, 101,  45, 117, 112,  51,  55,  45,  97,
+      115, 115, 101, 116, 115,  45, 102, 103,  54, 110, 121,  56,
+       52,  54,  47, 101,
+      ... 506 more items
+    ]
+  ],
+  pid: 50329,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(606) [Uint8Array] [
+     67, 108, 111, 110, 105, 110, 103,  32, 105, 110, 116, 111,
+     32,  39,  47, 112, 114, 105, 118,  97, 116, 101,  47, 118,
+     97, 114,  47, 102, 111, 108, 100, 101, 114, 115,  47,  98,
+     53,  47,  50, 109, 104,  95, 106,  53, 116, 106,  55, 109,
+     55,  49, 120, 104,  99, 106, 115, 107,  50, 122,  49, 116,
+     52,  99,  48,  48,  48,  48, 103, 110,  47,  84,  47, 110,
+    111, 110,  97, 109, 101,  45, 117, 112,  51,  55,  45,  97,
+    115, 115, 101, 116, 115,  45, 102, 103,  54, 110, 121,  56,
+     52,  54,  47, 101,
+    ... 506 more items
+  ]
+}
+
+Node.js v26.4.0

@@ -1,0 +1,515 @@
+{
+  "base": "http://127.0.0.1:58472",
+  "sourceRouting": "CDP redirects original-content port to own private static ServeDir equivalent; actual manifest and file bytes",
+  "matrix": [
+    {
+      "name": "star_dongyun",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/star_dongyun.mp3",
+          "duration": 4.768666666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi1.mp3",
+          "duration": 3.627666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starbishi2.mp3",
+          "duration": 3.9899791666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting1.mp3",
+          "duration": 3.453291666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/starzhengting2.mp3",
+          "duration": 3.96225,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入",
+      "clickedPlayback": {
+        "paused": false,
+        "time": 0.004349,
+        "duration": 4.768667,
+        "readyState": 4,
+        "error": null
+      }
+    },
+    {
+      "name": "ol_sb_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/ol_sb_zhouyu.mp3",
+          "duration": 7.031333333333333,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbguqu1.mp3",
+          "duration": 2.917375,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbguqu2.mp3",
+          "duration": 3.1685416666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbzuifeng1.mp3",
+          "duration": 6.967854166666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/olsbzuifeng2.mp3",
+          "duration": 4.9595625,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "huan_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/huan_zhouyu.mp3",
+          "duration": 6.080666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twdumou1.mp3",
+          "duration": 3.764666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twdumou2.mp3",
+          "duration": 3.5250625,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twhantian1.mp3",
+          "duration": 3.3025416666666665,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/twhantian2.mp3",
+          "duration": 3.8906666666666667,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "dc_sb_zhouyu",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/die/dc_sb_zhouyu.mp3",
+          "duration": 5.043125,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbronghuo1.mp3",
+          "duration": 3.8657083333333335,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbronghuo2.mp3",
+          "duration": 3.7931666666666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbyingmou1.mp3",
+          "duration": 6.851229166666666,
+          "channels": 1,
+          "sampleRate": 48000
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio/skill/dcsbyingmou2.mp3",
+          "duration": 4.729104166666667,
+          "channels": 1,
+          "sampleRate": 48000
+        }
+      ],
+      "status": "武将包已接入"
+    },
+    {
+      "name": "tangtang",
+      "image": {
+        "loaded": true,
+        "width": 350
+      },
+      "audio": [],
+      "status": "待完整移植"
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "/collection",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    },
+    {
+      "url": "/assets/index-DsoVWIAG.js",
+      "status": 200,
+      "bytes": 403753,
+      "mime": "text/javascript"
+    },
+    {
+      "url": "/assets/index-Bk9I-pVZ.css",
+      "status": 200,
+      "bytes": 28092,
+      "mime": "text/css"
+    },
+    {
+      "url": "/original-content/catalog.json",
+      "status": 200,
+      "bytes": 8471665,
+      "mime": "application/json"
+    },
+    {
+      "url": "/favicon.ico",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    },
+    {
+      "url": "/original-content/asset-manifest.json",
+      "status": 200,
+      "bytes": 3335336,
+      "mime": "application/json"
+    },
+    {
+      "url": "/original-content/assets/portraits/guoyuan.jpg",
+      "status": 200,
+      "bytes": 130109,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_chenzhi.jpg",
+      "status": 200,
+      "bytes": 86916,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_huangzu.jpg",
+      "status": 200,
+      "bytes": 148610,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_luyusheng.jpg",
+      "status": 200,
+      "bytes": 210976,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_sunjun.jpg",
+      "status": 200,
+      "bytes": 70730,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/tw_xiahoushang.jpg",
+      "status": 200,
+      "bytes": 105753,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_yanghong.jpg",
+      "status": 200,
+      "bytes": 150747,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_tianfeng.jpg",
+      "status": 200,
+      "bytes": 68513,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/mb_zhangyan.jpg",
+      "status": 200,
+      "bytes": 89716,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pangxi.jpg",
+      "status": 200,
+      "bytes": 111786,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_caozhen.jpg",
+      "status": 200,
+      "bytes": 182236,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_chendao.jpg",
+      "status": 200,
+      "bytes": 112161,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_chengpu.jpg",
+      "status": 200,
+      "bytes": 342298,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_chenqun.jpg",
+      "status": 200,
+      "bytes": 175031,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_dengai.jpg",
+      "status": 200,
+      "bytes": 81085,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_dongzhao.jpg",
+      "status": 200,
+      "bytes": 175864,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_heqi.jpg",
+      "status": 200,
+      "bytes": 141936,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_huanjie.jpg",
+      "status": 200,
+      "bytes": 58698,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_lougui.jpg",
+      "status": 200,
+      "bytes": 138183,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_lusu.jpg",
+      "status": 200,
+      "bytes": 86708,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_sunchen.jpg",
+      "status": 200,
+      "bytes": 133689,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/pot_taishici.jpg",
+      "status": 200,
+      "bytes": 123359,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/star_dongyun.jpg",
+      "status": 200,
+      "bytes": 204130,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/die/star_dongyun.mp3",
+      "status": 200,
+      "bytes": 38764,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/starbishi1.mp3",
+      "status": 200,
+      "bytes": 29740,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/starbishi2.mp3",
+      "status": 200,
+      "bytes": 32620,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/starzhengting1.mp3",
+      "status": 200,
+      "bytes": 28204,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/starzhengting2.mp3",
+      "status": 200,
+      "bytes": 32428,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/die/star_dongyun.mp3",
+      "status": 200,
+      "bytes": 38764,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/favicon.ico",
+      "status": 200,
+      "bytes": 455,
+      "mime": "text/html"
+    },
+    {
+      "url": "/original-content/assets/portraits/ol_sb_zhouyu.jpg",
+      "status": 200,
+      "bytes": 217789,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/die/ol_sb_zhouyu.mp3",
+      "status": 200,
+      "bytes": 71724,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/olsbguqu1.mp3",
+      "status": 200,
+      "bytes": 35623,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/olsbguqu2.mp3",
+      "status": 200,
+      "bytes": 41413,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/olsbzuifeng1.mp3",
+      "status": 200,
+      "bytes": 81095,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/olsbzuifeng2.mp3",
+      "status": 200,
+      "bytes": 57889,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/huan_zhouyu.jpg",
+      "status": 200,
+      "bytes": 184205,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/die/huan_zhouyu.mp3",
+      "status": 200,
+      "bytes": 49324,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/twdumou1.mp3",
+      "status": 200,
+      "bytes": 30700,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/twdumou2.mp3",
+      "status": 200,
+      "bytes": 28780,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/twhantian1.mp3",
+      "status": 200,
+      "bytes": 27052,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/twhantian2.mp3",
+      "status": 200,
+      "bytes": 31852,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/dc_sb_zhouyu.jpg",
+      "status": 200,
+      "bytes": 192905,
+      "mime": "image/jpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/die/dc_sb_zhouyu.mp3",
+      "status": 200,
+      "bytes": 83194,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/dcsbronghuo1.mp3",
+      "status": 200,
+      "bytes": 68123,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/dcsbronghuo2.mp3",
+      "status": 200,
+      "bytes": 66407,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/dcsbyingmou1.mp3",
+      "status": 200,
+      "bytes": 126942,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/audio/skill/dcsbyingmou2.mp3",
+      "status": 200,
+      "bytes": 84508,
+      "mime": "audio/mpeg"
+    },
+    {
+      "url": "/original-content/assets/portraits/tangtang.png",
+      "status": 200,
+      "bytes": 356487,
+      "mime": "image/png"
+    }
+  ]
+}

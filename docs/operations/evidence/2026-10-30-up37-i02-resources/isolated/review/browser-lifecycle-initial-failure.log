@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"exceptionId":1,"text":"Uncaught (in promise)","lineNumber":0,"columnNumber":0,"exception":{"type":"object","subtype":"error","className":"DOMException","description":"NotAllowedError: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD","objectId":"-5578005291659340780.2.1","preview":{"type":"object","subtype":"error","description":"NotAllowedError: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD","overflow":false,"properties":[{"name":"code","type":"number","value":"0"},{"name":"name","type":"string","value":"NotAllowedError"},{"name":"message","type":"string","value":"play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD"}]}}}
+    at evaluate (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/browser-lifecycle.mjs:36:133)
+    at async file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review/browser-lifecycle.mjs:57:2 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v26.4.0

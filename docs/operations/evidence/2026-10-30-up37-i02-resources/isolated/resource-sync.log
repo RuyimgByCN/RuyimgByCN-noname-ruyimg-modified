@@ -1,0 +1,15 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/sync-original-content.mjs:1877
+      else reject(new Error(
+                  ^
+
+Error: git exited 128: fatal: ../../../../../../../../private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/archive/upstream/noname/apps/core: '../../../../../../../../private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/archive/upstream/noname/apps/core' is outside repository at '/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname'
+    at ChildProcess.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/worktree/scripts/sync-original-content.mjs:1877:19)
+    at Object.onceWrapper (node:events:631:12)
+    at ChildProcess.emit (node:events:509:20)
+    at maybeClose (node:internal/child_process:1125:16)
+    at Socket.<anonymous> (node:internal/child_process:497:11)
+    at Socket.emit (node:events:509:20)
+    at Pipe.<anonymous> (node:net:355:12)
+
+Node.js v26.4.0
+{"command": ["node", "scripts/sync-original-content.mjs", "--resources-only"], "exit": 1, "locked_seconds": 0.19365754100726917, "disk_free_bytes": 169825865728}

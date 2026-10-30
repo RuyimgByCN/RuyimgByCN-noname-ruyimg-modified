@@ -1,0 +1,890 @@
+{
+  "scope": "Available direct audio preview; metadata aliases are evidence only, not implemented bindings",
+  "source": {
+    "core": {
+      "category": "core",
+      "root": "archive/upstream/noname/apps/core",
+      "repository": "https://github.com/libnoname/noname.git",
+      "repository_root": "archive/upstream/noname",
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "dirty": false,
+      "tracked_changes": [],
+      "tracked_change_count": 0,
+      "untracked_count": 0,
+      "redistribution_status": "preserved_from_source_requires_review"
+    },
+    "skin": null
+  },
+  "cases": [
+    {
+      "id": "onlyOL:ol_jie_zhuran",
+      "def_id": 2606884808,
+      "status": "ported",
+      "portrait": null,
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "onlyOL:ol_jie_danshou",
+          "source": "legacy-source/character/character/onlyOL/skill.js",
+          "metadata": {
+            "audio": "\"xindanshou\""
+          }
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "onlyOL:ol_zhuhuan",
+      "def_id": 3125343915,
+      "status": "ported",
+      "portrait": null,
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "onlyOL:ol_fenli",
+          "source": "legacy-source/character/character/onlyOL/skill.js",
+          "metadata": {}
+        },
+        {
+          "id": "onlyOL:ol_pingkou",
+          "source": "legacy-source/character/character/onlyOL/skill.js",
+          "metadata": {}
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "sp:tangtang",
+      "def_id": 2295081372,
+      "status": "source_synced",
+      "portrait": "assets/portraits/tangtang.png",
+      "character_metadata": {
+        "img": "\"image/character/tangtang.png\""
+      },
+      "skills": [
+        {
+          "id": "sp:zexing",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {}
+        },
+        {
+          "id": "sp:tt_zhiyi",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {}
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "collab:tw_dm_zhangliang",
+      "def_id": 3884015102,
+      "status": "source_synced",
+      "portrait": "assets/portraits/tw_dm_zhangliang.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "collab:twrenfang",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "collab:twjuemie",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "tw:twjianming",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "extra:relonghun",
+          "source": "legacy-source/character/character/extra/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/skill/relonghun1.mp3",
+          "size": 13267,
+          "source_category": "core",
+          "source_path": "audio/skill/relonghun1.mp3",
+          "sha256": "ac5dad60248234bdcdbcf5f895465cb5fc171250d493a29a3fa049913deb4a32"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/relonghun2.mp3",
+          "size": 10147,
+          "source_category": "core",
+          "source_path": "audio/skill/relonghun2.mp3",
+          "sha256": "4f16324d59eb29ead2e93d4635cb5577e31d059cdf97b02971db5121b74c3f84"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twjianming1.mp3",
+          "size": 49892,
+          "source_category": "core",
+          "source_path": "audio/skill/twjianming1.mp3",
+          "sha256": "e4da04e02fe65d53f0c2d55f6519d9939dab85c9cffdee50fc7abc93e1d758d5"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twjianming2.mp3",
+          "size": 50728,
+          "source_category": "core",
+          "source_path": "audio/skill/twjianming2.mp3",
+          "sha256": "e4983a0ca7b110b75c40e40f9a6193df945281b5eb72fc59028b3d017c07b84e"
+        }
+      ]
+    },
+    {
+      "id": "sp:ol_sunhanhua",
+      "def_id": 3671320243,
+      "status": "source_synced",
+      "portrait": null,
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "sp:olhuaguang",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {}
+        },
+        {
+          "id": "sp:olxuanbai",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {}
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "collab:ol_chitu",
+      "def_id": 4062169750,
+      "status": "source_synced",
+      "portrait": "assets/portraits/ol_chitu.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "collab:olfangma",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "collab:oljingxian",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/ol_chitu.mp3",
+          "size": 41328,
+          "source_category": "core",
+          "source_path": "audio/die/ol_chitu.mp3",
+          "sha256": "cf48f95e8cc3a2577c41ca7adad535211c2cb05e2a009ac6c2f399772c8b32a9"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olfangma1.mp3",
+          "size": 35625,
+          "source_category": "core",
+          "source_path": "audio/skill/olfangma1.mp3",
+          "sha256": "ef18678f77089b4428fe7031fcb03378ef010507c59551deb63c8aec7235b54f"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olfangma2.mp3",
+          "size": 31038,
+          "source_category": "core",
+          "source_path": "audio/skill/olfangma2.mp3",
+          "sha256": "73f8a74be242208e5e546841d6ce164b1b0a1adc17a8f9470c789ae83510b162"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/oljingxian1.mp3",
+          "size": 48687,
+          "source_category": "core",
+          "source_path": "audio/skill/oljingxian1.mp3",
+          "sha256": "301260e174da0c79fa29ebc73c61c56598ab028126a1c5989072f79fe67c9c26"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/oljingxian2.mp3",
+          "size": 44370,
+          "source_category": "core",
+          "source_path": "audio/skill/oljingxian2.mp3",
+          "sha256": "266e3a333f87f42a5ed0fa6326dfd1689719ac0272104adbcc7ad1e265332d6f"
+        }
+      ]
+    },
+    {
+      "id": "collab:ol_le_menghuo",
+      "def_id": 3341146162,
+      "status": "source_synced",
+      "portrait": "assets/portraits/ol_le_menghuo.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "collab:oljunzhu",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "collab:olrehuanshi",
+          "source": "legacy-source/character/character/collab/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/ol_le_menghuo.mp3",
+          "size": 64864,
+          "source_category": "core",
+          "source_path": "audio/die/ol_le_menghuo.mp3",
+          "sha256": "4fd86ab5290c2821ef40bcb4a0de9a2b7ec5518b334d549223fc79e2ef62e443"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/oljunzhu1.mp3",
+          "size": 117945,
+          "source_category": "core",
+          "source_path": "audio/skill/oljunzhu1.mp3",
+          "sha256": "5c8600ae2ac4e21bc94442ee75affd5b199851f6509c66a170b54364e043bc67"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/oljunzhu2.mp3",
+          "size": 82836,
+          "source_category": "core",
+          "source_path": "audio/skill/oljunzhu2.mp3",
+          "sha256": "c02a6e4bf50f50328f99a614d15058659ff4ace1702d96a6fe3433678fe8161e"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olrehuanshi1.mp3",
+          "size": 105824,
+          "source_category": "core",
+          "source_path": "audio/skill/olrehuanshi1.mp3",
+          "sha256": "69480f0a4476f3b3b712822bff9a10b5b2d1532b363168b1e8375907150ce509"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olrehuanshi2.mp3",
+          "size": 111258,
+          "source_category": "core",
+          "source_path": "audio/skill/olrehuanshi2.mp3",
+          "sha256": "ce47de3899a4024e37f9eeb2fa63972e0bb1a80d4cae343dd1c952917c1ea360"
+        }
+      ]
+    },
+    {
+      "id": "sp:ol_xushao",
+      "def_id": 2921950091,
+      "status": "source_synced",
+      "portrait": null,
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "sp:olshilun",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "sp:olzhuoming",
+          "source": "legacy-source/character/character/sp/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "sp2:star_dongyun",
+      "def_id": 2408253080,
+      "status": "ported",
+      "portrait": "assets/portraits/star_dongyun.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "sp2:starzhengting",
+          "source": "legacy-source/character/character/sp2/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "sp2:starbishi",
+          "source": "legacy-source/character/character/sp2/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/star_dongyun.mp3",
+          "size": 38764,
+          "source_category": "core",
+          "source_path": "audio/die/star_dongyun.mp3",
+          "sha256": "70657b7a6d286349600a489d04a6810e5aac2845b93ae612f772473a8ec4bddb"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/starbishi1.mp3",
+          "size": 29740,
+          "source_category": "core",
+          "source_path": "audio/skill/starbishi1.mp3",
+          "sha256": "2c3198f789376604d08a15de62c537315047c73abd726425e836563d71ee3e52"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/starbishi2.mp3",
+          "size": 32620,
+          "source_category": "core",
+          "source_path": "audio/skill/starbishi2.mp3",
+          "sha256": "82ea207d1cefa7df318ce829c1d7ea95f7ec4f9c2113f905310bdabce0e5d2d8"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/starzhengting1.mp3",
+          "size": 28204,
+          "source_category": "core",
+          "source_path": "audio/skill/starzhengting1.mp3",
+          "sha256": "417a550ddacbba41f1df591f552e4cbae29a1bc5b4fedecb8bafeb4b9c08192a"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/starzhengting2.mp3",
+          "size": 32428,
+          "source_category": "core",
+          "source_path": "audio/skill/starzhengting2.mp3",
+          "sha256": "90ed22d659c2ba1503725fedff8cef184bfd161e1ba20c502a88c213577dfac9"
+        }
+      ]
+    },
+    {
+      "id": "xianding:dc_sb_zhouyu",
+      "def_id": 3870127835,
+      "status": "ported",
+      "portrait": "assets/portraits/dc_sb_zhouyu.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "xianding:dcsbronghuo",
+          "source": "legacy-source/character/character/xianding/skill.js",
+          "metadata": {
+            "audio": "2",
+            "audioname": "[\"dc_sb_zhouyu_shadow\"]"
+          }
+        },
+        {
+          "id": "xianding:dcsbyingmou",
+          "source": "legacy-source/character/character/xianding/skill.js",
+          "metadata": {
+            "audio": "2",
+            "audioname": "[\"dc_sb_zhouyu_shadow\"]"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/dc_sb_zhouyu.mp3",
+          "size": 83194,
+          "source_category": "core",
+          "source_path": "audio/die/dc_sb_zhouyu.mp3",
+          "sha256": "4ce970b28ccfde52ab98b8f98bf44306623dcc372e84be1e6bdc9dbaa8e26e69"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcsbronghuo1.mp3",
+          "size": 68123,
+          "source_category": "core",
+          "source_path": "audio/skill/dcsbronghuo1.mp3",
+          "sha256": "314ca18446e09fbd05fcfc6564264b136aca1702ca4f655593a9da116583937b"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcsbronghuo2.mp3",
+          "size": 66407,
+          "source_category": "core",
+          "source_path": "audio/skill/dcsbronghuo2.mp3",
+          "sha256": "4efe0aeda5cb64ce8a6a7ed4648e25a33dc46ce3230552950c4021cf3902eb92"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcsbyingmou1.mp3",
+          "size": 126942,
+          "source_category": "core",
+          "source_path": "audio/skill/dcsbyingmou1.mp3",
+          "sha256": "199ba10d973cfce400fd2d53d219de797056b584c1e1eda0e2b0bda81152e3c5"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcsbyingmou2.mp3",
+          "size": 84508,
+          "source_category": "core",
+          "source_path": "audio/skill/dcsbyingmou2.mp3",
+          "sha256": "12ab0f92ab344a92e62937d6e855935b71acf65c2e4e228dd60104dbb6582c1e"
+        }
+      ]
+    },
+    {
+      "id": "tw:huan_zhouyu",
+      "def_id": 3188482273,
+      "status": "ported",
+      "portrait": "assets/portraits/huan_zhouyu.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "tw:twdumou",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "tw:twhantian",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/huan_zhouyu.mp3",
+          "size": 49324,
+          "source_category": "core",
+          "source_path": "audio/die/huan_zhouyu.mp3",
+          "sha256": "deb9021c03ead382435858b643546f6ce9c2e48f26b93664d3544b7fccea9eaf"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twdumou1.mp3",
+          "size": 30700,
+          "source_category": "core",
+          "source_path": "audio/skill/twdumou1.mp3",
+          "sha256": "dc6b274d727cee000a6ae07bceda1626fa79ba8245ce55ee3d7f271952e2ae31"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twdumou2.mp3",
+          "size": 28780,
+          "source_category": "core",
+          "source_path": "audio/skill/twdumou2.mp3",
+          "sha256": "3ee73a7488e2d34a9ddc1cf5c589c969c42988a42f84b9eebad47806111a3120"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twhantian1.mp3",
+          "size": 27052,
+          "source_category": "core",
+          "source_path": "audio/skill/twhantian1.mp3",
+          "sha256": "ee894a383063af4fb512117516a5edaea215dccbee0ea4021b1e83990774a27b"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twhantian2.mp3",
+          "size": 31852,
+          "source_category": "core",
+          "source_path": "audio/skill/twhantian2.mp3",
+          "sha256": "16043a14474d461ce69bb8c1da97a383dad8fd5ebcd02a502fe3b8c9131dcfde"
+        }
+      ]
+    },
+    {
+      "id": "onlyOL:ol_sb_zhouyu",
+      "def_id": 2509129165,
+      "status": "ported",
+      "portrait": "assets/portraits/ol_sb_zhouyu.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "onlyOL:olsbguqu",
+          "source": "legacy-source/character/character/onlyOL/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "onlyOL:olsbzuifeng",
+          "source": "legacy-source/character/character/onlyOL/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/ol_sb_zhouyu.mp3",
+          "size": 71724,
+          "source_category": "core",
+          "source_path": "audio/die/ol_sb_zhouyu.mp3",
+          "sha256": "165ca7f11af10a7fd2862219a2032fbb6ab251fe427291933aa10c5f495befdb"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olsbguqu1.mp3",
+          "size": 35623,
+          "source_category": "core",
+          "source_path": "audio/skill/olsbguqu1.mp3",
+          "sha256": "f5fc5bea2dbe0c7867d8a4fbc6240f2665a07ac8e59580575a3ca9ec6fec9a95"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olsbguqu2.mp3",
+          "size": 41413,
+          "source_category": "core",
+          "source_path": "audio/skill/olsbguqu2.mp3",
+          "sha256": "2682e7901170afe3459fe02e9a992340d500ede0713e75770f1b679b3cc52289"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olsbzuifeng1.mp3",
+          "size": 81095,
+          "source_category": "core",
+          "source_path": "audio/skill/olsbzuifeng1.mp3",
+          "sha256": "012cc17a41bcf3213a737eeeb1121439c04f150fa112e37be423fb1372d37f47"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/olsbzuifeng2.mp3",
+          "size": 57889,
+          "source_category": "core",
+          "source_path": "audio/skill/olsbzuifeng2.mp3",
+          "sha256": "40f288eb3bf767dc12204ea9662dd65dfca675b4f2a6c40db78f89d329d190ec"
+        }
+      ]
+    },
+    {
+      "id": "offline:hm_yudu",
+      "def_id": 2486034014,
+      "status": "ported",
+      "portrait": "assets/portraits/yudu.jpg",
+      "character_metadata": {
+        "img": "\"image/character/yudu.jpg\""
+      },
+      "skills": [
+        {
+          "id": "offline:hm_dafu",
+          "source": "legacy-source/character/character/offline/skill/offline_hanmo.js",
+          "metadata": {}
+        },
+        {
+          "id": "offline:hm_jipin",
+          "source": "legacy-source/character/character/offline/skill/offline_hanmo.js",
+          "metadata": {}
+        }
+      ],
+      "direct_audio": []
+    },
+    {
+      "id": "huicui:dc_zhugejun",
+      "def_id": 2548740789,
+      "status": "ported",
+      "portrait": "assets/portraits/dc_zhugejun.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "huicui:dcgengdu",
+          "source": "legacy-source/character/character/huicui/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "huicui:dcgumai",
+          "source": "legacy-source/character/character/huicui/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/dc_zhugejun.mp3",
+          "size": 89358,
+          "source_category": "core",
+          "source_path": "audio/die/dc_zhugejun.mp3",
+          "sha256": "5b178e86bc18abb5fc0940c664bca59570cab03734b5e3092999a04671f2d805"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcgengdu1.mp3",
+          "size": 55945,
+          "source_category": "core",
+          "source_path": "audio/skill/dcgengdu1.mp3",
+          "sha256": "2081df4614bafc31dddc3f0085bdc7426f65994c3b73d97bea34abc4f911d871"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcgengdu2.mp3",
+          "size": 64477,
+          "source_category": "core",
+          "source_path": "audio/skill/dcgengdu2.mp3",
+          "sha256": "313e9cc5d7462fb2008da2cc1d800767c9bf2afa017a53c080e2267f07827a29"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcgumai1.mp3",
+          "size": 81874,
+          "source_category": "core",
+          "source_path": "audio/skill/dcgumai1.mp3",
+          "sha256": "7c90521c56ac7ab888c3c7cc964ead3c103cf41c869f0972be9c151546d21f94"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/dcgumai2.mp3",
+          "size": 74172,
+          "source_category": "core",
+          "source_path": "audio/skill/dcgumai2.mp3",
+          "sha256": "70f48d6577e49d0384580e9c3f260de501d9737f0c422ffa9b79b81b5c23adb6"
+        }
+      ]
+    },
+    {
+      "id": "tw:tw_zhugejun",
+      "def_id": 3005466126,
+      "status": "ported",
+      "portrait": "assets/portraits/tw_zhugejun.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "tw:twshouzhu",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "tw:twdaigui",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "tw:twcairu",
+          "source": "legacy-source/character/character/tw/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/tw_zhugejun.mp3",
+          "size": 162592,
+          "source_category": "core",
+          "source_path": "audio/die/tw_zhugejun.mp3",
+          "sha256": "a99fbfd2ea090146e44a7183836b457f7c1892049f2fa20b16f551b149b525bb"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twcairu1.mp3",
+          "size": 96763,
+          "source_category": "core",
+          "source_path": "audio/skill/twcairu1.mp3",
+          "sha256": "375a9047779233bdb4ff2e96b9feb15ed554e5264761c00cf376a7c6e550c86d"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twcairu2.mp3",
+          "size": 96763,
+          "source_category": "core",
+          "source_path": "audio/skill/twcairu2.mp3",
+          "sha256": "e7b1b9b01db48fb6f7b3bd18f99d4d7cc9a2d493a5c7e749077a84c5f1ef9520"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twdaigui1.mp3",
+          "size": 95509,
+          "source_category": "core",
+          "source_path": "audio/skill/twdaigui1.mp3",
+          "sha256": "6f5f6bc3ce08bd248cdab38b6cf8b27af1847a9288bf40b18e1642867402cf23"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twdaigui2.mp3",
+          "size": 84224,
+          "source_category": "core",
+          "source_path": "audio/skill/twdaigui2.mp3",
+          "sha256": "1ab0f449df8bcc7ac32a07225fa6bf40154d1dec01034d56225ab344132601a5"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twshouzhu1.mp3",
+          "size": 89867,
+          "source_category": "core",
+          "source_path": "audio/skill/twshouzhu1.mp3",
+          "sha256": "bb58ed5347782aa0795f1840b1594dba7164cbff3d4530f9bd1ba1c2f6375a08"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/twshouzhu2.mp3",
+          "size": 93002,
+          "source_category": "core",
+          "source_path": "audio/skill/twshouzhu2.mp3",
+          "sha256": "47677cf18f71af6966e2226bef488419537695deb65d530848b7b395b026f6c5"
+        }
+      ]
+    },
+    {
+      "id": "xianding:wufan",
+      "def_id": 3053385964,
+      "status": "ported",
+      "portrait": "assets/portraits/wufan.jpg",
+      "character_metadata": {},
+      "skills": [
+        {
+          "id": "xianding:tianyun",
+          "source": "legacy-source/character/character/xianding/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        },
+        {
+          "id": "xianding:wfyuyan",
+          "source": "legacy-source/character/character/xianding/skill.js",
+          "metadata": {
+            "audio": "2"
+          }
+        }
+      ],
+      "direct_audio": [
+        {
+          "kind": "audio",
+          "path": "audio/die/wufan.mp3",
+          "size": 48917,
+          "source_category": "core",
+          "source_path": "audio/die/wufan.mp3",
+          "sha256": "96d08b0be02c475840f4cd2aef92cd796d73fecdbd6f66a3a7f4fe3cdfee4b36"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/tianyun1.mp3",
+          "size": 35764,
+          "source_category": "core",
+          "source_path": "audio/skill/tianyun1.mp3",
+          "sha256": "cfb38401baf9dd2c0cbe8203d64aa9643f0b346b3dab8896e7c500b9960af2e3"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/tianyun2.mp3",
+          "size": 32289,
+          "source_category": "core",
+          "source_path": "audio/skill/tianyun2.mp3",
+          "sha256": "2d788cc1d97b27cab274146918ba14c1e189912489a1eb2a94eaa188e8d21e51"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/wfyuyan1.mp3",
+          "size": 54981,
+          "source_category": "core",
+          "source_path": "audio/skill/wfyuyan1.mp3",
+          "sha256": "2169d07338bb5f14126c79d622e0a51bfda12ae98c6536ec623fe6e32fc97307"
+        },
+        {
+          "kind": "audio",
+          "path": "audio/skill/wfyuyan2.mp3",
+          "size": 45049,
+          "source_category": "core",
+          "source_path": "audio/skill/wfyuyan2.mp3",
+          "sha256": "acb6dd841f8fb9df4792edb656075f0d08a7277520be745042792093673a1fea"
+        }
+      ]
+    }
+  ],
+  "skin_counts": {
+    "packs": 26,
+    "characters": 2582,
+    "migrated_characters": 2576,
+    "skills": 6209,
+    "migrated_skills": 6193,
+    "profiled_skills": 6123,
+    "portraits": 2707,
+    "missing_character_portraits": 46,
+    "static_skins": 0,
+    "dynamic_skins": 0,
+    "substitutes": 79,
+    "skin_aliases": 0,
+    "dynamic_skin_aliases": 0,
+    "unresolved_skill_references": 0
+  },
+  "remaining_missing_portraits": [
+    "bingshi:pot_caoshuang",
+    "bingshi:pot_chenjiao",
+    "bingshi:pot_lvyi",
+    "bingshi:pot_xiahouba",
+    "bingshi:pot_zhangren",
+    "clan:clan_wuyi",
+    "clan:clan_zhugeguo",
+    "clan:clan_zhugezhan",
+    "huicui:dc_feiyi",
+    "huicui:dc_sunjun",
+    "key:key_crow",
+    "key:key_umi2",
+    "mobile:hanxuan",
+    "mobile:mb_dingshangwan",
+    "mobile:mb_gaoxiang",
+    "mobile:mb_xiahoumao",
+    "newjiang:yao_yuanshu",
+    "old:x_yao_yuanshu",
+    "onlyOL:ol_jie_zhuran",
+    "onlyOL:ol_liufeng",
+    "onlyOL:ol_quancong",
+    "onlyOL:ol_sb_jushou",
+    "onlyOL:ol_sb_zhangfei",
+    "onlyOL:ol_sb_zhaoyun",
+    "onlyOL:ol_sunxiu",
+    "onlyOL:ol_zhuhuan",
+    "refresh:re_simalang",
+    "refresh:xin_zhangliang",
+    "sb:sb_chentai",
+    "sp:ol_caizhenji",
+    "sp:ol_fanyufeng",
+    "sp:ol_sunhanhua",
+    "sp:ol_tw_zhangji",
+    "sp:ol_xushao",
+    "sp2:star_zhugejin",
+    "tw:huan_fazheng",
+    "xianding:dc_chenzhi",
+    "xianding:dc_sb_chengpu",
+    "xianding:dc_sb_weiguan",
+    "xianding:dc_sb_yangfeng",
+    "xianding:dc_sb_zhonghui",
+    "xianding:dengwantang",
+    "xianding:liupanxi",
+    "xianding:luwenyi",
+    "xianding:sunhe",
+    "xianding:zhangjian"
+  ]
+}

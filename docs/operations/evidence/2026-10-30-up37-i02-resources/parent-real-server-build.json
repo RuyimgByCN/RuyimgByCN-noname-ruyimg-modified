@@ -1,0 +1,21 @@
+{
+  "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "build",
+    "--offline",
+    "-p",
+    "game-server",
+    "--bin",
+    "game-server"
+  ],
+  "exit": 0,
+  "binary": "/tmp/noname-resource-server-329",
+  "sha256": "9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489",
+  "purpose": "Immediate real Rust ServeDir resource integration; preserved independently before exclusive cache handoff to A330",
+  "incremental_entries": 0,
+  "disk_free_bytes": 167577096192
+}

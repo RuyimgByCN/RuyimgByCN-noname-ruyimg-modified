@@ -1,0 +1,11 @@
+✔ UP37 available voices resolve from the existing manifest and actual catalog identities (37.061375ms)
+✔ resource URL rejects traversal, absolute paths, encoded separators and invalid segments (0.086833ms)
+✔ audio lookup requires exact identity, valid provenance and a supported audio file (0.305416ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 230.9205

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/noname-resource-real-http.py", line 30, in <module>
+    run('browser-errors',['node','/tmp/noname-resource-browser-errors.mjs',str(root),str(out/'errors'),str(out/'happy/validated-dist'),base])
+  File "/tmp/noname-resource-real-http.py", line 19, in run
+    records.append({'name':name,'argv':args,'cwd':str(cwd),'exit':r.returncode,'seconds':time.time()-t});save('http-commands.json',records);assert r.returncode==0,(name,r.returncode)
+AssertionError: ('browser-errors', 1)
+{"command": ["python3", "-B", "/tmp/noname-resource-real-http.py"], "exit": 1, "locked_seconds": 4.336954958998831, "disk_free_bytes": 161183981568}

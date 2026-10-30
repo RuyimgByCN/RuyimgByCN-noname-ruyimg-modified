@@ -1,0 +1,2 @@
+{"dist_restored": 37, "own_new_dist_removed": 12, "old_manifest_rows_preserved": 2707, "audio_rows": 9652, "audio_bytes": 651011056, "no_staged_files": true, "disk_free_bytes": 164476321792}
+{"command": ["python3", "-B", "/tmp/noname-resource-finalize.py"], "exit": 0, "locked_seconds": 1.45036637497833, "disk_free_bytes": 164476289024}

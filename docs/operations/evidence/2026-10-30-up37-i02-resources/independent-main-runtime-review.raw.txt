@@ -1,0 +1,29 @@
+# UP37-I02 main资源增量最终证据复核
+
+**Verdict：OK with notes；可接受本次有限main资源增量，无新P1/P2。无需追加外部outDir构建，也无需重跑20音频/九错误场景。**
+审查对象为`255bbfbd7f6916ee77bd29799826a225bd10871f`工作树的资源增量，329/archive105/ABI758/WS5；本次只读证据与相关driver，没有重新执行验证命令或修改main。
+
+准入7path均与原corrected candidate指纹一致；6个runtime路径前后相等。已直接比较before/after JSON的5组记录：31799 source、17124 protected、16 WASM、12359上游资源、6 runtime全部相等，未重新hash资产或源码。
+SourceAggregate为`9331596a49cfa98a617ddff5654248a6d85c4aff688630b8f844f7d6fe125b07`；未发现验证窗口内维护源码或runtime漂移，docs另由父线程收口。
+命令索引及日志支持Node156/0、pipeline2/0、resources sync/resource verify/full verify、typecheck/build、sourcecaps8984及preflight21项/322.120秒通过；没有把历史Rust测试冒充本次执行。
+
+真实HTTP链已补足此前“仅私有静态等价服务”的缺口：进程PID43762监听54420，运行父提供的`/tmp/noname-resource-server-329`，binary记录SHA为`9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489`。
+已核对启动日志、env、直接27个200 GET及driver：资源根是main/content/original；普通浏览器资源经CDP直接指向该Rust进程，前端Node服务拒绝普通资源请求。
+20份音频的HTTP长度/SHA、浏览器长度/SHA、候选manifest及记录的上游源SHA逐项一致；四角色各5份decode、画像与CDP点击播放有记录。该结论限于这20份样本和该真实ServeDir链，不泛化全部9652份codec或既有7700部署。
+九个P2场景输出无Runtime异常，正常响应直达Rust，仅A坏HTML/manifest503注入；原P2保持关闭。两个路径同时失败再恢复一个仍无独立runtime场景，不新增该通过声明。
+2614个实际非空catalog资源路径的helper审计0拒绝/0缺失；`hm_yudu`仍正确绑定`assets/portraits/yudu.jpg`。
+
+**执行偏差保留：标准`npm run build`确实瞬时写默认dist，违反父“不覆盖dist”的字面指令；原验证报告criterion-1的`not-satisfied`不得改成遵守或全程成功。**
+实际影响判断：入口37个tracked dist均证明等于255HEAD；finalize逐项从明确255HEAD恢复并核SHA，仅删除12个本轮产物且先核其生成SHA；final audit确认tracked dist无残留差异。
+标准build产物在测试前复制至保留目录；根与retry两份production-products清单一致，45项保留产物的记录SHA与artifact索引对应，finalize也逐项断言保留副本等于实际build产物。
+因此恢复链和被验证产物身份已足以支持本次源码/运行结论；再次改outDir构建不会补回此前的指令遵守记录，也没有尚待解决的产物等价缺口。**不要求追加构建。**
+接受的是已记录的新bundle及源码功能；恢复255HEAD旧dist不等于新增功能已经部署。未观察到持续源码损伤或当前runtime字节漂移，不将此执行偏差扩写成未证实的数据丢失。
+
+初轮guard顺序错误、首次retry admission路径错误均以exit1保留，最终retry为exit0；自有Rust/Chrome已停、store清理、no-stage均有final audit及cleanup记录。
+本次交叉检查证据：[evidence-crosscheck.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-up37-assets-fg6ny846/evidence/review-main-runtime/evidence-crosscheck.json)。原main证据：[main-integration](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration)。
+已复核关键hash比较、admission、command index、HTTP/browser结果、dist入口/恢复driver和最终audit；没有逐一dump或重新hash119份产物。
+数字ID尾缀歧义、重复core metadata未拒绝等原限制保留；skins/aliases、18份其他资源、自动对局音频、独立扩展生命周期及完整I02/37来源仍未完成。
+CDP输入不是OS-HID，也不证明物理听感或真机平台；没有新增`event.isTrusted`独立证据。
+建议父线程据本结论完成有限增量的Docs收口，同时保留执行偏差和剩余范围，不需要因本次证据复核重启构建/浏览器。
+
+Skipped：未重跑浏览器/build/Rust/WASM或任何源码/资产hash。Risk：dist指令偏差记录永久保留；全I02、别名/皮肤及物理平台验收仍待。
