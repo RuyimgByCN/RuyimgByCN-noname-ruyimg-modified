@@ -1,0 +1,9 @@
+{
+  "pid": 81804,
+  "command": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "../evidence/perf-profile/diagnose.py"
+  ]
+}

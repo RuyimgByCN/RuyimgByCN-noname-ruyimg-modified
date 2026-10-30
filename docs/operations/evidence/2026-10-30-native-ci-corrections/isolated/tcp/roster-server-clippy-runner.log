@@ -1,0 +1,1 @@
+{'command': ['cargo', 'clippy', '--offline', '-p', 'game-server', '--all-targets', '--no-deps'], 'exit': 0, 'seconds': 216.4575879573822, 'disk_free_after': 135121768448}

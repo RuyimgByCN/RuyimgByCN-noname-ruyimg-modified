@@ -1,0 +1,33 @@
+{
+  "all_hashes_unchanged": {
+    "head": true,
+    "index": true,
+    "source13": true,
+    "A_remaining50": true,
+    "protected": true,
+    "guard": true,
+    "guard_value": true,
+    "native_modules": true,
+    "frozen_content_diff_sha": true,
+    "tracked_dist_diff_sha": true
+  },
+  "workspace_totals": {
+    "passed": 6894,
+    "failed": 0,
+    "ignored": 77,
+    "measured": 0,
+    "filtered_out": 0,
+    "suite_summaries": 164,
+    "warning_headers_including_repeat_and_summary": 782
+  },
+  "frontend": 163,
+  "worker": {
+    "total": 82,
+    "failed": 0
+  },
+  "legacy_sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+  "native_sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+  "artifact_count": 92,
+  "disk_free_bytes": 125396844544
+}
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/finalize.py"], "exit": 0, "locked_seconds": 0.45236870800727047, "disk_free_bytes": 125396799488}

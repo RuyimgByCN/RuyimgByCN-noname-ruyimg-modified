@@ -1,0 +1,52 @@
+当前 main CI corrections 本地验收通过；HEAD `38ab1678df9b4b7b991d3b3122b1d937fd2648a1`，规则330／archive105／ABI758／WS6。仅验证四组已复审修正，不代表整个Goal或跨平台CI完成。
+
+证据根：[main-acceptance](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance)；[summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/summary.json)、[commands.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/commands.json)记录全部16次真实命令的argv/cwd/exit/locked/queue估计/freeSpace；92份证据有artifact-sha256索引，finalize.log为索引后的独立收尾日志。
+
+- 13维护文件首末SHA均精确匹配parent-source-admission；A原53中本批覆盖3、剩余50精确匹配原admission。prepare3、assetManifest/catalog、frozen-extra4、冻结内容diff、guard、HEAD、index、tracked dist前后一致。guard三项false，index始终空；未写维护source/docs/expectations、Git index/HEAD/remote、defaulttarget/dist/node_modules。
+- 真实bin为Cargo.toml的`game-server`；父确认交接`noname-next-server`是名称笔误。实际exact慢TCP测试exit0，未改断言、预算、payload。send/recv buffer＝1024/1024，301命令，慢观众buffered_outcomes178／469178B后断开，健康玩家301／893904B；reconnect=pass、members=3。原始metrics见tcp.log。
+- `nc09_native_actor_join_command_snapshot --exact --nocapture`真实roster定向测试1/1；后完整workspace正常再次覆盖，未额外重复单项。
+- `cargo test --offline --workspace`：exit0，164份suite摘要合计 **6894 passed／0 failed／77 ignored**，filtered0、measured0；77条ignored名称完整保存。workspace.log保留782条warning header（包括重复及Cargo汇总，不冒称782个独立诊断）。
+- `cargo check --offline --workspace --all-targets`：exit0，原始warnings完整保留。当前CI只对native3要求`RUSTFLAGS=-D warnings`；native3严格输入保持A330已验收版本，本轮依指令未盲重复；未虚构game-server或全workspace的新-Dwarnings门槛，也未降低lint。
+- 当前main `pnpm test`实际 **163/163**，含installer Unicode回归；`pnpm typecheck` exit0。原A161不替代本次计数。
+- 锁内真实`cargo run --offline --release -q -p benchmark-runner -- tiers`及`tier-report server-baseline`均exit0。当前330实际结果：start-hash-p50 **51/100us**、distance-query-p95 **0/300us**、snapshot-restore **46/200us**、observer-projection **20/100us**，PASS。未改budgets/iterations/seeds/profile，未借用隔离329七对或声称新收益百分比。
+- 直接维护入口`bash scripts/cross-target-hash.sh` exit0：conformance ALL PASS、两组start native/WASM hash相同、manifest hash/chain及skillVM检查通过。该入口内调用原`pnpm build:wasm`完成本批唯一一次legacy production重建，未在此前再单独重复一次。
+- 原producerScript SHA不变；复用批准preload的逻辑，只将child显式CARGO_TARGET_DIR定向专属stage3，原wasm-pack argv／release／wasm-opt行为不改。写入前确认授权生成目录untracked且非symlink，旧src/wasm-pkg＋public/pkg **12份文件原字节已保留**。无native WASM重编。
+- 新legacy WASM SHA `2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355`；native330 SHA仍为phase2的 `2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b`。镜像一致，生成模块首末SHA见generated-modules.json。
+- 正式native Worker **82/82**；现维护cross-target轨迹入口派生脚本仅改ROOT与证据输出目录，原比较器/输入不改：普通40步（20＋20恢复）与正式包20步（10＋10恢复）的revision/hash/event codes均native/WASM匹配。完整对象保留formal-trajectories/。
+- Vite以原base config、正确__dirname、configLoader runner构建到独立frontend-products，exit0；当前新legacy及不变native两份WASM均按SHA实际包含于产物。frontend-products-sha256.json及binary/input/tool SHA已保存；不将打包证据上调为新UI/平台运行验收。
+- sourcecaps自测2/2、8989文件行数门禁、层级自测与层级0 upward references门禁全部exit0。**完整preflight未运行，明确留给父文档／证据闭环后执行。**
+
+所有重命令经全局串行wrapper，stage3 target按lease专属使用，CARGO_INCREMENTAL=0／jobs2；每次编译后记录freeSpace，incremental始终空，无新无后用临时编译输出可清。debug/release/wasm deps及benchmark release executable为近期main CI复验明确保留，未删除旧缓存。收尾freeSpace **125396844544B**，始终高于3GiB停止线。
+
+所有spawn命令均等待退出，未独立启动Chrome或用户服务；TCP服务由测试创建并停止，无自有长驻进程。旧12模块、当前ignored生产模块和实际外部前端产物保留为复验输入／证据；未触用户7700、其他worker缓存。16命令本轮全部exit0，无实际red被隐藏；自有finalize脚本的类型/unused工具提示在首次执行前修正，未改主树。原run41053688083的5green/5red及父原patch/review证据不改。
+
+实际Windows MSI／Linux RPM、真实Linux慢TCP及新GitHub多平台CI仍待；当前macOS本地测试/配置检查不能替代这些平台产物。建议父完成文档闭环后运行最终fullpreflight，再独立审阅本轮证据；本批不关闭whole Goal。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"Only verification evidence and authorized ignored legacy modules generated; source13/A50/protected/guard/HEAD/index/dist unchanged."},
+    {"id":"criterion-2","status":"satisfied","evidence":"16 actual command logs,92 SHA-indexed artifacts,workspace6894/0/77,frontend163,Worker82,current330release metrics and production module/product SHAs retained."}
+  ],
+  "changedFiles": ["docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/**","apps/web-client/src/wasm-pkg/** (ignored production output)","apps/web-client/public/pkg/** (ignored production mirror)"],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command":"cargo test --offline -p game-server --bin game-server native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands -- --exact --nocapture","result":"passed","summary":"1/1; actual boundedTCP/drop/healthy/reconnect metrics retained"},
+    {"command":"cargo test --offline -p game-server --test nc09_native_actor nc09_native_actor_join_command_snapshot -- --exact --nocapture","result":"passed","summary":"1/1 true roster"},
+    {"command":"cargo test --offline --workspace","result":"passed","summary":"6894passed;0failed;77ignored"},
+    {"command":"cargo check --offline --workspace --all-targets","result":"passed","summary":"stock warnings retained"},
+    {"command":"pnpm test;pnpm typecheck (separate serialized invocations)","result":"passed","summary":"163/163;typecheck0"},
+    {"command":"release benchmark-runner tiers and tier-report server-baseline (separate serialized invocations)","result":"passed","summary":"current330 fixed budgets all PASS"},
+    {"command":"bash scripts/cross-target-hash.sh","result":"passed","summary":"productionlegacy rebuild plus all standardcross checks"},
+    {"command":"pnpm smoke:native;formal trajectory comparisons;externalVite (separate serialized invocations)","result":"passed","summary":"Worker82;40/20step comparisons;both actualWASM SHAs bundled"},
+    {"command":"sourcecaps selftests/gate and layering selftests/gate (four serialized invocations)","result":"passed","summary":"all exit0"},
+    {"command":"final fullpreflight","result":"not-run","summary":"explicitly deferred to parent after documentation closure"}
+  ],
+  "validationOutput": ["All admitted/protected source hashes unchanged;no staged files;all16 actualcommands exit0;no incremental entries"],
+  "residualRisks": ["77ignored tests and stock warnings retained,not silently cleared.","ActualWindowsMSI/LinuxRPM/LinuxslowTCP/newcrossplatformCI remain pending.","Finalfullpreflight deferred to parent; this is not wholeGoal acceptance."],
+  "noStagedFiles": true,
+  "diffSummary": "No maintained edits; only evidence and authorized ignoredlegacy production outputs remain.",
+  "reviewFindings": ["No local runtime/test blocker observed; independent review and parent finalpreflight remain required."],
+  "manualNotes": "Skipped unchangednative330 rebuild and repeatednative3strict as instructed; preserved old12module bytes and actual newproduct SHAs;no stage/commit/push/remote change."
+}
+```

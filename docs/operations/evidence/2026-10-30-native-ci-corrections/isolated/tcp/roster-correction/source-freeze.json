@@ -1,0 +1,31 @@
+{
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "versions": "330/105/758/WS6 unchanged",
+  "files": [
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "before_sha256": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa",
+      "after_sha256": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+      "role": "previously frozen slow correction, unchanged this run"
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/peer.rs",
+      "before_sha256": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3",
+      "after_sha256": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+      "role": "previously frozen slow correction, unchanged this run"
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_actor.rs",
+      "before_sha256": "1daef0e1d3b8aecfb8349f125f525435a5f2195923224f84b636bfcd02034c8e",
+      "after_sha256": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+      "role": "new roster assertion correction"
+    }
+  ],
+  "patches": {
+    "incremental.patch": "5dba37cafa4446e4df1335c656e3a36b0baa2a9946360be8cdf59512d9a8bf60",
+    "roster-only.patch": "57950c722404dd19418fac5b15239293988c9d1dacf246cb72f2bfe84900a5e7",
+    "combined-three-file.patch": "b0cb8879ca7c61e557836e58763d074d0dea95567ca9d4e86789c0fc1d3a0d31"
+  },
+  "frozen_at_utc": "2026-10-30T13:16:05.161643+00:00",
+  "review_mode": "Frozen source for independent read-only reviewer; no subsequent source edits in this run."
+}

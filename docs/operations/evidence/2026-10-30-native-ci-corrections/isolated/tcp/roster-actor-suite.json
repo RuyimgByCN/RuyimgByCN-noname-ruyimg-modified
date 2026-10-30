@@ -1,0 +1,16 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--test",
+    "nc09_native_actor",
+    "--",
+    "--nocapture"
+  ],
+  "exit": 0,
+  "seconds": 161.0402569770813,
+  "disk_free_after": 135108714496
+}

@@ -1,0 +1,32 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index ed0236fa..620939a4 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -188,7 +188,10 @@ jobs:
+       - uses: Swatinem/rust-cache@v2
+         with:
+           workspaces: noname-next
++      # Match phase17's release profile for performance measurements.
+       - name: Tier list
+-        run: cargo run -q -p benchmark-runner -- tiers
++        run: cargo run --release -q -p benchmark-runner -- tiers
+       - name: Tier report (server-baseline budget)
+-        run: cargo run -q -p benchmark-runner -- tier-report server-baseline
++        run: >-
++          cargo run --release -q -p benchmark-runner --
++          tier-report server-baseline
+diff --git a/docs/operations/native-ci.md b/docs/operations/native-ci.md
+index f87714a5..9c8d5f4d 100644
+--- a/docs/operations/native-ci.md
++++ b/docs/operations/native-ci.md
+@@ -58,6 +58,10 @@ settings are unchanged.
+ | desktop | macOS, Windows, Ubuntu | Tauri installers; uploads `installer-${matrix.os}` artifacts from `noname-next/target/release/bundle/**` |
+ | perf | macOS, Ubuntu | Existing tier list and server-baseline report |
+ 
++Perf runs both commands with `--release`, matching the historical phase17
++measurement profile. The unchanged runner measures the legacy engine-core line;
++profile diagnostics do not establish an engine-native performance improvement.
++
+ There are ten matrix job executions. The workflow requests only `contents: read`
+ for its token. Public source checkout and package installation require no new
+ repository secret. The existing optional `TAURI_SIGNING_PRIVATE_KEY` reference

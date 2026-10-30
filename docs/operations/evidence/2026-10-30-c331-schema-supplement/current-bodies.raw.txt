@@ -1,0 +1,615 @@
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/lib.rs
+255:     pub decls: Vec<engine_native::content::extension::VmSkillDecl>,
+256: }
+257: 
+258: mod vm_active;
+259: 
+260: pub fn bridge_vm_skill_decls(
+261:     pkg: &content_schema::ContentPackage,
+262: ) -> Result<VmBridgeOutcome, BridgeError> {
+263:     use engine_native::event::{EventKind, Timing};
+264:     pkg.validate_vm_effect_abi()
+265:         .map_err(|reason| BridgeError::InvalidField {
+266:             field: "manifest.rule_vm_abi_version",
+267:             reason,
+268:         })?;
+269:     pkg.modules
+270:         .iter()
+271:         .try_for_each(content_schema::validate_vm_module_hash)
+272:         .map_err(|reason| BridgeError::InvalidField {
+273:             field: "modules[].logic_hash",
+274:             reason,
+275:         })?;
+276:     content_runtime::check_engine_compat(&pkg.manifest, &content_runtime::tooling_host_versions())
+277:         .map_err(|error| BridgeError::InvalidField {
+278:             field: "manifest.rule_vm_abi_version",
+279:             reason: error.to_string(),
+280:         })?;
+281:     ensure_symbol_capacity()?;
+282:     let mut out = Vec::new();
+283:     let mut unsupported: Vec<String> = Vec::new();
+284:     for t in &pkg.trigger_index {
+285:         let module = pkg
+286:             .modules
+287:             .iter()
+288:             .find(|m| m.name == t.module)
+289:             .ok_or_else(|| BridgeError::InvalidField {
+290:                 field: "trigger_index.module",
+291:                 reason: format!("模块 {} 不在 npack modules 内", t.module),
+292:             })?;
+293:         vm_active::validate_entry(module, t.entry_pc, "trigger_index.entry_pc")?;
+294:         if !t.choice_actor.is_owner() {
+295:             return Err(invalid(
+296:                 "trigger_index.choice_actor",
+297:                 "non-owner confirmation is unsupported",
+298:             ));
+299:         }
+375:             if !unsupported.contains(&t.filter) {
+376:                 unsupported.push(t.filter.clone());
+377:             }
+378:             continue;
+379:         };
+380:         let filter = match phase_gate {
+381:             Some(phase) => engine_native::rvm_bridge::VmFilterPolicy::AtPhase {
+382:                 phase,
+383:                 inner: Box::new(filter),
+384:             },
+385:             None => filter,
+386:         };
+387:         out.push(engine_native::content::extension::VmSkillDecl {
+388:             name: names::intern(t.module.clone()).to_string(),
+389:             module: module.clone(),
+390:             trigger: engine_native::catalog::TriggerMeta {
+391:                 event,
+392:                 timing: Timing::Normal,
+393:                 priority: 0,
+394:                 optional: t.optional,
+395:                 extra_events: Vec::new(),
+396:             },
+397:             filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
+398:                 skill_def_id: t.skill_def_id,
+399:                 hand_limit_base_max_hp: pkg.modifier_index.iter().any(|m| {
+400:                     m.skill_def_id == t.skill_def_id && m.target == "hand_limit_base_max_hp"
+401:                 }),
+402:                 inner: Box::new(filter),
+403:             },
+404:         });
+405:     }
+406:     if !unsupported.is_empty() {
+407:         unsupported.sort();
+408:         return Err(BridgeError::UnsupportedVmFilters {
+409:             filters: unsupported,
+410:         });
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs
+155:     pub package_format_version: u32,
+156:     /// Namespace.
+157:     pub namespace: String,
+158:     /// Package id.
+159:     pub package_id: String,
+160:     /// Semver-like version string.
+161:     pub version: String,
+162:     /// Content schema version.
+163:     pub content_schema_version: u32,
+164:     /// Rule VM ABI version.
+165:     pub rule_vm_abi_version: u32,
+166:     /// Min engine API.
+167:     pub min_engine_api: u32,
+168:     /// Max engine API (inclusive).
+169:     pub max_engine_api: u32,
+170:     /// Capability set requested.
+171:     pub capabilities: CapabilitySet,
+172:     /// Exact package dependencies. Empty keeps legacy standalone-package behavior.
+173:     #[serde(default, skip_serializing_if = "Vec::is_empty")]
+174:     pub dependencies: Vec<PackageDependency>,
+175:     /// Logic hash (semantic — no timestamps).
+176:     pub logic_hash: [u8; 32],
+177:     /// Asset hash (zeros if no assets).
+178:     pub asset_hash: [u8; 32],
+179:     /// Author string.
+180:     pub author: String,
+181:     /// License record (§42: 代码许可 / 资源许可 / 来源 / 可再分发 / 修改记录).
+182:     /// Defaults to `Unspecified` — official distribution requires explicit license.
+183:     #[serde(default)]
+184:     pub license: licensing_schema::LicenseRecord,
+185: }
+186: 
+187: impl PackageManifest {
+188:     /// Create a bootstrap-style manifest shell (hash filled later).
+189:     pub fn new(namespace: &str, package_id: &str, version: &str) -> Self {
+190:         Self {
+191:             package_format_version: PACKAGE_FORMAT_VERSION,
+192:             namespace: namespace.into(),
+193:             package_id: package_id.into(),
+194:             version: version.into(),
+195:             content_schema_version: CONTENT_SCHEMA_VERSION,
+196:             rule_vm_abi_version: RULE_VM_ABI_VERSION,
+197:             min_engine_api: 1,
+198:             max_engine_api: 1,
+199:             capabilities: CapabilitySet::standard_skill(),
+200:             dependencies: Vec::new(),
+201:             logic_hash: [0u8; 32],
+202:             asset_hash: [0u8; 32],
+203:             author: "noname-next".into(),
+204:             license: licensing_schema::LicenseRecord::default(),
+205:         }
+206:     }
+207: }
+208: 
+209: /// Player who confirms an optional trigger.
+238: }
+239: 
+240: /// Trigger index entry for package (static).
+241: #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+242: pub struct PackageTriggerEntry {
+243:     /// Trigger def id.
+244:     pub trigger_def_id: u32,
+245:     /// Skill def id.
+246:     pub skill_def_id: u32,
+247:     /// Event tag string.
+248:     pub event: String,
+249:     /// Filter string.
+250:     pub filter: String,
+251:     /// Whether a player must confirm before execution.
+252:     #[serde(default)]
+253:     pub optional: bool,
+254:     /// Player who confirms an optional trigger.
+255:     #[serde(default, skip_serializing_if = "TriggerChoiceActor::is_owner")]
+256:     pub choice_actor: TriggerChoiceActor,
+257:     /// Module name containing handler.
+258:     pub module: String,
+259:     /// Entry PC in module.
+260:     pub entry_pc: u32,
+261: }
+262: 
+263: /// Skill-level metadata independent of any one handler module.
+264: #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+265: pub struct PackageSkillEntry {
+266:     /// Skill definition id.
+267:     pub skill_def_id: u32,
+268:     /// Source-level stable name.
+269:     pub name: String,
+270:     /// Locked/passive skill marker.
+271:     #[serde(default)]
+272:     pub locked: bool,
+273:     /// Only active while the owner has the Lord identity.
+685:     /// Branch selected after a successful conversion.
+686:     #[serde(default, skip_serializing_if = "Option::is_none")]
+687:     pub next_branch: Option<u8>,
+688:     /// Declarative source-free conversion cost.
+689:     #[serde(default, skip_serializing_if = "Option::is_none")]
+690:     pub cost: Option<String>,
+691:     /// Skill-definition mark consumed by the conversion cost.
+692:     #[serde(default, skip_serializing_if = "Option::is_none")]
+693:     pub mark_cost: Option<u32>,
+694:     /// Cards drawn after the converted card is used or responded with.
+695:     #[serde(default, skip_serializing_if = "is_zero_u8")]
+696:     pub post_draw: u8,
+697: }
+698: 
+699: fn default_one_u8() -> u8 {
+700:     1
+701: }
+702: 
+703: fn is_one_u8(value: &u8) -> bool {
+704:     *value == 1
+705: }
+706: 
+707: /// Full content package (Phase 4: JSON-serializable; production may use pb+bin).
+708: #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+709: pub struct ContentPackage {
+710:     /// Manifest.
+711:     pub manifest: PackageManifest,
+712:     /// Bytecode modules.
+713:     pub modules: Vec<BytecodeModule>,
+714:     /// Skill metadata index.
+715:     #[serde(default)]
+716:     pub skill_index: Vec<PackageSkillEntry>,
+717:     /// Character roster shipped by this package.
+718:     #[serde(default)]
+719:     pub character_index: Vec<PackageCharacterEntry>,
+720:     /// Presentation-only skin overlays, including overlays for dependency-package characters.
+721:     #[serde(default, skip_serializing_if = "PackageSkinIndex::is_empty")]
+722:     pub skin_index: PackageSkinIndex,
+723:     /// Immutable card definitions shipped by this package.
+724:     #[serde(default)]
+725:     pub card_index: Vec<PackageCardEntry>,
+726:     /// Trigger static index.
+727:     pub trigger_index: Vec<PackageTriggerEntry>,
+728:     /// Modifier static index.
+729:     pub modifier_index: Vec<PackageModifierEntry>,
+730:     /// Active skill static index.
+731:     #[serde(default)]
+732:     pub active_index: Vec<PackageActiveEntry>,
+733:     /// View-as skill static index.
+734:     #[serde(default)]
+735:     pub view_as_index: Vec<PackageViewAsEntry>,
+736:     /// Locale → translation key → translated text.
+737:     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+738:     pub translations: BTreeMap<String, BTreeMap<String, String>>,
+739:     /// Build-time/runtime asset metadata for this package.
+740:     #[serde(default, skip_serializing_if = "Option::is_none")]
+741:     pub asset_manifest: Option<resource_schema::AssetManifest>,
+800:     }
+801: 
+802:     /// Validate package identity, hashes, dependencies, and presentation references.
+803:     pub fn validate(&self) -> Result<(), String> {
+804:         self.validate_vm_effect_abi()?;
+805:         for (label, value) in [
+806:             ("namespace", self.manifest.namespace.as_str()),
+807:             ("package_id", self.manifest.package_id.as_str()),
+808:             ("version", self.manifest.version.as_str()),
+809:         ] {
+810:             if value.is_empty()
+811:                 || value == "."
+812:                 || value == ".."
+813:                 || value.contains('/')
+814:                 || value.contains('\\')
+815:             {
+816:                 return Err(format!("invalid {label} {value:?}"));
+817:             }
+818:         }
+819:         if self.manifest.logic_hash != self.compute_logic_hash() {
+820:             return Err("logic_hash mismatch".into());
+821:         }
+822:         if self.manifest.asset_hash != self.compute_asset_hash() {
+823:             return Err("asset_hash mismatch".into());
+824:         }
+825:         self.modules.iter().try_for_each(validate_vm_module_hash)?;
+826: 
+827:         let mut dependency_slots = std::collections::BTreeSet::new();
+828:         for dependency in &self.manifest.dependencies {
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime/src/compat.rs
+1: //! Engine / package compatibility checks.
+2: 
+3: use content_schema::PackageManifest;
+4: use engine_api::{VersionBundle, RULE_VM_ABI_VERSION};
+5: 
+6: use crate::RuntimeError;
+7: 
+8: const OLDEST_ADDITIVE_RULE_VM_ABI: u32 = 3;
+9: fn rule_vm_abi_compatible(host: u32, package: u32) -> bool {
+10:     host == package
+11:         || (host <= RULE_VM_ABI_VERSION && package >= OLDEST_ADDITIVE_RULE_VM_ABI && package < host)
+12: }
+13: 
+14: /// Check package manifest against host engine versions.
+15: pub fn check_engine_compat(
+16:     manifest: &PackageManifest,
+17:     host: &VersionBundle,
+18: ) -> Result<(), RuntimeError> {
+19:     if host.engine_api < manifest.min_engine_api || host.engine_api > manifest.max_engine_api {
+20:         return Err(RuntimeError::Incompatible(format!(
+21:             "engine_api {} not in package range [{}, {}]",
+22:             host.engine_api, manifest.min_engine_api, manifest.max_engine_api
+23:         )));
+24:     }
+25:     if !rule_vm_abi_compatible(host.rule_vm_abi, manifest.rule_vm_abi_version) {
+26:         return Err(RuntimeError::Incompatible(format!(
+27:             "rule_vm_abi host={} package={}",
+28:             host.rule_vm_abi, manifest.rule_vm_abi_version
+29:         )));
+30:     }
+31:     if host.content_schema != 0 && host.content_schema != manifest.content_schema_version {
+32:         // host may still report 0 historically; only enforce when host advertises a non-zero axis
+33:         return Err(RuntimeError::Incompatible(format!(
+34:             "content_schema host={} package={}",
+35:             host.content_schema, manifest.content_schema_version
+36:         )));
+37:     }
+38:     if host.package_format != 0 && host.package_format != manifest.package_format_version {
+39:         return Err(RuntimeError::Incompatible(format!(
+40:             "package_format host={} package={}",
+41:             host.package_format, manifest.package_format_version
+42:         )));
+43:     }
+44:     Ok(())
+45: }
+46: 
+47: /// Loose host bundle for Phase 10 tooling (matches content-schema defaults).
+48: pub fn tooling_host_versions() -> VersionBundle {
+49:     let mut v = VersionBundle::current();
+50:     v.content_schema = content_schema::CONTENT_SCHEMA_VERSION;
+51:     v.package_format = content_schema::PACKAGE_FORMAT_VERSION;
+52:     v.engine_api = 1;
+53:     v
+54: }
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api/src/version.rs
+1: //! Independent version axes (architecture §11.3).
+2: 
+3: use serde::{Deserialize, Serialize};
+4: 
+5: /// Current content schema version shared by hosts and package tooling.
+6: pub const CONTENT_SCHEMA_VERSION: u32 = 3;
+7: 
+8: /// Current installable package format version.
+9: pub const PACKAGE_FORMAT_VERSION: u32 = 1;
+10: 
+11: /// Current additive Rule VM host ABI version shared by packages and runtimes.
+12: ///
+13: /// Parallel agents share the workspace; ABI numbers are allocated serially in
+14: /// `ABI-COORDINATION.md` (repo root). Bumping this constant requires first
+15: /// claiming the number there — the `abort_bump_without_claim` test below
+16: /// enforces that invariant.
+17: pub const RULE_VM_ABI_VERSION: u32 = 758;
+18: 
+19: /// Bundle of version identifiers recorded in replays and packages.
+20: #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+21: pub struct VersionBundle {
+22:     /// Engine API version.
+23:     pub engine_api: u32,
+24:     /// Rule VM ABI version.
+25:     pub rule_vm_abi: u32,
+26:     /// Content schema version.
+27:     pub content_schema: u32,
+28:     /// Network protocol version.
+29:     pub network_protocol: u32,
+30:     /// Replay schema version.
+31:     pub replay_schema: u32,
+32:     /// Snapshot schema version.
+33:     pub snapshot_schema: u32,
+34:     /// Package format version.
+35:     pub package_format: u32,
+36:     /// Build id string (exact binary identity).
+37:     pub engine_build_id: String,
+38: }
+39: 
+40: impl VersionBundle {
+41:     /// Current Phase-1 workspace versions.
+42:     pub fn current() -> Self {
+43:         Self {
+44:             engine_api: 1,
+45:             rule_vm_abi: RULE_VM_ABI_VERSION,
+46:             content_schema: CONTENT_SCHEMA_VERSION,
+47:             network_protocol: 6,
+48:             replay_schema: crate::REPLAY_SCHEMA_VERSION,
+49:             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
+50:             package_format: PACKAGE_FORMAT_VERSION,
+51:             engine_build_id: crate::ENGINE_BUILD_ID.to_string(),
+52:         }
+53:     }
+54: }
+55: 
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler/src/lib.rs
+86:         codegen::compile_module_ir_with_required_abi(&ir)?;
+87: 
+88:     for m in &modules {
+89:         verify_module(m).map_err(|e| CompileError::Codegen(e.to_string()))?;
+90:     }
+91: 
+92:     let mut manifest = PackageManifest::new("official", package_id, "0.1.0");
+93:     manifest.rule_vm_abi_version = required_rule_vm_abi(&ir, module_required_abi);
+94:     manifest.capabilities = rule_api::CapabilitySet::none();
+95:     for module in &modules {
+96:         manifest.capabilities.emit_effects |= module.caps_mask & caps::EMIT_EFFECTS != 0;
+97:         manifest.capabilities.run_queries |= module.caps_mask & caps::RUN_QUERIES != 0;
+98:         manifest.capabilities.request_choice |= module.caps_mask & caps::REQUEST_CHOICE != 0;
+99:     }
+100: 
+101:     let trigger_index: Vec<PackageTriggerEntry> = triggers
+102:         .into_iter()
+103:         .map(|t| PackageTriggerEntry {
+104:             trigger_def_id: t.trigger_def_id,
+105:             skill_def_id: t.skill_def_id,
+106:             event: t.event,
+107:             filter: t.filter,
+108:             optional: t.optional,
+109:             choice_actor: t.choice_actor,
+110:             module: t.module,
+111:             entry_pc: t.entry_pc,
+112:         })
+113:         .collect();
+114: 
+115:     let modifier_index: Vec<PackageModifierEntry> = modifiers
+116:         .into_iter()
+117:         .map(|m| PackageModifierEntry {
+118:             skill_def_id: m.skill_def_id,
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package/hashing.rs
+1: //! 内容包的逻辑哈希与资源哈希（锁定、签名与升级比对的输入）。
+2: 
+3: use super::*;
+4: 
+5: impl ContentPackage {
+6:     /// Compute package logic hash from semantic fields only.
+7:     pub fn compute_logic_hash(&self) -> [u8; 32] {
+8:         let mut h = blake3::Hasher::new();
+9:         h.update(b"noname-next/npack-logic/v1");
+10:         h.update(&self.manifest.package_format_version.to_le_bytes());
+11:         h.update(&self.manifest.content_schema_version.to_le_bytes());
+12:         h.update(&self.manifest.rule_vm_abi_version.to_le_bytes());
+13:         h.update(self.manifest.namespace.as_bytes());
+14:         h.update(self.manifest.package_id.as_bytes());
+15:         h.update(self.manifest.version.as_bytes());
+16:         h.update(self.compiler_version.as_bytes());
+17:         if !self.manifest.dependencies.is_empty() {
+18:             h.update(b"dependencies/v1");
+19:             let mut dependencies = self.manifest.dependencies.clone();
+20:             dependencies.sort();
+21:             for dependency in dependencies {
+22:                 h.update(dependency.namespace.as_bytes());
+23:                 h.update(b"\0");
+24:                 h.update(dependency.package_id.as_bytes());
+99:             h.update(&card.distance_to.to_le_bytes());
+100:             h.update(&card.on_leave_equip_skill_def.to_le_bytes());
+101:         }
+102:         for t in &self.trigger_index {
+103:             h.update(&t.trigger_def_id.to_le_bytes());
+104:             h.update(&t.skill_def_id.to_le_bytes());
+105:             h.update(t.event.as_bytes());
+106:             h.update(t.filter.as_bytes());
+107:             h.update(&[u8::from(t.optional)]);
+108:             if !t.choice_actor.is_owner() {
+109:                 h.update(b"trigger-choice-actor/v1");
+110:                 h.update(&[t.choice_actor.tag()]);
+111:             }
+112:             h.update(t.module.as_bytes());
+113:             h.update(&t.entry_pc.to_le_bytes());
+114:         }
+115:         for m in &self.modifier_index {
+116:             h.update(&m.skill_def_id.to_le_bytes());
+117:             h.update(m.target.as_bytes());
+118:             if let Some(selector) = &m.selector {
+119:                 h.update(b"selector/v1");
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/vm_active.rs
+75:         validate_entry(module, active.entry_pc, "active_index.entry_pc")?;
+76:         let program = Arc::new(
+77:             VmSkillProgram::new(module.clone(), skill.name.clone())
+78:                 .map_err(|e| invalid("active_index.module", e.to_string()))?,
+79:         );
+80:         let mut triggers = Vec::new();
+81:         let mut remove = Vec::new();
+82:         for trigger in pkg
+83:             .trigger_index
+84:             .iter()
+85:             .filter(|t| t.skill_def_id == active.skill_def_id)
+86:         {
+87:             let index = decls
+88:                 .iter()
+89:                 .position(|d| d.name == trigger.module)
+90:                 .ok_or_else(|| invalid("trigger_index", "missing bridged handler"))?;
+91:             let decl = &decls[index];
+92:             if decl.trigger.event == engine_native::event::EventKind::DamageBefore {
+93:                 return Err(invalid(
+94:                     "trigger_index.event",
+95:                     "active skill with damage_before handler is unsupported",
+96:                 ));
+97:             }
+98:             if triggers
+99:                 .first()
+100:                 .is_some_and(|t: &VmTriggerProgram| t.meta.optional != decl.trigger.optional)
+101:             {
+102:                 return Err(invalid(
+103:                     "trigger_index.optional",
+104:                     "mixed optional handlers are unsupported",
+105:                 ));
+106:             }
+107:             triggers.push(VmTriggerProgram {
+108:                 program: Arc::new(
+109:                     VmSkillProgram::new(decl.module.clone(), skill.name.clone())
+110:                         .map_err(|e| invalid("trigger_index.module", e.to_string()))?,
+111:                 ),
+112:                 meta: decl.trigger.clone(),
+113:                 filter: decl.filter.clone(),
+114:             });
+115:             remove.push(index);
+116:         }
+117:         remove.sort_unstable();
+118:         for index in remove.into_iter().rev() {
+119:             decls.remove(index);
+120:         }
+121:         let mut meta = triggers.first().map(|t| t.meta.clone()).unwrap_or(
+122:             engine_native::catalog::TriggerMeta {
+123:                 event: engine_native::event::EventKind::SkillToggled,
+124:                 timing: engine_native::event::Timing::Normal,
+125:                 priority: 0,
+126:                 optional: false,
+127:                 extra_events: Vec::new(),
+128:             },
+129:         );
+130:         for trigger in &triggers {
+131:             if trigger.meta.event != meta.event && !meta.extra_events.contains(&trigger.meta.event)
+132:             {
+133:                 meta.extra_events.push(trigger.meta.event);
+134:             }
+135:         }
+136:         let limits = VmActiveLimits {
+137:             once_per_turn: active.uses_per_turn == Some(1),
+138:             once_per_play_phase: active.uses_per_play_phase == Some(1),
+139:             hand_nonempty: active.hand_nonempty,
+140:             equip_nonempty: active.equip_nonempty,
+141:             hand_gt_hp: active.hand_gt_hp,
+142:             hand_gt_max_hp: active.hand_gt_max_hp,
+143:             face_up: active.face_up,
+144:             owner_unlinked: active.owner_unlinked,
+145:             mark_at_least: active.mark_at_least,
+146:         };
+147:         decls.push(engine_native::content::extension::VmSkillDecl {
+148:             name: skill.name.clone(),
+149:             module: module.clone(),
+150:             trigger: meta,
+151:             filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
+152:                 skill_def_id: active.skill_def_id,
+153:                 active: program,
+154:                 limits,
+155:                 triggers,
+156:             })),
+157:         });
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server/src/native/frozen.rs
+35:     Ok(binding)
+36: }
+37: 
+38: impl FrozenNativePackage {
+39:     fn parsed_package(&self) -> Result<ContentPackage, String> {
+40:         if content_hash_hex(self.package_json.as_bytes()) != self.binding.content_hash {
+41:             return Err("原局包 content hash 不匹配".into());
+42:         }
+43:         let package = ContentPackage::from_json_bytes(self.package_json.as_bytes())?;
+44:         package.validate()?;
+45:         content_runtime::check_engine_compat(
+46:             &package.manifest,
+47:             &content_runtime::tooling_host_versions(),
+48:         )
+49:         .map_err(|e| e.to_string())?;
+50:         let manifest = &package.manifest;
+51:         if manifest.namespace != self.binding.namespace
+52:             || manifest.package_id != self.binding.package_id
+53:             || manifest.version != self.binding.version
+54:             || blake3::Hash::from(manifest.logic_hash).to_hex().as_str() != self.binding.logic_hash
+55:         {
+56:             return Err("原局包身份或 logic hash 不匹配".into());
+57:         }
+58:         Ok(package)
+59:     }
+60: 
+61:     pub(super) fn package(&self) -> Result<ContentPackage, String> {
+62:         let package = self.parsed_package()?;
+63:         let mut declared = BTreeMap::new();
+64:         if let Some(manifest) = &package.asset_manifest {
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs
+760:     }
+761:     Ok(())
+762: }
+763: 
+764: impl ContentPackage {
+765:     /// Reject packages whose effect tags cannot be interpreted under their declared ABI.
+766:     pub fn validate_vm_effect_abi(&self) -> Result<(), String> {
+767:         use rule_vm::bytecode::effect_tag;
+768: 
+769:         let abi = self.manifest.rule_vm_abi_version;
+770:         for module in &self.modules {
+771:             if (754..=757).contains(&abi)
+772:                 && rule_vm::module_uses_effect_tag(module, effect_tag::GAIN_OTHER_SKILL_PILE_CARDS)
+773:                     .map_err(|e| format!("module {}: {e}", module.name))?
+774:             {
+775:                 return Err(format!(
+776:                     "module {} uses ambiguous effect 656 with ABI {abi}",
+777:                     module.name
+778:                 ));
+779:             }
+780:             let uses_772 = rule_vm::module_uses_effect_tag(
+781:                 module,
+782:                 effect_tag::CHOOSE_OTHER_TARGETS_BY_SKIPPED_PHASE_COUNT_DAMAGE_DRAW,
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs
+1048:     /// Serialize to JSON bytes (deterministic field order via serde_json).
+1049:     pub fn to_json_bytes(&self) -> Result<Vec<u8>, String> {
+1050:         serde_json::to_vec(self).map_err(|e| e.to_string())
+1051:     }
+1052: 
+1053:     /// Deserialize.
+1054:     pub fn from_json_bytes(data: &[u8]) -> Result<Self, String> {
+1055:         serde_json::from_slice(data).map_err(|e| e.to_string())
+1056:     }
+1057: }
+1058: 
+1059: fn require_skin_asset(
+1060:     asset_kinds: &BTreeMap<&str, resource_schema::AssetKind>,
+1061:     skin_id: u32,

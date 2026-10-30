@@ -1,0 +1,1 @@
+{'command': ['python3', '-B', 'scripts/check-source-lines.py'], 'exit': 0, 'seconds': 3.4515981674194336, 'disk_free_after': 142428012544}

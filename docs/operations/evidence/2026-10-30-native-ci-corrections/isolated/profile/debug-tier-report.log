@@ -1,0 +1,7 @@
+=== 服务器基准机 ===
+tier=server-baseline
+  REGRESSION start-hash-p50           1204 / 100 us (1204%)
+  ✓ distance-query-p95       1 / 300 us (0%)
+  REGRESSION snapshot-restore         347 / 200 us (173%)
+  REGRESSION observer-projection      149 / 100 us (149%)
+result=FAIL

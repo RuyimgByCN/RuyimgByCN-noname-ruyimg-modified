@@ -1,0 +1,9 @@
+debug build exit 0 seconds 40.3809227499878 free 140680691712
+debug tiers exit 0
+debug tier-report exit 1
+debug outputs removed, free 141284016128
+release build exit 0 seconds 166.03282375002163 free 139319582720
+release tiers exit 0
+release tier-report exit 1
+release outputs removed, free 139680063488
+{"command": ["python3", "../evidence/perf-profile/diagnose.py"], "exit": 0, "locked_seconds": 208.53639045901946, "disk_free_bytes": 139680063488}

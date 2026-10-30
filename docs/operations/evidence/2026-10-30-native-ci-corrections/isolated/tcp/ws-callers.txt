@@ -1,0 +1,43 @@
+apps/game-server/src/native_ws_e2e/peer.rs:10:        let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
+apps/game-server/src/room_native_actor.rs:605:                    if out.try_send(&msg) == SendStatus::Full {
+apps/game-server/src/room_native_actor.rs:690:                            if out.try_send(&msg) == SendStatus::Full {
+apps/game-server/src/room_native_actor.rs:800:            if out.try_send(&msg) == SendStatus::Full {
+apps/game-server/src/room_native_actor.rs:813:            let _ = out.try_send(&msg);
+apps/game-server/src/session.rs:36:    pub fn slow_signal(&self) -> watch::Receiver<bool> {
+apps/game-server/src/session.rs:43:    pub fn slow_marker(&self) -> watch::Sender<bool> {
+apps/game-server/src/session.rs:48:    pub fn try_send(&self, msg: &ServerMessage) -> SendStatus {
+apps/game-server/src/session.rs:52:        match self.tx.try_send(text) {
+apps/game-server/src/session.rs:63:    /// 使用 [`Self::try_send`]，否则慢客户端会阻塞整个 room actor）。
+apps/game-server/src/session.rs:65:        match self.try_send(msg) {
+apps/game-server/src/session.rs:117:        let mut slow = outbound.slow_signal();
+apps/game-server/src/session.rs:118:        assert_eq!(outbound.try_send(&server_error()), SendStatus::Queued);
+apps/game-server/src/session.rs:119:        assert_eq!(outbound.try_send(&server_error()), SendStatus::Full);
+apps/game-server/src/session.rs:129:        assert_eq!(outbound.try_send(&server_error()), SendStatus::Closed);
+apps/game-server/src/native_ws_e2e.rs:20:use tokio_tungstenite::{tungstenite::Message, MaybeTlsStream, WebSocketStream};
+apps/game-server/src/native_ws_e2e.rs:61:    ws: WebSocketStream<MaybeTlsStream<TcpStream>>,
+apps/game-server/src/native_ws_e2e.rs:767:            crate::TEST_WRITER_DELAY_MS.store(0, std::sync::atomic::Ordering::Relaxed);
+apps/game-server/src/native_ws_e2e.rs:768:            crate::TEST_OUTBOUND_QUEUE.store(0, std::sync::atomic::Ordering::Relaxed);
+apps/game-server/src/native_ws_e2e.rs:773:    crate::TEST_WRITER_DELAY_MS.store(5, std::sync::atomic::Ordering::Relaxed);
+apps/game-server/src/native_ws_e2e.rs:774:    crate::TEST_OUTBOUND_QUEUE.store(8, std::sync::atomic::Ordering::Relaxed);
+apps/game-server/src/main.rs:467:pub(crate) static TEST_WRITER_DELAY_MS: std::sync::atomic::AtomicU64 =
+apps/game-server/src/main.rs:472:pub(crate) static TEST_OUTBOUND_QUEUE: std::sync::atomic::AtomicUsize =
+apps/game-server/src/main.rs:478:    let queue_capacity = match TEST_OUTBOUND_QUEUE.load(std::sync::atomic::Ordering::Relaxed) {
+apps/game-server/src/main.rs:490:        let writer_slow = outbound.slow_marker();
+apps/game-server/src/main.rs:495:                    let delay = TEST_WRITER_DELAY_MS.load(std::sync::atomic::Ordering::Relaxed);
+apps/game-server/src/main.rs:534:        slow: outbound.slow_signal(),
+apps/game-server/src/main.rs:785:            let (mut ws, resp) = tokio_tungstenite::connect_async(&url)
+apps/game-server/src/main.rs:861:            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A connect");
+apps/game-server/src/main.rs:898:            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B connect");
+apps/game-server/src/main.rs:1060:            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+apps/game-server/src/main.rs:1085:            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+apps/game-server/src/main.rs:1284:            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+apps/game-server/src/main.rs:1314:            let (mut b, _) = tokio_tungstenite::connect_async(&url).await.expect("B");
+apps/game-server/src/main.rs:1376:            let (mut a2, _) = tokio_tungstenite::connect_async(&url).await.expect("A2");
+apps/game-server/src/main.rs:1445:            let (mut a, _) = tokio_tungstenite::connect_async(&url).await.expect("A");
+apps/game-server/src/main.rs:1532:        type Ws = tokio_tungstenite::WebSocketStream<
+apps/game-server/src/main.rs:1537:            let (ws, _) = tokio_tungstenite::connect_async(url).await.expect("ws");
+apps/game-server/src/room_native_actor/timeout.rs:40:                if out.try_send(&message) == SendStatus::Full {
+apps/game-server/tests/nc09_dual_backend.rs:452:/// 多房间并发与隔离：不同原生房间互不影响；房间信箱有界（满时 `try_send` 失败）。
+apps/game-server/tests/nc09_dual_backend.rs:524:    // 信箱有界：容量 1 的房间，未消费时 `try_send` 必须失败（tokio mpsc 有界语义）
+apps/game-server/tests/nc09_dual_backend.rs:527:    tx.try_send("a".into()).expect("首个可入");
+apps/game-server/tests/nc09_dual_backend.rs:529:        tx.try_send("b".into()).is_err(),

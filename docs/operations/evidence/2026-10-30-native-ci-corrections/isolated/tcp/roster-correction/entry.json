@@ -1,0 +1,10 @@
+{
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "slow_patch_sha256": "5dba37cafa4446e4df1335c656e3a36b0baa2a9946360be8cdf59512d9a8bf60",
+  "actor_before_sha256": "1daef0e1d3b8aecfb8349f125f525435a5f2195923224f84b636bfcd02034c8e",
+  "private_ignore": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs",
+    "apps/game-server/tests/nc09_native_actor.rs"
+  ]
+}

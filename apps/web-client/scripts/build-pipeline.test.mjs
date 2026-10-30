@@ -125,6 +125,32 @@ test("legacy build prepends rustup PATH even when the cargo executable has a Win
   assert.ok(existsSync(join(web, "public/pkg/fresh.wasm")));
 });
 
+test("MSI keeps the Chinese product name with the matching WiX locale", () => {
+  const desktop = resolve(scripts, "../../desktop-client");
+  const config = JSON.parse(readFileSync(join(desktop, "tauri.conf.json"), "utf8"));
+  assert.equal(config.productName, "无名杀 Next");
+  assert.equal(config.bundle.windows.wix.language, "zh-CN");
+  assert.equal(config.bundle.targets ?? "all", "all");
+});
+
+test("Linux separates the package id from the Chinese window and launcher names", () => {
+  const desktop = resolve(scripts, "../../desktop-client");
+  const config = JSON.parse(readFileSync(join(desktop, "tauri.conf.json"), "utf8"));
+  const linux = JSON.parse(readFileSync(join(desktop, "tauri.linux.conf.json"), "utf8"));
+  assert.equal(linux.productName, "noname-next");
+  assert.match(linux.productName, /^[a-z0-9][a-z0-9+.-]*$/);
+  assert.equal(config.mainBinaryName, "noname-next-desktop");
+  assert.equal(config.app.windows[0].title, "无名杀 Next");
+  assert.equal(linux.bundle.targets, undefined);
+  for (const format of ["deb", "rpm"]) {
+    const template = readFileSync(join(desktop, linux.bundle.linux[format].desktopTemplate), "utf8");
+    assert.match(template, /^Name=无名杀 Next$/m);
+    for (const field of ["Exec={{exec}}", "StartupWMClass={{exec}}", "Icon={{icon}}", "MimeType={{mime_type}}"]) {
+      assert.ok(template.includes(field), field);
+    }
+  }
+});
+
 test("Tauri hooks resolve the actual sibling web client from the desktop crate", () => {
   const desktop = resolve(scripts, "../../desktop-client");
   const config = JSON.parse(readFileSync(join(desktop, "tauri.conf.json"), "utf8"));

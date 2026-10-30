@@ -1,0 +1,46 @@
+## Review
+
+- **Merge verdict: OK with notes。** 三文件增量可作为本地接入候选；未发现新的 P1/P2。修正后的 Linux CI 仍待真实执行，不能据本地 macOS 绿色关闭原 CI 失败。
+- **No issues found.**
+- 本次完整读取两份 handoff、两文件 slow patch、roster 独立 patch及 combined patch，并核对实际调用链与关键日志。全程只读，没有构建、处理缓存或修改源码、索引、main、stage、remote。
+
+**身份与范围**
+
+基准为 `9dbc65530feb695688d3160dc38b6cf64ad39ecd` + 初始 A53 overlay，保持330／105／758／WS6。父纯只读[入口核验](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/review-identity-entry.json)与[出口核验](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/review-identity-exit.json)均通过：三个源码指纹匹配冻结清单，相对初始 A53 恰三路径变化，其余50路径一致。
+
+| Patch | SHA256 |
+|---|---|
+| 原 slow 两文件 | `5dba37cafa4446e4df1335c656e3a36b0baa2a9946360be8cdf59512d9a8bf60` |
+| roster 独立修正 | `57950c722404dd19418fac5b15239293988c9d1dacf246cb72f2bfe84900a5e7` |
+| combined 三文件 | `b0cb8879ca7c61e557836e58763d074d0dea95567ca9d4e86789c0fc1d3a0d31` |
+
+**Correct：真实 TCP 背压场景与断言**
+
+- [native_ws_e2e.rs:778](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/src/native_ws_e2e.rs:778)在 listen 前设置发送缓冲，813行在 connect 前设置慢端接收缓冲，均检查 OS getter 返回值不超过64KiB；没有假定系统必须返回1024或固定倍增值。
+- 限制仅用于这一个 slow 场景的 listener；**该场景的健康和慢连接都经过这个 listener**。其他测试的 `Server::start` 仍绑定默认 listener，生产监听器未改。该模块仅在 `cfg(test)` 下编译。
+- [peer.rs:15](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/src/native_ws_e2e/peer.rs:15)抽取 `from_ws`，保留真实 HTTP upgrade 后的 Welcome／WS6 Hello 接线。慢端通过正式 Spectate 入房并验证公共投影，没有授予 Referee 权限。
+- 慢端入房后直到关闭检查前完全不读 socket。830行保留300条非法牌命令逐条拒绝，再提交独立 key 的合法玩家 EndPhase；每次提交仍有3秒界限。健康 B 持续读取，最终必须收到301条 CommandOutcome并核对自己的授权投影。
+- [关闭检查:875](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/src/native_ws_e2e.rs:875)必须在10秒内遇到 Close、EOF或终止错误，且收到的 outcome 数严格位于1至300之间。“全部消息只在内核缓存，恢复读取后完整收齐”的情况不能通过。
+- 重连继续验证 Spectator 投影、最新 revision/hash、一次正式 Snapshot完整相等，以及落盘成员总数3、旧 connection_id消失、原 token仅绑定一个成员。没有快照洪泛。
+- 911行的 `<1MiB` 是**健康 B 实收文本累计预算**，不是三连接总流量或进程内存上限。测试没有为制造饱和增加巨大负载。
+
+生产[64队列／5秒发送超时](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/src/main.rs:459)及 Outbound::try_send→Full→slow watch→断开链路保持原样。旧测试的全局5ms人工延迟和8队列覆盖已删除；当前源码搜索没有其他调用者设置这两个覆盖开关。本次结果证明背压断开，没有单独证明5秒 writer timeout分支被触发。
+
+**Fixed：恒真 roster 断言与 Clippy blocker——确认修复**
+
+原 `assert!(saw_roster || true)` 永远为真，既不能证明广播，也触发 Clippy默认 deny。修正后的[nc09_native_actor.rs:246](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/tests/nc09_native_actor.rs:246)使用3秒有界 recv、正式 decode_s2c及类型化 RoomRoster匹配，验证房号、唯一玩家、seat/player/name、connected/managed、started/finished和默认30秒配置；另验证 Join角色、观察者、token与连接绑定的完整 Snapshot投影。
+
+这符合实际[actor发送契约:379](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/apps/game-server/src/room_native_actor.rs:379)：插入成员→非阻塞广播 roster→发送 JoinReply。新建容量8的空 outbound在此场景应先收到自身名册。原命令提交、反冒充和 receipt重放断言保留；没有通过删除断言、放宽 lint或添加 allow消除失败。
+
+**运行证据与平台边界**
+
+- 原[Ubuntu CI日志:14430](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/run41053688083-gates-ubuntu-raw.log:14430)确有断开等待 Elapsed：75 passed／1 failed／0 ignored，45.91秒；checkout明确为9dbc655。原 Linux运行没有采集 socket缓冲值，不能把“容量足以容纳消息”写成当时实测结论。
+- 原样 A53在 macOS已绿，测试6.02秒；它不是 Linux red的本地复现。修正后最终[macOS定向日志:1163](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/corrected-mac-final.log:1163)为1/0/0、2.78秒：慢端178条／469178文本字节后关闭，健康端301条／893904字节，重连和成员检查通过。
+- 日志中的 send/recv=1024/1024，准确说是**macOS在 listen/connect前的 socket getter值**，不是 accepted socket的独立 SO_SNDBUF采样。缓冲继承和修正后的 Linux／Windows行为尚无真实运行证明；Tokio API可用不等于跨平台验收完成。
+- 原[Clippy red:3587](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/server-clippy.log:3587)exit101；同命令[修后日志:3662](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/roster-server-clippy.log:3662)exit0。源码修正与失败位置吻合，原 warnings仍保留，未宣称零警告。
+- typed roster定向为1/0/0、0.09秒，相关完整actor入口46/0/0、8.73秒。此前完整server450/0/0发生在最终 `<1MiB` 断言和第三文件修正之前；其后分别有最终slow定向及actor入口验证，**没有重跑最终combined的完整server执行套件**。本次review也没有重执行测试。
+
+原 CI red、Clippy red、各次 macOS结果及日志SHA均保留于两份日志索引。交接记录的早期自动插件私有 Cargo/cache运行也保留，不能混作规范手动锁内验收；私有ignore路径的自动LSP覆盖仍未确认。缓存退休记录不扩大本次审查权限，父 main仍冻结且未应用此delta。
+
+跳过：构建、缓存操作、最终全server／workspace／WASM／frontend重跑，以及修正后的Linux／Windows执行。  
+风险：本地接入审查通过；真实Linux CI及父main组合验收仍须另行完成，原Linux失败目前不能标为已实测关闭。

@@ -1,0 +1,128 @@
+     Locking 150 packages to latest compatible versions
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling syn v2.0.119
+   Compiling syn v3.0.3
+   Compiling synstructure v0.13.2
+   Compiling stable_deref_trait v1.2.1
+   Compiling displaydoc v0.2.7
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling zerofrom v0.1.8
+   Compiling zerovec-derive v0.11.3
+   Compiling yoke v0.8.3
+   Compiling memchr v2.8.3
+   Compiling litemap v0.8.2
+   Compiling writeable v0.6.3
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling icu_normalizer_data v2.2.0
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling utf8_iter v1.0.4
+   Compiling icu_locale_core v2.2.0
+   Compiling serde v1.0.229
+   Compiling icu_properties_data v2.2.0
+   Compiling icu_collections v2.2.0
+   Compiling icu_provider v2.2.0
+   Compiling serde_derive v1.0.229
+   Compiling zmij v1.0.23
+   Compiling strsim v0.11.1
+   Compiling siphasher v1.0.3
+   Compiling smallvec v1.15.2
+   Compiling ident_case v1.0.1
+   Compiling darling_core v0.23.0
+   Compiling icu_normalizer v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling itoa v1.0.18
+   Compiling serde_json v1.0.151
+   Compiling typeid v1.0.3
+   Compiling idna_adapter v1.2.2
+   Compiling darling_macro v0.23.0
+   Compiling phf_shared v0.13.1
+   Compiling aho-corasick v1.1.4
+   Compiling erased-serde v0.4.10
+   Compiling fastrand v2.5.0
+   Compiling regex-syntax v0.8.11
+   Compiling unic-common v0.9.0
+   Compiling percent-encoding v2.3.2
+   Compiling unic-char-range v0.9.0
+   Compiling thiserror v1.0.69
+   Compiling unic-char-property v0.9.0
+   Compiling form_urlencoded v1.2.2
+   Compiling unic-ucd-version v0.9.0
+   Compiling regex-automata v0.4.16
+   Compiling phf_generator v0.13.1
+   Compiling darling v0.23.0
+   Compiling idna v1.1.0
+   Compiling thiserror-impl v1.0.69
+   Compiling uuid v1.24.0
+   Compiling time-core v0.1.9
+   Compiling hashbrown v0.17.1
+   Compiling powerfmt v0.2.0
+   Compiling anyhow v1.0.104
+   Compiling thiserror v2.0.19
+   Compiling byteorder v1.5.0
+   Compiling winnow v1.0.4
+   Compiling equivalent v1.0.2
+   Compiling deranged v0.5.8
+   Compiling num-conv v0.2.2
+   Compiling fnv v1.0.7
+   Compiling cfb v0.7.3
+   Compiling time v0.3.54
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling indexmap v2.14.0
+   Compiling jsonptr v0.6.3
+   Compiling regex v1.13.1
+   Compiling url v2.5.8
+   Compiling serde_with_macros v3.21.0
+   Compiling phf_macros v0.13.1
+   Compiling unic-ucd-ident v0.9.0
+   Compiling quick-xml v0.41.0
+   Compiling thiserror-impl v2.0.19
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling serde_spanned v1.1.1
+   Compiling bytes v1.12.1
+   Compiling ctor-proc-macro v0.0.7
+   Compiling base64 v0.22.1
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling plist v1.10.0
+   Compiling toml v1.1.4+spec-1.1.0
+   Compiling http v1.5.0
+   Compiling ctor v0.8.0
+   Compiling phf v0.13.1
+   Compiling urlpattern v0.3.0
+   Compiling serde_with v3.21.0
+   Compiling json-patch v3.0.1
+   Compiling serde-untagged v0.1.9
+   Compiling infer v0.19.0
+   Compiling dunce v1.0.5
+   Compiling log v0.4.33
+   Compiling semver v1.0.28
+   Compiling glob v0.3.4
+   Compiling tauri-utils v2.9.3
+   Compiling heck v0.5.0
+   Compiling installer-config-check v0.0.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/config-check)
+error[E0308]: mismatched types
+  --> src/main.rs:21:77
+   |
+21 |             assert_eq!(config.bundle.linux.deb.desktop_template.as_deref(), Some("linux/main.desktop"));
+   |                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Option<&Path>`, found `Option<&str>`
+   |
+   = note: expected enum `Option<&Path>`
+              found enum `Option<&str>`
+
+error[E0308]: mismatched types
+  --> src/main.rs:22:77
+   |
+22 |             assert_eq!(config.bundle.linux.rpm.desktop_template.as_deref(), Some("linux/main.desktop"));
+   |                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `Option<&Path>`, found `Option<&str>`
+   |
+   = note: expected enum `Option<&Path>`
+              found enum `Option<&str>`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `installer-config-check` (bin "installer-config-check") due to 2 previous errors
+{"command": ["cargo", "run", "--offline", "--manifest-path", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/config-check/Cargo.toml", "--", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/effective"], "exit": 101, "locked_seconds": 18.245811334025348, "disk_free_bytes": 136048840704}

@@ -1,0 +1,19 @@
+{
+  "equal": true,
+  "checkpoints": 320,
+  "cases": 20,
+  "fields": [
+    "choice",
+    "dynamic",
+    "events",
+    "hash",
+    "manifest",
+    "players",
+    "replay",
+    "ruleset",
+    "seed",
+    "state",
+    "step"
+  ],
+  "note": "All serialized full state fields (including RNG and physical-card ownership), events, choices, hashes, manifest and replay bytes compare equal. Wrapper command footer excluded."
+}

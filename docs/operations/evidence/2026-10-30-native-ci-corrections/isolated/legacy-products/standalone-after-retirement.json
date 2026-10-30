@@ -1,0 +1,27 @@
+{
+  "target_absent": true,
+  "commands": [
+    {
+      "command": [
+        "before-benchmark-runner",
+        "tiers"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "after-benchmark-runner",
+        "tiers"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "node",
+        "wasm-compare.cjs"
+      ],
+      "exit": 0
+    }
+  ],
+  "tier_outputs_equal": true
+}

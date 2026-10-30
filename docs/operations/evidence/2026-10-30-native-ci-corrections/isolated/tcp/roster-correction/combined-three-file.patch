@@ -1,0 +1,264 @@
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -31,15 +31,23 @@
+ 
+ impl Server {
+     async fn start(cfg: &ServerConfig, restored: usize) -> Self {
++        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
++            .await
++            .expect("bind loopback");
++        Self::start_on(cfg, restored, listener).await
++    }
++
++    async fn start_on(
++        cfg: &ServerConfig,
++        restored: usize,
++        listener: tokio::net::TcpListener,
++    ) -> Self {
+         let lobby = bootstrap(cfg);
+         assert_eq!(
+             lobby.restore_native_rooms().expect("restore rooms"),
+             restored
+         );
+         let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
+-        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+-            .await
+-            .expect("bind loopback");
+         let url = format!("ws://{}/ws", listener.local_addr().unwrap());
+         let task = tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
+         Self { url, lobby, task }
+@@ -761,36 +769,63 @@
+ /// 仍必须继续处理其他玩家的命令；慢连接被断开并可重新同步。
+ #[test]
+ fn native_extensions_ws_slow_spectator_does_not_block_commands() {
+-    struct PacingGuard;
+-    impl Drop for PacingGuard {
+-        fn drop(&mut self) {
+-            crate::TEST_WRITER_DELAY_MS.store(0, std::sync::atomic::Ordering::Relaxed);
+-            crate::TEST_OUTBOUND_QUEUE.store(0, std::sync::atomic::Ordering::Relaxed);
+-        }
+-    }
+-    let _guard = PacingGuard;
+-    // 小队列 + 放慢 writer：不读取的客户端在少量消息内必然饱和。
+-    crate::TEST_WRITER_DELAY_MS.store(5, std::sync::atomic::Ordering::Relaxed);
+-    crate::TEST_OUTBOUND_QUEUE.store(8, std::sync::atomic::Ordering::Relaxed);
+     let directory = tempfile::tempdir().unwrap();
+     let cfg = local_config(directory.path());
+     runtime().block_on(async {
+-        let server = Server::start(&cfg, 0).await;
++        // Bound both TCP buffers: an unread loopback socket otherwise fits all broadcasts
++        // on some OSes, regardless of an artificial delay between writer sends.
++        let listener = tokio::net::TcpSocket::new_v4().unwrap();
++        listener.set_send_buffer_size(1024).unwrap();
++        let send_buffer = listener.send_buffer_size().unwrap();
++        assert!(send_buffer <= 64 * 1024, "unexpected TCP send buffer: {send_buffer}");
++        listener.bind("127.0.0.1:0".parse().unwrap()).unwrap();
++        let listener = listener.listen(128).unwrap();
++        let address = listener.local_addr().unwrap();
++        let server = Server::start_on(&cfg, 0, listener).await;
+         let mut a = Peer::connect(&server).await;
+         let initial = a.create().await;
+         let mut b = Peer::connect(&server).await;
+         b.join(a.room, 1, None).await;
+         // B 只是占座；持续读掉广播，避免它自己成为慢连接干扰断言。
+         let b_reader = tokio::spawn(async move {
+-            while let Some(Ok(frame)) = b.ws.next().await {
+-                if matches!(frame, Message::Close(_)) {
+-                    break;
++            let mut outcomes = 0;
++            let mut text_bytes = 0;
++            while let Some(frame) = b.ws.next().await {
++                match frame.unwrap() {
++                    Message::Text(text) => {
++                        text_bytes += text.len();
++                        let message = decode_s2c(text.as_ref()).unwrap();
++                        if let ServerMessage::CommandOutcome { idempotency_key, .. } = &message {
++                            outcomes += 1;
++                            State::from_message(message.clone()).assert_player(PlayerId::new(2));
++                            if idempotency_key.0 == 9999 {
++                                return (outcomes, text_bytes);
++                            }
++                        }
++                    }
++                    Message::Close(_) => break,
++                    _ => {}
+                 }
+             }
++            panic!("reading player disconnected before the accepted command");
+         });
+-        let mut slow = Peer::connect(&server).await;
+-        slow.spectate(a.room).await;
+-        // 从此不再读 slow：让服务端 writer/队列饱和。
++        let socket = tokio::net::TcpSocket::new_v4().unwrap();
++        socket.set_recv_buffer_size(1024).unwrap();
++        let recv_buffer = socket.recv_buffer_size().unwrap();
++        assert!(recv_buffer <= 64 * 1024, "unexpected TCP receive buffer: {recv_buffer}");
++        let stream = socket.connect(address).await.unwrap();
++        let (ws, response) = tokio_tungstenite::client_async(
++            &server.url,
++            MaybeTlsStream::Plain(stream),
++        ).await.unwrap();
++        assert_eq!(response.status().as_u16(), 101);
++        let mut slow = Peer::from_ws(ws).await;
++        slow.spectate(a.room).await.assert_spectator();
++        let token = slow.token.clone();
++        let store = super::native_room_store::NativeRoomStore::new(&cfg.native_room_store);
++        let original_member = store.load_all().unwrap()[0].state.members.iter()
++            .find(|member| member.reconnect_token == token).unwrap().connection_id;
++        // From here until the close check, the real Spectator socket is never read.
+         let mut revision = initial.view.revision;
+         for key in 1..=300u64 {
+             let (result, state) = tokio::time::timeout(
+@@ -815,12 +850,15 @@
+             revision = state.view.revision;
+             // A 每命令还会收到名册广播；用短等待排空，保持其队列不因测试
+             // 自身的读取节奏而饱和。
+-            while tokio::time::timeout(Duration::from_millis(2), a.ws.next())
+-                .await
+-                .is_ok()
+-            {}
++            loop {
++                match tokio::time::timeout(Duration::from_millis(2), a.ws.next()).await {
++                    Err(_) => break,
++                    Ok(Some(Ok(Message::Text(_)))) => {}
++                    other => panic!("active player must remain connected: {other:?}"),
++                }
++            }
+         }
+-        let (accepted, _) = tokio::time::timeout(
++        let (accepted, after) = tokio::time::timeout(
+             Duration::from_secs(3),
+             a.submit(a.player, revision, 9999, CommandKind::EndPhase),
+         )
+@@ -830,22 +868,48 @@
+             matches!(accepted, CommandResult::Accepted { .. }),
+             "{accepted:?}"
+         );
+-        // 服务端应主动关闭慢连接，而不是让它继续占据广播槽位。
+-        let closed = tokio::time::timeout(Duration::from_secs(10), async {
++        // Missing broadcasts plus a real close prove saturation; starting to read a
++        // merely buffered socket here must not turn the test green.
++        let mut outcomes = 0;
++        let mut wire_bytes = 0;
++        tokio::time::timeout(Duration::from_secs(10), async {
+             while let Some(frame) = slow.ws.next().await {
+                 match frame {
+-                    Ok(Message::Close(_)) => return true,
+-                    Ok(_) => continue,
+-                    Err(_) => return true,
++                    Ok(Message::Close(_)) | Err(_) => break,
++                    Ok(Message::Text(text)) => {
++                        wire_bytes += text.len();
++                        let message = decode_s2c(text.as_ref()).unwrap();
++                        if matches!(message, ServerMessage::CommandOutcome { .. }) {
++                            State::from_message(message).assert_spectator();
++                            outcomes += 1;
++                        }
++                    }
++                    Ok(_) => {}
+                 }
+             }
+-            true
+         })
+         .await
+         .expect("慢连接应在期限内被断开");
+-        assert!(closed);
+-        b_reader.abort();
+-        println!("NATIVE_WS slow_spectator=disconnected commands=301");
++        assert!(outcomes > 0 && outcomes < 301,
++            "backpressure must drop broadcasts before reading resumes: {outcomes}");
++
++        let mut reconnected = Peer::connect(&server).await;
++        let restored = reconnected.join(a.room, 0, Some(token.clone())).await;
++        restored.assert_spectator();
++        assert_eq!(restored.view.revision, after.view.revision);
++        assert_eq!(restored.view.state_hash, after.view.state_hash);
++        assert_eq!(reconnected.snapshot().await, restored);
++        let records = store.load_all().unwrap();
++        let members = &records[0].state.members;
++        assert_eq!(members.len(), 3, "reconnect must reclaim the old member");
++        assert!(!members.iter().any(|member| member.connection_id == original_member));
++        assert_eq!(members.iter().filter(|member| member.reconnect_token == token).count(), 1);
++        reconnected.close().await;
++        let (healthy_outcomes, healthy_bytes) = tokio::time::timeout(Duration::from_secs(3), b_reader)
++            .await.expect("reading player receives all commands").unwrap();
++        assert_eq!(healthy_outcomes, 301);
++        assert!(healthy_bytes < 1024 * 1024, "broadcast load stays below 1 MiB");
++        println!("NATIVE_WS slow_spectator=disconnected commands=301 send_buffer={send_buffer} recv_buffer={recv_buffer} buffered_outcomes={outcomes} text_bytes={wire_bytes} healthy_outcomes={healthy_outcomes} healthy_bytes={healthy_bytes} reconnect=pass members=3");
+         server.stop().await;
+     });
+ }
+--- a/apps/game-server/src/native_ws_e2e/peer.rs
++++ b/apps/game-server/src/native_ws_e2e/peer.rs
+@@ -9,6 +9,10 @@
+     pub(super) async fn connect_url(url: &str) -> Self {
+         let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
+         assert_eq!(response.status().as_u16(), 101);
++        Self::from_ws(ws).await
++    }
++
++    pub(super) async fn from_ws(ws: WebSocketStream<MaybeTlsStream<TcpStream>>) -> Self {
+         let mut peer = Self {
+             ws,
+             room: 0,
+--- a/apps/game-server/tests/nc09_native_actor.rs
++++ b/apps/game-server/tests/nc09_native_actor.rs
+@@ -18,7 +18,7 @@
+ mod session;
+ 
+ use engine_api::{Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId};
+-use engine_protocol::ServerMessage;
++use engine_protocol::{decode_s2c, ClientRole, ServerMessage};
+ use native::NativeContent;
+ use room::RoomMsg;
+ use room_native::NativeRoomSession;
+@@ -239,14 +239,27 @@
+     let joined = reply_rx.await.expect("reply").expect("join ok");
+     assert_eq!(joined.seat, 0);
+     assert_eq!(joined.player_id, 1);
+-    // 名册广播（可能先收到自身入座广播）
+-    let mut saw_roster = false;
+-    while let Ok(line) = rx1.try_recv() {
+-        if line.contains("RoomRoster") || line.contains("room_roster") || line.contains("roster") {
+-            saw_roster = true;
+-        }
+-    }
+-    assert!(saw_roster || true, "名册广播已发送（编码形态随协议）");
++    assert_eq!(joined.role, ClientRole::Player);
++    assert_eq!(joined.view.observer, engine_api::ObserverKind::Player(PlayerId::new(1)));
++    assert!(!joined.reconnect_token.is_empty());
++    // Successful Join enqueues the connected member's roster before replying.
++    let text = tokio::time::timeout(std::time::Duration::from_secs(3), rx1.recv())
++        .await
++        .expect("join must broadcast a roster within the response deadline")
++        .expect("joined member's outbound must remain open");
++    let ServerMessage::RoomRoster {
++        room_id, seats, started, finished, choice_timeout_secs,
++    } = decode_s2c(&text).expect("valid server protocol") else {
++        panic!("expected RoomRoster, got {text}");
++    };
++    assert_eq!(room_id, handle.id);
++    assert!(started && !finished);
++    assert_eq!(choice_timeout_secs, Some(30));
++    assert_eq!(seats.len(), 1, "only the joined player is a room member");
++    assert_eq!(seats[0].seat, joined.seat);
++    assert_eq!(seats[0].player_id, joined.player_id);
++    assert_eq!(seats[0].display_name, "p1");
++    assert!(seats[0].connected && !seats[0].managed);
+ 
+     // 命令：当前回合座位推进阶段
+     let current = {
+@@ -261,7 +274,12 @@
+             .await
+             .expect("send snapshot");
+         match reply_rx2.await.expect("reply").expect("snapshot ok") {
+-            ServerMessage::Snapshot { view, .. } => view.current_player,
++            ServerMessage::Snapshot { header, view, .. } => {
++                assert_eq!(header.room_id, handle.id);
++                assert_eq!(view, joined.view, "snapshot must preserve the joined player's projection");
++                assert!(view.seats.iter().any(|seat| seat.player.raw() == joined.player_id));
++                view.current_player
++            }
+             other => panic!("应返回快照: {other:?}"),
+         }
+     };

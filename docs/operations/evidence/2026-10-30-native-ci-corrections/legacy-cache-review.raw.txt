@@ -1,0 +1,46 @@
+What this change does: 旧 `engine-core` 在目录逐字段等于 `ContentRegistry::new()` 时，复用一份通过原加载路径生成的完整标准 registry 及其 combined digest。缓存不包含 `GameState`，动态目录继续沿用原合并路径。
+
+## Review
+
+No issues found.
+
+- **Correct — 范围与身份：**完整读取 canonical AGENTS/SPEC、[ponytail-review](/Users/ruyimg/.codex/plugins/cache/ponytail/ponytail/5.3.3/skills/ponytail-review/SKILL.md)、完整 handoff 与四文件差异。对象为 detached `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 的旧线 v329；实际差异为 138 additions / 6 deletions，不涉及父 main/v330。
+- **Correct — 入口/出口核验：**由父代算纯读 SHA，我读取了[入口记录](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/evidence/review-identity-entry.json)和[出口记录](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/evidence/review-identity-exit.json)。四源均等于 after manifest，实际 diff 等于补丁，入口/出口均 `all_equal=true`，私有 target 仍不存在。
+- **Correct — SHA 对照：**patch 为 `01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9`；before/after binary 分别为 `e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625` / `ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861`；两 source manifest 文件分别为 `5ff4b21359b2cf6bf869f676fb237f1a9d7ce3eb3e9327a982296b707e0953e2` / `9b3c4c46c505dba8deb9e42e396b2b4a93e46e830cf1264d393ba2f1ee9f10b0`，均匹配 `reproduction.json`。
+
+- **Correct — canonical 判定完整：**[standard_pack.rs:16](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/worktree/crates/engine-core/src/content/standard_pack.rs:16)使用整个 registry 的派生 `PartialEq/Eq`。核对 `registry.rs:214` 的所有字段与 `registry/new.rs:7`：modules、各目录/反查索引、全部 tracking flags、packages、两个 next ID 与 digest 均参与比较。没有维护第二份字段白名单；新增字段会纳入派生比较，`new()` 的显式初始化也提供编译期守卫。
+- **Correct — 非规范目录：**派生 `Default` 的 next IDs 为零，区别于 `new()` 的 10000；手改 digest、已有动态包等均不能误入缓存。它们仍执行原 `ensure_standard_package`，保留原覆盖筛选、ID 分配、排序及 digest 语义。
+- **Correct — 原加载/错误路径：**缓存初始化实际调用 `new → ensure_standard_package → load_package → validate_package_for_load → VerifiedModule::verify → recompute_combined_hash`。没有简化 catalog、手拼 digest 或绕过原校验；原嵌入内容的 `expect` 原样存在，没有把原 `Result` 改成 panic。动态包加载仍由 `registry/new.rs:431` 暂存后提交，错误不提交半成品。
+- **Correct — refresh 边界：**`standard_pack.rs:76` 的 refresh dependency 与 deferred character closure 保留。所谓完整缓存是原标准 registry 的完整对象；依赖集合的最终角色技能闭包仍由 `engine.rs:371`、`engine-wasm/src/lib.rs:77` 原入口校验，不能理解为缓存额外装载了 refresh 全闭包。
+
+- **Correct — COW 隔离：**核对 registry 所有成员类型、派生 Clone、`VerifiedModule(BytecodeModule, Vec<u32>)`、触发 handler/filter、modifier、active/view-as 与 package schema。均为自有容器、字符串、数值或值枚举；没有捕获每局状态的共享闭包、内部 `Cell/Mutex` 或可变模块引用。`Arc::make_mut` 会复制完整目录，实体、RNG、触发/修饰运行索引和 VM 续体仍属于每局状态。
+- **Correct — mutators/callers：**检索并追踪 registry load、inner load、tracking、digest 重算的全部直接调用；生产写入口包括 `Engine::load_package`、standard/guozhan ensure，均要求独占可变访问。也核对 Engine 的 verified-lock/store 加载、WASM fallback、devtools 与 CLI 调用。全局静态 Arc 的持有者不能经这些路径被写入。
+- **Correct — 构造与模式：**[engine.rs:264](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/worktree/crates/engine-core/src/engine.rs:264)保留 content-lock 清理、ruleset digest 更新和 derived-index 重建；`finish_turn_begin.rs:188/482` 覆盖 identity/bootstrap/single 与 guozhan 自动加载。guozhan 随后 COW 合并原完整国战包，种子、牌堆、实体分配与开局流程没有移动到缓存中。
+- **Correct — environment/并发：**标准数据来自 `include_str!` 的 DSL/角色 JSON，构造和验证不读取 RuntimeConfig、环境或 PackageStore root。多线程首次构造由 OnceLock 发布完整结果，无递归初始化调用链；不同 root 的已装载目录不满足 canonical-empty 判定。重复 ensure 保留原幂等行为；已共享目录走 fallback 时可能复制目录，因此不宣称重复加载或 guozhan 全路径均为零成本。
+- **Correct — 持久化/hash：**`state/u8_is_zero.rs:17` 仍透明序列化 Arc 内完整对象；`snapshot.rs:106` 保留恢复模块校验；canonical hash、规则/存档/ABI、golden、内容及 manifest/replay 编码均未改。
+
+- **Correct — 新增三测有实际断言：**`standard_pack.rs:183` 将缓存生产启动与原 ensure 重建的独立目录比较，断言完整 `GameState`、结果/hash、events、choice、manifest、replay bytes，并恢复 snapshot；不是只比较摘要。`:210` 修改一局 HP、真实加载新包，检查 Arc 分离及另一局/后续新局完整状态；`:241` 对动态 override、Default 空目录和手改 digest 逐对象对照旧合并路径，并从正式 Engine 入口验证 override。
+- **Correct — 测试边界：**新增单测主要覆盖自动 identity 入口；显式加载由私有 cost harness、现有生产入口与影响面测试补充。没有专门的首次并发初始化、跨 root 并发、重复显式加载或完整 WASM fallback 新回归；这些边界已做源码推导，不冒充新测试覆盖。
+- **Correct — 原测试记录：**核对完整影响面命令、原日志各 suite 结果及 exit：engine-core 3851/0/1、engine-ai 29/0/0、benchmark 8/0/0、conformance 4/0/0，合计 **3892/0/1**；新增定向 **3/0/0**；独立 conformance **19 cases ALL PASS**。保留 `two_hearts_can_save_a_dying_player_for_two_hp` 的既有 ignored。日志存在 unused/unreachable/unused-Result 等 warnings，不能写成无警告验收。
+- **Correct — 语义对照范围：**检查 harness 的实际完整 state 导出、选择推进、manifest/replay 导出与比较记录：native before/after 为 **20 场/320 检查点**完整 JSON 对照。WASM 脚本实际通过正式 submit/loadReplay/seekReplay API 比较 **10 场/160 命令/410 events/12 choices/160 replay 检查点**；动态 overlay 由 native 对照覆盖。WASM 没有完整 state 导出，不据此扩大到完整 WASM 状态、上游规则等价或全 workspace。
+
+- **Correct — 性能方法：**核对相同 cwd/root fixture、source manifests、rustc 1.95.0/aarch64、release LTO/codegen-units=1 与构建/采样脚本。`compare.py:10` 在全局 heavy lock 内固定七对交错顺序；读取全部 **42 个进程**的 argv/SHA/exit 记录、14 份 tier 与14份 start 原文，并核对各 cost 日志终点。七次 before tier 均 exit1，七次 after 均 exit0，其他28进程均 exit0。
+- **Correct — timer/预算：**`apps/benchmark-runner/src/main.rs:133/248` 的计时只包 submit，构造在外。tier 保留 4座/seed42/50次，distance10000、restore100、projection10000；start-hash 保留200次+3 warmup，server threshold 仍100µs。未改 CLI、profile、opcode、内容量、seed 或 samples。
+
+| 指标与统计单位 | before | after |
+|---|---:|---:|
+| 七轮 tier start p50，µs | 158,151,150,150,153,155,150 | 50,49,49,50,48,51,53 |
+| 七个轮内中位数的 p50 / p95，µs | 151 / 158 | 50 / 53 |
+| 私有 submit，1400样本 p50 / p95 / p99，ns | 142084 / 160958 / 175125 | 48917 / 56958 / 64167 |
+| 独立 canonical hash，1400样本 p50 / p95，ns | 14875 / 17958 | 14917 / 17125 |
+| 显式标准加载，1400样本 p50 / p95，ns | 92458 / 107250 | 125 / 167 |
+| submit 分配次数 / 字节 p50 | 1971 / 158449 | 464 / 52956 |
+
+- **Correct — 结论口径：**七个中位数的 p95 不是单次调用 p95；单次分布另列1400样本/ns。原 start-hash CLI 每轮 p50 before143834–147458ns、after47625–48542ns。独立 hash p50 未改善，收益来自初始化后的标准目录热复用；没有冷启动、新 engine-native 或其他设备 CI 收益证明。
+- **Correct — 失败保留：**首次 release baseline exit1（start158/100µs）仍在；原 CI run41053688083 的 macOS/Ubuntu debug 失败仍在，不能用本地 release 通过覆盖。首次未锁探索 sample、另取全程持锁 sample，以及 after 未完成时320vs0的临时断言失败均在诊断说明中保留；最终对照使用双方完成并 exit0 的记录。
+- **Fixed：**无；本次只读，未修改源码或证据产物。
+- **Finding：**无可证实、由该四文件补丁引入的 P1/P2。
+- **Merge verdict：OK with notes。**可作为旧线标准启动性能缺陷修复集成，无需规则升号；性能承诺限于本机 release 的重复建局负载。
+
+未执行编译、测试、benchmark 或二进制重跑；核查了源码、脚本与留存原始记录，未重新计算全部1400样本分位数或逐行重比较320份大型 state。
+未检查完整 workspace、Clippy、新 release CI、UI及其他平台；冷启动与并发实测仍未量化，集成到父 main/v330 后的适用性须另核。

@@ -1,0 +1,11 @@
+## Review
+
+- **Correct — P2已关闭。**[修订审批稿](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-c331-schema-supplement/README.md)“旧程序无法由新schema追溯修复”段明确：按旧算法重算摘要并作为新包导入，旧正式读者仍可能接受；可信冻结锁仅保护其绑定内容。未再承诺所有旧执行者必拒伪装包。
+- **Correct — hash binding已固定。**“实施边界”明确非默认段追加于原 trigger 条目原位，并绑定原数组位置及 handler 身份，保留声明顺序、不仅依赖可能重复的 trigger ID。“实施后证据”第3/4项覆盖 filter、位置、顺序与原位绑定的负控，要求移动元组必须改变摘要，满足此前交换元组负控意见。
+- **Correct — 两类hash已区分。**旧 schema3 默认逻辑 hash 保持中性；显式默认与省略默认JSON可有相同逻辑 hash，但不承诺相同 content hash。旧原件、版本及冻结锁不原地改写。
+- **Correct — 无新增scope冲突。**稿中保留 schema3默认/schema4非默认支持矩阵、legacy拒执行边界、多handler及来源阻断、其他版本轴不变，并明确新schema须另批。
+- **Finding：**无新增具体问题。
+- **Merge verdict：OK，限设计审批稿。**此前P2与hash绑定意见均已落实，可将该最小合同提交用户审批；目前仍无schema4授权，本结论不构成实施许可或runtime green。
+
+仅复核此修订稿，未重读14源、复审A/CI、编译或写入主树。
+旧程序不可追溯修复及多handler/来源能力边界仍按稿保留，须随实际实施验收。

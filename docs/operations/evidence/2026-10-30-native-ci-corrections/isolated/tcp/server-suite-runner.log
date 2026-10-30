@@ -1,0 +1,1 @@
+{'command': ['cargo', 'test', '--offline', '-p', 'game-server', '--', '--nocapture'], 'exit': 0, 'seconds': 128.90218305587769, 'disk_free_after': 138277920768}

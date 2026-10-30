@@ -18,7 +18,7 @@ mod room_native_actor;
 mod session;
 
 use engine_api::{Command, CommandKind, CommandResult, ExpectedRevision, IdempotencyKey, PlayerId};
-use engine_protocol::ServerMessage;
+use engine_protocol::{decode_s2c, ClientRole, ServerMessage};
 use native::NativeContent;
 use room::RoomMsg;
 use room_native::NativeRoomSession;
@@ -239,14 +239,27 @@ async fn nc09_native_actor_join_command_snapshot() {
     let joined = reply_rx.await.expect("reply").expect("join ok");
     assert_eq!(joined.seat, 0);
     assert_eq!(joined.player_id, 1);
-    // 名册广播（可能先收到自身入座广播）
-    let mut saw_roster = false;
-    while let Ok(line) = rx1.try_recv() {
-        if line.contains("RoomRoster") || line.contains("room_roster") || line.contains("roster") {
-            saw_roster = true;
-        }
-    }
-    assert!(saw_roster || true, "名册广播已发送（编码形态随协议）");
+    assert_eq!(joined.role, ClientRole::Player);
+    assert_eq!(joined.view.observer, engine_api::ObserverKind::Player(PlayerId::new(1)));
+    assert!(!joined.reconnect_token.is_empty());
+    // Successful Join enqueues the connected member's roster before replying.
+    let text = tokio::time::timeout(std::time::Duration::from_secs(3), rx1.recv())
+        .await
+        .expect("join must broadcast a roster within the response deadline")
+        .expect("joined member's outbound must remain open");
+    let ServerMessage::RoomRoster {
+        room_id, seats, started, finished, choice_timeout_secs,
+    } = decode_s2c(&text).expect("valid server protocol") else {
+        panic!("expected RoomRoster, got {text}");
+    };
+    assert_eq!(room_id, handle.id);
+    assert!(started && !finished);
+    assert_eq!(choice_timeout_secs, Some(30));
+    assert_eq!(seats.len(), 1, "only the joined player is a room member");
+    assert_eq!(seats[0].seat, joined.seat);
+    assert_eq!(seats[0].player_id, joined.player_id);
+    assert_eq!(seats[0].display_name, "p1");
+    assert!(seats[0].connected && !seats[0].managed);
 
     // 命令：当前回合座位推进阶段
     let current = {
@@ -261,7 +274,12 @@ async fn nc09_native_actor_join_command_snapshot() {
             .await
             .expect("send snapshot");
         match reply_rx2.await.expect("reply").expect("snapshot ok") {
-            ServerMessage::Snapshot { view, .. } => view.current_player,
+            ServerMessage::Snapshot { header, view, .. } => {
+                assert_eq!(header.room_id, handle.id);
+                assert_eq!(view, joined.view, "snapshot must preserve the joined player's projection");
+                assert!(view.seats.iter().any(|seat| seat.player.raw() == joined.player_id));
+                view.current_player
+            }
             other => panic!("应返回快照: {other:?}"),
         }
     };

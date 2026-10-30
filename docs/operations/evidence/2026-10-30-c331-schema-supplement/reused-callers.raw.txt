@@ -1,0 +1,274 @@
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/installed_packs.rs
+26: 
+27: fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
+28:     let manifest = &item["manifest"];
+29:     let namespace = required(manifest, "namespace")?;
+30:     let package_id = required(manifest, "package_id")?;
+31:     let version = required(manifest, "version")?;
+32:     // Bind both the semantic version and canonical installed assets, not cards.json's integer version.
+33:     let digest = blake3::hash(item.to_string().as_bytes()).to_hex();
+34:     let identity = names::intern(format!(
+35:         "installed:{}:{digest}",
+36:         serde_json::json!([namespace, package_id, version])
+37:     ));
+38:     // 完整 npack（含 modules/trigger_index）也是合法的 Worker 安装载荷：
+39:     // 服务端已按 `bridge_vm_skill_decls` 执行，客户端此前只认 cards/characters/pile，
+40:     // 导致 VM-only 包在 Worker 被“缺少载荷”拒绝。这里直接解析整包并桥接技能声明。
+41:     let vm_decls = if item.get("modules").is_some() {
+42:         let package: content_schema::ContentPackage =
+43:             serde_json::from_value(item.clone()).map_err(|e| format!("npack: {e}"))?;
+44:         package.validate().map_err(|e| format!("npack: {e}"))?;
+45:         content_native_loader::bridge_vm_skill_decls(&package)
+46:             .map_err(|e| e.to_string())?
+47:             .decls
+48:     } else {
+49:         Vec::new()
+50:     };
+51:     let vm_names: BTreeSet<String> = vm_decls.iter().map(|decl| decl.name.clone()).collect();
+52:     let mut pack = if let Some(cards) = item.get("cards") {
+53:         content_native_loader::bridge_pack(&json(cards))
+110:     pack.def.name = identity;
+111:     Ok(pack)
+112: }
+113: 
+114: /// 导入期深层校验（GT-014，裁决第 12 项）：对**单个**安装载荷执行与开局装载
+115: /// 完全相同的逐包校验——manifest 身份字段、`ContentPackage::validate()`
+116: /// （模块结构 + 包/模块 logic_hash）、`bridge_vm_skill_decls`（rule-vm 装载期
+117: /// verify + 宿主 ABI 窗口）、cards/characters/pile 桥接。只校验不建局；跨包
+118: /// 依赖解析仍在开局（`packs_from_json`）执行。与 `packs_from_json` 的单项
+119: /// 分派保持一致（含无 manifest 的旧 cards.json 元素）。
+120: pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+121:     let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
+122:     if item.get("manifest").is_some() {
+123:         installed_pack(&item).map(|_| ())
+124:     } else {
+125:         content_native_loader::bridge_pack(&json(&item))
+126:             .map(|_| ())
+127:             .map_err(|e| e.to_string())
+128:     }
+129: }
+130: 
+131: pub(super) fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/content/registry/load_package_checks.rs
+1: //! 内容包装载前的校验与按 ABI 启用的历史追踪（`load_package_inner` 的前两段）。
+2: 
+3: use super::*;
+4: 
+5: impl ContentRegistry {
+6:     /// 装载前校验：逻辑哈希、重复装载、VM ABI 门槛与依赖闭包（只读）。
+7:     /// 返回 `Ok(false)` 表示同一逻辑哈希的包已装载，调用方应直接成功返回（幂等）。
+8:     pub(super) fn validate_package_for_load(&self, pkg: &ContentPackage) -> Result<bool, ContentLoadError> {
+9:         pkg.validate_vm_effect_abi().map_err(ContentLoadError::Invalid)?;
+10:         if pkg.manifest.logic_hash != pkg.compute_logic_hash() {
+11:             return Err(ContentLoadError::Invalid(format!(
+12:                 "logic hash mismatch for {}/{}@{}",
+13:                 pkg.manifest.namespace, pkg.manifest.package_id, pkg.manifest.version
+14:             )));
+15:         }
+16:         pkg.modules
+17:             .iter()
+18:             .try_for_each(content_schema::validate_vm_module_hash)
+19:             .map_err(ContentLoadError::Invalid)?;
+20:         if self
+21:             .packages
+22:             .iter()
+23:             .any(|p| p.logic_hash == pkg.manifest.logic_hash)
+24:         {
+25:             return Ok(false);
+26:         }
+27:         if self.packages.iter().any(|loaded| {
+28:             loaded.namespace == pkg.manifest.namespace
+29:                 && loaded.package_id == pkg.manifest.package_id
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/content/registry/load_package_inner.rs
+35:         }
+36: 
+37:         for skill in &pkg.skill_index {
+38:             let metadata = SkillMetadata {
+39:                 skill_def: SkillDefId::new(skill.skill_def_id),
+40:                 name: skill.name.clone(),
+41:                 locked: skill.locked,
+42:                 lord_only: skill.lord_only,
+43:                 non_gainable: skill.non_gainable,
+44:                 conversion: skill.conversion,
+45:             };
+46:             if let Some(existing) = self.package_skills.get(&skill.skill_def_id) {
+47:                 if existing != &metadata {
+48:                     return Err(ContentLoadError::Conflict(format!(
+49:                         "skill definition {}",
+50:                         skill.skill_def_id
+51:                     )));
+52:                 }
+53:             } else {
+54:                 self.package_skills.insert(skill.skill_def_id, metadata);
+55:             }
+56:             // Phase 3: reverse name→def index for AddSkillByName resolution.
+57:             self.skill_def_by_name
+58:                 .entry(skill.name.clone())
+59:                 .or_insert(skill.skill_def_id);
+249:                     "trigger references missing module {}",
+250:                     t.module
+251:                 )));
+252:             }
+253:             let id = TriggerDefId(self.next_trigger_id);
+254:             self.next_trigger_id = self.next_trigger_id.saturating_add(1);
+255:             self.package_triggers.push(TriggerDefinition {
+256:                 id,
+257:                 skill_def: SkillDefId::new(t.skill_def_id),
+258:                 event,
+259:                 timing: TimingBand::Normal,
+260:                 priority: 0,
+261:                 optional: t.optional,
+262:                 choice_actor: t.choice_actor,
+263:                 filter,
+264:                 max_per_segment: 8,
+265:                 handler: TriggerHandler::RunVm {
+266:                     module: package_module_key(
+267:                         &pkg.manifest.namespace,
+268:                         &pkg.manifest.package_id,
+269:                         &t.module,
+270:                     ),
+271:                     entry_pc: t.entry_pc,
+272:                 },
+273:             });
+274:         }
+275: 
+276:         for m in &pkg.modifier_index {
+277:             if m.target == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+278:                 && (m.mode != "override" || m.value != 1)
+747:     pub(crate) fn recompute_combined_hash(&mut self) {
+748:         let mut h = blake3::Hasher::new();
+749:         h.update(b"noname-next/content-registry/v2");
+750:         for p in &self.packages {
+751:             h.update(&p.logic_hash);
+752:             h.update(p.namespace.as_bytes());
+753:             h.update(p.package_id.as_bytes());
+754:             h.update(p.version.as_bytes());
+755:         }
+756:         for (name, m) in &self.modules {
+757:             h.update(name.as_bytes());
+758:             h.update(&m.logic_hash);
+759:         }
+760:         for metadata in self.package_skills.values() {
+761:             h.update(&metadata.skill_def.raw().to_le_bytes());
+762:             h.update(metadata.name.as_bytes());
+763:             h.update(&[u8::from(metadata.locked)]);
+764:             if metadata.lord_only {
+765:                 h.update(b"lord_only/v1");
+766:             }
+767:             if metadata.non_gainable {
+768:                 h.update(b"non_gainable/v1");
+769:             }
+770:             if metadata.conversion {
+771:                 h.update(b"conversion/v1");
+772:             }
+773:         }
+774:         for character in self.package_characters.values() {
+775:             h.update(&character.id.to_le_bytes());
+776:             h.update(character.name_key.as_bytes());
+777:             h.update(&character.max_hp.to_le_bytes());
+778:             h.update(&character.initial_hp.to_le_bytes());
+779:             for skill in &character.skills {
+780:                 h.update(&skill.to_le_bytes());
+781:             }
+782:         }
+783:         for m in &self.package_modifiers {
+784:             h.update(&m.id.to_le_bytes());
+785:             h.update(&m.skill_def.raw().to_le_bytes());
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server/src/native.rs
+480:     Ok(loaded)
+481: }
+482: 
+483: /// 新对局存档（HTTP `/native/matches`）。
+484: #[derive(Debug, Clone, serde::Serialize)]
+485: pub struct NativeMatchArchive {
+486:     pub packages: Vec<String>,
+487:     pub catalog_cards: usize,
+488:     pub archive_hex: String,
+489: }
+490: 
+491: /// 恢复请求（HTTP `/native/matches/restore`）。
+492: #[derive(Debug, Clone, Deserialize)]
+493: pub struct NativeRestoreRequest {
+494:     #[serde(default)]
+495:     pub packages: Vec<String>,
+496:     pub archive_hex: String,
+497: }
+498: 
+499: /// 恢复结果。
+500: #[derive(Debug, Clone, serde::Serialize)]
+501: pub struct NativeRestoreSummary {
+502:     pub catalog_cards: usize,
+503: }
+550:     content: &NativeContent,
+551:     packages: &[String],
+552:     bytes: &[u8],
+553: ) -> Result<usize, String> {
+554:     let loaded = load_refs(content, packages)?;
+555:     let refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
+556:     let snapshot = engine_native::archive::decode_archive(bytes)
+557:         .map_err(|err| format!("存档解码失败: {err:?}"))?;
+558:     let engine = if refs.is_empty() {
+559:         Engine::restore(&snapshot).map_err(|err| format!("恢复失败: {err:?}"))?
+560:     } else {
+561:         Engine::restore_with_extensions(&snapshot, &refs)
+562:             .map_err(|err| format!("恢复失败: {err:?}"))?
+563:     };
+564:     Ok(engine.catalog().cards.len())
+565: }
+566: 
+567: /// HTTP 建局：安装包进入新对局并返回存档十六进制。
+568: pub fn open_native_match(
+569:     content: &NativeContent,
+570:     packages: &[String],
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/extensionStore.ts
+380: 
+381: /** 内容锁摘要（联机/开局展示）。 */
+382: export function contentLockSummary(snap = loadRaw()): {
+383:   packages: Array<{ key: string; version: string; fingerprint: string }>;
+384:   hashSeed: string;
+385: } {
+386:   const packages = snap.contentLock
+387:     .map((key) => {
+388:       const rec = snap.installed.find((r) => r.key === key);
+389:       if (!rec) return null;
+390:       return {
+391:         key,
+392:         version: rec.version,
+393:         fingerprint: rec.logicFingerprint,
+394:       };
+395:     })
+396:     .filter(Boolean) as Array<{ key: string; version: string; fingerprint: string }>;
+397:   const hashSeed = packages.map((p) => `${p.key}@${p.version}:${p.fingerprint}`).join("|");
+398:   return { packages, hashSeed };
+399: }
+400: 
+401: /** 一键安装并启用全部 15 包（开发/验收用）。 */
+402: export function installAndActivateAll(): ExtensionStoreSnapshot {
+403:   let snap = loadRaw();
+404:   for (const e of EXTENSION_CATALOG) {
+405:     const key = extensionKey(e);
+406:     snap = installExtension(key);
+407:     snap = activateExtension(key);
+408:   }
+409:   return snap;
+410: }
+411: 
+412: /** 原生存档槽（localStorage；与扩展内容锁摘要一并保存，供 G5 旧版会话面）。 */
+413: export interface NativeSaveSlot {
+414:   id: string;
+415:   label: string;
+416:   hex: string;
+417:   seed: number;
+418:   players: number;
+419:   contentLock: string[];
+420:   lockSeed: string;
+421:   savedAt: string;
+422:   revision: number;
+423:   /** 完整的固定包副本：当前启用集变化或卸载后仍可恢复旧局。 */
+424:   packsJson?: string;
+425: }
+

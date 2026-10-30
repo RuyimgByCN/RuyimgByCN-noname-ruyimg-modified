@@ -1,0 +1,14 @@
+vite v6.4.3 building for production...
+transforming...
+✓ 117 modules transformed.
+rendering chunks...
+computing gzip size...
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/index.html                                       0.46 kB │ gzip:     0.31 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/engine.worker-DU8mrB9S.js                 9.01 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/engine.native.worker-BIwpD907.js         22.08 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/engine_native_wasm_bg-u6T604pW.wasm   3,560.41 kB │ gzip: 1,029.08 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/engine_wasm_bg-Dcf9D3BU.wasm         15,389.46 kB │ gzip: 3,411.30 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/index-DtaP1kkT.css                       28.13 kB │ gzip:     6.03 kB
+../../docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/frontend-products/assets/index-vN0VjIyK.js                       411.84 kB │ gzip:   110.13 kB
+✓ built in 956ms
+{"command": ["node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/vite-build.mjs"], "exit": 0, "locked_seconds": 1.1798345829884056, "disk_free_bytes": 125252915200}

@@ -1,0 +1,14 @@
+{
+  "profile_configuration_prepared": true,
+  "remaining_release_regression": "start-hash-p50 151us >100us; exit1 preserved",
+  "debug_exit": 1,
+  "release_exit": 1,
+  "target_removed": true,
+  "source_and_budget_sha_unchanged": true,
+  "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f",
+  "no_staged_files": true,
+  "no_product_commits_or_publish_operations": true,
+  "pure_patch_lines": 32,
+  "report_lines": 33,
+  "report_sha256": "77aabe3b26bdcc53128ed57a1deab10297ca03c8a0646eb20932074365268b9b"
+}

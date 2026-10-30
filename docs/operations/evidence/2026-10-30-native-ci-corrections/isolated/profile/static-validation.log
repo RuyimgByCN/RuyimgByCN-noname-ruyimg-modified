@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "files": {
+    ".github/workflows/ci.yml": {
+      "base_sha256": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      "final_sha256": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698"
+    },
+    "docs/operations/native-ci.md": {
+      "base_sha256": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f",
+      "final_sha256": "8de170b289eb7f33dde6907e7dba61f1525e8fe3b44e46c769f054c9d7212323"
+    }
+  },
+  "patch_sha256": "218947aa6fef829ca788a645b645712d6ba20efeb0157a3dfab074f540ea33c7",
+  "patch_lines": 32,
+  "only_perf_argv_profile_changed": true,
+  "all_other_jobs_steps_inputs_versions_budgets_unchanged": true,
+  "five_jobs_ten_matrix_executions": true,
+  "six_resource_premise_files_unchanged": true,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/perf-profile/perf-profile-only.patch"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0
+    }
+  ],
+  "no_staged_files": true,
+  "actionlint": "not installed; YAML parsed with existing PyYAML and shell syntax checked"
+}

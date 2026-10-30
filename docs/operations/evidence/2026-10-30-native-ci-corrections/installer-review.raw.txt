@@ -1,0 +1,28 @@
+## Review
+
+No issues found.
+
+- **Finding：**无符合证据门槛的 P1/P2 当前缺陷。
+- **Fixed：**无；本轮严格只读，未执行 shell、Cargo、Node 或 packager，未修改源码、index、HEAD、remote、cache 或 settings。
+
+- **真实 scope：**完整读取 canonical `AGENTS.md`、`NONAME_NEXT_AGENT_SPEC.md`、指定 handoff 和纯补丁。仅审基准 `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 上的五文件；父 Main A330 未提交验收不属于输入。父会话代做入口、出口纯读核验，两次均确认 HEAD、五文件 after-SHA 与 scope 一致，补丁 SHA-256 为 `5d6eef4f05e29b265b0bcac90a7803be8732c0e63ab6b38dc01dff04918552e7`。证据：[入口](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/evidence/review-identity-entry.json)、[出口](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/evidence/review-identity-exit.json)。
+
+- **Correct — Windows：**[根配置](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client/tauri.conf.json:35) 仅增加受支持的 `wix.language="zh-CN"`，产品名仍为 `无名杀 Next`。首轮真实日志确认 WiX 3.14.1 的 `LGHT0311`/数据库 1252 失败；首 CI bundler 2.10.4 的 `languages.json:14` 将 zh-CN 映射为 2052/936，`msi/mod.rs:834` 生成 locale，并传入 `-cultures:zh-cn;en-US`。
+  摘要和数据库 codepage 的来源已区分：`main.wxs:29` 的 `SummaryCodepage` 使用 `TauriCodepage`；数据库所需的 936 来自已加载 `WixUIExtension` 所选的 [zh-cn 本地化声明](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/WixUI_zh-CN.wxl:5)。默认 Product 未显式覆盖 Codepage，现有配置路径有依据，无需私改 WiX 源码；最终 MSI 数据库仍需真实 Light 执行确认。
+
+- **Correct — Linux：**[平台配置](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client/tauri.linux.conf.json:1) 自动合并技术名 `noname-next`。真实 CLI 的 `helpers/config.rs:155` 和已装 tauri-utils 2.9.3 的 `config/parse.rs:180` 均读取平台配置并按 JSON Merge Patch 合并。CLI 将 productName 传给 bundler；DEB/RPM 从它生成合法 ASCII 包名，解决首轮 RPM 的 `无名杀-next` 非法名。
+
+- **Correct — launcher 与资源：**[desktop 模板](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client/linux/main.desktop:1) 与首 CI bundler 默认模板仅 `Name` 不同，保留中文显示名，以及 Categories、可选 Comment、Exec、StartupWMClass、Icon、可选 MimeType。真实 generator 在 `freedesktop/mod.rs:98` 使用 Handlebars；DEB `debian.rs:135`、RPM `rpm.rs:195` 调用它，AppImage `linuxdeploy.rs:80` 复用 DEB 数据生成。当前上游模板和配置没有被遗漏的 Actions 字段；新增中文常量未引入插值或命令注入入口。Exec/Icon 仍对应 `noname-next-desktop`。
+  Linux 包文件、desktop 文件及资源目录 stem 改为 ASCII；运行时 codegen 的 PackageInfo.name 同样来自合并后的 productName，资源查找与打包目录一致。
+
+- **Correct — schema/版本：**核对 workspace Tauri 2.11.5/utils 2.9.3、已装 Node CLI 2.11.4，以及首 CI CLI 2.12.4/bundler 2.10.4/utils 2.10.2。已读两版 CLI 的六个相关 schema 定义，字段一致；Linux/Deb/Rpm 无独立 `packageName`，且拒绝未知字段。`desktopTemplate` 和 WiX `language` 均为真实支持字段，没有自造 codepage/package-name 属性。
+
+- **Correct — 兼容与范围：**根配置其余内容与基准一致；Linux override 不覆盖 app、build 或 targets。因此中文窗口标题、macOS identity/signing/targets、identifier、capabilities 和 CSP 保留原语义。仍使用默认全部 targets，CI 仍执行 `cargo tauri build`，没有绕开 MSI/RPM；五文件不涉及规则、协议、ABI 或依赖，也未做全平台英文产品改名。
+
+- **验证证据及边界：**[新增测试](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/web-client/scripts/build-pipeline.test.mjs:128) 是配置保护断言。基准红日志中的失败分别是缺 `windows.wix` 和缺 Linux 配置文件，不能称为打包器行为复现；真实打包失败反例来自首轮 CI。已读实现者保留的 build-pipeline 10/10、真实 tauri-utils 三平台 merge/Config decode、真实 CLI schema 三平台接受及非法 `rpm.packageName` 拒绝日志，并核对对应检查源码。`check-content.py` 的模板展开使用字符串替换，证据仅限内容；本轮没有将其当作真实 Handlebars/packager 执行。行数门禁日志为单测 2/2、8,972 文件通过；本轮均未重跑。
+
+- **Correct — 文档：**[CI 文档](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/docs/operations/native-ci.md:68) 透明说明 Linux launcher/resource stem 变化、首轮失败来源及哈希，并明确历史 macOS artifact 成功不能证明修正后的 Windows/Linux 包或整条 workflow 全绿。
+
+- **Merge verdict：OK with notes。**五文件源码修正可合并进入后续平台 CI；本结论不代表安装包交付验收通过。
+
+未运行构建、测试或平台安装；实际修正后的 MSI/RPM 生成及安装仍需后续 Windows/Linux CI 与系统验收，DEB/AppImage launcher 行为也应随平台产物确认。

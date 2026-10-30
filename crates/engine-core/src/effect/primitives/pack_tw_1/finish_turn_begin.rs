@@ -185,7 +185,7 @@ pub fn bootstrap_match(
     }
 
     // M1: auto-load official standard skill pack when not already present.
-    crate::content::ensure_standard_package(std::sync::Arc::make_mut(&mut tx.state_mut().content));
+    crate::content::ensure_standard_content(&mut tx.state_mut().content);
 
     let st = tx.state_mut();
     // Preserve loaded content lock hash (packages loaded before StartGame).
@@ -479,7 +479,7 @@ pub fn bootstrap_guozhan(
     use crate::state::{RulesetRef, SkillInstance};
     use engine_api::{RulesetId, SkillDefId, SkillId};
 
-    crate::content::ensure_standard_package(std::sync::Arc::make_mut(&mut tx.state_mut().content));
+    crate::content::ensure_standard_content(&mut tx.state_mut().content);
     // ADR 0604: deal guozhan matches from the 256-character guozhan pool.
     crate::content::ensure_guozhan_package(std::sync::Arc::make_mut(&mut tx.state_mut().content));
 

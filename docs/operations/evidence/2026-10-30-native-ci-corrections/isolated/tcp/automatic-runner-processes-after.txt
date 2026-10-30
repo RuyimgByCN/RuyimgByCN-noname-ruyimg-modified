@@ -1,0 +1,2 @@
+93724 73055 /bin/bash -c cat /Users/ruyimg/.pi/agent/npm/node_modules/pi-lens/docs/configuration.md | head -200; python3 - <<'PY'\012import json,pathlib\012p=pathlib.Path('/Users/ruyimg/.pi/agent/npm/node_modules/pi-lens/docs/schema/pi-lens-config-v1.json')\012x=json.loads(p.read_text()); print(json.dumps(x.get('properties',{}),indent=2)[:24000])\012PY\012ps ax -o pid,ppid,command | rg 'cargo|clippy-driver|rustc' > ../evidence/automatic-runner-processes-after.txt; du -sh target ../target
+93729 93724 rg cargo|clippy-driver|rustc

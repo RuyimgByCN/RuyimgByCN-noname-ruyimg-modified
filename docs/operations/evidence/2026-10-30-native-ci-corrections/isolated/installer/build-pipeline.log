@@ -1,0 +1,18 @@
+✔ desktop builds both WASM engines before the frontend, forcing native web output (33.4365ms)
+✔ Windows desktop runs pnpm.cmd through a shell (30.441709ms)
+✔ a failed native build prevents publishing a frontend with a stale native package (33.147208ms)
+✔ native build creates a missing package from source with portable PATH and argument boundaries (33.58375ms)
+✔ native build failure preserves the previous usable package and clears temporary output (33.731042ms)
+✔ native Node smoke target remains available without shell interpolation (33.862083ms)
+✔ legacy build prepends rustup PATH even when the cargo executable has a Windows suffix (33.49ms)
+✔ MSI keeps the Chinese product name with the matching WiX locale (0.153333ms)
+✔ Linux separates the package id from the Chinese window and launcher names (0.347833ms)
+✔ Tauri hooks resolve the actual sibling web client from the desktop crate (0.141125ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 276.2805

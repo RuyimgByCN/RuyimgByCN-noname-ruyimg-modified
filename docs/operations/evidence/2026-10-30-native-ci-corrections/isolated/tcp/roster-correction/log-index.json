@@ -1,0 +1,102 @@
+{
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "toolchain": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+  "entries": [
+    {
+      "label": "roster-exact",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_actor",
+        "nc09_native_actor_join_command_snapshot",
+        "--",
+        "--exact",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 219.32635283470154,
+      "disk_free_after": 135319908352,
+      "test_counts": [
+        1,
+        0,
+        0
+      ],
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/roster-exact.log",
+      "log_sha256": "0653e31b34b6fd7604027bc4c20da95fe6c90859a31f547b32232f2788c54bf5"
+    },
+    {
+      "label": "roster-server-clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--offline",
+        "-p",
+        "game-server",
+        "--all-targets",
+        "--no-deps"
+      ],
+      "exit": 0,
+      "seconds": 216.4575879573822,
+      "disk_free_after": 135121768448,
+      "test_counts": [
+        0,
+        0,
+        0
+      ],
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/roster-server-clippy.log",
+      "log_sha256": "779daea55baa667680bc1cdb6e67d2f342a87033fbc23b949a1bc9ffd0feb50e"
+    },
+    {
+      "label": "roster-actor-suite",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "nc09_native_actor",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 161.0402569770813,
+      "disk_free_after": 135108714496,
+      "test_counts": [
+        46,
+        0,
+        0
+      ],
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/roster-actor-suite.log",
+      "log_sha256": "39f7bc8a5c85161de7e34be73aa5306a050de707599337d034abd0d656ab24bb"
+    },
+    {
+      "label": "roster-linegate",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 138.74763989448547,
+      "disk_free_after": 135108612096,
+      "test_counts": [
+        0,
+        0,
+        0
+      ],
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/roster-linegate.log",
+      "log_sha256": "7dfe1307e5d516a98f7fa8ed4e45aa96891bd79784ec8706ec09f84b13291f19"
+    }
+  ],
+  "original_red": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/server-clippy.log",
+    "exit": 101,
+    "sha256": "8564f2a8de6895fa9a1e7ac65c81c23f628cde5c2feb14093f4d8c674c9ace82",
+    "error": "nc09_native_actor.rs:249 overly_complex_bool_expr saw_roster || true"
+  }
+}

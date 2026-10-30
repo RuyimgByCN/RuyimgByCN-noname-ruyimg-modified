@@ -58,12 +58,49 @@ settings are unchanged.
 | desktop | macOS, Windows, Ubuntu | Tauri installers; uploads `installer-${matrix.os}` artifacts from `noname-next/target/release/bundle/**` |
 | perf | macOS, Ubuntu | Existing tier list and server-baseline report |
 
+Perf runs both commands with `--release`, matching the historical phase17
+measurement profile. The unchanged runner measures the legacy engine-core line;
+profile diagnostics do not establish an engine-native performance improvement.
+
 There are ten matrix job executions. The workflow requests only `contents: read`
 for its token. Public source checkout and package installation require no new
 repository secret. The existing optional `TAURI_SIGNING_PRIVATE_KEY` reference
 is retained; the current Tauri configuration does not enable updater artifact
 signing. Certificate signing and notarization are not configured. Installers
 are workflow artifacts, not GitHub releases.
+
+The 2026-10-30 installer correction is based on accepted source
+`9dbc65530feb695688d3160dc38b6cf64ad39ecd` and first run `41053688083`.
+Windows desktop failed with WiX `LGHT0311` (database codepage 1252);
+Linux desktop failed with RPM name `无名杀-next`. The original raw logs are
+`run41053688083-desktop-{windows,ubuntu}-raw.log` under
+`docs/operations/evidence/2026-10-30-native-ci-preparation/first-publication/`
+in the original publication evidence checkout. Their SHA-256 values are:
+
+| Raw log | SHA-256 |
+| --- | --- |
+| Windows | `f1db45af81ad893e7c7cf82e013a7ed2929a28d7a760c971329c0405a9f78193` |
+| Ubuntu | `0abac1175fde025798ad8e127ba0f7aa522adf753829a67bb17cc041dbb7045d` |
+
+[The root configuration](../../apps/desktop-client/tauri.conf.json) retains
+`无名杀 Next` and selects `bundle.windows.wix.language = "zh-CN"`.
+First-CI Tauri CLI 2.12.4 / bundler 2.10.4 maps this to language 2052 and
+codepage 936; WiX 3.14.1's zh-cn UI localization also sets database Codepage 936.
+[The Linux configuration](../../apps/desktop-client/tauri.linux.conf.json)
+automatically merges `productName = "noname-next"`, because the supported Linux
+schema has no independent package-name field. This is the Linux package name,
+bundle filename/resource-directory stem and desktop-file stem; the binary
+remains `noname-next-desktop`. DEB and RPM use the same
+[desktop template](../../apps/desktop-client/linux/main.desktop) to retain
+`Name=无名杀 Next`; AppImage uses the DEB desktop generator. The window title
+remains Chinese on all platforms. All default bundle targets remain enabled;
+macOS identity, targets, security capabilities and signing settings are retained.
+
+Local configuration/schema checks and the build-pipeline regressions cover
+these metadata changes. Actual MSI/RPM production requires a subsequent CI run
+on those systems. The first run's successful macOS desktop artifact
+`installer-macos-latest` (32,791,200 bytes), three OS build jobs and native-web
+job do not establish a fully green workflow or validate these corrected bundles.
 
 Publishing a commit pushes its entire tracked tree and any reachable history
 objects missing from the remote. A path list cannot filter that push. Existing

@@ -1,0 +1,9 @@
+PASS root config delta is only Windows wix.language; macOS/build/app/identity/security/targets unchanged
+PASS WiX source-generated locale: 2052/936, Chinese strings encodable; first culture zh-cn selects UI database Codepage=936
+PASS Linux template equals upstream except Chinese Name; DEB/RPM use template, AppImage uses DEB generator; RPM technical id derives from productName
+PASS desktop template content expansion preserves Chinese Name and technical Exec/Icon/MIME
+apps/desktop-client/tauri.conf.json 29763b4f5f7baba1f3d00b0c5916e7051b25936a7885fe2734fca438cc5625d1 -> a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556
+apps/desktop-client/tauri.linux.conf.json absent -> 995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736
+apps/desktop-client/linux/main.desktop absent -> 48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5
+apps/web-client/scripts/build-pipeline.test.mjs cbff2bfdab005616d775c99f1d297ee40aeda867e1467d04176be4ed0ce45825 -> 6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e
+docs/operations/native-ci.md cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f -> d6421d0857593f861b5815d0ece526c256eadb974b91a770e1ca3183e1df04c9

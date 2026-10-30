@@ -263,9 +263,7 @@ impl Engine {
     /// Load the embedded M1 standard skill package (idempotent).
     pub fn load_standard_package(&mut self) -> Result<(), ContentLoadError> {
         self.content_lock_hash = None;
-        crate::content::ensure_standard_package(std::sync::Arc::make_mut(
-            &mut self.state.content,
-        ));
+        crate::content::ensure_standard_content(&mut self.state.content);
         if self.state.content.combined_logic_hash != [0u8; 32] {
             self.state.ruleset.logic_hash = self.state.content.combined_logic_hash;
         }

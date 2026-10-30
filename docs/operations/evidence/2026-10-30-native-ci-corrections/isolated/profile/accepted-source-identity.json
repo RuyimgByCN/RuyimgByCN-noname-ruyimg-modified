@@ -1,0 +1,19 @@
+{
+  "accepted_commit": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "own_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "four_ci_files_matched_accepted_commit_at_entry": true,
+  "benchmark_and_workspace_dependency_trees_match": {
+    "apps/benchmark-runner": "76cb774d3d37fdc37933b870fb1dfd30834b10ec",
+    "crates/engine-api": "66ca916b982d1349ade5e26513632ff10b2ccca1",
+    "crates/engine-core": "d3b7d6eefea8ad194780ce1b3afb3411a905c200",
+    "crates/engine-ai": "a73ef5174f16d06df223c34ca762368b194ea013",
+    "crates/rule-api": "802c6147eac4a5d1d85f0281d8672525b0ff0cc2",
+    "crates/rule-vm": "c38e5dfa3f2de6ef3a0d55359d6639986f3af750",
+    "crates/content-schema": "98db393b1bd79a0902856c9621c70388188158e6",
+    "crates/content-runtime": "7712d975515fae4433e7129e6f816e8e89f5a76d",
+    "crates/content-compiler": "4d65aeb140ce6a8abe29e9bf8fe4ad993a57620e",
+    "Cargo.toml": "c607a7224d34e8f06a1c8075d9cc396e1ad8d080",
+    "Cargo.lock": "2f9c115f1c8a7dcae20701086ffe4494fef49e75"
+  },
+  "no_runtime_source_edits_in_worktree": true
+}

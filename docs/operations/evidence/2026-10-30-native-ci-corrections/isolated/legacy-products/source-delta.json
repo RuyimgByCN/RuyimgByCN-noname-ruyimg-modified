@@ -1,0 +1,23 @@
+{
+  "base": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "before_manifest_sha256": "5ff4b21359b2cf6bf869f676fb237f1a9d7ce3eb3e9327a982296b707e0953e2",
+  "after_manifest_sha256": "9b3c4c46c505dba8deb9e42e396b2b4a93e46e830cf1264d393ba2f1ee9f10b0",
+  "changed": {
+    "crates/engine-core/src/content/mod.rs": {
+      "before": "8672190b2c97b93fbc845edcf3d784cd3c4a1fae1472b483fcd57f144ba86f12",
+      "after": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f"
+    },
+    "crates/engine-core/src/content/standard_pack.rs": {
+      "before": "51b9f8866d0876405ac87a431049cff91c27e79b95fd10a4591d3a210f26a101",
+      "after": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5"
+    },
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": {
+      "before": "befd7bf50131556dacb9c4a999b8ca42037531183cfc7012a3c57ebe3f90e843",
+      "after": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8"
+    },
+    "crates/engine-core/src/engine.rs": {
+      "before": "00026b192c8a85ced81d9499866013aa47df5ce1e83ed6e484b0cb05b1ad7167",
+      "after": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38"
+    }
+  }
+}

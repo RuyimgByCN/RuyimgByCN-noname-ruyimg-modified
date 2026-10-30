@@ -67,6 +67,10 @@
 
 **25. 现有仓库持续发布许可**：用户对完整、可审查的本地提交`9dbc65530feb695688d3160dc38b6cf64ad39ecd`明确选择“本次及后续验收增量（推荐）”。允许将该完整tracked树及远端缺失的必要可达历史推送到现有公开仓库`RuyimgByCN/RuyimgByCN-noname-ruyimg-modified`的新分支`native-convergence`，并持续推送后续通过本地验收的提交、运行现有CI及安装器artifact上传。首次树41879路径、37个dist、9207个证据文件已明确纳入；可达历史对象解压约3.41GB不是网络传输估计。不force、不修改远端main/default branch、不新增remote、不创建PR/release/comment、不修改持久设置或secrets；协议/规则/存档/ABI超出现有批准范围仍需具体审批。本项明确取代裁决18对该仓库/分支的旧NoPush限制，不授权其他仓库或未验收改动。原无条件local-only钩子保留，首次明确目标用命令级、精确SHA/新分支的检查执行，七项自检和旧拒绝日志均保留。见[明确授权原文](../2026-10-30-native-ci-preparation/parent-user-publication-decision25.json)与[完整树审计](../2026-10-30-native-ci-preparation/parent-final-publication-scope.json)。授权不表示push或平台验收已成功，实际结果继续单独登记。
 
+## 补充裁决（2026-10-30，C331包schema兼容）
+
+**26. 限定schema4增量**：用户对[已独立复审的具体合同](../2026-10-30-c331-schema-supplement/README.md)明确选择“批准限定schema4（推荐）”。仅带非默认trigger排序数据的新不可变包用schema4；新native host明确读取schema3默认与schema4非默认，执行入口拒非默认schema3、全默认schema4、未知schema及schema0绕过；新legacy只执行schema3默认，拒新排序语义。旧schema3默认逻辑hash中性、原件/版本/冻结锁保留；schema4非默认段在原trigger条目原位并绑定数组位置及handler身份，元组/位置/filter/顺序篡改有负控。固定旧native public bridge拒合规schema4，但旧host0或恶意伪装schema3并按旧算法重算hash的新包仍可能被旧程序接受；可信冻结锁仅保护其绑定内容，新host必须拒降级，不追溯承诺修好旧binary。维持format1/API1/ABI758/NGSA105/WS6，不新增VM指令/查询/效果/命令/Worker字段；多handler不同元组、forceDie/out/indexed/hidden/filterStop等仍阻断对应来源验收，不因此豁免。规则331仍按裁决22在已验收A330（`38ab1678`）后独占实施，改命332仍待331实际验收。批准不等于实现或任何运行通过；真实新旧读者、正式安装/恢复/跨端、hash及原C验收矩阵须完成。见[本次明确选择与稿件指纹](../2026-10-30-c331-schema-supplement/user-decision26.json)。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

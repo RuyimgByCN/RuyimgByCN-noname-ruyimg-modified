@@ -1,0 +1,81 @@
+[
+  {
+    "profile": "debug",
+    "build_argv": [
+      "cargo",
+      "build",
+      "--offline",
+      "--locked",
+      "-j",
+      "2",
+      "-p",
+      "benchmark-runner"
+    ],
+    "build_exit": 0,
+    "build_seconds": 40.3809227499878,
+    "disk_free_after_build": 140680691712,
+    "binary_sha256": "185ae7ca33cc01d9c9ad49b45257fa364a9dd997433faf73e2c9dbaa9a2fc106",
+    "binary_bytes": 43271200,
+    "runs": [
+      {
+        "argv": [
+          "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/target-perf/debug/benchmark-runner",
+          "tiers"
+        ],
+        "exit": 0,
+        "seconds": 0.006172374996822327,
+        "log": "debug-tiers.log"
+      },
+      {
+        "argv": [
+          "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/target-perf/debug/benchmark-runner",
+          "tier-report",
+          "server-baseline"
+        ],
+        "exit": 1,
+        "seconds": 1.6530525000125635,
+        "log": "debug-tier-report.log"
+      }
+    ]
+  },
+  {
+    "profile": "release",
+    "build_argv": [
+      "cargo",
+      "build",
+      "--offline",
+      "--locked",
+      "-j",
+      "2",
+      "-p",
+      "benchmark-runner",
+      "--release"
+    ],
+    "build_exit": 0,
+    "build_seconds": 166.03282375002163,
+    "disk_free_after_build": 139319582720,
+    "binary_sha256": "904a37cc82a9baa8e9e471677c9469846fb1ec2daa61d0dfb5f35c26044dfffb",
+    "binary_bytes": 8617904,
+    "runs": [
+      {
+        "argv": [
+          "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/target-perf/release/benchmark-runner",
+          "tiers"
+        ],
+        "exit": 0,
+        "seconds": 0.003310458007035777,
+        "log": "release-tiers.log"
+      },
+      {
+        "argv": [
+          "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/target-perf/release/benchmark-runner",
+          "tier-report",
+          "server-baseline"
+        ],
+        "exit": 1,
+        "seconds": 0.22820562502602115,
+        "log": "release-tier-report.log"
+      }
+    ]
+  }
+]

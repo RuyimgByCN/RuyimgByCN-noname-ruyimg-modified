@@ -1,0 +1,97 @@
+{
+  "utc": "2026-10-30T14:14:04.424087+00:00",
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "staged_files": [],
+  "fresh_body_files": 8,
+  "reused_caller_files": 6,
+  "matching_prior_fingerprints": 13,
+  "newly_fingerprinted": 1,
+  "evidence_kind": "static source proof, no build/runtime tests",
+  "files": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/lib.rs",
+      "sha256": "ac54971472f3316dd9b341d1e1c7d3b619ae870a53f9350f589647e01088d53e",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs",
+      "sha256": "7ada0c79c7bd9a5f633d5618ae20f38e298535eaea6ce420f2177ceaf00ddc23",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime/src/compat.rs",
+      "sha256": "0f9cf4cbbc55a4bbe564791415bd9c678ab4c231b3c0e8446a94c84bdcd438cf",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api/src/version.rs",
+      "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "inspection": "body reread",
+      "matches_prior": null
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler/src/lib.rs",
+      "sha256": "a1048425e1a3776126febfe1330baa735df2aa29c1e51a955b15483e84d035cf",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package/hashing.rs",
+      "sha256": "496e4635146cc2eb52e78d7dbca904a426b2c774529c65a58ab828105cc472b2",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/vm_active.rs",
+      "sha256": "6ffc566297482b54f6032f1239121c1e58804c72cb34b207258322cc83ccee12",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server/src/native/frozen.rs",
+      "sha256": "fa9f8fb6074509478bdb4b9f00302dc81fd65bbe2b6d74853cc4e5f71d1f5847",
+      "inspection": "body reread",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/installed_packs.rs",
+      "sha256": "f0b8db5c28f55f3da83f047e06dc4767abcb62704937e392a54826ceee4d4eba",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/content/registry/load_package_checks.rs",
+      "sha256": "cd5eb0b231aaaf31a3c35079e8aaf3f82b5eb75addafec0d237b7dbe340dfc3f",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/content/registry/load_package_inner.rs",
+      "sha256": "37c6bb942b4a0a183c18064a8c41d4c90e9dda4b6da723d5beb13f6866dcbd34",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/game-server/src/native.rs",
+      "sha256": "364aac554308e4acbecdab5aca17fcdcdbaad17499f047cc2e8bf89dd3ca96e3",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/extensionStore.ts",
+      "sha256": "da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/bundledNativePackages.ts",
+      "sha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b",
+      "inspection": "prior excerpt reused; current SHA256 compared",
+      "matches_prior": true
+    }
+  ],
+  "inspection_note": "An initial evidence-script assertion assumed all 14 files had prior fingerprints. engine-api/version.rs was absent from that prior list; corrected missing-prior handling without claiming it changed."
+}

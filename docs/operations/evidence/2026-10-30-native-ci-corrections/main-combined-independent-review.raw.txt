@@ -1,0 +1,35 @@
+## Review
+
+**Merge verdict：OK with notes。** CI 四组、13 个维护文件的当前主树整合与本地功能证据可接受，未发现新增 P1/P2；本地提交仍须收齐最终完整 preflight 的实际通过结果。本报告不预宣 21/21。
+
+范围为 HEAD `38ab1678df9b4b7b991d3b3122b1d937fd2648a1` 上尚未 stage 的 CI 修正；未重复 A330 源码／证据审查。规则330／archive105／ABI758／WS6保持，schema4／C331仅为另行设计授权，本批没有对应实现。
+
+- **Correct — 整合身份闭环。** 父按请求纯读复算入口、出口：12 个运行／配置文件逐字节等于各自 private reviewedfile；当前13项等于 admission、functional before、functional after，A剩余50项匹配，HEAD不变、index为空。三个当前 WASM 也精确匹配生成记录。证据：[出口身份核验](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/evidence/review-main-ci-corrections/identity-exit.json:1)。
+
+- **Correct — 唯一文档交叠完整。** 已对照 profile、installer 两份原补丁的 doc hunk 精读当前 [native-ci.md](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/native-ci.md:61)：release 测量口径与旧 engine-core 限定，以及中文产品名、Linux技术名、安装器平台待验收说明均保留，没有把两组之一覆盖掉。
+
+- **Correct — 缓存条件与隔离没有整合偏离。** [standard_pack.rs](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/content/standard_pack.rs:16)仍以整个 registry 的派生 `PartialEq/Eq` 比较 `ContentRegistry::new()`；缓存经原 `ensure_standard_package` 构建。非规范空目录、动态内容走原合并路径和 `Arc::make_mut`；[Engine入口](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/engine.rs:264)保留 lock清理、digest更新及派生索引重建。本轮关键接缝与此前四文件审查一致，没有把每局状态放入全局缓存。
+
+- **Correct — CI门槛、矩阵与安装器范围保持。** 当前 [workflow](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.github/workflows/ci.yml:1)仅在两条原 perf 命令增加 `--release`；仍为5 jobs／10矩阵执行、`contents: read`，原平台、打包目标及上传步骤保留。严格检查仍限定 native3，没有扩大或降低门槛。installer四个非文档文件与已审版本一致：Windows保留中文名及WiX zh-CN，Linux使用 `noname-next` 技术名并保留中文窗口／launcher名，macOS设置和默认全部 targets 保持。
+
+- **Correct — 真TCP及名册结果来自当前main。** 原始 [tcp.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/tcp.log:1164)记录 send/recv＝1024/1024、301命令、慢端178结果后断开、健康端301结果、reconnect通过及members＝3；typed roster定向测试1/1。源码身份仍是此前已审的真实受限socket方案，保留生产64队列／5秒超时，没有 writer假延迟或额外排队造绿。
+
+- **Correct — 本批运行结果与警告透明。** 已读完整 [16条命令索引](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/commands.json:1)：全部exit0；workspace为 **6894/0/77**，frontend **163/163**，typecheck、workspace all-targets通过。782条warning header含重复及汇总，77个ignored保留，不能写成无warning或全用例执行。native3严格输入保持A330已验收版本，本批未重复严格构建。
+
+- **Correct — 当前预算通过，历史失败仍成立。** [tier-report原记录](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/tier-report.log:795)为启动 **51/100µs**、距离 **0/300µs**、恢复 **46/200µs**、投影 **20/100µs**，PASS；未改负载、样本、seed、预算或profile定义。0µs受计时分辨率限制。这是当前330旧线本机release结果；此前profile-only启动151＞100µs的失败及隔离329七对测量各自保留，不据此宣称 engine-native 收益。
+
+- **Correct — 生产产物与兼容证据衔接。** 正式维护入口完成一次legacy生产重建及crosshash／manifest／skillVM／conformance；新legacy SHA为 `2b1cc44e…fab355`，native仍为 `2292d7ab…ed189b`。旧12份生成输入保留，public镜像一致，独立Vite输出实际包含这两份WASM，默认dist受保护。证据：[生成模块及打包身份](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/generated-modules.json:1)。
+
+- **Correct — 覆盖表述没有扩大。** Worker **82/82**，正式轨迹普通40步及包20步含恢复点比较通过；轨迹payload只证明已记录的 revision/hash/event codes，不能称完整engine state相等。sourcecaps自测2/2及8989文件门禁、layering自测和0 upward references通过。Vite构建结果不扩大为新的浏览器、桌面或平台运行验收。证据：[实际汇总](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/summary.json:1)。
+
+- **Correct — 历史与资源边界保留。** 四组原始review、补丁及复制索引仍可追溯；CRLF原文按gzip保字节，部分执行产物明确私有保留。原run41053688083的5绿5红没有被当前macOS结果回填。命令均等待退出，无owned长驻进程；incremental为空，stage3按当前CI复验lease保留，未擅删缓存。
+
+**Finding：本轮指定整合范围内，无可证实的新增 P1/P2或本地功能证据缺口。**
+
+No issues found.
+
+**本地提交条件：** 本轮整合复审通过；最终 preflight `c735ec38…`在出口核验时尚未收到完成报告，仍记pending。父收齐真实21项结果、确认源码身份保持并完成事实记录后，可收口本地提交。
+
+**平台限制：** 新GitHub十矩阵、真实Linux慢TCP、修正后的Windows MSI／Linux RPM及实际安装仍待验收；macOS本地通过不能关闭这些平台失败，也不能签署整个Goal完成。
+
+未运行构建、测试、benchmark或远端操作；仅核查当前整合接缝与留存证据，最终preflight及平台产物风险仍须分别收口。

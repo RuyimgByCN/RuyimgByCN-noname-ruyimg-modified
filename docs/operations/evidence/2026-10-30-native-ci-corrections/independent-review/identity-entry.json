@@ -1,0 +1,108 @@
+{
+  "utc": "2026-10-30T15:20:28.390660+00:00",
+  "head": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "index": [],
+  "versions_from_unchanged_source_identity": "330/105/758/WS6",
+  "reviewed12": [
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "current_sha256": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+      "reviewed_sha256": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+      "equal": true
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/peer.rs",
+      "current_sha256": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+      "reviewed_sha256": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+      "equal": true
+    },
+    {
+      "path": "apps/game-server/tests/nc09_native_actor.rs",
+      "current_sha256": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+      "reviewed_sha256": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+      "equal": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "current_sha256": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+      "reviewed_sha256": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+      "equal": true
+    },
+    {
+      "path": "apps/desktop-client/tauri.conf.json",
+      "current_sha256": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556",
+      "reviewed_sha256": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556",
+      "equal": true
+    },
+    {
+      "path": "apps/desktop-client/tauri.linux.conf.json",
+      "current_sha256": "995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736",
+      "reviewed_sha256": "995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736",
+      "equal": true
+    },
+    {
+      "path": "apps/desktop-client/linux/main.desktop",
+      "current_sha256": "48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5",
+      "reviewed_sha256": "48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5",
+      "equal": true
+    },
+    {
+      "path": "apps/web-client/scripts/build-pipeline.test.mjs",
+      "current_sha256": "6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e",
+      "reviewed_sha256": "6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e",
+      "equal": true
+    },
+    {
+      "path": "crates/engine-core/src/content/mod.rs",
+      "current_sha256": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+      "reviewed_sha256": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+      "equal": true
+    },
+    {
+      "path": "crates/engine-core/src/content/standard_pack.rs",
+      "current_sha256": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+      "reviewed_sha256": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+      "equal": true
+    },
+    {
+      "path": "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs",
+      "current_sha256": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+      "reviewed_sha256": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+      "equal": true
+    },
+    {
+      "path": "crates/engine-core/src/engine.rs",
+      "current_sha256": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+      "reviewed_sha256": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+      "equal": true
+    }
+  ],
+  "current13": {
+    ".github/workflows/ci.yml": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+    "apps/desktop-client/linux/main.desktop": "48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5",
+    "apps/desktop-client/tauri.conf.json": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556",
+    "apps/desktop-client/tauri.linux.conf.json": "995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736",
+    "apps/game-server/src/native_ws_e2e.rs": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+    "apps/game-server/src/native_ws_e2e/peer.rs": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+    "apps/game-server/tests/nc09_native_actor.rs": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+    "apps/web-client/scripts/build-pipeline.test.mjs": "6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e",
+    "crates/engine-core/src/content/mod.rs": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+    "crates/engine-core/src/content/standard_pack.rs": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+    "crates/engine-core/src/engine.rs": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+    "docs/operations/native-ci.md": "02962346ecc393e5ca4302fe7e6170df17352a837748c9c96dc2d6ffb1bdab51"
+  },
+  "checks": {
+    "reviewed12": true,
+    "admission13": true,
+    "functional_before13": true,
+    "functional_after13": true,
+    "A_remaining50": true,
+    "head": true,
+    "index_empty": true
+  },
+  "all_equal": true,
+  "doc_overlap": "native-ci.md is the thirteenth path; reviewer reads the combined profile and installer sections, not expected byte-identical to either isolated document",
+  "final_preflight": "Separate native async run c735ec38-d18e-46b6-850c-9bbb9460aba2; no completion received at this check; not claimed21/21",
+  "read_only": true
+}

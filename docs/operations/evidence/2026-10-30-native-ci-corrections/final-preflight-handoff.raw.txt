@@ -1,0 +1,9 @@
+当前 main CI corrections 最终四项静态门禁完成：actual exits **0／0／0／0**，完整 preflight **21/21通过**，无本轮失败被补跑或覆盖。
+HEAD保持`38ab1678df9b4b7b991d3b3122b1d937fd2648a1`，版本330／archive105／ABI758／WS6；schema4仅已批准文档，不宣当前runtime实现schema4。
+锁内耗时依次0.071／4.392／5.644／314.934秒；fullpreflight wall314.964秒，queue估计0.030秒（含wrapper启动）；各项freeSpace在index，最终116226465792B。
+13 runtime与parent admission精确匹配，A其余50、prepare3、assetManifest/catalog、frozen4、native/legacy生成模块、tracked dist及冻结内容diff摘要首末相同；guard不变且false、HEAD不变、index始终空。
+`.gitattributes`首末SHA不变且匹配HEAD，本轮未改Windows rawlog属性；未写维护source/docs/expectations/guard/index/head/remote或全局设置。
+新证据：[summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/final-gates/summary.json)、[index.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/final-gates/index.json)、[完整preflight日志](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/final-gates/04-full-preflight.log)；所有log exclusive-create，旧记录保留。
+strict docrefs exit0，1065引用／越界0；原六类missing-file提示保留：path.rs、.../gujian/skill.js、character/offline/.../offline_piracyS.js、.../swd/skill.js、schema/package.rs、step_skills_status.rs，不宣全部引用clean。
+未重复Cargo/WASM/Node/Browser/perf或全资源大hash；stage3本轮未使用、未删除共享target，无本worker待运行任务，父可回收／重分配lease（未修改lease metadata）。
+建议父据本轮真实21/21完成复审与登记；本结论仅本地静态门禁，不代表新GitHub跨平台、安装器产物或whole Goal完成。

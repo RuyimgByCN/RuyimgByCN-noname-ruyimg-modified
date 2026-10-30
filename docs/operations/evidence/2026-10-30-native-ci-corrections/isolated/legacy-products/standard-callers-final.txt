@@ -1,0 +1,14 @@
+crates/engine-core/src/engine.rs:264:    pub fn load_standard_package(&mut self) -> Result<(), ContentLoadError> {
+crates/engine-core/src/engine.rs:266:        crate::content::ensure_standard_content(&mut self.state.content);
+crates/engine-core/src/content/standard_pack.rs:16:pub(crate) fn ensure_standard_content(content: &mut Arc<ContentRegistry>) {
+crates/engine-core/src/content/standard_pack.rs:22:                ensure_standard_package(&mut registry);
+crates/engine-core/src/content/standard_pack.rs:27:        ensure_standard_package(Arc::make_mut(content));
+crates/engine-core/src/content/standard_pack.rs:43:pub fn ensure_standard_package(reg: &mut ContentRegistry) {
+crates/engine-core/src/content/standard_pack.rs:185:        ensure_standard_package(&mut reference);
+crates/engine-core/src/content/standard_pack.rs:252:            ensure_standard_package(&mut reference);
+crates/engine-core/src/content/standard_pack.rs:254:            ensure_standard_content(&mut shared);
+crates/engine-core/src/content/mod.rs:20:pub use standard_pack::ensure_standard_package;
+crates/engine-core/src/content/mod.rs:21:pub(crate) use standard_pack::ensure_standard_content;
+crates/engine-wasm/src/lib.rs:68:            .load_standard_package()
+crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs:188:    crate::content::ensure_standard_content(&mut tx.state_mut().content);
+crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs:482:    crate::content::ensure_standard_content(&mut tx.state_mut().content);

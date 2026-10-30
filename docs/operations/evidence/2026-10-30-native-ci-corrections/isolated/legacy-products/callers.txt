@@ -1,0 +1,193 @@
+crates/engine-wasm/src/lib.rs:43:            inner: Engine::new(),
+crates/engine-wasm/src/lib.rs:66:        let mut staged = Engine::new();
+crates/engine-wasm/src/lib.rs:68:            .load_standard_package()
+crates/engine-wasm/src/lib.rs:398:    let mut engine = Engine::new();
+crates/engine-wasm/src/lib.rs:536:    let mut engine = Engine::new();
+crates/engine-wasm/src/lib.rs:585:        let mut source = Engine::new();
+crates/conformance/src/lib.rs:165:    let mut eng = Engine::new();
+crates/engine-core/src/engine.rs:41:        let state = GameState::empty();
+crates/engine-core/src/engine.rs:42:        let hash = canonical_state_hash(&state);
+crates/engine-core/src/engine.rs:60:        canonical_state_hash(&self.state)
+crates/engine-core/src/engine.rs:100:        let prior_state = std::mem::replace(&mut self.state, GameState::empty());
+crates/engine-core/src/engine.rs:264:    pub fn load_standard_package(&mut self) -> Result<(), ContentLoadError> {
+crates/engine-core/src/engine.rs:266:        crate::content::ensure_standard_package(std::sync::Arc::make_mut(
+crates/engine-core/src/engine.rs:414:        let hash = canonical_state_hash(&state);
+crates/engine-core/src/engine.rs:442:        let hash = canonical_state_hash(&state);
+crates/engine-core/src/engine.rs:453:        let mut eng = Engine::new();
+crates/engine-core/src/engine.rs:486:        let mut eng = Engine::new();
+crates/engine-core/src/engine.rs:597:        let mut eng = Engine::new();
+crates/engine-core/src/engine.rs:652:        let mut a = Engine::new();
+crates/engine-core/src/engine.rs:653:        let mut b = Engine::new();
+crates/engine-core/src/engine.rs:666:        let mut e = Engine::new();
+crates/engine-core/src/engine.rs:689:        let mut engine = Engine::new();
+crates/engine-core/src/engine.rs:699:        let mut e = Engine::new();
+crates/engine-core/src/engine.rs:703:        let mut e2 = Engine::new();
+crates/engine-core/src/engine.rs:711:        let mut e = Engine::new();
+crates/engine-core/src/engine.rs:726:        let mut live = Engine::new();
+crates/engine-ai/src/fork_strategy.rs:147:        let mut eng = Engine::new();
+crates/engine-ai/src/fork_strategy.rs:213:            let mut restored = Engine::new();
+crates/engine-ai/src/fork_strategy.rs:353:            let mut eng = Engine::new();
+crates/engine-ai/src/fork_strategy.rs:744:        let mut eng = Engine::new();
+crates/engine-core/src/hash.rs:11:pub fn canonical_state_hash(state: &GameState) -> [u8; 32] {
+crates/engine-core/src/hash.rs:826:        let a = canonical_state_hash(&GameState::empty());
+crates/engine-core/src/hash.rs:827:        let b = canonical_state_hash(&GameState::empty());
+crates/engine-core/src/hash.rs:835:                let mut state = GameState::empty();
+crates/engine-core/src/hash.rs:845:                canonical_state_hash(&state)
+crates/engine-core/src/hash.rs:849:            assert_ne!(baseline, canonical_state_hash(&GameState::empty()));
+crates/engine-core/src/hash.rs:860:        let base = canonical_state_hash(&GameState::empty());
+crates/engine-core/src/hash.rs:861:        let mut with_bonus = GameState::empty();
+crates/engine-core/src/hash.rs:863:        let hashed = canonical_state_hash(&with_bonus);
+crates/engine-core/src/hash.rs:867:        let mut other_player = GameState::empty();
+crates/engine-core/src/hash.rs:871:            canonical_state_hash(&other_player),
+crates/engine-core/src/hash.rs:874:        let mut other_value = GameState::empty();
+crates/engine-core/src/hash.rs:878:            canonical_state_hash(&other_value),
+crates/engine-core/src/hash.rs:885:            canonical_state_hash(&GameState::empty()),
+crates/engine-ai/src/fork.rs:62:        let _ = canonical_state_hash(authority.state());
+crates/engine-ai/src/info_set.rs:80:        let mut eng = Engine::new();
+crates/engine-ai/examples/nc12_oldline_ai_bench.rs:17:    let mut eng = Engine::new();
+crates/engine-ai/src/legal.rs:965:        let mut eng = Engine::new();
+crates/engine-ai/src/legal.rs:1042:        let mut eng = Engine::new();
+crates/engine-ai/tests/search_policies.rs:11:    let mut eng = Engine::new();
+crates/engine-core/src/query/mod.rs:126:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/query/mod.rs:145:        let mut state = GameState::empty();
+crates/engine-core/src/query/mod.rs:169:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/query/mod.rs:233:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/query/mod.rs:270:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/query/mod.rs:337:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/query/mod.rs:410:        let mut e = Engine::new();
+crates/engine-ai/src/submit.rs:122:        let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:140:        let mut e = Engine::new();
+apps/benchmark-runner/src/main.rs:155:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:192:        let mut r = Engine::new();
+apps/benchmark-runner/src/main.rs:252:        let mut e = Engine::new();
+apps/benchmark-runner/src/main.rs:257:        let mut e = Engine::new();
+apps/benchmark-runner/src/main.rs:320:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:447:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:486:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:516:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:545:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:568:        let mut restored = Engine::new();
+apps/benchmark-runner/src/main.rs:581:    let mut eng = Engine::new();
+apps/benchmark-runner/src/main.rs:630:        let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:145:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:220:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:337:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:484:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:523:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:539:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:584:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:690:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:739:    let mut eng = Engine::new();
+apps/engine-cli/src/main.rs:831:    let mut eng = Engine::new();
+crates/engine-core/src/query/modifier.rs:872:        let mut tx = Transaction::begin(GameState::empty());
+apps/game-server/src/lobby.rs:682:        let mut finished = engine_native::Engine::new(42, 2).save();
+apps/game-server/src/lobby.rs:689:        for (id, engine) in [(3, engine_native::Engine::new(41, 2)), (7, finished)] {
+apps/game-server/src/room_native/receipts.rs:148:        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
+apps/game-server/src/room_native/receipts.rs:180:        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
+apps/game-server/src/room_native/receipts.rs:223:        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
+apps/game-server/src/room_native/receipts.rs:252:        let mut session = NativeRoomSession::new(Engine::new(4242, 2), 2);
+crates/engine-core/src/snapshot.rs:78:            state_hash: canonical_state_hash(state),
+crates/engine-core/src/snapshot.rs:102:        let hash = canonical_state_hash(&self.state);
+crates/engine-core/src/snapshot.rs:163:        let mut state = GameState::empty();
+crates/engine-core/src/snapshot.rs:214:        let s = GameState::empty();
+crates/engine-core/src/snapshot.rs:217:        assert_eq!(canonical_state_hash(&s), canonical_state_hash(&restored));
+crates/engine-core/src/snapshot.rs:225:        let s = GameState::empty();
+crates/engine-core/src/snapshot.rs:244:        let s = GameState::empty();
+crates/engine-core/src/snapshot.rs:256:        let mut snapshot = Snapshot::capture(&GameState::empty());
+crates/engine-core/src/snapshot.rs:269:        let mut state = GameState::empty();
+crates/engine-core/src/invariants.rs:203:        assert!(check_invariants(&GameState::empty()).is_ok());
+apps/game-server/src/room_native_actor.rs:787:        engine_native::Engine::new(seed, players as usize)
+apps/game-server/src/room_native_actor.rs:839:        let mut session = NativeRoomSession::new(engine_native::Engine::new(7, 2), 2);
+apps/game-server/src/room.rs:136:        Engine::new(),
+crates/engine-core/src/command/mod.rs:236:            debug_assert_eq!(hash, canonical_state_hash(&state));
+apps/game-server/src/main.rs:1680:                engine_core::Engine::new(),
+apps/game-server/src/main.rs:1723:                engine_core::Engine::new(),
+crates/engine-core/src/projection.rs:162:        state_hash: canonical_state_hash(state),
+crates/engine-core/src/projection.rs:302:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/content/standard_pack.rs:13:pub fn standard_package() -> &'static ContentPackage {
+crates/engine-core/src/content/standard_pack.rs:24:pub fn ensure_standard_package(reg: &mut ContentRegistry) {
+crates/engine-core/src/content/standard_pack.rs:31:    let mut package = standard_package().clone();
+apps/game-server/src/native_ws_e2e.rs:439:        let standard = engine_native::Engine::new(SEED, 2);
+crates/engine-core/src/command/turn.rs:956:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/command/turn.rs:979:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:508:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:541:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:572:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:596:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:626:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:648:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:660:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:670:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:680:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:690:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:741:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/guozhan.rs:786:        let mut tx = crate::transaction::Transaction::begin(GameState::empty());
+apps/game-server/src/persist.rs:363:    recover_engine_from(persist, engine_core::Engine::new())
+apps/game-server/src/persist.rs:380:            let mut e = Engine::new();
+apps/game-server/src/persist.rs:385:            let mut e = Engine::new();
+apps/game-server/src/persist.rs:464:        let mut eng = Engine::new();
+apps/game-server/src/persist.rs:524:        let mut eng = Engine::new();
+crates/engine-core/src/content/mod.rs:20:pub use standard_pack::ensure_standard_package;
+crates/engine-core/src/effect/mod.rs:1004:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/identity.rs:155:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/identity.rs:168:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/runner.rs:55:    let mut eng = Engine::new();
+crates/engine-core/src/runner.rs:126:    let mut eng = Engine::new();
+crates/engine-core/src/mode/single.rs:60:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/single.rs:74:        let mut tx = Transaction::begin(GameState::empty());
+crates/engine-core/src/mode/single.rs:87:        let mut tx = Transaction::begin(GameState::empty());
+apps/game-server/src/native.rs:409:    let base_catalog_cards = Engine::new(1, req.seats as usize).catalog().cards.len();
+apps/game-server/src/native.rs:410:    let base_catalog_generals = Engine::new(1, req.seats as usize).catalog().general_count();
+apps/game-server/tests/m8_rolling_upgrade.rs:27:    let mut engine = Engine::new();
+crates/engine-core/src/transaction.rs:170:        let hash = canonical_state_hash(&self.working);
+crates/engine-core/src/transaction.rs:186:        canonical_state_hash(&self.baseline)
+crates/engine-core/src/transaction.rs:311:        let base = GameState::empty();
+crates/engine-core/src/transaction.rs:312:        let h0 = canonical_state_hash(&base);
+crates/engine-core/src/transaction.rs:317:        assert_eq!(canonical_state_hash(&restored), h0);
+crates/engine-core/src/transaction.rs:329:        let mut e = Engine::new();
+crates/engine-core/src/transaction.rs:367:        let h_base = canonical_state_hash(&base);
+crates/engine-core/src/transaction.rs:382:        let h_replay = canonical_state_hash(&replayed);
+crates/engine-core/src/transaction.rs:406:        let h_base = canonical_state_hash(&base);
+crates/engine-core/src/transaction.rs:418:            canonical_state_hash(&replayed),
+crates/engine-core/src/transaction.rs:463:        let h_base = canonical_state_hash(&base);
+crates/engine-core/src/transaction.rs:488:        let h_replay = canonical_state_hash(&replayed);
+apps/game-server/examples/policy_head2head.rs:16:    let mut e = Engine::new(seed, 4);
+apps/game-server/tests/approved_b_metadata.rs:75:    let mut engine = Engine::new(804, 3);
+apps/game-server/tests/approved_b_metadata.rs:83:    let mut discard = Engine::new(1515, 4);
+apps/game-server/tests/approved_b_metadata.rs:86:    let mut response = Engine::new(2, 2);
+apps/game-server/tests/approved_b_metadata.rs:92:    let mut pick = Engine::new(42, 3);
+apps/game-server/tests/approved_b_metadata.rs:111:    let engine = Engine::new(1, 3);
+apps/game-server/tests/approved_b_metadata.rs:136:    let mut engine = Engine::new(42, 3);
+apps/game-server/tests/nc09_referee_projection.rs:168:    let mut engine = Engine::new(804, 3);
+apps/game-server/tests/nc09_referee_projection.rs:190:    let mut discard = Engine::new(1515, 4);
+apps/game-server/tests/tournament_wal_signing.rs:33:    let mut eng = Engine::new();
+crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs:188:    crate::content::ensure_standard_package(std::sync::Arc::make_mut(&mut tx.state_mut().content));
+crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs:482:    crate::content::ensure_standard_package(std::sync::Arc::make_mut(&mut tx.state_mut().content));
+apps/game-server/examples/emit_approved_b_metadata.rs:30:    let mut engine = Engine::new(804, 3);
+apps/game-server/examples/emit_approved_b_metadata.rs:38:    let mut engine = Engine::new(1515, 4);
+apps/game-server/examples/emit_approved_b_metadata.rs:43:    let mut engine = Engine::new(2, 2);
+apps/game-server/examples/emit_approved_b_metadata.rs:49:    let mut engine = Engine::new(42, 3);
+apps/game-server/tests/native_product_path.rs:256:    let base = engine_native::Engine::new(1, 4).catalog().cards.len();
+apps/game-server/tests/native_product_path.rs:342:    let base = engine_native::Engine::new(4242, 4).catalog().cards.len();
+apps/game-server/tests/fault_injection.rs:49:    let mut eng = Engine::new();
+apps/game-server/tests/fault_injection.rs:126:    let mut eng = Engine::new();
+apps/game-server/tests/fault_injection.rs:131:    let mut fresh = Engine::new();
+apps/game-server/tests/fault_injection.rs:174:    let mut eng = Engine::new();
+apps/game-server/tests/fault_injection.rs:180:    let mut fresh = Engine::new();
+apps/game-server/tests/fault_injection.rs:192:    let mut eng = Engine::new();
+apps/game-server/tests/fault_injection.rs:221:    let mut eng = Engine::new();
+apps/game-server/tests/fault_injection.rs:247:    let mut eng = Engine::new();
+apps/game-server/tests/nc08_cross_line.rs:75:    let mut e = OldEngine::new();
+apps/game-server/tests/nc08_command_by_command.rs:56:    let mut old = engine_core::Engine::new();
+apps/game-server/tests/nc09_native_room_session.rs:122:    let mut room = NativeRoomSession::new(engine_native::Engine::new(4242, 4), 4);
+apps/game-server/tests/nc09_native_room_session.rs:673:    let mut room = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
+apps/game-server/tests/nc09_native_room_session.rs:695:    let mut engine = engine_native::Engine::new(1515, 4);
+apps/game-server/tests/nc09_native_room_session.rs:728:    let mut engine = engine_native::Engine::new(1515, 4);
+apps/game-server/tests/nc09_native_actor.rs:124:    let baseline = engine_native::Engine::new(1, 2);
+apps/game-server/tests/nc09_native_durability.rs:91:    let session = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
+apps/game-server/tests/nc09_native_durability.rs:150:            NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
+apps/game-server/tests/nc09_native_durability.rs:203:        let mut reference = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
+apps/game-server/tests/nc09_native_durability.rs:256:        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
+apps/game-server/tests/nc09_native_durability.rs:324:    let engine = engine_native::Engine::new(4242, 2);
+apps/game-server/tests/nc09_native_durability.rs:402:        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
+apps/game-server/tests/nc09_native_durability.rs:440:        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),

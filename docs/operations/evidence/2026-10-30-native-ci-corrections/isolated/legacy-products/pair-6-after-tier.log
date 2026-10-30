@@ -1,0 +1,7 @@
+=== 服务器基准机 ===
+tier=server-baseline
+  ✓ start-hash-p50           53 / 100 us (53%)
+  ✓ distance-query-p95       0 / 300 us (0%)
+  ✓ snapshot-restore         45 / 200 us (22%)
+  ✓ observer-projection      21 / 100 us (21%)
+result=PASS

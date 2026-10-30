@@ -1,0 +1,18 @@
+{
+  "decision": 26,
+  "utc": "2026-10-30T15:07:35.051082+00:00",
+  "question": "是否批准已独立复审的C331包格式兼容补充（schema4限定增量）？",
+  "answer": "批准限定schema4（推荐）",
+  "proposal_sha256": "8c2c551fb4c43a32fa94edad1331c345d25943274926279d064e0484b1b27743",
+  "final_review_sha256": "a64ca3c820d84d7d5198f687842d5d076c6b9b5bbd19eca61907b481e1dcf1ec",
+  "scope": "schema4 only for nondefault trigger ordering; new native reads3default/4; new legacy rejects nondefault3/4; immutable old bytes/locks preserved",
+  "unchanged_axes": {
+    "package_format": 1,
+    "engine_api": 1,
+    "rule_vm_abi": 758,
+    "native_archive": 105,
+    "ws": 6
+  },
+  "original_C22": "rule331 after accepted A330; no unrelated VM/state contract authorized",
+  "old_reader_limitations": "old host0 or disguised schema3 rehashed with old algorithm may still accept; fixed trusted locks protect only their own bound bytes"
+}

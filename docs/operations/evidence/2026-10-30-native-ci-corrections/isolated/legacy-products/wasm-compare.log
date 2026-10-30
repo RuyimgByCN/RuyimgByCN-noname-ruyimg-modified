@@ -1,0 +1,2 @@
+{"cases":10,"commands":160,"events":410,"choices":12,"checkpoints":160,"comparisons":"actual wasm32 old engine-core vs native: hashes/events/choices; full native state remains in traces","passed":true}
+{"command": ["node", "../products/wasm-compare.cjs"], "exit": 0, "locked_seconds": 0.5577296249975916, "disk_free_bytes": 135444373504}

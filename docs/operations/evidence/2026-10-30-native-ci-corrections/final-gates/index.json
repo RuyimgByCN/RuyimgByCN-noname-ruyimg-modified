@@ -1,0 +1,85 @@
+[
+  {
+    "name": "01-sourcecaps-selftests",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.09666899999137968,
+    "locked_seconds": 0.0706169999903068,
+    "queue_estimate_seconds": 0.026052000001072884,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 116170842112,
+    "log": "01-sourcecaps-selftests.log",
+    "completed_utc": "2026-10-30T15:18:48.329265+00:00"
+  },
+  {
+    "name": "02-source-lines",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 4.417751375003718,
+    "locked_seconds": 4.3916344580065925,
+    "queue_estimate_seconds": 0.026116916997125372,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 116170469376,
+    "log": "02-source-lines.log",
+    "completed_utc": "2026-10-30T15:18:52.748003+00:00"
+  },
+  {
+    "name": "03-strict-docrefs",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "exit": 0,
+    "wall_seconds": 5.670532583026215,
+    "locked_seconds": 5.643871790991398,
+    "queue_estimate_seconds": 0.02666079203481786,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 116259749888,
+    "log": "03-strict-docrefs.log",
+    "completed_utc": "2026-10-30T15:18:58.419197+00:00"
+  },
+  {
+    "name": "04-full-preflight",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "exit": 0,
+    "wall_seconds": 314.9644768750004,
+    "locked_seconds": 314.93442795801093,
+    "queue_estimate_seconds": 0.030048916989471763,
+    "queue_estimate_includes_wrapper_startup": true,
+    "free_disk_bytes": 116247207936,
+    "log": "04-full-preflight.log",
+    "completed_utc": "2026-10-30T15:24:30.698429+00:00"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "forward_dry_run": "passed for separate and combined patch on frozen initial A53",
+  "reverse_check": "passed for separate and combined patch on current sources",
+  "changed_relative_initial_A53": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs"
+  ],
+  "other_initial_overlay_files_preserved": 50,
+  "default_target_exists": false,
+  "no_staged_files": true
+}

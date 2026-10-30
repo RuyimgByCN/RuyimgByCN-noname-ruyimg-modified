@@ -1,0 +1,42 @@
+**旧 engine-core 标准启动成本已修；本机 release 固定负载从超预算变为通过，待父独立审查。**
+基准 HEAD `9dbc65530feb695688d3160dc38b6cf64ad39ecd`；Apple M3 Max / macOS 27.2 / aarch64 / rustc 1.95.0。未 stage/commit/push，未改全局设置、版本、预算、迭代、seed、tier、profile 定义、CLI 或 CI。
+已完整读取 canonical AGENTS/SPEC、任务 ponytail、phase17、profile handoff 和实际 benchmark timer，并检索 ctor/hash/标准 catalog 调用方；CodeGraph 不在本 worker 工具允许列表，使用 rg/源码。首次检查 archive 不存在，本任务未建链接。
+仅 4 个 core 文件：`content/standard_pack.rs`（新 helper + 3 回归）、`content/mod.rs`（crate-private 导出）、`engine.rs`（显式标准加载）、`effect/primitives/pack_tw_1/finish_turn_begin.rs`（identity/guozhan 自动加载）。共 138 additions / 6 deletions；生产逻辑增量约 20 行。
+实现：沿用现有 OnceLock 与 Arc，只对**逐字段等于 ContentRegistry::new()** 的目录复用一份经原 ensure/load/validate 路径构建的完整不可变标准 registry，连同既有 combined digest；动态、Default 非规范空目录及手改 digest 的目录走原合并路径。
+标准包全部内容/refresh 依赖、动态技能覆盖、配置/内容锁、种子和状态初始化、实际校验/错误、物理所有权、canonical hash 编码均保留；没有整局缓存或第二份简 catalog。单份静态目录通过 Arc::make_mut 隔离写入。
+[纯相对 9dbc 补丁](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/legacy-start-hash-only.patch) SHA-256 `01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9`。
+[产物/日志目录](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products) 内 `reproduction.json` 固定 base SHA、dirty patch SHA、binary/source manifest SHA、工具链与复验 argv；所有源码差异只有上述 4 文件。
+Before release binary `before-benchmark-runner` SHA-256 `e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625`。
+After release binary `after-benchmark-runner` SHA-256 `ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861`。
+Before/after source manifest SHA-256：`5ff4b21359b2cf6bf869f676fb237f1a9d7ce3eb3e9327a982296b707e0953e2` / `9b3c4c46c505dba8deb9e42e396b2b4a93e46e830cf1264d393ba2f1ee9f10b0`；after 是 9dbc + 上述精确未提交 patch，不伪造新 commit SHA。
+实际 timer：tier start 只计 submit(StartGame)，ctor 在外；4 座/seed42/50 次，distance10000、restore100、projection10000；start-hash CLI 为相同 4 座/seed42/200 次+3 warmup，均未改。
+首次 release 基线单跑保留 `original-release-tier-report.log/exit`：start **158/100 µs**、distance 0/300、restore44/200、projection20/100，**exit1**；未补跑覆盖该失败。
+原 CI run41053688083 两平台 debug rawlogs/initial-jobs/原 SHA 已逐字复制到 `original-ci-failure/` 并复核 SHA；这是旧线 debug 失败，owner 的 --release CI 修正不在本 patch 内，没有新 CI 结果。
+诊断：首次 200 样本 submit p50 139500ns、标准加载91459ns/1506alloc、state hash14625ns；系统采样落在 ensure_standard_package、包摘要/验证/建目录。完整 raw 位于 profile-before.log、sample-before-locked.txt。
+预先固定 7 对交错采样（偶数 before→after，奇数 after→before），每对运行原 tier、原 start-hash 和相同私有 200 样本 cost harness；42 个进程退出码/原始输出全保留，未按绿灯选择，全部验收采样持全局 heavy lock。
+
+| release 指标 | before | after |
+|---|---:|---:|
+| tier 每轮 start p50，µs，7 次全量 | 158,151,150,150,153,155,150 | 50,49,49,50,48,51,53 |
+| tier 七个中位数的 p50 / p95，µs | 151 / 158 | 50 / 53 |
+| tier 退出码，7 次 | 1,1,1,1,1,1,1 | 0,0,0,0,0,0,0 |
+| 私有 submit，1400 样本 p50 / p95 / p99，ns | 142084 / 160958 / 175125 | 48917 / 56958 / 64167 |
+| 私有 submit，分配次数/字节 p50 | 1971 / 158449 | 464 / 52956 |
+| 单独 canonical state hash，p50 / p95，ns | 14875 / 17958 | 14917 / 17125 |
+| 显式标准加载，p50 / p95，ns | 92458 / 107250 | 125 / 167 |
+| tier restore / projection 七轮中位数，µs | 44 / 20 | 44 / 20 |
+
+0µs 是整数微秒量化；tier p95 行是**七个每轮中位数的分布**，不是单次提交 p95；后者见私有 1400 样本行。原 CLI start-hash200 每轮 p50 为 before143834–147458ns、after47625–48542ns，全量见 comparison-cli-summary.json。无 debug/release 收益比或未经测量的性能百分比。
+新增 3 回归：完整启动 state/events/choice/hash/manifest/replay 与原重建目录一致并恢复；不同对局实体与目录 COW 写入隔离；动态 override 与非规范空目录保持原合并语义。定向 **3/0/0**，未新增 ignore。
+实际完整影响面命令：`CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=../target cargo test --offline --locked -j 2 -p engine-core -p engine-ai -p benchmark-runner -p conformance --no-fail-fast`，exit0：engine-core **3851/0/1 ignored**、engine-ai **29/0/0**、benchmark **8/0/0**、conformance **4/0/0**；共 **3892/0/1**。完整原文 affected-tests.log；没有把定向补跑冒充全量。
+独立 `cargo run --offline --locked -j 2 -p conformance`：**19 cases ALL PASS**，exit0；既有 golden/规则/档/ABI/WS 均未改。
+独立 before/after release harness：bootstrap/identity/single/guozhan × 固定种子/人数 × 有无动态覆盖，共20场/320检查点，完整 JSON state（含 RNG、所有实体及所有权）、events、choice、hash、manifest、回放字节逐字段完全相等；trace-comparison.json 与两份 traces raw 保留。
+真实 WASM：本源码 `cargo build --offline --locked --release --target wasm32-unknown-unknown -j 2 -p engine-wasm`，缓存 wasm-bindgen0.2.126 生成到 own products/wasm；Node 对照10场/160命令/410事件/12choice/160回放检查点通过，exit0；这是旧 engine-core 的 native/WASM 对照，不是 engine-native。
+WASM 对照覆盖 hash/events/choices 和经正式恢复入口验证的回放；完整逐字段 state 对照来自 native before/after，未把有限 WASM API 冒充完整 WASM state 导出。动态 overlay 完整 state 由 native20场及全量测试覆盖。
+`python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` **2/0**；行数门禁 **8972 文件通过**、Rust非测试≤1000有效行；git diff --check 通过，cached diff 为空。
+每次编译后记录磁盘并清私有 incremental；独占 ../target 创建前不存在，所有编译 CARGO_INCREMENTAL=0/jobs2，重编与验收均用全局 heavy lock；未借 mainpkg、父stage3、NC10 或其他 target。
+收尾已保留两个 release benchmark binaries、两个诊断 binaries、WASM、源码 manifests、精确 patch、全部 rawlogs/脚本；退休 own target 3,216,679,010 文件字节，target 已不存在；保留进入时既有 .pi-lens*，未删他人文件，staged files=[]。cleanup.json 含磁盘快照，不能当空间收益。
+退休 target 后两个独立 binary 的 tiers 输出相同且均 exit0，实际 WASM 对照再通过，证明保留产物可脱离 target 直接复验；父可在 products 执行对应 binary 的原 tier argv 或 compare.py。
+诊断过程完整说明：首个探索 sample 未持 heavy lock，已保留并另取全程持锁 sample；首次临时 trace 比较在 after 排队未完成时断言失败（320 vs0），等两边退出0后正式比较320/320相等，见 diagnostic-notes.json；无隐藏代码/测试失败。
+性能边界：收益对应已初始化不可变标准目录的重复建局；首个进程仍执行原完整编译/校验，未单独量化冷启动；动态目录保持原成本，通用 canonical state hash 未优化；此本机通过不保证其他 CI 设备预算。
+未检查：完整 workspace、Clippy、新 release CI、其他平台/UI或上游规则等价；这些不在本次旧线启动/hash scope。下一步由父按 reviewer gate 独立审补丁与原始证据，再自行决定集成；本 worker 未发布。

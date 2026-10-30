@@ -1,0 +1,39 @@
+{
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "files": {
+    "crates/engine-core/src/content/mod.rs": {
+      "actual": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+      "expected": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+      "equal": true
+    },
+    "crates/engine-core/src/content/standard_pack.rs": {
+      "actual": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+      "expected": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+      "equal": true
+    },
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": {
+      "actual": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+      "expected": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+      "equal": true
+    },
+    "crates/engine-core/src/engine.rs": {
+      "actual": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+      "expected": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+      "equal": true
+    }
+  },
+  "source_scope_count": 4,
+  "patch_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "worktree_diff_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "diff_equals_patch": true,
+  "binary_checks": {
+    "before": true,
+    "after": true
+  },
+  "source_manifest_checks": {
+    "before": true,
+    "after": true
+  },
+  "all_equal": true,
+  "read_only": true
+}

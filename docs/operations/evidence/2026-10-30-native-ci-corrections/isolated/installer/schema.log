@@ -1,0 +1,9 @@
+PASS installed CLI 2.11.4 schema matches first-CI CLI 2.12.4 for six relevant definitions
+macos          Info Default WiX Upgrade Code, derived from 无名杀 Next: 0c28067b-bab3-55f0-ba69-62828fd0fe43
+
+windows          Info Default WiX Upgrade Code, derived from 无名杀 Next: 0c28067b-bab3-55f0-ba69-62828fd0fe43
+
+linux          Info Default WiX Upgrade Code, derived from noname-next: 1d5862be-089e-5d7f-b1c7-4ecc652df947
+
+PASS real schema negative control rejects unknown rpm.packageName: Error `"tauri.conf.json"` error on `bundle > linux > rpm`: Additional properties are not allowed ('packageName' was unexpected)
+{"command": ["python3", "-B", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/check-schema.py"], "exit": 0, "locked_seconds": 0.3472258749825414, "disk_free_bytes": 135633215488}

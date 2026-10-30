@@ -1,0 +1,24 @@
+{
+  "base_source_sha": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "patch_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "before": {
+    "binary": "before-benchmark-runner",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625",
+    "source_manifest_sha256": "5ff4b21359b2cf6bf869f676fb237f1a9d7ce3eb3e9327a982296b707e0953e2"
+  },
+  "after": {
+    "binary": "after-benchmark-runner",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861",
+    "source_manifest_sha256": "9b3c4c46c505dba8deb9e42e396b2b4a93e46e830cf1264d393ba2f1ee9f10b0",
+    "source": "base_source_sha + exact patch_sha256 (uncommitted)"
+  },
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/worktree",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+  "commands": [
+    "./before-benchmark-runner tier-report server-baseline",
+    "./after-benchmark-runner tier-report server-baseline",
+    "python3 compare.py"
+  ],
+  "sampling": "7 pairs alternate before/after order, fixed CLI workloads, all results retained",
+  "note": "compare.py resolves products adjacent to itself; default CLI binaries are standalone. No source checkout needed for direct same-device rerun."
+}

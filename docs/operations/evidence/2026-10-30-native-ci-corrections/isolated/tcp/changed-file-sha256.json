@@ -1,0 +1,12 @@
+[
+  {
+    "path": "apps/game-server/src/native_ws_e2e.rs",
+    "before_sha256": "2e81309a1ee1eebfee3cd6aa09af85646d0d6ddb25d6b774aa39e6fbade8f7aa",
+    "after_sha256": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935"
+  },
+  {
+    "path": "apps/game-server/src/native_ws_e2e/peer.rs",
+    "before_sha256": "086f2ad7ae054a7587c5b59f888876f441e65c867af7296d9019b234684427d3",
+    "after_sha256": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9"
+  }
+]

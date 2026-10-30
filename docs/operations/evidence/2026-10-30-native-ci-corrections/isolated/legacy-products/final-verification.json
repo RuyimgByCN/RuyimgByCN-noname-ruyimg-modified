@@ -1,0 +1,18 @@
+{
+  "report": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/bb17aba4-76b8-4789-a911-e184dc1c0565/implementation/legacy-start-hash-budget-correction.md",
+  "report_lines": 42,
+  "report_sha256": "96d0d7d0de9e57fbf148402b81be770b12773d6d9bf3e4c903f40fd5ca033198",
+  "patch_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "source_matches_built_manifest": true,
+  "reverse_patch_check": true,
+  "diff_check": true,
+  "staged_files": [],
+  "target_retired": true,
+  "review_gate": "pending independent reviewer",
+  "changed_files": [
+    "crates/engine-core/src/content/mod.rs",
+    "crates/engine-core/src/content/standard_pack.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs",
+    "crates/engine-core/src/engine.rs"
+  ]
+}

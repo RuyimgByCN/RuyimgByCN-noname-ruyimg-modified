@@ -1,0 +1,39 @@
+What this change does: 提案以 content schema4 标记非默认触发排序数据，让当前旧原生 public bridge 经既有 schema3 兼容门拒绝合规新产物；新宿主明确支持 schema3 默认包与 schema4 非默认包。方向可行，尚无 schema4 授权或运行验收。
+
+## Review
+
+- **审查范围：**完整读取70行补充稿、原 ADR0788/C22、三份静态证据，并精读当前 parse/validate/hash、compat、public bridge、legacy 幂等门、compiler/manifest 构造及必要正式调用方。A330验收作为父提供的既定输入；不复审 A、缓存候选、CI 或 alias。
+- **源码身份：**父代做的限定14源 SHA 核验为14/14一致，记录见 [identity-entry.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/evidence/review-schema-supplement/identity-entry.json)。核验时 HEAD 为 `9dbc65530feb695688d3160dc38b6cf64ad39ecd`；这只固定本次静态依据，不表示 C331 已实现。
+
+- **Finding — P2，降级说明中对旧正式读者的表述须收窄。**[补充稿:27](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/7c2f9075-f22e-454e-bcb5-6e4de790b72a/proposals/adr0788-schema-compatibility-supplement.md:27)写“旧正式读者应因hash不符拒绝”。该结论适用于仍携带新语义摘要的篡改输入，不能推广到恶意作者重算旧算法摘要的新导入包：旧 serde 丢掉新字段后，`package.rs:819` 比较的仍是旧字段摘要，schema3兼容门也能通过。已固定且可信的旧锁/content hash 可以阻止替换其绑定字节，但不是所有旧导入路径的通用保护。
+- **最小修订：**改为“降级后仍保留新摘要的包通常在旧正式读者处因摘要不符被拒；若攻击者按旧算法重新生成摘要并作为新包导入，旧正式读者也可能接受并忽略新字段。已有可信冻结锁只保护其固定内容；新宿主拒非默认 schema3，无法追溯修复旧 binary。”相应旧读者矩阵增加这一输入，不要求伪造失败结果。此处无需扩大实施范围。
+
+- **Correct — 缺口真实可达：**[PackageTriggerEntry:242](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs:242)与 `ContentPackage:709` 无 `deny_unknown_fields`，`:1054` 仅反序列化。旧 [public bridge:260](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/lib.rs:260)检查 effect ABI、模块摘要、兼容性、入口与 filter，却没有整包 `validate/compute_logic_hash`；`:392` 将 timing/priority 固定为 Normal/0。合法模块的 schema3 JSON 注入排序字段后存在静默按旧语义执行的源码路径；尚未运行复现。
+- **Correct — schema4能触发现有旧门：**`compat.rs:31` 对非零 schema 精确比较，`tooling_host_versions:48` 固定取当前 schema3，且 public bridge 在生成 decl 前调用它。因此合规 schema4、合法 ABI/模块包会被该旧 bridge 受控拒绝，无需坏字节码或假元数据哨兵。错误外层虽标为 `manifest.rule_vm_abi_version`，实际原因包含 schema 不匹配。
+- **Correct — 保证范围：**提案已保留旧 `host.content_schema=0` 绕过与伪装 schema3 的局限；不能称“所有旧 reader 严格拒绝”。新执行路径须拒未知/零 schema 绕过，并独立验证包内字段组合。generic compat 只看 manifest，不能替代包语义验证。
+- **Correct — 新旧支持矩阵：**新 host4 显式接受3/4，而不是简单把常量改4后保留精确相等。`PackageManifest::new:189` 与 compiler 默认输出须继续为3；非默认三字段只能随4发行。schema3 非默认、schema4 全默认、未知 schema 均按稿拒绝；新 legacy 只保留3默认执行，不能因共享兼容层认识4便沿 Normal/0运行。
+- **Correct — 验证顺序：**新 public bridge 自身须验证完整包，不依赖上层调用者；legacy 的 schema/排序检查必须位于 `load_package_checks.rs:20` 同摘要幂等早退之前。正式安装、锁定装载、冻结恢复和直接 typed 调用均须走相同组合门，失败不得提交内容或回退到当前版本包。
+
+- **必要落细 — hash必须绑定具体条目位置。**稿中“非默认条目追加段”尚未固定最终编码。若实现为独立的非默认条目列表，仅列出的 ID/event/module/entry_pc 不能替代唯一位置：当前 schema validate 未保证 trigger ID 唯一，同键不同 filter 条目之间移动非默认元组可能失去绑定。最小做法是在每个原 trigger 条目的原位追加非默认段，或在集中段中编码原数组索引；保留声明顺序，并以交换元组的负控验证。无需新增运行状态或版本轴。
+- **Correct — hash/发行原则：**[hashing.rs:11](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package/hashing.rs:11)已包含 schema轴。旧3默认不写新增段，维持原 logic hash；新三字段规范编码 timing tag、i32小端 priority、bool，并绑定真实 handler。修正版使用新不可变包版本与新摘要/锁，旧安装副本、原JSON、冻结包及旧锁不原地重写；不能把 logic hash 中性等同于显式默认JSON与省略默认JSON的 content hash 相同。
+- **Correct — 多handler边界没有被schema解决：**`vm_active.rs:98` 当前只拒 mixed optional，`:121` 取首 meta 后合并 extra events；trigger-only 名称仍来自 module。新装载器必须校验稳定 logical skill 身份及统一排序元组，不能取首项、覆盖、丢 handler 或拆假技能名。无法表达的不同元组组合受控拒装并继续阻断对应来源验收。
+- **Correct — 来源范围：**forceDie/out/indexed/hidden/filterStop、直接 ExtensionPack 的语义身份及尚不能统一的 handler 身份仍是 C22 待办。拒装是保护当前执行结果，不是把这些来源移出范围，schema4不自动授予缺失上下文、状态或 VM 能力。
+- **Correct — 更小方案比较：**仅增 hash 或修新 bridge 无法改变旧 public bridge；API2需要改另一公开兼容轴及旧包 `[1,1]` 支持；ABI759/format2与纯排序元数据无对应新增 VM/布局需求。未发现比 schema4 更小、同时让这个旧 public bridge 拒绝合规新产物的实质方案。
+
+可提交用户审批的最小合同应明确为：
+
+| 项目 | 审批增量 |
+|---|---|
+| 包数据 | 三字段 `timing / effective priority / order_selectable`；默认 Normal/0/true。仅非默认产物使用 schema4。 |
+| 读取/执行 | 新 native host4支持3默认与4；新 legacy明确拒4及3非默认；所有执行入口先验证，禁止零 schema 绕过。 |
+| 旧读者承诺 | 固定旧 native public bridge拒合规4；不承诺旧 host0或恶意伪装3必拒，按上述修订保留真实局限。 |
+| 身份与兼容 | 逐handler规范 hash、旧3默认 hash中性、新不可变版本发行、旧字节/冻结锁保留。 |
+| 其他版本轴 | format1/API1/ABI758/存档105/WS6维持；不新增命令或 VM 原语，不借本批准兜底缺失能力。 |
+| 验收 | 固定真实旧 reader/binary先验证默认成功，再验证合规4被schema门拒；新3/4正反矩阵、降级负控、正式入口与跨端/恢复验收均为未来工作。 |
+
+- **授权判断：**[C22](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-28-user-decisions/README.md:56)已批准规则331、Skill/PickTag/机器与必要元数据，但明确要求新schema另报；当前尚无 schema4 授权。可审批上述限定增量，无需重复请求已批准的 C 实施或实机授权。
+- **Fixed：**无；只读设计审查。
+- **Merge verdict：OK with notes，限审批设计稿。**修窄降级说明并固定条目位置绑定后，可按上述最小合同提交用户批准；不构成实现、版本占用或 runtime green。
+
+未编译、运行旧binary、测试或实施；未写主树源码、文档、index、HEAD、remote、cache，也未做全仓审计。
+剩余风险是旧程序无法被新schema追溯修复，以及多handler/来源能力仍待实际实现与验收；A330绿色不能替代这些证据。

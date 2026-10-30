@@ -1,0 +1,26 @@
+{
+  "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-native-wasm-cross-target.py",
+  "changes": [
+    "--- \n",
+    "+++ \n",
+    "@@ -14,7 +14,7 @@\n",
+    " import tempfile",
+    " from pathlib import Path",
+    " ",
+    "-ROOT = Path(__file__).resolve().parents[1]",
+    "+ROOT = Path('/Users/ruyimg/Documents/Claude/sanguosha/noname-next')",
+    " EVIDENCE = ROOT / \"docs/operations/evidence/2026-10-24-native-wasm-cross-target\"",
+    " ",
+    " ",
+    "@@ -25,7 +25,8 @@\n",
+    " ",
+    " ",
+    " def main() -> None:",
+    "-    with tempfile.TemporaryDirectory(prefix=\"native-wasm-cross-target-\") as tmp:",
+    "+    if True:",
+    "+        tmp = '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/main-acceptance/formal-trajectories'",
+    "         native_out = Path(tmp) / \"native.json\"",
+    "         wasm_out = Path(tmp) / \"wasm.json\"",
+    "         env = dict(os.environ)"
+  ]
+}

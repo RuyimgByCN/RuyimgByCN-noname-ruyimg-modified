@@ -1,0 +1,66 @@
+{
+  "contract": "A successful Native Join inserts the member, enqueues RoomRoster using nonblocking Outbound::try_send, then sends its oneshot JoinReply. With a fresh capacity-8 receiver in this test, the first outbound is its single connected Player seat. Snapshot is projected using the connection-bound member. No production behavior changes are needed.",
+  "source_excerpts": [
+    {
+      "path": "apps/game-server/src/room_native_actor.rs",
+      "sha256": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+      "excerpts": [
+        {
+          "first_line": 350,
+          "last_line": 387,
+          "source": "                        }\n                        if let Some((conn, seat)) = reclaimed {\n                            members.remove(&conn);\n                            info!(room = id, conn, seat, \"\u539f\u751f\u623f\u95f4\u56de\u6536\u7f3a\u5e2d\u5ea7\u4f4d\uff08\u60f0\u6027\u8d85\u65f6\uff09\");\n                        }\n                        let m = NativeActorMember {\n                            last_seen: std::time::Instant::now(),\n                            connection_id,\n                            display_name,\n                            player_id: joined.member.player_id,\n                            seat: joined.member.seat,\n                            role: joined.member.role,\n                            outbound: Some(outbound),\n                        };\n                        let reply_payload = JoinReply {\n                            player_id: joined.member.player_id.raw(),\n                            seat: joined.member.seat,\n                            role: joined.member.role,\n                            reconnect_token: joined.member.reconnect_token.clone(),\n                            view: joined.view,\n                            choice: session.choice_for(\n                                joined.member.role.into(),\n                                Some(joined.member.player_id),\n                            ),\n                            legal_actions: joined.legal_actions,\n                        };\n                        members.retain(|connection, _| {\n                            session.members().any(|member| member.connection_id == *connection)\n                        });\n                        members.insert(connection_id, m);\n                        broadcast_roster_native(id, &mut members, &session).await;\n                        let _ = reply.send(Ok(reply_payload));\n                    }\n                    Err(e) => {\n                        if let Some(before) = before {\n                            session.rollback(before);\n                        }\n                        let _ = reply.send(Err(e));"
+        },
+        {
+          "first_line": 748,
+          "last_line": 775,
+          "source": "}\n\nfn roster_message(\n    room_id: u64,\n    members: &HashMap<u64, NativeActorMember>,\n    session: &NativeRoomSession,\n) -> ServerMessage {\n    let mut seats: Vec<SeatPresence> = members\n        .values()\n        .filter(|m| m.role == ClientRole::Player)\n        .map(|m| SeatPresence {\n            seat: m.seat,\n            player_id: m.player_id.raw(),\n            display_name: m.display_name.clone(),\n            connected: m.outbound.is_some(),\n            managed: session.timeout_state().managed_seats.contains(&m.seat),\n        })\n        .collect();\n    seats.sort_by_key(|s| s.seat);\n    ServerMessage::RoomRoster {\n        room_id,\n        seats,\n        started: true,\n        finished: session.engine().outcome().is_some(),\n        choice_timeout_secs: Some(session.timeout_state().choice_timeout_secs),\n    }\n}\n"
+        },
+        {
+          "first_line": 791,
+          "last_line": 815,
+          "source": "async fn broadcast_roster_native(\n    room_id: u64,\n    members: &mut HashMap<u64, NativeActorMember>,\n    session: &NativeRoomSession,\n) {\n    let msg = roster_message(room_id, members, session);\n    let mut stalled = Vec::new();\n    for m in members.values() {\n        if let Some(out) = &m.outbound {\n            if out.try_send(&msg) == SendStatus::Full {\n                stalled.push(m.connection_id);\n            }\n        }\n    }\n    if stalled.is_empty() {\n        return;\n    }\n    drop_stalled(members, stalled);\n    // \u5df2\u65ad\u5f00\u7684\u8fde\u63a5\u4e0d\u5e94\u518d\u51fa\u73b0\u5728\u540d\u518c\u7684 connected=true \u4e2d\uff1b\u4ec5\u5bf9\u5269\u4f59\u8fde\u63a5\u91cd\u53d1\u3002\n    let msg = roster_message(room_id, members, session);\n    for m in members.values() {\n        if let Some(out) = &m.outbound {\n            let _ = out.try_send(&msg);\n        }\n    }"
+        }
+      ]
+    },
+    {
+      "path": "apps/game-server/src/session.rs",
+      "sha256": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533",
+      "excerpts": [
+        {
+          "first_line": 46,
+          "last_line": 61,
+          "source": "\n    /// \u6709\u754c\u975e\u963b\u585e\u53d1\u9001\uff1a\u961f\u5217\u6ee1\u65f6\u6807\u8bb0\u6162\u8fde\u63a5\u5e76\u8fd4\u56de `Full`\uff0c\u7edd\u4e0d\u7b49\u5f85\u3002\n    pub fn try_send(&self, msg: &ServerMessage) -> SendStatus {\n        let Ok(text) = encode_s2c(msg) else {\n            return SendStatus::Closed;\n        };\n        match self.tx.try_send(text) {\n            Ok(()) => SendStatus::Queued,\n            Err(mpsc::error::TrySendError::Full(_)) => {\n                self.mark_slow();\n                SendStatus::Full\n            }\n            Err(mpsc::error::TrySendError::Closed(_)) => SendStatus::Closed,\n        }\n    }\n"
+        }
+      ]
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "sha256": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+      "excerpts": [
+        {
+          "first_line": 244,
+          "last_line": 291,
+          "source": "    /// \u5165\u5ea7\uff08\u6ee1\u5ea7\u6216\u5ea7\u4f4d\u88ab\u5360\u65f6\u8fd4\u56de\u9519\u8bef\uff1b\u540c\u4ee4\u724c\u4e3a\u91cd\u8fde\uff09\u3002\n    pub fn join(\n        &mut self,\n        connection_id: u64,\n        preferred_seat: Option<u8>,\n        reconnect_token: Option<String>,\n    ) -> Result<NativeJoinReply, String> {\n        // \u91cd\u8fde\uff1a\u6362\u7ed1\u8fde\u63a5\u3001\u4fdd\u7559\u5ea7\u4f4d\u4e0e\u4ee4\u724c\n        if let Some(token) = reconnect_token {\n            if let Some(old) = self.by_token.get(&token).copied() {\n                if old != connection_id && self.members.contains_key(&connection_id) {\n                    return Err(\"connection already in room\".into());\n                }\n                if let Some(mut m) = self.members.remove(&old) {\n                    m.connection_id = connection_id;\n                    if m.role == ClientRole::Player {\n                        self.timeout.managed_seats.retain(|s| *s != m.seat);\n                    }\n                    let reply = self.reply_for(&m);\n                    self.by_token.insert(token, connection_id);\n                    self.members.insert(connection_id, m);\n                    return Ok(reply);\n                }\n            }\n            return Err(\"invalid reconnect token\".into());\n        }\n        if self.members.contains_key(&connection_id) {\n            return Err(\"connection already in room\".into());\n        }\n        let seat = preferred_seat\n            .filter(|s| *s < self.max_seats && !self.seat_taken(*s))\n            .or_else(|| (0..self.max_seats).find(|s| !self.seat_taken(*s)))\n            .ok_or_else(|| \"room full\".to_string())?;\n        let token = uuid::Uuid::new_v4().to_string();\n        self.next_token += 1;\n        let member = NativeMember {\n            connection_id,\n            player_id: PlayerId::new(seat as u32 + 1),\n            seat,\n            role: ClientRole::Player,\n            reconnect_token: token.clone(),\n        };\n        self.by_token.insert(token, connection_id);\n        let reply = self.reply_for(&member);\n        self.members.insert(connection_id, member);\n        Ok(reply)\n    }\n"
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-protocol/src/messages.rs",
+      "sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "excerpts": [
+        {
+          "first_line": 160,
+          "last_line": 176,
+          "source": "        /// Public event codes only (optional sanitized list).\n        public_event_codes: Vec<u32>,\n    },\n    /// Room public roster update.\n    RoomRoster {\n        /// Native room window; legacy rooms have no choice timer.\n        choice_timeout_secs: Option<u8>,\n        /// Room id.\n        room_id: u64,\n        /// Seats filled.\n        seats: Vec<SeatPresence>,\n        /// Match started?\n        started: bool,\n        /// Finished?\n        finished: bool,\n    },\n    /// Snapshot response."
+        },
+        {
+          "first_line": 216,
+          "last_line": 232,
+          "source": "/// Presence of a seat (public).\n#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]\npub struct SeatPresence {\n    /// Seat index.\n    pub seat: u8,\n    /// Player id if seated.\n    pub player_id: u32,\n    /// Display name (sanitized).\n    pub display_name: String,\n    /// Connected now.\n    pub connected: bool,\n    /// Server-controlled seat takeover.\n    pub managed: bool,\n}\n\n/// Safe error codes (no hidden-state leakage).\n#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]"
+        }
+      ]
+    }
+  ],
+  "timeout": "new 3-second roster receive bound; existing timing thresholds unchanged",
+  "callers": "Only nc09_native_actor_join_command_snapshot changes; existing actor/module imports, configured join/reconnect helper, receipt and lazy reclamation tests remain unchanged."
+}

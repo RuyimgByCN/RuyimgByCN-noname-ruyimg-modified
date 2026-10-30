@@ -1,0 +1,33 @@
+**perf profile 修正已本地准备；release 实测仍有失败，不能宣称 CI 已修绿。** 本 worker 未 push/dispatch、stage/commit，也未写父 main、其他源码、上游或共享 warm cache。
+基准：本工作区 HEAD `255bbfbd7f6916ee77bd29799826a225bd10871f`；进入时 CI4 文件逐个 SHA 与已验收/已发布 `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 相同；benchmark 及全部工作区依赖 subtree OID 也相同，见 accepted-source-identity.json。
+仅改 `.github/workflows/ci.yml` 两条原 perf 命令，添加 `--release`；保留 `tiers` 和 `tier-report server-baseline` 的参数，并加一行 phase17 注释。`docs/operations/native-ci.md` 增加 3 行口径说明。未调预算、sample/seed、版本、profile 定义或代码。
+源码依据：root README 指向 phase17；benchmark-runner 目录无独立 README。phase17 第43–44行明确历史测量使用 release；实现仍依赖旧 `engine-core`/`engine-ai`，tier 定义保留 100/300/200/100 µs 门槛和超预算 exit1。本次不是 engine-native 性能测量或代码优化，不报告提速百分比。
+实际 run 41053688083 的首轮 raw 日志、initial-jobs 与其 SHA 已原样复制到 evidence/perf-profile；真实两个 perf job exit1 不被本次结果覆盖。日志实际 argv 均为 `cargo run -q -p benchmark-runner -- tier-report server-baseline`（默认 debug）。
+
+| 来源/profile | start /100 µs | distance /300 µs | restore /200 µs | projection /100 µs | exit |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 首轮 Actions Ubuntu/debug | 5541 | 3 | 1925 | 677 | 1 |
+| 首轮 Actions macOS/debug | 1737 | 23 | 425 | 205 | 1 |
+| 本机 debug | 1204 | 1 | 347 | 149 | 1 |
+| 本机 release | **151** | 0 | 44 | 20 | **1** |
+
+本机为 Apple M3 Max / aarch64 macOS，rustc/cargo 1.95.0；两 profile 使用同一工具链、同源、同 `tier-report server-baseline` workload，只有构建 profile 不同。CI 为 rustc 1.99.1；不同机器/工具链的结果不混作前后收益。distance 的 0 为整数微秒量化，并非零成本。
+本机 release 的 start 151 µs 仍超过 100 µs，其余三项通过。未重试挑选数字、修改阈值、跳过场景或自作 runtime 优化。若需消除剩余旧 engine-core start 成本，父线程须另定诊断/优化范围；此 patch 只纠正测量 profile。
+独占 `../target-perf` 经不存在/无 owner 检查后创建，在 `/tmp/noname-run-serialized.py` 全局锁内构建；`CARGO_INCREMENTAL=0`、jobs=2、offline/locked，不借 main/A/NC10 target。
+命令：`cargo build --offline --locked -j 2 -p benchmark-runner` 与同命令加 `--release`，各 build exit0；随后各自 binary 执行 `tiers`（均 exit0）和 `tier-report server-baseline`（均 exit1）。源码中的固定 50/10000/100/10000 次测量不变。
+每次 compile 后记录磁盘、清 incremental 与该 profile 输出；最终整个 target-perf 移除，没有保留无用 target 或二进制副本。最终本任务清理记录 free 139,680,067,584 B（并发磁盘快照，不是空间收益）。
+Debug binary SHA-256：`185ae7ca33cc01d9c9ad49b45257fa364a9dd997433faf73e2c9dbaa9a2fc106`；release：`904a37cc82a9baa8e9e471677c9469846fb1ec2daa61d0dfb5f35c26044dfffb`。
+
+[纯增量 patch（32行；2文件9 additions/2 deletions）](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/perf-profile/perf-profile-only.patch) 相对已审 CI4，排除旧 CI/input 修正及只读6资源前提。
+Patch SHA-256：`218947aa6fef829ca788a645b645712d6ba20efeb0157a3dfab074f540ea33c7`。
+
+| 文件 | accepted CI4 base SHA-256 | final SHA-256 |
+| --- | --- | --- |
+| `.github/workflows/ci.yml` | `1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb` | `4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698` |
+| `docs/operations/native-ci.md` | `cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f` | `8de170b289eb7f33dde6907e7dba61f1525e8fe3b44e46c769f054c9d7212323` |
+
+轻量检查均 exit0：YAML 解析、两条命令移除新增 `--release` 后 token 与原命令完全一致、bash -n、其他四 jobs 与 perf 其余 steps/矩阵逐项相同、5jobs/10矩阵不变、旧 inputs/wasm-pack/datahash guard 与6资源 SHA不变、git diff --check、patch reverse --check、2个行数单测与8972文件行数门禁。actionlint 未安装；没有安装工具或改 Node 版本。
+产品 index SHA 仍为 `f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f`，staged files 为空；benchmark source/Cargo.lock/Cargo.toml 前后 SHA 不变。父 main 正在进行的其他工作未作为本任务的构建输入或写入目标。
+证据：[perf-profile 目录](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/perf-profile)，含 original-failure-sha256.json、原始两个 raw.log/initial-jobs、accepted-source-identity.json、benchmark-source-sha256.json、measurement-context.json、diagnostic-results.json、debug/release-build.log、debug/release-tier-report.log、static-validation.json、cleanup.json、final-evidence.json；所有 argv/退出码/源码与 binary SHA 可复核。
+下一步：父线程独立审查这份 profile-only patch，并按裁决25自行验收提交/发布；本 worker 不发布。新的 release CI 尚未运行，首轮 gates/desktop 状态不属于本任务修复。剩余 release start regression 已向父线程报告，不能把 profile 修正或旧线结果称作原生优化完成。
+未检查：新的 GitHub release-profile perf 两平台结果、其他失败 jobs、Rust runtime 优化；已知风险是本机 release 仍 exit1，必须保留失败。

@@ -1,0 +1,2 @@
+{"scenario":"start-hash","samples":200,"total_us":10087,"p50_ns":48208,"p99_ns":61292,"cpu":"aarch64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=48208 p99_ns=61292 total_us=10087

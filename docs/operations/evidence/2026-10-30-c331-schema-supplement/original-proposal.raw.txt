@@ -1,0 +1,70 @@
+# ADR0788 包排序元数据兼容补充审批稿（只读草案，未批准）
+核验日期：2026-10-30；当前HEAD `9dbc65530feb695688d3160dc38b6cf64ad39ecd`＋A330候选。A330 final preflight/review仍由父负责；本稿不宣布A验收、不实施C331、不占用schema4或其他版本号、不新立ADR。
+本次只重读8处必要正文，另复用6处已读调用体并核对当前SHA256；13份有旧指纹者一致，engine-api/version.rs首次单独取指纹。证据：[本轮源码与指纹](/tmp/c331-schema-supplement.rOwtY5/sourceproof.json)、[当前带行号正文](/tmp/c331-schema-supplement.rOwtY5/current-bodies.txt)、[复用调用体](/tmp/c331-schema-supplement.rOwtY5/reused-callers.txt)。以下是sourceproof；没有编译、旧读者实验或运行trace。
+
+要批准的增量与原C22边界：
+- C22已经批准：Skill(SkillDefId)、PickTag/Answer/ResolveChoice、trigger_order、小型可恢复机器、timing/effective priority/order_selectable及必要hash/冻结身份；A330真实验收之后独占规则330→331。上述实现仍未发生。
+- 本次新增外部contract、须用户另批：仅含非默认排序数据的新包使用content schema4；新宿主支持schema3默认语义与schema4，旧原生schema3宿主受控拒schema4；编译与包工具按实际数据选择输出schema，所有执行入口强制校验该组合。此项不是C22对“必要元数据”的自动授权。
+- 维持package format1、VM/宿主ABI758、NGSA105、WS6和engine_api数值1；本补充不新增VM指令/查询/效果、命令、Worker信封或WS字段，不授权forceDie/out/indexed/hidden/filterStop的新状态/ABI。105尾追加tag的独立恢复证明仍按C22验收，不由schema4批准代替。
+
+阻断的当前真实路径：
+1. [PackageTriggerEntry:242](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs:242)与ContentPackage:709均derive Deserialize且无deny_unknown_fields；`ContentPackage::from_json_bytes:1054`仅serde_json::from_slice。旧typed索引没有timing/priority/order_selectable，默认serde会丢弃这些未知字段；反序列化本身不验证包hash或排序语义。
+2. [bridge_vm_skill_decls:260](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/lib.rs:260)是public入口：264查effect ABI，269查模块hash，276调用compat，293校验入口PC/VM模块，294拒非owner确认；没有调用ContentPackage::validate或compute_logic_hash。`:387`生成VmSkillDecl时把timing/priority硬编码Normal/0，名称取t.module。
+3. 同文件schema `validate_vm_effect_abi:766`检查声明ABI下的效果tag，loader `vm_active.rs::validate_entry:162`检查entry_pc与模块验证，二者均不能识别旧typed包已丢掉的排序字段。故合法模块＋兼容schema3/ABI包即使原JSON携非默认priority，旧低层bridge仍有接受并执行成0的路径；这是静态路径证明，尚未运行复现。
+4. [check_engine_compat:15](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime/src/compat.rs:15)按engine_api范围、VM ABI、content_schema、format逐项核对；`:31`在host.content_schema非0时要求精确相等。`:48 tooling_host_versions`明确从schema常量填host.content_schema，`:52`固定engine_api=1；当前[version.rs:6](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api/src/version.rs:6)是schema3。因此有效模块的schema4包进入这个旧public bridge，会在生成decl前因host3/package4返回Incompatible。
+5. 正式读者另有包hash关：[ContentPackage::validate:803](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package.rs:803)的`:819`比较logic_hash；WASM installed_packs.rs::installed_pack:41先validate再bridge；server FrozenNativePackage::parsed_package:39先content hash→parse→validate→compat→绑定identity/hash。不能用这些调用者的额外检查冒充旧public bridge已有包hash校验。
+6. 拒绝保证必须精确：旧原生bridge固定host schema3，故拒合规schema4；通用compat:31对host.content_schema=0跳过schema轴，不能声称任意旧自定义host也拒4。新执行入口必须拒schema未知/0绕过；任何真实旧自定义执行者若以0绕过且不校验新包hash，仍是阻断，不能登记其兼容完成。
+
+建议最小合同（批准后才实现）：
+| 载荷／宿主 | 承诺行为 |
+|---|---|
+| schema3旧包 | 缺省timing=normal、priority=0、order_selectable=true；不改原字节/manifest/hash/version。新宿主继续读默认包，显式写出完全相同默认值也只能产生相同排序语义。 |
+| schema3带任一非默认排序 | 新宿主的parse后validate、public bridge、正式导入、冻结恢复和legacy入口一律拒绝；即使重算了新hash也拒绝。不能自动忽略或运行时默升schema，作者须重新发布schema4新版本。 |
+| schema4新包 | 至少一条trigger有非默认排序；允许其余条目省略默认值。字段为timing∈{normal,first,last}、priority为effective i32、order_selectable为bool，默认同schema3；未知timing、非整数／越界priority、非法bool拒绝。不由optional、locale或tooltip推导。 |
+| schema4但全默认／未知schema | 本方案不产出全默认schema4，验证也拒该非规范组合；schema0、未来5及其他未支持值不得以“>=3都兼容”放行。只接收明确支持的3/4数据契约。 |
+| 新原生host与旧native host | 新host公布支持schema4并显式支持schema3默认，旧native/tooling host3拒4；format1/API1/ABI758其他轴保持。禁止只把常量3→4后继续精确相等，导致原schema3全部失效。 |
+| 新legacy engine-core | 保持schema3默认包原行为；对于本次非默认排序包明确拒绝，不借本补充把旧调度器改成C规则。共享兼容层可认识4，不等于legacy执行层支持4。 |
+| 旧档／冻结包 | 新C规则仍按规则版本拒330及更早NGSA；schema3包能被新局装载不意味着旧规则档可恢复。旧字节、包版本、安装副本/锁、冻结JSON和匹配旧执行路径保留；不改头、checksum、logic_hash或旧锁伪造迁移。 |
+新schema4合同只保证合规新产物被旧bridge拒绝。若恶意把其manifest改成schema3，旧binary反序列化又丢掉新字段，旧低层bridge可能接受；新宿主必须拒这种降级，旧正式读者应因hash不符拒绝。不能通过修改新host追溯修好旧binary；若验收要求旧低层bridge对这种伪装也必拒，本方案无法满足，需明确旧执行程序停用/升级等另行处置，不能写成已关闭。
+
+调用方支持范围与最小改动面（仅审批设计）：
+| 层／已有精确入口 | 批准后需要支持 |
+|---|---|
+| engine-api `version.rs::{CONTENT_SCHEMA_VERSION,VersionBundle::current}` | 报告最高支持4，API仍1；与“默认包输出schema3”分开。审计该常量及PackageManifest::new所有消费者，不能把最新读能力当每份产物必须使用4。 |
+| schema `package.rs::{PackageManifest::new,PackageTriggerEntry,ContentPackage::validate}` | 普通构造继续输出schema3；类型解码保留三字段，validate检查schema/字段组合与hash；包验证对非默认schema3拒绝。新public bridge必须直接调用这项验证，不能依赖上层恰好调用过。 |
+| compiler `lib.rs::compile_source_named:92/101/270`；merge/rehash工具 | 现DSL仅生成默认索引，继续schema3/原hash；来源迁移将已批准的非默认元数据补齐后，在hash生成前显式选择4并发布新版本。merge保留整条索引并重新判断schema，不能保留host schema3却混入donor非默认字段；不增加DSL语法或VM原语。 |
+| runtime `compat.rs::check_engine_compat/tooling_host_versions`；store/install/lock | 新host4接受manifest3或4，host3只接受3；执行入口不容0未知绕过。compat只看manifest，schema3内部是否默认必须由schema验证保证；安装、锁定装载、更新/回滚/依赖闭包仍验证原内容身份。 |
+| loader `lib.rs::bridge_vm_skill_decls`／`vm_active.rs::bridge_active_entries` | public路径自身验证完整包与组合，消费实际timing/priority/order_selectable，禁止静默回Normal/0；模块验证、filter映射、choice_actor限制保留。直接ExtensionPack不经过schema轴，继续按C22补语义指纹与当前可表达性校验，不宣称被schema4自动保护。 |
+| Worker/WASM `installed_packs.rs::{installed_pack,validate_pack_json,packs_from_json}`；TS `bundledNativePackages/extensionStore` | 正式validate→bridge支持3默认/4；TS结构检查及canonical payload必须保留schema与元数据，指纹来自完整logic_hash，拒绝前不写安装状态。不新增Worker命令；新旧WASM分别实测，不能只测TS。 |
+| server `NativeContent::{load_scoped,load_frozen}`／`FrozenNativePackage::parsed_package` | 统一validate/compat/bridge支持范围；保留content_hash、logic_hash、manifest identity、资产和撤销校验；拒绝不能回退当前包替换原局包。HTTP与room/WAL恢复均使用同一冻结合同，不增server/WAL字段。 |
+| legacy `ContentRegistry::validate_package_for_load:8`／`load_package_inner:255` | 新验证先于同hash幂等早退：schema3非默认及schema4拒执行，schema3默认照旧。当前触发映射Normal/0且SkillMetadata是skill级信息，不能只让共享新hash通过后沿旧映射运行；不把每handler排序塞入SkillMetadata。 |
+canonical hash与发行：保留旧schema3全默认的既有hash输入逐字节中性；[hashing.rs:11](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema/src/package/hashing.rs:11)已hash schema轴，schema4不会与schema3共用原hash。对新非默认条目追加域分隔`trigger-order/v1`规范段：条目数量、有序条目、trigger_def_id/skill_def_id、长度界定event/module、entry_pc、timing tag、i32小端priority、bool；绑定真实handler，保留声明顺序，不按名字重排后掩盖差异。默认条目不额外写段；具体编码须作为新hash合同随实现固定并测试。
+真实修正版必须使用新不可变包版本、新manifest.logic_hash/content hash和依赖锁；旧包原件／冻结锁不重hash。Worker installed identity已绑定完整JSON、server frozen已绑定内容/逻辑hash，直接ExtensionPack name/version锁仍须按C22补语义身份；展示locale改变不得改变order_selectable或排序逻辑hash。
+
+多handler的最小可表达边界（没有解决的仍pending）：
+- 当前loader/lib.rs:388触发-only名字来自module；[vm_active.rs:82](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader/src/vm_active.rs:82)只对具active声明的logical skill分组，`:98`仅拒mixed optional，`:121`取首meta，`:130`合extra_events；不能推断priority/timing/selectable/name已一致。
+- 本补充只允许完整保留且能映射到一个稳定logical skill身份、各handler排序元组一致的组合；逐handler event/filter/module/entry和声明顺序仍保存。若同logical skill含不同timing/priority/selectable或名字/归属冲突，必须给出明确unsupported/conflict并保留原包，不能取首项、覆盖、拆成假技能名或丢handler。trigger-only多个handler尚未统一身份的情况也须明确拒绝或留pending，不能由schema4掩盖。
+- 上述拒绝是避免错误装载的最小实现边界，不是来源豁免；真实需要跨handler不同排序的来源仍阻断其验收。若需按occurrence/handler调度、indexedData或额外VM上下文，另给具体合同审批；本补充不批准新续行字段/VM作者ABI来兜底。
+
+必须执行的矩阵（全部未来要求；当前只证明源码路径）：
+| 入口／数据与负控 | 必须得到的结果与证据 |
+|---|---|
+| 固定旧schema3 reader与旧public bridge，真实默认DSL包＋合法模块 | 先确认默认包成功；原JSON只注入priority=7等未知字段、仍标schema3时，记录旧typed字段丢失／旧bridge硬编码0的实际反例。分别测试旧hash保留与新语义hash两种输入：旧正式读者未必拒前者，旧bridge不校验包hash，不能把形式上失败当语义门禁。 |
+| 合规schema4同一真实包→旧public bridge | 模块与ABI必须先通过，旧bridge实际到compat以schema3/4不匹配拒绝，不能靠坏字节码/坏module hash制造假绿；不生成VmSkillDecl、不启动效果。固定旧源码/二进制指纹，不能用改好的新reader冒充旧reader。 |
+| 合规schema4→旧正式安装／WASM／server冻结读者 | 各路径均受控拒绝，无安装/锁/句柄/房间状态提交；旧正式读者允许先logic_hash mismatch或schema不兼容，记录实际先后，不强求一个虚假统一错误。缺模块/依赖拒绝另测，不能代替schema拒旧。 |
+| 新host×schema3默认／schema4非默认；legacy×两者 | 新native二者成功，schema3显式默认与省略默认同语义/hash；legacy只接受3默认，明确拒4／3非默认。新host0、未知schema、4全默认、越界/浮点priority、坏timing/bool拒绝；新compat的3/4矩阵不误放host3包4。 |
+| downgrade/tamper | schema4改3并重算或不重算hash，新host都拒非默认schema3；只改priority/timing/selectable、handler身份/顺序、manifest schema/version、冻结JSON/锁/资产均hash变化或受控拒绝。旧低层bridge对伪装3的已知局限必须实记，不改其失败期望装绿；通用旧host0分支也单独记录。 |
+| 公共bridge独立调用；formal caller与幂等重导入 | 直接构造typed包/从JSON parse后调用新bridge均不能绕过package.validate与schema组合；先查hash/契约再幂等早退。旧reader/newreader正反向、同ID不同immutable版本/logic_hash、同key篡改payload、缺包/错锁都保留原内容且拒错误提交。 |
+| 真DSL→包补合法来源元数据→编译/merge/rehash→正式安装→武将授技→真实事件 | 默认保持3，非默认产物为4；用正常事件和真实filter/effect验证First/Normal/Last、effective priority、selectable自动/选序及非交换效果，覆盖host+VM与可表示的多handler。元数据补齐后升级schema/hash是显式发行步骤，不冒称现DSL语法已有非默认排序。 |
+| 同包字节存读/进程恢复＋真实native/WASM/server/Worker | pending trigger_order、OptionalGate、效果选择、子事件/yield与冻结包恢复比较完整状态/事件/choices/RNG/continuation；仅保存原JSON不够。已答WAL含Skill不重算策略、重试/人工timeout竞争和持久化失败恰一次；旧330原档受控拒、旧包/锁字节保持。 |
+| 必须能红的负控 | 删schema gate则旧bridge反例/新schema3非默认拒绝测试失败；compat恢复精确4==4则schema3成功测试失败；漏hash字段、丢merge元数据、取首handler meta或跳过legacy拒绝均须失败。保留首次失败与完整运行结果，不以补跑改写历史。 |
+后续入口复用content-schema／content-compiler／content-native-loader／content-runtime测试，WASM vm_package_integrity/installed_package_payload，server frozen/GT014/ADR0787/WAL，Worker正式包安装/恢复与C331原生矩阵；新测试路径由writer按现分组登记，不能把本稿表格称作testexists。验收仍包括原生三包、workspace/conformance、frontend/typecheck、严格Gate1b/preflight与行数门禁。
+
+更小方式的比较：
+| 候选 | 当前代码证据与结论 |
+|---|---|
+| 只增hash段／只加强新bridge／保留schema3 | 旧public bridge既不查包hash也不认识字段，无法改变旧binary的接受路径；不满足此次不豁免public bridge的要求。 |
+| 复用min_engine_api=2而保持schema3 | 旧tooling host固定1，确能拒；但新host也须改engine_api能力/兼容策略，旧包常为范围[1,1]又须特殊保留，属于另一个外部API轴改约，无比schema4更小的证据。不能借choice_actor等真实语义字段当拒旧哨兵。 |
+| 提高VM ABI或package format | 旧门禁可拒，却把纯包排序元数据变成ABI759/format2的新增合同；无需VM新能力也无编码布局需求，不推荐，不在本稿授权请求中。 |
+建议父独立review后向用户提交的明确增量：批准上述schema4发行与3/4读取/拒绝合同、hash与不可变包策略、legacy拒执行边界，以及逐入口真实拒旧矩阵；不批准任何其他版本轴或缺失VM能力。若实际旧host0执行者、伪装3的旧binary保证或多handler真实来源要求超出所列边界，先保留对应阻断，另报具体处置，不据此直接实施。
+本轮只写本指定报告与`/tmp/c331-schema-supplement.rOwtY5`证据；未改main源码/包/expectations/版本/index/remote/target，无编译或测试。A330真实main acceptance、用户对本补充的明确批准以及随后C331实际验证仍均不可由本稿代替。

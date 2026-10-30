@@ -1,0 +1,32 @@
+# CI release profile 独立只读复审
+
+**结论：配置口径修正 OK；本两文件补丁无新增 P1/P2。perf 尚未修绿：本机 release 的 start 151 µs > 100 µs，tier-report exit 1，必须保留为待诊断失败。**
+范围：只审相对已发布 CI4 `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 的 profile-only patch；完整读取新 handoff、真实两文件差异、README→phase17 依据、benchmark 参数/预算/退出路径及原始诊断日志。未重做此前 CI 输入 P1 closure，未运行 build/Cargo/二进制，未写 source/index/main/上游或调用 GitHub。
+
+- `.github/workflows/ci.yml:192–198` 两条原命令各增加一个 Cargo `--release`，都位于 `--` 分隔符之前；`tiers` 与 `tier-report server-baseline` 的 binary 参数不变。折叠 YAML 的第二条命令解析为正常单行 argv，bash 语法通过。
+- 独立读取发布 commit 的原 workflow/doc，与保存的 CI4 before 文件逐字节一致。将新 workflow 的两个 run 恢复原值后，**整个解析对象等于已发布原版**：5 jobs/10 矩阵、perf 其他 steps、其余全部 gate/平台/inputs/条件/权限/cache/artifact 配置均未变。新增一条说明注释不改变执行。
+- `docs/operations/native-ci.md:61–63` 仅新增三行说明及空行，正确限定为 phase17 的历史 release profile 和旧 engine-core 线，不声明 engine-native 优化或提速百分比。README 指向的 phase17 第43–44行明确 release；Cargo 默认不带 `--release` 的 run 使用 dev/debug，原两平台日志也确为该 argv。
+- benchmark Cargo.toml 依赖旧 `engine-core`/`engine-ai`；main.rs/device_tiers.rs、Cargo.toml/Cargo.lock 已与发布 CI4 真实 blob 对照一致。未改 profile 定义、阈值、seed、人数、样本、数据输入或运行时代码。server-baseline 四项预算仍为 100/300/200/100 µs；工作量仍为 start 50、distance 10,000（另100 warmup）、restore 100、projection 10,000，固定 seed42，超预算仍 exit1。
+
+失败与限制：
+
+| 证据来源 | start /100 µs | distance /300 µs | restore /200 µs | projection /100 µs | exit |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 真实 Actions Ubuntu，原 debug 命令 | 5541 | 3 | 1925 | 677 | 1 |
+| 真实 Actions macOS，原 debug 命令 | 1737 | 23 | 425 | 205 | 1 |
+| 实现 worker 本机 release 诊断 | **151** | 0 | 44 | 20 | **1** |
+
+原始两平台 raw log 与 initial-jobs SHA 均重新核对相符。父提供的 run `41053688083` 最终状态为 completed/failure，5 success、5 failure；本次未另查 GitHub，两个 perf failure 已从原始日志独立确认。新增 release 配置尚无 Actions 结果，不能覆盖首轮失败或宣称整个 perf/CI 修复完成。
+本机 Apple M3 Max、rustc1.95 与 CI rustc1.99/设备不同，不作跨机器收益比较；整数微秒的 distance=0 不是零成本。release start 的 151 µs 显示当前旧线固定 workload 仍超预算，具体成本根因待父线程另行源码诊断；本补丁只纠正测量构建口径。
+
+验证与保护：`python3 -B ../evidence/perf-profile/review/check-profile.py` 通过，覆盖发布基准/完整 workflow 等价、精确 doc 插入、源码与原始失败哈希、失败保留、两条 `bash -n`、`git apply --reverse --check` 和 `git diff --check`。未重复安装/编译/测量；实现 worker 的 target-perf 已不存在，无新增 build 目录。证据见 [perf-profile/review](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/perf-profile/review)。
+两文件、其余两个 CI 输入文件、benchmark/Cargo 文件、patch、候选 HEAD、tracked diff、index 入口出口均未变，staged 为空；候选 index SHA=`f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f`。本次仅新增自有 review 证据及此报告。
+
+| 审查对象 | 入口 = 出口 SHA-256 |
+| --- | --- |
+| `.github/workflows/ci.yml` | `4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698` |
+| `docs/operations/native-ci.md` | `8de170b289eb7f33dde6907e7dba61f1525e8fe3b44e46c769f054c9d7212323` |
+| `perf-profile-only.patch` | `218947aa6fef829ca788a645b645712d6ba20efeb0157a3dfab074f540ea33c7` |
+
+下一步：父可验收此配置补丁；继续独立诊断 release start 超预算。该结论不扩大 source 优化范围，不修改或替代任何性能门槛。
+未检查：新 release-profile 两平台 Actions、其他失败 jobs、runtime 优化与全平台性能；本次无构建、无外部动作。已知风险：release 本机仍失败，新 runner 结果未知，不能称整个 perf 已修复。

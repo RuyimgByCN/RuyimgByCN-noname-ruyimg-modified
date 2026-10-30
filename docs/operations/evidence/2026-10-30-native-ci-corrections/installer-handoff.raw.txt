@@ -1,0 +1,50 @@
+Implemented Windows/Linux installer Unicode metadata correction on detached accepted source `9dbc65530feb695688d3160dc38b6cf64ad39ecd`; no commit/stage/push/dispatch/settings changes.
+Changed files: root Tauri config, Linux platform config, Linux desktop template, existing build-pipeline tests, native-ci documentation (five files).
+Windows: retain `无名杀 Next`; set existing `bundle.windows.wix.language="zh-CN"`. First-CI bundler maps this to language 2052 / summary codepage 936; WiX 3.14.1 zh-cn UI localization sets database `Codepage="936"` (Chinese name round-trips in cp936, fails cp1252).
+Linux: supported schema has no packageName; automatic platform merge uses technical `productName="noname-next"`, retaining Chinese window title and `Name=无名杀 Next` through one DEB/RPM template. AppImage reuses DEB generation. Linux package/bundle/resource-directory/desktop-file stems become ASCII; existing binary remains `noname-next-desktop`.
+All original targets remain enabled. macOS identity/config/targets/signing, identifier and capabilities retain prior semantics; no rules/protocol/ABI/dependencies/product flows changed.
+Raw first-run failures: run `41053688083`, Windows LGHT0311/1252, Ubuntu invalid RPM name `无名杀-next`; original logs are in supplied main-checkout first-publication directory.
+Raw SHA-256 Windows: `f1db45af81ad893e7c7cf82e013a7ed2929a28d7a760c971329c0405a9f78193`; Ubuntu: `0abac1175fde025798ad8e127ba0f7aa522adf753829a67bb17cc041dbb7045d`.
+Actual tool semantics read: workspace Tauri 2.11.5/utils 2.9.3; installed Node CLI 2.11.4; first-CI CLI 2.12.4/bundler 2.10.4/utils 2.10.2. Six relevant installed/first-CI schema definitions are identical.
+Read-only source download SHA: bundler crate `ec436f80e3f9dc5f87e449652cc21fd546760b5ee6b4646cec30e95b68fd9104`; WiX zh-CN source `61cbfae0a52b3561df846999f6bcf81abf0d9208845d254887ee17c000938279`.
+
+| File | Before SHA-256 | After SHA-256 |
+| --- | --- | --- |
+| apps/desktop-client/tauri.conf.json | 29763b4f5f7baba1f3d00b0c5916e7051b25936a7885fe2734fca438cc5625d1 | a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556 |
+| apps/desktop-client/tauri.linux.conf.json | absent | 995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736 |
+| apps/desktop-client/linux/main.desktop | absent | 48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5 |
+| apps/web-client/scripts/build-pipeline.test.mjs | cbff2bfdab005616d775c99f1d297ee40aeda867e1467d04176be4ed0ce45825 | 6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e |
+| docs/operations/native-ci.md | cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f | d6421d0857593f861b5815d0ece526c256eadb974b91a770e1ca3183e1df04c9 |
+
+Validation: build-pipeline 10/10; both new regressions fail against 9dbc baseline; real tauri-utils three-platform automatic parse/merge passed; genuine CLI schema passed all merged configs and rejected invented rpm.packageName; source-driven WiX locale and desktop-template content checks passed; source-line unit tests 2/2 and gate passed (8,972 files); doc links/diff/reverse-patch checks passed.
+Evidence directory: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/evidence/`; reproducible self-check sources and locks are in sibling `inspection/`. Rust compiler/harness/binary SHA retained in `toolchain-and-artifact-sha.log`.
+Patch: evidence `installer-unicode-correction.patch`, SHA-256 `5d6eef4f05e29b265b0bcac90a7803be8732c0e63ab6b38dc01dff04918552e7`; contains all five files including new files.
+Rust checks used supplied global wrapper/lock, own ../target, incremental=0/jobs=2/offline; first harness compile had Path/string assertion mismatch, corrected and rerun passed. Initial schema wrapper wait timed out before execution; serialized rerun passed. Own unused target retired after empty lsof; no main/shared target/dist/package writes.
+Open risks/questions: actual corrected MSI/RPM packaging and OS installation remain unverified on this Mac. Template expansion is a content check, not execution of the Linux bundler.
+The original macOS desktop artifact `installer-macos-latest` (32,791,200 bytes), three OS build successes and native-web success are historical individual results; no full-green workflow claimed.
+Recommended next step: independent reviewer gate, then parent-authorized subsequent Windows/Linux CI; worker performed no publication. Pre-existing untracked .pi-lens files preserved; no staged files.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"Five scoped files; Windows existing locale field plus Linux-only technical name/Chinese launcher template; all original targets retained."},
+    {"id":"criterion-2","status":"satisfied","evidence":"Before/after/raw SHA, complete patch, baseline failures, real config/schema checks and retained local logs/sources supplied; independent reviewer gate pending."}
+  ],
+  "changedFiles": ["apps/desktop-client/tauri.conf.json","apps/desktop-client/tauri.linux.conf.json","apps/desktop-client/linux/main.desktop","apps/web-client/scripts/build-pipeline.test.mjs","docs/operations/native-ci.md"],
+  "testsAddedOrUpdated": ["apps/web-client/scripts/build-pipeline.test.mjs: Chinese MSI locale and Linux technical/display names"],
+  "commandsRun": [
+    {"command":"node --test apps/web-client/scripts/build-pipeline.test.mjs","result":"passed","summary":"10/10; new tests separately reject accepted baseline"},
+    {"command":"serialized cargo run --offline --locked --manifest-path ../inspection/config-check/Cargo.toml -- <desktop> <effective>","result":"passed","summary":"tauri-utils 2.9.3 real merge/Config decode for Linux/Windows/macOS; initial harness compile error corrected"},
+    {"command":"python3 -B /tmp/noname-run-serialized.py python3 -B ../inspection/check-schema.py","result":"passed","summary":"Installed CLI real schema parser accepts three effective configs; unknown RPM field rejected; relevant schemas match first-CI version"},
+    {"command":"python3 -B ../inspection/check-content.py","result":"passed","summary":"WiX source-derived 936/2052; Linux template upstream-equivalent except Name; source call paths and metadata-only delta checked"},
+    {"command":"python3 -B -m unittest discover -s scripts -p test_check_source_lines.py; python3 -B scripts/check-source-lines.py","result":"passed","summary":"2 tests and repository line gate passed"},
+    {"command":"git diff --check; git apply --check --reverse ../evidence/installer-unicode-correction.patch; git diff --cached --name-only","result":"passed","summary":"Patch matches current files; whitespace clean; staged output empty"}
+  ],
+  "validationOutput": ["Node 10 passed/0 failed; real merge 3/3; real CLI schema 3/3 plus negative control; source lines 8,972 passed; docs links valid"],
+  "residualRisks": ["MSI/RPM build and installation require subsequent actual platform CI; no full-green claim"],
+  "noStagedFiles": true,
+  "diffSummary": "Windows zh-CN locale and Linux platform metadata/template with two regressions and provenance documentation",
+  "reviewFindings": ["Self-review: no blockers found; independent reviewer gate remains required"],
+  "manualNotes": "Skipped VM/toolchain installation and OS packaging on Mac. Source-derived locale/template content checks are not actual MSI/RPM production; main A330 acceptance remains untouched."
+}
+```

@@ -9,6 +9,10 @@ impl Peer {
     pub(super) async fn connect_url(url: &str) -> Self {
         let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
         assert_eq!(response.status().as_u16(), 101);
+        Self::from_ws(ws).await
+    }
+
+    pub(super) async fn from_ws(ws: WebSocketStream<MaybeTlsStream<TcpStream>>) -> Self {
         let mut peer = Self {
             ws,
             room: 0,

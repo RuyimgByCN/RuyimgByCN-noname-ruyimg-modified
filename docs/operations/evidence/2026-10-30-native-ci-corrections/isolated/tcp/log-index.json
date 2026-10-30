@@ -1,0 +1,233 @@
+[
+  {
+    "label": "corrected-mac-final",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--bin",
+      "game-server",
+      "native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands",
+      "--",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 7.438276052474976,
+    "disk_free_after": 138277756928,
+    "test_counts": [
+      1,
+      0,
+      0
+    ],
+    "harnesses": 1,
+    "markers": [
+      "NATIVE_WS slow_spectator=disconnected commands=301 send_buffer=1024 recv_buffer=1024 buffered_outcomes=178 text_bytes=469178 healthy_outcomes=301 healthy_bytes=893904 reconnect=pass members=3"
+    ],
+    "log_sha256": "1e34b839cc9454eb4e48e92f2f85f2ce675018c161d11a825452cb5eef1aaaa7"
+  },
+  {
+    "label": "corrected-mac-first",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--bin",
+      "game-server",
+      "native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands",
+      "--",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 42.87669229507446,
+    "disk_free_after": 139663159296,
+    "test_counts": [
+      1,
+      0,
+      0
+    ],
+    "harnesses": 1,
+    "markers": [
+      "NATIVE_WS slow_spectator=disconnected commands=301 send_buffer=1024 recv_buffer=1024 buffered_outcomes=179 text_bytes=471816 reconnect=pass members=3"
+    ],
+    "log_sha256": "a58709a3334332434402e4a4925aa56e732738cd0d870da959a9ec934a07e6ab"
+  },
+  {
+    "label": "corrected-mac-health",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--bin",
+      "game-server",
+      "native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands",
+      "--",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 7.516024112701416,
+    "disk_free_after": 139689377792,
+    "test_counts": [
+      1,
+      0,
+      0
+    ],
+    "harnesses": 1,
+    "markers": [
+      "NATIVE_WS slow_spectator=disconnected commands=301 send_buffer=1024 recv_buffer=1024 buffered_outcomes=178 text_bytes=469178 healthy_outcomes=301 healthy_bytes=893904 reconnect=pass members=3"
+    ],
+    "log_sha256": "bd79d99e5c69fcf61347996c11ae78dde704ec8a7647d5583d1fffd8da85f035"
+  },
+  {
+    "label": "linegate-final",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 3.4515981674194336,
+    "disk_free_after": 142428012544,
+    "test_counts": [
+      0,
+      0,
+      0
+    ],
+    "harnesses": 0,
+    "markers": [
+      "Source line limit passed: 8977 files <= 2000 lines; Rust non-test files <= 1000 effective lines"
+    ],
+    "log_sha256": "7f239d7055343fb364116b5b1c974a1bef52439e0ef62721706018a8722ee65b"
+  },
+  {
+    "label": "linegate-tests",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 51.41901421546936,
+    "disk_free_after": 138277892096,
+    "test_counts": [
+      0,
+      0,
+      0
+    ],
+    "harnesses": 0,
+    "markers": [],
+    "log_sha256": "911dce27f37521fca3fdbf8c268a250f67a6293c540610c9f1f26b6455e8722f"
+  },
+  {
+    "label": "linegate",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 3.7790369987487793,
+    "disk_free_after": 138276618240,
+    "test_counts": [
+      0,
+      0,
+      0
+    ],
+    "harnesses": 0,
+    "markers": [
+      "Source line limit passed: 8977 files <= 2000 lines; Rust non-test files <= 1000 effective lines"
+    ],
+    "log_sha256": "ec9cb75c4362d8440d31993f33d473542e40117c6be2c201377f5054f782fefb"
+  },
+  {
+    "label": "original-mac",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--bin",
+      "game-server",
+      "native_ws_e2e::native_extensions_ws_slow_spectator_does_not_block_commands",
+      "--",
+      "--exact",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 61.737762689590454,
+    "disk_free_after": 141287780352,
+    "test_counts": [
+      1,
+      0,
+      0
+    ],
+    "harnesses": 1,
+    "markers": [
+      "NATIVE_WS slow_spectator=disconnected commands=301"
+    ],
+    "log_sha256": "4b44c97e86cdbce1f13d288b66273876231b2aec4aafecc6d3d4884ac9a219d1"
+  },
+  {
+    "label": "server-clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--offline",
+      "-p",
+      "game-server",
+      "--all-targets",
+      "--no-deps"
+    ],
+    "exit": 101,
+    "seconds": 31.291123151779175,
+    "disk_free_after": 138076344320,
+    "test_counts": [
+      0,
+      0,
+      0
+    ],
+    "harnesses": 0,
+    "markers": [],
+    "log_sha256": "8564f2a8de6895fa9a1e7ac65c81c23f628cde5c2feb14093f4d8c674c9ace82"
+  },
+  {
+    "label": "server-suite",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 128.90218305587769,
+    "disk_free_after": 138277920768,
+    "test_counts": [
+      450,
+      0,
+      0
+    ],
+    "harnesses": 32,
+    "markers": [
+      "NATIVE_WS slow_spectator=disconnected commands=301 send_buffer=1024 recv_buffer=1024 buffered_outcomes=176 text_bytes=463902 healthy_outcomes=301 healthy_bytes=893904 reconnect=pass members=3"
+    ],
+    "log_sha256": "ca7a4183427512ebc5af8338989ac31fbbe55878dd6d57de7d55070e181fac80"
+  }
+]

@@ -1,0 +1,8 @@
+=== 服务器基准机 ===
+tier=server-baseline
+  REGRESSION start-hash-p50           158 / 100 us (158%)
+  ✓ distance-query-p95       0 / 300 us (0%)
+  ✓ snapshot-restore         44 / 200 us (22%)
+  ✓ observer-projection      20 / 100 us (20%)
+result=FAIL
+{"command": ["/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner", "tier-report", "server-baseline"], "exit": 1, "locked_seconds": 0.24183579100645147, "disk_free_bytes": 135108579328}

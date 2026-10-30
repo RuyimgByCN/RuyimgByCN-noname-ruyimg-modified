@@ -1,0 +1,5 @@
+{
+  "sample_exit": 0,
+  "loop_exit": 0,
+  "note": "Original sample-before.txt retained as exploratory unguarded capture; this capture holds global heavy lock throughout."
+}

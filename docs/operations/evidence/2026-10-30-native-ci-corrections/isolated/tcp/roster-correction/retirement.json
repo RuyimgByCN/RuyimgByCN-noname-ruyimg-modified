@@ -1,0 +1,16 @@
+{
+  "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/target",
+  "usage": "only this resumed worker; offline manual checks, CARGO_INCREMENTAL=0/jobs2/global wrapper; no shared cache",
+  "bytes_removed": 1498402816,
+  "lsof_exit": 1,
+  "active_users": false,
+  "target_exists_after": false,
+  "default_target_exists": false,
+  "free_bytes_after": 136505561088,
+  "no_staged_files": true,
+  "private_ignore_paths": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs",
+    "apps/game-server/tests/nc09_native_actor.rs"
+  ]
+}

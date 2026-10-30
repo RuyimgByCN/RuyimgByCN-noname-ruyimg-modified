@@ -1,0 +1,122 @@
+{
+  "head": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "index": [],
+  "source13": {
+    ".github/workflows/ci.yml": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+    "apps/desktop-client/linux/main.desktop": "48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5",
+    "apps/desktop-client/tauri.conf.json": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556",
+    "apps/desktop-client/tauri.linux.conf.json": "995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736",
+    "apps/game-server/src/native_ws_e2e.rs": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+    "apps/game-server/src/native_ws_e2e/peer.rs": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+    "apps/game-server/tests/nc09_native_actor.rs": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+    "apps/web-client/scripts/build-pipeline.test.mjs": "6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e",
+    "crates/engine-core/src/content/mod.rs": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+    "crates/engine-core/src/content/standard_pack.rs": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+    "crates/engine-core/src/engine.rs": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+    "docs/operations/native-ci.md": "02962346ecc393e5ca4302fe7e6170df17352a837748c9c96dc2d6ffb1bdab51"
+  },
+  "A_remaining50": {
+    "apps/game-server/src/lobby.rs": "ac9c875407e9e1847d7d4219c777157f7fcc51479adb701b9817373e2cdd45b9",
+    "apps/game-server/src/main.rs": "757e222fee8c0dd1c6a1cc3d90afb556a35030607acdea5ad618b2e98a965569",
+    "apps/game-server/src/native_room_store/tests.rs": "35b5b2769e6b3fa2cec7fe015a6800d92ebf40b919dea73e1e2acdf5cb23b00f",
+    "apps/game-server/src/native_view.rs": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4",
+    "apps/game-server/src/native_ws_e2e/authority.rs": "2a0af2f59c2bbc558fcd16a16ec602be65cf58ab6645fe1c1d3af7839a74317f",
+    "apps/game-server/src/native_ws_e2e/commit_crash.rs": "b61c5a21ce8d350f3097d439d0ff4a59ef2c8c7c859ad5568a2cd963bdcc9a14",
+    "apps/game-server/src/native_ws_e2e/double_failure.rs": "d39598b959a664a7f704d3729c792a3a8d105f7dd290d17fd6399ea462200620",
+    "apps/game-server/src/native_ws_e2e/durability.rs": "4507d1f44f5b7456e6203f7b2348587202853bd34f1a3645eec91839ebfac30c",
+    "apps/game-server/src/native_ws_e2e/referee.rs": "df433618fd856febd3c93c400801f7f61b500efe888ae0b7c20844009167d816",
+    "apps/game-server/src/room.rs": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+    "apps/game-server/src/room_native.rs": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+    "apps/game-server/src/room_native/timeout.rs": "65e8230aa0b4f5fed51cff85172972a7c86d65233f451d1d6ca7021166645495",
+    "apps/game-server/src/room_native/wal.rs": "3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e",
+    "apps/game-server/src/room_native_actor.rs": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+    "apps/game-server/src/room_native_actor/durability.rs": "326593a4426bd812f5524d8478766366cb97ba2d3b8197eb1368d72d56301f49",
+    "apps/game-server/src/room_native_actor/timeout.rs": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+    "apps/game-server/src/session.rs": "be4f6132157f74c0ae1e36efb785ca2a007aeffd60f7ab4aa059180ea1cdb533",
+    "apps/game-server/tests/adr0787_timeout.rs": "73b8d1eb54be76c2ba87b6a3abf6ab13b61fc92ef85d425d026663048ce2019c",
+    "apps/game-server/tests/approved_b_metadata.rs": "a70797a47478c17ffeae9cc221125af873d45e728130ed96ef210ee7d5d94326",
+    "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+    "apps/game-server/tests/nc09_native_durability.rs": "6d465afbc5a227dd2c3737f864c4b4061d1e22c5b8acaf3fd2769f13f93d750b",
+    "apps/game-server/tests/nc09_native_room_session.rs": "8532ab0d8c4d2323fb60b074a0bfd1a1d90173d94c4ca0b902c9bf4409db1ec4",
+    "apps/game-server/tests/nc09_projection_parity.rs": "dd6d44ac2e8d09ece51f866288f772b716acfecba87658755b29547c9aee859c",
+    "apps/game-server/tests/nc09_referee_projection.rs": "d12b2cb1d1aca22b83da1863add7e3be125b5e1ce79c53b2ab9f1ed0cd0f7cd1",
+    "apps/web-client/scripts/nc12-online-rtt.mjs": "e5b38de6989245584797d26b57caf05ea4a111cc006faaf47cfad9de6a36ab1f",
+    "apps/web-client/scripts/network-client.test.mjs": "d168782f0a626188d2e8f5850a0e205a4331812351678eca0aa01e03b37b121e",
+    "apps/web-client/src/engine/networkClient.ts": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+    "apps/web-client/src/engine/observerMetadata.ts": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd",
+    "apps/web-client/src/types/engine.ts": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c",
+    "apps/web-client/src/views/BattleView.vue": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79",
+    "apps/web-client/src/views/HomeView.vue": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2",
+    "crates/engine-api/src/choice.rs": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6",
+    "crates/engine-api/src/command.rs": "4d0c0cf9047a7e50cb2dbd0aa2e345d544c14e491170d64f9a1c9c6b53f8832c",
+    "crates/engine-api/src/version.rs": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs": "7b3295622c2cf1259f4ccb4fcab517c1536a1065a8622d7326e49e5e666b461c",
+    "crates/engine-core/src/snapshot.rs": "0a64cbb3ca80acc7daba5f3c4897596971e9cf40a447d4dc851bebab34c3d0c7",
+    "crates/engine-native-content/src/content/standard.rs": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+    "crates/engine-native-wasm/src/session.rs": "99064278c5afe72f839c926376be782daed78fdadbf18a877fbd593473e59206",
+    "crates/engine-native/src/engine.rs": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd",
+    "crates/engine-native/src/engine/apply_command.rs": "24c3638cedbde91c05295a6b99b4ae639e39aa69f7cb831c75c7e64c4774d72b",
+    "crates/engine-native/src/engine/commands.rs": "c90a989d6b1a5882b5ac50109e26deeacddd5696c7ed015ee8b8fff8d395f32b",
+    "crates/engine-native/tests/adr0786_j2_active_bridge.rs": "defca16798e3c3a3bb7d828625359ae3f08766b22430f9280cffc3a0c6a84998",
+    "crates/engine-native/tests/nc04_cards_given_event.rs": "034cccf7b1e9927b342e50af1302bde342c39ee3b4bc4758010d1ea11b99d5cb",
+    "crates/engine-native/tests/nc04_vm_resume.rs": "c96aafe8030ce00ffb0662aac6a03ee2ba98bd0d6f203c76834567d1d06d1c4d",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs": "19835f516cfeddbb908dd272565ca49e2154a1435dc421a1f4f17b6160a5056e",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs": "0e811fe0dc639ef867dbe95a0fcf03b069460758884b386e35ff80149997ff1b",
+    "crates/engine-native/tests/pa12_tag656_version.rs": "39a36a849ec2495c9304ee180d78302a8f63f757eb81da8eca72bc77edf9c9b9",
+    "crates/engine-native/tests/replay_scenarios.rs": "b41a409610028bbe1664a52df4f2ef7da952aa773361dfc6c19b7d240b4ecc68",
+    "crates/engine-protocol/src/lib.rs": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+    "crates/engine-protocol/src/messages.rs": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e"
+  },
+  "protected": {
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "content/original/catalog.json": "2c375927fec9387a2a78e58db7d49422091fb17427c082e220db5e18ac0779fe",
+    "apps/web-client/scripts/build-wasm.mjs": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+    "scripts/cross-target-hash.sh": "c6905bbeb9c79ab5baab8a3e4cb7648c0c8978c32ba0f5f639a4a00f7c8dc342",
+    "apps/game-server/tests/support/ws5_metadata_readers.rs": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+    "apps/web-client/scripts/approved-b-old-reader.ts": "b84da7fb4a4957113049cb50e100c2bdb338470979d2b3d8da131847c7b8dc2f",
+    "apps/game-server/tests/fixtures/adr0787-room329.json": "eeca9f1ea5ca4a48adf4e98dccb23c122134e2b5577f8bd5f4eda120e4c7589c",
+    "docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json": "86c0dc473253a769c906f59a0626755d46aa21f672827749d565d87089e77367"
+  },
+  "guard": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1",
+  "guard_value": {
+    "autofix": {
+      "enabled": false
+    },
+    "format": {
+      "enabled": false
+    },
+    "actionableWarnings": {
+      "autoFix": {
+        "enabled": false
+      }
+    }
+  },
+  "native_modules": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+    "apps/web-client/src/worker/native-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/worker/native-pkg/package.json": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+  },
+  "legacy_modules": {
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": "d1955bd0a06560c326650ee6654aea6d56200964d07f2343b9ff4601be6d6785",
+    "apps/web-client/src/wasm-pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/src/wasm-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/wasm-pkg/package.json": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/src/wasm-pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm": "d1955bd0a06560c326650ee6654aea6d56200964d07f2343b9ff4601be6d6785",
+    "apps/web-client/public/pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+    "apps/web-client/public/pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/public/pkg/package.json": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+    "apps/web-client/public/pkg/engine_wasm.js": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+  },
+  "frozen_content_diff_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tracked_dist_diff_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

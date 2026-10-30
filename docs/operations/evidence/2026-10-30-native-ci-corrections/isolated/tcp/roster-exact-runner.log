@@ -1,0 +1,1 @@
+{'command': ['cargo', 'test', '--offline', '-p', 'game-server', '--test', 'nc09_native_actor', 'nc09_native_actor_join_command_snapshot', '--', '--exact', '--nocapture'], 'exit': 0, 'seconds': 219.32635283470154, 'disk_free_after': 135319908352}

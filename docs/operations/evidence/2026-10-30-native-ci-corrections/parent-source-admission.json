@@ -1,0 +1,44 @@
+{
+  "base": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "groups": [
+    {
+      "group": "tcp_roster",
+      "patch_sha256": "b0cb8879ca7c61e557836e58763d074d0dea95567ca9d4e86789c0fc1d3a0d31",
+      "source_applied": true
+    },
+    {
+      "group": "profile",
+      "patch_sha256": "218947aa6fef829ca788a645b645712d6ba20efeb0157a3dfab074f540ea33c7",
+      "source_applied": true
+    },
+    {
+      "group": "installer",
+      "patch_sha256": "5d6eef4f05e29b265b0bcac90a7803be8732c0e63ab6b38dc01dff04918552e7",
+      "source_applied": true
+    },
+    {
+      "group": "legacy_cache",
+      "patch_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+      "source_applied": true
+    }
+  ],
+  "paths": {
+    ".github/workflows/ci.yml": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+    "apps/desktop-client/linux/main.desktop": "48f433741d1b2500ac1d33f2821a156f2a2f2b805d77208f70dd5748304dddd5",
+    "apps/desktop-client/tauri.conf.json": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556",
+    "apps/desktop-client/tauri.linux.conf.json": "995b7b58f416250693ed3b317aa805511cb164226623cd4740919181af10d736",
+    "apps/game-server/src/native_ws_e2e.rs": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+    "apps/game-server/src/native_ws_e2e/peer.rs": "f01fabb89c923106da8c49359f1aa001872c41aae1360e25baeb9428f3a2c9f9",
+    "apps/game-server/tests/nc09_native_actor.rs": "7425af751cc68e2008d46758a31fb18580e91302d4e0f8a9ef999389b100f52c",
+    "apps/web-client/scripts/build-pipeline.test.mjs": "6f123b3a910e6101d1a253c09de9a5f2a5c4448011b5c8f74236b54dcb3aae3e",
+    "crates/engine-core/src/content/mod.rs": "f520745e9c4887c7c681f994e92c9dea5343e507cda40e2419df6a99b131725f",
+    "crates/engine-core/src/content/standard_pack.rs": "58e5b99f55413514979d5c354711db3f4686ae973756cba912ceedb21c43c5a5",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": "254b722163a94e838a0c5fe40dcfd2471eec0391200e1db00cc712d2263147d8",
+    "crates/engine-core/src/engine.rs": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+    "docs/operations/native-ci.md": "02962346ecc393e5ca4302fe7e6170df17352a837748c9c96dc2d6ffb1bdab51"
+  },
+  "count": 13,
+  "doc_overlap": "native-ci.md retains both reviewed profile and installer sections",
+  "actual_cross_platform_ci": "pending; original run41053688083 5success5failure retained",
+  "index_empty": true
+}

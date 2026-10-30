@@ -1,0 +1,7 @@
+rustc 1.95.0 (59807616e 2026-04-14)
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+d97c3705a5c1142d5d38682c1af65dbe691a82e62ecb83414e2336797f0b6bc1  /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/config-check/src/main.rs
+2ff24eb2b0b1a615f683b71c597cc554c878a9270d3af4f1fe090637a443b962  /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/config-check/Cargo.lock
+2072330aab0b4d98e68ffc8dcd7c172a8ebf63ba75fa1a16f490c65885d30e5a  /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/check-schema.py
+7571c55bd7e83b7517fac6a571de91781e94ed4d2cbc49de70530bf8f4b23559  /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/check-content.py
+43bf185f095dcbfbc40c64dcc2307ae2d668e4c9fbf088d8e5af8f12ea436b83  /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/target/debug/installer-config-check

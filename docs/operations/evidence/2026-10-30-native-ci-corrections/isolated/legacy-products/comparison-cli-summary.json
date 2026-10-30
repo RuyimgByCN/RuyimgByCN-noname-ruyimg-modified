@@ -1,0 +1,186 @@
+{
+  "before": {
+    "start-hash-p50": {
+      "run_values_us": [
+        158,
+        151,
+        150,
+        150,
+        153,
+        155,
+        150
+      ],
+      "p50_run_medians_us": 151,
+      "p95_run_medians_us": 158
+    },
+    "distance-query-p95": {
+      "run_values_us": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "p50_run_medians_us": 0,
+      "p95_run_medians_us": 0
+    },
+    "snapshot-restore": {
+      "run_values_us": [
+        45,
+        44,
+        44,
+        45,
+        44,
+        43,
+        44
+      ],
+      "p50_run_medians_us": 44,
+      "p95_run_medians_us": 45
+    },
+    "observer-projection": {
+      "run_values_us": [
+        20,
+        21,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "p50_run_medians_us": 20,
+      "p95_run_medians_us": 21
+    },
+    "start-hash200": {
+      "p50_ns": [
+        146375,
+        143834,
+        145042,
+        144500,
+        146792,
+        147458,
+        144625
+      ],
+      "p99_ns": [
+        186542,
+        201625,
+        167000,
+        169125,
+        198292,
+        213458,
+        162500
+      ],
+      "total_us": [
+        30896,
+        30655,
+        30290,
+        30393,
+        31051,
+        30978,
+        30205
+      ]
+    },
+    "exits": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "after": {
+    "start-hash-p50": {
+      "run_values_us": [
+        50,
+        49,
+        49,
+        50,
+        48,
+        51,
+        53
+      ],
+      "p50_run_medians_us": 50,
+      "p95_run_medians_us": 53
+    },
+    "distance-query-p95": {
+      "run_values_us": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "p50_run_medians_us": 0,
+      "p95_run_medians_us": 0
+    },
+    "snapshot-restore": {
+      "run_values_us": [
+        44,
+        44,
+        44,
+        46,
+        44,
+        45,
+        45
+      ],
+      "p50_run_medians_us": 44,
+      "p95_run_medians_us": 46
+    },
+    "observer-projection": {
+      "run_values_us": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20,
+        21
+      ],
+      "p50_run_medians_us": 20,
+      "p95_run_medians_us": 21
+    },
+    "start-hash200": {
+      "p50_ns": [
+        47917,
+        48542,
+        48375,
+        48250,
+        47625,
+        47834,
+        48208
+      ],
+      "p99_ns": [
+        59667,
+        71958,
+        63042,
+        61375,
+        58042,
+        62500,
+        61292
+      ],
+      "total_us": [
+        10013,
+        10244,
+        10107,
+        10074,
+        9979,
+        9960,
+        10087
+      ]
+    },
+    "exits": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,446 @@
+            restored += 1;
+            tracing::info!(room = record.room_id, "原生房间已从落盘恢复");
+        }
+        Ok(restored)
+    }
+
+    #[cfg(test)]
+    pub(crate) fn native_room_store_for_test(
+        &self,
+    ) -> Option<crate::native_room_store::NativeRoomStore> {
+        self.native_room_store.clone()
+    }
+
+    /// T6③：列出已安装原生包。
+    pub fn native_packages(&self) -> Result<Vec<NativePackageInfo>, String> {
+        self.native.installed()
+    }
+
+    /// 正式生命周期：重新扫描 drop-in 并安装/升级。
+    pub fn native_import(&self) -> Result<Vec<NativePackageInfo>, String> {
+        self.native.import()
+    }
+
+    /// 正式生命周期：激活指定已安装版本。
+    pub fn native_activate(
+        &self,
+        namespace: &str,
+        package_id: &str,
+        version: &str,
+    ) -> Result<(), String> {
+        self.native.activate_version(namespace, package_id, version)
+    }
+
+    /// 正式生命周期：停用（保留安装副本），可再激活。
+    pub fn native_disable(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.native.disable_package(namespace, package_id)
+    }
+
+    /// 正式生命周期：物理卸载所有版本。
+    pub fn native_uninstall(&self, namespace: &str, package_id: &str) -> Result<(), String> {
+        self.native.uninstall_package(namespace, package_id)
+    }
+
+    /// T6③：安装包 → 装载 → 原生建局（CPU 密集，放阻塞线程池）。
+    pub async fn native_game(&self, req: NativeGameRequest) -> Result<NativeGameSummary, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || crate::native::create_native_game(&native, &req))
+            .await
+            .map_err(|e| format!("原生建局任务失败: {e}"))?
+    }
+
+    /// 已安装扩展进入新对局，返回可恢复的存档。
+    pub async fn native_match(
+        &self,
+        packages: Vec<String>,
+        seed: u64,
+        seats: u8,
+    ) -> Result<crate::native::NativeMatchArchive, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || {
+            crate::native::open_native_match(&native, &packages, seed, seats)
+        })
+        .await
+        .map_err(|e| format!("原生对局任务失败: {e}"))?
+    }
+
+    /// 用同一安装集恢复对局。缺包或错版由装载器/内容锁拒绝。
+    pub async fn native_restore(
+        &self,
+        req: crate::native::NativeRestoreRequest,
+    ) -> Result<crate::native::NativeRestoreSummary, String> {
+        let native = self.native.clone();
+        tokio::task::spawn_blocking(move || crate::native::restore_native_match(&native, &req))
+            .await
+            .map_err(|e| format!("原生恢复任务失败: {e}"))?
+    }
+
+    /// Return one bounded page from the immutable startup content catalog.
+    pub fn content_catalog_page(
+        &self,
+        offset: Option<u32>,
+        limit: Option<u32>,
+    ) -> ActiveCatalogPage {
+        self.content_catalog
+            .page(&self.content_lock.lock_hash, offset, limit)
+    }
+
+    /// Canonical hash of the immutable startup content set.
+    pub fn content_lock_hash(&self) -> &str {
+        &self.content_lock.lock_hash
+    }
+
+    /// Return immutable store metadata for an active package asset.
+    pub fn active_asset(
+        &self,
+        namespace: &str,
+        package_id: &str,
+        asset_id: &str,
+    ) -> Option<ActiveAssetInfo> {
+        self.content_assets
+            .get(&(
+                namespace.to_owned(),
+                package_id.to_owned(),
+                asset_id.to_owned(),
+            ))
+            .cloned()
+    }
+
+    /// Collect point-in-time stats for Prometheus export (§40.2).
+    pub fn stats(&self) -> LobbyStats {
+        LobbyStats {
+            active_rooms: self.rooms.lock().len() as u64,
+            total_connections: self.total_connections.load(Ordering::Relaxed),
+            total_commands: self.total_commands.load(Ordering::Relaxed),
+            rejected_commands: self.rejected_commands.load(Ordering::Relaxed),
+            outbox_pending: self.outbox_pending.load(Ordering::Relaxed),
+            outbox_delivered: self.outbox_delivered.load(Ordering::Relaxed),
+        }
+    }
+
+    /// List active rooms for the /rooms endpoint.
+    pub fn room_list(&self) -> Vec<serde_json::Value> {
+        let rooms = self.rooms.lock();
+        rooms
+            .keys()
+            .map(|id| {
+                serde_json::json!({
+                    "room_id": id,
+                })
+            })
+            .collect()
+    }
+
+    /// Allocate connection id.
+    pub fn alloc_connection_id(&self) -> u64 {
+        self.next_conn.fetch_add(1, Ordering::Relaxed)
+    }
+
+    /// Handle one client message.
+    pub async fn handle_client(
+        &self,
+        session: &mut Session,
+        msg: ClientMessage,
+    ) -> Result<(), HandlerError> {
+        if !matches!(&msg, ClientMessage::Hello { .. }) && !session.handshake_complete {
+            return Err(HandlerError::new(
+                ErrorCode::VersionMismatch,
+                "WS6 Hello required",
+            ));
+        }
+        let header = match &msg {
+            ClientMessage::SubmitCommand { header, .. }
+            | ClientMessage::RequestSnapshot { header, .. }
+            | ClientMessage::Heartbeat { header } => Some(header),
+            _ => None,
+        };
+        if header.is_some_and(|h| h.protocol_version != NETWORK_PROTOCOL_VERSION) {
+            return Err(HandlerError::new(
+                ErrorCode::VersionMismatch,
+                "protocol version mismatch",
+            ));
+        }
+        match msg {
+            ClientMessage::Hello {
+                versions,
+                display_name,
+            } => {
+                if versions.network_protocol != NETWORK_PROTOCOL_VERSION {
+                    return Err(HandlerError::new(
+                        ErrorCode::VersionMismatch,
+                        "protocol version mismatch",
+                    ));
+                }
+                session.handshake_complete = true;
+                if !display_name.is_empty() {
+                    session.display_name = sanitize_name(&display_name);
+                }
+                Ok(())
+            }
+
+            ClientMessage::CreateRoom {
+                players,
+                seed,
+                password,
+                choice_timeout_secs,
+            } => {
+                let secs = choice_timeout_secs.unwrap_or(30);
+                crate::room_native::validate_timeout_secs(secs)
+                    .map_err(|e| HandlerError::new(ErrorCode::BadMessage, e))?;
+                if !self.cfg.native_rooms && secs != 30 {
+                    return Err(HandlerError::new(
+                        ErrorCode::BadMessage,
+                        "legacy rooms do not support choice timeouts",
+                    ));
+                }
+                if !(2..=8).contains(&players) {
+                    return Err(HandlerError::new(
+                        ErrorCode::BadMessage,
+                        "players must be 2..=8",
+                    ));
+                }
+                let room_id = {
+                    let mut rooms = self.rooms.lock();
+                    if rooms.len() >= self.cfg.max_rooms {
+                        return Err(HandlerError::new(
+                            ErrorCode::RateLimited,
+                            "server room capacity",
+                        ));
+                    }
+                    let id = self
+                        .next_room
+                        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |id| {
+                            (id != 0).then(|| id.checked_add(1).unwrap_or(0))
+                        })
+                        .map_err(|_| {
+                            HandlerError::new(
+                                ErrorCode::Internal,
+                                "room storage unavailable or room IDs exhausted",
+                            )
+                        })?;
+                    // NC09：后端选择——原生权威房间（显式启用）或旧线房间。
+                    // 原生装载失败**明确报错**，不静默回退（避免「已启用」成假象）。
+                    let native_handle = crate::room_native_actor::spawn_native_room_if_configured(
+                        id,
+                        players,
+                        seed,
+                        password.clone(),
+                        self.cfg.room_mailbox,
+                        self.cfg.snapshot_every,
+                        &self.native,
+                        self.cfg.native_rooms,
+                        &self.cfg.native_room_namespace,
+                        &self.cfg.native_room_packages,
+                        self.native_room_store.clone(),
+                        secs,
+                    )
+                    .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                    let handle = match native_handle {
+                        Some(h) => h,
+                        None => spawn_room_with_engine(
+                            id,
+                            players,
+                            seed,
+                            password.clone(),
+                            self.cfg.room_mailbox,
+                            self.cfg.snapshot_every,
+                            self.engine_template.clone(),
+                        ),
+                    };
+                    rooms.insert(id, handle);
+                    id
+                }; // MutexGuard dropped here before any await
+                info!(room = room_id, players, "room created");
+                let _ = session
+                    .outbound
+                    .send(&ServerMessage::RoomCreated {
+                        room_id,
+                        host_hint: session.display_name.clone(),
+                    })
+                    .await;
+                self.join_room(session, room_id, password, Some(0), None)
+                    .await
+            }
+
+            ClientMessage::JoinRoom {
+                room_id,
+                password,
+                preferred_seat,
+                reconnect_token,
+            } => {
+                self.join_room(session, room_id, password, preferred_seat, reconnect_token)
+                    .await
+            }
+
+            ClientMessage::Spectate { room_id } => {
+                let handle = {
+                    self.rooms.lock().get(&room_id).cloned().ok_or_else(|| {
+                        HandlerError::new(ErrorCode::RoomNotFound, "room not found")
+                    })?
+                };
+                let (tx, rx) = tokio::sync::oneshot::channel();
+                handle
+                    .send(RoomMsg::Spectate {
+                        connection_id: session.connection_id,
+                        display_name: session.display_name.clone(),
+                        outbound: session.outbound.clone(),
+                        reply: tx,
+                    })
+                    .await
+                    .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                let jr = rx
+                    .await
+                    .map_err(|_| HandlerError::new(ErrorCode::Internal, "room reply lost"))?
+                    .map_err(|e| map_room_err(&e))?;
+                session.room_id = Some(room_id);
+                session.player_id = Some(jr.player_id);
+                session.role = Some(jr.role);
+                session.reconnect_token = Some(jr.reconnect_token.clone());
+                let _ = session
+                    .outbound
+                    .send(&ServerMessage::JoinOk {
+                        room_id,
+                        player_id: jr.player_id,
+                        seat: jr.seat,
+                        role: jr.role,
+                        reconnect_token: jr.reconnect_token,
+                        view: jr.view,
+                        choice: jr.choice,
+                        legal_actions: jr.legal_actions,
+                    })
+                    .await;
+                Ok(())
+            }
+
+            ClientMessage::SubmitCommand {
+                header,
+                command,
+                idempotency_key,
+                replay,
+            } => {
+                if matches!(
+                    command.kind,
+                    engine_api::CommandKind::TimeoutAction { .. }
+                        | engine_api::CommandKind::AdminAbortMatch { .. }
+                ) {
+                    return Err(HandlerError::new(
+                        ErrorCode::Unauthorized,
+                        "internal command is not available to clients",
+                    ));
+                }
+                let room_id = session
+                    .room_id
+                    .ok_or_else(|| HandlerError::new(ErrorCode::NotInRoom, "not in room"))?;
+                if header.room_id != 0 && header.room_id != room_id {
+                    return Err(HandlerError::new(ErrorCode::Conflict, "room mismatch"));
+                }
+                if header.conn_seq != 0 && header.conn_seq <= session.last_conn_seq {
+                    // allow equal only for pure retries with same idempotency (room handles)
+                    if header.conn_seq < session.last_conn_seq {
+                        return Err(HandlerError::new(
+                            ErrorCode::Conflict,
+                            "conn_seq went backwards",
+                        ));
+                    }
+                }
+                session.last_conn_seq = session.last_conn_seq.max(header.conn_seq);
+
+                let handle = {
+                    self.rooms.lock().get(&room_id).cloned().ok_or_else(|| {
+                        HandlerError::new(ErrorCode::RoomNotFound, "room not found")
+                    })?
+                };
+                let (tx, rx) = tokio::sync::oneshot::channel();
+                handle
+                    .send(RoomMsg::Submit {
+                        connection_id: session.connection_id,
+                        header: MessageHeader::new(room_id, header.conn_seq, header.revision),
+                        command,
+                        idempotency_key,
+                        replay,
+                        reply: tx,
+                    })
+                    .await
+                    .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                let msg = rx
+                    .await
+                    .map_err(|_| HandlerError::new(ErrorCode::Internal, "room reply lost"))?
+                    .map_err(|e| map_room_err(&e))?;
+                let _ = session.outbound.send(&msg).await;
+                Ok(())
+            }
+
+            ClientMessage::RequestSnapshot { header, .. } => {
+                let room_id = session
+                    .room_id
+                    .ok_or_else(|| HandlerError::new(ErrorCode::NotInRoom, "not in room"))?;
+                let handle = {
+                    self.rooms.lock().get(&room_id).cloned().ok_or_else(|| {
+                        HandlerError::new(ErrorCode::RoomNotFound, "room not found")
+                    })?
+                };
+                let (tx, rx) = tokio::sync::oneshot::channel();
+                handle
+                    .send(RoomMsg::Snapshot {
+                        connection_id: session.connection_id,
+                        header: MessageHeader::new(room_id, header.conn_seq, header.revision),
+                        reply: tx,
+                    })
+                    .await
+                    .map_err(|e| HandlerError::new(ErrorCode::Internal, e))?;
+                let msg = rx
+                    .await
+                    .map_err(|_| HandlerError::new(ErrorCode::Internal, "room reply lost"))?
+                    .map_err(|e| map_room_err(&e))?;
+                let _ = session.outbound.send(&msg).await;
+                Ok(())
+            }
+
+            ClientMessage::Heartbeat { header } => {
+                let ms = SystemTime::now()
+                    .duration_since(UNIX_EPOCH)
+                    .map(|d| d.as_millis() as u64)
+                    .unwrap_or(0);
+                let _ = session
+                    .outbound
+                    .send(&ServerMessage::Pong {
+                        header: MessageHeader::new(
+                            header.room_id,
+                            header.conn_seq,
+                            header.revision,
+                        ),
+                        server_time_ms: ms,
+                    })
+                    .await;
+                Ok(())
+            }
+
+            ClientMessage::LeaveRoom { room_id } => {
+                if session.room_id == Some(room_id) {
+                    self.disconnect(room_id, session.connection_id).await;
+                    session.room_id = None;
+                    session.player_id = None;
+                    session.role = None;
+                }
+                Ok(())
+            }
+        }
+    }
+
+    async fn join_room(
+        &self,
+        session: &mut Session,
+        room_id: u64,
+        password: String,
+        preferred_seat: Option<u8>,
+        reconnect_token: Option<String>,
+    ) -> Result<(), HandlerError> {
+        let handle = {
+            self.rooms
+                .lock()
+                .get(&room_id)
+                .cloned()
+                .ok_or_else(|| HandlerError::new(ErrorCode::RoomNotFound, "room not found"))?
+        };
+        let (tx, rx) = tokio::sync::oneshot::channel();
+        handle

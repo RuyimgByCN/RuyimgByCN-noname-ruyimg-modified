@@ -1,0 +1,31 @@
+{
+  "packages": {
+    "benchmark-runner": [
+      8,
+      0,
+      0
+    ],
+    "conformance": [
+      4,
+      0,
+      0
+    ],
+    "engine-ai": [
+      29,
+      0,
+      0
+    ],
+    "engine-core": [
+      3851,
+      0,
+      1
+    ]
+  },
+  "command_exit": 0,
+  "directed_catalog_tests": [
+    3,
+    0,
+    0
+  ],
+  "conformance_exit": 0
+}

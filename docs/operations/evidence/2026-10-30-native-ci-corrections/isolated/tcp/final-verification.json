@@ -1,0 +1,21 @@
+{
+  "HEAD": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "initial_overlay_files": 53,
+  "changed_source_files": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs"
+  ],
+  "preserved_overlay_files": 51,
+  "no_staged_files": true,
+  "pure_patch_forward_dry_run": "passed",
+  "pure_patch_reverse_check": "passed",
+  "git_diff_check": true,
+  "source_versions": "330/105/758/WS6 unchanged",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "owned_targets_exist": {
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree/target": false,
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/target": false
+  },
+  "private_guard": "untracked .pi-lens.json only; two source paths ignored; no global change; automatic coverage unconfirmed",
+  "symlinks_created": []
+}

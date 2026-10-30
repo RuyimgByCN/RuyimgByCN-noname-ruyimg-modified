@@ -1,0 +1,55 @@
+ M apps/game-server/src/lobby.rs
+ M apps/game-server/src/main.rs
+ M apps/game-server/src/native_room_store/tests.rs
+ M apps/game-server/src/native_view.rs
+ M apps/game-server/src/native_ws_e2e.rs
+ M apps/game-server/src/native_ws_e2e/authority.rs
+ M apps/game-server/src/native_ws_e2e/commit_crash.rs
+ M apps/game-server/src/native_ws_e2e/double_failure.rs
+ M apps/game-server/src/native_ws_e2e/durability.rs
+ M apps/game-server/src/native_ws_e2e/referee.rs
+ M apps/game-server/src/room.rs
+ M apps/game-server/src/room_native.rs
+ M apps/game-server/src/room_native_actor.rs
+ M apps/game-server/src/room_native_actor/durability.rs
+ M apps/game-server/src/session.rs
+ M apps/game-server/tests/approved_b_metadata.rs
+ M apps/game-server/tests/nc09_native_actor.rs
+ M apps/game-server/tests/nc09_native_durability.rs
+ M apps/game-server/tests/nc09_native_room_session.rs
+ M apps/game-server/tests/nc09_projection_parity.rs
+ M apps/game-server/tests/nc09_referee_projection.rs
+ M apps/web-client/scripts/nc12-online-rtt.mjs
+ M apps/web-client/scripts/network-client.test.mjs
+ M apps/web-client/src/engine/networkClient.ts
+ M apps/web-client/src/engine/observerMetadata.ts
+ M apps/web-client/src/types/engine.ts
+ M apps/web-client/src/views/BattleView.vue
+ M apps/web-client/src/views/HomeView.vue
+ M crates/engine-api/src/choice.rs
+ M crates/engine-api/src/command.rs
+ M crates/engine-api/src/version.rs
+ M crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+ M crates/engine-core/src/snapshot.rs
+ M crates/engine-native-content/src/content/standard.rs
+ M crates/engine-native-wasm/src/session.rs
+ M crates/engine-native/src/engine.rs
+ M crates/engine-native/src/engine/apply_command.rs
+ M crates/engine-native/src/engine/commands.rs
+ M crates/engine-native/tests/adr0786_j2_active_bridge.rs
+ M crates/engine-native/tests/nc04_cards_given_event.rs
+ M crates/engine-native/tests/nc04_vm_resume.rs
+ M crates/engine-native/tests/nc07_archive_hash_fields.rs
+ M crates/engine-native/tests/nc07_lianyaohu_hash.rs
+ M crates/engine-native/tests/pa12_tag656_version.rs
+ M crates/engine-native/tests/replay_scenarios.rs
+ M crates/engine-protocol/src/lib.rs
+ M crates/engine-protocol/src/messages.rs
+?? .pi-lens-probe-home/
+?? .pi-lens.json
+?? apps/game-server/src/native_ws_e2e/peer.rs
+?? apps/game-server/src/room_native/timeout.rs
+?? apps/game-server/src/room_native/wal.rs
+?? apps/game-server/src/room_native_actor/timeout.rs
+?? apps/game-server/tests/adr0787_timeout.rs
+?? apps/game-server/tests/fixtures/

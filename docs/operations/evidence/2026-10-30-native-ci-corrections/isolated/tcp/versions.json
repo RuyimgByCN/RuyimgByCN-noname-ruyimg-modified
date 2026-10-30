@@ -1,0 +1,26 @@
+{
+  "crates/engine-native-content/src/content/standard.rs": {
+    "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+    "version_constants": [
+      "pub const STANDARD_RULESET_VERSION: u64 = 330;"
+    ]
+  },
+  "crates/engine-native-kernel/src/archive.rs": {
+    "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+    "version_constants": [
+      "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;"
+    ]
+  },
+  "crates/engine-api/src/version.rs": {
+    "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+    "version_constants": [
+      "pub const RULE_VM_ABI_VERSION: u32 = 758;"
+    ]
+  },
+  "crates/engine-protocol/src/lib.rs": {
+    "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+    "version_constants": [
+      "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;"
+    ]
+  }
+}

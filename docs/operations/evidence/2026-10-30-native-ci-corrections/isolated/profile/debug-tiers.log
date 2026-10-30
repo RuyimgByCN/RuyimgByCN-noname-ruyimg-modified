@@ -1,0 +1,13 @@
+=== §38.1 Device Tiers ===
+android-low-webview: 低端 Android WebView (2GB, Android 8+)
+  start_hash_p50=2000us  command_p95=8000us  distance_q_p95=10000us  frame=16ms  mem=128MB
+android-mainstream: 主流 Android (6GB, Android 12+)
+  start_hash_p50=1000us  command_p95=4000us  distance_q_p95=5000us  frame=16ms  mem=256MB
+iphone-ipad: iPhone / iPad (A12+, Safari)
+  start_hash_p50=800us  command_p95=3000us  distance_q_p95=3000us  frame=16ms  mem=256MB
+desktop-browser: 普通桌面浏览器 (Chrome)
+  start_hash_p50=500us  command_p95=2000us  distance_q_p95=2000us  frame=8ms  mem=512MB
+desktop-native: 桌面 Native (Tauri/Rust)
+  start_hash_p50=300us  command_p95=1000us  distance_q_p95=1000us  frame=8ms  mem=1024MB
+server-baseline: 服务器基准机
+  start_hash_p50=100us  command_p95=500us  distance_q_p95=300us  frame=8ms  mem=2048MB

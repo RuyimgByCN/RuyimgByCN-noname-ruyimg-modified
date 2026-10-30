@@ -1,0 +1,7 @@
+   Compiling installer-config-check v0.0.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/config-check)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running `../target/debug/installer-config-check /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/../inspection/effective`
+PASS macos: real tauri-utils read_from + Config decode, files=1, name=无名杀 Next, all targets preserved
+PASS windows: real tauri-utils read_from + Config decode, files=1, name=无名杀 Next, all targets preserved
+PASS linux: real tauri-utils read_from + Config decode, files=2, name=noname-next, all targets preserved
+{"command": ["cargo", "run", "--offline", "--locked", "--manifest-path", "../inspection/config-check/Cargo.toml", "--", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/apps/desktop-client", "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/worktree/../inspection/effective"], "exit": 0, "locked_seconds": 0.6699556249950547, "disk_free_bytes": 136035487744}

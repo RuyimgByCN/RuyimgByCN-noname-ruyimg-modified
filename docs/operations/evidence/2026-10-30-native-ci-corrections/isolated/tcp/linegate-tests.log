@@ -1,0 +1,7 @@
+{"cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/worktree", "command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "platform": "darwin", "disk_free_before": 138278457344, "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-slow-ws-yn6e1n1c/target", "incremental": 0, "jobs": 2}
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.010s
+
+OK
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "exit": 0, "locked_seconds": 0.04538233298808336, "disk_free_bytes": 138277892096}

@@ -1,0 +1,6 @@
+{
+  "initial_profile_capture": "Exploratory sample-before.txt ran outside heavy lock; retained. sample-before-locked.txt/JSON is the corrected capture with lock held throughout; acceptance comparison 7 pairs fully locked.",
+  "premature_trace_compare": "First ad-hoc comparison executed while after trace command was still queued (320 before vs 0 after rows); it asserted and produced no comparison artifact. Completed comparison checks exit0 for both then proves 320/320 exact equality.",
+  "suite_failures": "No failures in affected four-package test suite; original release budget failure and original CI failures remain preserved.",
+  "omitted": "No full workspace tests, Clippy, new CI runs, or UI/platform acceptance; these are outside old-engine startup/hash scope."
+}

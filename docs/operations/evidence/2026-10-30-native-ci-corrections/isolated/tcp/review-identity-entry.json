@@ -1,0 +1,21 @@
+{
+  "files": {
+    "apps/game-server/src/native_ws_e2e.rs": true,
+    "apps/game-server/src/native_ws_e2e/peer.rs": true,
+    "apps/game-server/tests/nc09_native_actor.rs": true
+  },
+  "changed_from_initial_A53": [
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/tests/nc09_native_actor.rs",
+    "apps/game-server/src/native_ws_e2e/peer.rs"
+  ],
+  "remaining_50_equal": true,
+  "patches": {
+    "incremental.patch": true,
+    "roster-only.patch": true,
+    "combined-three-file.patch": true
+  },
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "all_equal": true,
+  "read_only": true
+}

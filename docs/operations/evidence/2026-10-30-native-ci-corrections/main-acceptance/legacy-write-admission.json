@@ -1,0 +1,14 @@
+{
+  "apps/web-client/src/wasm-pkg": {
+    "is_symlink": false,
+    "tracked": []
+  },
+  "apps/web-client/src/.wasm-pkg-tmp": {
+    "is_symlink": false,
+    "tracked": []
+  },
+  "apps/web-client/public/pkg": {
+    "is_symlink": false,
+    "tracked": []
+  }
+}

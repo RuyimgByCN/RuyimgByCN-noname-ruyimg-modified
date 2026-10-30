@@ -1,0 +1,1 @@
+{"cases":10,"commands":160,"events":410,"choices":12,"checkpoints":160,"comparisons":"actual wasm32 old engine-core vs native: hashes/events/choices; full native state remains in traces","passed":true}

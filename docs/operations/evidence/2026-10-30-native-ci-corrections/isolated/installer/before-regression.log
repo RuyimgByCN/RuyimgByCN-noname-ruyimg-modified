@@ -1,0 +1,38 @@
+✖ MSI keeps the Chinese product name with the matching WiX locale (0.56325ms)
+✖ Linux separates the package id from the Chinese window and launcher names (0.157ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.730041
+
+✖ failing tests:
+
+test at ../inspection/before/apps/web-client/scripts/build-pipeline.test.mjs:128:1
+✖ MSI keeps the Chinese product name with the matching WiX locale (0.56325ms)
+  TypeError: Cannot read properties of undefined (reading 'wix')
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/before/apps/web-client/scripts/build-pipeline.test.mjs:132:38)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at ../inspection/before/apps/web-client/scripts/build-pipeline.test.mjs:136:1
+✖ Linux separates the package id from the Chinese window and launcher names (0.157ms)
+  Error: ENOENT: no such file or directory, open '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/before/apps/desktop-client/tauri.linux.conf.json'
+      at readFileSync (node:fs:539:20)
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/before/apps/web-client/scripts/build-pipeline.test.mjs:139:28)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-installer-unicode-a_in35gp/inspection/before/apps/desktop-client/tauri.linux.conf.json'
+  }

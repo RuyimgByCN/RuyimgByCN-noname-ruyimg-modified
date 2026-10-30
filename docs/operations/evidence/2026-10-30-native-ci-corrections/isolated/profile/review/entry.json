@@ -1,0 +1,28 @@
+{
+  "files": {
+    ".github/workflows/ci.yml": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+    "docs/operations/native-ci.md": "8de170b289eb7f33dde6907e7dba61f1525e8fe3b44e46c769f054c9d7212323",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "apps/benchmark-runner/Cargo.toml": "625b59699bd17602bdaf09c2cce4dee832750caa315b88659b1e66f910154af4",
+    "apps/benchmark-runner/src/main.rs": "d1a62dc9ecd7346b49fd13b4193e331c766eb85492fe7f7fbb3286d1d2ea2383",
+    "apps/benchmark-runner/src/device_tiers.rs": "731cd8c4df4b3fdbdd1b9771a7b18013bfec2a5f15c58a200815d95fb12dc4f5",
+    "Cargo.toml": "ee2c34fd5e1af005b8fe9b9198e4d1557b2be9469fba1574b4fd321a1c4baf6b",
+    "Cargo.lock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50"
+  },
+  "patch_sha256": "218947aa6fef829ca788a645b645712d6ba20efeb0157a3dfab074f540ea33c7",
+  "HEAD": {
+    "sha256": "1f76658740ddb507de7bfff60de739f7785e1fbe82e8e927a701bc4578f3209c",
+    "text": "255bbfbd7f6916ee77bd29799826a225bd10871f\n"
+  },
+  "diff": {
+    "sha256": "47f14cbde100f0d113b635b0bb57b852baf244ab06771c5faefc28e6be3a694e",
+    "text": null
+  },
+  "staged": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "text": null
+  },
+  "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f",
+  "index_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/worktrees/worktree13/index"
+}

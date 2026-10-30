@@ -1,0 +1,22 @@
+{
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "files": {
+    "crates/engine-core/src/content/mod.rs": true,
+    "crates/engine-core/src/content/standard_pack.rs": true,
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": true,
+    "crates/engine-core/src/engine.rs": true
+  },
+  "patch_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "diff_sha256": "01f66c8e4326de0b8ca7c2481482c533536f9272d47729688d2bb0be5d8a53a9",
+  "binary_checks": {
+    "before": true,
+    "after": true
+  },
+  "source_manifest_checks": {
+    "before": true,
+    "after": true
+  },
+  "target_absent": true,
+  "all_equal": true,
+  "read_only": true
+}

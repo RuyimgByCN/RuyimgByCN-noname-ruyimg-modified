@@ -1,0 +1,10 @@
+{
+  "time": "2026-10-30T14:37:48.559218+00:00",
+  "source13": 13,
+  "A_remaining": 50,
+  "old_legacy_files": 12,
+  "setup_correction": "actual Cargo bin game-server; supervisor confirmed handoff noname-next-server typo",
+  "strict_native3": "unchanged path: prior A330 native3 -Dwarnings accepted; workflow only requires native3 strict, no global/game-server strict gate added",
+  "disk_free_bytes": 125880872960,
+  "deps_retention": "Stage3 debug/release/wasm deps needed for this continuous validation; CARGO_INCREMENTAL=0"
+}

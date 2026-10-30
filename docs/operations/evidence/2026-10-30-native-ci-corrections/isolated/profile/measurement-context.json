@@ -1,0 +1,15 @@
+{
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2",
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "machine": "Darwin ruyimg-Book-Pro-14.local 27.2.0 Darwin Kernel Version 27.2.0: Wed Oct 14 23:47:32 PDT 2026; root:xnu-13432.41.4~25/RELEASE_ARM64_T6031 arm64",
+  "cpu": "Apple M3 Max",
+  "env_set": {
+    "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/target-perf",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TERM_COLOR": "never"
+  },
+  "source_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "same_source_and_workload_both_profiles": true,
+  "no_warm_cache_copied": true
+}

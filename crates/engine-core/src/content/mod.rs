@@ -18,6 +18,7 @@ pub use registry::{
     SkillMetadata, ViewAsDef, PACKAGE_MODIFIER_ID_BASE, PACKAGE_TRIGGER_ID_BASE,
 };
 pub use standard_pack::ensure_standard_package;
+pub(crate) use standard_pack::ensure_standard_content;
 pub use standard_pack::ensure_guozhan_package;
 
 /// Mark def: 酒（下一张杀伤害 +1）。

@@ -1,0 +1,172 @@
+{
+  "read_only_inputs": true,
+  "comparisons": [
+    {
+      "native": "formal/native.json",
+      "wasm": "formal/wasm.json",
+      "native_sha256": "8ef3522e923864bcdb48bbaa6bf71daf15d6c3b4c427e06d61fd4322e4bd0e6b",
+      "wasm_sha256": "5bc4094741987092d50541505dc5c311271b42547a08e02437ab2369f5837060",
+      "native_keys": [
+        "direct",
+        "players",
+        "restore",
+        "seed"
+      ],
+      "wasm_keys": [
+        "direct",
+        "players",
+        "restore",
+        "seed",
+        "wasm"
+      ],
+      "excluded_exact_field": "$.wasm",
+      "differences": [],
+      "equal": true,
+      "direct_count": 40,
+      "restore_count": 3
+    },
+    {
+      "native": "formal/native-package.json",
+      "wasm": "formal/wasm-package.json",
+      "native_sha256": "f31df554e530d9a118f5a279032e2f5598a3c76668324eee5ce0708333a5e07c",
+      "wasm_sha256": "7bdd8955152021a66f62aac82e25f50f57616a3cc3a7536c0bbe1640a554dace",
+      "native_keys": [
+        "direct",
+        "package",
+        "players",
+        "restore",
+        "seed"
+      ],
+      "wasm_keys": [
+        "direct",
+        "package",
+        "players",
+        "restore",
+        "seed",
+        "wasm"
+      ],
+      "excluded_exact_field": "$.wasm",
+      "differences": [],
+      "equal": true,
+      "direct_count": 20,
+      "restore_count": 3
+    },
+    {
+      "left": "planner/native-output.json",
+      "right": "planner/wasm-output.json",
+      "left_sha256": "cc7edeb00511937463e0f1f4cea8e107641fbe2682424ccfb9c51123b7cad598",
+      "right_sha256": "6838e15de6e0aff4abe09bcc635fd037336b62cb8307734617870f3623be5ef7",
+      "excluded_fields": [],
+      "differences": [],
+      "equal": true
+    },
+    {
+      "left": "referee-external-corrected/report.json.before.json",
+      "right": "referee-external-corrected/report.json.after.json",
+      "left_sha256": "531b12ad877a6fa13fefbdf4d32eae6e2bb38a773e8c5bc100a323656b15398c",
+      "right_sha256": "531b12ad877a6fa13fefbdf4d32eae6e2bb38a773e8c5bc100a323656b15398c",
+      "excluded_fields": [],
+      "differences": [],
+      "equal": true
+    }
+  ],
+  "locator": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+    "checkpoint_sha256": "fb6ff03d82f7651049df4c9068ff8ba738f8cb986e5761829a2275889b97e758",
+    "matches_checkpoint": true
+  },
+  "versions": {
+    "source_sha256": "6b4873858d941b137f5fe6f2d275750cff9ceaab9e3606b96c529a33682637b3",
+    "standard_count": 11,
+    "package_count": 3,
+    "rows": [
+      {
+        "name": "ordinary-dual-def-zero",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "kingdoms-dark",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "kingdoms-primary-revealed",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "kingdoms-both-revealed",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "confirm",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "select_players",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "select_cards",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "respond_card",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "pick_tag-fanjian",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "machine-XunXun",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "machine-JiJie",
+        "lock": "0",
+        "expected_rules_string": "330",
+        "equal": true
+      },
+      {
+        "name": "machine-GaiMing",
+        "lock": "9699176272500769421",
+        "expected_rules_string": "9699176272500769735",
+        "equal": true
+      },
+      {
+        "name": "machine-HaoTianTa",
+        "lock": "18039999305147582495",
+        "expected_rules_string": "18039999305147582805",
+        "equal": true
+      },
+      {
+        "name": "machine-Liaoyuan",
+        "lock": "18039999305147582495",
+        "expected_rules_string": "18039999305147582805",
+        "equal": true
+      }
+    ]
+  },
+  "all_equal": true,
+  "scope": "All recorded JSON keys, JSON types and values compared; formal payload itself records revision/hash/codes, not full engine state. No general metadata removal. No rerun or source/fixture modification."
+}

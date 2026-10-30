@@ -1,0 +1,20 @@
+{
+  "files": {
+    "apps/desktop-client/tauri.conf.json": true,
+    "apps/desktop-client/tauri.linux.conf.json": true,
+    "apps/desktop-client/linux/main.desktop": true,
+    "apps/web-client/scripts/build-pipeline.test.mjs": true,
+    "docs/operations/native-ci.md": true
+  },
+  "scope": [
+    "apps/desktop-client/tauri.conf.json",
+    "apps/web-client/scripts/build-pipeline.test.mjs",
+    "docs/operations/native-ci.md",
+    "apps/desktop-client/linux/main.desktop",
+    "apps/desktop-client/tauri.linux.conf.json"
+  ],
+  "head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "patch_sha256": "5d6eef4f05e29b265b0bcac90a7803be8732c0e63ab6b38dc01dff04918552e7",
+  "all_equal": true,
+  "readonly": true
+}

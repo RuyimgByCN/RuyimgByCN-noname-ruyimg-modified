@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "noname-next",
+  "bundle": {
+    "linux": {
+      "deb": {
+        "desktopTemplate": "linux/main.desktop"
+      },
+      "rpm": {
+        "desktopTemplate": "linux/main.desktop"
+      }
+    }
+  }
+}

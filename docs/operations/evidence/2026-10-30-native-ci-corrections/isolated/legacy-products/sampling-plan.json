@@ -1,0 +1,13 @@
+{
+  "profile": "release lto=true codegen-units=1",
+  "initial_baseline_runs": 1,
+  "diagnostic_samples": 200,
+  "comparison_pairs": 7,
+  "order": "before-after on even pairs; after-before on odd pairs",
+  "scenarios": [
+    "tier-report server-baseline",
+    "start-hash"
+  ],
+  "seed_players_iterations": "unchanged CLI: seed42/4 seats, tier50 start; distance10000/restore100/projection10000; start-hash200+3warmup",
+  "selection": "all samples, all exits retained; no reruns chosen by outcome"
+}

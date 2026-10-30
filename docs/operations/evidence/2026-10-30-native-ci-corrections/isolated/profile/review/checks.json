@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "accepted_base": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "two_command_changes": [
+    {
+      "name": "Tier list",
+      "before": "cargo run -q -p benchmark-runner -- tiers",
+      "after": "cargo run --release -q -p benchmark-runner -- tiers"
+    },
+    {
+      "name": "Tier report (server-baseline budget)",
+      "before": "cargo run -q -p benchmark-runner -- tier-report server-baseline",
+      "after": "cargo run --release -q -p benchmark-runner -- tier-report server-baseline"
+    }
+  ],
+  "entire_normalized_workflow_equals_published_base": true,
+  "only_three_doc_lines_plus_blank_added": true,
+  "jobs": 5,
+  "matrix_executions": 10,
+  "benchmark_code_Cargo_lock_and_profile_definitions_equal_published_base": true,
+  "original_debug_failure_logs_preserved": true,
+  "release_diagnostic_exit": 1,
+  "release_start_us": 151,
+  "start_budget_us": 100,
+  "cleanup_target_absent": true,
+  "commands": [
+    {
+      "command": "git apply --reverse --check /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/../evidence/perf-profile/perf-profile-only.patch",
+      "exit": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "entry_exit_files_patch_index_diff_HEAD_unchanged": true,
+  "no_staged_files": true,
+  "no_build_or_platform_calls": true
+}

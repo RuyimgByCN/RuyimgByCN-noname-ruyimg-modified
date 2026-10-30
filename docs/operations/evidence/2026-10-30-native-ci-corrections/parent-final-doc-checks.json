@@ -1,0 +1,68 @@
+{
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "log": "docs/operations/evidence/2026-10-30-native-ci-corrections/parent-final-doc-check-1.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "log": "docs/operations/evidence/2026-10-30-native-ci-corrections/parent-final-doc-check-2.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        ".github/workflows/ci.yml",
+        "apps/desktop-client/linux/main.desktop",
+        "apps/desktop-client/tauri.conf.json",
+        "apps/desktop-client/tauri.linux.conf.json",
+        "apps/game-server/src/native_ws_e2e.rs",
+        "apps/game-server/src/native_ws_e2e/peer.rs",
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "apps/web-client/scripts/build-pipeline.test.mjs",
+        "crates/engine-core/src/content/mod.rs",
+        "crates/engine-core/src/content/standard_pack.rs",
+        "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs",
+        "crates/engine-core/src/engine.rs",
+        "docs/operations/native-ci.md",
+        "docs/architecture/native-progress.md",
+        "docs/architecture/native-rules-baseline.md",
+        "docs/operations/evidence/2026-10-30-adr0787-timeout/README.md",
+        "docs/operations/evidence/2026-10-28-user-decisions/README.md"
+      ],
+      "exit": 0,
+      "log": "docs/operations/evidence/2026-10-30-native-ci-corrections/parent-final-doc-check-3.log"
+    }
+  ],
+  "source13_matches": {
+    ".github/workflows/ci.yml": true,
+    "apps/desktop-client/linux/main.desktop": true,
+    "apps/desktop-client/tauri.conf.json": true,
+    "apps/desktop-client/tauri.linux.conf.json": true,
+    "apps/game-server/src/native_ws_e2e.rs": true,
+    "apps/game-server/src/native_ws_e2e/peer.rs": true,
+    "apps/game-server/tests/nc09_native_actor.rs": true,
+    "apps/web-client/scripts/build-pipeline.test.mjs": true,
+    "crates/engine-core/src/content/mod.rs": true,
+    "crates/engine-core/src/content/standard_pack.rs": true,
+    "crates/engine-core/src/effect/primitives/pack_tw_1/finish_turn_begin.rs": true,
+    "crates/engine-core/src/engine.rs": true,
+    "docs/operations/native-ci.md": true
+  },
+  "all_passed": true,
+  "full_preflight": "final-gates 21/21; subsequent checks cover documentation closure only"
+}

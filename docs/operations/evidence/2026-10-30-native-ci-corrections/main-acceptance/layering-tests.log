@@ -1,0 +1,6 @@
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.079s
+
+OK
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_native_layering.py"], "exit": 0, "locked_seconds": 0.11809470897424035, "disk_free_bytes": 125395120128}

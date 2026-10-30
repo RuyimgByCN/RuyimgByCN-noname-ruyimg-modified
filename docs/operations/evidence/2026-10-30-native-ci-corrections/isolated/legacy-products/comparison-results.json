@@ -1,0 +1,506 @@
+[
+  {
+    "pair": 0,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-0-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 0,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-0-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 0,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-0-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 0,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-0-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 0,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-0-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 0,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-0-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 1,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-1-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 1,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-1-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 1,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-1-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 1,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-1-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 1,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-1-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 1,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-1-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 2,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-2-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 2,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-2-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 2,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-2-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 2,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-2-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 2,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-2-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 2,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-2-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 3,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-3-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 3,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-3-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 3,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-3-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 3,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-3-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 3,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-3-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 3,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-3-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 4,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-4-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 4,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-4-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 4,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-4-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 4,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-4-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 4,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-4-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 4,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-4-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 5,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-5-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 5,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-5-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 5,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-5-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  },
+  {
+    "pair": 5,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-5-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 5,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-5-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 5,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-5-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 6,
+    "variant": "before",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 1,
+    "log": "pair-6-before-tier.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 6,
+    "variant": "before",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-6-before-start.log",
+    "binary_sha256": "e796aa2ea8806a480db827f0d6dfdfb437714bf75c8c7b6707a87321b8620625"
+  },
+  {
+    "pair": 6,
+    "variant": "before",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/before-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-6-before-cost.log",
+    "binary_sha256": "b2aa5e4456fff5fe8ea70fc570dc90b7af83df0a42d6b4a6b9bda1b683a299cc"
+  },
+  {
+    "pair": 6,
+    "variant": "after",
+    "scenario": "tier",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "tier-report",
+      "server-baseline"
+    ],
+    "exit": 0,
+    "log": "pair-6-after-tier.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 6,
+    "variant": "after",
+    "scenario": "start",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-benchmark-runner",
+      "start-hash"
+    ],
+    "exit": 0,
+    "log": "pair-6-after-start.log",
+    "binary_sha256": "ecb7887ba1d0cc26bd44cf64932e737769baac0b86513a78815a020be3d0d861"
+  },
+  {
+    "pair": 6,
+    "variant": "after",
+    "scenario": "cost",
+    "argv": [
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/products/after-cost-harness"
+    ],
+    "exit": 0,
+    "log": "pair-6-after-cost.log",
+    "binary_sha256": "a9597497b09b7e8c97278acbca235856e0500e9b7472c7e1cfdac41d1e78a1f6"
+  }
+]

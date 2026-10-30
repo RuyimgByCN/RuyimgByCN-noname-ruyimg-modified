@@ -1,0 +1,31 @@
+{
+  "binary_sha256": {
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/benchmark-runner": "4ddc92fee94885d29770d6db082a7891318538f2ebe4f5eb6c7021afb6b0c090",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/engine_wasm.wasm": "9e7b7e5bc56f8277638b0e579f39cc810b5cb9b525c8d979ad93454fe56f9686"
+  },
+  "producer_script_sha256": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+  "cross_target_entry_sha256": "c6905bbeb9c79ab5baab8a3e4cb7648c0c8978c32ba0f5f639a4a00f7c8dc342",
+  "target_preload_sha256": "78fb79b7a3da6deee993815fa338bbd445113fd689e5cc95e72a28e717a60a68",
+  "lease": {
+    "time": "2026-10-30T14:32:53.623904+00:00",
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+    "prior_owner": "A330 phase1/phase2 completed",
+    "lsof_exit": 0,
+    "owners": [],
+    "exclusive_next_use": "main CI correction validation only; inc0/jobs2/global lock",
+    "handoff_allowed": true
+  },
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 6
+  },
+  "tools": {
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "node": "v26.4.0",
+    "pnpm": "10.34.3",
+    "wasm-pack": "wasm-pack 0.15.0"
+  }
+}

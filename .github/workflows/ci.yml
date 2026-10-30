@@ -188,7 +188,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: noname-next
+      # Match phase17's release profile for performance measurements.
       - name: Tier list
-        run: cargo run -q -p benchmark-runner -- tiers
+        run: cargo run --release -q -p benchmark-runner -- tiers
       - name: Tier report (server-baseline budget)
-        run: cargo run -q -p benchmark-runner -- tier-report server-baseline
+        run: >-
+          cargo run --release -q -p benchmark-runner --
+          tier-report server-baseline

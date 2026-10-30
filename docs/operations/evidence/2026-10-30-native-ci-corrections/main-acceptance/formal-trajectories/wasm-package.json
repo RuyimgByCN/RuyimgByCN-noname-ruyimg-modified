@@ -1,0 +1,349 @@
+{
+  "seed": 20261025,
+  "players": 1,
+  "package": "huanle-cards",
+  "direct": [
+    {
+      "revision": 1,
+      "hash": "57fbed3ca25bc174b35a2412417ff8578b73806a312fd8956aab667dd57226c3",
+      "codes": [
+        8,
+        8,
+        2
+      ]
+    },
+    {
+      "revision": 2,
+      "hash": "26fc5031825bc494738f56fe59932ea832c7cd498da1b1dde5ee610ccc0d749a",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 3,
+      "hash": "30ab4dac6e2a1dfa7635ab3b9002f171227e4ba5cb7cebf5fbe117a520469733",
+      "codes": [
+        8,
+        8,
+        10
+      ]
+    },
+    {
+      "revision": 4,
+      "hash": "dbc2b2fad1997806690a446b00ae61e68c984b751ffba378f93e124b9007ec46",
+      "codes": [
+        10
+      ]
+    },
+    {
+      "revision": 5,
+      "hash": "86b71c6736b68c41da37dc3f7753aace2b10644a93b67378ce2f72dd965b8899",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 6,
+      "hash": "528d92e3bb64e385072326077a526dae79b087f29ad2ff99f055b868cbb37fd3",
+      "codes": [
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 7,
+      "hash": "62ca22cedd88173924cd2351e5cbc8749b39bb08a1227bff2fe47043fa76c367",
+      "codes": [
+        8,
+        8,
+        2
+      ]
+    },
+    {
+      "revision": 8,
+      "hash": "a4f1a4fdebe8cca46896bc932c1671b2ae30236b1a6453cf67238f4e995a5d8c",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 9,
+      "hash": "d60c327f291012bc42ff1b071f12981f01841285886319174d403f3de37d6925",
+      "codes": [
+        8,
+        8,
+        10
+      ]
+    },
+    {
+      "revision": 10,
+      "hash": "02b30722c146a9558bce7862e9ef9ab8f6ecce112e97a457a9c64e8bdf5c2451",
+      "codes": [
+        10
+      ]
+    },
+    {
+      "revision": 11,
+      "hash": "d37c686693e6b9ea7f6b1f6b82c8e8856f9cfdc8d8195b595faf3f435a9ac529",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 12,
+      "hash": "997856d8d1dc6ac67a2228cf7c4c81a5ba9ae48b55cfe0995872ff5522803652",
+      "codes": [
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 13,
+      "hash": "2b05eda8fce40d62046d02a1257bc7c4af1c685f7b514030d423ec0eb01eaca5",
+      "codes": [
+        8,
+        8,
+        2
+      ]
+    },
+    {
+      "revision": 14,
+      "hash": "1e7f2412810a0f5622ce13a1c360beb9f40ef7b81e3592450e00df7f8fe1aad8",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 15,
+      "hash": "29ada1cb116afbc8730ed92cb7db977bf630e1ca68ee2b42977a11b465ad0b53",
+      "codes": [
+        8,
+        8,
+        10
+      ]
+    },
+    {
+      "revision": 16,
+      "hash": "47404668b1298f0cf81cf1aae08c8da363791abb0b985619d029e497b5684e3c",
+      "codes": [
+        10
+      ]
+    },
+    {
+      "revision": 17,
+      "hash": "55d16d439ea74c43e94f997824a08e887ef2df8a61f8a3dffea1620a50d6d6ff",
+      "codes": [
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 18,
+      "hash": "f00a8ac9ec6de168562fdb88e6a88900f3a3e011c5f46473ed6b68e45fc89ae5",
+      "codes": [
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "revision": 19,
+      "hash": "161bcf29c1c574bc1732ff485f64f1edee6c6f08bc034a3578894c1105f31169",
+      "codes": [
+        8,
+        8,
+        2
+      ]
+    },
+    {
+      "revision": 20,
+      "hash": "d9bfaeb2e875018b0379ef0e5ec69b4a86ce516c9a741a86e6675d396b9e28fa",
+      "codes": [
+        8,
+        8
+      ]
+    }
+  ],
+  "restore": {
+    "midpoint": 10,
+    "before": [
+      {
+        "revision": 1,
+        "hash": "57fbed3ca25bc174b35a2412417ff8578b73806a312fd8956aab667dd57226c3",
+        "codes": [
+          8,
+          8,
+          2
+        ]
+      },
+      {
+        "revision": 2,
+        "hash": "26fc5031825bc494738f56fe59932ea832c7cd498da1b1dde5ee610ccc0d749a",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 3,
+        "hash": "30ab4dac6e2a1dfa7635ab3b9002f171227e4ba5cb7cebf5fbe117a520469733",
+        "codes": [
+          8,
+          8,
+          10
+        ]
+      },
+      {
+        "revision": 4,
+        "hash": "dbc2b2fad1997806690a446b00ae61e68c984b751ffba378f93e124b9007ec46",
+        "codes": [
+          10
+        ]
+      },
+      {
+        "revision": 5,
+        "hash": "86b71c6736b68c41da37dc3f7753aace2b10644a93b67378ce2f72dd965b8899",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 6,
+        "hash": "528d92e3bb64e385072326077a526dae79b087f29ad2ff99f055b868cbb37fd3",
+        "codes": [
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 7,
+        "hash": "62ca22cedd88173924cd2351e5cbc8749b39bb08a1227bff2fe47043fa76c367",
+        "codes": [
+          8,
+          8,
+          2
+        ]
+      },
+      {
+        "revision": 8,
+        "hash": "a4f1a4fdebe8cca46896bc932c1671b2ae30236b1a6453cf67238f4e995a5d8c",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 9,
+        "hash": "d60c327f291012bc42ff1b071f12981f01841285886319174d403f3de37d6925",
+        "codes": [
+          8,
+          8,
+          10
+        ]
+      },
+      {
+        "revision": 10,
+        "hash": "02b30722c146a9558bce7862e9ef9ab8f6ecce112e97a457a9c64e8bdf5c2451",
+        "codes": [
+          10
+        ]
+      }
+    ],
+    "after": [
+      {
+        "revision": 11,
+        "hash": "d37c686693e6b9ea7f6b1f6b82c8e8856f9cfdc8d8195b595faf3f435a9ac529",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 12,
+        "hash": "997856d8d1dc6ac67a2228cf7c4c81a5ba9ae48b55cfe0995872ff5522803652",
+        "codes": [
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 13,
+        "hash": "2b05eda8fce40d62046d02a1257bc7c4af1c685f7b514030d423ec0eb01eaca5",
+        "codes": [
+          8,
+          8,
+          2
+        ]
+      },
+      {
+        "revision": 14,
+        "hash": "1e7f2412810a0f5622ce13a1c360beb9f40ef7b81e3592450e00df7f8fe1aad8",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 15,
+        "hash": "29ada1cb116afbc8730ed92cb7db977bf630e1ca68ee2b42977a11b465ad0b53",
+        "codes": [
+          8,
+          8,
+          10
+        ]
+      },
+      {
+        "revision": 16,
+        "hash": "47404668b1298f0cf81cf1aae08c8da363791abb0b985619d029e497b5684e3c",
+        "codes": [
+          10
+        ]
+      },
+      {
+        "revision": 17,
+        "hash": "55d16d439ea74c43e94f997824a08e887ef2df8a61f8a3dffea1620a50d6d6ff",
+        "codes": [
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 18,
+        "hash": "f00a8ac9ec6de168562fdb88e6a88900f3a3e011c5f46473ed6b68e45fc89ae5",
+        "codes": [
+          8,
+          8,
+          8
+        ]
+      },
+      {
+        "revision": 19,
+        "hash": "161bcf29c1c574bc1732ff485f64f1edee6c6f08bc034a3578894c1105f31169",
+        "codes": [
+          8,
+          8,
+          2
+        ]
+      },
+      {
+        "revision": 20,
+        "hash": "d9bfaeb2e875018b0379ef0e5ec69b4a86ce516c9a741a86e6675d396b9e28fa",
+        "codes": [
+          8,
+          8
+        ]
+      }
+    ]
+  },
+  "wasm": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"
+}

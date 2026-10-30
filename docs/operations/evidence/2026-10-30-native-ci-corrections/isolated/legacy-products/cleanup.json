@@ -1,0 +1,23 @@
+{
+  "retired_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-legacy-start-perf-0hholn9n/target",
+  "owned_target_only": true,
+  "removed_file_bytes": 3216679010,
+  "disk_free_before": 133111246848,
+  "disk_free_after": 136148193280,
+  "target_absent": true,
+  "preserved": [
+    "before-benchmark-runner",
+    "after-benchmark-runner",
+    "before-cost-harness",
+    "after-cost-harness",
+    "wasm",
+    "source manifests",
+    "exact patch",
+    "all raw logs"
+  ],
+  "archive_symlink_created": false,
+  "initial_untracked_pi_lens_files": "preserved",
+  "staged_files": [],
+  "date": "2026-10-30T21:27:26.546168",
+  "note": "Concurrent disk snapshots are not a performance or storage-saving claim."
+}

@@ -1,0 +1,25 @@
+2026-10-30T12:13:10.8310370Z ##[group]Runner Image Provisioner
+2026-10-30T12:13:10.8316070Z ##[group]Runner Image
+2026-10-30T12:14:06.8138720Z   stable-aarch64-apple-darwin unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-30T12:14:06.9234510Z   stable-aarch64-apple-darwin unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-30T12:14:06.9287190Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-30T12:14:06.9287940Z DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-30T12:14:06.9288530Z HASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')
+2026-10-30T12:14:07.1199420Z   if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then
+2026-10-30T12:14:07.1201260Z   elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then
+2026-10-30T12:14:07.1996200Z if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then
+2026-10-30T12:14:07.2495360Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-10-30T12:14:07.2531360Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-10-30T12:14:07.2531750Z rustc +"$toolchain" --version --verbose
+2026-10-30T12:14:07.3110750Z rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-30T12:14:09.8434050Z ##[group]Run cargo run -q -p benchmark-runner -- tiers
+2026-10-30T12:14:09.8434450Z cargo run -q -p benchmark-runner -- tiers
+2026-10-30T12:16:09.2770980Z ##[group]Run cargo run -q -p benchmark-runner -- tier-report server-baseline
+2026-10-30T12:16:09.2771800Z cargo run -q -p benchmark-runner -- tier-report server-baseline
+2026-10-30T12:16:13.5761480Z tier=server-baseline
+2026-10-30T12:16:13.5761800Z   REGRESSION start-hash-p50           1737 / 100 us (1737%)
+2026-10-30T12:16:13.5763260Z   ✓ distance-query-p95       23 / 300 us (7%)
+2026-10-30T12:16:13.5763630Z   REGRESSION snapshot-restore         425 / 200 us (212%)
+2026-10-30T12:16:13.5763990Z   REGRESSION observer-projection      205 / 100 us (204%)
+2026-10-30T12:16:13.5764740Z result=FAIL
+2026-10-30T12:16:13.5788470Z ##[error]Process completed with exit code 1.
