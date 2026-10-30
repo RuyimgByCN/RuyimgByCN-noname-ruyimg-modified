@@ -1,0 +1,74 @@
+[
+  {
+    "name": "fresh-missing-dependency",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 1,
+    "seconds": 0.035000500007299706
+  },
+  {
+    "name": "fresh-missing-source",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 1,
+    "seconds": 0.13836258399533108
+  },
+  {
+    "name": "fresh-missing-assets",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 1,
+    "seconds": 0.23900979099562392
+  },
+  {
+    "name": "resources-bootstrap",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only"
+    ],
+    "exit": 0,
+    "seconds": 4.645623499993235
+  },
+  {
+    "name": "resources-verify",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only",
+      "--verify-only"
+    ],
+    "exit": 0,
+    "seconds": 6.818600333004724
+  },
+  {
+    "name": "gate4-tests",
+    "command": [
+      "node",
+      "--test",
+      "scripts/test_original_content_order.mjs",
+      "scripts/test_original_resources.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.6793511249998119
+  },
+  {
+    "name": "gate4-full-verify",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 0,
+    "seconds": 3.2773800840077456
+  }
+]

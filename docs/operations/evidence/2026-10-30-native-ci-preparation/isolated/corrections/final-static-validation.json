@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "all_prior_jobs_matrices_and_gate_commands_preserved": true,
+  "matrix_executions": 10,
+  "both_yaml_parsed": true,
+  "all_action_shell_syntax_passed": true,
+  "six_resource_premise_files_unchanged": true,
+  "canonical_seven_modifications_unchanged": true,
+  "product_index_identical_to_review": true,
+  "no_staged_files": true,
+  "files": {
+    ".github/workflows/ci.yml": {
+      "base_sha256": "14cd129e77232fea3c2be3fddfa224140f4b483fb9ff12c9410f001f2616c972",
+      "previous_reviewed_sha256": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7",
+      "final_sha256": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      "final_bytes": 7118
+    },
+    ".github/actions/prepare-original-content/action.yml": {
+      "base_sha256": null,
+      "previous_reviewed_sha256": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9",
+      "final_sha256": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+      "final_bytes": 3380
+    },
+    "docs/operations/native-ci.md": {
+      "base_sha256": null,
+      "previous_reviewed_sha256": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084",
+      "final_sha256": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f",
+      "final_bytes": 4836
+    },
+    ".github/actions/prepare-original-content/liuli-longxue.patch": {
+      "base_sha256": null,
+      "previous_reviewed_sha256": null,
+      "final_sha256": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+      "final_bytes": 628456
+    }
+  },
+  "patch_checks": [
+    {
+      "command": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/corrections/native-ci-only.patch"
+      ],
+      "exit": 0,
+      "sha256": "e9085113f7d1a12c51490f83bb8b1524a7480f54997bcf9a4acdc9d4357cd9a7"
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/corrections/correction-only.patch"
+      ],
+      "exit": 0,
+      "sha256": "f32d0fc18c3b89da970fe7a1cea392747976e7cb221e8ad6fcf8c333b9814710"
+    }
+  ],
+  "publication": {
+    "base_commit": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+    "baseline_committed_paths": 41501,
+    "baseline_tracked_dist_paths": 37,
+    "baseline_tracked_raw_evidence_paths": 8835,
+    "baseline_reachable_objects": 55181,
+    "baseline_reachable_commits": 1771,
+    "parent_supplied_object_audit": {
+      "uncompressed_bytes": 3349878968,
+      "blobs_over_100MiB": 0,
+      "source": "parent follow-up and independent review; not recomputed here",
+      "not_network_transfer_size": true
+    },
+    "local_prepared_union_paths": 41507,
+    "not_final_publication_commit": true,
+    "unfiltered_scope": "entire final accepted tracked tree plus reachable objects absent from target remote; path lists cannot filter git push",
+    "parent_current_accepted_main_prefix": "977cdf1f",
+    "required_before_permission": "parent refresh exact final accepted CI commit git ls-tree, ancestors/object audit; fill commit ID",
+    "actual_pushes": 0,
+    "actual_actions_runs": 0
+  },
+  "limits": "no actionlint installed, Cargo, WASM build or true Actions run"
+}

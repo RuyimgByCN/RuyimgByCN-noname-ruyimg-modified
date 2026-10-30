@@ -1,0 +1,32 @@
+{
+  "restored": [
+    {
+      "path": "crates/engine-native/src/engine/construction.rs",
+      "restored_sha256": "065366ea6c3061b7de28704a232b98632f421e67ceaac9ea043dd0bc8bfacd3d"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash.rs",
+      "restored_sha256": "b8a4243a87f4987ce852480eb9758c981a55e1d670676b9e8fe027511063edd3"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash/machine.rs",
+      "restored_sha256": "fa5d301d91a41971e7ef2b5ea054ce1cfca3f737e32e15cefd12413f98b4f4d8"
+    },
+    {
+      "path": "crates/engine-native/src/engine/legal_actions.rs",
+      "restored_sha256": "6a3b692a0958a59214b2ad2e66aaef4cb43b8a863863aa48bc4071de581ebb4a"
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_rules.rs",
+      "restored_sha256": "f506ce6516545f22233cdd0c704591bc89cd9db6a4a329f91ff3d8fea5aab3b7"
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_sha.rs",
+      "restored_sha256": "40238952241cccfb572fe6d8dae83558fef077f6f201c94ba7e51caed810f3f4"
+    }
+  ],
+  "all_rust_tracked_differences_empty": true,
+  "unaccepted_bytes_preserved": true,
+  "no_compilation_required": "Exact byte restoration to the previously validated977cdf1f tree; no runtime source change",
+  "guard_left_active_until_next_verified_boundary": true
+}

@@ -1,0 +1,1 @@
+{"command": ["git", "diff", "--exit-code", "--", "content/original"], "exit": 0, "locked_seconds": 0.33069654199061915, "disk_free_bytes": 147799166976}

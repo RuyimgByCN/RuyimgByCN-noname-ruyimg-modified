@@ -1,0 +1,9 @@
+{
+  "run": "d5d13193-8e56-438f-8303-75ba82cfef83",
+  "timeout_ms": 900000,
+  "result": "worker timed out after commands completed; original fullpreflight exit1/20of21 is real",
+  "queue_in_source_selftest_seconds_including_execution": 577.2557192500099,
+  "original_command_index": "parent-final-command-index.json",
+  "original_validation": "parent-final-local-validation.json",
+  "no_live_owned_process_after_timeout": true
+}

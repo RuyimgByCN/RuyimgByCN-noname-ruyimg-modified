@@ -1,0 +1,10 @@
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+{"command": ["python3", "-B", "scripts/check_doc_line_refs.py", "--strict"], "exit": 0, "locked_seconds": 5.4279923329886515, "disk_free_bytes": 149030195200}

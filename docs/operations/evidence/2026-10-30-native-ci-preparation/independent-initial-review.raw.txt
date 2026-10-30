@@ -1,0 +1,36 @@
+# 原生 CI 准备补丁独立只读审查
+
+结论：**请求修改：3 个 P1，1 个发布描述 P2。真正 GitHub Actions 实跑为 0；本地可审不等于 Actions 通过。**
+范围：基准 `255bbfbd7f6916ee77bd29799826a225bd10871f`，原生规则/存档/ABI 前提 329/105/758/WS5；仅审三文件 CI patch，六资源文件为只读前提，未计入 patch。已完整阅读 implementation handoff、canonical AGENTS/SPEC、实际 README/package/Tauri/构建脚本及相关测试注册与调用链。
+
+1. **P1 — checkout 的 origin 拼写使 provenance 必然不匹配。** `.github/actions/prepare-original-content/action.yml:7–13,25`：`actions/checkout@v4` 的 HTTPS URL 为 `https://github.com/libnoname/noname`，不带 `.git`；adopted manifest/catalog 均要求 `https://github.com/libnoname/noname.git`。真实 `sourceProvenance`（`scripts/sync-original-content.mjs:1455,1473`）与 sanitizer（1484）保留此差异，273 行严格比较首先抛出 `resource source provenance mismatch`。因此 gates/native-web/三 OS desktop 的五次执行都会在复制资源前失败。
+   最小修法：在 CI 上游 checkout 后、sync 前，将其已有 origin 的 URL 设为 adopted 的完整 HTTPS `.git` URL；只修 CI checkout 元数据，不改 canonical、不改 adopted provenance、不伪造 HEAD。隔离 fixture 使用真实 Git commit、真实 sparse checkout 与从原脚本提取的未改动函数，确认 clean 状态/root 映射正确，原 URL 拒绝、改正 URL 后通过；没有拿 fixture 冒充平台执行。
+   证据：[checkout 源码](https://github.com/actions/checkout/blob/v4/src/url-helper.ts#L20)、[创建 origin 的源码](https://github.com/actions/checkout/blob/v4/src/git-source-provider.ts#L114)、[定向复现](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/review/check-checkout-provenance.json)。源码 GET 快照也保存在下述 evidence/review。
+2. **P1 — 完整测试仍缺 Liuli 源码输入（基准已有缺口，本补丁未补齐）。** `.github/workflows/ci.yml:59,68–69,109,116–117`：共享 action 只 checkout core，但 workspace 与 native-web regression 均运行 engine-native 集成测试。`crates/engine-native/tests/l10_epic_cards_eight.rs:28–31,126–131` 无条件读取 `../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js`；`nc08_upstream_boss_zhugeliang.rs:107–111` 同样读取 `noname/character/extra.js` 并 expect。不是未注册的散落测试：Cargo.toml 的显式 l_rounds、nc08_upstream_a_k groups 都导入它们。fresh runner 没有这个仓，修好 P1-1 后 gates 与 native-web 仍会 panic，完整 Gate 4 仍到不了。
+   最小修法：只在需要完整集成测试的 jobs，按已采纳版本额外取得真实 Liuli 所需源码，保持 `archive/upstream/noname-liuli/noname/...` 拓扑；可 sparse 到调用者所需 character/extension 文本目录，不启用 `--skin-source`、不复制 skin assets、不删/skip 现有测试。本地只读定位的 canonical HEAD 为 `8485dbb29ff16f9b258a766b1a17ef75f883aade`、origin `Helasisy1984/Noname-Liuli-Modified.git`，最终采用仍应由父线程核对已有来源依据。调用者清单见 `liuli-callers.txt`。
+3. **P1 — gates 未准备 Gate 3 工具链（基准已有缺口，本补丁未补齐）。** `.github/workflows/ci.yml:50–59,80–81` 没有安装 wasm-pack；官方 Ubuntu 24.04 runner Rust 安装脚本仅安装 rustup/toolchain 与 rustfmt/clippy，没有 wasm-pack/wasm-bindgen。`scripts/cross-target-hash.sh:26` 调用 `build:wasm`，继而 `apps/web-client/scripts/build-wasm.mjs:38–65` 进入 fallback，固定安装 `wasm-bindgen-cli 0.2.100`；当前 `Cargo.lock:4738–4739` 的 wasm-bindgen 是 `0.2.126`。fresh runner 即使前面都通过，生成绑定也会因 schema/CLI 版本不匹配失败。
+   最小修法：gates 在 cross-target gate 前复用 native-web 已有的 `cargo install wasm-pack --version 0.15.0 --locked`，保持现有 gate 与脚本不变。此项依据实际调用链、lockfile 和官方镜像源码静态判定；按约束未运行任何 Rust/WASM 构建。官方材料 GET 快照：`ubuntu-install-rust.sh`、`ubuntu-24.04-software.md`。
+4. **P2 — 发布清单排除承诺与真实 push 不一致。** implementation handoff `native-ci-publication-preparation.md:78` 声称清单不含 dist/证据目录，但 `proposed-native-tree-paths.txt` 实有 37 个 `apps/web-client/dist/` 路径和 8,835 个 `docs/operations/evidence/` 路径。76 行普通 `git push <commit>:refs/heads/native-convergence` 发布整棵 commit tree，并按远端缺失情况发送可达历史对象，路径清单不能过滤它们。
+   最小修法：刷新最终 commit 的真实 `git ls-tree` 与 ancestor/object 审计，将公开授权提案明确写成整棵已验收树及必要历史。父提供的只读 object audit 记录基准可达 55,181 objects、解压 3,349,878,968 B、无 >100 MiB blob，含约 55/73 MB 历史日志；这不是实际网络传输量，也不是 push 验证。未改写、过滤历史或创建无证据根；若改用独立发布 tree 策略须另获明确授权。
+
+其他已核对：
+
+- 三处 local `uses: ./noname-next/...` 都相对 workspace 根；composite 两个 run 显式 `working-directory: noname-next`/`shell: bash`，不受 native-web caller 的 web-client 默认 cwd 混淆。workflow/job/desktop run cwd、五处 Rust cache `workspaces: noname-next` 与 installer artifact `noname-next/target/release/bundle/**` 相互一致。
+- pnpm/action-setup 显式 version 9，根无 package.json 时其源码允许 ENOENT；实际 frozen 安装仍在 web-client，Tauri beforeBuildCommand → build:desktop → native/legacy/web 构建路径均按脚本位置解析。原五类 job、十次矩阵、strict/legacy cross hash/完整 content verify/native Worker/frontend/Tauri/perf 命令均保留；未新增 framework/schema/规则/profile。
+- core HEAD 与 adopted 一致；本地该 HEAD 的 index 没有 gitlink/symlink，`.gitmodules` 为空。manifest 12,359 个资产 source_path 全部对应 tracked core 输入，无需编造或在上游生成它们。sparse `apps/core` 包含所需源码/资源；小 fixture 的 Git sparse/config 不会本身造成 dirty/root 偏移，首个真实差异就是 origin URL。
+- native 41,501 与 core 15,590 个 index 路径扫描均无 symlink/gitlink、Windows 保留名或大小写碰撞，最长相对路径分别 168/96 字符；这只是静态兼容性证据，不能证明 Windows hardlink、checkout EOL、安装器或 macOS 权限已通过。
+- `permissions: contents: read` 足够公共 checkout；保留 optional Tauri signing secret，未增加 secrets。on.push 无 branch filter，新 native-convergence 分支可触发十次矩阵；无需改 default main/force。现有 API 证据显示仓库 Actions enabled/allowed all，不代表已获 push 授权或平台成功。
+
+本次验证与保护证据（均在 [evidence/review](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/review)）：
+
+- `node ../evidence/review/check-checkout-provenance.mjs` 通过；真实 small Git fixture 已删除，无上游 fetch/共享 clone。`python3 -B ../evidence/review/check-static.py` 通过，含 YAML、五 jobs/十矩阵/保留命令、local action、bash -n、资源 tracked 输入检查；首次自检误把 runner workspace 路径当成本地根而失败，修正自检映射后通过，未改候选配置。
+- `git apply --reverse --check ../evidence/native-ci-only.patch`、`git diff --check` 通过。`entry.json`/`exit.json` 证明 HEAD、三 CI 文件、六资源前提、patch、tracked diff、完整 status、index 字节均相同；无 staged files。未运行全资产 hash/restore、pnpm install、Node build、Cargo 或 WASM；actionlint 未安装未运行。
+- 纯 patch SHA-256 入口=出口：`407c7667743aa8072dcdad73225acd63580f3e7738b8e1c615c8e705313947dc`。
+- `.github/workflows/ci.yml` 入口=出口 SHA-256：`8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7`。
+- `.github/actions/prepare-original-content/action.yml` 入口=出口 SHA-256：`e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9`。
+- `docs/operations/native-ci.md` 入口=出口 SHA-256：`83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084`。
+- tracked binary diff 入口=出口 SHA-256：`7ebfead24b559ba19c5179dc254558caf4261b731c5b6217cec72a34eaa77efa`；index SHA-256：`f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f`。报告与证据仅写授权输出路径和自己的 evidence/review，未 push/dispatch/PR/comment/release/settings/secrets/newremote，未运行子 agent。
+
+下一步：父线程先修复上述 CI 输入/工具链阻断并刷新真实发布树/历史说明，再独立验收最终补丁；获明确外部许可之后才进行真实 Actions 验证。
+未检查：Windows/macOS 安装器、Node 20 全链、平台权限与 artifact 上传；本次无 build，无新增 build 目录需清理，磁盘可用约 150 GiB，fixture 已清理。
+风险：**GitHub Actions 实跑仍为 0；不得把本地 fixture、静态审查或既有 Gate 4 证据称为平台全绿。**

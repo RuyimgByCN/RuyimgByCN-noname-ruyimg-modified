@@ -1,0 +1,32 @@
+# 原生 CI 修正最终独立只读复审
+
+**结论：SOURCE OK with notes。原审查的 3 个 P1 与发布描述 P2 已在当前四文件配置/输入范围关闭；未发现新的 P1/P2。实际 push = 0，GitHub Actions run = 0；本地输入及配置验收不等于平台通过。**
+已完整阅读新 handoff、四文件及相关真实 reader/注册、package importer、Node inventory、构建调用链；本地候选基准仍 `255bbfbd`，父已验收 main 为 `977cdf1f`。未编辑任何 source/index/上游/main/metadata；仅写本报告和自己的 [evidence/review-corrections](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/review-corrections)。
+
+- **P1-1 关闭：** `action.yml:18–21` 显式在 `archive/upstream/noname` 将新 CI checkout 的已有 origin 绑定到 adopted `.git` URL；在 resource-only 之前执行，未改 sanitizer、manifest、HEAD 或 canonical remote。复核了真实 small Git fixture 的 URL red→green 与 clean/root/head 证据；配置修复针对原错误，无 provenance 伪造。
+- **P1-2 关闭：** `action.yml:22–42` 固定 Liuli HEAD `8485dbb29ff16f9b258a766b1a17ef75f883aade`，仅 gates/native-web 请求 integration-sources。独立扫描实际代码并核对 groups，8 个 runtime reader 的依赖集合与 12 个 sparse 文件精确相等：l10/16/18/26 各一份 extension，l17 四份 plan，l21 extension+mightyFoe，boss extra.js，longxue extension。`/noname/...` 前导根锚点、non-cone 模式、中文及无扩展名 plan 路径正确，无 wildcard 扩目录；真实 sparse fixture 已证明未选 skin 不落地。本次不重复创建 fixture。
+- **Longxue 必要输入正确：** `action.yml:43–63` 在新 Liuli checkout 先断言 preimage SHA，再通过 `execFileSync('git', ['apply', absolutePatchPath])` 应用唯一目标 patch，再断言 adopted SHA；异常会令 step 失败。Node `path.join(GITHUB_WORKSPACE, 'noname-next/...')` 与实参数组保留路径边界，heredoc 不插值。独立从完整 patch 重建旧/新文件，核对 SHA-256、Git blob OID、唯一目标及 canonical 实际字节，连 postimage 无结尾换行也一致。pre=`cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76`，post=`e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7`；复核既有实际 apply green、错误 preimage 写入前拒绝证据。没有执行该 JS 上游文本。
+- **七项 canonical 修改边界正确：** 本次七份当前文件 SHA 与交接逐条一致且入口出口未变；只有 Longxue 需要 patch，Epic 两版都满足 l10 五个源码谓词，其余五份无实际 raw reader。测试包 content_hash 读取 tracked 转换包。源码里的 source/line 描述不触发额外 Liuli 文件装载：Rust importer 只读所传 package 目录及其包/资产，content-native-loader 解析传入文本；Node inventory 只读 packages/extensions 的 npack manifest。core 完整 verify 不配置 skin-source，不会转读 Liuli。这里验收测试输入，不声明七项修改或 37 来源的全语义等价。
+- **P1-3 关闭：** `ci.yml:82–85` 在 Gate 3 前安装现有 `wasm-pack 0.15.0 --locked`，与 native-web 相同。实际 cross-target→pnpm build:wasm→build-wasm 路径不变。复核已保存的实际 JS 配合 process/fs 桩的路由 red→green，避免 fallback CLI 0.2.100 与 lockfile 0.2.126 冲突；桩证据只证明路由，不是工具安装或 WASM 编译成功。
+- **P2 关闭：** 新 `native-ci.md` 与新 handoff 明确撤回 dist/evidence 排除承诺，发布范围为完整 tracked tree 与远端缺失的必要可达历史。独立只读 `git ls-tree` 确认当前父 main `977cdf1f` 为 41,706 路径、37 tracked dist、9,037 tracked evidence、target/ignored assets tracked 数为 0；这不是最终 CI commit 清单。255 的 3,349,878,968 B 未压缩对象量不是网络传输量，无 >100 MiB blob 也不证明 push 成功。须在问用户前刷新最终 CI commit 的真实 tree/history/object 审计；无 orphan、过滤历史或改写 main。API admin 不是公开发布授权，目前仍未取得该许可。
+
+其他范围检查：5 jobs/10 矩阵及所有旧 run 命令保留，strict、完整 core verify、legacy cross hash、native rebuild/Worker/frontend、desktop/Tauri/artifact、perf 均无删改/skip。三处 local action 仍相对 workspace 根；workflow/job/composite cwd、Rust cache workspaces、installer artifact 路径正确。Longxue 步骤实际只在两 Ubuntu job 运行；desktop 三 OS 的 composite 仍显式 bash/cwd，未新添 Windows JSON/shell 转义依赖。permissions contents:read、既有 optional Tauri secret 与 on.push 全分支触发保持；无新框架/schema/规则/profile。
+
+本次轻量核验：
+
+- `python3 -B ../evidence/review-corrections/check-corrections.py` 通过：YAML、旧命令/矩阵、8→12 reader 集合、补丁逐字节重建/唯一作用域、全部 composite `bash -n`、wasm-pack 顺序、两份 `git apply --reverse --check` 及 `git diff --check`。未安装依赖、未重跑全资产 hash/restore、未运行 Cargo/build；已有 pnpm9 frozen/full verify/17,031 保护文件证据已读，不改称本次或平台实跑。
+- 保留初次自检失败：自有重建器原先拒绝 patch 的合法 `No newline` 标记，修正仅自有 checker 后通过；记录在 `first-check-observation.txt`。交接中原 fixture 锁等待超时、wrong-preimage 拒绝、core index 二进制保护断言失败及后续观察均保留，未擦除或覆盖。
+- 入口/出口文件和两 patch 哈希完全相同；candidate HEAD、tracked diff、index 均相同，index=`f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f`，tracked binary diff SHA=`6994e7d91524a5825cd4d7bb8848b05bda42490a8b98d80f7970317f92a337a2`；六资源前提未变；candidate/main/core/Liuli 均无 staged files。
+- 保护观察须保留：本次 core index 入口出口均 `a4d931…` 且 logical=HEAD，Liuli index/七文件也未变；父 main index 二进制从 `4b374cd5…` 变 `e5f80738…`，首次退出 equality 断言失败。main HEAD=977、tracked diff、staged 摘要未变，logical index=HEAD。全部 reviewer Git 命令禁用 optional locks/懒 fetch；未写回/恢复 metadata，不能归因于本 reviewer，也不承诺并发窗口全程 index byte 不变。完整值和失败见 `entry.json`/`exit.json`。
+
+| 四文件 | 入口 = 出口 SHA-256 |
+| --- | --- |
+| `.github/workflows/ci.yml` | `1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb` |
+| `.github/actions/prepare-original-content/action.yml` | `3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773` |
+| `docs/operations/native-ci.md` | `cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f` |
+| `.github/actions/prepare-original-content/liuli-longxue.patch` | `02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9` |
+
+完整四文件 patch 入口=出口 SHA：`e9085113f7d1a12c51490f83bb8b1524a7480f54997bcf9a4acdc9d4357cd9a7`；correction-only patch：`f32d0fc18c3b89da970fe7a1cea392747976e7cb221e8ad6fcf8c333b9814710`。父按集成状态二选一，不叠加；本次未应用到 977、未提交。
+下一步：父可集成四文件并完成最终 CI commit/整树历史审计，然后申请一次具体外部许可；本报告不授予 push/dispatch/Actions/artifact 发布许可。
+未检查：真实 GitHub Actions、Node 20 全链、Windows/macOS 安装器、平台权限与 artifact 上传；Actions run 仍为 0。未新增 fixture/build 目录，磁盘约 143 GiB 可用。
+风险：源码配置可接受仍不保证 fresh GitHub 全链成功；原有源码语义及平台验收范围没有被本复审替代。

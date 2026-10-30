@@ -1,0 +1,17 @@
+{
+  "command": [
+    "node",
+    "scripts/sync-original-content.mjs",
+    "--verify-only"
+  ],
+  "exit": 0,
+  "env": {
+    "GIT_OPTIONAL_LOCKS": "0",
+    "GIT_NO_LAZY_FETCH": "1"
+  },
+  "canonical_index_before_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9",
+  "canonical_index_after_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9",
+  "canonical_index_bytes_unchanged_in_this_window": true,
+  "canonical_logical_index_equals_HEAD": true,
+  "limits": "Does not erase earlier binary index refresh observation or prove attribution in that earlier concurrent window"
+}

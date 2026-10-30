@@ -1,0 +1,11 @@
+{
+  "observed_failure": "initial completion guard expected every repository index byte hash unchanged, but canonical core index hash differed",
+  "before_sha256": "3e4b8f30179c7f231ed446b502c39ed093cdecec35ac75a09c65536c2f4dbc79",
+  "after_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9",
+  "head_and_remote_unchanged": true,
+  "logical_index_equals_HEAD": true,
+  "candidate_index_unchanged": true,
+  "liuli_index_unchanged": true,
+  "possible_cause": "sourceProvenance calls git status; without GIT_OPTIONAL_LOCKS=0, Git can refresh index stat-cache metadata; parent concurrent verification also existed, so attribution is unproven",
+  "response": "No canonical restore or set-url. Evidence runner corrected to GIT_OPTIONAL_LOCKS=0 and GIT_NO_LAZY_FETCH=1; one serialized read-only verification queued."
+}

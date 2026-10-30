@@ -1,0 +1,21 @@
+{
+  "base_commit": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "baseline_committed_paths": 41501,
+  "baseline_tracked_dist_paths": 37,
+  "baseline_tracked_raw_evidence_paths": 8835,
+  "baseline_reachable_objects": 55181,
+  "baseline_reachable_commits": 1771,
+  "parent_supplied_object_audit": {
+    "uncompressed_bytes": 3349878968,
+    "blobs_over_100MiB": 0,
+    "source": "parent follow-up and independent review; not recomputed here",
+    "not_network_transfer_size": true
+  },
+  "local_prepared_union_paths": 41507,
+  "not_final_publication_commit": true,
+  "unfiltered_scope": "entire final accepted tracked tree plus reachable objects absent from target remote; path lists cannot filter git push",
+  "parent_current_accepted_main_prefix": "977cdf1f",
+  "required_before_permission": "parent refresh exact final accepted CI commit git ls-tree, ancestors/object audit; fill commit ID",
+  "actual_pushes": 0,
+  "actual_actions_runs": 0
+}

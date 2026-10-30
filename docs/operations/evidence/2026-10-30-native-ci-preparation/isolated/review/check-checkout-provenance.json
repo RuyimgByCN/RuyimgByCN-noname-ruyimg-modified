@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "functions": "unmodified function bodies extracted from actual sync-original-content.mjs",
+  "sparse_checkout": "apps/core",
+  "fixture_provenance": {
+    "category": "core",
+    "root": "archive/upstream/noname/apps/core",
+    "repository": "https://github.com/libnoname/noname",
+    "repository_root": "archive/upstream/noname",
+    "head": "0db7a196309af292560fef750757b474307d0ae1",
+    "dirty": false,
+    "tracked_changes": [],
+    "tracked_change_count": 0,
+    "untracked_count": 0,
+    "redistribution_status": "preserved_from_source_requires_review"
+  },
+  "rejection": "resource source provenance mismatch",
+  "minimal_origin_correction": "passed",
+  "note": "No upstream objects, pnpm, build, assets or platform execution; fixture head is its own real commit"
+}

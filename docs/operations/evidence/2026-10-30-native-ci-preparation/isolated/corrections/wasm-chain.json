@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "actual_build_script_executed_with_stubbed_process_and_fs": true,
+  "red_missing_pack_selects_incompatible_cli": "0.2.100",
+  "lock_wasm_bindgen": "0.2.126",
+  "gate_installs_existing_version": "cargo install wasm-pack --version 0.15.0 --locked",
+  "ordered_before_cross_target_gate": true,
+  "green_prefers_wasm_pack": true,
+  "red_calls": [
+    {
+      "probe": "wasm-pack",
+      "args": [
+        "--version"
+      ]
+    },
+    {
+      "cmd": "cargo",
+      "args": [
+        "build",
+        "-p",
+        "engine-wasm",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--release"
+      ]
+    },
+    {
+      "probe": "wasm-bindgen",
+      "args": [
+        "--version"
+      ]
+    },
+    {
+      "cmd": "cargo",
+      "args": [
+        "install",
+        "wasm-bindgen-cli",
+        "--version",
+        "0.2.100",
+        "--locked"
+      ]
+    },
+    {
+      "cmd": "wasm-bindgen",
+      "args": [
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/target/wasm32-unknown-unknown/release/engine_wasm.wasm",
+        "--target",
+        "web",
+        "--out-dir",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/apps/web-client/src/wasm-pkg",
+        "--out-name",
+        "engine_wasm"
+      ]
+    }
+  ],
+  "green_calls": [
+    {
+      "probe": "wasm-pack",
+      "args": [
+        "--version"
+      ]
+    },
+    {
+      "cmd": "wasm-pack",
+      "args": [
+        "build",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/crates/engine-wasm",
+        "--target",
+        "web",
+        "--out-dir",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/apps/web-client/src/wasm-pkg",
+        "--release",
+        "--",
+        "--no-default-features"
+      ]
+    }
+  ],
+  "note": "No Cargo/Rust/WASM compilation or actual tool installation; this proves command routing only"
+}

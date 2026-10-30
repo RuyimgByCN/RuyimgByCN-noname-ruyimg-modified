@@ -1,0 +1,174 @@
+{
+  "passed": true,
+  "missing_source_red": true,
+  "immutable_longxue_red": "jsjiami missing, actual source predicate false",
+  "adopted_patch_green": true,
+  "wrong_preimage_rejected_before_write": true,
+  "source_predicates_checked": {
+    "l10_epic_cards_eight": 5,
+    "l16_drag_read_eight": 8,
+    "l18_update_guard_eight": 8,
+    "l21_martial_eight": 6,
+    "l26_fool_eight": 9
+  },
+  "extra_boss_source_assertions": "passed",
+  "four_plan_source_assertions": "passed",
+  "registered_source_tests": 8,
+  "sparse_text_inputs": {
+    "noname/character/extra.js": {
+      "head_sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "bytes": 571275,
+      "canonical_sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a",
+      "final_sha256": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a"
+    },
+    "noname/extension/史诗卡牌/extension.js": {
+      "head_sha256": "f597a6aa9ffbba27317aadbd17929c138749e5299ded18b48604539c8918b4ca",
+      "bytes": 137857,
+      "canonical_sha256": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+      "final_sha256": "f597a6aa9ffbba27317aadbd17929c138749e5299ded18b48604539c8918b4ca"
+    },
+    "noname/extension/拖拽读取/extension.js": {
+      "head_sha256": "f758f3a882b1f7460107c97a34914299ef5a056a687658fabb9e8ef9a9c07939",
+      "bytes": 40949,
+      "canonical_sha256": "f758f3a882b1f7460107c97a34914299ef5a056a687658fabb9e8ef9a9c07939",
+      "final_sha256": "f758f3a882b1f7460107c97a34914299ef5a056a687658fabb9e8ef9a9c07939"
+    },
+    "noname/extension/斗转星移/data/inputPlan/空白": {
+      "head_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60",
+      "bytes": 4,
+      "canonical_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60",
+      "final_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60"
+    },
+    "noname/extension/斗转星移/data/inputPlan/标准包": {
+      "head_sha256": "eeeb703c6158d5dfb1c011b25c7208ae4f229e34ed25614c76a122200c98ef1b",
+      "bytes": 16517,
+      "canonical_sha256": "eeeb703c6158d5dfb1c011b25c7208ae4f229e34ed25614c76a122200c98ef1b",
+      "final_sha256": "eeeb703c6158d5dfb1c011b25c7208ae4f229e34ed25614c76a122200c98ef1b"
+    },
+    "noname/extension/斗转星移/data/inputPlan/风林火山": {
+      "head_sha256": "7a097a8f96edc50c41d1edfbf31d0496da5b8757ef64869f2635bd42e097df46",
+      "bytes": 16027,
+      "canonical_sha256": "7a097a8f96edc50c41d1edfbf31d0496da5b8757ef64869f2635bd42e097df46",
+      "final_sha256": "7a097a8f96edc50c41d1edfbf31d0496da5b8757ef64869f2635bd42e097df46"
+    },
+    "noname/extension/斗转星移/data/outputPlan/无": {
+      "head_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60",
+      "bytes": 4,
+      "canonical_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60",
+      "final_sha256": "ef761e2f93912b3b7ae80b272a7900e6e204378adde80c69615ae9901ae1cc60"
+    },
+    "noname/extension/更新保护/extension.js": {
+      "head_sha256": "d09ba2e49b7d73e9ee0d8213bd736cc4e32b247c5b08ed4f16f3368c52a5c512",
+      "bytes": 71347,
+      "canonical_sha256": "d09ba2e49b7d73e9ee0d8213bd736cc4e32b247c5b08ed4f16f3368c52a5c512",
+      "final_sha256": "d09ba2e49b7d73e9ee0d8213bd736cc4e32b247c5b08ed4f16f3368c52a5c512"
+    },
+    "noname/extension/武皇争霸/extension.js": {
+      "head_sha256": "f60b6793e5b272b7e0d9a2831aa2e4cc6380fa50b65279aa7db9e5a481497937",
+      "bytes": 76304,
+      "canonical_sha256": "f60b6793e5b272b7e0d9a2831aa2e4cc6380fa50b65279aa7db9e5a481497937",
+      "final_sha256": "f60b6793e5b272b7e0d9a2831aa2e4cc6380fa50b65279aa7db9e5a481497937"
+    },
+    "noname/extension/武皇争霸/mightyFoe.js": {
+      "head_sha256": "8ab327c52e27385f94fa09225b504c48ffe6d3c41a6a54a9cb28697aa5ad09c3",
+      "bytes": 694,
+      "canonical_sha256": "8ab327c52e27385f94fa09225b504c48ffe6d3c41a6a54a9cb28697aa5ad09c3",
+      "final_sha256": "8ab327c52e27385f94fa09225b504c48ffe6d3c41a6a54a9cb28697aa5ad09c3"
+    },
+    "noname/extension/笨蛋插件/extension.js": {
+      "head_sha256": "5adffeaf2238584a15f09a8208b394b0af68b05952ab30eb4db5cb01af4dd4ac",
+      "bytes": 74455,
+      "canonical_sha256": "5adffeaf2238584a15f09a8208b394b0af68b05952ab30eb4db5cb01af4dd4ac",
+      "final_sha256": "5adffeaf2238584a15f09a8208b394b0af68b05952ab30eb4db5cb01af4dd4ac"
+    },
+    "noname/extension/龙血玄黄/extension.js": {
+      "head_sha256": "cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76",
+      "bytes": 193328,
+      "canonical_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+      "final_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7"
+    }
+  },
+  "seven_local_changes_audit": [
+    {
+      "path": "noname/extension/十周年UI/meihua.js",
+      "head_sha256": "9bf2c192c7d115bc50c362eef1f9cb4feb038fb47fde6a528b4a508f22624da6",
+      "canonical_sha256": "2148cd5255a9d6c8105d1f320cce7a02dfa1ebde0a8795eb20f6f4c2ab857f92",
+      "head_bytes": 358169,
+      "canonical_bytes": 358165,
+      "raw_source_readers": [],
+      "ci_patch_required": false,
+      "decision": "no registered raw-source reader found; not a claim of behavioral equivalence"
+    },
+    {
+      "path": "noname/extension/史诗卡牌/extension.js",
+      "head_sha256": "f597a6aa9ffbba27317aadbd17929c138749e5299ded18b48604539c8918b4ca",
+      "canonical_sha256": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+      "head_bytes": 137857,
+      "canonical_bytes": 137764,
+      "raw_source_readers": [
+        "l10_epic_cards_eight"
+      ],
+      "ci_patch_required": false,
+      "decision": "both byte variants satisfy every raw-source predicate; content hashes use tracked converted packages"
+    },
+    {
+      "path": "noname/extension/如真似幻/extension.js",
+      "head_sha256": "b2cc01276a98a41723e929937b91bad5703150d78fa35115661547778fd2972b",
+      "canonical_sha256": "d17ae26170cc74618c4afc0a5d51cc13dc7e9ee18b3578b398fbb7a03260d6a1",
+      "head_bytes": 609829,
+      "canonical_bytes": 619266,
+      "raw_source_readers": [],
+      "ci_patch_required": false,
+      "decision": "no registered raw-source reader found; not a claim of behavioral equivalence"
+    },
+    {
+      "path": "noname/extension/如真似幻/js/rzsh.js",
+      "head_sha256": "317fcce564eca04c2788a9ff165df570582f04ce5be43a32e6a9bff14c9573fe",
+      "canonical_sha256": "0a113793f615a7dbf7fb8c419db594c42a5b97e0c38ecb0ca421915e5d3e4a80",
+      "head_bytes": 35500,
+      "canonical_bytes": 123473,
+      "raw_source_readers": [],
+      "ci_patch_required": false,
+      "decision": "no registered raw-source reader found; not a claim of behavioral equivalence"
+    },
+    {
+      "path": "noname/extension/手杀ui/extension.js",
+      "head_sha256": "f6d6441ce7235ac9e61e387431e2fa5a2bcf6fee6ec33895997b12640760d70c",
+      "canonical_sha256": "1246acb0364348505f3d17ed4a951ea41226f91113669cab5d9d8c0b2f09d026",
+      "head_bytes": 323632,
+      "canonical_bytes": 322551,
+      "raw_source_readers": [],
+      "ci_patch_required": false,
+      "decision": "no registered raw-source reader found; not a claim of behavioral equivalence"
+    },
+    {
+      "path": "noname/extension/选将美化/extension.js",
+      "head_sha256": "aa2c41d53188cdcd251255d9b4158967477ddef9f8c3a925d08382e5ce19672a",
+      "canonical_sha256": "a5c50981044e93304f69304a3aad3795e0a1db195a0b1534f859994d8006317f",
+      "head_bytes": 485927,
+      "canonical_bytes": 918197,
+      "raw_source_readers": [],
+      "ci_patch_required": false,
+      "decision": "no registered raw-source reader found; not a claim of behavioral equivalence"
+    },
+    {
+      "path": "noname/extension/龙血玄黄/extension.js",
+      "head_sha256": "cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76",
+      "canonical_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+      "head_bytes": 193328,
+      "canonical_bytes": 434126,
+      "raw_source_readers": [
+        "nc08_upstream_longxue"
+      ],
+      "ci_patch_required": true,
+      "decision": "restore exact adopted bytes; immutable HEAD fails jsjiami assertion"
+    }
+  ],
+  "canonical_seven_bytes_unchanged": true,
+  "fixture_head_unchanged": true,
+  "patch_only_expected_file": [
+    "noname/extension/龙血玄黄/extension.js"
+  ],
+  "no_skin_assets": true,
+  "note": "real source bytes in own fixture; no Rust tests, real upstream checkout or complete Actions run"
+}

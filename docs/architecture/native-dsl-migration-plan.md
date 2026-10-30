@@ -2,6 +2,8 @@
 
 > 本文是台帐 [PA12](native-remaining-ledger.md#pa01pa12-性能架构调整2026-10-26) ④ 的交付物：原型证据见 [PA12④ 原型](../operations/evidence/2026-10-26-pa12-dsl-native-prototype/README.md)。**批量迁移前须再请用户确认**（PA12 裁决条件④）。**2026-10-27 21:50 用户授权：在本计划范围内连续推进各批，无需逐批确认；新立 ADR、改协议、改版本门禁（规则版本/存档格式/ABI 升号）的批次及计划外范围变化仍须先问用户**（见[台帐 PA12 批次登记](native-remaining-ledger.md#pa12-迁移批次登记按提交顺序)）；**2026-10-28 用户另授权 §2 J「效果级选择窗挂起」与批⑥「主动技桥」的设计与 ADR 起草**，VM 提交协议、选择/命令协议的具体改动及任何升号实施前仍须分别请示（[裁决登记](../operations/evidence/2026-10-28-user-decisions/README.md)）。规则/存档版本不随本文变化。
 
+> **2026-10-30核验说明**：J1及J2已依各自授权实现并验收入库，J2提交`255bbfbd`接通主动技桥及756–758效果续行。下表频次、ABI753拒绝和“未实施”属于初版/重盘时点，不是最新阻断；当前状态及尚缺完整事件/原语/整包只看[进度主稿](native-progress.md)与[统一剩余台账](native-remaining-ledger.md)。该验收不关闭R01选择状态机、所有§2 J效果族或完整PA12。
+
 ## 1 结论与路线
 
 - **路线成立**：现有 ported `.skill`（旧线 DSL 产物）经 content-compiler → `content-native-loader::bridge_vm_skill_decls` → engine-native `VmMachine` 即可在原生整局运行，**不写新的原生 Rust 宿主代码**。原型用 sp 包真实技能 `olyinji`（隐绩：结束阶段体力非唯一最高时 `choose(1,2)` 回复 1 或上限 +1）完成：正式装载路径、触发、挂起、作答续行、效果落账、挂起中存档→恢复→续行（同一快照双分支）、与旧线 vm_host 对同一字节码的差分一致、上游语义（结束阶段、仅并列最高触发）核对。

@@ -1,0 +1,4 @@
+original content resources verified:
+  portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied
+  audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied
+{"command": ["node", "scripts/sync-original-content.mjs", "--resources-only", "--verify-only"], "exit": 0, "locked_seconds": 2.0249544590187725, "disk_free_bytes": 147798208512}

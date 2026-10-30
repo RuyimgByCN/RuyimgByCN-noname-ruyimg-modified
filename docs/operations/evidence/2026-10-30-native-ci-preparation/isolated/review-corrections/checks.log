@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "jobs": 5,
+  "matrix_executions": 10,
+  "all_prior_run_commands_preserved": true,
+  "actual_raw_reader_files": {
+    "crates/engine-native/tests/l16_drag_read_eight.rs": [
+      "noname/extension/拖拽读取/extension.js"
+    ],
+    "crates/engine-native/tests/nc08_upstream_longxue.rs": [
+      "noname/extension/龙血玄黄/extension.js"
+    ],
+    "crates/engine-native/tests/l17_douzhuan_eight.rs": [
+      "noname/extension/斗转星移/data/inputPlan/标准包",
+      "noname/extension/斗转星移/data/inputPlan/空白",
+      "noname/extension/斗转星移/data/inputPlan/风林火山",
+      "noname/extension/斗转星移/data/outputPlan/无"
+    ],
+    "crates/engine-native/tests/nc08_upstream_boss_zhugeliang.rs": [
+      "noname/character/extra.js"
+    ],
+    "crates/engine-native/tests/l10_epic_cards_eight.rs": [
+      "noname/extension/史诗卡牌/extension.js"
+    ],
+    "crates/engine-native/tests/l18_update_guard_eight.rs": [
+      "noname/extension/更新保护/extension.js"
+    ],
+    "crates/engine-native/tests/l21_martial_eight.rs": [
+      "noname/extension/武皇争霸/extension.js",
+      "noname/extension/武皇争霸/mightyFoe.js"
+    ],
+    "crates/engine-native/tests/l26_fool_eight.rs": [
+      "noname/extension/笨蛋插件/extension.js"
+    ]
+  },
+  "sparse_inputs": 12,
+  "patch_scope": "1\t509\tnoname/extension/龙血玄黄/extension.js",
+  "preimage_sha256": "cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76",
+  "postimage_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+  "blob_oids_match_patch": true,
+  "postimage_equals_actual_canonical_bytes": true,
+  "shell_syntax": "passed",
+  "origin_cwd_and_url": "passed",
+  "patch_path_and_exec_argument_array": "passed",
+  "wasm_pack_ordering": "passed",
+  "patch_reverse_checks": [
+    {
+      "command": "git apply --reverse --check /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/../evidence/corrections/native-ci-only.patch",
+      "exit": 0
+    },
+    {
+      "command": "git apply --reverse --check /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/../evidence/corrections/correction-only.patch",
+      "exit": 0
+    }
+  ],
+  "limits": "No Git init/add/commit, restore, metadata write, Cargo/build, or platform execution. Existing real sparse/apply fixtures reviewed, not repeated."
+}

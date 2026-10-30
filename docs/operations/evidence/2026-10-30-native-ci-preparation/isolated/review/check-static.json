@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "jobs": [
+    "build",
+    "gates",
+    "native-web",
+    "desktop",
+    "perf"
+  ],
+  "matrix_executions": 10,
+  "existing_commands_preserved": true,
+  "composite_shell_and_local_uses": "passed",
+  "cache_and_artifact_paths": "passed",
+  "all_manifest_assets_tracked_in_adopted_source": 12359,
+  "unconditional_liuli_callers_registered": true,
+  "gates_no_wasm_pack": true,
+  "fallback_and_lock_versions": [
+    "0.2.100",
+    "0.2.126"
+  ]
+}

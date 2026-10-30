@@ -1,0 +1,47 @@
+{
+  "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+  "files": {
+    "noname/extension/十周年UI/meihua.js": {
+      "head_sha256": "9bf2c192c7d115bc50c362eef1f9cb4feb038fb47fde6a528b4a508f22624da6",
+      "canonical_sha256": "2148cd5255a9d6c8105d1f320cce7a02dfa1ebde0a8795eb20f6f4c2ab857f92",
+      "head_bytes": 358169,
+      "canonical_bytes": 358165
+    },
+    "noname/extension/史诗卡牌/extension.js": {
+      "head_sha256": "f597a6aa9ffbba27317aadbd17929c138749e5299ded18b48604539c8918b4ca",
+      "canonical_sha256": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+      "head_bytes": 137857,
+      "canonical_bytes": 137764
+    },
+    "noname/extension/如真似幻/extension.js": {
+      "head_sha256": "b2cc01276a98a41723e929937b91bad5703150d78fa35115661547778fd2972b",
+      "canonical_sha256": "d17ae26170cc74618c4afc0a5d51cc13dc7e9ee18b3578b398fbb7a03260d6a1",
+      "head_bytes": 609829,
+      "canonical_bytes": 619266
+    },
+    "noname/extension/如真似幻/js/rzsh.js": {
+      "head_sha256": "317fcce564eca04c2788a9ff165df570582f04ce5be43a32e6a9bff14c9573fe",
+      "canonical_sha256": "0a113793f615a7dbf7fb8c419db594c42a5b97e0c38ecb0ca421915e5d3e4a80",
+      "head_bytes": 35500,
+      "canonical_bytes": 123473
+    },
+    "noname/extension/手杀ui/extension.js": {
+      "head_sha256": "f6d6441ce7235ac9e61e387431e2fa5a2bcf6fee6ec33895997b12640760d70c",
+      "canonical_sha256": "1246acb0364348505f3d17ed4a951ea41226f91113669cab5d9d8c0b2f09d026",
+      "head_bytes": 323632,
+      "canonical_bytes": 322551
+    },
+    "noname/extension/选将美化/extension.js": {
+      "head_sha256": "aa2c41d53188cdcd251255d9b4158967477ddef9f8c3a925d08382e5ce19672a",
+      "canonical_sha256": "a5c50981044e93304f69304a3aad3795e0a1db195a0b1534f859994d8006317f",
+      "head_bytes": 485927,
+      "canonical_bytes": 918197
+    },
+    "noname/extension/龙血玄黄/extension.js": {
+      "head_sha256": "cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76",
+      "canonical_sha256": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7",
+      "head_bytes": 193328,
+      "canonical_bytes": 434126
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "reason": "Copied third-party Rust cache README has repository-relative link ./.github/workflows; retain exact raw bytes as txt rather than treat external documentation as maintained local Markdown",
+  "source_original_unchanged": true,
+  "old_owned_copy": "isolated/review/rust-cache-README.md",
+  "new_owned_copy": "isolated/review/rust-cache-README.raw.txt",
+  "sha256_unchanged": "e07cff27b5f01707b6f3a9158df045011047b916263b2fb8807d341a9881085a",
+  "original_failed_preflight": "parent-final-full-preflight.log",
+  "old_result": "20/21 failed local-links-all; no testing failure suppressed"
+}

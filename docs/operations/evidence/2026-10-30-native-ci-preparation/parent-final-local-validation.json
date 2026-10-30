@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "commands": [
+    {
+      "name": "source-line-selftests",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "elapsed_seconds_including_queue": 577.2557192500099,
+      "log": "parent-final-source-line-selftests.log"
+    },
+    {
+      "name": "source-line-gate",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "elapsed_seconds_including_queue": 6.393833500012988,
+      "log": "parent-final-source-line-gate.log"
+    },
+    {
+      "name": "strict-document-references",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "elapsed_seconds_including_queue": 5.454247749992646,
+      "log": "parent-final-strict-document-references.log"
+    },
+    {
+      "name": "full-preflight",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "exit": 1,
+      "elapsed_seconds_including_queue": 312.39382712499355,
+      "log": "parent-final-full-preflight.log"
+    }
+  ],
+  "four_reviewed_config_inputs_unchanged": true,
+  "rust_and_tracked_original_content_unchanged": true,
+  "github_run_count": 0,
+  "push_count": 0,
+  "scope": "Local configuration/input validation only; no Cargo/WASM build or external execution"
+}

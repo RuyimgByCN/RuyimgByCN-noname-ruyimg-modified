@@ -1,0 +1,14 @@
+{
+  "commit": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "tracked_paths": 41706,
+  "tracked_prefix_counts": {
+    "apps/web-client/dist/": 37,
+    "docs/operations/evidence/": 9037,
+    "target/": 0,
+    "content/original/assets/": 0
+  },
+  "publication_requires_explicit_user_authorization": true,
+  "ordinary_push_includes_full_tracked_tree_and_missing_reachable_history": true,
+  "no_history_filter_or_rewrite_performed": true,
+  "future_accepted_ci_commit_requires_fresh_ls_tree_manifest": true
+}

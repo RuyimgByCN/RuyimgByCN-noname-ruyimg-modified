@@ -1,0 +1,58 @@
+{
+  "files": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "scripts/test_original_resources.mjs": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "apps/web-client/src/engine/originalResources.ts": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+    "apps/web-client/src/views/CollectionView.vue": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+    "apps/web-client/scripts/original-resources.test.mjs": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47"
+  },
+  "patches": {
+    "native-ci-only.patch": "e9085113f7d1a12c51490f83bb8b1524a7480f54997bcf9a4acdc9d4357cd9a7",
+    "correction-only.patch": "f32d0fc18c3b89da970fe7a1cea392747976e7cb221e8ad6fcf8c333b9814710"
+  },
+  "repositories": {
+    "candidate": {
+      "HEAD": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+      "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f",
+      "index_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/worktrees/worktree13/index",
+      "diff_sha256": "6994e7d91524a5825cd4d7bb8848b05bda42490a8b98d80f7970317f92a337a2",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "main": {
+      "HEAD": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+      "index_sha256": "4b374cd54c8a1670975454d0a4ffaa516d8154265e4285cf06e39c3d34b5c25d",
+      "index_path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/index",
+      "diff_sha256": "efb076aa43c73926df9eb84706f6342fc0aad3b2e784f7ad67ad00b0793c545f",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "core": {
+      "HEAD": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "index_sha256": "a4d9317274d361fb9b28d17a5ff73e8439fe80185097600994647f2f6b9ed69e",
+      "index_path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/.git/index",
+      "diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "logical_index_equals_HEAD": true
+    },
+    "liuli": {
+      "HEAD": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "index_sha256": "706aab4efd39e37091c8c142df493d098e889449dc232a0a8a06ec8547113b1b",
+      "index_path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/.git/index",
+      "diff_sha256": "de87ce16ecbf67f75b0139af1c27a4e85b042cab3011164a3929f526f5c47aa2",
+      "staged_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "liuli_seven": {
+    "noname/extension/\u5341\u5468\u5e74UI/meihua.js": "2148cd5255a9d6c8105d1f320cce7a02dfa1ebde0a8795eb20f6f4c2ab857f92",
+    "noname/extension/\u53f2\u8bd7\u5361\u724c/extension.js": "07f7960942e479d465bf52eec2ad600f4f93471c6b739da2d1cb00dd2425b23c",
+    "noname/extension/\u5982\u771f\u4f3c\u5e7b/extension.js": "d17ae26170cc74618c4afc0a5d51cc13dc7e9ee18b3578b398fbb7a03260d6a1",
+    "noname/extension/\u5982\u771f\u4f3c\u5e7b/js/rzsh.js": "0a113793f615a7dbf7fb8c419db594c42a5b97e0c38ecb0ca421915e5d3e4a80",
+    "noname/extension/\u624b\u6740ui/extension.js": "1246acb0364348505f3d17ed4a951ea41226f91113669cab5d9d8c0b2f09d026",
+    "noname/extension/\u9009\u5c06\u7f8e\u5316/extension.js": "a5c50981044e93304f69304a3aad3795e0a1db195a0b1534f859994d8006317f",
+    "noname/extension/\u9f99\u8840\u7384\u9ec4/extension.js": "e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7"
+  }
+}

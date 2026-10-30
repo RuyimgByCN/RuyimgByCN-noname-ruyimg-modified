@@ -1,0 +1,19 @@
+{
+  "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "scope": "Read-only objects reachable from accepted HEAD; not a push",
+  "objects": 55181,
+  "uncompressed_object_bytes": 3349878968,
+  "blobs_at_least_50MiB": [
+    {
+      "oid": "b84c1f13eba36ccb664bca5f5854e6a5725c8666",
+      "bytes": 55265367,
+      "path": "docs/operations/evidence/2026-10-18-nc12-plan-crash/long-load-25M-ok.log"
+    },
+    {
+      "oid": "9712919c725970127ac1c9133f4912ec60043db1",
+      "bytes": 73040213,
+      "path": "docs/operations/evidence/2026-10-18-nc12-plan-crash/long-load-33M-ok.log"
+    }
+  ],
+  "github_100MiB_blob_limit_conflicts": []
+}

@@ -1,0 +1,1 @@
+First independent check exited 1 at check-corrections.py line 55: AssertionError unexpected missing-newline marker. The adopted patch correctly records no trailing newline on its postimage. Fixed only this own-evidence reconstruction checker to preserve that byte property; no candidate/source/metadata edits. Original implementation failures remain preserved in corrections/.

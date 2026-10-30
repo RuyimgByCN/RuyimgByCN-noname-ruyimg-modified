@@ -1,0 +1,53 @@
+{
+  "native_255": {
+    "before": {
+      "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+      "remotes": "",
+      "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f"
+    },
+    "after": {
+      "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+      "remotes": "",
+      "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f"
+    },
+    "same": {
+      "head": true,
+      "remotes": true,
+      "index_sha256": true
+    }
+  },
+  "canonical_core": {
+    "before": {
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "remotes": "origin\thttps://github.com/libnoname/noname.git (fetch) [blob:none]\norigin\thttps://github.com/libnoname/noname.git (push)\n",
+      "index_sha256": "3e4b8f30179c7f231ed446b502c39ed093cdecec35ac75a09c65536c2f4dbc79"
+    },
+    "after": {
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "remotes": "origin\thttps://github.com/libnoname/noname.git (fetch) [blob:none]\norigin\thttps://github.com/libnoname/noname.git (push)\n",
+      "index_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9"
+    },
+    "same": {
+      "head": true,
+      "remotes": true,
+      "index_sha256": false
+    }
+  },
+  "canonical_liuli": {
+    "before": {
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "remotes": "origin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (fetch)\norigin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (push)\n",
+      "index_sha256": "706aab4efd39e37091c8c142df493d098e889449dc232a0a8a06ec8547113b1b"
+    },
+    "after": {
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "remotes": "origin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (fetch)\norigin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (push)\n",
+      "index_sha256": "706aab4efd39e37091c8c142df493d098e889449dc232a0a8a06ec8547113b1b"
+    },
+    "same": {
+      "head": true,
+      "remotes": true,
+      "index_sha256": true
+    }
+  }
+}

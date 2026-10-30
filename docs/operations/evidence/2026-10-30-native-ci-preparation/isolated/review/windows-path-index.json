@@ -1,0 +1,16 @@
+{
+  "native": {
+    "files": 41501,
+    "symlinks_or_gitlinks": [],
+    "casefold_collisions": [],
+    "windows_invalid": [],
+    "longest_relative_path": 168
+  },
+  "upstream": {
+    "files": 15590,
+    "symlinks_or_gitlinks": [],
+    "casefold_collisions": [],
+    "windows_invalid": [],
+    "longest_relative_path": 96
+  }
+}

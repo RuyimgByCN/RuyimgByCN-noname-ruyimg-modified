@@ -1,0 +1,94 @@
+{
+  "candidate_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "no_staged_files": true,
+  "metadata": {
+    "native_255": {
+      "head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+      "remotes": "",
+      "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f"
+    },
+    "canonical_core": {
+      "head": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+      "remotes": "origin\thttps://github.com/libnoname/noname.git (fetch) [blob:none]\norigin\thttps://github.com/libnoname/noname.git (push)\n",
+      "index_sha256": "a4d9317274d361fb9b28d17a5ff73e8439fe80185097600994647f2f6b9ed69e"
+    },
+    "canonical_liuli": {
+      "head": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "remotes": "origin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (fetch)\norigin\thttps://github.com/Helasisy1984/Noname-Liuli-Modified.git (push)\n",
+      "index_sha256": "706aab4efd39e37091c8c142df493d098e889449dc232a0a8a06ec8547113b1b"
+    }
+  },
+  "canonical_index_observation_preserved": true,
+  "canonical_core_index_may_change_outside_controlled_verify_window": true,
+  "canonical_core_logical_index_equals_HEAD_at_completion": true,
+  "readonly_verify": {
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 0,
+    "env": {
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_NO_LAZY_FETCH": "1"
+    },
+    "canonical_index_before_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9",
+    "canonical_index_after_sha256": "7c2f8f06eb128ee13180b928d658595b21bedea6ddd4751b6fd226bb558f38b9",
+    "canonical_index_bytes_unchanged_in_this_window": true,
+    "canonical_logical_index_equals_HEAD": true,
+    "limits": "Does not erase earlier binary index refresh observation or prove attribution in that earlier concurrent window"
+  },
+  "original_input_validation": [
+    {
+      "name": "pnpm9-frozen",
+      "command": [
+        "/Users/ruyimg/Library/pnpm/.tools/pnpm/9.15.9/bin/pnpm",
+        "--dir",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-correction-dependencies",
+        "install",
+        "--frozen-lockfile",
+        "--store-dir",
+        "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-correction-dependencies/store"
+      ],
+      "exit": 0,
+      "seconds": 5.37192295899149
+    },
+    {
+      "name": "gate4-tests",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_original_content_order.mjs",
+        "scripts/test_original_resources.mjs"
+      ],
+      "exit": 0,
+      "seconds": 0.6786471249943133
+    },
+    {
+      "name": "gate4-original-full-verify",
+      "command": [
+        "node",
+        "scripts/sync-original-content.mjs",
+        "--verify-only"
+      ],
+      "exit": 0,
+      "seconds": 11.52409262501169
+    }
+  ],
+  "original_input_hashes": {
+    "files": 17031,
+    "sha256_list_before": "42b9d3b44708463a576b8a9cd75352aee7e88e44f47a165e0b70c5a61ba1f586",
+    "sha256_list_after": "42b9d3b44708463a576b8a9cd75352aee7e88e44f47a165e0b70c5a61ba1f586",
+    "same_as_previous_run_protected_input": true,
+    "all_unchanged": true
+  },
+  "all_own_git_fixtures_removed": true,
+  "owned_dependency_and_lookup_removed": true,
+  "original_handoff_review_patch_and_list_preserved": true,
+  "both_patch_reverse_checks_exit": 0,
+  "final_ci_files_match_recorded_sha": true,
+  "disk_free_bytes": 154788687872,
+  "no_product_commits": true,
+  "actual_pushes": 0,
+  "actual_actions_runs": 0
+}

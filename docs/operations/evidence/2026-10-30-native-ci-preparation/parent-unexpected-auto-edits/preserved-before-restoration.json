@@ -1,0 +1,50 @@
+{
+  "head": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "scope": "Six unaccepted style rewrites appeared after temporary guard removal; no user requested these edits, all workers isolated/read-only; patch and full copies preserved before exact restoration",
+  "files": [
+    {
+      "path": "crates/engine-native/src/engine/construction.rs",
+      "unaccepted_sha256": "a9e6892c73b3d9a5059db80d69bfc5093dc60835b3f72fde7c7eb3370f3ebaec",
+      "accepted_sha256": "065366ea6c3061b7de28704a232b98632f421e67ceaac9ea043dd0bc8bfacd3d",
+      "mtime_ns": 1793347658208480428,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/construction.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash.rs",
+      "unaccepted_sha256": "13bd4a039cb4d9fcf47338c5b599e6d7919aab87b4e9587dd468297c371e180b",
+      "accepted_sha256": "b8a4243a87f4987ce852480eb9758c981a55e1d670676b9e8fe027511063edd3",
+      "mtime_ns": 1793347658210090267,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/hash.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash/machine.rs",
+      "unaccepted_sha256": "78c7080db652f7129a8688c8473f9c159aa2a7cf742e7921943b4c56873727d2",
+      "accepted_sha256": "fa5d301d91a41971e7ef2b5ea054ce1cfca3f737e32e15cefd12413f98b4f4d8",
+      "mtime_ns": 1793347659442062315,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/hash/machine.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/legal_actions.rs",
+      "unaccepted_sha256": "4cb940d0bb48157e14726f509e2b400d777dd168d80d160e342a14cc5af9a51d",
+      "accepted_sha256": "6a3b692a0958a59214b2ad2e66aaef4cb43b8a863863aa48bc4071de581ebb4a",
+      "mtime_ns": 1793347658209761390,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/legal_actions.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_rules.rs",
+      "unaccepted_sha256": "ea665fa3466e9291f6c5d96b37bc006dad7bc1818a965470e365d2da32b21594",
+      "accepted_sha256": "f506ce6516545f22233cdd0c704591bc89cd9db6a4a329f91ff3d8fea5aab3b7",
+      "mtime_ns": 1793347658209193638,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/play_rules.rs"
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_sha.rs",
+      "unaccepted_sha256": "fcd9c8864f4fe464d0ef74eec28ac60ae0db129efda7fd1d16aa1850b2046c81",
+      "accepted_sha256": "40238952241cccfb572fe6d8dae83558fef077f6f201c94ba7e51caed810f3f4",
+      "mtime_ns": 1793347658209448014,
+      "preserved_unaccepted_copy": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-preserved-auto-edits-mntr95qp/crates/engine-native/src/engine/play_sha.rs"
+    }
+  ],
+  "patch_sha256": "ebce06787331decbbf3408ad9b8c981d5336bbe28709f479076f888a14ccb920",
+  "guard_reinstalled": true
+}

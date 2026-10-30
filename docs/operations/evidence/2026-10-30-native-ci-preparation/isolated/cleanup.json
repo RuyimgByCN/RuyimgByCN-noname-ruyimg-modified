@@ -1,0 +1,19 @@
+{
+  "removed": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/apps/web-client/node_modules",
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-dependencies/node_modules"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/../archive",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/archive"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-dependencies",
+      "kind": "fresh dependency fixture"
+    }
+  ],
+  "kept": "ignored content/original/assets, used to verify 12359 real resource files",
+  "disk_free_bytes": 161368866816,
+  "staged_files": []
+}

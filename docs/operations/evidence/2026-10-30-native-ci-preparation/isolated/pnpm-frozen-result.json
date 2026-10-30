@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/Users/ruyimg/Library/pnpm/.tools/pnpm/9.15.9/bin/pnpm",
+    "--dir",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-dependencies",
+    "install",
+    "--frozen-lockfile",
+    "--store-dir",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-dependencies/store"
+  ],
+  "pnpm_version": "9.15.9",
+  "exit": 0,
+  "seconds": 3.3577682090108283,
+  "package_unchanged": true,
+  "lock_unchanged": true
+}

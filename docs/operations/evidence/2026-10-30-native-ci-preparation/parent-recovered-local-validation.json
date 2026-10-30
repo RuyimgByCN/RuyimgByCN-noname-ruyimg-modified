@@ -1,0 +1,57 @@
+{
+  "base": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "scripts/preflight.py"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "before": {
+    "four_hashes": {
+      ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+      ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+      "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+    },
+    "four_hashes_match_admission": true,
+    "crates_content_original_tracked_diff_empty": true,
+    "scoped_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "staged_files": []
+  },
+  "prior_failed_validation": "parent-final-local-validation.json",
+  "prior_failure_routing": "parent-raw-readme-routing.json",
+  "prior_timeout": "parent-validator-timeout.json",
+  "cargo_rust_wasm_node_browser_commands_run": 0,
+  "github_actions_run": 0,
+  "external_actions": 0,
+  "old_warnings_cleared": false,
+  "active_lsp": "inconclusive",
+  "single_new_fullpreflight_invocation": true,
+  "actual_exit": 0,
+  "wall_seconds": 310.0502854579827,
+  "locked_seconds": 310.02336266700877,
+  "wrapper_exit": 0,
+  "passed_gate_count": 21,
+  "failed_gate_count": 0,
+  "preflight_log": "docs/operations/evidence/2026-10-30-native-ci-preparation/parent-recovered-full-preflight.log",
+  "preflight_log_sha256": "0627fd2d7c3de3d964e57e3a820e2da25d875bbc108037c0f06e7142eb3afe04",
+  "after": {
+    "four_hashes": {
+      ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+      ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+      ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+      "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+    },
+    "four_hashes_match_admission": true,
+    "crates_content_original_tracked_diff_empty": true,
+    "scoped_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "staged_files": []
+  },
+  "four_hashes_unchanged": true,
+  "scoped_diff_unchanged": true,
+  "passed": true,
+  "no_staged_files": true
+}

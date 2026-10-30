@@ -1,0 +1,9 @@
+fresh-missing-dependency 1
+fresh-missing-source 1
+fresh-missing-assets 1
+resources-bootstrap 0
+resources-verify 0
+gate4-tests 0
+gate4-full-verify 0
+Protected tracked files unchanged: 17031
+{"command": ["python3", "../evidence/validate_local.py"], "exit": 0, "locked_seconds": 21.735735833004583, "disk_free_bytes": 161428697088}

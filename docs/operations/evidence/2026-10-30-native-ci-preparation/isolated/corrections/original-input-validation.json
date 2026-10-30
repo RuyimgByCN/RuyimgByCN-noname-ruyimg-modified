@@ -1,0 +1,37 @@
+[
+  {
+    "name": "pnpm9-frozen",
+    "command": [
+      "/Users/ruyimg/Library/pnpm/.tools/pnpm/9.15.9/bin/pnpm",
+      "--dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-correction-dependencies",
+      "install",
+      "--frozen-lockfile",
+      "--store-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/.scratch/ci-correction-dependencies/store"
+    ],
+    "exit": 0,
+    "seconds": 5.37192295899149
+  },
+  {
+    "name": "gate4-tests",
+    "command": [
+      "node",
+      "--test",
+      "scripts/test_original_content_order.mjs",
+      "scripts/test_original_resources.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.6786471249943133
+  },
+  {
+    "name": "gate4-original-full-verify",
+    "command": [
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "exit": 0,
+    "seconds": 11.52409262501169
+  }
+]

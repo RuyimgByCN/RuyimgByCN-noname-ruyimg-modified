@@ -1,0 +1,10 @@
+ M .github/workflows/ci.yml
+ M apps/web-client/src/views/CollectionView.vue
+ M content/original/asset-manifest.json
+ M scripts/sync-original-content.mjs
+?? .github/actions/
+?? .pi-lens-probe-home/
+?? apps/web-client/scripts/original-resources.test.mjs
+?? apps/web-client/src/engine/originalResources.ts
+?? docs/operations/native-ci.md
+?? scripts/test_original_resources.mjs

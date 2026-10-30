@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "red": "resource source provenance mismatch",
+  "green": {
+    "category": "core",
+    "root": "archive/upstream/noname/apps/core",
+    "repository": "https://github.com/libnoname/noname.git",
+    "repository_root": "archive/upstream/noname",
+    "head": "b3108b784f5709d5685d70fde99ce17b73e5348d",
+    "dirty": false,
+    "tracked_changes": [],
+    "tracked_change_count": 0,
+    "untracked_count": 0,
+    "redistribution_status": "preserved_from_source_requires_review"
+  },
+  "actual_action_command": "git remote set-url origin https://github.com/libnoname/noname.git",
+  "head_unchanged": true,
+  "clean_after": true,
+  "scope": "own Git fixture only; its commit is test data, not adopted upstream HEAD",
+  "cleanup": "fixture removed in finally"
+}

@@ -1,0 +1,26 @@
+{
+  ".github/workflows/ci.yml": {
+    "base_sha256": "14cd129e77232fea3c2be3fddfa224140f4b483fb9ff12c9410f001f2616c972",
+    "previous_reviewed_sha256": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7",
+    "final_sha256": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    "final_bytes": 7118
+  },
+  ".github/actions/prepare-original-content/action.yml": {
+    "base_sha256": null,
+    "previous_reviewed_sha256": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9",
+    "final_sha256": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    "final_bytes": 3380
+  },
+  "docs/operations/native-ci.md": {
+    "base_sha256": null,
+    "previous_reviewed_sha256": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084",
+    "final_sha256": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f",
+    "final_bytes": 4836
+  },
+  ".github/actions/prepare-original-content/liuli-longxue.patch": {
+    "base_sha256": null,
+    "previous_reviewed_sha256": null,
+    "final_sha256": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "final_bytes": 628456
+  }
+}

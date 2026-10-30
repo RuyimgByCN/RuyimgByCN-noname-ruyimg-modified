@@ -1,0 +1,37 @@
+{
+  "base": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "checks": [
+    {
+      "name": "parent-pipeline",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_original_content_order.mjs",
+        "scripts/test_original_resources.mjs"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-resources-verify",
+      "command": [
+        "node",
+        "scripts/sync-original-content.mjs",
+        "--resources-only",
+        "--verify-only"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "parent-tracked-content",
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "--",
+        "content/original"
+      ],
+      "exit": 0
+    }
+  ],
+  "scope": "Local current inputs and CI tracked-content guard only; no checkout/set-url/canonical mutation and no Actions run"
+}

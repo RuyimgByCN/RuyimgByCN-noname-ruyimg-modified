@@ -1,0 +1,166 @@
+{
+  "registered_runtime_reader_files": 8,
+  "selected_exactly_matches_all_literal_runtime_archive_callers": true,
+  "source_files": 12,
+  "callers": [
+    {
+      "caller": "crates/engine-native/tests/l16_drag_read_eight.rs",
+      "text_targets": [
+        "noname/extension/拖拽读取/extension.js"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 171,
+          "text": "let npack_bytes = std::fs::read(source_root.join(\"package.npack.json\")).expect(\"读 npack\");"
+        },
+        {
+          "line": 234,
+          "text": "meta.content_hash,"
+        },
+        {
+          "line": 235,
+          "text": "content_runtime::content_hash_hex(&npack_bytes)"
+        },
+        {
+          "line": 257,
+          "text": "assert_eq!(kept.content_hash, content_runtime::content_hash_hex(&bytes));"
+        }
+      ]
+    },
+    {
+      "caller": "crates/engine-native/tests/nc08_upstream_longxue.rs",
+      "text_targets": [
+        "noname/extension/龙血玄黄/extension.js"
+      ],
+      "package_hash_lines": []
+    },
+    {
+      "caller": "crates/engine-native/tests/l17_douzhuan_eight.rs",
+      "text_targets": [
+        "noname/extension/斗转星移/data/inputPlan/标准包",
+        "noname/extension/斗转星移/data/inputPlan/空白",
+        "noname/extension/斗转星移/data/inputPlan/风林火山",
+        "noname/extension/斗转星移/data/outputPlan/无"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 81,
+          "text": "let npack_bytes = std::fs::read(source_root.join(\"package.npack.json\")).expect(\"读 npack\");"
+        },
+        {
+          "line": 101,
+          "text": "meta.content_hash,"
+        },
+        {
+          "line": 102,
+          "text": "content_runtime::content_hash_hex(&npack_bytes),"
+        },
+        {
+          "line": 103,
+          "text": "\"商店 content_hash 来自本包 npack\""
+        },
+        {
+          "line": 137,
+          "text": "kept.content_hash,"
+        },
+        {
+          "line": 138,
+          "text": "content_runtime::content_hash_hex(&bytes),"
+        }
+      ]
+    },
+    {
+      "caller": "crates/engine-native/tests/nc08_upstream_boss_zhugeliang.rs",
+      "text_targets": [
+        "noname/character/extra.js"
+      ],
+      "package_hash_lines": []
+    },
+    {
+      "caller": "crates/engine-native/tests/l10_epic_cards_eight.rs",
+      "text_targets": [
+        "noname/extension/史诗卡牌/extension.js"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 277,
+          "text": "meta.content_hash,"
+        },
+        {
+          "line": 278,
+          "text": "content_runtime::content_hash_hex(&npack_bytes)"
+        }
+      ]
+    },
+    {
+      "caller": "crates/engine-native/tests/l18_update_guard_eight.rs",
+      "text_targets": [
+        "noname/extension/更新保护/extension.js"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 332,
+          "text": "let npack_bytes = std::fs::read(source_root.join(\"package.npack.json\")).expect(\"读 npack\");"
+        },
+        {
+          "line": 352,
+          "text": "meta.content_hash,"
+        },
+        {
+          "line": 353,
+          "text": "content_runtime::content_hash_hex(&npack_bytes)"
+        },
+        {
+          "line": 391,
+          "text": "assert_eq!(kept.content_hash, content_runtime::content_hash_hex(&bytes));"
+        }
+      ]
+    },
+    {
+      "caller": "crates/engine-native/tests/l21_martial_eight.rs",
+      "text_targets": [
+        "noname/extension/武皇争霸/extension.js",
+        "noname/extension/武皇争霸/mightyFoe.js"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 322,
+          "text": "let npack_bytes = std::fs::read(source_root.join(\"package.npack.json\")).expect(\"读 npack\");"
+        },
+        {
+          "line": 361,
+          "text": "assert_eq!(meta.content_hash, content_runtime::content_hash_hex(&npack_bytes));"
+        },
+        {
+          "line": 379,
+          "text": "assert_eq!(kept.content_hash, content_runtime::content_hash_hex(&bytes));"
+        }
+      ]
+    },
+    {
+      "caller": "crates/engine-native/tests/l26_fool_eight.rs",
+      "text_targets": [
+        "noname/extension/笨蛋插件/extension.js"
+      ],
+      "package_hash_lines": [
+        {
+          "line": 520,
+          "text": "let npack_bytes = std::fs::read(source_root.join(\"package.npack.json\")).expect(\"读 npack\");"
+        },
+        {
+          "line": 540,
+          "text": "meta.content_hash,"
+        },
+        {
+          "line": 541,
+          "text": "content_runtime::content_hash_hex(&npack_bytes)"
+        },
+        {
+          "line": 584,
+          "text": "assert_eq!(kept.content_hash, content_runtime::content_hash_hex(&bytes));"
+        }
+      ]
+    }
+  ],
+  "limits": "comments omitted; these callers read text only; no native tests executed"
+}

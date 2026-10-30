@@ -1,0 +1,29 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +64
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 64, reused 0, downloaded 13, added 13
+Progress: resolved 64, reused 0, downloaded 46, added 46
+Progress: resolved 64, reused 0, downloaded 62, added 62
+Progress: resolved 64, reused 0, downloaded 63, added 62
+Progress: resolved 64, reused 0, downloaded 64, added 64, done
+.../node_modules/@swc/core postinstall$ node postinstall.js
+.../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+.../node_modules/@swc/core postinstall: Done
+.../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+
+dependencies:
++ @tauri-apps/api 2.11.1
++ vue 3.5.39
++ vue-router 4.6.4
+
+devDependencies:
++ @tauri-apps/cli 2.11.4
++ @vitejs/plugin-vue 5.2.4
++ typescript 5.9.3
++ vite 6.4.3
++ vite-plugin-top-level-await 1.6.0
++ vite-plugin-wasm 3.6.0
++ vue-tsc 2.2.12
+
+Done in 5.3s using pnpm v9.15.9

@@ -1,0 +1,18 @@
+{
+  "proposed_list_paths": 41506,
+  "tracked_dist_paths_in_list": 37,
+  "dist_examples": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css"
+  ],
+  "tracked_evidence_paths_in_list": 8835,
+  "evidence_examples": [
+    "docs/operations/evidence/2026-09-16-native-n09/build.err",
+    "docs/operations/evidence/2026-09-16-native-n09/environment.txt",
+    "docs/operations/evidence/2026-09-16-native-n09/n10_table.log",
+    "docs/operations/evidence/2026-09-16-native-n09/n12_reader.log"
+  ],
+  "note": "Object-size audit supplied by parent is read-only evidence; this worker did not enumerate or rewrite history."
+}

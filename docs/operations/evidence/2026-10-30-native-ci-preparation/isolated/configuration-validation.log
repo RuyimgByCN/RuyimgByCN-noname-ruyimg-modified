@@ -1,0 +1,30 @@
+{
+  "yaml_parsed": [
+    ".github/workflows/ci.yml",
+    ".github/actions/prepare-original-content/action.yml"
+  ],
+  "all_existing_jobs_and_matrices_preserved": true,
+  "all_gate_commands_preserved_or_test_extended": true,
+  "checkout_paths_within_workspace": true,
+  "source_head_matches_adopted_manifest": true,
+  "bootstrap_shell_syntax": "passed",
+  "overlay_six_files_unchanged": true,
+  "ci_changed_files": {
+    ".github/workflows/ci.yml": {
+      "base_sha256": "14cd129e77232fea3c2be3fddfa224140f4b483fb9ff12c9410f001f2616c972",
+      "final_sha256": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7"
+    },
+    ".github/actions/prepare-original-content/action.yml": {
+      "base_sha256": null,
+      "final_sha256": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9"
+    },
+    "docs/operations/native-ci.md": {
+      "base_sha256": null,
+      "final_sha256": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084"
+    }
+  },
+  "proposed_tree_paths": 41506,
+  "proposed_tree_sha256": "4524973a891ab27eac6919f5b04f42b13655380e0ca29d6ee314d076e53932ec",
+  "no_staged_files": true,
+  "actionlint": "not installed; not run"
+}

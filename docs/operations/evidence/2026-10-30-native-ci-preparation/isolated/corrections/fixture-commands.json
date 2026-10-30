@@ -1,0 +1,36 @@
+[
+  {
+    "name": "serialized-fixture-attempt",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "../evidence/corrections/check-provenance.mjs"
+    ],
+    "exit": "timeout at 30s waiting for global lock; no fixture launched"
+  },
+  {
+    "name": "provenance-fixture",
+    "command": [
+      "node",
+      "../evidence/corrections/check-provenance.mjs"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "liuli-fixture",
+    "command": [
+      "python3",
+      "../evidence/corrections/check-liuli.py"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "wasm-chain-fixture",
+    "command": [
+      "node",
+      "../evidence/corrections/check-wasm-chain.mjs"
+    ],
+    "exit": 0
+  }
+]

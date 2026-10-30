@@ -1,0 +1,6 @@
+{
+  "source": "Supervisor response in this revived worker session",
+  "authorization": "Only newly created own evidence/corrections temporary fixtures may run git init/add/commit and simulate an origin, with their own .git, exact rev-parse --show-toplevel guard, and GIT_CEILING_DIRECTORIES. This is isolated test data, not product/candidate staging or commits.",
+  "prohibitions": "Do not touch product/canonical index, HEAD, remotes; no shared clone or original repository fetch.",
+  "implemented": "Both real Git fixtures assert their own toplevel, use separate .git, sanitize Git path environment variables, and remove themselves in finally. The product index remains identical to the independent review."
+}

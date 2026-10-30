@@ -1,0 +1,14 @@
+{
+  "base": "977cdf1f35bc3f08aba137528a3672f3dad5f391",
+  "pure_patch_sha256": "e9085113f7d1a12c51490f83bb8b1524a7480f54997bcf9a4acdc9d4357cd9a7",
+  "reviewed_paths_exact": {
+    ".github/workflows/ci.yml": "1fc97110b1d41df138bb5343ea2ef3f283ff19ae3bc383fa95e1beaf3ee3e6eb",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "cd3ec0abbda62ea85e49e70c2b1ed97f559dc39b00d235d4c1a3aca5d9ed076f"
+  },
+  "no_other_candidate_source_overlay_applied": true,
+  "external_publish_not_authorized": true,
+  "push_count": 0,
+  "github_actions_count": 0
+}

@@ -1,0 +1,10 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/scripts/sync-original-content.mjs:1738
+  if (!info?.isDirectory()) throw new Error(`directory not found: ${directory}`);
+                                  ^
+
+Error: directory not found: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/content/original/assets/portraits
+    at requireDirectory (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/scripts/sync-original-content.mjs:1738:35)
+    at async verifyTree (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/scripts/sync-original-content.mjs:1541:3)
+    at async file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/worktree/scripts/sync-original-content.mjs:299:51
+
+Node.js v26.4.0

@@ -1,0 +1,14 @@
+{
+  ".github/workflows/ci.yml": {
+    "base_sha256": "14cd129e77232fea3c2be3fddfa224140f4b483fb9ff12c9410f001f2616c972",
+    "final_sha256": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7"
+  },
+  ".github/actions/prepare-original-content/action.yml": {
+    "base_sha256": null,
+    "final_sha256": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9"
+  },
+  "docs/operations/native-ci.md": {
+    "base_sha256": null,
+    "final_sha256": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084"
+  }
+}

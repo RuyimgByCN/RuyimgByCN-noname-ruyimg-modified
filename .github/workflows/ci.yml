@@ -7,6 +7,13 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: noname-next
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -20,10 +27,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: noname-next
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
       - name: Build workspace
         run: cargo build --workspace
       - name: Unit tests
@@ -34,13 +45,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: noname-next
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - uses: ./noname-next/.github/actions/prepare-original-content
+        with:
+          integration-sources: true
       - name: Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)
         run: |
           python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
@@ -61,11 +79,13 @@ jobs:
           RUSTFLAGS: -D warnings
       - name: Gate 2 — conformance
         run: cargo run -p conformance
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --version 0.15.0 --locked
       - name: Gate 3 — cross-target hash (Native vs WASM)
         run: bash scripts/cross-target-hash.sh
       - name: Gate 4 — original content sync verify
         run: |
-          node --test scripts/test_original_content_order.mjs
+          node --test scripts/test_original_content_order.mjs scripts/test_original_resources.mjs
           node scripts/sync-original-content.mjs --verify-only
 
   # 独立于源码行数/旧线门禁：从本次源码重建 native-pkg 后验正式 Worker 与前端。
@@ -74,23 +94,25 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: apps/web-client
+        working-directory: noname-next/apps/web-client
     env:
       WASM_PACK_TARGET: web
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: noname-next
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v4
+      - uses: ./noname-next/.github/actions/prepare-original-content
         with:
-          version: 9
-      - name: Install frontend dependencies
-        run: pnpm install --frozen-lockfile
+          integration-sources: true
       - name: Install wasm-pack
         run: cargo install wasm-pack --version 0.15.0 --locked
       - name: Rebuild native WASM from current source
@@ -118,27 +140,27 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: noname-next
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - name: Install Linux Tauri dependencies
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev
-      - name: Install frontend dependencies
-        run: pnpm --dir apps/web-client install --frozen-lockfile
+      - uses: ./noname-next/.github/actions/prepare-original-content
       - name: Install wasm-pack
         run: cargo install wasm-pack --version 0.15.0 --locked
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2" --locked
       - name: Produce installer (tauri beforeBuildCommand builds the web client)
-        working-directory: apps/desktop-client
+        working-directory: noname-next/apps/desktop-client
         run: cargo tauri build
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -147,7 +169,7 @@ jobs:
         with:
           name: installer-${{ matrix.os }}
           path: |
-            target/release/bundle/**
+            noname-next/target/release/bundle/**
           if-no-files-found: error
 
   # M7 gate 3: multi-platform performance tier measurement.
@@ -160,8 +182,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: noname-next
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
       - name: Tier list
         run: cargo run -q -p benchmark-runner -- tiers
       - name: Tier report (server-baseline budget)

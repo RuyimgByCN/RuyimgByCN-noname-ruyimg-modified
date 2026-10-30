@@ -1,0 +1,77 @@
+name: Prepare original content
+description: Install locked tools and restore adopted assets, preserving rules.
+inputs:
+  integration-sources:
+    description: Restore Liuli text inputs for registered integration tests.
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    # Sibling checkouts preserve the adopted source provenance paths.
+    - uses: actions/checkout@v4
+      with:
+        repository: libnoname/noname
+        ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+        path: archive/upstream/noname
+        sparse-checkout: apps/core
+        persist-credentials: false
+    - name: Bind CI checkout origin to adopted provenance
+      shell: bash
+      working-directory: archive/upstream/noname
+      run: git remote set-url origin https://github.com/libnoname/noname.git
+    - uses: actions/checkout@v4
+      if: inputs.integration-sources == 'true'
+      with:
+        repository: Helasisy1984/Noname-Liuli-Modified
+        ref: 8485dbb29ff16f9b258a766b1a17ef75f883aade
+        path: archive/upstream/noname-liuli
+        sparse-checkout-cone-mode: false
+        sparse-checkout: |
+          /noname/character/extra.js
+          /noname/extension/史诗卡牌/extension.js
+          /noname/extension/拖拽读取/extension.js
+          /noname/extension/斗转星移/data/inputPlan/空白
+          /noname/extension/斗转星移/data/inputPlan/标准包
+          /noname/extension/斗转星移/data/inputPlan/风林火山
+          /noname/extension/斗转星移/data/outputPlan/无
+          /noname/extension/更新保护/extension.js
+          /noname/extension/武皇争霸/extension.js
+          /noname/extension/武皇争霸/mightyFoe.js
+          /noname/extension/笨蛋插件/extension.js
+          /noname/extension/龙血玄黄/extension.js
+        persist-credentials: false
+    - name: Restore adopted Longxue source input
+      if: inputs.integration-sources == 'true'
+      shell: bash
+      working-directory: archive/upstream/noname-liuli
+      run: |
+        node --input-type=module <<'NODE'
+        import assert from 'node:assert/strict';
+        import { readFileSync } from 'node:fs';
+        import { createHash } from 'node:crypto';
+        import { execFileSync } from 'node:child_process';
+        import path from 'node:path';
+        const file = 'noname/extension/龙血玄黄/extension.js';
+        const hash = () => createHash('sha256')
+          .update(readFileSync(file)).digest('hex');
+        assert.equal(hash(),
+          'cf953876295d884bf2a766dd3a74e953d30073dc7a513ecb16cd59d50ad0db76');
+        execFileSync('git', ['apply', path.join(process.env.GITHUB_WORKSPACE,
+          'noname-next/.github/actions/prepare-original-content/liuli-longxue.patch')]);
+        assert.equal(hash(),
+          'e3fad7cf47bfb5a6f6b55d21bd6dbdd7b44753a6b92d7407a2a1c88bb71d2db7');
+        NODE
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    - name: Install frontend dependencies
+      shell: bash
+      working-directory: noname-next
+      run: pnpm --dir apps/web-client install --frozen-lockfile
+    - name: Restore and verify adopted resource bytes
+      shell: bash
+      working-directory: noname-next
+      run: |
+        node scripts/sync-original-content.mjs --resources-only
+        node scripts/sync-original-content.mjs --resources-only --verify-only
+        git diff --exit-code -- content/original

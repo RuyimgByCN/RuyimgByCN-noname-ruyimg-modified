@@ -1,0 +1,17 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname",
+    "diff",
+    "--cached",
+    "--quiet",
+    "HEAD"
+  ],
+  "env": {
+    "GIT_OPTIONAL_LOCKS": "0",
+    "GIT_NO_LAZY_FETCH": "1"
+  },
+  "exit": 0,
+  "meaning": "canonical core logical index content equals HEAD; binary index hash changed in earlier window; no restoration attempted"
+}

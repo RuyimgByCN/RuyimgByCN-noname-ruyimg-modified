@@ -1,0 +1,188 @@
+name: ci
+
+# M7 多端门禁：三桌面平台构建矩阵 + 四道门禁。
+# - macOS / Windows / Linux 各跑一遍 `cargo build --workspace`（安装包产出见 build-desktop）。
+# - Linux 额外跑全部四道门禁（含 Native/WASM 哈希一致性）。
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: noname-next
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: build-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: noname-next
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
+      - name: Build workspace
+        run: cargo build --workspace
+      - name: Unit tests
+        run: cargo test --workspace --lib
+
+  gates:
+    name: gates-ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: noname-next
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: ./noname-next/.github/actions/prepare-original-content
+      - name: Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)
+        run: |
+          python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+          python3 scripts/check-source-lines.py
+      - name: engine-native kernel layer does not grow content/engine references
+        run: |
+          python3 -B -m unittest discover -s scripts -p 'test_check_native_layering.py'
+          python3 scripts/check-native-layering.py
+      - name: Gate 1 — cargo test --workspace
+        run: cargo test --workspace
+      - name: Gate 1b — engine-native all targets warnings denied
+        # lib/测试/示例均已零警告（T21，2026-10-12），用 -D warnings 防死代码信号回流：
+        # 漏写 #[test] 的测试函数只会报 dead_code，叠加 #[test] 只报 duplicated attribute。
+        # 限定原生三层（旧线工程仍有存量警告，不宜全局开启）；RUSTFLAGS 同时作用于
+        # 其路径依赖（content-runtime 等），它们也须保持零警告。
+        run: cargo check -p engine-native-kernel -p engine-native-content -p engine-native --all-targets
+        env:
+          RUSTFLAGS: -D warnings
+      - name: Gate 2 — conformance
+        run: cargo run -p conformance
+      - name: Gate 3 — cross-target hash (Native vs WASM)
+        run: bash scripts/cross-target-hash.sh
+      - name: Gate 4 — original content sync verify
+        run: |
+          node --test scripts/test_original_content_order.mjs scripts/test_original_resources.mjs
+          node scripts/sync-original-content.mjs --verify-only
+
+  # 独立于源码行数/旧线门禁：从本次源码重建 native-pkg 后验正式 Worker 与前端。
+  native-web:
+    name: native-web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: noname-next/apps/web-client
+    env:
+      WASM_PACK_TARGET: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: noname-next
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: ./noname-next/.github/actions/prepare-original-content
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --version 0.15.0 --locked
+      - name: Rebuild native WASM from current source
+        run: pnpm build:native
+      - name: Rebuild legacy WASM (still imported by the client)
+        run: pnpm build:wasm
+      - name: Native kernel and package loader regressions
+        run: cargo test -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --no-fail-fast
+      - name: Real native Worker smoke
+        run: pnpm smoke:native
+      - name: Frontend regressions
+        run: pnpm test
+      - name: Frontend typecheck and production build
+        run: pnpm build
+
+  # M7 gate 1: produce desktop installers on all three platforms (tauri build).
+  # The desktop shell is a thin Tauri 2 wrapper over the shared Web/WASM client;
+  # rule hashes are platform-independent (cross-target-hash gate above).
+  desktop:
+    name: desktop-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: noname-next
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Linux Tauri dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev
+      - uses: ./noname-next/.github/actions/prepare-original-content
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --version 0.15.0 --locked
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+      - name: Produce installer (tauri beforeBuildCommand builds the web client)
+        working-directory: noname-next/apps/desktop-client
+        run: cargo tauri build
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: |
+            noname-next/target/release/bundle/**
+          if-no-files-found: error
+
+  # M7 gate 3: multi-platform performance tier measurement.
+  perf:
+    name: perf-${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: noname-next
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: noname-next
+      - name: Tier list
+        run: cargo run -q -p benchmark-runner -- tiers
+      - name: Tier report (server-baseline budget)
+        run: cargo run -q -p benchmark-runner -- tier-report server-baseline

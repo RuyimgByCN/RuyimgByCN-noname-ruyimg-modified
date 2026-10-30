@@ -1,0 +1,4 @@
+pnpm9-frozen 0
+gate4-tests 0
+gate4-original-full-verify 0
+{"command": ["python3", "../evidence/corrections/verify-original-inputs.py"], "exit": 0, "locked_seconds": 24.103377250023186, "disk_free_bytes": 157951877120}

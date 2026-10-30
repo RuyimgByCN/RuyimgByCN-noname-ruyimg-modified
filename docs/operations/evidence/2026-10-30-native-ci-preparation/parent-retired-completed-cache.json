@@ -1,0 +1,13 @@
+{
+  "path": "/tmp/noname-pa09-parent-gate-9e6c6232",
+  "prior_owner": "Completed B/J2 strict validation; explicitly relinquished in combined acceptance final-target-retirement.json",
+  "later_A330_owner": "Only separate stage3 cache; no access to this retired strict cache authorized",
+  "lsof_exit": 1,
+  "open_files_observed": false,
+  "size_KiB": 83168,
+  "contains_only_regenerable_build_cache": true,
+  "source_evidence_and_actual_build_products_preserved": true,
+  "free_before": 157947359232,
+  "deleted": true,
+  "free_after": 158025478144
+}

@@ -1,0 +1,35 @@
+{
+  "files": {
+    ".github/workflows/ci.yml": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7",
+    ".github/actions/prepare-original-content/action.yml": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9",
+    "docs/operations/native-ci.md": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084",
+    "scripts/sync-original-content.mjs": "97a7e2b14382cbc36188b00361f20a2a5dc88acba6eddd9ab448b1b3cf6699d7",
+    "scripts/test_original_resources.mjs": "6b0a52887cadf7208a3a6bd5fa121e85ff6cf35b0442bc71ca0b7538dd419568",
+    "content/original/asset-manifest.json": "41ceb1343fa66d80aad99b19d99414c860933ad23920ca98fc46632fa6f60434",
+    "apps/web-client/src/engine/originalResources.ts": "0c33f800ea370ce65466184479195cfa0d762e642e440b7962d517edf2fee8a1",
+    "apps/web-client/src/views/CollectionView.vue": "44d0290e4358af0d3bc2023390ab59c93227d6ab8abca463348a17281d04adbf",
+    "apps/web-client/scripts/original-resources.test.mjs": "1476243b7a7b6bf106979d2d3e18b34abc927cc13a469d88e1d576df9be80c47"
+  },
+  "patch_sha256": "407c7667743aa8072dcdad73225acd63580f3e7738b8e1c615c8e705313947dc",
+  "head": {
+    "returncode": 0,
+    "sha256": "1f76658740ddb507de7bfff60de739f7785e1fbe82e8e927a701bc4578f3209c",
+    "text": "255bbfbd7f6916ee77bd29799826a225bd10871f\n"
+  },
+  "diff": {
+    "returncode": 0,
+    "sha256": "7ebfead24b559ba19c5179dc254558caf4261b731c5b6217cec72a34eaa77efa",
+    "text": null
+  },
+  "status": {
+    "returncode": 0,
+    "sha256": "9774de37624dd383ee72f6ef40613b7ec1348d5a1775d89b9069dc423eb24584",
+    "text": " M .github/workflows/ci.yml\n M apps/web-client/src/views/CollectionView.vue\n M content/original/asset-manifest.json\n M scripts/sync-original-content.mjs\n?? .github/actions/prepare-original-content/action.yml\n?? .pi-lens-probe-home/bus-events.log\n?? .pi-lens-probe-home/cascade.log\n?? .pi-lens-probe-home/extension.log\n?? .pi-lens-probe-home/latency.log\n?? .pi-lens-probe-home/logs/2026-10-30.jsonl\n?? .pi-lens-probe-home/read-guard.log\n?? .pi-lens-probe-home/sessionstart.log\n?? apps/web-client/scripts/original-resources.test.mjs\n?? apps/web-client/src/engine/originalResources.ts\n?? docs/operations/native-ci.md\n?? scripts/test_original_resources.mjs\n"
+  },
+  "staged": {
+    "returncode": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "text": ""
+  },
+  "index_sha256": "f407bd0b312b7b3a171856d168666d1df774d251d3be07cda62ce3bc59ba4b2f"
+}

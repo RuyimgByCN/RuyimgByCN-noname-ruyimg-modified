@@ -1,0 +1,9 @@
+{
+  "pid": 42619,
+  "command": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "../evidence/corrections/verify-readonly.py"
+  ]
+}

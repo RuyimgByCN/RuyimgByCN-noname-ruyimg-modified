@@ -1,0 +1,366 @@
+crates/content-runtime/examples/gen_epic_cards_package.rs:3://! 把 noname-liuli 的「史诗卡牌」扩展转换为 `discover_extensions` 可发现的
+crates/content-runtime/examples/gen_epic_cards_package.rs:8://! - noname-liuli `noname/extension/史诗卡牌/extension.js`
+crates/content-runtime/examples/gen_epic_cards_package.rs:26:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_epic_cards_package.rs:51:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_doomsday_brawl_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_doomsday_brawl_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_doomsday_brawl_package.rs:49:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_boss_packages.rs:171:        "noname-liuli",
+crates/content-runtime/examples/gen_select_beautify_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_select_beautify_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_select_beautify_package.rs:52:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_cardpile_packages.rs:7://! - noname-liuli `noname/extension/cardpile/extension.js`  @ 8485dbb2
+crates/content-runtime/examples/gen_cardpile_packages.rs:141:            "noname-liuli",
+crates/content-runtime/examples/gen_qhly_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_qhly_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_thunder_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_thunder_package.rs:25:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_hero_kill_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_mark_supplement_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_mark_supplement_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_mark_supplement_package.rs:52:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-runtime/examples/gen_skin_switch_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_skin_switch_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/engine-native-wasm/src/lib.rs:719:        assert!(config.contains("\"source\": \"noname-liuli\""), "{config}");
+crates/engine-native-wasm/src/lib.rs:726:        assert!(bought.contains("source:noname-liuli"), "{bought}");
+crates/engine-native-wasm/src/lib.rs:734:        assert!(settled.contains("source:noname-liuli"), "{settled}");
+crates/engine-native-wasm/src/lib.rs:736:            &config.replace("\"noname-liuli\"", "\"\""),
+crates/engine-native-wasm/src/lib.rs:750:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:808:            &config.replace("\"noname-liuli\"", "\"\""),
+crates/engine-native-wasm/src/lib.rs:826:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:876:            sj_apply(&config.replace("\"noname-liuli\"", "\"\""), "boot").starts_with("error:")
+crates/engine-native-wasm/src/lib.rs:888:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:950:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native-wasm/src/lib.rs:974:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1001:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1049:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native-wasm/src/lib.rs:1084:        assert!(pile.contains("\"source\": \"noname-liuli\""), "{pile}");
+crates/engine-native-wasm/src/lib.rs:1102:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1124:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native-wasm/src/lib.rs:1136:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1174:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native-wasm/src/lib.rs:1186:            ("boss-play-upstream-liuli", "noname-liuli"),
+crates/engine-native-wasm/src/lib.rs:1217:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1251:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native-wasm/src/lib.rs:1263:        assert!(config.contains("\"source\": \"noname-liuli\""));
+crates/engine-native-wasm/src/lib.rs:1300:            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/content-runtime/examples/gen_ai_tuning_package.rs:3://! 把 noname-liuli 的「雷霆万钧」扩展转换为可发现包（manifest.json +
+crates/content-runtime/examples/gen_ai_tuning_package.rs:22:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-native-loader/src/drag_read.rs:1://! L16 拖拽读取（noname-liuli）的可移植决策。
+crates/content-runtime/examples/gen_drag_read_package.rs:3://! 把 noname-liuli 的「拖拽读取」扩展转换为 `discover_extensions` 可发现的
+crates/content-runtime/examples/gen_drag_read_package.rs:8://! - noname-liuli `noname/extension/拖拽读取/extension.js` @ 8485dbb2
+crates/content-runtime/examples/gen_drag_read_package.rs:28:    out.push_str("  \"source\": \"noname-liuli\",\n");
+crates/content-native-loader/tests/thunder_loader.rs:8:  "source": "noname-liuli",
+crates/content-native-loader/tests/thunder_loader.rs:31:    let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
+crates/content-native-loader/src/thunder.rs:1://! L28 雷霆万钧（noname-liuli）的可移植决策。
+crates/content-native-loader/tests/ai_tuning_loader.rs:8:  "source": "noname-liuli",
+crates/content-native-loader/tests/ai_tuning_loader.rs:36:    let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
+crates/content-native-loader/src/martial.rs:172:    if source != "noname-liuli" {
+crates/content-native-loader/src/epic_cards.rs:1://! L10 史诗卡牌（noname-liuli）的可移植决策。
+crates/content-native-loader/tests/qhly_loader.rs:8:  "source": "noname-liuli",
+crates/content-native-loader/tests/qhly_loader.rs:34:    let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
+crates/content-native-loader/src/doomsday.rs:1://! L19 末日乱斗（noname-liuli）的可移植决策。
+scripts/sync-original-content.mjs:40:const defaultSource = path.resolve(repoRoot, "../archive/upstream/noname");
+scripts/sync-original-content.mjs:48:  explicitCoreSourceInput || legacySourceInput || process.env.NONAME_ORIGINAL_ROOT || defaultSource,
+crates/content-native-loader/tests/skin_switch_loader.rs:9:  "source": "noname-liuli",
+crates/content-native-loader/tests/skin_switch_loader.rs:32:    let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
+crates/content-native-loader/src/skin_switch.rs:1://! L24 皮肤切换（noname-liuli）的可移植决策。
+crates/content-native-loader/src/qhly.rs:1://! L09 千幻聆音（noname-liuli）的可移植决策。
+crates/content-native-loader/tests/epic_cards_loader.rs:8:  "source": "noname-liuli",
+crates/content-native-loader/tests/epic_cards_loader.rs:25:    assert_eq!(cfg.source, "noname-liuli");
+crates/content-native-loader/tests/epic_cards_loader.rs:37:    let missing = CONFIG.replace("\"source\": \"noname-liuli\",", "");
+crates/content-native-loader/src/rzsh.rs:1://! L12 如真似幻（noname-liuli）的可移植决策。
+crates/content-native-loader/src/shousha_mvp.rs:1://! L13 手杀MVP（noname-liuli）。结算统计与结算分组走调用方给出的**权威
+crates/content-native-loader/src/ai_tuning.rs:1://! L01 AI优化（noname-liuli）的可移植决策。
+apps/game-server/src/config.rs:80:        if let Ok(path) = std::env::var("NONAME_ORIGINAL_CONTENT_ROOT") {
+crates/engine-native-content/src/content/pile.rs:4://! 上游 `cardpile/extension.js`（noname 与 noname-liuli 两仓数据一致）
+crates/engine-native/src/ai.rs:39:/// L01 AI优化（noname-liuli）的参数消费面。
+crates/engine-native/tests/nc08_upstream_swd_shijianhuisu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js:1392`）：
+crates/engine-native/tests/nc08_upstream_swd_shijianhuisu.rs:127:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js",
+crates/engine-native/tests/nc08_upstream_yunchou_kuanggu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`diykuanggu`）：
+crates/engine-native/tests/nc08_upstream_yunchou_kuanggu.rs:140:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_swd_jiguantong.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js`，`jiguantong`）：
+crates/engine-native/tests/nc08_upstream_mtg_haidao.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_rangjie.rs:3://! 上游源码（`archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_shenhuofeiya.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:906`）：
+crates/engine-native/tests/nc08_upstream_kuangfu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_kuangfu.rs:138:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/l16_drag_read_eight.rs:23:fn upstream_extension() -> String {
+crates/engine-native/tests/l16_drag_read_eight.rs:25:        .join("../../../archive/upstream/noname-liuli/noname/extension/拖拽读取/extension.js");
+crates/engine-native/tests/l16_drag_read_eight.rs:75:    let upstream = upstream_extension();
+crates/engine-native/tests/l16_drag_read_eight.rs:180:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/nc08_upstream_zhiyuan.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jijie.rs:6://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jijie.rs:56:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_jijie.rs:87:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_jijie.rs:99:            .join("../../../archive/upstream/noname/apps/core/character/standard/translate.js"),
+crates/engine-native/tests/nc08_upstream_gujian_yunvyuanshen.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`yunvyuanshen`）：
+crates/engine-native/tests/nc08_upstream_yunchou_shaoying.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`shaoying`）：
+crates/engine-native/tests/nc08_upstream_yunchou_shaoying.rs:211:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_wudian_youdishenru.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js`）：
+crates/engine-native/tests/nc08_upstream_yunchou_yiesheng.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`yiesheng`）：
+crates/engine-native/tests/nc08_upstream_yunchou_yiesheng.rs:188:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_yiji.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_yiji.rs:132:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_qixi.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_identity_start.rs:4://! `archive/upstream/noname/apps/core/mode/identity.js` 的 `start` 尾部：
+crates/engine-native/tests/nc08_upstream_gujian_jinlianzhu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`jinlianzhu`）：
+crates/engine-native/tests/nc08_upstream_mtg_shuimomuxue.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_shatang.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`shatang`）：
+crates/engine-native/tests/nc08_upstream_zhenfa_dizaizhen.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/zhenfa/card.js`）：
+crates/engine-native/tests/l05_coin_eight.rs:114:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l05_coin_eight.rs:118:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:125:        parse_coin_config(&stored.replace("\"noname-liuli\"", "\"\"")),
+crates/engine-native/tests/l05_coin_eight.rs:128:    assert!(matches!(parse_coin_config(&stored.replace("noname-liuli", "bad token")), Err(CoinError::BadConfig(_))));
+crates/engine-native/tests/l05_coin_eight.rs:137:    assert!(!noname_text.contains("noname-liuli"));
+crates/engine-native/tests/l05_coin_eight.rs:142:    assert_eq!(session.source(), "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:156:    assert_eq!(reloaded.source, "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:159:    assert_eq!(again.source(), "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:163:    assert_eq!(fell.source, "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:215:    assert_eq!(restored.source(), "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:219:    assert!(restore_coin(&text.replace("noname-liuli", "bad token")).is_err(), "来源字段损坏拒绝");
+crates/engine-native/tests/l05_coin_eight.rs:285:    assert_eq!(kept_config.source, "noname-liuli");
+crates/engine-native/tests/l05_coin_eight.rs:287:    assert!(kept_text.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/nc08_upstream_mtg_shamolvzhou.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_yunchou_beige.rs:4://! 上游源码（`archive/upstream/noname/apps/core/character/refresh/skill.js:3957`，`olbeige`）：
+crates/engine-native/tests/nc08_upstream_yunchou_beige.rs:186:            .join("../../../archive/upstream/noname/apps/core/character/refresh/skill.js"),
+crates/engine-native/tests/nc08_upstream_wudian_wangmeizhike.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js`）：
+crates/engine-native/tests/nc08_upstream_hearth_zhiliaobo.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_mtg_youlin.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_kuwu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js`）：
+crates/engine-native/tests/nc08_upstream_kuwu.rs:64://! （`archive/upstream/noname/apps/core/card/standard.js:99-102` 的
+crates/engine-native/tests/l04_cardpile_eight.rs:97:    assert!(pile_text.contains("\"source\": \"noname-liuli\""), "读到的是 liuli 比例表");
+crates/engine-native/tests/l04_cardpile_eight.rs:99:    assert_eq!(spec.source, "noname-liuli");
+crates/engine-native/tests/l04_cardpile_eight.rs:132:    assert!(!noname_text.contains("noname-liuli"));
+crates/engine-native/tests/l04_cardpile_eight.rs:233:    assert!(again_text.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/nc08_upstream_xiuluo.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js`）：
+crates/engine-native/tests/l17_douzhuan_eight.rs:23:fn upstream_data(name: &str) -> String {
+crates/engine-native/tests/l17_douzhuan_eight.rs:25:        "../../../archive/upstream/noname-liuli/noname/extension/斗转星移/data/{name}"
+crates/engine-native/tests/l17_douzhuan_eight.rs:162:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l17_douzhuan_eight.rs:169:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l17_douzhuan_eight.rs:440:    let blank = upstream_data("inputPlan/空白");
+crates/engine-native/tests/l17_douzhuan_eight.rs:441:    let none = upstream_data("outputPlan/无");
+crates/engine-native/tests/l17_douzhuan_eight.rs:445:    let standard = parse_plan_text(&upstream_data("inputPlan/标准包")).unwrap();
+crates/engine-native/tests/l17_douzhuan_eight.rs:446:    let volcano = parse_plan_text(&upstream_data("inputPlan/风林火山")).unwrap();
+crates/engine-native/tests/l17_douzhuan_eight.rs:454:        upstream_data("inputPlan/标准包").trim()
+crates/engine-native/tests/l17_douzhuan_eight.rs:460:            upstream_data("inputPlan/空白").trim()
+crates/engine-native/tests/l17_douzhuan_eight.rs:490:            &stored.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native/tests/l17_douzhuan_eight.rs:635:    assert_eq!(kept_config.source, "noname-liuli");
+crates/engine-native/tests/nc08_upstream_jianxiong.rs:8://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jianxiong.rs:162:            .join("../../../archive/upstream/noname/apps/core/character/sb/skill.js"),
+crates/engine-native/tests/nc08_upstream_jianxiong.rs:188:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/g1_huanle/huanle.rs:691:/// 上游源（archive/upstream/noname/.../欢乐卡牌/card/list.js，
+crates/engine-native/tests/l26_fool_eight.rs:26:fn upstream_extension() -> String {
+crates/engine-native/tests/l26_fool_eight.rs:28:        .join("../../../archive/upstream/noname-liuli/noname/extension/笨蛋插件/extension.js");
+crates/engine-native/tests/l26_fool_eight.rs:151:    let upstream = upstream_extension();
+crates/engine-native/tests/l26_fool_eight.rs:603:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l26_fool_eight.rs:611:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l26_fool_eight.rs:650:            &stored.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native/tests/l26_fool_eight.rs:779:        "noname-liuli"
+crates/engine-native/tests/nc08_upstream_gujian_mutoumianju.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`mutoumianju`）：
+crates/engine-native/tests/nc08_upstream_tuxi.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_tuxi.rs:196:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_mtg_longlushanfeng.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_heilonglinpian.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`heilonglinpian`）：
+crates/engine-native/tests/nc08_upstream_hearth_zhaomingdan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_standard_tricks.rs:4://! 上游源码（`archive/upstream/noname/apps/core/card/standard.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_mianlijinzhen.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`mianlijinzhen`）：
+crates/engine-native/tests/nc08_upstream_chunbing.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`）：
+crates/engine-native/tests/nc08_upstream_hearth_shandianjian.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`，`shandianjian`）：
+crates/engine-native/tests/nc08_upstream_jieyin.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_longxue.rs:37:            .join("../../../archive/upstream/noname-liuli/noname/extension/龙血玄黄/extension.js"),
+crates/engine-native/tests/nc08_upstream_boss_zhugeliang.rs:8://! 上游源码（`archive/upstream/noname-liuli/noname/character/extra.js`）：
+crates/engine-native/tests/nc08_upstream_boss_zhugeliang.rs:109:            .join("../../../archive/upstream/noname-liuli/noname/character/extra.js"),
+crates/engine-native/tests/nc08_upstream_boss_zhugeliang.rs:132:            .join("../../../archive/upstream/noname-liuli/noname/character/extra.js"),
+crates/engine-native/tests/nc08_upstream_hearth_yuansuhuimie.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_mtg_feixu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_hearth_linghunzhihuo.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_hujia.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_hujia.rs:62:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_hujia.rs:100:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_hujia.rs:133:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_yunchou_guihan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`guihan`）：
+crates/engine-native/tests/nc08_upstream_yunchou_guihan.rs:52:        "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/l02_sj_eight.rs:263:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l02_sj_eight.rs:269:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l02_sj_eight.rs:273:        matches!(parse_sj_config(&stored.replace("\"noname-liuli\"", "\"\"")), Err(SjError::BadConfig(msg)) if msg.contains("source"))
+crates/engine-native/tests/l02_sj_eight.rs:276:        parse_sj_config(&stored.replace("noname-liuli", "bad token")),
+crates/engine-native/tests/l02_sj_eight.rs:1425:    assert_eq!(kept_config.source, "noname-liuli");
+crates/engine-native/tests/l02_sj_eight.rs:1428:    assert!(kept_text.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/nc08_upstream_tieji.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_tieji.rs:131:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_luoyi.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_luoyi.rs:192:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_qingguo.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_qingguo.rs:52:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_yaowu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_yaowu.rs:183:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/l15_shousha_eight.rs:237:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l15_shousha_eight.rs:245:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l15_shousha_eight.rs:281:        parse_shousha_config(&stored.replace("\"source\": \"noname-liuli\"", "\"source\": \"\"")),
+crates/engine-native/tests/l15_shousha_eight.rs:834:    assert_eq!(kept_config.source, "noname-liuli");
+crates/engine-native/tests/l15_shousha_eight.rs:837:    assert!(kept_text.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/nc08_upstream_fankui.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_fankui.rs:136:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_linghunzhihuo.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_shushen.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_shushen.rs:220:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_fanjian.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_fanjian.rs:256:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_jizhi.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/sb/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jizhi.rs:190:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_gujian_dinvxuanshuang.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`dinvxuanshuang`）：
+crates/engine-native/tests/nc08_upstream_hearth_dunpaigedang.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_feibiao.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`feibiao`）：
+crates/engine-native/tests/nc08_upstream_guicai.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_guicai.rs:140:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_guicai.rs:156:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_guicai.rs:165:            .join("../../../archive/upstream/noname/apps/core/character/sb/skill.js"),
+crates/engine-native/tests/nc08_upstream_swd_mujiaren.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js:490`）：
+crates/engine-native/tests/nc08_upstream_swd_mujiaren.rs:155:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js",
+crates/engine-native/tests/l13_shousha_mvp_eight.rs:277:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l13_shousha_mvp_eight.rs:282:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l13_shousha_mvp_eight.rs:294:        parse_mvp_config(&stored.replace("\"noname-liuli\"", "\"\"")),
+crates/engine-native/tests/nc08_upstream_yunchou_luweiyan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`luweiyan`）：
+crates/engine-native/tests/nc08_upstream_yunchou_luweiyan.rs:161:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_gujian_liufengsan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`liufengsan`）：
+crates/engine-native/tests/nc08_upstream_swd_cangchizhibi.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js`）：
+crates/engine-native/tests/l09_qhly_eight.rs:133:    let missing = text.replace("\"source\": \"noname-liuli\",", "");
+crates/engine-native/tests/nc08_upstream_jiuyuan.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jiuyuan.rs:62:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_duwen.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js`）：
+crates/engine-native/tests/nc08_upstream_yunchou_xiongzi.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:143`）：
+crates/engine-native/tests/nc08_upstream_yunchou_xiongzi.rs:110:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/g1_cardpile.rs:140:            "noname-liuli",
+crates/engine-native/tests/u04_coin_eight.rs:109:    assert!(!stored.contains("noname-liuli"));
+crates/engine-native/tests/l10_epic_cards_eight.rs:28:fn upstream_extension() -> String {
+crates/engine-native/tests/l10_epic_cards_eight.rs:30:        .join("../../../archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js");
+crates/engine-native/tests/l10_epic_cards_eight.rs:131:    let upstream = upstream_extension();
+crates/engine-native/tests/nc08_upstream_rende.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_rende.rs:198:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_gujian_shihuifen.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`shihuifen`）：
+crates/engine-native/tests/nc08_upstream_yunchou_honglian.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`honglian`）：
+crates/engine-native/tests/nc08_upstream_yunchou_honglian.rs:168:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_tiandu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_tiandu.rs:129:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_hearth_shijieshu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_qicai.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_qicai.rs:173:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_mtg_linzhongjianta.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_yunchou_chenhuodajie.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/yunchou/card.js`）：
+crates/engine-native/tests/nc08_upstream_guanxing.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_guanxing.rs:127:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_gujian_mapodoufu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`mapodoufu`）：
+crates/engine-native/tests/nc08_upstream_jijiang.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jijiang.rs:60:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_zhiheng.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_ziyu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js`）：
+crates/engine-native/tests/nc08_upstream_paoxiao.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_paoxiao.rs:119:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_hearth_shenenshu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_hearth_jihuocard.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/l29_longxue_eight.rs:163:    assert_eq!(cfg.source, "noname-liuli");
+crates/engine-native/tests/nc08_upstream_luoshen.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_luoshen.rs:112:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_luoshen.rs:137:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_yunchou_unimplemented.rs:37:        "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou",
+crates/engine-native/tests/nc08_upstream_liegong_xinkuanggu.rs:3://! 上游源码（`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js`）：
+crates/engine-native/tests/l22_elo_eight.rs:117:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l22_elo_eight.rs:121:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l22_elo_eight.rs:126:        parse_elo_config(&stored.replace("\"noname-liuli\"", "\"\"")),
+crates/engine-native/tests/l22_elo_eight.rs:129:    assert!(matches!(parse_elo_config(&stored.replace("noname-liuli", "bad token")), Err(EloError::BadConfig(_))));
+crates/engine-native/tests/l22_elo_eight.rs:333:    assert_eq!(kept_config.source, "noname-liuli");
+crates/engine-native/tests/l22_elo_eight.rs:336:    assert!(kept_text.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/nc08_upstream_biyue_yingzi.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_biyue_yingzi.rs:153:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_shengke.rs:3://! 上游源码（`archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62-172`）：
+crates/engine-native/tests/nc08_upstream_lijian.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_lijian.rs:235:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_kurou.rs:3://! 上游源码（`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js`，
+crates/engine-native/tests/nc08_upstream_wushuang.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_wushuang.rs:63:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_wushuang.rs:175:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_ganglie.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_ganglie.rs:158:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_wuxing_shengke.rs:4://! 上游源码（`noname-liuli/noname/extension/wuxing/extension.js`，`help` 逐字）：
+crates/engine-native/tests/nc08_upstream_qingnang.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_hearth_tanshezhiren.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_qianxun.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_qianxun.rs:135:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_hearth_chuansongmen.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_shujinsan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`shujinsan`）：
+crates/engine-native/tests/nc08_upstream_gujian_bingpotong.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`bingpotong`）：
+crates/engine-native/tests/nc08_upstream_yunchou_huoshan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/yunchou/card.js`）：
+crates/engine-native/tests/nc08_upstream_haidao.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_gujian_longxugou.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`longxugou`）：
+crates/engine-native/tests/nc08_upstream_xiaoji.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_ciqiu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js`）：
+crates/engine-native/tests/nc08_upstream_yunchou_jieyan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`jieyan`）：
+crates/engine-native/tests/nc08_upstream_yunchou_jieyan.rs:157:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_wusheng.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_wusheng.rs:240:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_yanziyaoshui.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gwent/card.js`）：
+crates/engine-native/tests/nc08_upstream_guose.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_guose.rs:154:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_mtg_lindixiliu.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/l18_update_guard_eight.rs:26:fn upstream_extension() -> String {
+crates/engine-native/tests/l18_update_guard_eight.rs:28:        .join("../../../archive/upstream/noname-liuli/noname/extension/更新保护/extension.js");
+crates/engine-native/tests/l18_update_guard_eight.rs:85:    let upstream = upstream_extension();
+crates/engine-native/tests/l18_update_guard_eight.rs:407:    assert!(stored.contains("\"source\": \"noname-liuli\""));
+crates/engine-native/tests/l18_update_guard_eight.rs:415:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l18_update_guard_eight.rs:445:            &stored.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
+crates/engine-native/tests/l18_update_guard_eight.rs:577:        "noname-liuli"
+crates/engine-native/tests/nc08_upstream_yunchou_jiaoxia.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`diy_jiaoxia`）：
+crates/engine-native/tests/nc08_upstream_yunchou_jiaoxia.rs:150:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_gujian_liyutang.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`liyutang`）：
+crates/engine-native/tests/nc08_upstream_yunchou_yaliang.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`yaliang`）：
+crates/engine-native/tests/nc08_upstream_yunchou_yaliang.rs:120:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/boss_play_eight.rs:91:    assert_eq!(config.source, if liuli { "noname-liuli" } else { "noname" });
+crates/engine-native/tests/boss_play_eight.rs:271:/// L03（noname-liuli）八项。目标平台的字符串辅助在 `engine-native-wasm` 里覆盖。
+crates/engine-native/tests/nc08_upstream_lingxue.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js`）：
+crates/engine-native/tests/nc08_upstream_lianying.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_lianying.rs:198:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_xicai.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`）：
+crates/engine-native/tests/nc08_upstream_liuli.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_keji.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_keji.rs:185:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_mtg_bingheyaosai.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/mtg/card.js`）：
+crates/engine-native/tests/nc08_upstream_jiyuan.rs:6://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jiyuan.rs:59:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_longdan.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_longdan.rs:196:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_jijiu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_jijiu.rs:52:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_jijiu.rs:81:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_gujian_ziyangdan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`ziyangdan`）：
+crates/engine-native/tests/nc08_upstream_hearth_xingjiegoutong.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/hearth/card.js`）：
+crates/engine-native/tests/g1_wuxing.rs:4://! 上游（noname-liuli wuxing @ 8485dbb2）：每角色随机属性、牌堆 1/3
+crates/engine-native/tests/nc08_upstream_yunchou_chanyuan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js:402`）：
+crates/engine-native/tests/nc08_upstream_yunchou_chanyuan.rs:104:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/l21_martial_eight.rs:26:fn upstream_extension() -> String {
+crates/engine-native/tests/l21_martial_eight.rs:28:        .join("../../../archive/upstream/noname-liuli/noname/extension/武皇争霸/extension.js");
+crates/engine-native/tests/l21_martial_eight.rs:93:    let source = upstream_extension();
+crates/engine-native/tests/l21_martial_eight.rs:106:        .join("../../../archive/upstream/noname-liuli/noname/extension/武皇争霸/mightyFoe.js");
+crates/engine-native/tests/l21_martial_eight.rs:331:    assert_eq!(config.source, "noname-liuli");
+crates/engine-native/tests/l21_martial_eight.rs:348:        apply_martial_line(&config_text.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""), "{}"),
+crates/engine-native/tests/l21_martial_eight.rs:469:    assert_eq!(parse_martial_config(&kept_text).unwrap().source, "noname-liuli");
+crates/engine-native/tests/nc08_upstream_tianfuzhen.rs:3://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/zhenfa/card.js`）：
+crates/engine-native/tests/nc08_upstream_mashu.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_mashu.rs:49:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_mashu.rs:65:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js`，`liutouge`）：
+crates/engine-native/tests/nc08_upstream_gujian_liutouge.rs:148:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js",
+crates/engine-native/tests/native_kernel/standard.rs:5:/// archive/upstream/noname/apps/core/character/standard/{character,skill}.js。
+crates/engine-native/tests/nc08_upstream_wuxing_wuxingpan.rs:1://! NC08 第⑦层（上游行为对照）样本 140：**来源 U11（wuxing / noname-liuli）** 装备
+crates/engine-native/tests/nc08_upstream_wuxing_wuxingpan.rs:4://! 上游源码（`archive/upstream/noname-liuli/noname/extension/wuxing/extension.js`，**扩展对象格式**）：
+crates/engine-native/tests/nc08_upstream_swd_yangpijuan.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js`，`yangpijuan`）：
+crates/engine-native/tests/nc08_upstream_swd_yangpijuan.rs:193:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js",
+crates/engine-native/tests/nc08_upstream_yunchou_zonghuo.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`zonghuo`）：
+crates/engine-native/tests/nc08_upstream_yunchou_zonghuo.rs:147:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_swd_gouhunluo.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js:592`）：
+crates/engine-native/tests/nc08_upstream_swd_gouhunluo.rs:173:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/card.js",
+crates/engine-native/tests/nc08_upstream_kongcheng.rs:3://! 上游源码（`archive/upstream/noname/apps/core/character/standard/skill.js`）：
+crates/engine-native/tests/nc08_upstream_kongcheng.rs:103:            .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),
+crates/engine-native/tests/nc08_upstream_yunchou_guhuo.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js`，`diyguhuo`）：
+crates/engine-native/tests/nc08_upstream_yunchou_guhuo.rs:157:            "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",
+crates/engine-native/tests/nc08_upstream_gujian_qiankunbiao.rs:4://! 上游源码（`archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/card.js:870`）：

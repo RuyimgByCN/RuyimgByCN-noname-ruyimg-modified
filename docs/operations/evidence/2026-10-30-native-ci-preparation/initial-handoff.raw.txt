@@ -1,0 +1,84 @@
+**本地 CI 执行入口准备完成；真正的 GitHub Actions 运行仍为 0 次。没有 push、dispatch、PR、release、comment、消息发送、remote/repo settings/secrets 修改，也没有 stage 或 commit。** 此交付须经父线程独立审查；外部发布仍等待父线程完成主源码验收后向用户取得明确许可。
+
+实现范围为 3 个 CI 文件，基准 `255bbfbd7f6916ee77bd29799826a225bd10871f`。6 个资源修复文件是只读前提，不在本补丁内，最终 SHA-256 均与 `borrowed-resource-overlay.json` 一致。没有改动规则、ABI、包版本、Rust、WASM、profile、原始上游仓、Liuli 或 A 的 stage3 cache。
+
+- `.github/workflows/ci.yml`：源码 checkout 到 workspace 内的 `noname-next`；同步各 job 的运行目录、Rust cache workspace、Tauri installer artifact 路径；令牌权限显式设为 `contents: read`。原有 5 类 jobs、三 OS build/libtest、所有 Ubuntu gates、native-web、三 OS desktop、两 OS perf 均保留，共 10 次矩阵执行。Gate 4 仍执行原完整 `--verify-only`，并额外接入已有资源回归测试。
+- `.github/actions/prepare-original-content/action.yml`：gates/native-web/desktop 共用。用现有 checkout、pnpm setup action，以 `apps/core` sparse checkout 获取 `libnoname/noname` 的 adopted commit `1a548c95acdf8ac1ef44d74473403eda2ac86cf0`，位置为 workspace 内的 `archive/upstream/noname`。其与 `noname-next` 构成 adopted provenance 所需的兄弟目录，不使用 checkout 的 workspace 外路径。pnpm 9 执行 frozen 安装；仅恢复真实源字节的 ignored assets，然后资源 verify；最后用 `git diff --exit-code -- content/original` 拒绝 tracked 内容变更。没有重建 legacy-source、catalog、ported/frozen 或规则，也没有伪造 provenance、添加 skin/Liuli。
+- `docs/operations/native-ci.md`：记录目录拓扑、资源恢复命令、完整 job/platform 清单、artifact 与权限/secret 边界及真实 Actions 待验证限制。
+
+纯 CI patch（107 additions / 14 deletions，3 files）：
+[../evidence/native-ci-only.patch](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/native-ci-only.patch)
+
+Patch SHA-256：`407c7667743aa8072dcdad73225acd63580f3e7738b8e1c615c8e705313947dc`。父线程应应用该补丁而非打包整个 dirty 工作区。
+
+| 文件 | 基准 SHA-256 | 最终 SHA-256 |
+| --- | --- | --- |
+| `.github/workflows/ci.yml` | `14cd129e77232fea3c2be3fddfa224140f4b483fb9ff12c9410f001f2616c972` | `8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7` |
+| `.github/actions/prepare-original-content/action.yml` | 新文件 | `e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9` |
+| `docs/operations/native-ci.md` | 新文件 | `83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084` |
+
+完整摘要：[ci-file-sha256.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/ci-file-sha256.json)。6 个借入文件的哈希前提：[borrowed-resource-overlay.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/borrowed-resource-overlay.json)。
+
+本地验证从当前独立 fresh worktree 的缺依赖、缺源、缺 ignored assets 状态开始，没有 clone --shared，没有修复或 fetch canonical promisor 仓。
+
+| 命令/检查 | 退出码 | 结果 |
+| --- | --- | --- |
+| 初始 `node scripts/sync-original-content.mjs --verify-only` | 1（预期） | 真实缺失 `apps/web-client/node_modules/typescript/lib/typescript.js` |
+| 仅加入自己 owned 的只读 node_modules lookup 后，同一命令 | 1（预期） | 真实缺失 `../archive/upstream/noname/apps/core` |
+| 再加入自己 owned 的 `../archive → canonical archive` 只读 lookup 后，同一命令 | 1（预期） | 真实缺失 `content/original/assets/portraits` |
+| `node scripts/sync-original-content.mjs --resources-only` | 0 | 从原源文件恢复 2,707 portraits 和 9,652 audio |
+| `node scripts/sync-original-content.mjs --resources-only --verify-only` | 0 | 资源字节/manifest 校验通过 |
+| `node --test scripts/test_original_content_order.mjs scripts/test_original_resources.mjs` | 0 | 2 tests passed，包含实际小 fixture 的资源保护、错误 provenance 拒绝及坏字节检测 |
+| `node scripts/sync-original-content.mjs --verify-only` | 0 | 完整原 Gate 4，通过 legacy-source、provenance、catalog、ported 对应与资产校验 |
+| 使用现有本机 pnpm 9.15.9，复制实际 package.json/lockfile 到自己 fresh fixture，`pnpm --dir <fixture> install --frozen-lockfile --store-dir <fixture>/store` | 0 | 实际下载/安装 64 包及正常 postinstall，package.json/lockfile 字节不变 |
+| 用该 fresh pnpm 9 依赖再次执行完整 Gate 4 | 0 | 通过；不是仅借用主树依赖的结果 |
+| `python3 ../evidence/check_configuration.py` | 0 | 两份 YAML 解析；所有既有 jobs/matrices/gate 命令保留；bootstrap head=adopted head；目录与 artifact 路径正确；`bash -n` 通过；6 文件前提哈希未变；无 staged files |
+| `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | 0 | 2 tests passed |
+| `python3 -B scripts/check-source-lines.py` | 0 | 8,972 文件行数检查通过 |
+| `git diff --check` | 0 | 无 whitespace 错误 |
+| `git apply --reverse --check ../evidence/native-ci-only.patch` | 0 | patch 与交付最终文件一致，不实际应用或更改文件 |
+| `git diff --cached --name-only` | 0，空输出 | 无 staged files |
+
+资源 sync/hash/Node 验证均经 `/tmp/noname-run-serialized.py` 全局锁。对 `content/original`、web generated 和标准 public portraits 的 17,031 个 tracked 文件逐一计算前后 SHA-256，完全一致，包含 manifest/catalog/legacy mirror/所有 ported 包。由于独立工作区借入的资源前提本身相对基准是 dirty，CI 内最终的 clean-tree `git diff` 不能在这里冒称已整体运行通过；本地以逐文件字节比较证明 bootstrap 未改 tracked 内容，真正 CI 将基于父线程最终验收提交的 clean checkout 执行该 guard。
+
+原失败、命令、退出码与输出：
+[local-validation-results.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/local-validation-results.json)、
+[validation-driver.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/validation-driver.log)、
+[pnpm-frozen-result.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/pnpm-frozen-result.json)、
+[pnpm-frozen-install.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/pnpm-frozen-install.log)、
+[gate4-pnpm9-verify.log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/gate4-pnpm9-verify.log)、
+[protected-before.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/protected-before.json)、
+[protected-after.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/protected-after.json)、
+[configuration-validation.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/configuration-validation.json)、
+[final-check-results.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/final-check-results.json)、
+[patch-check-results.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/patch-check-results.json)。
+
+本地 Node 为 v26.4.0；CI 配置保留 Node 20。未安装 actionlint，未运行 actionlint；用现有 PyYAML 解析并执行了针对实际 workflow/action 的结构及 shell 检查。没有运行 Rust/WASM 编译、无关 UI build、全部 Cargo tests 或全音频 decode。没有冒称远程 sparse checkout、Windows/macOS 构建、Tauri 打包或上传 artifact 已通过。
+
+只读 GitHub API 结果（均为 GET）：
+
+| Endpoint | 退出码 | 读到的事实 |
+| --- | --- | --- |
+| `repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified` | 0 | public；default `main`；未 archive/disable；当前凭据 API 权限显示 admin/maintain/push/pull=true |
+| `.../actions/permissions` | 0 | `enabled=true`, `allowed_actions=all`, `sha_pinning_required=false` |
+| `.../actions/permissions/workflow` | 0 | `default_workflow_permissions=read`, `can_approve_pull_request_reviews=false` |
+| `.../actions/workflows` | 0 | `total_count=0`, `workflows=[]`；没有把旧 JS 源码 workflow 计作原生运行 |
+| `.../branches/main` | 0 | HEAD 仍为 `47347c6608d651660ae9459e59eb529b3cef277f` |
+| `.../branches/native-convergence` | 1（404） | 拟用新分支目前不存在 |
+| `repos/libnoname/noname/commits/1a548c95acdf8ac1ef44d74473403eda2ac86cf0` | 0 | adopted source commit 在 GitHub 可查询 |
+
+原始结果在 [api/results.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/api/results.json) 及同目录的每 endpoint JSON/stderr。API 读出的 push/admin 权限不是本次外部写授权，也不能证明实际 Actions job 必成功。
+
+父线程可直接展示的发布提案如下（此提案未执行）：
+
+> 申请明确许可，将最终经审查验收的原生源码根目录提交 `<PARENT_FILL_ACCEPTED_NATIVE_COMMIT>` 推到现有公开仓库 `https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git` 的新分支 `native-convergence`。仅创建此分支，不 force push、不新增 remote、不改默认 main、不合并、不创建 release、不改仓库设置或 secrets、不发布 PR/comment。该分支 push 会按其中的原生 `.github/workflows/ci.yml` 自动启动 build 三 OS、Ubuntu gates、native-web、desktop 三 OS、perf 两 OS，共 10 个矩阵执行；desktop job 将产生 3 组 installer Actions artifacts，其余 job 运行验证/报告。上传的根是原生项目根（含 Cargo.toml），不是旧 JS main 的嵌套目录。允许该现有仓库公开承载所验收源码，并允许本次 push 自带的 Actions 执行及 installer artifacts 上传。随后只读查询并报告真实 run URL、各 job 结果及失败原因。
+
+父线程在获得上述授权且填写最终验收 commit 后，先重新只读核对新分支尚不存在，然后才执行普通、无 force 的 `git push https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git <PARENT_FILL_ACCEPTED_NATIVE_COMMIT>:refs/heads/native-convergence`。该命令仅作为未来提案记录，本 worker 没有执行。若首次真实 Actions 失败，应按真实日志修复并遵守父线程获准的发布范围，不能用本地结果代替真实 run。
+
+拟上传源码文件清单：[proposed-native-tree-paths.txt](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/proposed-native-tree-paths.txt)，41,506 个路径，SHA-256 `4524973a891ab27eac6919f5b04f42b13655380e0ca29d6ee314d076e53932ec`。它由现有 tracked 树 + 6 资源前提（其中 3 为新增源码）+ 本 CI 3 文件构成，是父线程最终 commit 前的审查清单，不是已提交 tree object；父线程最终验收提交若有变动需相应刷新。此列表不含 `.pi-lens-probe-home`、临时依赖、ignored assets、target、dist、证据目录或本地未 tracked 二进制/WIP；本纯 CI patch 也不含 6 资源前提。
+
+当前不用用户提供新 secret：公共上游 checkout 与 pnpm frozen install 不需要额外 secret；现有可选 `TAURI_SIGNING_PRIVATE_KEY` 引用保留，当前 Tauri 配置未启用 updater artifact 签名，也未配置证书签名或 notarization。实际 runner/安装器行为仍须真实运行验证，不能提前承诺所有平台无额外环境问题。
+
+自己创建的 node_modules lookup、archive lookup 和 fresh pnpm fixture 已移除；保留有明确验证用途的 ignored `content/original/assets`（12,359 个真实输入资源的本地输出，不在拟上传列表）。清理后的磁盘可用约 161.4 GB（十进制），详见 [cleanup.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/cleanup.json)。预先存在的 `.pi-lens-probe-home` 没有编辑或删除。最终 [final-status.txt](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-native-ci-pml7niud/evidence/final-status.txt) 明确区分 CI 文件与借入资源；index 为空。
+
+推荐下一步：父线程独立审查此纯 CI patch、完成 6 资源前提与最终原生根的验收，准备明确 commit，然后仅申请一次上述具体外部发布许可。未获许可前保持无外部写。真正 Actions run、Windows/macOS、Node 20 与打包上传仍未检查，是必须保留的风险边界。

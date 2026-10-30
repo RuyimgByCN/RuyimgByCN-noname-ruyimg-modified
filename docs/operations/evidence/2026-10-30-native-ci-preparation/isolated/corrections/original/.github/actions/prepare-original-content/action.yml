@@ -1,0 +1,27 @@
+name: Prepare original content
+description: Install locked tools and restore adopted assets, preserving rules.
+runs:
+  using: composite
+  steps:
+    # Sibling checkouts preserve the adopted source provenance paths.
+    - uses: actions/checkout@v4
+      with:
+        repository: libnoname/noname
+        ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
+        path: archive/upstream/noname
+        sparse-checkout: apps/core
+        persist-credentials: false
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+    - name: Install frontend dependencies
+      shell: bash
+      working-directory: noname-next
+      run: pnpm --dir apps/web-client install --frozen-lockfile
+    - name: Restore and verify adopted resource bytes
+      shell: bash
+      working-directory: noname-next
+      run: |
+        node scripts/sync-original-content.mjs --resources-only
+        node scripts/sync-original-content.mjs --resources-only --verify-only
+        git diff --exit-code -- content/original

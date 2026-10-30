@@ -1,0 +1,232 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 038edca4..11181d97 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -7,6 +7,13 @@ on:
+   push:
+   pull_request:
+ 
++permissions:
++  contents: read
++
++defaults:
++  run:
++    working-directory: noname-next
++
+ env:
+   CARGO_TERM_COLOR: always
+ 
+@@ -20,10 +27,14 @@ jobs:
+     runs-on: ${{ matrix.os }}
+     steps:
+       - uses: actions/checkout@v4
++        with:
++          path: noname-next
+       - uses: dtolnay/rust-toolchain@stable
+         with:
+           targets: wasm32-unknown-unknown
+       - uses: Swatinem/rust-cache@v2
++        with:
++          workspaces: noname-next
+       - name: Build workspace
+         run: cargo build --workspace
+       - name: Unit tests
+@@ -34,13 +45,18 @@ jobs:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
++        with:
++          path: noname-next
+       - uses: dtolnay/rust-toolchain@stable
+         with:
+           targets: wasm32-unknown-unknown
+       - uses: Swatinem/rust-cache@v2
++        with:
++          workspaces: noname-next
+       - uses: actions/setup-node@v4
+         with:
+           node-version: 20
++      - uses: ./noname-next/.github/actions/prepare-original-content
+       - name: Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)
+         run: |
+           python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+@@ -65,7 +81,7 @@ jobs:
+         run: bash scripts/cross-target-hash.sh
+       - name: Gate 4 — original content sync verify
+         run: |
+-          node --test scripts/test_original_content_order.mjs
++          node --test scripts/test_original_content_order.mjs scripts/test_original_resources.mjs
+           node scripts/sync-original-content.mjs --verify-only
+ 
+   # 独立于源码行数/旧线门禁：从本次源码重建 native-pkg 后验正式 Worker 与前端。
+@@ -74,23 +90,23 @@ jobs:
+     runs-on: ubuntu-latest
+     defaults:
+       run:
+-        working-directory: apps/web-client
++        working-directory: noname-next/apps/web-client
+     env:
+       WASM_PACK_TARGET: web
+     steps:
+       - uses: actions/checkout@v4
++        with:
++          path: noname-next
+       - uses: dtolnay/rust-toolchain@stable
+         with:
+           targets: wasm32-unknown-unknown
+       - uses: Swatinem/rust-cache@v2
++        with:
++          workspaces: noname-next
+       - uses: actions/setup-node@v4
+         with:
+           node-version: 20
+-      - uses: pnpm/action-setup@v4
+-        with:
+-          version: 9
+-      - name: Install frontend dependencies
+-        run: pnpm install --frozen-lockfile
++      - uses: ./noname-next/.github/actions/prepare-original-content
+       - name: Install wasm-pack
+         run: cargo install wasm-pack --version 0.15.0 --locked
+       - name: Rebuild native WASM from current source
+@@ -118,27 +134,27 @@ jobs:
+     runs-on: ${{ matrix.os }}
+     steps:
+       - uses: actions/checkout@v4
++        with:
++          path: noname-next
+       - uses: dtolnay/rust-toolchain@stable
+         with:
+           targets: wasm32-unknown-unknown
+       - uses: Swatinem/rust-cache@v2
++        with:
++          workspaces: noname-next
+       - uses: actions/setup-node@v4
+         with:
+           node-version: 20
+-      - uses: pnpm/action-setup@v4
+-        with:
+-          version: 9
+       - name: Install Linux Tauri dependencies
+         if: runner.os == 'Linux'
+         run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev
+-      - name: Install frontend dependencies
+-        run: pnpm --dir apps/web-client install --frozen-lockfile
++      - uses: ./noname-next/.github/actions/prepare-original-content
+       - name: Install wasm-pack
+         run: cargo install wasm-pack --version 0.15.0 --locked
+       - name: Install Tauri CLI
+         run: cargo install tauri-cli --version "^2" --locked
+       - name: Produce installer (tauri beforeBuildCommand builds the web client)
+-        working-directory: apps/desktop-client
++        working-directory: noname-next/apps/desktop-client
+         run: cargo tauri build
+         env:
+           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+@@ -147,7 +163,7 @@ jobs:
+         with:
+           name: installer-${{ matrix.os }}
+           path: |
+-            target/release/bundle/**
++            noname-next/target/release/bundle/**
+           if-no-files-found: error
+ 
+   # M7 gate 3: multi-platform performance tier measurement.
+@@ -160,8 +176,12 @@ jobs:
+     runs-on: ${{ matrix.os }}
+     steps:
+       - uses: actions/checkout@v4
++        with:
++          path: noname-next
+       - uses: dtolnay/rust-toolchain@stable
+       - uses: Swatinem/rust-cache@v2
++        with:
++          workspaces: noname-next
+       - name: Tier list
+         run: cargo run -q -p benchmark-runner -- tiers
+       - name: Tier report (server-baseline budget)
+diff --git a/.github/actions/prepare-original-content/action.yml b/.github/actions/prepare-original-content/action.yml
+new file mode 100644
+index 00000000..04f255ff
+--- /dev/null
++++ b/.github/actions/prepare-original-content/action.yml
+@@ -0,0 +1,27 @@
++name: Prepare original content
++description: Install locked tools and restore adopted assets, preserving rules.
++runs:
++  using: composite
++  steps:
++    # Sibling checkouts preserve the adopted source provenance paths.
++    - uses: actions/checkout@v4
++      with:
++        repository: libnoname/noname
++        ref: 1a548c95acdf8ac1ef44d74473403eda2ac86cf0
++        path: archive/upstream/noname
++        sparse-checkout: apps/core
++        persist-credentials: false
++    - uses: pnpm/action-setup@v4
++      with:
++        version: 9
++    - name: Install frontend dependencies
++      shell: bash
++      working-directory: noname-next
++      run: pnpm --dir apps/web-client install --frozen-lockfile
++    - name: Restore and verify adopted resource bytes
++      shell: bash
++      working-directory: noname-next
++      run: |
++        node scripts/sync-original-content.mjs --resources-only
++        node scripts/sync-original-content.mjs --resources-only --verify-only
++        git diff --exit-code -- content/original
+diff --git a/docs/operations/native-ci.md b/docs/operations/native-ci.md
+new file mode 100644
+index 00000000..c71e5750
+--- /dev/null
++++ b/docs/operations/native-ci.md
+@@ -0,0 +1,46 @@
++# Native GitHub Actions entry
++
++The native source root contains `.github/workflows/ci.yml` and `Cargo.toml`.
++A push or pull request runs the workflow on every branch. Publishing this tree
++as a new branch does not change the repository's default branch.
++
++The workflow checks out this root at `$GITHUB_WORKSPACE/noname-next`.
++`prepare-original-content` checks out `libnoname/noname` at the adopted commit
++`1a548c95acdf8ac1ef44d74473403eda2ac86cf0`, with `apps/core` in the sparse
++checkout, at `$GITHUB_WORKSPACE/archive/upstream/noname`. Both checkout paths
++are inside the workspace. This sibling layout matches the source paths in the
++adopted manifest and catalog; no provenance fields are rewritten.
++
++The shared action installs the web client's existing dependencies with pnpm 9
++and `--frozen-lockfile`, then runs:
++
++```sh
++node scripts/sync-original-content.mjs --resources-only
++node scripts/sync-original-content.mjs --resources-only --verify-only
++git diff --exit-code -- content/original
++```
++
++This restores ignored portraits/audio from the real source files. It does not
++regenerate the tracked legacy mirror, catalog, ported packages, or rules. The
++final diff check rejects changes to tracked original content. Gate 4 still
++runs the full original-content verification, plus ordering and resource tests.
++No Liuli checkout or optional skin source is configured.
++
++| Job | Platforms | Checks or output |
++| --- | --- | --- |
++| build | macOS, Windows, Ubuntu | Workspace build and library tests |
++| gates | Ubuntu | Source size/layering, workspace tests, strict native targets, conformance, Native/WASM hash, original-content verification |
++| native-web | Ubuntu | Fresh native and legacy WASM, native regressions, real Worker smoke, frontend tests/typecheck/build |
++| desktop | macOS, Windows, Ubuntu | Tauri installers; uploads `installer-${matrix.os}` artifacts from `noname-next/target/release/bundle/**` |
++| perf | macOS, Ubuntu | Existing tier list and server-baseline report |
++
++There are ten matrix job executions. The workflow requests only `contents: read`
++for its token. Public source checkout and package installation require no new
++repository secret. The existing optional `TAURI_SIGNING_PRIVATE_KEY` reference
++is retained; the current Tauri configuration does not enable updater artifact
++signing. Certificate signing and notarization are not configured. Installers
++are workflow artifacts, not GitHub releases.
++
++A local Gate 4 pass does not prove checkout, tool installation, cross-platform
++builds, packaging, or artifact upload on GitHub runners. Record an actual run
++URL and its individual job results after an explicitly authorized branch push.

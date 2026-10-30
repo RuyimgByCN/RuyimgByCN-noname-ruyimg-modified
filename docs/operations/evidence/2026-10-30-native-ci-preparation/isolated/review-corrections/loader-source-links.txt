@@ -1,0 +1,176 @@
+crates/content-native-loader/src/omnisearch.rs:464:pub fn debug_execute(source: &str) -> Result<String, SearchError> {
+crates/content-native-loader/src/omnisearch.rs:465:    let _ = source;
+crates/content-native-loader/src/sj_settings.rs:25:    pub source: String,
+crates/content-native-loader/src/sj_settings.rs:309:    /// `evt.source`。
+crates/content-native-loader/src/sj_settings.rs:310:    pub source: Option<Actor>,
+crates/content-native-loader/src/sj_settings.rs:323:    pub source: Option<String>,
+crates/content-native-loader/src/sj_settings.rs:347:fn source_token(value: Option<&Value>) -> Result<String, SjError> {
+crates/content-native-loader/src/sj_settings.rs:358:        Some(_) => Err(SjError::BadConfig("source must be a token".into())),
+crates/content-native-loader/src/sj_settings.rs:383:        source: source_token(obj.get("source"))?,
+crates/content-native-loader/src/sj_settings.rs:702:pub fn eval_update_script(source: &str) -> Result<(), SjError> {
+crates/content-native-loader/src/sj_settings.rs:703:    let _ = source;
+crates/content-native-loader/src/sj_settings.rs:728:    let source = match &report.source {
+crates/content-native-loader/src/sj_settings.rs:740:        "错误文件: {source}\n错误信息: {}\n行号: {}\n列号: {}",
+crates/content-native-loader/src/sj_settings.rs:742:        show_part(&report.line),
+crates/content-native-loader/src/sj_settings.rs:765:            || event.source.is_some()
+crates/content-native-loader/src/sj_settings.rs:786:        if let Some(actor) = &event.source {
+crates/content-native-loader/src/sj_settings.rs:788:                text.push_str(&format!("\nsource: {label}[{}]", actor.name));
+crates/content-native-loader/src/update_guard.rs:23:    pub source: String,
+crates/content-native-loader/src/update_guard.rs:171:    let source = required_str(obj, "source")?;
+crates/content-native-loader/src/update_guard.rs:172:    if source.is_empty() {
+crates/content-native-loader/src/update_guard.rs:173:        return Err(GuardError::BadConfig("source".into()));
+crates/content-native-loader/src/update_guard.rs:200:        source: source.to_string(),
+crates/content-native-loader/src/douzhuan.rs:20:    pub source: String,
+crates/content-native-loader/src/douzhuan.rs:143:    let source = required_string(obj, "source")?;
+crates/content-native-loader/src/douzhuan.rs:144:    if source.is_empty() {
+crates/content-native-loader/src/douzhuan.rs:145:        return Err(DouzhuanError::BadConfig("source".into()));
+crates/content-native-loader/src/douzhuan.rs:148:        source,
+crates/content-native-loader/src/shousha.rs:28:    pub source: String,
+crates/content-native-loader/src/shousha.rs:156:    let source = token(obj.get("source"), "source")?;
+crates/content-native-loader/src/shousha.rs:166:        source,
+crates/content-native-loader/src/martial.rs:19:    pub source: String,
+crates/content-native-loader/src/martial.rs:171:    let source = required_string(&value, "source")?;
+crates/content-native-loader/src/martial.rs:172:    if source != "noname-liuli" {
+crates/content-native-loader/src/martial.rs:173:        return Err(MartialError::BadConfig("source".into()));
+crates/content-native-loader/src/martial.rs:181:        source,
+crates/content-native-loader/src/longxue.rs:12:    pub source: String,
+crates/content-native-loader/src/longxue.rs:43:    let source = obj
+crates/content-native-loader/src/longxue.rs:44:        .get("source")
+crates/content-native-loader/src/longxue.rs:46:        .ok_or(LongxueError::Missing("source"))?;
+crates/content-native-loader/src/longxue.rs:47:    if source.is_empty() {
+crates/content-native-loader/src/longxue.rs:48:        return Err(LongxueError::BadField("source"));
+crates/content-native-loader/src/longxue.rs:78:        source: source.to_string(),
+crates/content-native-loader/src/lib.rs:82:    dir_entry_visible, list_dir, parse_drag_config, plan_archive_import, plan_single_extension_js,
+crates/content-native-loader/src/lib.rs:348:            // 杀被目标闪避（原生有独立帧 EventData::ShaDodged{card,source,target}）。
+crates/content-native-loader/src/lib.rs:423:            || m.value_source.is_some()
+crates/content-native-loader/src/lib.rs:900:    let source = req_str(&parsed, "source", "pile.json source")?.to_string();
+crates/content-native-loader/src/lib.rs:930:        source,
+crates/content-native-loader/src/vm_active.rs:39:            || active.uses_per_turn_source.is_some()
+crates/content-native-loader/src/shousha_mvp.rs:77:    pub source: String,
+crates/content-native-loader/src/shousha_mvp.rs:124:        source: u32,
+crates/content-native-loader/src/shousha_mvp.rs:128:        source_is_nei: bool,
+crates/content-native-loader/src/shousha_mvp.rs:134:        source: u32,
+crates/content-native-loader/src/shousha_mvp.rs:136:        source_alive: bool,
+crates/content-native-loader/src/shousha_mvp.rs:137:        source_is_nei: bool,
+crates/content-native-loader/src/shousha_mvp.rs:144:        source: u32,
+crates/content-native-loader/src/shousha_mvp.rs:146:        source_alive: bool,
+crates/content-native-loader/src/shousha_mvp.rs:147:        source_is_nei: bool,
+crates/content-native-loader/src/shousha_mvp.rs:154:        source: u32,
+crates/content-native-loader/src/shousha_mvp.rs:156:        source_alive: bool,
+crates/content-native-loader/src/shousha_mvp.rs:157:        source_is_nei: bool,
+crates/content-native-loader/src/shousha_mvp.rs:164:        source: u32,
+crates/content-native-loader/src/shousha_mvp.rs:165:        source_alive: bool,
+crates/content-native-loader/src/shousha_mvp.rs:166:        source_is_nei: bool,
+crates/content-native-loader/src/shousha_mvp.rs:168:        /// 死者视来源为友方（上游 `player.getFriends().contains(source)`）。
+crates/content-native-loader/src/shousha_mvp.rs:170:        /// 死者视来源为敌方（上游 `player.getEnemies().contains(source)`）。
+crates/content-native-loader/src/shousha_mvp.rs:288:                source,
+crates/content-native-loader/src/shousha_mvp.rs:292:                source_is_nei,
+crates/content-native-loader/src/shousha_mvp.rs:296:                    self.stat_mut(source)?.damage += num as i64;
+crates/content-native-loader/src/shousha_mvp.rs:300:                if source != target && (source_is_nei || attitude_negative) {
+crates/content-native-loader/src/shousha_mvp.rs:301:                    let score = self.score_mut(source)?;
+crates/content-native-loader/src/shousha_mvp.rs:302:                    if attitude_negative || source_is_nei {
+crates/content-native-loader/src/shousha_mvp.rs:313:                source,
+crates/content-native-loader/src/shousha_mvp.rs:315:                source_alive,
+crates/content-native-loader/src/shousha_mvp.rs:316:                source_is_nei,
+crates/content-native-loader/src/shousha_mvp.rs:324:                if source_alive
+crates/content-native-loader/src/shousha_mvp.rs:325:                    && source != player
+crates/content-native-loader/src/shousha_mvp.rs:327:                    && (source_is_nei || player_enemy)
+crates/content-native-loader/src/shousha_mvp.rs:334:                source,
+crates/content-native-loader/src/shousha_mvp.rs:336:                source_alive,
+crates/content-native-loader/src/shousha_mvp.rs:337:                source_is_nei,
+crates/content-native-loader/src/shousha_mvp.rs:341:                if source_alive
+crates/content-native-loader/src/shousha_mvp.rs:342:                    && source != player
+crates/content-native-loader/src/shousha_mvp.rs:344:                    && (source_is_nei || player_enemy)
+crates/content-native-loader/src/shousha_mvp.rs:346:                    self.score_mut(source)?.support += cards as i64;
+crates/content-native-loader/src/shousha_mvp.rs:351:                source,
+crates/content-native-loader/src/shousha_mvp.rs:353:                source_alive,
+crates/content-native-loader/src/shousha_mvp.rs:354:                source_is_nei,
+crates/content-native-loader/src/shousha_mvp.rs:358:                if source_alive && (source_is_nei || friend_or_self || player == source) {
+crates/content-native-loader/src/shousha_mvp.rs:359:                    let score = self.score_mut(source)?;
+crates/content-native-loader/src/shousha_mvp.rs:369:                source,
+crates/content-native-loader/src/shousha_mvp.rs:370:                source_alive,
+crates/content-native-loader/src/shousha_mvp.rs:371:                source_is_nei,
+crates/content-native-loader/src/shousha_mvp.rs:380:                if source_alive {
+crates/content-native-loader/src/shousha_mvp.rs:381:                    self.stat_mut(source)?.kill += 1;
+crates/content-native-loader/src/shousha_mvp.rs:383:                        let score = self.score_mut(source)?;
+crates/content-native-loader/src/shousha_mvp.rs:386:                    if victim_friend && source_is_nei && !victim_is_lord {
+crates/content-native-loader/src/shousha_mvp.rs:387:                        let score = self.score_mut(source)?;
+crates/content-native-loader/src/shousha_mvp.rs:392:                        self.score_mut(source)?.attack += 3;
+crates/content-native-loader/src/shousha_mvp.rs:868:        source: string_field("source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1001:            source: fact_u32(entry, "source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1005:            source_is_nei: fact_bool(entry, "sourceIsNei"),
+crates/content-native-loader/src/shousha_mvp.rs:1010:            source: fact_u32(entry, "source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1012:            source_alive: fact_bool_default(entry, "sourceAlive"),
+crates/content-native-loader/src/shousha_mvp.rs:1013:            source_is_nei: fact_bool(entry, "sourceIsNei"),
+crates/content-native-loader/src/shousha_mvp.rs:1019:            source: fact_u32(entry, "source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1021:            source_alive: fact_bool_default(entry, "sourceAlive"),
+crates/content-native-loader/src/shousha_mvp.rs:1022:            source_is_nei: fact_bool(entry, "sourceIsNei"),
+crates/content-native-loader/src/shousha_mvp.rs:1028:            source: fact_u32(entry, "source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1030:            source_alive: fact_bool_default(entry, "sourceAlive"),
+crates/content-native-loader/src/shousha_mvp.rs:1031:            source_is_nei: fact_bool(entry, "sourceIsNei"),
+crates/content-native-loader/src/shousha_mvp.rs:1037:            source: fact_u32(entry, "source")?,
+crates/content-native-loader/src/shousha_mvp.rs:1038:            source_alive: fact_bool_default(entry, "sourceAlive"),
+crates/content-native-loader/src/shousha_mvp.rs:1039:            source_is_nei: fact_bool(entry, "sourceIsNei"),
+crates/content-native-loader/src/thunder.rs:53:    pub source: String,
+crates/content-native-loader/src/thunder.rs:115:        source: opt_str(&v, "source")?,
+crates/content-native-loader/src/ai_tuning.rs:40:    pub source: String,
+crates/content-native-loader/src/ai_tuning.rs:127:        source: opt_str(&v, "source")?,
+crates/content-native-loader/src/drag_read.rs:58:    pub source: String,
+crates/content-native-loader/src/drag_read.rs:94:pub fn default_extension_name(archive_name: &str) -> String {
+crates/content-native-loader/src/drag_read.rs:95:    let lower = archive_name.to_ascii_lowercase();
+crates/content-native-loader/src/drag_read.rs:98:            return archive_name[..archive_name.len() - suffix.len()].to_string();
+crates/content-native-loader/src/drag_read.rs:101:    archive_name.to_string()
+crates/content-native-loader/src/drag_read.rs:135:pub fn plan_archive_import(
+crates/content-native-loader/src/drag_read.rs:137:    archive_name: &str,
+crates/content-native-loader/src/drag_read.rs:166:        default_name: default_extension_name(archive_name),
+crates/content-native-loader/src/drag_read.rs:213:    let source = req_str(obj, "source")?;
+crates/content-native-loader/src/drag_read.rs:214:    if source.is_empty() {
+crates/content-native-loader/src/drag_read.rs:215:        return Err(DragError::BadConfig("source".into()));
+crates/content-native-loader/src/drag_read.rs:218:        source: source.to_string(),
+crates/content-native-loader/src/drag_read.rs:312:        DropKind::Zip => match plan_archive_import(&files_refs, name, &extname, &config.native_plays)
+crates/content-native-loader/src/fool.rs:19:    pub source: String,
+crates/content-native-loader/src/fool.rs:145:    let source = required_str(obj, "source")?;
+crates/content-native-loader/src/fool.rs:146:    if source.is_empty() {
+crates/content-native-loader/src/fool.rs:147:        return Err(FoolError::BadConfig("source".into()));
+crates/content-native-loader/src/fool.rs:150:        source,
+crates/content-native-loader/src/coin.rs:107:    pub source: String,
+crates/content-native-loader/src/coin.rs:127:    source: String,
+crates/content-native-loader/src/coin.rs:288:    pub fn source(&self) -> &str {
+crates/content-native-loader/src/coin.rs:289:        &self.source
+crates/content-native-loader/src/coin.rs:293:fn source_token(value: Option<&Value>, missing: &str) -> Result<String, ()> {
+crates/content-native-loader/src/coin.rs:296:        Some(Value::String(text)) if is_source_token(text) => Ok(text.clone()),
+crates/content-native-loader/src/coin.rs:301:fn is_source_token(text: &str) -> bool {
+crates/content-native-loader/src/coin.rs:340:    let source = source_token(obj.get("source"), "noname")
+crates/content-native-loader/src/coin.rs:341:        .map_err(|_| CoinError::BadConfig("source must be a token".into()))?;
+crates/content-native-loader/src/coin.rs:348:        source,
+crates/content-native-loader/src/coin.rs:385:        source: config.source.clone(),
+crates/content-native-loader/src/coin.rs:589:        source: session.source.clone(),
+crates/content-native-loader/src/coin.rs:610:        "source": session.source,
+crates/content-native-loader/src/coin.rs:674:    let source = source_token(obj.get("source"), "noname")
+crates/content-native-loader/src/coin.rs:675:        .map_err(|_| CoinError::BadSnapshot("source".into()))?;
+crates/content-native-loader/src/coin.rs:689:        source,
+crates/content-native-loader/src/coin.rs:761:        "balance:{} owned:{} running:{} bet:{} fall:{} source:{}",
+crates/content-native-loader/src/coin.rs:767:        session.source
+crates/content-native-loader/src/boss_playpack.rs:57:    pub source: String,
+crates/content-native-loader/src/boss_playpack.rs:207:    let source = req_str(obj, "source")?;
+crates/content-native-loader/src/boss_playpack.rs:208:    if source.is_empty() {
+crates/content-native-loader/src/boss_playpack.rs:209:        return Err(PlayError::BadConfig("source".into()));
+crates/content-native-loader/src/boss_playpack.rs:229:        source: source.to_string(),
+crates/content-native-loader/src/skin_switch.rs:176:    pub source: String,
+crates/content-native-loader/src/skin_switch.rs:242:        source: opt_str(&v, "source")?,
+crates/content-native-loader/src/elo.rs:24:    pub source: String,
+crates/content-native-loader/src/elo.rs:88:fn source_token(value: Option<&Value>) -> Result<String, EloError> {
+crates/content-native-loader/src/elo.rs:99:        Some(_) => Err(EloError::BadConfig("source must be a token".into())),
+crates/content-native-loader/src/elo.rs:124:    let source = source_token(obj.get("source"))?;
+crates/content-native-loader/src/elo.rs:126:        source,
+crates/content-native-loader/src/qhly.rs:6://!   的规则（`source` 以 `hp_` 开头）决定是否切换，并以「本回合已因掉血换过」
+crates/content-native-loader/src/qhly.rs:30:    /// 规则来源（上游 `source`；仅以 `hp_` 开头的规则参与换肤）。
+crates/content-native-loader/src/qhly.rs:31:    pub source: String,
+crates/content-native-loader/src/qhly.rs:39:    /// 是否参与换肤（上游过滤：`source.indexOf('hp_') == 0`）。
+crates/content-native-loader/src/qhly.rs:41:        self.source.starts_with("hp_")
+crates/content-native-loader/src/qhly.rs:114:    pub source: String,
+crates/content-native-loader/src/qhly.rs:156:        source: opt_str(&v, "source")?,
+crates/content-native-loader/src/sj_settings/commands.rs:47:        source: None,
+crates/content-native-loader/src/sj_settings/commands.rs:344:                        source: Some("%".into()),
+crates/content-native-loader/src/epic_cards.rs:26:    pub source: String,
+crates/content-native-loader/src/epic_cards.rs:86:        source: opt_str(&v, "source")?,

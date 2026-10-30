@@ -1,0 +1,546 @@
+{
+  "files": [
+    {
+      "path": "gate4-full-verify.log",
+      "sha256": "ce49a074b71f1d3a075837a32c8c6d120a5423e59537cb5a48f6402a6b5d3826"
+    },
+    {
+      "path": "protected-after.json",
+      "sha256": "62074941fb5d8f42622db70ed95aeb09cdbc7104edf10cd9a339f5b59d17caf3"
+    },
+    {
+      "path": "configuration-validation.json",
+      "sha256": "889f60935dce1b55a85d4dda0a47c556bd5fd36e3d4a2619ce989849e9c6b49b"
+    },
+    {
+      "path": "source-line-gate.log",
+      "sha256": "51e31db1b6fc62524f40c6a1e51a73d6193bb9e66323a7e20685dca6efc333c7"
+    },
+    {
+      "path": "gate4-pnpm9-verify.log",
+      "sha256": "ce49a074b71f1d3a075837a32c8c6d120a5423e59537cb5a48f6402a6b5d3826"
+    },
+    {
+      "path": "final-status.txt",
+      "sha256": "078315f1de5d3fb21069066ad04c79fca83e9b8a4aaae7eae50b7bf7720f19e2"
+    },
+    {
+      "path": "all-source-callers-correction.txt",
+      "sha256": "93599c4380b2f147400eb1e267d420510b867365da6290f34c16e30f44577cf0"
+    },
+    {
+      "path": "fresh-missing-assets.log",
+      "sha256": "a40183b7136a214268e242a248b7206b89b8857430072eadde94d75c6b4515d8"
+    },
+    {
+      "path": "native-ci-only.patch",
+      "sha256": "407c7667743aa8072dcdad73225acd63580f3e7738b8e1c615c8e705313947dc"
+    },
+    {
+      "path": "dependencies-driver.pid",
+      "sha256": "216f0163c19f7a3b9526ba55bbe9ff8cee67d84fe8bdc74b9a282cb56269ae0b"
+    },
+    {
+      "path": "ci-file-sha256.json",
+      "sha256": "e8e708d4576d8e74804e9a1521b745369458a9836cdad0b481815471f19ad08a"
+    },
+    {
+      "path": "resources-bootstrap.log",
+      "sha256": "5742c9fed4d53b75cc45caaa8ddc0f9b6c0ed7de222261524fc6bf04b5fd003e"
+    },
+    {
+      "path": "validation-driver.log",
+      "sha256": "eb9d1cb2c9fef37c24f996e5d15fb45fdb627d0a040b1d2aa82eb536e8777744"
+    },
+    {
+      "path": "fresh-missing-dependency.log",
+      "sha256": "6f1a71ab2cafc2c955bee45507fcbf80f8b2a5a9674ed12396ee6765ff80cb4d"
+    },
+    {
+      "path": "final-check-results.json",
+      "sha256": "fccba32548997a15542b69cce51bcf02b38fb7fd26bd6c9cb3e3e1307a12ffde"
+    },
+    {
+      "path": "diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "dependencies-driver.log",
+      "sha256": "83ef44c2cb8786f55c0ab50ed12fd048e48089b0087ffec51b560de3c5ba20e0"
+    },
+    {
+      "path": "pnpm-frozen-result.json",
+      "sha256": "d1c412f291f603f1984ab43d1094eafa2dbc6fbb095ca344a7647d4fae5edfda"
+    },
+    {
+      "path": "patch-check-results.json",
+      "sha256": "e5fed9dab1c7be983f85c9b8e4456360a7fff54afc9f2b494a98728a1dfb67e9"
+    },
+    {
+      "path": "check_configuration.py",
+      "sha256": "abbf9ced5bfd05879f584fb9f340eeca068818a9426496bb62720b323bebbf52"
+    },
+    {
+      "path": "resources-verify.log",
+      "sha256": "2c4251dbbc2b7e8102f4ec057f698a4aadf41bec650d3fd5591f31852002370a"
+    },
+    {
+      "path": "validate_local.py",
+      "sha256": "06e397cf13333b1eb8ff1798e2671fabc85fe2e9a1289bdb45615da96946c8e7"
+    },
+    {
+      "path": "validation-driver.pid",
+      "sha256": "752ce2ee8a446f11f5f4ff738b1e1046d86072091257f166704dfd5866834e63"
+    },
+    {
+      "path": "fresh-missing-source.log",
+      "sha256": "c494030d86565ea95bb700e8a2fda3eca61278f7890274039ee1b7db1642b4a9"
+    },
+    {
+      "path": "validate_dependencies.py",
+      "sha256": "21d95b5052c18b317f3f22e1da39687db9523a690d48544e173c4bad50805772"
+    },
+    {
+      "path": "cleanup.json",
+      "sha256": "bcf6f6609ece5d1e4f4b64b48ea9827fd39391a6cf9b38283620c2092deba107"
+    },
+    {
+      "path": "local-validation-results.json",
+      "sha256": "75a0c51ae308670198a16efb7eb5365a4ed0dff2f535c35153cc51830883ec05"
+    },
+    {
+      "path": "borrowed-resource-overlay.json",
+      "sha256": "58470e4544a365822843184667f93844d1415fdbffd0e22385ca71c68b72b03a"
+    },
+    {
+      "path": "source-line-tests.log",
+      "sha256": "f70b0d257d89d9572bffe8681edcda88c771a5d502b515a8dffc8effdaa63ba0"
+    },
+    {
+      "path": "configuration-validation.log",
+      "sha256": "889f60935dce1b55a85d4dda0a47c556bd5fd36e3d4a2619ce989849e9c6b49b"
+    },
+    {
+      "path": "pnpm-frozen-install.log",
+      "sha256": "08b169b6968d383e0e960dab849d57915c4d3e4ee965da4e70b5190a128cee71"
+    },
+    {
+      "path": "gate4-tests.log",
+      "sha256": "1417540625241173396b8da3aefe5af3cf111c9db7aa643551ce76362e3fe66c"
+    },
+    {
+      "path": "ci-base-sha256.json",
+      "sha256": "8b6c9a3699a8ab66305d183eaff1c359a346d303c76e9ead8e1097935acae52b"
+    },
+    {
+      "path": "proposed-native-tree-paths.txt",
+      "sha256": "4524973a891ab27eac6919f5b04f42b13655380e0ca29d6ee314d076e53932ec"
+    },
+    {
+      "path": "protected-result.json",
+      "sha256": "62a6291db61fa44ce87b80ce63fa6d78c8f6cbf0e9a104b77b0ef14bae888524"
+    },
+    {
+      "path": "protected-before.json",
+      "sha256": "62074941fb5d8f42622db70ed95aeb09cdbc7104edf10cd9a339f5b59d17caf3"
+    },
+    {
+      "path": "review-corrections/entry.json",
+      "sha256": "40edbec7f665f8fc2c3ca7d2c477956689a72e1834a79ed570453022b8c1132f"
+    },
+    {
+      "path": "review-corrections/exit.json",
+      "sha256": "058862595d3331d356b1e1d7c7dba3028b69da442256d3a58384280bb38d81d9"
+    },
+    {
+      "path": "review-corrections/source-references.txt",
+      "sha256": "ed7df59a8040eec985444ad9333685d2a701046ba031e6d61ac3fd6d8765ee7b"
+    },
+    {
+      "path": "review-corrections/checks.log",
+      "sha256": "d214c1ce7e2aec566919e384acc7d821e1dfad323bbd032e8d7fedd124e033bb"
+    },
+    {
+      "path": "review-corrections/first-check-observation.txt",
+      "sha256": "6ef122fd7c9fc655eda642d4a54d6eb6edcf612237f403d4f5a98d453819992e"
+    },
+    {
+      "path": "review-corrections/checks.json",
+      "sha256": "d214c1ce7e2aec566919e384acc7d821e1dfad323bbd032e8d7fedd124e033bb"
+    },
+    {
+      "path": "review-corrections/check-corrections.py",
+      "sha256": "927e9027fba1aa58cf89eba9e6b7e5dd549a4acbfe21d105036526785b0ed655"
+    },
+    {
+      "path": "review-corrections/loader-source-links.txt",
+      "sha256": "fdeb01de7d3eff1595d2ad135daf65e82cf7ad59c23aa15b727458439d05d075"
+    },
+    {
+      "path": "review-corrections/check-exit.py",
+      "sha256": "7bc6029119bbb8039df150698a8c9fa78756c94be50d3b2cc2535136e4074f39"
+    },
+    {
+      "path": "review/entry.json",
+      "sha256": "631e02448559d5a8530c61d91e13f6ecdfff78265953bd53bab0416aa6d73b02"
+    },
+    {
+      "path": "review/exit.json",
+      "sha256": "b9979ddbb042d3b11e308c12714906a63685d4085a47eeca42671ec090038d86"
+    },
+    {
+      "path": "review/pnpm-run-self-install.ts",
+      "sha256": "b04d519e08a8da1e70822d68f4f1832931cf9fafb923ca36d75155841f489fba"
+    },
+    {
+      "path": "review/check-static.json",
+      "sha256": "bf38b5fc256fa8073e8a0a7388d5b773f7093f3aab36c1bf6050752498324144"
+    },
+    {
+      "path": "review/ubuntu-24.04-software.md",
+      "sha256": "433ac9525040ccec39fc6b1fbcbeb457cba1acd6414317f940e1ea2d9bea73c9"
+    },
+    {
+      "path": "review/check-checkout-provenance.json",
+      "sha256": "0ee923b4b8d073ffab3ed84fc550a94a555d7bb60ec1d806e7de7c0629949545"
+    },
+    {
+      "path": "review/pnpm-self-installer.ts",
+      "sha256": "351c7a1c9c757b5e2cfca248e4e2e480ab4ebedbe3bfede9c19324798c977f14"
+    },
+    {
+      "path": "review/pnpm-run.ts",
+      "sha256": "f2332841c4e4fa85423c623024628ab93e5067c676b6d84b5ee58d06a91a74f6"
+    },
+    {
+      "path": "review/ubuntu-install-rust.sh",
+      "sha256": "c69f6ecb2836a0e33f328757cbc88e48790fda844918a54cdcf4c083b189f045"
+    },
+    {
+      "path": "review/pnpm-action.yml",
+      "sha256": "5fb508882756b5d3f2a10531e09acd2006b2cd00e71c2e22361149a2105acec6"
+    },
+    {
+      "path": "review/liuli-callers.txt",
+      "sha256": "128be1af0129e2d543e7d57a57e89cbea2ca76a1d3eeee5766e097998dbac662"
+    },
+    {
+      "path": "review/check-checkout-provenance.mjs",
+      "sha256": "b1b89baa9da5abf28e78a92410feb78e0786987b5531e3d5c0c8e272be47c06d"
+    },
+    {
+      "path": "review/rust-cache-README.md",
+      "sha256": "e07cff27b5f01707b6f3a9158df045011047b916263b2fb8807d341a9881085a"
+    },
+    {
+      "path": "review/checkout-git-source-provider.ts",
+      "sha256": "b1bf57713d94302decc7f440a1cd7daa24f205ddf677c52debeb654a5565d1a7"
+    },
+    {
+      "path": "review/publication-list-audit.json",
+      "sha256": "e9c949945d29e5bae72a5ed7c6fdd4ec1d4455c047d624f15bc5126c58e6a0bb"
+    },
+    {
+      "path": "review/checkout-url-helper.ts",
+      "sha256": "62b7c8604af83eec741275b8c3b85807cd6e3d70ae1e98dce214326f6dfd21a0"
+    },
+    {
+      "path": "review/windows-path-index.json",
+      "sha256": "ba1913b5d99018e723d3e0caa4a41d68fda217909f7596e4a5434f25be600f2e"
+    },
+    {
+      "path": "review/check-static.py",
+      "sha256": "d347b04b4cd68658a0b3cc2bdd3ce01bc6d58caefc69f8a0eae57b99a22fe370"
+    },
+    {
+      "path": "api/workflow-permissions.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "api/native-branch.stderr",
+      "sha256": "ab805aaf03e24b234a15d0c2af0770edf18cf3c8322e2e5c76cd4a8e3f2f48db"
+    },
+    {
+      "path": "api/main.json",
+      "sha256": "d0652394531d1ae59fe48e34900876eaad0d839bc4b96b6947721fbba32eb569"
+    },
+    {
+      "path": "api/actions-permissions.json",
+      "sha256": "0bffee97e4ad52676c0127aacb5b4b304a2675f5c524de641acf1326e0b0e857"
+    },
+    {
+      "path": "api/workflows.json",
+      "sha256": "51da78a4f28ec83978198558b5be95ebec25c44ab19561c168a975e203f0a785"
+    },
+    {
+      "path": "api/results.json",
+      "sha256": "97881b5d8107059725068c8ef296d7d689a82cdbaa5dd5b9f0ad2690bbeda33b"
+    },
+    {
+      "path": "api/repository.json",
+      "sha256": "48abfbfc3a1d4b15ddebdf60e018fd72a131a8113abf60d9cfe20c39f68b52f7"
+    },
+    {
+      "path": "api/workflow-permissions.json",
+      "sha256": "f6e178fc1e56cf43900da383f85398b61de9ae61c6b8433116c1856605745924"
+    },
+    {
+      "path": "api/workflows.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "api/repository.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "api/adopted-core.json",
+      "sha256": "92f8c691c0d96833b54f580b56638e72415cf2c5bece25deac1942537cf1e4c2"
+    },
+    {
+      "path": "api/actions-permissions.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "api/native-branch.json",
+      "sha256": "35a8e0403a6493e9dfa44e29a817364187590ba2fc33c970e82b038b568d4256"
+    },
+    {
+      "path": "api/main.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "api/adopted-core.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "corrections/check-wasm-chain.mjs",
+      "sha256": "a58ccb640af7834e4ed4a244a83c23732fefb4c29faf2584c6a655dfaf3dbda7"
+    },
+    {
+      "path": "corrections/readonly-driver.log",
+      "sha256": "0eb5fd23a752c106ce11f614bee460d9b6dabe9a7e3254907cb3fdba93ffe894"
+    },
+    {
+      "path": "corrections/verify-readonly.py",
+      "sha256": "3499518d7d07f9858d04dbace20eee39f1783be95dca1b7933bb207e272d1eea"
+    },
+    {
+      "path": "corrections/fixture-commands.json",
+      "sha256": "ee9070d3649dacbd7ed8cdf9866aa89422d50e5844b487ac4995ebccaacd32ed"
+    },
+    {
+      "path": "corrections/final-status.txt",
+      "sha256": "078315f1de5d3fb21069066ad04c79fca83e9b8a4aaae7eae50b7bf7720f19e2"
+    },
+    {
+      "path": "corrections/correction-only.patch",
+      "sha256": "f32d0fc18c3b89da970fe7a1cea392747976e7cb221e8ad6fcf8c333b9814710"
+    },
+    {
+      "path": "corrections/local-prepared-paths-not-a-commit.txt",
+      "sha256": "d35f3dfcc2e550d3ebc43a06340eb89af6c82412f8fb1b94c97d3d17939e531b"
+    },
+    {
+      "path": "corrections/required-checks.json",
+      "sha256": "087aa52ab347e70ae7a6ad8012957c3f5e168974870f2543177b42fe4cb9ee9c"
+    },
+    {
+      "path": "corrections/wasm-chain.json",
+      "sha256": "c4e5f613a6123c48f25e598fa123e7b3fb46645360f5e03c3ac33337ac2dd23f"
+    },
+    {
+      "path": "corrections/preserved-original-artifacts.json",
+      "sha256": "10fbc115b7ba4992d0d1bf24253b9487536068b6844a99822af40571829a81c3"
+    },
+    {
+      "path": "corrections/baseline-255-ancestors.txt",
+      "sha256": "377430fdac341f4043566ab436b425ba78610908fa7dbc76ebfe10f6ae706bcd"
+    },
+    {
+      "path": "corrections/check-provenance.mjs",
+      "sha256": "096a8808e68341f496897e5ae6d1547645347764cd3cd41a3fbcc80b2c1ee755"
+    },
+    {
+      "path": "corrections/required-check-2.log",
+      "sha256": "51e31db1b6fc62524f40c6a1e51a73d6193bb9e66323a7e20685dca6efc333c7"
+    },
+    {
+      "path": "corrections/baseline-255-reachable-objects.txt",
+      "sha256": "93d9d5680ed64d9fc37a09492fc2316c36888f048356bcc252ce2503f0e333f5"
+    },
+    {
+      "path": "corrections/canonical-core-logical-index.json",
+      "sha256": "c98f5996b8866fd821b26f6b61687f64130dd76f145fcc8c5954be5141567fe1"
+    },
+    {
+      "path": "corrections/native-ci-only.patch",
+      "sha256": "e9085113f7d1a12c51490f83bb8b1524a7480f54997bcf9a4acdc9d4357cd9a7"
+    },
+    {
+      "path": "corrections/completion-validation.json",
+      "sha256": "a63783d43022ee12655e2d625e606f84f01ec84b1fea3567bc5d8350c3b4cf59"
+    },
+    {
+      "path": "corrections/required-check-1.log",
+      "sha256": "d1276a2d9d79b9ed0a61446aa751886a8b573a45c52c4fe838159bc8be061837"
+    },
+    {
+      "path": "corrections/ci-file-sha256.json",
+      "sha256": "84a385c800b584dbbf01aedf5cbb836f515c83f2184a387e460e38bce6037634"
+    },
+    {
+      "path": "corrections/final-static-validation.log",
+      "sha256": "036325fcdf93fda25090b8c413304cb92f9ca6a96a2395cc75e78ecf449226a9"
+    },
+    {
+      "path": "corrections/required-check-0.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "corrections/ci-patch-paths.txt",
+      "sha256": "e32c36507215a1b7b1f1324da275c2e145e44c0b6050fd4554642f25dfb7fffd"
+    },
+    {
+      "path": "corrections/gate4-original-full-verify.log",
+      "sha256": "ce49a074b71f1d3a075837a32c8c6d120a5423e59537cb5a48f6402a6b5d3826"
+    },
+    {
+      "path": "corrections/original-input-hashes.json",
+      "sha256": "787054ce3a1bb78dfc03b6f50cae71be471fffbae370457fc369b80809748fc9"
+    },
+    {
+      "path": "corrections/repository-state-after-fixtures.json",
+      "sha256": "6117c778e9f68bdcb78c18f55bebbff4fb571ad8a17f61b6c17bc2c450debe13"
+    },
+    {
+      "path": "corrections/liuli-seven-original.json",
+      "sha256": "a9bc9ec923b8ee0f6c7fb1d09a21773c39c11f48c6bce560b7a638471e98636f"
+    },
+    {
+      "path": "corrections/liuli-wrong-preimage-rejected.log",
+      "sha256": "af68fb219a40ac9dcf00a5878c6325070dcf2fe35139f2d470a377bbc0505a5d"
+    },
+    {
+      "path": "corrections/liuli-fixture.json",
+      "sha256": "8803aba1b225e095d421983b273add97eaab5eca716303c5ef58854cbf04fadf"
+    },
+    {
+      "path": "corrections/baseline-255-ls-tree.txt",
+      "sha256": "3b0bf043364e691232f79a43c7a2889f61326a95c9c85268761e29df8d58ca89"
+    },
+    {
+      "path": "corrections/finalize-static.py",
+      "sha256": "648d066f98751157bf050f8337b3a240d0db18c35a8140795513cd47864e8c65"
+    },
+    {
+      "path": "corrections/baseline-255-tracked-paths.txt",
+      "sha256": "471eaf08a237fcb06411c8ceba39b1a725fa1a59197c0a8bce413ddec4e2a574"
+    },
+    {
+      "path": "corrections/publication-scope-correction.json",
+      "sha256": "4da8459681f6bb2dad4c1cec6635157ea52c09c30389c1b4ef4b693004927f12"
+    },
+    {
+      "path": "corrections/original-input-validation.json",
+      "sha256": "9674138ae862f5f5abb879b42172df28b4d84201f74c61a567119afa3198d053"
+    },
+    {
+      "path": "corrections/wasm-chain-fixture.log",
+      "sha256": "a1aae66a4511f5a24a34411a7065be808f6b30029458b265c4f92c9217805d05"
+    },
+    {
+      "path": "corrections/gate4-readonly-verify.log",
+      "sha256": "ce49a074b71f1d3a075837a32c8c6d120a5423e59537cb5a48f6402a6b5d3826"
+    },
+    {
+      "path": "corrections/canonical-core-index-observation.json",
+      "sha256": "0a51852b63ce084eb33201099745e0b94e22f8587fc8e5c6ef4e2ca15da3b2bb"
+    },
+    {
+      "path": "corrections/original-input-driver.json",
+      "sha256": "6d1a446c5e742d16b0b25d9c7d4a924445b905884f238217b0deee79bb3464de"
+    },
+    {
+      "path": "corrections/repository-state-final.json",
+      "sha256": "27607d10d566ca672ae9ffe76523f6f6a7480ccc0af4639269f4a9c8ee6a8077"
+    },
+    {
+      "path": "corrections/readonly-verify-result.json",
+      "sha256": "f9cef158ea8c69439070110678daad045f3cc24565a9d8bbf128907db37ff736"
+    },
+    {
+      "path": "corrections/gate4-tests.log",
+      "sha256": "5c5d5b65b178f55b79f881c8bb2deacbdf99df12de986101911c7e9be75ba245"
+    },
+    {
+      "path": "corrections/readonly-driver.json",
+      "sha256": "a9af5fc23fc126d5e0115779d2164c9ec64ab0ba114f39b5080bf2c95f14cf5a"
+    },
+    {
+      "path": "corrections/original-input-driver.log",
+      "sha256": "cb9630cfded9f1be37b8c7e8d243195e2a1a41f9e806b5022e45ec3c267523d8"
+    },
+    {
+      "path": "corrections/verify-original-inputs-before-optional-locks.py",
+      "sha256": "ba813fc92fecc29b98b27fcf2bbb68eb1e183efd95000c3612097eeebbf3641d"
+    },
+    {
+      "path": "corrections/verify-original-inputs.py",
+      "sha256": "77561380084eb24ee2b02d58f0ba0ac365f5701f308e7a8be0e86a47d4730fbb"
+    },
+    {
+      "path": "corrections/liuli-adopted-api.json",
+      "sha256": "4ce0bad26900a6b8ef20fe871cc8bdeeff0f330b521791c114c2ed706509a417"
+    },
+    {
+      "path": "corrections/original-input-cleanup.json",
+      "sha256": "fcedce7fef627ce5a59b94f07cc81b277bf865ba41aa2eff2074df71c6a05d6f"
+    },
+    {
+      "path": "corrections/liuli-runtime-callers.json",
+      "sha256": "289fa4c9b7ce82f5a82761c5c5eefaeef660bbea14a1502e379146ab6cafce51"
+    },
+    {
+      "path": "corrections/provenance-fixture.log",
+      "sha256": "2a298427659260b1e3b742d5d91ef90b9dafe49b24a4f0f088dac13d675bee89"
+    },
+    {
+      "path": "corrections/liuli-adopted-api.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "corrections/pnpm9-frozen.log",
+      "sha256": "0d002e7983310f7d7c0324b91acc3e474210ef2a32c52eceaf8cda7c47471555"
+    },
+    {
+      "path": "corrections/check-liuli.py",
+      "sha256": "b07a382745dbc066a1e7a027555e764732291118f02dfb7004ff036331f0152a"
+    },
+    {
+      "path": "corrections/fixture-authorization.json",
+      "sha256": "ac296c881f8d3baa6d0ff00a42919b02be89a51e8e44debeb75ce2d3f6d999bc"
+    },
+    {
+      "path": "corrections/final-static-validation.json",
+      "sha256": "036325fcdf93fda25090b8c413304cb92f9ca6a96a2395cc75e78ecf449226a9"
+    },
+    {
+      "path": "corrections/liuli-fixture.log",
+      "sha256": "e4362c31b7f6e65d93cf40bb392412008daef290d237380a5ad88fe3e0eaba95"
+    },
+    {
+      "path": "corrections/original/docs/operations/native-ci.md",
+      "sha256": "83008c960d76beda0d77fdf83a10a9cfc238bb5f22867606526884125d6d9084"
+    },
+    {
+      "path": "corrections/original/.github/workflows/ci.yml",
+      "sha256": "8f8ddc7decff71f614aa41c82bb550115eef217b3a30e4debe52b13dd9de49e7"
+    },
+    {
+      "path": "corrections/original/.github/actions/prepare-original-content/action.yml",
+      "sha256": "e796402909f4112dc3716c783b2aa380757baf1c82c4cfdb1397aba69fa353b9"
+    }
+  ],
+  "skipped_runtime_or_binary": [],
+  "originals_preserved": true
+}

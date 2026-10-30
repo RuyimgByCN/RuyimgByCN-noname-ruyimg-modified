@@ -1,0 +1,14 @@
+[
+  {
+    "name": "links-all",
+    "exit": 0
+  },
+  {
+    "name": "docrefs",
+    "exit": 0
+  },
+  {
+    "name": "maintained-whitespace",
+    "exit": 0
+  }
+]
