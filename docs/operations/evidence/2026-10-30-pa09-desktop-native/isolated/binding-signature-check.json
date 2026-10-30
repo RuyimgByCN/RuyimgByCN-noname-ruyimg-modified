@@ -1,0 +1,31 @@
+{
+  "base": "db4e37ca",
+  "preserved_native_engine_method_signatures": 25,
+  "names": [
+    "activate_skill",
+    "answer",
+    "assign_general",
+    "auto_step",
+    "cards_with_prefix",
+    "general_candidates_json",
+    "is_finished",
+    "legal_actions_json",
+    "log_len",
+    "new",
+    "new_identity",
+    "new_identity_with_packs_json",
+    "new_with_packs_json",
+    "next_phase",
+    "open_choice_json",
+    "play_card",
+    "public_event_codes_json",
+    "restore_hex",
+    "restore_hex_checked",
+    "restore_hex_with_packs_json",
+    "revision",
+    "save_hex",
+    "set_planner",
+    "state_hash_hex",
+    "view_json"
+  ]
+}

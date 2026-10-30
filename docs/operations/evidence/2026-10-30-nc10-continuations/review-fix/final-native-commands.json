@@ -1,0 +1,46 @@
+[
+  {
+    "name": "p2-final-green-nc10",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 0,
+    "locked_seconds": 2.2293401249917224
+  },
+  {
+    "name": "p2-final-full-native3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 0,
+    "locked_seconds": 22.237122374994215
+  }
+]

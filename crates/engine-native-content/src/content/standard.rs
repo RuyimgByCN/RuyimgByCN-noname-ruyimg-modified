@@ -330,6 +330,22 @@ pub fn restore_content_machine(
             },
             top: top.clone(),
         })),
+        MachineSnapshot::XunXun { owner, stage, top } => Some(Box::new(XunXunMachine {
+            owner: *owner,
+            stage: match stage {
+                XunXunStageSnap::Undo => XunXunStage::Undo,
+                XunXunStageSnap::Arrange => XunXunStage::Arrange,
+            },
+            top: top.clone(),
+        })),
+        MachineSnapshot::JiJie { owner, stage, card } => Some(Box::new(JiJieMachine {
+            owner: *owner,
+            stage: match stage {
+                JiJieStageSnap::Ask => JiJieStage::Ask,
+                JiJieStageSnap::Read => JiJieStage::Read,
+            },
+            card: *card,
+        })),
         MachineSnapshot::LianYing { owner } => Some(Box::new(LianYingMachine {
             owner: *owner,
             asked: false,

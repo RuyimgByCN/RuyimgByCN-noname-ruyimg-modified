@@ -1,0 +1,87 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 51 tests
+test nc10_ai_bounds::content_tuning_rejects_non_finite_values ... ok
+test nc10_ai_bounds::zero_deadline_returns_timed_out_plan_without_blocking ... ok
+DBG NC10 过期：Stale submitted=0 current=1 ✅
+DBG NC10 重规划：apply_plan = true
+test nc10_ai_boundary_and_cancel::stale_plan_is_rejected ... ok
+DBG NC10 取消：cancelled=true nodes_used=0 budget_exhausted=false
+test nc10_ai_boundary_and_cancel::cancelled_planner_marks_plan_cancelled ... ok
+test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling
+DBG NC10 预算：nodes_used=1 budget_exhausted=false timed_out=false cancelled=false
+test nc10_ai_boundary_and_cancel::tiny_budget_marks_exhausted ... ok
+test nc10_duel_nullify_privacy::both_answers_can_resume_redacted_window_after_restore ... ok
+test nc10_duel_nullify_privacy::public_special_zones_allow_safe_redaction ... ok
+DBG NC10 变体：variant=0 两次结果相同=true
+DBG 预算 0：该座位此刻无合法动作，规划返回占位 NextPhase
+test nc10_live_hidden_cards::dead_current_actor_does_not_probe_attacks ... ok
+test nc10_duel_nullify_privacy::redaction_preserves_window_and_produces_restorable_equal_hidden_zones ... ok
+DBG NC10 变体：variant=1 两次结果相同=true
+DBG NC10 变体：variant=2 两次结果相同=true
+test nc10_ai_bounds::nc10_stale_plan_is_rejected ... ok
+test nc10_ai_boundary_and_cancel::policy_variants_are_deterministic ... ok
+test nc10_ai_bounds::nc10_planner_is_deterministic ... ok
+test nc10_live_hidden_cards::empty_zero_minimum_choice_has_a_legal_plan_even_without_cancellation ... ok
+DBG NC10 信息边界：座位0输入长度 before=1730 after=1730（应相同）
+test nc10_ai_boundary_and_cancel::hidden_other_hands_do_not_change_seat_input ... ok
+test nc10_duel_nullify_privacy::planning_uses_only_observers_information ... ok
+test nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information ... ok
+DBG NC10 并发：workers=1 n=30 p50=429µs p95=1115µs p99=1165µs
+test nc10_ai_bounds::nc10_tiny_budget_still_legal ... ok
+test nc10_live_hidden_cards::real_guanxing_machine_held_cards_are_not_duplicated ... ok
+
+thread 'nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf' (8700131) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:116:9:
+Rejected(IllegalTargets)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf ... FAILED
+DBG NC10 并发：workers=4 n=30 p50=368µs p95=1087µs p99=1145µs
+test nc10_ai_boundary_and_cancel::pool_parallel_matches_sequential_and_records_tail ... ok
+NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE left=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } right=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... ok
+test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling
+test nc10_multiple_hidden_traps::scarce_suits_are_shared_across_trap_holders ... ok
+test nc10_multiple_hidden_traps::multiple_traps_stay_physical_from_each_observer ... ok
+test nc10_multiple_hidden_traps::real_skill_places_two_traps_and_simulation_remains_restorable ... ok
+test nc10_multiple_hidden_traps::references_follow_multiple_synthetic_traps ... ok
+test nc10_pending_duel_privacy::public_special_zones_are_preserved_during_redaction ... ok
+test nc10_pending_duel_privacy::duel_planning_does_not_depend_on_opponent_hidden_card ... ok
+test nc10_planner_pool::nc10_pool_full_degrades_without_losing_plans ... ok
+test nc10_planner_pool::nc10_pool_plans_are_revision_guarded ... ok
+test nc10_planner_pool::nc10_pool_respects_cancellation ... ok
+test nc10_pending_duel_privacy::redaction_preserves_duel_machine_and_referenced_cards ... ok
+test nc10_planner_pool::nc10_pool_reuses_workers_and_returns_legal_plans ... ok
+test nc10_skill_pile_conservation::fixed_piles_keep_hidden_hand_permutations_equivalent ... ok
+test nc10_ai_information_boundary::planner_detects_own_hand_change ... ok
+test nc10_skill_pile_conservation::opponent_private_pile_identity_does_not_change_synthetic_hands ... ok
+test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix
+test nc10_live_hidden_cards::real_vm_commit_window_and_private_piles_are_counterfactually_equal ... ok
+test nc10_live_hidden_cards::live_sha_window_hides_opponent_hand_identity ... ok
+test nc10_single_hidden_trap::vm_opaque_storage_keeps_its_trap_reference ... ok
+test nc10_skill_pile_conservation::redaction_preserves_owned_skill_cards_for_self_and_opponents ... ok
+test nc10_single_hidden_trap::references_follow_their_synthetic_cards ... ok
+test nc10_ai_information_boundary::planner_is_invariant_under_hidden_information ... ok
+test nc10_single_hidden_trap::real_single_opponent_trap_redacts_without_duplicate_cards ... ok
+test nc10_live_hidden_cards::private_vm_piles_are_physical_and_counterfactually_equal ... ok
+DBG 牌库顺序不变性：静止态 12 例、非静止态 3 例
+test nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order ... ok
+test nc10_single_hidden_trap::single_opponent_trap_identity_cannot_change_planning ... ok
+DBG NC10 泄漏面：静止态 0/29 改变；非静止态窗口 0/3 改变
+test nc10_ai_bounds::nc10_leak_surface_quantified ... ok
+test nc10_multiple_hidden_traps::multiple_hidden_traps_do_not_change_simulation_or_plans ... ok
+test nc10_single_hidden_trap::hidden_trap_sampling_is_invariant_across_seeds ... ok
+
+failures:
+
+failures:
+    nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf
+
+test result: FAILED. 47 passed; 1 failed; 3 ignored; 0 measured; 90 filtered out; finished in 1.19s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.3194442499952856}

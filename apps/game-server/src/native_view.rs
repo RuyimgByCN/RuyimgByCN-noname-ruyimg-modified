@@ -8,8 +8,7 @@
 //! 口径：
 //! - 座位投影：自己手牌与公开牌区可见，他人手牌仅数量（原生视图保证）；
 //!   `known_cards` 为这些可见牌附上真实牌面。
-//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 保留完整武将定义，
-//!   其余原生完整信息投影尚未齐备；
+//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 使用共享全信息视图；
 //! - 权威动作：`Engine::legal_actions`（内核校验同源）→ `LegalAction`；
 //! - 摘要：`Engine::state_hash`（规范摘要）逐字节带上，供客户端比对修订。
 
@@ -27,7 +26,7 @@ pub enum RoomRole {
     Player,
     /// 观战者（公开信息）。
     Spectator,
-    /// 裁判（可信宿主授予；原生完整信息投影尚未齐备）。
+    /// 裁判（可信宿主授予；完整隐藏信息）。
     Referee,
 }
 
@@ -51,28 +50,23 @@ fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
             kind: kind_tag(def.kind),
         });
     };
-    for player in &view.players {
-        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
-        if let HandView::Own(hand) = &player.hand {
-            for id in hand {
-                push(*id, owner, CardZoneTag::Hand);
-            }
-        }
-    }
-    for player in &view.players {
-        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
-        for id in &player.equips {
-            push(*id, owner, CardZoneTag::Equip);
-        }
-        for id in &player.judge {
-            push(*id, owner, CardZoneTag::Judge);
-        }
-    }
-    for id in &view.discard {
-        push(*id, None, CardZoneTag::DiscardPile);
-    }
-    for id in &view.table {
-        push(*id, None, CardZoneTag::Processing);
+    for card in &view.cards {
+        use engine_native::snap::PhysicalCardZone as Z;
+        let zone = match card.zone {
+            Z::Hand => CardZoneTag::Hand,
+            Z::Equip => CardZoneTag::Equip,
+            Z::Judge => CardZoneTag::Judge,
+            Z::DiscardPile => CardZoneTag::DiscardPile,
+            Z::Processing => CardZoneTag::Processing,
+            Z::DrawPile => CardZoneTag::DrawPile,
+            Z::Removed => CardZoneTag::Removed,
+            Z::Expansion => CardZoneTag::Expansion,
+        };
+        push(
+            card.id,
+            card.owner.map(|seat| ApiPlayerId::new(seat as u32 + 1)),
+            zone,
+        );
     }
     cards
 }
@@ -123,12 +117,10 @@ pub fn observer_snapshot_for(
     role: RoomRole,
     seat: Option<ApiPlayerId>,
 ) -> ObserverSnapshot {
-    // shortcut: 原生裁判手牌/身份仍缺完整投影，待共享 full-info 视图补齐后替换。
-    let native_seat = seat
-        .and_then(|p| p.raw().checked_sub(1))
-        .filter(|p| (*p as usize) < engine.state_core().players.len());
+    let native_seat = native_seat(engine, seat);
     let view: PlayerView = match (role, native_seat) {
-        (RoomRole::Player, Some(p)) => engine.view_for(p as u8),
+        (RoomRole::Player, Some(p)) => engine.view_for(p),
+        (RoomRole::Referee, _) => engine.view_referee(),
         _ => engine.view_spectator(),
     };
     let observer = match role {
@@ -142,11 +134,7 @@ pub fn observer_snapshot_for(
         .map(|cell| SeatView {
             player: ApiPlayerId::new(cell.seat as u32 + 1),
             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
-            character_def: if role == RoomRole::Referee {
-                engine.state_core().player(cell.seat).general_slots[0].map(u32::from).unwrap_or(0)
-            } else {
-                cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0)
-            },
+            character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
             seat: engine_api::SeatIndex::new(cell.seat),
             hp: cell.hp,
             max_hp: cell.max_hp,
@@ -239,21 +227,49 @@ pub fn observer_snapshot_for(
     }
 }
 
-/// 原生开放选择 → 协议 `ChoiceRequest`（**选项仅观察者可见**：非观察者返回 `None`，
-/// 与内核 `choice_view_for` 同口径；观战/裁判返回 `None`，不泄漏选项内容）。
-pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_api::ChoiceRequest> {
-    let seat = seat?;
-    let native_seat = seat.raw().saturating_sub(1) as u8;
-    let open = engine.open_choice()?;
-    if open.observer != native_seat {
-        return None;
+fn native_seat(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<u8> {
+    let seat = seat?.raw().checked_sub(1)?;
+    (seat < engine.state_core().players.len() as u32).then(|| seat as u8)
+}
+
+impl From<engine_protocol::ClientRole> for RoomRole {
+    fn from(role: engine_protocol::ClientRole) -> Self {
+        match role {
+            engine_protocol::ClientRole::Player => Self::Player,
+            engine_protocol::ClientRole::Spectator => Self::Spectator,
+            engine_protocol::ClientRole::Referee => Self::Referee,
+        }
     }
+}
+
+/// Full options for the owner or trusted referee; role always comes from membership.
+pub fn choice_for(
+    engine: &Engine,
+    role: RoomRole,
+    seat: Option<ApiPlayerId>,
+) -> Option<engine_api::ChoiceRequest> {
+    let view = match role {
+        RoomRole::Player => engine.choice_view_for(Some(native_seat(engine, seat)?)),
+        RoomRole::Referee => engine.choice_view_referee(),
+        RoomRole::Spectator => return None,
+    }?;
+    let engine_native::view::ChoiceView::Own {
+        id,
+        kind,
+        options,
+        min,
+        max,
+        allow_cancel,
+        ..
+    } = view
+    else {
+        return None;
+    };
+    let observer = ApiPlayerId::new(engine.open_choice()?.observer as u32 + 1);
     // 协议 `ChoiceOption` 是 `{token, label_key}` 二元组（token 即 ResolveChoice 的
     // 选择值；label_key 只用于本地化/显示，不参与规则）。token 与原生选项一一对应：
     // 使用**候选下标**（与前端适配层/`answer()` 同口径），label_key 保留语义标签。
-    let options: Vec<engine_api::ChoiceOption> = open
-        .spec
-        .options
+    let options: Vec<engine_api::ChoiceOption> = options
         .iter()
         .enumerate()
         .map(|(idx, opt)| engine_api::ChoiceOption {
@@ -269,15 +285,21 @@ pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_a
         })
         .collect();
     Some(engine_api::ChoiceRequest {
-        choice_id: engine_api::ChoiceId::new(open.id as u32),
-        observer: seat,
+        choice_id: engine_api::ChoiceId::new(id as u32),
+        observer,
         options,
-        continuation_id: open.id,
-        // 原生 `ChoiceKind` 未映射为协议语义枚举时统一 `Custom`（**不猜测**具体语义）
-        kind: engine_api::ChoiceKind::Custom,
-        min_count: open.spec.min as u8,
-        max_count: open.spec.max as u8,
-        allow_cancel: open.spec.allow_cancel,
+        continuation_id: id,
+        kind: match kind {
+            engine_native::ChoiceKind::Confirm => engine_api::ChoiceKind::Confirm,
+            engine_native::ChoiceKind::SelectCards => engine_api::ChoiceKind::SelectCards,
+            engine_native::ChoiceKind::SelectPlayers => engine_api::ChoiceKind::SelectTargets,
+            engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => {
+                engine_api::ChoiceKind::Custom
+            }
+        },
+        min_count: min as u8,
+        max_count: max as u8,
+        allow_cancel,
         timeout_policy: engine_api::TimeoutPolicy::None,
         revision: engine.revision(),
     })
@@ -285,7 +307,9 @@ pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_a
 
 /// 权威动作 → 协议动作（只映射本内核可表达的形态；未覆盖形态见待办）。
 pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction> {
-    let seat_u8 = seat.raw().saturating_sub(1) as u8;
+    let Some(seat_u8) = native_seat(engine, Some(seat)) else {
+        return Vec::new();
+    };
     engine
         .legal_actions(seat_u8)
         .into_iter()

@@ -1,0 +1,183 @@
+[
+  {
+    "name": "final-all5",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "-p",
+      "game-server",
+      "-p",
+      "engine-native-wasm",
+      "--no-fail-fast"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-strict-all3",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-wasm32-build",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "../../apps/web-client/src/worker/native-pkg"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-emit-fixtures",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_projection_fixture",
+      "--",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence/wasm32-fixtures.json"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-wasm32-parity",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/native-server-projection-parity.mjs",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence/wasm32-fixtures.json"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/web-client",
+    "exit": 0
+  },
+  {
+    "name": "final-worker82",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/native-worker-smoke.mjs"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/web-client",
+    "exit": 0
+  },
+  {
+    "name": "final-frontend",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "--test"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/web-client",
+    "exit": 0
+  },
+  {
+    "name": "final-typecheck",
+    "command": [
+      "node_modules/.bin/vue-tsc",
+      "--noEmit"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/web-client",
+    "exit": 0
+  },
+  {
+    "name": "final-cross-target",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-source-line-units",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "final-preflight",
+    "command": [
+      "python3",
+      "-B",
+      "-u",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 1
+  }
+]

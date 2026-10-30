@@ -1,0 +1,37 @@
+[
+  {
+    "window": "XunXun",
+    "bytes": 1823,
+    "beforeSha256": "5499a37359f2749eb5b16c81f079d097705b5d1b9d164009c0e57231a0ff4b80",
+    "afterSha256": "5499a37359f2749eb5b16c81f079d097705b5d1b9d164009c0e57231a0ff4b80",
+    "equal": true
+  },
+  {
+    "window": "JiJie",
+    "bytes": 1772,
+    "beforeSha256": "059afaaebd217d64561a0026a0ed3e69a7fe4bbc000998ffe555d51a87e711d3",
+    "afterSha256": "059afaaebd217d64561a0026a0ed3e69a7fe4bbc000998ffe555d51a87e711d3",
+    "equal": true
+  },
+  {
+    "window": "GaiMing",
+    "bytes": 2157,
+    "beforeSha256": "17fcc4657c9f15ad0f46597a2a480b730a7e213f1cf8a4834ed7847a3ed10bc1",
+    "afterSha256": "17fcc4657c9f15ad0f46597a2a480b730a7e213f1cf8a4834ed7847a3ed10bc1",
+    "equal": true
+  },
+  {
+    "window": "HaoTianTa",
+    "bytes": 2702,
+    "beforeSha256": "cf5d4057d155ab30b4f7e413a1e4adcf5df6f5f756bc23c11a6e7cab0dcd56d2",
+    "afterSha256": "cf5d4057d155ab30b4f7e413a1e4adcf5df6f5f756bc23c11a6e7cab0dcd56d2",
+    "equal": true
+  },
+  {
+    "window": "Liaoyuan",
+    "bytes": 2737,
+    "beforeSha256": "fa34e88c9a67e3156abfc2c26f7a677ff68913876fa58b78b00702ffdd82faea",
+    "afterSha256": "fa34e88c9a67e3156abfc2c26f7a677ff68913876fa58b78b00702ffdd82faea",
+    "equal": true
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "rules": 328,
+  "archive": 105,
+  "abi": 753,
+  "ws": 5,
+  "definitions": {
+    "rules": "crates/engine-native-content/src/content/standard.rs:160",
+    "archive": "crates/engine-native-kernel/src/archive.rs:113",
+    "abi": "crates/engine-api/src/version.rs:17",
+    "ws": "crates/engine-protocol/src/lib.rs:17"
+  },
+  "publicNativeEngineMethods": [
+    "new",
+    "set_planner",
+    "revision",
+    "is_finished",
+    "general_candidates_json",
+    "assign_general",
+    "view_json",
+    "open_choice_json",
+    "next_phase",
+    "play_card",
+    "legal_actions_json",
+    "activate_skill",
+    "answer",
+    "auto_step",
+    "state_hash_hex",
+    "log_len",
+    "public_event_codes_json",
+    "save_hex",
+    "restore_hex",
+    "restore_hex_checked",
+    "new_identity",
+    "new_identity_with_packs_json",
+    "new_with_packs_json",
+    "restore_hex_with_packs_json",
+    "cards_with_prefix"
+  ],
+  "publicNativeEngineMethodCount": 25,
+  "j2Integrated": false,
+  "defaultDesktopTransport": "WASM; native remains explicit opt-in"
+}

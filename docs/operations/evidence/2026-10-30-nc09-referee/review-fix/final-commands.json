@@ -1,0 +1,112 @@
+[
+  {
+    "name": "full-all5",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "-p",
+      "game-server",
+      "-p",
+      "engine-native-wasm",
+      "--no-fail-fast"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "strict-all3",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "fresh-wasm32-build",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "../../apps/web-client/src/worker/native-pkg"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "wasm32-machine-windows",
+    "command": [
+      "node",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/wasm-machine-windows.mjs",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "fresh-ordinary-fixtures",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "env",
+      "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_projection_fixture",
+      "--",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/ordinary-fixtures.json"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree",
+    "exit": 0
+  },
+  {
+    "name": "wasm32-ordinary-parity",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/native-server-projection-parity.mjs",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/ordinary-fixtures.json"
+    ],
+    "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/web-client",
+    "exit": 0
+  }
+]

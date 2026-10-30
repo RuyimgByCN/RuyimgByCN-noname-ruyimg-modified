@@ -1,0 +1,28 @@
+{
+  "name": "p2-wasm-native-privacy",
+  "totals": {
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0
+  },
+  "targets": [
+    {
+      "target": "Running tests/nc03_actor_authorization.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc03_actor_authorization-8731039cd1d8e7f5)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc03_legal_actions_export.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc03_legal_actions_export-b99850c2ad44198d)",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc03_view_projection.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc03_view_projection-3443755528094dac)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

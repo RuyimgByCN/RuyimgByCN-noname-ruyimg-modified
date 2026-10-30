@@ -1,0 +1,2 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
+{"command": ["env", "RUSTFLAGS=-D warnings", "cargo", "check", "--offline", "-p", "engine-native-content", "--all-targets"], "exit": 0, "locked_seconds": 0.1040729160013143}

@@ -1,0 +1,67 @@
+{
+  "baseHead": "f6b7bb57bf27251b00832243b1e0826e6b3bc751",
+  "priorPatchSha256": "158f7230962d49b15df4ccfb54b7ad1abb8a448f0bb00ef62aac6dba73f528c7",
+  "incrementalPatchSha256": "28a7c7626b79c1f1026726a6482717215b8c5a880e1b3afbcb08bcccab552c14",
+  "changedFiles": [
+    {
+      "path": "crates/engine-native-kernel/src/snap/validation.rs",
+      "beforeReviewSha256": "9fcbaa16d8ea6d9f4fea82ec5649e5962ea2be39072bfe80e40845f218436ec4",
+      "afterSha256": "6ad1b6d209653e50b45f8e61170583a1fc7c2b2e987a0f1d4c3263cd496c6c5f",
+      "physicalLines": 486
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "beforeReviewSha256": "fa5ca41101d1a8afa9f0eacf5ca7e484f91efa4fe4d30490813a3ef9ba35f642",
+      "afterSha256": "847e21d45e36d350f01a32432596d839f53eb27d6451c3bd5a47d611b3fecaca",
+      "physicalLines": 1018
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+      "beforeReviewSha256": "258afe40a6c5289c17f96642baa9fabeaca040ab175224380f00d530a7b9e6db",
+      "afterSha256": "618976eedbb8e31c6e244ead240ad4e0f11373ba5ebd3aa64cb440c07232bbb7",
+      "physicalLines": 340
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard.rs",
+      "beforeReviewSha256": "16bc14f8ec6a58a7b759127d20e73b67b207d117d1cc155211a1f79781d69c35",
+      "afterSha256": "c7f9be70780fbbd0e4398badd79a6b0baf0dfe2b17c3f05d1d703a6a60a2b8c4",
+      "physicalLines": 559
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "beforeReviewSha256": "4b4e3d7a1ed733f0122f3633a53eb42f19827bf4e60ff7a7bd1d4855ee669ada",
+      "afterSha256": "45d9690b22918c7393dda652da13adfee01051045d059e4ff002a0eb9c60462a",
+      "physicalLines": 1010
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/asks.rs",
+      "beforeReviewSha256": "8bbcff6983affe1a8a44a9176a581fc33a859b4b2965dcb8a4c4314449c0d8e3",
+      "afterSha256": "b38f15f68e81b7398890976de08b944c4791439d4f37ff9c885e826a62e653db",
+      "physicalLines": 778
+    },
+    {
+      "path": "crates/engine-native/tests/groups/misc.rs",
+      "beforeReviewSha256": "e66246f3b3abaee0d92e182fed3fc066f9330cd970fed86c3b622b3212192d63",
+      "afterSha256": "81a46e377838c38a9e32a2b13be83e4667a86143b3ebb001af3099ede32419df",
+      "physicalLines": 101
+    },
+    {
+      "path": "crates/engine-native/tests/nc09_machine_ownership.rs",
+      "beforeReviewSha256": null,
+      "afterSha256": "05cc0ac837754574e2a5e6f6aa926cfb4a799d637a801e3ba802cd7c8971633a",
+      "physicalLines": 733
+    },
+    {
+      "path": "crates/engine-native/tests/support/nc09_machine_windows.rs",
+      "beforeReviewSha256": null,
+      "afterSha256": "a93adf2baed6407476a6a3eea8a5d5fa9d90e88f550b11e9ce60d9d0ffbd13e5",
+      "physicalLines": 309
+    },
+    {
+      "path": "apps/game-server/tests/nc09_machine_projection.rs",
+      "beforeReviewSha256": null,
+      "afterSha256": "ffb95dd821ab58649740380b91b52ad9b3a7862b722bf8093bc4021af683400c",
+      "physicalLines": 116
+    }
+  ]
+}

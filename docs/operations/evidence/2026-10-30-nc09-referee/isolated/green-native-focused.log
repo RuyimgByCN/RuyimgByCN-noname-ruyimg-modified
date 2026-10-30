@@ -1,0 +1,40 @@
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling libc v0.2.186
+   Compiling once_cell v1.21.4
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling syn v2.0.118
+   Compiling errno v0.3.14
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-schema)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 30.42s
+     Running tests/groups/misc.rs (../target/debug/deps/misc-129eb0d7396969d0)
+
+running 3 tests
+test nc09_referee_projection::full_info_entry_cannot_escape_to_ordinary_views_or_ai_sessions ... ok
+test nc09_referee_projection::referee_reveals_both_dark_generals_and_identities_without_mutating_authority ... ok
+test nc09_referee_projection::referee_includes_machine_held_cards_and_private_choice_after_archive ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 173 filtered out; finished in 0.00s
+
+{"command": ["env", "CARGO_TARGET_DIR=../target", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_referee_projection::"], "exit": 0, "locked_seconds": 30.459218708012486}

@@ -1,0 +1,16 @@
+{
+  "kind": "Read-only candidate repository check; not CI execution, no remote or push",
+  "full_name": "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+  "default_branch": "main",
+  "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+  "workflow_list_exit": 0,
+  "workflow_paths": [
+    ".github/workflows/build.yml",
+    ".github/workflows/close-stale-issues.yml",
+    ".github/workflows/lint-check.yml",
+    ".github/workflows/nightly-publish.yml",
+    ".github/workflows/release.yml"
+  ],
+  "noname_next_manifest_exit": 1,
+  "noname_next_manifest_error": "gh: Not Found (HTTP 404)\n"
+}

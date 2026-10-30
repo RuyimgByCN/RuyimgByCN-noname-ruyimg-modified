@@ -1,0 +1,13 @@
+{
+  "time": 1793301184.9435542,
+  "head": "38789f54c798829d7b32bff1c990def50cf7f611",
+  "hashes": {
+    "../AGENTS.md": "15299d19f85be9e2cbe924692e886a23205d2f2a536c5e6ee19c06f78586a4c3",
+    "../NONAME_NEXT_AGENT_SPEC.md": "61ff6423d955b3164e6059c52996f2720c09afcf7dd102bed87079d355be6b60",
+    ".pi-lens.json": "c8116d9261456974ae77643b24e6443ceaaa0230be81593aaab1d4bee732fa1c",
+    "crates/engine-native/src/ai.rs": "144a2b4e9ffc4ace8842bd3aa3054f774eb485a45869568248f03a3d04b61c03",
+    "crates/engine-native/src/ai/redact.rs": "deaa4acebee0a74dde9ba950d3dd68e9252440685d33d14ad2ea3eea274b534f",
+    "crates/engine-native/Cargo.toml": "f42777764653ec77a12f394b45c17a34d560acb0cd2fc3647f5278034ea7119f"
+  },
+  "status": "?? .pi-lens-probe-home/\n?? .pi-lens.json\n"
+}

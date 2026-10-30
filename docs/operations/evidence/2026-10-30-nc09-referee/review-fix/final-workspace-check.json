@@ -1,0 +1,17 @@
+{
+  "head": "f6b7bb57bf27251b00832243b1e0826e6b3bc751",
+  "versions": {
+    "rules": 328,
+    "archive": 105,
+    "abi": 753,
+    "ws": 5
+  },
+  "protectedDiffPaths": [],
+  "noStagedFiles": true,
+  "sourceManifestMatches": true,
+  "lensConfigVerifiedDisabledAndRemoved": true,
+  "ownDependencySymlinkRemoved": true,
+  "noCacheCleanup": true,
+  "canonicalOutsideAgentsSha256": "15299d19f85be9e2cbe924692e886a23205d2f2a536c5e6ee19c06f78586a4c3",
+  "checkedAtUtc": "2026-10-30T01:47:45.924289+00:00"
+}

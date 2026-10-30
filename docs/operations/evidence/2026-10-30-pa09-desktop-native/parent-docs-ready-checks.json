@@ -1,0 +1,25 @@
+[
+  {
+    "name": "local-links-docs-ready",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 0.41,
+    "log": "local-links-docs-ready.log"
+  },
+  {
+    "name": "stale-values-docs-ready",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_stale_numbers.py"
+    ],
+    "exit": 0,
+    "seconds": 0.051,
+    "log": "stale-values-docs-ready.log"
+  }
+]

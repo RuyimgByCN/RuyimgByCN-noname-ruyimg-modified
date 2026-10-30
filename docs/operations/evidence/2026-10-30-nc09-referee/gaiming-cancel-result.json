@@ -1,0 +1,35 @@
+{
+  "scope": "Evidence-only actual existing GaiMing cancel regression; no maintained source mutation or rules/archive/ABI change",
+  "started": "2026-10-30T11:42:53.074557+08:00",
+  "libraries": {
+    "engine_native": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/libengine_native-cb83787f35854d8e.rlib",
+      "sha256": "fe9afca8a3b8726a3a16eaa144722897b4e9652f4e054d8096565f754597b2e1"
+    },
+    "content_native_loader": {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/libcontent_native_loader-355a6981ed08c605.rlib",
+      "sha256": "aee75fafb34c0d3ac77f7a90773ed09cce2651429902f77e0ccdb760f83e316c"
+    }
+  },
+  "source_sha256": "2b10ceaca2fe5aae166c9deeced0bc76a46f786aa29c22673192431b68f0e98c",
+  "judge_source_sha256": "3c3af9caff49f0deecc917027ee885f10cb0995002d9a57086e5951f3e525221",
+  "compile_argv": [
+    "rustc",
+    "--edition=2021",
+    "--crate-name=gaiming_cancel_repro",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc09-referee/gaiming-cancel-repro.rs",
+    "-L",
+    "dependency=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps",
+    "-o",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-gaiming-repro-z94jez5o/repro",
+    "--extern",
+    "engine_native=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/libengine_native-cb83787f35854d8e.rlib",
+    "--extern",
+    "content_native_loader=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/libcontent_native_loader-355a6981ed08c605.rlib"
+  ],
+  "compile_exit": 0,
+  "runtime_exit": 101,
+  "private_binary_cleanup": "Temporary compile output and executable removed after use; active/shared target read only",
+  "disk_free_bytes": 173140611072,
+  "finished": "2026-10-30T11:42:53.398785+08:00"
+}

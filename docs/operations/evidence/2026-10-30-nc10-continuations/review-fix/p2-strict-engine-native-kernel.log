@@ -1,0 +1,6 @@
+    Checking engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-api)
+    Checking rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/rule-api)
+    Checking rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/rule-vm)
+    Checking engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.70s
+{"name": "p2-strict-engine-native-kernel", "command": ["cargo", "check", "--offline", "-p", "engine-native-kernel", "--all-targets"], "env": {"CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target", "RUSTFLAGS": "-D warnings"}, "exit": 0, "locked_seconds": 8.729589499998838}

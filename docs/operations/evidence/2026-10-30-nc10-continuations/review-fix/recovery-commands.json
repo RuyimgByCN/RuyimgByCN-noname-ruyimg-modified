@@ -1,0 +1,162 @@
+[
+  {
+    "name": "p2-green-nc10",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 101,
+    "locked_seconds": 21.591600249987096
+  },
+  {
+    "name": "p2-full-native3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 101,
+    "locked_seconds": 32.73711958297645
+  },
+  {
+    "name": "p2-strict-engine-native-kernel",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "--all-targets"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target",
+      "RUSTFLAGS": "-D warnings"
+    },
+    "exit": 0,
+    "locked_seconds": 8.729589499998838
+  },
+  {
+    "name": "p2-strict-engine-native-content",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-content",
+      "--all-targets"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target",
+      "RUSTFLAGS": "-D warnings"
+    },
+    "exit": 0,
+    "locked_seconds": 1.2468174579844344
+  },
+  {
+    "name": "p2-strict-engine-native",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target",
+      "RUSTFLAGS": "-D warnings"
+    },
+    "exit": 0,
+    "locked_seconds": 10.036567875009496
+  },
+  {
+    "name": "p2-wasm-native-privacy",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "nc03_view_projection",
+      "--test",
+      "nc03_actor_authorization",
+      "--test",
+      "nc03_legal_actions_export"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 0,
+    "locked_seconds": 23.622170542017557
+  },
+  {
+    "name": "p2-wasm-build",
+    "command": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "nodejs",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence-review-p2/nc10-node-pkg"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target"
+    },
+    "exit": 0,
+    "locked_seconds": 28.37850495800376
+  },
+  {
+    "name": "p2-wasm-smoke",
+    "command": [
+      "node",
+      "scripts/native_wasm_smoke.mjs"
+    ],
+    "env": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target",
+      "PKG": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence-review-p2/nc10-node-pkg"
+    },
+    "exit": 0,
+    "locked_seconds": 0.09470095799770206
+  }
+]

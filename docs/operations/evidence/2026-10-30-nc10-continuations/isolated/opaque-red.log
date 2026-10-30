@@ -1,0 +1,25 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.87s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 1 test
+NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE left=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } right=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(1)] }, nodes_used: 6, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+
+thread 'nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice' (7744337) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:80:5:
+assertion `left == right` failed: cached unknown hand color leaked through VM local 0
+  left: Answer { choice_id: 1, selection: [Tag(0)] }
+ right: Answer { choice_id: 1, selection: [Tag(1)] }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... FAILED
+
+failures:
+
+failures:
+    nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 136 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_opaque_vm_privacy", "--", "--nocapture"], "exit": 101, "locked_seconds": 0.9352512500190642}

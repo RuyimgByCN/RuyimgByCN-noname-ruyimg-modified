@@ -1,0 +1,98 @@
+{
+  "ids": [
+    4282840320,
+    3443082095,
+    3041623461,
+    3211127217,
+    4237989003,
+    3198500410,
+    1638154896,
+    2560120484,
+    3500788194,
+    2622258010,
+    813648679,
+    2846701473,
+    3973195064
+  ],
+  "checks": [
+    {
+      "document": 0,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 1,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 2,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 3,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 4,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 5,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 6,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 7,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 8,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 9,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 10,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 11,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 12,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 0
+    }
+  ],
+  "imageId": 2410445262
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-30T10:47:18.326637+08:00",
+  "reason": "J2 run9e039 failed ENOSPC and is terminal; no live compiler. All source, patches, logs, wasm/binary artifacts/deps preserved. Only regenerable incremental compiler objects in explicitly task-private cache; shared targets untouched.",
+  "active_users": [],
+  "paths": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/incremental",
+      "retired_kib": 14693348
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-gate/debug/incremental",
+      "retired_kib": 1287296
+    }
+  ]
+}

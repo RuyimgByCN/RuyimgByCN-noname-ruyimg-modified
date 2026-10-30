@@ -1,0 +1,158 @@
+[
+  {
+    "path": "Cargo.lock",
+    "sha256": "0b8e79792d975b91e5865f14f59194538fda1b80adbcf4c7f3c1d8bf8f238834",
+    "prior_patch_sha256": "0b8e79792d975b91e5865f14f59194538fda1b80adbcf4c7f3c1d8bf8f238834",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/Cargo.toml",
+    "sha256": "11d1bd13b0b82cee33f8387fdfc7f98cb55bf79ea4dfe4eb91724dfea6004585",
+    "prior_patch_sha256": "11d1bd13b0b82cee33f8387fdfc7f98cb55bf79ea4dfe4eb91724dfea6004585",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/src/lib.rs",
+    "sha256": "b542ad1ff045fb09b4a05b6b6ee5d98045695ad03f627cde7d0f8cb18c9df288",
+    "prior_patch_sha256": "b542ad1ff045fb09b4a05b6b6ee5d98045695ad03f627cde7d0f8cb18c9df288",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/src/main.rs",
+    "sha256": "05f695f258906055809f6c52953e77510c8ad46f48669df2c580fbecdc32e070",
+    "prior_patch_sha256": "05f695f258906055809f6c52953e77510c8ad46f48669df2c580fbecdc32e070",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/nc04-worker-failure.test.mjs",
+    "sha256": "4ae6ec81fb3cfb08d4f3e2f01fd35d9735eefd280415630b7c02fe7f9d64bb77",
+    "prior_patch_sha256": "4ae6ec81fb3cfb08d4f3e2f01fd35d9735eefd280415630b7c02fe7f9d64bb77",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/network-client.test.mjs",
+    "sha256": "e96b851f9849c9b875e9edb6cb33ee5b68d9a22b88bd8f0f238850d813ba3f1e",
+    "prior_patch_sha256": "e96b851f9849c9b875e9edb6cb33ee5b68d9a22b88bd8f0f238850d813ba3f1e",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/web-frame-external.mjs",
+    "sha256": "3b6f8a7bb6737329dc622caf5a41b1d2d22c583f2405f02076768c84fcb348c6",
+    "prior_patch_sha256": "3b6f8a7bb6737329dc622caf5a41b1d2d22c583f2405f02076768c84fcb348c6",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/engine/autoDrive.ts",
+    "sha256": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10",
+    "prior_patch_sha256": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/engine/client.ts",
+    "sha256": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+    "prior_patch_sha256": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/views/ExtensionsView.vue",
+    "sha256": "b7d58314556a7e4ef733e545877fa57910db3b769ce71b9453dff6365f1553b5",
+    "prior_patch_sha256": "b7d58314556a7e4ef733e545877fa57910db3b769ce71b9453dff6365f1553b5",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/views/SettingsView.vue",
+    "sha256": "c4dbd34b1a7db3c8acae0d1818a96c920c7d6a113a559e75881adac71ef1c964",
+    "prior_patch_sha256": "c4dbd34b1a7db3c8acae0d1818a96c920c7d6a113a559e75881adac71ef1c964",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/worker/nativeBackend.ts",
+    "sha256": "9e230f1c09b98e42f49e4fc615781f16cbee4fa315421833c289c0cd59f7095d",
+    "prior_patch_sha256": "9e230f1c09b98e42f49e4fc615781f16cbee4fa315421833c289c0cd59f7095d",
+    "matches": true
+  },
+  {
+    "path": "crates/engine-native-wasm/src/lib.rs",
+    "sha256": "32196e4022a19d0264b34f61df17c33c0fce2eadadb670259c7dd0d18c6190cc",
+    "prior_patch_sha256": "32196e4022a19d0264b34f61df17c33c0fce2eadadb670259c7dd0d18c6190cc",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/examples/pa09_native_bridge.rs",
+    "sha256": "b81afbe7187cc689e78e9ccb7c54f189973bbc07eab454b2348f886424dcb244",
+    "prior_patch_sha256": "b81afbe7187cc689e78e9ccb7c54f189973bbc07eab454b2348f886424dcb244",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/src/native_engine_host.rs",
+    "sha256": "442e42a23605684d75bb09a2db20368b30e5296e7ab39a84d2f6d77d6ada0aa7",
+    "prior_patch_sha256": "442e42a23605684d75bb09a2db20368b30e5296e7ab39a84d2f6d77d6ada0aa7",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/src/native_engine_resource.rs",
+    "sha256": "4716985cb54660396516d9dbe6f39581eec5f0a7f3d2896afad54f3275d46f3d",
+    "prior_patch_sha256": "4716985cb54660396516d9dbe6f39581eec5f0a7f3d2896afad54f3275d46f3d",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/src/native_envelope.rs",
+    "sha256": "bedb039a854c2b30a02ace2bcf0e1c046b01ec7b08ab0bc02c8af554c8a070a5",
+    "prior_patch_sha256": "bedb039a854c2b30a02ace2bcf0e1c046b01ec7b08ab0bc02c8af554c8a070a5",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/tests/native_engine_host.rs",
+    "sha256": "ee8c46e96f91df67d808d752c9d9964f2497a7627bf5d6d262db819180614541",
+    "prior_patch_sha256": "ee8c46e96f91df67d808d752c9d9964f2497a7627bf5d6d262db819180614541",
+    "matches": true
+  },
+  {
+    "path": "apps/desktop-client/tests/native_planner_measurement.rs",
+    "sha256": "9cef60cfba2a11ba8574c0945cdd645ca5a671969e503a20148d4e1bec87d366",
+    "prior_patch_sha256": "9cef60cfba2a11ba8574c0945cdd645ca5a671969e503a20148d4e1bec87d366",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+    "sha256": "081db1554a4a9c144d434dd3827a6b1d5f030be0e8d768dd82bd6362c3237406",
+    "prior_patch_sha256": "081db1554a4a9c144d434dd3827a6b1d5f030be0e8d768dd82bd6362c3237406",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/pa09-desktop-webview.ts",
+    "sha256": "0e2df1110022115e0fc5ef8e884e29ff534d4caa72220c28d4c5ad89c55df266",
+    "prior_patch_sha256": "0e2df1110022115e0fc5ef8e884e29ff534d4caa72220c28d4c5ad89c55df266",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/scripts/pa09-native-host-smoke.mjs",
+    "sha256": "a4c332d6870cb3d890054361c5500fc7c423f9015e84bca727ae18f860afdd9b",
+    "prior_patch_sha256": "a4c332d6870cb3d890054361c5500fc7c423f9015e84bca727ae18f860afdd9b",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "sha256": "ef301484146505eb5c3d317d2559772134609b81ca54940d33cd35b0b43ac419",
+    "prior_patch_sha256": "ef301484146505eb5c3d317d2559772134609b81ca54940d33cd35b0b43ac419",
+    "matches": true
+  },
+  {
+    "path": "apps/web-client/src/engine/nativeOutcome.ts",
+    "sha256": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf",
+    "prior_patch_sha256": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf",
+    "matches": true
+  },
+  {
+    "path": "crates/engine-native-wasm/src/session.rs",
+    "sha256": "787ff9c407c5ac1157f9f3e0d515f36fe1d89db245df9ba29e63e3da7f34de04",
+    "prior_patch_sha256": "787ff9c407c5ac1157f9f3e0d515f36fe1d89db245df9ba29e63e3da7f34de04",
+    "matches": true
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/pa09_native_session.rs",
+    "sha256": "2dff2b0a6988ae8d83c5ad9a41f6f55b53f0f396fccc4d6502350ab1dca2480e",
+    "prior_patch_sha256": "2dff2b0a6988ae8d83c5ad9a41f6f55b53f0f396fccc4d6502350ab1dca2480e",
+    "matches": true
+  }
+]

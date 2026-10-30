@@ -1,0 +1,71 @@
+[
+  {
+    "log": "revival-gate-engine-native-kernel.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "wall_seconds_including_lock_wait": 0.14882206916809082
+  },
+  {
+    "log": "revival-gate-engine-native-content.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-content",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "wall_seconds_including_lock_wait": 0.13081002235412598
+  },
+  {
+    "log": "revival-gate-engine-native.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "wall_seconds_including_lock_wait": 1.279865026473999
+  },
+  {
+    "log": "wasm-build.log",
+    "command": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "nodejs",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence/nc10-node-pkg"
+    ],
+    "exit": 0,
+    "wall_seconds_including_lock_wait": 35.543163776397705
+  },
+  {
+    "log": "wasm-smoke.log",
+    "command": [
+      "node",
+      "scripts/native_wasm_smoke.mjs"
+    ],
+    "exit": 0
+  }
+]

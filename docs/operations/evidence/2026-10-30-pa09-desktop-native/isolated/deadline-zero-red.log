@@ -1,0 +1,136 @@
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:224:4
+    |
+224 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:285:4
+    |
+285 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:347:4
+    |
+347 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:356:4
+    |
+356 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:382:4
+    |
+382 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:391:4
+    |
+391 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:430:4
+    |
+430 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:439:4
+    |
+439 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:447:4
+    |
+447 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:455:4
+    |
+455 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:463:4
+    |
+463 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:471:4
+    |
+471 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:479:4
+    |
+479 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:487:4
+    |
+487 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:495:4
+    |
+495 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:503:4
+    |
+503 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:511:4
+    |
+511 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s
+     Running tests/pa09_native_session.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/pa09_native_session-a283cf14d2e0c554)
+
+running 1 test
+test zero_deadline_keeps_the_node_bounded_candidate_policy ... FAILED
+
+failures:
+
+---- zero_deadline_keeps_the_node_bounded_candidate_policy stdout ----
+
+thread 'zero_deadline_keeps_the_node_bounded_candidate_policy' (6704320) panicked at crates/engine-native-wasm/tests/pa09_native_session.rs:22:9:
+assertion `left == right` failed: step 2
+  left: "{\"finished\":false,\"kind\":\"plan\",\"outcome\":\"{\\\"finished\\\":false,\\\"outcome\\\":\\\"accepted\\\",\\\"reason\\\":null,\\\"revision\\\":3}\",\"seat\":0}"
+ right: "{\"finished\":false,\"kind\":\"plan\",\"outcome\":\"{\\\"finished\\\":false,\\\"outcome\\\":\\\"pending\\\",\\\"reason\\\":null,\\\"revision\\\":3}\",\"seat\":0}"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    zero_deadline_keeps_the_node_bounded_candidate_policy
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native-wasm --test pa09_native_session`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "pa09_native_session", "zero_deadline"], "exit": 101, "locked_seconds": 0.7169551249971846}

@@ -1,0 +1,40 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.78s
+     Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/deps/misc-129eb0d7396969d0)
+
+running 18 tests
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+
+thread 'nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject' (8975929) panicked at crates/engine-native/tests/groups/../nc09_machine_ownership.rs:712:9:
+LiaoYuan invalid scalar/stage/candidate 2
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... FAILED
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+
+failures:
+
+failures:
+    nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject
+
+test result: FAILED. 17 passed; 1 failed; 0 ignored; 0 measured; 176 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `-p engine-native --test misc`
+{"command": ["env", "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target", "NC09_MACHINE_TRACE_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/machine-traces", "NC09_MACHINE_ARCHIVE_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/archive-after", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::", "--", "--nocapture"], "exit": 101, "locked_seconds": 3.8400582500034943}

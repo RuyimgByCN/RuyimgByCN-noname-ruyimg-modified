@@ -1,0 +1,14 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.07s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 2 tests
+NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+NC10_OPAQUE left=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } right=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1test nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf ... , selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+ok
+test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 139 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_opaque_vm_privacy", "--", "--nocapture"], "exit": 0, "locked_seconds": 3.131478708004579}

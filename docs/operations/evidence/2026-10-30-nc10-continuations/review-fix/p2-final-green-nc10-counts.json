@@ -1,0 +1,16 @@
+{
+  "name": "p2-final-green-nc10",
+  "totals": {
+    "passed": 53,
+    "failed": 0,
+    "ignored": 4
+  },
+  "targets": [
+    {
+      "target": "Running tests/groups/nc_rounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "passed": 53,
+      "failed": 0,
+      "ignored": 4
+    }
+  ]
+}

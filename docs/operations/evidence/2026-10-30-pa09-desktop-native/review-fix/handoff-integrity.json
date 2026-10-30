@@ -1,0 +1,308 @@
+{
+  "no_staged_files": true,
+  "temporary_config_removed": true,
+  "dependency_symlink_removed": true,
+  "local_hook_logs_preserved_at": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/evidence-review-fix/pi-lens-probe-home",
+  "source_hashes_verified": 27,
+  "unexpected_source_changes": [],
+  "rust_results": {
+    "passed": 93,
+    "failed": 0,
+    "ignored": 1
+  },
+  "node_results": {
+    "passed": 135,
+    "failed": 0
+  },
+  "reload": {
+    "passed": true,
+    "reloads": 12,
+    "documents": 13,
+    "nextClientConnected": true,
+    "checks": [
+      {
+        "document": 0,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 1,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 2,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 3,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 4,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 5,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 6,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 7,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 8,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 9,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 10,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 11,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 12,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 0
+      }
+    ],
+    "state": {
+      "ids": [
+        1999495448,
+        3789823057,
+        2802319380,
+        2625923341,
+        1594015434,
+        1827659213,
+        3406592428,
+        2333126887,
+        2509282998,
+        2415515601,
+        3487080965,
+        1670819422,
+        3988025130
+      ],
+      "checks": [
+        {
+          "document": 0,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 1,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 2,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 3,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 4,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 5,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 6,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 7,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 8,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 9,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 10,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 11,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 8
+        },
+        {
+          "document": 12,
+          "oldResourceRefused": true,
+          "unrelatedImageRetained": true,
+          "pendingRequests": 0
+        }
+      ],
+      "imageId": 367994820
+    },
+    "pendingSnapshots": [
+      {
+        "document": 0,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 1,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 2,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 3,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 4,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 5,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 6,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 7,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 8,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 9,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 10,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      },
+      {
+        "document": 11,
+        "submitted": 10,
+        "pendingRequests": 8,
+        "pendingOpens": 2,
+        "settledAtNavigation": 0
+      }
+    ]
+  },
+  "existing_webview": {
+    "passed": true,
+    "terminal": {
+      "steps": 280,
+      "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+      "outcome": {
+        "RebelWin": null
+      }
+    },
+    "vm_lifecycle": "actual IPC passed",
+    "isolation": "validator init preserves battle",
+    "fallback": "actual Wasm Worker passed",
+    "resources": "close/duplicate-close/closed-request passed",
+    "state": {
+      "ids": [],
+      "checks": []
+    },
+    "pendingSnapshots": []
+  },
+  "release_build_passed": true,
+  "no_performance_measurements": true
+}

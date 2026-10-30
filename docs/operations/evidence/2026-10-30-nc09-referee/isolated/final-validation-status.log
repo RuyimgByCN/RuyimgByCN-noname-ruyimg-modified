@@ -1,0 +1,24 @@
+START final-all5
+FINISH final-all5 exit=0
+START final-strict-all3
+FINISH final-strict-all3 exit=0
+START final-wasm32-build
+FINISH final-wasm32-build exit=0
+START final-emit-fixtures
+FINISH final-emit-fixtures exit=0
+START final-wasm32-parity
+FINISH final-wasm32-parity exit=0
+START final-worker82
+FINISH final-worker82 exit=0
+START final-frontend
+FINISH final-frontend exit=0
+START final-typecheck
+FINISH final-typecheck exit=0
+START final-cross-target
+FINISH final-cross-target exit=0
+START final-source-lines
+FINISH final-source-lines exit=0
+START final-source-line-units
+FINISH final-source-line-units exit=0
+START final-preflight
+FINISH final-preflight exit=1

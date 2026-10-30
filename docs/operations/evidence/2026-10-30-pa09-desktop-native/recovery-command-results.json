@@ -1,0 +1,669 @@
+[
+  {
+    "name": "workspace",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "log": "recovery-workspace.log",
+    "locked_seconds": 359.316106208018,
+    "elapsed_including_lock_seconds": 359.3185984999873,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 17317822464,
+    "rust_counts": [
+      6782,
+      0,
+      75
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "strict-native-all3",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "log": "recovery-strict-native-all3.log",
+    "locked_seconds": 22.09288683300838,
+    "elapsed_including_lock_seconds": 108.5360735419963,
+    "env": {
+      "CARGO_TARGET_DIR": "/tmp/noname-pa09-parent-gate-9e6c6232",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": "-Dwarnings",
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 15212711936,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "native-layering",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "log": "recovery-native-layering.log",
+    "locked_seconds": 2.012298792018555,
+    "elapsed_including_lock_seconds": 56.01816470801714,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 14449709056,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "wasm-web-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "exit": 0,
+    "log": "recovery-wasm-web-build.log",
+    "locked_seconds": 30.13998191599967,
+    "elapsed_including_lock_seconds": 39.46031729099923,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": "--require=/tmp/pa09-build-target.cjs"
+    },
+    "free_bytes_after": 14353612800,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "worker-final",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "smoke:native"
+    ],
+    "exit": 0,
+    "log": "recovery-worker-final.log",
+    "locked_seconds": 2.0118500830139965,
+    "elapsed_including_lock_seconds": 141.24753845800296,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 13202878464,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "frontend-after-wasm",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "test"
+    ],
+    "exit": 0,
+    "log": "recovery-frontend-after-wasm.log",
+    "locked_seconds": 2.0117944160010666,
+    "elapsed_including_lock_seconds": 62.76715966599295,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 13183229952,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "exit": 0,
+    "log": "recovery-typecheck.log",
+    "locked_seconds": 2.010623834008584,
+    "elapsed_including_lock_seconds": 47.87025929198717,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 12367474688,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "frontend-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build"
+    ],
+    "exit": 0,
+    "log": "recovery-frontend-build.log",
+    "locked_seconds": 4.022671042010188,
+    "elapsed_including_lock_seconds": 40.84478908299934,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 12192120832,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "exit": 0,
+    "log": "recovery-conformance.log",
+    "locked_seconds": 42.15605241700541,
+    "elapsed_including_lock_seconds": 44.03508604198578,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 11297361920,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "empty-hujia-native-vector",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/pa09-empty-hujia/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json"
+    ],
+    "exit": 0,
+    "log": "recovery-empty-hujia-native-vector.log",
+    "locked_seconds": 20.092917000001762,
+    "elapsed_including_lock_seconds": 34.92881837501773,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 10739376128,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "native-wasm-cross",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "exit": 0,
+    "log": "recovery-native-wasm-cross.log",
+    "locked_seconds": 28.102651875000447,
+    "elapsed_including_lock_seconds": 114.9676877919992,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 9677856768,
+    "rust_counts": [
+      2,
+      0,
+      0
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "empty-hujia-wasm32",
+    "command": [
+      "node",
+      "/tmp/pa09-empty-hujia/verify.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-wasm-report.json"
+    ],
+    "exit": 0,
+    "log": "recovery-empty-hujia-wasm32.log",
+    "locked_seconds": 2.015690291998908,
+    "elapsed_including_lock_seconds": 96.89039650000632,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 9677815808,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "legacy-cross",
+    "command": [
+      "bash",
+      "scripts/cross-target-hash.sh"
+    ],
+    "exit": 0,
+    "log": "recovery-legacy-cross.log",
+    "locked_seconds": 118.28519729198888,
+    "elapsed_including_lock_seconds": 191.66908070800127,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": "--require=/tmp/pa09-build-target.cjs"
+    },
+    "free_bytes_after": 7818240000,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "source-line-units",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "log": "recovery-source-line-units.log",
+    "locked_seconds": 2.007602041005157,
+    "elapsed_including_lock_seconds": 240.46174883301137,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 54957461504,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "log": "recovery-source-lines.log",
+    "locked_seconds": 8.01340016699396,
+    "elapsed_including_lock_seconds": 10.527361249987734,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 59468730368,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "machine-fixtures",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc09",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "log": "recovery-machine-fixtures.log",
+    "locked_seconds": 2.0081081250100397,
+    "elapsed_including_lock_seconds": 2.0088692090066615,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 60695281664,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "machine-fixtures-registered-misc",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "log": "recovery-machine-fixtures-registered-misc.log",
+    "locked_seconds": 26.060611124994466,
+    "elapsed_including_lock_seconds": 51.53090516701923,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 183621959680,
+    "rust_counts": [
+      18,
+      0,
+      0
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "machine-wasm",
+    "command": [
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine"
+    ],
+    "exit": 0,
+    "log": "recovery-machine-wasm.log",
+    "locked_seconds": 2.007757083978504,
+    "elapsed_including_lock_seconds": 3.749511292000534,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 183619248128,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "ordinary-fixtures",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_projection_fixture",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json"
+    ],
+    "exit": 0,
+    "log": "recovery-ordinary-fixtures.log",
+    "locked_seconds": 56.14253620800446,
+    "elapsed_including_lock_seconds": 56.14399937502458,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 182951649280,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "ordinary-wasm",
+    "command": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/native-server-projection-parity.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json"
+    ],
+    "exit": 0,
+    "log": "recovery-ordinary-wasm.log",
+    "locked_seconds": 2.0052673750033136,
+    "elapsed_including_lock_seconds": 10.3154405420064,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 182818598912,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "desktop-debug-build",
+    "command": [
+      "cargo",
+      "build",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "--features",
+      "tauri-shell"
+    ],
+    "exit": 0,
+    "log": "recovery-desktop-debug-build.log",
+    "locked_seconds": 64.15438466699561,
+    "elapsed_including_lock_seconds": 64.1547474580002,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 181628092416,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "reload-fixture-build",
+    "command": [
+      "node",
+      "/tmp/pa09-validation-webview/build-webview.mjs",
+      "pa09-document-reload"
+    ],
+    "exit": 0,
+    "log": "recovery-reload-fixture-build.log",
+    "locked_seconds": 2.0067984590132255,
+    "elapsed_including_lock_seconds": 8.226120042003458,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 181558251520,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "reload-webview",
+    "command": [
+      "node",
+      "/tmp/pa09-validation-webview/run-webview.mjs",
+      "pa09-document-reload",
+      "recovery"
+    ],
+    "exit": 0,
+    "log": "recovery-reload-webview.log",
+    "locked_seconds": 2.006941125000594,
+    "elapsed_including_lock_seconds": 57.213167457986856,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 178832982016,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "lifecycle-fixture-build",
+    "command": [
+      "node",
+      "/tmp/pa09-validation-webview/build-webview.mjs",
+      "pa09-desktop-webview"
+    ],
+    "exit": 0,
+    "log": "recovery-lifecycle-fixture-build.log",
+    "locked_seconds": 2.00676120800199,
+    "elapsed_including_lock_seconds": 23.957332791993394,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 178719178752,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "lifecycle-webview",
+    "command": [
+      "node",
+      "/tmp/pa09-validation-webview/run-webview.mjs",
+      "pa09-desktop-webview",
+      "recovery"
+    ],
+    "exit": 0,
+    "log": "recovery-lifecycle-webview.log",
+    "locked_seconds": 2.0068483750219457,
+    "elapsed_including_lock_seconds": 53.422358915995574,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 178411610112,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "desktop-release-build",
+    "command": [
+      "cargo",
+      "build",
+      "--offline",
+      "--release",
+      "-p",
+      "desktop-client",
+      "--features",
+      "tauri-shell"
+    ],
+    "exit": 0,
+    "log": "recovery-desktop-release-build.log",
+    "locked_seconds": 186.7128397919878,
+    "elapsed_including_lock_seconds": 617.0686694160104,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 170190000128,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "preflight-final",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "exit": 0,
+    "log": "recovery-preflight-final.log",
+    "locked_seconds": 313.19861254197895,
+    "elapsed_including_lock_seconds": 340.56657370799803,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 173397372928,
+    "rust_counts": null,
+    "stop_reason": null
+  }
+]

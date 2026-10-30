@@ -1,0 +1,112 @@
+{
+  "name": "p2-full-native3",
+  "totals": {
+    "passed": 1582,
+    "failed": 76,
+    "ignored": 75
+  },
+  "targets": [
+    {
+      "target": "Running unittests src/lib.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/engine_native-93ff46b733d632dd)",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/g1.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/g1-3b65073a010e6994)",
+      "passed": 166,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "Running tests/groups/g1_shahai.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/g1_shahai-8a1963244b113ff3)",
+      "passed": 174,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/kernel.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/kernel-c8db19856b9de99c)",
+      "passed": 435,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/l_rounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/l_rounds-42dae96f224d693f)",
+      "passed": 37,
+      "failed": 6,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/misc-3eb46395e53d52b2)",
+      "passed": 173,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/nc08.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 50
+    },
+    {
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "passed": 103,
+      "failed": 27,
+      "ignored": 9
+    },
+    {
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "passed": 157,
+      "failed": 42,
+      "ignored": 8
+    },
+    {
+      "target": "Running tests/groups/nc_rounds.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "passed": 139,
+      "failed": 1,
+      "ignored": 7
+    },
+    {
+      "target": "Running tests/groups/swd.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/swd-242e65b299021c1e)",
+      "passed": 134,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/test_registry.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/test_registry-54852cb76b051105)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running unittests src/lib.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/engine_native_content-ed4f563e86e97ef7)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running unittests src/lib.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/deps/engine_native_kernel-d8af084864bb7b24)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native_content",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native_kernel",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

@@ -75,7 +75,7 @@ fn legacy_replay_rejection(
         },
         view,
         legal_actions: legal_actions_for(session.engine(), player_id),
-        choice: choice_for(session.engine(), Some(player_id)),
+        choice: choice_for(session.engine(), RoomRole::Player, Some(player_id)),
         public_event_codes: vec![],
     })
 }
@@ -286,11 +286,11 @@ async fn native_room_loop(
                             role: joined.member.role,
                             reconnect_token: joined.member.reconnect_token.clone(),
                             view: joined.view,
-                            choice: choice_for(session.engine(), Some(joined.member.player_id)),
+                            choice: choice_for(session.engine(), joined.member.role.into(), Some(joined.member.player_id)),
                             legal_actions: joined.legal_actions,
                         };
-                        members.retain(|_, old| {
-                            old.player_id != m.player_id || old.role != ClientRole::Player
+                        members.retain(|connection, _| {
+                            session.members().any(|member| member.connection_id == *connection)
                         });
                         members.insert(connection_id, m);
                         broadcast_roster_native(id, &mut members, session.engine().outcome().is_some())
@@ -363,6 +363,10 @@ async fn native_room_loop(
                     let _ = reply.send(Err("not in room".into()));
                     continue;
                 };
+                if m.role != ClientRole::Player {
+                    let _ = reply.send(Err("spectator cannot submit".into()));
+                    continue;
+                }
                 let checkpoint = match durability.checkpoint(&session) {
                     Ok(before) => before,
                     Err(error) => {
@@ -390,7 +394,7 @@ async fn native_room_loop(
                             result: prev,
                             view,
                             legal_actions: legal_actions_for(session.engine(), m.player_id),
-                            choice: choice_for(session.engine(), Some(m.player_id)),
+                            choice: choice_for(session.engine(), m.role.into(), Some(m.player_id)),
                             public_event_codes: vec![],
                         }));
                         continue;
@@ -481,7 +485,7 @@ async fn native_room_loop(
                     observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
                 });
                 let legal = legal_actions_for(session.engine(), m.player_id);
-                let choice = choice_for(session.engine(), Some(m.player_id));
+                let choice = choice_for(session.engine(), m.role.into(), Some(m.player_id));
                 let _ = reply.send(Ok(ServerMessage::CommandOutcome {
                     header: MessageHeader::new(id, header.conn_seq, last_revision),
                     idempotency_key,
@@ -521,7 +525,7 @@ async fn native_room_loop(
                         } else {
                             Vec::new()
                         },
-                        choice: choice_for(session.engine(), seat),
+                        choice: choice_for(session.engine(), role, seat),
                         public_event_codes: public_event_codes.clone(),
                     };
                     if out.try_send(&msg) == SendStatus::Full {
@@ -538,6 +542,7 @@ async fn native_room_loop(
             } => match session.snapshot(connection_id) {
                 Ok(view) => {
                     let member = members.get(&connection_id);
+                    let role = member.map(|m| m.role.into()).unwrap_or(RoomRole::Spectator);
                     let (seat, is_player) = match member {
                         Some(m) if m.role == ClientRole::Player => (Some(m.player_id), true),
                         _ => (None, false),
@@ -549,7 +554,7 @@ async fn native_room_loop(
                             session.engine().revision(),
                         ),
                         view,
-                        choice: choice_for(session.engine(), seat),
+                        choice: choice_for(session.engine(), role, seat),
                         legal_actions: if is_player {
                             legal_actions_for(session.engine(), seat.expect("player seat"))
                         } else {
@@ -604,7 +609,7 @@ async fn native_room_loop(
                             let msg = ServerMessage::Snapshot {
                                 header: MessageHeader::new(id, 0, revision),
                                 view: observer_snapshot_for(session.engine(), role, seat),
-                                choice: choice_for(session.engine(), seat),
+                                choice: choice_for(session.engine(), role, seat),
                                 legal_actions: if other.role == ClientRole::Player {
                                     legal_actions_for(session.engine(), seat.expect("player seat"))
                                 } else {

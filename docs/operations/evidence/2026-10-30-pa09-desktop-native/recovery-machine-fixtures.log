@@ -1,0 +1,5 @@
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc09", "nc09_machine_ownership::", "--", "--nocapture"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 59477200896}
+error: no test target named `nc09` in `engine-native` package
+
+help: a target with a similar name exists: `nc08`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc09", "nc09_machine_ownership::", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.0081081250100397, "stop_reason": null}

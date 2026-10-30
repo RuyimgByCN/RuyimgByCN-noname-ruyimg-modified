@@ -1,0 +1,41 @@
+{
+  "at_utc": "2026-10-30T03:39:12.147495+00:00",
+  "free_bytes": 173393825792,
+  "targets": [
+    {
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "lsof": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "",
+        "no_open_files_observed": true
+      },
+      "du_output": "3766600\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "du_exit": 0,
+      "worker_downstream_use_complete": true,
+      "evidence_copies_secured": true,
+      "retirement_owner": "parent; worker did not delete full target"
+    },
+    {
+      "target": "/tmp/noname-pa09-parent-gate-9e6c6232",
+      "lsof": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "",
+        "no_open_files_observed": true
+      },
+      "du_output": "75176\t/tmp/noname-pa09-parent-gate-9e6c6232",
+      "du_exit": 0,
+      "worker_downstream_use_complete": true,
+      "evidence_copies_secured": true,
+      "retirement_owner": "parent; worker did not delete full target"
+    }
+  ],
+  "retired_private_tmp_outputs": [
+    "/tmp/pa09-validation-webview/pa09-document-reload-dist",
+    "/tmp/pa09-validation-webview/pa09-desktop-webview-dist",
+    "/tmp/pa09-validation-dist-before"
+  ],
+  "retained_small_tmp_source": "Harness and runner scripts are preserved for reproduction; copies live in evidence; no maintained source deleted.",
+  "no_staged_files": true
+}

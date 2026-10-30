@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "name": "hid-v2-prepare",
+      "command": [
+        "python3",
+        "-B",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/prepare-hid-driver.py"
+      ],
+      "exit": 0,
+      "log": "hid-v2-prepare.log",
+      "scope": "Preparation checks only; no UI launch, input, permission request or timing measurement"
+    },
+    {
+      "name": "hid-v2-node-syntax",
+      "command": [
+        "node",
+        "--check",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-web-frame-external.mjs"
+      ],
+      "exit": 0,
+      "log": "hid-v2-node-syntax.log",
+      "scope": "Preparation checks only; no UI launch, input, permission request or timing measurement"
+    },
+    {
+      "name": "hid-v2-coordinate-self-check",
+      "command": [
+        "node",
+        "--import",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-web-frame-external.mjs",
+        "--self-check"
+      ],
+      "exit": 0,
+      "log": "hid-v2-coordinate-self-check.log",
+      "scope": "Preparation checks only; no UI launch, input, permission request or timing measurement"
+    },
+    {
+      "name": "hid-v2-swift-syntax",
+      "command": [
+        "swiftc",
+        "-frontend",
+        "-parse",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-tool.swift"
+      ],
+      "exit": 0,
+      "log": "hid-v2-swift-syntax.log",
+      "scope": "Preparation checks only; no UI launch, input, permission request or timing measurement"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "prepare-hid-driver.py",
+      "sha256": "ac611c9ce0eb99cb1e8b0c7caf33c18a464dba003c1fc680a6d3a1ed1e5e5eff"
+    },
+    {
+      "path": "hid-web-frame-external.mjs",
+      "sha256": "14efa47c005ec5d7463d320b73779e3683e81fc7c4474607e49c7fbc698d5db6"
+    },
+    {
+      "path": "hid-tool.swift",
+      "sha256": "02950f45bb78fc389c21ecadd2d6b6c16bb9f350f9cff7f784bdf2a91aef94d5"
+    },
+    {
+      "path": "hid-release-config.json",
+      "sha256": "143bfcdbb7dc9f8baf08bd5042baeaae15349da4b6bfc7ed38e1152309fe849f"
+    }
+  ],
+  "configuration_scope": "Separate local HTTP fixture configuration for a future release-profile test executable; production config unchanged. Not yet built/runtime-qualified."
+}

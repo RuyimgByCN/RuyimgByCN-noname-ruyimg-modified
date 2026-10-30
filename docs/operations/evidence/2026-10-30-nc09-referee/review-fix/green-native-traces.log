@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.96s
+     Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/deps/misc-129eb0d7396969d0)
+
+running 14 tests
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 176 filtered out; finished in 0.02s
+
+{"command": ["env", "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target", "NC09_MACHINE_TRACE_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/machine-traces", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::", "--", "--nocapture"], "exit": 0, "locked_seconds": 1.0139133750053588}

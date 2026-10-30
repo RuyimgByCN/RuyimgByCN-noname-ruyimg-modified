@@ -4,6 +4,7 @@ mod durability;
 mod commit_crash;
 mod double_failure;
 mod authority;
+mod referee;
 
 use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
 use engine_api::{
@@ -194,12 +195,12 @@ impl Peer {
             ..
         } = &message
         {
-            if *player_id == 0 {
-                assert_eq!(*role, ClientRole::Spectator);
-                assert_eq!(*seat, u8::MAX);
-            } else {
-                assert_eq!(*role, ClientRole::Player);
-                assert_eq!(*seat as u32 + 1, *player_id);
+            match role {
+                ClientRole::Player => assert_eq!(*seat as u32 + 1, *player_id),
+                ClientRole::Spectator | ClientRole::Referee => {
+                    assert_eq!(*player_id, 0);
+                    assert_eq!(*seat, u8::MAX);
+                }
             }
             self.room = *room_id;
             self.player = PlayerId::new(*player_id);

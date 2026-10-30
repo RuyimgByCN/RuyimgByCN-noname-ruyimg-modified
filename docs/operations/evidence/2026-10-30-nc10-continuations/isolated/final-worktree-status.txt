@@ -1,0 +1,13 @@
+ M crates/engine-native/Cargo.toml
+ M crates/engine-native/src/ai.rs
+ M crates/engine-native/src/ai/redact.rs
+ M crates/engine-native/src/engine/accessors.rs
+ M crates/engine-native/tests/groups/nc_rounds.rs
+ M crates/engine-native/tests/nc10_duel_nullify_privacy.rs
+ M crates/engine-native/tests/nc10_pending_duel_privacy.rs
+ M crates/engine-native/tests/nc12_ai_strength_baseline.rs
+?? .pi-lens-probe-home/
+?? .pi-lens.json
+?? crates/engine-native/src/ai/remap.rs
+?? crates/engine-native/tests/nc10_live_hidden_cards.rs
+?? crates/engine-native/tests/nc10_opaque_vm_privacy.rs

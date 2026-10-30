@@ -1,0 +1,321 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: full wasm32/native trajectory at step 9
++ actual - expected
+
+  {
+    choice: {
+-     allow_cancel: undefined,
+      choice_id: 2,
+      kind: 'Custom',
+-     max_count: undefined,
+-     min_count: undefined,
+      observer: 0,
+      options: []
+    },
+    events: [
+      {
+
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/scripts/pa09-native-host-smoke.mjs:81:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    choice: { choice_id: 2, kind: 'Custom', observer: 0, options: [] },
+    events: [
+      { PublicEvent: { code: 8, label: '阶段或回合推进' } },
+      { PublicEvent: { code: 8, label: '阶段或回合推进' } },
+      { PublicEvent: { code: 10, label: '选择状态变化' } }
+    ],
+    finished: false,
+    hash_hex: '2d16a471c317bbca6cb7f2c286d12d9dc78d1b7774fd6be6fae9b07de483fbd1',
+    legal_actions: [],
+    result: {
+      finished: false,
+      kind: 'plan',
+      outcome: '{"finished":false,"outcome":"pending","reason":null,"revision":10}',
+      seat: 1
+    },
+    revision: 10,
+    view: {
+      current_player: 1,
+      known_cards: [
+        {
+          def: 98,
+          id: 116,
+          kind: 'Other',
+          owner: 0,
+          rank: 2,
+          suit: 'Spade',
+          zone: 'Hand'
+        },
+        {
+          def: 6,
+          id: 93,
+          kind: 'Other',
+          owner: 0,
+          rank: 1,
+          suit: 'Spade',
+          zone: 'Hand'
+        },
+        {
+          def: 8,
+          id: 101,
+          kind: 'Other',
+          owner: 0,
+          rank: 1,
+          suit: 'Spade',
+          zone: 'Hand'
+        },
+        {
+          def: 90,
+          id: 107,
+          kind: 'Other',
+          owner: 0,
+          rank: 11,
+          suit: 'Heart',
+          zone: 'Hand'
+        },
+        {
+          def: 92,
+          id: 109,
+          kind: 'Other',
+          owner: 0,
+          rank: 3,
+          suit: 'Heart',
+          zone: 'Hand'
+        },
+        {
+          def: 7,
+          id: 97,
+          kind: 'ShaFire',
+          owner: null,
+          rank: 1,
+          suit: 'Spade',
+          zone: 'DiscardPile'
+        },
+        {
+          def: 0,
+          id: 24,
+          kind: 'Sha',
+          owner: null,
+          rank: 6,
+          suit: 'Diamond',
+          zone: 'DiscardPile'
+        }
+      ],
+      observer: 0,
+      outcome: null,
+      phase: 'Discard',
+      revision: 10,
+      round: 1,
+      seats: [
+        {
+          alive: true,
+          character_def: 0,
+          hand_count: 5,
+          hp: 4,
+          identity: 'Lord',
+          max_hp: 5,
+          player: 0,
+          seat: 0,
+          skills: [],
+          turned_over: false
+        },
+        {
+          alive: true,
+          character_def: 0,
+          hand_count: 5,
+          hp: 4,
+          identity: null,
+          max_hp: 4,
+          player: 1,
+          seat: 1,
+          skills: [],
+          turned_over: false
+        },
+        {
+          alive: true,
+          character_def: 0,
+          hand_count: 4,
+          hp: 4,
+          identity: null,
+          max_hp: 4,
+          player: 2,
+          seat: 2,
+          skills: [],
+          turned_over: false
+        },
+        {
+          alive: true,
+          character_def: 0,
+          hand_count: 4,
+          hp: 4,
+          identity: null,
+          max_hp: 4,
+          player: 3,
+          seat: 3,
+          skills: [],
+          turned_over: false
+        }
+      ],
+      state_hash: ''
+    }
+  },
+  expected: {
+    result: {
+      finished: false,
+      kind: 'plan',
+      outcome: '{"finished":false,"outcome":"pending","reason":null,"revision":10}',
+      seat: 1
+    },
+    events: [
+      { PublicEvent: { code: 8, label: '阶段或回合推进' } },
+      { PublicEvent: { code: 8, label: '阶段或回合推进' } },
+      { PublicEvent: { code: 10, label: '选择状态变化' } }
+    ],
+    choice: {
+      choice_id: 2,
+      observer: 0,
+      min_count: undefined,
+      max_count: undefined,
+      allow_cancel: undefined,
+      kind: 'Custom',
+      options: []
+    },
+    view: {
+      revision: 10,
+      state_hash: '',
+      observer: 0,
+      round: 1,
+      current_player: 1,
+      phase: 'Discard',
+      seats: [
+        {
+          player: 0,
+          character_def: 0,
+          seat: 0,
+          hp: 4,
+          max_hp: 5,
+          alive: true,
+          turned_over: false,
+          hand_count: 5,
+          identity: 'Lord',
+          skills: []
+        },
+        {
+          player: 1,
+          character_def: 0,
+          seat: 1,
+          hp: 4,
+          max_hp: 4,
+          alive: true,
+          turned_over: false,
+          hand_count: 5,
+          identity: null,
+          skills: []
+        },
+        {
+          player: 2,
+          character_def: 0,
+          seat: 2,
+          hp: 4,
+          max_hp: 4,
+          alive: true,
+          turned_over: false,
+          hand_count: 4,
+          identity: null,
+          skills: []
+        },
+        {
+          player: 3,
+          character_def: 0,
+          seat: 3,
+          hp: 4,
+          max_hp: 4,
+          alive: true,
+          turned_over: false,
+          hand_count: 4,
+          identity: null,
+          skills: []
+        }
+      ],
+      known_cards: [
+        {
+          id: 116,
+          def: 98,
+          suit: 'Spade',
+          rank: 2,
+          owner: 0,
+          zone: 'Hand',
+          kind: 'Other'
+        },
+        {
+          id: 93,
+          def: 6,
+          suit: 'Spade',
+          rank: 1,
+          owner: 0,
+          zone: 'Hand',
+          kind: 'Other'
+        },
+        {
+          id: 101,
+          def: 8,
+          suit: 'Spade',
+          rank: 1,
+          owner: 0,
+          zone: 'Hand',
+          kind: 'Other'
+        },
+        {
+          id: 107,
+          def: 90,
+          suit: 'Heart',
+          rank: 11,
+          owner: 0,
+          zone: 'Hand',
+          kind: 'Other'
+        },
+        {
+          id: 109,
+          def: 92,
+          suit: 'Heart',
+          rank: 3,
+          owner: 0,
+          zone: 'Hand',
+          kind: 'Other'
+        },
+        {
+          id: 97,
+          def: 7,
+          suit: 'Spade',
+          rank: 1,
+          owner: null,
+          zone: 'DiscardPile',
+          kind: 'ShaFire'
+        },
+        {
+          id: 24,
+          def: 0,
+          suit: 'Diamond',
+          rank: 6,
+          owner: null,
+          zone: 'DiscardPile',
+          kind: 'Sha'
+        }
+      ],
+      outcome: null
+    },
+    legal_actions: [],
+    hash_hex: '2d16a471c317bbca6cb7f2c286d12d9dc78d1b7774fd6be6fae9b07de483fbd1',
+    revision: 10,
+    finished: false
+  },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.4.0

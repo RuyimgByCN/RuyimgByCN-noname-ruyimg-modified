@@ -6,6 +6,14 @@
 
 #![deny(missing_docs)]
 
+mod native_engine_host;
+mod native_envelope;
+pub use native_engine_host::NativeEngineHost;
+#[cfg(feature = "tauri-shell")]
+mod native_engine_resource;
+#[cfg(feature = "tauri-shell")]
+pub use native_engine_resource::{close_native_engine, close_native_engines, open_native_engine};
+
 use content_runtime::{
     import_extensions, ActiveCatalogPage, ContentLock, ExtensionImportReport, InstallOptions,
     InstallResult, PackageSignature, PackageStore, RuntimeError,

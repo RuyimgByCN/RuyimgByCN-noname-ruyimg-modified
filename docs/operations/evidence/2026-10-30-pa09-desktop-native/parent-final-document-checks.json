@@ -1,0 +1,75 @@
+[
+  {
+    "name": "links",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 0.38465966601506807,
+    "log": "parent-final-links.log"
+  },
+  {
+    "name": "line-refs",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py"
+    ],
+    "exit": 0,
+    "seconds": 4.5935527499823365,
+    "log": "parent-final-line-refs.log"
+  },
+  {
+    "name": "stale",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_stale_numbers.py"
+    ],
+    "exit": 0,
+    "seconds": 0.04762916700565256,
+    "log": "parent-final-stale.log"
+  },
+  {
+    "name": "source-line-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.05376829201122746,
+    "log": "parent-final-source-line-tests.log"
+  },
+  {
+    "name": "source-lines",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 3.2973862910002936,
+    "log": "parent-final-source-lines.log"
+  },
+  {
+    "name": "diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.06726549999439158,
+    "log": "parent-final-diff-check.log"
+  }
+]

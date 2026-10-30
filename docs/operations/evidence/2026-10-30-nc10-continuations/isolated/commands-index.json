@@ -1,0 +1,664 @@
+[
+  {
+    "log": "dead-actor-red.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "dead_current_actor_does_not_probe_attacks",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 0.7514468749868684
+  },
+  {
+    "log": "full-final.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "locked_seconds": 37.17721862500184
+  },
+  {
+    "log": "full-initial.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content"
+    ],
+    "exit": 101,
+    "locked_seconds": 10.713049458019668
+  },
+  {
+    "log": "full-with-upstream.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "locked_seconds": 24.276644166006008
+  },
+  {
+    "log": "gate-final.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 1.1980802079779096
+  },
+  {
+    "log": "gate1b.log",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 22.80746245899354
+  },
+  {
+    "log": "green-initial.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_live_hidden_cards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 3.2802814580209088
+  },
+  {
+    "log": "host-scalar-green.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--lib",
+      "host_scalar_payloads",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "locked_seconds": 1.999967750016367
+  },
+  {
+    "log": "host-scalar-red.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--lib",
+      "host_scalar_payloads",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 1.366318666987354
+  },
+  {
+    "log": "liaoyuan-restore-repro.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "real_liaoyuan_suit_scalar",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 0.8267282919841819
+  },
+  {
+    "log": "nc10-final.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 1.2967295839916915
+  },
+  {
+    "log": "nc10-initial.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 2.7359658330096863
+  },
+  {
+    "log": "nc10-leaf.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "locked_seconds": 5.709492290974595
+  },
+  {
+    "log": "nc10-second.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 2.3222085000015795
+  },
+  {
+    "log": "nc10-third.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "locked_seconds": 2.332109999988461
+  },
+  {
+    "log": "opaque-red.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_opaque_vm_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 0.9352512500190642
+  },
+  {
+    "log": "quality-diagnostic.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 101,
+    "locked_seconds": 7.249384791997727
+  },
+  {
+    "log": "quality-final.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 101,
+    "locked_seconds": 30.804820500023197
+  },
+  {
+    "log": "quality-reject-context.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 101,
+    "locked_seconds": 7.058536041993648
+  },
+  {
+    "log": "quality-release-node64.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--release",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix_production",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 0,
+    "locked_seconds": 60.92155708299833
+  },
+  {
+    "log": "quality-revival-node8.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 0,
+    "locked_seconds": 27.483333541982574
+  },
+  {
+    "log": "quality-second.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_quality_matrix",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "exit": 101,
+    "locked_seconds": 15.30452391700237
+  },
+  {
+    "log": "red.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_live_hidden_cards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 24.88445066701388
+  },
+  {
+    "log": "revival-final-full.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "locked_seconds": 24.776520707993768
+  },
+  {
+    "log": "revival-gate-engine-native-content.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-content",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.1040729160013143
+  },
+  {
+    "log": "revival-gate-engine-native-kernel.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.10606791701866314
+  },
+  {
+    "log": "revival-gate-engine-native.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 1.2548300829948857
+  },
+  {
+    "log": "revival-live-matrix.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_live_hidden_cards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 0.5526181249879301
+  },
+  {
+    "log": "revival-nc10-second.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "locked_seconds": 2.400748666987056
+  },
+  {
+    "log": "revival-nc10.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 2.3194442499952856
+  },
+  {
+    "log": "revival-opaque.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_opaque_vm_privacy",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "locked_seconds": 3.131478708004579
+  },
+  {
+    "log": "scoped-final-full.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "locked_seconds": 23.79760604200419
+  },
+  {
+    "log": "scoped-final-gate-engine-native-content.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-content",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.1789865420141723
+  },
+  {
+    "log": "scoped-final-gate-engine-native-kernel.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.17461474999436177
+  },
+  {
+    "log": "scoped-final-gate-engine-native.log",
+    "command": [
+      "env",
+      "RUSTFLAGS=-D warnings",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "locked_seconds": 2.272230500006117
+  },
+  {
+    "log": "scoped-final-nc10.log",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "locked_seconds": 2.5098717089858837
+  },
+  {
+    "log": "scoped-final-wasm-build.log",
+    "command": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "nodejs",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence/nc10-node-pkg"
+    ],
+    "exit": 0,
+    "locked_seconds": 16.371283584012417
+  },
+  {
+    "log": "scoped-final-wasm-smoke.log",
+    "command": [
+      "node",
+      "scripts/native_wasm_smoke.mjs"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.09434974999749102
+  },
+  {
+    "log": "wasm-build.log",
+    "command": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "nodejs",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence/nc10-node-pkg"
+    ],
+    "exit": 0,
+    "locked_seconds": 35.5162811659975
+  },
+  {
+    "log": "wasm-smoke.log",
+    "command": [
+      "node",
+      "scripts/native_wasm_smoke.mjs"
+    ],
+    "exit": 0,
+    "locked_seconds": 0.09573341597570106
+  }
+]

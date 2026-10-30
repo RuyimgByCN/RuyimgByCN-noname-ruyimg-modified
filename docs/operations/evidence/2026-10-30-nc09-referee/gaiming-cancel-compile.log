@@ -1,0 +1,31 @@
+warning: variants `XunXun`, `JiJie`, `HaoTianTa`, and `Liaoyuan` are never constructed
+  --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/support/nc09_machine_windows.rs:9:5
+   |
+ 8 | pub enum Window {
+   |          ------ variants in this enum
+ 9 |     XunXun,
+   |     ^^^^^^
+10 |     JiJie,
+   |     ^^^^^
+11 |     GaiMing,
+12 |     HaoTianTa,
+   |     ^^^^^^^^^
+13 |     Liaoyuan,
+   |     ^^^^^^^^
+   |
+   = note: `Window` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `held` and `selection` are never read
+  --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/support/nc09_machine_windows.rs:20:9
+   |
+16 | pub struct Fixture {
+   |            ------- fields in this struct
+...
+20 |     pub held: Vec<u32>,
+   |         ^^^^
+21 |     pub selection: Vec<ChoiceOption>,
+   |         ^^^^^^^^^
+
+warning: 2 warnings emitted
+

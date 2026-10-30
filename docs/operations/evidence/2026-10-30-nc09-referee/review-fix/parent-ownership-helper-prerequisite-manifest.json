@@ -1,0 +1,15 @@
+{
+  "patch": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/parent-ownership-helper-prerequisite-vs-38789f54.patch",
+  "sha256": "a3978bf45cbc301dbd7cdb73a8deaccf8dfdbe91924b54222927e985f3229ee5",
+  "scope": "Two original-referee-patch prerequisites used by validation physical_cards extraction",
+  "files": [
+    {
+      "path": "crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/ownership.rs",
+      "sha256": "92f8c82ad0569d431c5ab5bcc55961380c99fc3ba4bcd686e91f2d7c15297e48"
+    }
+  ]
+}

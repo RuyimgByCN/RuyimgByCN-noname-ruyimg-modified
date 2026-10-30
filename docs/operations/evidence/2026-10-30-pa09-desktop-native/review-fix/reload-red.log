@@ -1,0 +1,9 @@
+{
+  "passed": false,
+  "error": "TypeError: Attempted to assign to readonly property.",
+  "stack": "Le@http://localhost:5173/assets/pa09-document-reload-bYjiV7SO.js:1117:6\n@http://localhost:5173/assets/pa09-document-reload-bYjiV7SO.js:1182:13",
+  "state": {
+    "ids": [],
+    "checks": []
+  }
+}

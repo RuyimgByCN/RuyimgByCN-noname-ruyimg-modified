@@ -1,0 +1,12 @@
+START final-full-all5
+FINISH final-full-all5 exit=0
+START final-strict-all3
+FINISH final-strict-all3 exit=0
+START final-fresh-wasm32-build
+FINISH final-fresh-wasm32-build exit=0
+START final-wasm32-machine-windows
+FINISH final-wasm32-machine-windows exit=0
+START final-fresh-ordinary-fixtures
+FINISH final-fresh-ordinary-fixtures exit=0
+START final-wasm32-ordinary-parity
+FINISH final-wasm32-ordinary-parity exit=0

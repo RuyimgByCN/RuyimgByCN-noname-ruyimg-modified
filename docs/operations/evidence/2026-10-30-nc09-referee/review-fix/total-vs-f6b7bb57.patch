@@ -1,0 +1,2908 @@
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+index 86e6f98bdfebed94e7f7a3a7d6ca5da5033a7acc..b6d82d4d6ff5991311782931780ae207503dcc8f 100644
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -8,8 +8,7 @@
+ //! 口径：
+ //! - 座位投影：自己手牌与公开牌区可见，他人手牌仅数量（原生视图保证）；
+ //!   `known_cards` 为这些可见牌附上真实牌面。
+-//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 保留完整武将定义，
+-//!   其余原生完整信息投影尚未齐备；
++//! - 观察者：`Spectator` 仅公开信息；可信宿主授予的 `Referee` 使用共享全信息视图；
+ //! - 权威动作：`Engine::legal_actions`（内核校验同源）→ `LegalAction`；
+ //! - 摘要：`Engine::state_hash`（规范摘要）逐字节带上，供客户端比对修订。
+ 
+@@ -27,7 +26,7 @@ pub enum RoomRole {
+     Player,
+     /// 观战者（公开信息）。
+     Spectator,
+-    /// 裁判（可信宿主授予；原生完整信息投影尚未齐备）。
++    /// 裁判（可信宿主授予；完整隐藏信息）。
+     Referee,
+ }
+ 
+@@ -51,28 +50,23 @@ fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
+             kind: kind_tag(def.kind),
+         });
+     };
+-    for player in &view.players {
+-        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
+-        if let HandView::Own(hand) = &player.hand {
+-            for id in hand {
+-                push(*id, owner, CardZoneTag::Hand);
+-            }
+-        }
+-    }
+-    for player in &view.players {
+-        let owner = Some(ApiPlayerId::new(player.seat as u32 + 1));
+-        for id in &player.equips {
+-            push(*id, owner, CardZoneTag::Equip);
+-        }
+-        for id in &player.judge {
+-            push(*id, owner, CardZoneTag::Judge);
+-        }
+-    }
+-    for id in &view.discard {
+-        push(*id, None, CardZoneTag::DiscardPile);
+-    }
+-    for id in &view.table {
+-        push(*id, None, CardZoneTag::Processing);
++    for card in &view.cards {
++        use engine_native::snap::PhysicalCardZone as Z;
++        let zone = match card.zone {
++            Z::Hand => CardZoneTag::Hand,
++            Z::Equip => CardZoneTag::Equip,
++            Z::Judge => CardZoneTag::Judge,
++            Z::DiscardPile => CardZoneTag::DiscardPile,
++            Z::Processing => CardZoneTag::Processing,
++            Z::DrawPile => CardZoneTag::DrawPile,
++            Z::Removed => CardZoneTag::Removed,
++            Z::Expansion => CardZoneTag::Expansion,
++        };
++        push(
++            card.id,
++            card.owner.map(|seat| ApiPlayerId::new(seat as u32 + 1)),
++            zone,
++        );
+     }
+     cards
+ }
+@@ -123,12 +117,10 @@ pub fn observer_snapshot_for(
+     role: RoomRole,
+     seat: Option<ApiPlayerId>,
+ ) -> ObserverSnapshot {
+-    // shortcut: 原生裁判手牌/身份仍缺完整投影，待共享 full-info 视图补齐后替换。
+-    let native_seat = seat
+-        .and_then(|p| p.raw().checked_sub(1))
+-        .filter(|p| (*p as usize) < engine.state_core().players.len());
++    let native_seat = native_seat(engine, seat);
+     let view: PlayerView = match (role, native_seat) {
+-        (RoomRole::Player, Some(p)) => engine.view_for(p as u8),
++        (RoomRole::Player, Some(p)) => engine.view_for(p),
++        (RoomRole::Referee, _) => engine.view_referee(),
+         _ => engine.view_spectator(),
+     };
+     let observer = match role {
+@@ -142,11 +134,7 @@ pub fn observer_snapshot_for(
+         .map(|cell| SeatView {
+             player: ApiPlayerId::new(cell.seat as u32 + 1),
+             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+-            character_def: if role == RoomRole::Referee {
+-                engine.state_core().player(cell.seat).general_slots[0].map(u32::from).unwrap_or(0)
+-            } else {
+-                cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0)
+-            },
++            character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+             seat: engine_api::SeatIndex::new(cell.seat),
+             hp: cell.hp,
+             max_hp: cell.max_hp,
+@@ -239,21 +227,49 @@ pub fn observer_snapshot_for(
+     }
+ }
+ 
+-/// 原生开放选择 → 协议 `ChoiceRequest`（**选项仅观察者可见**：非观察者返回 `None`，
+-/// 与内核 `choice_view_for` 同口径；观战/裁判返回 `None`，不泄漏选项内容）。
+-pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_api::ChoiceRequest> {
+-    let seat = seat?;
+-    let native_seat = seat.raw().saturating_sub(1) as u8;
+-    let open = engine.open_choice()?;
+-    if open.observer != native_seat {
+-        return None;
++fn native_seat(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<u8> {
++    let seat = seat?.raw().checked_sub(1)?;
++    (seat < engine.state_core().players.len() as u32).then(|| seat as u8)
++}
++
++impl From<engine_protocol::ClientRole> for RoomRole {
++    fn from(role: engine_protocol::ClientRole) -> Self {
++        match role {
++            engine_protocol::ClientRole::Player => Self::Player,
++            engine_protocol::ClientRole::Spectator => Self::Spectator,
++            engine_protocol::ClientRole::Referee => Self::Referee,
++        }
+     }
++}
++
++/// Full options for the owner or trusted referee; role always comes from membership.
++pub fn choice_for(
++    engine: &Engine,
++    role: RoomRole,
++    seat: Option<ApiPlayerId>,
++) -> Option<engine_api::ChoiceRequest> {
++    let view = match role {
++        RoomRole::Player => engine.choice_view_for(Some(native_seat(engine, seat)?)),
++        RoomRole::Referee => engine.choice_view_referee(),
++        RoomRole::Spectator => return None,
++    }?;
++    let engine_native::view::ChoiceView::Own {
++        id,
++        kind,
++        options,
++        min,
++        max,
++        allow_cancel,
++        ..
++    } = view
++    else {
++        return None;
++    };
++    let observer = ApiPlayerId::new(engine.open_choice()?.observer as u32 + 1);
+     // 协议 `ChoiceOption` 是 `{token, label_key}` 二元组（token 即 ResolveChoice 的
+     // 选择值；label_key 只用于本地化/显示，不参与规则）。token 与原生选项一一对应：
+     // 使用**候选下标**（与前端适配层/`answer()` 同口径），label_key 保留语义标签。
+-    let options: Vec<engine_api::ChoiceOption> = open
+-        .spec
+-        .options
++    let options: Vec<engine_api::ChoiceOption> = options
+         .iter()
+         .enumerate()
+         .map(|(idx, opt)| engine_api::ChoiceOption {
+@@ -269,15 +285,21 @@ pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_a
+         })
+         .collect();
+     Some(engine_api::ChoiceRequest {
+-        choice_id: engine_api::ChoiceId::new(open.id as u32),
+-        observer: seat,
++        choice_id: engine_api::ChoiceId::new(id as u32),
++        observer,
+         options,
+-        continuation_id: open.id,
+-        // 原生 `ChoiceKind` 未映射为协议语义枚举时统一 `Custom`（**不猜测**具体语义）
+-        kind: engine_api::ChoiceKind::Custom,
+-        min_count: open.spec.min as u8,
+-        max_count: open.spec.max as u8,
+-        allow_cancel: open.spec.allow_cancel,
++        continuation_id: id,
++        kind: match kind {
++            engine_native::ChoiceKind::Confirm => engine_api::ChoiceKind::Confirm,
++            engine_native::ChoiceKind::SelectCards => engine_api::ChoiceKind::SelectCards,
++            engine_native::ChoiceKind::SelectPlayers => engine_api::ChoiceKind::SelectTargets,
++            engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => {
++                engine_api::ChoiceKind::Custom
++            }
++        },
++        min_count: min as u8,
++        max_count: max as u8,
++        allow_cancel,
+         timeout_policy: engine_api::TimeoutPolicy::None,
+         revision: engine.revision(),
+     })
+@@ -285,7 +307,9 @@ pub fn choice_for(engine: &Engine, seat: Option<ApiPlayerId>) -> Option<engine_a
+ 
+ /// 权威动作 → 协议动作（只映射本内核可表达的形态；未覆盖形态见待办）。
+ pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction> {
+-    let seat_u8 = seat.raw().saturating_sub(1) as u8;
++    let Some(seat_u8) = native_seat(engine, Some(seat)) else {
++        return Vec::new();
++    };
+     engine
+         .legal_actions(seat_u8)
+         .into_iter()
+diff --git a/apps/game-server/src/native_ws_e2e.rs b/apps/game-server/src/native_ws_e2e.rs
+index 6f7f6c8c38c19d401d4dcb74a8b4ab391698e16b..d0bf3a0bf99d89de4cae5ba9b05f9932dd10ecf8 100644
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -4,6 +4,7 @@ mod durability;
+ mod commit_crash;
+ mod double_failure;
+ mod authority;
++mod referee;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+ use engine_api::{
+@@ -194,12 +195,12 @@ impl Peer {
+             ..
+         } = &message
+         {
+-            if *player_id == 0 {
+-                assert_eq!(*role, ClientRole::Spectator);
+-                assert_eq!(*seat, u8::MAX);
+-            } else {
+-                assert_eq!(*role, ClientRole::Player);
+-                assert_eq!(*seat as u32 + 1, *player_id);
++            match role {
++                ClientRole::Player => assert_eq!(*seat as u32 + 1, *player_id),
++                ClientRole::Spectator | ClientRole::Referee => {
++                    assert_eq!(*player_id, 0);
++                    assert_eq!(*seat, u8::MAX);
++                }
+             }
+             self.room = *room_id;
+             self.player = PlayerId::new(*player_id);
+diff --git a/apps/game-server/src/native_ws_e2e/authority.rs b/apps/game-server/src/native_ws_e2e/authority.rs
+index 002d87adf67c413068282ed98513ba4caa4a62e3..ca08131c9f407b9662e73d73bb59c67400865755 100644
+--- a/apps/game-server/src/native_ws_e2e/authority.rs
++++ b/apps/game-server/src/native_ws_e2e/authority.rs
+@@ -44,3 +44,25 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
+     peer.snapshot().await.assert_player(peer.player);
+     server.stop().await;
+ }
++
++#[tokio::test]
++async fn native_ws_pending_seat_zero_choice_stays_private_on_spectator_reconnect() {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = config(directory.path());
++    let server = Server::start(&cfg, 0).await;
++    let mut owner = Peer::connect(&server).await;
++    owner.create().await;
++    let mut player = Peer::connect(&server).await;
++    player.join(owner.room, 1, None).await;
++    let mut spectator = Peer::connect(&server).await;
++    spectator.spectate(owner.room).await;
++    let pending = durability::pending_choice(&mut owner, &mut player, &mut spectator).await;
++    assert_eq!(pending.choice.as_ref().unwrap().observer, PlayerId::new(1));
++    spectator.snapshot().await.assert_spectator();
++    let token = spectator.token.clone();
++    spectator.close().await;
++    let mut reconnected = Peer::connect(&server).await;
++    reconnected.join(owner.room, 0, Some(token)).await.assert_spectator();
++    reconnected.snapshot().await.assert_spectator();
++    server.stop().await;
++}
+diff --git a/apps/game-server/src/native_ws_e2e/double_failure.rs b/apps/game-server/src/native_ws_e2e/double_failure.rs
+index 3e8de3dfce6f5b4000d81ade65fd236202c4c58a..99c233fafe632e8aa60ff2d03e068ba65625c95b 100644
+--- a/apps/game-server/src/native_ws_e2e/double_failure.rs
++++ b/apps/game-server/src/native_ws_e2e/double_failure.rs
+@@ -35,11 +35,11 @@ pub(super) fn saved_state(cfg: &ServerConfig, record: &StoredRoom, token: &str)
+         legal: player
+             .map(|id| crate::native_view::legal_actions_for(session.engine(), id))
+             .unwrap_or_default(),
+-        choice: crate::native_view::choice_for(session.engine(), player),
++        choice: crate::native_view::choice_for(session.engine(), member.role.into(), player),
+     }
+ }
+ 
+-async fn submit_error(peer: &mut Peer, key: u64, kind: CommandKind) {
++pub(super) async fn submit_error(peer: &mut Peer, key: u64, kind: CommandKind) {
+     peer.seq += 1;
+     let sequence = peer.seq;
+     peer.send(ClientMessage::SubmitCommand {
+diff --git a/apps/game-server/src/room_native_actor.rs b/apps/game-server/src/room_native_actor.rs
+index 9d79e6bb44f246b35816f126f6d32ef37b3f7892..a476daa7ff1d94af0103fdc5942367e3280b4fa7 100644
+--- a/apps/game-server/src/room_native_actor.rs
++++ b/apps/game-server/src/room_native_actor.rs
+@@ -75,7 +75,7 @@ fn legacy_replay_rejection(
+         },
+         view,
+         legal_actions: legal_actions_for(session.engine(), player_id),
+-        choice: choice_for(session.engine(), Some(player_id)),
++        choice: choice_for(session.engine(), RoomRole::Player, Some(player_id)),
+         public_event_codes: vec![],
+     })
+ }
+@@ -286,11 +286,11 @@ async fn native_room_loop(
+                             role: joined.member.role,
+                             reconnect_token: joined.member.reconnect_token.clone(),
+                             view: joined.view,
+-                            choice: choice_for(session.engine(), Some(joined.member.player_id)),
++                            choice: choice_for(session.engine(), joined.member.role.into(), Some(joined.member.player_id)),
+                             legal_actions: joined.legal_actions,
+                         };
+-                        members.retain(|_, old| {
+-                            old.player_id != m.player_id || old.role != ClientRole::Player
++                        members.retain(|connection, _| {
++                            session.members().any(|member| member.connection_id == *connection)
+                         });
+                         members.insert(connection_id, m);
+                         broadcast_roster_native(id, &mut members, session.engine().outcome().is_some())
+@@ -363,6 +363,10 @@ async fn native_room_loop(
+                     let _ = reply.send(Err("not in room".into()));
+                     continue;
+                 };
++                if m.role != ClientRole::Player {
++                    let _ = reply.send(Err("spectator cannot submit".into()));
++                    continue;
++                }
+                 let checkpoint = match durability.checkpoint(&session) {
+                     Ok(before) => before,
+                     Err(error) => {
+@@ -390,7 +394,7 @@ async fn native_room_loop(
+                             result: prev,
+                             view,
+                             legal_actions: legal_actions_for(session.engine(), m.player_id),
+-                            choice: choice_for(session.engine(), Some(m.player_id)),
++                            choice: choice_for(session.engine(), m.role.into(), Some(m.player_id)),
+                             public_event_codes: vec![],
+                         }));
+                         continue;
+@@ -481,7 +485,7 @@ async fn native_room_loop(
+                     observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
+                 });
+                 let legal = legal_actions_for(session.engine(), m.player_id);
+-                let choice = choice_for(session.engine(), Some(m.player_id));
++                let choice = choice_for(session.engine(), m.role.into(), Some(m.player_id));
+                 let _ = reply.send(Ok(ServerMessage::CommandOutcome {
+                     header: MessageHeader::new(id, header.conn_seq, last_revision),
+                     idempotency_key,
+@@ -521,7 +525,7 @@ async fn native_room_loop(
+                         } else {
+                             Vec::new()
+                         },
+-                        choice: choice_for(session.engine(), seat),
++                        choice: choice_for(session.engine(), role, seat),
+                         public_event_codes: public_event_codes.clone(),
+                     };
+                     if out.try_send(&msg) == SendStatus::Full {
+@@ -538,6 +542,7 @@ async fn native_room_loop(
+             } => match session.snapshot(connection_id) {
+                 Ok(view) => {
+                     let member = members.get(&connection_id);
++                    let role = member.map(|m| m.role.into()).unwrap_or(RoomRole::Spectator);
+                     let (seat, is_player) = match member {
+                         Some(m) if m.role == ClientRole::Player => (Some(m.player_id), true),
+                         _ => (None, false),
+@@ -549,7 +554,7 @@ async fn native_room_loop(
+                             session.engine().revision(),
+                         ),
+                         view,
+-                        choice: choice_for(session.engine(), seat),
++                        choice: choice_for(session.engine(), role, seat),
+                         legal_actions: if is_player {
+                             legal_actions_for(session.engine(), seat.expect("player seat"))
+                         } else {
+@@ -604,7 +609,7 @@ async fn native_room_loop(
+                             let msg = ServerMessage::Snapshot {
+                                 header: MessageHeader::new(id, 0, revision),
+                                 view: observer_snapshot_for(session.engine(), role, seat),
+-                                choice: choice_for(session.engine(), seat),
++                                choice: choice_for(session.engine(), role, seat),
+                                 legal_actions: if other.role == ClientRole::Player {
+                                     legal_actions_for(session.engine(), seat.expect("player seat"))
+                                 } else {
+diff --git a/apps/game-server/tests/nc09_native_room_session.rs b/apps/game-server/tests/nc09_native_room_session.rs
+index e2aedceaa0a64e55980ef77abfc7fa4faa54bb55..9e04db17f24b7e4b6250c2e484efad8f5f7e352a 100644
+--- a/apps/game-server/tests/nc09_native_room_session.rs
++++ b/apps/game-server/tests/nc09_native_room_session.rs
+@@ -150,7 +150,7 @@ fn nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions() {
+     let mut room = session_with_choice();
+     let open = room.engine().open_choice().unwrap().clone();
+     let joined = room.join(1, Some(open.observer), None).unwrap();
+-    let choice = native_view::choice_for(room.engine(), Some(joined.member.player_id)).unwrap();
++    let choice = native_view::choice_for(room.engine(), joined.member.role.into(), Some(joined.member.player_id)).unwrap();
+     assert_eq!(
+         choice.options.iter().map(|o| o.token).collect::<Vec<_>>(),
+         (0..open.spec.options.len() as u32).collect::<Vec<_>>()
+@@ -722,3 +722,35 @@ fn nc09_referee_general_authority_survives_trusted_restore_and_reconnect() {
+     assert_eq!(spec.member.role, ClientRole::Spectator);
+     assert_eq!(spec.view.seats[1].character_def, 0);
+ }
++
++#[test]
++fn nc09_choice_rejects_invalid_player_ids_without_wrapping() {
++    let mut engine = engine_native::Engine::new(1515, 4);
++    for _ in 0..3 {
++        let result = engine.submit(engine_native::GameCommand {
++            actor: 0, expected_revision: engine.revision(), dedup_id: engine.revision() + 1,
++            action: engine_native::GameAction::NextPhase,
++        });
++        assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)));
++    }
++    let room = NativeRoomSession::new(engine, 4);
++    assert_eq!(room.engine().open_choice().unwrap().observer, 0);
++    for raw in [0, 257, u32::MAX] {
++        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Player, Some(ApiPlayerId::new(raw))).is_none(),
++            "invalid player id {raw} exposed seat-zero private options");
++        assert!(native_view::legal_actions_for(room.engine(), ApiPlayerId::new(raw)).is_empty());
++    }
++}
++
++#[test]
++fn nc09_choice_visibility_requires_trusted_role_even_with_a_valid_seat() {
++    let room = session_with_choice();
++    let open = room.engine().open_choice().unwrap();
++    let owner = ApiPlayerId::new(open.observer as u32 + 1);
++    for seat in [None, Some(ApiPlayerId::NONE), Some(owner), Some(ApiPlayerId::new(257))] {
++        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat).is_none());
++        let choice = native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
++        assert_eq!(choice.observer, owner);
++        assert_eq!(choice.options.len(), open.spec.options.len());
++    }
++}
+diff --git a/apps/game-server/tests/nc09_projection_parity.rs b/apps/game-server/tests/nc09_projection_parity.rs
+index 643beba7761076f71ea63e21f0f3da8e352f8a02..f22bbdb8d3405e08c99dc61c990083ce6be0107e 100644
+--- a/apps/game-server/tests/nc09_projection_parity.rs
++++ b/apps/game-server/tests/nc09_projection_parity.rs
+@@ -220,7 +220,7 @@ fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
+     let message = engine_protocol::ServerMessage::Snapshot {
+         header: engine_protocol::MessageHeader::new(15, 1, engine.revision()),
+         view: view.clone(),
+-        choice: native_view::choice_for(&engine, Some(PlayerId::new(1))),
++        choice: native_view::choice_for(&engine, RoomRole::Player, Some(PlayerId::new(1))),
+         legal_actions: native_view::legal_actions_for(&engine, PlayerId::new(1)),
+     };
+     assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 5);
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+index 13d3ee15a0d781a3fcb6a2896c88ba35868ce5b9..0d4547362b9b41374eb90fa428b4b3e2f497a330 100644
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -34,7 +34,7 @@ export interface CardView {
+   suit: "Spade" | "Heart" | "Club" | "Diamond" | null;
+   rank: number | null;
+   owner: number | null;
+-  zone: "DrawPile" | "DiscardPile" | "Hand" | "Equip" | "Judge" | "Processing" | "Removed";
++  zone: "DrawPile" | "DiscardPile" | "Hand" | "Equip" | "Judge" | "Processing" | "Removed" | "Expansion";
+   kind:
+     | "Sha"
+     | "Tao"
+diff --git a/crates/engine-native-content/src/content/host/asks.rs b/crates/engine-native-content/src/content/host/asks.rs
+index 0252dd39126a0af3b357639189f170cae7df369c..c01432848b62d0fb311c479768c9bd4c99bc2803 100644
+--- a/crates/engine-native-content/src/content/host/asks.rs
++++ b/crates/engine-native-content/src/content/host/asks.rs
+@@ -18,6 +18,7 @@ pub(crate) fn active_ask_host(
+     owner: PlayerId,
+     target: Option<PlayerId>,
+     targets: &[PlayerId],
++    card: Option<u32>,
+     cards: &[CardId],
+     core: &GameStateCore,
+     catalog: &Catalog,
+@@ -28,6 +29,18 @@ pub(crate) fn active_ask_host(
+     let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
+     let stage = HostStage::from_tag(stage)?;
+     match behavior {
++        HostBehavior::Liaoyuan => {
++            if stage != HostStage::SelectCard {
++                return None;
++            }
++            // Host.card is the suit scalar; Host.cards is already-discarded history.
++            let suit = card.filter(|suit| *suit <= 3)?;
++            let player = core.player(owner);
++            let options = player.hand.iter().chain(player.equips.iter()).copied()
++                .filter(|id| catalog.cards[*id as usize].suit as u32 == suit)
++                .map(ChoiceOption::Card).collect();
++            Some(ask(owner, "liaoyuan_discard", ChoiceKind::SelectCards, options, 1, 1, true))
++        }
+         // 五行盘：改属性手牌 → 新属性
+         HostBehavior::ChangeCardNature => match stage {
+             HostStage::SelectNature => Some(ask(
+diff --git a/crates/engine-native-content/src/content/standard.rs b/crates/engine-native-content/src/content/standard.rs
+index 8d9331a00cf902130f1a6d01cddaa06c5c7ec636..9b79eb1604792d3d9a8c5b3dd14bb5a2d4da9dc1 100644
+--- a/crates/engine-native-content/src/content/standard.rs
++++ b/crates/engine-native-content/src/content/standard.rs
+@@ -330,6 +330,22 @@ pub fn restore_content_machine(
+             },
+             top: top.clone(),
+         })),
++        MachineSnapshot::XunXun { owner, stage, top } => Some(Box::new(XunXunMachine {
++            owner: *owner,
++            stage: match stage {
++                XunXunStageSnap::Undo => XunXunStage::Undo,
++                XunXunStageSnap::Arrange => XunXunStage::Arrange,
++            },
++            top: top.clone(),
++        })),
++        MachineSnapshot::JiJie { owner, stage, card } => Some(Box::new(JiJieMachine {
++            owner: *owner,
++            stage: match stage {
++                JiJieStageSnap::Ask => JiJieStage::Ask,
++                JiJieStageSnap::Read => JiJieStage::Read,
++            },
++            card: *card,
++        })),
+         MachineSnapshot::LianYing { owner } => Some(Box::new(LianYingMachine {
+             owner: *owner,
+             asked: false,
+diff --git a/crates/engine-native-kernel/src/archive/resolution.rs b/crates/engine-native-kernel/src/archive/resolution.rs
+index 6a29b4338e296cbf40142c2fb52920f41f65d355..375d418458271a8963d33ba5cbc7792b19ff3bd7 100644
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -129,6 +129,11 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
+     // SelectCards 与 Answer 通道，无新增变体/载荷）。**表尾追加**——索引即
+     // 线上 tag，既有编码不移位。
+     "rvm_discard_pick",
++    "xunxun_arrange",
++    "jijie_give_target",
++    "gaiming_pick",
++    "haotianta_pick",
++    "liaoyuan_discard",
+ ];
+ 
+ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
+diff --git a/crates/engine-native-kernel/src/catalog.rs b/crates/engine-native-kernel/src/catalog.rs
+index 0e5097afecb0f56777d984f221b9a161151731c8..4424b83d255c0e9d6f1f3ac791fc579c5dc72f40 100644
+--- a/crates/engine-native-kernel/src/catalog.rs
++++ b/crates/engine-native-kernel/src/catalog.rs
+@@ -759,13 +759,14 @@ pub type CardIntrinsicHook = fn(
+     CardKind,
+ ) -> Option<Option<Box<dyn SkillMachine>>>;
+ 
+-/// 宿主机器挂起询问的派生（行为标签、阶段标签、owner、target、targets、cards）。
++/// 宿主机器挂起询问的派生（行为/阶段、owner/target、targets、行为专用 card、cards）。
+ pub type HostAskHook = fn(
+     u16,
+     u8,
+     crate::ids::PlayerId,
+     Option<crate::ids::PlayerId>,
+     &[crate::ids::PlayerId],
++    Option<u32>,
+     &[crate::ids::CardId],
+     &crate::state::GameStateCore,
+     &Catalog,
+@@ -792,7 +793,7 @@ pub struct ContentHooks {
+ impl ContentHooks {
+     pub const NONE: ContentHooks = ContentHooks {
+         card_intrinsic: |_, _, _| None,
+-        host_ask: |_, _, _, _, _, _, _, _| None,
++        host_ask: |_, _, _, _, _, _, _, _, _| None,
+         restore_machine: |_, _| None,
+         borrow_options: |_, _, _| Vec::new(),
+         borrowed_owner: |_, _, _| None,
+diff --git a/crates/engine-native-kernel/src/snap.rs b/crates/engine-native-kernel/src/snap.rs
+index 2548519259fcfa89b153f78ae72c2a20065a06d5..1e63f57fcb18a59809477ffdc9539ffafd798388 100644
+--- a/crates/engine-native-kernel/src/snap.rs
++++ b/crates/engine-native-kernel/src/snap.rs
+@@ -23,6 +23,8 @@ use crate::state::{GameMode, GameStateCore, Outcome, Winner};
+ 
+ mod types;
+ pub use types::*;
++mod ownership;
++pub use ownership::*;
+ mod validation;
+ pub use validation::*;
+ mod machine_validation;
+diff --git a/crates/engine-native-kernel/src/snap/asks.rs b/crates/engine-native-kernel/src/snap/asks.rs
+index 9d881b68d58fb0c5f03ac63ad3be8666aca16df8..3a4edbd8bfae1ce3381294dd647eb1a12c57ce3e 100644
+--- a/crates/engine-native-kernel/src/snap/asks.rs
++++ b/crates/engine-native-kernel/src/snap/asks.rs
+@@ -278,8 +278,32 @@ pub fn active_ask(
+                 active_ask(e, core, catalog)
+             }
+         }
+-        MachineSnapshot::JudgePhase { current, .. } => {
++        MachineSnapshot::JudgePhase { owner, current, .. } => {
+             let c = current.as_deref()?;
++            if !c.finalized && c.judge_held {
++                if let Some(cards) = &c.gaiming_cards {
++                    return Some(ask(
++                        *owner,
++                        "gaiming_pick",
++                        ChoiceKind::SelectCards,
++                        hand_card_options(cards),
++                        1,
++                        1,
++                        true,
++                    ));
++                }
++                if let (Some(holder), Some(other)) = (c.haotian_holder, c.haotian_other) {
++                    return Some(ask(
++                        holder,
++                        "haotianta_pick",
++                        ChoiceKind::SelectCards,
++                        vec![ChoiceOption::Card(c.judge_card), ChoiceOption::Card(other)],
++                        1,
++                        1,
++                        false,
++                    ));
++                }
++            }
+             if c.in_rewrite {
+                 if !c.asked {
+                     return None;
+@@ -864,6 +888,24 @@ pub fn active_ask(
+                 _ => None,
+             }
+         }
++        MachineSnapshot::XunXun { owner, stage: XunXunStageSnap::Arrange, top } => Some(ask(
++            *owner,
++            "xunxun_arrange",
++            ChoiceKind::SelectCards,
++            hand_card_options(top),
++            2,
++            2,
++            false,
++        )),
++        MachineSnapshot::JiJie { owner, stage: JiJieStageSnap::Read, .. } => Some(ask(
++            *owner,
++            "jijie_give_target",
++            ChoiceKind::SelectPlayers,
++            core.alive_players().map(ChoiceOption::Player).collect(),
++            1,
++            1,
++            false,
++        )),
+         MachineSnapshot::GuanXing { owner, stage, top } => match stage {
+             GuanXingStageSnap::Place => {
+                 let take = top.len();
+@@ -956,6 +998,7 @@ pub fn active_ask(
+             owner,
+             target,
+             targets,
++            card,
+             cards,
+             ..
+         } => (catalog.hooks.host_ask)(
+@@ -964,6 +1007,7 @@ pub fn active_ask(
+             *owner,
+             *target,
+             targets,
++            *card,
+             cards,
+             core,
+             catalog,
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index 0419881ad73ae136356cd1410acc9a4db7f873b4..22c228dc81a58a72445f8ef5dc901c68f5c08ff3 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -339,7 +339,7 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
+ }
+ 
+ /// 机器持牌收集（N04-f：判定进行态/观星顶牌由机器持有，不在任何牌区）。
+-pub(super) fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
++pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+     match m {
+         MachineSnapshot::JudgePhase { queue, current, .. } => {
+             out.extend(queue.iter().copied());
+@@ -349,10 +349,31 @@ pub(super) fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+                     out.push(c.trick);
+                 }
+                 if c.judge_held {
+-                    out.push(c.judge_card);
++                    if !c.finalized {
++                        if let Some(cards) = &c.gaiming_cards {
++                            out.extend(cards.iter().copied());
++                            // Only the first candidate aliases judge_card; other duplicates remain errors.
++                            if cards.first() != Some(&c.judge_card) {
++                                out.push(c.judge_card);
++                            }
++                        } else {
++                            out.push(c.judge_card);
++                        }
++                        if c.haotian_holder.is_some() {
++                            out.extend(c.haotian_other);
++                        }
++                    } else {
++                        out.push(c.judge_card);
++                    }
+                 }
+             }
+         }
++        MachineSnapshot::XunXun { stage: XunXunStageSnap::Arrange, top, .. } => {
++            out.extend(top.iter().copied());
++        }
++        MachineSnapshot::JiJie { stage: JiJieStageSnap::Read, card, .. } => {
++            out.extend(card);
++        }
+         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
+         // 末焱展示牌已离开牌库，挂起期间只在宿主机器上。
+         MachineSnapshot::Host {
+@@ -389,50 +410,12 @@ pub fn validate_card_ownership(
+         seen[c as usize] = true;
+         Ok(())
+     }
+-    for p in &core.players {
+-        for c in &p.hand {
+-            mark(&mut seen, b, *c)?;
+-        }
+-        for c in &p.equips {
+-            mark(&mut seen, b, *c)?;
+-        }
+-        for c in &p.judge {
+-            mark(&mut seen, b, *c)?;
+-        }
+-        // 离场区（机关怨挂附等；T19a 修复：此前未计入所有权校验）
+-        for c in &p.off_court {
+-            mark(&mut seen, b, *c)?;
+-        }
+-        // These skill piles own cards; fields such as yishan_lost only reference them.
+-        for pile in [&p.zhucheng, &p.lianyaohu_store, &p.sxianjing_traps, &p.hutian_hold] {
+-            for c in pile {
+-                mark(&mut seen, b, *c)?;
+-            }
+-        }
+-    }
+-    for c in &core.deck {
+-        mark(&mut seen, b, *c)?;
+-    }
+-    for c in &core.discard {
+-        mark(&mut seen, b, *c)?;
+-    }
+-    for c in &core.table {
+-        mark(&mut seen, b, *c)?;
+-    }
+-    // NC06/NC07：通用内容面 `vm_aux.piles`（内容自有牌堆，如 swd 牌堆类技能）
+-    // 也是合法的牌归属区——此前未计入，导致「把牌放进内容牌堆」的活状态在恢复期
+-    // 被判 `card_missing_from_all_zones`。
+-    for pile in core.vm_aux.piles.values() {
+-        for c in pile {
+-            mark(&mut seen, b, *c)?;
+-        }
+-    }
+-    let mut held: Vec<CardId> = Vec::new();
++    let mut held = Vec::new();
+     for park in &resolution.parks {
+         machine_held_cards(&park.machine, &mut held);
+     }
+-    for c in held {
+-        mark(&mut seen, b, c)?;
++    for card in physical_cards(core, &held) {
++        mark(&mut seen, b, card.id)?;
+     }
+     for (id, ok) in seen.iter().enumerate() {
+         if !ok {
+diff --git a/crates/engine-native-wasm/src/lib.rs b/crates/engine-native-wasm/src/lib.rs
+index d1fee9231815097abf82d03d9545840803df45ec..61241e7cb538e6739e0b987fea5ecf70a14079d1 100644
+--- a/crates/engine-native-wasm/src/lib.rs
++++ b/crates/engine-native-wasm/src/lib.rs
+@@ -493,6 +493,7 @@ impl NativeEngine {
+                 min,
+                 max,
+                 allow_cancel,
++                ..
+             }) => serde_json::json!({
+                 "id": id,
+                 "observer": seat,
+diff --git a/crates/engine-native/src/engine/views.rs b/crates/engine-native/src/engine/views.rs
+index 432d7fb736b77c7a52941c1edf8c7cb7c7b8cae3..52827da65ffa5713b8063c6dd066620f037ef45a 100644
+--- a/crates/engine-native/src/engine/views.rs
++++ b/crates/engine-native/src/engine/views.rs
+@@ -3,15 +3,21 @@ use super::*;
+ impl Engine {
+     /// N10：座位 `seat` 的可见视图——自己的手牌可见，对手手牌与牌库内容隐藏。
+     pub fn view_for(&self, seat: PlayerId) -> crate::view::PlayerView {
+-        self.build_view(Some(seat))
++        self.build_view(Some(seat), false)
+     }
+ 
+     /// N10：观战者视图——所有手牌隐藏，仅公开信息。
+     pub fn view_spectator(&self) -> crate::view::PlayerView {
+-        self.build_view(None)
++        self.build_view(None, false)
+     }
+ 
+-    pub(super) fn build_view(&self, seat: Option<PlayerId>) -> crate::view::PlayerView {
++    /// Trusted host projection: all physical cards, identities and both general slots.
++    /// This grants visibility only; it does not create a seat or authorize commands.
++    pub fn view_referee(&self) -> crate::view::PlayerView {
++        self.build_view(None, true)
++    }
++
++    fn build_view(&self, seat: Option<PlayerId>, full_info: bool) -> crate::view::PlayerView {
+         let core = &self.state.core;
+         let roles = core.identity_roles();
+         let players = core
+@@ -26,7 +32,7 @@ impl Engine {
+                 // 与已死亡（遗言公开）可见；其余他人身份不可见。
+                 let role = roles.and_then(|rs| {
+                     let r = *rs.get(i as usize)?;
+-                    (own || r == crate::state::Role::Lord || !p.alive).then_some(r)
++                    (full_info || own || r == crate::state::Role::Lord || !p.alive).then_some(r)
+                 });
+                 // 国战门控（ADR 0757）：本座位双将可见；他人只见明置槽。
+                 // 非国战模式（原型/身份/对决/斗地主/Boss）无暗置概念，
+@@ -35,7 +41,7 @@ impl Engine {
+                 let mut generals: [Option<crate::view::GeneralView>; 2] = [None, None];
+                 for (s, g_slot) in p.general_slots.iter().enumerate() {
+                     let Some(g) = g_slot else { continue };
+-                    if !own && kingdoms && !p.revealed_generals[s] {
++                    if !full_info && !own && kingdoms && !p.revealed_generals[s] {
+                         continue; // 国战暗置槽：他人不可见
+                     }
+                     if let Some((name, faction, _, _, _)) = self.catalog.general_meta(*g) {
+@@ -51,7 +57,7 @@ impl Engine {
+                     alive: p.alive,
+                     hp: p.hp,
+                     max_hp: p.max_hp,
+-                    hand: if own {
++                    hand: if full_info || own {
+                         crate::view::HandView::Own(p.hand.clone())
+                     } else {
+                         crate::view::HandView::Hidden
+@@ -84,6 +90,25 @@ impl Engine {
+         crate::view::PlayerView {
+             seat: seat.unwrap_or(PlayerId::MAX),
+             players,
++            cards: {
++                let mut held = Vec::new();
++                if full_info {
++                    for park in &self.state.resolution.parks {
++                        crate::snap::machine_held_cards(&park.machine.snapshot(), &mut held);
++                    }
++                }
++                crate::snap::physical_cards(core, &held)
++                    .into_iter()
++                    .filter(|card| {
++                        use crate::snap::PhysicalCardZone::*;
++                        full_info || match card.zone {
++                            Hand => seat.is_some() && card.owner == seat,
++                            Equip | Judge | DiscardPile | Processing => true,
++                            DrawPile | Removed | Expansion => false,
++                        }
++                    })
++                    .collect()
++            },
+             deck_count: core.deck.len(),
+             discard: core.discard.clone(),
+             table: core.table.clone(),
+@@ -98,10 +123,20 @@ impl Engine {
+     /// N10 第二批：开放选择的座位可见性——观察者见完整选项，
+     /// 他人仅见询问存在（选项会暴露应答者手牌）。无开放选择返回 None。
+     pub fn choice_view_for(&self, seat: Option<PlayerId>) -> Option<crate::view::ChoiceView> {
++        self.build_choice_view(seat, false)
++    }
++
++    /// Trusted referee sees the current choice without becoming its owner.
++    pub fn choice_view_referee(&self) -> Option<crate::view::ChoiceView> {
++        self.build_choice_view(None, true)
++    }
++
++    fn build_choice_view(&self, seat: Option<PlayerId>, full_info: bool) -> Option<crate::view::ChoiceView> {
+         let open = self.state.resolution.open_choice.as_ref()?;
+-        Some(if seat == Some(open.observer) {
++        Some(if full_info || seat == Some(open.observer) {
+             crate::view::ChoiceView::Own {
+                 id: open.id,
++                kind: open.spec.kind,
+                 prompt: open.spec.prompt,
+                 options: open.spec.options.clone(),
+                 min: open.spec.min,
+diff --git a/crates/engine-native/src/view.rs b/crates/engine-native/src/view.rs
+index 69f090e603d134b5c9c939f7e69072adfcf7c470..7c52b31430aa6fbb94b8e41a251b134ca429ac9b 100644
+--- a/crates/engine-native/src/view.rs
++++ b/crates/engine-native/src/view.rs
+@@ -2,8 +2,8 @@
+ //!
+ //! `PlayerView` 是权威状态（`GameStateCore`）的**只读投影**：每个座位只能
+ //! 看到自己的手牌与所有公开信息（装备/判定区/弃牌堆/牌桌面/体力/回合）；
+-//! 对手手牌与牌库内容一律不可见（仅数量）。视图构造为纯投影，不修改状态、
+-//! 不进入快照与摘要。
++//! 普通视角隐藏对手手牌与牌库内容（仅数量）；可信裁判可见完整信息。
++//! 视图构造为纯投影，不修改状态，不进入快照与摘要。
+ 
+ use crate::event::Phase;
+ use crate::ids::{CardId, PlayerId};
+@@ -12,7 +12,7 @@ use crate::GameAction;
+ use crate::state::{Winner};
+ use crate::machine::LogEvent;
+ 
+-/// 手牌可见性：仅本人可见具体牌，他人只见数量。
++/// 手牌可见性：本人或可信裁判可见具体牌，普通他人只见数量。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum HandView {
+     /// 自己（或公开）的手牌：具体牌 id。
+@@ -21,8 +21,8 @@ pub enum HandView {
+     Hidden,
+ }
+ 
+-/// 明置武将的可见单元（N11 国战门控）：名称与势力。
+-/// 暗置槽不产生本单元——他人视图不可见（信息隔离，ADR 0757）。
++/// 可见武将的单元（N11 国战门控）：名称与势力。
++/// 暗置槽仅本人或可信裁判可见（信息隔离，ADR 0757）。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub struct GeneralView {
+     pub def: u16,
+@@ -37,15 +37,14 @@ pub struct PlayerCellView {
+     pub alive: bool,
+     pub hp: i32,
+     pub max_hp: u32,
+-    /// 自己的手牌（具体牌 id）；他人为 `Hidden`（仅数量）。
++    /// 本人或裁判可见具体牌 id；普通他人视角为 `Hidden`（仅数量）。
+     pub hand: HandView,
+     pub hand_count: usize,
+     /// 装备区：公开。
+     pub equips: Vec<CardId>,
+     /// 判定区：公开。
+     pub judge: Vec<CardId>,
+-    /// 双将槽视图（N11 国战，非国战局两槽恒 None）：
+-    /// 本座位两槽可见；他人仅明置槽可见，暗置槽为 `None`（不泄将领与势力）。
++    /// 已配置的双将槽：本人和裁判两槽可见；普通他人仅在国战隐藏暗置槽。
+     pub generals: [Option<GeneralView>; 2],
+     /// 明置状态：公开信息（明置行为本身可见）。
+     pub revealed_generals: [bool; 2],
+@@ -53,7 +52,7 @@ pub struct PlayerCellView {
+     pub turned_over: bool,
+     /// 已授技能名（公开信息；T13 起投影，排序稳定）。
+     pub skills: Vec<&'static str>,
+-    /// 身份（仅身份局有值）：本人视角、主公（公开）与已死亡（遗言公开，
++    /// 身份（仅身份局有值）：裁判、本人、主公（公开）与已死亡（遗言公开，
+     /// 上游 `dieAfter`）成员可见；其余存活非主公成员的他人身份为 `None`
+     /// （信息隔离）。非身份局恒 `None`。
+     pub role: Option<Role>,
+@@ -62,10 +61,13 @@ pub struct PlayerCellView {
+ /// 单个座位的完整可见视图。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub struct PlayerView {
+-    /// 视角座位（观战者为其视图内不含任何手牌 id）。
++    /// 视角座位；观战者与裁判为 `PlayerId::MAX`，可见性由投影入口决定。
+     pub seat: PlayerId,
+     pub players: Vec<PlayerCellView>,
+-    /// 牌库仅可见数量，不可见内容与顺序。
++    /// Authorized physical cards in pile order; hidden locations are absent from
++    /// ordinary seat/spectator/AI views. Referee views include every location.
++    pub cards: Vec<crate::snap::PhysicalCard>,
++    /// 牌库数量；普通视角不含内容与顺序，裁判的 `cards` 包含有序牌库。
+     pub deck_count: usize,
+     /// 弃牌堆：公开。
+     pub discard: Vec<CardId>,
+@@ -80,12 +82,13 @@ pub struct PlayerView {
+ 
+ /// 开放选择的座位可见性（N10 第二批）：
+ /// 询问的存在与类型是公开信息（众人可见有人被询问什么）；
+-/// **选项内容仅观察者本人可见**——选项会暴露应答者手牌（桃/闪）。
++/// **选项内容仅本人或可信裁判可见**——选项会暴露应答者手牌（桃/闪）。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum ChoiceView {
+-    /// 观察者本人：完整选项。
++    /// 本人或可信裁判：完整选项（可见性不授予应答权限）。
+     Own {
+         id: u64,
++        kind: crate::choice::ChoiceKind,
+         prompt: &'static str,
+         options: Vec<crate::choice::ChoiceOption>,
+         min: usize,
+@@ -116,17 +119,7 @@ pub enum EventView {
+ impl PlayerView {
+     /// 收集视图中出现的全部牌 id（用于信息隔离验收：与隐藏集合求交）。
+     pub fn visible_card_ids(&self) -> Vec<CardId> {
+-        let mut ids = Vec::new();
+-        for p in &self.players {
+-            if let HandView::Own(hand) = &p.hand {
+-                ids.extend(hand.iter().copied());
+-            }
+-            ids.extend(p.equips.iter().copied());
+-            ids.extend(p.judge.iter().copied());
+-        }
+-        ids.extend(self.discard.iter().copied());
+-        ids.extend(self.table.iter().copied());
+-        ids
++        self.cards.iter().map(|card| card.id).collect()
+     }
+ }
+ 
+diff --git a/crates/engine-native/tests/groups/misc.rs b/crates/engine-native/tests/groups/misc.rs
+index 9308a5fa3414ea5e358d92479db915aa6beb2cd0..4536537c900ce51da8b1837ab2c77e4df58e7855 100644
+--- a/crates/engine-native/tests/groups/misc.rs
++++ b/crates/engine-native/tests/groups/misc.rs
+@@ -93,3 +93,9 @@ mod u08_hero_kill_batch1;
+ 
+ #[path = "../u08_menshen_batch2.rs"]
+ mod u08_menshen_batch2;
++
++#[path = "../nc09_referee_projection.rs"]
++mod nc09_referee_projection;
++
++#[path = "../nc09_machine_ownership.rs"]
++mod nc09_machine_ownership;
+diff --git a/apps/game-server/src/native_ws_e2e/referee.rs b/apps/game-server/src/native_ws_e2e/referee.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..cb0bf74f1422c31024d1d803a437e36f0cf9e593
+--- /dev/null
++++ b/apps/game-server/src/native_ws_e2e/referee.rs
+@@ -0,0 +1,291 @@
++//! Trusted store membership controls visibility through the real WebSocket actor.
++use super::*;
++use crate::native_room_store::{NativeRoomStore, StoredRoom};
++use crate::native_view::{choice_for, observer_snapshot_for, RoomRole};
++use crate::room_native::NativeRoomSession;
++
++fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
++    let mut engine = engine_native::Engine::new_identity(1515, 4);
++    engine.assign_general_named(1, "刘备").unwrap();
++    for _ in 0..3 {
++        let result = engine.submit(engine_native::GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: engine.revision() + 1,
++            action: engine_native::GameAction::NextPhase,
++        });
++        assert!(!matches!(
++            result,
++            engine_native::CommandOutcome::Rejected(_)
++        ));
++    }
++    assert_eq!(engine.open_choice().unwrap().observer, 0);
++    let mut snapshot = engine.save();
++    snapshot.core.mode = engine_native::GameMode::Kingdoms;
++    snapshot.core.player_mut(1).revealed_generals = [false, false];
++    let removed = snapshot.core.deck.pop().unwrap();
++    snapshot.core.player_mut(1).off_court.push(removed);
++    let expansion = snapshot.core.deck.pop().unwrap();
++    snapshot.core.player_mut(2).lianyaohu_store.push(expansion);
++    let mut session = NativeRoomSession::new(engine_native::Engine::restore(&snapshot).unwrap(), 4);
++    let owner = session.join(1, Some(0), None).unwrap();
++    let other = session.join(2, Some(1), None).unwrap();
++    session.spectate(90);
++    session.spectate(91);
++    let mut state = session.export_state(&session.snapshot_hex());
++    state.next_dedup = snapshot.last_dedup + 1;
++    let referee = state
++        .members
++        .iter_mut()
++        .find(|m| m.connection_id == 90)
++        .unwrap();
++    referee.role = ClientRole::Referee;
++    referee.reconnect_token = uuid::Uuid::new_v4().to_string();
++    let referee_token = referee.reconnect_token.clone();
++    let spectator = state
++        .members
++        .iter_mut()
++        .find(|m| m.connection_id == 91)
++        .unwrap();
++    // A valid seat in a trusted record still cannot turn a Spectator into a Player.
++    spectator.player_id = PlayerId::new(1);
++    spectator.seat = 0;
++    spectator.reconnect_token = uuid::Uuid::new_v4().to_string();
++    let spectator_token = spectator.reconnect_token.clone();
++    let expected = State {
++        view: observer_snapshot_for(session.engine(), RoomRole::Referee, None),
++        choice: choice_for(session.engine(), RoomRole::Referee, None),
++        legal: vec![],
++    };
++    let room_id = 909;
++    NativeRoomStore::new(&cfg.native_room_store)
++        .save(&StoredRoom {
++            room_id,
++            password_hash: crate::native_room_store::password_hash(room_id, PASSWORD),
++            state,
++            checksum: String::new(),
++        })
++        .unwrap();
++    (
++        room_id,
++        [
++            owner.member.reconnect_token,
++            other.member.reconnect_token,
++            referee_token,
++            spectator_token,
++        ],
++        expected,
++    )
++}
++
++async fn reconnect_spectator_with_stored_seat(peer: &mut Peer, room: u64, token: &str) {
++    peer.send(ClientMessage::JoinRoom {
++        room_id: room,
++        password: PASSWORD.into(),
++        preferred_seat: Some(0),
++        reconnect_token: Some(token.into()),
++    })
++    .await;
++    let message = peer
++        .until(|message| matches!(message, ServerMessage::JoinOk { .. }))
++        .await;
++    let ServerMessage::JoinOk {
++        role,
++        player_id,
++        seat,
++        ..
++    } = &message
++    else {
++        unreachable!()
++    };
++    assert_eq!((*role, *player_id, *seat), (ClientRole::Spectator, 1, 0));
++    State::from_message(message).assert_spectator();
++    peer.room = room;
++    peer.player = PlayerId::new(1);
++    peer.token = token.into();
++}
++
++fn assert_referee(state: &State) {
++    assert_eq!(state.view.observer, ObserverKind::Referee);
++    assert!(
++        state.legal.is_empty(),
++        "visibility must not grant intervention"
++    );
++    let ids: std::collections::BTreeSet<_> =
++        state.view.known_cards.iter().map(|card| card.id).collect();
++    assert_eq!(state.view.known_cards.len(), 124);
++    assert_eq!(ids.len(), 124);
++    assert!(state
++        .view
++        .known_cards
++        .iter()
++        .all(|card| card.def.is_some() && card.suit.is_some() && card.rank.is_some()));
++    assert!(state
++        .view
++        .known_cards
++        .iter()
++        .any(|card| card.zone == engine_api::CardZoneTag::DrawPile));
++    assert!(state
++        .view
++        .known_cards
++        .iter()
++        .any(|card| card.zone == engine_api::CardZoneTag::Removed));
++    assert!(state
++        .view
++        .known_cards
++        .iter()
++        .any(|card| card.zone == engine_api::CardZoneTag::Expansion));
++    assert_ne!(
++        state.view.seats[1].character_def, 0,
++        "dark general remains authorized"
++    );
++}
++
++#[test]
++fn native_ws_referee_restore_reconnect_choice_fanout_and_restart() {
++    let directory = tempfile::tempdir().unwrap();
++    let cfg = config(directory.path());
++    let (room, tokens, expected) = stored_pending(&cfg);
++    let before_restart = runtime().block_on(async {
++        let server = Server::start(&cfg, 1).await;
++        let mut owner = Peer::connect(&server).await;
++        let initial = owner.join(room, 0, Some(tokens[0].clone())).await;
++        let mut other = Peer::connect(&server).await;
++        other
++            .join(room, 1, Some(tokens[1].clone()))
++            .await
++            .assert_player(PlayerId::new(2));
++        let mut referee = Peer::connect(&server).await;
++        let joined = referee.join(room, 0, Some(tokens[2].clone())).await;
++        assert_eq!(joined, expected);
++        assert_referee(&joined);
++        assert_eq!(referee.snapshot().await, expected);
++        assert_eq!(
++            joined.choice, initial.choice,
++            "referee sees the current owner's full choice"
++        );
++        let mut old_referee = referee;
++        let mut referee = Peer::connect(&server).await;
++        assert_eq!(
++            referee.join(room, 0, Some(tokens[2].clone())).await,
++            expected
++        );
++        old_referee
++            .send(ClientMessage::RequestSnapshot {
++                header: MessageHeader::new(room, 1, 0),
++                last_revision: 0,
++            })
++            .await;
++        let stale = old_referee
++            .until(|message| {
++                matches!(
++                    message,
++                    ServerMessage::Error { .. } | ServerMessage::Snapshot { .. }
++                )
++            })
++            .await;
++        assert!(
++            matches!(stale, ServerMessage::Error { .. }),
++            "old referee connection retained authority"
++        );
++        let mut spectator = Peer::connect(&server).await;
++        reconnect_spectator_with_stored_seat(&mut spectator, room, &tokens[3]).await;
++        spectator.snapshot().await.assert_spectator();
++        assert!(spectator.snapshot().await.view.seats[1].character_def == 0);
++        let mut newcomer = Peer::connect(&server).await;
++        newcomer.spectate(room).await.assert_spectator();
++        // A rejected player intent still fans out the unchanged pending private choice.
++        let (rejected, unchanged) = owner
++            .submit(
++                owner.player,
++                initial.view.revision,
++                8999,
++                CommandKind::EndPhase,
++            )
++            .await;
++        assert!(matches!(rejected, CommandResult::Rejected { .. }));
++        assert_eq!(unchanged, initial);
++        assert_eq!(referee.pushed(8999).await, expected);
++        spectator.pushed(8999).await.assert_spectator();
++        newcomer.pushed(8999).await.assert_spectator();
++        old_referee
++            .send(ClientMessage::RequestSnapshot {
++                header: MessageHeader::new(room, 2, 0),
++                last_revision: 0,
++            })
++            .await;
++        let stale_push = old_referee
++            .until(|message| {
++                matches!(
++                    message,
++                    ServerMessage::Error { .. } | ServerMessage::CommandOutcome { .. }
++                )
++            })
++            .await;
++        assert!(
++            matches!(stale_push, ServerMessage::Error { .. }),
++            "stale referee received private choice fanout"
++        );
++        // Seeing the full options cannot authorize a referee to answer them, including replay.
++        let answer = durability::answer(&initial, owner.player);
++        double_failure::submit_error(&mut referee, 9001, answer.clone()).await;
++        double_failure::submit_error(&mut spectator, 9001, answer.clone()).await;
++        referee.seq += 1;
++        referee
++            .send(ClientMessage::SubmitCommand {
++                header: MessageHeader::new(room, referee.seq, initial.view.revision),
++                command: Command {
++                    actor: owner.player,
++                    expected_revision: ExpectedRevision(initial.view.revision),
++                    idempotency_key: IdempotencyKey(9001),
++                    kind: answer.clone(),
++                },
++                idempotency_key: IdempotencyKey(9001),
++                replay: true,
++            })
++            .await;
++        let rejected = referee
++            .until(|message| {
++                matches!(
++                    message,
++                    ServerMessage::Error { .. } | ServerMessage::CommandOutcome { .. }
++                )
++            })
++            .await;
++        assert!(matches!(rejected, ServerMessage::Error { .. }));
++        assert_eq!(referee.snapshot().await, expected);
++        let (result, _) = owner
++            .submit(owner.player, initial.view.revision, 9002, answer)
++            .await;
++        assert!(
++            matches!(result, CommandResult::Accepted { .. }),
++            "{result:?}"
++        );
++        let pushed = referee.pushed(9002).await;
++        assert_referee(&pushed);
++        spectator.pushed(9002).await.assert_spectator();
++        newcomer.pushed(9002).await.assert_spectator();
++        let before_restart = referee.snapshot().await;
++        assert_eq!(pushed, before_restart);
++        owner.close().await;
++        other.close().await;
++        referee.close().await;
++        old_referee.close().await;
++        spectator.close().await;
++        newcomer.close().await;
++        server.stop().await;
++        before_restart
++    });
++    runtime().block_on(async {
++        let restarted = Server::start(&cfg, 1).await;
++        let mut referee = Peer::connect(&restarted).await;
++        assert_eq!(
++            referee.join(room, 0, Some(tokens[2].clone())).await,
++            before_restart
++        );
++        assert_eq!(referee.snapshot().await, before_restart);
++        let mut spectator = Peer::connect(&restarted).await;
++        reconnect_spectator_with_stored_seat(&mut spectator, room, &tokens[3]).await;
++        restarted.stop().await;
++    });
++}
+diff --git a/apps/game-server/tests/nc09_referee_projection.rs b/apps/game-server/tests/nc09_referee_projection.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..efaf2b91a9e32c1ef59fedb7ab409eacf772920a
+--- /dev/null
++++ b/apps/game-server/tests/nc09_referee_projection.rs
+@@ -0,0 +1,199 @@
++//! NC09: authorized cards come from physical ownership, never catalog membership.
++#[path = "../src/native_view.rs"]
++mod native_view;
++
++use engine_api::{CardZoneTag, PlayerId};
++use engine_native::Engine;
++use native_view::{observer_snapshot_for, RoomRole};
++use std::collections::BTreeSet;
++
++#[test]
++fn referee_sees_all_physical_cards_faces_owners_and_deck_order_after_archive() {
++    let engine = Engine::new_identity(1515, 4);
++    let mut snapshot = engine.save();
++    for index in 0..6 {
++        let card = snapshot.core.deck.pop().unwrap();
++        let p = snapshot.core.player_mut(1);
++        match index {
++            0 => {
++                p.off_court.push(card);
++                p.yishan_lost.push(card);
++                p.jiguanyuan_cards.push(card);
++            }
++            1 => p.zhucheng.push(card),
++            2 => p.lianyaohu_store.push(card),
++            3 => p.sxianjing_traps.push(card),
++            4 => p.hutian_hold.push(card),
++            5 => {
++                snapshot
++                    .core
++                    .vm_aux
++                    .piles
++                    .insert((2, "test.pile".into()), vec![card]);
++            }
++            _ => unreachable!(),
++        }
++    }
++    let encoded = engine_native::archive::encode_archive(&snapshot);
++    let decoded = engine_native::archive::decode_archive(&encoded).unwrap();
++    assert_eq!(snapshot, decoded);
++    let engine = Engine::restore(&decoded).unwrap();
++    let before = engine.save();
++    let authority_bytes = engine_native::archive::encode_archive(&before);
++    let view = observer_snapshot_for(&engine, RoomRole::Referee, None);
++    assert_eq!(view.known_cards.len(), engine.catalog().cards.len());
++    let ids: BTreeSet<_> = view.known_cards.iter().map(|card| card.id.raw()).collect();
++    assert_eq!(
++        ids.len(),
++        view.known_cards.len(),
++        "references must not duplicate ownership"
++    );
++    assert_eq!(ids, (0..engine.catalog().cards.len() as u32).collect());
++    assert!(view.seats.iter().all(|seat| seat.identity.is_some()));
++    for card in &view.known_cards {
++        let def = &engine.catalog().cards[card.id.raw() as usize];
++        assert_eq!(card.def, Some(def.kind as u16 as u32));
++        assert!(card.suit.is_some());
++        assert_eq!(card.rank, Some(def.rank));
++        if card.zone == CardZoneTag::Hand {
++            let seat = card.owner.unwrap().raw() as usize - 1;
++            assert!(engine.state_core().players[seat]
++                .hand
++                .contains(&card.id.raw()));
++        }
++    }
++    assert_eq!(
++        view.known_cards
++            .iter()
++            .filter(|c| c.zone == CardZoneTag::DrawPile)
++            .map(|c| c.id.raw())
++            .collect::<Vec<_>>(),
++        snapshot.core.deck.iter().copied().collect::<Vec<_>>()
++    );
++    assert_eq!(
++        view.known_cards
++            .iter()
++            .filter(|c| c.zone == CardZoneTag::Removed)
++            .map(|c| (c.id.raw(), c.owner))
++            .collect::<Vec<_>>(),
++        vec![(snapshot.core.player(1).off_court[0], Some(PlayerId::new(2)))]
++    );
++    for id in snapshot
++        .core
++        .player(1)
++        .zhucheng
++        .iter()
++        .chain(&snapshot.core.player(1).lianyaohu_store)
++        .chain(&snapshot.core.player(1).sxianjing_traps)
++        .chain(&snapshot.core.player(1).hutian_hold)
++    {
++        let card = view.known_cards.iter().find(|c| c.id.raw() == *id).unwrap();
++        assert_eq!(
++            (card.zone, card.owner),
++            (CardZoneTag::Expansion, Some(PlayerId::new(2)))
++        );
++    }
++    let vm = view
++        .known_cards
++        .iter()
++        .find(|c| c.id.raw() == snapshot.core.vm_aux.piles[&(2, "test.pile".into())][0])
++        .unwrap();
++    assert_eq!(
++        (vm.zone, vm.owner),
++        (CardZoneTag::Expansion, Some(PlayerId::new(3)))
++    );
++    for role in [RoomRole::Spectator, RoomRole::Player] {
++        let ordinary = observer_snapshot_for(&engine, role, Some(PlayerId::new(1)));
++        assert!(ordinary
++            .known_cards
++            .iter()
++            .all(|c| c.zone == CardZoneTag::Hand && c.owner == Some(PlayerId::new(1))));
++        if role == RoomRole::Spectator {
++            assert!(ordinary.known_cards.is_empty());
++        }
++    }
++    assert_eq!(engine.save(), before);
++    assert_eq!(
++        engine_native::archive::encode_archive(&engine.save()),
++        authority_bytes
++    );
++}
++
++fn submit(engine: &mut Engine, action: engine_native::GameAction) {
++    let actor = engine
++        .open_choice()
++        .map_or(engine.turn().current, |c| c.observer);
++    let result = engine.submit(engine_native::GameCommand {
++        actor,
++        expected_revision: engine.revision(),
++        dedup_id: engine.revision() + 1,
++        action,
++    });
++    assert!(
++        !matches!(result, engine_native::CommandOutcome::Rejected(_)),
++        "{result:?}"
++    );
++}
++
++fn assert_choice_kind(engine: &Engine, kind: engine_api::ChoiceKind) {
++    let owner = PlayerId::new(engine.open_choice().unwrap().observer as u32 + 1);
++    let choice = native_view::choice_for(engine, RoomRole::Player, Some(owner)).unwrap();
++    assert_eq!(choice.kind, kind);
++    assert_eq!(
++        Some(choice.clone()),
++        native_view::choice_for(engine, RoomRole::Referee, None)
++    );
++    assert!(native_view::choice_for(engine, RoomRole::Spectator, Some(owner)).is_none());
++    let message = engine_protocol::ServerMessage::Snapshot {
++        header: engine_protocol::MessageHeader::new(909, 1, engine.revision()),
++        view: observer_snapshot_for(engine, RoomRole::Referee, None),
++        legal_actions: vec![],
++        choice: Some(choice.clone()),
++    };
++    let wire = engine_protocol::encode_s2c(&message).unwrap();
++    let engine_protocol::ServerMessage::Snapshot {
++        header,
++        choice: decoded,
++        ..
++    } = engine_protocol::decode_s2c(&wire).unwrap()
++    else {
++        panic!("snapshot")
++    };
++    assert_eq!(header.protocol_version, 5);
++    assert_eq!(decoded, Some(choice));
++}
++
++#[test]
++fn current_choices_preserve_all_expressible_existing_wire_kinds() {
++    let mut engine = Engine::new(804, 3);
++    engine.debug_grant(0, "突袭");
++    engine.state_core_mut().turn.phase = engine_native::Phase::Judge;
++    submit(&mut engine, engine_native::GameAction::NextPhase);
++    assert_eq!(
++        engine.open_choice().unwrap().spec.kind,
++        engine_native::ChoiceKind::Confirm
++    );
++    assert_choice_kind(&engine, engine_api::ChoiceKind::Confirm);
++    let id = engine.open_choice().unwrap().id;
++    submit(
++        &mut engine,
++        engine_native::GameAction::Answer {
++            choice_id: id,
++            selection: vec![engine_native::ChoiceOption::Confirm],
++        },
++    );
++    assert_eq!(
++        engine.open_choice().unwrap().spec.kind,
++        engine_native::ChoiceKind::SelectPlayers
++    );
++    assert_choice_kind(&engine, engine_api::ChoiceKind::SelectTargets);
++    let mut discard = Engine::new(1515, 4);
++    for _ in 0..3 {
++        submit(&mut discard, engine_native::GameAction::NextPhase);
++    }
++    assert_eq!(
++        discard.open_choice().unwrap().spec.kind,
++        engine_native::ChoiceKind::SelectCards
++    );
++    assert_choice_kind(&discard, engine_api::ChoiceKind::SelectCards);
++}
+diff --git a/crates/engine-native-kernel/src/snap/ownership.rs b/crates/engine-native-kernel/src/snap/ownership.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..096a6a0375dfefdbecc1e79fde56cef0c5428531
+--- /dev/null
++++ b/crates/engine-native-kernel/src/snap/ownership.rs
+@@ -0,0 +1,65 @@
++//! Physical ownership shared by restore validation and authorized read-only views.
++use crate::ids::{CardId, PlayerId};
++use crate::state::GameStateCore;
++
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum PhysicalCardZone {
++    Hand,
++    Equip,
++    Judge,
++    DiscardPile,
++    Processing,
++    DrawPile,
++    Removed,
++    Expansion,
++}
++
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub struct PhysicalCard {
++    pub id: CardId,
++    pub owner: Option<PlayerId>,
++    pub zone: PhysicalCardZone,
++}
++
++/// Enumerate actual card ownership, preserving each pile's order. `held` contains
++/// only cards owned by parked machines, collected with `machine_held_cards`.
++pub fn physical_cards(core: &GameStateCore, held: &[CardId]) -> Vec<PhysicalCard> {
++    use PhysicalCardZone::*;
++    let mut cards = Vec::new();
++    let mut pile = |ids: &[CardId], owner, zone| {
++        cards.extend(ids.iter().map(|id| PhysicalCard {
++            id: *id,
++            owner,
++            zone,
++        }));
++    };
++    for (seat, player) in core.players.iter().enumerate() {
++        pile(&player.hand, Some(seat as PlayerId), Hand);
++    }
++    for (seat, player) in core.players.iter().enumerate() {
++        let owner = Some(seat as PlayerId);
++        pile(&player.equips, owner, Equip);
++        pile(&player.judge, owner, Judge);
++    }
++    pile(&core.discard, None, DiscardPile);
++    pile(&core.table, None, Processing);
++    pile(&core.deck, None, DrawPile);
++    for (seat, player) in core.players.iter().enumerate() {
++        let owner = Some(seat as PlayerId);
++        pile(&player.off_court, owner, Removed);
++        // yishan_lost, jiguanyuan_cards and similar history fields only reference cards.
++        for ids in [
++            &player.zhucheng,
++            &player.lianyaohu_store,
++            &player.sxianjing_traps,
++            &player.hutian_hold,
++        ] {
++            pile(ids, owner, Expansion);
++        }
++    }
++    for ((owner, _), ids) in &core.vm_aux.piles {
++        pile(ids, Some(*owner), Expansion);
++    }
++    pile(held, None, Processing);
++    cards
++}
+diff --git a/crates/engine-native/tests/nc09_referee_projection.rs b/crates/engine-native/tests/nc09_referee_projection.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..84811b8aa0340ca5aa14b267bf36c79a3848fcb5
+--- /dev/null
++++ b/crates/engine-native/tests/nc09_referee_projection.rs
+@@ -0,0 +1,169 @@
++//! Trusted full information projection must remain read-only and isolated from AI seats.
++use engine_native::{
++    ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction, GameCommand, HandView,
++};
++
++fn submit(engine: &mut Engine, action: GameAction) {
++    let out = engine.submit(GameCommand {
++        actor: engine
++            .open_choice()
++            .map_or(engine.turn().current, |c| c.observer),
++        expected_revision: engine.revision(),
++        dedup_id: engine.revision() + 1,
++        action,
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++
++fn restart(engine: &Engine) -> Engine {
++    let before = engine.save();
++    let bytes = engine_native::archive::encode_archive(&before);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(before, decoded);
++    let restored = Engine::restore(&decoded).unwrap();
++    assert_eq!(engine.state_hash(), restored.state_hash());
++    restored
++}
++
++#[test]
++fn referee_reveals_both_dark_generals_and_identities_without_mutating_authority() {
++    let mut engine = Engine::new_identity(1515, 4);
++    engine.assign_general_named(0, "曹操").unwrap();
++    engine.assign_general_named(1, "刘备").unwrap();
++    let identity_view = engine.view_referee();
++    for (seat, player) in identity_view.players.iter().enumerate() {
++        assert_eq!(
++            player.role,
++            Some(engine.state_core().identity_roles().unwrap()[seat])
++        );
++        assert_eq!(
++            player.hand,
++            HandView::Own(engine.state_core().players[seat].hand.clone())
++        );
++    }
++    let mut snapshot = engine.save();
++    snapshot.core.mode = engine_native::GameMode::Kingdoms;
++    snapshot.core.players[1].general_slots[1] = snapshot.core.players[0].general_slots[0];
++    snapshot.core.players[1].revealed_generals = [false, false];
++    let engine = Engine::restore(&snapshot).unwrap();
++    let before = engine.save();
++    let view = engine.view_referee();
++    for slot in 0..2 {
++        let def = snapshot.core.players[1].general_slots[slot].unwrap();
++        let meta = engine.catalog().general_meta(def).unwrap();
++        let general = view.players[1].generals[slot].as_ref().unwrap();
++        assert_eq!(
++            (general.def, general.name, general.faction),
++            (def, meta.0, meta.1)
++        );
++    }
++    assert_eq!(engine.view_for(0).players[1].generals, [None, None]);
++    assert_eq!(engine.view_spectator().players[1].generals, [None, None]);
++    assert_eq!(restart(&engine).view_referee(), view);
++    assert_eq!(engine.save(), before);
++}
++
++#[test]
++fn full_info_entry_cannot_escape_to_ordinary_views_or_ai_sessions() {
++    let engine = Engine::new_identity(1515, 4);
++    let mut other = engine.save();
++    std::mem::swap(&mut other.core.players[1].hand[0], &mut other.core.deck[0]);
++    let other = Engine::restore(&other).unwrap();
++    assert_ne!(engine.view_referee(), other.view_referee());
++    assert_eq!(engine.view_for(0), other.view_for(0));
++    assert_eq!(engine.view_spectator(), other.view_spectator());
++    let a = engine.ai_session(0).input();
++    let b = other.ai_session(0).input();
++    assert_eq!(a.view, b.view);
++    assert_eq!(a.choice, b.choice);
++    assert_eq!(a.own_hand_kinds, b.own_hand_kinds);
++    assert_eq!(engine.view_for(0), a.view);
++    for view in [a.view, engine.view_spectator()] {
++        assert!(view.cards.iter().all(|card| {
++            use engine_native::snap::PhysicalCardZone::*;
++            matches!(card.zone, Hand | Equip | Judge | DiscardPile | Processing)
++        }));
++    }
++}
++
++#[test]
++fn referee_includes_machine_held_cards_and_private_choice_after_archive() {
++    let mut engine = Engine::new(901, 3);
++    engine.debug_grant(0, "观星");
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    for _ in 0..128 {
++        if engine.open_choice().is_some() {
++            break;
++        }
++        submit(&mut engine, GameAction::NextPhase);
++    }
++    assert_eq!(engine.open_choice().unwrap().spec.prompt, "trigger_confirm");
++    let choice_id = engine.open_choice().unwrap().id;
++    submit(
++        &mut engine,
++        GameAction::Answer {
++            choice_id,
++            selection: vec![ChoiceOption::Confirm],
++        },
++    );
++    let open = engine.open_choice().unwrap().clone();
++    assert_eq!(open.spec.prompt, "guanxing_arrange");
++    let held: Vec<_> = open
++        .spec
++        .options
++        .iter()
++        .filter_map(|option| {
++            if let ChoiceOption::Card(id) = option {
++                Some(*id)
++            } else {
++                None
++            }
++        })
++        .collect();
++    assert_eq!(held.len(), 3);
++    let view = engine.view_referee();
++    let ids = view.visible_card_ids();
++    let unique: std::collections::BTreeSet<_> = ids.iter().copied().collect();
++    assert_eq!(unique.len(), ids.len());
++    assert_eq!(ids.len(), engine.catalog().cards.len());
++    for id in held {
++        let card = view.cards.iter().find(|card| card.id == id).unwrap();
++        assert_eq!(card.zone, engine_native::snap::PhysicalCardZone::Processing);
++        assert_eq!(card.owner, None);
++        assert!(!engine.view_spectator().visible_card_ids().contains(&id));
++    }
++    assert_eq!(
++        engine.choice_view_referee(),
++        engine.choice_view_for(Some(open.observer))
++    );
++    assert!(matches!(
++        engine.choice_view_for(None),
++        Some(ChoiceView::Other { .. })
++    ));
++    assert!(
++        matches!(engine.choice_view_referee(), Some(ChoiceView::Own { kind, prompt, options, min, max, allow_cancel, .. })
++        if kind == open.spec.kind && prompt == open.spec.prompt && options == open.spec.options && min == open.spec.min && max == open.spec.max && allow_cancel == open.spec.allow_cancel)
++    );
++    let mut restored = restart(&engine);
++    assert_eq!(restored.view_referee(), view);
++    assert_eq!(restored.choice_view_referee(), engine.choice_view_referee());
++    submit(
++        &mut engine,
++        GameAction::Answer {
++            choice_id: open.id,
++            selection: vec![],
++        },
++    );
++    submit(
++        &mut restored,
++        GameAction::Answer {
++            choice_id: open.id,
++            selection: vec![],
++        },
++    );
++    assert_eq!(restored.state_hash(), engine.state_hash());
++    assert_eq!(restored.save().core, engine.save().core);
++    assert_eq!(restored.save().resolution, engine.save().resolution);
++}
+diff --git a/crates/engine-native/tests/nc09_machine_ownership.rs b/crates/engine-native/tests/nc09_machine_ownership.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..ed415624de667ef3c4088bdcdaf5009ef9748dbd
+--- /dev/null
++++ b/crates/engine-native/tests/nc09_machine_ownership.rs
+@@ -0,0 +1,733 @@
++//! NC09 review regression: every existing parked-card window must project and restore.
++#[path = "support/nc09_machine_windows.rs"]
++mod windows;
++
++use engine_native::snap::{machine_held_cards, MachineSnapshot, SnapshotError, StateSnapshot};
++use engine_native::GameAction;
++use windows::{fixture, Window};
++
++fn projection(window: Window) {
++    let fixture = fixture(window);
++    let engine = &fixture.engine;
++    let before = engine.save();
++    let view = engine.view_referee();
++    let mut actual = view.visible_card_ids();
++    actual.sort_unstable();
++    assert_eq!(
++        actual, fixture.physical_ids,
++        "{window:?}: exact physical multiset"
++    );
++    for id in &fixture.held {
++        let cards: Vec<_> = view.cards.iter().filter(|card| card.id == *id).collect();
++        assert_eq!(cards.len(), 1, "{window:?}: held card {id} exactly once");
++        assert_eq!(
++            cards[0].zone,
++            engine_native::snap::PhysicalCardZone::Processing
++        );
++        assert_eq!(cards[0].owner, None);
++    }
++    for seat in 0..engine.state_core().players.len() as u8 {
++        let ordinary = engine.view_for(seat);
++        assert!(ordinary
++            .visible_card_ids()
++            .iter()
++            .all(|id| !fixture.held.contains(id)));
++        assert_eq!(engine.ai_session(seat).view(), ordinary);
++    }
++    assert!(engine
++        .view_spectator()
++        .visible_card_ids()
++        .iter()
++        .all(|id| !fixture.held.contains(id)));
++    assert_eq!(
++        engine.save(),
++        before,
++        "projection must not change authority/RNG"
++    );
++}
++
++fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
++    let choice = engine.open_choice().map(|open| {
++        serde_json::json!({
++            "id": open.id, "observer": open.observer, "prompt": open.spec.prompt,
++            "min": open.spec.min, "max": open.spec.max, "allowCancel": open.spec.allow_cancel,
++            "options": open.spec.options.iter().map(|option| match option {
++                engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
++                engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
++                engine_native::ChoiceOption::Card(id) => serde_json::json!({"card": id}),
++                engine_native::ChoiceOption::Player(id) => serde_json::json!({"player": id}),
++                engine_native::ChoiceOption::Tag(id) => serde_json::json!({"tag": id}),
++                engine_native::ChoiceOption::Kind(id) => serde_json::json!({"kind": id}),
++            }).collect::<Vec<_>>(),
++        })
++    });
++    serde_json::json!({
++        "hash": engine.state_hash().iter().map(|byte| format!("{byte:02x}")).collect::<String>(),
++        "revision": engine.revision(), "choice": choice, "deckCount": engine.state_core().deck.len(),
++        "visible": (0..engine.state_core().players.len() as u8).map(|seat| {
++            let mut ids = engine.view_for(seat).visible_card_ids(); ids.sort_unstable(); ids
++        }).collect::<Vec<_>>(),
++    })
++}
++
++fn archive_resume(window: Window) {
++    let mut fixture = fixture(window);
++    let before = fixture.engine.save();
++    let bytes = engine_native::archive::encode_archive(&before);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(decoded, before);
++    let mut restored = fixture
++        .restore(&decoded)
++        .unwrap_or_else(|error| panic!("{window:?}: actual pending archive: {error:?}"));
++    let open = fixture.engine.open_choice().unwrap();
++    let expected = engine_native::snap::ask(
++        open.observer,
++        open.spec.prompt,
++        open.spec.kind,
++        open.spec.options.clone(),
++        open.spec.min,
++        open.spec.max,
++        open.spec.allow_cancel,
++    );
++    assert_eq!(
++        engine_native::snap::active_ask(
++            &before.resolution.parks.last().unwrap().machine,
++            &before.core,
++            fixture.engine.catalog()
++        ),
++        Some(expected)
++    );
++    assert_eq!(restored.view_referee(), fixture.engine.view_referee());
++    assert_eq!(restored.open_choice(), fixture.engine.open_choice());
++    let mut frames = vec![trace_frame(&fixture.engine)];
++    let mut commands = Vec::new();
++    for step in 0..7 {
++        let action = if step == 0 {
++            GameAction::Answer {
++                choice_id: fixture.engine.open_choice().unwrap().id,
++                selection: fixture.selection.clone(),
++            }
++        } else if let Some(open) = fixture.engine.open_choice() {
++            GameAction::Answer {
++                choice_id: open.id,
++                selection: windows::default_selection(&fixture.engine),
++            }
++        } else if fixture.engine.outcome().is_none() {
++            GameAction::NextPhase
++        } else {
++            break;
++        };
++        let actor = fixture
++            .engine
++            .open_choice()
++            .map_or(fixture.engine.turn().current, |c| c.observer);
++        let command = match &action {
++            GameAction::Answer {
++                choice_id,
++                selection,
++            } => serde_json::json!({
++                "kind": "answer", "actor": actor, "id": choice_id,
++                "indices": selection.iter().map(|option| fixture.engine.open_choice().unwrap().spec.options.iter().position(|item| item == option).unwrap()).collect::<Vec<_>>()
++            }),
++            GameAction::NextPhase => serde_json::json!({"kind": "next", "actor": actor}),
++            _ => unreachable!(),
++        };
++        let left_log = fixture.engine.log().len();
++        let right_log = restored.log().len();
++        windows::submit(&mut fixture.engine, action.clone());
++        windows::submit(&mut restored, action);
++        assert_eq!(
++            fixture.engine.state_hash(),
++            restored.state_hash(),
++            "{window:?}: step {step}"
++        );
++        assert_eq!(fixture.engine.state_core(), restored.state_core());
++        assert_eq!(fixture.engine.state_core().rng, restored.state_core().rng);
++        assert_eq!(fixture.engine.save().resolution, restored.save().resolution);
++        assert_eq!(fixture.engine.open_choice(), restored.open_choice());
++        assert_eq!(
++            &fixture.engine.log()[left_log..],
++            &restored.log()[right_log..],
++            "{window:?}: events at {step}"
++        );
++        commands.push(serde_json::json!({"command": command, "codes": fixture.engine.public_event_codes_from(left_log)}));
++        frames.push(trace_frame(&fixture.engine));
++        let bytes = engine_native::archive::encode_archive(&restored.save());
++        let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++        assert_eq!(decoded, restored.save());
++        restored = fixture
++            .restore(&decoded)
++            .unwrap_or_else(|error| panic!("{window:?}: resumed checkpoint {step}: {error:?}"));
++    }
++    if let Some(directory) = std::env::var_os("NC09_MACHINE_TRACE_OUT") {
++        let directory = std::path::PathBuf::from(directory);
++        std::fs::create_dir_all(&directory).unwrap();
++        let value = serde_json::json!({
++            "window": format!("{window:?}"), "held": fixture.held,
++            "archiveHex": bytes.iter().map(|byte| format!("{byte:02x}")).collect::<String>(),
++            "frames": frames, "commands": commands,
++        });
++        std::fs::write(
++            directory.join(format!("{window:?}.json")),
++            serde_json::to_vec_pretty(&value).unwrap(),
++        )
++        .unwrap();
++    }
++}
++
++#[test]
++fn xunxun_projects_four_held_cards() {
++    projection(Window::XunXun);
++}
++#[test]
++fn jijie_projects_bottom_card() {
++    projection(Window::JiJie);
++}
++#[test]
++fn gaiming_projects_seven_candidates_once() {
++    projection(Window::GaiMing);
++}
++#[test]
++fn haotianta_projects_both_candidates() {
++    projection(Window::HaoTianTa);
++}
++#[test]
++fn xunxun_archive_restores_and_resumes() {
++    archive_resume(Window::XunXun);
++}
++#[test]
++fn jijie_archive_restores_and_resumes() {
++    archive_resume(Window::JiJie);
++}
++#[test]
++fn gaiming_archive_restores_and_resumes() {
++    archive_resume(Window::GaiMing);
++}
++#[test]
++fn haotianta_archive_restores_and_resumes() {
++    archive_resume(Window::HaoTianTa);
++}
++
++fn window_machine(machine: &mut MachineSnapshot) -> &mut MachineSnapshot {
++    match machine {
++        MachineSnapshot::OptionalGate {
++            inner: Some(inner), ..
++        }
++        | MachineSnapshot::NullifyWindow {
++            effect: Some(inner),
++            ..
++        }
++        | MachineSnapshot::Aoe {
++            inner: Some(inner), ..
++        }
++        | MachineSnapshot::Jijiang {
++            inner: Some(inner), ..
++        }
++        | MachineSnapshot::LiJian {
++            inner: Some(inner), ..
++        } => window_machine(inner),
++        _ => machine,
++    }
++}
++
++fn change_held(snapshot: &mut StateSnapshot, window: Window, replacement: Option<u32>) {
++    let machine = window_machine(&mut snapshot.resolution.parks.last_mut().unwrap().machine);
++    match (window, machine) {
++        (Window::XunXun, MachineSnapshot::XunXun { top, .. }) => match replacement {
++            Some(id) => top[0] = id,
++            None => {
++                top.remove(0);
++            }
++        },
++        (Window::JiJie, MachineSnapshot::JiJie { card, .. }) => *card = replacement,
++        (
++            Window::GaiMing,
++            MachineSnapshot::JudgePhase {
++                current: Some(current),
++                ..
++            },
++        ) => {
++            let cards = current.gaiming_cards.as_mut().unwrap();
++            match replacement {
++                Some(id) => cards[1] = id,
++                None => {
++                    cards.remove(1);
++                }
++            }
++        }
++        (
++            Window::HaoTianTa,
++            MachineSnapshot::JudgePhase {
++                current: Some(current),
++                ..
++            },
++        ) => current.haotian_other = replacement,
++        _ => panic!("wrong real window"),
++    }
++}
++
++fn restore_bytes(
++    fixture: &windows::Fixture,
++    snapshot: &StateSnapshot,
++) -> Result<engine_native::Engine, SnapshotError> {
++    let bytes = engine_native::archive::encode_archive(snapshot);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(&decoded, snapshot);
++    fixture.restore(&decoded)
++}
++
++#[test]
++fn machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards() {
++    for window in [
++        Window::XunXun,
++        Window::JiJie,
++        Window::GaiMing,
++        Window::HaoTianTa,
++    ] {
++        let fixture = fixture(window);
++        let original = fixture.engine.save();
++        let mut duplicate = original.clone();
++        duplicate.core.deck.push(fixture.held[0]);
++        assert!(
++            matches!(
++                restore_bytes(&fixture, &duplicate),
++                Err(SnapshotError::IdOutOfBounds {
++                    what: "card_in_multiple_zones",
++                    ..
++                })
++            ),
++            "{window:?}: duplicate"
++        );
++        let mut missing = original.clone();
++        change_held(&mut missing, window, None);
++        assert!(
++            matches!(
++                restore_bytes(&fixture, &missing),
++                Err(SnapshotError::IdOutOfBounds {
++                    what: "card_missing_from_all_zones",
++                    ..
++                })
++            ),
++            "{window:?}: missing"
++        );
++        let mut outside = original.clone();
++        change_held(
++            &mut outside,
++            window,
++            Some(fixture.engine.catalog().cards.len() as u32),
++        );
++        assert!(
++            matches!(
++                restore_bytes(&fixture, &outside),
++                Err(SnapshotError::IdOutOfBounds { what: "card", .. })
++            ),
++            "{window:?}: out of range"
++        );
++        if matches!(window, Window::GaiMing | Window::HaoTianTa) {
++            let mut alias = original.clone();
++            change_held(&mut alias, window, Some(fixture.held[0]));
++            assert!(
++                matches!(
++                    restore_bytes(&fixture, &alias),
++                    Err(SnapshotError::IdOutOfBounds {
++                        what: "card_in_multiple_zones",
++                        ..
++                    })
++                ),
++                "{window:?}: only GaiMing judge_card/first-candidate alias is legitimate"
++            );
++        }
++    }
++}
++
++#[test]
++fn inactive_storage_and_finalized_judge_references_are_not_owned() {
++    for window in [
++        Window::XunXun,
++        Window::JiJie,
++        Window::GaiMing,
++        Window::HaoTianTa,
++    ] {
++        let fixture = fixture(window);
++        let mut machine = fixture
++            .engine
++            .save()
++            .resolution
++            .parks
++            .last()
++            .unwrap()
++            .machine
++            .clone();
++        let leaf = window_machine(&mut machine);
++        match leaf {
++            MachineSnapshot::XunXun { stage, .. } => {
++                *stage = engine_native::snap::XunXunStageSnap::Undo
++            }
++            MachineSnapshot::JiJie { stage, .. } => {
++                *stage = engine_native::snap::JiJieStageSnap::Ask
++            }
++            MachineSnapshot::JudgePhase {
++                current: Some(current),
++                ..
++            } => {
++                current.finalized = true;
++                current.judge_held = false;
++            }
++            _ => panic!("window"),
++        }
++        let mut ids = Vec::new();
++        machine_held_cards(&machine, &mut ids);
++        assert!(
++            ids.is_empty(),
++            "{window:?}: inactive references are not physical ownership: {ids:?}"
++        );
++    }
++}
++
++#[test]
++fn parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers() {
++    use engine_native::snap::{active_ask, JijiangStageSnap, LiJianStageSnap};
++    for window in [
++        Window::XunXun,
++        Window::JiJie,
++        Window::GaiMing,
++        Window::HaoTianTa,
++    ] {
++        let fixture = fixture(window);
++        let mut root = fixture
++            .engine
++            .save()
++            .resolution
++            .parks
++            .last()
++            .unwrap()
++            .machine
++            .clone();
++        let mut machine = window_machine(&mut root).clone();
++        let mut expected = fixture.held.clone();
++        if let MachineSnapshot::JudgePhase {
++            current: Some(current),
++            queue,
++            ..
++        } = &machine
++        {
++            expected.extend(queue);
++            expected.push(current.trick);
++        }
++        expected.sort_unstable();
++        let open = fixture.engine.open_choice().unwrap();
++        let ask = engine_native::snap::ask(
++            open.observer,
++            open.spec.prompt,
++            open.spec.kind,
++            open.spec.options.clone(),
++            open.spec.min,
++            open.spec.max,
++            open.spec.allow_cancel,
++        );
++        for wrapper in 0..5 {
++            machine = match wrapper {
++                0 => MachineSnapshot::OptionalGate {
++                    owner: 0,
++                    def: 0,
++                    event: engine_native::event::EventData::Phase {
++                        player: 0,
++                        phase: engine_native::Phase::Draw,
++                        begin: true,
++                    },
++                    asked: true,
++                    inner: Some(Box::new(machine)),
++                },
++                1 => MachineSnapshot::NullifyWindow {
++                    card: 0,
++                    source: 0,
++                    nullified: false,
++                    queue: vec![],
++                    asked: false,
++                    window_open: false,
++                    owns_disposal: false,
++                    effect: Some(Box::new(machine)),
++                },
++                2 => MachineSnapshot::Aoe {
++                    card: 0,
++                    source: 0,
++                    need: engine_native::CardKind::Sha,
++                    targets: vec![],
++                    idx: 0,
++                    nature: engine_native::event::DamageNature::Normal,
++                    inner: Some(Box::new(machine)),
++                },
++                3 => MachineSnapshot::Jijiang {
++                    owner: 0,
++                    stage: JijiangStageSnap::HelperAsk,
++                    queue: None,
++                    helper: None,
++                    sha: None,
++                    inner: Some(Box::new(machine)),
++                },
++                4 => MachineSnapshot::LiJian {
++                    owner: 0,
++                    stage: LiJianStageSnap::Launch,
++                    card: None,
++                    inner: Some(Box::new(machine)),
++                },
++                _ => unreachable!(),
++            };
++            let mut actual = Vec::new();
++            machine_held_cards(&machine, &mut actual);
++            actual.sort_unstable();
++            assert_eq!(actual, expected, "{window:?}: nested wrapper {wrapper}");
++            assert_eq!(
++                active_ask(
++                    &machine,
++                    fixture.engine.state_core(),
++                    fixture.engine.catalog()
++                ),
++                Some(ask.clone())
++            );
++        }
++    }
++}
++
++#[test]
++fn archive_encoding_rejects_unknown_prompts_without_changing_existing_layout() {
++    for window in [
++        Window::XunXun,
++        Window::JiJie,
++        Window::GaiMing,
++        Window::HaoTianTa,
++        Window::Liaoyuan,
++    ] {
++        let fixture = fixture(window);
++        let original = fixture.engine.save();
++        let bytes = engine_native::archive::encode_archive(&original);
++        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 105);
++        if let Some(directory) = std::env::var_os("NC09_MACHINE_ARCHIVE_OUT") {
++            let directory = std::path::PathBuf::from(directory);
++            std::fs::create_dir_all(&directory).unwrap();
++            std::fs::write(directory.join(format!("{window:?}.bin")), &bytes).unwrap();
++        }
++        let mut unknown = original;
++        unknown.resolution.open_choice.as_mut().unwrap().spec.prompt =
++            "nc09_unregistered_test_prompt";
++        let bytes = engine_native::archive::encode_archive(&unknown);
++        assert!(matches!(
++            engine_native::archive::decode_archive(&bytes),
++            Err(engine_native::archive::ArchiveError::BadTag(
++                "prompt_unknown",
++                0
++            ))
++        ));
++    }
++}
++
++#[test]
++fn gaiming_only_first_candidate_aliases_judge_card() {
++    let fixture = fixture(Window::GaiMing);
++    let mut snapshot = fixture.engine.save();
++    let MachineSnapshot::JudgePhase {
++        current: Some(current),
++        ..
++    } = window_machine(&mut snapshot.resolution.parks.last_mut().unwrap().machine)
++    else {
++        panic!("judge")
++    };
++    current.judge_card = current.gaiming_cards.as_ref().unwrap()[1];
++    assert!(matches!(
++        restore_bytes(&fixture, &snapshot),
++        Err(SnapshotError::IdOutOfBounds {
++            what: "card_in_multiple_zones",
++            ..
++        })
++    ));
++}
++
++#[test]
++fn pending_choice_metadata_must_match_the_machine_after_byte_decode() {
++    for window in [
++        Window::XunXun,
++        Window::JiJie,
++        Window::GaiMing,
++        Window::HaoTianTa,
++    ] {
++        let fixture = fixture(window);
++        for mutation in 0..6 {
++            let mut snapshot = fixture.engine.save();
++            let open = snapshot.resolution.open_choice.as_mut().unwrap();
++            match mutation {
++                0 => open.spec.options.reverse(),
++                1 => open.spec.min += 1,
++                2 => open.spec.max += 1,
++                3 => open.spec.allow_cancel = !open.spec.allow_cancel,
++                4 => open.spec.kind = engine_native::ChoiceKind::Confirm,
++                5 => open.observer = (open.observer + 1) % snapshot.core.players.len() as u8,
++                _ => unreachable!(),
++            }
++            assert!(
++                matches!(
++                    restore_bytes(&fixture, &snapshot),
++                    Err(SnapshotError::OpenChoiceMismatch { .. })
++                ),
++                "{window:?}: metadata mutation {mutation}"
++            );
++        }
++    }
++}
++
++fn liaoyuan_fields(snapshot: &StateSnapshot) -> (u8, Option<u32>, Vec<u32>) {
++    let mut root = snapshot.resolution.parks.last().unwrap().machine.clone();
++    let MachineSnapshot::Host {
++        behavior,
++        stage,
++        card,
++        cards,
++        ..
++    } = window_machine(&mut root)
++    else {
++        panic!("LiaoYuan host")
++    };
++    assert_eq!(
++        *behavior,
++        engine_native::content::host::HostBehavior::Liaoyuan.tag()
++    );
++    (*stage, *card, cards.clone())
++}
++
++#[test]
++fn liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores() {
++    let fixture = fixture(Window::Liaoyuan);
++    let before = fixture.engine.save();
++    let (stage, suit, history) = liaoyuan_fields(&before);
++    assert_eq!(
++        stage,
++        engine_native::content::host::HostStage::SelectCard.tag()
++    );
++    assert!(suit.is_some_and(|suit| suit <= 3));
++    assert!(history.is_empty());
++    let restored = fixture.restore(&before).unwrap();
++    assert_eq!(restored.state_core(), fixture.engine.state_core());
++    assert_eq!(restored.save().resolution, before.resolution);
++    let open = fixture.engine.open_choice().unwrap();
++    let expected: Vec<_> = before
++        .core
++        .player(0)
++        .hand
++        .iter()
++        .chain(&before.core.player(0).equips)
++        .filter(|id| fixture.engine.catalog().cards[**id as usize].suit as u32 == suit.unwrap())
++        .copied()
++        .map(engine_native::ChoiceOption::Card)
++        .collect();
++    assert_eq!(open.spec.options, expected);
++    assert_eq!(
++        (open.spec.min, open.spec.max, open.spec.allow_cancel),
++        (1, 1, true)
++    );
++}
++
++#[test]
++fn liaoyuan_byte_archive_restores_and_resumes() {
++    archive_resume(Window::Liaoyuan);
++}
++
++#[test]
++fn liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores() {
++    let fixture = fixture(Window::Liaoyuan);
++    for privacy in [false, true] {
++        let mut original = fixture.engine.clone();
++        let before = original.save();
++        if privacy {
++            engine_native::ai::redact_opponent_hands(&mut original, 0);
++            assert_eq!(original.save().resolution, before.resolution);
++            assert_eq!(original.state_core().rng, before.core.rng);
++        }
++        let scalar = liaoyuan_fields(&original.save()).1;
++        let equip = original.state_core().player(0).equips[0];
++        let mut restored = restore_bytes(&fixture, &original.save()).unwrap();
++        for selection in [vec![engine_native::ChoiceOption::Card(equip)], vec![]] {
++            assert_eq!(
++                original.open_choice().unwrap().spec.prompt,
++                "liaoyuan_discard"
++            );
++            let left_log = original.log().len();
++            let right_log = restored.log().len();
++            windows::answer(&mut original, selection.clone());
++            windows::answer(&mut restored, selection);
++            assert_eq!(original.state_core(), restored.state_core());
++            assert_eq!(original.state_hash(), restored.state_hash());
++            assert_eq!(original.save().resolution, restored.save().resolution);
++            assert_eq!(&original.log()[left_log..], &restored.log()[right_log..]);
++            if original
++                .open_choice()
++                .is_some_and(|choice| choice.spec.prompt == "liaoyuan_discard")
++            {
++                let (_, after_scalar, history) = liaoyuan_fields(&original.save());
++                assert_eq!(after_scalar, scalar, "Host.card is the same suit scalar");
++                assert_eq!(
++                    history,
++                    vec![equip],
++                    "Host.cards references the already discarded equipment"
++                );
++                assert!(original.state_core().discard.contains(&equip));
++                let mut physical = original.view_referee().visible_card_ids();
++                physical.sort_unstable();
++                assert_eq!(
++                    physical, fixture.physical_ids,
++                    "history does not own a second copy"
++                );
++            }
++            restored = restore_bytes(&fixture, &restored.save()).unwrap();
++        }
++    }
++}
++
++#[test]
++fn liaoyuan_invalid_scalar_stage_and_candidate_still_reject() {
++    let fixture = fixture(Window::Liaoyuan);
++    for invalid in 0..5 {
++        let mut snapshot = fixture.engine.save();
++        let MachineSnapshot::Host { card, stage, .. } =
++            window_machine(&mut snapshot.resolution.parks.last_mut().unwrap().machine)
++        else {
++            panic!("host")
++        };
++        match invalid {
++            0 => *card = None,
++            1 => *card = Some(4),
++            2 => *card = Some(256),
++            3 => *stage = engine_native::content::host::HostStage::Act.tag(),
++            4 => {
++                snapshot
++                    .resolution
++                    .open_choice
++                    .as_mut()
++                    .unwrap()
++                    .spec
++                    .options = vec![engine_native::ChoiceOption::Card(
++                    snapshot.core.player(1).hand[0],
++                )]
++            }
++            _ => unreachable!(),
++        }
++        let result = restore_bytes(&fixture, &snapshot);
++        if invalid == 2 {
++            assert!(
++                matches!(
++                    result,
++                    Err(SnapshotError::IdOutOfBounds {
++                        what: "card",
++                        got: 256
++                    })
++                ),
++                "existing host payload bounds must reject 256: {:?}",
++                result.as_ref().err()
++            );
++        } else {
++            assert!(
++                matches!(result, Err(SnapshotError::OpenChoiceMismatch { .. })),
++                "LiaoYuan invalid scalar/stage/candidate {invalid}: {:?}",
++                result.as_ref().err()
++            );
++        }
++    }
++}
+diff --git a/crates/engine-native/tests/support/nc09_machine_windows.rs b/crates/engine-native/tests/support/nc09_machine_windows.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..9a3fff034974b5aa22628302dfc4f42cfa3e57b5
+--- /dev/null
++++ b/crates/engine-native/tests/support/nc09_machine_windows.rs
+@@ -0,0 +1,309 @@
++//! Real pending windows from the existing Li Dian, Yi Ji, Boss and SWD fixtures.
++use engine_native::content::extension::ExtensionPack;
++use engine_native::{
++    CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
++};
++
++#[derive(Debug, Clone, Copy)]
++pub enum Window {
++    XunXun,
++    JiJie,
++    GaiMing,
++    HaoTianTa,
++    Liaoyuan,
++}
++
++pub struct Fixture {
++    pub engine: Engine,
++    pub packs: Vec<ExtensionPack>,
++    pub physical_ids: Vec<u32>,
++    pub held: Vec<u32>,
++    pub selection: Vec<ChoiceOption>,
++}
++
++pub fn submit(engine: &mut Engine, action: GameAction) {
++    let result = engine.submit(GameCommand {
++        actor: engine
++            .open_choice()
++            .map_or(engine.turn().current, |c| c.observer),
++        expected_revision: engine.revision(),
++        dedup_id: engine.revision() + 1,
++        action,
++    });
++    assert!(!matches!(result, CommandOutcome::Rejected(_)), "{result:?}");
++}
++
++pub fn answer(engine: &mut Engine, selection: Vec<ChoiceOption>) {
++    let choice_id = engine.open_choice().unwrap().id;
++    submit(
++        engine,
++        GameAction::Answer {
++            choice_id,
++            selection,
++        },
++    );
++}
++
++pub fn default_selection(engine: &Engine) -> Vec<ChoiceOption> {
++    let open = engine.open_choice().unwrap();
++    if open.spec.options.contains(&ChoiceOption::Pass) {
++        vec![ChoiceOption::Pass]
++    } else if open.spec.allow_cancel {
++        vec![]
++    } else {
++        open.spec
++            .options
++            .iter()
++            .take(open.spec.min)
++            .copied()
++            .collect()
++    }
++}
++
++fn advance_to_play(engine: &mut Engine) {
++    for _ in 0..64 {
++        if engine.turn().current == 0
++            && engine.turn().phase == Phase::Play
++            && engine.open_choice().is_none()
++        {
++            return;
++        }
++        if engine.open_choice().is_some() {
++            answer(engine, default_selection(engine));
++        } else {
++            submit(engine, GameAction::NextPhase);
++        }
++    }
++    panic!("seat zero play phase");
++}
++
++fn pack(directory: &str) -> ExtensionPack {
++    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
++        .join("../../packages/extensions")
++        .join(directory)
++        .join("assets/cards.json");
++    content_native_loader::bridge_pack(&std::fs::read_to_string(path).unwrap())
++        .unwrap()
++        .pack
++}
++
++pub fn fixture(window: Window) -> Fixture {
++    let packs = match window {
++        Window::GaiMing => vec![pack("boss-zhugeliang-upstream-liuli")],
++        Window::HaoTianTa | Window::Liaoyuan => vec![pack("shahai-swd-upstream-noname")],
++        _ => vec![],
++    };
++    let seed = match window {
++        Window::XunXun => 80,
++        Window::JiJie => 100,
++        Window::GaiMing => 93003,
++        Window::HaoTianTa => 62023,
++        Window::Liaoyuan => 122001,
++    };
++    let seats = if packs.is_empty() { 3 } else { 4 };
++    let refs: Vec<_> = packs.iter().collect();
++    let mut engine = Engine::new_with_extensions(seed, seats, &refs).unwrap();
++    // Capture actual initial ownership, independently of the collector under test.
++    let mut physical_ids = engine.state_core().deck.clone();
++    for player in &engine.state_core().players {
++        physical_ids.extend(&player.hand);
++    }
++    physical_ids.sort_unstable();
++    assert!(physical_ids.windows(2).all(|ids| ids[0] != ids[1]));
++    let (prompt, held, selection) = match window {
++        Window::XunXun => {
++            advance_to_play(&mut engine);
++            for seat in 0..seats as u8 {
++                engine.debug_clear_hand(seat);
++            }
++            engine.debug_assemble_general(0, "李典");
++            engine.debug_set_turn(2, Phase::End, engine.turn().round);
++            submit(&mut engine, GameAction::NextPhase);
++            submit(&mut engine, GameAction::NextPhase);
++            assert_eq!(engine.open_choice().unwrap().spec.prompt, "trigger_confirm");
++            answer(&mut engine, vec![ChoiceOption::Confirm]);
++            let held = card_options(&engine);
++            assert_eq!(held.len(), 4);
++            let selection = held[..2].iter().copied().map(ChoiceOption::Card).collect();
++            ("xunxun_arrange", held, selection)
++        }
++        Window::JiJie => {
++            advance_to_play(&mut engine);
++            for seat in 0..seats as u8 {
++                engine.debug_clear_hand(seat);
++            }
++            engine.debug_assemble_general(0, "伊籍");
++            let card = engine.state_core().deck[0];
++            let skill = engine.catalog().skill_by_name("机捷").unwrap();
++            submit(&mut engine, GameAction::ActivateSkill { skill });
++            (
++                "jijie_give_target",
++                vec![card],
++                vec![ChoiceOption::Player(1)],
++            )
++        }
++        Window::GaiMing => {
++            let def = (0..engine.catalog().general_count() as u16)
++                .find(|def| {
++                    engine
++                        .catalog()
++                        .general_meta(*def)
++                        .is_some_and(|g| g.0 == "boss_zhugeliang")
++                })
++                .unwrap();
++            engine.debug_assemble_general_def(0, def);
++            engine.debug_place_judge(0, "le");
++            engine.debug_set_deck_top_by(|card| card.suit.is_spade());
++            engine.debug_set_turn(3, Phase::End, engine.turn().round);
++            submit(&mut engine, GameAction::NextPhase);
++            assert_eq!(engine.open_choice().unwrap().spec.prompt, "trigger_confirm");
++            answer(&mut engine, vec![]);
++            let held = card_options(&engine);
++            assert_eq!(held.len(), 7);
++            (
++                "gaiming_pick",
++                held.clone(),
++                vec![ChoiceOption::Card(held[6])],
++            )
++        }
++        Window::Liaoyuan => {
++            engine.debug_grant(0, "liaoyuan");
++            engine.debug_set_turn(0, Phase::Play, 1);
++            let sha = engine.debug_move_named_card_to_hand(0, "sha");
++            let suit = engine.catalog().cards[sha as usize].suit;
++            let equip_name = engine
++                .catalog()
++                .cards
++                .iter()
++                .find(|card| {
++                    card.suit == suit
++                        && card.kind.equip_slot().is_some()
++                        && card.equip_skills.is_empty()
++                })
++                .unwrap()
++                .name;
++            let equip = engine.debug_place(0, equip_name);
++            submit(
++                &mut engine,
++                GameAction::PlayCard {
++                    card: equip,
++                    targets: vec![],
++                },
++            );
++            for _ in 0..3 {
++                let index = engine
++                    .state_core()
++                    .deck
++                    .iter()
++                    .position(|id| engine.catalog().cards[*id as usize].suit == suit)
++                    .unwrap();
++                let card = engine.state_core_mut().deck.remove(index);
++                engine.state_core_mut().players[0].hand.push(card);
++            }
++            submit(
++                &mut engine,
++                GameAction::PlayCard {
++                    card: sha,
++                    targets: vec![1],
++                },
++            );
++            for _ in 0..16 {
++                let choice = engine.open_choice().unwrap();
++                if choice.spec.prompt == "liaoyuan_discard" {
++                    break;
++                }
++                let selection = if choice.spec.options.contains(&ChoiceOption::Confirm) {
++                    vec![ChoiceOption::Confirm]
++                } else {
++                    choice
++                        .spec
++                        .options
++                        .iter()
++                        .take(choice.spec.min)
++                        .copied()
++                        .collect()
++                };
++                answer(&mut engine, selection);
++            }
++            let open = engine.open_choice().unwrap();
++            assert_eq!(open.spec.prompt, "liaoyuan_discard");
++            assert!(open.spec.options.contains(&ChoiceOption::Card(equip)));
++            let selection = vec![open.spec.options[0]];
++            ("liaoyuan_discard", vec![], selection)
++        }
++        Window::HaoTianTa => {
++            advance_to_play(&mut engine);
++            for seat in 0..seats as u8 {
++                engine.debug_clear_hand(seat);
++            }
++            let name = engine
++                .catalog()
++                .cards
++                .iter()
++                .find(|card| card.kind == CardKind::Haotianta)
++                .unwrap()
++                .name;
++            let card = engine.debug_place(2, name);
++            engine.debug_set_turn(2, Phase::Play, engine.turn().round);
++            submit(
++                &mut engine,
++                GameAction::PlayCard {
++                    card,
++                    targets: vec![],
++                },
++            );
++            engine.debug_set_turn(0, Phase::Play, engine.turn().round);
++            let le = engine.debug_place(0, "le");
++            submit(
++                &mut engine,
++                GameAction::PlayCard {
++                    card: le,
++                    targets: vec![1],
++                },
++            );
++            assert!(engine.open_choice().is_none());
++            let heart = engine.debug_set_deck_top_by(|card| card.suit.is_heart());
++            let spade = engine.debug_set_deck_top_by(|card| card.suit.is_spade());
++            engine.debug_set_turn(0, Phase::End, engine.turn().round);
++            submit(&mut engine, GameAction::NextPhase);
++            assert_eq!(card_options(&engine), vec![spade, heart]);
++            (
++                "haotianta_pick",
++                vec![spade, heart],
++                vec![ChoiceOption::Card(heart)],
++            )
++        }
++    };
++    assert_eq!(engine.open_choice().unwrap().spec.prompt, prompt);
++    Fixture {
++        engine,
++        packs,
++        physical_ids,
++        held,
++        selection,
++    }
++}
++
++fn card_options(engine: &Engine) -> Vec<u32> {
++    engine
++        .open_choice()
++        .unwrap()
++        .spec
++        .options
++        .iter()
++        .filter_map(|option| match option {
++            ChoiceOption::Card(id) => Some(*id),
++            _ => None,
++        })
++        .collect()
++}
++
++impl Fixture {
++    pub fn restore(
++        &self,
++        snapshot: &engine_native::StateSnapshot,
++    ) -> Result<Engine, engine_native::SnapshotError> {
++        let packs: Vec<_> = self.packs.iter().collect();
++        Engine::restore_with_extensions(snapshot, &packs)
++    }
++}
+diff --git a/apps/game-server/tests/nc09_machine_projection.rs b/apps/game-server/tests/nc09_machine_projection.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..d26b994582f9636c36932cc0945684982628e4a2
+--- /dev/null
++++ b/apps/game-server/tests/nc09_machine_projection.rs
+@@ -0,0 +1,116 @@
++//! Referee/native agreement at real XunXun, JiJie and judgment choice windows.
++#[path = "../src/native_view.rs"]
++mod native_view;
++#[path = "../../../crates/engine-native/tests/support/nc09_machine_windows.rs"]
++mod windows;
++
++use engine_api::{CardZoneTag, PlayerId};
++use native_view::{observer_snapshot_for, RoomRole};
++use windows::{fixture, Window};
++
++fn projection(window: Window) {
++    let fixture = fixture(window);
++    let engine = &fixture.engine;
++    let before = engine.save();
++    let native = engine.view_referee();
++    let server = observer_snapshot_for(engine, RoomRole::Referee, None);
++    let mut ids: Vec<_> = server
++        .known_cards
++        .iter()
++        .map(|card| card.id.raw())
++        .collect();
++    ids.sort_unstable();
++    assert_eq!(
++        ids, fixture.physical_ids,
++        "{window:?}: exact physical multiset"
++    );
++    assert_eq!(
++        server
++            .known_cards
++            .iter()
++            .map(|card| card.id.raw())
++            .collect::<Vec<_>>(),
++        native.visible_card_ids()
++    );
++    for card in &server.known_cards {
++        let expected = native
++            .cards
++            .iter()
++            .find(|location| location.id == card.id.raw())
++            .unwrap();
++        assert_eq!(
++            card.owner,
++            expected.owner.map(|seat| PlayerId::new(seat as u32 + 1))
++        );
++        assert_eq!(format!("{:?}", card.zone), format!("{:?}", expected.zone));
++        let face = &engine.catalog().cards[card.id.raw() as usize];
++        assert_eq!(card.def, Some(face.kind as u16 as u32));
++        assert_eq!(card.rank, Some(face.rank));
++        assert!(card.suit.is_some());
++    }
++    for id in &fixture.held {
++        let card = server
++            .known_cards
++            .iter()
++            .find(|card| card.id.raw() == *id)
++            .unwrap();
++        assert_eq!((card.zone, card.owner), (CardZoneTag::Processing, None));
++    }
++    for seat in 0..engine.state_core().players.len() as u32 {
++        let player = PlayerId::new(seat + 1);
++        let ordinary = observer_snapshot_for(engine, RoomRole::Player, Some(player));
++        assert!(ordinary
++            .known_cards
++            .iter()
++            .all(|card| !fixture.held.contains(&card.id.raw())));
++        assert_eq!(
++            ordinary
++                .known_cards
++                .iter()
++                .map(|card| card.id.raw())
++                .collect::<Vec<_>>(),
++            engine.view_for(seat as u8).visible_card_ids()
++        );
++        let spectator = observer_snapshot_for(engine, RoomRole::Spectator, Some(player));
++        assert!(spectator
++            .known_cards
++            .iter()
++            .all(|card| !fixture.held.contains(&card.id.raw())));
++        assert!(native_view::choice_for(engine, RoomRole::Spectator, Some(player)).is_none());
++    }
++    let bytes = engine_native::archive::encode_archive(&before);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(decoded, before);
++    let restored = fixture.restore(&decoded).unwrap();
++    assert_eq!(
++        observer_snapshot_for(&restored, RoomRole::Referee, None),
++        server
++    );
++    assert_eq!(
++        native_view::choice_for(&restored, RoomRole::Referee, None),
++        native_view::choice_for(engine, RoomRole::Referee, None)
++    );
++    assert_eq!(engine.save(), before);
++}
++
++#[test]
++fn xunxun_native_server_referee_and_privacy() {
++    projection(Window::XunXun);
++}
++#[test]
++fn jijie_native_server_referee_and_privacy() {
++    projection(Window::JiJie);
++}
++#[test]
++fn gaiming_native_server_referee_and_privacy() {
++    projection(Window::GaiMing);
++}
++#[test]
++fn haotianta_native_server_referee_and_privacy() {
++    projection(Window::HaoTianTa);
++}
++
++#[test]
++fn liaoyuan_native_server_referee_and_privacy() {
++    projection(Window::Liaoyuan);
++}

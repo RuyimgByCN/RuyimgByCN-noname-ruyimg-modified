@@ -1,0 +1,3794 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 21f9ee44..3a9a57b0 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -872,6 +872,8 @@ dependencies = [
+  "content-schema",
+  "diagnostics",
+  "engine-api",
++ "engine-native",
++ "engine-native-wasm",
+  "rule-vm",
+  "serde",
+  "serde_json",
+@@ -879,6 +881,7 @@ dependencies = [
+  "tauri-build",
+  "tempfile",
+  "thiserror 2.0.18",
++ "tokio",
+ ]
+ 
+ [[package]]
+diff --git a/apps/desktop-client/Cargo.toml b/apps/desktop-client/Cargo.toml
+index f8387435..c9c56a8b 100644
+--- a/apps/desktop-client/Cargo.toml
++++ b/apps/desktop-client/Cargo.toml
+@@ -23,6 +23,8 @@ serde = { workspace = true }
+ serde_json = { workspace = true }
+ thiserror = { workspace = true }
+ tauri = { version = "2", optional = true, features = ["protocol-asset"] }
++engine-native-wasm = { path = "../../crates/engine-native-wasm" }
++tokio = { version = "1", features = ["sync", "rt", "macros"] }
+ 
+ [build-dependencies]
+ tauri-build = { version = "2", features = [] }
+@@ -32,3 +34,4 @@ tempfile = "3"
+ content-schema = { path = "../../crates/content-schema" }
+ rule-vm = { path = "../../crates/rule-vm" }
+ blake3 = { workspace = true }
++engine-native = { path = "../../crates/engine-native" }
+diff --git a/apps/desktop-client/src/lib.rs b/apps/desktop-client/src/lib.rs
+index ae0383d4..019dbeae 100644
+--- a/apps/desktop-client/src/lib.rs
++++ b/apps/desktop-client/src/lib.rs
+@@ -6,6 +6,14 @@
+ 
+ #![deny(missing_docs)]
+ 
++mod native_engine_host;
++mod native_envelope;
++pub use native_engine_host::NativeEngineHost;
++#[cfg(feature = "tauri-shell")]
++mod native_engine_resource;
++#[cfg(feature = "tauri-shell")]
++pub use native_engine_resource::{close_native_engine, close_native_engines, open_native_engine};
++
+ use content_runtime::{
+     import_extensions, ActiveCatalogPage, ContentLock, ExtensionImportReport, InstallOptions,
+     InstallResult, PackageSignature, PackageStore, RuntimeError,
+diff --git a/apps/desktop-client/src/main.rs b/apps/desktop-client/src/main.rs
+index 33b87fe9..9c76cad6 100644
+--- a/apps/desktop-client/src/main.rs
++++ b/apps/desktop-client/src/main.rs
+@@ -1,5 +1,7 @@
+ use content_runtime::{ActiveCatalogPage, InstallResult, PackageSignature};
+-use desktop_client::{ContentBundle, DesktopHost, PlatformInfo, ShellCapabilities};
++use desktop_client::{
++    ContentBundle, DesktopHost, NativeEngineHost, PlatformInfo, ShellCapabilities,
++};
+ use std::sync::Mutex;
+ use tauri::{Manager, State};
+ 
+@@ -101,14 +103,61 @@ fn rollback_content(host: State<'_, HostState>) -> Result<(), String> {
+         .map_err(|error| error.to_string())
+ }
+ 
++#[tauri::command]
++fn native_engine_open(window: tauri::WebviewWindow) -> Result<tauri::ResourceId, String> {
++    desktop_client::open_native_engine(&mut window.resources_table())
++}
++
++#[tauri::command]
++fn native_engine_close(
++    window: tauri::WebviewWindow,
++    resource_id: tauri::ResourceId,
++) -> Result<(), String> {
++    desktop_client::close_native_engine(&mut window.resources_table(), resource_id)
++}
++
++#[tauri::command]
++async fn native_engine_request(
++    window: tauri::WebviewWindow,
++    resource_id: tauri::ResourceId,
++    request: serde_json::Value,
++) -> Result<serde_json::Value, String> {
++    let engine = window
++        .resources_table()
++        .get::<NativeEngineHost>(resource_id)
++        .map_err(|error| error.to_string())?;
++    engine.request(request).await
++}
++
+ fn main() {
+-    tauri::Builder::default()
++    let builder = tauri::Builder::default().on_page_load(|webview, payload| {
++        if payload.event() == tauri::webview::PageLoadEvent::Started {
++            desktop_client::close_native_engines(&mut webview.resources_table());
++        }
++    });
++    #[cfg(any(target_os = "macos", target_os = "ios"))]
++    let builder = builder.on_web_content_process_terminate(|webview| {
++        desktop_client::close_native_engines(&mut webview.resources_table());
++        // Preserve Tauri's default renderer-crash recovery after retiring the lost document's engines.
++        if let Err(error) = webview.reload() {
++            eprintln!("failed to reload desktop WebView after renderer termination: {error}");
++        }
++    });
++    builder
+         .setup(|app| {
+             let data_dir = app.path().app_data_dir()?;
+             let host =
+                 DesktopHost::open_for_shell(data_dir, ShellCapabilities::default(), "tauri2")
+                     .map_err(|error| error.to_string())?;
+             app.manage(Mutex::new(host));
++            for window in app.webview_windows().into_values() {
++                let webview = window.clone();
++                window.on_window_event(move |event| {
++                    if matches!(event, tauri::WindowEvent::Destroyed) {
++                        desktop_client::close_native_engines(&mut webview.resources_table());
++                    }
++                });
++            }
+             Ok(())
+         })
+         .invoke_handler(tauri::generate_handler![
+@@ -119,7 +168,10 @@ fn main() {
+             resolve_content_asset,
+             set_match_frozen,
+             install_package,
+-            rollback_content
++            rollback_content,
++            native_engine_open,
++            native_engine_close,
++            native_engine_request
+         ])
+         .run(tauri::generate_context!())
+         .expect("failed to run noname-next desktop shell");
+diff --git a/apps/web-client/scripts/nc04-worker-failure.test.mjs b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+index 6bd0e964..e994dd20 100644
+--- a/apps/web-client/scripts/nc04-worker-failure.test.mjs
++++ b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
+ import { readFileSync } from "node:fs";
+ import { test } from "node:test";
+ import ts from "typescript";
++import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
+ 
+ async function settles(promise) {
+   let timer;
+@@ -17,7 +18,7 @@ async function settles(promise) {
+ 
+ // Use the production client class with a controllable Worker; the browser test
+ // additionally exercises actual browser event dispatch and a native Worker.
+-function fixture({ autoInit = true } = {}) {
++function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
+   const source = readFileSync(new URL("../src/engine/client.ts", import.meta.url), "utf8");
+   const ast = ts.createSourceFile("client.ts", source, ts.ScriptTarget.Latest, true);
+   const declaration = ast.statements.find((node) => ts.isClassDeclaration(node) && node.name?.text === "EngineClient");
+@@ -46,9 +47,12 @@ function fixture({ autoInit = true } = {}) {
+   const EngineClient = new Function(
+     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
+     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
+-    "urlParam", "console", js + "\nreturn EngineClient;",
+-  )(FakeWorker, FakeWorker, () => false, () => {}, (id) => failed.push(id),
+-    () => {}, () => {}, () => false, () => null, { error: () => {} });
++    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
++  )(FakeWorker, FakeWorker, () => desktopNative, () => {}, (id) => failed.push(id),
++    () => {}, () => {}, () => false, () => null, { error: () => {} },
++    () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
++      constructor() { super(invoke); }
++    });
+   return { client: new EngineClient(), workers, failed };
+ }
+ 
+@@ -150,3 +154,35 @@ test("空闲 Worker 的错误或释放不会结束其他请求的共享等待",
+     globalThis.__latencySabDebug = previous;
+   }
+ });
++
++test("desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback", async () => {
++  const calls = [];
++  let release;
++  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
++    calls.push({ command, args });
++    if (command === "native_engine_open") return 31;
++    if (command === "native_engine_close") return;
++    const { request } = args;
++    if (request.type === "init") return { id: request.id, ok: true, data: "native ready" };
++    if (request.type === "useSkillCard") return { id: request.id, ok: false, error: "useSkillCard 未映射" };
++    if (request.type === "autoStep") return new Promise((resolve) => { release = resolve; });
++    return { id: request.id, ok: true, data: { kind: "status", revision: 4, finished: false } };
++  } });
++  await f.client.connect();
++  assert.equal(f.client.getTransportKind(), "desktop-native");
++  assert.equal(f.workers.length, 0);
++  await assert.rejects(f.client.useSkillCard(0, 1, 0, [], 0), /未映射/);
++  assert.equal((await f.client.status()).revision, 4);
++  assert.deepEqual(calls.filter((c) => c.command === "native_engine_request").map((c) => c.args.request.id), [1, 2, 3]);
++  const pending = f.client.autoStep();
++  const rejected = assert.rejects(pending, /结果未知/);
++  await new Promise((resolve) => setImmediate(resolve));
++  f.client.dispose();
++  await settles(rejected);
++  release({ id: 4, ok: true, data: { revision: 5 } });
++  await new Promise((resolve) => setImmediate(resolve));
++  assert.equal(f.client.pending.size, 0);
++  assert.deepEqual(f.failed, [4]);
++  assert.equal(calls.filter((c) => c.command === "native_engine_close").length, 1);
++  assert.equal(f.workers.length, 0);
++});
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+index dc8aa14c..6ee3ec37 100644
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -475,3 +475,18 @@ test("联机公开事件与本地一致地展示粗粒度语义", async (t) => {
+   applyEnvelope(store, envelopes.at(-1));
+   assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+ });
++
++test("network outcomes retain protocol seat IDs and never use the local-native normalization", async (t) => {
++  const { client, connect } = fixture(t);
++  const socket = await connect();
++  const pending = client.joinRoom(7);
++  join(socket);
++  await pending;
++  const received = [];
++  client.onEnvelope((envelope) => received.push(envelope));
++  for (const player of [1, 4]) {
++    const snapshot = { ...view(player), outcome: { SingleWin: { player } } };
++    socket.receive("CommandOutcome", { view: snapshot, choice: null, legal_actions: [], result: { Accepted: {} } });
++    assert.deepEqual(received.at(-1).view.outcome, { SingleWin: { player } });
++  }
++});
+diff --git a/apps/web-client/scripts/web-frame-external.mjs b/apps/web-client/scripts/web-frame-external.mjs
+index 5a1f8430..7b895328 100644
+--- a/apps/web-client/scripts/web-frame-external.mjs
++++ b/apps/web-client/scripts/web-frame-external.mjs
+@@ -98,6 +98,9 @@ const battleQuery = new URLSearchParams({
+ // PA08-5 长时：loop=1 连续多局 + duration=<ms> 总时长（auto 档）
+ if (args.loop) battleQuery.set("loop", "1");
+ if (args.duration) battleQuery.set("duration", String(Number(args.duration)));
++if (args["engine-transport"] === "native" || args["engine-transport"] === "wasm") {
++  battleQuery.set("engineTransport", args["engine-transport"]);
++}
+ // PA07 缓解原型 A/B：latency=sab（回包 SAB 镜像 + rAF 轮询提前应用；需跨源隔离）
+ if (args.latency === "sab") {
+   battleQuery.set("latency", "sab");
+@@ -246,6 +249,7 @@ const summary = {
+     dpr: reportData.dpr,
+     viewport: reportData.viewport,
+     href: reportData.href,
++    engine_transport: reportData.engine_transport ?? null,
+     dist: distDir,
+   },
+   run: {
+diff --git a/apps/web-client/src/engine/autoDrive.ts b/apps/web-client/src/engine/autoDrive.ts
+index f34660e4..8a1142f3 100644
+--- a/apps/web-client/src/engine/autoDrive.ts
++++ b/apps/web-client/src/engine/autoDrive.ts
+@@ -94,6 +94,8 @@ function collect() {
+     dpr: window.devicePixelRatio,
+     viewport: [window.innerWidth, window.innerHeight],
+     href: location.href,
++    // SAFETY: EngineClient records the actual selected transport before opening its connection.
++    engine_transport: (globalThis as unknown as { __engineTransport?: string }).__engineTransport ?? null,
+     // PA08-5 长时内存采样（sampleMemory 在上报前覆写；series 为 driveAuto 周期采样）
+     memory: null as { used: number; total: number; limit: number; api: string } | null,
+     memory_series: [] as Array<{ t_ms: number; bytes: number }>,
+diff --git a/apps/web-client/src/engine/client.ts b/apps/web-client/src/engine/client.ts
+index 62ed3e36..652498af 100644
+--- a/apps/web-client/src/engine/client.ts
++++ b/apps/web-client/src/engine/client.ts
+@@ -11,6 +11,7 @@ import type {
+   WorkerResponse,
+ } from "../types/engine";
+ import { desktopContentBundle, isTauriShell } from "./desktopHost";
++import { DesktopEngineTransport, desktopEngineChoice, type EngineTransport } from "./desktopEngineTransport";
+ import {
+   perfRequestSent,
+   perfRequestFailed,
+@@ -39,7 +40,11 @@ function fetchText(url: string): Promise<string> {
+  * T13 产品面：默认原生后端（VITE_ENGINE_BACKEND=legacy 回退旧线）。
+  */
+ export class EngineClient {
+-  private worker: Worker | null = null;
++  private worker: EngineTransport | null = null;
++  private transportKind: "desktop-native" | "wasm-worker" | "legacy-worker" = "wasm-worker";
++
++  /** Actual selected transport, also available to the PA08/PA09 measurement harness. */
++  getTransportKind(): string { return this.transportKind; }
+   private seq = 1;
+   private pending = new Map<
+     number,
+@@ -60,9 +65,13 @@ export class EngineClient {
+     // worker chunk（dist 仅有 index.js），真实浏览器里 worker 加载失败 →
+     // 控制台 `engine worker error Event`、战斗页「未连接」。见证据
+     // docs/operations/evidence/2026-10-18-nc09-browser-e2e/。
+-    const worker: Worker = this.native
+-      ? new NativeEngineWorker()
+-      : new LegacyEngineWorker();
++    const desktopNative = this.native && isTauriShell() && desktopEngineChoice() === "native";
++    this.transportKind = desktopNative ? "desktop-native" : this.native ? "wasm-worker" : "legacy-worker";
++    // SAFETY: this optional diagnostic records the transport chosen above; it carries no rule state.
++    (globalThis as unknown as { __engineTransport?: string }).__engineTransport = this.transportKind;
++    const worker: EngineTransport = desktopNative
++      ? new DesktopEngineTransport()
++      : this.native ? new NativeEngineWorker() : new LegacyEngineWorker();
+     this.worker = worker;
+     worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
+       if (this.worker !== worker) return;
+@@ -116,7 +125,7 @@ export class EngineClient {
+         type: "init",
+         bundle: bundle ?? undefined,
+         perf: startPerfProbe(),
+-        latencySab: this.initSabMirror(),
++        latencySab: desktopNative ? undefined : this.initSabMirror(),
+       });
+     } catch (error) {
+       if (this.worker === worker) this.dispose();
+diff --git a/apps/web-client/src/views/ExtensionsView.vue b/apps/web-client/src/views/ExtensionsView.vue
+index 7661775f..95c543d7 100644
+--- a/apps/web-client/src/views/ExtensionsView.vue
++++ b/apps/web-client/src/views/ExtensionsView.vue
+@@ -1,5 +1,5 @@
+ <script setup lang="ts">
+-import { computed, ref } from "vue";
++import { computed, ref, onUnmounted } from "vue";
+ import {
+   EXTENSION_CATALOG,
+   extensionKey,
+@@ -32,6 +32,7 @@ const importing = ref(false);
+  * 服务端导入期拒绝一致；只校验不建局。校验 Worker 按需连接、页面内复用。
+  */
+ let validator: Promise<EngineClient> | null = null;
++onUnmounted(() => { void validator?.then((client) => client.dispose(), () => {}); });
+ function validatorClient(): Promise<EngineClient> {
+   validator ??= (async () => {
+     const client = new EngineClient();
+diff --git a/apps/web-client/src/views/SettingsView.vue b/apps/web-client/src/views/SettingsView.vue
+index 01c4db0d..4d7d90b9 100644
+--- a/apps/web-client/src/views/SettingsView.vue
++++ b/apps/web-client/src/views/SettingsView.vue
+@@ -1,6 +1,12 @@
+ <script setup lang="ts">
+ import { ref, watch, onMounted } from "vue";
+ import NativePackagesPanel from "../components/NativePackagesPanel.vue";
++import { isTauriShell } from "../engine/desktopHost";
++import { DESKTOP_ENGINE_KEY, desktopEngineChoice } from "../engine/desktopEngineTransport";
++
++const desktop = isTauriShell();
++const engineChoice = ref(desktopEngineChoice());
++watch(engineChoice, (choice) => localStorage.setItem(DESKTOP_ENGINE_KEY, choice));
+ 
+ // §30 Accessibility: full profile controls
+ 
+@@ -80,6 +86,18 @@ watch([highContrast, skipAnimations, fontScale, colorBlind, screenReader], () =>
+       表现层设置不影响规则核心（§30 可访问性）。所有设置即时生效并保存到本地。
+     </p>
+ 
++    <fieldset v-if="desktop" class="a11y-group">
++      <legend>桌面引擎</legend>
++      <label class="select-row">
++        <span>下次连接使用</span>
++        <select v-model="engineChoice" aria-label="桌面引擎">
++          <option value="wasm">WASM Worker（默认 / 回退）</option>
++          <option value="native">原生引擎（实验原型）</option>
++        </select>
++      </label>
++      <p class="muted">当前对局不切换。操作失败时保留当前引擎，请先核对局面。</p>
++    </fieldset>
++
+     <fieldset class="a11y-group">
+       <legend>可访问性（§30）</legend>
+ 
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index 6bff9174..357bd3de 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -18,6 +18,7 @@
+  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
+  */
+ import { publicEventLabel } from "../engine/publicEvents";
++import { normalizeNativeOutcome } from "../engine/nativeOutcome";
+ import type {
+   CardView,
+   EngineEnvelope,
+@@ -276,7 +277,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
+       })),
+     })),
+     known_cards,
+-    outcome: view.outcome ?? null,
++    outcome: normalizeNativeOutcome(view.outcome ?? null),
+   };
+ }
+ 
+diff --git a/crates/engine-native-wasm/src/lib.rs b/crates/engine-native-wasm/src/lib.rs
+index 2698d6b9..3146d69a 100644
+--- a/crates/engine-native-wasm/src/lib.rs
++++ b/crates/engine-native-wasm/src/lib.rs
+@@ -14,48 +14,17 @@
+ //!
+ //! 视图投影为纯只读面，不进权威状态与哈希（ADR 0730）。
+ 
+-use engine_native::ai::BoundedPlanner;
+-use engine_native::content::extension::ExtensionPack;
+-use engine_native::event::Phase;
+-use engine_native::view::{HandView, PlayerView};
+-use engine_native::{CommandOutcome, Engine, GameAction, RejectReason};
+ use wasm_bindgen::prelude::*;
+ 
+ mod installed_packs;
+-use installed_packs::packs_from_json;
+-
+-pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
+-    let packs = packs_from_json(packs_json)?;
+-    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+-    if refs.is_empty() {
+-        Ok(Engine::new(seed, players as usize))
+-    } else {
+-        Engine::new_with_extensions(seed, players as usize, &refs).map_err(|e| format!("{e:?}"))
+-    }
+-}
+-
+-pub fn engine_identity_from_packs(
+-    players: u8,
+-    seed: u64,
+-    packs_json: &str,
+-) -> Result<Engine, String> {
+-    let packs = packs_from_json(packs_json)?;
+-    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+-    Engine::try_new_identity_with_extensions(seed, players as usize, &refs)
+-}
+-
+-pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
+-    let packs = packs_from_json(packs_json)?;
+-    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+-    let bytes = hex_decode(hex)?;
+-    let snapshot =
+-        engine_native::archive::decode_archive(&bytes).map_err(|e| format!("解码失败: {e:?}"))?;
+-    if refs.is_empty() {
+-        Engine::restore(&snapshot).map_err(|e| format!("恢复失败: {e:?}"))
+-    } else {
+-        Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("恢复失败: {e:?}"))
+-    }
+-}
++mod session;
++pub use session::{
++    assign_general_for, engine_from_archive, engine_from_packs, engine_identity_from_packs,
++    general_candidates_json_for, hex_encode, legal_actions_json_for, NativeSession,
++    MAX_ARCHIVE_HEX_CHARS,
++};
++#[cfg(test)]
++use session::{hex_decode, hex_decode_bounded, prefix_count};
+ 
+ /// 导入期深层校验（GT-014，裁决第 12 项）：对单个安装载荷复用开局装载的
+ /// 逐包 Rust 校验器（身份字段、包/模块 logic_hash、rule-vm 装载期 verify、
+@@ -66,84 +35,6 @@ pub fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+     installed_packs::validate_pack_json(pack_json)
+ }
+ 
+-fn prefix_count(engine: &Engine, prefix: &str) -> u32 {
+-    engine
+-        .catalog()
+-        .cards
+-        .iter()
+-        .filter(|c| c.name.starts_with(prefix))
+-        .count() as u32
+-}
+-
+-/// 十六进制编解码（无 base64 依赖；存档字节面）。
+-pub fn hex_encode(bytes: &[u8]) -> String {
+-    let mut s = String::with_capacity(bytes.len() * 2);
+-    for b in bytes {
+-        s.push_str(&format!("{b:02x}"));
+-    }
+-    s
+-}
+-
+-/// 存档十六进制文本上限（2 字符 = 1 字节）。超出时在分配/解码前拒绝，
+-/// 避免任意长输入进入 WASM 线性内存。64 MiB 字节对当前 NGSA 载荷有充分余量。
+-pub const MAX_ARCHIVE_HEX_CHARS: usize = 64 * 1024 * 1024;
+-
+-/// 严格十六进制解码：先验证 ASCII/偶数长度/上限，再逐字节解析。
+-///
+-/// 旧实现按 `s[i..i + 2]` 字符串下标切片；奇数长度、多字节 UTF-8 或非 ASCII
+-/// 输入会 panic，WASM 侧表现为 `unreachable` 并破坏后续句柄使用。这里在
+-/// 字节层校验，错误只返回文本，不触碰调用方的原引擎。
+-fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
+-    hex_decode_bounded(s, MAX_ARCHIVE_HEX_CHARS)
+-}
+-
+-fn hex_decode_bounded(s: &str, max_chars: usize) -> Result<Vec<u8>, String> {
+-    if s.len() > max_chars {
+-        return Err(format!(
+-            "restore: 存档文本过长（{} 字符，上限 {max_chars}）",
+-            s.len()
+-        ));
+-    }
+-    if !s.is_ascii() {
+-        return Err("restore: 非法十六进制：只接受 ASCII 0-9a-fA-F".into());
+-    }
+-    let bytes = s.as_bytes();
+-    if bytes.len() % 2 != 0 {
+-        return Err(format!(
+-            "restore: 非法十六进制：长度为奇数（{}）",
+-            bytes.len()
+-        ));
+-    }
+-    let mut out = Vec::with_capacity(bytes.len() / 2);
+-    for (index, pair) in bytes.chunks_exact(2).enumerate() {
+-        let hi = hex_nibble(pair[0]).ok_or_else(|| {
+-            format!(
+-                "restore: 非法十六进制字符 {:?}（字节 {}）",
+-                pair[0] as char,
+-                index * 2
+-            )
+-        })?;
+-        let lo = hex_nibble(pair[1]).ok_or_else(|| {
+-            format!(
+-                "restore: 非法十六进制字符 {:?}（字节 {}）",
+-                pair[1] as char,
+-                index * 2 + 1
+-            )
+-        })?;
+-        out.push((hi << 4) | lo);
+-    }
+-    Ok(out)
+-}
+-
+-fn hex_nibble(byte: u8) -> Option<u8> {
+-    match byte {
+-        b'0'..=b'9' => Some(byte - b'0'),
+-        b'a'..=b'f' => Some(byte - b'a' + 10),
+-        b'A'..=b'F' => Some(byte - b'A' + 10),
+-        _ => None,
+-    }
+-}
+-
+ #[cfg(test)]
+ mod restore_boundary {
+     use super::*;
+@@ -190,267 +81,27 @@ fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+     JsValue::from_str(&format!("{e:?}"))
+ }
+ 
+-/// 命令结果的 JSON 投影（窄面：Accepted/Pending/Rejected 摘要）。
+-///
+-/// `Rejected` 附带 `reason`（`RejectReason` 的调试名）：界面必须能区分
+-/// 「被拒绝」与「为什么被拒绝」，否则伪造卡 id／越权座位只剩无因的失败。
+-fn outcome_json(engine: &Engine, out: &CommandOutcome) -> String {
+-    let reason = match out {
+-        CommandOutcome::Rejected(reason) => Some(format!("{reason:?}")),
+-        _ => None,
+-    };
+-    serde_json::json!({
+-        "outcome": match out {
+-            CommandOutcome::Accepted { .. } => "accepted",
+-            CommandOutcome::Pending { .. } => "pending",
+-            CommandOutcome::Rejected(_) => "rejected",
+-            CommandOutcome::Suspended => "suspended",
+-        },
+-        "revision": engine.revision(),
+-        "finished": engine.outcome().is_some(),
+-        "reason": reason,
+-    })
+-    .to_string()
+-}
+-
+-fn rejected(engine: &Engine, reason: RejectReason) -> String {
+-    outcome_json(engine, &CommandOutcome::Rejected(reason))
+-}
+-
+-fn phase_name(phase: Phase) -> &'static str {
+-    match phase {
+-        Phase::Judge => "judge",
+-        Phase::Draw => "draw",
+-        Phase::Play => "play",
+-        Phase::Discard => "discard",
+-        Phase::End => "end",
+-    }
+-}
+-
+-/// 内核动作 → 客户端动作 JSON（与 TS `LegalAction` 联合类型同形，见
+-/// `apps/web-client/src/types/engine.ts`）。
+-///
+-/// 为什么在这里投影而不是让客户端解析内核类型：窄壳不暴露内核类型面，
+-/// 且 `Answer` 的候选值**必须先换算成下标**——窄壳 `answer()` 直取
+-/// `spec.options[idx]`，候选值只用于展示。换算在权威侧做一次，客户端
+-/// 拿到的 `selections` 就是可直接回传的 token。
+-///
+-/// 找不到候选下标的应答（理论不可达：候选即由同一 `spec.options` 生成）
+-/// 与当前查询不枚举的国战明置一律不入列，避免给出**不可提交**的动作。
+-fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Value> {
+-    match action {
+-        GameAction::NextPhase => Some(serde_json::json!("EndPhase")),
+-        GameAction::PlayCard { card, targets } => Some(serde_json::json!({
+-            "PlayCard": { "card": card, "targets": targets },
+-        })),
+-        GameAction::ActivateSkill { skill } => Some(serde_json::json!({
+-            "ActivateSkill": { "skill": skill, "targets": [], "card_targets": [] },
+-        })),
+-        GameAction::Answer {
+-            choice_id,
+-            selection,
+-        } => {
+-            let spec = engine.open_choice().map(|c| c.spec.clone())?;
+-            let mut selections = Vec::with_capacity(selection.len());
+-            for option in selection {
+-                selections.push(spec.options.iter().position(|o| o == option)? as u32);
+-            }
+-            Some(serde_json::json!({
+-                "ResolveChoice": {
+-                    "choice_id": choice_id,
+-                    "selections": selections,
+-                    "cancelled": selection.is_empty(),
+-                },
+-            }))
+-        }
+-        // 权威查询当前不产出明置候选（国战门控未接线）；出现也不投影。
+-        GameAction::RevealGeneral { .. } => None,
+-    }
+-}
+-
+-/// NC03 权威动作查询的 JSON 投影：`{"seat", "revision", "actions"}`。
+-///
+-/// 不经 `wasm_bindgen`，宿主测试（`tests/nc03_legal_actions_export.rs`）可直接
+-/// 调用，避免走到 `JsValue`。`revision` 是候选成立的状态修订号：客户端可据此
+-/// 判断候选是否过期（`Engine::legal_actions` 只读，不改状态）。
+-/// NC05/NC09：正式选将候选（宿主侧，非 wasm-bindgen）。
+-pub fn general_candidates_json_for(engine: &Engine) -> String {
+-    let rows: Vec<serde_json::Value> = engine
+-        .general_candidates()
+-        .into_iter()
+-        .filter_map(|def| {
+-            engine.catalog().general_meta(def).map(|m| {
+-                serde_json::json!({
+-                    "def": def,
+-                    "name": m.0,
+-                    "skills": m.2,
+-                })
+-            })
+-        })
+-        .collect();
+-    serde_json::json!({ "count": rows.len(), "candidates": rows }).to_string()
+-}
+-
+-/// NC05/NC09：按名字正式选将（宿主侧，非 wasm-bindgen）。
+-pub fn assign_general_for(
+-    engine: &mut Engine,
+-    seat: u8,
+-    name: &str,
+-) -> Result<String, String> {
+-    let seats = engine.view_for(0).players.len();
+-    if seat as usize >= seats {
+-        return Err(format!("assign_general: 座位越界（{seat} ≥ {seats}）"));
+-    }
+-    engine
+-        .assign_general_named(seat, name)
+-        .map_err(|e| format!("assign_general 被拒绝: {e:?}"))?;
+-    Ok(serde_json::json!({
+-        "seat": seat,
+-        "name": name,
+-        "revision": engine.revision(),
+-        "state_hash": hex_encode(&engine.state_hash()),
+-    })
+-    .to_string())
+-}
+-
+-pub fn legal_actions_json_for(engine: &Engine, seat: u8) -> Result<String, String> {
+-    let seats = engine.view_for(0).players.len();
+-    if seat as usize >= seats {
+-        return Err(format!("legal_actions: 座位越界（{seat} ≥ {seats}）"));
+-    }
+-    let actions: Vec<serde_json::Value> = engine
+-        .legal_actions(seat)
+-        .iter()
+-        .filter_map(|action| action_to_json(engine, action))
+-        .collect();
+-    Ok(serde_json::json!({
+-        "seat": seat,
+-        "revision": engine.revision(),
+-        "actions": actions,
+-    })
+-    .to_string())
+-}
+-
+-/// 身份可见字符串（NC03/NC09 裁决⑥：观察者过滤后的 identity 随座位对象
+-/// 下发——本人/主公/已死亡可见，其余存活者 null；命名与协议 `IdentityTag`
+-/// 及前端 `SeatView.identity` 联合一致）。
+-fn identity_json(role: Option<engine_native::state::Role>) -> serde_json::Value {
+-    match role {
+-        None => serde_json::Value::Null,
+-        Some(engine_native::state::Role::Lord) => serde_json::json!("Lord"),
+-        Some(engine_native::state::Role::Loyalist) => serde_json::json!("Loyalist"),
+-        Some(engine_native::state::Role::Rebel) => serde_json::json!("Rebel"),
+-        Some(engine_native::state::Role::Traitor) => serde_json::json!("Renegade"),
+-    }
++fn js_error(message: String) -> JsValue {
++    JsValue::from_str(&message)
+ }
+ 
+-/// 牌面花色字符串（与前端 `CardView.suit` 联合一致）。
+-fn suit_json(suit: engine_native::catalog::Suit) -> &'static str {
+-    use engine_native::catalog::Suit;
+-    match suit {
+-        Suit::Spade => "Spade",
+-        Suit::Heart => "Heart",
+-        Suit::Club => "Club",
+-        Suit::Diamond => "Diamond",
+-    }
+-}
+-
+-/// 牌面公开规则类别（与服务端 `native_view.rs` 的 `kind_tag` 同映射——
+-/// 跨入口同契约：已建模六类直映，其余 `Other` 不猜测）。
+-fn kind_tag_json(kind: engine_native::catalog::CardKind) -> &'static str {
+-    use engine_native::catalog::CardKind as K;
+-    match kind {
+-        K::Sha => "Sha",
+-        K::Tao => "Tao",
+-        K::Shan => "Shan",
+-        K::Jiu => "Jiu",
+-        K::FireSha => "ShaFire",
+-        K::LeiSha => "ShaThunder",
+-        _ => "Other",
+-    }
+-}
+-
+-/// 座位视图投影（`PlayerView` 手写 JSON；视图为只读投影不进哈希）。
+-/// NC03/NC09 裁决⑥⑦（2026-10-28）：座位对象附带观察者过滤的 `identity`；
+-/// 顶层 `cards` 为**观察者可见牌**（本人手牌 + 全场装备/判定 + 弃牌/处理区，
+-/// 即 `visible_card_ids`）附真实牌面（def/suit/rank/kind）——他人手牌与
+-/// 牌堆 id 不在其中。仅扩展本地 `view_json` 内容，Worker/WS 消息结构不变。
+-fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
+-    let catalog = engine.catalog();
+-    let faces = v
+-        .visible_card_ids()
+-        .into_iter()
+-        .map(|id| {
+-            let def = &catalog.cards[id as usize];
+-            (
+-                id.to_string(),
+-                serde_json::json!({
+-                    "def": def.kind as u16 as u32,
+-                    "suit": suit_json(def.suit),
+-                    "rank": def.rank,
+-                    "kind": kind_tag_json(def.kind),
+-                }),
+-            )
+-        })
+-        .collect::<serde_json::Map<_, _>>();
+-    serde_json::json!({
+-        "seat": v.seat,
+-        "players": v.players.iter().map(|p| serde_json::json!({
+-            "seat": p.seat,
+-            "alive": p.alive,
+-            "hp": p.hp,
+-            "maxHp": p.max_hp,
+-            "hand": match &p.hand {
+-                HandView::Own(cards) => serde_json::json!({ "own": cards }),
+-                HandView::Hidden => serde_json::json!({ "hidden": true }),
+-            },
+-            "handCount": p.hand_count,
+-            "equips": p.equips,
+-            "judge": p.judge,
+-            "turnedOver": p.turned_over,
+-            "skills": p.skills,
+-            "revealedGenerals": p.revealed_generals,
+-            "identity": identity_json(p.role),
+-        })).collect::<Vec<_>>(),
+-        "deckCount": v.deck_count,
+-        "discard": v.discard,
+-        "table": v.table,
+-        "cards": faces,
+-        "turn": v.turn,
+-        "phase": phase_name(v.phase),
+-        "round": v.round,
+-        // NC09/NC12 修正：终局**胜负类型**必须随视图下发（此前只发 `"finished"`，
+-        // 前端无法显示胜者）。此处直接序列化协议 `MatchOutcome`（如
+-        // `{"LoyalistWin":null}` / `{"RebelWin":null}` / `{"RenegadeWin":{"player":3}}` …）。
+-        "outcome": winner_to_protocol_json(&v.outcome),
+-        "rulesetVersion": v.ruleset_version,
+-    })
+-}
+-
+-/// 原生引擎 wasm 壳实例。
++/// WASM binding for the shared native session; existing JS/Rust signatures remain unchanged.
+ #[wasm_bindgen]
+ pub struct NativeEngine {
+-    inner: Engine,
+-    planner_nodes: usize,
+-    deadline_ms: u64,
++    inner: NativeSession,
+ }
+ 
+ #[wasm_bindgen]
+ impl NativeEngine {
+-    /// 标准目录建局（无扩展；players 为座位数，seed 为随机流种子）。
+     #[wasm_bindgen(constructor)]
+     pub fn new(players: u8, seed: u64) -> Result<NativeEngine, JsValue> {
+-        Ok(NativeEngine {
+-            inner: Engine::new(seed, players as usize),
+-            planner_nodes: 64,
+-            deadline_ms: 50,
+-        })
++        NativeSession::new(players, seed)
++            .map(|inner| NativeEngine { inner })
++            .map_err(js_error)
+     }
+ 
+-    /// 规划预算参数化（T13 策略质量批同款；0=无规划）。
+     pub fn set_planner(&mut self, nodes: usize, deadline_ms: u64) {
+-        self.planner_nodes = nodes;
+-        self.deadline_ms = deadline_ms;
++        self.inner.set_planner(nodes, deadline_ms)
+     }
+ 
+     pub fn revision(&self) -> u64 {
+@@ -458,335 +109,123 @@ impl NativeEngine {
+     }
+ 
+     pub fn is_finished(&self) -> bool {
+-        self.inner.outcome().is_some()
++        self.inner.is_finished()
+     }
+ 
+-    /// NC05/NC09 正式选将候选（客户端选将 UI 用）。
+     pub fn general_candidates_json(&self) -> String {
+-        general_candidates_json_for(&self.inner)
++        self.inner.general_candidates_json()
+     }
+ 
+-    /// NC05/NC09 正式选将（按名字；失败返回错误，不静默）。
+     pub fn assign_general(&mut self, seat: u8, name: &str) -> Result<String, JsValue> {
+-        assign_general_for(&mut self.inner, seat, name).map_err(|e| JsValue::from_str(&e))
++        self.inner.assign_general(seat, name).map_err(js_error)
+     }
+ 
+-    /// 座位可见视图 JSON（信息隔离面：自己手牌具体 id、他人仅数量）。
+     pub fn view_json(&self, seat: u8) -> Result<String, JsValue> {
+-        let seats = self.inner.view_for(0).players.len();
+-        if seat as usize >= seats {
+-            return Err(JsValue::from_str("view: 座位越界"));
+-        }
+-        Ok(view_to_json(&self.inner, &self.inner.view_for(seat)).to_string())
++        self.inner.view_json(seat).map_err(js_error)
+     }
+ 
+-    /// 当前开放选择的座位可见 JSON（N10 选择可见性口径：观察者本人含
+-    /// 选项；他人/观战仅存在面）。无询问返回 null。
+     pub fn open_choice_json(&self, seat: u8) -> Result<String, JsValue> {
+-        use engine_native::view::ChoiceView;
+-        Ok(match self.inner.choice_view_for(Some(seat)) {
+-            Some(ChoiceView::Own {
+-                id,
+-                prompt,
+-                options,
+-                min,
+-                max,
+-                allow_cancel,
+-            }) => serde_json::json!({
+-                "id": id,
+-                "observer": seat,
+-                "prompt": prompt,
+-                "min": min,
+-                "max": max,
+-                "allowCancel": allow_cancel,
+-                "options": options.iter().map(|o| match o {
+-                    engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
+-                    engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
+-                    engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
+-                    engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
+-                    engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
+-                    engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
+-                }).collect::<Vec<_>>(),
+-            })
+-            .to_string(),
+-            Some(ChoiceView::Other {
+-                id,
+-                observer,
+-                prompt,
+-            }) => serde_json::json!({
+-                "id": id,
+-                "observer": observer,
+-                "prompt": prompt,
+-                "hidden": true,
+-            })
+-            .to_string(),
+-            None => "null".to_string(),
+-        })
+-    }
+-
+-    /// 阶段推进（当前回合玩家）。
++        self.inner.open_choice_json(seat).map_err(js_error)
++    }
++
+     pub fn next_phase(&mut self, actor: u32) -> Result<String, JsValue> {
+-        let Ok(actor) = u8::try_from(actor) else {
+-            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+-        };
+-        let out = self.inner.submit(engine_native::GameCommand {
+-            actor,
+-            expected_revision: self.inner.revision(),
+-            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-            action: GameAction::NextPhase,
+-        });
+-        Ok(outcome_json(&self.inner, &out))
+-    }
+-
+-    /// 出牌（手牌 id + 目标座位）。
++        self.inner.next_phase(actor).map_err(js_error)
++    }
++
+     pub fn play_card(
+         &mut self,
+         actor: u32,
+         card: u32,
+         targets: Vec<u32>,
+     ) -> Result<String, JsValue> {
+-        let Ok(actor) = u8::try_from(actor) else {
+-            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+-        };
+-        let Ok(targets) = targets.into_iter().map(u8::try_from).collect() else {
+-            return Ok(rejected(&self.inner, RejectReason::IllegalTargets));
+-        };
+-        let out = self.inner.submit(engine_native::GameCommand {
+-            actor,
+-            expected_revision: self.inner.revision(),
+-            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-            action: GameAction::PlayCard {
+-                card,
+-                targets,
+-            },
+-        });
+-        Ok(outcome_json(&self.inner, &out))
+-    }
+-
+-    /// NC03 权威动作查询：该座位此刻**可提交**的候选动作 JSON。
+-    ///
+-    /// 候选由内核经与正式提交相同的校验产出（`Engine::legal_actions`），
+-    /// 顺序稳定（应答 → 主动技 → 出牌 → 阶段推进），上限 256；`actions`
+-    /// 每项与 TS `LegalAction` 同形，可直接用于界面并原样回传。
+-    ///
+-    /// 代价：实测约 1.6 ms/次（5 人局，含克隆校验），**按需调用**——前端
+-    /// 只在构建信封（用户动作/观察刷新）时查一次，并按 `revision` 记忆化。
++        self.inner.play_card(actor, card, targets).map_err(js_error)
++    }
++
+     pub fn legal_actions_json(&self, seat: u8) -> Result<String, JsValue> {
+-        legal_actions_json_for(&self.inner, seat).map_err(|e| JsValue::from_str(&e))
++        self.inner.legal_actions_json(seat).map_err(js_error)
+     }
+ 
+-    /// 主动技发动（`skill` 取自权威查询的 `ActivateSkill` 候选）。
+-    ///
+-    /// 内核 `GameAction::ActivateSkill` 不接受目标：技能内部的选择走开放
+-    /// 选择应答，因此窄壳也不接目标参数（前端传目标即协议误用）。
+     pub fn activate_skill(&mut self, actor: u32, skill: u16) -> Result<String, JsValue> {
+-        let Ok(actor) = u8::try_from(actor) else {
+-            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+-        };
+-        let out = self.inner.submit(engine_native::GameCommand {
+-            actor,
+-            expected_revision: self.inner.revision(),
+-            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-            action: GameAction::ActivateSkill { skill },
+-        });
+-        Ok(outcome_json(&self.inner, &out))
+-    }
+-
+-    /// 选择应答（`selection` 是**候选下标**，直取 `spec.options[idx]`：与
+-    /// [`NativeEngine::legal_actions_json`] 的 `ResolveChoice.selections` 同口径；
+-    /// 空数组 = 取消）。
++        self.inner.activate_skill(actor, skill).map_err(js_error)
++    }
++
+     pub fn answer(
+         &mut self,
+         observer: u32,
+         choice_id: u64,
+         selection: Vec<u32>,
+     ) -> Result<String, JsValue> {
+-        let Ok(actor) = u8::try_from(observer) else {
+-            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+-        };
+-        if actor as usize >= self.inner.state_core().players.len() {
+-            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+-        }
+-        let Some(c) = self.inner.open_choice() else {
+-            return Err(JsValue::from_str("answer: 无开放选择"));
+-        };
+-        if c.observer != actor {
+-            return Ok(rejected(&self.inner, RejectReason::WrongPlayer));
+-        }
+-        if c.id != choice_id {
+-            return Err(JsValue::from_str("answer: choice_id 不匹配"));
+-        }
+-        let mut sel = Vec::new();
+-        for (idx, v) in selection.iter().enumerate() {
+-            let Some(o) = c.spec.options.get(*v as usize) else {
+-                return Err(JsValue::from_str("answer: 选项索引越界"));
+-            };
+-            let _ = idx;
+-            sel.push(o.clone());
+-        }
+-        let out = self.inner.submit(engine_native::GameCommand {
+-            actor,
+-            expected_revision: self.inner.revision(),
+-            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-            action: GameAction::Answer {
+-                choice_id: c.id,
+-                selection: sel,
+-            },
+-        });
+-        Ok(outcome_json(&self.inner, &out))
+-    }
+-
+-    /// 一步自动推进：挂起选择按 min/首选自动应答；否则当前座位经
+-    /// `BoundedPlanner` 规划并应用（game-server `/native` 同款）。返回
+-    /// 一步摘要 JSON。
++        self.inner
++            .answer(observer, choice_id, selection)
++            .map_err(js_error)
++    }
++
+     pub fn auto_step(&mut self) -> Result<String, JsValue> {
+-        if self.inner.outcome().is_some() {
+-            return Ok(serde_json::json!({ "done": true }).to_string());
+-        }
+-        if let Some(c) = self.inner.open_choice() {
+-            let take = c.spec.min.max(1).min(c.spec.options.len());
+-            let sel: Vec<_> = c
+-                .spec
+-                .options
+-                .iter()
+-                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
+-                .take(take)
+-                .cloned()
+-                .collect();
+-            let sel = if sel.is_empty() {
+-                vec![c.spec.options[0].clone()]
+-            } else {
+-                sel
+-            };
+-            let (cid, obs) = (c.id, c.observer);
+-            let out = self.inner.submit(engine_native::GameCommand {
+-                actor: obs,
+-                expected_revision: self.inner.revision(),
+-                dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-                action: GameAction::Answer {
+-                    choice_id: cid,
+-                    selection: sel,
+-                },
+-            });
+-            return Ok(serde_json::json!({
+-                "kind": "answer",
+-                "outcome": outcome_json(&self.inner, &out),
+-            })
+-            .to_string());
+-        }
+-        let seat = self.inner.turn().current;
+-        let planner = BoundedPlanner::new(self.planner_nodes).with_deadline_ms(self.deadline_ms);
+-        let plan = self.inner.plan_action(seat, &planner);
+-        match self.inner.apply_plan(&plan) {
+-            Ok(out) => Ok(serde_json::json!({
+-                "kind": "plan",
+-                "seat": seat,
+-                "outcome": outcome_json(&self.inner, &out),
+-                "finished": self.inner.outcome().is_some(),
+-            })
+-            .to_string()),
+-            Err(e) => Ok(serde_json::json!({
+-                "kind": "plan",
+-                "seat": seat,
+-                "error": match e {
+-                    engine_native::ai::ApplyPlanError::Stale { .. } => "stale",
+-                    engine_native::ai::ApplyPlanError::Cancelled => "cancelled",
+-                },
+-            })
+-            .to_string()),
+-        }
++        self.inner.auto_step().map_err(js_error)
+     }
+ 
+-    /// 权威状态 hash（32 字节 hex）。只读投影，不推进修订号。
+     pub fn state_hash_hex(&self) -> String {
+-        hex_encode(&self.inner.state_hash())
++        self.inner.state_hash_hex()
+     }
+ 
+-    /// 当前事件日志长度（宿主据此记录已消费位置）。
+     pub fn log_len(&self) -> u32 {
+-        self.inner.log().len().min(u32::MAX as usize) as u32
++        self.inner.log_len()
+     }
+ 
+-    /// 自 `start` 起的公开事件码 JSON 数组；不含牌 id 或选项内容。
+     pub fn public_event_codes_json(&self, start: u32) -> String {
+-        serde_json::to_string(&self.inner.public_event_codes_from(start as usize))
+-            .unwrap_or_else(|_| "[]".into())
++        self.inner.public_event_codes_json(start)
+     }
+ 
+-    /// 存档十六进制（NGSA v65 字节面）。
+     pub fn save_hex(&self) -> String {
+-        hex_encode(&engine_native::archive::encode_archive(&self.inner.save()))
++        self.inner.save_hex()
+     }
+ 
+-    /// 存档恢复（标准目录）。扩展局须走 [`restore_hex_with_packs_json`]。
+-    ///
+-    /// 先在局部变量完成解码与恢复，全部成功后才替换当前引擎；任何坏输入
+-    /// 都只返回受控错误，原句柄、原局与后续 `save_hex`/命令仍可用。
+     pub fn restore_hex(&mut self, hex: &str) -> Result<(), JsValue> {
+-        self.restore_hex_checked(hex)
+-            .map_err(|e| JsValue::from_str(&e))
++        self.inner.restore_hex(hex).map_err(js_error)
+     }
+ 
+-    /// [`restore_hex`] 的宿主可测版本（不构造 `JsValue`）。
+     pub fn restore_hex_checked(&mut self, hex: &str) -> Result<(), String> {
+-        let bytes = hex_decode(hex)?;
+-        let snapshot =
+-            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
+-        let restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
+-        self.inner = restored;
+-        Ok(())
+-    }
+-
+-    /// **身份局**建局（NC09 身份局端到端：浏览器侧需要非原型模式）。
+-    ///
+-    /// 与 [`new`] 的区别只在 `GameMode`：身份局由 `Engine::new_identity` 装配
+-    /// （主公/忠臣/反贼/内奸），胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
++        self.inner.restore_hex_checked(hex)
++    }
++
+     pub fn new_identity(players: u8, seed: u64) -> Result<NativeEngine, JsValue> {
+-        Self::new_identity_with_packs_json(players, seed, "[]")
++        NativeSession::new_identity(players, seed)
++            .map(|inner| NativeEngine { inner })
++            .map_err(js_error)
+     }
+ 
+-    /// 身份局与扩展一起装载；身份和扩展初始化使用同一规则随机流。
+     pub fn new_identity_with_packs_json(
+         players: u8,
+         seed: u64,
+         packs_json: &str,
+     ) -> Result<NativeEngine, JsValue> {
+-        Ok(NativeEngine {
+-            inner: engine_identity_from_packs(players, seed, packs_json)
+-                .map_err(|e| JsValue::from_str(&e))?,
+-            planner_nodes: 64,
+-            deadline_ms: 50,
+-        })
++        NativeSession::new_identity_with_packs_json(players, seed, packs_json)
++            .map(|inner| NativeEngine { inner })
++            .map_err(js_error)
+     }
+ 
+-    /// 已安装扩展载荷数组建局。空数组与 [`new`] 相同。
+     pub fn new_with_packs_json(
+         players: u8,
+         seed: u64,
+         packs_json: &str,
+     ) -> Result<NativeEngine, JsValue> {
+-        let inner =
+-            engine_from_packs(players, seed, packs_json).map_err(|e| JsValue::from_str(&e))?;
+-        Ok(NativeEngine {
+-            inner,
+-            planner_nodes: 64,
+-            deadline_ms: 50,
+-        })
++        NativeSession::new_with_packs_json(players, seed, packs_json)
++            .map(|inner| NativeEngine { inner })
++            .map_err(js_error)
+     }
+ 
+-    /// 用同一组安装载荷恢复扩展局。包集合或版本不符时拒绝，不替换当前对局。
+     pub fn restore_hex_with_packs_json(
+         &mut self,
+         hex: &str,
+         packs_json: &str,
+     ) -> Result<(), JsValue> {
+-        self.inner = engine_from_archive(hex, packs_json).map_err(|e| JsValue::from_str(&e))?;
+-        Ok(())
++        self.inner
++            .restore_hex_with_packs_json(hex, packs_json)
++            .map_err(js_error)
+     }
+ 
+-    /// 目录中牌名以前缀开头的张数（扩展牌并入对局的可观察计数）。
+     pub fn cards_with_prefix(&self, prefix: &str) -> u32 {
+-        prefix_count(&self.inner, prefix)
++        self.inner.cards_with_prefix(prefix)
+     }
+ }
+ 
+@@ -1529,9 +968,8 @@ mod pack_roundtrip {
+     /// L13 目标平台：真实 config.json 的 MVP 计分与结算分组。不画界面。
+     #[test]
+     fn shousha_mvp_pack_json_enters_wasm_helper() {
+-        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
+-            "../../packages/extensions/shousha-mvp-upstream-liuli/assets/config.json",
+-        );
++        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
++            .join("../../packages/extensions/shousha-mvp-upstream-liuli/assets/config.json");
+         let config = std::fs::read_to_string(&path).expect("读手杀MVP config.json");
+         assert!(config.contains("\"source\": \"noname-liuli\""));
+         assert!(config.contains("手杀MVP/extension.js"));
+@@ -1705,9 +1143,15 @@ mod pack_roundtrip {
+             &config,
+             r#"{"name":"我的扩展.zip","mime":"application/zip","files":["我的扩展/extension.js","我的扩展/card/a.json"],"dir":["card",".git","_x","image"]}"#,
+         );
+-        assert!(ok.starts_with("kind:zip | default:我的扩展 | prefix:我的扩展/ |"), "{ok}");
++        assert!(
++            ok.starts_with("kind:zip | default:我的扩展 | prefix:我的扩展/ |"),
++            "{ok}"
++        );
+         assert!(ok.contains("dir:card,image |"), "{ok}");
+-        assert!(ok.ends_with("| err:- | eval:0 | fetch:0 | write:0 | dom:0"), "{ok}");
++        assert!(
++            ok.ends_with("| err:- | eval:0 | fetch:0 | write:0 | dom:0"),
++            "{ok}"
++        );
+         let seven = drag_read_apply(&config, r#"{"name":"我的扩展.7z","mime":""}"#);
+         assert!(seven.starts_with("kind:7z |"), "{seven}");
+         assert!(seven.contains("err:还不支持读取7z格式的扩展"), "{seven}");
+@@ -1715,13 +1159,22 @@ mod pack_roundtrip {
+             &config,
+             r#"{"name":"boss.zip","mime":"application/zip","extname":"boss","files":["boss/extension.js"]}"#,
+         );
+-        assert!(native.contains("err:禁止安装游戏原生扩展（boss）"), "{native}");
++        assert!(
++            native.contains("err:禁止安装游戏原生扩展（boss）"),
++            "{native}"
++        );
+         let single = drag_read_apply(&config, r#"{"name":"extension.js","mime":""}"#);
+         assert!(single.starts_with("kind:extension.js |"), "{single}");
+-        assert!(single.contains("err:extension.js代码有错误，无法导入！"), "{single}");
++        assert!(
++            single.contains("err:extension.js代码有错误，无法导入！"),
++            "{single}"
++        );
+         assert!(drag_read_apply(&config, "not json").starts_with("error:BadConfig"));
+-        assert!(drag_read_apply(&config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""), "{}")
+-            .starts_with("error:BadConfig"));
++        assert!(drag_read_apply(
++            &config.replace("\"source\": \"noname-liuli\"", "\"source\": \"\""),
++            "{}"
++        )
++        .starts_with("error:BadConfig"));
+     }
+ 
+     /// U02/L03 目标平台：两仓 boss play 包的真实 config.json。装配/归一/门控。
+@@ -1732,18 +1185,25 @@ mod pack_roundtrip {
+             ("boss-play-upstream-noname", "noname"),
+             ("boss-play-upstream-liuli", "noname-liuli"),
+         ] {
+-            let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+-                .join(format!("../../packages/extensions/{dir}/assets/config.json"));
++            let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!(
++                "../../packages/extensions/{dir}/assets/config.json"
++            ));
+             let config = std::fs::read_to_string(&path).expect("读 boss play config.json");
+             assert!(config.contains(&format!("\"source\": \"{source}\"")));
+             assert!(config.contains("挑战武将") && config.contains("剑阁武将"));
+             assert!(!config.contains("localStorage"));
+             assert!(!config.contains("eval("));
+             let line = boss_play_apply(&config, req);
+-            assert!(line.starts_with("skipped:0 | boss:2 | jiange:1 | chars:3 | forbidai:0 |"), "{line}");
++            assert!(
++                line.starts_with("skipped:0 | boss:2 | jiange:1 | chars:3 | forbidai:0 |"),
++                "{line}"
++            );
+             assert!(line.contains("allowed_jiange:1 | skills:2 |"), "{line}");
+             let tafang = boss_play_apply(&config, r#"{"mode":"tafang"}"#);
+-            assert!(tafang.starts_with("skipped:1 | boss:0 | jiange:0 |"), "{tafang}");
++            assert!(
++                tafang.starts_with("skipped:1 | boss:0 | jiange:0 |"),
++                "{tafang}"
++            );
+             assert!(boss_play_apply(&config, "not json").starts_with("error:BadConfig"));
+         }
+     }
+@@ -1813,8 +1273,14 @@ mod pack_roundtrip {
+             "registered:1 | mode:normal | connect:0 | double:0 | hpRule:hejiansan | hpUi:0 | change:0 | free:0 | show:5 | battle:5 | hide:2 | width:5 | num:5 | hiddenN:4 | size:20 | ratio:1.2 | first:0 | side:3 | zhuSeat:1 | fanSeat:0 | zhuSkill:0 | hidden:a,b,c,d | friend:a,b,c,d,e | enemy:j,i,h,g,f | zhu:j,i,h,g,f | fan:a,b,c,d,e | openZhu:j | openFan:a | drawZhu:4 | drawFan:5 | join:- | hp:0 | foe:0 | script:extension/武皇/mightyFoe.js | scriptRan:0 | online:0 | playback:0 | coeff:- | sampled:0 | dom:0 | sleep:0 | eval:0 | fetch:0 | write:0 | reload:0 | dialog:0"
+         );
+         let second = martial_apply(&config, r#"{"first":1}"#);
+-        assert!(second.contains("first:1 | side:1 | zhuSeat:0 | fanSeat:1"), "{second}");
+-        assert!(second.contains("friend:a,b,c,e,f | enemy:j,i,h,d,g"), "{second}");
++        assert!(
++            second.contains("first:1 | side:1 | zhuSeat:0 | fanSeat:1"),
++            "{second}"
++        );
++        assert!(
++            second.contains("friend:a,b,c,e,f | enemy:j,i,h,d,g"),
++            "{second}"
++        );
+         assert!(second.contains("zhu:a,b,c,e,f | fan:j,i,h,d,g"), "{second}");
+         assert!(second.contains("sampled:0 | dom:0 | sleep:0"), "{second}");
+         let joined = martial_apply(
+@@ -1886,7 +1352,8 @@ mod winner_protocol_tests {
+             winner_to_protocol_json(&Some(Winner::Player(3))),
+             serde_json::json!({"SingleWin": {"player": 4}})
+         );
+-        let g = winner_to_protocol_json(&Some(Winner::Faction(engine_native::catalog::Faction::Shu)));
++        let g =
++            winner_to_protocol_json(&Some(Winner::Faction(engine_native::catalog::Faction::Shu)));
+         assert!(g.get("GroupWin").is_some(), "势力胜应映射为 GroupWin：{g}");
+         assert_eq!(winner_to_protocol_json(&None), serde_json::Value::Null);
+         // 未建模（对决/斗地主/Boss）→ 保持 "finished"
+diff --git a/apps/desktop-client/examples/pa09_native_bridge.rs b/apps/desktop-client/examples/pa09_native_bridge.rs
+new file mode 100644
+index 00000000..8953195e
+--- /dev/null
++++ b/apps/desktop-client/examples/pa09_native_bridge.rs
+@@ -0,0 +1,16 @@
++//! Line-oriented acceptance harness for the actual native host, using unchanged Worker messages.
++use desktop_client::NativeEngineHost;
++use std::io::{self, BufRead, Write};
++
++#[tokio::main(flavor = "current_thread")]
++async fn main() -> Result<(), Box<dyn std::error::Error>> {
++    let host = NativeEngineHost::new()?;
++    let mut stdout = io::stdout().lock();
++    for line in io::stdin().lock().lines() {
++        let request = serde_json::from_str(&line?)?;
++        let response = host.request(request).await?;
++        writeln!(stdout, "{response}")?;
++        stdout.flush()?;
++    }
++    Ok(())
++}
+diff --git a/apps/desktop-client/src/native_engine_host.rs b/apps/desktop-client/src/native_engine_host.rs
+new file mode 100644
+index 00000000..68ff99f1
+--- /dev/null
++++ b/apps/desktop-client/src/native_engine_host.rs
+@@ -0,0 +1,406 @@
++//! Serialized native execution of the existing frontend Worker request semantics.
++use crate::native_envelope::envelope;
++use engine_native_wasm::{validate_pack_json, NativeSession, MAX_ARCHIVE_HEX_CHARS};
++use serde::Deserialize;
++use serde_json::{json, Value};
++use std::sync::{
++    atomic::{AtomicBool, Ordering},
++    mpsc::{sync_channel, Receiver, SyncSender},
++    Arc, Mutex,
++};
++use tokio::sync::oneshot;
++
++const MAX_PACK_JSON_BYTES: usize = 64 * 1024 * 1024;
++const MAX_SAFE_INTEGER: u64 = 9_007_199_254_740_991;
++type Job = (Value, oneshot::Sender<Value>);
++
++/// One bounded queue and one owner thread; engine objects never cross the IPC thread boundary.
++pub struct NativeEngineHost {
++    sender: Mutex<Option<SyncSender<Job>>>,
++    closed: Arc<AtomicBool>,
++}
++
++impl NativeEngineHost {
++    /// Start an engine owner without blocking the WebView or requiring an engine to be Send.
++    pub fn new() -> Result<Self, String> {
++        let (sender, receiver) = sync_channel::<Job>(8);
++        let closed = Arc::new(AtomicBool::new(false));
++        let owner_closed = closed.clone();
++        std::thread::Builder::new()
++            .name("desktop-engine".into())
++            .spawn(move || {
++                let mut host = HostSession::default();
++                run_requests(receiver, &owner_closed, |request| host.dispatch(request));
++            })
++            .map_err(|error| error.to_string())?;
++        Ok(Self {
++            sender: Mutex::new(Some(sender)),
++            closed,
++        })
++    }
++
++    /// Close the queue; an in-flight command can still complete and must not be retried implicitly.
++    pub fn close(&self) {
++        self.closed.store(true, Ordering::Release);
++        if let Ok(mut sender) = self.sender.lock() {
++            sender.take();
++        }
++    }
++
++    /// Submit a WorkerRequest and asynchronously receive its WorkerResponse.
++    /// Queue saturation rejects before enqueue; channel loss reports an unknown operation result.
++    pub async fn request(&self, request: Value) -> Result<Value, String> {
++        validate_payload_size(&request)?;
++        let (sender_response, receiver) = oneshot::channel();
++        {
++            let sender = self
++                .sender
++                .lock()
++                .map_err(|_| "native engine queue poisoned")?;
++            sender
++                .as_ref()
++                .ok_or("native engine closed; request was not submitted")?
++                .try_send((request, sender_response))
++                .map_err(|error| match error {
++                    std::sync::mpsc::TrySendError::Full(_) => {
++                        "native engine busy; request was not submitted".to_string()
++                    }
++                    std::sync::mpsc::TrySendError::Disconnected(_) => {
++                        "native engine unavailable; request was not submitted".to_string()
++                    }
++                })?;
++        }
++        receiver.await.map_err(|_| {
++            "native engine stopped; operation result unknown; inspect the current match".to_string()
++        })
++    }
++}
++
++fn run_requests(
++    receiver: Receiver<Job>,
++    closed: &AtomicBool,
++    mut dispatch: impl FnMut(Value) -> Result<Value, String>,
++) {
++    for (request, response) in receiver {
++        let id = request.get("id").cloned().unwrap_or(Value::Null);
++        let result = if closed.load(Ordering::Acquire) {
++            Err("native engine closed before execution; request was not submitted".into())
++        } else {
++            dispatch(request)
++        };
++        let reply = match result {
++            Ok(data) => json!({"id": id, "ok": true, "data": data}),
++            Err(error) => json!({"id": id, "ok": false, "error": error}),
++        };
++        // A disconnected caller cannot undo an operation already submitted.
++        let _ = response.send(reply);
++    }
++}
++
++fn validate_payload_size(value: &Value) -> Result<(), String> {
++    for (field, limit) in [
++        ("hex", MAX_ARCHIVE_HEX_CHARS),
++        ("packsJson", MAX_PACK_JSON_BYTES),
++        ("packJson", MAX_PACK_JSON_BYTES),
++        ("json", MAX_PACK_JSON_BYTES),
++    ] {
++        if value[field].as_str().is_some_and(|text| text.len() > limit) {
++            return Err(format!("native: {field} exceeds {limit} bytes"));
++        }
++    }
++    Ok(())
++}
++
++#[derive(Deserialize)]
++#[serde(tag = "type", rename_all = "camelCase")]
++enum Request {
++    Init {
++        #[serde(rename = "packsJson")]
++        packs: Option<String>,
++    },
++    Start {
++        players: u8,
++        seed: u64,
++        observer: u8,
++        #[serde(rename = "packsJson")]
++        packs: Option<String>,
++        mode: Option<String>,
++    },
++    EndPhase {
++        actor: Option<u8>,
++    },
++    PlayCard {
++        actor: u8,
++        card: u32,
++        targets: Vec<u8>,
++    },
++    ActivateSkill {
++        actor: u8,
++        skill: u16,
++        #[serde(default)]
++        targets: Vec<u8>,
++        #[serde(default, rename = "cardTargets")]
++        card_targets: Vec<u32>,
++    },
++    ResolveChoice {
++        actor: u8,
++        #[serde(rename = "choiceId")]
++        choice_id: u64,
++        selections: Vec<u32>,
++        #[serde(default)]
++        cancelled: bool,
++    },
++    AutoStep,
++    Observer,
++    Status,
++    GeneralCandidates,
++    ChooseGeneral {
++        seat: u8,
++        name: String,
++    },
++    Save,
++    Restore {
++        hex: String,
++        #[serde(rename = "packsJson")]
++        packs: Option<String>,
++    },
++    ValidatePackage {
++        #[serde(rename = "packJson")]
++        pack: String,
++    },
++    UseSkillCard,
++    LoadReplay,
++    SeekReplay,
++}
++
++#[derive(Default)]
++struct HostSession {
++    session: Option<NativeSession>,
++    observer: u8,
++    cursor: u32,
++}
++
++fn parsed(raw: String) -> Result<Value, String> {
++    serde_json::from_str(&raw).map_err(|error| error.to_string())
++}
++
++impl HostSession {
++    fn dispatch(&mut self, value: Value) -> Result<Value, String> {
++        let id = value["id"].as_u64().filter(|id| *id <= MAX_SAFE_INTEGER);
++        if id.is_none() {
++            return Err("native: invalid request id".into());
++        }
++        validate_payload_size(&value)?;
++        let request: Request = serde_json::from_value(value)
++            .map_err(|error| format!("native: invalid request: {error}"))?;
++        match request {
++            Request::Init { packs } => {
++                let candidate =
++                    NativeSession::new_with_packs_json(4, 4242, packs.as_deref().unwrap_or("[]"))?;
++                self.session = Some(candidate);
++                self.observer = 0;
++                self.cursor = 0;
++                return Ok(json!("native ready"));
++            }
++            Request::ValidatePackage { pack } => {
++                if pack.is_empty() {
++                    return Err("native: validatePackage requires nonempty JSON".into());
++                }
++                validate_pack_json(&pack)?;
++                return Ok(json!({"valid": true}));
++            }
++            _ => {}
++        }
++        let session = self
++            .session
++            .as_mut()
++            .ok_or("native engine not initialized")?;
++        let result = match request {
++            Request::Start {
++                players,
++                seed,
++                observer,
++                packs,
++                mode,
++            } => {
++                if players == 0 || observer >= players || seed > MAX_SAFE_INTEGER {
++                    return Err("native: invalid players, observer or seed".into());
++                }
++                let candidate = match mode.as_deref() {
++                    Some("identity") => NativeSession::new_identity_with_packs_json(
++                        players,
++                        seed,
++                        packs.as_deref().unwrap_or("[]"),
++                    )?,
++                    None => NativeSession::new_with_packs_json(
++                        players,
++                        seed,
++                        packs.as_deref().unwrap_or("[]"),
++                    )?,
++                    _ => return Err("native: unknown match mode".into()),
++                };
++                let data = envelope(&candidate, observer, &mut 0, Value::Null)?;
++                *session = candidate;
++                self.observer = observer;
++                self.cursor = 0;
++                return Ok(data);
++            }
++            Request::EndPhase { actor } => {
++                parsed(session.next_phase(actor.unwrap_or(self.observer) as u32)?)?
++            }
++            Request::PlayCard {
++                actor,
++                card,
++                targets,
++            } => parsed(session.play_card(
++                actor as u32,
++                card,
++                targets.into_iter().map(u32::from).collect(),
++            )?)?,
++            Request::ActivateSkill {
++                actor,
++                skill,
++                targets,
++                card_targets,
++            } => {
++                if !targets.is_empty() || !card_targets.is_empty() {
++                    return Err(
++                        "native: activateSkill 不接受预选目标（目标由内核开放选择应答决定）".into(),
++                    );
++                }
++                parsed(session.activate_skill(actor as u32, skill)?)?
++            }
++            Request::ResolveChoice {
++                actor,
++                choice_id,
++                selections,
++                cancelled,
++            } => {
++                if choice_id > MAX_SAFE_INTEGER {
++                    return Err("native: invalid choiceId".into());
++                }
++                let choice = parsed(session.open_choice_json(actor)?)?;
++                if choice["id"].as_u64() != Some(choice_id) {
++                    return Err(format!("native: choice {choice_id} 不匹配/不存在"));
++                }
++                let count = choice["options"].as_array().map_or(0, Vec::len);
++                if !cancelled && selections.iter().any(|index| *index as usize >= count) {
++                    return Err("native: 选项 token 不在候选".into());
++                }
++                parsed(session.answer(
++                    actor as u32,
++                    choice_id,
++                    if cancelled { Vec::new() } else { selections },
++                )?)?
++            }
++            Request::AutoStep => parsed(session.auto_step()?)?,
++            Request::Observer => Value::Null,
++            Request::Status => {
++                return Ok(
++                    json!({"kind": "status", "revision": session.revision(), "finished": session.is_finished()}),
++                )
++            }
++            Request::GeneralCandidates => return parsed(session.general_candidates_json()),
++            Request::ChooseGeneral { seat, name } => {
++                let assignment = parsed(session.assign_general(seat, &name)?)?;
++                return Ok(
++                    json!({"assignment": assignment, "envelope": envelope(session, self.observer, &mut self.cursor, Value::Null)?}),
++                );
++            }
++            Request::Save => return Ok(json!({"kind": "save", "hex": session.save_hex()})),
++            Request::Restore { hex, packs } => {
++                let mut candidate = NativeSession::new(1, 0)?;
++                candidate.restore_hex_with_packs_json(&hex, packs.as_deref().unwrap_or("[]"))?;
++                let data = envelope(&candidate, self.observer, &mut 0, Value::Null)?;
++                // Preserve planner settings on the live session, as the Worker does.
++                session.restore_hex_with_packs_json(&hex, packs.as_deref().unwrap_or("[]"))?;
++                self.cursor = 0;
++                return Ok(data);
++            }
++            Request::UseSkillCard => return Err("native backend: useSkillCard 未映射".into()),
++            Request::LoadReplay => return Err("native backend: loadReplay 未映射".into()),
++            Request::SeekReplay => return Err("native backend: seekReplay 未映射".into()),
++            Request::Init { .. } | Request::ValidatePackage { .. } => unreachable!(),
++        };
++        envelope(session, self.observer, &mut self.cursor, result)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[tokio::test]
++    async fn close_allows_the_executing_command_but_rejects_queued_commands() {
++        let (sender, receiver) = sync_channel::<Job>(8);
++        let closed = Arc::new(AtomicBool::new(false));
++        let host = NativeEngineHost {
++            sender: Mutex::new(Some(sender)),
++            closed: closed.clone(),
++        };
++        let (entered_tx, entered_rx) = sync_channel(1);
++        let (release_tx, release_rx) = sync_channel(1);
++        let (finished_tx, finished_rx) = sync_channel(1);
++        let owner = std::thread::spawn(move || {
++            let mut session = HostSession::default();
++            session.dispatch(json!({"id": 1, "type": "init"})).unwrap();
++            run_requests(receiver, &closed, |request| {
++                entered_tx.send(()).unwrap();
++                release_rx.recv().unwrap();
++                session.dispatch(request)
++            });
++            finished_tx
++                .send(
++                    session
++                        .dispatch(json!({"id": 4, "type": "status"}))
++                        .unwrap(),
++                )
++                .unwrap();
++        });
++        let (executing_tx, executing_rx) = oneshot::channel();
++        host.sender
++            .lock()
++            .unwrap()
++            .as_ref()
++            .unwrap()
++            .try_send((
++                json!({"id": 2, "type": "endPhase", "actor": 0}),
++                executing_tx,
++            ))
++            .unwrap();
++        entered_rx
++            .recv_timeout(std::time::Duration::from_secs(5))
++            .unwrap();
++        let (queued_tx, queued_rx) = oneshot::channel();
++        host.sender
++            .lock()
++            .unwrap()
++            .as_ref()
++            .unwrap()
++            .try_send((json!({"id": 3, "type": "autoStep"}), queued_tx))
++            .unwrap();
++        host.close();
++        release_tx.send(()).unwrap();
++        let executing = executing_rx.await.unwrap();
++        let queued = queued_rx.await.unwrap();
++        assert_eq!(executing["ok"], true);
++        assert_eq!(executing["data"]["revision"], 1);
++        assert_eq!(queued["ok"], false);
++        assert!(queued["error"]
++            .as_str()
++            .unwrap()
++            .contains("closed before execution"));
++        assert_eq!(
++            finished_rx
++                .recv_timeout(std::time::Duration::from_secs(5))
++                .unwrap()["revision"],
++            1
++        );
++        assert!(host
++            .request(json!({"id": 5, "type": "status"}))
++            .await
++            .unwrap_err()
++            .contains("closed"));
++        owner.join().unwrap();
++    }
++}
+diff --git a/apps/desktop-client/src/native_engine_resource.rs b/apps/desktop-client/src/native_engine_resource.rs
+new file mode 100644
+index 00000000..799745ce
+--- /dev/null
++++ b/apps/desktop-client/src/native_engine_resource.rs
+@@ -0,0 +1,50 @@
++//! Per-WebView Tauri resources give each EngineClient the same independent lifetime as a Worker.
++use crate::NativeEngineHost;
++use std::sync::Arc;
++use tauri::{Resource, ResourceId, ResourceTable};
++
++impl Resource for NativeEngineHost {
++    fn close(self: Arc<Self>) {
++        NativeEngineHost::close(&self);
++    }
++}
++
++/// Allocate a bounded host resource; resource IDs are generated by Tauri.
++pub fn open_native_engine(table: &mut ResourceTable) -> Result<ResourceId, String> {
++    let count = table
++        .names()
++        .filter(|(_, name)| name.as_ref() == std::any::type_name::<NativeEngineHost>())
++        .count();
++    if count >= 8 {
++        return Err("native engine resource limit reached".into());
++    }
++    Ok(table.add(NativeEngineHost::new()?))
++}
++
++/// Retire this WebView document's engines without touching resources owned by other APIs.
++pub fn close_native_engines(table: &mut ResourceTable) -> usize {
++    let ids: Vec<_> = table
++        .names()
++        .map(|(id, _)| id)
++        .filter(|id| table.get::<NativeEngineHost>(*id).is_ok())
++        .collect();
++    for id in &ids {
++        let engine = table
++            .take::<NativeEngineHost>(*id)
++            .expect("engine selected from the same exclusive resource table");
++        Resource::close(engine);
++    }
++    ids.len()
++}
++
++/// Close only an engine resource; unknown IDs and duplicate closes are controlled errors.
++pub fn close_native_engine(
++    table: &mut ResourceTable,
++    resource_id: ResourceId,
++) -> Result<(), String> {
++    let engine = table
++        .take::<NativeEngineHost>(resource_id)
++        .map_err(|error| error.to_string())?;
++    Resource::close(engine);
++    Ok(())
++}
+diff --git a/apps/desktop-client/src/native_envelope.rs b/apps/desktop-client/src/native_envelope.rs
+new file mode 100644
+index 00000000..7ee5e794
+--- /dev/null
++++ b/apps/desktop-client/src/native_envelope.rs
+@@ -0,0 +1,140 @@
++//! Existing Worker envelope projection from the shared, observer-filtered session API.
++use engine_native_wasm::NativeSession;
++use serde_json::{json, Value};
++
++fn parse(raw: String) -> Result<Value, String> {
++    serde_json::from_str(&raw).map_err(|error| error.to_string())
++}
++
++fn card(view: &Value, id: &Value, owner: Value, zone: &str) -> Value {
++    let face = &view["cards"][id.to_string()];
++    json!({"id": id, "def": face["def"], "suit": face["suit"], "rank": face["rank"],
++        "owner": owner, "zone": zone, "kind": face["kind"].as_str().unwrap_or("Other")})
++}
++
++fn snapshot(view: &Value, revision: u64) -> Value {
++    let mut cards = Vec::new();
++    let mut seats = Vec::new();
++    for player in view["players"].as_array().into_iter().flatten() {
++        for (key, zone) in [("equips", "Equip"), ("judge", "Judge")] {
++            for id in player[key].as_array().into_iter().flatten() {
++                cards.push(card(view, id, player["seat"].clone(), zone));
++            }
++        }
++        seats.push(json!({
++            "player": player["seat"], "character_def": player["characterDef"].as_u64().unwrap_or(0),
++            "seat": player["seat"], "hp": player["hp"], "max_hp": player["maxHp"],
++            "alive": player["alive"], "turned_over": player["turnedOver"],
++            "hand_count": player["handCount"], "identity": player["identity"],
++            "skills": player["skills"].as_array().into_iter().flatten().map(|name| json!({
++                "id": 0, "def": 0, "enabled": true, "use_count": 0, "active": false,
++                "view_as": false, "locked": false, "name": name,
++            })).collect::<Vec<_>>()
++        }));
++    }
++    let mut own = Vec::new();
++    if let Some(player) = view["players"]
++        .as_array()
++        .and_then(|players| players.iter().find(|p| p["seat"] == view["seat"]))
++    {
++        for id in player["hand"]["own"].as_array().into_iter().flatten() {
++            own.push(card(view, id, view["seat"].clone(), "Hand"));
++        }
++    }
++    own.extend(cards);
++    for (key, zone) in [("discard", "DiscardPile"), ("table", "Processing")] {
++        for id in view[key].as_array().into_iter().flatten() {
++            own.push(card(view, id, Value::Null, zone));
++        }
++    }
++    let phase = match view["phase"].as_str() {
++        Some("judge") => "Judge",
++        Some("draw") => "Draw",
++        Some("play") => "Play",
++        Some("discard") => "Discard",
++        Some("end") => "End",
++        _ => "Idle",
++    };
++    json!({"revision": revision, "state_hash": "", "observer": view["seat"],
++        "round": view["round"], "current_player": view["turn"], "phase": phase,
++        "seats": seats, "known_cards": own, "outcome": view["outcome"]})
++}
++
++fn option_label(option: &Value) -> String {
++    if let Some(text) = option.as_str() {
++        return text.into();
++    }
++    if option.is_number() {
++        return option.to_string();
++    }
++    for key in ["card", "player", "tag", "kind"] {
++        if !option[key].is_null() {
++            return format!("{key}:{}", option[key]);
++        }
++    }
++    "unknown".into()
++}
++
++fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
++    let raw = parse(session.open_choice_json(observer)?)?;
++    if raw.is_null() {
++        return Ok(Value::Null);
++    }
++    let mut result = json!({"choice_id": raw["id"], "observer": observer, "kind": raw["kind"].as_str().unwrap_or("Custom"),
++        "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
++            json!({"token": index, "label_key": option_label(option)})
++        }).collect::<Vec<_>>()});
++    for (source, target) in [
++        ("min", "min_count"),
++        ("max", "max_count"),
++        ("allowCancel", "allow_cancel"),
++    ] {
++        if let Some(value) = raw.get(source) {
++            result[target] = value.clone();
++        }
++    }
++    Ok(result)
++}
++
++fn public_event(code: &Value) -> Value {
++    let label = match code.as_u64() {
++        Some(1) => "对局开始",
++        Some(2) => "摸牌",
++        Some(3) => "使用或响应牌",
++        Some(4) => "伤害结算",
++        Some(5) => "回复体力",
++        Some(6) => "濒死状态变化",
++        Some(7) => "玩家阵亡",
++        Some(8) => "阶段或回合推进",
++        Some(9) => "对局结束",
++        Some(10) => "选择状态变化",
++        _ => return json!({"PublicEvent": {"code": code, "label": format!("事件 {code}")}}),
++    };
++    json!({"PublicEvent": {"code": code, "label": label}})
++}
++
++pub(super) fn envelope(
++    session: &NativeSession,
++    observer: u8,
++    cursor: &mut u32,
++    result: Value,
++) -> Result<Value, String> {
++    let view = parse(session.view_json(observer)?)?;
++    let legal = parse(session.legal_actions_json(observer)?)?;
++    let choice = choice(session, observer)?;
++    let mut events = Vec::new();
++    if !result.is_null() {
++        let end = session.log_len();
++        let codes = parse(session.public_event_codes_json((*cursor).min(end)))?;
++        events = codes
++            .as_array()
++            .into_iter()
++            .flatten()
++            .map(public_event)
++            .collect();
++        *cursor = end;
++    }
++    Ok(json!({"result": result, "events": events, "choice": choice,
++        "view": snapshot(&view, session.revision()), "legal_actions": legal["actions"],
++        "hash_hex": session.state_hash_hex(), "revision": session.revision(), "finished": session.is_finished()}))
++}
+diff --git a/apps/desktop-client/tests/native_engine_host.rs b/apps/desktop-client/tests/native_engine_host.rs
+new file mode 100644
+index 00000000..72b7384d
+--- /dev/null
++++ b/apps/desktop-client/tests/native_engine_host.rs
+@@ -0,0 +1,283 @@
++use desktop_client::NativeEngineHost;
++use engine_native_wasm::{NativeEngine, NativeSession, MAX_ARCHIVE_HEX_CHARS};
++use serde_json::{json, Value};
++
++async fn request(host: &NativeEngineHost, mut body: Value) -> Value {
++    body["id"] = json!(1);
++    let response = host.request(body).await.unwrap();
++    assert_eq!(response["ok"], true, "{response}");
++    response["data"].clone()
++}
++
++#[tokio::test]
++async fn host_requests_initialize_and_reject_invalid_input_without_losing_state() {
++    let host = NativeEngineHost::new().unwrap();
++    let init = request(&host, json!({"type": "init"})).await;
++    assert_eq!(init, "native ready");
++    request(
++        &host,
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 0}),
++    )
++    .await;
++    let saved = request(&host, json!({"type": "save"})).await;
++    for mut invalid in [
++        json!({"type": "playCard", "actor": 0, "card": -1, "targets": []}),
++        json!({"type": "playCard", "actor": 256, "card": 1, "targets": []}),
++        json!({"type": "playCard", "actor": 0, "card": 1.5, "targets": []}),
++        json!({"type": "playCard", "actor": 0, "card": 1, "targets": [256]}),
++        json!({"type": "activateSkill", "actor": 0, "skill": 65536, "targets": [], "cardTargets": []}),
++        json!({"type": "activateSkill", "actor": 0, "skill": 1, "targets": [1], "cardTargets": []}),
++        json!({"type": "resolveChoice", "actor": 0, "choiceId": 9007199254740992u64, "selections": [], "cancelled": false}),
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 255}),
++        json!({"type": "start", "players": 0, "seed": 42, "observer": 0}),
++        json!({"type": "start", "players": 4, "seed": 9007199254740992u64, "observer": 0}),
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 0, "packsJson": "{}"}),
++        json!({"type": "restore", "hex": "中"}),
++        json!({"type": "restore", "hex": "abc"}),
++        json!({"type": "restore", "hex": "zz"}),
++        json!({"type": "validatePackage", "packJson": "{}"}),
++        json!({"type": "chooseGeneral", "seat": 0, "name": "unknown-general"}),
++        json!({"type": "useSkillCard"}),
++        json!({"type": "loadReplay"}),
++        json!({"type": "seekReplay"}),
++        json!({"type": "unknown-request"}),
++    ] {
++        invalid["id"] = json!(2);
++        let rejected = host.request(invalid).await.unwrap();
++        assert_eq!(rejected["ok"], false, "{rejected}");
++        assert_eq!(saved, request(&host, json!({"type": "save"})).await);
++    }
++    for field in ["hex", "packsJson", "packJson"] {
++        let mut oversized = json!({"id": 3, "type": "restore"});
++        oversized[field] = json!("0".repeat(MAX_ARCHIVE_HEX_CHARS + 1));
++        assert!(host
++            .request(oversized)
++            .await
++            .unwrap_err()
++            .contains("exceeds"));
++        assert_eq!(saved, request(&host, json!({"type": "save"})).await);
++    }
++}
++
++#[tokio::test]
++async fn host_full_identity_trajectory_matches_session_and_existing_binding_and_cross_restores() {
++    let host = NativeEngineHost::new().unwrap();
++    request(&host, json!({"type": "init"})).await;
++    let mut native = NativeSession::new_identity(4, 42).unwrap();
++    let mut binding = NativeEngine::new_identity(4, 42).unwrap();
++    let start = request(
++        &host,
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 0, "mode": "identity"}),
++    )
++    .await;
++    assert_eq!(start["hash_hex"], native.state_hash_hex());
++    let mut finished = false;
++    for step in 0..2000 {
++        let actual = request(&host, json!({"type": "autoStep"})).await;
++        let expected: Value = serde_json::from_str(&native.auto_step().unwrap()).unwrap();
++        assert_eq!(actual["result"], expected, "step {step}");
++        assert_eq!(
++            expected,
++            serde_json::from_str::<Value>(&binding.auto_step().unwrap()).unwrap()
++        );
++        assert_eq!(actual["hash_hex"], native.state_hash_hex(), "step {step}");
++        assert_eq!(native.state_hash_hex(), binding.state_hash_hex());
++        if step == 30 {
++            let save = request(&host, json!({"type": "save"})).await;
++            native.restore_hex(save["hex"].as_str().unwrap()).unwrap();
++            binding
++                .restore_hex_checked(save["hex"].as_str().unwrap())
++                .unwrap();
++            let restored =
++                request(&host, json!({"type": "restore", "hex": binding.save_hex()})).await;
++            assert_eq!(actual["hash_hex"], restored["hash_hex"]);
++        }
++        if native.is_finished() {
++            finished = true;
++            break;
++        }
++    }
++    assert!(finished, "seed 42 must reach its actual terminal outcome");
++    assert!(!request(&host, json!({"type": "observer"})).await["view"]["outcome"].is_null());
++}
++
++#[tokio::test]
++async fn host_projects_authority_candidates_and_observer_privacy() {
++    let host = NativeEngineHost::new().unwrap();
++    request(&host, json!({"type": "init"})).await;
++    let data = request(
++        &host,
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 1, "mode": "identity"}),
++    )
++    .await;
++    let reference = NativeSession::new_identity(4, 42).unwrap();
++    let raw: Value = serde_json::from_str(&reference.view_json(1).unwrap()).unwrap();
++    let known = data["view"]["known_cards"].as_array().unwrap();
++    assert_eq!(
++        known.len(),
++        raw["players"][1]["hand"]["own"].as_array().unwrap().len()
++    );
++    assert!(known
++        .iter()
++        .all(|card| card["owner"] == 1 && card["def"].is_number()));
++    for seat in 0..4 {
++        assert_eq!(
++            data["view"]["seats"][seat]["identity"],
++            raw["players"][seat]["identity"]
++        );
++    }
++    let candidates = request(&host, json!({"type": "generalCandidates"})).await;
++    assert_eq!(
++        candidates,
++        serde_json::from_str::<Value>(&reference.general_candidates_json()).unwrap()
++    );
++    let name = candidates["candidates"][0]["name"].as_str().unwrap();
++    let selected = request(
++        &host,
++        json!({"type": "chooseGeneral", "seat": 1, "name": name}),
++    )
++    .await;
++    assert_eq!(selected["assignment"]["name"], name);
++    assert_eq!(
++        selected["assignment"]["state_hash"],
++        selected["envelope"]["hash_hex"]
++    );
++    assert_eq!(
++        request(&host, json!({"type": "status"})).await["revision"],
++        selected["envelope"]["revision"]
++    );
++    // Invalid restored observer must leave the original four-seat match intact.
++    let before = request(&host, json!({"type": "save"})).await;
++    let one_seat = NativeSession::new(1, 0).unwrap().save_hex();
++    let rejected = host
++        .request(json!({"id": 2, "type": "restore", "hex": one_seat}))
++        .await
++        .unwrap();
++    assert_eq!(rejected["ok"], false);
++    assert_eq!(before, request(&host, json!({"type": "save"})).await);
++}
++
++#[tokio::test]
++async fn host_owns_a_single_ordered_command_stream_and_is_send_sync() {
++    fn assert_send_sync<T: Send + Sync>() {}
++    assert_send_sync::<NativeEngineHost>();
++    let host = NativeEngineHost::new().unwrap();
++    request(&host, json!({"type": "init"})).await;
++    request(
++        &host,
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 0}),
++    )
++    .await;
++    let (first, second) = tokio::join!(
++        host.request(json!({"id": 2, "type": "autoStep"})),
++        host.request(json!({"id": 3, "type": "autoStep"})),
++    );
++    let first = first.unwrap();
++    let second = second.unwrap();
++    assert_eq!(first["id"], 2);
++    assert_eq!(second["id"], 3);
++    assert_eq!(
++        first["data"]["revision"].as_u64().unwrap() + 1,
++        second["data"]["revision"].as_u64().unwrap()
++    );
++}
++
++#[tokio::test]
++async fn independent_clients_do_not_reset_each_others_sessions_and_close_is_controlled() {
++    let battle = NativeEngineHost::new().unwrap();
++    let validator = NativeEngineHost::new().unwrap();
++    request(&battle, json!({"type": "init"})).await;
++    request(
++        &battle,
++        json!({"type": "start", "players": 4, "seed": 42, "observer": 0}),
++    )
++    .await;
++    request(&battle, json!({"type": "autoStep"})).await;
++    let saved = request(&battle, json!({"type": "save"})).await;
++    request(&validator, json!({"type": "init"})).await;
++    assert_eq!(saved, request(&battle, json!({"type": "save"})).await);
++    validator.close();
++    validator.close();
++    assert!(validator
++        .request(json!({"id": 1, "type": "save"}))
++        .await
++        .unwrap_err()
++        .contains("closed"));
++    assert_eq!(saved, request(&battle, json!({"type": "save"})).await);
++}
++
++#[cfg(feature = "tauri-shell")]
++#[tokio::test]
++async fn tauri_resource_ids_isolate_clients_and_have_a_real_capacity_and_close_boundary() {
++    use desktop_client::{close_native_engine, open_native_engine};
++    let mut table = tauri::ResourceTable::default();
++    let mut ids = Vec::new();
++    for _ in 0..8 {
++        ids.push(open_native_engine(&mut table).unwrap());
++    }
++    assert!(open_native_engine(&mut table)
++        .unwrap_err()
++        .contains("limit"));
++    let first = table.get::<NativeEngineHost>(ids[0]).unwrap();
++    let second = table.get::<NativeEngineHost>(ids[1]).unwrap();
++    request(&first, json!({"type": "init"})).await;
++    request(&first, json!({"type": "autoStep"})).await;
++    let saved = request(&first, json!({"type": "save"})).await;
++    request(&second, json!({"type": "init"})).await;
++    assert_eq!(saved, request(&first, json!({"type": "save"})).await);
++    close_native_engine(&mut table, ids[0]).unwrap();
++    assert!(close_native_engine(&mut table, ids[0]).is_err());
++    assert!(table.get::<NativeEngineHost>(ids[0]).is_err());
++    assert!(first
++        .request(json!({"id": 1, "type": "save"}))
++        .await
++        .unwrap_err()
++        .contains("closed"));
++    for id in ids.into_iter().skip(1) {
++        close_native_engine(&mut table, id).unwrap();
++    }
++    let replacement = open_native_engine(&mut table).unwrap();
++    close_native_engine(&mut table, replacement).unwrap();
++}
++
++#[cfg(feature = "tauri-shell")]
++#[tokio::test]
++async fn document_cleanup_retires_only_native_hosts_and_preserves_unrelated_resources() {
++    use desktop_client::{close_native_engines, open_native_engine};
++    use std::sync::{
++        atomic::{AtomicBool, Ordering},
++        Arc,
++    };
++    struct UnrelatedResource(Arc<AtomicBool>);
++    impl tauri::Resource for UnrelatedResource {
++        fn name(&self) -> std::borrow::Cow<'_, str> {
++            // Matching a name is insufficient: only NativeEngineHost's concrete type may be closed.
++            std::any::type_name::<NativeEngineHost>().into()
++        }
++        fn close(self: Arc<Self>) {
++            self.0.store(true, Ordering::Release);
++        }
++    }
++    let mut table = tauri::ResourceTable::default();
++    let other_closed = Arc::new(AtomicBool::new(false));
++    let unrelated_id = table.add(UnrelatedResource(other_closed.clone()));
++    for _document in 0..20 {
++        let first = open_native_engine(&mut table).unwrap();
++        let second = open_native_engine(&mut table).unwrap();
++        let retained_old_handle = table.get::<NativeEngineHost>(first).unwrap();
++        request(&retained_old_handle, json!({"type": "init"})).await;
++        assert_eq!(close_native_engines(&mut table), 2);
++        assert_eq!(close_native_engines(&mut table), 0);
++        assert!(table.get::<NativeEngineHost>(first).is_err());
++        assert!(table.get::<NativeEngineHost>(second).is_err());
++        assert!(retained_old_handle
++            .request(json!({"id": 2, "type": "status"}))
++            .await
++            .unwrap_err()
++            .contains("closed"));
++        assert!(table.get::<UnrelatedResource>(unrelated_id).is_ok());
++        assert!(!other_closed.load(Ordering::Acquire));
++    }
++    table.close(unrelated_id).unwrap();
++    assert!(other_closed.load(Ordering::Acquire));
++}
+diff --git a/apps/desktop-client/tests/native_planner_measurement.rs b/apps/desktop-client/tests/native_planner_measurement.rs
+new file mode 100644
+index 00000000..96bc2137
+--- /dev/null
++++ b/apps/desktop-client/tests/native_planner_measurement.rs
+@@ -0,0 +1,79 @@
++//! Native-only measurements for PA09; these are not WebView or PA08 acceptance results.
++use engine_native::ai::{BoundedPlanner, PlanPool};
++use engine_native::ai_pool::PlannerPool;
++use engine_native::{Engine, GameAction, GameCommand};
++use std::time::Instant;
++
++fn percentile(values: &mut [u128], percent: usize) -> u128 {
++    values.sort_unstable();
++    values[(values.len() * percent).div_ceil(100).saturating_sub(1)]
++}
++
++#[test]
++#[ignore = "native wall-clock measurement; run explicitly with --ignored --nocapture"]
++fn actual_single_seat_planning_compares_existing_pools_and_native_clock() {
++    let mut engine = Engine::new_identity(42, 4);
++    for _ in 0..2 {
++        engine.submit(GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: engine.revision() + 1,
++            action: GameAction::NextPhase,
++        });
++    }
++    let planner = BoundedPlanner::new(64).with_deadline_ms(50);
++    let pool = PlanPool::new(4);
++    let persistent = PlannerPool::new(4, 8);
++    let expected = engine.plan_action(0, &planner);
++    let mut direct = Vec::new();
++    let mut scoped = Vec::new();
++    let mut pooled = Vec::new();
++    for _ in 0..100 {
++        let started = Instant::now();
++        let plan = engine.plan_action(0, &planner);
++        direct.push(started.elapsed().as_nanos());
++        assert_eq!(plan.action, expected.action);
++        let started = Instant::now();
++        let plans = pool.plan_seats(&engine, &[0], &planner);
++        scoped.push(started.elapsed().as_nanos());
++        assert_eq!(plans[0].action, expected.action);
++        let started = Instant::now();
++        let plans = pool.plan_seats_with_pool(&persistent, &engine, &[0], &planner);
++        pooled.push(started.elapsed().as_nanos());
++        assert_eq!(plans[0].action, expected.action);
++    }
++    persistent.shutdown();
++    println!(
++        "{}",
++        serde_json::json!({
++            "workload": "4-seat identity seed42, first play phase, current seat only, 64 nodes / 50ms",
++            "samples": 100, "direct_p50_ns": percentile(&mut direct, 50),
++            "scoped_p50_ns": percentile(&mut scoped, 50), "persistent_p50_ns": percentile(&mut pooled, 50),
++            "direct_p95_ns": percentile(&mut direct, 95), "scoped_p95_ns": percentile(&mut scoped, 95),
++            "persistent_p95_ns": percentile(&mut pooled, 95),
++        })
++    );
++    // Stress the same planner's native clock without changing its candidate policy.
++    let mut snapshot = engine.save();
++    let cards = std::mem::take(&mut snapshot.core.deck);
++    snapshot.core.players[0].hand.extend(cards);
++    engine = Engine::restore(&snapshot).unwrap();
++    let hand_count = engine.view_for(0).players[0].hand_count;
++    let clock = BoundedPlanner::new(usize::MAX).with_deadline_ms(1);
++    let started = Instant::now();
++    let bounded = engine.plan_action(0, &clock);
++    let elapsed = started.elapsed();
++    assert!(
++        bounded.timed_out,
++        "stress workload must actually reach the native deadline"
++    );
++    assert!(
++        elapsed.as_millis() < 1000,
++        "native planning did not return promptly"
++    );
++    println!(
++        "{}",
++        serde_json::json!({"workload": "native deadline stress: full deck in hand", "hand_count": hand_count, "deadline_ms": 1,
++        "elapsed_us": elapsed.as_micros(), "timed_out": bounded.timed_out, "nodes_used": bounded.nodes_used})
++    );
++}
+diff --git a/apps/web-client/scripts/pa09-desktop-transport.test.mjs b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+new file mode 100644
+index 00000000..ea29af45
+--- /dev/null
++++ b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+@@ -0,0 +1,138 @@
++import assert from "node:assert/strict";
++import { test } from "node:test";
++import { DesktopEngineTransport, desktopEngineChoice, DESKTOP_ENGINE_KEY } from "../src/engine/desktopEngineTransport.ts";
++
++const tick = () => new Promise((resolve) => setImmediate(resolve));
++
++test("desktop IPC preserves request order, ids, errors and continues on the same engine", async () => {
++  const calls = [];
++  let release;
++  const first = new Promise((resolve) => { release = resolve; });
++  const transport = new DesktopEngineTransport(async (command, args) => {
++    if (command === "native_engine_open") return 17;
++    if (command === "native_engine_close") return;
++    calls.push({ command, ...args });
++    const request = args.request;
++    if (request.id === 1) return first;
++    if (request.id === 2) return { id: 2, ok: false, error: "native backend: useSkillCard 未映射" };
++    if (request.id === 3) throw new Error("bridge lost");
++    return { id: request.id, ok: true, data: { revision: 7 } };
++  });
++  const replies = [];
++  transport.onmessage = (event) => replies.push(event.data);
++  const start = { id: 1, type: "start", players: 4, seed: 42, observer: 0, mode: "identity", packsJson: "[]" };
++  transport.postMessage(start);
++  transport.postMessage({ id: 2, type: "useSkillCard", actor: 0, skill: 1, cardKind: 0, targets: [], equipSlot: 0 });
++  transport.postMessage({ id: 3, type: "autoStep" });
++  transport.postMessage({ id: 4, type: "observer" });
++  await tick();
++  assert.deepEqual(calls, [{ command: "native_engine_request", resourceId: 17, request: start }]);
++  release({ id: 1, ok: true, data: { revision: 6 } });
++  await tick();
++  assert.deepEqual(calls.map((call) => call.request.id), [1, 2, 3, 4]);
++  assert.deepEqual(replies[1], { id: 2, ok: false, error: "native backend: useSkillCard 未映射" });
++  assert.match(replies[2].error, /bridge lost.*结果可能未知/);
++  assert.deepEqual(replies[3], { id: 4, ok: true, data: { revision: 7 } });
++  transport.terminate();
++});
++
++test("dispose suppresses late IPC replies and never submits queued operations", async () => {
++  let release;
++  const sent = [];
++  const transport = new DesktopEngineTransport((command, args) => {
++    if (command === "native_engine_open") return Promise.resolve(19);
++    if (command === "native_engine_close") return Promise.resolve();
++    sent.push(args.request.id);
++    return new Promise((resolve) => { release = resolve; });
++  });
++  const replies = [];
++  transport.onmessage = (event) => replies.push(event.data);
++  transport.postMessage({ id: 1, type: "autoStep" });
++  transport.postMessage({ id: 2, type: "autoStep" });
++  await tick();
++  transport.terminate();
++  release({ id: 1, ok: true, data: "late" });
++  await tick();
++  assert.deepEqual(sent, [1]);
++  assert.deepEqual(replies, []);
++  assert.throws(() => transport.postMessage({ id: 3, type: "save" }), /closed/);
++});
++
++test("mismatched IPC response is an explicit unknown-result error, without retry", async () => {
++  let calls = 0;
++  const transport = new DesktopEngineTransport(async (command) => {
++    if (command === "native_engine_open") return 20;
++    if (command === "native_engine_close") return;
++    calls++; return { id: 99, ok: true, data: "wrong" };
++  });
++  const response = new Promise((resolve) => { transport.onmessage = (event) => resolve(event.data); });
++  transport.postMessage({ id: 1, type: "endPhase", actor: 0 });
++  assert.match((await response).error, /invalid IPC response.*结果可能未知/);
++  assert.equal(calls, 1);
++  transport.terminate();
++});
++
++test("Wasm is the default and an explicit persistent/URL fallback remains available", () => {
++  const originalStorage = globalThis.localStorage;
++  const originalLocation = globalThis.location;
++  const values = new Map();
++  globalThis.localStorage = { getItem: (key) => values.get(key) ?? null };
++  globalThis.location = { search: "", hash: "" };
++  try {
++    assert.equal(desktopEngineChoice(), "wasm");
++    values.set(DESKTOP_ENGINE_KEY, "native");
++    assert.equal(desktopEngineChoice(), "native");
++    globalThis.location.search = "?engineTransport=wasm";
++    assert.equal(desktopEngineChoice(), "wasm");
++    globalThis.location.search = "?engineTransport=native";
++    values.clear();
++    assert.equal(desktopEngineChoice(), "native");
++    globalThis.location.search = "";
++    globalThis.location.hash = "#/battle?engineTransport=wasm";
++    assert.equal(desktopEngineChoice(), "wasm");
++  } finally {
++    if (originalStorage === undefined) delete globalThis.localStorage; else globalThis.localStorage = originalStorage;
++    if (originalLocation === undefined) delete globalThis.location; else globalThis.location = originalLocation;
++  }
++});
++
++test("dispose during resource allocation closes it once and submits no request", async () => {
++  let opened;
++  const calls = [];
++  const transport = new DesktopEngineTransport((command, args) => {
++    calls.push({ command, args });
++    if (command === "native_engine_open") return new Promise((resolve) => { opened = resolve; });
++    return Promise.resolve();
++  });
++  transport.postMessage({ id: 1, type: "init" });
++  await tick();
++  transport.terminate();
++  transport.terminate();
++  opened(25);
++  await tick();
++  assert.deepEqual(calls.map((call) => call.command), ["native_engine_open", "native_engine_close"]);
++  assert.deepEqual(calls[1].args, { resourceId: 25 });
++});
++
++test("IPC and Worker convert native SingleWin seats exactly once without modifying raw projections", async () => {
++  const { nativeObserverToSnapshot } = await import("../src/worker/nativeBackend.ts");
++  for (const player of [1, 4]) {
++    const raw = { SingleWin: { player } };
++    const view = { seat: 0, players: [], discard: [], table: [], turn: 0, phase: "end", round: 1, outcome: raw };
++    const envelope = { result: null, events: [], choice: null, view: { outcome: raw }, legal_actions: [], hash_hex: "hash", revision: 1, finished: true };
++    const transport = new DesktopEngineTransport(async (command, args) => {
++      if (command === "native_engine_open") return 26;
++      if (command === "native_engine_close") return;
++      return { id: args.request.id, ok: true, data: args.request.type === "chooseGeneral" ? { assignment: {}, envelope } : envelope };
++    });
++    const pending = new Map();
++    transport.onmessage = (event) => pending.get(event.data.id)(event.data.data);
++    const send = (body) => new Promise((resolve) => { pending.set(body.id, resolve); transport.postMessage(body); });
++    assert.deepEqual(nativeObserverToSnapshot(view).outcome, { SingleWin: { player: player - 1 } });
++    assert.deepEqual((await send({ id: 1, type: "observer" })).view.outcome, { SingleWin: { player: player - 1 } });
++    assert.deepEqual((await send({ id: 2, type: "chooseGeneral", seat: 0, name: "曹操" })).envelope.view.outcome, { SingleWin: { player: player - 1 } });
++    assert.deepEqual(raw, { SingleWin: { player } });
++    assert.equal(envelope.view.outcome, raw);
++    transport.terminate();
++  }
++});
+diff --git a/apps/web-client/scripts/pa09-desktop-webview.ts b/apps/web-client/scripts/pa09-desktop-webview.ts
+new file mode 100644
+index 00000000..16e35e69
+--- /dev/null
++++ b/apps/web-client/scripts/pa09-desktop-webview.ts
+@@ -0,0 +1,140 @@
++// Actual WKWebView acceptance entry, bundled with Vite and served by the external evidence runner.
++import { invoke } from "@tauri-apps/api/core";
++import { EngineClient } from "../src/engine/client";
++import { activateExtension, deactivateExtension, importExtensionPackageValidated, readExtensionStore, setMatchFrozen, uninstallExtension } from "../src/engine/extensionStore";
++import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent";
++import type { EngineEnvelope } from "../src/types/engine";
++import v1 from "./fixtures/vm-trigger/package.npack.json";
++import chars1 from "./fixtures/vm-trigger/character.json";
++import v2 from "./fixtures/vm-trigger-v2/package.npack.json";
++import chars2 from "./fixtures/vm-trigger-v2/character.json";
++
++function check(condition: unknown, message: string): asserts condition {
++  if (!condition) throw new Error(message);
++}
++function equal(actual: unknown, expected: unknown, message: string) {
++  const canonical = (value: unknown): string => JSON.stringify(value, (_key, item) => {
++    if (item && typeof item === "object" && !Array.isArray(item)) return Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b)));
++    return item;
++  });
++  check(canonical(actual) === canonical(expected), message);
++}
++async function rejects(action: () => Promise<unknown>, message: string) {
++  let failed = false;
++  try { await action(); } catch { failed = true; }
++  check(failed, message);
++}
++const battle = new EngineClient();
++const validator = new EngineClient();
++const wasm = new EngineClient();
++const storage = new Map<string, string>();
++Object.defineProperty(window, "localStorage", { value: {
++  getItem: (key: string) => storage.get(key) ?? null,
++  setItem: (key: string, value: string) => storage.set(key, String(value)),
++  removeItem: (key: string) => storage.delete(key),
++} });
++
++async function run() {
++  history.replaceState(null, "", "/?engineTransport=native");
++  await battle.connect();
++  check(battle.getTransportKind() === "desktop-native", "battle did not select actual IPC");
++  let env = await battle.start(4, 42, 0, undefined, "identity");
++  const savedBeforeValidator = await battle.saveHex();
++  await validator.connect();
++  equal(await battle.saveHex(), savedBeforeValidator, "validator init reset battle resource");
++  history.replaceState(null, "", "/?engineTransport=wasm");
++  await wasm.connect();
++  check(wasm.getTransportKind() === "wasm-worker", "explicit Wasm fallback did not select Worker");
++  history.replaceState(null, "", "/?engineTransport=native");
++  equal(env, await wasm.start(4, 42, 0, undefined, "identity"), "initial IPC/Worker envelopes differ");
++  let steps = 0;
++  for (; steps < 2000 && !env.finished; steps++) {
++    env = await battle.autoStep();
++    equal(env, await wasm.autoStep(), `IPC/Worker trajectory diverged at ${steps}`);
++    if (steps === 30 || steps === 70) {
++      const hex = await battle.saveHex();
++      equal(hex, await wasm.saveHex(), "native/Wasm archive bytes differ");
++      equal(await battle.restoreHex(await wasm.saveHex()), await wasm.restoreHex(hex), "cross-restore differed");
++    }
++  }
++  check(env.finished, "identity workload did not reach its actual terminal outcome");
++  const terminal = { steps, hash: env.hash_hex, outcome: env.view.outcome };
++  const deep = (json: string) => validator.validatePackage(json);
++  await importExtensionPackageValidated(JSON.stringify({ ...v1, characters: chars1 }), deep);
++  const key = "official/vm-fixture";
++  activateExtension(key);
++  const frozen = prepareNativeMatchContent();
++  await battle.start(4, 42, 0, frozen.packsJson);
++  const candidates = await battle.generalCandidates();
++  check(candidates.candidates.some((row) => row.name === "vm_fixture"), "installed VM general missing from actual IPC candidates");
++  env = (await battle.chooseGeneral(0, "vm_fixture")).envelope;
++  async function phaseEnd(delta: number) {
++    for (let step = 0; step < 80; step++) {
++      const before: EngineEnvelope = env;
++      env = before.choice
++        ? await battle.resolveChoice(before.choice.observer, before.choice.choice_id,
++            (before.choice.options ?? []).slice(0, Math.max(1, before.choice.min_count ?? 0)).map((option) => option.token))
++        : await battle.endPhase(before.view.current_player);
++      if (before.view.phase === "Discard" && env.view.phase === "End") {
++        equal(env.view.seats[0].hand_count - before.view.seats[0].hand_count, delta, "actual IPC VM effect did not use expected package version");
++        return;
++      }
++    }
++    throw new Error("VM phase end was not reached");
++  }
++  await phaseEnd(1);
++  const save = { hex: await battle.saveHex(), ...frozen };
++  setMatchFrozen(true);
++  await rejects(() => importExtensionPackageValidated(JSON.stringify({ ...v2, characters: chars2 }), deep), "frozen install was accepted");
++  setMatchFrozen(false);
++  await importExtensionPackageValidated(JSON.stringify({ ...v2, characters: chars2 }), deep);
++  const upgraded = prepareNativeMatchContent();
++  check(upgraded.lockSeed !== frozen.lockSeed, "upgrade did not change content lock");
++  equal(await battle.observer(), env.view, "upgrade mutated the live match");
++  deactivateExtension(key);
++  check(prepareNativeMatchContent().packsJson === undefined, "disabled package remained active");
++  activateExtension(key);
++  equal(prepareNativeMatchContent().lockSeed, upgraded.lockSeed, "enable lost upgraded version");
++  deactivateExtension(key);
++  uninstallExtension(key);
++  equal(readExtensionStore().installed.length, 0, "uninstall did not remove installed slot");
++  const original = restoreNativeMatchContent(save);
++  const restored = await battle.restoreHex(save.hex, original.packsJson);
++  equal(restored.hash_hex, env.hash_hex, "frozen old package restore failed after uninstall");
++  const beforeRejectedRestore = await battle.saveHex();
++  await rejects(() => battle.restoreHex(save.hex, upgraded.packsJson), "wrong-version archive restore was accepted");
++  equal(await battle.saveHex(), beforeRejectedRestore, "rejected restore destroyed live archive");
++  await battle.start(4, 42, 0, upgraded.packsJson);
++  env = (await battle.chooseGeneral(0, "vm_fixture")).envelope;
++  await phaseEnd(2);
++  await battle.start(4, 42, 0);
++  env = (await battle.chooseGeneral(0, "黄盖")).envelope;
++  await battle.endPhase(0);
++  env = await battle.endPhase(0);
++  const active = env.legal_actions.find((action) => typeof action === "object" && "ActivateSkill" in action);
++  check(active && typeof active === "object" && "ActivateSkill" in active, "active skill candidate missing");
++  env = await battle.activateSkill(0, active.ActivateSkill.skill, [], []);
++  const play = env.legal_actions.find((action) => typeof action === "object" && "PlayCard" in action);
++  check(play && typeof play === "object" && "PlayCard" in play, "playable card candidate missing");
++  env = await battle.playCard(0, play.PlayCard.card, play.PlayCard.targets);
++  check((await battle.status()).revision === env.revision, "status revision differs");
++  await rejects(() => battle.useSkillCard(0, 1, 0, [], 0), "unsupported request falsely succeeded");
++  check(battle.getTransportKind() === "desktop-native", "unsupported request silently switched transport");
++  const resourceId = await invoke<number>("native_engine_open");
++  await invoke("native_engine_close", { resourceId });
++  await rejects(() => invoke("native_engine_close", { resourceId }), "duplicate resource close was uncontrolled");
++  await rejects(() => invoke("native_engine_request", { resourceId, request: { id: 1, type: "init" } }), "closed resource accepted a request");
++  return { passed: true, terminal, vm_lifecycle: "actual IPC passed", isolation: "validator init preserves battle", fallback: "actual Wasm Worker passed", resources: "close/duplicate-close/closed-request passed" };
++}
++
++try {
++  const result = await run();
++  document.body.textContent = JSON.stringify(result);
++  await fetch("/report", { method: "POST", body: JSON.stringify(result) });
++} catch (error) {
++  const result = { passed: false, error: String(error), stack: error instanceof Error ? error.stack : null };
++  document.body.textContent = JSON.stringify(result);
++  await fetch("/report", { method: "POST", body: JSON.stringify(result) });
++} finally {
++  battle.dispose(); validator.dispose(); wasm.dispose();
++}
+diff --git a/apps/web-client/scripts/pa09-document-reload.ts b/apps/web-client/scripts/pa09-document-reload.ts
+new file mode 100644
+index 00000000..4d11f93d
+--- /dev/null
++++ b/apps/web-client/scripts/pa09-document-reload.ts
+@@ -0,0 +1,72 @@
++// Reload the same real WebView without Vue unmount or JS disposal; native lifecycle must own cleanup.
++import { invoke } from "@tauri-apps/api/core";
++import { Image } from "@tauri-apps/api/image";
++import { EngineClient } from "../src/engine/client";
++import v1 from "./fixtures/vm-trigger/package.npack.json";
++
++interface ReloadState {
++  ids: number[];
++  imageId?: number;
++  checks: Array<{ document: number; oldResourceRefused: boolean; unrelatedImageRetained: boolean; pendingRequests: number }>;
++}
++
++async function run() {
++  const state: ReloadState = await (await fetch("/state")).json();
++  const documentNumber = state.ids.length;
++  history.replaceState(null, "", `/?engineTransport=native&document=${documentNumber}`);
++  if (state.imageId === undefined) state.imageId = (await Image.new([11, 22, 33, 255], 1, 1)).rid;
++  const size = await new Image(state.imageId).size();
++  const unrelatedImageRetained = size.width === 1 && size.height === 1;
++  if (!unrelatedImageRetained) throw new Error("unrelated image resource lost during navigation");
++  let oldResourceRefused = documentNumber === 0;
++  if (documentNumber > 0) {
++    try {
++      await invoke("native_engine_request", { resourceId: state.ids.at(-1), request: { id: 99, type: "status" } });
++    } catch { oldResourceRefused = true; }
++  }
++  const validator = new EngineClient();
++  await validator.connect();
++  await validator.validatePackage(JSON.stringify(v1));
++  // SAFETY: this test reads the allocated resource promise from the production client's IPC transport without replacing either implementation.
++  const resourceId = await (validator as unknown as { worker: { resource: Promise<number> } }).worker.resource;
++  if (!Number.isInteger(resourceId)) throw new Error("validator did not allocate an actual native resource");
++  const spareResources: number[] = [];
++  try {
++    for (let slot = 0; slot < 7; slot++) spareResources.push(await invoke<number>("native_engine_open"));
++  } finally {
++    for (const resourceId of spareResources) await invoke("native_engine_close", { resourceId });
++  }
++  state.ids.push(resourceId);
++  // Send actual invoke requests before replacing the document. Their old renderer must not own a live host afterward.
++  const pendingRequests = documentNumber < 12 ? 8 : 0;
++  state.checks.push({ document: documentNumber, oldResourceRefused, unrelatedImageRetained, pendingRequests });
++  await fetch("/state", { method: "POST", body: JSON.stringify(state) });
++  if (documentNumber < 12) {
++    let settled = 0;
++    for (let id = 1; id <= pendingRequests; id++) {
++      void invoke("native_engine_request", { resourceId, request: { id: 100 + id, type: "autoStep" } })
++        .then(() => { settled++; }, () => { settled++; });
++    }
++    for (let allocation = 0; allocation < 2; allocation++) {
++      void invoke("native_engine_open").then(() => { settled++; }, () => { settled++; });
++    }
++    navigator.sendBeacon("/pending", JSON.stringify({ document: documentNumber, submitted: pendingRequests + 2, pendingRequests, pendingOpens: 2, settledAtNavigation: settled }));
++    location.reload();
++    return;
++  }
++  if (!state.checks.every((check) => check.oldResourceRefused)) throw new Error("old document resource survived navigation");
++  const nextClient = new EngineClient();
++  await nextClient.connect();
++  const status = await nextClient.status();
++  if (status.revision !== 0) throw new Error("new client after repeated reloads did not have an independent session");
++  nextClient.dispose();
++  validator.dispose();
++  await new Image(state.imageId).close();
++  const report = { passed: true, reloads: 12, documents: state.checks.length, nextClientConnected: status.revision === 0, checks: state.checks };
++  await fetch("/report", { method: "POST", body: JSON.stringify(report) });
++}
++
++try { await run(); }
++catch (error) {
++  await fetch("/report", { method: "POST", body: JSON.stringify({ passed: false, error: String(error), stack: error instanceof Error ? error.stack : null }) });
++}
+diff --git a/apps/web-client/scripts/pa09-native-host-smoke.mjs b/apps/web-client/scripts/pa09-native-host-smoke.mjs
+new file mode 100644
+index 00000000..e14b83d9
+--- /dev/null
++++ b/apps/web-client/scripts/pa09-native-host-smoke.mjs
+@@ -0,0 +1,207 @@
++// Run with PA09_NATIVE_BRIDGE pointing at cargo's pa09_native_bridge example.
++// This exercises the native host and real wasm32 module; Tauri resource tests cover IPC registration separately.
++import assert from "node:assert/strict";
++import { spawn } from "node:child_process";
++import { readFileSync, writeFileSync } from "node:fs";
++import { createInterface } from "node:readline";
++import init from "../src/worker/native-pkg/engine_native_wasm.js";
++import {
++  nativeCreateIdentity, nativeCreateWithPacks, nativeDispatch, nativeEnvelope,
++  generalCandidates, chooseGeneral,
++} from "../src/worker/nativeBackend.ts";
++import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
++import {
++  activateExtension, deactivateExtension, importExtensionPackageValidated,
++  readExtensionStore, setMatchFrozen, uninstallExtension,
++} from "../src/engine/extensionStore.ts";
++import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
++
++assert.ok(process.env.PA09_NATIVE_BRIDGE, "set PA09_NATIVE_BRIDGE to the built native host harness");
++await init({ module_or_path: readFileSync(new URL("../src/worker/native-pkg/engine_native_wasm_bg.wasm", import.meta.url)) });
++const trace = [];
++// IPC JSON omits optional undefined fields that Worker structured clone preserves.
++const wire = (value) => JSON.parse(JSON.stringify(value));
++const storage = new Map();
++globalThis.localStorage = {
++  getItem: (key) => storage.get(key) ?? null,
++  setItem: (key, value) => storage.set(key, String(value)),
++  removeItem: (key) => storage.delete(key),
++};
++
++function bridge() {
++  const child = spawn(process.env.PA09_NATIVE_BRIDGE, [], { stdio: ["pipe", "pipe", "inherit"] });
++  const pending = new Map();
++  let seq = 1;
++  const lines = createInterface({ input: child.stdout });
++  lines.on("line", (line) => {
++    const response = JSON.parse(line);
++    const waiter = pending.get(response.id);
++    assert.ok(waiter, `unexpected native response ${response.id}`);
++    pending.delete(response.id);
++    waiter.resolve(response);
++  });
++  child.on("exit", (code) => {
++    for (const waiter of pending.values()) waiter.reject(new Error(`native bridge exited ${code}`));
++    pending.clear();
++  });
++  const transport = new DesktopEngineTransport(async (command, args) => {
++    if (command === "native_engine_open") return 1;
++    if (command === "native_engine_close") { child.stdin.end(); return; }
++    assert.equal(command, "native_engine_request");
++    return new Promise((resolve, reject) => {
++      pending.set(args.request.id, { resolve, reject });
++      child.stdin.write(`${JSON.stringify(args.request)}\n`);
++    });
++  });
++  const responses = new Map();
++  transport.onmessage = (event) => {
++    const response = event.data;
++    const waiter = responses.get(response.id);
++    responses.delete(response.id);
++    if (response.ok) waiter.resolve(response.data); else waiter.reject(new Error(response.error));
++  };
++  return {
++    request: (body) => new Promise((resolve, reject) => {
++      const id = seq++;
++      responses.set(id, { resolve, reject });
++      transport.postMessage({ id, ...body });
++    }),
++    close: () => transport.terminate(),
++  };
++}
++
++const native = bridge();
++try {
++  await native.request({ type: "init" });
++  let wasm = nativeCreateIdentity(4, 42, 0);
++  const start = { type: "start", players: 4, seed: 42, observer: 0, mode: "identity" };
++  assert.deepEqual(await native.request(start), nativeEnvelope(wasm));
++  let finished = false;
++  for (let step = 0; step < 2000; step++) {
++    const actual = await native.request({ type: "autoStep" });
++    const expected = nativeDispatch(wasm, { type: "autoStep" });
++    assert.deepEqual(actual, wire(expected), `full wasm32/native trajectory at step ${step}`);
++    trace.push({ workload: "identity", step, hash: actual.hash_hex, revision: actual.revision, outcome: actual.view.outcome });
++    if (step === 30 || step === 70) {
++      const saved = await native.request({ type: "save" });
++      assert.deepEqual(saved, nativeDispatch(wasm, { type: "save" }));
++      const expectedRestored = nativeDispatch(wasm, { type: "restore", hex: saved.hex });
++      assert.deepEqual(await native.request({ type: "restore", hex: saved.hex }), wire(expectedRestored));
++    }
++    if (actual.finished) { finished = true; break; }
++  }
++  assert.ok(finished, "identity game must reach its terminal outcome");
++  wasm.engine.free();
++
++  wasm = nativeCreateWithPacks(2, 42, 0, "[]");
++  assert.deepEqual(await native.request({ type: "start", players: 2, seed: 42, observer: 0 }), nativeEnvelope(wasm));
++  let prototypeFinished = false;
++  for (let step = 0; step < 2000; step++) {
++    const actual = await native.request({ type: "autoStep" });
++    assert.deepEqual(actual, wire(nativeDispatch(wasm, { type: "autoStep" })), `prototype outcome trajectory ${step}`);
++    if (actual.finished) {
++      const raw = JSON.parse(wasm.engine.view_json(0)).outcome;
++      assert.ok(raw.SingleWin.player >= 1 && raw.SingleWin.player <= 2);
++      assert.equal(actual.view.outcome.SingleWin.player, raw.SingleWin.player - 1);
++      prototypeFinished = true;
++      break;
++    }
++  }
++  assert.ok(prototypeFinished, "prototype game must reach a real SingleWin");
++  wasm.engine.free();
++
++  wasm = nativeCreateWithPacks(4, 42, 0, "[]");
++  assert.deepEqual(await native.request({ type: "start", players: 4, seed: 42, observer: 0 }), nativeEnvelope(wasm));
++  const activeAssignment = chooseGeneral(wasm, 0, "黄盖");
++  assert.deepEqual(await native.request({ type: "chooseGeneral", seat: 0, name: "黄盖" }), { assignment: activeAssignment, envelope: nativeEnvelope(wasm) });
++  for (let phase = 0; phase < 2; phase++) {
++    const req = { type: "endPhase", actor: 0 };
++    assert.deepEqual(await native.request(req), wire(nativeDispatch(wasm, req)));
++  }
++  const active = nativeEnvelope(wasm).legal_actions.find((action) => action.ActivateSkill)?.ActivateSkill;
++  assert.ok(active, "fixture general must offer a real active skill");
++  const skillReq = { type: "activateSkill", actor: 0, skill: active.skill, targets: [], cardTargets: [] };
++  assert.deepEqual(await native.request(skillReq), wire(nativeDispatch(wasm, skillReq)));
++  const play = nativeEnvelope(wasm).legal_actions.find((action) => action.PlayCard)?.PlayCard;
++  assert.ok(play, "fixture hand must offer a real playable card");
++  const playReq = { type: "playCard", actor: 0, card: play.card, targets: play.targets };
++  const played = await native.request(playReq);
++  assert.deepEqual(played, wire(nativeDispatch(wasm, playReq)));
++  assert.notEqual(played.result.outcome, "rejected");
++  wasm.engine.free();
++
++  const load = (dir) => {
++    const packageJson = JSON.parse(readFileSync(new URL(`./fixtures/${dir}/package.npack.json`, import.meta.url)));
++    packageJson.characters = JSON.parse(readFileSync(new URL(`./fixtures/${dir}/character.json`, import.meta.url)));
++    return JSON.stringify(packageJson);
++  };
++  const v1 = load("vm-trigger");
++  const v2 = load("vm-trigger-v2");
++  const key = "official/vm-fixture";
++  const validate = (packJson) => native.request({ type: "validatePackage", packJson });
++  await importExtensionPackageValidated(v1, validate);
++  activateExtension(key);
++  const frozen = prepareNativeMatchContent();
++  wasm = nativeCreateWithPacks(4, 42, 0, frozen.packsJson);
++  assert.deepEqual(await native.request({ type: "start", players: 4, seed: 42, observer: 0, packsJson: frozen.packsJson }), nativeEnvelope(wasm));
++  assert.deepEqual(await native.request({ type: "generalCandidates" }), generalCandidates(wasm));
++  const assignment = chooseGeneral(wasm, 0, "vm_fixture");
++  assert.deepEqual(await native.request({ type: "chooseGeneral", seat: 0, name: "vm_fixture" }), { assignment, envelope: nativeEnvelope(wasm) });
++  setMatchFrozen(true);
++  await assert.rejects(importExtensionPackageValidated(v2, validate), /对局中/);
++  setMatchFrozen(false);
++  const runVmPhaseEnd = async (expectedDelta) => {
++    for (let step = 0; step < 80; step++) {
++      const before = nativeEnvelope(wasm);
++      const req = before.choice
++        ? { type: "resolveChoice", actor: before.choice.observer, choiceId: before.choice.choice_id,
++            selections: before.choice.options.slice(0, Math.max(1, before.choice.min_count ?? 0)).map((option) => option.token), cancelled: false }
++        : { type: "endPhase", actor: before.view.current_player };
++      const actual = await native.request(req);
++      assert.deepEqual(actual, wire(nativeDispatch(wasm, req)));
++      trace.push({ workload: `VM-draw-${expectedDelta}`, step, hash: actual.hash_hex, hand: actual.view.seats[0].hand_count });
++      if (before.view.phase === "Discard" && actual.view.phase === "End") {
++        assert.equal(actual.view.seats[0].hand_count - before.view.seats[0].hand_count, expectedDelta, "VM effect must add its version-specific draw at phase end");
++        return;
++      }
++    }
++    assert.fail("VM fixture did not reach its actual phase-end effect");
++  };
++  await runVmPhaseEnd(1);
++  const save = { ...(await native.request({ type: "save" })), ...frozen };
++  await importExtensionPackageValidated(v2, validate);
++  const upgraded = prepareNativeMatchContent();
++  assert.notEqual(upgraded.lockSeed, frozen.lockSeed);
++  assert.deepEqual(restoreNativeMatchContent(save), frozen);
++  // Upgrading or disabling does not mutate the live engine or its frozen package copy.
++  assert.deepEqual(await native.request({ type: "observer" }), nativeEnvelope(wasm));
++  deactivateExtension(key);
++  assert.equal(prepareNativeMatchContent().packsJson, undefined);
++  activateExtension(key);
++  assert.equal(prepareNativeMatchContent().lockSeed, upgraded.lockSeed);
++  deactivateExtension(key);
++  uninstallExtension(key);
++  assert.equal(readExtensionStore().installed.length, 0);
++  const original = restoreNativeMatchContent(save);
++  const req = { type: "restore", hex: save.hex, packsJson: original.packsJson };
++  assert.deepEqual(await native.request(req), wire(nativeDispatch(wasm, req)));
++  const beforeRejected = await native.request({ type: "save" });
++  await assert.rejects(native.request({ type: "restore", hex: save.hex, packsJson: upgraded.packsJson }), /恢复|Content|content|Mismatch|mismatch/);
++  assert.deepEqual(await native.request({ type: "save" }), beforeRejected);
++  const corrupt = JSON.parse(v2);
++  corrupt.modules[0].logic_hash[0] ^= 1;
++  const beforeStore = storage.get("noname-next.extension-store.v1");
++  await assert.rejects(importExtensionPackageValidated(JSON.stringify(corrupt), validate), /logic_hash|fingerprint/);
++  assert.equal(storage.get("noname-next.extension-store.v1"), beforeStore);
++  wasm.engine.free();
++  wasm = nativeCreateWithPacks(4, 42, 0, upgraded.packsJson);
++  assert.deepEqual(await native.request({ type: "start", players: 4, seed: 42, observer: 0, packsJson: upgraded.packsJson }), nativeEnvelope(wasm));
++  const upgradedAssignment = chooseGeneral(wasm, 0, "vm_fixture");
++  assert.deepEqual(await native.request({ type: "chooseGeneral", seat: 0, name: "vm_fixture" }), { assignment: upgradedAssignment, envelope: nativeEnvelope(wasm) });
++  await runVmPhaseEnd(2);
++  wasm.engine.free();
++  if (process.env.PA09_TRACE_PATH) writeFileSync(process.env.PA09_TRACE_PATH, JSON.stringify(trace, null, 2));
++  console.log(JSON.stringify({ full_wasm32_native_steps: trace.filter((row) => row.workload === "identity").length, terminal: trace.findLast((row) => row.workload === "identity"), vm_lifecycle: "passed", transport: "actual native host over stdio through production IPC transport adapter (not a WebView measurement)" }, null, 2));
++} finally {
++  native.close();
++}
+diff --git a/apps/web-client/src/engine/desktopEngineTransport.ts b/apps/web-client/src/engine/desktopEngineTransport.ts
+new file mode 100644
+index 00000000..64732df3
+--- /dev/null
++++ b/apps/web-client/src/engine/desktopEngineTransport.ts
+@@ -0,0 +1,82 @@
++import { invoke } from "@tauri-apps/api/core";
++import { urlParam } from "./autoDrive";
++import { normalizeNativeOutcome } from "./nativeOutcome";
++import type { ChooseGeneralPayload, EngineEnvelope, WorkerRequest, WorkerResponse } from "../types/engine";
++
++/** The messaging seam shared by a Worker and the desktop IPC adapter. */
++export interface EngineTransport {
++  onmessage: ((event: MessageEvent<WorkerResponse>) => void) | null;
++  onerror: ((event: ErrorEvent) => void) | null;
++  postMessage(request: WorkerRequest): void;
++  terminate(): void;
++  addEventListener(type: "messageerror", listener: () => void): void;
++}
++
++type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>;
++export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
++export type DesktopEngineChoice = "wasm" | "native";
++
++/** Wasm stays the default until all six PA09 conditions have evidence. */
++export function desktopEngineChoice(): DesktopEngineChoice {
++  const override = typeof location === "undefined" ? null : urlParam("engineTransport");
++  if (override === "native" || override === "wasm") return override;
++  try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === "native" ? "native" : "wasm"; }
++  catch { return "wasm"; }
++}
++
++function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {
++  return { ...envelope, view: { ...envelope.view, outcome: normalizeNativeOutcome(envelope.view.outcome) } };
++}
++
++/** Normalize only the two existing local response locations; network envelopes never enter here. */
++function normalizeResponse(response: WorkerResponse, request: WorkerRequest): WorkerResponse {
++  if (!response.ok || !response.data || typeof response.data !== "object") return response;
++  if (request.type === "chooseGeneral") {
++    const data = response.data as ChooseGeneralPayload;
++    if (data.envelope?.view) return { ...response, data: { ...data, envelope: normalizeEnvelope(data.envelope) } };
++  } else {
++    const data = response.data as EngineEnvelope;
++    if (data.view) return { ...response, data: normalizeEnvelope(data) };
++  }
++  return response;
++}
++
++/** Serial invoke calls carry the same WorkerRequest/WorkerResponse, including controlled errors. */
++export class DesktopEngineTransport implements EngineTransport {
++  onmessage: EngineTransport["onmessage"] = null;
++  onerror: EngineTransport["onerror"] = null;
++  private closed = false;
++  private tail: Promise<void> = Promise.resolve();
++  private resource: Promise<number> | null = null;
++
++  constructor(private call: Invoke = invoke) {}
++
++  postMessage(request: WorkerRequest): void {
++    if (this.closed) throw new Error("Desktop engine transport closed");
++    this.tail = this.tail.then(async () => {
++      if (this.closed) return;
++      let response: WorkerResponse;
++      try {
++        this.resource ??= this.call<number>("native_engine_open");
++        const resourceId = await this.resource;
++        if (this.closed) return;
++        response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
++        if (response.id !== request.id || typeof response.ok !== "boolean") {
++          throw new Error("invalid IPC response");
++        }
++      } catch (error) {
++        response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
++      }
++      if (!this.closed) this.onmessage?.({ data: normalizeResponse(response, request) } as MessageEvent<WorkerResponse>);
++    });
++  }
++
++  terminate(): void {
++    if (this.closed) return;
++    this.closed = true;
++    void this.resource?.then((resourceId) => this.call("native_engine_close", { resourceId }))
++      .catch((error) => console.error("Desktop engine resource close failed", error));
++  }
++  // invoke returns structured JSON; decoding failures reject its promise.
++  addEventListener(_type: "messageerror", _listener: () => void): void {}
++}
+diff --git a/apps/web-client/src/engine/nativeOutcome.ts b/apps/web-client/src/engine/nativeOutcome.ts
+new file mode 100644
+index 00000000..342b6168
+--- /dev/null
++++ b/apps/web-client/src/engine/nativeOutcome.ts
+@@ -0,0 +1,11 @@
++import type { ObserverSnapshot } from "../types/engine";
++
++/** Local Rust projections use one-based SingleWin seats; local UI seats are zero-based. */
++export function normalizeNativeOutcome(outcome: unknown): ObserverSnapshot["outcome"] {
++  if (outcome === null || typeof outcome !== "object" || Array.isArray(outcome)) return outcome;
++  const single = (outcome as { SingleWin?: unknown }).SingleWin;
++  if (single === null || typeof single !== "object" || Array.isArray(single)) return outcome;
++  const player = (single as { player?: unknown }).player;
++  if (typeof player !== "number" || !Number.isInteger(player) || player <= 0) return outcome;
++  return { ...outcome, SingleWin: { ...single, player: player - 1 } };
++}
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+new file mode 100644
+index 00000000..c68ac6f9
+--- /dev/null
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -0,0 +1,712 @@
++//! Shared native/WASM session operations; binding errors are converted only at the WASM boundary.
++use crate::installed_packs::packs_from_json;
++use crate::winner_to_protocol_json;
++use engine_native::ai::BoundedPlanner;
++use engine_native::content::extension::ExtensionPack;
++use engine_native::event::Phase;
++use engine_native::view::{HandView, PlayerView};
++use engine_native::{CommandOutcome, Engine, GameAction, RejectReason};
++
++pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
++    let packs = packs_from_json(packs_json)?;
++    let refs: Vec<&ExtensionPack> = packs.iter().collect();
++    if refs.is_empty() {
++        Ok(Engine::new(seed, players as usize))
++    } else {
++        Engine::new_with_extensions(seed, players as usize, &refs).map_err(|e| format!("{e:?}"))
++    }
++}
++
++pub fn engine_identity_from_packs(
++    players: u8,
++    seed: u64,
++    packs_json: &str,
++) -> Result<Engine, String> {
++    let packs = packs_from_json(packs_json)?;
++    let refs: Vec<&ExtensionPack> = packs.iter().collect();
++    Engine::try_new_identity_with_extensions(seed, players as usize, &refs)
++}
++
++pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
++    let packs = packs_from_json(packs_json)?;
++    let refs: Vec<&ExtensionPack> = packs.iter().collect();
++    let bytes = hex_decode(hex)?;
++    let snapshot =
++        engine_native::archive::decode_archive(&bytes).map_err(|e| format!("解码失败: {e:?}"))?;
++    if refs.is_empty() {
++        Engine::restore(&snapshot).map_err(|e| format!("恢复失败: {e:?}"))
++    } else {
++        Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("恢复失败: {e:?}"))
++    }
++}
++
++pub(super) fn prefix_count(engine: &Engine, prefix: &str) -> u32 {
++    engine
++        .catalog()
++        .cards
++        .iter()
++        .filter(|c| c.name.starts_with(prefix))
++        .count() as u32
++}
++
++/// 十六进制编解码（无 base64 依赖；存档字节面）。
++pub fn hex_encode(bytes: &[u8]) -> String {
++    let mut s = String::with_capacity(bytes.len() * 2);
++    for b in bytes {
++        s.push_str(&format!("{b:02x}"));
++    }
++    s
++}
++
++/// 存档十六进制文本上限（2 字符 = 1 字节）。超出时在分配/解码前拒绝，
++/// 避免任意长输入进入 WASM 线性内存。64 MiB 字节对当前 NGSA 载荷有充分余量。
++pub const MAX_ARCHIVE_HEX_CHARS: usize = 64 * 1024 * 1024;
++
++/// 严格十六进制解码：先验证 ASCII/偶数长度/上限，再逐字节解析。
++///
++/// 旧实现按 `s[i..i + 2]` 字符串下标切片；奇数长度、多字节 UTF-8 或非 ASCII
++/// 输入会 panic，WASM 侧表现为 `unreachable` 并破坏后续句柄使用。这里在
++/// 字节层校验，错误只返回文本，不触碰调用方的原引擎。
++pub(super) fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
++    hex_decode_bounded(s, MAX_ARCHIVE_HEX_CHARS)
++}
++
++pub(super) fn hex_decode_bounded(s: &str, max_chars: usize) -> Result<Vec<u8>, String> {
++    if s.len() > max_chars {
++        return Err(format!(
++            "restore: 存档文本过长（{} 字符，上限 {max_chars}）",
++            s.len()
++        ));
++    }
++    if !s.is_ascii() {
++        return Err("restore: 非法十六进制：只接受 ASCII 0-9a-fA-F".into());
++    }
++    let bytes = s.as_bytes();
++    if bytes.len() % 2 != 0 {
++        return Err(format!(
++            "restore: 非法十六进制：长度为奇数（{}）",
++            bytes.len()
++        ));
++    }
++    let mut out = Vec::with_capacity(bytes.len() / 2);
++    for (index, pair) in bytes.chunks_exact(2).enumerate() {
++        let hi = hex_nibble(pair[0]).ok_or_else(|| {
++            format!(
++                "restore: 非法十六进制字符 {:?}（字节 {}）",
++                pair[0] as char,
++                index * 2
++            )
++        })?;
++        let lo = hex_nibble(pair[1]).ok_or_else(|| {
++            format!(
++                "restore: 非法十六进制字符 {:?}（字节 {}）",
++                pair[1] as char,
++                index * 2 + 1
++            )
++        })?;
++        out.push((hi << 4) | lo);
++    }
++    Ok(out)
++}
++
++fn hex_nibble(byte: u8) -> Option<u8> {
++    match byte {
++        b'0'..=b'9' => Some(byte - b'0'),
++        b'a'..=b'f' => Some(byte - b'a' + 10),
++        b'A'..=b'F' => Some(byte - b'A' + 10),
++        _ => None,
++    }
++}
++
++/// 命令结果的 JSON 投影（窄面：Accepted/Pending/Rejected 摘要）。
++///
++/// `Rejected` 附带 `reason`（`RejectReason` 的调试名）：界面必须能区分
++/// 「被拒绝」与「为什么被拒绝」，否则伪造卡 id／越权座位只剩无因的失败。
++fn outcome_json(engine: &Engine, out: &CommandOutcome) -> String {
++    let reason = match out {
++        CommandOutcome::Rejected(reason) => Some(format!("{reason:?}")),
++        _ => None,
++    };
++    serde_json::json!({
++        "outcome": match out {
++            CommandOutcome::Accepted { .. } => "accepted",
++            CommandOutcome::Pending { .. } => "pending",
++            CommandOutcome::Rejected(_) => "rejected",
++            CommandOutcome::Suspended => "suspended",
++        },
++        "revision": engine.revision(),
++        "finished": engine.outcome().is_some(),
++        "reason": reason,
++    })
++    .to_string()
++}
++
++fn rejected(engine: &Engine, reason: RejectReason) -> String {
++    outcome_json(engine, &CommandOutcome::Rejected(reason))
++}
++
++fn phase_name(phase: Phase) -> &'static str {
++    match phase {
++        Phase::Judge => "judge",
++        Phase::Draw => "draw",
++        Phase::Play => "play",
++        Phase::Discard => "discard",
++        Phase::End => "end",
++    }
++}
++
++/// 内核动作 → 客户端动作 JSON（与 TS `LegalAction` 联合类型同形，见
++/// `apps/web-client/src/types/engine.ts`）。
++///
++/// 为什么在这里投影而不是让客户端解析内核类型：窄壳不暴露内核类型面，
++/// 且 `Answer` 的候选值**必须先换算成下标**——窄壳 `answer()` 直取
++/// `spec.options[idx]`，候选值只用于展示。换算在权威侧做一次，客户端
++/// 拿到的 `selections` 就是可直接回传的 token。
++///
++/// 找不到候选下标的应答（理论不可达：候选即由同一 `spec.options` 生成）
++/// 与当前查询不枚举的国战明置一律不入列，避免给出**不可提交**的动作。
++fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Value> {
++    match action {
++        GameAction::NextPhase => Some(serde_json::json!("EndPhase")),
++        GameAction::PlayCard { card, targets } => Some(serde_json::json!({
++            "PlayCard": { "card": card, "targets": targets },
++        })),
++        GameAction::ActivateSkill { skill } => Some(serde_json::json!({
++            "ActivateSkill": { "skill": skill, "targets": [], "card_targets": [] },
++        })),
++        GameAction::Answer {
++            choice_id,
++            selection,
++        } => {
++            let spec = engine.open_choice().map(|c| c.spec.clone())?;
++            let mut selections = Vec::with_capacity(selection.len());
++            for option in selection {
++                selections.push(spec.options.iter().position(|o| o == option)? as u32);
++            }
++            Some(serde_json::json!({
++                "ResolveChoice": {
++                    "choice_id": choice_id,
++                    "selections": selections,
++                    "cancelled": selection.is_empty(),
++                },
++            }))
++        }
++        // 权威查询当前不产出明置候选（国战门控未接线）；出现也不投影。
++        GameAction::RevealGeneral { .. } => None,
++    }
++}
++
++/// NC03 权威动作查询的 JSON 投影：`{"seat", "revision", "actions"}`。
++///
++/// 不经 `wasm_bindgen`，宿主测试（`tests/nc03_legal_actions_export.rs`）可直接
++/// 调用，避免走到 `JsValue`。`revision` 是候选成立的状态修订号：客户端可据此
++/// 判断候选是否过期（`Engine::legal_actions` 只读，不改状态）。
++/// NC05/NC09：正式选将候选（宿主侧，非 wasm-bindgen）。
++pub fn general_candidates_json_for(engine: &Engine) -> String {
++    let rows: Vec<serde_json::Value> = engine
++        .general_candidates()
++        .into_iter()
++        .filter_map(|def| {
++            engine.catalog().general_meta(def).map(|m| {
++                serde_json::json!({
++                    "def": def,
++                    "name": m.0,
++                    "skills": m.2,
++                })
++            })
++        })
++        .collect();
++    serde_json::json!({ "count": rows.len(), "candidates": rows }).to_string()
++}
++
++/// NC05/NC09：按名字正式选将（宿主侧，非 wasm-bindgen）。
++pub fn assign_general_for(engine: &mut Engine, seat: u8, name: &str) -> Result<String, String> {
++    let seats = engine.view_for(0).players.len();
++    if seat as usize >= seats {
++        return Err(format!("assign_general: 座位越界（{seat} ≥ {seats}）"));
++    }
++    engine
++        .assign_general_named(seat, name)
++        .map_err(|e| format!("assign_general 被拒绝: {e:?}"))?;
++    Ok(serde_json::json!({
++        "seat": seat,
++        "name": name,
++        "revision": engine.revision(),
++        "state_hash": hex_encode(&engine.state_hash()),
++    })
++    .to_string())
++}
++
++pub fn legal_actions_json_for(engine: &Engine, seat: u8) -> Result<String, String> {
++    let seats = engine.view_for(0).players.len();
++    if seat as usize >= seats {
++        return Err(format!("legal_actions: 座位越界（{seat} ≥ {seats}）"));
++    }
++    let actions: Vec<serde_json::Value> = engine
++        .legal_actions(seat)
++        .iter()
++        .filter_map(|action| action_to_json(engine, action))
++        .collect();
++    Ok(serde_json::json!({
++        "seat": seat,
++        "revision": engine.revision(),
++        "actions": actions,
++    })
++    .to_string())
++}
++
++/// 身份可见字符串（NC03/NC09 裁决⑥：观察者过滤后的 identity 随座位对象
++/// 下发——本人/主公/已死亡可见，其余存活者 null；命名与协议 `IdentityTag`
++/// 及前端 `SeatView.identity` 联合一致）。
++fn identity_json(role: Option<engine_native::state::Role>) -> serde_json::Value {
++    match role {
++        None => serde_json::Value::Null,
++        Some(engine_native::state::Role::Lord) => serde_json::json!("Lord"),
++        Some(engine_native::state::Role::Loyalist) => serde_json::json!("Loyalist"),
++        Some(engine_native::state::Role::Rebel) => serde_json::json!("Rebel"),
++        Some(engine_native::state::Role::Traitor) => serde_json::json!("Renegade"),
++    }
++}
++
++/// 牌面花色字符串（与前端 `CardView.suit` 联合一致）。
++fn suit_json(suit: engine_native::catalog::Suit) -> &'static str {
++    use engine_native::catalog::Suit;
++    match suit {
++        Suit::Spade => "Spade",
++        Suit::Heart => "Heart",
++        Suit::Club => "Club",
++        Suit::Diamond => "Diamond",
++    }
++}
++
++/// 牌面公开规则类别（与服务端 `native_view.rs` 的 `kind_tag` 同映射——
++/// 跨入口同契约：已建模六类直映，其余 `Other` 不猜测）。
++fn kind_tag_json(kind: engine_native::catalog::CardKind) -> &'static str {
++    use engine_native::catalog::CardKind as K;
++    match kind {
++        K::Sha => "Sha",
++        K::Tao => "Tao",
++        K::Shan => "Shan",
++        K::Jiu => "Jiu",
++        K::FireSha => "ShaFire",
++        K::LeiSha => "ShaThunder",
++        _ => "Other",
++    }
++}
++
++/// 座位视图投影（`PlayerView` 手写 JSON；视图为只读投影不进哈希）。
++/// NC03/NC09 裁决⑥⑦（2026-10-28）：座位对象附带观察者过滤的 `identity`；
++/// 顶层 `cards` 为**观察者可见牌**（本人手牌 + 全场装备/判定 + 弃牌/处理区，
++/// 即 `visible_card_ids`）附真实牌面（def/suit/rank/kind）——他人手牌与
++/// 牌堆 id 不在其中。仅扩展本地 `view_json` 内容，Worker/WS 消息结构不变。
++fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
++    let catalog = engine.catalog();
++    let faces = v
++        .visible_card_ids()
++        .into_iter()
++        .map(|id| {
++            let def = &catalog.cards[id as usize];
++            (
++                id.to_string(),
++                serde_json::json!({
++                    "def": def.kind as u16 as u32,
++                    "suit": suit_json(def.suit),
++                    "rank": def.rank,
++                    "kind": kind_tag_json(def.kind),
++                }),
++            )
++        })
++        .collect::<serde_json::Map<_, _>>();
++    serde_json::json!({
++        "seat": v.seat,
++        "players": v.players.iter().map(|p| serde_json::json!({
++            "seat": p.seat,
++            "alive": p.alive,
++            "hp": p.hp,
++            "maxHp": p.max_hp,
++            "hand": match &p.hand {
++                HandView::Own(cards) => serde_json::json!({ "own": cards }),
++                HandView::Hidden => serde_json::json!({ "hidden": true }),
++            },
++            "handCount": p.hand_count,
++            "equips": p.equips,
++            "judge": p.judge,
++            "turnedOver": p.turned_over,
++            "skills": p.skills,
++            "revealedGenerals": p.revealed_generals,
++            "identity": identity_json(p.role),
++        })).collect::<Vec<_>>(),
++        "deckCount": v.deck_count,
++        "discard": v.discard,
++        "table": v.table,
++        "cards": faces,
++        "turn": v.turn,
++        "phase": phase_name(v.phase),
++        "round": v.round,
++        // NC09/NC12 修正：终局**胜负类型**必须随视图下发（此前只发 `"finished"`，
++        // 前端无法显示胜者）。此处直接序列化协议 `MatchOutcome`（如
++        // `{"LoyalistWin":null}` / `{"RebelWin":null}` / `{"RenegadeWin":{"player":3}}` …）。
++        "outcome": winner_to_protocol_json(&v.outcome),
++        "rulesetVersion": v.ruleset_version,
++    })
++}
++
++/// One authoritative engine and its planner budget, usable by native hosts.
++pub struct NativeSession {
++    inner: Engine,
++    planner_nodes: usize,
++    deadline_ms: u64,
++}
++
++impl NativeSession {
++    /// 标准目录建局（无扩展；players 为座位数，seed 为随机流种子）。
++    pub fn new(players: u8, seed: u64) -> Result<NativeSession, String> {
++        Ok(NativeSession {
++            inner: Engine::new(seed, players as usize),
++            planner_nodes: 64,
++            deadline_ms: 50,
++        })
++    }
++
++    /// 规划预算参数化（T13 策略质量批同款；0=无规划）。
++    pub fn set_planner(&mut self, nodes: usize, deadline_ms: u64) {
++        self.planner_nodes = nodes;
++        self.deadline_ms = deadline_ms;
++    }
++
++    pub fn revision(&self) -> u64 {
++        self.inner.revision()
++    }
++
++    pub fn is_finished(&self) -> bool {
++        self.inner.outcome().is_some()
++    }
++
++    /// NC05/NC09 正式选将候选（客户端选将 UI 用）。
++    pub fn general_candidates_json(&self) -> String {
++        general_candidates_json_for(&self.inner)
++    }
++
++    /// NC05/NC09 正式选将（按名字；失败返回错误，不静默）。
++    pub fn assign_general(&mut self, seat: u8, name: &str) -> Result<String, String> {
++        assign_general_for(&mut self.inner, seat, name)
++    }
++
++    /// 座位可见视图 JSON（信息隔离面：自己手牌具体 id、他人仅数量）。
++    pub fn view_json(&self, seat: u8) -> Result<String, String> {
++        let seats = self.inner.view_for(0).players.len();
++        if seat as usize >= seats {
++            return Err(String::from("view: 座位越界"));
++        }
++        Ok(view_to_json(&self.inner, &self.inner.view_for(seat)).to_string())
++    }
++
++    /// 当前开放选择的座位可见 JSON（N10 选择可见性口径：观察者本人含
++    /// 选项；他人/观战仅存在面）。无询问返回 null。
++    pub fn open_choice_json(&self, seat: u8) -> Result<String, String> {
++        use engine_native::view::ChoiceView;
++        Ok(match self.inner.choice_view_for(Some(seat)) {
++            Some(ChoiceView::Own {
++                id,
++                prompt,
++                options,
++                min,
++                max,
++                allow_cancel,
++            }) => serde_json::json!({
++                "id": id,
++                "observer": seat,
++                "prompt": prompt,
++                "min": min,
++                "max": max,
++                "allowCancel": allow_cancel,
++                "options": options.iter().map(|o| match o {
++                    engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
++                    engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
++                    engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
++                    engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
++                    engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
++                    engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
++                }).collect::<Vec<_>>(),
++            })
++            .to_string(),
++            Some(ChoiceView::Other {
++                id,
++                observer,
++                prompt,
++            }) => serde_json::json!({
++                "id": id,
++                "observer": observer,
++                "prompt": prompt,
++                "hidden": true,
++            })
++            .to_string(),
++            None => "null".to_string(),
++        })
++    }
++
++    /// 阶段推进（当前回合玩家）。
++    pub fn next_phase(&mut self, actor: u32) -> Result<String, String> {
++        let Ok(actor) = u8::try_from(actor) else {
++            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
++        };
++        let out = self.inner.submit(engine_native::GameCommand {
++            actor,
++            expected_revision: self.inner.revision(),
++            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++            action: GameAction::NextPhase,
++        });
++        Ok(outcome_json(&self.inner, &out))
++    }
++
++    /// 出牌（手牌 id + 目标座位）。
++    pub fn play_card(
++        &mut self,
++        actor: u32,
++        card: u32,
++        targets: Vec<u32>,
++    ) -> Result<String, String> {
++        let Ok(actor) = u8::try_from(actor) else {
++            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
++        };
++        let Ok(targets) = targets.into_iter().map(u8::try_from).collect() else {
++            return Ok(rejected(&self.inner, RejectReason::IllegalTargets));
++        };
++        let out = self.inner.submit(engine_native::GameCommand {
++            actor,
++            expected_revision: self.inner.revision(),
++            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++            action: GameAction::PlayCard { card, targets },
++        });
++        Ok(outcome_json(&self.inner, &out))
++    }
++
++    /// NC03 权威动作查询：该座位此刻**可提交**的候选动作 JSON。
++    ///
++    /// 候选由内核经与正式提交相同的校验产出（`Engine::legal_actions`），
++    /// 顺序稳定（应答 → 主动技 → 出牌 → 阶段推进），上限 256；`actions`
++    /// 每项与 TS `LegalAction` 同形，可直接用于界面并原样回传。
++    ///
++    /// 代价：实测约 1.6 ms/次（5 人局，含克隆校验），**按需调用**——前端
++    /// 只在构建信封（用户动作/观察刷新）时查一次，并按 `revision` 记忆化。
++    pub fn legal_actions_json(&self, seat: u8) -> Result<String, String> {
++        legal_actions_json_for(&self.inner, seat)
++    }
++
++    /// 主动技发动（`skill` 取自权威查询的 `ActivateSkill` 候选）。
++    ///
++    /// 内核 `GameAction::ActivateSkill` 不接受目标：技能内部的选择走开放
++    /// 选择应答，因此窄壳也不接目标参数（前端传目标即协议误用）。
++    pub fn activate_skill(&mut self, actor: u32, skill: u16) -> Result<String, String> {
++        let Ok(actor) = u8::try_from(actor) else {
++            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
++        };
++        let out = self.inner.submit(engine_native::GameCommand {
++            actor,
++            expected_revision: self.inner.revision(),
++            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++            action: GameAction::ActivateSkill { skill },
++        });
++        Ok(outcome_json(&self.inner, &out))
++    }
++
++    /// 选择应答（`selection` 是**候选下标**，直取 `spec.options[idx]`：与
++    /// [`NativeSession::legal_actions_json`] 的 `ResolveChoice.selections` 同口径；
++    /// 空数组 = 取消）。
++    pub fn answer(
++        &mut self,
++        observer: u32,
++        choice_id: u64,
++        selection: Vec<u32>,
++    ) -> Result<String, String> {
++        let Ok(actor) = u8::try_from(observer) else {
++            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
++        };
++        if actor as usize >= self.inner.state_core().players.len() {
++            return Ok(rejected(&self.inner, RejectReason::UnknownActor));
++        }
++        let Some(c) = self.inner.open_choice() else {
++            return Err(String::from("answer: 无开放选择"));
++        };
++        if c.observer != actor {
++            return Ok(rejected(&self.inner, RejectReason::WrongPlayer));
++        }
++        if c.id != choice_id {
++            return Err(String::from("answer: choice_id 不匹配"));
++        }
++        let mut sel = Vec::new();
++        for (idx, v) in selection.iter().enumerate() {
++            let Some(o) = c.spec.options.get(*v as usize) else {
++                return Err(String::from("answer: 选项索引越界"));
++            };
++            let _ = idx;
++            sel.push(o.clone());
++        }
++        let out = self.inner.submit(engine_native::GameCommand {
++            actor,
++            expected_revision: self.inner.revision(),
++            dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++            action: GameAction::Answer {
++                choice_id: c.id,
++                selection: sel,
++            },
++        });
++        Ok(outcome_json(&self.inner, &out))
++    }
++
++    /// 一步自动推进：挂起选择按 min/首选自动应答；否则当前座位经
++    /// `BoundedPlanner` 规划并应用（game-server `/native` 同款）。返回
++    /// 一步摘要 JSON。
++    pub fn auto_step(&mut self) -> Result<String, String> {
++        if self.inner.outcome().is_some() {
++            return Ok(serde_json::json!({ "done": true }).to_string());
++        }
++        if let Some(c) = self.inner.open_choice() {
++            let take = c.spec.min.max(1).min(c.spec.options.len());
++            let sel: Vec<_> = c
++                .spec
++                .options
++                .iter()
++                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
++                .take(take)
++                .cloned()
++                .collect();
++            let sel = if sel.is_empty() {
++                vec![c.spec.options[0].clone()]
++            } else {
++                sel
++            };
++            let (cid, obs) = (c.id, c.observer);
++            let out = self.inner.submit(engine_native::GameCommand {
++                actor: obs,
++                expected_revision: self.inner.revision(),
++                dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++                action: GameAction::Answer {
++                    choice_id: cid,
++                    selection: sel,
++                },
++            });
++            return Ok(serde_json::json!({
++                "kind": "answer",
++                "outcome": outcome_json(&self.inner, &out),
++            })
++            .to_string());
++        }
++        let seat = self.inner.turn().current;
++        let planner = BoundedPlanner::new(self.planner_nodes);
++        // Zero disables the native clock so node-bounded WASM/native comparisons use the same policy.
++        let planner = if self.deadline_ms == 0 {
++            planner
++        } else {
++            planner.with_deadline_ms(self.deadline_ms)
++        };
++        let plan = self.inner.plan_action(seat, &planner);
++        match self.inner.apply_plan(&plan) {
++            Ok(out) => Ok(serde_json::json!({
++                "kind": "plan",
++                "seat": seat,
++                "outcome": outcome_json(&self.inner, &out),
++                "finished": self.inner.outcome().is_some(),
++            })
++            .to_string()),
++            Err(e) => Ok(serde_json::json!({
++                "kind": "plan",
++                "seat": seat,
++                "error": match e {
++                    engine_native::ai::ApplyPlanError::Stale { .. } => "stale",
++                    engine_native::ai::ApplyPlanError::Cancelled => "cancelled",
++                },
++            })
++            .to_string()),
++        }
++    }
++
++    /// 权威状态 hash（32 字节 hex）。只读投影，不推进修订号。
++    pub fn state_hash_hex(&self) -> String {
++        hex_encode(&self.inner.state_hash())
++    }
++
++    /// 当前事件日志长度（宿主据此记录已消费位置）。
++    pub fn log_len(&self) -> u32 {
++        self.inner.log().len().min(u32::MAX as usize) as u32
++    }
++
++    /// 自 `start` 起的公开事件码 JSON 数组；不含牌 id 或选项内容。
++    pub fn public_event_codes_json(&self, start: u32) -> String {
++        serde_json::to_string(&self.inner.public_event_codes_from(start as usize))
++            .unwrap_or_else(|_| "[]".into())
++    }
++
++    /// 存档十六进制（NGSA v65 字节面）。
++    pub fn save_hex(&self) -> String {
++        hex_encode(&engine_native::archive::encode_archive(&self.inner.save()))
++    }
++
++    /// 存档恢复（标准目录）。扩展局须走 [`restore_hex_with_packs_json`]。
++    ///
++    /// 先在局部变量完成解码与恢复，全部成功后才替换当前引擎；任何坏输入
++    /// 都只返回受控错误，原句柄、原局与后续 `save_hex`/命令仍可用。
++    pub fn restore_hex(&mut self, hex: &str) -> Result<(), String> {
++        self.restore_hex_checked(hex)
++    }
++
++    /// [`restore_hex`] 的宿主可测版本（不构造 `String`）。
++    pub fn restore_hex_checked(&mut self, hex: &str) -> Result<(), String> {
++        let bytes = hex_decode(hex)?;
++        let snapshot =
++            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
++        let restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
++        self.inner = restored;
++        Ok(())
++    }
++
++    /// **身份局**建局（NC09 身份局端到端：浏览器侧需要非原型模式）。
++    ///
++    /// 与 [`new`] 的区别只在 `GameMode`：身份局由 `Engine::new_identity` 装配
++    /// （主公/忠臣/反贼/内奸），胜负结果走 `Winner::{LordSide, Rebels, Traitor}`。
++    pub fn new_identity(players: u8, seed: u64) -> Result<NativeSession, String> {
++        Self::new_identity_with_packs_json(players, seed, "[]")
++    }
++
++    /// 身份局与扩展一起装载；身份和扩展初始化使用同一规则随机流。
++    pub fn new_identity_with_packs_json(
++        players: u8,
++        seed: u64,
++        packs_json: &str,
++    ) -> Result<NativeSession, String> {
++        Ok(NativeSession {
++            inner: engine_identity_from_packs(players, seed, packs_json)?,
++            planner_nodes: 64,
++            deadline_ms: 50,
++        })
++    }
++
++    /// 已安装扩展载荷数组建局。空数组与 [`new`] 相同。
++    pub fn new_with_packs_json(
++        players: u8,
++        seed: u64,
++        packs_json: &str,
++    ) -> Result<NativeSession, String> {
++        let inner = engine_from_packs(players, seed, packs_json)?;
++        Ok(NativeSession {
++            inner,
++            planner_nodes: 64,
++            deadline_ms: 50,
++        })
++    }
++
++    /// 用同一组安装载荷恢复扩展局。包集合或版本不符时拒绝，不替换当前对局。
++    pub fn restore_hex_with_packs_json(
++        &mut self,
++        hex: &str,
++        packs_json: &str,
++    ) -> Result<(), String> {
++        self.inner = engine_from_archive(hex, packs_json)?;
++        Ok(())
++    }
++
++    /// 目录中牌名以前缀开头的张数（扩展牌并入对局的可观察计数）。
++    pub fn cards_with_prefix(&self, prefix: &str) -> u32 {
++        prefix_count(&self.inner, prefix)
++    }
++}
+diff --git a/crates/engine-native-wasm/tests/pa09_native_session.rs b/crates/engine-native-wasm/tests/pa09_native_session.rs
+new file mode 100644
+index 00000000..9e04259b
+--- /dev/null
++++ b/crates/engine-native-wasm/tests/pa09_native_session.rs
+@@ -0,0 +1,54 @@
++use engine_native_wasm::{NativeEngine, NativeSession};
++
++#[test]
++fn native_errors_are_strings_and_leave_the_session_usable() {
++    let mut session = NativeSession::new(4, 42).unwrap();
++    let before = session.save_hex();
++    assert!(session.view_json(255).unwrap_err().contains("座位越界"));
++    assert!(session
++        .answer(0, 123, vec![])
++        .unwrap_err()
++        .contains("无开放选择"));
++    assert!(session.restore_hex("中").unwrap_err().contains("ASCII"));
++    assert!(session.assign_general(0, "missing-general").is_err());
++    assert_eq!(session.save_hex(), before);
++    assert!(session.view_json(0).is_ok());
++}
++
++#[test]
++fn zero_deadline_keeps_the_node_bounded_candidate_policy() {
++    let mut unbounded = NativeSession::new(4, 42).unwrap();
++    let mut generous = NativeSession::new(4, 42).unwrap();
++    unbounded.set_planner(64, 0);
++    generous.set_planner(64, 10_000);
++    for step in 0..64 {
++        assert_eq!(
++            unbounded.auto_step().unwrap(),
++            generous.auto_step().unwrap(),
++            "step {step}"
++        );
++        assert_eq!(
++            unbounded.state_hash_hex(),
++            generous.state_hash_hex(),
++            "step {step}"
++        );
++    }
++}
++
++#[test]
++fn native_session_and_existing_wasm_api_keep_identical_trajectories() {
++    let mut native = NativeSession::new(4, 42).unwrap();
++    let mut wasm = NativeEngine::new(4, 42).unwrap();
++    native.set_planner(0, 0);
++    wasm.set_planner(0, 0);
++    for _ in 0..64 {
++        assert_eq!(native.state_hash_hex(), wasm.state_hash_hex());
++        assert_eq!(native.view_json(0).unwrap(), wasm.view_json(0).unwrap());
++        assert_eq!(native.auto_step().unwrap(), wasm.auto_step().unwrap());
++    }
++    let saved = native.save_hex();
++    wasm.restore_hex_checked(&saved).unwrap();
++    assert_eq!(native.state_hash_hex(), wasm.state_hash_hex());
++    native.restore_hex(&wasm.save_hex()).unwrap();
++    assert_eq!(native.state_hash_hex(), wasm.state_hash_hex());
++}

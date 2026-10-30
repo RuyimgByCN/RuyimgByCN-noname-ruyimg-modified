@@ -1,0 +1,12 @@
+START full-all5
+FINISH full-all5 exit=0
+START strict-all3
+FINISH strict-all3 exit=0
+START fresh-wasm32-build
+FINISH fresh-wasm32-build exit=0
+START wasm32-machine-windows
+FINISH wasm32-machine-windows exit=0
+START fresh-ordinary-fixtures
+FINISH fresh-ordinary-fixtures exit=0
+START wasm32-ordinary-parity
+FINISH wasm32-ordinary-parity exit=0

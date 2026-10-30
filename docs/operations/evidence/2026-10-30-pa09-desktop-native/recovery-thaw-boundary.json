@@ -1,0 +1,16 @@
+{
+  "at_utc": "2026-10-30T03:42:54.552983+00:00",
+  "source_freeze_validation_complete": true,
+  "head": "100489f554fe89d3389e35196947d9070673c2a1",
+  "maintained_hashes_file": "recovery-maintained-source-hashes-final.json",
+  "maintained_files": 20720,
+  "maintained_aggregate_sha256": "8f59ccff676b529f108e872240259a2bd929663b4ac8854160fa9c39d6db36af",
+  "changed_maintained_files_since_post_preflight_snapshot": [],
+  "generated_tracked_changes_remaining": [],
+  "tracked_dist_restored_to_exact_head_files": 37,
+  "no_staged_files": true,
+  "future_worker_source_or_build_use": "none; remaining writes are report/evidence only",
+  "thaw_boundary": "Parent can now thaw/apply isolated changes; acceptance evidence belongs to this exact snapshot. New source changes need their own validation.",
+  "private_targets": "Both listed in recovery-target-retirement.json are unused by worker; lsof audit clean and necessary artifact copies secured. Parent coordinates deletion.",
+  "free_bytes": 173124431872
+}

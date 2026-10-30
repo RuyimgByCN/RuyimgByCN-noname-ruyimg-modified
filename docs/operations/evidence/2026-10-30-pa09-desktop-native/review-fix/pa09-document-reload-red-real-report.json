@@ -1,0 +1,68 @@
+{
+  "passed": false,
+  "error": "Error: Desktop IPC: native engine resource limit reached; 操作结果可能未知，请先确认当前局面",
+  "stack": "@http://localhost:5173/assets/pa09-document-reload-C1n_UcBq.js:609:200\n@http://localhost:5173/assets/pa09-document-reload-C1n_UcBq.js:339:73",
+  "state": {
+    "ids": [
+      1114609832,
+      1903113996,
+      3026412074,
+      3863881703,
+      2997031567,
+      655045796,
+      890918331,
+      1052145323
+    ],
+    "checks": [
+      {
+        "document": 0,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 1,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 2,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 3,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 4,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 5,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 6,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 7,
+        "oldResourceRefused": false,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      }
+    ],
+    "imageId": 3387749106
+  }
+}

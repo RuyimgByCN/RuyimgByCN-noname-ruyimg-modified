@@ -1,0 +1,13 @@
+{
+  "before_files": 32598,
+  "after_files": 32598,
+  "changed": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md"
+  ],
+  "rust_ts_changes": [],
+  "non_doc_changes": [],
+  "non_markdown_changes": [],
+  "staged_files": [],
+  "head": "100489f554fe89d3389e35196947d9070673c2a1"
+}

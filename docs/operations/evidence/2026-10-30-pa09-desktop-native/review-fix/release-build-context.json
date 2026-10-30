@@ -1,0 +1,28 @@
+{
+  "command": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "build",
+    "--offline",
+    "--release",
+    "-p",
+    "desktop-client",
+    "--features",
+    "tauri-shell"
+  ],
+  "cargo_target_dir": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+  "profile": "release",
+  "workspace_release_profile": {
+    "lto": true,
+    "codegen-units": 1
+  },
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n",
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123\n",
+  "architecture": "arm64",
+  "profile_overrides": {},
+  "rustflags_present": false,
+  "frontend_index_sha256": "9c6ba9f04c3b3d3d5b53cfb442e4df1dd6b05daaa8ef3f9c93360bbb10fcba00",
+  "performance_measurements_taken": false
+}

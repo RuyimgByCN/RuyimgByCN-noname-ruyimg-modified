@@ -220,7 +220,7 @@ fn nc09_projection_uses_existing_v5_snapshot_and_card_fields() {
     let message = engine_protocol::ServerMessage::Snapshot {
         header: engine_protocol::MessageHeader::new(15, 1, engine.revision()),
         view: view.clone(),
-        choice: native_view::choice_for(&engine, Some(PlayerId::new(1))),
+        choice: native_view::choice_for(&engine, RoomRole::Player, Some(PlayerId::new(1))),
         legal_actions: native_view::legal_actions_for(&engine, PlayerId::new(1)),
     };
     assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 5);

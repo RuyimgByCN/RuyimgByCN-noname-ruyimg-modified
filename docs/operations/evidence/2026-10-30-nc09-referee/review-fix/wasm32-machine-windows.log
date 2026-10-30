@@ -1,0 +1,5 @@
+PASS XunXun: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS JiJie: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS GaiMing: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+PASS HaoTianTa: pending archive, exact choices/privacy, continued hashes/events and repeated byte restores
+{"windows":4,"stateComparisons":60,"seatChecks":210,"commands":28,"archiveRestarts":32,"failed":0}

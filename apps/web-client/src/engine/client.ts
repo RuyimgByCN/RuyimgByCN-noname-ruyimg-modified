@@ -11,6 +11,7 @@ import type {
   WorkerResponse,
 } from "../types/engine";
 import { desktopContentBundle, isTauriShell } from "./desktopHost";
+import { DesktopEngineTransport, desktopEngineChoice, type EngineTransport } from "./desktopEngineTransport";
 import {
   perfRequestSent,
   perfRequestFailed,
@@ -39,7 +40,11 @@ function fetchText(url: string): Promise<string> {
  * T13 产品面：默认原生后端（VITE_ENGINE_BACKEND=legacy 回退旧线）。
  */
 export class EngineClient {
-  private worker: Worker | null = null;
+  private worker: EngineTransport | null = null;
+  private transportKind: "desktop-native" | "wasm-worker" | "legacy-worker" = "wasm-worker";
+
+  /** Actual selected transport, also available to the PA08/PA09 measurement harness. */
+  getTransportKind(): string { return this.transportKind; }
   private seq = 1;
   private pending = new Map<
     number,
@@ -60,9 +65,13 @@ export class EngineClient {
     // worker chunk（dist 仅有 index.js），真实浏览器里 worker 加载失败 →
     // 控制台 `engine worker error Event`、战斗页「未连接」。见证据
     // docs/operations/evidence/2026-10-18-nc09-browser-e2e/。
-    const worker: Worker = this.native
-      ? new NativeEngineWorker()
-      : new LegacyEngineWorker();
+    const desktopNative = this.native && isTauriShell() && desktopEngineChoice() === "native";
+    this.transportKind = desktopNative ? "desktop-native" : this.native ? "wasm-worker" : "legacy-worker";
+    // SAFETY: this optional diagnostic records the transport chosen above; it carries no rule state.
+    (globalThis as unknown as { __engineTransport?: string }).__engineTransport = this.transportKind;
+    const worker: EngineTransport = desktopNative
+      ? new DesktopEngineTransport()
+      : this.native ? new NativeEngineWorker() : new LegacyEngineWorker();
     this.worker = worker;
     worker.onmessage = (ev: MessageEvent<WorkerResponse>) => {
       if (this.worker !== worker) return;
@@ -116,7 +125,7 @@ export class EngineClient {
         type: "init",
         bundle: bundle ?? undefined,
         perf: startPerfProbe(),
-        latencySab: this.initSabMirror(),
+        latencySab: desktopNative ? undefined : this.initSabMirror(),
       });
     } catch (error) {
       if (this.worker === worker) this.dispose();

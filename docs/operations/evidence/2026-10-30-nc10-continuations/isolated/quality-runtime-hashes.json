@@ -1,0 +1,10 @@
+{
+  "note": "Current runtime files unchanged since release64 measurement. Debug8 preceded unconditional typed-reference mapping for protected VM traps; quality workload has no VM or traps. Additional tests were added later.",
+  "sha256": {
+    "crates/engine-native/src/ai.rs": "c623c739037375fd0bda6e1876aa26fc847aa0c2fcf7a8e1f7eda766fe38a2f6",
+    "crates/engine-native/src/ai/redact.rs": "7ed8093444188acd9159d924fdf4aad639f0f795632522a56e646dfce44522e3",
+    "crates/engine-native/src/ai/remap.rs": "4c0cf26cbdc79457ac9f68991553c20c039a111cfa85cf7e03d0666a6d7411e5",
+    "crates/engine-native/src/engine/accessors.rs": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+    "crates/engine-native/Cargo.toml": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445"
+  }
+}

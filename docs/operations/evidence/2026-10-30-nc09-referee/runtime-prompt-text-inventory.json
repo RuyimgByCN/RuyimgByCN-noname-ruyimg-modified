@@ -1,0 +1,1321 @@
+{
+  "source_head": "100489f5 + reviewed PA09/Referee integration",
+  "kind": "Literal text inventory only; does not establish reachability, runtime failure, full prompt set or permission for new keys",
+  "registered_names": 68,
+  "literal_prompt_names": 252,
+  "literal_names_absent_from_whitelist": {
+    "aojian_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 25
+      }
+    ],
+    "aojian_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 76
+      }
+    ],
+    "baishouzhihu_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 452
+      }
+    ],
+    "beige_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/yunchou.rs",
+        "line": 59
+      }
+    ],
+    "bingfeng_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "line": 127
+      }
+    ],
+    "bingjian_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 252
+      }
+    ],
+    "bingjian_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 286
+      }
+    ],
+    "buchun_target": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/buchun.rs",
+        "line": 140
+      }
+    ],
+    "cixiong_discard_choose": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 542
+      }
+    ],
+    "cyqiaoxie_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 470
+      }
+    ],
+    "cyqiaoxie_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 511
+      }
+    ],
+    "cyxianjiang_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 194
+      }
+    ],
+    "daixing_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 338
+      }
+    ],
+    "dangping_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 594
+      }
+    ],
+    "dangping_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 645
+      }
+    ],
+    "donghuangzhong_cost": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 258
+      }
+    ],
+    "donghuangzhong_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 286
+      }
+    ],
+    "duanxing_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 140
+      }
+    ],
+    "duanyi_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 132
+      }
+    ],
+    "duanyi_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 171
+      }
+    ],
+    "duanyue_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 691
+      }
+    ],
+    "duanyue_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 723
+      }
+    ],
+    "duishi_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 27
+      }
+    ],
+    "duishi_discard_same_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 106
+      }
+    ],
+    "duishi_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 62
+      }
+    ],
+    "dunxing_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "line": 95
+      }
+    ],
+    "fanjian_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/fan_jian.rs",
+        "line": 127
+      }
+    ],
+    "fengming_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 206
+      }
+    ],
+    "fengming_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 253
+      }
+    ],
+    "fengqi_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 24
+      }
+    ],
+    "fengqi_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 62
+      }
+    ],
+    "fengxueren_flip_confirm": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 754
+      }
+    ],
+    "funiao_give": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 128
+      }
+    ],
+    "funiao_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 168
+      }
+    ],
+    "fuyan_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 179
+      }
+    ],
+    "fz_xinkuanggu_choice": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+        "line": 14
+      }
+    ],
+    "fzhenwei_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 303
+      }
+    ],
+    "gaizao_slot": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+        "line": 411
+      }
+    ],
+    "gongshen_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "line": 334
+      }
+    ],
+    "gongxin_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 269
+      },
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 301
+      }
+    ],
+    "gongxin_choice": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 315
+      }
+    ],
+    "gongxin_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 240
+      }
+    ],
+    "guanhu_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 677
+      }
+    ],
+    "guanshi_force_damage": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 983
+      }
+    ],
+    "guiyan_take": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 71
+      }
+    ],
+    "guiyan_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 33
+      }
+    ],
+    "guozao_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 224
+      }
+    ],
+    "guxing_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 479
+      }
+    ],
+    "gxianyin_gain_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+        "line": 506
+      }
+    ],
+    "gxianyin_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+        "line": 463
+      }
+    ],
+    "hanbing_prevent_confirm": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha.rs",
+        "line": 230
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 770
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 1022
+      }
+    ],
+    "hanbing_target_discard": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha.rs",
+        "line": 376
+      }
+    ],
+    "heihuo_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 418
+      }
+    ],
+    "huajian_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 23
+      }
+    ],
+    "huajian_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 78
+      }
+    ],
+    "huajin_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 105
+      }
+    ],
+    "huangyu_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+        "line": 100
+      }
+    ],
+    "huanhun_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 422
+      }
+    ],
+    "huanle_monkey_confirm": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/monkey.rs",
+        "line": 103
+      }
+    ],
+    "huanle_xuelunyang_skill": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "line": 275
+      }
+    ],
+    "huanle_xuelunyang_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "line": 237
+      }
+    ],
+    "huanling_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 354
+      }
+    ],
+    "huanxing_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 223
+      }
+    ],
+    "huanxing_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 270
+      }
+    ],
+    "huiqi_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 94
+      }
+    ],
+    "huodan_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 268
+      }
+    ],
+    "huodan_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 302
+      }
+    ],
+    "hutian_cards": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+        "line": 201
+      }
+    ],
+    "hutian_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+        "line": 237
+      }
+    ],
+    "hwendao_discard_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 45
+      }
+    ],
+    "jianji_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 122
+      }
+    ],
+    "jianji_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 171
+      }
+    ],
+    "jiedao_sha_or_give": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/tricks.rs",
+        "line": 281
+      }
+    ],
+    "jikong_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 598
+      }
+    ],
+    "jilve_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 361
+      }
+    ],
+    "jilve_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 400
+      }
+    ],
+    "jinlin_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 534
+      }
+    ],
+    "juxi_choice": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "line": 193
+      }
+    ],
+    "juxi_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "line": 170
+      }
+    ],
+    "kunlunjingc_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 162
+      }
+    ],
+    "kunlunjingc_replace": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 194
+      }
+    ],
+    "lianda_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+        "line": 27
+      }
+    ],
+    "lianhua_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 222
+      }
+    ],
+    "lieren_player_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 536
+      }
+    ],
+    "lieren_target_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 507
+      }
+    ],
+    "lingfeng_damage_or_hujia": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "line": 54
+      }
+    ],
+    "lingfeng_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "line": 33
+      }
+    ],
+    "linyun_pick_two": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 328
+      }
+    ],
+    "linyun_sha_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 367
+      }
+    ],
+    "liuli_discard_choose": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/liuli.rs",
+        "line": 44
+      }
+    ],
+    "lmazui_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 141
+      }
+    ],
+    "lmazui_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 179
+      }
+    ],
+    "luanji_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+        "line": 169
+      }
+    ],
+    "lueying_choose_victim": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+        "line": 171
+      }
+    ],
+    "lueying_confirm": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 465
+      }
+    ],
+    "lxianglong_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "line": 84
+      }
+    ],
+    "mailun_mode": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+        "line": 134
+      }
+    ],
+    "mbcmqingzheng_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 459
+      }
+    ],
+    "mbcmqingzheng_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 495
+      }
+    ],
+    "mbcmqingzheng_target_suit": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 517
+      }
+    ],
+    "meihuo_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 596
+      }
+    ],
+    "meihuo_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 566
+      }
+    ],
+    "miedao_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 119
+      }
+    ],
+    "mingfu_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 378
+      }
+    ],
+    "mingfu_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 416
+      }
+    ],
+    "moyan_cards": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 223
+      }
+    ],
+    "moyan_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 265
+      }
+    ],
+    "mufeng_discover": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 30
+      }
+    ],
+    "new_meibu_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 125
+      }
+    ],
+    "nigong_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 562
+      }
+    ],
+    "ningshuang_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "line": 242
+      }
+    ],
+    "ningxian_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 142
+      }
+    ],
+    "ningxian_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 204
+      }
+    ],
+    "nlianji_t0_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 416
+      }
+    ],
+    "nlianji_target0": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 355
+      }
+    ],
+    "nlianji_target1": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 384
+      }
+    ],
+    "nlianji_throw": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 324
+      }
+    ],
+    "polang_discard_equip": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 121
+      }
+    ],
+    "pozhen_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 314
+      }
+    ],
+    "pozhen_discard_source": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 332
+      }
+    ],
+    "pozhou_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 416
+      }
+    ],
+    "qilin_discard_horse": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha.rs",
+        "line": 245
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 786
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 1037
+      }
+    ],
+    "qinglong_replay_sha": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 943
+      }
+    ],
+    "qinglongzhigui_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 371
+      }
+    ],
+    "rangjie_choice": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 29
+      }
+    ],
+    "rangjie_move_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 96
+      }
+    ],
+    "rangjie_move_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 167
+      }
+    ],
+    "rangjie_type": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 60
+      }
+    ],
+    "reguhuo_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 227
+      }
+    ],
+    "reguhuo_name": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 248
+      }
+    ],
+    "reguhuo_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+        "line": 292
+      }
+    ],
+    "rumeng_basic_or_skip": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 504
+      }
+    ],
+    "rumeng_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 459
+      }
+    ],
+    "sadengjinhuan_extra_shan": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/resume.rs",
+        "line": 356
+      }
+    ],
+    "sadengjinhuan_judge_confirm": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 1007
+      }
+    ],
+    "shangxi_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 345
+      }
+    ],
+    "shangxi_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 401
+      }
+    ],
+    "shedu_discard_or_lose": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shed_u.rs",
+        "line": 79
+      }
+    ],
+    "shehun_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 486
+      }
+    ],
+    "shehun_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 525
+      }
+    ],
+    "shehun_target_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 556
+      }
+    ],
+    "shennongding_cost": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 28
+      }
+    ],
+    "shoulie_discard": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 578
+      }
+    ],
+    "shouna_cost": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 133
+      }
+    ],
+    "shouna_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 165
+      }
+    ],
+    "shuchui_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs",
+        "line": 110
+      }
+    ],
+    "shushen_target": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/shu_shen.rs",
+        "line": 69
+      }
+    ],
+    "songci_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 414
+      }
+    ],
+    "songci_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_cards.rs",
+        "line": 373
+      }
+    ],
+    "suiyan_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 32
+      }
+    ],
+    "susheng_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "line": 41
+      }
+    ],
+    "swd_jiefen_give": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 491
+      }
+    ],
+    "swd_jiefen_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 459
+      }
+    ],
+    "swd_niaoxiangzhen_shan": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+        "line": 220
+      }
+    ],
+    "swd_qixingzhen_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+        "line": 96
+      }
+    ],
+    "swd_qixingzhen_shan": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+        "line": 140
+      }
+    ],
+    "swd_tianfuzhen_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs",
+        "line": 40
+      }
+    ],
+    "swdtianshu_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 155
+      }
+    ],
+    "swdtianshu_skill": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 217
+      }
+    ],
+    "swdtianshu_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+        "line": 187
+      }
+    ],
+    "sxianjing_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 412
+      }
+    ],
+    "tianlun_rewrite": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/judge.rs",
+        "line": 378
+      }
+    ],
+    "tianxiang_heart": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 359
+      }
+    ],
+    "tianxiang_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 389
+      }
+    ],
+    "tongji_transfer_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/tong_ji.rs",
+        "line": 102
+      }
+    ],
+    "toudan_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 457
+      }
+    ],
+    "toudan_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 502
+      }
+    ],
+    "wangchen_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+        "line": 81
+      }
+    ],
+    "wudian_xj_yuexing_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+        "line": 25
+      }
+    ],
+    "wugu_pick": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/tricks.rs",
+        "line": 201
+      }
+    ],
+    "xiandan_discard": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/sha/step.rs",
+        "line": 501
+      }
+    ],
+    "xianghui_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 139
+      }
+    ],
+    "xiaoguo_discard_basic": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xiao_guo.rs",
+        "line": 93
+      }
+    ],
+    "xielei_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 31
+      }
+    ],
+    "xielei_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+        "line": 82
+      }
+    ],
+    "xingdian_card": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+        "line": 256
+      }
+    ],
+    "xingxia_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xingxia.rs",
+        "line": 152
+      }
+    ],
+    "xingxia_enemy": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/xingxia.rs",
+        "line": 135
+      }
+    ],
+    "xingzhui_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 21
+      }
+    ],
+    "xingzhui_same_type": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 138
+      }
+    ],
+    "xingzhui_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 77
+      }
+    ],
+    "xiuluo_hand": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 27
+      }
+    ],
+    "xiuluo_judge": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 61
+      }
+    ],
+    "xuanying_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+        "line": 127
+      }
+    ],
+    "xuanyuan_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 184
+      }
+    ],
+    "xuanzhou_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 285
+      }
+    ],
+    "xuanzhou_trick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 246
+      }
+    ],
+    "yaowu_draw_or_recover": [
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/yao_wu.rs",
+        "line": 81
+      }
+    ],
+    "yiesheng_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/yunchou.rs",
+        "line": 246
+      }
+    ],
+    "yihua_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 331
+      }
+    ],
+    "yijue_player_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 253
+      }
+    ],
+    "yijue_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 192
+      }
+    ],
+    "yijue_target_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_combos.rs",
+        "line": 224
+      }
+    ],
+    "yiluan_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+        "line": 86
+      }
+    ],
+    "yinguo_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 221
+      }
+    ],
+    "yuchen_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+        "line": 28
+      }
+    ],
+    "yudun_pick_two": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 222
+      }
+    ],
+    "yudun_sha_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_virtual_sha.rs",
+        "line": 275
+      }
+    ],
+    "yulin_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+        "line": 173
+      }
+    ],
+    "yunchou_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 349
+      }
+    ],
+    "yunchou_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+        "line": 395
+      }
+    ],
+    "yxs_fanji_sha": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+        "line": 50
+      }
+    ],
+    "yxs_menshen_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+        "line": 23
+      }
+    ],
+    "zhangba_pick_two": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_card_use.rs",
+        "line": 379
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhangba.rs",
+        "line": 94
+      }
+    ],
+    "zhangba_sha_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_card_use.rs",
+        "line": 419
+      },
+      {
+        "path": "crates/engine-native-content/src/content/standard/skills/zhangba.rs",
+        "line": 134
+      }
+    ],
+    "zhanlu_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 33
+      }
+    ],
+    "zhanlu_targets": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+        "line": 87
+      }
+    ],
+    "zhanxing_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 372
+      }
+    ],
+    "zhanxing_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_multi.rs",
+        "line": 479
+      }
+    ],
+    "zhenjiu_pick": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 35
+      }
+    ],
+    "zhenjiu_target": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+        "line": 73
+      }
+    ],
+    "zhenlie_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+        "line": 417
+      }
+    ],
+    "zhuhai_sha": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+        "line": 236
+      }
+    ],
+    "zhuyu_discard": [
+      {
+        "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+        "line": 791
+      }
+    ]
+  },
+  "limits": "Only literal prompt: string fields; helper-built/dynamic prompts and cfg(test) cannot be classified by this inventory. Each real defect needs a reachable-state regression."
+}

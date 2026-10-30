@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
+import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
 
 async function settles(promise) {
   let timer;
@@ -17,7 +18,7 @@ async function settles(promise) {
 
 // Use the production client class with a controllable Worker; the browser test
 // additionally exercises actual browser event dispatch and a native Worker.
-function fixture({ autoInit = true } = {}) {
+function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
   const source = readFileSync(new URL("../src/engine/client.ts", import.meta.url), "utf8");
   const ast = ts.createSourceFile("client.ts", source, ts.ScriptTarget.Latest, true);
   const declaration = ast.statements.find((node) => ts.isClassDeclaration(node) && node.name?.text === "EngineClient");
@@ -46,9 +47,12 @@ function fixture({ autoInit = true } = {}) {
   const EngineClient = new Function(
     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
-    "urlParam", "console", js + "\nreturn EngineClient;",
-  )(FakeWorker, FakeWorker, () => false, () => {}, (id) => failed.push(id),
-    () => {}, () => {}, () => false, () => null, { error: () => {} });
+    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
+  )(FakeWorker, FakeWorker, () => desktopNative, () => {}, (id) => failed.push(id),
+    () => {}, () => {}, () => false, () => null, { error: () => {} },
+    () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
+      constructor() { super(invoke); }
+    });
   return { client: new EngineClient(), workers, failed };
 }
 
@@ -149,4 +153,36 @@ test("空闲 Worker 的错误或释放不会结束其他请求的共享等待", 
   } finally {
     globalThis.__latencySabDebug = previous;
   }
+});
+
+test("desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback", async () => {
+  const calls = [];
+  let release;
+  const f = fixture({ desktopNative: true, invoke: async (command, args) => {
+    calls.push({ command, args });
+    if (command === "native_engine_open") return 31;
+    if (command === "native_engine_close") return;
+    const { request } = args;
+    if (request.type === "init") return { id: request.id, ok: true, data: "native ready" };
+    if (request.type === "useSkillCard") return { id: request.id, ok: false, error: "useSkillCard 未映射" };
+    if (request.type === "autoStep") return new Promise((resolve) => { release = resolve; });
+    return { id: request.id, ok: true, data: { kind: "status", revision: 4, finished: false } };
+  } });
+  await f.client.connect();
+  assert.equal(f.client.getTransportKind(), "desktop-native");
+  assert.equal(f.workers.length, 0);
+  await assert.rejects(f.client.useSkillCard(0, 1, 0, [], 0), /未映射/);
+  assert.equal((await f.client.status()).revision, 4);
+  assert.deepEqual(calls.filter((c) => c.command === "native_engine_request").map((c) => c.args.request.id), [1, 2, 3]);
+  const pending = f.client.autoStep();
+  const rejected = assert.rejects(pending, /结果未知/);
+  await new Promise((resolve) => setImmediate(resolve));
+  f.client.dispose();
+  await settles(rejected);
+  release({ id: 4, ok: true, data: { revision: 5 } });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(f.client.pending.size, 0);
+  assert.deepEqual(f.failed, [4]);
+  assert.equal(calls.filter((c) => c.command === "native_engine_close").length, 1);
+  assert.equal(f.workers.length, 0);
 });

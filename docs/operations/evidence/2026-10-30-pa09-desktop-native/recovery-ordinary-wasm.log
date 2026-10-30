@@ -1,0 +1,8 @@
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/native-server-projection-parity.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 182825123840}
+PASS identity-public-zones: every seat, two archive restores, server/generated-WASM32 parity
+PASS dead-identity: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-hidden: every seat, two archive restores, server/generated-WASM32 parity
+PASS kingdoms-revealed: every seat, two archive restores, server/generated-WASM32 parity
+PASS all-kinds: every seat, two archive restores, server/generated-WASM32 parity
+{"fixtures":5,"comparisons":40,"privateChecks":32,"kinds":["Jiu","Other","Sha","ShaFire","ShaThunder","Shan","Tao"],"zones":["DiscardPile","Equip","Hand","Judge","Processing"],"failed":0}
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/native-server-projection-parity.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json"], "exit": 0, "locked_seconds": 2.0052673750033136, "stop_reason": null}

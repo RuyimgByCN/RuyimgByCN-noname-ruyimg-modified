@@ -1,0 +1,95 @@
+{
+  "recorded_at": "2026-10-30T10:58:47.454006+08:00",
+  "head": "38789f54c798829d7b32bff1c990def50cf7f611",
+  "ruleset": 328,
+  "archive": 105,
+  "native_abi": 753,
+  "pure_nc10_files": {
+    "crates/engine-native/Cargo.toml": {
+      "sha256": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+      "frozen_sha256": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+      "lines": 73,
+      "new": false
+    },
+    "crates/engine-native/src/ai.rs": {
+      "sha256": "c623c739037375fd0bda6e1876aa26fc847aa0c2fcf7a8e1f7eda766fe38a2f6",
+      "frozen_sha256": "c623c739037375fd0bda6e1876aa26fc847aa0c2fcf7a8e1f7eda766fe38a2f6",
+      "lines": 833,
+      "new": false
+    },
+    "crates/engine-native/src/ai/redact.rs": {
+      "sha256": "c703619118324360fe4e8522f6172a158cf1f5d83429b72b2c833bfc3635b2ee",
+      "frozen_sha256": "a7f703c8c07672badacfecc4bac90d4a845a3b99cb107aa4b18a61e94178ca64",
+      "lines": 396,
+      "new": false
+    },
+    "crates/engine-native/src/engine/accessors.rs": {
+      "sha256": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+      "frozen_sha256": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+      "lines": 79,
+      "new": false
+    },
+    "crates/engine-native/tests/groups/nc_rounds.rs": {
+      "sha256": "a73d7e1dada4e0b9672c78d2e6d33c6be0869dc3ed0990702b4ca6acc4cee1e0",
+      "frozen_sha256": "80f98fd5da8dfd6b59dec7c45887619147c1db4474e003c3cbbcfba9702b1009",
+      "lines": 98,
+      "new": false
+    },
+    "crates/engine-native/tests/nc10_duel_nullify_privacy.rs": {
+      "sha256": "a7b2257e2884bdb6890052fb8bc6b1d50a35aba8420978611787b188b6f4aca4",
+      "frozen_sha256": "a7b2257e2884bdb6890052fb8bc6b1d50a35aba8420978611787b188b6f4aca4",
+      "lines": 214,
+      "new": false
+    },
+    "crates/engine-native/tests/nc10_pending_duel_privacy.rs": {
+      "sha256": "e30f29078154554653c6604a159517be52377456280df876068ea2dddaf6ae1e",
+      "frozen_sha256": "e30f29078154554653c6604a159517be52377456280df876068ea2dddaf6ae1e",
+      "lines": 263,
+      "new": false
+    },
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs": {
+      "sha256": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622",
+      "frozen_sha256": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622",
+      "lines": 205,
+      "new": false
+    },
+    "crates/engine-native/src/ai/remap.rs": {
+      "sha256": "c8fe6bfc0e3c55c12009982d9169a5b38c06e6c8296aa3d3953a529490ad3a3b",
+      "frozen_sha256": "243e6e2f6937111d6c2ab44c48864cb2a8d17e0a2f25eb498d13dfd8a0ec5ad2",
+      "lines": 287,
+      "new": true
+    },
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs": {
+      "sha256": "bced06ac31f3917ef5fc8839152d5e7a038f6790e3be78035fb578a51574ad1e",
+      "frozen_sha256": "bfbc645d192ecef37d61167e336a8c775ab4f05726809e48a971d5094ab7f44e",
+      "lines": 473,
+      "new": true
+    },
+    "crates/engine-native/tests/nc10_opaque_vm_privacy.rs": {
+      "sha256": "ba5868087dcac0f17f836b83a3cf7adf2db95a41b634da4b14bf2f4a12e747da",
+      "frozen_sha256": "ba5868087dcac0f17f836b83a3cf7adf2db95a41b634da4b14bf2f4a12e747da",
+      "lines": 286,
+      "new": true
+    },
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs": {
+      "sha256": "171ccef48c72e350a4aae8ab080ddd70ab445c3e435249ec0ac12eb905756f0e",
+      "frozen_sha256": null,
+      "lines": 308,
+      "new": true
+    }
+  },
+  "p2_changed_files": [
+    "crates/engine-native/src/ai/redact.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/src/ai/remap.rs",
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs"
+  ],
+  "complete_patch_sha256": "de121a0f23019a9226627a46d88f54ac9906673373cf05fbac4796b81303bd05",
+  "p2_delta_patch_sha256": "838591a55219384b2bee21d419eb8e6cedaf8c45571fead13a67870fd27ce32f",
+  "borrowed_manifest_sha256": "6b58627f17eb599fc7190f8781ad4d542ca77cbf1d7d47b95aabd9cbc4abbb4f",
+  "borrowed_paths_verified": 8,
+  "borrowed_excluded_from_pure_patches": true,
+  "no_staged_files": true,
+  "cargo_incremental": "0 for every recovery Rust/WASM command; cache setting only; no performance conclusion"
+}

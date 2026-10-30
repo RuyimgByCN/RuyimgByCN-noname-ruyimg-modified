@@ -1,0 +1,4 @@
+    Checking engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+    Checking content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/content-native-loader)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.47s
+{"command": ["env", "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target", "RUSTFLAGS=-D warnings", "cargo", "check", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 1.5169024589995388}

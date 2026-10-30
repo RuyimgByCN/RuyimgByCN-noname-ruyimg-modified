@@ -278,8 +278,32 @@ pub fn active_ask(
                 active_ask(e, core, catalog)
             }
         }
-        MachineSnapshot::JudgePhase { current, .. } => {
+        MachineSnapshot::JudgePhase { owner, current, .. } => {
             let c = current.as_deref()?;
+            if !c.finalized && c.judge_held {
+                if let Some(cards) = &c.gaiming_cards {
+                    return Some(ask(
+                        *owner,
+                        "gaiming_pick",
+                        ChoiceKind::SelectCards,
+                        hand_card_options(cards),
+                        1,
+                        1,
+                        true,
+                    ));
+                }
+                if let (Some(holder), Some(other)) = (c.haotian_holder, c.haotian_other) {
+                    return Some(ask(
+                        holder,
+                        "haotianta_pick",
+                        ChoiceKind::SelectCards,
+                        vec![ChoiceOption::Card(c.judge_card), ChoiceOption::Card(other)],
+                        1,
+                        1,
+                        false,
+                    ));
+                }
+            }
             if c.in_rewrite {
                 if !c.asked {
                     return None;
@@ -864,6 +888,24 @@ pub fn active_ask(
                 _ => None,
             }
         }
+        MachineSnapshot::XunXun { owner, stage: XunXunStageSnap::Arrange, top } => Some(ask(
+            *owner,
+            "xunxun_arrange",
+            ChoiceKind::SelectCards,
+            hand_card_options(top),
+            2,
+            2,
+            false,
+        )),
+        MachineSnapshot::JiJie { owner, stage: JiJieStageSnap::Read, .. } => Some(ask(
+            *owner,
+            "jijie_give_target",
+            ChoiceKind::SelectPlayers,
+            core.alive_players().map(ChoiceOption::Player).collect(),
+            1,
+            1,
+            false,
+        )),
         MachineSnapshot::GuanXing { owner, stage, top } => match stage {
             GuanXingStageSnap::Place => {
                 let take = top.len();
@@ -956,6 +998,7 @@ pub fn active_ask(
             owner,
             target,
             targets,
+            card,
             cards,
             ..
         } => (catalog.hooks.host_ask)(
@@ -964,6 +1007,7 @@ pub fn active_ask(
             *owner,
             *target,
             targets,
+            *card,
             cards,
             core,
             catalog,

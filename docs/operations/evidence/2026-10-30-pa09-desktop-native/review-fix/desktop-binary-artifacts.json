@@ -1,0 +1,18 @@
+[
+  {
+    "profile": "debug",
+    "target_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop",
+    "preserved_copy": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/evidence-review-fix/noname-next-desktop-debug",
+    "sha256": "621f71d81be6eb43a2617153eed02feb6b868ce3270fb36f3cdcfb259264a2a7",
+    "bytes": 43706360,
+    "file": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop: Mach-O 64-bit executable arm64"
+  },
+  {
+    "profile": "release",
+    "target_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/noname-next-desktop",
+    "preserved_copy": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/evidence-review-fix/noname-next-desktop-release",
+    "sha256": "0d4f502d1b47abcb66ce71a6b1853c0e9e206ef5258ce4f4d1b3de2af665d911",
+    "bytes": 11332896,
+    "file": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/noname-next-desktop: Mach-O 64-bit executable arm64"
+  }
+]

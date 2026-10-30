@@ -1,0 +1,27 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.47s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 8 tests
+test nc10_live_hidden_cards::dead_current_actor_does_not_probe_attacks ... ok
+
+thread 'nc10_live_hidden_cards::real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path' (8760470) panicked at crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:227:56:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 0 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc10_live_hidden_cards::real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path ... FAILED
+test nc10_live_hidden_cards::empty_zero_minimum_choice_has_a_legal_plan_even_without_cancellation ... ok
+test nc10_live_hidden_cards::real_moyan_public_machine_held_cards_survive_both_windows ... ok
+test nc10_live_hidden_cards::real_guanxing_machine_held_cards_are_not_duplicated ... ok
+test nc10_live_hidden_cards::real_vm_commit_window_and_private_piles_are_counterfactually_equal ... ok
+test nc10_live_hidden_cards::live_sha_window_hides_opponent_hand_identity ... ok
+test nc10_live_hidden_cards::private_vm_piles_are_physical_and_counterfactually_equal ... ok
+
+failures:
+
+failures:
+    nc10_live_hidden_cards::real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path
+
+test result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 136 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_live_hidden_cards", "--", "--nocapture"], "exit": 101, "locked_seconds": 0.5526181249879301}

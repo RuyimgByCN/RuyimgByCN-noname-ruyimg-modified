@@ -1,0 +1,3 @@
+{"command": ["python3", "-B", "scripts/check-source-lines.py"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 56556212224}
+Source line limit passed: 8951 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+{"command": ["python3", "-B", "scripts/check-source-lines.py"], "exit": 0, "locked_seconds": 8.01340016699396, "stop_reason": null}

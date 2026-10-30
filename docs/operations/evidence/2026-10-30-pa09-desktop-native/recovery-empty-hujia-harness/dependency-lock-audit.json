@@ -1,0 +1,11 @@
+{
+  "allDependencyVersionsAndSourcesMatchMain": true,
+  "mainPackages": 515,
+  "harnessPackages": 43,
+  "newRootOnly": [
+    "pa09-empty-hujia-vector"
+  ],
+  "mainProfileDevDebug": "line-tables-only",
+  "harnessProfileDevDebug": "line-tables-only",
+  "productionProfilesUntouched": true
+}

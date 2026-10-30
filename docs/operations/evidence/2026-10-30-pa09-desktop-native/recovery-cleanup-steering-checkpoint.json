@@ -1,0 +1,31 @@
+{
+  "at_utc": "2026-10-30T03:18:47.003863+00:00",
+  "free_bytes": 181871394816,
+  "incremental0": true,
+  "incremental_dirs": {
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental": {
+      "exists": true,
+      "entries": 0
+    },
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/incremental": {
+      "exists": false,
+      "entries": 0
+    },
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/incremental": {
+      "exists": false,
+      "entries": 0
+    },
+    "/tmp/noname-pa09-parent-gate-9e6c6232/debug/incremental": {
+      "exists": true,
+      "entries": 0
+    }
+  },
+  "deleted": [],
+  "retained": {
+    "stage3_target": "Current debug/release and real WebView acceptance still needs deps/exe/WASM; parent will reclaim after evidence copies",
+    "strict_target": "Completed check target; no incremental generated; parent can reclaim after handoff",
+    "private_webview_dist": "Needed by queued actual reload and lifecycle tests",
+    "native_pkg": "Normal main generated package still used by actual Worker/WebView acceptance; shared main package not cleanup-owned"
+  },
+  "native_pkg_tmp_exists": false
+}

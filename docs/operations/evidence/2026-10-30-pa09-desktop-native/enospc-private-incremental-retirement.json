@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-30T10:46:15.015794+08:00",
+  "active_cache_users": [],
+  "action": "Retire only these private debug/incremental caches; keep source, worktrees, patches, logs, deps, full targets, binaries, WASM artifacts and all shared targets",
+  "paths": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/incremental",
+      "retired_kib": 5552844,
+      "reason": "Task ended or failed before this retirement; no active compiler users. ENOSPC recovery; only private regenerable incremental objects."
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target/debug/incremental",
+      "retired_kib": 2323840,
+      "reason": "Task ended or failed before this retirement; no active compiler users. ENOSPC recovery; only private regenerable incremental objects."
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental",
+      "retired_kib": 5975816,
+      "reason": "Task ended or failed before this retirement; no active compiler users. ENOSPC recovery; only private regenerable incremental objects."
+    }
+  ]
+}

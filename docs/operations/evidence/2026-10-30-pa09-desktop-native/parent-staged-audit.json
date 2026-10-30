@@ -1,0 +1,7 @@
+{
+  "raw_evidence_diff_check_exit": 2,
+  "raw_evidence_whitespace_preserved": true,
+  "reason": "Original command outputs, raw independent reviews and unified patches retain exact bytes; context blank lines in patches are not maintained source defects",
+  "maintained_source_and_document_diff_check_exit": 0,
+  "NC10_scope": "Reviewed pure candidate/evidence archived only; no NC10 production source applied"
+}

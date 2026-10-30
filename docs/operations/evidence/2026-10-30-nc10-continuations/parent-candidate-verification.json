@@ -1,0 +1,69 @@
+{
+  "pure_nc10_paths": [
+    {
+      "path": "crates/engine-native/Cargo.toml",
+      "candidate_sha256": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+      "main_before_sha256": "f42777764653ec77a12f394b45c17a34d560acb0cd2fc3647f5278034ea7119f"
+    },
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "candidate_sha256": "c623c739037375fd0bda6e1876aa26fc847aa0c2fcf7a8e1f7eda766fe38a2f6",
+      "main_before_sha256": "144a2b4e9ffc4ace8842bd3aa3054f774eb485a45869568248f03a3d04b61c03"
+    },
+    {
+      "path": "crates/engine-native/src/ai/redact.rs",
+      "candidate_sha256": "c703619118324360fe4e8522f6172a158cf1f5d83429b72b2c833bfc3635b2ee",
+      "main_before_sha256": "deaa4acebee0a74dde9ba950d3dd68e9252440685d33d14ad2ea3eea274b534f"
+    },
+    {
+      "path": "crates/engine-native/src/engine/accessors.rs",
+      "candidate_sha256": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+      "main_before_sha256": "5388b7595bce21f42013ef616467c7e2b413047984c0d896157348b31779844f"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "candidate_sha256": "a73d7e1dada4e0b9672c78d2e6d33c6be0869dc3ed0990702b4ca6acc4cee1e0",
+      "main_before_sha256": "04596d40c437743d082fe139ec6e3806b0a94202b3a455d9d4572af56234f2ee"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_duel_nullify_privacy.rs",
+      "candidate_sha256": "a7b2257e2884bdb6890052fb8bc6b1d50a35aba8420978611787b188b6f4aca4",
+      "main_before_sha256": "292942e2f432d79c525c414cfe76fa04528ffac828818ee8b6748b52cc7f4db7"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_pending_duel_privacy.rs",
+      "candidate_sha256": "e30f29078154554653c6604a159517be52377456280df876068ea2dddaf6ae1e",
+      "main_before_sha256": "afdeafa44a77832b1107d948350c5eb94e7fb3ceb5021493f3577b46e20edd4d"
+    },
+    {
+      "path": "crates/engine-native/tests/nc12_ai_strength_baseline.rs",
+      "candidate_sha256": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622",
+      "main_before_sha256": "35d0b2d44348ecc9a14c6fd5e8a6e87306698fbdc5339c5eb32466d6896edc36"
+    },
+    {
+      "path": "crates/engine-native/src/ai/remap.rs",
+      "candidate_sha256": "c8fe6bfc0e3c55c12009982d9169a5b38c06e6c8296aa3d3953a529490ad3a3b",
+      "main_before_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+      "candidate_sha256": "bced06ac31f3917ef5fc8839152d5e7a038f6790e3be78035fb578a51574ad1e",
+      "main_before_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+      "candidate_sha256": "ba5868087dcac0f17f836b83a3cf7adf2db95a41b634da4b14bf2f4a12e747da",
+      "main_before_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+      "candidate_sha256": "171ccef48c72e350a4aae8ab080ddd70ab445c3e435249ec0ac12eb905756f0e",
+      "main_before_sha256": null
+    }
+  ],
+  "patch_sha256": "de121a0f23019a9226627a46d88f54ac9906673373cf05fbac4796b81303bd05",
+  "apply_check_exit": 0,
+  "integrated": false,
+  "reason": "Parent maintained source frozen for PA09/Referee validation; no NC10 source applied yet",
+  "borrowed_8_not_in_delta": true
+}

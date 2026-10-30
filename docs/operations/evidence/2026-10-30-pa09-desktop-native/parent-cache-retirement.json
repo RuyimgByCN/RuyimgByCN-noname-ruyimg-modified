@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30T09:41:54.578320+08:00",
+  "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental",
+  "owner": "Completed F7-stage3/PA09 private cache, now exclusively parent; no main build has used it yet",
+  "active_cache_users": [],
+  "retired_kib": 8547608,
+  "disk_available_before_bytes": 8440107008,
+  "preserved": "All source, raw logs, debug/release executables and stable copies, dependency artifacts, release tree; no shared target touched",
+  "first_preflight": "Aborted before any mutation because ps contained invalid UTF-8; second read decodes replacement characters outside ASCII path matching.",
+  "action": "Remove completed-task incremental compiler cache only; it is regenerable and contains no maintained source",
+  "disk_available_after_bytes": 15643906048
+}

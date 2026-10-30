@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "terminal": {
+    "steps": 280,
+    "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+    "outcome": {
+      "RebelWin": null
+    }
+  },
+  "vm_lifecycle": "actual IPC passed",
+  "isolation": "validator init preserves battle",
+  "fallback": "actual Wasm Worker passed",
+  "resources": "close/duplicate-close/closed-request passed"
+}

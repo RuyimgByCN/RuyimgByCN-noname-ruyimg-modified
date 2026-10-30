@@ -34,7 +34,7 @@ export interface CardView {
   suit: "Spade" | "Heart" | "Club" | "Diamond" | null;
   rank: number | null;
   owner: number | null;
-  zone: "DrawPile" | "DiscardPile" | "Hand" | "Equip" | "Judge" | "Processing" | "Removed";
+  zone: "DrawPile" | "DiscardPile" | "Hand" | "Equip" | "Judge" | "Processing" | "Removed" | "Expansion";
   kind:
     | "Sha"
     | "Tao"

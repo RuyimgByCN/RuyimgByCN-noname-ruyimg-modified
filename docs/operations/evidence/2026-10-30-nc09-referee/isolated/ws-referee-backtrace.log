@@ -1,0 +1,76 @@
+
+running 1 test
+
+thread 'native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart' (7278988) panicked at apps/game-server/src/native_ws_e2e.rs:176:17:
+unexpected Error { code: NotInRoom, message: "not in room", room_id: Some(909) }
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:689:5
+   1: core::panicking::panic_fmt
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/panicking.rs:80:14
+   2: {async_fn#0}<game_server::native_ws_e2e::{impl#3}::submit::{async_fn#0}::{closure_env#0}>
+             at ./apps/game-server/src/native_ws_e2e.rs:176:17
+   3: {async_fn#0}
+             at ./apps/game-server/src/native_ws_e2e.rs:271:12
+   4: {async_block#0}
+             at ./apps/game-server/src/native_ws_e2e/referee.rs:153:10
+   5: poll<&mut dyn core::future::future::Future<Output=()>>
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/future/future.rs:133:9
+   6: poll<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/future/future.rs:133:9
+   7: {closure#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:778:70
+   8: with_budget<core::task::poll::Poll<()>, tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure#0}::{closure#0}::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/task/coop/mod.rs:167:5
+   9: budget<core::task::poll::Poll<()>, tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure#0}::{closure#0}::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/task/coop/mod.rs:133:5
+  10: {closure#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:778:25
+  11: enter<core::task::poll::Poll<()>, tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure#0}::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:451:19
+  12: {closure#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:777:44
+  13: {closure#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:865:68
+  14: set<tokio::runtime::scheduler::Context, tokio::runtime::scheduler::current_thread::{impl#9}::enter::{closure_env#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>, (alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>)>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/context/scoped.rs:40:9
+  15: {closure#0}<(alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>), tokio::runtime::scheduler::current_thread::{impl#9}::enter::{closure_env#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/context.rs:181:38
+  16: try_with<tokio::runtime::context::Context, tokio::runtime::context::set_scheduler::{closure_env#0}<(alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>), tokio::runtime::scheduler::current_thread::{impl#9}::enter::{closure_env#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>>, (alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>)>
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/thread/local.rs:513:12
+  17: with<tokio::runtime::context::Context, tokio::runtime::context::set_scheduler::{closure_env#0}<(alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>), tokio::runtime::scheduler::current_thread::{impl#9}::enter::{closure_env#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>>, (alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>)>
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/thread/local.rs:477:20
+  18: set_scheduler<(alloc::boxed::Box<tokio::runtime::scheduler::current_thread::Core, alloc::alloc::Global>, core::option::Option<()>), tokio::runtime::scheduler::current_thread::{impl#9}::enter::{closure_env#0}<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/context.rs:181:17
+  19: enter<tokio::runtime::scheduler::current_thread::{impl#9}::block_on::{closure_env#0}<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>, core::option::Option<()>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:865:27
+  20: block_on<core::pin::Pin<&mut core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:765:24
+  21: {closure#0}<core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:205:33
+  22: enter_runtime<tokio::runtime::scheduler::current_thread::{impl#0}::block_on::{closure_env#0}<core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>, ()>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/context/runtime.rs:65:16
+  23: block_on<core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/scheduler/current_thread/mod.rs:193:9
+  24: block_on_inner<core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/runtime.rs:371:52
+  25: block_on<core::pin::Pin<&mut dyn core::future::future::Future<Output=()>>>
+             at /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.52.3/src/runtime/runtime.rs:345:18
+  26: native_ws_referee_restore_reconnect_choice_fanout_and_restart
+             at ./apps/game-server/src/native_ws_e2e/referee.rs:179:27
+  27: {closure#0}
+             at ./apps/game-server/src/native_ws_e2e/referee.rs:117:73
+  28: call_once<game_server::native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart::{closure_env#0}, ()>
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/ops/function.rs:250:5
+  29: <fn() -> core::result::Result<(), alloc::string::String> as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart ... FAILED
+
+failures:
+
+failures:
+    native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 75 filtered out; finished in 1.12s
+

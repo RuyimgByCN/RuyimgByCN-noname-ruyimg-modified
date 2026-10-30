@@ -1,0 +1,36 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.65s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 3 tests
+NONOBSERVER_SHAN original=35 sampled=97 kind=FireSha
+
+thread 'nc10_redaction_helper_contract::nonobserver_shan_window_retains_restorable_filtered_options' (9231307) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:295:6:
+non-observer helper preserves sampled choice restoration: OpenChoiceMismatch { observer: 1 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc10_redaction_helper_contract::nonobserver_shan_window_retains_restorable_filtered_options ... FAILED
+VM_SENTINEL move=true source=46 sampled=0 moved=false
+
+thread 'nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract' (9231308) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:214:5:
+accepted nonzero pending card effect must survive helper sampling
+VM_SENTINEL move=false source=46 sampled=0 moved=false
+
+thread 'nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract' (9231309) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:214:5:
+accepted nonzero pending card effect must survive helper sampling
+test nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract ... FAILED
+test nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract ... FAILED
+
+failures:
+
+failures:
+    nc10_redaction_helper_contract::nonobserver_shan_window_retains_restorable_filtered_options
+    nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract
+    nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 144 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_redaction_helper_contract", "--", "--nocapture"], "exit": 101, "locked_seconds": 8.697186208009953}

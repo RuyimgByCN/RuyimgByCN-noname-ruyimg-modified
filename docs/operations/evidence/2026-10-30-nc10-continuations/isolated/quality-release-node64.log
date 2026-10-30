@@ -1,0 +1,362 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling cfg-if v1.0.4
+   Compiling serde v1.0.228
+   Compiling arrayvec v0.7.8
+   Compiling thiserror v2.0.18
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling libc v0.2.186
+   Compiling cc v1.2.66
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling bitflags v2.13.0
+   Compiling fastrand v2.4.1
+   Compiling once_cell v1.21.4
+   Compiling errno v0.3.14
+   Compiling blake3 v1.8.5
+   Compiling syn v2.0.118
+   Compiling tempfile v3.27.0
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-native-loader)
+    Finished `release` profile [optimized] target(s) in 58.77s
+     Running tests/groups/nc_rounds.rs (../target/release/deps/nc_rounds-ffa7baea2200417b)
+
+running 1 test
+test nc12_ai_strength_baseline::nc10_quality_matrix_production ... QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=0 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=1 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=2 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=3 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=2 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=3 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=2244 samples=2244 rejected=0 faults=0 nodes=4396 exhausted=0 zero_node=0 p50_ns=5333 p95_ns=20500 p99_ns=28167
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=280 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=245 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=324 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=181 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=2 role=None steps=216 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=3 role=None steps=339 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=false variant=1 depth=1 games=8 finished=7 challenger_wins=5 steps=2619 samples=2619 rejected=0 faults=0 nodes=8215 exhausted=0 zero_node=0 p50_ns=5792 p95_ns=39958 p99_ns=63625
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=280 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=245 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=324 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=181 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=2 role=None steps=216 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=3 role=None steps=339 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=false variant=1 depth=2 games=8 finished=7 challenger_wins=5 steps=2619 samples=2619 rejected=0 faults=0 nodes=9169 exhausted=0 zero_node=0 p50_ns=5958 p95_ns=42958 p99_ns=72458
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=2 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=3 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1528 samples=1528 rejected=0 faults=0 nodes=3324 exhausted=0 zero_node=0 p50_ns=5209 p95_ns=21167 p99_ns=34209
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=0 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=1 role=None steps=204 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=2 role=None steps=237 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=3 role=None steps=113 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=0 role=None steps=168 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=1 role=None steps=125 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=2 role=None steps=472 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=3 role=None steps=392 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=true variant=1 depth=1 games=8 finished=7 challenger_wins=4 steps=2511 samples=2511 rejected=0 faults=0 nodes=8146 exhausted=0 zero_node=0 p50_ns=6292 p95_ns=41500 p99_ns=68042
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=0 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=1 role=None steps=204 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=2 role=None steps=237 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=3 role=None steps=151 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=0 role=None steps=141 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=1 role=None steps=159 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=2 role=None steps=472 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=3 role=None steps=392 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY budget=64 seats=4 identity=false skills=true variant=1 depth=2 games=8 finished=7 challenger_wins=4 steps=2556 samples=2556 rejected=0 faults=0 nodes=9863 exhausted=0 zero_node=0 p50_ns=6750 p95_ns=49417 p99_ns=87083
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1104 samples=1104 rejected=0 faults=0 nodes=2288 exhausted=0 zero_node=0 p50_ns=4500 p95_ns=17709 p99_ns=26291
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=447 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=244 winner=Some(Outcome { winner: Traitor })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=99 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=254 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=81 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=111 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=84 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=false variant=1 depth=1 games=8 finished=8 challenger_wins=4 steps=1384 samples=1384 rejected=0 faults=0 nodes=4742 exhausted=0 zero_node=0 p50_ns=5208 p95_ns=48709 p99_ns=72166
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=800 winner=None
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=141 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=254 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=81 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=111 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=84 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=false variant=1 depth=2 games=8 finished=6 challenger_wins=2 steps=2335 samples=2335 rejected=0 faults=0 nodes=8541 exhausted=0 zero_node=0 p50_ns=5792 p95_ns=48375 p99_ns=80209
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=3 steps=1072 samples=1072 rejected=0 faults=0 nodes=2428 exhausted=0 zero_node=0 p50_ns=4916 p95_ns=20417 p99_ns=46167
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=224 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=147 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=221 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=209 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=141 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=144 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=300 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=true variant=1 depth=1 games=8 finished=8 challenger_wins=4 steps=1480 samples=1480 rejected=0 faults=0 nodes=5138 exhausted=0 zero_node=0 p50_ns=5750 p95_ns=56125 p99_ns=80500
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=214 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=226 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=233 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=209 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=141 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=131 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=131 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=800 winner=None
+QUALITY_SUMMARY budget=64 seats=4 identity=true skills=true variant=1 depth=2 games=8 finished=7 challenger_wins=4 steps=2085 samples=2085 rejected=0 faults=0 nodes=7648 exhausted=0 zero_node=0 p50_ns=6250 p95_ns=52084 p99_ns=92125
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=0 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=1 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=2 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=3 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=4 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=5 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=6 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=7 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=2 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=3 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=4 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=5 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=6 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=7 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=false variant=0 depth=1 games=16 finished=16 challenger_wins=2 steps=7952 samples=7952 rejected=0 faults=0 nodes=21176 exhausted=0 zero_node=0 p50_ns=6083 p95_ns=33208 p99_ns=63833
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=537 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=698 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=475 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=424 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=4 role=None steps=425 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=5 role=None steps=405 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=6 role=None steps=464 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=7 role=None steps=463 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=434 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=468 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=2 role=None steps=638 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=3 role=None steps=525 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=4 role=None steps=494 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=5 role=None steps=536 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=6 role=None steps=499 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=7 role=None steps=488 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=false variant=1 depth=1 games=16 finished=16 challenger_wins=11 steps=7973 samples=7973 rejected=0 faults=0 nodes=29671 exhausted=0 zero_node=0 p50_ns=6500 p95_ns=59958 p99_ns=132709
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=410 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=738 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=435 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=598 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=4 role=None steps=425 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=5 role=None steps=478 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=6 role=None steps=441 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=7 role=None steps=486 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=438 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=418 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=2 role=None steps=650 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=3 role=None steps=475 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=4 role=None steps=421 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=5 role=None steps=441 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=6 role=None steps=538 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=7 role=None steps=525 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=false variant=1 depth=2 games=16 finished=16 challenger_wins=13 steps=7917 samples=7917 rejected=0 faults=0 nodes=33574 exhausted=27 zero_node=0 p50_ns=6750 p95_ns=62042 p99_ns=150792
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=4 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=5 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=6 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=7 role=None steps=573 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=2 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=3 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=4 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=5 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=6 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=7 role=None steps=451 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=true variant=0 depth=1 games=16 finished=16 challenger_wins=2 steps=8192 samples=8192 rejected=0 faults=0 nodes=21656 exhausted=0 zero_node=0 p50_ns=7375 p95_ns=39250 p99_ns=71875
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=0 role=None steps=512 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=1 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=2 role=None steps=612 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=3 role=None steps=423 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=4 role=None steps=377 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=5 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=6 role=None steps=531 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=7 role=None steps=546 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=0 role=None steps=384 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=1 role=None steps=505 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=2 role=None steps=578 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=3 role=None steps=457 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=4 role=None steps=751 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=5 role=None steps=592 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=6 role=None steps=534 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=7 role=None steps=404 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=true variant=1 depth=1 games=16 finished=14 challenger_wins=10 steps=8806 samples=8806 rejected=0 faults=0 nodes=32076 exhausted=0 zero_node=0 p50_ns=7750 p95_ns=62250 p99_ns=142334
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=0 role=None steps=401 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=1 role=None steps=611 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=2 role=None steps=576 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=3 role=None steps=409 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=4 role=None steps=414 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=5 role=None steps=711 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=6 role=None steps=581 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=7 role=None steps=408 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=0 role=None steps=361 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=1 role=None steps=585 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=2 role=None steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=3 role=None steps=410 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=4 role=None steps=522 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=5 role=None steps=375 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=6 role=None steps=534 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME budget=64 seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=7 role=None steps=388 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY budget=64 seats=8 identity=false skills=true variant=1 depth=2 games=16 finished=15 challenger_wins=10 steps=8086 samples=8086 rejected=0 faults=0 nodes=34378 exhausted=40 zero_node=0 p50_ns=7958 p95_ns=70583 p99_ns=178083
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=433 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=2 role=Some(Rebel) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=3 role=Some(Loyalist) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=170 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=false variant=0 depth=1 games=16 finished=16 challenger_wins=8 steps=4824 samples=4824 rejected=0 faults=0 nodes=14808 exhausted=0 zero_node=0 p50_ns=5750 p95_ns=38458 p99_ns=88417
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=491 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=402 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=165 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=317 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=309 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=383 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=263 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=368 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=122 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=2 role=Some(Rebel) steps=671 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=3 role=Some(Loyalist) steps=130 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=139 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=174 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=171 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=155 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=false variant=1 depth=1 games=16 finished=15 challenger_wins=9 steps=5060 samples=5060 rejected=0 faults=0 nodes=21681 exhausted=0 zero_node=0 p50_ns=6333 p95_ns=72583 p99_ns=158500
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=614 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=165 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=3 role=Some(Rebel) steps=405 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=4 role=Some(Loyalist) steps=309 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=5 role=Some(Rebel) steps=320 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=6 role=Some(Rebel) steps=341 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=7 role=Some(Loyalist) steps=335 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=370 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=164 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=2 role=Some(Rebel) steps=310 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=3 role=Some(Loyalist) steps=130 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=4 role=Some(Rebel) steps=177 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=5 role=Some(Rebel) steps=118 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=6 role=Some(Traitor) steps=232 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=7 role=Some(Rebel) steps=167 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=false variant=1 depth=2 games=16 finished=15 challenger_wins=8 steps=4957 samples=4957 rejected=0 faults=0 nodes=24702 exhausted=39 zero_node=0 p50_ns=6541 p95_ns=86833 p99_ns=173750
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=486 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=2 role=Some(Rebel) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=3 role=Some(Loyalist) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=461 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=true variant=0 depth=1 games=16 finished=16 challenger_wins=7 steps=7576 samples=7576 rejected=0 faults=0 nodes=21040 exhausted=0 zero_node=0 p50_ns=7250 p95_ns=40333 p99_ns=78708
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=453 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=379 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=510 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=458 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=312 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=538 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=463 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=360 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=547 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=644 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=2 role=Some(Rebel) steps=456 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=3 role=Some(Loyalist) steps=338 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=230 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=652 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=176 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=800 winner=None
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=true variant=1 depth=1 games=16 finished=15 challenger_wins=10 steps=7316 samples=7316 rejected=0 faults=0 nodes=29383 exhausted=0 zero_node=0 p50_ns=7750 p95_ns=69875 p99_ns=170042
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=522 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=458 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=3 role=Some(Rebel) steps=376 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=4 role=Some(Loyalist) steps=390 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=5 role=Some(Rebel) steps=357 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=6 role=Some(Rebel) steps=437 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=7 role=Some(Loyalist) steps=337 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=586 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=355 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=2 role=Some(Rebel) steps=311 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=3 role=Some(Loyalist) steps=370 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=4 role=Some(Rebel) steps=412 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=5 role=Some(Rebel) steps=800 winner=None
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=6 role=Some(Traitor) steps=271 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME budget=64 seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=7 role=Some(Rebel) steps=800 winner=None
+QUALITY_SUMMARY budget=64 seats=8 identity=true skills=true variant=1 depth=2 games=16 finished=13 challenger_wins=6 steps=7582 samples=7582 rejected=0 faults=0 nodes=34163 exhausted=47 zero_node=0 p50_ns=7916 p95_ns=73542 p99_ns=195208
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 141 filtered out; finished in 2.10s
+
+{"command": ["cargo", "test", "--offline", "--release", "-p", "engine-native", "--test", "nc_rounds", "nc10_quality_matrix_production", "--", "--ignored", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 60.92155708299833}

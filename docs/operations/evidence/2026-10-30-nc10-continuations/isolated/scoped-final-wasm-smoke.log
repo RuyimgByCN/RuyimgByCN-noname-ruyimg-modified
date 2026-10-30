@@ -1,0 +1,13 @@
+PASS build | ruleset=v328 players=4
+PASS view_own_hand | own=4
+PASS view_hidden_hand | {"hidden":true}
+PASS view_deck_count_only | deck=108
+PASS view_per_seat
+PASS auto_game_progress | steps=235 finished=true answers=39
+PASS auto_suspended_none_or_resumable | suspended=0
+PASS restore_view_equal | mid-save restore per-view equal
+PASS restore_matches_same_seed | same-seed 60 steps equal restored view
+PASS dual_instance_determinism | hash_equal=true
+PASS choice_visibility_own_and_other | own=true other=true
+{"total":11,"failed":0,"results":[{"name":"build","ok":true,"detail":"ruleset=v328 players=4"},{"name":"view_own_hand","ok":true,"detail":"own=4"},{"name":"view_hidden_hand","ok":true,"detail":"{\"hidden\":true}"},{"name":"view_deck_count_only","ok":true,"detail":"deck=108"},{"name":"view_per_seat","ok":true,"detail":""},{"name":"auto_game_progress","ok":true,"detail":"steps=235 finished=true answers=39"},{"name":"auto_suspended_none_or_resumable","ok":true,"detail":"suspended=0"},{"name":"restore_view_equal","ok":true,"detail":"mid-save restore per-view equal"},{"name":"restore_matches_same_seed","ok":true,"detail":"same-seed 60 steps equal restored view"},{"name":"dual_instance_determinism","ok":true,"detail":"hash_equal=true"},{"name":"choice_visibility_own_and_other","ok":true,"detail":"own=true other=true"}]}
+{"command": ["node", "scripts/native_wasm_smoke.mjs"], "exit": 0, "locked_seconds": 0.09434974999749102}

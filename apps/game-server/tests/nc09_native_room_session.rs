@@ -150,7 +150,7 @@ fn nc09_choice_tokens_roundtrip_through_session_and_authoritative_actions() {
     let mut room = session_with_choice();
     let open = room.engine().open_choice().unwrap().clone();
     let joined = room.join(1, Some(open.observer), None).unwrap();
-    let choice = native_view::choice_for(room.engine(), Some(joined.member.player_id)).unwrap();
+    let choice = native_view::choice_for(room.engine(), joined.member.role.into(), Some(joined.member.player_id)).unwrap();
     assert_eq!(
         choice.options.iter().map(|o| o.token).collect::<Vec<_>>(),
         (0..open.spec.options.len() as u32).collect::<Vec<_>>()
@@ -721,4 +721,36 @@ fn nc09_referee_general_authority_survives_trusted_restore_and_reconnect() {
     let spec = restored.spectate(101);
     assert_eq!(spec.member.role, ClientRole::Spectator);
     assert_eq!(spec.view.seats[1].character_def, 0);
+}
+
+#[test]
+fn nc09_choice_rejects_invalid_player_ids_without_wrapping() {
+    let mut engine = engine_native::Engine::new(1515, 4);
+    for _ in 0..3 {
+        let result = engine.submit(engine_native::GameCommand {
+            actor: 0, expected_revision: engine.revision(), dedup_id: engine.revision() + 1,
+            action: engine_native::GameAction::NextPhase,
+        });
+        assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)));
+    }
+    let room = NativeRoomSession::new(engine, 4);
+    assert_eq!(room.engine().open_choice().unwrap().observer, 0);
+    for raw in [0, 257, u32::MAX] {
+        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Player, Some(ApiPlayerId::new(raw))).is_none(),
+            "invalid player id {raw} exposed seat-zero private options");
+        assert!(native_view::legal_actions_for(room.engine(), ApiPlayerId::new(raw)).is_empty());
+    }
+}
+
+#[test]
+fn nc09_choice_visibility_requires_trusted_role_even_with_a_valid_seat() {
+    let room = session_with_choice();
+    let open = room.engine().open_choice().unwrap();
+    let owner = ApiPlayerId::new(open.observer as u32 + 1);
+    for seat in [None, Some(ApiPlayerId::NONE), Some(owner), Some(ApiPlayerId::new(257))] {
+        assert!(native_view::choice_for(room.engine(), native_view::RoomRole::Spectator, seat).is_none());
+        let choice = native_view::choice_for(room.engine(), native_view::RoomRole::Referee, seat).unwrap();
+        assert_eq!(choice.observer, owner);
+        assert_eq!(choice.options.len(), open.spec.options.len());
+    }
 }

@@ -1,0 +1,10 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.57s
+     Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/deps/misc-129eb0d7396969d0)
+
+running 1 test
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 187 filtered out; finished in 0.01s
+
+{"command": ["env", "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target", "NC09_MACHINE_ARCHIVE_OUT=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/archive-before", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::archive_encoding_rejects_unknown_prompts", "--", "--nocapture"], "exit": 0, "locked_seconds": 1.6477984589873813}

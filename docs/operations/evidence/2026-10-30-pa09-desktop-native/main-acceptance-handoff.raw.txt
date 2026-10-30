@@ -1,0 +1,288 @@
+PA09 / Referee main acceptance after disk recovery — 2026-10-30T03:41:30.728212+00:00
+
+The authorized remaining functional acceptance checks completed successfully. The original run remains a terminal ENOSPC failure; recovery evidence is separate. One recovery invocation used an unregistered Cargo target and failed before tests ran; the registered command was then executed successfully. No maintained source, configuration, expected value, golden, or frozen package was edited by this worker.
+
+Validated main HEAD `100489f554fe89d3389e35196947d9070673c2a1` with its existing dirty integrated tree, rules **328**, archive **105**, ABI **753**, WS **5**. The **25 existing NativeEngine public wrapper methods** remain unchanged; J2 is not integrated and desktop default remains WASM. Actual host: macOS-27.2-arm64-arm-64bit; rustc 1.95.0 (59807616e 2026-04-14); v26.4.0.
+
+Completed results:
+
+| Check | Result | Raw evidence |
+|---|---|---|
+| Retained original integrated six packages | **2143 passed / 0 failed / 74 ignored**, completed exit0; no rerun | [validation-integrated-six-packages.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-integrated-six-packages.log) |
+| workspace | exit 0: 6782 passed / 0 failed / 75 ignored; full workspace, no-fail-fast | [recovery-workspace.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-workspace.log) |
+| strict-native-all3 | exit 0: Independent check target; all 3 native packages/all targets; -Dwarnings; zero warnings | [recovery-strict-native-all3.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-strict-native-all3.log) |
+| native-layering | exit 0: 0 upward references <= BASELINE 0 | [recovery-native-layering.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-native-layering.log) |
+| wasm-web-build | exit 0: Current release/web native WASM rebuilt; original --no-opt arguments retained | [recovery-wasm-web-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-wasm-web-build.log) |
+| worker-final | exit 0: 82 checks / 0 failed using freshly generated WASM | [recovery-worker-final.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-worker-final.log) |
+| frontend-after-wasm | exit 0: 146 passed / 0 failed / 0 skipped | [recovery-frontend-after-wasm.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-frontend-after-wasm.log) |
+| typecheck | exit 0: Completed successfully | [recovery-typecheck.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-typecheck.log) |
+| frontend-build | exit 0: Completed successfully | [recovery-frontend-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-frontend-build.log) |
+| conformance | exit 0: ALL PASS; 19 named OK vectors | [recovery-conformance.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-conformance.log) |
+| empty-hujia-native-vector | exit 0: Exact current fixture: 8 seats/seed45000/step11/observer4/id3; native manual empty answer equals auto_step | [recovery-empty-hujia-native-vector.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-native-vector.log) |
+| native-wasm-cross | exit 0: Native/WASM trajectory + formal package comparison; 2 Rust tests / 0 failures; save/restore parity | [recovery-native-wasm-cross.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-native-wasm-cross.log) |
+| empty-hujia-wasm32 | exit 0: Actual web-target WASM: complete reply/archive/auth generation/16 choices/hash/revision/events match native empty answer | [recovery-empty-hujia-wasm32.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-wasm32.log) |
+| legacy-cross | exit 0: Entire cross-target-hash.sh completed, including current legacy web-WASM rebuild and matching start hashes | [recovery-legacy-cross.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-legacy-cross.log) |
+| source-line-units | exit 0: 2 tests passed | [recovery-source-line-units.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-source-line-units.log) |
+| source-lines | exit 0: 8951 files <=2000 physical lines; Rust non-test <=1000 effective lines | [recovery-source-lines.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-source-lines.log) |
+| machine-fixtures | exit 101: FAILED invocation: no test target named nc09. Preserved; corrected registered misc invocation follows. | [recovery-machine-fixtures.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine-fixtures.log) |
+| machine-fixtures-registered-misc | exit 0: 18 passed / 0 failed / 0 ignored; fresh five-window traces/archives emitted | [recovery-machine-fixtures-registered-misc.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine-fixtures-registered-misc.log) |
+| machine-wasm | exit 0: 5 windows / 75 state comparisons / 270 seat checks / 35 commands / 40 archive restarts / 0 failed | [recovery-machine-wasm.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine-wasm.log) |
+| ordinary-fixtures | exit 0: 5 fresh same-archive server projection fixtures emitted | [recovery-ordinary-fixtures.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-fixtures.log) |
+| ordinary-wasm | exit 0: 5 fixtures / 40 comparisons / 32 privacy checks / 0 failed | [recovery-ordinary-wasm.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-wasm.log) |
+| desktop-debug-build | exit 0: Actual tauri-shell debug executable built; evidence copy + SHA preserved | [recovery-desktop-debug-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-desktop-debug-build.log) |
+| reload-fixture-build | exit 0: Current main reload fixture bundled to private temporary dist; later archived and retired | [recovery-reload-fixture-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-reload-fixture-build.log) |
+| reload-webview | exit 0: Actual WKWebView: 12 reloads / 13 documents; stale IDs rejected; unrelated image retained; next independent client succeeds | [recovery-reload-webview.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-reload-webview.log) |
+| lifecycle-fixture-build | exit 0: Current main full trajectory/VM fixture bundled; later archived and retired | [recovery-lifecycle-fixture-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-lifecycle-fixture-build.log) |
+| lifecycle-webview | exit 0: Actual native IPC vs real Worker: 280-step identity terminal parity, cross-restores and formal VM lifecycle passed | [recovery-lifecycle-webview.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-lifecycle-webview.log) |
+| desktop-release-build | exit 0: Actual production tauri-shell release executable built; evidence copy + SHA preserved | [recovery-desktop-release-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-desktop-release-build.log) |
+| preflight-final | exit 0: Full final preflight: 21/21 gates passed, including full script unit suite and strict document references | [recovery-preflight-final.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-preflight-final.log) |
+
+Counts are completed-command counts. The retained six-package subtotals are native engine/kernel/content **1665/0/73** (1658 + 3 + 4 passed), native WASM **76/0/0**, game-server **383/0/0**, desktop **19/0/1**. Full workspace contains **75 ignored** tests: native73, desktop1, legacy engine-core1. Complete target-by-target results and exact ignored test names remain in [recovery-retained-six-by-crate.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-retained-six-by-crate.json) and [recovery-workspace-detailed-results.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-workspace-detailed-results.json). Compiler warning output is preserved verbatim; only the independent three-package strict check claims zero warnings. Native WASM helper warnings and duplicated attributes were not suppressed or fixed.
+
+The real WKWebView reload report proves 12 actual navigations across13 documents, refusal of each prior document resource, retention of an unrelated image resource, and a new independent client after the last navigation. All12 navigation snapshots show8 pending native requests plus2 pending opens, with zero settled at navigation. The full IPC/Worker report reached **RebelWin after280 steps**, terminal hash `0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f`. It also executed packagev1 installation, VM effects, frozen-install rejection, upgrade tov2, enable/disable/uninstall, old frozen-content restoration, rejection of a mismatched-version archive without destroying the live archive, active/play operations, validator isolation, resource-close refusals, and explicit real WASM Worker fallback. Reports: [validation-pa09-document-reload-recovery-report.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-pa09-document-reload-recovery-report.json), [validation-pa09-document-reload-recovery-pending.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-pa09-document-reload-recovery-pending.json), [validation-pa09-desktop-webview-recovery-report.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-pa09-desktop-webview-recovery-report.json).
+
+The added empty-Hujia check uses the exact current Rust fixture, with **8 seats, seed45000, step11, observer4, choiceID3, options=[], min0, allowCancel=false**. Its temporary Cargo harness used current path dependencies and current locked dependency versions/sources. A native manual `answer(observer,id,[])` and native `auto_step` first had to match. The generated web-target JS then initialized the actual rebuilt wasm32 bytes and ran `restore_hex → auto_step`: full reply string/JSON, complete archive hex, restored authorization generation, all16 before/after seat choices, state hash, revision and event codes matched. Result: hash `7a1f3687d25df1395d81c1e127e4000f2568947e3d40a06a19d6181ed61db58c`, revision12, codes `[10,4,10]`. This is actual wasm32 execution in Node, distinct from the host NativeEngine test; the separate WKWebView test executes the actual Worker. Evidence: [recovery-empty-hujia-vector.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json), [recovery-empty-hujia-wasm-report.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-wasm-report.json), [recovery-empty-hujia-harness/dependency-lock-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-harness/dependency-lock-audit.json). Optional old-WASM negative control was not pursued.
+
+Source integrity and environment:
+
+Source thaw boundary: **2026-10-30T03:42:54.552983+00:00**. No further worker source/build use remains. Parent may now apply its isolated changes; this evidence remains scoped to the exact validated snapshot. Latest maintained manifest covers **20720 files**, aggregate SHA256 `8f59ccff676b529f108e872240259a2bd929663b4ac8854160fa9c39d6db36af`: [maintained hashes](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-maintained-source-hashes-final.json), [thaw / restoration audit](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-thaw-boundary.json). Generated tracked changes remaining: **none**; all37 tracked dist files are at exact HEAD bytes.
+
+- Full before/after manifests each contain **32598 files**: [validation-before-source-hashes.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-before-source-hashes.json) and [recovery-after-source-hashes.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-after-source-hashes.json). Only the parent’s expected `docs/architecture/native-progress.md` and `docs/architecture/native-remaining-ledger.md` differ; no Rust/TS/DSL or other non-Markdown file changed. [recovery-source-difference.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-source-difference.json).
+- Non-Markdown aggregate SHA256 before = after: `faa024d4ba9c55c9fc8cbb837badaf52453308877be5b2faaf561681b2819e6d`. [recovery-frozen-source-aggregate.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-frozen-source-aggregate.json). No staged files; [recovery-git-status.txt](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-git-status.txt).
+- Recovery compilation and child script spawns use `CARGO_INCREMENTAL=0`, `CARGO_BUILD_JOBS=2`, the same owned stage3 target, and the global serialized lock. Strict check alone uses its independent small check target and approved `-Dwarnings`. Preload changed only the hardcoded child `CARGO_TARGET_DIR`; script spread preserved incremental0 and original WASM arguments/Rust flags. [validation-build-child-argv.jsonl](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-build-child-argv.jsonl). Lock-scoped command durations are functional-check logs, not benchmark or cold-build evidence.
+- The final production dist contains exact matches for both freshly rebuilt WASM packages, verified before release embedding. [recovery-production-dist-wasm-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-production-dist-wasm-audit.json). All37 tracked generated dist files were restored to exact HEAD bytes after preserving the current and prior generated frontend outputs. [recovery-dist-restored-exact-head.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-dist-restored-exact-head.json).
+
+Preserved build artifacts:
+
+| Artifact | Bytes | SHA256 |
+|---|---:|---|
+| [recovery-artifacts/debug-noname-next-desktop](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/debug-noname-next-desktop) | 43507400 | `46b122a3e4084ed3018b3f456f81ac6e7f277a864a3f2ca575dacf9739e3d0ba` |
+| [recovery-artifacts/release-noname-next-desktop](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/release-noname-next-desktop) | 11433712 | `873a68efbde540a57fdf53ed61704510a58b6a90b690837a3199d063f975ba8a` |
+| Fresh native web WASM | 3409008 | `0a50a161dbb1eca898edf001f97eef94904f0af8e29b98f00823e9071031205e` |
+| Fresh legacy web WASM | 15373760 | `65408f5a118c0399efdc469caac9ae6a9a661f2fae79c84f21c6a658b467c485` |
+
+Native/legacy WASM packages, both compiled real-WebView fixtures, generated frontend versions, and debug/release executables are preserved in `recovery-artifacts`; full artifact checksum index: [recovery-artifact-hashes.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifact-hashes.json). Raw source of the temporary harness/comparator and lockfile are retained for reproduction.
+
+Disk cleanup and retirement:
+
+- After subsequent compilation, free space and retention reasons were recorded. New incremental directories have zero entries; the WASM script’s temporary package directory was already removed by its normal finally block. [recovery-post-compile-cleanup.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-post-compile-cleanup.json).
+- Archived then deleted only private disposable compiled outputs: `/tmp/pa09-validation-webview/pa09-document-reload-dist`, `/tmp/pa09-validation-webview/pa09-desktop-webview-dist`, and `/tmp/pa09-validation-dist-before`. No maintained source, patch, log, frozen package, shared target or full private target was deleted by this worker.
+- Parent-unified retirement is now safe from this worker’s perspective: all downstream checks are done, copies secured, and `lsof +D` returned1 with empty stdout/stderr for both exact targets. Parent should recheck current ownership before deleting them. [recovery-target-retirement.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-target-retirement.json).
+  - Stage3 target: `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target`; **3766600KiB**.
+  - Independent strict target: `/tmp/noname-pa09-parent-gate-9e6c6232`; **75176KiB**.
+- Final observed free space: **161.49GiB**. External free-space changes are not attributed to this worker’s small cleanup. Shared normal main WASM packages/generated assets remain outside private-cache cleanup ownership.
+
+Retained failures and limits:
+
+- Original interrupted six-package60s attempt remains indexed as incomplete, without inferred passing counts. The later completed six-package2143/0/74 exit0 was retained exactly.
+- Pre-recovery workspace log contains actual ENOSPC/query-cache/LLVM IO failures and lacks a completed exit sentinel. Exact bytes are preserved and indexed as failed/incomplete, not passed: [validation-workspace.failed-enospc-retained.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.failed-enospc-retained.log) and [recovery-failed-command-index.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-failed-command-index.json). Recovery full workspace subsequently completed6782/0/75.
+- Recovery `machine-fixtures` exit101 was a command-selection error (`no test target named nc09`); its raw failure is preserved. Registry verification selected `--test misc nc09_machine_ownership::`, which completed18/0/0 and emitted the new fixtures. No source fix or expected-value change was made.
+- The six-condition PA09 default-switch acceptance remains **unmet**. This run provides functional proof for specific paths; it does not provide controlled physical HID/i2p or IPC-vs-Worker performance, a same-workload thread-pool benefit, or the same-seed full server-process trajectory. Windows/Linux and GitHub Actions were not run. No permission API, GPU instrumentation or HID capture was invoked. Upstream equivalence and37-source completion are not claimed.
+
+Recommended next step: independently review these current-source results, update the parent’s final progress evidence while retaining WASM default, and reclaim the two completed private targets through the parent’s coordinated cleanup. Documentation edits after this final snapshot require the corresponding final document/preflight checks again.
+
+Skipped: optional old-WASM negative control, physical input/performance, Windows/Linux and CI. Risk: existing ignored tests/warnings and the unmet default-switch conditions remain.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Completed authorized remaining validation and temporary empty-Hujia WASM32 harness only; no maintained source/config/golden changes. Original six-package pass retained."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "27 indexed completed recovery commands (26 exit0, one corrected invocation error), raw historical failures, actual WebView reports, artifact copies+SHA, full before/after source manifests and no-staged proof provided."
+    }
+  ],
+  "changedFiles": [
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3f117aeb-282a-4138-9c2f-1cff7731bec2/verification/pa09-referee-main-acceptance-after-disk-recovery.md",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-command-results.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-final-summary.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-after-source-hashes.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-source-difference.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifact-hashes.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-target-retirement.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-post-compile-cleanup.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-wasm-report.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-maintained-source-hashes-final.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-thaw-boundary.json"
+  ],
+  "testsAddedOrUpdated": [
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-harness/main.rs",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-harness/verify.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p game-server -p desktop-client --features desktop-client/tauri-shell --no-fail-fast",
+      "result": "passed",
+      "summary": "Retained original completed exit0 result: 2143/0/74; not rerun because source hashes unchanged"
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6782 passed / 0 failed / 75 ignored; full workspace, no-fail-fast; log=recovery-workspace.log"
+    },
+    {
+      "command": "cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Independent check target; all 3 native packages/all targets; -Dwarnings; zero warnings; log=recovery-strict-native-all3.log"
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "result": "passed",
+      "summary": "0 upward references <= BASELINE 0; log=recovery-native-layering.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client build:native",
+      "result": "passed",
+      "summary": "Current release/web native WASM rebuilt; original --no-opt arguments retained; log=recovery-wasm-web-build.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client smoke:native",
+      "result": "passed",
+      "summary": "82 checks / 0 failed using freshly generated WASM; log=recovery-worker-final.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client test",
+      "result": "passed",
+      "summary": "146 passed / 0 failed / 0 skipped; log=recovery-frontend-after-wasm.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client typecheck",
+      "result": "passed",
+      "summary": "Completed exit0; log=recovery-typecheck.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client build",
+      "result": "passed",
+      "summary": "Completed exit0; log=recovery-frontend-build.log"
+    },
+    {
+      "command": "cargo run --offline -p conformance",
+      "result": "passed",
+      "summary": "ALL PASS; 19 named OK vectors; log=recovery-conformance.log"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /tmp/pa09-empty-hujia/Cargo.toml -- /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json",
+      "result": "passed",
+      "summary": "Exact current fixture: 8 seats/seed45000/step11/observer4/id3; native manual empty answer equals auto_step; log=recovery-empty-hujia-native-vector.log"
+    },
+    {
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "result": "passed",
+      "summary": "Native/WASM trajectory + formal package comparison; 2 Rust tests / 0 failures; save/restore parity; log=recovery-native-wasm-cross.log"
+    },
+    {
+      "command": "node /tmp/pa09-empty-hujia/verify.mjs /Users/ruyimg/Documents/Claude/sanguosha/noname-next /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-vector.json /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-empty-hujia-wasm-report.json",
+      "result": "passed",
+      "summary": "Actual web-target WASM: complete reply/archive/auth generation/16 choices/hash/revision/events match native empty answer; log=recovery-empty-hujia-wasm32.log"
+    },
+    {
+      "command": "bash scripts/cross-target-hash.sh",
+      "result": "passed",
+      "summary": "Entire cross-target-hash.sh completed, including current legacy web-WASM rebuild and matching start hashes; log=recovery-legacy-cross.log"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "result": "passed",
+      "summary": "2 tests passed; log=recovery-source-line-units.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "8951 files <=2000 physical lines; Rust non-test <=1000 effective lines; log=recovery-source-lines.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test nc09 nc09_machine_ownership:: -- --nocapture",
+      "result": "failed",
+      "summary": "FAILED invocation: no test target named nc09. Preserved; corrected registered misc invocation follows.; log=recovery-machine-fixtures.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test misc nc09_machine_ownership:: -- --nocapture",
+      "result": "passed",
+      "summary": "18 passed / 0 failed / 0 ignored; fresh five-window traces/archives emitted; log=recovery-machine-fixtures-registered-misc.log"
+    },
+    {
+      "command": "node /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs /Users/ruyimg/Documents/Claude/sanguosha/noname-next /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine",
+      "result": "passed",
+      "summary": "5 windows / 75 state comparisons / 270 seat checks / 35 commands / 40 archive restarts / 0 failed; log=recovery-machine-wasm.log"
+    },
+    {
+      "command": "cargo run --offline -p game-server --example emit_projection_fixture -- /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json",
+      "result": "passed",
+      "summary": "5 fresh same-archive server projection fixtures emitted; log=recovery-ordinary-fixtures.log"
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/native-server-projection-parity.mjs /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-ordinary-projection.json",
+      "result": "passed",
+      "summary": "5 fixtures / 40 comparisons / 32 privacy checks / 0 failed; log=recovery-ordinary-wasm.log"
+    },
+    {
+      "command": "cargo build --offline -p desktop-client --features tauri-shell",
+      "result": "passed",
+      "summary": "Actual tauri-shell debug executable built; evidence copy + SHA preserved; log=recovery-desktop-debug-build.log"
+    },
+    {
+      "command": "node /tmp/pa09-validation-webview/build-webview.mjs pa09-document-reload",
+      "result": "passed",
+      "summary": "Current main reload fixture bundled to private temporary dist; later archived and retired; log=recovery-reload-fixture-build.log"
+    },
+    {
+      "command": "node /tmp/pa09-validation-webview/run-webview.mjs pa09-document-reload recovery",
+      "result": "passed",
+      "summary": "Actual WKWebView: 12 reloads / 13 documents; stale IDs rejected; unrelated image retained; next independent client succeeds; log=recovery-reload-webview.log"
+    },
+    {
+      "command": "node /tmp/pa09-validation-webview/build-webview.mjs pa09-desktop-webview",
+      "result": "passed",
+      "summary": "Current main full trajectory/VM fixture bundled; later archived and retired; log=recovery-lifecycle-fixture-build.log"
+    },
+    {
+      "command": "node /tmp/pa09-validation-webview/run-webview.mjs pa09-desktop-webview recovery",
+      "result": "passed",
+      "summary": "Actual native IPC vs real Worker: 280-step identity terminal parity, cross-restores and formal VM lifecycle passed; log=recovery-lifecycle-webview.log"
+    },
+    {
+      "command": "cargo build --offline --release -p desktop-client --features tauri-shell",
+      "result": "passed",
+      "summary": "Actual production tauri-shell release executable built; evidence copy + SHA preserved; log=recovery-desktop-release-build.log"
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "Full final preflight: 21/21 gates passed, including full script unit suite and strict document references; log=recovery-preflight-final.log"
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast (pre-recovery attempt)",
+      "result": "failed",
+      "summary": "Explicit ENOSPC/query-cache/LLVM IO failures; no completed exit sentinel. Exact log retained; no partial counts accepted."
+    }
+  ],
+  "validationOutput": [
+    "Retained six-package 2143/0/74; native3 subtotal1665/0/73, nativeWASM76/0/0, game-server383/0/0, desktop19/0/1",
+    "Recovery workspace6782/0/75; strict native3/alltargets -Dwarnings and layer0 passed",
+    "Worker82/0; frontend146/0; sourcecaps8951; full preflight21/21",
+    "Real WKWebView12 reloads/13documents; current realIPC/Worker280-step identity/VM lifecycle passed",
+    "Actual empty-Hujia WASM32 result hash7a1f3687d25df1395d81c1e127e4000f2568947e3d40a06a19d6181ed61db58c revision12 events[10,4,10]",
+    "32598-file source manifests differ only parent native-progress.md and native-remaining-ledger.md; no Rust/TS/DSL/non-Markdown changes; no staged files"
+  ],
+  "residualRisks": [
+    "Independent reviewer gate remains required; this report does not claim review approval.",
+    "Six-condition PA09 default-switch acceptance remains unmet; WASM default unchanged. No physical HID/i2p/IPC-vs-Worker performance or pool-benefit evidence, and no same-seed full server trajectory in this run.",
+    "Windows/Linux, physical hardware input, GPU instrumentation/permission APIs and GitHub Actions not run.",
+    "Workspace75 ignored tests remain: native73, desktop1, legacy engine-core1. Compiler warnings retained, including18 nativeWASM helper warnings and existing duplicated attributes.",
+    "Optional isolated pre-fix WASM negative control was not pursued; parent host red/green logs remain preserved."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Validation logs, fixtures/vectors, temporary evidence harness/comparator, source/artifact audits and required output report only. Generated production artifacts archived; 37 tracked dist files restored to exact HEAD bytes.",
+  "reviewFindings": [
+    "No source blocker found by completed functional acceptance; original ENOSPC failure and corrected --test nc09 invocation exit101 are explicitly retained.",
+    "No readiness/default-switch claim is made."
+  ],
+  "manualNotes": "CARGO_INCREMENTAL=0 and jobs2 used for all recovery compilation/script spawns; preload changed only CARGO_TARGET_DIR. Durations are lock-scoped functional-check times, not benchmark or cold-rebuild comparisons. No cache/deps/full target deleted by worker. Private compiled fixture outputs and prior generated-dist backup archived then retired. Parent can retire the two private targets after fresh ownership check; exact lsof/size audit linked. Source thaw boundary 2026-10-30T03:42:54.552983+00:00; no worker downstream source/build use remains; generated tracked changes remaining none."
+}
+```

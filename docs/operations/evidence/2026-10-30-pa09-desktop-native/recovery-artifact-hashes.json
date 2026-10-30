@@ -1,0 +1,38 @@
+{
+  "recovery-artifacts/pa09-desktop-webview-dist.tar.gz": {
+    "bytes": 13353641,
+    "sha256": "969ff29c6c432db00e34c12ca6357719d88510c64fd19dcbd7441cc8120e4096"
+  },
+  "recovery-artifacts/pa09-desktop-webview-dist-sha256.json": {
+    "bytes": 4422,
+    "sha256": "4247b2b320e5d1ede6025b2b43e5c1a835745be005dee952067daff4ffc6a60b"
+  },
+  "recovery-artifacts/pa09-document-reload-dist-sha256.json": {
+    "bytes": 4422,
+    "sha256": "3657f7257a2e9f0f2bdc64548d593febbda06c383343b159e8f7f250081826fc"
+  },
+  "recovery-artifacts/debug-noname-next-desktop": {
+    "bytes": 43507400,
+    "sha256": "46b122a3e4084ed3018b3f456f81ac6e7f277a864a3f2ca575dacf9739e3d0ba"
+  },
+  "recovery-artifacts/generated-dist-before-validation.tar.gz": {
+    "bytes": 7745806,
+    "sha256": "d8103d15ce449885b64f76764df69eb52fbde86b0dda77d8ffcdaee32559b9c0"
+  },
+  "recovery-artifacts/legacy-wasm-web-package.tar.gz": {
+    "bytes": 3390383,
+    "sha256": "182dcc50dd8795c61fb3f085f15a3a544498e2c0921f66c7a5f375e62fdfa972"
+  },
+  "recovery-artifacts/release-noname-next-desktop": {
+    "bytes": 11433712,
+    "sha256": "873a68efbde540a57fdf53ed61704510a58b6a90b690837a3199d063f975ba8a"
+  },
+  "recovery-artifacts/pa09-document-reload-dist.tar.gz": {
+    "bytes": 13349856,
+    "sha256": "dceacc0fdd06aad85311247eaa7bafcd8ad1562e58cf3cd0fcd3457a320ef102"
+  },
+  "recovery-artifacts/native-wasm-web-package.tar.gz": {
+    "bytes": 983027,
+    "sha256": "422fa7b71c3aa9efba34a149c3e6c4a83ef612719f725d41442c436b4e006fb7"
+  }
+}

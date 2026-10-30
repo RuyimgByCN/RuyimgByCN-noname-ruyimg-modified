@@ -18,6 +18,7 @@ pub(crate) fn active_ask_host(
     owner: PlayerId,
     target: Option<PlayerId>,
     targets: &[PlayerId],
+    card: Option<u32>,
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
@@ -28,6 +29,18 @@ pub(crate) fn active_ask_host(
     let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
     let stage = HostStage::from_tag(stage)?;
     match behavior {
+        HostBehavior::Liaoyuan => {
+            if stage != HostStage::SelectCard {
+                return None;
+            }
+            // Host.card is the suit scalar; Host.cards is already-discarded history.
+            let suit = card.filter(|suit| *suit <= 3)?;
+            let player = core.player(owner);
+            let options = player.hand.iter().chain(player.equips.iter()).copied()
+                .filter(|id| catalog.cards[*id as usize].suit as u32 == suit)
+                .map(ChoiceOption::Card).collect();
+            Some(ask(owner, "liaoyuan_discard", ChoiceKind::SelectCards, options, 1, 1, true))
+        }
         // 五行盘：改属性手牌 → 新属性
         HostBehavior::ChangeCardNature => match stage {
             HostStage::SelectNature => Some(ask(

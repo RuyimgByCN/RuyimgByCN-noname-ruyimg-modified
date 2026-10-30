@@ -1,0 +1,18 @@
+[
+  {
+    "name": "workspace-before-recovery",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "exit": null,
+    "status": "failed-incomplete-enospc",
+    "log": "validation-workspace.failed-enospc-retained.log",
+    "sha256": "fedc05aade8b9b7739ed4ec990b4ac34ca14220fd155eff1dbb3ea61f0248b16",
+    "counts": null,
+    "note": "Actual log contains ENOSPC/LLVM IO failures; no completed exit sentinel. No partial counts accepted."
+  }
+]

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 import {
   EXTENSION_CATALOG,
   extensionKey,
@@ -32,6 +32,7 @@ const importing = ref(false);
  * 服务端导入期拒绝一致；只校验不建局。校验 Worker 按需连接、页面内复用。
  */
 let validator: Promise<EngineClient> | null = null;
+onUnmounted(() => { void validator?.then((client) => client.dispose(), () => {}); });
 function validatorClient(): Promise<EngineClient> {
   validator ??= (async () => {
     const client = new EngineClient();

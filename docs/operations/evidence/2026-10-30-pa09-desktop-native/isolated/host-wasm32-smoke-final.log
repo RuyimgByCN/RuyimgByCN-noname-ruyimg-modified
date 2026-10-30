@@ -1,0 +1,14 @@
+{
+  "full_wasm32_native_steps": 280,
+  "terminal": {
+    "workload": "identity",
+    "step": 279,
+    "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+    "revision": 280,
+    "outcome": {
+      "RebelWin": null
+    }
+  },
+  "vm_lifecycle": "passed",
+  "transport": "actual native host over stdio through production IPC transport adapter (not a WebView measurement)"
+}

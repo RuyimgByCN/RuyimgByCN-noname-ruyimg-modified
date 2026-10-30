@@ -1,0 +1,534 @@
+diff --git a/crates/engine-native/Cargo.toml b/crates/engine-native/Cargo.toml
+index 7f707297..234dbaa2 100644
+--- a/crates/engine-native/Cargo.toml
++++ b/crates/engine-native/Cargo.toml
+@@ -12,9 +12,9 @@ autotests = false
+ blake3 = { workspace = true }
+ engine-native-kernel = { path = "../engine-native-kernel" }
+ engine-native-content = { path = "../engine-native-content" }
++rule-api = { workspace = true }
+ 
+ [dev-dependencies]
+-rule-api = { workspace = true }
+ rule-vm = { workspace = true }
+ blake3 = { workspace = true }
+ serde = { workspace = true }
+diff --git a/crates/engine-native/src/ai.rs b/crates/engine-native/src/ai.rs
+index 66cf9a63..21d24cde 100644
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -9,6 +9,7 @@ use crate::{CardKind, ChoiceOption, ChoiceView, CommandOutcome, GameAction, Game
+ use std::sync::atomic::{AtomicBool, Ordering};
+ use std::time::{Duration, Instant};
+ mod redact;
++mod remap;
+ pub use redact::*;
+ 
+ /// 单选候选枚举上限（防超大选项集撑爆候选向量；真实询问的选项数
+@@ -352,7 +353,7 @@ fn enumerate_candidates_variant(sim: &Engine, seat: u8, variant: u8) -> Vec<Game
+                     selection: options.iter().take(8).copied().collect(),
+                 });
+             }
+-        } else if min == 0 && allow_cancel && !options.is_empty() {
++        } else if min == 0 || allow_cancel {
+             candidates.push(GameAction::Answer {
+                 choice_id: id,
+                 selection: vec![],
+@@ -506,12 +507,42 @@ fn policy_score(
+     score
+ }
+ 
++// VM choices may retain private query results in locals or already queued effects.
++// Use the public prompt as the boundary so private continuation branches cannot select a policy.
++fn vm_choice_leaf(choice: &ChoiceView) -> bool {
++    let prompt = match choice {
++        ChoiceView::Own { prompt, .. } | ChoiceView::Other { prompt, .. } => prompt,
++    };
++    matches!(*prompt, "rvm_choice" | "rvm_discard_pick")
++}
++
++fn projected_choice_action(choice: ChoiceView) -> GameAction {
++    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
++        return GameAction::NextPhase;
++    };
++    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
++        vec![ChoiceOption::Pass]
++    } else if min == 0 && allow_cancel {
++        Vec::new()
++    } else {
++        options.into_iter().take(min).collect()
++    };
++    GameAction::Answer { choice_id: id, selection }
++}
++
+ impl Engine {
+     /// 有界规划：在克隆引擎上模拟候选动作（计算与规则推进隔离），
+     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
+         let submitted_revision = self.revision();
++        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
++            return Plan {
++                seat, revision: submitted_revision, action: projected_choice_action(choice),
++                nodes_used: 0, budget_exhausted: false, timed_out: false,
++                cancelled: planner.cancelled(), sim_faults: 0,
++            };
++        }
+         // wasm 目标无 wall-clock 时间源（Instant::now panic）：deadline
+         // 静默失效=纯节点预算面（engine-native-wasm 壳契约，登记证据）；
+         // 原生目标语义不变。
+@@ -657,7 +688,9 @@ impl Engine {
+             );
+             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
+             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
+-            if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
++            if planner.lookahead_depth >= 2 && trial.outcome().is_none()
++                && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)
++            {
+                 let opp = match trial.open_choice() {
+                     Some(open) => open.observer,
+                     None => trial.turn().current,
+@@ -715,8 +748,10 @@ impl Engine {
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            let fallback = if can_redact_suspended_duel(self, seat)
+-                || can_redact_hidden_traps(self, seat)
++            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
++                return projected_choice_action(choice);
++            }
++            let fallback = if can_redact_continuation(self)
+             {
+                 &sim
+             } else {
+diff --git a/crates/engine-native/src/ai/redact.rs b/crates/engine-native/src/ai/redact.rs
+index ab4704a9..d4217840 100644
+--- a/crates/engine-native/src/ai/redact.rs
++++ b/crates/engine-native/src/ai/redact.rs
+@@ -19,167 +19,14 @@ pub fn redact_last_state() -> (bool, u64, u64, bool) {
+     )
+ }
+ 
+-// shortcut: 只覆盖引用可完整核对的单帧决斗及其无懈窗口；其他机器需先完成引用自省。
+-pub(super) fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
+-    use crate::choice::{ChoiceKind, ChoiceOption};
+-    use crate::event::{EventData, Stage};
+-    use crate::resolution::Slot;
+-    use crate::snap::MachineSnapshot;
+-
+-    let core = e.state_core();
+-    let Some(player) = core.players.get(seat as usize) else {
+-        return false;
+-    };
+-    let res = e.resolution();
+-    let ([frame], [park], Some(choice)) = (
+-        res.stack.as_slice(),
+-        res.parks.as_slice(),
+-        res.open_choice.as_ref(),
+-    ) else {
+-        return false;
+-    };
+-    let EventData::CardUsed(used) = &frame.data else {
+-        return false;
+-    };
+-    if frame.stage != Stage::Intrinsic
+-        || !frame.queue.is_empty()
+-        || park.slot != (Slot::Intrinsic { frame: frame.id })
+-        || park.resume_depth != 1
+-        || res.answer.is_some()
+-        || choice.observer != seat
+-        || choice.spec.min != 1
+-        || choice.spec.max != 1
+-        || choice.spec.allow_cancel
+-        || !core.table.contains(&used.card)
+-        || !choice.spec.options.iter().all(|option| match option {
+-            ChoiceOption::Pass => true,
+-            ChoiceOption::Card(card) => player.hand.contains(card),
+-            _ => false,
+-        })
+-    {
+-        return false;
+-    }
+-    let MachineSnapshot::NullifyWindow {
+-        card,
+-        source,
+-        nullified,
+-        queue,
+-        asked,
+-        window_open,
+-        owns_disposal,
+-        effect: Some(effect),
+-    } = park.machine.snapshot()
+-    else {
+-        return false;
+-    };
+-    let MachineSnapshot::Duel {
+-        card: duel_card,
+-        source: duel_source,
+-        target,
+-        on_target,
+-        asked: duel_asked,
+-        second_pending,
+-    } = *effect
+-    else {
+-        return false;
+-    };
+-    if card != used.card
+-        || source != used.player
+-        || duel_card != card
+-        || duel_source != source
+-        || used.targets.as_slice() != [target]
+-    {
+-        return false;
+-    }
+-    let duel_response = choice.spec.kind == ChoiceKind::RespondCard
+-        && choice.spec.prompt == "duel_sha"
+-        && !nullified
+-        && queue.is_empty()
+-        && !asked
+-        && !window_open
+-        && duel_asked
+-        && seat == if on_target { target } else { source };
+-    let duel_nullify = choice.spec.kind == ChoiceKind::Confirm
+-        && choice.spec.prompt == "nullify_window"
+-        && !nullified
+-        && owns_disposal
+-        && queue.first() == Some(&seat)
+-        && asked
+-        && window_open
+-        && on_target
+-        && !duel_asked
+-        && !second_pending
+-        && choice.spec.options.iter().any(|option| matches!(option, ChoiceOption::Card(_)))
+-        && choice.spec.options.iter().all(|option| match option {
+-            ChoiceOption::Pass => true,
+-            ChoiceOption::Card(card) => e.catalog().card_kind(*card) == CardKind::Nullify,
+-            _ => false,
+-        });
+-    if !duel_response && !duel_nullify {
+-        return false;
+-    }
+-
+-    // 这些状态可引用或持有手牌外的实体；未完成通用自省时保留原有处理。
+-    if !core.vm_aux.is_empty()
+-        || !core.turn.huanxia_track.is_empty()
+-        || !core.turn.kunlunjing_snapshot.is_empty()
+-        || core.turn.luanjian_card.is_some()
+-        || core.turn.qizuo_copy.is_some()
+-        || core.players.iter().any(|p| {
+-            !p.zhucheng.is_empty()
+-                || !p.lianyaohu_store.is_empty()
+-                || !p.sxianjing_traps.is_empty()
+-                || p.ctianfu_card.is_some()
+-                || !p.jiguanyuan_cards.is_empty()
+-                || !p.yishan_lost.is_empty()
+-                || !p.hutian_hold.is_empty()
+-                || !p.card_mods.is_empty()
+-        })
+-    {
+-        return false;
+-    }
+-    // 元数据所引用的牌也必须已在不会重写的区域。
+-    let fixed = |card: &u32| {
+-        core.discard.contains(card)
+-            || core.table.contains(card)
+-            || player.hand.contains(card)
+-            || core.players.iter().any(|p| {
+-                p.equips.contains(card) || p.judge.contains(card) || p.off_court.contains(card)
+-            })
+-    };
+-    core.declared_kinds
+-        .keys()
+-        .chain(core.declared_slots.keys())
+-        .chain(core.card_natures.keys())
+-        .all(fixed)
+-}
+-
+-// shortcut: 仅无 VM 的静止态陷阱；其他情形需先完成通用自省。
+-pub(super) fn can_redact_hidden_traps(e: &Engine, seat: u8) -> bool {
+-    let core = e.state_core();
+-    let res = e.resolution();
+-    !e.is_suspended()
+-        && res.stack.is_empty()
+-        && res.parks.is_empty()
+-        && res.open_choice.is_none()
+-        && res.answer.is_none()
+-        && core.vm_aux.piles.values().all(|pile| pile.is_empty())
+-        && core.players.iter().enumerate().any(|(owner, player)| {
+-            owner != seat as usize && !player.sxianjing_traps.is_empty()
+-        })
+-        && !e.catalog()
+-            .skills
+-            .iter()
+-            .any(|skill| skill.behavior.is_vm_skill())
++// Opaque VM locals can cache private query results; they need a separate information-set strategy.
++pub(super) fn can_redact_continuation(e: &Engine) -> bool {
++    e.resolution().parks.iter().all(|p| !super::remap::has_opaque_continuation(&p.machine.snapshot()))
+ }
+ 
+ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+     use crate::ids::CardId;
+-    // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
+-    // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
+-    // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
+-    // monkey.rs「被拦截的桃应在使用者手牌」）。静止态可重分配；非静止态
+-    // 仅对已核对所有引用的决斗及其无懈窗口重分配，其余泄漏面仍登记为 NC10 待办。
++    // Unknown physical owners and every typed continuation reference share one mapping.
+     let quiescent = {
+         let res = e.resolution();
+         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
+@@ -198,7 +45,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+             std::sync::atomic::Ordering::Relaxed,
+         );
+     }
+-    if !quiescent && !can_redact_suspended_duel(e, seat) {
++    if !can_redact_continuation(e) {
+         // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
+         // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
+         // 对手手牌的身份遮蔽在未核对引用的窗口仍不可做（会改写被引用的实体牌 id → panic），
+@@ -224,7 +71,8 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
+     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
+     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
+-    let redact_traps = can_redact_hidden_traps(e, seat);
++    let redact_traps = e.state_core().vm_aux.storage.is_empty()
++        || !e.catalog().skills.iter().any(|skill| skill.behavior.is_vm_skill());
+     let n = e.state_core().players.len();
+     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
+     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
+@@ -251,29 +99,22 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+             for pile in [&p.zhucheng, &p.lianyaohu_store, &p.hutian_hold] {
+                 visible.extend(pile.iter().copied());
+             }
+-            if owner == seat as usize {
++            if owner == seat as usize || !redact_traps {
+                 visible.extend(p.sxianjing_traps.iter().copied());
+             }
+         }
+-        // shortcut: VM 牌堆与非静止态陷阱尚未保护，完成可见性和引用自省后重分配。
++        // The observer retains their private VM piles.
+         for ((owner, _), pile) in &core.vm_aux.piles {
+             if *owner == seat {
+                 visible.extend(pile.iter().copied());
+             }
+         }
+         visible.extend(core.table.iter().copied());
+-        // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
+-        // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
+-        if !redact_traps {
+-            for (c, _) in core.turn.huanxia_track.iter() {
+-                visible.insert(*c);
+-            }
+-            for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
+-                visible.extend(a.iter().copied());
+-                visible.extend(b.iter().copied());
+-                visible.extend(c.iter().copied());
+-            }
++        let mut held = Vec::new();
++        for park in &e.resolution().parks {
++            super::remap::held_cards(&park.machine.snapshot(), &mut held);
+         }
++        visible.extend(held);
+     }
+     // 填充池：目录全部牌 id 去掉保留牌（保持确定性顺序）
+     let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
+@@ -311,7 +152,10 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+         .iter()
+         .map(|i| e.state_core().players[*i].sxianjing_traps.len())
+         .sum();
+-    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count;
++    let vm_piles: Vec<_> = e.state_core().vm_aux.piles.keys()
++        .filter(|(owner, _)| *owner != seat).cloned().collect();
++    let vm_count: usize = vm_piles.iter().map(|key| e.state_core().vm_aux.piles[key].len()).sum();
++    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count + vm_count;
+     assert!(
+         pool.len() >= need,
+         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
+@@ -356,7 +200,8 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+                     .iter()
+                     .flat_map(|i| e.state_core().players[*i].hand.iter().copied()),
+             )
+-            .chain(e.state_core().deck.iter().copied());
++            .chain(e.state_core().deck.iter().copied())
++            .chain(vm_piles.iter().flat_map(|key| e.state_core().vm_aux.piles[key].iter().copied()));
+         for (before, after) in old.zip(pool.iter().copied()) {
+             remap[before as usize] = after;
+         }
+@@ -379,6 +224,13 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+         cursor += len;
+     }
+     core.deck = pool[cursor..cursor + deck_len].to_vec();
++    cursor += deck_len;
++    for key in &vm_piles {
++        let pile = core.vm_aux.piles.get_mut(key).expect("existing pile");
++        let len = pile.len();
++        pile.copy_from_slice(&pool[cursor..cursor + len]);
++        cursor += len;
++    }
+     if !remap.is_empty() {
+         let replace = |card: &mut CardId| {
+             if let Some(replacement) = remap.get(*card as usize) {
+@@ -444,6 +296,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+             })
+             .collect();
+     }
++    super::remap::remap_resolution(e, &remap);
+ }
+ 
+ #[cfg(test)]
+diff --git a/crates/engine-native/src/engine/accessors.rs b/crates/engine-native/src/engine/accessors.rs
+index 97f43555..5c16b52d 100644
+--- a/crates/engine-native/src/engine/accessors.rs
++++ b/crates/engine-native/src/engine/accessors.rs
+@@ -68,6 +68,10 @@ impl Engine {
+ }
+ 
+ impl Engine {
++    pub(crate) fn resolution_mut(&mut self) -> &mut crate::resolution::Resolution {
++        &mut self.state.resolution
++    }
++
+     /// 执行位置只读视图（含 NC04 瞬态故障槽，供宿主诊断）。
+     pub fn resolution(&self) -> &crate::resolution::Resolution {
+         &self.state.resolution
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index e1d330f3..1acb9b65 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -87,3 +87,9 @@ mod nc12_dangling_reference_repro;
+ 
+ #[path = "../nc12_swd_authoritative_stability.rs"]
+ mod nc12_swd_authoritative_stability;
++
++#[path = "../nc10_live_hidden_cards.rs"]
++mod nc10_live_hidden_cards;
++
++#[path = "../nc10_opaque_vm_privacy.rs"]
++mod nc10_opaque_vm_privacy;
+diff --git a/crates/engine-native/tests/nc10_duel_nullify_privacy.rs b/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
+index 5f2ed59e..b51ad80d 100644
+--- a/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
++++ b/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
+@@ -175,14 +175,14 @@ fn both_answers_can_resume_redacted_window_after_restore() {
+ }
+ 
+ #[test]
+-fn special_zones_remain_conservative() {
++fn public_special_zones_allow_safe_redaction() {
+     let mut e = fixture();
+     let card = e.state_core_mut().deck.pop().unwrap();
+     e.state_core_mut().players[1].zhucheng.push(card);
+     let before = e.state_core().players[0].hand.clone();
+     let machine = e.resolution().parks[0].machine.snapshot();
+     engine_native::ai::redact_opponent_hands(&mut e, 2);
+-    assert_eq!(e.state_core().players[0].hand, before);
++    assert_ne!(e.state_core().players[0].hand, before);
+     assert_eq!(e.state_core().players[1].zhucheng, vec![card]);
+     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
+ }
+diff --git a/crates/engine-native/tests/nc10_pending_duel_privacy.rs b/crates/engine-native/tests/nc10_pending_duel_privacy.rs
+index 5927f300..8e562672 100644
+--- a/crates/engine-native/tests/nc10_pending_duel_privacy.rs
++++ b/crates/engine-native/tests/nc10_pending_duel_privacy.rs
+@@ -222,7 +222,7 @@ fn redaction_preserves_duel_machine_and_referenced_cards() {
+ }
+ 
+ #[test]
+-fn uninspected_special_zones_are_not_reassigned() {
++fn public_special_zones_are_preserved_during_redaction() {
+     let pack = pack();
+     let mut e = fixture(&pack);
+     let card = e.state_core_mut().deck.pop().unwrap();
+@@ -230,7 +230,7 @@ fn uninspected_special_zones_are_not_reassigned() {
+     let original = e.state_core().players[1].hand.clone();
+     let machine = e.resolution().parks[0].machine.snapshot();
+     engine_native::ai::redact_opponent_hands(&mut e, 0);
+-    assert_eq!(e.state_core().players[1].hand, original);
++    assert_ne!(e.state_core().players[1].hand, original);
+     assert_eq!(e.state_core().players[2].zhucheng, vec![card]);
+     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
+ }
+diff --git a/crates/engine-native/tests/nc12_ai_strength_baseline.rs b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+index 4c8fbd73..ab37d5b3 100644
+--- a/crates/engine-native/tests/nc12_ai_strength_baseline.rs
++++ b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+@@ -81,3 +81,79 @@ fn nc12_ai_strength_baseline_statistics() {
+         "终局率过低：{finished}/{n}（策略面观测，低于半数视为异常）"
+     );
+ }
++
++/// Reproducible strategy comparison; run explicitly with --ignored --nocapture --test-threads=1.
++/// Latency is diagnostic unless the host is otherwise idle. Percentiles use nearest rank.
++#[test]
++#[ignore = "manual fixed-seed quality and latency matrix"]
++fn nc10_quality_matrix() {
++    use engine_native::{CommandOutcome, Role, Winner};
++    use std::time::Instant;
++    fn percentile(values: &mut [u128], percentile: usize) -> u128 {
++        values.sort_unstable();
++        values[(values.len() * percentile).div_ceil(100).saturating_sub(1)]
++    }
++    let mut matrix_errors = 0;
++    for seats in [4, 8] {
++        for identity in [false, true] {
++            for skills in [false, true] {
++                for (variant, depth) in [(0, 1), (1, 1), (1, 2)] {
++                    let mut latencies = Vec::new();
++                    let (mut games, mut finished, mut wins, mut rejected, mut faults) = (0, 0, 0, 0, 0);
++                    let (mut nodes, mut exhausted, mut leaves, mut steps) = (0, 0, 0, 0);
++                    for seed in [45000, 45001] {
++                        for challenger in 0..seats {
++                            let mut e = if identity { Engine::new_identity(seed, seats) } else { Engine::new(seed, seats) };
++                            if skills {
++                                for seat in 0..seats {
++                                    e.assign_general_named(seat as u8, ["曹操", "刘备", "孙权", "赵云"][seat % 4]).unwrap();
++                                }
++                            }
++                            let role = e.roles().map(|r| r[challenger]);
++                            let probe_before = engine_native::engine::legal_actions::probe_faults();
++                            let baseline = BoundedPlanner::new(8).with_policy_variant(0);
++                            let candidate = BoundedPlanner::new(8).with_policy_variant(variant).with_lookahead(depth);
++                            let mut game_steps = 0;
++                            while e.outcome().is_none() && game_steps < 800 {
++                                let actor = e.open_choice().map(|c| c.observer).unwrap_or(e.turn().current);
++                                let planner = if actor as usize == challenger { &candidate } else { &baseline };
++                                let started = Instant::now();
++                                let plan = e.plan_action(actor, planner);
++                                latencies.push(started.elapsed().as_nanos());
++                                faults += plan.sim_faults as u64;
++                                if plan.sim_faults > 0 { eprintln!("QUALITY_FAULT seed={seed} challenger={challenger} step={game_steps} context={:?}", engine_native::ai::sim_fault_log()); engine_native::ai::clear_sim_fault_log(); }
++                                nodes += plan.nodes_used;
++                                exhausted += usize::from(plan.budget_exhausted);
++                                leaves += usize::from(plan.nodes_used == 0);
++                                let result = e.apply_plan(&plan).unwrap();
++                                rejected += usize::from(matches!(result, CommandOutcome::Rejected(_)));
++                                game_steps += 1;
++                                if matches!(result, CommandOutcome::Rejected(_)) { eprintln!("QUALITY_REJECT seats={seats} seed={seed} actor={actor} plan={plan:?} choice={:?} result={result:?}", e.open_choice()); break; }
++                            }
++                            faults += engine_native::engine::legal_actions::probe_faults() - probe_before;
++                            games += 1;
++                            steps += game_steps;
++                            if let Some(outcome) = e.outcome() {
++                                finished += 1;
++                                wins += usize::from(match outcome.winner {
++                                    Winner::Player(seat) => seat as usize == challenger,
++                                    Winner::LordSide => matches!(role, Some(Role::Lord | Role::Loyalist)),
++                                    Winner::Rebels => role == Some(Role::Rebel),
++                                    Winner::Traitor => role == Some(Role::Traitor),
++                                    _ => false,
++                                });
++                            }
++                            eprintln!("QUALITY_GAME seats={seats} identity={identity} skills={skills} variant={variant} depth={depth} seed={seed} challenger={challenger} role={role:?} steps={game_steps} winner={:?}", e.outcome());
++                        }
++                    }
++                    let p50 = percentile(&mut latencies, 50);
++                    let p95 = percentile(&mut latencies, 95);
++                    let p99 = percentile(&mut latencies, 99);
++                    eprintln!("QUALITY_SUMMARY seats={seats} identity={identity} skills={skills} variant={variant} depth={depth} games={games} finished={finished} challenger_wins={wins} steps={steps} samples={} rejected={rejected} faults={faults} nodes={nodes} exhausted={exhausted} zero_node={leaves} p50_ns={p50} p95_ns={p95} p99_ns={p99}", latencies.len());
++                    matrix_errors += rejected + faults as usize;
++                }
++            }
++        }
++    }
++    assert_eq!(matrix_errors, 0, "quality matrix rejected plans or simulation faults");
++}

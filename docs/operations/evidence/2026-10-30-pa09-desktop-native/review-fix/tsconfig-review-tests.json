@@ -1,0 +1,8 @@
+{
+  "extends": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/tsconfig.json",
+  "include": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/src/**/*.ts",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/src/**/*.vue",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/scripts/pa09-document-reload.ts"
+  ]
+}

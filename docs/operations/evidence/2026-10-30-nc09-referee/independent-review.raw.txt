@@ -1,0 +1,85 @@
+## Review
+
+- **Correct:** The patch centralizes authorized card projection, preserves ordinary visibility, checks API seat IDs before conversion, derives Referee privileges from trusted membership, rejects non-Player submit/replay before the legacy helper, and synchronizes actor membership by actual session connection IDs.
+- **Fixed:** None by this reviewer; review remained read-only.
+- **Finding — P1:** The new Referee projection omits physical cards at existing XunXun, JiJie, GaiMing and HaoTianTa choice boundaries because it reuses an incomplete machine-card collector.
+- **Merge verdict: BLOCK pending the narrow shared-collector correction and focused regression evidence.** I found no additional patch-caused role or command-authority defect. The deferred protocol additions and wider NC09 acceptance are not reasons for this verdict.
+
+Reviewed the complete implementation report and supplied 18-file patch against `f6b7bb57`, identified by the manifest as SHA256 `158f7230962d49b15df4ccfb54b7ad1abb8a448f0bb00ef62aac6dba73f528c7`. I also read the canonical AGENTS instructions, supplied specification, observer contract, legacy security matrix, relevant source, substantive test fixtures, and red/green evidence. No edits, builds, tests or commits were performed. Findings below are source-derived; recorded test results belong to the implementer.
+
+**P1 — Complete machine ownership before using it as the full Referee projection**
+
+The new call at [engine/views.rs:97](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native/src/engine/views.rs:97) collects parked-machine cards using `machine_held_cards`, then feeds those IDs to `physical_cards`. However, [snap/validation.rs:342](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/snap/validation.rs:342) only collects JudgePhase queue/trick/current judgment card, GuanXing top cards, D3Moyan cards, and selected recursive wrappers.
+
+These omissions are reachable in the current rules-328 source:
+
+| Pending boundary | Physical ownership proved by source | Result in the new Referee view |
+|---|---|---|
+| `xunxun_arrange` | [xun_xun.rs:66](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content/src/content/standard/skills/xun_xun.rs:66) removes four cards with `deck.split_off`, stores them in `top`, switches to `Arrange`, and returns `WaitChoice`. | All four cards are absent from `PlayerView.cards` and server `known_cards`. |
+| `jijie_give_target` | [ji_jie.rs:72](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content/src/content/standard/skills/ji_jie.rs:72) removes `deck[0]`, stores it in `card`, switches to `Read`, and returns `WaitChoice`. | The removed card is absent. Its target-choice options contain players, so they cannot supply even its ID. |
+| `gaiming_pick` | [judge.rs:532](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/kernel/judge.rs:532) removes up to seven cards, stores the candidate vector, and sets `judge_card = cards[0]` before waiting. | With seven candidates, only `judge_card` is collected; six physical cards are absent. |
+| `haotianta_pick` | [judge.rs:606](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/kernel/judge.rs:606) stores a second removed deck card in `haotian_other` before waiting. | The second candidate is absent; the ordinary judgment-card field covers only the first. |
+
+These are actual suspended ownership states, not historical references or completed-machine residue. `resolution::run` parks the updated machine and returns `Pending` at [resolution.rs:407](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/resolution.rs:407). `Engine::save` snapshots those same parked machines.
+
+Existing behavior fixtures already construct the boundaries:
+
+- `native_kernel/lidian.rs:78` reaches four-option `xunxun_arrange`.
+- `native_kernel/yiji.rs:35` reaches `jijie_give_target` after recording the removed bottom card.
+- `t11_boss_zhugeliang_hlss.rs:467` reaches seven-option `gaiming_pick`.
+- `g1_shahai_swd/swd_cards_equip5_b44_yuruyi_draw_window.rs:589` reaches `haotianta_pick` with captured candidate IDs.
+
+Stopping those fixtures before answering and calling `view_referee()` gives concrete projection counterexamples. The provided full-suite log records these behavior tests as passing, but their assertions proceed through the windows without checking Referee projection or restoring there.
+
+**Attribution:** The collector omissions predate this patch. Consequently, valid saves at these boundaries already fail `validate_card_ownership` with `card_missing_from_all_zones`. The diff does not newly introduce that restore failure or weaken the old ownership checks. It does newly make the incomplete collector the source for Referee projection, so this is a current defect in the implemented full-information path.
+
+**Smallest correction:** Extend the existing shared `machine_held_cards` traversal for these current ownership states. Keep the new physical-location helper and server mapper. Preserve existing recursive traversal and processing-zone/owner semantics.
+
+For GaiMing, explicitly account for the legitimate alias between `judge_card` and `gaiming_cards[0]`; do not append both as ownership. Do not globally deduplicate collected cards: that would conceal real duplicate ownership and weaken restore validation. Continue excluding choice-option references, finalized trick bookkeeping and historical references.
+
+There is a separate, pre-existing restore limitation to retain in the follow-up record: [snap/asks.rs:281](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/snap/asks.rs:281) handles JudgePhase rewrite/TianDu requests but not GaiMing/HaoTianTa; XunXun and JiJie also lack `active_ask` arms and fall through to `None` at line 972. Therefore a collector-only correction repairs projection completeness, but those pending archives will subsequently encounter `OpenChoiceMismatch`. Do not claim complete restore support from the collector correction alone. This is not a second patch-caused finding.
+
+**What is correct in the implementation**
+
+The core-zone extraction matches the former ownership-validation inputs. [ownership.rs:26](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/snap/ownership.rs:26) includes hands, equipment, judgment, discard, table, ordered deck, off-court cards, all four physical skill piles, generic VM piles and supplied machine-held cards. It preserves pile order and actual seat owners, including owner zero through `Some(0)`. It excludes reference-only fields. The validation loop still checks range, duplicate ownership and complete catalog coverage; I found no dropped core zone in this extraction.
+
+Ordinary views pass an empty machine-held list and filter out deck, removed and expansion locations. Thus classifying authorized machine-held cards as `Processing` does not expose them to ordinary observers. The server’s ordinary `known_cards` traversal retains its former order: own hands, per-player equipment/judgment, discard, then table.
+
+General and identity projection use the shared visibility builder. Both configured native general slots are retained for Referee; the visibility condition only hides foreign dark Kingdoms slots from ordinary observers. Definition zero is accepted because the code matches `Some(g)` and resolves metadata without a zero-value filter. The server primary general now comes from `cell.generals[0]`, removing the old Referee raw-state bypass. Card faces are looked up only for IDs already authorized in `view.cards`.
+
+The choice boundary is sound for the reviewed scope. [native_view.rs:230](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/game-server/src/native_view.rs:230) checks subtraction and bounds before converting to `u8`. IDs `0`, `257` and `u32::MAX` cannot wrap to seat zero. Spectator returns `None` regardless of a supplied seat. Referee receives the full native request through the explicit trusted projection, while the wire `observer` remains the actual chooser. The three approved existing-kind mappings preserve option indices and command-token meaning.
+
+All seven native actor choice call sites are updated. [room_native_actor.rs:366](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/game-server/src/room_native_actor.rs:366) rejects non-Players before receipt lookup or legacy replay handling. Session submission and general assignment independently retain Player-role guards. Client Join/Spectate messages do not supply the trusted role.
+
+Reconnect pruning at [room_native_actor.rs:292](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/apps/game-server/src/room_native_actor.rs:292) follows actual `session.members()` connection IDs. It therefore preserves the legitimate Player when a non-Player trusted record carries that Player’s numeric seat, and removes the superseded Referee actor entry. Pruning happens after successful durable commit; failed persistence rolls session membership back before actor membership changes. Later disconnects from a pruned connection find no actor entry and cannot disconnect the replacement member.
+
+**Evidence assessment and remaining validation**
+
+The new tests are substantive. The storage fixture checks nonempty private piles, duplicate historical references, faces, owners and ordered deck. Native tests check both dark general slots, identities, GuanXing-held cards, choice metadata, archive continuation and AI isolation. The real WS Referee fixture checks trusted restored tokens, duplicate reconnect, stale snapshot denial, future pending-choice fanout exclusion, a Spectator record carrying seat zero, submit/replay denial, owner continuation and runtime restart.
+
+The raw history supports the reported fixes: invalid ID zero exposed private options; spectator reconnect exposed the pending seat-zero choice; Referee returned zero rather than 124 cards; expressible Confirm was mapped to Custom; and the trusted-role fixture exposed `NotInRoom` on the legitimate owner path. Intermediate dedup and writer-lock fixture failures remain visible. The final fixture explicitly advances `next_dedup` and drops the first runtime before restart.
+
+Recorded evidence is:
+
+| Check | Recorded result |
+|---|---:|
+| Native facade/content/kernel | 1,647 passed, 0 failed, 73 ignored |
+| Native WASM Rust tests | 72 passed, 0 failed |
+| Game server, including 18 WS tests | 378 passed, 0 failed |
+| Combined five packages | 2,097 passed, 0 failed, 73 ignored |
+| Stronger pending-fanout server rerun | 378 passed, 0 failed |
+| Strict native three-crate check | Exit 0 |
+| Generated WASM32/server comparison | 5 states, 40 comparisons, 32 privacy checks, 0 failures |
+| Worker / frontend | Reported 82 / 139 passed |
+| Isolated repository preflight | **19/21 passed; exit 1** |
+
+The preflight failures are the two link gates caused by absent outside `AGENTS.md`; they are not a current full preflight pass. Parent integration still needs the full preflight to pass in its canonical layout.
+
+Before accepting physical-card completeness, add focused assertions at the four boundaries above: exact physical multiset, once-only IDs, correct processing zone/owner, and native/server Referee agreement. Retain ordinary hidden-card isolation and negative ownership checks for missing, duplicate and out-of-range machine cards. If restore support is repaired in the same follow-up, test archive decode/restore and continuation at those exact windows, including the existing `active_ask` gap. Rerun the affected focused tests and required native three-crate suite; server projection changes should also retain the existing full server/WS checks.
+
+The recorded WASM32 comparison covers ordinary cards and seat fields. It does not establish cross-entry choice-semantic equivalence: WASM’s explicit choice JSON still omits the newly retained native kind, and the Worker retains its existing fallback. Parent integration of `ChoiceView::Own.kind` and later adapter/auto-match changes needs the corresponding PA09 session-equivalence validation.
+
+No new wire field or `ChoiceKind` variant is implemented here. TypeScript `Expansion` mirrors the existing Rust variant. Secondary-general metadata, prompt and exact unmatched native choice kinds remain the separate **unapproved** proposal. They do not block this authorized expressible slice, and neither all-37-source acceptance nor broader PA09 completion is a prerequisite for this narrow patch.
+
+Skipped: runtime execution, repository mutation, independent SHA recomputation and the parent’s committed integration range.  
+Risk: current Referee snapshots omit physically held cards at four reachable choice windows; collector-only fixes must not be presented as complete pending-state restore support.

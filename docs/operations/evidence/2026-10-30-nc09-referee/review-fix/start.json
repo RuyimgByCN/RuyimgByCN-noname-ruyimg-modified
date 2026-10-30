@@ -1,0 +1,9 @@
+{
+  "head": "f6b7bb57bf27251b00832243b1e0826e6b3bc751",
+  "priorPatchSha256": "158f7230962d49b15df4ccfb54b7ad1abb8a448f0bb00ef62aac6dba73f528c7",
+  "startedUtc": "2026-10-29T19:29:35.598024+00:00",
+  "reservedKernelFiles": [
+    "crates/engine-native-kernel/src/snap/validation.rs",
+    "crates/engine-native-kernel/src/snap/asks.rs"
+  ]
+}

@@ -872,6 +872,8 @@ dependencies = [
  "content-schema",
  "diagnostics",
  "engine-api",
+ "engine-native",
+ "engine-native-wasm",
  "rule-vm",
  "serde",
  "serde_json",
@@ -879,6 +881,7 @@ dependencies = [
  "tauri-build",
  "tempfile",
  "thiserror 2.0.18",
+ "tokio",
 ]
 
 [[package]]

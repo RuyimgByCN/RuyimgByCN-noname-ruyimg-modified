@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-30T10:22:53.485092+08:00",
+  "head": "100489f554fe89d3389e35196947d9070673c2a1",
+  "pending": "Reviewed PA09 integration and local empty-hujia regression fix; preserved",
+  "rules": 328,
+  "archive": 105,
+  "abi": 753,
+  "ws": 5,
+  "patch_sha256": "8cf34a8cf7196c53057542200a855e92f7fa25ec71d5dfd82c3f749648af36db",
+  "excluded": "WASM lib own-choice new kind lives in PA09 extracted session; adapt explicitly"
+}

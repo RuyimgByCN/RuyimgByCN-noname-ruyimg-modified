@@ -1,0 +1,3 @@
+serving /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/dist at http://127.0.0.1:5173/
+report received (7179 bytes)
+RESULT scenario=web_frame_external {"players":4,"driver":"click","app":"tauri","end_state":"max_steps","final_status":"rev 15 · 6afff3288df4… · native","frame_ms":{"p50":17,"p95":19,"p99":20,"max":23,"n":167},"steps":15,"input_to_paint_ms":{"p50":12,"p95":20,"p99":20,"max":20,"n":15},"roundtrip_ms":{"p50":3,"p95":5,"p99":5,"max":5,"n":15},"transfer_ms":{"p50":null,"p95":null,"p99":null,"max":null,"n":0},"long_tasks":0,"memory_mb":null}

@@ -1,0 +1,405 @@
+../evidence/nc10-final.log-30-test nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information ... ok
+../evidence/nc10-final.log-31-test nc10_ai_bounds::nc10_tiny_budget_still_legal ... ok
+../evidence/nc10-final.log-32-test nc10_live_hidden_cards::real_guanxing_machine_held_cards_are_not_duplicated ... ok
+../evidence/nc10-final.log-33-
+../evidence/nc10-final.log:34:thread 'nc10_opaque_vm_privacy::author_dsl_private_query_before_ask_is_a_public_search_leaf' (7971354) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:96:77:
+../evidence/nc10-final.log-35-called `Result::unwrap()` on an `Err` value: Lex { pos: 111, message: "unexpected byte 34" }
+../evidence/nc10-final.log-36-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+../evidence/nc10-final.log:37:test nc10_opaque_vm_privacy::author_dsl_private_query_before_ask_is_a_public_search_leaf ... FAILED
+../evidence/nc10-final.log-38-DBG NC10 并发：workers=4 n=30 p50=306µs p95=464µs p99=527µs
+../evidence/nc10-final.log-39-test nc10_ai_boundary_and_cancel::pool_parallel_matches_sequential_and_records_tail ... ok
+../evidence/nc10-final.log-40-NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+../evidence/nc10-final.log-41-NC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+../evidence/nc10-final.log-42-NC10_OPAQUE left=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } right=Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+../evidence/nc10-final.log-43-test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... ok
+../evidence/nc10-final.log-44-test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling
+../evidence/nc10-final.log-45-test nc10_multiple_hidden_traps::multiple_traps_stay_physical_from_each_observer ... ok
+../evidence/nc10-final.log-46-test nc10_pending_duel_privacy::public_special_zones_are_preserved_during_redaction ... ok
+../evidence/nc10-final.log-47-test nc10_multiple_hidden_traps::scarce_suits_are_shared_across_trap_holders ... ok
+--
+../evidence/nc10-final.log-75-
+../evidence/nc10-final.log-76-failures:
+../evidence/nc10-final.log-77-
+../evidence/nc10-final.log-78-failures:
+../evidence/nc10-final.log:79:    nc10_opaque_vm_privacy::author_dsl_private_query_before_ask_is_a_public_search_leaf
+../evidence/nc10-final.log-80-
+../evidence/nc10-final.log-81-test result: FAILED. 46 passed; 1 failed; 3 ignored; 0 measured; 90 filtered out; finished in 1.20s
+../evidence/nc10-final.log-82-
+../evidence/nc10-final.log-83-error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+../evidence/nc10-final.log-84-{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.2967295839916915}
+--
+../evidence/quality-final.log-10-QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-11-QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-12-QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=2 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-13-QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=3 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:14:QUALITY_SUMMARY seats=4 identity=false skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=2244 samples=2244 rejected=0 faults=0 nodes=4388 exhausted=4 zero_node=0 p50_ns=59167 p95_ns=142583 p99_ns=207166
+../evidence/quality-final.log-15-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=226 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-16-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=303 winner=Some(Outcome { winner: Player(1) })
+../evidence/quality-final.log-17-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=197 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-18-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=222 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-19-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=231 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-20-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=152 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-21-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=2 role=None steps=175 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-22-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=3 role=None steps=127 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:23:QUALITY_SUMMARY seats=4 identity=false skills=false variant=1 depth=1 games=8 finished=8 challenger_wins=5 steps=1633 samples=1633 rejected=0 faults=0 nodes=4260 exhausted=147 zero_node=0 p50_ns=57583 p95_ns=241667 p99_ns=479875
+../evidence/quality-final.log-24-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=238 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-25-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=295 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-26-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=229 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-27-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=222 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-28-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=242 winner=Some(Outcome { winner: Player(0) })
+../evidence/quality-final.log-29-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=152 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-30-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=2 role=None steps=175 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-31-QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=3 role=None steps=129 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:32:QUALITY_SUMMARY seats=4 identity=false skills=false variant=1 depth=2 games=8 finished=8 challenger_wins=5 steps=1682 samples=1682 rejected=0 faults=0 nodes=4553 exhausted=176 zero_node=0 p50_ns=59042 p95_ns=239583 p99_ns=529791
+../evidence/quality-final.log-33-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-34-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-35-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-36-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-37-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-38-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-39-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=2 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-40-QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=3 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:41:QUALITY_SUMMARY seats=4 identity=false skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1528 samples=1528 rejected=0 faults=0 nodes=3304 exhausted=12 zero_node=0 p50_ns=61542 p95_ns=173667 p99_ns=300958
+../evidence/quality-final.log-42-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=0 role=None steps=257 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-43-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=1 role=None steps=325 winner=Some(Outcome { winner: Player(1) })
+../evidence/quality-final.log-44-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=2 role=None steps=291 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-45-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=3 role=None steps=204 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-46-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=0 role=None steps=297 winner=Some(Outcome { winner: Player(0) })
+../evidence/quality-final.log-47-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=1 role=None steps=212 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-48-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=2 role=None steps=115 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-49-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=3 role=None steps=123 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:50:QUALITY_SUMMARY seats=4 identity=false skills=true variant=1 depth=1 games=8 finished=8 challenger_wins=6 steps=1824 samples=1824 rejected=0 faults=0 nodes=4960 exhausted=162 zero_node=0 p50_ns=67250 p95_ns=253833 p99_ns=524792
+../evidence/quality-final.log-51-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=0 role=None steps=257 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-52-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=1 role=None steps=800 winner=None
+../evidence/quality-final.log-53-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=2 role=None steps=233 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-54-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=3 role=None steps=181 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-55-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=0 role=None steps=153 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-56-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=1 role=None steps=216 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-57-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=2 role=None steps=350 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-58-QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=3 role=None steps=109 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log:59:QUALITY_SUMMARY seats=4 identity=false skills=true variant=1 depth=2 games=8 finished=7 challenger_wins=4 steps=2299 samples=2299 rejected=0 faults=0 nodes=9292 exhausted=430 zero_node=0 p50_ns=88041 p95_ns=632667 p99_ns=684458
+../evidence/quality-final.log-60-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=193 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-61-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=193 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-62-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=193 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-63-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=193 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-64-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=83 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-65-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=83 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-66-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=83 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-67-QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=83 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:68:QUALITY_SUMMARY seats=4 identity=true skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1104 samples=1104 rejected=0 faults=0 nodes=2280 exhausted=4 zero_node=0 p50_ns=49750 p95_ns=149334 p99_ns=197000
+../evidence/quality-final.log-69-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=301 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-70-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=203 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-71-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=88 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-72-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=119 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-73-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=90 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-74-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=138 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-75-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-76-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=97 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:77:QUALITY_SUMMARY seats=4 identity=true skills=false variant=1 depth=1 games=8 finished=8 challenger_wins=3 steps=1100 samples=1100 rejected=0 faults=0 nodes=2854 exhausted=98 zero_node=0 p50_ns=55209 p95_ns=240333 p99_ns=555666
+../evidence/quality-final.log-78-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=132 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-79-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=167 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-80-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=118 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-81-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=178 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-82-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=90 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-83-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=138 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-84-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-85-QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=191 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log:86:QUALITY_SUMMARY seats=4 identity=true skills=false variant=1 depth=2 games=8 finished=8 challenger_wins=2 steps=1078 samples=1078 rejected=0 faults=0 nodes=3008 exhausted=125 zero_node=0 p50_ns=53917 p95_ns=248958 p99_ns=590459
+../evidence/quality-final.log-87-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=174 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-88-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=174 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-89-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=174 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-90-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=174 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-91-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-92-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-93-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-94-QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:95:QUALITY_SUMMARY seats=4 identity=true skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=3 steps=1072 samples=1072 rejected=0 faults=0 nodes=2384 exhausted=16 zero_node=0 p50_ns=58750 p95_ns=175209 p99_ns=329875
+../evidence/quality-final.log-96-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=176 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-97-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=211 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-98-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=210 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-99-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=113 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-100-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=67 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-101-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=800 winner=None
+../evidence/quality-final.log-102-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=99 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-103-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=99 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:104:QUALITY_SUMMARY seats=4 identity=true skills=true variant=1 depth=1 games=8 finished=7 challenger_wins=3 steps=1775 samples=1775 rejected=0 faults=0 nodes=7403 exhausted=364 zero_node=0 p50_ns=93041 p95_ns=532542 p99_ns=595084
+../evidence/quality-final.log-105-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=173 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-106-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=183 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-107-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=355 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-108-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=119 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-109-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=67 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-110-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=800 winner=None
+../evidence/quality-final.log-111-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=88 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-112-QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=102 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:113:QUALITY_SUMMARY seats=4 identity=true skills=true variant=1 depth=2 games=8 finished=7 challenger_wins=4 steps=1887 samples=1887 rejected=0 faults=0 nodes=7862 exhausted=391 zero_node=0 p50_ns=93166 p95_ns=530333 p99_ns=607416
+../evidence/quality-final.log-114-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=0 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-115-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=1 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-116-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=2 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-117-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=3 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-118-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=4 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-119-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=5 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-120-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=6 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-121-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=7 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-122-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-123-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+--
+../evidence/quality-final.log-126-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=4 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-127-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=5 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-128-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=6 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-129-QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=7 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log:130:QUALITY_SUMMARY seats=8 identity=false skills=false variant=0 depth=1 games=16 finished=16 challenger_wins=2 steps=7816 samples=7816 rejected=0 faults=0 nodes=19616 exhausted=352 zero_node=0 p50_ns=69209 p95_ns=277625 p99_ns=780083
+../evidence/quality-final.log-131-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=351 winner=Some(Outcome { winner: Player(0) })
+../evidence/quality-final.log-132-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=473 winner=Some(Outcome { winner: Player(1) })
+../evidence/quality-final.log-133-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=518 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-134-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=454 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-135-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=4 role=None steps=576 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-136-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=5 role=None steps=391 winner=Some(Outcome { winner: Player(5) })
+../evidence/quality-final.log-137-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=6 role=None steps=285 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-138-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=7 role=None steps=509 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-139-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=354 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-140-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=681 winner=Some(Outcome { winner: Player(2) })
+--
+../evidence/quality-final.log-143-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=4 role=None steps=517 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-144-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=5 role=None steps=592 winner=Some(Outcome { winner: Player(5) })
+../evidence/quality-final.log-145-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=6 role=None steps=438 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-146-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=7 role=None steps=384 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log:147:QUALITY_SUMMARY seats=8 identity=false skills=false variant=1 depth=1 games=16 finished=16 challenger_wins=10 steps=7320 samples=7320 rejected=0 faults=0 nodes=19839 exhausted=629 zero_node=0 p50_ns=73208 p95_ns=350875 p99_ns=913792
+../evidence/quality-final.log-148-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=364 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-149-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=345 winner=Some(Outcome { winner: Player(1) })
+../evidence/quality-final.log-150-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=480 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-151-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=481 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-152-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=4 role=None steps=506 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-153-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=5 role=None steps=403 winner=Some(Outcome { winner: Player(5) })
+../evidence/quality-final.log-154-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=6 role=None steps=308 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-155-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=7 role=None steps=468 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-156-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=559 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-157-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=735 winner=Some(Outcome { winner: Player(2) })
+--
+../evidence/quality-final.log-160-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=4 role=None steps=453 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-161-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=5 role=None steps=571 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-162-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=6 role=None steps=626 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-163-QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=7 role=None steps=419 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log:164:QUALITY_SUMMARY seats=8 identity=false skills=false variant=1 depth=2 games=16 finished=16 challenger_wins=8 steps=7486 samples=7486 rejected=0 faults=0 nodes=20542 exhausted=664 zero_node=0 p50_ns=74958 p95_ns=330375 p99_ns=950459
+../evidence/quality-final.log-165-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-166-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-167-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-168-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-169-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=4 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-170-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=5 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-171-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=6 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-172-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=7 role=None steps=363 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-173-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-174-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+--
+../evidence/quality-final.log-177-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=4 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-178-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=5 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-179-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=6 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-180-QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=7 role=None steps=459 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log:181:QUALITY_SUMMARY seats=8 identity=false skills=true variant=0 depth=1 games=16 finished=16 challenger_wins=2 steps=6576 samples=6576 rejected=0 faults=0 nodes=17224 exhausted=384 zero_node=0 p50_ns=98708 p95_ns=1248375 p99_ns=5271166
+../evidence/quality-final.log-182-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=0 role=None steps=361 winner=Some(Outcome { winner: Player(0) })
+../evidence/quality-final.log-183-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=1 role=None steps=800 winner=None
+../evidence/quality-final.log-184-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=2 role=None steps=453 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-185-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=3 role=None steps=510 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-186-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=4 role=None steps=315 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-187-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=5 role=None steps=800 winner=None
+../evidence/quality-final.log-188-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=6 role=None steps=472 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-189-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45000 challenger=7 role=None steps=391 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-190-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=0 role=None steps=600 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-191-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=1 role=None steps=800 winner=None
+--
+../evidence/quality-final.log-194-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=4 role=None steps=350 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-195-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=5 role=None steps=800 winner=None
+../evidence/quality-final.log-196-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=6 role=None steps=322 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-197-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=1 seed=45001 challenger=7 role=None steps=303 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log:198:QUALITY_SUMMARY seats=8 identity=false skills=true variant=1 depth=1 games=16 finished=12 challenger_wins=10 steps=8185 samples=8185 rejected=0 faults=0 nodes=37220 exhausted=2585 zero_node=0 p50_ns=168000 p95_ns=1833500 p99_ns=9970417
+../evidence/quality-final.log-199-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=0 role=None steps=404 winner=Some(Outcome { winner: Player(0) })
+../evidence/quality-final.log-200-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=1 role=None steps=800 winner=None
+../evidence/quality-final.log-201-
+../evidence/quality-final.log-202-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-203-a must be alive
+../evidence/quality-final.log-204-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+../evidence/quality-final.log-205-
+../evidence/quality-final.log-206-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-207-a must be alive
+../evidence/quality-final.log:208:QUALITY_FAULT seed=45000 challenger=2 step=454 context=["PRE rev=454 phase=Play action=PlayCard { card: 20, targets: [2] } frames=[] parks=[]", "POST seat=5 rev=454 phase=Play action=PlayCard { card: 20, targets: [2] } table=[] hands=[p0:hp=0/4 hand=[] | p1:hp=0/4 hand=[] | p2:hp=4/4 hand=[50, 108] | p3:hp=0/4 hand=[] | p4:hp=2/4 hand=[17, 114] | p5:hp=0/4 hand=[20, 30] | p6:hp=0/4 hand=[] | p7:hp=0/4 hand=[]] frames=[] parks=[]", "PRE rev=454 phase=Play action=PlayCard { card: 20, targets: [4] } frames=[] parks=[]", "POST seat=5 rev=454 phase=Play action=PlayCard { card: 20, targets: [4] } table=[] hands=[p0:hp=0/4 hand=[] | p1:hp=0/4 hand=[] | p2:hp=4/4 hand=[50, 108] | p3:hp=0/4 hand=[] | p4:hp=2/4 hand=[17, 114] | p5:hp=0/4 hand=[20, 30] | p6:hp=0/4 hand=[] | p7:hp=0/4 hand=[]] frames=[] parks=[]"]
+../evidence/quality-final.log-209-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=2 role=None steps=488 winner=Some(Outcome { winner: Player(2) })
+../evidence/quality-final.log-210-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=3 role=None steps=569 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-211-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=4 role=None steps=315 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-212-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=5 role=None steps=800 winner=None
+../evidence/quality-final.log-213-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=6 role=None steps=297 winner=Some(Outcome { winner: Player(5) })
+../evidence/quality-final.log-214-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45000 challenger=7 role=None steps=470 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-215-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=0 role=None steps=398 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-216-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=1 role=None steps=800 winner=None
+../evidence/quality-final.log-217-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=2 role=None steps=473 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log-218-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=3 role=None steps=349 winner=Some(Outcome { winner: Player(3) })
+../evidence/quality-final.log-219-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=4 role=None steps=354 winner=Some(Outcome { winner: Player(4) })
+../evidence/quality-final.log-220-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=5 role=None steps=800 winner=None
+../evidence/quality-final.log-221-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=6 role=None steps=379 winner=Some(Outcome { winner: Player(6) })
+../evidence/quality-final.log-222-QUALITY_GAME seats=8 identity=false skills=true variant=1 depth=2 seed=45001 challenger=7 role=None steps=316 winner=Some(Outcome { winner: Player(7) })
+../evidence/quality-final.log:223:QUALITY_SUMMARY seats=8 identity=false skills=true variant=1 depth=2 games=16 finished=12 challenger_wins=9 steps=8012 samples=8012 rejected=0 faults=2 nodes=38428 exhausted=2677 zero_node=0 p50_ns=163625 p95_ns=1484584 p99_ns=1852333
+../evidence/quality-final.log-224-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-225-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-226-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-227-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-228-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-229-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-230-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-231-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=358 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-232-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-233-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=222 winner=Some(Outcome { winner: Rebels })
+--
+../evidence/quality-final.log-236-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-237-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-238-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-239-QUALITY_GAME seats=8 identity=true skills=false variant=0 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:240:QUALITY_SUMMARY seats=8 identity=true skills=false variant=0 depth=1 games=16 finished=16 challenger_wins=8 steps=4640 samples=4640 rejected=0 faults=0 nodes=12440 exhausted=328 zero_node=0 p50_ns=79084 p95_ns=423666 p99_ns=1448083
+../evidence/quality-final.log-241-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=407 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-242-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=234 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-243-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=134 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-244-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=324 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-245-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=325 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-246-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=402 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-247-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=191 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-248-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=194 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-249-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=112 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-250-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=239 winner=Some(Outcome { winner: Rebels })
+--
+../evidence/quality-final.log-253-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=89 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-254-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-255-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=112 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-256-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=222 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:257:QUALITY_SUMMARY seats=8 identity=true skills=false variant=1 depth=1 games=16 finished=16 challenger_wins=9 steps=3395 samples=3395 rejected=0 faults=0 nodes=10066 exhausted=392 zero_node=0 p50_ns=81750 p95_ns=655709 p99_ns=1320292
+../evidence/quality-final.log-258-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=362 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-259-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=336 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-260-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=120 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-261-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=3 role=Some(Rebel) steps=324 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-262-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=4 role=Some(Loyalist) steps=292 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-263-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=5 role=Some(Rebel) steps=237 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-264-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=6 role=Some(Rebel) steps=216 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-265-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45000 challenger=7 role=Some(Loyalist) steps=194 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-266-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=133 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-267-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=139 winner=Some(Outcome { winner: Rebels })
+--
+../evidence/quality-final.log-270-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=4 role=Some(Rebel) steps=89 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-271-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=5 role=Some(Rebel) steps=94 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-272-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=6 role=Some(Traitor) steps=112 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-273-QUALITY_GAME seats=8 identity=true skills=false variant=1 depth=2 seed=45001 challenger=7 role=Some(Rebel) steps=123 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:274:QUALITY_SUMMARY seats=8 identity=true skills=false variant=1 depth=2 games=16 finished=16 challenger_wins=9 steps=2978 samples=2978 rejected=0 faults=0 nodes=9001 exhausted=373 zero_node=0 p50_ns=77416 p95_ns=682334 p99_ns=1176250
+../evidence/quality-final.log-275-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-276-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-277-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-278-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-279-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-280-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-281-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-282-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=353 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-283-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=465 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-284-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=465 winner=Some(Outcome { winner: Rebels })
+--
+../evidence/quality-final.log-287-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=465 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-288-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=465 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-289-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=465 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-290-QUALITY_GAME seats=8 identity=true skills=true variant=0 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=465 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:291:QUALITY_SUMMARY seats=8 identity=true skills=true variant=0 depth=1 games=16 finished=16 challenger_wins=7 steps=6544 samples=6544 rejected=0 faults=0 nodes=18384 exhausted=544 zero_node=0 p50_ns=98000 p95_ns=539792 p99_ns=1920542
+../evidence/quality-final.log-292-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=354 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-293-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=800 winner=None
+../evidence/quality-final.log-294-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=392 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-295-
+../evidence/quality-final.log-296-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-297-a must be alive
+../evidence/quality-final.log-298-
+../evidence/quality-final.log-299-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-300-a must be alive
+../evidence/quality-final.log-301-
+--
+../evidence/quality-final.log-309-a must be alive
+../evidence/quality-final.log-310-
+../evidence/quality-final.log-311-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-312-a must be alive
+../evidence/quality-final.log:313:QUALITY_FAULT seed=45000 challenger=3 step=140 context=["PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [0] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [0] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [1] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [1] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [4] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [4] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [5] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [5] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [6] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [6] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [7] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [7] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]"]
+../evidence/quality-final.log-314-
+../evidence/quality-final.log-315-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-316-a must be alive
+../evidence/quality-final.log-317-
+../evidence/quality-final.log-318-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-319-a must be alive
+../evidence/quality-final.log-320-
+../evidence/quality-final.log-321-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-322-a must be alive
+../evidence/quality-final.log-323-
+--
+../evidence/quality-final.log-328-a must be alive
+../evidence/quality-final.log-329-
+../evidence/quality-final.log-330-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-331-a must be alive
+../evidence/quality-final.log:332:QUALITY_FAULT seed=45000 challenger=3 step=141 context=["PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [0] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [0] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [1] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [1] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [4] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [4] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [5] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [5] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [6] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [6] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [7] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [7] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]"]
+../evidence/quality-final.log-333-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=3 role=Some(Rebel) steps=345 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-334-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=4 role=Some(Loyalist) steps=342 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-335-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=5 role=Some(Rebel) steps=800 winner=None
+../evidence/quality-final.log-336-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=6 role=Some(Rebel) steps=234 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-337-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45000 challenger=7 role=Some(Loyalist) steps=361 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-338-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=220 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-339-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=800 winner=None
+../evidence/quality-final.log-340-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=2 role=Some(Rebel) steps=436 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-341-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=3 role=Some(Loyalist) steps=406 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-342-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=4 role=Some(Rebel) steps=420 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-343-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=5 role=Some(Rebel) steps=800 winner=None
+../evidence/quality-final.log-344-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=6 role=Some(Traitor) steps=188 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-345-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=1 seed=45001 challenger=7 role=Some(Rebel) steps=306 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:346:QUALITY_SUMMARY seats=8 identity=true skills=true variant=1 depth=1 games=16 finished=12 challenger_wins=9 steps=7204 samples=7204 rejected=0 faults=12 nodes=35462 exhausted=2568 zero_node=0 p50_ns=154167 p95_ns=1359084 p99_ns=1496666
+../evidence/quality-final.log-347-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=413 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-348-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=800 winner=None
+../evidence/quality-final.log-349-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=412 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-350-
+../evidence/quality-final.log-351-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-352-a must be alive
+../evidence/quality-final.log-353-
+../evidence/quality-final.log-354-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-355-a must be alive
+../evidence/quality-final.log-356-
+--
+../evidence/quality-final.log-364-a must be alive
+../evidence/quality-final.log-365-
+../evidence/quality-final.log-366-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-367-a must be alive
+../evidence/quality-final.log:368:QUALITY_FAULT seed=45000 challenger=3 step=140 context=["PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [0] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [0] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [1] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [1] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [4] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [4] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [5] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [5] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [6] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [6] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]", "PRE rev=140 phase=Play action=PlayCard { card: 21, targets: [7] } frames=[] parks=[]", "POST seat=3 rev=140 phase=Play action=PlayCard { card: 21, targets: [7] } table=[] hands=[p0:hp=5/5 hand=[110, 52, 103, 36, 44] | p1:hp=1/4 hand=[76] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21, 50] | p4:hp=2/4 hand=[11, 33, 101, 63] | p5:hp=4/4 hand=[53, 39, 56, 108] | p6:hp=4/4 hand=[3, 48, 41, 23] | p7:hp=4/4 hand=[109, 31, 55, 29]] frames=[] parks=[]"]
+../evidence/quality-final.log-369-
+../evidence/quality-final.log-370-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-371-a must be alive
+../evidence/quality-final.log-372-
+../evidence/quality-final.log-373-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-374-a must be alive
+../evidence/quality-final.log-375-
+../evidence/quality-final.log-376-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-377-a must be alive
+../evidence/quality-final.log-378-
+--
+../evidence/quality-final.log-383-a must be alive
+../evidence/quality-final.log-384-
+../evidence/quality-final.log-385-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native-kernel/src/state/core_ops.rs:678:53:
+../evidence/quality-final.log-386-a must be alive
+../evidence/quality-final.log:387:QUALITY_FAULT seed=45000 challenger=3 step=141 context=["PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [0] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [0] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [1] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [1] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [4] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [4] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [5] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [5] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [6] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [6] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]", "PRE rev=141 phase=Play action=PlayCard { card: 21, targets: [7] } frames=[] parks=[]", "POST seat=3 rev=141 phase=Play action=PlayCard { card: 21, targets: [7] } table=[] hands=[p0:hp=5/5 hand=[104, 100, 64, 63, 87] | p1:hp=1/4 hand=[38] | p2:hp=0/4 hand=[] | p3:hp=0/4 hand=[21] | p4:hp=2/4 hand=[3, 14, 11, 17] | p5:hp=4/4 hand=[110, 10, 82, 53] | p6:hp=4/4 hand=[113, 101, 52, 74] | p7:hp=4/4 hand=[86, 103, 6, 58]] frames=[] parks=[]"]
+../evidence/quality-final.log-388-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=3 role=Some(Rebel) steps=345 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-389-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=4 role=Some(Loyalist) steps=279 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-390-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=5 role=Some(Rebel) steps=800 winner=None
+../evidence/quality-final.log-391-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=6 role=Some(Rebel) steps=240 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-392-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45000 challenger=7 role=Some(Loyalist) steps=367 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-393-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=220 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-394-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=800 winner=None
+../evidence/quality-final.log-395-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=2 role=Some(Rebel) steps=348 winner=Some(Outcome { winner: LordSide })
+../evidence/quality-final.log-396-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=3 role=Some(Loyalist) steps=424 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-397-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=4 role=Some(Rebel) steps=366 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-398-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=5 role=Some(Rebel) steps=800 winner=None
+../evidence/quality-final.log-399-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=6 role=Some(Traitor) steps=181 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log-400-QUALITY_GAME seats=8 identity=true skills=true variant=1 depth=2 seed=45001 challenger=7 role=Some(Rebel) steps=388 winner=Some(Outcome { winner: Rebels })
+../evidence/quality-final.log:401:QUALITY_SUMMARY seats=8 identity=true skills=true variant=1 depth=2 games=16 finished=12 challenger_wins=8 steps=7183 samples=7183 rejected=0 faults=12 nodes=36427 exhausted=2632 zero_node=0 p50_ns=155125 p95_ns=1371208 p99_ns=1484625
+../evidence/quality-final.log-402-
+../evidence/quality-final.log-403-thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7943297) panicked at crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:158:5:
+../evidence/quality-final.log-404-assertion `left == right` failed: quality matrix rejected plans or simulation faults
+../evidence/quality-final.log-405-  left: 26
+../evidence/quality-final.log-406- right: 0
+../evidence/quality-final.log-407-FAILED
+../evidence/quality-final.log-408-
+../evidence/quality-final.log-409-failures:
+../evidence/quality-final.log-410-
+../evidence/quality-final.log-411-failures:

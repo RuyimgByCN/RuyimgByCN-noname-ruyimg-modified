@@ -129,6 +129,11 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     // SelectCards 与 Answer 通道，无新增变体/载荷）。**表尾追加**——索引即
     // 线上 tag，既有编码不移位。
     "rvm_discard_pick",
+    "xunxun_arrange",
+    "jijie_give_target",
+    "gaiming_pick",
+    "haotianta_pick",
+    "liaoyuan_discard",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

@@ -1,0 +1,13 @@
+{
+  "staged_paths": 645,
+  "staged_all_bytes_equal_worktree": true,
+  "line_ending_handling": "CSV raw blob inserted with hash-object --no-filters and update-index after add retained old normalized index; original CRLF preserved. No repository config or gitattributes changed",
+  "production_source_paths": 51,
+  "NC10_production_paths_staged": false,
+  "source_versions": [
+    328,
+    105,
+    753,
+    5
+  ]
+}

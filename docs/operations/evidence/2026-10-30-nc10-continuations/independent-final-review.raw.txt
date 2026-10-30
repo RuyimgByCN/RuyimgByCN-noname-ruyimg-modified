@@ -1,0 +1,63 @@
+## Review
+
+**Both original P2 findings are closed. Merge verdict: OK with notes for this honest partial NC10 increment, with the separately approved restore prerequisites present.**
+
+No issues found.
+
+I read the full correction handoff, five-path correction patch, complete 12-path NC10 patch, source manifest and command index. I checked the current helper guards, recursive wrapper handling, planner entry/lookahead/fallback, regression tests and supporting logs. This verdict covers the corrected increment against baseline `38789f54c798829d7b32bff1c990def50cf7f611`, rules 328/archive 105/native ABI 753.
+
+- **Fixed — VM nonzero-card references becoming the zero sentinel.**  
+  [remap.rs:140](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/remap.rs:140) now classifies both `paused: Some(_)` and `commit_pick: Some(_)` Rvm machines as requiring conservative handling. OptionalGate, NullifyWindow, Aoe, Chain, Jijiang and LiJian recurse into their inner machines. The engine checks every parked machine before entering reassignment. Consequently, an accepted commit-pause payload is preserved before the physical mapping or effect visitor can change a nonzero reference into native CardId zero.
+
+  The regression is meaningful: [nc10_redaction_helper_contract.rs:115](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/tests/nc10_redaction_helper_contract.rs:115) constructs accepted VM commit windows, demonstrates that unrestricted allocation would map the selected nonzero card to zero, decodes and admits the pending effects using existing code, then performs archive/restore and continuation execution. Both Store and Move are exercised. The retained red log records `source=46 sampled=0 moved=false`; the final green log records `source=46 sampled=46 moved=true` for both effects.
+
+  Closure comes from preventing these states from reaching the mapper. It does not establish that generic VM effect remapping is sentinel-safe.
+
+- **Fixed — Another seat’s filtered response options becoming inconsistent with its sampled hand.**  
+  [redact.rs:23](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/redact.rs:23) now requires an existing open choice to belong to the requested observer seat. Otherwise, the helper takes the conservative path and returns before changing hands, piles, options or continuation references. The check uses the engine’s current open choice, so it also applies when the asking machine is nested inside a wrapper.
+
+  The new Sha regression constructs a valid response window owned by seat 1 and redacts for seat 0. The retained red log records Shan35 becoming FireSha97 and restore failing with `OpenChoiceMismatch { observer: 1 }`. The final log records Shan35 remaining Shan35. The test checks unchanged input/events, unchanged continuation and responder hand, archive/restore, and successful response submission.
+
+- **Correct — The conservative path preserves the relevant state.**  
+  [redact.rs:51](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/redact.rs:51) retains the existing deterministic deck-order shuffle and returns even when the deck contains fewer than two cards. It does not proceed to physical reassignment or `remap_resolution`. This protects helper validity while explicitly retaining private information in these unsupported states.
+
+- **Correct — Planner privacy handling remains separate from helper preservation.**  
+  The public `rvm_choice`/`rvm_discard_pick` root leaf at `ai.rs:542` and lookahead guard at `ai.rs:694` are unchanged. Neither chooses its policy from storage presence, locals or pending scalar values. The fallback at `ai.rs:753` continues to use projected choice handling or the simulation clone; authoritative `self.legal_actions` has not returned.
+
+  The adjusted real commit-window test appropriately checks conservative helper preservation separately from equal complete PolicyInput/events/full Plans, zero nodes/faults, restore/apply and source immutability. Removing cross-counterfactual helper-Core equality for this now-conservative state accurately narrows the claim.
+
+- **Correct — Liaoyuan remains a real, registered regression.**  
+  [nc10_live_hidden_cards.rs:440](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/tests/nc10_live_hidden_cards.rs:440) now follows OptionalGate wrappers to inspect the actual nested Host. It still asserts the real `liaoyuan_discard` window, successful initial restore, Liaoyuan’s SelectCard stage, the captured suit scalar, unchanged resolution after conservative redaction, and successful subsequent restore. The test was not skipped or weakened into a synthetic fixture. The borrowed Host ask code now receives the `card` scalar and derives the Liaoyuan options from it.
+
+**Validation evidence**
+
+These are results inspected in the supplied logs, not tests rerun by this reviewer:
+
+| Check | Recorded result |
+|---|---|
+| Original P2 reproductions | **0 passed / 3 failed**, with both sentinel failures and the Shan/FireSha restore mismatch |
+| Final targeted NC10 run | **53 passed / 0 failed / 4 ignored**, exit0 |
+| Final native three-package run | **1658 passed / 0 failed / 75 ignored**, exit0 |
+| Three strict native package checks | All exit0 with `RUSTFLAGS=-D warnings` |
+| WASM facade native authorization/action/projection tests | **11 passed / 0 failed** |
+| Actual corrected-source release WASM build | Exit0; existing shell dead-code warnings retained |
+| Generated-WASM Node smoke | **11 passed / 0 failed**, including a 235-step terminal game |
+| Source/layering gates | 8923 files within limits; zero upward references |
+
+The final full log explicitly includes the three helper regressions and the retained Liaoyuan test as passing. The earlier **1582/76/75** full run and **52/1/4** targeted run remain distinct failed attempts; the final result comes from a separate complete run.
+
+**Scope and fingerprints**
+
+The supplied five-path correction patch changes the two guards, test registration, existing live tests and the new helper-contract test file. The complete patch contains 12 pure NC10 paths. The eight borrowed prerequisite paths remain separately inventoried and excluded from those patches. The supplied forward-application and final-source logs report all 12 resulting hashes matching, frozen11 verified, borrowed8 unchanged and no staged files.
+
+The recorded fingerprints are:
+
+- Complete patch: `de121a0f23019a9226627a46d88f54ac9906673373cf05fbac4796b81303bd05`
+- Five-path correction patch: `838591a55219384b2bee21d419eb8e6cedaf8c45571fead13a67870fd27ce32f`
+
+These are **supplied fingerprints**. I did not independently compute hashes. I reread both guards and the Liaoyuan lookup/assertions at the end of review.
+
+The remaining full-NC10 gaps are correctly retained: non-D3Moyan Host semantics, no-choice VM storage/flags/cached scalar provenance, the existing storage-dependent trap branch, post-repair privacy matrices, complete typed-continuation equivalence, public memory/known-card policy, pile shape/count information and newer J2 continuations. The actual opaque-VM WASM counterfactual matrix also remains untested. Standard WASM smoke and the earlier two-seed/no-VM quality matrices do not close those gaps.
+
+Skipped: writes, builds, runtime tests, commits, independent digest computation and unrelated Host/provenance implementation.  
+Risk: conservative helper states retain private information; this approval covers the documented partial increment, not full NC10 privacy acceptance.

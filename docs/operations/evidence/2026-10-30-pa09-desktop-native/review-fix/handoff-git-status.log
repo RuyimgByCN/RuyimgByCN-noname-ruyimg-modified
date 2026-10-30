@@ -1,0 +1,26 @@
+ M Cargo.lock
+ M apps/desktop-client/Cargo.toml
+ M apps/desktop-client/src/lib.rs
+ M apps/desktop-client/src/main.rs
+ M apps/web-client/scripts/nc04-worker-failure.test.mjs
+ M apps/web-client/scripts/network-client.test.mjs
+ M apps/web-client/scripts/web-frame-external.mjs
+ M apps/web-client/src/engine/autoDrive.ts
+ M apps/web-client/src/engine/client.ts
+ M apps/web-client/src/views/ExtensionsView.vue
+ M apps/web-client/src/views/SettingsView.vue
+ M apps/web-client/src/worker/nativeBackend.ts
+ M crates/engine-native-wasm/src/lib.rs
+?? apps/desktop-client/examples/
+?? apps/desktop-client/src/native_engine_host.rs
+?? apps/desktop-client/src/native_engine_resource.rs
+?? apps/desktop-client/src/native_envelope.rs
+?? apps/desktop-client/tests/
+?? apps/web-client/scripts/pa09-desktop-transport.test.mjs
+?? apps/web-client/scripts/pa09-desktop-webview.ts
+?? apps/web-client/scripts/pa09-document-reload.ts
+?? apps/web-client/scripts/pa09-native-host-smoke.mjs
+?? apps/web-client/src/engine/desktopEngineTransport.ts
+?? apps/web-client/src/engine/nativeOutcome.ts
+?? crates/engine-native-wasm/src/session.rs
+?? crates/engine-native-wasm/tests/pa09_native_session.rs

@@ -1,0 +1,3 @@
+HEAD f6b7bb57bf27251b00832243b1e0826e6b3bc751
+Initial source and index clean; tool-generated untracked .pi-lens-probe-home/ present and preserved.
+No commits, remotes, reset, clean, stash or staging actions performed.

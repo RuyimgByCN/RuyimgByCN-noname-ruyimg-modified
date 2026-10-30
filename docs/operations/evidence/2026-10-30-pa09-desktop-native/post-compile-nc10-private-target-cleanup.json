@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-30T11:15:43.126850+08:00",
+  "authorization": "User: 注意下本地磁盤，每次編譯完要清理下",
+  "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target",
+  "retired_kib": 3136392,
+  "active_open_file_users": [],
+  "preserved_wasm_artifacts": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence/nc10-node-pkg/engine_native_wasm_bg.wasm",
+      "bytes": 3423759,
+      "sha256": "d5b5885f998ca1acf0c07071deffbfc6f3076bd5c2099130932bb72091a1d34c"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence-review-p2/nc10-node-pkg/engine_native_wasm_bg.wasm",
+      "bytes": 3429050,
+      "sha256": "95946e87d990b600190808d0ec328015b1d549226941b4bb0bdca3658ee5e584"
+    }
+  ],
+  "preserved": "All worktree source, original/review patches, manifests, raw test/quality logs and retained WASM products outside target; no shared or active target touched",
+  "reason": "NC10 compile/verification run8cf0a686 completed and delivered; next independent review is source/log read-only, integration tests will use parent cache",
+  "available_after_gib": 124.45
+}

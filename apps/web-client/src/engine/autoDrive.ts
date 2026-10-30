@@ -94,6 +94,8 @@ function collect() {
     dpr: window.devicePixelRatio,
     viewport: [window.innerWidth, window.innerHeight],
     href: location.href,
+    // SAFETY: EngineClient records the actual selected transport before opening its connection.
+    engine_transport: (globalThis as unknown as { __engineTransport?: string }).__engineTransport ?? null,
     // PA08-5 长时内存采样（sampleMemory 在上报前覆写；series 为 driveAuto 周期采样）
     memory: null as { used: number; total: number; limit: number; api: string } | null,
     memory_series: [] as Array<{ t_ms: number; bytes: number }>,

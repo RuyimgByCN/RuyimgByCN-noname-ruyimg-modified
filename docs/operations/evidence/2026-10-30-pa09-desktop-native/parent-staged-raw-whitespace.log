@@ -1,0 +1,438 @@
+docs/operations/evidence/2026-10-30-nc09-referee/gaiming-cancel-compile.log:31: new blank line at EOF.
+docs/operations/evidence/2026-10-30-nc09-referee/independent-review.raw.txt:84: trailing whitespace.
++Skipped: runtime execution, repository mutation, independent SHA recomputation and the parent’s committed integration range.  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/final-all5.log:4790: trailing whitespace.
++test native_room_store::tests::scan_isolates_bad_records_and_reserves_all_related_room_ids ... 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/final-worker82.log:61: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/final-worker82.log:73: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/final-worker82.log:77: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/full-native-server-wasm.log:4795: trailing whitespace.
++test native_room_store::tests::stale_legacy_temp_never_blocks_new_save ... 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/preflight.log:23: new blank line at EOF.
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:23: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:191: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:210: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:274: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:452: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:466: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:550: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:556: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:655: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:661: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:670: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:755: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/total-vs-f6b7bb57.patch:761: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/worker82.log:61: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/worker82.log:73: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/worker82.log:77: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/ws-referee-backtrace.log:76: new blank line at EOF.
+docs/operations/evidence/2026-10-30-nc09-referee/isolated/ws-referee-failure-detail.log:15: new blank line at EOF.
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix-independent-review.raw.txt:102: trailing whitespace.
++Skipped: runtime execution, live SHA recomputation and unmerged parent candidates.  
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/interrupted-green-server.log:911: new blank line at EOF.
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/parent-ownership-helper-prerequisite-vs-38789f54.patch:6: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/parent-six-production-restore-vs-38789f54.patch:73: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/parent-six-production-restore-vs-38789f54.patch:82: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/parent-six-production-restore-vs-38789f54.patch:189: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:23: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:191: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:210: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:274: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:452: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:466: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:550: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:556: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:655: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:661: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:670: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:755: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/prior-total-vs-f6b7bb57.patch:761: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/review-fix-incremental.patch:131: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/review-fix-incremental.patch:167: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/review-fix-incremental.patch:225: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:14: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:23: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:191: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:210: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:274: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:519: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:528: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:555: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:648: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:765: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:771: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:870: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:876: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:885: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:937: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:970: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-nc09-referee/review-fix/total-vs-f6b7bb57.patch:976: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:20: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:32: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:47: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:71: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:75: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:126: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:130: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:153: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:332: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:334: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:338: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:353: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:374: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:389: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:433: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:439: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:524: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:680: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:773: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:788: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:795: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:799: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:804: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:810: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:816: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:826: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:931: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1062: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1068: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1074: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1081: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1087: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1097: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1121: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1138: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1156: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1176: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/pa09-native-desktop-delta.patch:1232: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:6: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:13: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:57: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:148: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:399: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:421: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:425: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:822: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/session-extraction.patch:822: new blank line at EOF.
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/web-typecheck-final.log:4: new blank line at EOF.
+docs/operations/evidence/2026-10-30-pa09-desktop-native/isolated/web-typecheck.log:4: new blank line at EOF.
+docs/operations/evidence/2026-10-30-pa09-desktop-native/main-network-tests-preserved.diff:13: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-worker-final.log:66: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-worker-final.log:78: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-worker-final.log:82: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:20: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:32: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:47: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:71: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:75: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:156: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:160: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:183: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:362: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:364: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:368: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:383: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:404: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:412: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:419: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:463: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:469: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:554: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:710: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:803: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:818: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:825: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:829: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:834: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:840: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:846: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:856: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:961: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1092: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1098: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1104: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1111: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1117: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1127: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1151: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1168: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1186: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1199: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1206: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-corrected-total-vs-db4e37ca.patch:1262: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-review-fix-incremental-vs-prior-26.patch:10: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-review-fix-incremental-vs-prior-26.patch:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-review-fix-incremental-vs-prior-26.patch:92: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/pa09-review-fix-incremental-vs-prior-26.patch:206: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:20: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:32: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:47: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:71: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:75: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:126: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:130: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:153: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:332: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:334: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:338: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:353: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:374: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:389: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:433: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:439: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:524: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:680: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:773: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:788: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:795: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:799: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:804: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:810: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:816: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:826: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:931: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1062: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1068: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1074: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1081: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1087: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1097: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1121: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1138: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1156: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1176: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/review-fix/prior-total-vs-db4e37ca.patch:1232: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.failed-enospc-retained.log:5828: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.failed-enospc-retained.log:5839: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.failed-enospc-retained.log:5849: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.failed-enospc-retained.log:5858: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.log:5828: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.log:5839: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.log:5849: trailing whitespace.
++          
+docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-workspace.log:5858: trailing whitespace.
++          

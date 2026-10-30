@@ -1,0 +1,169 @@
+# NC10 helper review corrections after disk recovery
+
+Implemented both independently reviewed P2 helper corrections. Final native three-package validation is **1,658 passed / 0 failed / 75 ignored**, including the retained real Liaoyuan test. The corrected partial increment is ready for the parent's fresh independent review; this is not full NC10 privacy acceptance.
+
+Verified 2026-10-30. Base HEAD `38789f54c798829d7b32bff1c990def50cf7f611`; rules 328 / archive 105 / native ABI 753 unchanged. Workspace: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree`. No main/shared documentation, authoritative rules, ABI, metadata, commits, staging, pushes or cache cleanup were changed in this recovery.
+
+## Concrete correction and scope
+
+- `ai/redact.rs`: the continuation gate now receives the observer seat and conservatively retains hands when the open choice belongs to another seat. This keeps catalog-filtered response options consistent with the actual hand.
+- `ai/remap.rs`: commit-paused Rvm machines join paused opaque VM states in the conservative helper path, including recursive wrapper handling already present. Pending nonzero VM references therefore cannot become native CardId zero, which the VM commit layer treats as a no-card sentinel.
+- The existing conservative deterministic deck shuffle remains. Hidden hands/piles and continuation payloads are preserved in these states. This is a helper validity correction, **not a new privacy guarantee**. There is no return to authoritative `self` for planning.
+- The public `rvm_choice` / `rvm_discard_pick` root leaf and lookahead guards are unchanged. Those decisions still use the public prompt and projected options/bounds/cancellation/Pass, independent of private storage/locals.
+- The real discard/draw commit test remains registered. It now checks equal complete PolicyInput/events/full Plans, zero-node/zero-fault public leaf, restore/apply on both counterfactuals, source immutability and conservative helper hand/payload preservation. It no longer claims that the helper canonicalizes private hands at commit pauses.
+- The retained Liaoyuan test now follows its actual OptionalGate wrapper to inspect the nested Host suit scalar. This test-only correction was necessary after the borrowed fix allowed restore to progress past the original failure; it retains the real window, stage/scalar checks, restore assertions and unchanged-resolution assertion. No Host semantic visitor or additional production fix was introduced.
+
+## Actual red-to-green evidence
+
+`p2-first-red.log` was preserved from before disk exhaustion and records **0 passed / 3 failed**:
+
+1. Real accepted pending `StoreEventCardInSkillPile`: nonzero physical card **46 → 0**, effect skipped.
+2. Real accepted pending `MoveCards`: nonzero physical card **46 → 0**, effect skipped.
+3. Real accepted Sha response owned by another seat: **Shan 35 → FireSha 97**, then `OpenChoiceMismatch { observer: 1 }` on restore.
+
+The new tests create those real accepted states, validate the VM effects through the existing decoder/admission checks, force the unrestricted allocation position that would produce zero/non-Shan, and perform archive roundtrip/restore and actual continuation execution. With the correction, card 46 remains nonzero and both pending effects execute; Shan 35 remains a Shan and the response restores/resumes. Final NC10 log and the full native log show all three tests passing.
+
+The original Liaoyuan restore red remains in the earlier evidence directory. Its registered regression was not deleted or ignored. Borrowed restore prerequisites now let its initial `Engine::restore_with_extensions` succeed. The first recovery targeted run then exposed the test's top-level-only Host lookup, at `expect("real suit scalar")`; the actual Host is nested in OptionalGate. The corrected lookup passes and checks the real suit value plus unchanged continuation after conservative redaction.
+
+## Pure patches and independently verified fingerprints
+
+All artifacts below are under [evidence-review-p2](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/evidence-review-p2).
+
+| Artifact | Scope / SHA-256 |
+|---|---|
+| `nc10-corrected-complete.patch` | Original 11-path NC10 increment plus new review-test path; **12 pure paths**, no borrowed files. `de121a0f23019a9226627a46d88f54ac9906673373cf05fbac4796b81303bd05` |
+| `nc10-p2-vs-frozen-11.patch` | **Five-path correction** against the b5-reviewed frozen 11-file source. `838591a55219384b2bee21d419eb8e6cedaf8c45571fead13a67870fd27ce32f` |
+| `corrected-source-manifest.json` | Current hashes/line counts for all 12 pure files, original frozen hashes, base versions, patch hashes and staged-state evidence. |
+| `borrowed-prerequisites.json` | Separate eight-path prerequisite inventory with before/after hashes; excluded from both pure patches. |
+| `commands-index.json` | All ten completed recovery heavy commands, exact argv/env, exit and acquired-lock execution duration. |
+| `evidence-manifest.json` | Evidence artifact byte counts and independently computed SHA-256 hashes. |
+| `patch-forward-final-check.log`, `final-source-verification.log` | Forward application reproduces all 12 hashes; final source/borrowed checks and no staging. |
+
+Both patches pass reverse checks against the current tree. Each also forward-applies in a separate evidence copy of its proper base and reproduces **all 12 current file hashes**. All 11 frozen snapshot hashes were independently recomputed and matched the b5-review baseline. Final source verification after all tests confirmed no pure-source drift and no borrowed-source drift.
+
+The five correction paths are:
+
+- `crates/engine-native/src/ai/redact.rs`
+- `crates/engine-native/src/ai/remap.rs`
+- `crates/engine-native/tests/groups/nc_rounds.rs`
+- `crates/engine-native/tests/nc10_live_hidden_cards.rs`
+- `crates/engine-native/tests/nc10_redaction_helper_contract.rs`
+
+The complete pure patch additionally retains the original changes to `Cargo.toml`, `ai.rs`, `engine/accessors.rs`, `nc10_duel_nullify_privacy.rs`, `nc10_pending_duel_privacy.rs`, `nc10_opaque_vm_privacy.rs` and `nc12_ai_strength_baseline.rs`.
+
+## Borrowed prerequisites stay separate
+
+The approved prerequisite patches were already present and were **not reapplied**. Independently computed hashes match the approved values:
+
+- `parent-ownership-helper-prerequisite-vs-38789f54.patch`: `a3978bf45cbc301dbd7cdb73a8deaccf8dfdbe91924b54222927e985f3229ee5`
+- `parent-six-production-restore-vs-38789f54.patch`: `a504ce83d2dfa027af527ef12d1aea44c121a8f8d6a86ad45721bfbf98dd78f8`
+
+All eight current prerequisite file hashes matched the recorded after-hashes at recovery start and final verification:
+
+- kernel `snap.rs`, `snap/ownership.rs`, `snap/validation.rs`, `snap/asks.rs`, `archive/resolution.rs`, `catalog.rs`
+- content `content/standard.rs`, `content/host/asks.rs`
+
+Their manifests, patches and before snapshots are retained. They enable this validation but are not attributed to the NC10 helper patch. Restored private `../archive` lookup symlink points to the existing `/Users/ruyimg/Documents/Claude/sanguosha/archive` so upstream fixture tests can run. No archive contents were changed; the link is retained and must be available when replaying those fixture-dependent checks.
+
+## Final validation
+
+Every explicit recovery Rust/WASM command used **`CARGO_INCREMENTAL=0`**, `CARGO_BUILD_JOBS=2`, and private `CARGO_TARGET_DIR=../target`. This is a cache setting, not performance evidence. Strict gates retain their existing `RUSTFLAGS=-D warnings` policy; no release profile, ABI or compiler semantics were changed as a disk workaround.
+
+The recovery runner takes the same `/tmp/noname-phase4-heavy-command.lock` used by the shared serializer, checks at least 3 GiB free before queueing and after acquiring the lock, and writes exit-bearing records. No cache cleanup occurred. Final observed free space was approximately 10.7 GiB. Logs separate lock-held execution from queue waiting; no controlled performance claim is made.
+
+| Check | Actual final result | Evidence |
+|---|---:|---|
+| `cargo test --offline -p engine-native --test nc_rounds nc10_ -- --nocapture` | **53 passed / 0 failed / 4 ignored**, exit0 | `p2-final-green-nc10.log`, counts JSON |
+| `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast` | **1658 passed / 0 failed / 75 ignored**, exit0 | `p2-final-full-native3.log`, per-target counts JSON |
+| Independent `RUSTFLAGS=-D warnings cargo check --offline -p engine-native-kernel --all-targets` | exit0 | `p2-strict-engine-native-kernel.log` |
+| Same strict gate for `engine-native-content` | exit0 | `p2-strict-engine-native-content.log` |
+| Same strict gate for `engine-native` | exit0 | `p2-strict-engine-native.log` |
+| WASM facade native actor authorization, legal action export and view projection tests | **11 passed / 0 failed**, exit0 | `p2-wasm-native-privacy.log`, counts JSON |
+| Actual `wasm-pack build … --target nodejs --release --no-opt` from corrected source | exit0; existing WASM-shell dead-code warnings retained | `p2-wasm-build.log` |
+| Actual generated-WASM `scripts/native_wasm_smoke.mjs` | **11 passed / 0 failed**, exit0; 235-step terminal game, zero suspended outcomes | `p2-wasm-smoke.log` |
+| Source-line gate tests / final gate | **2 passed**; **8,923 files** within 2,000 physical / 1,000 effective Rust limits | `p2-source-tests.log`, `p2-source-final.log` |
+| Layering tests / gate | **9 passed**; **0 upward references** | `p2-layering-tests.log`, `p2-layering.log` |
+| Diff and patch checks | pass; **no staged files** | source manifest and final verification log |
+
+All failed attempts remain distinct:
+
+- First direct invocation timed out waiting for the shared lock before compiler/test output; not a completed test or pass.
+- `p2-green-nc10.log`: **52/1/4**, exit101; the later Liaoyuan test lookup failure described above, with all three P2 regressions passing.
+- `p2-full-native3.log`: **1582/76/75**, exit101. It compiled before the test lookup correction and also lacked the private upstream fixture link. The failures and complete output are preserved. The later all-green result is a separate full run, not a selective reclassification of this run.
+- Previous partial handoff path did not exist; existing P2 JSON files were parsed fully before use. No partial JSON/markdown was assumed complete.
+
+## Quality evidence and remaining acceptance gaps
+
+No unchanged quality benchmark was repeated. Earlier logs remain scoped to their recorded source/profile/node settings: debug/node8 **288 games, 269 terminal / 19 truncated**, release/node64 **288 games, 272 terminal / 16 truncated**, two repeated seeds and no VM packages, zero recorded rejection/fault. The current helper gates affect states outside that sampled standard-policy matrix; the public VM leaf policy is unchanged. Those logs are not a fresh quality run of every current state. Latencies remain diagnostic, with no cross-profile speedup or strong-AI claim.
+
+Actual release WASM build and standard game smoke are green; they **do not** establish the actual opaque-VM WASM counterfactual matrix. That matrix remains untested.
+
+Full NC10 remains incomplete for non-D3Moyan Host behavior/stage semantics; no-choice private VM storage/flags/cached scalar provenance (including the existing private-storage-based trap branch); XunXun/JiJie/GaiMing/HaoTianTa privacy matrices after shared restore fixes; all typed continuation equivalence; public memory/known-card policy; private pile shapes/counts and broader modes; actual opaque-VM WASM matrix; J2/newer continuations outside this v328 base. Borrowed restore fixes prove neither those privacy matrices nor upstream rule equivalence.
+
+Recommended next step: parent launches fresh independent review of the corrected five-path P2 delta plus complete pure patch and this evidence. The b5 review predates these corrections and does not satisfy that fresh review gate. There are no remaining local test/build failures in the completed required checks; review approval is still pending.
+
+Skipped: unchanged quality matrices and unapproved Host/provenance/version work. Risk: conservative helper states retain private hands; full NC10 privacy and the real opaque-VM WASM matrix remain unaccepted.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Five-path P2 delta adds conservative non-observer/VM-commit helper gates, three real regression tests, registration and required existing-test corrections; public planner leaf unchanged; borrowed eight paths excluded."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Actual red/green logs, full native3 1658/0/75, three strict gates, WASM build/privacy/smoke logs, independently verified source/patch/evidence hashes and forward/reverse checks are retained for fresh independent review."
+    }
+  ],
+  "changedFiles": [
+    "crates/engine-native/src/ai/redact.rs",
+    "crates/engine-native/src/ai/remap.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "pending_store_preserves_vm_nonzero_card_contract",
+    "pending_move_preserves_vm_nonzero_card_contract",
+    "nonobserver_shan_window_retains_restorable_filtered_options",
+    "real_vm_commit_window_uses_equal_public_plans_with_conservative_helper",
+    "real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path"
+  ],
+  "commandsRun": [
+    {"command": "first corrected NC10 run", "result": "failed", "summary": "52/1/4; P2 tests green, Liaoyuan test-only wrapper lookup failed"},
+    {"command": "first recovery native3 full run", "result": "failed", "summary": "1582/76/75; missing upstream fixture link plus old compiled Liaoyuan test lookup; preserved"},
+    {"command": "CARGO_INCREMENTAL=0 cargo test --offline -p engine-native --test nc_rounds nc10_ -- --nocapture", "result": "passed", "summary": "53/0/4"},
+    {"command": "CARGO_INCREMENTAL=0 cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast", "result": "passed", "summary": "1658/0/75"},
+    {"command": "CARGO_INCREMENTAL=0 RUSTFLAGS=-D warnings cargo check --offline -p <each native package> --all-targets", "result": "passed", "summary": "Three independent package commands, all exit0"},
+    {"command": "CARGO_INCREMENTAL=0 cargo test --offline -p engine-native-wasm --test nc03_view_projection --test nc03_actor_authorization --test nc03_legal_actions_export", "result": "passed", "summary": "11/0"},
+    {"command": "CARGO_INCREMENTAL=0 wasm-pack build crates/engine-native-wasm --target nodejs --release --no-opt --out-dir <private evidence package>", "result": "passed", "summary": "Actual corrected-source release build; existing shell warnings retained"},
+    {"command": "PKG=<private evidence package> node scripts/native_wasm_smoke.mjs", "result": "passed", "summary": "11/0, 235-step terminal game"},
+    {"command": "source-line and native-layering Python tests/gates", "result": "passed", "summary": "2 source tests; 8923 files within limits; 9 layering tests; 0 upward references"},
+    {"command": "git diff --check; pure patch forward/reverse checks; source/borrowed hash verification; git diff --cached --name-only", "result": "passed", "summary": "Both patches reproduce all 12 pure hashes; borrowed8 unchanged; no staged files"}
+  ],
+  "validationOutput": [
+    "Real nonzero VM card46 remains46 and both pending store/move effects execute",
+    "Real non-observer Shan35 remains Shan35 and archive/restore/resume passes",
+    "Retained Liaoyuan real-window restore and scalar assertions pass",
+    "Full native3 1658 passed, 0 failed, 75 ignored; independent strict gates pass",
+    "Actual WASM build and Node smoke pass; opaque-VM WASM matrix remains a gap"
+  ],
+  "residualRisks": [
+    "Fresh independent corrected-P2 review is pending; prior b5 review is not approval of these corrections",
+    "Conservative helper states preserve hidden hands and do not establish privacy",
+    "Full NC10 Host/no-choice VM/provenance/typed-branch/memory/newer-J2 coverage remains incomplete",
+    "Actual opaque-VM WASM counterfactual matrix remains untested",
+    "Private upstream archive fixture link must be available for replay; no archive contents changed"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Narrow P2 helper correction and real regression tests against frozen11; complete pure patch has12 paths; borrowed8 prerequisites are separately verified and excluded.",
+  "reviewFindings": [
+    "Both reviewed P2 defects reproduced and corrected with passing regressions",
+    "Fresh independent review required by parent before acceptance"
+  ],
+  "manualNotes": "All explicit recovery Rust/WASM commands use CARGO_INCREMENTAL=0 and private target under global heavy lock. No cache cleanup or performance claim. Failed runs, source snapshots and logs retained."
+}
+```

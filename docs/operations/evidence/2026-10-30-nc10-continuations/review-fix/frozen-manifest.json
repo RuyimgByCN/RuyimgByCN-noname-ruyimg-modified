@@ -1,0 +1,73 @@
+{
+  "recorded_at": "2026-10-30T10:21:49.476039+08:00",
+  "manifest": {
+    "recorded_at": "2026-10-30T09:30:04.027749+08:00",
+    "head": "38789f54c798829d7b32bff1c990def50cf7f611",
+    "ruleset": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "patch_sha256": "dd21a0d3db4ae4457f57c6e907997b38ab8fc0a44b69d9666b3d79b34048d518",
+    "files": {
+      "crates/engine-native/Cargo.toml": {
+        "sha256": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+        "lines": 73,
+        "new": false
+      },
+      "crates/engine-native/src/ai.rs": {
+        "sha256": "c623c739037375fd0bda6e1876aa26fc847aa0c2fcf7a8e1f7eda766fe38a2f6",
+        "lines": 833,
+        "new": false
+      },
+      "crates/engine-native/src/ai/redact.rs": {
+        "sha256": "a7f703c8c07672badacfecc4bac90d4a845a3b99cb107aa4b18a61e94178ca64",
+        "lines": 393,
+        "new": false
+      },
+      "crates/engine-native/src/engine/accessors.rs": {
+        "sha256": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+        "lines": 79,
+        "new": false
+      },
+      "crates/engine-native/tests/groups/nc_rounds.rs": {
+        "sha256": "80f98fd5da8dfd6b59dec7c45887619147c1db4474e003c3cbbcfba9702b1009",
+        "lines": 95,
+        "new": false
+      },
+      "crates/engine-native/tests/nc10_duel_nullify_privacy.rs": {
+        "sha256": "a7b2257e2884bdb6890052fb8bc6b1d50a35aba8420978611787b188b6f4aca4",
+        "lines": 214,
+        "new": false
+      },
+      "crates/engine-native/tests/nc10_pending_duel_privacy.rs": {
+        "sha256": "e30f29078154554653c6604a159517be52377456280df876068ea2dddaf6ae1e",
+        "lines": 263,
+        "new": false
+      },
+      "crates/engine-native/tests/nc12_ai_strength_baseline.rs": {
+        "sha256": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622",
+        "lines": 205,
+        "new": false
+      },
+      "crates/engine-native/src/ai/remap.rs": {
+        "sha256": "243e6e2f6937111d6c2ab44c48864cb2a8d17e0a2f25eb498d13dfd8a0ec5ad2",
+        "lines": 284,
+        "new": true
+      },
+      "crates/engine-native/tests/nc10_live_hidden_cards.rs": {
+        "sha256": "bfbc645d192ecef37d61167e336a8c775ab4f05726809e48a971d5094ab7f44e",
+        "lines": 426,
+        "new": true
+      },
+      "crates/engine-native/tests/nc10_opaque_vm_privacy.rs": {
+        "sha256": "ba5868087dcac0f17f836b83a3cf7adf2db95a41b634da4b14bf2f4a12e747da",
+        "lines": 286,
+        "new": true
+      }
+    },
+    "no_staged_files": true,
+    "preexisting_untracked": [
+      ".pi-lens-probe-home/",
+      ".pi-lens.json"
+    ]
+  }
+}

@@ -98,6 +98,9 @@ const battleQuery = new URLSearchParams({
 // PA08-5 长时：loop=1 连续多局 + duration=<ms> 总时长（auto 档）
 if (args.loop) battleQuery.set("loop", "1");
 if (args.duration) battleQuery.set("duration", String(Number(args.duration)));
+if (args["engine-transport"] === "native" || args["engine-transport"] === "wasm") {
+  battleQuery.set("engineTransport", args["engine-transport"]);
+}
 // PA07 缓解原型 A/B：latency=sab（回包 SAB 镜像 + rAF 轮询提前应用；需跨源隔离）
 if (args.latency === "sab") {
   battleQuery.set("latency", "sab");
@@ -246,6 +249,7 @@ const summary = {
     dpr: reportData.dpr,
     viewport: reportData.viewport,
     href: reportData.href,
+    engine_transport: reportData.engine_transport ?? null,
     dist: distDir,
   },
   run: {

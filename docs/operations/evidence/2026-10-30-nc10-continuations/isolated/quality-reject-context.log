@@ -1,0 +1,214 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-8509f2627693ef3d)
+
+running 1 test
+test nc12_ai_strength_baseline::nc10_quality_matrix ... QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=0 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=1 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=2 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45000 challenger=3 role=None steps=310 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=2 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=0 depth=1 seed=45001 challenger=3 role=None steps=251 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=2244 samples=2244 rejected=0 faults=0 nodes=4388 exhausted=4 zero_node=0 p50_ns=58042 p95_ns=140875 p99_ns=198125
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=226 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=303 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=197 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=222 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=231 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=152 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=2 role=None steps=175 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=1 seed=45001 challenger=3 role=None steps=127 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=false variant=1 depth=1 games=8 finished=8 challenger_wins=5 steps=1633 samples=1633 rejected=0 faults=0 nodes=4260 exhausted=147 zero_node=0 p50_ns=56209 p95_ns=244708 p99_ns=478042
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=238 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=295 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=229 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=222 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=242 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=152 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=2 role=None steps=175 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=false variant=1 depth=2 seed=45001 challenger=3 role=None steps=129 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=false variant=1 depth=2 games=8 finished=8 challenger_wins=5 steps=1682 samples=1682 rejected=0 faults=0 nodes=4553 exhausted=176 zero_node=0 p50_ns=57167 p95_ns=247167 p99_ns=538666
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=234 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=2 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=0 depth=1 seed=45001 challenger=3 role=None steps=148 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1528 samples=1528 rejected=0 faults=0 nodes=3272 exhausted=12 zero_node=0 p50_ns=60125 p95_ns=167792 p99_ns=290500
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=0 role=None steps=257 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=1 role=None steps=325 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=2 role=None steps=291 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45000 challenger=3 role=None steps=204 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=0 role=None steps=297 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=1 role=None steps=212 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=2 role=None steps=115 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=1 seed=45001 challenger=3 role=None steps=123 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=true variant=1 depth=1 games=8 finished=8 challenger_wins=6 steps=1824 samples=1824 rejected=0 faults=0 nodes=4936 exhausted=162 zero_node=0 p50_ns=65625 p95_ns=253417 p99_ns=493459
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=0 role=None steps=257 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=1 role=None steps=256 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=2 role=None steps=233 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45000 challenger=3 role=None steps=181 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=0 role=None steps=153 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=1 role=None steps=216 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=2 role=None steps=350 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=4 identity=false skills=true variant=1 depth=2 seed=45001 challenger=3 role=None steps=109 winner=Some(Outcome { winner: Player(3) })
+QUALITY_SUMMARY seats=4 identity=false skills=true variant=1 depth=2 games=8 finished=8 challenger_wins=4 steps=1755 samples=1755 rejected=0 faults=0 nodes=4814 exhausted=170 zero_node=0 p50_ns=65125 p95_ns=239042 p99_ns=561458
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=193 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=83 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY seats=4 identity=true skills=false variant=0 depth=1 games=8 finished=8 challenger_wins=2 steps=1104 samples=1104 rejected=0 faults=0 nodes=2280 exhausted=4 zero_node=0 p50_ns=49125 p95_ns=146167 p99_ns=197250
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=301 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=203 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=88 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=119 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=90 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=138 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=97 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY seats=4 identity=true skills=false variant=1 depth=1 games=8 finished=8 challenger_wins=3 steps=1100 samples=1100 rejected=0 faults=0 nodes=2854 exhausted=98 zero_node=0 p50_ns=55000 p95_ns=238125 p99_ns=550042
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=132 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=167 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=118 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=178 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=90 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=138 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=64 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=false variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=191 winner=Some(Outcome { winner: LordSide })
+QUALITY_SUMMARY seats=4 identity=true skills=false variant=1 depth=2 games=8 finished=8 challenger_wins=2 steps=1078 samples=1078 rejected=0 faults=0 nodes=3008 exhausted=125 zero_node=0 p50_ns=53500 p95_ns=244375 p99_ns=601709
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=174 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=0 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=94 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY seats=4 identity=true skills=true variant=0 depth=1 games=8 finished=8 challenger_wins=3 steps=1072 samples=1072 rejected=0 faults=0 nodes=2348 exhausted=16 zero_node=0 p50_ns=57417 p95_ns=174834 p99_ns=319541
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=0 role=Some(Lord) steps=176 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=1 role=Some(Traitor) steps=211 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=2 role=Some(Rebel) steps=210 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45000 challenger=3 role=Some(Loyalist) steps=113 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=0 role=Some(Lord) steps=67 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=1 role=Some(Loyalist) steps=194 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=2 role=Some(Traitor) steps=99 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=1 seed=45001 challenger=3 role=Some(Rebel) steps=99 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY seats=4 identity=true skills=true variant=1 depth=1 games=8 finished=8 challenger_wins=3 steps=1169 samples=1169 rejected=0 faults=0 nodes=3364 exhausted=134 zero_node=0 p50_ns=65292 p95_ns=310834 p99_ns=632916
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=0 role=Some(Lord) steps=173 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=1 role=Some(Traitor) steps=183 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=2 role=Some(Rebel) steps=355 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45000 challenger=3 role=Some(Loyalist) steps=119 winner=Some(Outcome { winner: LordSide })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=0 role=Some(Lord) steps=67 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=1 role=Some(Loyalist) steps=194 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=2 role=Some(Traitor) steps=88 winner=Some(Outcome { winner: Rebels })
+QUALITY_GAME seats=4 identity=true skills=true variant=1 depth=2 seed=45001 challenger=3 role=Some(Rebel) steps=102 winner=Some(Outcome { winner: Rebels })
+QUALITY_SUMMARY seats=4 identity=true skills=true variant=1 depth=2 games=8 finished=8 challenger_wins=4 steps=1281 samples=1281 rejected=0 faults=0 nodes=3841 exhausted=161 zero_node=0 p50_ns=70083 p95_ns=275834 p99_ns=608875
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=0 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=1 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=2 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=3 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=4 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=5 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=6 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45000 challenger=7 role=None steps=519 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=0 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=1 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=2 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=3 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=4 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=5 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=6 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=0 depth=1 seed=45001 challenger=7 role=None steps=458 winner=Some(Outcome { winner: Player(2) })
+QUALITY_SUMMARY seats=8 identity=false skills=false variant=0 depth=1 games=16 finished=16 challenger_wins=2 steps=7816 samples=7816 rejected=0 faults=0 nodes=19616 exhausted=352 zero_node=0 p50_ns=67791 p95_ns=277208 p99_ns=777500
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=0 role=None steps=351 winner=Some(Outcome { winner: Player(0) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=1 role=None steps=473 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=2 role=None steps=518 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=3 role=None steps=454 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=4 role=None steps=576 winner=Some(Outcome { winner: Player(4) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=5 role=None steps=391 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=6 role=None steps=285 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45000 challenger=7 role=None steps=509 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=0 role=None steps=354 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=1 role=None steps=681 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=2 role=None steps=348 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=3 role=None steps=449 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=4 role=None steps=517 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=5 role=None steps=592 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=6 role=None steps=438 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=1 seed=45001 challenger=7 role=None steps=384 winner=Some(Outcome { winner: Player(2) })
+QUALITY_SUMMARY seats=8 identity=false skills=false variant=1 depth=1 games=16 finished=16 challenger_wins=10 steps=7320 samples=7320 rejected=0 faults=0 nodes=19839 exhausted=629 zero_node=0 p50_ns=72041 p95_ns=341042 p99_ns=899166
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=0 role=None steps=364 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=1 role=None steps=345 winner=Some(Outcome { winner: Player(1) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=2 role=None steps=480 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=3 role=None steps=481 winner=Some(Outcome { winner: Player(3) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=4 role=None steps=506 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=5 role=None steps=403 winner=Some(Outcome { winner: Player(5) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=6 role=None steps=308 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45000 challenger=7 role=None steps=468 winner=Some(Outcome { winner: Player(7) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=0 role=None steps=559 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=1 role=None steps=735 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=2 role=None steps=376 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=3 role=None steps=392 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=4 role=None steps=453 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=5 role=None steps=571 winner=Some(Outcome { winner: Player(2) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=6 role=None steps=626 winner=Some(Outcome { winner: Player(6) })
+QUALITY_GAME seats=8 identity=false skills=false variant=1 depth=2 seed=45001 challenger=7 role=None steps=419 winner=Some(Outcome { winner: Player(7) })
+QUALITY_SUMMARY seats=8 identity=false skills=false variant=1 depth=2 games=16 finished=16 challenger_wins=8 steps=7486 samples=7486 rejected=0 faults=0 nodes=20542 exhausted=664 zero_node=0 p50_ns=72416 p95_ns=318125 p99_ns=913166
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=0 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=1 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=2 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=3 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=4 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=5 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=6 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45000 actor=4 plan=Plan { seat: 4, revision: 11, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 3, observer: 4, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45000 challenger=7 role=None steps=12 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=0 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=1 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=2 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=3 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=4 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=5 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=6 role=None steps=42 winner=None
+QUALITY_REJECT seats=8 seed=45001 actor=0 plan=Plan { seat: 0, revision: 41, action: NextPhase, nodes_used: 1, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } choice=Some(OpenChoice { id: 6, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "hujia_respond", options: [], min: 0, max: 1, allow_cancel: false } }) result=Rejected(ChoicePending)
+QUALITY_GAME seats=8 identity=false skills=true variant=0 depth=1 seed=45001 challenger=7 role=None steps=42 winner=None
+QUALITY_SUMMARY seats=8 identity=false skills=true variant=0 depth=1 games=16 finished=0 challenger_wins=0 steps=432 samples=432 rejected=16 faults=0 nodes=1512 exhausted=72 zero_node=0 p50_ns=72875 p95_ns=1092625 p99_ns=1211209
+
+thread 'nc12_ai_strength_baseline::nc10_quality_matrix' (7844327) panicked at crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:151:21:
+assertion `left == right` failed: plans must submit legally
+  left: 16
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    nc12_ai_strength_baseline::nc10_quality_matrix
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 137 filtered out; finished in 6.36s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_quality_matrix", "--", "--ignored", "--nocapture", "--test-threads=1"], "exit": 101, "locked_seconds": 7.058536041993648}

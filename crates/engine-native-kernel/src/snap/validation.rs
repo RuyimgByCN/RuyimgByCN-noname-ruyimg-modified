@@ -339,7 +339,7 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
 }
 
 /// 机器持牌收集（N04-f：判定进行态/观星顶牌由机器持有，不在任何牌区）。
-pub(super) fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
     match m {
         MachineSnapshot::JudgePhase { queue, current, .. } => {
             out.extend(queue.iter().copied());
@@ -349,9 +349,30 @@ pub(super) fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
                     out.push(c.trick);
                 }
                 if c.judge_held {
-                    out.push(c.judge_card);
+                    if !c.finalized {
+                        if let Some(cards) = &c.gaiming_cards {
+                            out.extend(cards.iter().copied());
+                            // Only the first candidate aliases judge_card; other duplicates remain errors.
+                            if cards.first() != Some(&c.judge_card) {
+                                out.push(c.judge_card);
+                            }
+                        } else {
+                            out.push(c.judge_card);
+                        }
+                        if c.haotian_holder.is_some() {
+                            out.extend(c.haotian_other);
+                        }
+                    } else {
+                        out.push(c.judge_card);
+                    }
                 }
             }
+        }
+        MachineSnapshot::XunXun { stage: XunXunStageSnap::Arrange, top, .. } => {
+            out.extend(top.iter().copied());
+        }
+        MachineSnapshot::JiJie { stage: JiJieStageSnap::Read, card, .. } => {
+            out.extend(card);
         }
         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
         // 末焱展示牌已离开牌库，挂起期间只在宿主机器上。
@@ -389,50 +410,12 @@ pub fn validate_card_ownership(
         seen[c as usize] = true;
         Ok(())
     }
-    for p in &core.players {
-        for c in &p.hand {
-            mark(&mut seen, b, *c)?;
-        }
-        for c in &p.equips {
-            mark(&mut seen, b, *c)?;
-        }
-        for c in &p.judge {
-            mark(&mut seen, b, *c)?;
-        }
-        // 离场区（机关怨挂附等；T19a 修复：此前未计入所有权校验）
-        for c in &p.off_court {
-            mark(&mut seen, b, *c)?;
-        }
-        // These skill piles own cards; fields such as yishan_lost only reference them.
-        for pile in [&p.zhucheng, &p.lianyaohu_store, &p.sxianjing_traps, &p.hutian_hold] {
-            for c in pile {
-                mark(&mut seen, b, *c)?;
-            }
-        }
-    }
-    for c in &core.deck {
-        mark(&mut seen, b, *c)?;
-    }
-    for c in &core.discard {
-        mark(&mut seen, b, *c)?;
-    }
-    for c in &core.table {
-        mark(&mut seen, b, *c)?;
-    }
-    // NC06/NC07：通用内容面 `vm_aux.piles`（内容自有牌堆，如 swd 牌堆类技能）
-    // 也是合法的牌归属区——此前未计入，导致「把牌放进内容牌堆」的活状态在恢复期
-    // 被判 `card_missing_from_all_zones`。
-    for pile in core.vm_aux.piles.values() {
-        for c in pile {
-            mark(&mut seen, b, *c)?;
-        }
-    }
-    let mut held: Vec<CardId> = Vec::new();
+    let mut held = Vec::new();
     for park in &resolution.parks {
         machine_held_cards(&park.machine, &mut held);
     }
-    for c in held {
-        mark(&mut seen, b, c)?;
+    for card in physical_cards(core, &held) {
+        mark(&mut seen, b, card.id)?;
     }
     for (id, ok) in seen.iter().enumerate() {
         if !ok {

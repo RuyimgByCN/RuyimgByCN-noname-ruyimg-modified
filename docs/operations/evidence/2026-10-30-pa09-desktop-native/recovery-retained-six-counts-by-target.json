@@ -1,0 +1,492 @@
+[
+  {
+    "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/desktop_client-c18e67226693f69f)",
+    "passed": 12,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running unittests src/main.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/noname_next_desktop-3f7908f28352967e)",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running tests/native_engine_host.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_engine_host-0590c7e0c8582bfc)",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s"
+  },
+  {
+    "target": "Running tests/native_planner_measurement.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_planner_measurement-ad76de77bacac15d)",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 1,
+    "result": "test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native-ef999bac38825f0f)",
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+  },
+  {
+    "target": "Running tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1-444f5090750a9b46)",
+    "passed": 166,
+    "failed": 0,
+    "ignored": 1,
+    "result": "test result: ok. 166 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.60s"
+  },
+  {
+    "target": "Running tests/groups/g1_shahai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1_shahai-6503fbd4846bf38a)",
+    "passed": 174,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 174 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.03s"
+  },
+  {
+    "target": "Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/kernel-784c832e89a0ebfe)",
+    "passed": 435,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 435 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.92s"
+  },
+  {
+    "target": "Running tests/groups/l_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/l_rounds-2001eab3bbba9eea)",
+    "passed": 43,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s"
+  },
+  {
+    "target": "Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-68c27367166b53f0)",
+    "passed": 194,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 194 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s"
+  },
+  {
+    "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-6ba9dc87c633480c)",
+    "passed": 45,
+    "failed": 0,
+    "ignored": 50,
+    "result": "test result: ok. 45 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.49s"
+  },
+  {
+    "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-d72a513ac7bc62d8)",
+    "passed": 130,
+    "failed": 0,
+    "ignored": 9,
+    "result": "test result: ok. 130 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+  },
+  {
+    "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-238400b4116f1a0c)",
+    "passed": 199,
+    "failed": 0,
+    "ignored": 8,
+    "result": "test result: ok. 199 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+  },
+  {
+    "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-e9f523882d2afdfe)",
+    "passed": 127,
+    "failed": 0,
+    "ignored": 5,
+    "result": "test result: ok. 127 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 12.45s"
+  },
+  {
+    "target": "Running tests/groups/swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/swd-56a4ca4dd8178a86)",
+    "passed": 134,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s"
+  },
+  {
+    "target": "Running tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/test_registry-eed0dbad50d11ad6)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_content-9c577a5828894286)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_kernel-1265743bca017bd0)",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_wasm-32655bf8ac24eb2b)",
+    "passed": 27,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s"
+  },
+  {
+    "target": "Running tests/cross_target_multiseat.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/cross_target_multiseat-341ef8ec00a720fd)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+  },
+  {
+    "target": "Running tests/cross_target_package.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/cross_target_package-d3708f2b173de5d9)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Running tests/events_hash_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/events_hash_export-467be0a277b77103)",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+  },
+  {
+    "target": "Running tests/gt014_import_validation_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/gt014_import_validation_parity-199e23775efc3de7)",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s"
+  },
+  {
+    "target": "Running tests/installed_package_payload.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/installed_package_payload-21ea93d3f42faaad)",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/nc03_actor_authorization.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_actor_authorization-f9920bdb57819427)",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+  },
+  {
+    "target": "Running tests/nc03_legal_actions_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_legal_actions_export-a1b3f76a7ade336d)",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/nc03_view_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_view_projection-c15d939b86d7fc19)",
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+  },
+  {
+    "target": "Running tests/nc04_vm_control_flow.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc04_vm_control_flow-ce32fec323852c27)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/nc05_general_select_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_general_select_export-33c621b6e492b538)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+  },
+  {
+    "target": "Running tests/nc06_skill_pile_restore.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc06_skill_pile_restore-d519328c0dd0a4fa)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/nc08_cross_target.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_cross_target-a1424de5706c9f7c)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/pa09_native_session.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/pa09_native_session-bb3c1855fd189eeb)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+  },
+  {
+    "target": "Running tests/restore_boundary_handle.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/restore_boundary_handle-a3e520878ed827b5)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/vm_module_hash.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_module_hash-cf0edbe5f918691f)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/vm_package_integrity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_package_integrity-7b5e85cb8381a835)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/vm_package_worker.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_package_worker-f1a5925b947cb66c)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s"
+  },
+  {
+    "target": "Running unittests src/main.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/game_server-e8b97ac8649c4dd6)",
+    "passed": 76,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 76 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 30.33s"
+  },
+  {
+    "target": "Running tests/fault_injection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/fault_injection-0b4f654f7c5c0d94)",
+    "passed": 11,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+  },
+  {
+    "target": "Running tests/gt014_vm_import_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/gt014_vm_import_parity-ad9f498e2ae8bfd0)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s"
+  },
+  {
+    "target": "Running tests/long_run_bot.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_bot-b69250a76b6a8a5e)",
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s"
+  },
+  {
+    "target": "Running tests/long_run_memory.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_memory-e6cb7c242cb1111d)",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.88s"
+  },
+  {
+    "target": "Running tests/long_run_soak.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_soak-70dfe8aaeab64839)",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.08s"
+  },
+  {
+    "target": "Running tests/m8_rolling_upgrade.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/m8_rolling_upgrade-467efc744edece3d)",
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s"
+  },
+  {
+    "target": "Running tests/multi_room_stress.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/multi_room_stress-eac8c73a83324a9a)",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s"
+  },
+  {
+    "target": "Running tests/native_frozen_packages.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_frozen_packages-f8caf52db49620ec)",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+  },
+  {
+    "target": "Running tests/native_onlyol_general.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_onlyol_general-def44e4a1499099a)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+  },
+  {
+    "target": "Running tests/native_product_path.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_product_path-bd373c563cb4af63)",
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s"
+  },
+  {
+    "target": "Running tests/native_upgrade_rollback.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_upgrade_rollback-af9c273914de99c4)",
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s"
+  },
+  {
+    "target": "Running tests/nc02_install_identity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc02_install_identity-0b0cf6d8ab074067)",
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s"
+  },
+  {
+    "target": "Running tests/nc05_campaign_profile.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_campaign_profile-28c05fa68da16083)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s"
+  },
+  {
+    "target": "Running tests/nc05_lifecycle_heavy.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_lifecycle_heavy-287bf309ee638413)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s"
+  },
+  {
+    "target": "Running tests/nc05_skin_ui.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_skin_ui-7d4b497295f102e5)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s"
+  },
+  {
+    "target": "Running tests/nc08_command_by_command.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_command_by_command-3e34018c5c062a68)",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+  },
+  {
+    "target": "Running tests/nc08_cross_line.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_cross_line-6bbab495ef347ccf)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s"
+  },
+  {
+    "target": "Running tests/nc08_install_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_install_matrix-d69383dd0ef5f0b4)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s"
+  },
+  {
+    "target": "Running tests/nc09_dual_backend.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_dual_backend-99a50fd037b28e5c)",
+    "passed": 45,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.41s"
+  },
+  {
+    "target": "Running tests/nc09_machine_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_machine_projection-3c1e87a9bca226d2)",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/nc09_native_actor.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_actor-0d4760b02a75066f)",
+    "passed": 44,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.37s"
+  },
+  {
+    "target": "Running tests/nc09_native_durability.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_durability-74339b60cdf82e75)",
+    "passed": 45,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 45 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.59s"
+  },
+  {
+    "target": "Running tests/nc09_native_room_session.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_room_session-55af529f167b6fca)",
+    "passed": 56,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 56 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.16s"
+  },
+  {
+    "target": "Running tests/nc09_native_view_bridge.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_view_bridge-f84a137eba048afe)",
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s"
+  },
+  {
+    "target": "Running tests/nc09_projection_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_projection_parity-9ceca376d5444842)",
+    "passed": 8,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s"
+  },
+  {
+    "target": "Running tests/nc09_referee_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_referee_projection-014f5f78575b0e74)",
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s"
+  },
+  {
+    "target": "Running tests/room_flow.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/room_flow-ac90afd7303ac912)",
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s"
+  },
+  {
+    "target": "Running tests/tournament_wal_signing.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/tournament_wal_signing-044f2d88da7c034d)",
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s"
+  },
+  {
+    "target": "Doc-tests desktop_client",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Doc-tests engine_native",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Doc-tests engine_native_content",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Doc-tests engine_native_kernel",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  },
+  {
+    "target": "Doc-tests engine_native_wasm",
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "result": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  }
+]

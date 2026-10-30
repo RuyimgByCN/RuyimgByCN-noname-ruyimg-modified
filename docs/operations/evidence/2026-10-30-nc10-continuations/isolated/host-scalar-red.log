@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.33s
+     Running unittests src/lib.rs (../target/debug/deps/engine_native-26daa588d639494c)
+
+running 1 test
+
+thread 'ai::remap::tests::host_scalar_payloads_are_never_generic_card_references' (8689366) panicked at crates/engine-native/src/ai/remap.rs:178:13:
+assertion `left == right` failed: Liaoyuan: payload slots contain scalars as well as cards
+  left: Host { def_key: "payload-probe", behavior: 502, stage: 2, owner: 0, target: Some(1), card: Some(103), cards: [], targets: [] }
+ right: Host { def_key: "payload-probe", behavior: 502, stage: 2, owner: 0, target: Some(1), card: Some(3), cards: [], targets: [] }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test ai::remap::tests::host_scalar_payloads_are_never_generic_card_references ... FAILED
+
+failures:
+
+failures:
+    ai::remap::tests::host_scalar_payloads_are_never_generic_card_references
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --lib`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--lib", "host_scalar_payloads", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.366318666987354}

@@ -55,6 +55,10 @@
 21. **完整观察者元数据（方案B）**：批准SeatView.generals两槽可选元数据（def/name/faction/revealed）及ChoiceRequest可选prompt/native_kind，同步实际WASM、Worker、IPC、服务端与UI，只从共享授权投影取值，保留旧character_def/kind回退和裁判无命令权限。先证明WS5旧/新读者兼容，再随第20项整体发布WS6，不另占WS7。若先行兼容证明失败，将字段并入第20项WS6拒旧路径，不擅增版本/ChoiceKind或必填字段。字段、隐私和兼容矩阵详见[方案B](../2026-10-30-next-version-proposals/README.md#b-完整裁判与普通观察者元数据兼容的可选字段)。本项不升规则/存档/ABI，不代表当前Referee全部边界已验收。
 22. **NC08玩家选序规则331（方案C）**：采纳[ADR 0788](../../../adr/0788-native-player-trigger-order.md)。第20项实际330验收接入后，本批独占规则 **330→331**。以当前noname arrangeTrigger为主基准：普通触发按玩家顺座桶→有效优先级、去掉强制/可选调度优先级、每次执行前重验filter；同人并列强制/可选都可选下一个，First/Last及silent/无译名自动。复用Answer/ResolveChoice与PickTag，新增类型化Skill(SkillDefId)选项、静态trigger_order键、可恢复机器和必要包触发元数据/hash校验；已有wire OrderTriggers可复用，不新建命令。预计保留存档105/ABI758和届时WS6；若需archive106、ABI759、新schema或版本已占用则另报。liuli差异、57组真实逐场景及forceDie/out/indexed/隐藏技等未完成项继续验收，不以批准本稿豁免缺失功能。旧规则档明确拒绝并保留原件。
 
+## 补充执行要求（2026-10-30，磁盘）
+
+**23. 编译后清理**：用户明确要求“注意下本地磁盤，每次編譯完要清理下”。后续每次编译完成检查剩余空间，清理本次已无后续验收用途的私有增量缓存与临时产物；同批仍需使用的依赖/测试二进制暂留并记录原因，用完即回收。任务结束先保留必要的WASM/二进制产物、指纹和原始证据，再退休已结束任务的私有target。继续使用CARGO_INCREMENTAL=0控制缓存增长，不将其用于性能前后比较；不触碰源码、补丁、日志、冻结包/旧锁、共享target及仍被其他任务使用的目录，不扩展为无关用户目录清理。已完成NC10私有target约3GiB的回收记录见[编译后清理证据](../2026-10-30-pa09-desktop-native/post-compile-nc10-private-target-cleanup.json)。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

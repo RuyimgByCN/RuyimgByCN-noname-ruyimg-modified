@@ -1,0 +1,9 @@
+{
+  "no_staged_files": true,
+  "temporary_pi_lens_config_removed": true,
+  "dependency_symlink_removed": true,
+  "pre_existing_probe_logs_moved_to": "../evidence/pre-existing-pi-lens-probe-home",
+  "patch_sha256": "a6b05aec64c6d2991da0ba98f2fedc9c6df5d326fce9d1f836bf1c22585cac64",
+  "patch_numstat_files": 26,
+  "diff_check": "passed"
+}

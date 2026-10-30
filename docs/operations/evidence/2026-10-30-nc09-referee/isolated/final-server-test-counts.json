@@ -1,0 +1,205 @@
+{
+  "totals": {
+    "passed": 378,
+    "failed": 0,
+    "ignored": 0
+  },
+  "sections": [
+    {
+      "run": "Running unittests src/main.rs (../target/debug/deps/game_server-67845a215e40e362)",
+      "status": "ok",
+      "passed": 76,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/fault_injection.rs (../target/debug/deps/fault_injection-c5a6262ea32d8536)",
+      "status": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/gt014_vm_import_parity.rs (../target/debug/deps/gt014_vm_import_parity-7c320eaa705c63d4)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/long_run_bot.rs (../target/debug/deps/long_run_bot-1039d69e883bf851)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/long_run_memory.rs (../target/debug/deps/long_run_memory-b2b0d6fc19b4e77e)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/long_run_soak.rs (../target/debug/deps/long_run_soak-428c154432fc4f3b)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/m8_rolling_upgrade.rs (../target/debug/deps/m8_rolling_upgrade-925c229145c29630)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/multi_room_stress.rs (../target/debug/deps/multi_room_stress-d7407e411679771a)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/native_frozen_packages.rs (../target/debug/deps/native_frozen_packages-f43c842de3658303)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/native_onlyol_general.rs (../target/debug/deps/native_onlyol_general-eb1ec78cbeaa4518)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/native_product_path.rs (../target/debug/deps/native_product_path-6de22e1a49849bab)",
+      "status": "ok",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/native_upgrade_rollback.rs (../target/debug/deps/native_upgrade_rollback-57377926a1e9325f)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc02_install_identity.rs (../target/debug/deps/nc02_install_identity-606a0c41e878aa08)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc05_campaign_profile.rs (../target/debug/deps/nc05_campaign_profile-4f81d98271398ff3)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc05_lifecycle_heavy.rs (../target/debug/deps/nc05_lifecycle_heavy-9e80dddc200efd85)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc05_skin_ui.rs (../target/debug/deps/nc05_skin_ui-c60d0e00dea760ce)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc08_command_by_command.rs (../target/debug/deps/nc08_command_by_command-6d833bb98ec94328)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc08_cross_line.rs (../target/debug/deps/nc08_cross_line-eee9b1d88ddac760)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc08_install_matrix.rs (../target/debug/deps/nc08_install_matrix-542592ec249f49d3)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_dual_backend.rs (../target/debug/deps/nc09_dual_backend-27b15a73d6da5c9a)",
+      "status": "ok",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_native_actor.rs (../target/debug/deps/nc09_native_actor-ddf5752b58d523e5)",
+      "status": "ok",
+      "passed": 44,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_native_durability.rs (../target/debug/deps/nc09_native_durability-0a3c7928f905b644)",
+      "status": "ok",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_native_room_session.rs (../target/debug/deps/nc09_native_room_session-b77d22b128ef308d)",
+      "status": "ok",
+      "passed": 56,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_native_view_bridge.rs (../target/debug/deps/nc09_native_view_bridge-bc924416cae9db60)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_projection_parity.rs (../target/debug/deps/nc09_projection_parity-f13da1d42f34c32e)",
+      "status": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/nc09_referee_projection.rs (../target/debug/deps/nc09_referee_projection-99bf67294b207b88)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/room_flow.rs (../target/debug/deps/room_flow-10dc62dbfaffcddc)",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "run": "Running tests/tournament_wal_signing.rs (../target/debug/deps/tournament_wal_signing-219b13f2b3b2a42c)",
+      "status": "ok",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

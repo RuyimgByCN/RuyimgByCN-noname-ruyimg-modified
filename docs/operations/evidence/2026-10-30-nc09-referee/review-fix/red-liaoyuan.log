@@ -1,0 +1,35 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.35s
+     Running tests/groups/misc.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/deps/misc-129eb0d7396969d0)
+
+running 4 tests
+
+thread 'nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores' (8922036) panicked at crates/engine-native/tests/groups/../nc09_machine_ownership.rs:274:66:
+called `Result::unwrap()` on an `Err` value: BadTag("prompt_unknown", 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... FAILED
+
+thread 'nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes' (8922034) panicked at crates/engine-native/tests/groups/../nc09_machine_ownership.rs:77:66:
+called `Result::unwrap()` on an `Err` value: BadTag("prompt_unknown", 0)
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... FAILED
+
+thread 'nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores' (8922037) panicked at crates/engine-native/tests/groups/../nc09_machine_ownership.rs:607:45:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 0 }
+
+thread 'nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject' (8922035) panicked at crates/engine-native/tests/groups/../nc09_machine_ownership.rs:274:66:
+called `Result::unwrap()` on an `Err` value: BadTag("prompt_unknown", 0)
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... FAILED
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... FAILED
+
+failures:
+
+failures:
+    nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes
+    nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject
+    nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores
+    nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 190 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p engine-native --test misc`
+{"command": ["env", "CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::liaoyuan", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.4084658749925438}

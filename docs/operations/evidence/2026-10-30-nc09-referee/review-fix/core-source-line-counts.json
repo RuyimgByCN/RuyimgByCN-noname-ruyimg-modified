@@ -1,0 +1,32 @@
+[
+  {
+    "path": "crates/engine-native-kernel/src/catalog.rs",
+    "physical": 1010,
+    "effective": 527
+  },
+  {
+    "path": "crates/engine-native-kernel/src/snap/validation.rs",
+    "physical": 486,
+    "effective": 440
+  },
+  {
+    "path": "crates/engine-native-kernel/src/snap/asks.rs",
+    "physical": 1018,
+    "effective": 961
+  },
+  {
+    "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+    "physical": 340,
+    "effective": 313
+  },
+  {
+    "path": "crates/engine-native-content/src/content/standard.rs",
+    "physical": 559,
+    "effective": 400
+  },
+  {
+    "path": "crates/engine-native-content/src/content/host/asks.rs",
+    "physical": 778,
+    "effective": 737
+  }
+]

@@ -1,0 +1,27 @@
+ M apps/game-server/src/native_view.rs
+ M apps/game-server/src/native_ws_e2e.rs
+ M apps/game-server/src/native_ws_e2e/authority.rs
+ M apps/game-server/src/native_ws_e2e/double_failure.rs
+ M apps/game-server/src/room_native_actor.rs
+ M apps/game-server/tests/nc09_native_room_session.rs
+ M apps/game-server/tests/nc09_projection_parity.rs
+ M apps/web-client/src/types/engine.ts
+ M crates/engine-native-kernel/src/snap.rs
+ M crates/engine-native-kernel/src/snap/validation.rs
+ M crates/engine-native-wasm/src/lib.rs
+ M crates/engine-native/src/engine/views.rs
+ M crates/engine-native/src/view.rs
+ M crates/engine-native/tests/groups/misc.rs
+?? .pi-lens-probe-home/bus-events.log
+?? .pi-lens-probe-home/cascade.log
+?? .pi-lens-probe-home/extension.log
+?? .pi-lens-probe-home/latency.log
+?? .pi-lens-probe-home/logs/2026-10-29.jsonl
+?? .pi-lens-probe-home/read-guard.log
+?? .pi-lens-probe-home/review-graph.log
+?? .pi-lens-probe-home/sessionstart.log
+?? .pi-lens-probe-home/tree-sitter.log
+?? apps/game-server/src/native_ws_e2e/referee.rs
+?? apps/game-server/tests/nc09_referee_projection.rs
+?? crates/engine-native-kernel/src/snap/ownership.rs
+?? crates/engine-native/tests/nc09_referee_projection.rs

@@ -1,0 +1,23 @@
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+index dc8aa14c..6ee3ec37 100644
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -475,3 +475,18 @@ test("联机公开事件与本地一致地展示粗粒度语义", async (t) => {
+   applyEnvelope(store, envelopes.at(-1));
+   assert.deepEqual(store.log.map((event) => event.text), labels.toReversed());
+ });
++
++test("network outcomes retain protocol seat IDs and never use the local-native normalization", async (t) => {
++  const { client, connect } = fixture(t);
++  const socket = await connect();
++  const pending = client.joinRoom(7);
++  join(socket);
++  await pending;
++  const received = [];
++  client.onEnvelope((envelope) => received.push(envelope));
++  for (const player of [1, 4]) {
++    const snapshot = { ...view(player), outcome: { SingleWin: { player } } };
++    socket.receive("CommandOutcome", { view: snapshot, choice: null, legal_actions: [], result: { Accepted: {} } });
++    assert.deepEqual(received.at(-1).view.outcome, { SingleWin: { player } });
++  }
++});

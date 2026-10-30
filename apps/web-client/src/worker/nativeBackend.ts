@@ -18,6 +18,7 @@
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
 import { publicEventLabel } from "../engine/publicEvents";
+import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
   CardView,
   EngineEnvelope,
@@ -247,14 +248,6 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
     ...view.discard.map((id) => faceToCardView(view, id, null, "DiscardPile")),
     ...view.table.map((id) => faceToCardView(view, id, null, "Processing")),
   ];
-  let outcome = view.outcome ?? null;
-  if (outcome && typeof outcome === "object" && "SingleWin" in outcome) {
-    const winner = (outcome as { SingleWin: { player?: unknown } | null }).SingleWin;
-    if (typeof winner?.player === "number" && Number.isInteger(winner.player) && winner.player > 0) {
-      // 窄壳胜者协议为一基；本地视图的 seat/player 为零基，联机投影不走此处。
-      outcome = { ...outcome, SingleWin: { ...winner, player: winner.player - 1 } };
-    }
-  }
   return {
     revision: view.rulesetVersion ?? view.ruleset_version ?? 0,
     state_hash: "",
@@ -285,7 +278,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
       })),
     })),
     known_cards,
-    outcome,
+    outcome: normalizeNativeOutcome(view.outcome ?? null),
   };
 }
 

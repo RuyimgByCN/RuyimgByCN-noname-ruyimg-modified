@@ -1,0 +1,20 @@
+{
+  "commands": 27,
+  "exit_zero": 26,
+  "failed": [
+    {
+      "name": "machine-fixtures",
+      "exit": 101,
+      "log": "recovery-machine-fixtures.log"
+    }
+  ],
+  "completed_log_index_issues": [],
+  "original_six_retained_counts": [
+    2143,
+    0,
+    74
+  ],
+  "all_six_native_packages_rerun": false,
+  "preflight_checks": 21,
+  "no_staged_files": true
+}

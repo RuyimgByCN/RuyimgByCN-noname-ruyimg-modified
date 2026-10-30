@@ -93,3 +93,9 @@ mod u08_hero_kill_batch1;
 
 #[path = "../u08_menshen_batch2.rs"]
 mod u08_menshen_batch2;
+
+#[path = "../nc09_referee_projection.rs"]
+mod nc09_referee_projection;
+
+#[path = "../nc09_machine_ownership.rs"]
+mod nc09_machine_ownership;

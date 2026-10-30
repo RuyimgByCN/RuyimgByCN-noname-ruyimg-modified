@@ -1,0 +1,246 @@
+{
+  "passed": true,
+  "reloads": 12,
+  "documents": 13,
+  "nextClientConnected": true,
+  "checks": [
+    {
+      "document": 0,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 1,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 2,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 3,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 4,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 5,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 6,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 7,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 8,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 9,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 10,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 11,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 8
+    },
+    {
+      "document": 12,
+      "oldResourceRefused": true,
+      "unrelatedImageRetained": true,
+      "pendingRequests": 0
+    }
+  ],
+  "state": {
+    "ids": [
+      1850428442,
+      1919357862,
+      3135627453,
+      1797925457,
+      2387115384,
+      778520599,
+      2517287563,
+      531059079,
+      3939097899,
+      4237777659,
+      1218631780,
+      304842392,
+      1009295816
+    ],
+    "checks": [
+      {
+        "document": 0,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 1,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 2,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 3,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 4,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 5,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 6,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 7,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 8,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 9,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 10,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 11,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 8
+      },
+      {
+        "document": 12,
+        "oldResourceRefused": true,
+        "unrelatedImageRetained": true,
+        "pendingRequests": 0
+      }
+    ],
+    "imageId": 3136062471
+  },
+  "pendingSnapshots": [
+    {
+      "document": 0,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 1,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 2,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 3,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 4,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 5,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 6,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 7,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 8,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 9,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 10,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    },
+    {
+      "document": 11,
+      "submitted": 8,
+      "settledAtNavigation": 0
+    }
+  ]
+}

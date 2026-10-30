@@ -23,6 +23,8 @@ use crate::state::{GameMode, GameStateCore, Outcome, Winner};
 
 mod types;
 pub use types::*;
+mod ownership;
+pub use ownership::*;
 mod validation;
 pub use validation::*;
 mod machine_validation;

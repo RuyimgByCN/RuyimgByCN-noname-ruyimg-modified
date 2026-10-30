@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "无名杀 Next",
+  "mainBinaryName": "noname-next-desktop",
+  "version": "0.1.0",
+  "identifier": "org.noname.next",
+  "build": {
+    "features": [
+      "tauri-shell"
+    ],
+    "beforeDevCommand": {
+      "script": "pnpm dev",
+      "cwd": "../web-client"
+    },
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": {
+      "script": "pnpm build:desktop",
+      "cwd": "../web-client"
+    },
+    "frontendDist": "../web-client/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "无名杀 Next",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 960,
+        "minHeight": 640,
+        "resizable": true,
+        "url": "http://localhost:5173"
+      }
+    ],
+    "security": {
+      "capabilities": [
+        {
+          "identifier": "pa09-local-hid-fixture",
+          "description": "Local bundled battle UI with core window APIs only; no filesystem, shell, or HTTP plugins.",
+          "windows": [
+            "main"
+          ],
+          "permissions": [
+            "core:default"
+          ],
+          "remote": {
+            "urls": [
+              "http://localhost:5173/*"
+            ]
+          }
+        }
+      ],
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$APPDATA/content/**/*"
+        ]
+      },
+      "csp": "default-src 'self' customprotocol: asset:; connect-src 'self' ipc: http://ipc.localhost ws: wss:; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; font-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

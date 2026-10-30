@@ -1,0 +1,49 @@
+[
+  {
+    "name": "hid-prepare",
+    "command": [
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/prepare-hid-driver.py"
+    ],
+    "exit": 0,
+    "log": "hid-prepare.log",
+    "scope": "Preparation only; no application launch, HID input or performance measurement"
+  },
+  {
+    "name": "hid-node-syntax",
+    "command": [
+      "node",
+      "--check",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-web-frame-external.mjs"
+    ],
+    "exit": 0,
+    "log": "hid-node-syntax.log",
+    "scope": "Preparation only; no application launch, HID input or performance measurement"
+  },
+  {
+    "name": "hid-coordinate-self-check",
+    "command": [
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-web-frame-external.mjs",
+      "--self-check"
+    ],
+    "exit": 0,
+    "log": "hid-coordinate-self-check.log",
+    "scope": "Preparation only; no application launch, HID input or performance measurement"
+  },
+  {
+    "name": "hid-swift-syntax",
+    "command": [
+      "swiftc",
+      "-frontend",
+      "-parse",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/hid-tool.swift"
+    ],
+    "exit": 0,
+    "log": "hid-swift-syntax.log",
+    "scope": "Preparation only; no application launch, HID input or performance measurement"
+  }
+]

@@ -1,0 +1,3 @@
+Read-only installed web node_modules linked locally for tests; remove this agent-created symlink before handoff.
+Unchanged legacy WASM pkg copied from canonical tree only to satisfy existing TypeScript declarations; no old-WASM rebuild claimed.
+Initial wasm-pack CARGO_TARGET_DIR=../target was resolved relative to its crate working directory, producing own isolated crates/target (299MB); this agent-created extra cache removed after build. All subsequent builds use absolute private ../target.

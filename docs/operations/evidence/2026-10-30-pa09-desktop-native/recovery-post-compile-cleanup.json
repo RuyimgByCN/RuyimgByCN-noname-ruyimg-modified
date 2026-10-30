@@ -1,0 +1,81 @@
+[
+  {
+    "command": "desktop-debug-build",
+    "at_utc": "2026-10-30T03:19:45.230984+00:00",
+    "free_bytes": 178828566528,
+    "incremental_entries": 0,
+    "deleted": [],
+    "retained": {
+      "stage3_deps_and_exe": "Needed by remaining actual WebView tests and release build; debug copy saved with SHA",
+      "webview_dist": "Queued real navigation and VM acceptance needs these outputs",
+      "WASM_main_packages": "Current main generated packages are still used by queued fixture bundles; preserved evidence copies"
+    },
+    "debug_evidence_sha256": "46b122a3e4084ed3018b3f456f81ac6e7f277a864a3f2ca575dacf9739e3d0ba",
+    "debug_bytes": 43507400
+  },
+  {
+    "command": "reload-fixture-build",
+    "at_utc": "2026-10-30T03:20:29.559586+00:00",
+    "free_bytes": 178708295680,
+    "deleted": [],
+    "retained": {
+      "private_bundled_fixture_dist": "Needed immediately by next real WKWebView acceptance; archive and remove compiled tmp after both runtime tests finish"
+    },
+    "incremental0": true
+  },
+  {
+    "command": "lifecycle-fixture-build",
+    "at_utc": "2026-10-30T03:20:29.559720+00:00",
+    "free_bytes": 178708295680,
+    "deleted": [],
+    "retained": {
+      "private_bundled_fixture_dist": "Needed immediately by next real WKWebView acceptance; archive and remove compiled tmp after both runtime tests finish"
+    },
+    "incremental0": true
+  },
+  {
+    "command": "reload-and-lifecycle-runtime-complete",
+    "at_utc": "2026-10-30T03:22:15.559479+00:00",
+    "free_bytes": 177817702400,
+    "deleted": [
+      "/tmp/pa09-validation-webview/pa09-document-reload-dist",
+      "/tmp/pa09-validation-webview/pa09-desktop-webview-dist"
+    ],
+    "retained": {
+      "stage3_target": "Release compilation still pending; deps/exe retained until complete"
+    },
+    "evidence": "Both private compiled fixture dists archived with per-file SHA256 before deletion; source runner scripts and raw runtime reports/logs retained."
+  },
+  {
+    "command": "desktop-release-build",
+    "at_utc": "2026-10-30T03:31:38.446763+00:00",
+    "free_bytes": 170178416640,
+    "incremental_entries": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental": 0,
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/incremental": 0,
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/incremental": 0
+    },
+    "deleted": [],
+    "retained": {
+      "stage3_target": "Complete debug/release and actual WASM evidence secured; retain pending final preflight/handoff, then parent-unified retirement",
+      "main_generated_packages": "Shared normal main outputs; not cleanup-owned"
+    },
+    "release_sha256": "873a68efbde540a57fdf53ed61704510a58b6a90b690837a3199d063f975ba8a",
+    "release_bytes": 11433712
+  },
+  {
+    "command": "tracked-generated-dist-restoration",
+    "at_utc": "2026-10-30T03:36:25.696938+00:00",
+    "free_bytes": 173398278144,
+    "deleted": [
+      "/tmp/pa09-validation-dist-before"
+    ],
+    "retained": {
+      "generated_dist_evidence": "Current production and prior generated output archives preserved",
+      "shared_main_outputs": "Untracked main generated assets and normal WASM packages are not private-cache cleanup-owned",
+      "private_targets": "All new incremental entries0; full target retirement delegated to parent after handoff"
+    },
+    "restored_exact_head_files": 37,
+    "evidence": "recovery-artifacts/generated-dist-before-validation.tar.gz and recovery-production-frontend.tar.gz"
+  }
+]

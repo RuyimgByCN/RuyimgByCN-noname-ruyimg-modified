@@ -759,13 +759,14 @@ pub type CardIntrinsicHook = fn(
     CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>>;
 
-/// 宿主机器挂起询问的派生（行为标签、阶段标签、owner、target、targets、cards）。
+/// 宿主机器挂起询问的派生（行为/阶段、owner/target、targets、行为专用 card、cards）。
 pub type HostAskHook = fn(
     u16,
     u8,
     crate::ids::PlayerId,
     Option<crate::ids::PlayerId>,
     &[crate::ids::PlayerId],
+    Option<u32>,
     &[crate::ids::CardId],
     &crate::state::GameStateCore,
     &Catalog,
@@ -792,7 +793,7 @@ pub struct ContentHooks {
 impl ContentHooks {
     pub const NONE: ContentHooks = ContentHooks {
         card_intrinsic: |_, _, _| None,
-        host_ask: |_, _, _, _, _, _, _, _| None,
+        host_ask: |_, _, _, _, _, _, _, _, _| None,
         restore_machine: |_, _| None,
         borrow_options: |_, _, _| Vec::new(),
         borrowed_owner: |_, _, _| None,

@@ -1,0 +1,1 @@
+src/worker/engine.worker.ts(7,34): error TS2307: Cannot find module '../wasm-pkg/engine_wasm.js' or its corresponding type declarations.

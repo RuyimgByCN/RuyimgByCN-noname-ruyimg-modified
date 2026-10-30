@@ -1,0 +1,29 @@
+$ date -Iseconds
+2026-10-30T09:37:10+08:00
+
+$ uname -a
+Darwin ruyimg-Book-Pro-14.local 27.2.0 Darwin Kernel Version 27.2.0: Wed Oct 14 23:47:32 PDT 2026; root:xnu-13432.41.4~25/RELEASE_ARM64_T6031 arm64
+
+$ sysctl -n machdep.cpu.brand_string
+Apple M3 Max
+
+$ sysctl -n hw.memsize
+38654705664
+
+$ rustc -Vv
+rustc 1.95.0 (59807616e 2026-04-14)
+binary: rustc
+commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860
+commit-date: 2026-04-14
+host: aarch64-apple-darwin
+release: 1.95.0
+LLVM version: 22.1.2
+
+$ cargo -V
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+
+$ wasm-pack --version
+wasm-pack 0.15.0
+
+$ node --version
+v26.4.0

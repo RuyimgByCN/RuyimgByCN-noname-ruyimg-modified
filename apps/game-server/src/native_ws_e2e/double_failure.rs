@@ -35,11 +35,11 @@ pub(super) fn saved_state(cfg: &ServerConfig, record: &StoredRoom, token: &str) 
         legal: player
             .map(|id| crate::native_view::legal_actions_for(session.engine(), id))
             .unwrap_or_default(),
-        choice: crate::native_view::choice_for(session.engine(), player),
+        choice: crate::native_view::choice_for(session.engine(), member.role.into(), player),
     }
 }
 
-async fn submit_error(peer: &mut Peer, key: u64, kind: CommandKind) {
+pub(super) async fn submit_error(peer: &mut Peer, key: u64, kind: CommandKind) {
     peer.seq += 1;
     let sequence = peer.seq;
     peer.send(ClientMessage::SubmitCommand {

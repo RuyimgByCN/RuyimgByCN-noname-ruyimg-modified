@@ -1,5 +1,7 @@
 use content_runtime::{ActiveCatalogPage, InstallResult, PackageSignature};
-use desktop_client::{ContentBundle, DesktopHost, PlatformInfo, ShellCapabilities};
+use desktop_client::{
+    ContentBundle, DesktopHost, NativeEngineHost, PlatformInfo, ShellCapabilities,
+};
 use std::sync::Mutex;
 use tauri::{Manager, State};
 
@@ -101,14 +103,61 @@ fn rollback_content(host: State<'_, HostState>) -> Result<(), String> {
         .map_err(|error| error.to_string())
 }
 
+#[tauri::command]
+fn native_engine_open(window: tauri::WebviewWindow) -> Result<tauri::ResourceId, String> {
+    desktop_client::open_native_engine(&mut window.resources_table())
+}
+
+#[tauri::command]
+fn native_engine_close(
+    window: tauri::WebviewWindow,
+    resource_id: tauri::ResourceId,
+) -> Result<(), String> {
+    desktop_client::close_native_engine(&mut window.resources_table(), resource_id)
+}
+
+#[tauri::command]
+async fn native_engine_request(
+    window: tauri::WebviewWindow,
+    resource_id: tauri::ResourceId,
+    request: serde_json::Value,
+) -> Result<serde_json::Value, String> {
+    let engine = window
+        .resources_table()
+        .get::<NativeEngineHost>(resource_id)
+        .map_err(|error| error.to_string())?;
+    engine.request(request).await
+}
+
 fn main() {
-    tauri::Builder::default()
+    let builder = tauri::Builder::default().on_page_load(|webview, payload| {
+        if payload.event() == tauri::webview::PageLoadEvent::Started {
+            desktop_client::close_native_engines(&mut webview.resources_table());
+        }
+    });
+    #[cfg(any(target_os = "macos", target_os = "ios"))]
+    let builder = builder.on_web_content_process_terminate(|webview| {
+        desktop_client::close_native_engines(&mut webview.resources_table());
+        // Preserve Tauri's default renderer-crash recovery after retiring the lost document's engines.
+        if let Err(error) = webview.reload() {
+            eprintln!("failed to reload desktop WebView after renderer termination: {error}");
+        }
+    });
+    builder
         .setup(|app| {
             let data_dir = app.path().app_data_dir()?;
             let host =
                 DesktopHost::open_for_shell(data_dir, ShellCapabilities::default(), "tauri2")
                     .map_err(|error| error.to_string())?;
             app.manage(Mutex::new(host));
+            for window in app.webview_windows().into_values() {
+                let webview = window.clone();
+                window.on_window_event(move |event| {
+                    if matches!(event, tauri::WindowEvent::Destroyed) {
+                        desktop_client::close_native_engines(&mut webview.resources_table());
+                    }
+                });
+            }
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -119,7 +168,10 @@ fn main() {
             resolve_content_asset,
             set_match_frozen,
             install_package,
-            rollback_content
+            rollback_content,
+            native_engine_open,
+            native_engine_close,
+            native_engine_request
         ])
         .run(tauri::generate_context!())
         .expect("failed to run noname-next desktop shell");

@@ -1,0 +1,86 @@
+## Review
+
+**Merge verdict: BLOCK for one P1 lifecycle defect.** After that fix and the stated NC09/NC03 integration edits, this can integrate as a reversible, explicit opt-in prototype. The incomplete performance evidence does not prevent that integration, but it does prevent marking PA09 complete or switching any platform’s default.
+
+Reviewed the complete supplied patch against `db4e37ca`, its manifest, the full implementation report, the affected source and tests, and relevant raw evidence. This was a read-only review; I ran no builds, tests, or Git operations.
+
+- **Finding: P1 — Full-page reloads can leak native validator resources and exhaust the eight-resource limit.**
+
+  [ExtensionsView.vue:35](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/src/views/ExtensionsView.vue:35) disposes its validator only through Vue’s `onUnmounted`. A document reload does not run that application unmount path. The native transport releases its resource only when `terminate()` invokes `native_engine_close` in [desktopEngineTransport.ts:74](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/src/engine/desktopEngineTransport.ts:74).
+
+  These resources belong to the native WebView object, which survives document reloads. Tauri’s installed page-load handler retains that object and does not clear its resource table: [Tauri manager/webview.rs:288](/Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.11.5/src/manager/webview.rs:288). The application registers no native page-load cleanup in [main.rs:133](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/main.rs:133).
+
+  **Source-derived reproduction:** opt into native, use the extension importer so it creates its validator, reload that document, and repeat. Each old validator remains held by its resource-table entry, retaining its session and waiting execution thread. Once eight entries remain, subsequent native connections receive `native engine resource limit reached` from [native_engine_resource.rs:13](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_engine_resource.rs:13). JavaScript garbage collection cannot release those native entries.
+
+  **Smallest reliable fix:** close this document’s native-engine entries at native document teardown/navigation, scoped to `NativeEngineHost`; preserve unrelated resources and the distinction between queued work and an already executing command. Adding the extension page’s missing `pagehide` disposal would improve consistency with `BattleView`, but asynchronous JavaScript cleanup alone does not cover renderer loss. Add a reload regression that repeatedly creates a validator and reloads the same WebView, then verifies another native client can still connect. The existing WebView harness tests explicit disposal and resource close, not document replacement.
+
+- **Correct — Rule operations and authoritative projections remain shared.**
+
+  [session.rs:355](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/crates/engine-native-wasm/src/session.rs:355) owns the existing `Engine` and planner settings. Commands still reach the same submission, choice, package-validation, archive, legal-action, event-code, and state-hash implementations.
+
+  [native_envelope.rs:116](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_envelope.rs:116) translates shared session outputs into the existing UI envelope. It does not invent legal actions or read private engine state. Its visible-card ordering, identity projection, hidden-choice handling, event cursor, public labels, result, and hash placement agree with the Worker adapter on the inspected paths.
+
+  The adapter duplicates some UI-schema translation, but I found no new rule-semantic implementation in it. The patch contains no kernel/content rule changes or protocol, ABI, or archive-version changes.
+
+- **Correct — The session extraction preserves the existing binding surface and provides native string errors.**
+
+  [lib.rs:19](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/crates/engine-native-wasm/src/lib.rs:19) re-exports the existing root helpers and delegates the original 25 `NativeEngine` method signatures to `NativeSession`. The supplied signature inventory agrees with the patch. Native host error paths use `Result<_, String>`; `JsValue` conversion remains at the Wasm binding boundary.
+
+  The existing `engine_native` imports remain compatible with the described F7 facade paths at source level. This review does not establish that the patch has compiled after integration onto `f6b7bb57`.
+
+- **Correct — Ownership, ingress bounds, and replacement atomicity are implemented.**
+
+  [native_engine_host.rs:26](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_engine_host.rs:26) creates one execution thread and an eight-slot channel per host. The session is constructed inside that thread. The resource contains the channel sender and synchronization state, with no new unsafe `Send`/`Sync` implementation.
+
+  Explicit resource close removes the sender and marks queued work for rejection; an executing command may finish. Channel loss reports an unknown result. Resource-table allocation counts actual host entries under the table lock, and the capacity test allocates eight real entries, rejects the ninth, closes entries, and verifies replacement allocation.
+
+  Typed deserialization rejects invalid numeric representations and narrowing overflows. Explicit checks cover safe-integer request IDs, seeds and choice IDs, valid start observers, and the specified archive/package text caps. Start constructs and projects a candidate before replacing the live session. Restore validates the candidate envelope before restoring the live session, preserving planner settings. The invalid restored-observer test verifies that failure leaves the previous archive intact.
+
+  The eight-request bound applies to **Rust ingress**. The frontend Promise chain serializes invocations and has no separate backlog cap, so the implementation should not be described as bounding the entire client request pipeline.
+
+- **Correct — Wasm remains the default, fallback is explicit, and failures do not silently change engines.**
+
+  [desktopEngineTransport.ts:20](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/src/engine/desktopEngineTransport.ts:20) selects Wasm absent an explicit stored or URL choice. `EngineClient` retains its request sequence, pending map and disposal behavior. The IPC adapter checks response IDs, reports bridge uncertainty, and neither retries commands nor switches to Worker automatically.
+
+  The Node tests exercise ordering, controlled errors, bridge failures, response-ID mismatch, disposal during allocation, late responses, and explicit Wasm selection. Separate native resources prevent validator initialization from resetting the battle session.
+
+- **Correct — Outcome conversion occurs once at each local frontend boundary.**
+
+  The pure helper is called by Worker snapshot conversion and IPC envelope reception, including `chooseGeneral.envelope`. Raw Rust projections retain one-based `SingleWin` IDs. Network envelopes bypass this conversion. Tests check players 1 and 4 becoming local seats 0 and 3 without mutating the raw objects.
+
+  During parent integration, replace the existing NC03 inline conversion with the helper call. Also carry main’s NC09 `characterDef` serialization into the moved session projection and preserve its matching frontend adaptation. Those are acknowledged integration edits, not additional findings against the supplied base patch.
+
+- **Correct — The zero-deadline change is limited and covered.**
+
+  [session.rs:598](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/crates/engine-native-wasm/src/session.rs:598) treats zero as disabling this session’s native clock while retaining the node budget. Positive deadlines still call the existing planner deadline API; `BoundedPlanner::with_deadline_ms(0)` itself is unchanged.
+
+  The preserved regression fails at step 2 before the fix and passes afterward. Located existing callers do not establish a dependency on zero meaning immediate native timeout. The separately executed stress measurement actually reaches the 1 ms native deadline. Its loose return-time assertion and single diagnostic workload do not establish a general latency bound.
+
+- **Correct — The supplied correctness evidence is substantive, with identifiable limits.**
+
+  [pa09-desktop-webview.ts:49](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/scripts/pa09-desktop-webview.ts:49) compares complete serialized envelopes between actual IPC and the actual Wasm Worker through terminal completion, with archive equality and cross-restores at two intermediate points. The recorded result reaches revision 280, `RebelWin`, hash `0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f`.
+
+  The VM lifecycle assertions verify v1 draw +1 and v2 draw +2, frozen-install rejection, content-lock changes, enable/disable/uninstall, restoration from the frozen old package, and failed wrong-version restore preserving the immediately preceding live archive. This is meaningful fixture coverage. It does not cover renderer/document lifecycle or all third-party packages.
+
+  The raw logs support **91 passed / 0 failed / 1 ignored** Rust tests, including six new host/resource tests; the ignored measurement separately passed. Node records **135 passed / 0 failed / 0 skipped**. Typecheck, frontend build, Wasm rebuild, desktop-shell build and unchanged source-cap guards have recorded successful results. These are inspected prior executions, not tests rerun by this reviewer.
+
+  Earlier failures remain preserved. The smoke comparison’s omission of optional `undefined` properties matches JSON transport semantics. The final VM check measures the actual phase-end delta. The corrected rejected-restore assertion captures bytes immediately before rejection. I found no basis to classify those harness corrections as hiding a production failure. The logs also retain the 18 host-build unused-helper warnings and a duplicate-test-attribute warning; this is not a zero-warning workspace result.
+
+- **Fixed — None.** Review-only authorization was respected.
+
+All six default-switch conditions remain required:
+
+| Condition | Assessment |
+| --- | --- |
+| 1. Same-load PA08-2 input-to-paint and IPC/Worker comparison | **Unmet.** Fifteen uncontrolled synthetic samples per transport are diagnostic only. Native RTT p50/p95 is 3/5 ms and i2p 12/20 ms; Wasm RTT is 2/6 ms and i2p 9/14 ms. Native RTT includes execution, with no separate native transfer measurement. |
+| 2. Effective native deadlines and same-load pool benefit | **Partial.** Deadline behavior is demonstrated. Scoped and persistent pools were slower than direct planning in the measured one-seat snapshot; there is no full-workload positive benefit evidence. |
+| 3. Same-seed terminal/hash parity with Wasm/server and cross-restores | **Partial.** Native/Wasm IPC-versus-Worker parity and cross-restores are substantive. A separate server-process trajectory was not rerun. |
+| 4. Package lifecycle, lock, VM and archives through IPC | **Passed for the exercised fixture flow.** Broader package acceptance remains outside this result. |
+| 5. Default switches only on measured platforms | **Preserved.** No default changed. Windows/Linux remain unmeasured and default to Wasm. |
+| 6. Tested explicit Wasm fallback | **Supported.** Selection/error tests and the actual Wasm Worker comparison exercise the fallback path. |
+
+There is a credible next path to real HID measurement without screen recording: obtain the button’s `getBoundingClientRect()` and viewport dimensions from the measurement fixture, combine them with the existing Accessibility window-position read, and convert to macOS logical screen coordinates while accounting for the content/title-bar inset. The preserved 1280×820 window versus 1280×788 viewport gives a useful calibration check; do not blindly multiply coordinates by DPR 2. Use the existing authorized HID path and verify trusted input plus completed requests/revisions before accepting samples. This requires no screenshot capture. I did not execute that path or change permissions.
+
+After the lifecycle fix, parent validation should include the reload regression and the existing Rust, Node and real-WebView acceptance checks after the F7/NC09/NC03 merge. Performance qualification can then continue independently; missing measurements remain gates rather than waived conditions.
+
+Skipped: executing builds/tests, reproducing reloads interactively, HID input, and Windows/Linux validation. Risk: the current native validator can survive document replacement; all six conditions still gate PA09 completion and any default switch.

@@ -1,0 +1,3 @@
+    Checking engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-content)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.22s
+{"name": "p2-strict-engine-native-content", "command": ["cargo", "check", "--offline", "-p", "engine-native-content", "--all-targets"], "env": {"CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "CARGO_TARGET_DIR": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/target", "RUSTFLAGS": "-D warnings"}, "exit": 0, "locked_seconds": 1.2468174579844344}

@@ -1,0 +1,70 @@
+## Review
+
+- **Merge verdict: OK for explicit opt-in prototype integration.** The previous P1 document-reload leak is resolved by this correction. No new qualifying issues were found. This verdict does not qualify PA09 completion, a native default switch, or the future merged main tree.
+
+I read the full correction report, the complete six-file incremental patch, the corrected manifest and verification records, the changed source/tests, the reload evidence, and the relevant installed Tauri/Wry dispatch and lifecycle code. I performed no writes, builds, tests, or runtime actions.
+
+- **Fixed: P1 — Native resources now retire when their document is replaced.**
+
+  [main.rs:132](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/main.rs:132) registers cleanup on `PageLoadEvent::Started`, macOS/iOS renderer termination, and destruction of the currently configured native windows. Cleanup no longer depends on Vue unmount, JavaScript disposal, or garbage collection.
+
+  [native_engine_resource.rs:25](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_engine_resource.rs:25) selects resources by concrete `NativeEngineHost` type, removes them under exclusive access to the table, and calls their existing close implementation. It does not clear the table or retire unrelated resources. Repeated cleanup is harmless.
+
+  The preserved [old-binary counterexample](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/evidence-review-fix/pa09-document-reload-red-real-report.json) demonstrates the original defect: eight retained validator resources, successful access to preceding documents’ IDs, then allocation failure. The [corrected WebView result](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/evidence-review-fix/pa09-document-reload-green-pending-open-report.json) demonstrates twelve reloads across thirteen documents, refusal of each preceding document’s ID, and a successful final independent client connection.
+
+- **Correct: Allocation and navigation ordering do not expose a verified late-allocation defect in the reviewed macOS path.**
+
+  `native_engine_open` and `native_engine_close` remain synchronous Tauri commands. The installed command wrapper executes these functions inline; it does not defer allocation to Tokio. Tauri’s IPC protocol handler directly calls the invoke handler, and Wry’s WKWebView scheme handler directly dispatches that protocol callback. Thus an allocation already executing is completed before another main-thread lifecycle callback can retire the table entries.
+
+  The installed Wry implementation emits `PageLoadEvent::Started` from `didCommitNavigation`: [navigation.rs:17](/Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wry-0.55.1/src/wkwebview/navigation.rs:17). This is the actual native document-replacement callback used by the correction. The source does not support treating resource allocation as an independently spawned operation that can resume after cleanup.
+
+  The reload fixture strengthens this source assessment: [pa09-document-reload.ts:35](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/web-client/scripts/pa09-document-reload.ts:35) allocates all seven remaining slots after each replacement document creates its validator. Even one surviving old engine would prevent that check from succeeding. Before each reload it also sends eight requests and two opens without awaiting their responses.
+
+  The twelve beacons record **120 unsettled JavaScript operations** at navigation. That establishes pending UI activity, not that all 120 native operations had started. The report correctly preserves that distinction.
+
+- **Correct: Retirement preserves executing-command and queued-command semantics.**
+
+  [native_engine_host.rs:79](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_engine_host.rs:79) extracts the existing owner loop without changing dispatch semantics. Closing sets the closed flag and removes the sender. A retained old handle cannot submit new work; work still waiting in the channel receives the existing closed-before-execution response. A command already admitted to execution may finish.
+
+  The new [deterministic regression at line 334](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/src/native_engine_host.rs:334) holds the executing dispatch, queues another command, closes the host, then releases execution. It checks that `endPhase` succeeds at revision 1, queued `autoStep` fails, final revision remains 1, new requests fail, and the owner thread joins. This complements the real-navigation test without inferring native execution order from unresolved browser promises.
+
+  The asynchronous request path releases the resource-table guard before awaiting the host. Retirement holds no join or WebView callback wait. I found no lock inversion introduced by these changes.
+
+- **Correct: Unrelated resources and callback lifetimes are handled narrowly.**
+
+  The Rust retirement test repeats twenty document cycles, retains a stale host `Arc`, and preserves an unrelated resource whose display name deliberately matches `NativeEngineHost`. That verifies type-based selection rather than name-based cleanup: [native_engine_host.rs:245](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/worktree/apps/desktop-client/tests/native_engine_host.rs:245).
+
+  The actual WebView test retains the same 1×1 Tauri Image across every reload and explicitly closes it at completion. This would fail if cleanup cleared the whole resource table.
+
+  The renderer-termination hook retires engines and then reloads the WebView. That preserves the behavior of Tauri’s replaced default handler, which also reloads after termination. The window-destruction closure retains access to the correct WebView table; the inspected runtime dispatch invokes window listeners before removing the runtime window entry. I found no evidence of a new callback-retention leak.
+
+  Deliberate renderer termination and OS-level window destruction were not executed. Those paths have compiled hooks and share the tested retirement helper. Given the real reload regression and source trace, their missing runtime exercises are a disclosed coverage limit, not a reason to keep this narrow P1 open.
+
+- **Correct: The evidence remains scoped to what ran.**
+
+  The supplied Rust log records **93 passed / 0 failed / 1 ignored**, adding the two lifecycle regressions to the prior scope. Node records **135 passed / 0 failed / 0 skipped**. The normal frontend build, strict typecheck including the reload entry, source-cap checks, cap unit tests, and whitespace check have recorded successful results. The existing 18 Wasm-helper warnings and duplicate-test-attribute warning remain; this is not a zero-warning result.
+
+  The corrected debug executable also reran the prior real-WebView acceptance: all **280 identity steps**, complete envelope parity with the Wasm Worker, cross-restores, and the exercised VM/package lifecycle remained green. The terminal hash remains `0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f`.
+
+  Both erroneous harness runs remain distinguishable from the production counterexample: the read-only invoke assignment failed before allocation, and the stale fixture was rejected for missing pending beacons. The final runner requires the complete reload and pending-operation evidence.
+
+  The manifest records the intended six-file correction and unchanged shared-session/binding/test hashes. No new Wasm-source change required repeating the Wasm build for this correction.
+
+  The optimized artifact is a preparation build, SHA-256 `0d4f502d1b47abcb66ce71a6b1853c0e9e206ef5258ce4f4d1b3de2af665d911`, using the existing release LTO configuration without overrides. It has not received release-runtime qualification.
+
+- **Finding:** No issues found.
+
+The parent integration work remains necessary: normalize local outcomes through the shared helper exactly once, carry NC09 `characterDef` serialization into the extracted session while preserving its frontend adaptation, retain the current network tests, and accommodate the incoming `ChoiceView::Own` field through the stated match adjustment. Those merged-tree edits and their native/Wasm validation are outside this correction’s result.
+
+All six default-switch conditions remain required:
+
+| Condition | Remaining status |
+| --- | --- |
+| Controlled same-load real-HID i2p and IPC/Worker comparison | Unmet; no new qualifying measurements. |
+| Effective native deadlines and positive same-load pool benefit | Partial; prior deadline evidence stands, but no qualifying pool benefit exists. |
+| Full trajectory/hash parity with Wasm and server, plus cross-restores | Native/Wasm portion reran successfully; separate server-process coverage remains outstanding. |
+| Package lifecycle, lock, VM and archives through IPC | Passed for the exercised fixture flow. |
+| Switch defaults only on measured platforms | Preserved; no default changed, Windows/Linux remain unmeasured. |
+| Explicit tested Wasm fallback | Existing tests and actual Worker comparison remain green. |
+
+Skipped: executing tests/builds, deliberate renderer kill/window destruction, release-runtime qualification, controlled HID/performance, and Windows/Linux validation. Risk: parent integration still needs validation; Wasm must remain the default until all six gates are satisfied.

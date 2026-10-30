@@ -1,0 +1,50 @@
+{
+  "recorded_at": "2026-10-30T10:28:25.387180+08:00",
+  "scope": "Reviewed restore prerequisites, excluded from pure NC10 patches",
+  "files": [
+    {
+      "path": "crates/engine-native-kernel/src/snap.rs",
+      "before_sha256": "7b1abad6044ce922fe7333e764e78136c008bb79d72e6cc766a2e23b29d7895b",
+      "after_sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/ownership.rs",
+      "before_sha256": null,
+      "after_sha256": "92f8c82ad0569d431c5ab5bcc55961380c99fc3ba4bcd686e91f2d7c15297e48"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/validation.rs",
+      "before_sha256": "9e1f0b9046e01ac1f9e979b67190431a97b73249ad3d848214ff3055665d5743",
+      "after_sha256": "6ad1b6d209653e50b45f8e61170583a1fc7c2b2e987a0f1d4c3263cd496c6c5f"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "before_sha256": "fa5ca41101d1a8afa9f0eacf5ca7e484f91efa4fe4d30490813a3ef9ba35f642",
+      "after_sha256": "847e21d45e36d350f01a32432596d839f53eb27d6451c3bd5a47d611b3fecaca"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+      "before_sha256": "258afe40a6c5289c17f96642baa9fabeaca040ab175224380f00d530a7b9e6db",
+      "after_sha256": "618976eedbb8e31c6e244ead240ad4e0f11373ba5ebd3aa64cb440c07232bbb7"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard.rs",
+      "before_sha256": "16bc14f8ec6a58a7b759127d20e73b67b207d117d1cc155211a1f79781d69c35",
+      "after_sha256": "c7f9be70780fbbd0e4398badd79a6b0baf0dfe2b17c3f05d1d703a6a60a2b8c4"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "before_sha256": "4b4e3d7a1ed733f0122f3633a53eb42f19827bf4e60ff7a7bd1d4855ee669ada",
+      "after_sha256": "45d9690b22918c7393dda652da13adfee01051045d059e4ff002a0eb9c60462a"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/asks.rs",
+      "before_sha256": "8bbcff6983affe1a8a44a9176a581fc33a859b4b2965dcb8a4c4314449c0d8e3",
+      "after_sha256": "b38f15f68e81b7398890976de08b944c4791439d4f37ff9c885e826a62e653db"
+    }
+  ],
+  "patches": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/parent-ownership-helper-prerequisite-vs-38789f54.patch",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/evidence-review-fix/parent-six-production-restore-vs-38789f54.patch"
+  ]
+}

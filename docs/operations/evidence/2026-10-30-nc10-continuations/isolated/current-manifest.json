@@ -1,0 +1,17 @@
+{
+  "head": "38789f54c798829d7b32bff1c990def50cf7f611",
+  "tracked_patch_sha256": "d6e30567f11b575131aa65dde50785ef22dda54f9ccb419a75d8096a3d7f85b3",
+  "files": {
+    "crates/engine-native/Cargo.toml": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+    "crates/engine-native/src/ai.rs": "d3a31e62635fcfb895b1bed3e8ed4cec955c6601fb509114b6b89a41843f43b4",
+    "crates/engine-native/src/ai/redact.rs": "c82b8ef618fca904c9c4f1cd82ae796b1af9ce0f5268ac156d82bd9f5cb86260",
+    "crates/engine-native/src/engine/accessors.rs": "e52fe4d9821a5b35bfee0a19592b15068827a5b8e0fa655736664f7be7b72ef0",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "80f98fd5da8dfd6b59dec7c45887619147c1db4474e003c3cbbcfba9702b1009",
+    "crates/engine-native/tests/nc10_duel_nullify_privacy.rs": "a7b2257e2884bdb6890052fb8bc6b1d50a35aba8420978611787b188b6f4aca4",
+    "crates/engine-native/tests/nc10_pending_duel_privacy.rs": "e30f29078154554653c6604a159517be52377456280df876068ea2dddaf6ae1e",
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "6511cc6978d56d212c8dd11a87ca06d23b4144652755c938b4fa8ff889a31813",
+    "crates/engine-native/src/ai/remap.rs": "69f70ab9574c856d247f709dd4fc0a0ce971ef4d2e79c8bd01b87b0921270585",
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs": "650394c7c53ecb6cec5d41534e75b904d9532831af5fe6eb3de97d0ee69db30f",
+    "crates/engine-native/tests/nc10_opaque_vm_privacy.rs": "b9489e1d8487f81248934c49850b41f03ed338ef3f7056065e2ba81961c2e981"
+  }
+}

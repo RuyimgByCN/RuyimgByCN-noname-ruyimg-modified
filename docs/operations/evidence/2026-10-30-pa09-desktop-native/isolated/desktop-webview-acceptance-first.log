@@ -1,0 +1,5 @@
+{
+  "passed": false,
+  "error": "Error: rejected restore destroyed live archive",
+  "stack": "h@http://localhost:5173/assets/pa09-desktop-webview-BJTlX9lB.js:1574:28\n_@http://localhost:5173/assets/pa09-desktop-webview-BJTlX9lB.js:1578:6\nRt@http://localhost:5173/assets/pa09-desktop-webview-BJTlX9lB.js:1648:181\n@http://localhost:5173/assets/pa09-desktop-webview-BJTlX9lB.js:1674:23"
+}

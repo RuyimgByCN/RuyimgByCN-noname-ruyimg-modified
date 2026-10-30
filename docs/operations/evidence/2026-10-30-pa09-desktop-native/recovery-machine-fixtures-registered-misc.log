@@ -1,0 +1,68 @@
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::", "--", "--nocapture"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 184097382400}
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling find-msvc-tools v0.1.9
+   Compiling syn v2.0.118
+   Compiling shlex v2.0.1
+   Compiling cc v1.2.66
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling serde_derive v1.0.228
+   Compiling blake3 v1.8.5
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayvec v0.7.8
+   Compiling thiserror v2.0.18
+   Compiling thiserror-impl v2.0.18
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling libc v0.2.186
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling errno v0.3.14
+   Compiling bitflags v2.13.0
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.4.1
+   Compiling tempfile v3.27.0
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.52s
+     Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-70c7f9625ea9b3e9)
+
+running 18 tests
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... ok
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 176 filtered out; finished in 0.03s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "nc09_machine_ownership::", "--", "--nocapture"], "exit": 0, "locked_seconds": 26.060611124994466, "stop_reason": null}

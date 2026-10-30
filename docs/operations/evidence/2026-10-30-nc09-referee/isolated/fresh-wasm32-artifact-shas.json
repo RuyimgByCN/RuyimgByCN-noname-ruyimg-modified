@@ -1,0 +1,32 @@
+[
+  {
+    "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts",
+    "sha256": "fca9012ba34cb891ad3512a743dcba5b1dc9760a836bce10dc137828502fb833",
+    "bytes": 9481
+  },
+  {
+    "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts",
+    "sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+    "bytes": 3030
+  },
+  {
+    "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+    "sha256": "b52cd15a839fcbeaf8964d54de4ca1de175bd40adde0ecdd184c8f0d7df3230a",
+    "bytes": 24391
+  },
+  {
+    "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "sha256": "b15aa72b810806b3d41d04a5e95ee3ba1e6e0979618bf183ee54a5d1c107c33e",
+    "bytes": 3404765
+  },
+  {
+    "path": "apps/web-client/src/worker/native-pkg/.gitignore",
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "bytes": 1
+  },
+  {
+    "path": "apps/web-client/src/worker/native-pkg/package.json",
+    "sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+    "bytes": 488
+  }
+]

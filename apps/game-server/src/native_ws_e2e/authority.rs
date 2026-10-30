@@ -44,3 +44,25 @@ async fn native_ws_client_role_claim_cannot_promote_to_referee() {
     peer.snapshot().await.assert_player(peer.player);
     server.stop().await;
 }
+
+#[tokio::test]
+async fn native_ws_pending_seat_zero_choice_stays_private_on_spectator_reconnect() {
+    let directory = tempfile::tempdir().unwrap();
+    let cfg = config(directory.path());
+    let server = Server::start(&cfg, 0).await;
+    let mut owner = Peer::connect(&server).await;
+    owner.create().await;
+    let mut player = Peer::connect(&server).await;
+    player.join(owner.room, 1, None).await;
+    let mut spectator = Peer::connect(&server).await;
+    spectator.spectate(owner.room).await;
+    let pending = durability::pending_choice(&mut owner, &mut player, &mut spectator).await;
+    assert_eq!(pending.choice.as_ref().unwrap().observer, PlayerId::new(1));
+    spectator.snapshot().await.assert_spectator();
+    let token = spectator.token.clone();
+    spectator.close().await;
+    let mut reconnected = Peer::connect(&server).await;
+    reconnected.join(owner.room, 0, Some(token)).await.assert_spectator();
+    reconnected.snapshot().await.assert_spectator();
+    server.stop().await;
+}

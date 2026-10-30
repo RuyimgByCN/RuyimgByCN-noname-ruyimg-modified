@@ -1,0 +1,2008 @@
+diff --git a/crates/engine-native/Cargo.toml b/crates/engine-native/Cargo.toml
+--- a/crates/engine-native/Cargo.toml
++++ b/crates/engine-native/Cargo.toml
+@@ -12,9 +12,9 @@
+ blake3 = { workspace = true }
+ engine-native-kernel = { path = "../engine-native-kernel" }
+ engine-native-content = { path = "../engine-native-content" }
++rule-api = { workspace = true }
+ 
+ [dev-dependencies]
+-rule-api = { workspace = true }
+ rule-vm = { workspace = true }
+ blake3 = { workspace = true }
+ serde = { workspace = true }
+diff --git a/crates/engine-native/src/ai.rs b/crates/engine-native/src/ai.rs
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -9,6 +9,7 @@
+ use std::sync::atomic::{AtomicBool, Ordering};
+ use std::time::{Duration, Instant};
+ mod redact;
++mod remap;
+ pub use redact::*;
+ 
+ /// 单选候选枚举上限（防超大选项集撑爆候选向量；真实询问的选项数
+@@ -352,13 +353,16 @@
+                     selection: options.iter().take(8).copied().collect(),
+                 });
+             }
+-        } else if min == 0 && allow_cancel && !options.is_empty() {
++        }
++        if min == 0 || allow_cancel {
+             candidates.push(GameAction::Answer {
+                 choice_id: id,
+                 selection: vec![],
+             });
+         }
+-    } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play {
++    } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play
++        && input.view.players[seat as usize].alive
++    {
+         let others: Vec<u8> = input
+             .view
+             .players
+@@ -506,12 +510,42 @@
+     score
+ }
+ 
++// VM choices may retain private query results in locals or already queued effects.
++// Use the public prompt as the boundary so private continuation branches cannot select a policy.
++fn vm_choice_leaf(choice: &ChoiceView) -> bool {
++    let prompt = match choice {
++        ChoiceView::Own { prompt, .. } | ChoiceView::Other { prompt, .. } => prompt,
++    };
++    matches!(*prompt, "rvm_choice" | "rvm_discard_pick")
++}
++
++fn projected_choice_action(choice: ChoiceView) -> GameAction {
++    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
++        return GameAction::NextPhase;
++    };
++    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
++        vec![ChoiceOption::Pass]
++    } else if min == 0 && allow_cancel {
++        Vec::new()
++    } else {
++        options.into_iter().take(min).collect()
++    };
++    GameAction::Answer { choice_id: id, selection }
++}
++
+ impl Engine {
+     /// 有界规划：在克隆引擎上模拟候选动作（计算与规则推进隔离），
+     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
+         let submitted_revision = self.revision();
++        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
++            return Plan {
++                seat, revision: submitted_revision, action: projected_choice_action(choice),
++                nodes_used: 0, budget_exhausted: false, timed_out: false,
++                cancelled: planner.cancelled(), sim_faults: 0,
++            };
++        }
+         // wasm 目标无 wall-clock 时间源（Instant::now panic）：deadline
+         // 静默失效=纯节点预算面（engine-native-wasm 壳契约，登记证据）；
+         // 原生目标语义不变。
+@@ -657,7 +691,9 @@
+             );
+             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
+             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
+-            if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
++            if planner.lookahead_depth >= 2 && trial.outcome().is_none()
++                && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)
++            {
+                 let opp = match trial.open_choice() {
+                     Some(open) => open.observer,
+                     None => trial.turn().current,
+@@ -715,14 +751,13 @@
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            let fallback = if can_redact_suspended_duel(self, seat)
+-                || can_redact_hidden_traps(self, seat)
+-            {
+-                &sim
+-            } else {
+-                self
+-            };
+-            fallback.legal_actions(seat)
++            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
++                return projected_choice_action(choice);
++            }
++            if !sim.ai_session(seat).view().players[seat as usize].alive {
++                return GameAction::NextPhase;
++            }
++            sim.legal_actions(seat)
+                 .into_iter()
+                 .next()
+                 .unwrap_or(GameAction::NextPhase)
+diff --git a/crates/engine-native/src/ai/redact.rs b/crates/engine-native/src/ai/redact.rs
+--- a/crates/engine-native/src/ai/redact.rs
++++ b/crates/engine-native/src/ai/redact.rs
+@@ -19,167 +19,17 @@
+     )
+ }
+ 
+-// shortcut: 只覆盖引用可完整核对的单帧决斗及其无懈窗口；其他机器需先完成引用自省。
+-pub(super) fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
+-    use crate::choice::{ChoiceKind, ChoiceOption};
+-    use crate::event::{EventData, Stage};
+-    use crate::resolution::Slot;
+-    use crate::snap::MachineSnapshot;
+-
+-    let core = e.state_core();
+-    let Some(player) = core.players.get(seat as usize) else {
+-        return false;
+-    };
+-    let res = e.resolution();
+-    let ([frame], [park], Some(choice)) = (
+-        res.stack.as_slice(),
+-        res.parks.as_slice(),
+-        res.open_choice.as_ref(),
+-    ) else {
+-        return false;
+-    };
+-    let EventData::CardUsed(used) = &frame.data else {
+-        return false;
+-    };
+-    if frame.stage != Stage::Intrinsic
+-        || !frame.queue.is_empty()
+-        || park.slot != (Slot::Intrinsic { frame: frame.id })
+-        || park.resume_depth != 1
+-        || res.answer.is_some()
+-        || choice.observer != seat
+-        || choice.spec.min != 1
+-        || choice.spec.max != 1
+-        || choice.spec.allow_cancel
+-        || !core.table.contains(&used.card)
+-        || !choice.spec.options.iter().all(|option| match option {
+-            ChoiceOption::Pass => true,
+-            ChoiceOption::Card(card) => player.hand.contains(card),
+-            _ => false,
++// Host payload schemas and pending ownership repairs still limit full continuation remapping.
++pub(super) fn can_redact_continuation(e: &Engine, seat: u8) -> bool {
++    e.open_choice().is_none_or(|choice| choice.observer == seat)
++        && e.resolution().parks.iter().all(|p| {
++            !super::remap::requires_conservative_redaction(&p.machine.snapshot())
+         })
+-    {
+-        return false;
+-    }
+-    let MachineSnapshot::NullifyWindow {
+-        card,
+-        source,
+-        nullified,
+-        queue,
+-        asked,
+-        window_open,
+-        owns_disposal,
+-        effect: Some(effect),
+-    } = park.machine.snapshot()
+-    else {
+-        return false;
+-    };
+-    let MachineSnapshot::Duel {
+-        card: duel_card,
+-        source: duel_source,
+-        target,
+-        on_target,
+-        asked: duel_asked,
+-        second_pending,
+-    } = *effect
+-    else {
+-        return false;
+-    };
+-    if card != used.card
+-        || source != used.player
+-        || duel_card != card
+-        || duel_source != source
+-        || used.targets.as_slice() != [target]
+-    {
+-        return false;
+-    }
+-    let duel_response = choice.spec.kind == ChoiceKind::RespondCard
+-        && choice.spec.prompt == "duel_sha"
+-        && !nullified
+-        && queue.is_empty()
+-        && !asked
+-        && !window_open
+-        && duel_asked
+-        && seat == if on_target { target } else { source };
+-    let duel_nullify = choice.spec.kind == ChoiceKind::Confirm
+-        && choice.spec.prompt == "nullify_window"
+-        && !nullified
+-        && owns_disposal
+-        && queue.first() == Some(&seat)
+-        && asked
+-        && window_open
+-        && on_target
+-        && !duel_asked
+-        && !second_pending
+-        && choice.spec.options.iter().any(|option| matches!(option, ChoiceOption::Card(_)))
+-        && choice.spec.options.iter().all(|option| match option {
+-            ChoiceOption::Pass => true,
+-            ChoiceOption::Card(card) => e.catalog().card_kind(*card) == CardKind::Nullify,
+-            _ => false,
+-        });
+-    if !duel_response && !duel_nullify {
+-        return false;
+-    }
+-
+-    // 这些状态可引用或持有手牌外的实体；未完成通用自省时保留原有处理。
+-    if !core.vm_aux.is_empty()
+-        || !core.turn.huanxia_track.is_empty()
+-        || !core.turn.kunlunjing_snapshot.is_empty()
+-        || core.turn.luanjian_card.is_some()
+-        || core.turn.qizuo_copy.is_some()
+-        || core.players.iter().any(|p| {
+-            !p.zhucheng.is_empty()
+-                || !p.lianyaohu_store.is_empty()
+-                || !p.sxianjing_traps.is_empty()
+-                || p.ctianfu_card.is_some()
+-                || !p.jiguanyuan_cards.is_empty()
+-                || !p.yishan_lost.is_empty()
+-                || !p.hutian_hold.is_empty()
+-                || !p.card_mods.is_empty()
+-        })
+-    {
+-        return false;
+-    }
+-    // 元数据所引用的牌也必须已在不会重写的区域。
+-    let fixed = |card: &u32| {
+-        core.discard.contains(card)
+-            || core.table.contains(card)
+-            || player.hand.contains(card)
+-            || core.players.iter().any(|p| {
+-                p.equips.contains(card) || p.judge.contains(card) || p.off_court.contains(card)
+-            })
+-    };
+-    core.declared_kinds
+-        .keys()
+-        .chain(core.declared_slots.keys())
+-        .chain(core.card_natures.keys())
+-        .all(fixed)
+-}
+-
+-// shortcut: 仅无 VM 的静止态陷阱；其他情形需先完成通用自省。
+-pub(super) fn can_redact_hidden_traps(e: &Engine, seat: u8) -> bool {
+-    let core = e.state_core();
+-    let res = e.resolution();
+-    !e.is_suspended()
+-        && res.stack.is_empty()
+-        && res.parks.is_empty()
+-        && res.open_choice.is_none()
+-        && res.answer.is_none()
+-        && core.vm_aux.piles.values().all(|pile| pile.is_empty())
+-        && core.players.iter().enumerate().any(|(owner, player)| {
+-            owner != seat as usize && !player.sxianjing_traps.is_empty()
+-        })
+-        && !e.catalog()
+-            .skills
+-            .iter()
+-            .any(|skill| skill.behavior.is_vm_skill())
+ }
+ 
+ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
+     use crate::ids::CardId;
+-    // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
+-    // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
+-    // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
+-    // monkey.rs「被拦截的桃应在使用者手牌」）。静止态可重分配；非静止态
+-    // 仅对已核对所有引用的决斗及其无懈窗口重分配，其余泄漏面仍登记为 NC10 待办。
++    // Unknown physical owners and every typed continuation reference share one mapping.
+     let quiescent = {
+         let res = e.resolution();
+         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
+@@ -198,11 +48,9 @@
+             std::sync::atomic::Ordering::Relaxed,
+         );
+     }
+-    if !quiescent && !can_redact_suspended_duel(e, seat) {
+-        // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
+-        // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
+-        // 对手手牌的身份遮蔽在未核对引用的窗口仍不可做（会改写被引用的实体牌 id → panic），
+-        // 登记为待办（需机器自省保引用重分配）。
++    if !can_redact_continuation(e, seat) {
++        // shortcut: uninspected payloads, VM commit sentinels and other seats' filtered choices
++        // retain hidden hands until semantic remapping exists. Public VM choices use a planner leaf.
+         let n = e.state_core().deck.len();
+         if n >= 2 {
+             let mut rng_state: u64 = 0xD1CE_5EED_0000
+@@ -224,7 +72,8 @@
+     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
+     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
+     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
+-    let redact_traps = can_redact_hidden_traps(e, seat);
++    let redact_traps = e.state_core().vm_aux.storage.is_empty()
++        || !e.catalog().skills.iter().any(|skill| skill.behavior.is_vm_skill());
+     let n = e.state_core().players.len();
+     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
+     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
+@@ -251,29 +100,22 @@
+             for pile in [&p.zhucheng, &p.lianyaohu_store, &p.hutian_hold] {
+                 visible.extend(pile.iter().copied());
+             }
+-            if owner == seat as usize {
++            if owner == seat as usize || !redact_traps {
+                 visible.extend(p.sxianjing_traps.iter().copied());
+             }
+         }
+-        // shortcut: VM 牌堆与非静止态陷阱尚未保护，完成可见性和引用自省后重分配。
++        // The observer retains their private VM piles.
+         for ((owner, _), pile) in &core.vm_aux.piles {
+             if *owner == seat {
+                 visible.extend(pile.iter().copied());
+             }
+         }
+         visible.extend(core.table.iter().copied());
+-        // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
+-        // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
+-        if !redact_traps {
+-            for (c, _) in core.turn.huanxia_track.iter() {
+-                visible.insert(*c);
+-            }
+-            for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
+-                visible.extend(a.iter().copied());
+-                visible.extend(b.iter().copied());
+-                visible.extend(c.iter().copied());
+-            }
+-        }
++        let mut held = Vec::new();
++        for park in &e.resolution().parks {
++            super::remap::held_cards(&park.machine.snapshot(), &mut held);
++        }
++        visible.extend(held);
+     }
+     // 填充池：目录全部牌 id 去掉保留牌（保持确定性顺序）
+     let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
+@@ -311,7 +153,10 @@
+         .iter()
+         .map(|i| e.state_core().players[*i].sxianjing_traps.len())
+         .sum();
+-    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count;
++    let vm_piles: Vec<_> = e.state_core().vm_aux.piles.keys()
++        .filter(|(owner, _)| *owner != seat).cloned().collect();
++    let vm_count: usize = vm_piles.iter().map(|key| e.state_core().vm_aux.piles[key].len()).sum();
++    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count + vm_count;
+     assert!(
+         pool.len() >= need,
+         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
+@@ -346,7 +191,7 @@
+         }
+     }
+     // 牌引用按同一个重分配映射更新，避免指向错误的实体。
+-    let remap: Vec<CardId> = if redact_traps {
++    let remap: Vec<CardId> = {
+         let mut remap: Vec<CardId> = (0..e.catalog().cards.len() as CardId).collect();
+         let old = trap_owners
+             .iter()
+@@ -356,13 +201,12 @@
+                     .iter()
+                     .flat_map(|i| e.state_core().players[*i].hand.iter().copied()),
+             )
+-            .chain(e.state_core().deck.iter().copied());
++            .chain(e.state_core().deck.iter().copied())
++            .chain(vm_piles.iter().flat_map(|key| e.state_core().vm_aux.piles[key].iter().copied()));
+         for (before, after) in old.zip(pool.iter().copied()) {
+             remap[before as usize] = after;
+         }
+         remap
+-    } else {
+-        Default::default()
+     };
+     let core = e.core_mut();
+     let mut cursor = 0usize;
+@@ -379,6 +223,13 @@
+         cursor += len;
+     }
+     core.deck = pool[cursor..cursor + deck_len].to_vec();
++    cursor += deck_len;
++    for key in &vm_piles {
++        let pile = core.vm_aux.piles.get_mut(key).expect("existing pile");
++        let len = pile.len();
++        pile.copy_from_slice(&pool[cursor..cursor + len]);
++        cursor += len;
++    }
+     if !remap.is_empty() {
+         let replace = |card: &mut CardId| {
+             if let Some(replacement) = remap.get(*card as usize) {
+@@ -444,6 +295,7 @@
+             })
+             .collect();
+     }
++    super::remap::remap_resolution(e, &remap);
+ }
+ 
+ #[cfg(test)]
+diff --git a/crates/engine-native/src/engine/accessors.rs b/crates/engine-native/src/engine/accessors.rs
+--- a/crates/engine-native/src/engine/accessors.rs
++++ b/crates/engine-native/src/engine/accessors.rs
+@@ -68,6 +68,10 @@
+ }
+ 
+ impl Engine {
++    pub(crate) fn resolution_mut(&mut self) -> &mut crate::resolution::Resolution {
++        &mut self.state.resolution
++    }
++
+     /// 执行位置只读视图（含 NC04 瞬态故障槽，供宿主诊断）。
+     pub fn resolution(&self) -> &crate::resolution::Resolution {
+         &self.state.resolution
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -87,3 +87,12 @@
+ 
+ #[path = "../nc12_swd_authoritative_stability.rs"]
+ mod nc12_swd_authoritative_stability;
++
++#[path = "../nc10_live_hidden_cards.rs"]
++mod nc10_live_hidden_cards;
++
++#[path = "../nc10_opaque_vm_privacy.rs"]
++mod nc10_opaque_vm_privacy;
++
++#[path = "../nc10_redaction_helper_contract.rs"]
++mod nc10_redaction_helper_contract;
+diff --git a/crates/engine-native/tests/nc10_duel_nullify_privacy.rs b/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
+--- a/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
++++ b/crates/engine-native/tests/nc10_duel_nullify_privacy.rs
+@@ -175,14 +175,14 @@
+ }
+ 
+ #[test]
+-fn special_zones_remain_conservative() {
++fn public_special_zones_allow_safe_redaction() {
+     let mut e = fixture();
+     let card = e.state_core_mut().deck.pop().unwrap();
+     e.state_core_mut().players[1].zhucheng.push(card);
+     let before = e.state_core().players[0].hand.clone();
+     let machine = e.resolution().parks[0].machine.snapshot();
+     engine_native::ai::redact_opponent_hands(&mut e, 2);
+-    assert_eq!(e.state_core().players[0].hand, before);
++    assert_ne!(e.state_core().players[0].hand, before);
+     assert_eq!(e.state_core().players[1].zhucheng, vec![card]);
+     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
+ }
+diff --git a/crates/engine-native/tests/nc10_pending_duel_privacy.rs b/crates/engine-native/tests/nc10_pending_duel_privacy.rs
+--- a/crates/engine-native/tests/nc10_pending_duel_privacy.rs
++++ b/crates/engine-native/tests/nc10_pending_duel_privacy.rs
+@@ -222,7 +222,7 @@
+ }
+ 
+ #[test]
+-fn uninspected_special_zones_are_not_reassigned() {
++fn public_special_zones_are_preserved_during_redaction() {
+     let pack = pack();
+     let mut e = fixture(&pack);
+     let card = e.state_core_mut().deck.pop().unwrap();
+@@ -230,7 +230,7 @@
+     let original = e.state_core().players[1].hand.clone();
+     let machine = e.resolution().parks[0].machine.snapshot();
+     engine_native::ai::redact_opponent_hands(&mut e, 0);
+-    assert_eq!(e.state_core().players[1].hand, original);
++    assert_ne!(e.state_core().players[1].hand, original);
+     assert_eq!(e.state_core().players[2].zhucheng, vec![card]);
+     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
+ }
+diff --git a/crates/engine-native/tests/nc12_ai_strength_baseline.rs b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+--- a/crates/engine-native/tests/nc12_ai_strength_baseline.rs
++++ b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+@@ -23,7 +23,9 @@
+         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+     let json = std::fs::read_to_string(root.join("shahai-swd-upstream-noname/assets/cards.json"))
+         .expect("读 swd 包");
+-    let pack = content_native_loader::bridge_pack(&json).expect("桥接").pack;
++    let pack = content_native_loader::bridge_pack(&json)
++        .expect("桥接")
++        .pack;
+     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
+ }
+ 
+@@ -75,9 +77,129 @@
+         pct(0.9),
+         steps_all[n - 1]
+     );
+-    assert_eq!(faults, 0, "统计期间命中内核悬空引用故障（详见 nc12_dangling_reference_repro）");
++    assert_eq!(
++        faults, 0,
++        "统计期间命中内核悬空引用故障（详见 nc12_dangling_reference_repro）"
++    );
+     assert!(
+         finished * 2 >= n,
+         "终局率过低：{finished}/{n}（策略面观测，低于半数视为异常）"
+     );
+ }
++
++/// Reproducible strategy comparison; run explicitly with --ignored --nocapture --test-threads=1.
++/// Latency is diagnostic unless the host is otherwise idle. Percentiles use nearest rank.
++#[test]
++#[ignore = "manual fixed-seed quality and latency matrix"]
++fn nc10_quality_matrix() {
++    quality_matrix(8);
++}
++
++#[test]
++#[ignore = "manual production-budget quality and latency matrix"]
++fn nc10_quality_matrix_production() {
++    quality_matrix(64);
++}
++
++fn quality_matrix(node_budget: usize) {
++    use engine_native::{CommandOutcome, Role, Winner};
++    use std::time::Instant;
++    fn percentile(values: &mut [u128], percentile: usize) -> u128 {
++        values.sort_unstable();
++        values[(values.len() * percentile).div_ceil(100).saturating_sub(1)]
++    }
++    let mut matrix_errors = 0;
++    for seats in [4, 8] {
++        for identity in [false, true] {
++            for skills in [false, true] {
++                for (variant, depth) in [(0, 1), (1, 1), (1, 2)] {
++                    let mut latencies = Vec::new();
++                    let (mut games, mut finished, mut wins, mut rejected, mut faults) =
++                        (0, 0, 0, 0, 0);
++                    let (mut nodes, mut exhausted, mut leaves, mut steps) = (0, 0, 0, 0);
++                    for seed in [45000, 45001] {
++                        for challenger in 0..seats {
++                            let mut e = if identity {
++                                Engine::new_identity(seed, seats)
++                            } else {
++                                Engine::new(seed, seats)
++                            };
++                            if skills {
++                                for seat in 0..seats {
++                                    e.assign_general_named(
++                                        seat as u8,
++                                        ["曹操", "刘备", "孙权", "赵云"][seat % 4],
++                                    )
++                                    .unwrap();
++                                }
++                            }
++                            let role = e.roles().map(|r| r[challenger]);
++                            let probe_before = engine_native::engine::legal_actions::probe_faults();
++                            let baseline = BoundedPlanner::new(node_budget).with_policy_variant(0);
++                            let candidate = BoundedPlanner::new(node_budget)
++                                .with_policy_variant(variant)
++                                .with_lookahead(depth);
++                            let mut game_steps = 0;
++                            while e.outcome().is_none() && game_steps < 800 {
++                                let actor = e
++                                    .open_choice()
++                                    .map(|c| c.observer)
++                                    .unwrap_or(e.turn().current);
++                                let planner = if actor as usize == challenger {
++                                    &candidate
++                                } else {
++                                    &baseline
++                                };
++                                let started = Instant::now();
++                                let plan = e.plan_action(actor, planner);
++                                latencies.push(started.elapsed().as_nanos());
++                                faults += plan.sim_faults as u64;
++                                if plan.sim_faults > 0 {
++                                    eprintln!("QUALITY_FAULT seed={seed} challenger={challenger} step={game_steps} context={:?}", engine_native::ai::sim_fault_log());
++                                    engine_native::ai::clear_sim_fault_log();
++                                }
++                                nodes += plan.nodes_used;
++                                exhausted += usize::from(plan.budget_exhausted);
++                                leaves += usize::from(plan.nodes_used == 0);
++                                let result = e.apply_plan(&plan).unwrap();
++                                rejected +=
++                                    usize::from(matches!(result, CommandOutcome::Rejected(_)));
++                                game_steps += 1;
++                                if matches!(result, CommandOutcome::Rejected(_)) {
++                                    eprintln!("QUALITY_REJECT seats={seats} seed={seed} actor={actor} plan={plan:?} choice={:?} result={result:?}", e.open_choice());
++                                    break;
++                                }
++                            }
++                            faults +=
++                                engine_native::engine::legal_actions::probe_faults() - probe_before;
++                            games += 1;
++                            steps += game_steps;
++                            if let Some(outcome) = e.outcome() {
++                                finished += 1;
++                                wins += usize::from(match outcome.winner {
++                                    Winner::Player(seat) => seat as usize == challenger,
++                                    Winner::LordSide => {
++                                        matches!(role, Some(Role::Lord | Role::Loyalist))
++                                    }
++                                    Winner::Rebels => role == Some(Role::Rebel),
++                                    Winner::Traitor => role == Some(Role::Traitor),
++                                    _ => false,
++                                });
++                            }
++                            eprintln!("QUALITY_GAME budget={node_budget} seats={seats} identity={identity} skills={skills} variant={variant} depth={depth} seed={seed} challenger={challenger} role={role:?} steps={game_steps} winner={:?}", e.outcome());
++                        }
++                    }
++                    let p50 = percentile(&mut latencies, 50);
++                    let p95 = percentile(&mut latencies, 95);
++                    let p99 = percentile(&mut latencies, 99);
++                    eprintln!("QUALITY_SUMMARY budget={node_budget} seats={seats} identity={identity} skills={skills} variant={variant} depth={depth} games={games} finished={finished} challenger_wins={wins} steps={steps} samples={} rejected={rejected} faults={faults} nodes={nodes} exhausted={exhausted} zero_node={leaves} p50_ns={p50} p95_ns={p95} p99_ns={p99}", latencies.len());
++                    matrix_errors += rejected + faults as usize;
++                }
++            }
++        }
++    }
++    assert_eq!(
++        matrix_errors, 0,
++        "quality matrix rejected plans or simulation faults"
++    );
++}
+diff --git a/crates/engine-native/src/ai/remap.rs b/crates/engine-native/src/ai/remap.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-native/src/ai/remap.rs
+@@ -0,0 +1,287 @@
++//! Typed card references in simulation continuations; ownership stays in its original zone.
++use crate::{Engine, EventData, MachineSnapshot};
++
++pub(super) fn event_cards(event: &mut EventData, map: &impl Fn(&mut u32)) {
++    match event {
++        EventData::Damage(d) => d.card.iter_mut().for_each(map),
++        EventData::Recover { by_card, .. } => by_card.iter_mut().for_each(map),
++        EventData::CardUsed(u) => map(&mut u.card),
++        EventData::CardResponded { card, .. } | EventData::ShaDodged { card, .. } => map(card),
++        EventData::Equipped { card, replaced, .. } => {
++            map(card);
++            replaced.iter_mut().for_each(map);
++        }
++        EventData::CardsDrawn { cards, .. }
++        | EventData::CardsMoved { cards, .. }
++        | EventData::CardsDiscarded { cards, .. }
++        | EventData::CardsLost { cards, .. }
++        | EventData::CardsGiven { cards, .. } => cards.iter_mut().for_each(map),
++        _ => {}
++    }
++}
++
++fn effects(bytes: &mut Vec<u8>, map: &impl Fn(&mut u32)) {
++    use rule_api::EffectRequest;
++    if bytes.is_empty() {
++        return;
++    }
++    let mut effects = crate::rvm_ops::dec_effects(bytes).expect("validated VM effects");
++    for effect in &mut effects {
++        let mut card = |id: &mut rule_api::CardId| {
++            // VM zero is a no-card sentinel, unlike native CardId zero.
++            if id.raw() != 0 {
++                let mut raw = id.raw();
++                map(&mut raw);
++                *id = rule_api::CardId::new(raw);
++            }
++        };
++        match effect {
++            EffectRequest::StoreEventCardInSkillPile { card: id, .. } => card(id),
++            EffectRequest::MoveCards { cards, .. } | EffectRequest::RevealCards { cards, .. } => {
++                cards.iter_mut().for_each(&mut card);
++            }
++            _ => {}
++        }
++    }
++    bytes.clear();
++    crate::rvm_ops::enc_effects(bytes, &effects);
++}
++
++pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u32)) {
++    use MachineSnapshot::*;
++    match machine {
++        Sha {
++            card,
++            liuli_card,
++            qilin_horse,
++            guanshi_cards,
++            fuchou_card,
++            ..
++        } => {
++            map(card);
++            liuli_card
++                .iter_mut()
++                .chain(qilin_horse)
++                .chain(fuchou_card)
++                .for_each(map);
++            guanshi_cards.iter_mut().for_each(map);
++        }
++        Duel { card, .. }
++        | PlaceDelayed { card, .. }
++        | AoeTarget { card, .. }
++        | JianXiong { card, .. }
++        | Dismantle { card, .. }
++        | MonkeySteal { card, .. }
++        | Snatch { card, .. } => map(card),
++        NullifyWindow { card, effect, .. } => {
++            map(card);
++            if let Some(inner) = effect {
++                machine_cards(inner, map);
++            }
++        }
++        Aoe { card, inner, .. } | Chain { card, inner, .. } => {
++            map(card);
++            if let Some(inner) = inner {
++                machine_cards(inner, map);
++            }
++        }
++        OptionalGate { event, inner, .. } => {
++            event_cards(event, map);
++            if let Some(inner) = inner {
++                machine_cards(inner, map);
++            }
++        }
++        JudgePhase { queue, current, .. } => {
++            queue.iter_mut().for_each(map);
++            if let Some(c) = current {
++                map(&mut c.trick);
++                map(&mut c.judge_card);
++                c.haotian_other.iter_mut().for_each(map);
++                if let Some(cards) = &mut c.gaiming_cards {
++                    cards.iter_mut().for_each(map);
++                }
++            }
++        }
++        Zhangba { cards, .. } | Wugu { cards, .. } | Rende { cards, .. } | JieYin { cards, .. } => {
++            cards.iter_mut().for_each(map)
++        }
++        XunXun { top, .. } | GuanXing { top, .. } => top.iter_mut().for_each(map),
++        JiJie { card, .. } => card.iter_mut().for_each(map),
++        Jijiang { sha, inner, .. } => {
++            sha.iter_mut().for_each(map);
++            if let Some(inner) = inner {
++                machine_cards(inner, map);
++            }
++        }
++        LiJian { card, inner, .. } => {
++            card.iter_mut().for_each(map);
++            if let Some(inner) = inner {
++                machine_cards(inner, map);
++            }
++        }
++        // Host slots also encode suit/kind/seat/bool; they need behavior/stage semantics.
++        Host { .. } => {}
++        Rvm {
++            event,
++            paused,
++            commit_pending,
++            ..
++        } => {
++            event_cards(event, map);
++            effects(commit_pending, map);
++            if let Some(paused) = paused {
++                effects(&mut paused.pending, map);
++            }
++        }
++        _ => {}
++    }
++}
++
++pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool {
++    use MachineSnapshot::*;
++    match machine {
++        Rvm {
++            paused: Some(_), ..
++        }
++        | Rvm {
++            commit_pick: Some(_), ..
++        } => true,
++        // Their physical ownership/ask restoration is being fixed in the shared kernel.
++        XunXun { .. } | JiJie { .. } => true,
++        JudgePhase {
++            current: Some(current),
++            ..
++        } if current.haotian_other.is_some() || current.gaiming_cards.is_some() => true,
++        Host { behavior, .. } => *behavior != crate::content::host::HostBehavior::D3Moyan.tag(),
++        OptionalGate { inner, .. }
++        | NullifyWindow { effect: inner, .. }
++        | Aoe { inner, .. }
++        | Chain { inner, .. }
++        | Jijiang { inner, .. }
++        | LiJian { inner, .. } => inner
++            .as_deref()
++            .is_some_and(requires_conservative_redaction),
++        _ => false,
++    }
++}
++
++/// These are physical owners in the current restore validator, not historical references.
++pub(super) fn held_cards(machine: &MachineSnapshot, out: &mut Vec<u32>) {
++    use MachineSnapshot::*;
++    match machine {
++        JudgePhase { queue, current, .. } => {
++            out.extend(queue);
++            if let Some(c) = current {
++                if !c.finalized {
++                    out.push(c.trick);
++                }
++                if c.judge_held {
++                    out.push(c.judge_card);
++                }
++            }
++        }
++        GuanXing { top, .. } => out.extend(top),
++        Host {
++            behavior, cards, ..
++        } if *behavior == crate::content::host::HostBehavior::D3Moyan.tag() => out.extend(cards),
++        OptionalGate { inner, .. }
++        | NullifyWindow { effect: inner, .. }
++        | Aoe { inner, .. }
++        | Chain { inner, .. }
++        | Jijiang { inner, .. }
++        | LiJian { inner, .. } => {
++            if let Some(inner) = inner {
++                held_cards(inner, out);
++            }
++        }
++        _ => {}
++    }
++}
++
++pub(super) fn remap_resolution(engine: &mut Engine, mapping: &[u32]) {
++    let map = |card: &mut u32| {
++        if let Some(next) = mapping.get(*card as usize) {
++            *card = *next;
++        }
++    };
++    let catalog = engine.catalog().clone();
++    let resolution = engine.resolution_mut();
++    for frame in &mut resolution.stack {
++        event_cards(&mut frame.data, &map);
++    }
++    for park in &mut resolution.parks {
++        let mut machine = park.machine.snapshot();
++        let original = machine.clone();
++        machine_cards(&mut machine, &map);
++        if machine != original {
++            park.machine = machine
++                .restore(&catalog)
++                .expect("simulation machine retains its type");
++        }
++    }
++    let option = |o: &mut crate::ChoiceOption| {
++        if let crate::ChoiceOption::Card(card) = o {
++            map(card);
++        }
++    };
++    if let Some(choice) = &mut resolution.open_choice {
++        choice.spec.options.iter_mut().for_each(option);
++    }
++    if let Some(answer) = &mut resolution.answer {
++        answer.iter_mut().for_each(option);
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::content::host::{HostBehavior, HostStage};
++
++    #[test]
++    fn host_scalar_payloads_are_never_generic_card_references() {
++        for (behavior, stage, card, cards) in [
++            (
++                HostBehavior::Liaoyuan,
++                HostStage::SelectCard,
++                Some(3),
++                vec![],
++            ),
++            (
++                HostBehavior::Reguhuo,
++                HostStage::TargetChoice,
++                Some(81),
++                vec![1],
++            ),
++            (
++                HostBehavior::SwdQixingzhenCard,
++                HostStage::SelectCard,
++                Some(82),
++                vec![1, 2],
++            ),
++            (
++                HostBehavior::WudianPingzhang,
++                HostStage::SelectCard,
++                Some(1),
++                vec![],
++            ),
++        ] {
++            let mut machine = MachineSnapshot::Host {
++                def_key: "payload-probe".into(),
++                behavior: behavior.tag(),
++                stage: stage.tag(),
++                owner: 0,
++                target: Some(1),
++                card,
++                cards,
++                targets: vec![],
++            };
++            let original = machine.clone();
++            machine_cards(&mut machine, &|card| *card += 100);
++            assert_eq!(
++                machine, original,
++                "{behavior:?}: payload slots contain scalars as well as cards"
++            );
++            assert!(requires_conservative_redaction(&machine));
++        }
++    }
++}
+diff --git a/crates/engine-native/tests/nc10_live_hidden_cards.rs b/crates/engine-native/tests/nc10_live_hidden_cards.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-native/tests/nc10_live_hidden_cards.rs
+@@ -0,0 +1,473 @@
++//! NC10: unknown physical cards in VM piles and live response windows.
++use engine_native::ai::{redact_opponent_hands, BoundedPlanner};
++use engine_native::{CommandOutcome, Engine, GameAction, GameCommand, Phase};
++
++fn submit(e: &mut Engine, actor: u8, action: GameAction) {
++    let out = e.submit(GameCommand {
++        actor,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action,
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++
++fn assert_pair(left: Engine, right: Engine, observer: u8) {
++    assert_pair_with_packs(left, right, observer, &[]);
++}
++
++fn assert_pair_with_packs(
++    left: Engine,
++    right: Engine,
++    observer: u8,
++    packs: &[&engine_native::content::extension::ExtensionPack],
++) {
++    assert_eq!(
++        format!("{:?}", left.ai_session(observer).input()),
++        format!("{:?}", right.ai_session(observer).input())
++    );
++    assert_eq!(
++        left.ai_session(observer).events(),
++        right.ai_session(observer).events()
++    );
++    let originals = [left.save(), right.save()];
++    for e in [&left, &right] {
++        let snapshot = e.save();
++        let decoded = engine_native::archive::decode_archive(
++            &engine_native::archive::encode_archive(&snapshot),
++        )
++        .expect("archive roundtrip");
++        assert_eq!(decoded, snapshot);
++        Engine::restore_with_extensions(&decoded, packs).expect("legal initial snapshot");
++    }
++    let mut a = left.clone();
++    let mut b = right.clone();
++    redact_opponent_hands(&mut a, observer);
++    redact_opponent_hands(&mut b, observer);
++    Engine::restore_with_extensions(&a.save(), packs).expect("physical redacted snapshot");
++    Engine::restore_with_extensions(&b.save(), packs).expect("physical alternate snapshot");
++    assert_eq!(a.state_core(), b.state_core(), "unknown ownership leaked");
++    assert_eq!(
++        a.save().resolution,
++        b.save().resolution,
++        "continuation leaked"
++    );
++    assert_eq!(a.legal_actions(observer), b.legal_actions(observer));
++    assert_public_plans(&left, &right, observer, packs);
++    assert_eq!([left.save(), right.save()], originals);
++}
++
++fn assert_public_plans(
++    left: &Engine,
++    right: &Engine,
++    observer: u8,
++    packs: &[&engine_native::content::extension::ExtensionPack],
++) {
++    assert_eq!(
++        format!("{:?}", left.ai_session(observer).input()),
++        format!("{:?}", right.ai_session(observer).input())
++    );
++    assert_eq!(
++        left.ai_session(observer).events(),
++        right.ai_session(observer).events()
++    );
++    for budget in [0, 48] {
++        let planner = BoundedPlanner::new(budget)
++            .with_policy_variant(1)
++            .with_lookahead(2);
++        let p = left.plan_action(observer, &planner);
++        let q = right.plan_action(observer, &planner);
++        assert_eq!(format!("{p:?}"), format!("{q:?}"));
++        assert_eq!(p.sim_faults, 0);
++        for original in [left, right] {
++            let mut restored = Engine::restore_with_extensions(&original.save(), packs).unwrap();
++            assert!(!matches!(
++                restored.apply_plan(&p).unwrap(),
++                CommandOutcome::Rejected(_)
++            ));
++        }
++    }
++}
++
++#[test]
++fn private_vm_piles_are_physical_and_counterfactually_equal() {
++    for seed in 9700..9712 {
++        let mut a = Engine::new(seed, 4);
++        a.debug_set_turn(0, Phase::Play, 1);
++        for owner in [0, 1, 2] {
++            let card = a.state_core_mut().deck.pop().unwrap();
++            a.state_core_mut()
++                .vm_aux
++                .piles
++                .insert((owner, "private".into()), vec![card]);
++        }
++        let mut b = a.clone();
++        let core = b.state_core_mut();
++        for (i, owner) in [1, 2].into_iter().enumerate() {
++            std::mem::swap(
++                &mut core
++                    .vm_aux
++                    .piles
++                    .get_mut(&(owner, "private".into()))
++                    .unwrap()[0],
++                &mut core.deck[i],
++            );
++        }
++        assert_pair(a, b, 0);
++    }
++}
++
++#[test]
++fn live_sha_window_hides_opponent_hand_identity() {
++    for seed in 9800..9812 {
++        let mut a = Engine::new(seed, 4);
++        a.debug_set_turn(0, Phase::Play, 1);
++        a.debug_move_named_card_to_hand(1, "shan");
++        let card = a.debug_move_named_card_to_hand(0, "sha");
++        submit(
++            &mut a,
++            0,
++            GameAction::PlayCard {
++                card,
++                targets: vec![1],
++            },
++        );
++        let observer = a.open_choice().expect("real response window").observer;
++        let mut b = a.clone();
++        let core = b.state_core_mut();
++        std::mem::swap(&mut core.players[2].hand[0], &mut core.deck[0]);
++        assert_pair(a, b, observer);
++    }
++}
++
++#[test]
++fn real_vm_commit_window_uses_equal_public_plans_with_conservative_helper() {
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let pkg = content_compiler::compile_source_named("nc10-commit", "skill nc10_commit(991041) { trigger card_targeted always { effect discard_hand_equip_count(event_player, 2); effect draw_cards(event_player, 1); } }").unwrap();
++    let bridge = content_native_loader::bridge_vm_skill_decls(&pkg).unwrap();
++    let mut pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "nc10-commit",
++            version: 1,
++            description: "NC10 commit privacy",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: bridge.decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    pack.vm_skills.truncate(1);
++    for seed in 9900..9912 {
++        let mut a = Engine::new_with_extensions(seed, 4, &[&pack]).unwrap();
++        a.debug_set_turn(0, Phase::Play, 1);
++        a.debug_grant(0, &pack.vm_skills[0].name);
++        let card = a.debug_move_named_card_to_hand(0, "sha");
++        submit(
++            &mut a,
++            0,
++            GameAction::PlayCard {
++                card,
++                targets: vec![1],
++            },
++        );
++        assert_eq!(a.open_choice().unwrap().spec.prompt, "rvm_discard_pick");
++        assert!(a.save().resolution.parks.iter().any(|p| matches!(&p.machine, engine_native::MachineSnapshot::Rvm { paused: None, commit_pick: Some(_), commit_pending, .. } if !commit_pending.is_empty())));
++        let card = a.state_core_mut().deck.pop().unwrap();
++        a.state_core_mut()
++            .vm_aux
++            .piles
++            .insert((2, "private".into()), vec![card]);
++        let mut b = a.clone();
++        let core = b.state_core_mut();
++        std::mem::swap(&mut core.players[1].hand[0], &mut core.deck[0]);
++        std::mem::swap(
++            &mut core.vm_aux.piles.get_mut(&(2, "private".into())).unwrap()[0],
++            &mut core.deck[1],
++        );
++        let originals = [a.save(), b.save()];
++        for original in [&a, &b] {
++            let mut sampled = original.clone();
++            redact_opponent_hands(&mut sampled, 0);
++            let snapshot = sampled.save();
++            let decoded = engine_native::archive::decode_archive(
++                &engine_native::archive::encode_archive(&snapshot),
++            )
++            .unwrap();
++            Engine::restore_with_extensions(&decoded, &[&pack]).unwrap();
++            assert_eq!(snapshot.resolution, original.save().resolution);
++            assert_eq!(snapshot.core.players, original.state_core().players);
++            assert_eq!(
++                snapshot.core.vm_aux.piles,
++                original.state_core().vm_aux.piles
++            );
++        }
++        assert_public_plans(&a, &b, 0, &[&pack]);
++        for e in [&a, &b] {
++            let plan = e.plan_action(0, &BoundedPlanner::new(48));
++            assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));
++        }
++        assert_eq!([a.save(), b.save()], originals);
++    }
++}
++
++#[test]
++fn real_guanxing_machine_held_cards_are_not_duplicated() {
++    for seed in 9950..9954 {
++        let mut a = Engine::new(seed, 4);
++        a.debug_grant(1, "观星");
++        for _ in 0..100 {
++            if a.open_choice()
++                .is_some_and(|c| c.spec.prompt == "guanxing_arrange")
++            {
++                break;
++            }
++            if let Some(c) = a.open_choice().cloned() {
++                let selection = if c
++                    .spec
++                    .options
++                    .contains(&engine_native::ChoiceOption::Confirm)
++                {
++                    vec![engine_native::ChoiceOption::Confirm]
++                } else {
++                    c.spec.options.iter().take(c.spec.min).copied().collect()
++                };
++                submit(
++                    &mut a,
++                    c.observer,
++                    GameAction::Answer {
++                        choice_id: c.id,
++                        selection,
++                    },
++                );
++            } else {
++                let actor = a.turn().current;
++                submit(&mut a, actor, GameAction::NextPhase);
++            }
++        }
++        assert_eq!(a.open_choice().unwrap().spec.prompt, "guanxing_arrange");
++        let mut b = a.clone();
++        let core = b.state_core_mut();
++        std::mem::swap(&mut core.players[2].hand[0], &mut core.deck[0]);
++        assert_pair(a, b, 1);
++    }
++}
++
++#[test]
++fn empty_zero_minimum_choice_has_a_legal_plan_even_without_cancellation() {
++    let mut e = Engine::new(45000, 8);
++    for seat in 0..8 {
++        e.assign_general_named(seat, ["曹操", "刘备", "孙权", "赵云"][seat as usize % 4])
++            .unwrap();
++    }
++    let planner = BoundedPlanner::new(8);
++    for _ in 0..100 {
++        if let Some(c) = e.open_choice().cloned() {
++            if c.spec.options.is_empty() && c.spec.min == 0 && !c.spec.allow_cancel {
++                assert_eq!(c.spec.prompt, "hujia_respond");
++                for budget in [0, 8] {
++                    let p = e.plan_action(c.observer, &BoundedPlanner::new(budget));
++                    assert!(
++                        matches!(&p.action, GameAction::Answer { selection, .. } if selection.is_empty())
++                    );
++                    let mut restored = Engine::restore(&e.save()).unwrap();
++                    assert!(!matches!(
++                        restored.apply_plan(&p).unwrap(),
++                        CommandOutcome::Rejected(_)
++                    ));
++                }
++                return;
++            }
++        }
++        let actor = e
++            .open_choice()
++            .map(|c| c.observer)
++            .unwrap_or(e.turn().current);
++        let p = e.plan_action(actor, &planner);
++        assert!(!matches!(
++            e.apply_plan(&p).unwrap(),
++            CommandOutcome::Rejected(_)
++        ));
++    }
++    panic!("expected the real zero-card hujia window");
++}
++
++#[test]
++fn dead_current_actor_does_not_probe_attacks() {
++    let mut e = Engine::new(45000, 4);
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_move_named_card_to_hand(0, "sha");
++    e.state_core_mut().players[0].alive = false;
++    e.state_core_mut().players[0].hp = 0;
++    Engine::restore(&e.save()).expect("a dead current player can await phase advancement");
++    let plan = e.plan_action(
++        0,
++        &BoundedPlanner::new(8)
++            .with_policy_variant(1)
++            .with_lookahead(2),
++    );
++    assert_eq!(plan.sim_faults, 0, "an observable dead actor cannot attack");
++    assert_eq!(plan.action, GameAction::NextPhase);
++    assert!(!matches!(
++        e.apply_plan(&plan).unwrap(),
++        CommandOutcome::Rejected(_)
++    ));
++}
++
++#[test]
++fn real_moyan_public_machine_held_cards_survive_both_windows() {
++    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
++    let json = std::fs::read_to_string(
++        root.join("../../packages/extensions/d3-upstream-noname/assets/character.json"),
++    )
++    .unwrap();
++    let pack = content_native_loader::bridge_pack(&json).unwrap().pack;
++    for gain_window in [false, true] {
++        let mut a = Engine::new_with_extensions(9970, 4, &[&pack]).unwrap();
++        a.debug_grant(0, "dddmoyan");
++        a.debug_set_turn(3, Phase::End, 1);
++        submit(&mut a, 3, GameAction::NextPhase);
++        assert_eq!(a.open_choice().unwrap().spec.prompt, "d3_moyan_target");
++        if gain_window {
++            let id = a.open_choice().unwrap().id;
++            submit(
++                &mut a,
++                0,
++                GameAction::Answer {
++                    choice_id: id,
++                    selection: vec![engine_native::ChoiceOption::Player(1)],
++                },
++            );
++            assert_eq!(a.open_choice().unwrap().spec.prompt, "d3_moyan_gain");
++        }
++        let observer = a.open_choice().unwrap().observer;
++        let shown = match &a.save().resolution.parks[0].machine {
++            engine_native::MachineSnapshot::Host {
++                behavior, cards, ..
++            } if *behavior == engine_native::content::host::HostBehavior::D3Moyan.tag() => {
++                cards.clone()
++            }
++            other => panic!("real public held cards: {other:?}"),
++        };
++        assert_eq!(shown.len(), 3);
++        let mut b = a.clone();
++        let core = b.state_core_mut();
++        std::mem::swap(&mut core.players[2].hand[0], &mut core.deck[0]);
++        assert_eq!(
++            a.ai_session(observer).events(),
++            b.ai_session(observer).events()
++        );
++        assert_pair_with_packs(a, b, observer, &[&pack]);
++    }
++}
++
++#[test]
++fn real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path() {
++    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
++    let json = std::fs::read_to_string(
++        root.join("../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json"),
++    )
++    .unwrap();
++    let pack = content_native_loader::bridge_pack(&json).unwrap().pack;
++    let mut e = Engine::new_with_extensions(122001, 4, &[&pack]).unwrap();
++    e.debug_grant(0, "liaoyuan");
++    e.debug_set_turn(0, Phase::Play, 1);
++    let sha = e.debug_move_named_card_to_hand(0, "sha");
++    let suit = e.catalog().cards[sha as usize].suit;
++    for _ in 0..3 {
++        let index = e
++            .state_core()
++            .deck
++            .iter()
++            .position(|c| e.catalog().cards[*c as usize].suit == suit)
++            .unwrap();
++        let card = e.state_core_mut().deck.remove(index);
++        e.state_core_mut().players[0].hand.push(card);
++    }
++    eprintln!(
++        "LIAOYUAN_COMMAND actor=0 revision={} dedup={} PlayCard card={sha} targets=[1]",
++        e.revision(),
++        e.save().last_dedup + 1
++    );
++    submit(
++        &mut e,
++        0,
++        GameAction::PlayCard {
++            card: sha,
++            targets: vec![1],
++        },
++    );
++    for _ in 0..16 {
++        let c = e.open_choice().cloned().unwrap();
++        if c.spec.prompt == "liaoyuan_discard" {
++            break;
++        }
++        let selection = if c
++            .spec
++            .options
++            .contains(&engine_native::ChoiceOption::Confirm)
++        {
++            vec![engine_native::ChoiceOption::Confirm]
++        } else {
++            c.spec.options.iter().take(c.spec.min).copied().collect()
++        };
++        eprintln!("LIAOYUAN_COMMAND actor={} revision={} dedup={} Answer choice={} selection={selection:?}", c.observer, e.revision(), e.save().last_dedup + 1, c.id);
++        submit(
++            &mut e,
++            c.observer,
++            GameAction::Answer {
++                choice_id: c.id,
++                selection,
++            },
++        );
++    }
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "liaoyuan_discard");
++    let before = e.save();
++    let expected: Vec<_> = before
++        .resolution
++        .parks
++        .iter()
++        .filter_map(|p| engine_native::snap::active_ask(&p.machine, &before.core, e.catalog()))
++        .collect();
++    eprintln!("LIAOYUAN_EXPECTED {expected:#?}");
++    eprintln!("LIAOYUAN_ACTUAL {:#?}", before.resolution.open_choice);
++    eprintln!("LIAOYUAN_SNAPSHOT {before:#?}");
++    eprintln!(
++        "LIAOYUAN_ARCHIVE {:?}",
++        engine_native::archive::encode_archive(&before)
++    );
++    Engine::restore_with_extensions(&before, &[&pack]).unwrap();
++    let scalar = before
++        .resolution
++        .parks
++        .iter()
++        .find_map(|park| {
++            let mut machine = &park.machine;
++            while let engine_native::MachineSnapshot::OptionalGate {
++                inner: Some(inner), ..
++            } = machine {
++                machine = inner;
++            }
++            match machine {
++                engine_native::MachineSnapshot::Host {
++                    behavior,
++                    stage,
++                    card,
++                    ..
++                } if *behavior == engine_native::content::host::HostBehavior::Liaoyuan.tag() => {
++                    assert_eq!(
++                        *stage,
++                        engine_native::content::host::HostStage::SelectCard.tag()
++                    );
++                    *card
++                }
++                _ => None,
++            }
++        })
++        .expect("real suit scalar");
++    assert_eq!(scalar, suit as u32);
++    redact_opponent_hands(&mut e, 0);
++    assert_eq!(e.save().resolution, before.resolution);
++    Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
++}
+diff --git a/crates/engine-native/tests/nc10_opaque_vm_privacy.rs b/crates/engine-native/tests/nc10_opaque_vm_privacy.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-native/tests/nc10_opaque_vm_privacy.rs
+@@ -0,0 +1,286 @@
++//! A reachable VM local caches an opponent's private hand color before HOST_CHOICE.
++use engine_native::ai::BoundedPlanner;
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook, VmSkillDecl};
++use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
++use rule_vm::bytecode::{caps, effect_tag, op, query_tag};
++
++fn constant(code: &mut Vec<u8>, value: u32) {
++    code.push(op::CONST_U32);
++    code.extend(value.to_le_bytes());
++}
++
++fn pack() -> ExtensionPack {
++    let mut code = vec![];
++    constant(&mut code, 3); // rule seat 3 = native opponent 2
++    constant(&mut code, 1); // red
++    code.extend([op::HOST_QUERY, query_tag::HAND_COLOR_COUNT, op::STORE, 0]);
++    constant(&mut code, 0);
++    constant(&mut code, 1);
++    code.extend([
++        op::HOST_CHOICE,
++        2,
++        op::STORE,
++        1,
++        op::LOAD,
++        1,
++        op::JUMP_IF_FALSE,
++    ]);
++    let jump = code.len();
++    code.extend([0, 0]);
++    constant(&mut code, 1);
++    constant(&mut code, 3);
++    code.extend([
++        op::LOAD,
++        0,
++        op::HOST_EFFECT,
++        effect_tag::DEAL_DAMAGE as u8,
++        op::HALT,
++    ]);
++    let destination = code.len();
++    code[jump..jump + 2].copy_from_slice(&((destination - jump - 2) as i16).to_le_bytes());
++    constant(&mut code, 1);
++    constant(&mut code, 4);
++    constant(&mut code, 1);
++    code.extend([op::HOST_EFFECT, effect_tag::DEAL_DAMAGE as u8, op::HALT]);
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "nc10-opaque",
++            version: 1,
++            description: "cached hidden color",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        init_hook: InitHook::None,
++        enabled: true,
++        vm_skills: vec![VmSkillDecl {
++            name: "nc10_opaque".into(),
++            module: rule_vm::BytecodeModule {
++                name: "nc10-opaque".into(),
++                code,
++                local_count: 2,
++                max_stack: 8,
++                entry_pc: 0,
++                logic_hash: [41; 32],
++                caps_mask: caps::RUN_QUERIES | caps::REQUEST_CHOICE | caps::EMIT_EFFECTS,
++            },
++            trigger: engine_native::catalog::TriggerMeta {
++                event: engine_native::EventKind::PhaseEnd,
++                timing: engine_native::Timing::Normal,
++                priority: 0,
++                optional: false,
++                extra_events: vec![],
++            },
++            filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
++        }],
++    }
++}
++
++fn fixture(pack: &ExtensionPack, red: bool) -> Engine {
++    let mut e = Engine::new_with_extensions(991_100, 4, &[pack]).unwrap();
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_grant(0, "nc10_opaque");
++    for index in 0..4 {
++        let deck_index = e
++            .state_core()
++            .deck
++            .iter()
++            .position(|id| {
++                let suit = e.catalog().cards[*id as usize].suit;
++                matches!(
++                    suit,
++                    engine_native::catalog::Suit::Heart | engine_native::catalog::Suit::Diamond
++                ) == red
++            })
++            .unwrap();
++        let core = e.state_core_mut();
++        std::mem::swap(&mut core.players[2].hand[index], &mut core.deck[deck_index]);
++    }
++    let out = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: 1,
++        action: GameAction::NextPhase,
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "rvm_choice");
++    Engine::restore_with_extensions(&e.save(), &[pack]).unwrap();
++    e
++}
++
++#[test]
++fn opaque_vm_private_local_does_not_change_choice() {
++    let pack = pack();
++    let a = fixture(&pack, false);
++    let mut b = fixture(&pack, true);
++    b.state_core_mut()
++        .vm_aux
++        .storage
++        .insert("opaque#private".into(), 42);
++    assert_eq!(
++        format!("{:?}", a.ai_session(0).input()),
++        format!("{:?}", b.ai_session(0).input())
++    );
++    assert_eq!(a.ai_session(0).choice(), b.ai_session(0).choice());
++    assert_eq!(a.ai_session(0).events(), b.ai_session(0).events());
++    let original = [a.save(), b.save()];
++    for (engine, expected) in [(&a, 0i32), (&b, 4i32)] {
++        let snapshot = engine.save();
++        let engine_native::MachineSnapshot::Rvm {
++            paused: Some(paused),
++            owner,
++            ..
++        } = &snapshot.resolution.parks[0].machine
++        else {
++            panic!("VM paused")
++        };
++        assert_eq!(*owner, 0);
++        assert_eq!(
++            i32::from_le_bytes(paused.frames[2..6].try_into().unwrap()),
++            expected
++        );
++        eprintln!(
++            "NC10_OPAQUE pc={} local0={} frames={:?}",
++            paused.pc, expected, paused.frames
++        );
++    }
++    let planner = BoundedPlanner::new(48)
++        .with_policy_variant(1)
++        .with_lookahead(2);
++    let p = a.plan_action(0, &planner);
++    let q = b.plan_action(0, &planner);
++    eprintln!("NC10_OPAQUE left={p:?} right={q:?}");
++    assert_eq!(
++        format!("{p:?}"),
++        format!("{q:?}"),
++        "cached unknown hand color leaked through VM local 0"
++    );
++    assert_eq!(p.nodes_used, 0);
++    assert_eq!([a.save(), b.save()], original);
++    let damage_after = |action| {
++        let mut trial = Engine::restore_with_extensions(&b.save(), &[&pack]).unwrap();
++        let before: i32 = trial
++            .state_core()
++            .players
++            .iter()
++            .skip(1)
++            .map(|p| p.hp)
++            .sum();
++        let outcome = trial.submit(GameCommand {
++            actor: 0,
++            expected_revision: trial.revision(),
++            dedup_id: trial.save().last_dedup + 1,
++            action,
++        });
++        assert!(!matches!(outcome, CommandOutcome::Rejected(_)));
++        before
++            - trial
++                .state_core()
++                .players
++                .iter()
++                .skip(1)
++                .map(|p| p.hp)
++                .sum::<i32>()
++    };
++    let conservative_damage = damage_after(p.action.clone());
++    let private_damage = damage_after(GameAction::Answer {
++        choice_id: b.open_choice().unwrap().id,
++        selection: vec![ChoiceOption::Tag(1)],
++    });
++    eprintln!("NC10_LEAF_COST private_red_count=4 leaf_damage={conservative_damage} private_continuation_damage={private_damage}");
++    assert_eq!((conservative_damage, private_damage), (1, 4));
++    for source in [&a, &b] {
++        let mut restored = Engine::restore_with_extensions(&source.save(), &[&pack]).unwrap();
++        assert!(
++            matches!(&p.action, GameAction::Answer { selection, .. } if selection.len() == 1 && matches!(selection[0], ChoiceOption::Tag(_)))
++        );
++        assert!(!matches!(
++            restored.apply_plan(&p).unwrap(),
++            CommandOutcome::Rejected(_)
++        ));
++    }
++}
++
++#[test]
++fn author_dsl_private_query_in_pending_effects_is_a_public_search_leaf() {
++    let source = "skill nc10_author(991042) { trigger card_targeted always { let reds = hand_color_count(self, red); effect discard_hand_equip_count(event_player, 1); effect deal_damage(self, event_player, reds + 1); } }";
++    let pkg = content_compiler::compile_source_named("nc10-author", source).unwrap();
++    let mut pack = pack();
++    pack.def.name = "nc10-author";
++    pack.vm_skills = content_native_loader::bridge_vm_skill_decls(&pkg)
++        .unwrap()
++        .decls;
++    pack.vm_skills.truncate(1);
++    let mut pair = Vec::new();
++    for red in [false, true] {
++        let mut e = Engine::new_with_extensions(991_102, 4, &[&pack]).unwrap();
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(1, &pack.vm_skills[0].name);
++        let sha = e.debug_move_named_card_to_hand(0, "sha");
++        for index in 0..e.state_core().players[1].hand.len() {
++            let deck_index = e
++                .state_core()
++                .deck
++                .iter()
++                .position(|id| {
++                    let suit = e.catalog().cards[*id as usize].suit;
++                    matches!(
++                        suit,
++                        engine_native::catalog::Suit::Heart | engine_native::catalog::Suit::Diamond
++                    ) == red
++                })
++                .unwrap();
++            let core = e.state_core_mut();
++            std::mem::swap(&mut core.players[1].hand[index], &mut core.deck[deck_index]);
++        }
++        let out = e.submit(GameCommand {
++            actor: 0,
++            expected_revision: 0,
++            dedup_id: 1,
++            action: GameAction::PlayCard {
++                card: sha,
++                targets: vec![1],
++            },
++        });
++        assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++        assert_eq!(
++            (
++                e.open_choice().unwrap().observer,
++                e.open_choice().unwrap().spec.prompt
++            ),
++            (0, "rvm_discard_pick")
++        );
++        Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
++        pair.push(e);
++    }
++    assert_eq!(
++        format!("{:?}", pair[0].ai_session(0).input()),
++        format!("{:?}", pair[1].ai_session(0).input())
++    );
++    assert_eq!(
++        pair[0].ai_session(0).choice(),
++        pair[1].ai_session(0).choice()
++    );
++    assert_eq!(
++        pair[0].ai_session(0).events(),
++        pair[1].ai_session(0).events()
++    );
++    for budget in [0, 48] {
++        let planner = BoundedPlanner::new(budget)
++            .with_policy_variant(1)
++            .with_lookahead(2);
++        let p = pair[0].plan_action(0, &planner);
++        let q = pair[1].plan_action(0, &planner);
++        assert_eq!(format!("{p:?}"), format!("{q:?}"));
++        assert_eq!(p.nodes_used, 0);
++        for e in &pair {
++            let mut restored = Engine::restore_with_extensions(&e.save(), &[&pack]).unwrap();
++            assert!(!matches!(
++                restored.apply_plan(&p).unwrap(),
++                CommandOutcome::Rejected(_)
++            ));
++        }
++        planner.cancel();
++        assert!(pair[0].plan_action(0, &planner).cancelled);
++    }
++}
+diff --git a/crates/engine-native/tests/nc10_redaction_helper_contract.rs b/crates/engine-native/tests/nc10_redaction_helper_contract.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-native/tests/nc10_redaction_helper_contract.rs
+@@ -0,0 +1,308 @@
++//! NC10 helper contracts: VM sentinels and another actor's filtered choices.
++use engine_native::ai::{redact_opponent_hands, BoundedPlanner};
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook, VmSkillDecl};
++use engine_native::{
++    CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
++};
++use rule_vm::bytecode::{caps, effect_tag, op};
++
++fn submit(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
++    let out = e.submit(GameCommand {
++        actor,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action,
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++    out
++}
++
++fn collect_unknown_cards(e: &mut Engine) {
++    let core = e.state_core_mut();
++    let mut unknown = std::mem::take(&mut core.deck);
++    for player in core.players.iter_mut().skip(1) {
++        unknown.append(&mut player.hand);
++    }
++    core.players[1].hand = unknown;
++}
++
++// The closed copy only observes the helper's deterministic pool, not the rule continuation.
++fn idle_sample(e: &Engine, packs: &[&ExtensionPack]) -> Engine {
++    let mut snapshot = e.save();
++    snapshot.resolution.stack.clear();
++    snapshot.resolution.parks.clear();
++    snapshot.resolution.open_choice = None;
++    snapshot.resolution.answer = None;
++    let mut sample = Engine::restore_with_extensions(&snapshot, packs).unwrap();
++    redact_opponent_hands(&mut sample, 0);
++    sample
++}
++
++fn constant(code: &mut Vec<u8>, value: u32) {
++    code.push(op::CONST_U32);
++    code.extend(value.to_le_bytes());
++}
++
++fn effect(code: &mut Vec<u8>, tag: u16) {
++    code.push(op::HOST_EFFECT_EXT);
++    code.extend(tag.to_le_bytes());
++}
++
++fn pending_pack(card: u32, move_card: bool) -> ExtensionPack {
++    let mut code = Vec::new();
++    constant(&mut code, 1);
++    constant(&mut code, 1);
++    effect(&mut code, effect_tag::DISCARD_HAND_EQUIP_COUNT);
++    if move_card {
++        constant(&mut code, card);
++        constant(&mut code, (1 << 8) | 3); // native seat 0 hand
++        constant(&mut code, (2 << 8) | 3); // native seat 1 hand
++        effect(&mut code, effect_tag::MOVE_CARD);
++    } else {
++        constant(&mut code, 1);
++        constant(&mut code, card);
++        constant(&mut code, 0);
++        effect(&mut code, effect_tag::STORE_EVENT_CARD_IN_SKILL_PILE);
++    }
++    code.push(op::HALT);
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "nc10-pending-card",
++            version: 1,
++            description: "VM sentinel regression",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        init_hook: InitHook::None,
++        enabled: true,
++        vm_skills: vec![VmSkillDecl {
++            name: "nc10_pending_card".into(),
++            module: rule_vm::BytecodeModule {
++                name: "nc10-pending-card".into(),
++                code,
++                local_count: 0,
++                max_stack: 8,
++                entry_pc: 0,
++                logic_hash: [73; 32],
++                caps_mask: caps::EMIT_EFFECTS,
++            },
++            trigger: engine_native::catalog::TriggerMeta {
++                event: engine_native::EventKind::PhaseEnd,
++                timing: engine_native::Timing::Normal,
++                priority: 0,
++                optional: false,
++                extra_events: vec![],
++            },
++            filter: engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
++        }],
++    }
++}
++
++fn pending_engine(seed: u64, pack: &ExtensionPack, swap: Option<(usize, usize)>) -> Engine {
++    let mut e = Engine::new_with_extensions(seed, 4, &[pack]).unwrap();
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_grant(0, &pack.vm_skills[0].name);
++    collect_unknown_cards(&mut e);
++    if let Some((a, b)) = swap {
++        e.state_core_mut().players[1].hand.swap(a, b);
++    }
++    submit(&mut e, 0, GameAction::NextPhase);
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "rvm_discard_pick");
++    Engine::restore_with_extensions(&e.save(), &[pack]).expect("real accepted commit pause");
++    e
++}
++
++fn pending_card_survives_redaction(move_card: bool) {
++    let probe_pack = pending_pack(1, move_card);
++    let seed = (991200..991216)
++        .find(|seed| {
++            !Engine::new_with_extensions(*seed, 4, &[&probe_pack])
++                .unwrap()
++                .state_core()
++                .players[0]
++                .hand
++                .contains(&0)
++        })
++        .unwrap();
++    let probe = pending_engine(seed, &probe_pack, None);
++    let sample = idle_sample(&probe, &[&probe_pack]);
++    let zero_slot = sample.state_core().players[1]
++        .hand
++        .iter()
++        .position(|c| *c == 0)
++        .unwrap();
++    let hand = &probe.state_core().players[1].hand;
++    let swap =
++        (hand[zero_slot] == 0).then(|| (zero_slot, hand.iter().position(|c| *c != 0).unwrap()));
++    let card = swap.map(|(_, b)| hand[b]).unwrap_or(hand[zero_slot]);
++    assert_ne!(card, 0);
++    let pack = pending_pack(card, move_card);
++    let original = pending_engine(seed, &pack, swap);
++    assert_eq!(original.state_core().players[1].hand[zero_slot], card);
++    assert_eq!(
++        idle_sample(&original, &[&pack]).state_core().players[1].hand[zero_slot],
++        0,
++        "the same unrestricted physical pool would assign nonzero card to native zero"
++    );
++    let machine = &original.save().resolution.parks[0].machine;
++    let engine_native::MachineSnapshot::Rvm { commit_pending, .. } = machine else {
++        panic!("Rvm commit pause")
++    };
++    let effects = engine_native::rvm_ops::dec_effects(commit_pending).unwrap();
++    for effect in &effects {
++        engine_native::rvm_ops::accept_effect(effect, 4).unwrap();
++    }
++    assert!(effects.iter().any(|effect| match effect {
++        rule_api::EffectRequest::StoreEventCardInSkillPile { card: c, .. } => c.raw() == card,
++        rule_api::EffectRequest::MoveCards { cards, .. } => cards.iter().any(|c| c.raw() == card),
++        _ => false,
++    }));
++    let mut redacted = original.clone();
++    redact_opponent_hands(&mut redacted, 0);
++    let sampled_card = redacted.state_core().players[1].hand[zero_slot];
++    let snapshot = redacted.save();
++    let mut restored = Engine::restore_with_extensions(
++        &engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&snapshot))
++            .unwrap(),
++        &[&pack],
++    )
++    .unwrap();
++    for budget in [0, 64] {
++        let planner = BoundedPlanner::new(budget)
++            .with_policy_variant(1)
++            .with_lookahead(2);
++        assert_eq!(
++            format!("{:?}", original.ai_session(0).input()),
++            format!("{:?}", redacted.ai_session(0).input())
++        );
++        let plan = original.plan_action(0, &planner);
++        assert_eq!(
++            format!("{plan:?}"),
++            format!("{:?}", redacted.plan_action(0, &planner))
++        );
++        assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));
++    }
++    let choice = restored.open_choice().unwrap().clone();
++    submit(
++        &mut restored,
++        choice.observer,
++        GameAction::Answer {
++            choice_id: choice.id,
++            selection: choice
++                .spec
++                .options
++                .iter()
++                .take(choice.spec.min)
++                .copied()
++                .collect(),
++        },
++    );
++    let moved = if move_card {
++        restored.state_core().players[0]
++            .hand
++            .contains(&sampled_card)
++    } else {
++        restored
++            .state_core()
++            .vm_aux
++            .piles
++            .get(&(0, pack.vm_skills[0].name.clone()))
++            .is_some_and(|pile| pile.contains(&sampled_card))
++    };
++    eprintln!("VM_SENTINEL move={move_card} source={card} sampled={sampled_card} moved={moved}");
++    assert!(
++        moved,
++        "accepted nonzero pending card effect must survive helper sampling"
++    );
++    assert_eq!(
++        redacted.save().resolution,
++        original.save().resolution,
++        "conservative commit helper preserves the actual pending payload"
++    );
++    Engine::restore_with_extensions(&restored.save(), &[&pack]).unwrap();
++}
++
++#[test]
++fn pending_store_preserves_vm_nonzero_card_contract() {
++    pending_card_survives_redaction(false);
++}
++
++#[test]
++fn pending_move_preserves_vm_nonzero_card_contract() {
++    pending_card_survives_redaction(true);
++}
++
++fn sha_setup() -> (Engine, u32) {
++    let mut e = Engine::new(991300, 4);
++    e.debug_set_turn(0, Phase::Play, 1);
++    let sha = e.debug_move_named_card_to_hand(0, "sha");
++    collect_unknown_cards(&mut e);
++    (e, sha)
++}
++
++#[test]
++fn nonobserver_shan_window_retains_restorable_filtered_options() {
++    let (setup, sha) = sha_setup();
++    let mut probe = setup.clone();
++    submit(
++        &mut probe,
++        0,
++        GameAction::PlayCard {
++            card: sha,
++            targets: vec![1],
++        },
++    );
++    assert_eq!(probe.open_choice().unwrap().observer, 1);
++    let sample = idle_sample(&probe, &[]);
++    let slot = sample.state_core().players[1]
++        .hand
++        .iter()
++        .position(|card| sample.catalog().card_kind(*card) != CardKind::Shan)
++        .unwrap();
++    let shan = setup.state_core().players[1]
++        .hand
++        .iter()
++        .position(|card| setup.catalog().card_kind(*card) == CardKind::Shan)
++        .unwrap();
++    let mut e = setup;
++    e.state_core_mut().players[1].hand.swap(slot, shan);
++    let original_shan = e.state_core().players[1].hand[slot];
++    submit(
++        &mut e,
++        0,
++        GameAction::PlayCard {
++            card: sha,
++            targets: vec![1],
++        },
++    );
++    Engine::restore(&e.save()).expect("real accepted Sha response before redaction");
++    let before = e.save();
++    let input = format!("{:?}", e.ai_session(0).input());
++    let events = e.ai_session(0).events();
++    redact_opponent_hands(&mut e, 0);
++    eprintln!(
++        "NONOBSERVER_SHAN original={original_shan} sampled={} kind={:?}",
++        e.state_core().players[1].hand[slot],
++        e.catalog().card_kind(e.state_core().players[1].hand[slot])
++    );
++    assert_eq!(format!("{:?}", e.ai_session(0).input()), input);
++    assert_eq!(e.ai_session(0).events(), events);
++    let mut restored = Engine::restore(
++        &engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&e.save()))
++            .unwrap(),
++    )
++    .expect("non-observer helper preserves sampled choice restoration");
++    assert_eq!(e.save().resolution, before.resolution);
++    assert_eq!(e.state_core().players[1].hand, before.core.players[1].hand);
++    let choice = restored.open_choice().unwrap().clone();
++    assert!(choice.spec.options.contains(&ChoiceOption::Pass));
++    submit(
++        &mut restored,
++        1,
++        GameAction::Answer {
++            choice_id: choice.id,
++            selection: vec![ChoiceOption::Pass],
++        },
++    );
++}

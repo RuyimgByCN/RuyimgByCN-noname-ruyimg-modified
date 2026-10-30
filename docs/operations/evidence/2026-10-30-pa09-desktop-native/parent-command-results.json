@@ -1,0 +1,119 @@
+[
+  {
+    "name": "frontend-initial",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "test"
+    ],
+    "exit": 0,
+    "elapsed_including_lock_seconds": 0.881,
+    "log": "parent-frontend-initial.log"
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "typecheck"
+    ],
+    "exit": 0,
+    "elapsed_including_lock_seconds": 1.358,
+    "log": "parent-typecheck.log"
+  },
+  {
+    "name": "desktop-wasm-initial",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "-p",
+      "engine-native-wasm",
+      "--features",
+      "desktop-client/tauri-shell"
+    ],
+    "exit": 0,
+    "elapsed_including_lock_seconds": 13.646,
+    "log": "parent-desktop-wasm-initial.log"
+  },
+  {
+    "name": "empty-hujia-red",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "pa09_native_session",
+      "auto_step_answers_real_empty_hujia_window_without_panicking",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "elapsed_including_lock_seconds": 7.033,
+    "log": "parent-empty-hujia-red.log"
+  },
+  {
+    "name": "desktop-wasm-empty-hujia-green",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "-p",
+      "engine-native-wasm",
+      "--features",
+      "desktop-client/tauri-shell"
+    ],
+    "exit": 0,
+    "elapsed_including_lock_seconds": 5.362,
+    "log": "parent-desktop-wasm-empty-hujia-green.log"
+  },
+  {
+    "name": "integrated-six-packages-interrupted-60s",
+    "command": [
+      "python3",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "--features",
+      "desktop-client/tauri-shell",
+      "--no-fail-fast"
+    ],
+    "exit": null,
+    "status": "timedout",
+    "timeout_seconds": 60,
+    "log": "parent-integrated-six-packages.interrupted-60s.log",
+    "rust_counts": null,
+    "note": "Interrupted original command; partial results do not establish acceptance."
+  }
+]

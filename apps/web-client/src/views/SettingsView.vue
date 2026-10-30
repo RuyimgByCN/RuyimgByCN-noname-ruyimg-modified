@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import NativePackagesPanel from "../components/NativePackagesPanel.vue";
+import { isTauriShell } from "../engine/desktopHost";
+import { DESKTOP_ENGINE_KEY, desktopEngineChoice } from "../engine/desktopEngineTransport";
+
+const desktop = isTauriShell();
+const engineChoice = ref(desktopEngineChoice());
+watch(engineChoice, (choice) => localStorage.setItem(DESKTOP_ENGINE_KEY, choice));
 
 // §30 Accessibility: full profile controls
 
@@ -79,6 +85,18 @@ watch([highContrast, skipAnimations, fontScale, colorBlind, screenReader], () =>
     <p class="muted" role="note">
       表现层设置不影响规则核心（§30 可访问性）。所有设置即时生效并保存到本地。
     </p>
+
+    <fieldset v-if="desktop" class="a11y-group">
+      <legend>桌面引擎</legend>
+      <label class="select-row">
+        <span>下次连接使用</span>
+        <select v-model="engineChoice" aria-label="桌面引擎">
+          <option value="wasm">WASM Worker（默认 / 回退）</option>
+          <option value="native">原生引擎（实验原型）</option>
+        </select>
+      </label>
+      <p class="muted">当前对局不切换。操作失败时保留当前引擎，请先核对局面。</p>
+    </fieldset>
 
     <fieldset class="a11y-group">
       <legend>可访问性（§30）</legend>

@@ -1,0 +1,603 @@
+{
+  "totals": {
+    "engine-native-wasm": {
+      "passed": 72,
+      "failed": 0,
+      "ignored": 0,
+      "sections": 18
+    },
+    "engine-native-kernel": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "sections": 2
+    },
+    "engine-native-content": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "sections": 2
+    },
+    "game-server": {
+      "passed": 378,
+      "failed": 0,
+      "ignored": 0,
+      "sections": 28
+    },
+    "engine-native": {
+      "passed": 1640,
+      "failed": 0,
+      "ignored": 73,
+      "sections": 13
+    }
+  },
+  "sections": [
+    {
+      "target": "engine_native",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "g1",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 166,
+      "failed": 0,
+      "ignored": 1,
+      "status": "ok"
+    },
+    {
+      "target": "g1_shahai",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 174,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "kernel",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 435,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "l_rounds",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "misc",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 176,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc08",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 50,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_upstream_a_k",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 130,
+      "failed": 0,
+      "ignored": 9,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_upstream_l_z",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 199,
+      "failed": 0,
+      "ignored": 8,
+      "status": "ok"
+    },
+    {
+      "target": "nc_rounds",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 127,
+      "failed": 0,
+      "ignored": 5,
+      "status": "ok"
+    },
+    {
+      "target": "swd",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 134,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "test_registry",
+      "package": "engine-native",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_content",
+      "package": "engine-native-content",
+      "kind": "test",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_kernel",
+      "package": "engine-native-kernel",
+      "kind": "test",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_wasm",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 27,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "cross_target_multiseat",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "cross_target_package",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "events_hash_export",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "gt014_import_validation_parity",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "installed_package_payload",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc03_actor_authorization",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc03_legal_actions_export",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc03_view_projection",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc04_vm_control_flow",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc05_general_select_export",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc06_skill_pile_restore",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_cross_target",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "restore_boundary_handle",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "vm_module_hash",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "vm_package_integrity",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "vm_package_worker",
+      "package": "engine-native-wasm",
+      "kind": "test",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "game_server",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 76,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "fault_injection",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "gt014_vm_import_parity",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "long_run_bot",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "long_run_memory",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "long_run_soak",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "m8_rolling_upgrade",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "multi_room_stress",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "native_frozen_packages",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "native_onlyol_general",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "native_product_path",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "native_upgrade_rollback",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc02_install_identity",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc05_campaign_profile",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc05_lifecycle_heavy",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc05_skin_ui",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_command_by_command",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_cross_line",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc08_install_matrix",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_dual_backend",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_native_actor",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 44,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_native_durability",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_native_room_session",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 56,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_native_view_bridge",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_projection_parity",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "nc09_referee_projection",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "room_flow",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "tournament_wal_signing",
+      "package": "game-server",
+      "kind": "test",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native",
+      "package": "engine-native",
+      "kind": "doc",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_content",
+      "package": "engine-native-content",
+      "kind": "doc",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_kernel",
+      "package": "engine-native-kernel",
+      "kind": "doc",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    },
+    {
+      "target": "engine_native_wasm",
+      "package": "engine-native-wasm",
+      "kind": "doc",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "status": "ok"
+    }
+  ]
+}

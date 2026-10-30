@@ -1,0 +1,103 @@
+## Review
+
+- **Correct:** The follow-up matches the current runtime ownership stages and restores the exact five pending requests. The read-only host callback carries LiaoYuan’s existing suit scalar without treating it as a physical card.
+- **Fixed:** The previous P1 is resolved: XunXun, JiJie, GaiMing and HaoTianTa held cards now reach the shared Referee projection and ownership validator; missing ask derivation, prompt recognition and XunXun/JiJie factories are supplied.
+- **Finding — P2, report-only existing defect:** GaiMing cancellation returns its placeholder judgment card to the deck, then discards that same card without removing it from the deck. This predates the correction and is not exercised by the new GaiMing continuation trace.
+- **Merge verdict: OK with notes.** No additional defect introduced by the incremental correction was found. The existing cancellation issue should receive a separate regression and correction; it does not invalidate the repaired pending-window projection/restore path.
+
+I read the complete follow-up report, complete ten-file incremental patch, relevant current source, new test fixtures, manifests, red/green records and WASM verification script. This was read-only: no source changes, builds, tests or commits were performed.
+
+The reviewed artifacts are:
+
+| Artifact | Recorded SHA256 |
+|---|---|
+| Incremental correction | `28a7c7626b79c1f1026726a6482717215b8c5a880e1b3afbcb08bcccab552c14` |
+| Combined 26-file patch against `f6b7bb57` | `8cf34a8cf7196c53057542200a855e92f7fa25ec71d5dfd82c3f749648af36db` |
+
+I compared all sixteen original-file hash pairs outside this increment in the preserved and final manifests; they match. That includes the original server projection, role/reconnect implementation, WASM wrapper and TypeScript source. I did not independently recompute live filesystem hashes.
+
+**Previous P1: resolved**
+
+[The collector at validation.rs:342](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/snap/validation.rs:342) now distinguishes physical ownership from stored references:
+
+- XunXun contributes `top` only in `Arrange`, after runtime removes those cards from the deck.
+- JiJie contributes `card` only in `Read`, after runtime removes the bottom card.
+- An unfinalized, held GaiMing judgment contributes the full candidate vector. Only `judge_card == candidates[0]` receives the known alias treatment. Duplicate candidates, non-first aliases and cross-zone duplicates remain detectable.
+- An unfinalized, held HaoTianTa judgment contributes its second candidate when the holder identifies that window.
+- Finalized trick bookkeeping and inactive storage are excluded. Existing recursive wrappers remain intact.
+
+There is no global deduplication. `validate_card_ownership` still checks every collected ID for range, rejects repeated physical ownership and checks complete coverage. The correction therefore repairs the omissions without concealing duplicate ownership.
+
+The shared physical-location helper and ordinary-view filter are unchanged. Full views collect parked cards; ordinary Player, Spectator and AI views do not. Held cards retain `Processing` with no owner, and the original core-zone order and owner mapping remain unchanged.
+
+**Ask derivation and restoration: correct for the reviewed windows**
+
+The additions at [snap/asks.rs:281](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/snap/asks.rs:281) and line 891 match the actual runtime `WaitChoice` specifications:
+
+| Window | Derived request |
+|---|---|
+| XunXun | Stored top-card order; SelectCards; exactly two; no cancellation |
+| JiJie | Current alive-player order, including self; SelectPlayers; exactly one; no cancellation |
+| GaiMing | Stored candidate order; SelectCards; exactly one; cancellation allowed |
+| HaoTianTa | Judgment card followed by second candidate; actual holder as observer; exactly one; no cancellation |
+| LiaoYuan | Owner hand followed by equipment, filtered by stored suit; SelectCards; exactly one; cancellation allowed |
+
+The two [standard factory arms at standard.rs:333](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content/src/content/standard.rs:333) reconstruct XunXun/JiJie from their existing owner, stage and card fields. They neither invent defaults nor reinterpret payloads. The normal content hook reaches these factories, preserving the existing `SkillMachine` snapshot/step behavior.
+
+The five prompt additions only extend the decoder whitelist. `enc_open_choice` continues writing the prompt string and the same fields in the same order; no codec tag or state ID is added. The negative test still requires unknown prompts to fail with `BadTag("prompt_unknown", 0)`. The recorded before/after archive comparisons show identical bytes for all five original pending fixtures.
+
+**LiaoYuan callback: correct and bounded**
+
+The `HostAskHook` signature at [catalog.rs:763](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/catalog.rs:763), its `NONE` closure, the invocation in `snap::active_ask`, and the content implementation agree on parameter order. Exhaustive searches found the expected definition, default, registration and invocation; no stale caller was found.
+
+[host/asks.rs:32](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-content/src/content/host/asks.rs:32) requires `SelectCard`, obtains the suit from the existing `Host.card`, rejects missing/out-of-range suit values, and filters current owner hand/equipment. The enum’s current suit order agrees with `mbcm_suit_of`: Spade, Heart, Club, Diamond correspond to 0–3.
+
+Runtime LiaoYuan appends discarded cards to `Host.cards`; the collector continues treating these as history, not additional physical ownership. The test discards equipment, restores at the repeat window, verifies the unchanged scalar and history, checks the physical multiset, then cancels and compares continuation.
+
+The `256` negative remains a precise rejection by the existing host payload bound. The final test asserts `IdOutOfBounds { what: "card", got: 256 }`; it was not weakened to accept any error. This is an internal read-only Rust callback adjustment, with no VM ABI or wire change.
+
+**Tests and recorded evidence**
+
+The fixture captures initial deck and hands before running the rules, independently of the collector. Sorted vector equality checks the physical multiset without deduplicating it. The four ownership windows then arise through real runtime card removal.
+
+The new tests cover physical omissions, cross-zone duplicates, missing/out-of-range held cards, GaiMing aliases, inactive references, nested wrappers, request order/kind/observer/count/cancellation mutations, unknown prompts and LiaoYuan scalar/candidate negatives. Native archive tests compare full core, resolution, pending choice, RNG and newly emitted event payloads after continuation and repeated byte restoration.
+
+I also read the actual WASM script. It loads the native-generated pending archives with matching packages, checks every seat’s authorized cards and choices, executes recorded commands, compares hashes/revisions/public event codes, and saves/restores after every command. Its recorded result is 75 state comparisons, 270 seat/privacy checks, 35 commands and 40 archive restarts across five windows.
+
+The preserved failures substantiate the repair sequence: physical omissions and unknown prompts, then `OpenChoiceMismatch`, then missing XunXun/JiJie factories, followed by the LiaoYuan failures. The final records show:
+
+| Check | Recorded result |
+|---|---:|
+| Focused native / server | 18 / 5 passed; 0 failed |
+| Full native three crates | 1,665 passed; 0 failed; 73 ignored |
+| Full server | 383 passed; 0 failed |
+| Native WASM Rust suite | 72 passed; 0 failed |
+| Combined five packages | 2,120 passed; 0 failed; 73 ignored |
+| Strict native three-crate check | Exit 0 |
+| Fresh WASM32 five-window verification | 0 failures |
+| Fresh ordinary WASM32/server parity | 40 comparisons, 32 privacy checks; 0 failures |
+| Repository preflight | **21/21 passed** |
+
+These are implementer runs, not reviewer executions. Unlike the previous isolated result, the supplied final preflight is a full pass. Worker82/frontend139 remain dated prior results; this follow-up does not represent them as rerun.
+
+**P2 — Existing GaiMing cancellation duplicates a physical card**
+
+This is a separate existing runtime defect discovered while tracing the corrected boundary.
+
+At [judge.rs:177](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/kernel/judge.rs:177), cancellation puts every candidate back into the deck. It retains `cur.judge_card`, `judge_held` and the unfinished judgment. The next loop reaches finalization at line 441. For the fixture’s Le judgment, [judge.rs:723](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/worktree/crates/engine-native-kernel/src/kernel/judge.rs:723) discards the retained judgment card. `Ctx::to_discard` at `machine.rs:424` does not remove cards from the deck.
+
+A concrete source-derived counterexample uses the new `Window::GaiMing` fixture:
+
+1. Reach its pending `gaiming_pick`; the recorded first candidate/placeholder is card **65**.
+2. Answer with an empty selection, which the request legally permits.
+3. The cancellation branch returns card 65 to the deck, then Le resolution also places it in discard.
+4. The exact physical multiset contains card 65 twice; subsequent restore should reject `card_in_multiple_zones`.
+
+The new trace selects candidate index six, so its green restore sequence does not cover cancellation. The older Boss cancellation test checks deck length and judgment completion, without checking physical uniqueness or restoring afterward.
+
+The follow-up should correct cancellation’s transfer back into ordinary judgment processing so one physical card is reacquired and consumed exactly once. Add a cancellation regression comparing the physical multiset and successful byte restore after answering, for both uninterrupted and restored engines. This belongs in the existing judgment rule path; it should not be hidden through collector deduplication or looser validation. I have not executed this counterexample.
+
+The narrow correction can merge. Parent integration still needs to preserve the reserved J2/NC10/PA09 hunks and validate the combined tree; separately approved B fields are absent from this patch and were not reviewed as implemented.
+
+Skipped: runtime execution, live SHA recomputation and unmerged parent candidates.  
+Risk: the corrected pending-window paths are supported by the supplied evidence, but existing GaiMing cancellation still needs separate ownership/restore coverage and repair.

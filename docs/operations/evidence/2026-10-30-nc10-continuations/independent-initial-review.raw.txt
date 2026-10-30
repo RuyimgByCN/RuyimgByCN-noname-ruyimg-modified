@@ -1,0 +1,86 @@
+## Review
+
+**Merge verdict: OK with notes for the explicitly narrow partial patch after the known Liaoyuan fix is integrated and the required tests are rerun successfully. The supplied tree remains BLOCKED by that known failure today.** I found two patch-caused P2 issues in the redaction helper, described below. I did not establish a new patch-caused P0/P1 failure in the audited planner path.
+
+This review covers the complete 11-file `nc10-complete.patch`, the full handoff, final manifest and command index, connected AI/redaction/remapping/accessor code, relevant runtime machines and restore validation, and the cited evidence logs. The review baseline is `38789f54c798829d7b32bff1c990def50cf7f611`, rules 328/archive 105/native ABI 753. The parent’s later `100489f5` integration, PA09 edits, J2 candidate, and future version documentation are outside this verdict.
+
+- **Correct:** Enemy `vm_aux.piles` now participate in the physical unknown pool, while the observer’s hand and private VM piles remain fixed. Physical assignment and typed references use the same mapping. History/reference fields are not added as physical owners. The allocation order and mapping order agree in `ai/redact.rs:191–228`.
+
+- **Correct:** The inspected non-Host fields follow their runtime meanings. Sha’s `extra_targets` and `lueying_victim` are seats and are correctly left unchanged; its selected cost-card fields are references. Zhangba, Rende, JieYin and LiJian retain selected cards in ordinary zones until consumption. Wugu references table cards. GuanXing owns its detached top cards. Judge ownership distinguishes unfinished tricks and held judgment cards from bookkeeping references.
+
+- **Correct:** Generic Host slots are excluded from remapping. The scalar regression demonstrates the earlier Liaoyuan suit `3 → 103` corruption and now passes. This establishes scalar preservation, **not Host privacy**. D3Moyan’s exception is supported by its actual runtime: `content/host/support.rs:830` removes three cards, publicly reveals them before either choice, and later transfers/discards those same held cards. They are genuine physical owners outside ordinary zones.
+
+- **Correct:** The opaque-VM root policy uses the public prompt, without a storage-presence guard. The recorded red example has Tag0/nodes3 versus Tag1/nodes6; the final example has identical full Plans with nodes0 and faults0. Root selection uses projected options, bounds, cancellation and Pass semantics, without authoritative `legal_actions` fallback. The lookahead guard checks the public prompt before enumerating or submitting the second-layer answers.
+
+- **Correct:** I did not find the proposed non-VM choice beneath a still-paused opaque VM to be reachable on this baseline. `VmMachine::run` returns its own `rvm_choice`; `pump_commit` runs synchronously until completion or its own `rvm_discard_pick`. Neither path yields to nested rule processing while retaining the paused locals/pending queue. The scheduler immediately returns Pending on `WaitChoice`. OptionalGate delegates to the same inner machine. This conclusion is limited to the inspected v328 implementation; it does not cover J2.
+
+- **Correct:** Planner mutations remain on simulation clones. `resolution_mut()` is crate-private and its only caller is the remapper. `apply_plan` retains cancellation/revision checks and submits through the normal command path. Moving `rule-api` into ordinary dependencies is consistent with facade-to-leaf dependency direction.
+
+- **Fixed:** None applied; this was a read-only review.
+
+- **Finding: P2 — A valid nonzero VM card reference can be remapped into the VM’s no-card sentinel.**
+
+  Location: [remap.rs:32](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/remap.rs:32), with allocation at [redact.rs:118](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/redact.rs:118).
+
+  The visitor protects an **incoming** zero, but permits `map(nonzero)` to produce zero. Native physical CardId zero participates in the unknown pool. The VM commit layer interprets zero as no card: `rvm_ops.rs:492` skips `StoreEventCardInSkillPile`, and `rvm_ops.rs:650` skips it in `MoveCards`.
+
+  A source-level counterexample is a real commit-pause queue containing `DiscardHandEquipCount` followed by `StoreEventCardInSkillPile(card=C)`, with `C != 0` in an unknown zone and the physical permutation assigning `C → 0`. The new helper rewrites both the physical card and queued reference to zero. On resume, the store effect returns early instead of moving the remapped physical card. This changes continuation behavior despite retaining valid physical ownership.
+
+  This queue is expressible through the existing VM effect decoder and admitted by `accept_effect`; `requires_conservative_redaction` permits `Rvm { paused: None, commit_pick: Some(..) }`. It is therefore a current helper defect, not a hypothetical future opcode. The new live commit test queues discard/draw and does not exercise a pending card-bearing effect.
+
+  **Smallest bounded fix:** retain conservative helper handling for commit-paused Rvm states until their card mapping preserves the VM sentinel contract, and add a focused `nonzero → native zero` pending-effect regression. Do not change the authoritative ID/ABI contract incidentally. Severity is P2 because ordinary planner entry at this prompt returns the public leaf before invoking redaction; I have not established an authoritative-plan failure through this defect.
+
+- **Finding: P2 — Remapping another seat’s filtered response options can create a clone that fails choice restoration.**
+
+  Location: [remap.rs:225](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native/src/ai/remap.rs:225), enabled by the seat-independent continuation gate at `ai/redact.rs:23`.
+
+  The helper remaps existing `ChoiceOption::Card` entries mechanically. Such a permutation preserves physical identity relationships but does not preserve catalog properties used to derive a choice. For example, [snap/asks.rs:147](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-ai-113i2ib5/worktree/crates/engine-native-kernel/src/snap/asks.rs:147) derives an ordinary `respond_shan` choice by filtering the responder’s hand for Shan.
+
+  Counterexample: seat 0 has opened a normal Sha response for seat 1; call `redact_opponent_hands` for seat 0. Seat 1’s hand is now unknown and reassigned. If an original Shan `C` maps to a non-Shan `Y`, the stored choice becomes `Pass, Card(Y), …`, whereas `active_ask` excludes `Y` and derives options from the sampled hand’s actual Shans. `Engine::restore` compares the ordered option lists and returns `OpenChoiceMismatch`.
+
+  This can be constructed without relying on a lucky seed: give the responder the remaining unknown cards, then order the original hand so a Shan occupies the allocation position receiving a known non-Shan from the deterministic pool. The initial response state is valid; the new mapping makes its stored options disagree with the shared derivation.
+
+  The old suspended-Duel gate required `choice.observer == seat`; other such windows retained their hands. The patch removes that restriction, making this helper regression reachable. The added response tests redact for the actual choice observer, whose own hand remains fixed, so they do not cover it.
+
+  **Smallest bounded fix:** keep conservative handling for a current choice belonging to another seat, or rederive the sampled choice through the existing shared ask machinery where supported. Add a non-observer response-window restore regression. Severity is P2: the ordinary active-observer planner path avoids this case, and I did not establish a new authoritative-plan rejection caused by it.
+
+**Evidence assessment**
+
+The supplied logs support the handoff’s limited claims:
+
+| Evidence | Supported result |
+|---|---|
+| `scoped-final-full.log` and per-target counts | **1654 passed / 1 failed / 75 ignored**, exit101. The sole failure is the registered Liaoyuan test, failing at restore before redaction. |
+| Three `scoped-final-gate-*.log` files | Each strict `RUSTFLAGS=-D warnings cargo check --offline … --all-targets` completed with exit0. |
+| Final source/layering logs | Source-limit tests 2/0; 8921 files within limits; layering tests 9/0; zero upward references. |
+| `scoped-final-wasm-build.log` and smoke log | Actual release WASM rebuild, followed by Node **11/0**, including a 235-step completed game. The build retains WASM-shell dead-code warnings. |
+| `quality-revival-node8.log` | Manual matrix actually executed: **288 games, 269 terminal, 19 truncated; 96,569 samples; zero rejections/faults**. |
+| `quality-release-node64.log` | Manual matrix actually executed: **288 games, 272 terminal, 16 truncated; 109,778 samples; zero rejections/faults**. |
+| `scoped-final-nc10.log:1287` onward | Final opaque-local equality and the explicit **1 versus 4 damage** leaf-cost example. |
+
+The quality matrix uses two seeds with repeated challenger rotations; it is not 288 independent random samples. It contains no VM packages. Its latency figures are diagnostic, and debug/node8 versus release/node64 is not a controlled performance comparison. The 3-point leaf-cost example establishes a concrete local quality tradeoff, not a whole-game win-rate estimate. I found no inflation of those claims in the handoff.
+
+The known Liaoyuan failure remains a merge prerequisite, **not a newly attributed patch finding**. After the shared HostAskHook repair, the parent should rerun the registered Liaoyuan test and:
+
+```text
+cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast
+```
+
+**Remaining NC10 acceptance gaps**
+
+The partial merge must retain these boundaries explicitly:
+
+- Non-D3Moyan Host behavior/stage payloads remain conservative and unproven for privacy.
+- No-choice VM storage, flags and cached scalar provenance remain unresolved. In particular, `ai/redact.rs:72` still uses private storage emptiness to decide trap handling; the public VM-choice leaf does not prove that broader boundary.
+- XunXun, JiJie, GaiMing and HaoTianTa require the parent’s shared repairs and subsequent real-window counterfactual matrix.
+- The inspected visitor is not evidence that every typed continuation branch satisfies identical remapped Core/resolution/candidates/full Plan/nodes/faults for equal complete PolicyInput and public events.
+- Public memory, formerly known cards, private-pile shape/count information, other modes and the real WASM opaque-VM matrix remain incomplete.
+
+These are limits on full NC10 acceptance. They do not require completing all 37 sources before merging this documented partial increment.
+
+**Fingerprints and verification limits**
+
+The supplied patch SHA-256 is `dd21a0d3db4ae4457f57c6e907997b38ab8fc0a44b69d9666b3d79b34048d518`, matching the value recorded in the final manifest. All file/log hashes referenced here are **supplied fingerprints**; I did not independently compute a digest. I read the complete patch and reread the finding-bearing mapping, VM commit, ask-derivation and restore code at the end of review.
+
+No writes, builds, tests, commits or runtime reproductions were performed; the two new counterexamples are source-proved constructions.  
+Risk: the partial planner boundary is narrower than the public redaction helper’s apparent applicability, and full NC10 privacy remains unaccepted.

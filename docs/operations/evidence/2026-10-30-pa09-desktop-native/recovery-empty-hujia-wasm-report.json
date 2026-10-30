@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "runtime": "actual wasm32 web-target artifact loaded by generated JavaScript in Node",
+  "players": 8,
+  "seed": 45000,
+  "fixtureSteps": 11,
+  "prompt": "hujia_respond",
+  "options": [],
+  "min": 0,
+  "cancel": false,
+  "exactReply": true,
+  "exactArchiveAgainstNativeManualEmptyAnswer": true,
+  "exactRestoredAuthGeneration": true,
+  "hash": "7a1f3687d25df1395d81c1e127e4000f2568947e3d40a06a19d6181ed61db58c",
+  "revision": "12",
+  "choicesCompared": 16,
+  "eventCodes": [
+    10,
+    4,
+    10
+  ]
+}

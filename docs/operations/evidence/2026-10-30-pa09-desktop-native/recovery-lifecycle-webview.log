@@ -1,0 +1,22 @@
+{"command": ["node", "/tmp/pa09-validation-webview/run-webview.mjs", "pa09-desktop-webview", "recovery"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 178416152576}
+{"ownedDesktopPid":44362,"binary":"/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop","entry":"pa09-desktop-webview","run":"recovery"}
+{
+  "passed": true,
+  "terminal": {
+    "steps": 280,
+    "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+    "outcome": {
+      "RebelWin": null
+    }
+  },
+  "vm_lifecycle": "actual IPC passed",
+  "isolation": "validator init preserves battle",
+  "fallback": "actual Wasm Worker passed",
+  "resources": "close/duplicate-close/closed-request passed",
+  "state": {
+    "ids": [],
+    "checks": []
+  },
+  "pendingSnapshots": []
+}
+{"command": ["node", "/tmp/pa09-validation-webview/run-webview.mjs", "pa09-desktop-webview", "recovery"], "exit": 0, "locked_seconds": 2.0068483750219457, "stop_reason": null}

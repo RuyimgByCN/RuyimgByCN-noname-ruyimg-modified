@@ -1,0 +1,15 @@
+{
+  "native": {
+    "fresh_package_sha256": "0a50a161dbb1eca898edf001f97eef94904f0af8e29b98f00823e9071031205e",
+    "matching_dist_assets": [
+      "apps/web-client/dist/assets/engine_native_wasm_bg-UWjHYLGk.wasm"
+    ]
+  },
+  "legacy": {
+    "fresh_package_sha256": "65408f5a118c0399efdc469caac9ae6a9a661f2fae79c84f21c6a658b467c485",
+    "matching_dist_assets": [
+      "apps/web-client/dist/assets/engine_wasm_bg-BLWgi6bp.wasm",
+      "apps/web-client/dist/pkg/engine_wasm_bg.wasm"
+    ]
+  }
+}

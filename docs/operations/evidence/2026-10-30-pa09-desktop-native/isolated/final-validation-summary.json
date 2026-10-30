@@ -1,0 +1,30 @@
+{
+  "base_head": "db4e37ca608877111d9d6f5e12290e6ec912da41",
+  "reference_base": "db4e37ca",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123\n",
+  "architecture": "arm64",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "node": "v26.4.0",
+  "pnpm": "10.34.3",
+  "rust_results": {
+    "passed": 91,
+    "failed": 0,
+    "ignored": 1
+  },
+  "native_webview": {
+    "passed": true,
+    "terminal": {
+      "steps": 280,
+      "hash": "0f86bade58e22ba091b391f52cc5ec1af8660e03a67d6f407322816d8aa4bd8f",
+      "outcome": {
+        "RebelWin": null
+      }
+    },
+    "vm_lifecycle": "actual IPC passed",
+    "isolation": "validator init preserves battle",
+    "fallback": "actual Wasm Worker passed",
+    "resources": "close/duplicate-close/closed-request passed"
+  },
+  "controlled_performance_acceptance": false,
+  "default_transport": "wasm-worker"
+}

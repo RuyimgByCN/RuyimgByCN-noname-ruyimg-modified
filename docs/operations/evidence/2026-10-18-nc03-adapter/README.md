@@ -28,7 +28,7 @@
 ### 2.1 token 与候选值混用（反例 1）
 
 - 旧行为：`readChoice` 的 token 对 `{card:42}` 这类载荷候选取**下标**（0），对裸数字候选取**值**；而 `resolveChoice` 一律按候选值 `findIndex`。于是候选值 42/99 时暴露 token 0/1，提交 token 0 会被当作值 0 查找 → `native: 选项值 0 不在候选`。同时 `deriveLegalActions` 合成的 `selections` 用的是候选值（`[42]`），与 token 语义相反，两个出口互相矛盾。
-- 契约依据：窄壳 `answer()` 直取 `spec.options[idx]`（`crates/engine-native-wasm/src/lib.rs:268-287`），**回传面是索引**。
+- 契约依据：窄壳 `answer()` 直取 `spec.options[idx]`，**回传面是索引**。当时位于 lib.rs 第268–287行；2026-10-30共享session抽取后，绑定仍委托同一[NativeSession::answer](../../../../crates/engine-native-wasm/src/session.rs)，本页测试结果仍仅属于2026-10-18快照。
 - 修复：token **统一为候选下标**（`options.map((o, index) => ({ token: index, … }))`），候选值只进 `label_key`；`deriveLegalActions` 的 `selections` 改用首候选 token `[0]`；`resolveChoice` 按 token 直传索引，越界/非整数显式抛错（`native: 选项 token X 不在候选（0..N-1）`），不再静默命中别的候选。
 - 验证：stub 回归 4 项 + 真实引擎（`discard_to_limit`，`{card:113}`）token 0 → `accepted`，提交载荷值 113 → 被拒（§4）。
 

@@ -3,15 +3,21 @@ use super::*;
 impl Engine {
     /// N10：座位 `seat` 的可见视图——自己的手牌可见，对手手牌与牌库内容隐藏。
     pub fn view_for(&self, seat: PlayerId) -> crate::view::PlayerView {
-        self.build_view(Some(seat))
+        self.build_view(Some(seat), false)
     }
 
     /// N10：观战者视图——所有手牌隐藏，仅公开信息。
     pub fn view_spectator(&self) -> crate::view::PlayerView {
-        self.build_view(None)
+        self.build_view(None, false)
     }
 
-    pub(super) fn build_view(&self, seat: Option<PlayerId>) -> crate::view::PlayerView {
+    /// Trusted host projection: all physical cards, identities and both general slots.
+    /// This grants visibility only; it does not create a seat or authorize commands.
+    pub fn view_referee(&self) -> crate::view::PlayerView {
+        self.build_view(None, true)
+    }
+
+    fn build_view(&self, seat: Option<PlayerId>, full_info: bool) -> crate::view::PlayerView {
         let core = &self.state.core;
         let roles = core.identity_roles();
         let players = core
@@ -26,7 +32,7 @@ impl Engine {
                 // 与已死亡（遗言公开）可见；其余他人身份不可见。
                 let role = roles.and_then(|rs| {
                     let r = *rs.get(i as usize)?;
-                    (own || r == crate::state::Role::Lord || !p.alive).then_some(r)
+                    (full_info || own || r == crate::state::Role::Lord || !p.alive).then_some(r)
                 });
                 // 国战门控（ADR 0757）：本座位双将可见；他人只见明置槽。
                 // 非国战模式（原型/身份/对决/斗地主/Boss）无暗置概念，
@@ -35,7 +41,7 @@ impl Engine {
                 let mut generals: [Option<crate::view::GeneralView>; 2] = [None, None];
                 for (s, g_slot) in p.general_slots.iter().enumerate() {
                     let Some(g) = g_slot else { continue };
-                    if !own && kingdoms && !p.revealed_generals[s] {
+                    if !full_info && !own && kingdoms && !p.revealed_generals[s] {
                         continue; // 国战暗置槽：他人不可见
                     }
                     if let Some((name, faction, _, _, _)) = self.catalog.general_meta(*g) {
@@ -51,7 +57,7 @@ impl Engine {
                     alive: p.alive,
                     hp: p.hp,
                     max_hp: p.max_hp,
-                    hand: if own {
+                    hand: if full_info || own {
                         crate::view::HandView::Own(p.hand.clone())
                     } else {
                         crate::view::HandView::Hidden
@@ -84,6 +90,25 @@ impl Engine {
         crate::view::PlayerView {
             seat: seat.unwrap_or(PlayerId::MAX),
             players,
+            cards: {
+                let mut held = Vec::new();
+                if full_info {
+                    for park in &self.state.resolution.parks {
+                        crate::snap::machine_held_cards(&park.machine.snapshot(), &mut held);
+                    }
+                }
+                crate::snap::physical_cards(core, &held)
+                    .into_iter()
+                    .filter(|card| {
+                        use crate::snap::PhysicalCardZone::*;
+                        full_info || match card.zone {
+                            Hand => seat.is_some() && card.owner == seat,
+                            Equip | Judge | DiscardPile | Processing => true,
+                            DrawPile | Removed | Expansion => false,
+                        }
+                    })
+                    .collect()
+            },
             deck_count: core.deck.len(),
             discard: core.discard.clone(),
             table: core.table.clone(),
@@ -98,10 +123,20 @@ impl Engine {
     /// N10 第二批：开放选择的座位可见性——观察者见完整选项，
     /// 他人仅见询问存在（选项会暴露应答者手牌）。无开放选择返回 None。
     pub fn choice_view_for(&self, seat: Option<PlayerId>) -> Option<crate::view::ChoiceView> {
+        self.build_choice_view(seat, false)
+    }
+
+    /// Trusted referee sees the current choice without becoming its owner.
+    pub fn choice_view_referee(&self) -> Option<crate::view::ChoiceView> {
+        self.build_choice_view(None, true)
+    }
+
+    fn build_choice_view(&self, seat: Option<PlayerId>, full_info: bool) -> Option<crate::view::ChoiceView> {
         let open = self.state.resolution.open_choice.as_ref()?;
-        Some(if seat == Some(open.observer) {
+        Some(if full_info || seat == Some(open.observer) {
             crate::view::ChoiceView::Own {
                 id: open.id,
+                kind: open.spec.kind,
                 prompt: open.spec.prompt,
                 options: open.spec.options.clone(),
                 min: open.spec.min,

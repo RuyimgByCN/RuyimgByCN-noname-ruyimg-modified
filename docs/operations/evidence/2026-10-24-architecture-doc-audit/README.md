@@ -16,7 +16,7 @@
 
 ### 1. P1：坏十六进制存档会使 WASM 句柄失效
 
-- **具体情况**：`hex_decode` 用字符串下标按两个字节切片，未先验证偶数长度和 UTF-8 边界（`crates/engine-native-wasm/src/lib.rs:78`）。对现有原生 WASM 调用 `restore_hex("0")` 或 `restore_hex("中")`，实际得到 `RuntimeError: unreachable`，随后同句柄 `save_hex()` 报 Rust 别名借用错误。仅应拒绝坏文件的操作会使当前牌局无法继续读取。
+- **具体情况（当时快照）**：`hex_decode` 用字符串下标按两个字节切片，未先验证偶数长度和 UTF-8 边界（当时lib.rs第78行；后续修复及2026-10-30抽取后的入口见[session.rs](../../../../crates/engine-native-wasm/src/session.rs)）。对当时原生 WASM 调用 `restore_hex("0")` 或 `restore_hex("中")`，实际得到 `RuntimeError: unreachable`，随后同句柄 `save_hex()` 报 Rust 别名借用错误。仅应拒绝坏文件的操作会使当前牌局无法继续读取。
 - **最小修正**：在 WASM 边界按字节检查长度、ASCII hex 和资源上限，再进入解码；错误回传受控结果，恢复成功前保留原引擎。不能依赖 UI 已校验输入。
 - **验收**：奇数、非 ASCII、非法字符、超限和截断均受控失败；错误后原局状态／选择／存档仍可用。已有归档解码器的未知牌种与尾载荷修复不能替代这个更外层的检查。
 - **本轮证据**：[探针脚本](wasm-restore-boundary-probe.mjs)、[完整运行元数据](wasm-restore-boundary-probe.json)、[原始输出](wasm-restore-boundary-probe.log)。使用既有生成包，未重建；JS／WASM／Rust 文件摘要运行前后不变。

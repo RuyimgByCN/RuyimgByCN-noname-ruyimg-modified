@@ -1,0 +1,15 @@
+
+running 1 test
+
+thread 'native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart' (7273737) panicked at apps/game-server/src/native_ws_e2e.rs:176:17:
+unexpected Error { code: NotInRoom, message: "not in room", room_id: Some(909) }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart ... FAILED
+
+failures:
+
+failures:
+    native_ws_e2e::referee::native_ws_referee_restore_reconnect_choice_fanout_and_restart
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 75 filtered out; finished in 0.68s
+

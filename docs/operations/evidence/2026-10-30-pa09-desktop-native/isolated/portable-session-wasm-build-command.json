@@ -1,0 +1,20 @@
+{
+  "pid": 93556,
+  "command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "env",
+    "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+    "CARGO_NET_OFFLINE=true",
+    "wasm-pack",
+    "build",
+    "crates/engine-native-wasm",
+    "--target",
+    "web",
+    "--release",
+    "--no-opt",
+    "--out-dir",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-pa09-76hf4fur/native-pkg"
+  ]
+}
