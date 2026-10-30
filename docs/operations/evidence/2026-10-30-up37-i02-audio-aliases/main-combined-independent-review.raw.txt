@@ -1,0 +1,34 @@
+## Review
+
+**Merge verdict: OK with notes。Main alias9 集成证据及最终四门禁局部验收通过；本结论不关闭整个 I02、UP37、37 来源或 Goal。**
+
+No issues found.
+
+- **Correct — 审查范围与身份链成立。** 已完整读取主树交接和原最终源码复审报告，沿用已关闭的跨包 P1／空 fixture P2，不重复全文算法审查。当前 HEAD 精确为 `da7e4c019461a6c467a9dd2de849f3b1a7494b86`，330／105／ABI758／WS6、asset schema2 六字段保持。九文件逐项 SHA 等于 [parent admission](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/parent-main-source-admission.json:1)，对应批准补丁 `5a8a2d…`；聚合 SHA 仍为 `82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978`。
+
+- **Correct — 证据完整性经过独立核对。** main-acceptance 索引 107/107 文件 SHA 匹配，实际 108 文件，额外仅索引自身；final-gates 69/69 文件长度及 SHA 匹配，实际 70 文件同样仅多自身索引。因 reviewer 无执行工具，由父运行限定只读脚本；本 reviewer 已审脚本与[功能证据核验结果](/tmp/parent-audio-alias-main-review/independent-results.json:1)、[最终门禁核验结果](/tmp/parent-audio-alias-main-review/final-gates-independent-results.json:1)，没有重跑测试或媒体审计。
+
+- **Correct — Main 实际执行记录与交接一致。** [Node 原日志](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/pipeline.log:1)为 11/11，[完整前端日志](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/frontend.log:175)为 167/167，typecheck exit0；资源同步、资源 verify 和完整 verify 均 exit0。核读同步入口分支，三个模式均在 Cargo／catalog regeneration 路径前退出；每步九文件 SHA 保持。
+
+- **Correct — 原资源及别名字节证据充分。** [byte-audit.py](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/byte-audit.py:1)逐项断言原 12359 direct 对象及顺序、非 assets 元数据精确保持，23393 alias 恰六字段，除 path 外等于 backing；实际文件名单精确匹配，source／backing／target 长度与 SHA 一致。8824 独立 payload 按 dev/inode/size/mtime 去重核字节，23393 行均为同 inode 链；这是一次字节审计，不是 12k codec 验收。
+
+- **Correct — 正向 owner／形态核验没有空 fixture。** 已审 [mapping-audit.mjs](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/mapping-audit.mjs:1)：独立提取 79 声明的来源、行号及 directives，按完整 catalog 精确名称要求唯一 global owner，再检查 571 项可用映射和 91 行跨包 alias。八形态全部非空：太史慈 shadow1–4、魏延 achieve/fail、于吉 shadow、周瑜 shadow，归四个 bingshi owner；独立 JSON 派生复核同数。2582 身份的 helper 输出归自身路径，形态阵亡仅接受该 owner 真实声明的 form。
+
+- **Correct — 页面样本定位到 Main 实际角色。** [原浏览器结果](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/happy/browser-result.json:652)中标准刘备确为阵亡、rende1/2、jijiang11/12 共五条；N01 是 xindanshou1/2，dc_sb_zhouyu 的四条 shadow 技能音频及 pot_zhouyu 的 shadow 阵亡／技能均存在。刘禅、君刘备及简雍 tempname 隔离断言有对应真实输入。
+
+- **Correct — 解码、播放和 HTTP 有原始数据支撑。** 已读 [happy driver](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/browser-audio.mjs:1)及选定原始记录；独立派生核得 15 角色、121 条完整 WebAudio 解码、14 次 controls 播放，全部 time>0、playingEvents>0、playedRanges>0、error=null。214 GET 精确分为 2 JSON＋121 页面音频＋91 跨包 alias，页面／HTTP／manifest 的 SHA、长度逐项相等。
+
+- **Correct — 已知五条失败没有混入成功样本。** 121 条来源均匹配旧成功 allowlist 的 ok、decoderOK、index、SHA、bytes，并直接流读原 `chrome.jsonl` 对应成功条目复核；没有 `tsumugi_mugyu1..5.mp3` 或 compat 派生件。[独立派生脚本](/tmp/parent-audio-alias-main-review/audit-json-evidence.py:1)及[结果](/tmp/parent-audio-alias-main-review/browser-and-mapping-results.json:1)保留完整对应关系。
+
+- **Correct — 正常资源直达 Rust，错误注入限定清楚。** CDP 将逻辑 7700 URL 重定向至自有 Rust 端口；普通资源由 ServeDir 返回，Node 页面服务器拒绝普通资源请求。[错误 driver](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/browser-errors.mjs:1)仅将指定坏音频 HTML 和 manifest503 路由至注入服务器；九场景原始结果证明逐路径错误归属、跨角色隔离、loadeddata 恢复及 manifest 错误保留。
+
+- **Correct — 历史 cleanup red 保留且续跑边界准确。** [happy.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/happy.log:1)先输出全部成功，再因 profile ENOTEMPTY 退出1；初始 driver 保留，修改仅为清理有限重试，resume 未重复 happy，只完成九错误场景和 214 GET。15 功能调用为14 exit0＋1 cleanup fail；三个 snapshot wrapper 另算，两次 snapshot queue wall 为 null。
+
+- **Correct — 最终四门禁现已完成。** 已核四份原始日志、[21 子命令记录](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/preflight-children.jsonl:1)及记录 driver：行数自测2/2、8992文件门禁、strict docrefs、完整 preflight 均 exit0；preflight 21/21，脚本单测192/192、零跳过，锁内327.392秒。本地链接1910文件／坏链0；六类缺失路径提示、98次 ResourceWarning 和卡面提示保留，未宣 warning 全清。唯一 Cargo 调用为 offline metadata，没有编译。
+
+- **Correct — 冻结范围与合法文档更新有区分。** 功能首末保护17195／AST461／modules／dist／guard／HEAD/index 一致；最终窄审计再次确认 source9、CI4、批准覆盖后的 A53、modules18、tracked dist37、父四文档、guard 入口出口及当前字节一致，index 为空且原始字节不变。父后续追加验收结论属于允许的文档收口，不应误报为源码漂移。
+
+- **Fixed — 本 reviewer 无源码、文档或 Main 修改。** 原跨包 P1 与 fixture P2 的关闭结论保持；本次未发现新增 P0/P1/P2。父可把本报告及 final-gates 结果追加到 README／进度，保留功能快照中当时“门禁待执行”的日期语境。
+
+未重复算法审查、测试、构建、decoder、live API、全媒体或17195保护树 hash；保留329 binary仅证明静态路由，两份既有 WASM 经外部 Vite 打包，不代表330 server或新WASM重建，CDP也不代表OS-HID／听感。
+2487缺backing、234动态表达式、原五条Chrome失败及整I02／37来源／Goal继续未完成；既有十绿CI未覆盖当前未提交alias9或私有compat，本报告不扩张其验收范围。

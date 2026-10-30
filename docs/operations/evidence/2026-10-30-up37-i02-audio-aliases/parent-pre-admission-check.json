@@ -1,0 +1,10 @@
+{
+  "main_head": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "current_main_runtime": "A330 candidate, phase2 source frozen",
+  "patch_sha256": "5a8a2d547ea6893009b2a8e9227e57349e7516f5957687af7c1391700fc84ef5",
+  "apply_check_exit": 0,
+  "stderr": "",
+  "source_applied": false,
+  "hold_reason": "Preserve running A330 main phase2 source fingerprints; integrate as next accepted increment",
+  "independent_review": "P1 crosspack/P2 vacuous tests closed; main validation pending"
+}

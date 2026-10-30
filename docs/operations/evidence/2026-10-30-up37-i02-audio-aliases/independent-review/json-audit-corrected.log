@@ -1,0 +1,67 @@
+{
+  "all_assertions_passed": true,
+  "roles": 15,
+  "decoded_page_entries": 121,
+  "http": {
+    "all": 214,
+    "json": 2,
+    "page_audio": 121,
+    "cross_alias": 91,
+    "all_page_manifest_sha_size_exact": true
+  },
+  "cross_by_owner": {
+    "bingshi:pot_taishici": [
+      {
+        "form": "pot_taishici_shadow1",
+        "aliases": 10,
+        "sources": 10
+      },
+      {
+        "form": "pot_taishici_shadow2",
+        "aliases": 10,
+        "sources": 10
+      },
+      {
+        "form": "pot_taishici_shadow3",
+        "aliases": 10,
+        "sources": 10
+      },
+      {
+        "form": "pot_taishici_shadow4",
+        "aliases": 10,
+        "sources": 10
+      }
+    ],
+    "bingshi:pot_weiyan": [
+      {
+        "form": "pot_weiyan_achieve",
+        "aliases": 11,
+        "sources": 11
+      },
+      {
+        "form": "pot_weiyan_fail",
+        "aliases": 11,
+        "sources": 11
+      }
+    ],
+    "bingshi:pot_yuji": [
+      {
+        "form": "pot_yuji_shadow",
+        "aliases": 10,
+        "sources": 10
+      }
+    ],
+    "bingshi:pot_zhouyu": [
+      {
+        "form": "pot_zhouyu_shadow",
+        "aliases": 19,
+        "sources": 19
+      }
+    ]
+  },
+  "alias_byte_rows": 23393,
+  "distinct_source_paths": 8824,
+  "mappings": 25880,
+  "missing": 2487,
+  "dynamic": 234
+}

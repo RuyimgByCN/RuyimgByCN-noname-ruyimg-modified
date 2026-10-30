@@ -1,0 +1,8 @@
+{
+  "exists": true,
+  "files": 23393,
+  "approved_root": "content/original/assets/audio-declared",
+  "backing_sha_size_verified": 23393,
+  "all_hardlinked_to_core_backing": 23393,
+  "preserved_reason": "Current main product resources required by ServeDir; retained, not unused build cache"
+}

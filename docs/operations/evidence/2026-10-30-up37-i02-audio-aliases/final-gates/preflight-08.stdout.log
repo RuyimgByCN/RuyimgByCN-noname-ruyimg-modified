@@ -1,0 +1,4 @@
+扫描 2 个目录，命中 1 处 card_kind 相等比较
+  OK XianjianLiguang:200  ctx.catalog.card_kind(*o) != ctx.catalog.card_kind(*c)
+
+✅ 所有 card_kind 相等比较均已登记

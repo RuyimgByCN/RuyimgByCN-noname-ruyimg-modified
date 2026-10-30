@@ -1,0 +1,298 @@
+{
+  "passed": true,
+  "base": "http://127.0.0.1:49627",
+  "build": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/validated-dist",
+  "rustBase": "http://127.0.0.1:49621",
+  "sourceRouting": "Actual main built Vue; CDP directly routes ordinary resources to owned actual Rust game-server, only designated bad A HTML and manifest503 route to injection server",
+  "matrix": [
+    {
+      "case": "A genuine media error from HTML response",
+      "alerts": [
+        {
+          "text": "语音加载或解码失败，请检查本地资源。",
+          "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+        }
+      ],
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3",
+          "error": 4,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0001/starzhengting1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0002/starzhengting2.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0001/starbishi1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0002/starbishi2.mp3",
+          "error": null,
+          "readyState": 0
+        }
+      ],
+      "originalA": {
+        "error": 4,
+        "connected": true,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "another A voice succeeds without clearing failed voice",
+      "alerts": [
+        {
+          "text": "语音加载或解码失败，请检查本地资源。",
+          "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+        }
+      ],
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3",
+          "error": 4,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0001/starzhengting1.mp3",
+          "error": null,
+          "readyState": 4
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0002/starzhengting2.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0001/starbishi1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0002/starbishi2.mp3",
+          "error": null,
+          "readyState": 0
+        }
+      ],
+      "originalA": {
+        "error": 4,
+        "connected": true,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "B loadeddata succeeds without A pollution",
+      "alerts": [],
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/tw/die/huan_zhouyu/0001/huan_zhouyu.mp3",
+          "error": null,
+          "readyState": 4
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/tw/character/huan_zhouyu/skill/twdumou/base/0001/twdumou1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/tw/character/huan_zhouyu/skill/twdumou/base/0002/twdumou2.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/tw/character/huan_zhouyu/skill/twhantian/base/0001/twhantian1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/tw/character/huan_zhouyu/skill/twhantian/base/0002/twhantian2.mp3",
+          "error": null,
+          "readyState": 0
+        }
+      ],
+      "originalA": {
+        "error": 4,
+        "connected": false,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "T has no audio and no unrelated alert",
+      "alerts": [],
+      "audio": [],
+      "originalA": {
+        "error": 4,
+        "connected": false,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "returning to A retains only A's failed path",
+      "alerts": [
+        {
+          "text": "语音加载或解码失败，请检查本地资源。",
+          "voice": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+        }
+      ],
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0001/starzhengting1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0002/starzhengting2.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0001/starbishi1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0002/starbishi2.mp3",
+          "error": null,
+          "readyState": 0
+        }
+      ],
+      "originalA": {
+        "error": 4,
+        "connected": false,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "successful A loadeddata clears only its path",
+      "alerts": [],
+      "audio": [
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3",
+          "error": null,
+          "readyState": 4
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0001/starzhengting1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starzhengting/base/0002/starzhengting2.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0001/starbishi1.mp3",
+          "error": null,
+          "readyState": 0
+        },
+        {
+          "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/character/star_dongyun/skill/starbishi/base/0002/starbishi2.mp3",
+          "error": null,
+          "readyState": 0
+        }
+      ],
+      "originalA": {
+        "error": 4,
+        "connected": false,
+        "src": "http://127.0.0.1:7700/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3"
+      }
+    },
+    {
+      "case": "manifest request really fails with 503",
+      "alerts": [
+        {
+          "text": "无法读取语音资源清单（Error: 503 Service Unavailable）。",
+          "voice": null
+        }
+      ],
+      "audio": [],
+      "originalA": null
+    },
+    {
+      "case": "manifest failure persists on huan_zhouyu",
+      "alerts": [
+        {
+          "text": "无法读取语音资源清单（Error: 503 Service Unavailable）。",
+          "voice": null
+        }
+      ],
+      "audio": [],
+      "originalA": null
+    },
+    {
+      "case": "manifest failure persists on tangtang",
+      "alerts": [
+        {
+          "text": "无法读取语音资源清单（Error: 503 Service Unavailable）。",
+          "voice": null
+        }
+      ],
+      "audio": [],
+      "originalA": null
+    }
+  ],
+  "exceptions": [],
+  "requests": [
+    {
+      "path": "/collection",
+      "status": 200,
+      "bytes": 455
+    },
+    {
+      "path": "/assets/index-BvcZtXKw.js",
+      "status": 200,
+      "bytes": 412676
+    },
+    {
+      "path": "/assets/index-jC10sqNn.css",
+      "status": 200,
+      "bytes": 28125
+    },
+    {
+      "path": "/favicon.ico",
+      "status": 200,
+      "bytes": 455
+    },
+    {
+      "path": "/original-content/assets/audio-declared/sp2/die/star_dongyun/0001/star_dongyun.mp3",
+      "injected": "non-audio HTML"
+    },
+    {
+      "path": "/collection",
+      "status": 200,
+      "bytes": 455
+    },
+    {
+      "path": "/assets/index-BvcZtXKw.js",
+      "status": 200,
+      "bytes": 412676
+    },
+    {
+      "path": "/assets/index-jC10sqNn.css",
+      "status": 200,
+      "bytes": 28125
+    },
+    {
+      "path": "/favicon.ico",
+      "status": 200,
+      "bytes": 455
+    },
+    {
+      "path": "/original-content/asset-manifest.json",
+      "injected": "manifest503"
+    }
+  ]
+}

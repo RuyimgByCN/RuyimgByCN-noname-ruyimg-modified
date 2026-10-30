@@ -1,0 +1,192 @@
+{
+  "evidence": "/tmp/noname-i02-all-codecs.LXnAxI/chrome-failures.json",
+  "original_failures": [
+    {
+      "event": "result",
+      "index": 10813,
+      "path": "audio/skill/tsumugi_mugyu1.mp3",
+      "source_path": "audio/skill/tsumugi_mugyu1.mp3",
+      "kind": "audio",
+      "source_category": "core",
+      "expectedBytes": 18559,
+      "sourceSHA": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+      "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu1.mp3",
+      "ok": false,
+      "http": {
+        "status": 200,
+        "mime": "audio/mpeg",
+        "contentLength": "18559",
+        "contentEncoding": null,
+        "acceptRanges": "bytes",
+        "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu1.mp3",
+        "ok": true
+      },
+      "bytes": 18559,
+      "sha256": "a92f05d0ece4b03ae630a0dbae45a04552dd7eaf61de719c960723def8f6dc32",
+      "magicHex": "0000001c667479704d34412000000000",
+      "decoderOK": false,
+      "decodeError": {
+        "name": "EncodingError",
+        "message": "Unable to decode audio data"
+      },
+      "metadata": {
+        "ok": true,
+        "duration": 1.109333,
+        "readyState": 4
+      },
+      "metadataOK": true,
+      "elapsedMs": 3.2,
+      "at": "2026-10-30T13:54:19.080Z"
+    },
+    {
+      "event": "result",
+      "index": 10814,
+      "path": "audio/skill/tsumugi_mugyu2.mp3",
+      "source_path": "audio/skill/tsumugi_mugyu2.mp3",
+      "kind": "audio",
+      "source_category": "core",
+      "expectedBytes": 114374,
+      "sourceSHA": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+      "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu2.mp3",
+      "ok": false,
+      "http": {
+        "status": 200,
+        "mime": "audio/mpeg",
+        "contentLength": "114374",
+        "contentEncoding": null,
+        "acceptRanges": "bytes",
+        "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu2.mp3",
+        "ok": true
+      },
+      "bytes": 114374,
+      "sha256": "34e248650c7261ea50128b84b776eb36819e74482236d7a8afaf31be1e6a1ff6",
+      "magicHex": "0000001c667479704d34412000000000",
+      "decoderOK": false,
+      "decodeError": {
+        "name": "EncodingError",
+        "message": "Unable to decode audio data"
+      },
+      "metadata": {
+        "ok": true,
+        "duration": 6.997333,
+        "readyState": 4
+      },
+      "metadataOK": true,
+      "elapsedMs": 4.5,
+      "at": "2026-10-30T13:54:19.084Z"
+    },
+    {
+      "event": "result",
+      "index": 10815,
+      "path": "audio/skill/tsumugi_mugyu3.mp3",
+      "source_path": "audio/skill/tsumugi_mugyu3.mp3",
+      "kind": "audio",
+      "source_category": "core",
+      "expectedBytes": 10031,
+      "sourceSHA": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+      "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu3.mp3",
+      "ok": false,
+      "http": {
+        "status": 200,
+        "mime": "audio/mpeg",
+        "contentLength": "10031",
+        "contentEncoding": null,
+        "acceptRanges": "bytes",
+        "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu3.mp3",
+        "ok": true
+      },
+      "bytes": 10031,
+      "sha256": "b2b6e57e6525b161603cc5016e941e2f9f7dcee17be189984d31de17a6b75441",
+      "magicHex": "0000001c667479704d34412000000000",
+      "decoderOK": false,
+      "decodeError": {
+        "name": "EncodingError",
+        "message": "Unable to decode audio data"
+      },
+      "metadata": {
+        "ok": true,
+        "duration": 0.554667,
+        "readyState": 4
+      },
+      "metadataOK": true,
+      "elapsedMs": 11.5,
+      "at": "2026-10-30T13:54:19.095Z"
+    },
+    {
+      "event": "result",
+      "index": 10816,
+      "path": "audio/skill/tsumugi_mugyu4.mp3",
+      "source_path": "audio/skill/tsumugi_mugyu4.mp3",
+      "kind": "audio",
+      "source_category": "core",
+      "expectedBytes": 38934,
+      "sourceSHA": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+      "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu4.mp3",
+      "ok": false,
+      "http": {
+        "status": 200,
+        "mime": "audio/mpeg",
+        "contentLength": "38934",
+        "contentEncoding": null,
+        "acceptRanges": "bytes",
+        "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu4.mp3",
+        "ok": true
+      },
+      "bytes": 38934,
+      "sha256": "dccb9ff86e652e0e3f8b6e0b91a700c5fc658cc35344e72dde6c9c62e5a6235c",
+      "magicHex": "0000001c667479704d34412000000000",
+      "decoderOK": false,
+      "decodeError": {
+        "name": "EncodingError",
+        "message": "Unable to decode audio data"
+      },
+      "metadata": {
+        "ok": true,
+        "duration": 2.368,
+        "readyState": 4
+      },
+      "metadataOK": true,
+      "elapsedMs": 15.7,
+      "at": "2026-10-30T13:54:19.100Z"
+    },
+    {
+      "event": "result",
+      "index": 10817,
+      "path": "audio/skill/tsumugi_mugyu5.mp3",
+      "source_path": "audio/skill/tsumugi_mugyu5.mp3",
+      "kind": "audio",
+      "source_category": "core",
+      "expectedBytes": 80896,
+      "sourceSHA": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+      "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu5.mp3",
+      "ok": false,
+      "http": {
+        "status": 200,
+        "mime": "audio/mpeg",
+        "contentLength": "80896",
+        "contentEncoding": null,
+        "acceptRanges": "bytes",
+        "url": "http://127.0.0.1:58820/original-content/assets/audio/skill/tsumugi_mugyu5.mp3",
+        "ok": true
+      },
+      "bytes": 80896,
+      "sha256": "d39be83ee7a66e6d75ba0843a337d9a7dcb9f0976824cef1d8d1d1dc46e8e32b",
+      "magicHex": "0000001c667479704d34412000000000",
+      "decoderOK": false,
+      "decodeError": {
+        "name": "EncodingError",
+        "message": "Unable to decode audio data"
+      },
+      "metadata": {
+        "ok": true,
+        "duration": 4.949333,
+        "readyState": 4
+      },
+      "metadataOK": true,
+      "elapsedMs": 6.8,
+      "at": "2026-10-30T13:54:19.102Z"
+    }
+  ],
+  "this_run_decode_retested": false,
+  "derivatives_included": false
+}

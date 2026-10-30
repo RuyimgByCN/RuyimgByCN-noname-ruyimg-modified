@@ -1,0 +1,48 @@
+P1 跨包 substitute 漏绑和 P2 提前返回测试均已修复并验证；原 reviewer 复审和 main validation 仍待父线程，不能把本交接当成整项 I02 验收。
+基准仍为 `977cdf1f35bc3f08aba137528a3672f3dad5f391`，329／105／758／WS5；总改动仍 9 文件，本次相对已审 B 仅改 4 文件，无 schema／规则／catalog4／PackageStore／npack／frozen／sourceRoot 变更。
+证据根：`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/cross-pack/`；旧 B 的 `82c2b264...` patch、指纹、red/fail/proofs 原样保留。
+
+真实 Node red 先证明 `bingshi:pot_zhouyu` 的 `audio/die/pot_zhouyu_shadow.mp3` 和 `audio/skill/potchiyun_pot_zhouyu_shadow1.mp3` 源已存在而均未选中，见 `real-red.log`、`real-red-both.json`；随后真实回归转绿。
+P1 最小共享修正：用既有 AST 全局精确角色名索引确认 substitute 的唯一 owner，unknown／ambiguous owner 在写入前拒绝；关联不再要求声明包相等，alias 仍由实际 owner.pack 生成。声明 source／line／pack 与 catalog 均未改，没有英雄硬编码、pool fallback 或第二注册表。
+P2 删除两组缺 pack 的失效测试，合并进有效 character/direct/alias fixture；先证明正常可选，再逐项破坏来源、类型、长度、SHA、路径、backing、重复 canonical 和 numeric ID；匹配但非法的 SHA/size 同时污染 backing 与 alias 仍拒绝，避免仅靠不匹配得到假绿。
+
+独立审计按 catalog 的全局精确 owner 核对全部 79 声明，8 条 mobile→bingshi 跨包声明均正确；571 项有源形态映射通过，只要求源存在者。见 `all79-global-owner-audit.json`、`all79-audit.log`，未复用原同包过滤谓词。
+新增 91 alias rows，引用 56 个既有源文件；182 次新增源／目标长度与 SHA 校验通过；旧 12359 行、nonassets 字段及全部旧 23302 alias 内容／相对顺序保持，全部 23393 alias 六字段与 direct backing 一致，manifest 共 35752 行，新独立素材 0。见 `audit-summary.json`、`new-alias-byte-checks.json`。
+精确 17124 protected 基准及 17501 并集全不变；原 481 源文件、额外 player.js／character.js、catalog 和冻结模块输入全不变，见 `source-freeze.json`、`protected-after.json`。源 HEAD 仍 `1a548c95acdf8ac1ef44d74473403eda2ac86cf0`。
+最终 pipeline/order 12/12、frontend 160/160、typecheck、resources-only sync、资源与完整 verify、行数 unittest 2/2 和 8975-file 门禁均通过。160 是合并两个失效测试并新增跨包回归后的实跑计数；见 `checks/commands.json`、`final-commands.json`、`pipeline-final.log`。
+Vite 使用既有 runner-loader 薄启动器、正确 own __dirname 和明确 own outDir，117 modules／production 成功；无共享 dist/node_modules 写入，无 Rust/WASM 编译。全部重型 sync/hash/build/browser 经全局锁，锁等待未算通过。
+
+实际复用 `/tmp/noname-resource-server-329`，SHA `9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489`；私有端口／store、own resource root、空 legacy folder，不侵 7700，不模拟正常资源。
+当前页面 12 个角色、79 条实际 HTTP 音频请求的源字节／长度／SHA／浏览器 decode 通过；跨包周瑜 30 条含两个原 red，刘备隔离、N01、原 direct、无 audio／缺源 fallback 保持。九个 per-path MediaError／loadeddata／manifest503 场景通过。见 `runtime.log`、`real-http.json`、`happy/browser-result.json`、`errors/browser-result.json`；CDP 不宣称 OS-HID／听感。
+correction patch SHA：`e9f1d3f13815ab74a315dea8582ad1c3b5e837f8f231e33c30d7f0327b83e733`（`up37-i02-audio-cross-pack-correction.patch`）；total patch SHA：`5a8a2d547ea6893009b2a8e9227e57349e7516f5957687af7c1391700fc84ef5`（`up37-i02-audio-total-corrected.patch`）。
+9 文件 HEAD／已审 B／final SHA、4 个 correction 文件和四项正反 apply check 均见 `patch-files.json`；无 index 操作。旧 B patch SHA 仍 `82c2b2647fa47b23de70112243b3e700eb9f4a3f4080a79b11e9651793ec9a68`。
+
+并发输入已私有隔离并向父 ack 可覆盖 mainpkg：原 freeze.native_modules 与两个实际 pkg 都是 6+6=12 文件（不是 16）；复制前／后／原子换链后 12/12 SHA 一致，见 `inputs-329-isolation.json`；保留自有 `../evidence/b-cross-pack/inputs-329/{native-pkg,wasm-pkg}`，本轮始终使用原 329 输入。
+清理完成：本轮 Rust PID27053 已 wait 回收，stores／Chrome profiles／scratch 已清；四个 own lookup links 均移除；新 dist 在哈希后删除，其全部产品逐文件等同已保留的 `../evidence/b/validated-dist`，可配合当前资源重放。私有 329 inputs 和真实资源文件保留供复审，见 `cleanup.json`、`build-products-sha256.json`。
+234 动态表达式、2487 缺源 mapping rows、5 未知技能引用及自引空语义仍单独留在 `all-mappings.json`；未执行旧 JS、未伪算动态、未借声。未重跑全部 9652 codec、无关 Rust、物理听感／OS-HID／真机；样本证据不代表 whole I02。
+无 stage／commit／PR／push／remote／main 或其他 worktree 写入，无 A330 cache 使用；原 probe untracked 保留。下一步请原 reviewer 复审 P1/P2 correction，再由父做 main validation。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [{"id":"criterion-1","status":"satisfied","evidence":"P1 global exact owner resolution plus ambiguity guard and P2 non-vacuous valid fixtures implemented; four-file correction within original nine-file scope."},{"id":"criterion-2","status":"satisfied","evidence":"Real red/green, independent all79 audit, 182 new payload checks, preserved baselines, current checks/UI proof, correction/total patches and all9 triple SHA exported."}],
+  "changedFiles": ["apps/web-client/scripts/original-resources.test.mjs","apps/web-client/src/engine/originalResources.ts","apps/web-client/src/views/CollectionView.vue","content/original/asset-manifest.json","scripts/sync-original-content.mjs","scripts/test_original_resources.mjs","scripts/original-audio-resources.mjs","scripts/original-source-ast.mjs","scripts/test_original_audio_resources.mjs"],
+  "testsAddedOrUpdated": ["apps/web-client/scripts/original-resources.test.mjs","scripts/test_original_audio_resources.mjs"],
+  "commandsRun": [
+    {"command":"Node real cross-pack regression before correction","result":"failed","summary":"Expected red; both existing source files absent from selected preview, preserved."},
+    {"command":"node --test scripts/test_original_audio_resources.mjs scripts/test_original_resources.mjs scripts/test_original_content_order.mjs","result":"passed","summary":"12/12"},
+    {"command":"npm test; npm run typecheck (apps/web-client)","result":"passed","summary":"Final frontend160/160 and typecheck exit0"},
+    {"command":"private Vite runner-loader production build via serialized wrapper","result":"passed","summary":"Own __dirname/outDir; products byte-identical to retained B bundle"},
+    {"command":"sync-original-content.mjs --resources-only; --resources-only --verify-only; --verify-only via serialized wrapper","result":"passed","summary":"All exit0; no Cargo"},
+    {"command":"audit-all79.mjs via serialized wrapper","result":"passed","summary":"79 declarations, 8 cross-pack owners, 571 available-source expectations, 91 cross-pack alias rows"},
+    {"command":"audit-bytes.py via serialized wrapper","result":"passed","summary":"182 new payload checks; old12359/nonassets/23302 aliases exact; protected17124/17501 and481+2 source files unchanged"},
+    {"command":"runtime.py via serialized wrapper","result":"passed","summary":"Actual329 Rust HTTP, 12 Collection cases,79 audio requests/decode,9 error cases"},
+    {"command":"source-lines unittest/gate; freeze.py; cleanup.py; git diff checks","result":"passed","summary":"2/2 and8975-file gate;4 apply checks; links/runtime/new products cleaned; no staged files"}
+  ],
+  "validationOutput": ["91 added alias rows,56 existing source files,0 independent new materials","23393 aliases and35752 manifest rows;25880 expected mappings","Original BLOCK and82c2b264 patch/proofs retained; all new evidence under cross-pack"],
+  "residualRisks": ["Original reviewer re-review and main validation pending","Dynamic/missing mappings remain explicit gaps; no full-codec/physical/whole-I02 claim","Two actual pkg directories contain12 frozen files, not requested16; all actual files privately preserved and parent notified"],
+  "noStagedFiles": true,
+  "diffSummary": "Global exact character owner correction and meaningful rejection regressions; old resource and immutable contracts preserved.",
+  "reviewFindings": ["P1 cross-pack omission corrected and independently audited across79 declarations","P2 early-return tests replaced with positive-selectable fixture and per-condition rejection checks","Independent reviewer gate pending"],
+  "manualNotes": "No commit/PR/stage/push. Private329 input copies retained; all owned links and runtime/new dist removed after hashing. Unrelated Rust/all-codec/physical checks were not rerun."
+}
+```

@@ -1,0 +1,36 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "seconds": 0.41303995900671
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "seconds": 8.67338954200386
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "seconds": 0.3591569169948343
+    }
+  ],
+  "only_docs_and_evidence_changed_after_full_gates": true,
+  "source9_unchanged": true,
+  "no_full_gate_or_function_rerun": true
+}

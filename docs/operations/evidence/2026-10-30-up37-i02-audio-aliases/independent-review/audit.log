@@ -1,0 +1,12 @@
+{
+  "artifact_index_entries": 107,
+  "actual_file_count": 108,
+  "missing": [],
+  "extra_files": [
+    "artifact-sha256.json"
+  ],
+  "source9_equal_admission": true,
+  "source9_aggregate": "82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978",
+  "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "all_assertions_passed": true
+}

@@ -1,0 +1,970 @@
+{
+  "audio/die/dc_sb_zhouyu_shadow.mp3": {
+    "source_path": "audio/die/dc_sb_zhouyu_shadow.mp3",
+    "sha256": "1c9ff6973e94dfc3e4d5e223373fe9bf489c521a261488bf662fbbf5781a8e9e",
+    "bytes": 80049,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3079
+  },
+  "audio/die/dc_sb_zhouyu.mp3": {
+    "source_path": "audio/die/dc_sb_zhouyu.mp3",
+    "sha256": "4ce970b28ccfde52ab98b8f98bf44306623dcc372e84be1e6bdc9dbaa8e26e69",
+    "bytes": 83194,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3078
+  },
+  "audio/die/huan_zhouyu.mp3": {
+    "source_path": "audio/die/huan_zhouyu.mp3",
+    "sha256": "deb9021c03ead382435858b643546f6ce9c2e48f26b93664d3544b7fccea9eaf",
+    "bytes": 49324,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3292
+  },
+  "audio/die/liubei.mp3": {
+    "source_path": "audio/die/liubei.mp3",
+    "sha256": "38d9b1ffba89ecc3d59910404592243992841866ed296b711b9667f8ac1dd707",
+    "bytes": 17044,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3402
+  },
+  "audio/die/liushan.mp3": {
+    "source_path": "audio/die/liushan.mp3",
+    "sha256": "fe28e7ed722f99ffd3d3707d0cf4a3f7ab533d09230bd6a24e24dd85ce5cda0a",
+    "bytes": 17766,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3415
+  },
+  "audio/die/ol_sb_zhouyu.mp3": {
+    "source_path": "audio/die/ol_sb_zhouyu.mp3",
+    "sha256": "165ca7f11af10a7fd2862219a2032fbb6ab251fe427291933aa10c5f495befdb",
+    "bytes": 71724,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3665
+  },
+  "audio/die/pot_taishici.mp3": {
+    "source_path": "audio/die/pot_taishici.mp3",
+    "sha256": "b2b70ceb177aaa022dd4a7342516feb678cf22e0f81b38855d49dc84faa2a984",
+    "bytes": 85859,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3752
+  },
+  "audio/die/pot_weiyan.mp3": {
+    "source_path": "audio/die/pot_weiyan.mp3",
+    "sha256": "bd93f260faaa7988287095a6cfc9364c3b73fe6d1ade65160823d1aee26b4621",
+    "bytes": 101010,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3753
+  },
+  "audio/die/pot_weiyan_achieve.mp3": {
+    "source_path": "audio/die/pot_weiyan_achieve.mp3",
+    "sha256": "78c1034e6d848bc1e80d5904bbe6997e0e2c582f34a54fc64271471219ee12bd",
+    "bytes": 176765,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3754
+  },
+  "audio/die/pot_weiyan_fail.mp3": {
+    "source_path": "audio/die/pot_weiyan_fail.mp3",
+    "sha256": "70b9fb34dc9db5c2acfb48960c62350a079e0509e17eeb2a6378e3aacbc634f9",
+    "bytes": 140193,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3755
+  },
+  "audio/die/pot_yuji.mp3": {
+    "source_path": "audio/die/pot_yuji.mp3",
+    "sha256": "511b2b662e4b68d7a2124b52e54a35f9d9782caf87ca1ec815492c357fb6a843",
+    "bytes": 145940,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3758
+  },
+  "audio/die/pot_yuji_shadow.mp3": {
+    "source_path": "audio/die/pot_yuji_shadow.mp3",
+    "sha256": "3e41621faa5640e4c65c0adee319e95162eb67a4b8d9878ec954df113f461c17",
+    "bytes": 142283,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3759
+  },
+  "audio/die/pot_zhouyu.mp3": {
+    "source_path": "audio/die/pot_zhouyu.mp3",
+    "sha256": "b1e57f90ed21569b9664678fb3ffa7b641d7b903b6ba03f42a4ad7702158509a",
+    "bytes": 105737,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3762
+  },
+  "audio/die/pot_zhouyu_shadow.mp3": {
+    "source_path": "audio/die/pot_zhouyu_shadow.mp3",
+    "sha256": "fa1d0fc5ffd3535d30ec8c30a0f4535072f9615d259398a2306fbce11ef1f5e0",
+    "bytes": 112007,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3763
+  },
+  "audio/die/re_jianyong.mp3": {
+    "source_path": "audio/die/re_jianyong.mp3",
+    "sha256": "481e4cdf66c65244de3550f275eae72a0e7dca99cbe04efc361df8bd6e2c43b0",
+    "bytes": 63947,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3828
+  },
+  "audio/die/re_liubei.mp3": {
+    "source_path": "audio/die/re_liubei.mp3",
+    "sha256": "0f926c230e0007bf349494b4a66c572e64d4752ad9e2edea71b32b0c2ba19471",
+    "bytes": 72768,
+    "decoderOK": true,
+    "ok": true,
+    "index": 3836
+  },
+  "audio/die/star_dongyun.mp3": {
+    "source_path": "audio/die/star_dongyun.mp3",
+    "sha256": "70657b7a6d286349600a489d04a6810e5aac2845b93ae612f772473a8ec4bddb",
+    "bytes": 38764,
+    "decoderOK": true,
+    "ok": true,
+    "index": 4097
+  },
+  "audio/skill/dcsbronghuo1.mp3": {
+    "source_path": "audio/skill/dcsbronghuo1.mp3",
+    "sha256": "314ca18446e09fbd05fcfc6564264b136aca1702ca4f655593a9da116583937b",
+    "bytes": 68123,
+    "decoderOK": true,
+    "ok": true,
+    "index": 5966
+  },
+  "audio/skill/dcsbronghuo2.mp3": {
+    "source_path": "audio/skill/dcsbronghuo2.mp3",
+    "sha256": "4efe0aeda5cb64ce8a6a7ed4648e25a33dc46ce3230552950c4021cf3902eb92",
+    "bytes": 66407,
+    "decoderOK": true,
+    "ok": true,
+    "index": 5967
+  },
+  "audio/skill/dcsbronghuo_dc_sb_zhouyu_shadow1.mp3": {
+    "source_path": "audio/skill/dcsbronghuo_dc_sb_zhouyu_shadow1.mp3",
+    "sha256": "c686d47c8e48070cb375928b55c0c12aec2e8a6611e18dfa7e6698c59dddc140",
+    "bytes": 95106,
+    "decoderOK": true,
+    "ok": true,
+    "index": 5968
+  },
+  "audio/skill/dcsbronghuo_dc_sb_zhouyu_shadow2.mp3": {
+    "source_path": "audio/skill/dcsbronghuo_dc_sb_zhouyu_shadow2.mp3",
+    "sha256": "830fe34f79cab807ac22a6f6bc4c670ed98c7d4413695f4d5918ddb8e59e3ac7",
+    "bytes": 97869,
+    "decoderOK": true,
+    "ok": true,
+    "index": 5969
+  },
+  "audio/skill/dcsbyingmou2.mp3": {
+    "source_path": "audio/skill/dcsbyingmou2.mp3",
+    "sha256": "12ab0f92ab344a92e62937d6e855935b71acf65c2e4e228dd60104dbb6582c1e",
+    "bytes": 84508,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6017
+  },
+  "audio/skill/dcsbyingmou1.mp3": {
+    "source_path": "audio/skill/dcsbyingmou1.mp3",
+    "sha256": "199ba10d973cfce400fd2d53d219de797056b584c1e1eda0e2b0bda81152e3c5",
+    "bytes": 126942,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6016
+  },
+  "audio/skill/dcsbyingmou_dc_sb_zhouyu_shadow1.mp3": {
+    "source_path": "audio/skill/dcsbyingmou_dc_sb_zhouyu_shadow1.mp3",
+    "sha256": "f4570c84001eb8b324afe289d17a03a1e9846072570186d636986aff852c6aac",
+    "bytes": 89612,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6018
+  },
+  "audio/skill/dcsbyingmou_dc_sb_zhouyu_shadow2.mp3": {
+    "source_path": "audio/skill/dcsbyingmou_dc_sb_zhouyu_shadow2.mp3",
+    "sha256": "91953a9220c1137377b818c69bc285e3c2a8b44ded78f016c6deec8bcbf864d9",
+    "bytes": 101684,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6019
+  },
+  "audio/skill/fangquan1.mp3": {
+    "source_path": "audio/skill/fangquan1.mp3",
+    "sha256": "2adb9b83891325650b340f104be0b1de04efbc17857e9d2238b2884793daa90a",
+    "bytes": 43093,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6591
+  },
+  "audio/skill/fangquan2.mp3": {
+    "source_path": "audio/skill/fangquan2.mp3",
+    "sha256": "e2af22dcba9cae378f6f8a591829c2d0dbd5c350ac2ea6ce03e3f97aeab78630",
+    "bytes": 37137,
+    "decoderOK": true,
+    "ok": true,
+    "index": 6592
+  },
+  "audio/skill/jijiang11.mp3": {
+    "source_path": "audio/skill/jijiang11.mp3",
+    "sha256": "ce2758e15063fbdd43a6117d4aa646040d79c76fffb3cd82457ae8c473c344b6",
+    "bytes": 6392,
+    "decoderOK": true,
+    "ok": true,
+    "index": 7191
+  },
+  "audio/skill/jijiang12.mp3": {
+    "source_path": "audio/skill/jijiang12.mp3",
+    "sha256": "b3d40b1a215bf40fcb5b3c0770943d440233049f98680597c4c0484b0975ab95",
+    "bytes": 8984,
+    "decoderOK": true,
+    "ok": true,
+    "index": 7192
+  },
+  "audio/skill/jyzongshi_re_jianyong1.mp3": {
+    "source_path": "audio/skill/jyzongshi_re_jianyong1.mp3",
+    "sha256": "8cad819afa95ab9e97efb0aabdf01c7b37c66696e2aff2f55ddb5d18e62937e3",
+    "bytes": 55588,
+    "decoderOK": true,
+    "ok": true,
+    "index": 7486
+  },
+  "audio/skill/jyzongshi_re_jianyong2.mp3": {
+    "source_path": "audio/skill/jyzongshi_re_jianyong2.mp3",
+    "sha256": "76fa4a1a3d51de508b514a15e893b8390f52887913e7bc0d8514274aa8f81442",
+    "bytes": 48901,
+    "decoderOK": true,
+    "ok": true,
+    "index": 7487
+  },
+  "audio/skill/olsbguqu1.mp3": {
+    "source_path": "audio/skill/olsbguqu1.mp3",
+    "sha256": "f5fc5bea2dbe0c7867d8a4fbc6240f2665a07ac8e59580575a3ca9ec6fec9a95",
+    "bytes": 35623,
+    "decoderOK": true,
+    "ok": true,
+    "index": 8771
+  },
+  "audio/skill/olsbguqu2.mp3": {
+    "source_path": "audio/skill/olsbguqu2.mp3",
+    "sha256": "2682e7901170afe3459fe02e9a992340d500ede0713e75770f1b679b3cc52289",
+    "bytes": 41413,
+    "decoderOK": true,
+    "ok": true,
+    "index": 8772
+  },
+  "audio/skill/olsbzuifeng1.mp3": {
+    "source_path": "audio/skill/olsbzuifeng1.mp3",
+    "sha256": "012cc17a41bcf3213a737eeeb1121439c04f150fa112e37be423fb1372d37f47",
+    "bytes": 81095,
+    "decoderOK": true,
+    "ok": true,
+    "index": 8893
+  },
+  "audio/skill/olsbzuifeng2.mp3": {
+    "source_path": "audio/skill/olsbzuifeng2.mp3",
+    "sha256": "40f288eb3bf767dc12204ea9662dd65dfca675b4f2a6c40db78f89d329d190ec",
+    "bytes": 57889,
+    "decoderOK": true,
+    "ok": true,
+    "index": 8894
+  },
+  "audio/skill/potchiyun2.mp3": {
+    "source_path": "audio/skill/potchiyun2.mp3",
+    "sha256": "a76019db1c3fcd3f29c38ab3fc637d7f5ae36eb031d1eb1940bbe80d2458c657",
+    "bytes": 65201,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9166
+  },
+  "audio/skill/potchiyun1.mp3": {
+    "source_path": "audio/skill/potchiyun1.mp3",
+    "sha256": "4ac2fe0230591919ceada94124dee514d914ffc96711b09b9b89254eb8912966",
+    "bytes": 119948,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9165
+  },
+  "audio/skill/potchiyun_pot_zhouyu_shadow1.mp3": {
+    "source_path": "audio/skill/potchiyun_pot_zhouyu_shadow1.mp3",
+    "sha256": "c5521e6ee19f054aae596b92a954078eea411b7c09e2039332b2692745a849e3",
+    "bytes": 63111,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9167
+  },
+  "audio/skill/potchiyun_pot_zhouyu_shadow2.mp3": {
+    "source_path": "audio/skill/potchiyun_pot_zhouyu_shadow2.mp3",
+    "sha256": "2401751513156750127c048102a67b13d76023606488b22c5b894204f7479863",
+    "bytes": 96124,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9168
+  },
+  "audio/skill/potchiyun_pot_zhouyu_shadow3.mp3": {
+    "source_path": "audio/skill/potchiyun_pot_zhouyu_shadow3.mp3",
+    "sha256": "3bf32ba59ddb4e3dd7a0215e4a2f798b9eee237e55c11229dae0ad98f8d1422a",
+    "bytes": 72306,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9169
+  },
+  "audio/skill/potchiyun_pot_zhouyu_shadow4.mp3": {
+    "source_path": "audio/skill/potchiyun_pot_zhouyu_shadow4.mp3",
+    "sha256": "295e60933742a3b77e50a1ae8a05a8a80dfc50029195253e0583a72ba6580f52",
+    "bytes": 62269,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9170
+  },
+  "audio/skill/potdaozhuan2.mp3": {
+    "source_path": "audio/skill/potdaozhuan2.mp3",
+    "sha256": "c9a11949ba676a29c8c61463b4c4c30361b9a58d68ae8c0de8de5bdaf86aafe8",
+    "bytes": 128177,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9176
+  },
+  "audio/skill/potdaozhuan1.mp3": {
+    "source_path": "audio/skill/potdaozhuan1.mp3",
+    "sha256": "a02a537fc7166f6fe9369dfcf4124b9127e631480e86d822e137672c4a1e2a4b",
+    "bytes": 144896,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9175
+  },
+  "audio/skill/potdaozhuan3.mp3": {
+    "source_path": "audio/skill/potdaozhuan3.mp3",
+    "sha256": "d0289bd1fd1dfb0898144058502da115ac076dbcb247a9366e19ac44efc1f760",
+    "bytes": 108324,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9177
+  },
+  "audio/skill/potdaozhuan4.mp3": {
+    "source_path": "audio/skill/potdaozhuan4.mp3",
+    "sha256": "ec55290edc75d81c56b18563594dfd7297e77bf652b000b707bd91db81cb2138",
+    "bytes": 138626,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9178
+  },
+  "audio/skill/potfentao1.mp3": {
+    "source_path": "audio/skill/potfentao1.mp3",
+    "sha256": "96b3a571a1b0ab2e6c7ad8b8711d44b527c548ac771d433595000277c08053b6",
+    "bytes": 53916,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9189
+  },
+  "audio/skill/potfentao2.mp3": {
+    "source_path": "audio/skill/potfentao2.mp3",
+    "sha256": "bda65088e02bd0a1a338110d956640193ef400fbef7928b95ab1276f15bb59ef",
+    "bytes": 63529,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9190
+  },
+  "audio/skill/potfentao_pot_zhouyu_shadow1.mp3": {
+    "source_path": "audio/skill/potfentao_pot_zhouyu_shadow1.mp3",
+    "sha256": "75fa796b3862d97b4bd483df373ce855e3042f07503d9a2b87690463e55c112b",
+    "bytes": 69793,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9191
+  },
+  "audio/skill/potfentao_pot_zhouyu_shadow2.mp3": {
+    "source_path": "audio/skill/potfentao_pot_zhouyu_shadow2.mp3",
+    "sha256": "e9212fa2f3f2f953963eb54e844db82f961d54fb90a3e3f63f0e838f701d6874",
+    "bytes": 68545,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9192
+  },
+  "audio/skill/potfentao_pot_zhouyu_shadow4.mp3": {
+    "source_path": "audio/skill/potfentao_pot_zhouyu_shadow4.mp3",
+    "sha256": "2e97138b963b111ea1a700f44a2dd28a591b4a6f42e14c5cd554d894d5b82c60",
+    "bytes": 60186,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9194
+  },
+  "audio/skill/potfentao_pot_zhouyu_shadow3.mp3": {
+    "source_path": "audio/skill/potfentao_pot_zhouyu_shadow3.mp3",
+    "sha256": "5b11f627edf8b577282b8f8f3c2200b1e89cf18d4e1194d33de0ef7a1042bec7",
+    "bytes": 65619,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9193
+  },
+  "audio/skill/potfuji1.mp3": {
+    "source_path": "audio/skill/potfuji1.mp3",
+    "sha256": "ba12f3325fdcba26ae6d0151b104c9bbfa4b1e1616d5e656c9977cd5d4e5cd98",
+    "bytes": 126610,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9195
+  },
+  "audio/skill/potfuji2.mp3": {
+    "source_path": "audio/skill/potfuji2.mp3",
+    "sha256": "523b9314fc032e9c238cf643bf827411938706302f2d28f3e5cfcc79e545a9cb",
+    "bytes": 119296,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9196
+  },
+  "audio/skill/potfuji3.mp3": {
+    "source_path": "audio/skill/potfuji3.mp3",
+    "sha256": "489da77d68966ff494719b342d2933e8cc57e1ea8bd61c9ed38d153a47315e08",
+    "bytes": 86381,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9197
+  },
+  "audio/skill/potfuji4.mp3": {
+    "source_path": "audio/skill/potfuji4.mp3",
+    "sha256": "75d785fc933a1c0584e4d3a77be984be18a6faf2265e0fc5474938307f38f4a1",
+    "bytes": 95785,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9198
+  },
+  "audio/skill/potfuji5.mp3": {
+    "source_path": "audio/skill/potfuji5.mp3",
+    "sha256": "a58ec0c437b457d3883de9e1a3a32180728969d603e94746b2a9af87cf3cc98a",
+    "bytes": 108324,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9199
+  },
+  "audio/skill/pothanzhan1.mp3": {
+    "source_path": "audio/skill/pothanzhan1.mp3",
+    "sha256": "d139f22dc4ce99eb4733a865a2d68f986b7fd08702f1c5fe2bba7542d3becf5b",
+    "bytes": 79067,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9204
+  },
+  "audio/skill/pothanzhan2.mp3": {
+    "source_path": "audio/skill/pothanzhan2.mp3",
+    "sha256": "80f8422a21c1c3dfeedec12413669976e5f00be2a8a514673622ff52bf730fbd",
+    "bytes": 91083,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9205
+  },
+  "audio/skill/potxiongzi1.mp3": {
+    "source_path": "audio/skill/potxiongzi1.mp3",
+    "sha256": "4875dcca3a9da57ea777bc49d2905c3259e55d472eb3e5cb5f5824959b2fa25d",
+    "bytes": 71471,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9277
+  },
+  "audio/skill/potxiongzi2.mp3": {
+    "source_path": "audio/skill/potxiongzi2.mp3",
+    "sha256": "52d53a23f2c70478e073782eb9c553a2064354b73eabea68e7fdc89b1e1137fd",
+    "bytes": 69799,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9278
+  },
+  "audio/skill/potxiongzi4.mp3": {
+    "source_path": "audio/skill/potxiongzi4.mp3",
+    "sha256": "a8ed562ffc8d941af1ef6019b711ce6069322c13f553fdc7387e2b3653cc3820",
+    "bytes": 117440,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9280
+  },
+  "audio/skill/potxiongzi3.mp3": {
+    "source_path": "audio/skill/potxiongzi3.mp3",
+    "sha256": "93a0957a15671c95cf016c4fff61da4ad07152f0c4080e6bfe49d8ea2e1e789e",
+    "bytes": 81502,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9279
+  },
+  "audio/skill/potyanhui1.mp3": {
+    "source_path": "audio/skill/potyanhui1.mp3",
+    "sha256": "d771914f0793ffe22d154018e5c16cb7cd5359587d71b06d07bfe585ad7a5885",
+    "bytes": 69381,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9281
+  },
+  "audio/skill/potyanhui2.mp3": {
+    "source_path": "audio/skill/potyanhui2.mp3",
+    "sha256": "1503e6319a39cffcfa8be52c6d11731c1bcd6b45902d4163cb429f99efc80828",
+    "bytes": 99886,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9282
+  },
+  "audio/skill/potyanhui3.mp3": {
+    "source_path": "audio/skill/potyanhui3.mp3",
+    "sha256": "5b3ca112780043eeb3d3383f8314bf085e0e388f039a421469df87b7168cba44",
+    "bytes": 86517,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9283
+  },
+  "audio/skill/potyanhui4.mp3": {
+    "source_path": "audio/skill/potyanhui4.mp3",
+    "sha256": "afb3cf25df60245f15bdcb8db6a2a9452029d7615b1f2720d5fc69c456fc5d55",
+    "bytes": 146906,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9284
+  },
+  "audio/skill/potyanhui5.mp3": {
+    "source_path": "audio/skill/potyanhui5.mp3",
+    "sha256": "2a242b5cc0a6f0765456e194b2d5718546bbbd963263ce35ce1a2afa9d81498e",
+    "bytes": 74808,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9285
+  },
+  "audio/skill/potyanhui6.mp3": {
+    "source_path": "audio/skill/potyanhui6.mp3",
+    "sha256": "05c126e2993777955915bad4c0b977c3676edacd84a33885d0b6b4c5f8d6bcc3",
+    "bytes": 44303,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9286
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow2.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow2.mp3",
+    "sha256": "07619e893e75ad95ecdab09e57f706d0c40bc24f32c18db1c26082db8c575a70",
+    "bytes": 61434,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9288
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow1.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow1.mp3",
+    "sha256": "7b43f4bf7622484166fee0b7dd11c9b4fd57dca40d2d55ccc53191eaaed81b00",
+    "bytes": 104274,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9287
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow3.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow3.mp3",
+    "sha256": "debf8bf14bf46b35cd3e35975047ad93d350db6ae22c1835cdcbf31194a0a3a2",
+    "bytes": 65619,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9289
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow4.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow4.mp3",
+    "sha256": "055b9f33a5c52af73abdd9b80ecc7bc32729fb1654a505fd38ff13e8ba3bfc27",
+    "bytes": 81920,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9290
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow5.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow5.mp3",
+    "sha256": "fd48f066541619e4f116661559423c8f6255f2f91b261188ffc186fd958da1a3",
+    "bytes": 67291,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9291
+  },
+  "audio/skill/potyanhui_pot_zhouyu_shadow6.mp3": {
+    "source_path": "audio/skill/potyanhui_pot_zhouyu_shadow6.mp3",
+    "sha256": "da8170cc2f82b2bbe8c57c3d7a4e10c8ba11ea300a768771aab4bbc9ab1c58b9",
+    "bytes": 69375,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9292
+  },
+  "audio/skill/potyinzhan1.mp3": {
+    "source_path": "audio/skill/potyinzhan1.mp3",
+    "sha256": "352df3e97b24a71c5fc01c29aeaebf862a051804f13c658a216ddb5a000e755f",
+    "bytes": 78544,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9305
+  },
+  "audio/skill/potyinzhan2.mp3": {
+    "source_path": "audio/skill/potyinzhan2.mp3",
+    "sha256": "c47fc69bf1888ed1fcb853607982ce6676dbb1ee735a25615fd5873cdcb169ec",
+    "bytes": 65483,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9306
+  },
+  "audio/skill/potyinzhan3.mp3": {
+    "source_path": "audio/skill/potyinzhan3.mp3",
+    "sha256": "5f36b86ba50059c9843cc6aa0bcd85162bfd6925545db49218fb09f031a6efbf",
+    "bytes": 83247,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9307
+  },
+  "audio/skill/potyinzhan_pot_weiyan_achieve1.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_achieve1.mp3",
+    "sha256": "2a65e21878464e7227a87f0731a31a6b88a00d38fbca270a18d0741be93094b1",
+    "bytes": 77500,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9308
+  },
+  "audio/skill/potyinzhan_pot_weiyan_achieve3.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_achieve3.mp3",
+    "sha256": "49cd7b19d0325278c3e87c6fe517591963c3a093252c43ee6bd04f27849f3e41",
+    "bytes": 73842,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9310
+  },
+  "audio/skill/potyinzhan_pot_weiyan_achieve2.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_achieve2.mp3",
+    "sha256": "ba6aa1cce4116c041a685343f3c567bdbaea8efb0f95424b6d49900eb2e8e35f",
+    "bytes": 90038,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9309
+  },
+  "audio/skill/potyinzhan_pot_weiyan_fail1.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_fail1.mp3",
+    "sha256": "39a63f94cc40bb85cd064ccdd1d977e5c9d16458afdd9adbc23df4685b4efaf1",
+    "bytes": 72275,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9311
+  },
+  "audio/skill/potyinzhan_pot_weiyan_fail2.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_fail2.mp3",
+    "sha256": "75edabc0600fe1811c93ad9d1d691a2b1df7f96871dffa549e4f700fd9064618",
+    "bytes": 86904,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9312
+  },
+  "audio/skill/potyinzhan_pot_weiyan_fail3.mp3": {
+    "source_path": "audio/skill/potyinzhan_pot_weiyan_fail3.mp3",
+    "sha256": "19e9e04ba0c19a7c4ddeb4ca304fe7c499609586ef691a1bb3db4b44b1148f54",
+    "bytes": 102055,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9313
+  },
+  "audio/skill/potzhanlie1.mp3": {
+    "source_path": "audio/skill/potzhanlie1.mp3",
+    "sha256": "f953f268cce6be0629133bedfa58b2f336a37987e3e5c5323746ddae5884f713",
+    "bytes": 68096,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9316
+  },
+  "audio/skill/potzhanlie2.mp3": {
+    "source_path": "audio/skill/potzhanlie2.mp3",
+    "sha256": "24558967cca4691c59054f8973ba8952402c6f82baf2ec280b23a2173d7776e7",
+    "bytes": 77500,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9317
+  },
+  "audio/skill/potzhanlie3.mp3": {
+    "source_path": "audio/skill/potzhanlie3.mp3",
+    "sha256": "afcb0373bd17b1e00c5f914424eac1df130368d7e745baa14bf4299a121b0a82",
+    "bytes": 54512,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9318
+  },
+  "audio/skill/potzhenfeng2.mp3": {
+    "source_path": "audio/skill/potzhenfeng2.mp3",
+    "sha256": "e25ad14b5f6070660b774a93e2709049983505ae34058d73c73a63821f27c52d",
+    "bytes": 82724,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9320
+  },
+  "audio/skill/potzhenfeng1.mp3": {
+    "source_path": "audio/skill/potzhenfeng1.mp3",
+    "sha256": "780184de27fe3fe9e5220c8370b4e6b37aef48599de4b5359e2f9a2f1a3c95fa",
+    "bytes": 88993,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9319
+  },
+  "audio/skill/potzhenfeng4.mp3": {
+    "source_path": "audio/skill/potzhenfeng4.mp3",
+    "sha256": "d91290eb672c76ca70143489e0ddd5b57a2fb5863f3d7200f461feade98f7b2e",
+    "bytes": 66006,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9322
+  },
+  "audio/skill/potzhenfeng3.mp3": {
+    "source_path": "audio/skill/potzhenfeng3.mp3",
+    "sha256": "48f9298901e0a9d97d0909df71e27d99c490466a6d2ddb5c857e22838431eef1",
+    "bytes": 79067,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9321
+  },
+  "audio/skill/potzhongao1.mp3": {
+    "source_path": "audio/skill/potzhongao1.mp3",
+    "sha256": "bb35e39aa50592d4b1b89fe7ea89ca79bb57ce1a2ea2c7cdf3a750069b87e785",
+    "bytes": 85336,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9325
+  },
+  "audio/skill/potzhongao2.mp3": {
+    "source_path": "audio/skill/potzhongao2.mp3",
+    "sha256": "b5bf9cc928c63a7eb87504454a896c415d8dad3421c80a12fcd20bec8d1d2b3b",
+    "bytes": 88471,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9326
+  },
+  "audio/skill/potzhongao3.mp3": {
+    "source_path": "audio/skill/potzhongao3.mp3",
+    "sha256": "c7c251cf78ffb80a105304d46da634ae116b574c0333055d6a23617781496c24",
+    "bytes": 89516,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9327
+  },
+  "audio/skill/potzhongao4.mp3": {
+    "source_path": "audio/skill/potzhongao4.mp3",
+    "sha256": "2fb2eb4c4ef3ebdf5a519ddb35e275f705e4dd7084bb1715ccc2ca6b4e633988",
+    "bytes": 107802,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9328
+  },
+  "audio/skill/potzhongao5.mp3": {
+    "source_path": "audio/skill/potzhongao5.mp3",
+    "sha256": "bf3e072f43cf36e0956a48aeefa3edc3a49241fdd33f9b885134dfc4e7f2a010",
+    "bytes": 82724,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9329
+  },
+  "audio/skill/potzhuangshi1.mp3": {
+    "source_path": "audio/skill/potzhuangshi1.mp3",
+    "sha256": "327269d56570d896256883920d77cd08e0af1112eba7e5d5b9a78820834970c1",
+    "bytes": 108847,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9330
+  },
+  "audio/skill/potzhuangshi2.mp3": {
+    "source_path": "audio/skill/potzhuangshi2.mp3",
+    "sha256": "ece436c854e86dde6558553e0b9d524e7d4309c47c0f844a886b0ee48d4d4466",
+    "bytes": 111459,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9331
+  },
+  "audio/skill/potzhuangshi_pot_weiyan_achieve1.mp3": {
+    "source_path": "audio/skill/potzhuangshi_pot_weiyan_achieve1.mp3",
+    "sha256": "d71749ce96fdbc80e881e7646871c5c5a80497ce95803f0c1118751960309409",
+    "bytes": 84814,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9332
+  },
+  "audio/skill/potzhuangshi_pot_weiyan_achieve2.mp3": {
+    "source_path": "audio/skill/potzhuangshi_pot_weiyan_achieve2.mp3",
+    "sha256": "0bb1aa80b0ebc9b5450e984c517d386c468f10a72a77cc206c10db2d469166e9",
+    "bytes": 80634,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9333
+  },
+  "audio/skill/rende1.mp3": {
+    "source_path": "audio/skill/rende1.mp3",
+    "sha256": "5fdb7d9a7f4ab87a5054eed1fb342f275103d8e26494db7daa046a36e17f9908",
+    "bytes": 7252,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9732
+  },
+  "audio/skill/rende2.mp3": {
+    "source_path": "audio/skill/rende2.mp3",
+    "sha256": "0066bf26ee31a91803a1b7423339d2f5d628dbfb83b1cfecc312c5f09ace62f1",
+    "bytes": 17332,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9733
+  },
+  "audio/skill/reqiaoshui1.mp3": {
+    "source_path": "audio/skill/reqiaoshui1.mp3",
+    "sha256": "82c76ddd96722a910c3fe9a582569b8076322dcc90264eb29a95fe7e709c5600",
+    "bytes": 54334,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9768
+  },
+  "audio/skill/reqiaoshui2.mp3": {
+    "source_path": "audio/skill/reqiaoshui2.mp3",
+    "sha256": "d7f51af6fdc91950aecbf6b95c72fece276ea07b3dbb996874504ce56ed7f270",
+    "bytes": 61440,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9769
+  },
+  "audio/skill/rerende2.mp3": {
+    "source_path": "audio/skill/rerende2.mp3",
+    "sha256": "2304e30cf5c122a2dce3d00edf8d8a8f0dcb09681697592822fb67021d4b6d6e",
+    "bytes": 25957,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9795
+  },
+  "audio/skill/rerende1.mp3": {
+    "source_path": "audio/skill/rerende1.mp3",
+    "sha256": "413be92aae4e19b46378c97cd0151452da03149cdc0b2f044bcb0c4dc6e80296",
+    "bytes": 37033,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9794
+  },
+  "audio/skill/ruoyu1.mp3": {
+    "source_path": "audio/skill/ruoyu1.mp3",
+    "sha256": "bf44a28ad5b102d67e2b896a5fc54bc889a73f154243079ab376cf172b6f2541",
+    "bytes": 49362,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9924
+  },
+  "audio/skill/ruoyu2.mp3": {
+    "source_path": "audio/skill/ruoyu2.mp3",
+    "sha256": "b5b57a519016082eed3d1d411fd3a4940e56a5688c43f05cc725e5799e5c833c",
+    "bytes": 43406,
+    "decoderOK": true,
+    "ok": true,
+    "index": 9925
+  },
+  "audio/skill/sbjijiang1.mp3": {
+    "source_path": "audio/skill/sbjijiang1.mp3",
+    "sha256": "fa963c7900370461248eb66f7e3ee3d849c869402f92c54a7af6247c986a995b",
+    "bytes": 19307,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10030
+  },
+  "audio/skill/sbjijiang2.mp3": {
+    "source_path": "audio/skill/sbjijiang2.mp3",
+    "sha256": "bd1fdd21f0f16f0468d527f7fb9ce476732aa53b5434d0221ce0635d201e1439",
+    "bytes": 25576,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10031
+  },
+  "audio/skill/starbishi1.mp3": {
+    "source_path": "audio/skill/starbishi1.mp3",
+    "sha256": "2c3198f789376604d08a15de62c537315047c73abd726425e836563d71ee3e52",
+    "bytes": 29740,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10590
+  },
+  "audio/skill/starbishi2.mp3": {
+    "source_path": "audio/skill/starbishi2.mp3",
+    "sha256": "82ea207d1cefa7df318ce829c1d7ea95f7ec4f9c2113f905310bdabce0e5d2d8",
+    "bytes": 32620,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10591
+  },
+  "audio/skill/starzhengting1.mp3": {
+    "source_path": "audio/skill/starzhengting1.mp3",
+    "sha256": "417a550ddacbba41f1df591f552e4cbae29a1bc5b4fedecb8bafeb4b9c08192a",
+    "bytes": 28204,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10662
+  },
+  "audio/skill/starzhengting2.mp3": {
+    "source_path": "audio/skill/starzhengting2.mp3",
+    "sha256": "90ed22d659c2ba1503725fedff8cef184bfd161e1ba20c502a88c213577dfac9",
+    "bytes": 32428,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10663
+  },
+  "audio/skill/twdumou1.mp3": {
+    "source_path": "audio/skill/twdumou1.mp3",
+    "sha256": "dc6b274d727cee000a6ae07bceda1626fa79ba8245ce55ee3d7f271952e2ae31",
+    "bytes": 30700,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10892
+  },
+  "audio/skill/twdumou2.mp3": {
+    "source_path": "audio/skill/twdumou2.mp3",
+    "sha256": "3ee73a7488e2d34a9ddc1cf5c589c969c42988a42f84b9eebad47806111a3120",
+    "bytes": 28780,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10893
+  },
+  "audio/skill/twhantian1.mp3": {
+    "source_path": "audio/skill/twhantian1.mp3",
+    "sha256": "ee894a383063af4fb512117516a5edaea215dccbee0ea4021b1e83990774a27b",
+    "bytes": 27052,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10938
+  },
+  "audio/skill/twhantian2.mp3": {
+    "source_path": "audio/skill/twhantian2.mp3",
+    "sha256": "16043a14474d461ce69bb8c1da97a383dad8fd5ebcd02a502fe3b8c9131dcfde",
+    "bytes": 31852,
+    "decoderOK": true,
+    "ok": true,
+    "index": 10939
+  },
+  "audio/skill/xiangle1.mp3": {
+    "source_path": "audio/skill/xiangle1.mp3",
+    "sha256": "9300cadc53d6589d76ac9f47dee67963bf32e3c05e239b477677a910f05c2771",
+    "bytes": 18488,
+    "decoderOK": true,
+    "ok": true,
+    "index": 11358
+  },
+  "audio/skill/xiangle2.mp3": {
+    "source_path": "audio/skill/xiangle2.mp3",
+    "sha256": "5759b0da9dfdf171786e3794a25a387def7045ef994c95837dead4f17badb9f1",
+    "bytes": 7256,
+    "decoderOK": true,
+    "ok": true,
+    "index": 11359
+  },
+  "audio/skill/xindanshou1.mp3": {
+    "source_path": "audio/skill/xindanshou1.mp3",
+    "sha256": "76f5f27556e49000eeabb4de8ea94dfd8d0df4512de777113cc3a01138dc4070",
+    "bytes": 62693,
+    "decoderOK": true,
+    "ok": true,
+    "index": 11447
+  },
+  "audio/skill/xindanshou2.mp3": {
+    "source_path": "audio/skill/xindanshou2.mp3",
+    "sha256": "91e60064cb4dd9e9cc27c5f391c80d902c91abd51946552170ee6086beaceadc",
+    "bytes": 38452,
+    "decoderOK": true,
+    "ok": true,
+    "index": 11448
+  }
+}

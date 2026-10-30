@@ -1,0 +1,36 @@
+## Review
+
+范围：仅冻结 snapshot 的选序、动态订阅、必要消费者及恢复切片。依据父提供的 [identity.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/identity.json)，118/118 文件与封存源码一致；本次未自行重算 SHA、读取 live worktree 或修改文件。以下四项为源码可证的新问题，小反例未执行。
+
+- **Correct：调度载体与基本选序符合所审契约。** [resolution.rs:469](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution.rs:469) 使用原 Frame.queue、Park、Slot；未新增 Frame/Resolution 字段或独立全局 ledger。[trigger_order.rs:8](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:8) 实现 First→Normal owner 桶→priority→Last，不按 optional 排序、不对 MIN 取负；Normal 从整组寻找自动项，0/1 自动、≥2 单选下一步。
+- **Correct：确认、编码和摘要已有接线。** [OptionalGate:240](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution.rs:240) 保留运行中 inner 的续行，确认前重新 eligibility；Death 取消只在共享资格检查中阻止后续候选。Skill 使用 u16、新机器 tag83、Skill tag6；所读 codec diff 未重解释旧 payload。[machine hash:9](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/src/engine/hash/machine.rs:9) 覆盖全部六个新机器字段，[queue hash:650](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/src/engine/hash.rs:650) 包含 q.order.4。archive105/ABI758/WS6 保持。
+- **Correct：必要自动消费者已接入。** [ai.rs:515](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/src/ai.rs:515) 对公开 trigger_order 候选直接选首项；[timeout.rs:35](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/apps/game-server/src/room_native/timeout.rs:35) 从授权投影生成普通选择，经既有 Answer/TimeoutAction 提交。
+- **Fixed：无；本次只读。**
+
+- **Finding：P1 — 恢复未保证窗口机器唯一存在，非待答机器深度也未绑定。**  
+  位置：[trigger_order.rs:126](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:126)。校验只遍历现存顶层 park；没有反向检查 planned 触发窗口必须由一个 TriggerOrder 承接，resume_depth 的精确检查仅在 asked=true 分支。通用校验也只要求深度不超过栈长。  
+  触发及影响：三技能中选定一个 optional，停在 trigger_confirm、原队列仍有兄弟项时，删除 asked=false 的 TriggerOrder，或仅把其深度改为0，剩余 gate 与 ExpectedAsk 仍通过恢复。gate 完成后没有可运行的窗口机器，进入 [resolution.rs:475](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution.rs:475) 的非空队列断言；复制该非待答 park 也未被唯一性检查拒绝。  
+  最小修正：校验窗口机器数量与合法窗口生命周期，并将所有 TriggerOrder 的深度绑定到其 frame 的栈位置；禁止嵌套机器树藏入额外窗口权威。须补删除、复制、非待答深度篡改三例，均在恢复时拒绝，正常 OptionalGate/子帧暂停仍可恢复。
+
+- **Finding：P1 — 恢复按当前回合锚点重算旧队列，合法状态可被拒档。**  
+  位置：[trigger_order.rs:132](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs:132)。队列座次在 plan_triggers 入窗时确定；恢复却要求其等于当前 `seat_steps_from(core.turn.current, owner)`。合法 [SetTurnState:736](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/rvm_ops.rs:736) 能在技能效果中改变 current，队列没有同步重写。  
+  触发及影响：原 current=1，同一 owner 的三技能先执行改变 current→0 的技能，剩余两项再次询序。直接续行使用旧 order.3；此时 save→codec→restore 按新 current 重算，报 trigger_order_binding，拒绝自己产生的存档。动态注入同样按当前锚点计算，和旧队列的桶依据不一致。  
+  最小修正：在同一小机器内统一窗口 owner 桶的稳定依据，恢复与新增订阅沿用它，保持已过桶不倒退；不能仅取消 order 校验。须补上述 SetTurnState 两项待答重启例，并补窗口内换座后的祖先注入例，比较直接/恢复的完整续行。
+
+- **Finding：P1 — 并行 RevealGeneral 授技漏过新增订阅通知。**  
+  位置：[commands.rs:131](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/src/engine/commands.rs:131)、[apply_command.rs:47](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/src/engine/apply_command.rs:47)。pending 时允许明置并直接返回；底层 [general_assembly.rs:49](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/state/general_assembly.rs:49) 直接插入 skills，未通知 register_added。下一次 run 的 prior_skills 已包含这些键，步边界差集也补不回来。  
+  触发及影响：国战 CardUsed 的 trigger_order 挂起时，合法明置授予一个订阅该事件、所属桶尚未走过的新技能；回答并继续后，该技能始终未进入已规划的祖先 queue，漏掉当前窗口触发。  
+  最小修正：命令层授技也通知既有共享注册入口，并遵守待答组重校验/新 choice id 契约。须补真实隐藏武将明置例：同桶或未来桶的新技能恰一次触发，已过桶不回退，保存恢复与直接续行一致。
+
+- **Finding：P1 — 新增 trigger-only handler 合并混淆 DamageBefore 与 Damage。**  
+  位置：[vm_active.rs:177](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-native-loader/src/vm_active.rs:177) 新增合并路径允许含 DamageBefore 的多 handler；[handlers.rs:71](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/rvm_bridge/handlers.rs:71) 却按 `entry.meta.event == event.kind()` 匹配。DamageBefore 共用 Damage 载荷，[event.rs:209](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/event.rs:209) 始终返回 Damage；外层选序使用的有效窗口 kind 没传入此处。既有 active 合并路径显式拒绝 DamageBefore，新路径没有对应处理。  
+  触发及影响：同一 locked 技能声明 `damage_before owner_is_target` 写 storage，以及 `damage owner_is_target` 摸一张，使用相同排序元组。前窗资格检查反而匹配 damage handler：前置 storage 不执行，摸牌 handler 在前、后窗各执行一次。仅含前置 handler 的合并技能则整个前窗失效。  
+  最小修正：handler 的资格、启动及恢复授权共享有效触发窗口身份；暂不支持的组合须装载时明确拒绝。须补上述两 handler 实际受伤例，断言提交前 storage 已写、后窗只摸一张，并在两个阶段暂停重启核对。
+
+已读 [nc08 测试正文](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native/tests/nc08_trigger_order_counterexample.rs:1) 的12项及相关 VM/257项测试正文；封存 order-persistent-3.log 的12 passed 仅作为既有定向证据。这些测试未覆盖上述反例。14 golden、Browser/WAL 全矩阵、88 host 元数据及57来源余项不重复作为新 finding；UI257向量也未当作实际浏览器验收。
+
+NC10 私有 Result/opaque 候选未审、未假设已合入。未来合并接点为 AI 公开选择叶、resolution 资格与队列、RVM handlers、snap asks/validation/restore、hash，以及从 parks 定位实际 owner machine 的测试。
+
+- **Merge verdict：BLOCK（仅就所审切片的四个 P1）；不能给整 C331 merge green。**
+
+未编译、运行测试、重录 golden 或写入 snapshot/main/index/cache；反例结论来自冻结源码路径推导，修复后须由父会话执行上述小回归。

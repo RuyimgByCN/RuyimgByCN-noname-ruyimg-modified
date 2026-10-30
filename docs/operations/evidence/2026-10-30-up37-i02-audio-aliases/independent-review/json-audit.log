@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/parent-audio-alias-main-review/audit-json-evidence.py", line 77, in <module>
+    assert all(asset['path'].startswith(prefixes) for asset in row['selected']), row['id']
+AssertionError: bingshi:pot_weiyan

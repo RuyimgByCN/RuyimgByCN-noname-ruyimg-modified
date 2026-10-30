@@ -1,0 +1,9 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?branch=native-convergence&head_sha=da7e4c019461a6c467a9dd2de849f3b1a7494b86&event=push&per_page=100"
+  ],
+  "exit": 0,
+  "evidence_directory": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-da7e-observation-lkxhc3le"
+}

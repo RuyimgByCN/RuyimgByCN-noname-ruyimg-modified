@@ -1,0 +1,2 @@
+{"aliases":23393,"mappings":25880,"missing":2487,"dynamic":234,"declarations":79,"source_rows_exact":true,"cross_pack":8,"required_source_mappings":571,"cross_pack_aliases":91,"catalog_identities":2582,"liubei_voices":5}
+{"command": ["node", "--import", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/mapping-audit.mjs"], "exit": 0, "locked_seconds": 18.479321208025794, "disk_free_bytes": 102611664896}

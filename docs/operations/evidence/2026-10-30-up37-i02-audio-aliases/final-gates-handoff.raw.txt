@@ -1,0 +1,49 @@
+已执行当前 main alias9 最终四门禁与窄身份审计；四命令均 exit0，完整 preflight 21/21，通过条件包含 source9 精确匹配。HEAD 始终为 `da7e4c019461a6c467a9dd2de849f3b1a7494b86`，330 / archive105 / ABI758 / WS6 / asset schema2 不变。本轮仅新增 main 指定 final-gates 证据文件及本报告，未修改源码、docs 正文、index、配置或共享依赖，未 stage / commit / push / 访问 remote。
+
+证据入口：[final-gates/README.md](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/README.md)、[summary.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/summary.json)、[command-index.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/command-index.json)。70个新增证据文件列入 changed-files.json，其中69份按 SHA256 索引，artifact-sha256.json 明确排除自身。
+
+| 命令 | 实际结果 | wall 秒 | locked 秒 |
+|---|---|---:|---:|
+| `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` | exit0；2/2 | 0.092640 | 0.066634 |
+| `python3 -B scripts/check-source-lines.py` | exit0；8992 files，源码≤2000行、Rust有效行≤1000 | 8.017223 | 7.989056 |
+| `python3 -B scripts/check_doc_line_refs.py --strict` | exit0；1065 refs、越界0 | 8.208791 | 8.178140 |
+| `python3 -B scripts/preflight.py` | exit0；21/21；脚本单测192/192、221.252s、跳过0 | 327.421834 | 327.392302 |
+
+四命令均经 `/tmp/noname-run-serialized.py` 使用全局 `/tmp/noname-phase4-heavy-command.lock`，无 --quick、selected-gate 补跑或失败重试。参数先经 --help 核对。纯 queue 未独立测量，索引记 null；wall减locked分别为0.026006 / 0.028167 / 0.030651 / 0.029532秒，明确标记为 queue+launch overhead，不伪造纯排队值。首末轻量本地身份读取未独立测量 queue/locked，摘要同样为 null。
+
+preflight 子进程完整 stdout/stderr 各21份由 preflight-children.jsonl 定位；局部 sitecustomize 仅在 preflight 父进程记录原 subprocess 返回内容，不改 argv、输出或退出码，也不修改维护入口。链接仅在完整 preflight 内检查：核心7文件、全部1910文件，坏链0。父新 progress / remaining ledger / CI evidence / alias README 均处在该扫描时点，无需重复本地链接命令，未发现需要父修复的真实坏链接。
+
+首末逐项检查 source9（父 parent-main-source-admission.json paths9）、CI4（workflow / prepare action / Longxue patch / native-ci.md）、按 admission 实录的 A53、18个模块及公共WASM镜像文件、37个 tracked dist 文件、no-autofix guard，以及父4份当前文档。A53三项已有批准的 CI13 覆盖，使用覆盖后实际哈希，未误称仍匹配被替代的旧三项。所有组前后完全一致；source9聚合SHA为 `82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978`，与父功能交接相同。tracked dist另外精确匹配此前功能交接的37文件记录。index始终空且index字节SHA不变；本证据目录外287条逐文件 dirty/untracked 状态完整保留，无新增/移除差异，未套用旧的92计数冒充当前展开状态。没有第三份全树清单或17k/461/12k媒体重复哈希。
+
+stage3 使用前核读 `/tmp/noname-ci-stage3-lease.json` 中 handoff_allowed=true / owners=[]，lsof检查exit1且stdout/stderr为空，才登记 exclusive-stage3-lease.json。本轮 CARGO_INCREMENTAL=0 / CARGO_BUILD_JOBS=2 / 指定 stage3 target 生效；唯一 Cargo 调用为 `metadata --offline --no-deps --format-version 1`，没有编译。该调用前空闲101347598336字节，明显高于3GiB；收尾101347450880字节。incremental入口与出口目录/mtime记录相同，没有新增incremental。租用结束已记录released=true，stage3与dependencies原样保留供父后续明确授权验收；没有自有临时构建产品需要删除，没有使用Main默认target或其他agent target。
+
+警告与历史失败均保留：[all-warnings-failures-ignored.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/all-warnings-failures-ignored.json)列出98次 `scripts/report_phase_arms.py:117` 的 unclosed-file ResourceWarning及其每次原始日志定位；另有1条卡面引用不等于行为正确的提示。strict docrefs仍有既有六类缺失/示例路径：path.rs、.../gujian/skill.js、character/offline/.../offline_piracyS.js、.../swd/skill.js、schema/package.rs、step_skills_status.rs；越界0，按现有扫描器口径exit0，未压警告或更改期望。本轮新门禁失败0、preflight跳过0、单测跳过0。父功能批原Chrome profile ENOTEMPTY cleanup exit1及原日志原样保留，本轮未重跑运行时或把该历史red记成通过。
+
+建议下一步：父执行独立review并决定是否进入commit阶段。本报告只证明冻结Main9的最终四门禁及窄身份，不宣布整I02、UP37、37来源或Goal完成。
+
+按授权范围跳过已完成的11Node/167frontend/types/sync/verify/8824 payload/Vue121decode14play/214GET9errors，及Workspace/native3/conformance/Wasm/codec/性能和private331/compat14/NC10；未做所有媒体重复哈希。
+保留风险：98次脚本ResourceWarning、六类docref缺失提示、原五份Chrome音频失败与原cleanup exit1均未修；父独立review仍为必要后续。
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id":"criterion-1","status":"satisfied","evidence":"Executed only four authorized maintained gates plus narrow read audits; main changes limited to 70 files under specified final-gates evidence directory; source9/CI4/A53/modules/tracked dist/guard/parent documents/index unchanged."},
+    {"id":"criterion-2","status":"satisfied","evidence":"69 SHA-indexed artifacts plus self-excluded SHA index; four raw gate logs, 21 child stdout/stderr pairs, argv/durations/queue-null records, complete warning inventory, entry/exit SHA identity, stage3 lease and empty-index proof available for independent review."}
+  ],
+  "changedFiles": ["docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/final-gates/** (70 files enumerated in changed-files.json)","/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/edbe32a8-e539-4b17-b41c-fc97b8cfc01c/verification/audio-alias-main-final-gates-and-review.task-1.md"],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command":"python3 -B -m unittest discover -s scripts -p test_check_source_lines.py","result":"passed","summary":"exit0;2 tests"},
+    {"command":"python3 -B scripts/check-source-lines.py","result":"passed","summary":"exit0;8992 files within maintained line budgets"},
+    {"command":"python3 -B scripts/check_doc_line_refs.py --strict","result":"passed","summary":"exit0;1065 references;0 out of bounds;6 existing missing-path hint kinds retained"},
+    {"command":"python3 -B scripts/preflight.py","result":"passed","summary":"exit0;full21/21;192 script tests;0 failures/skips;327.392302 locked seconds"},
+    {"command":"narrow entry/exit identity and unrelated status comparisons","result":"passed","summary":"source9 exact;CI4/A53/18modules/37dist/guard/4parent docs/index byte hashes same;287 outside-evidence status entries preserved"}
+  ],
+  "validationOutput": ["source9 aggregate SHA256 82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978","preflight local links:7/1910 files,0 broken;no duplicate scanner run","OnlyCargo metadata;inc0/jobs2/stage3;no compile or new incremental;cache preserved","HEAD da7e4c019461a6c467a9dd2de849f3b1a7494b86;330/105/758/WS6/schema2 unchanged"],
+  "residualRisks": ["98 ResourceWarning occurrences from report_phase_arms.py:117 and six docref missing-path hint kinds retained;not repaired in evidence-only scope.","Original five Chrome audio failures and historical cleanup exit1 remain preserved;functional suites intentionally not rerun.","Pure queue and snapshot queue/locked durations were not independently measured and remain null.","Required independent parent review/commit stage remains pending;wholeI02/UP37/37/Goal acceptance not claimed."],
+  "noStagedFiles": true,
+  "diffSummary": "Only new final-gates evidence and authoritative task report;no maintained source/docs/index/config/defaultdist/shareddeps changes.",
+  "reviewFindings": ["No blocker found in the four gates or narrow identity audit;required parent independent review is still pending."],
+  "manualNotes": "Read canonical AGENTS.md/NONAME_NEXT_AGENT_SPEC.md and full parent functional handoff;no LSP tool/Cargo auto-trigger initiated;guard unchanged;global serialized wrapper used for all four gates;historical cleanup red not overwritten. Skipped authorized prior function/media suites;known warnings and unresolved broader acceptance boundaries remain."
+}
+```

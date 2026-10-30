@@ -1,0 +1,23 @@
+{
+  "binary": "/tmp/noname-resource-server-329",
+  "sha256": "9ef4b49544bbd35640caf3abf240714af4cd3e0fc56a711c1f5ad502ce0d3489",
+  "source_build_head": "255bbfbd7f6916ee77bd29799826a225bd10871f",
+  "source_versions": "329/105/758/WS5 retained artifact; unchanged static ServeDir route only",
+  "current_frontend_source": "da7e4c019461a6c467a9dd2de849f3b1a7494b86 + frozenalias9;330/105/758/WS6",
+  "pid": 55909,
+  "url": "http://127.0.0.1:49194",
+  "env": {
+    "GAME_SERVER_ADDR": "127.0.0.1:49194",
+    "NONAME_ORIGINAL_CONTENT_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/content/original",
+    "NONAME_CONTENT_STORE_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime-store/content-store",
+    "NONAME_EXTENSIONS_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime-store/extensions",
+    "NONAME_NATIVE_PACKAGES_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions",
+    "NONAME_NATIVE_STORE_ROOT": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime-store/native-store",
+    "NONAME_NATIVE_ROOM_STORE": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime-store/rooms",
+    "NONAME_NATIVE_ROOMS": "true"
+  },
+  "no_engine_or_room_acceptance_claim": true,
+  "stop_exit": -15,
+  "own_runtime_store_removed": true,
+  "server_waited": true
+}

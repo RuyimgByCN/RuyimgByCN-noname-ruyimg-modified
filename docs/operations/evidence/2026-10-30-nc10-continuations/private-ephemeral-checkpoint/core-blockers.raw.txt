@@ -1,0 +1,41 @@
+# Delivery status: BLOCK, not NC10 acceptance
+
+This run only read and packaged the existing checkpoint; it made no product-source edits and ran no builds or new game experiments. PID12109/12110 had already exited: rule-vm/native-WASM exit0; combined caller check exit101.
+
+## Actual final test state
+
+The latest combined run has native3 1701 passed / 19 failed / 75 ignored. Every native failure is Err(NoCertifiedRoot) before receiving a Plan; none is a logged final nodes inequality. The same run had native-WASM 77/1 because an assertion equated NoCertifiedRoot with dynamic Opaque. That test was changed in the preceding run to require actual bounded certification attempts/scheduler work; subsequent FULL rule-vm/native-WASM is 24+78=102 passed / 0 failed. This superseding result does not turn the earlier native3 failures green.
+
+The combined game-server/desktop tests check failed on TWO remaining Result accesses: apps/desktop-client/tests/native_planner_measurement.rs:39 and :43 read plans[0].action. No standalone full game-server success is asserted. No full-workspace/strict-warnings acceptance exists. See suite-counts-and-failures.json and logs/caller-check.log.
+
+## Formal fault and the two archive proofs
+
+Actual source: rvm_bridge/machine.rs:462 Err stores res.fault and kind OutOfFuel/Host; resolution::run_inner checks that fault and returns StepOutcome::Fault; engine/commands.rs:270 rolls back and returns Rejected(VmFault). This is a measured branch, not a universal assertion that every diagnostic called a fault must reject.
+
+proofs/fuel-proof-output.json holds equal COMPLETE PolicyInput/events/choice, two complete source hex archives and after archives. fuel-0.archive/fuel-1.archive are raw copies. Both were actually encode/decode/restored. Same Answer Tag(0): A Accepted; B Rejected(VmFault { skill: nc10_opaque, detail: OutOfFuel: out of fuel（事件 3） }). B remained unchanged. Only B saved private fuel_remaining was set to0. Both share public module/default fuel cap and scheduler budget, but PRIVATE remaining fuel differs. A came from an initial debug hand-color arrangement then formal NextPhase; B natural reachability is NOT established. Do not silently assume it is formally reachable or tighten restore to remove it. The source/body is harness-opaque.rs and harness-fuel_proof.rs.
+
+proofs/pending-certificate-output.json is a distinct former-certificate counter: seed9/revision9, paired opponent Shan/Sha arrangement, same complete input, both byte-restored, same module/candidate Sha0→1. Old planner returned equal Ok Plans; formal A Pending(respond_shan), B Rejected(VmFault Host / DealDamage 越界（事件 1）). This is Pending-versus-Rejected, not Accepted-versus-Rejected. Its JSON events field was captured AFTER formal A; pre-event equality was asserted but not serialized separately (restores start empty log epochs). It must not be presented as a serialized pre-event trace. Source is harness-pending_certificate.rs. The current sampled_pending_choice_does_not_certify_a_root_with_a_possible_vm_fault test (saved source/engine/simulation.rs:359) PASSED in final-packages.log: it checks the same formal mismatch, equal genuine alternative Plans, legal application, and authority immutability. It did not convert a positive privacy guard to equality of errors.
+
+## Root certificate limits and known public-module blocking
+
+engine/simulation.rs:31 still rejects ANY choice whenever ANY catalog skill is VM, even if the VM definition is unrelated to that window. It also uses a narrow native prompt allowlist, excluding trigger_confirm. The rejection occurs before clone/redaction; it does not inspect private PCs or commit-buffer emptiness. Root-certificate-failures.json separately lists all19 tests, evidence and unknown contexts. Driver failures without logged public state are explicitly unclassified; no new probes were run.
+
+engine/certification.rs is a separate conservative certificate for Complete trials: VM-free catalog shortcut; otherwise unique public names, no enabled native skill/equipment/judge, routed normal-Sha / Play-phase NextPhase exclusions, or active-only subset. It is NOT a complete all-path/all-PC/fuel proof. Its manually listed event closure and native macro assumptions require independent review. Opaque itself never certifies. This subset has real successful scalar Plans but still blocks old positive continuation guards. No promise of complete legality/general privacy follows from these samples.
+
+## Public Host/filter work
+
+Recovered Some(false)/None separates a public exclusion from a private read. Seven held predicates (Qinglong/Huanglin/Baishou/Zhuque/Xuanwu/Yuchan/Shencaojie) use public event/owner guards; identity reads are permitted only for CURRENT own hand. Shenmiguo absence in current own hand proves false, while its cached used flag remains unknown even for its owner. RVM phase wrappers/named predicates can be disproved by public clauses before secret flags/tags/once/piles/hits. Matching private clauses is not performed to obtain a false result. Definition once-per-turn eligibility stays Opaque, regardless its actual cached value. Initial SwD Pool4/0 and native19-vs28 progress are real; all Host families, continuations, cached native modifiers and dynamic membership are NOT audited.
+
+ReadSite records verified module identity/opcode PC/tag before host query. ObserverQueryGate currently classifies requests and relies on the explicit fresh-frame marker; it ignores ReadSite fields in its allow predicate, and allow_resume returns true behind the kernel freshness check. Thus it is not a completed PC/handler-specific authorization proof. Old frames are blocked before private fields; committing/following/implicit dependencies still require review. Future Draw marks the control and blocks later fresh VM frames; this is not general provenance tracking for all native moves/random choices.
+
+StorageGet/Has are allowed only after same-trial permitted committed writes; value0 certifies deletion rather than authority-key presence. Queued writes do NOT certify reads. Tests cover denied query stub0/4/-1 without host calls, unchanged formal allowed outcomes, unclassified resume, zero/nonzero known writes, private branch constant-write/delete/no-write, predicate tripwires, and the two real scalar counters. A complete presence/deletion/control-taint matrix, namespace/ownerless-mirror aliases and all native access paths are NOT proven.
+
+Reserve:64 candidates, 512 scheduler steps per trial, DEFAULT_FUEL10000 each fresh invocation; nodes count root/reply attempts before executing, while budget0 search nodes remain0. Attempts/scheduler_steps/vm_instructions/Opaque are separate stats. Cancellation/deadline checks occur before reserve attempts; no hard intra-VM/native deadline proof or native allocation bound is established. Exact observed natural stats are in resource-observations.json.
+
+## Validation scope and next minimum work
+
+Direct actual WASM59383c... natural matrix is ONLY the18-command natural counter with/without seat2 restart, budgets0/48:8 root+8 restored Plans, full output deepEqual, all legally applied. The original controlled scalar is green in native tests; current controlled-counter direct WASM was NOT in this matrix. Production binding existing error string/archive unchanged/one request and IPC mock envelope8/0 are separate checks, not a direct-Planner substitute.
+
+Fixed-profile quality has8 fixtures×3 budgets×100 repeats,18/24 groups Ok versus24/24 before. No complete games, win-rate, opponent matrix or strength acceptance. Pure public-VM scenarios now choose Sha rather than prior ActivateSkill; Liaoyuan48 chooses Card98 rather than prior empty answer. See full raw rows/latencies, not a VM-free288-game claim.
+
+Next minimum: repair the TWO Desktop Result consumers; independently review root certificates/PC authorization; capture missing root context in existing failing drivers and restore provable public families; resolve old-frame certificate/public-knowledge contract using the concrete archives without changing formal VM/restore/persistence; then targeted/full native3, affected callers, BOTH direct-WASM counters and actual VM/Host quality. The original19 red guards remain registered. No stage/commit/merge/publication.

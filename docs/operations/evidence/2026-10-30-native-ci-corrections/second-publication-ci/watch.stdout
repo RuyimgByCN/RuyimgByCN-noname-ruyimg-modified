@@ -1,0 +1,1607 @@
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 1 minute ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* gates-ubuntu (ID 124155333420)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* desktop-macos-latest (ID 124155333637)
+  * Run actions/setup-node@v4
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+* build-macos-latest (ID 124155333694)
+  * Build workspace
+* build-ubuntu-latest (ID 124155333727)
+  * Build workspace
+* desktop-ubuntu-latest (ID 124155333745)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* build-windows-latest (ID 124155333890)
+  * Build workspace
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 2 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild native WASM from current source
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* desktop-macos-latest (ID 124155333637)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+* build-macos-latest (ID 124155333694)
+  * Build workspace
+* build-ubuntu-latest (ID 124155333727)
+  * Unit tests
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install wasm-pack
+* build-windows-latest (ID 124155333890)
+  * Build workspace
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 3 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild legacy WASM (still imported by the client)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Install wasm-pack
+* desktop-macos-latest (ID 124155333637)
+  * Run ./noname-next/.github/actions/prepare-original-content
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+* build-macos-latest (ID 124155333694)
+  * Build workspace
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install wasm-pack
+* build-windows-latest (ID 124155333890)
+  * Build workspace
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 3 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild legacy WASM (still imported by the client)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Install wasm-pack
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+* build-macos-latest (ID 124155333694)
+  * Unit tests
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+* build-windows-latest (ID 124155333890)
+  * Build workspace
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 4 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild legacy WASM (still imported by the client)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Install wasm-pack
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+* build-windows-latest (ID 124155333890)
+  * Unit tests
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 4 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild legacy WASM (still imported by the client)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Install wasm-pack
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+* build-windows-latest (ID 124155333890)
+  * Unit tests
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 5 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Rebuild legacy WASM (still imported by the client)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+* perf-ubuntu-latest (ID 124155333608)
+  * Tier list
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 6 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Native kernel and package loader regressions
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 6 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Native kernel and package loader regressions
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 7 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Native kernel and package loader regressions
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 7 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Native kernel and package loader regressions
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 8 minutes ago
+
+JOBS
+* native-web (ID 124155333126)
+  * Frontend regressions
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Tier list
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 9 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* perf-macos-latest (ID 124155333661)
+  * Complete job
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Install Tauri CLI
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 9 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 10 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 10 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 11 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 11 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1 — cargo test --workspace
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 12 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 1b — engine-native all targets warnings denied
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 13 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 2 — conformance
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 13 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 2 — conformance
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 14 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Install wasm-pack
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 14 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 15 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Install Tauri CLI
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 16 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 16 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 17 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+* desktop-macos-latest (ID 124155333637)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 17 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Gate 3 — cross-target hash (Native vs WASM)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 18 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+* gates-ubuntu (ID 124155333420)
+  * Post Run Swatinem/rust-cache@v2
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 18 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 19 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 19 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+* desktop-ubuntu-latest (ID 124155333745)
+  * Post Run ./noname-next/.github/actions/prepare-original-content
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 20 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 21 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 21 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 22 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 22 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 23 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 23 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 24 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 24 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 25 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 26 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 26 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 27 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 27 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 28 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 28 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 29 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 30 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 30 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 31 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Produce installer (tauri beforeBuildCommand builds the web client)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* native-convergence ci · 41082599800
+Triggered via push about 31 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+* desktop-windows-latest (ID 124155333632)
+  * Post Run Swatinem/rust-cache@v2
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+
+✓ native-convergence ci · 41082599800
+Triggered via push about 32 minutes ago
+
+JOBS
+✓ native-web in 8m35s (ID 124155333126)
+✓ gates-ubuntu in 18m20s (ID 124155333420)
+✓ perf-ubuntu-latest in 5m36s (ID 124155333608)
+✓ desktop-windows-latest in 32m2s (ID 124155333632)
+✓ desktop-macos-latest in 17m21s (ID 124155333637)
+✓ perf-macos-latest in 8m53s (ID 124155333661)
+✓ build-macos-latest in 4m1s (ID 124155333694)
+✓ build-ubuntu-latest in 2m50s (ID 124155333727)
+✓ desktop-ubuntu-latest in 19m58s (ID 124155333745)
+✓ build-windows-latest in 5m3s (ID 124155333890)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-ubuntu-latest: .github#2
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build-ubuntu-latest: .github#1
+
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build-windows-latest: .github#3
+

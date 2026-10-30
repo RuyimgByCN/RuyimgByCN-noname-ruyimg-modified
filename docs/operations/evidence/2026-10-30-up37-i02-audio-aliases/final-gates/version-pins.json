@@ -1,0 +1,37 @@
+[
+  {
+    "kind": "rule",
+    "path": "crates/engine-native-content/src/content/standard.rs",
+    "line": 163,
+    "declaration": "pub const STANDARD_RULESET_VERSION: u64 = 330;",
+    "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f"
+  },
+  {
+    "kind": "archive",
+    "path": "crates/engine-native-kernel/src/archive.rs",
+    "line": 113,
+    "declaration": "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;",
+    "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09"
+  },
+  {
+    "kind": "ABI",
+    "path": "crates/engine-api/src/version.rs",
+    "line": 17,
+    "declaration": "pub const RULE_VM_ABI_VERSION: u32 = 758;",
+    "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8"
+  },
+  {
+    "kind": "WS",
+    "path": "crates/engine-protocol/src/lib.rs",
+    "line": 17,
+    "declaration": "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;",
+    "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f"
+  },
+  {
+    "kind": "asset_schema",
+    "path": "content/original/asset-manifest.json",
+    "line": 2,
+    "value": 2,
+    "sha256": "0cc7ef5beb65c4842335a186b64dff220176bd1364d2c16efdcd06f37f8744cf"
+  }
+]

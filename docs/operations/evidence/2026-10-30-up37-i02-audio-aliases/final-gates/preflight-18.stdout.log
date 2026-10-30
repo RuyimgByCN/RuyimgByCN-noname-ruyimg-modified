@@ -1,0 +1,29 @@
+ADR 编号检查（scripts/check-adr-index.py）
+- ADR 文件 3（编号文件 2，唯一编号 1）
+- 重复编号 1 组 / 2 个文件
+- 消歧表登记 0 组
+- 标题错号 0
+- 未登记冲突 1，过时登记 0，登记内容不符 0，索引坏链 0
+  [未登记冲突] 0001: 0001-first.md, 0001-second.md
+检查结果：失败 1 项
+{
+ "adr_dir": "docs/adr",
+ "adr_files": 3,
+ "duplicate_files": 2,
+ "duplicate_groups": 1,
+ "duplicates": {
+  "0001": [
+   "0001-first.md",
+   "0001-second.md"
+  ]
+ },
+ "failures": 0,
+ "heading_mismatches": [],
+ "link_missing": [],
+ "numbered_files": 2,
+ "registry_duplicate_groups": 1,
+ "registry_mismatch": [],
+ "registry_missing": [],
+ "registry_stale": [],
+ "unique_numbers": 1
+}

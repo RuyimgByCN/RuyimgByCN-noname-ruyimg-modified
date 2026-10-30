@@ -1,0 +1,46 @@
+behavior	phase	begin	位置	skill	上游trigger	判定
+GujianFoodZiyangdan	End	true	common.rs:631		player: "phaseBegin"	G14(钉死阶段)
+XianjianFenglue	Play	true	xianjian.rs:142		player:'phaseUseBefore'	G15(之前档)
+GujianFoodMapodoufu	End	true	common.rs:616		player: "phaseJieshuBegin"	OK
+GujianFoodXiajiao	Draw	true	common.rs:609		player: "phaseDrawBegin"	OK
+GujianFoodYougeng	Judge	true	common.rs:628		player: "phaseBegin"	OK
+GwentBirinState	Play	false	common.rs:636		player: "phaseUseAfter"	OK
+GwentCiguState	Draw	true	common.rs:640		player: "phaseDrawBegin"	OK
+GwentQinpenState	Discard	false	common.rs:649		player: "phaseDiscardAfter"	OK
+HlssFengqi	Judge	true	common.rs:44		player:['phaseZhunbeiBegin']	OK
+HuanleXuelunyangCard	Judge	true	common.rs:661		player: "phaseBegin"	OK
+MbcmQingzheng	Play	true	common.rs:413	mbcmqingzheng	player: "phaseUseBegin",	OK
+Miedao	Discard	true	common.rs:232	miedao	player:'phaseDrawBegin' | player:'phaseDiscardBegin'	OK
+SwdBaishouzhihuHeld	Discard	false	swd.rs:413		player:'discardEnd'	OK
+SwdDaixing	End	false	swd.rs:30		player:'phaseEnd'	OK
+SwdDaixing2	Judge	true	swd.rs:36		player:'phaseBegin'	OK
+SwdHuajin2	Judge	true	swd.rs:818	swd_huajin2	source:'damageBegin'	OK
+SwdHuanglinzhicongHeld	Judge	true	swd.rs:462		player: "phaseBegin"	OK
+SwdHuanxing	Judge	true	swd.rs:698		player:'phaseBegin'	OK
+SwdHujing	Judge	true	swd.rs:992		player:'phaseBegin'	OK
+SwdHyunshen2	Judge	true	swd.rs:26		player:'phaseBegin'	OK
+SwdLexue	Judge	true	swd.rs:668		player: "phaseBegin"	OK
+SwdQinglongzhiguiHeld	Judge	true	swd.rs:390		player: "phaseBegin"	OK
+SwdReyingzi	Draw	true	swd.rs:654		player:'phaseDrawBegin2'	OK
+SwdZhenjiu2	Judge	true	swd.rs:672	swd_zhenjiu2	player: "phaseBegin"	OK
+WudianGeju	Judge	true	common.rs:693	geju	player:'phaseBegin'	OK
+WudianOwliyong	Draw	true	common.rs:724		player:'phaseDrawBegin'	OK
+WudianXiyang	End	false	common.rs:764		player:'phaseEnd'	OK
+WudianYuedong	Play	false	common.rs:769		player:'phaseUseEnd'	OK
+XianjianChangnian2	End	false	xianjian.rs:117		player:'phaseEnd'	OK
+XianjianHusha	End	false	xianjian.rs:152		player:'phaseEnd'	OK
+XianjianLiguang	End	false	xianjian.rs:182		player:'phaseEnd'	OK
+XianjianLingquan	End	false	xianjian.rs:214		player:'phaseEnd'	OK
+XianjianLonghuo	End	false	xianjian.rs:223		player:'phaseEnd'	OK
+XianjianQianfang	Judge	true	xianjian.rs:236		player:'phaseBegin'	OK
+XianjianShuiyun	End	false	xianjian.rs:367		player:'phaseEnd'	OK
+XianjianXjzhimeng	End	false	xianjian.rs:317		player: "phaseEnd"	OK
+XianjianZhaoyao	Draw	true	xianjian.rs:380		global:'phaseDrawBegin'	OK
+Xiuluo	Judge	true	common.rs:224	swd_xiuluo	player: "phaseZhunbeiBegin"	OK
+YunchouDiyguhuo	Judge	true	common.rs:476		player: "phaseBegin"	OK
+YunchouXiongzi	Draw	true	common.rs:518		player:'phaseDrawBegin'	OK
+Zaibian	Play	true	common.rs:190	zaibian	player:'phaseUseBegin'	OK
+BossBaiyi	Judge	true	common.rs:862		(enable 主动技)	凭空新增触发
+SwdWangchenHeld	End	true	swd.rs:444		player: "phaseDiscardEnd"	相邻相位(可接受)
+SwdXielv	End	true	swd.rs:346		player: "phaseDiscardEnd"	相邻相位(可接受)
+GujianFoodTanhuadong	Play	false	common.rs:625		player: "phaseEnd"	语义选择

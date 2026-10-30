@@ -1,0 +1,187 @@
+{
+  "verified_at": "2026-10-30T17:15:49.713308+00:00",
+  "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "four_gates": "passed",
+  "commands": [
+    {
+      "name": "01-source-line-tests",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "wrapper_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "started_at": "2026-10-30T17:09:17.149012+00:00",
+      "exit": 0,
+      "wall_seconds": 0.09264037501998246,
+      "locked_seconds": 0.06663425001897849,
+      "queue_seconds": null,
+      "queue_plus_launch_overhead_seconds": 0.026006125001003966,
+      "disk_free_bytes": 102214230016,
+      "log": "01-source-line-tests.log"
+    },
+    {
+      "name": "02-source-lines",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "wrapper_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "started_at": "2026-10-30T17:09:17.247164+00:00",
+      "exit": 0,
+      "wall_seconds": 8.017222707974724,
+      "locked_seconds": 7.989056167018134,
+      "queue_seconds": null,
+      "queue_plus_launch_overhead_seconds": 0.028166540956590325,
+      "disk_free_bytes": 102214971392,
+      "log": "02-source-lines.log"
+    },
+    {
+      "name": "03-doc-line-refs",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "wrapper_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "started_at": "2026-10-30T17:09:25.270612+00:00",
+      "exit": 0,
+      "wall_seconds": 8.208790707984008,
+      "locked_seconds": 8.178139667026699,
+      "queue_seconds": null,
+      "queue_plus_launch_overhead_seconds": 0.030651040957309306,
+      "disk_free_bytes": 102231482368,
+      "log": "03-doc-line-refs.log"
+    },
+    {
+      "name": "04-preflight",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "wrapper_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "scripts/preflight.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "started_at": "2026-10-30T17:09:33.485282+00:00",
+      "exit": 0,
+      "wall_seconds": 327.4218344579858,
+      "locked_seconds": 327.3923024169926,
+      "queue_seconds": null,
+      "queue_plus_launch_overhead_seconds": 0.02953204099321738,
+      "disk_free_bytes": 101347581952,
+      "log": "04-preflight.log"
+    }
+  ],
+  "preflight": {
+    "gates_passed": 21,
+    "gates_failed": 0,
+    "gates_skipped": 0,
+    "script_tests_passed": 192,
+    "script_tests_failed": 0,
+    "script_tests_skipped": 0,
+    "script_test_seconds": 221.252
+  },
+  "source_line_tests_passed": 2,
+  "source_line_files_checked": 8992,
+  "local_links": {
+    "core_files": 7,
+    "all_files": 1910,
+    "broken": 0,
+    "executed_only_inside_preflight": true
+  },
+  "docrefs": {
+    "references": 1065,
+    "missing_file_kinds": 6,
+    "out_of_bounds": 0
+  },
+  "source9_aggregate_sha256": "82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978",
+  "narrow_identity_unchanged": true,
+  "narrow_group_counts": {
+    "source9": 9,
+    "ci4": 4,
+    "A53": 53,
+    "modules": 18,
+    "tracked_dist": 37,
+    "parent_docs": 4,
+    "guard": 1
+  },
+  "ci4_admission": "CI13 parent source admission + prior main functional snapshot prepare action/Longxue patch",
+  "A53_admission": "ADR0787 runtime_paths_applied53 with three approved CI13 overrides; original unmodified53 not misclaimed",
+  "parent_four_docs_frozen_entry_exit": true,
+  "unrelated_status_unchanged": true,
+  "index_empty": true,
+  "index_bytes_unchanged": true,
+  "versions": {
+    "rule": 330,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 6,
+    "asset_schema": 2
+  },
+  "metadata_only_no_compile": true,
+  "cargo_invocations": 1,
+  "new_incremental_dirs": 0,
+  "stage3_lease_released_and_cache_retained": true,
+  "warnings": {
+    "resource_warning_unclosed_files": 98,
+    "card_coverage_caution": 1,
+    "docref_missing_file_kinds": 6
+  },
+  "snapshot_timing": {
+    "entry_queue_seconds": null,
+    "entry_locked_seconds": null,
+    "exit_queue_seconds": null,
+    "exit_locked_seconds": null,
+    "reason": "lightweight local read snapshots outside heavy wrapper; no fabricated timing"
+  },
+  "queue_timing_note": "wrapper measures locked duration; separate pure queue not measured (null); wall-minus-locked recorded as queue+launch overhead, not pure queue",
+  "required_independent_parent_review": "pending; this report supplies evidence, not reviewer acceptance",
+  "whole_I02_UP37_37_Goal_completion_claimed": false,
+  "no_source_docs_index_stage_commit_push_remote_settings_defaultdist_shareddeps_changes": true
+}

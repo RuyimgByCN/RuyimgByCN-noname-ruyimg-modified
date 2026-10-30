@@ -1,0 +1,3 @@
+[2m2026-10-30T16:36:30.488725Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m content ready [3mpackages[0m[2m=[0m0 [3mextensions[0m[2m=[0m0 [3mcontent_lock[0m[2m=[0ma6cd5606ddabd11575f25d991b9410418047ca7c2a91fbf1068c1cd747111415
+[2m2026-10-30T16:36:30.562790Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m native content ready [3mpackages[0m[2m=[0m41
+[2m2026-10-30T16:36:30.563213Z[0m [32m INFO[0m [2mgame_server[0m[2m:[0m game-server listening [3maddr[0m[2m=[0m127.0.0.1:49194

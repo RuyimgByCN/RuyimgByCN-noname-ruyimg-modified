@@ -1,0 +1,14 @@
+{
+  "failure": "Chrome profile ENOTEMPTY after happy121decode/14play assertions passed",
+  "original_log": "happy.log",
+  "original_result": "happy/browser-result.json",
+  "no_product_failure": true,
+  "profile": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/happy/chrome-csObwp",
+  "remaining_profile_files_before_cleanup": [
+    "Default",
+    "Default/.com.google.Chrome.TransportSecurity.B3lBj4"
+  ],
+  "owned_profile_removed": true,
+  "no_owned_chrome_process_at_cleanup": true,
+  "happy_not_repeated": true
+}

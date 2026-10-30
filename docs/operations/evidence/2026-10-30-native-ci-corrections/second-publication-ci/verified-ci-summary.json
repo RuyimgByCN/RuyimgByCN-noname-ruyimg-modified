@@ -1,0 +1,449 @@
+{
+  "run_id": 41082599800,
+  "head_sha": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "run_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800",
+  "status": "completed",
+  "conclusion": "success",
+  "watch_exit": 0,
+  "jobs": [
+    {
+      "id": 124155333126,
+      "name": "native-web",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333126",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 472955,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333126-raw-log.stdout",
+      "duration_seconds": 515.0,
+      "raw_log_sha256": "543d7cabbab46534fd125eb55cd864681b2e0f447666fdfe436ebf27aab79d24",
+      "rust_test_results": {
+        "passed": 1815,
+        "failed": 0,
+        "ignored": 75,
+        "measured": 0,
+        "filtered_out": 0
+      },
+      "worker_checks": {
+        "passed": 82,
+        "failed": 0,
+        "names": [
+          "PASS init_web",
+          "PASS create",
+          "PASS observer_view",
+          "PASS endPhase",
+          "PASS autoStep_progress",
+          "PASS save_hex",
+          "PASS restore_hex",
+          "PASS playCard_shape",
+          "PASS extension_package_inventory",
+          "PASS extension_catalog_consistent",
+          "PASS pack_enters_match",
+          "PASS missing_pack_refused",
+          "PASS same_pack_restore",
+          "PASS wrong_version_refused",
+          "PASS adapter_choice_token_roundtrip",
+          "PASS legal_actions_shape",
+          "PASS legal_actions_revision_matches_engine",
+          "PASS legal_actions_non_empty",
+          "PASS adapter_passes_kernel_actions_verbatim",
+          "PASS adapter_hash_hex_authoritative",
+          "PASS adapter_events_authoritative",
+          "PASS adapter_observer_does_not_drain_events",
+          "PASS legal_actions_sampled_all_accepted",
+          "PASS forged_card_rejected_with_reason",
+          "PASS legal_actions_seat_boundary_refused",
+          "PASS general_candidates_from_catalog",
+          "PASS choose_general_changes_skills",
+          "PASS choose_general_assignment_shape",
+          "PASS choose_general_unknown_refused",
+          "PASS choose_general_seat_boundary_refused",
+          "PASS worker_native_init",
+          "PASS worker_installed_cards_and_pile_enter_start",
+          "PASS worker_installed_general_candidate",
+          "PASS worker_installed_general_assignment",
+          "PASS worker_installed_save",
+          "PASS worker_installed_missing_refused",
+          "PASS worker_installed_exact_version_refused",
+          "PASS worker_installed_changed_asset_refused",
+          "PASS worker_duplicate_slot_refused_without_changing_match",
+          "PASS worker_invalid_identity_refused_without_changing_match",
+          "PASS worker_installed_same_lock_restore",
+          "PASS worker_dependency_valid_start_and_restore",
+          "PASS worker_dependency_refused_without_changing_match",
+          "PASS worker_identity_keeps_packs_and_lord_bonus",
+          "PASS worker_identity_projection_filtered_not_placeholder",
+          "PASS worker_visible_general_definition_reaches_seat_view",
+          "PASS worker_identity_selection_keeps_lord_bonus_and_global_skills",
+          "PASS worker_identity_invalid_seats_refused",
+          "PASS worker_vm_formal_import_installed_copy_reaches_match",
+          "PASS worker_visible_hand_faces_not_placeholder",
+          "PASS worker_vm_formal_install_start_identity_and_restore",
+          "PASS worker_vm_only_corrupt_module_refused_without_mutation",
+          "PASS worker_vm_unmapped_general_skill_refused",
+          "PASS worker_vm_changed_trigger_hash_refused",
+          "PASS worker_vm_changed_trigger_restore_refused_without_mutation",
+          "PASS worker_vm_changed_module_hash_refused_without_mutation",
+          "PASS worker_vm_jump_invalid_control_flow_refused",
+          "PASS worker_vm_entry_invalid_control_flow_refused",
+          "PASS worker_vm_general_owns_module",
+          "PASS worker_vm_effect_at_end_phase",
+          "PASS worker_vm_same_package_restore_and_replay",
+          "PASS worker_validate_package_accepts_valid_fixture",
+          "PASS worker_validate_package_rejects_corrupt_module_local_count",
+          "PASS worker_validate_package_rejects_tampered_trigger_event",
+          "PASS worker_validate_package_rejects_entry_pc_out_of_range",
+          "PASS worker_validate_package_rejects_trigger_unknown_module",
+          "PASS worker_validate_package_rejects_invalid_identity",
+          "PASS worker_validate_package_rejects_same_version_different_content",
+          "PASS worker_validate_package_rejects_abi_window",
+          "PASS worker_validate_package_does_not_touch_current_match",
+          "PASS worker_vm_import_upgrade_keeps_history_and_old_copy",
+          "PASS worker_vm_upgrade_new_match_uses_new_version",
+          "PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade",
+          "PASS worker_vm_old_save_with_new_version_copy_refused",
+          "PASS worker_vm_rollback_restores_old_version_for_new_matches",
+          "PASS worker_vm_disabled_absent_from_new_match_but_old_save_restores",
+          "PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy",
+          "PASS worker_standard_restart",
+          "PASS worker_general_candidates",
+          "PASS worker_choose_general_reply",
+          "PASS worker_choose_general_unknown_refused",
+          "PASS worker_choose_general_seat_refused"
+        ]
+      },
+      "frontend_tap_summary": [
+        "# tests 163",
+        "# pass 163",
+        "# fail 0",
+        "# skipped 0",
+        "# todo 0"
+      ]
+    },
+    {
+      "id": 124155333420,
+      "name": "gates-ubuntu",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333420",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 2224268,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333420-raw-log.stdout",
+      "duration_seconds": 1100.0,
+      "raw_log_sha256": "985e319b83ffa8f4dbe1c6c68aabe3499d5924b8c7f6204a3f8950e1734301b3",
+      "rust_test_results": {
+        "passed": 6894,
+        "failed": 0,
+        "ignored": 77,
+        "measured": 0,
+        "filtered_out": 0
+      },
+      "conformance_cases": [
+        "OK start_4_42",
+        "OK start_2_1",
+        "OK start_8_99",
+        "OK identity_4_42",
+        "OK identity_2_7",
+        "OK identity_8_99",
+        "OK guozhan_4_42",
+        "OK guozhan_2_7",
+        "OK package_jianxiong_repro",
+        "OK dual_vm_standard_m1",
+        "OK guozhan_gz_jianxiong_repro",
+        "OK guozhan_wei_batch_repro",
+        "OK guozhan_other_batch_repro",
+        "OK guozhan_batch_all_repro",
+        "OK guozhan_zhulian_bihe_abi641",
+        "OK huanle_shoulijian_abi642",
+        "OK shahai_impl_repro",
+        "OK gwent_dudayuanshuai_abi643",
+        "OK shahai_hupeng_abi644"
+      ],
+      "cross_target_result": "ALL CROSS-TARGET CHECKS PASSED",
+      "original_verify_summary": [
+        "# tests 2",
+        "# pass 2",
+        "# fail 0",
+        "# skipped 0"
+      ],
+      "original_content_verified": [
+        "original content verified:",
+        "  legacy-source: 366 files, 14.9 MiB, 0 linked, 366 copied",
+        "  portraits: 2707 files, 387.6 MiB, 2707 linked, 0 copied",
+        "  audio: 9652 files, 620.9 MiB, 9652 linked, 0 copied",
+        "Post job cleanup.",
+        "##[start-action display=Run pnpm/action-setup@v4;id=__fc2a07f5-4a34-4c1d-9447-b03bebda2c6d.__pnpm_action-setup]",
+        "Post job cleanup."
+      ]
+    },
+    {
+      "id": 124155333608,
+      "name": "perf-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333608",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 197171,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333608-raw-log.stdout",
+      "duration_seconds": 336.0,
+      "raw_log_sha256": "7b07f7b06c10780ae0dbfd7b397d169f8946d68a21f9e8db0a4465b8c6808adb",
+      "tier": "server-baseline",
+      "metrics": [
+        {
+          "name": "start-hash-p50",
+          "actual_us": 72,
+          "budget_us": 100
+        },
+        {
+          "name": "distance-query-p95",
+          "actual_us": 0,
+          "budget_us": 300
+        },
+        {
+          "name": "snapshot-restore",
+          "actual_us": 60,
+          "budget_us": 200
+        },
+        {
+          "name": "observer-projection",
+          "actual_us": 29,
+          "budget_us": 100
+        }
+      ]
+    },
+    {
+      "id": 124155333632,
+      "name": "desktop-windows-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333632",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 308082,
+      "log_crlf_count": 4051,
+      "failed_steps": [],
+      "skipped_steps": [
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-30T15:40:05Z",
+          "completed_at": "2026-10-30T15:40:05Z"
+        }
+      ],
+      "raw_log": "job-124155333632-raw-log.stdout",
+      "duration_seconds": 1922.0,
+      "raw_log_sha256": "b1c4d073f6407a5001b47e0d35f54a3a756b28579f1f7cfb966d38f571c01369"
+    },
+    {
+      "id": 124155333637,
+      "name": "desktop-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333637",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 183321,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-30T15:40:23Z",
+          "completed_at": "2026-10-30T15:40:23Z"
+        }
+      ],
+      "raw_log": "job-124155333637-raw-log.stdout",
+      "duration_seconds": 1041.0,
+      "raw_log_sha256": "450c60f72446f6581ffbdcf8e289c7a049c64fd8ee7ae602c55bb1933e57601c"
+    },
+    {
+      "id": 124155333661,
+      "name": "perf-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333661",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 199073,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333661-raw-log.stdout",
+      "duration_seconds": 533.0,
+      "raw_log_sha256": "e27a7a70d1e84eba018806e902571aa2fa019a06e8037c1411240b83e9cb3700",
+      "tier": "server-baseline",
+      "metrics": [
+        {
+          "name": "start-hash-p50",
+          "actual_us": 74,
+          "budget_us": 100
+        },
+        {
+          "name": "distance-query-p95",
+          "actual_us": 1,
+          "budget_us": 300
+        },
+        {
+          "name": "snapshot-restore",
+          "actual_us": 141,
+          "budget_us": 200
+        },
+        {
+          "name": "observer-projection",
+          "actual_us": 28,
+          "budget_us": 100
+        }
+      ]
+    },
+    {
+      "id": 124155333694,
+      "name": "build-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333694",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 360247,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333694-raw-log.stdout",
+      "duration_seconds": 241.0,
+      "raw_log_sha256": "4769f9596bc4800b2c2042e01f7522c7413677ed79aa5163f7b99f33950125ee",
+      "rust_test_results": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "id": 124155333727,
+      "name": "build-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333727",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 358523,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333727-raw-log.stdout",
+      "duration_seconds": 170.0,
+      "raw_log_sha256": "d830b6e03a982a05545c027544c98394bd4e91e9ab66c00dbcfabc022ee8727b",
+      "rust_test_results": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "id": 124155333745,
+      "name": "desktop-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333745",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 432050,
+      "log_crlf_count": 0,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333745-raw-log.stdout",
+      "duration_seconds": 1198.0,
+      "raw_log_sha256": "787b068387c42d86de1f46013888e31b9623b3c732a185cb438a9e099be00fef"
+    },
+    {
+      "id": 124155333890,
+      "name": "build-windows-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800/job/124155333890",
+      "status": "completed",
+      "conclusion": "success",
+      "log_bytes": 365922,
+      "log_crlf_count": 3821,
+      "failed_steps": [],
+      "skipped_steps": [],
+      "raw_log": "job-124155333890-raw-log.stdout",
+      "duration_seconds": 303.0,
+      "raw_log_sha256": "40e84866cc00d8b436747e826f450e1642b9c3c24976cfe9fd6e28508b482674",
+      "rust_test_results": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered_out": 0
+      }
+    }
+  ],
+  "artifacts": {
+    "total_count": 3,
+    "artifacts": [
+      {
+        "id": 12992007422,
+        "node_id": "MDg6QXJ0aWZhY3QxMjk5MjAwNzQyMg==",
+        "name": "installer-windows-latest",
+        "size_in_bytes": 26273163,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12992007422",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12992007422/zip",
+        "expired": false,
+        "digest": "sha256:acbff49717be3539754f31dd71f0fc6a5edccf0a6661b477aa1d23973efa858e",
+        "created_at": "2026-10-30T16:10:00Z",
+        "updated_at": "2026-10-30T16:10:00Z",
+        "expires_at": "2027-01-28T15:38:39Z",
+        "workflow_run": {
+          "id": 41082599800,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "da7e4c019461a6c467a9dd2de849f3b1a7494b86"
+        }
+      },
+      {
+        "id": 12991606067,
+        "node_id": "MDg6QXJ0aWZhY3QxMjk5MTYwNjA2Nw==",
+        "name": "installer-ubuntu-latest",
+        "size_in_bytes": 266337379,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12991606067",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12991606067/zip",
+        "expired": false,
+        "digest": "sha256:82b7c7c2fdb83513d4e865baba19783988939534dd057612a60017273db9f2dd",
+        "created_at": "2026-10-30T15:58:27Z",
+        "updated_at": "2026-10-30T15:58:27Z",
+        "expires_at": "2027-01-28T15:38:39Z",
+        "workflow_run": {
+          "id": 41082599800,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "da7e4c019461a6c467a9dd2de849f3b1a7494b86"
+        }
+      },
+      {
+        "id": 12990234641,
+        "node_id": "MDg6QXJ0aWZhY3QxMjk5MDIzNDY0MQ==",
+        "name": "installer-macos-latest",
+        "size_in_bytes": 32802348,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12990234641",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/12990234641/zip",
+        "expired": false,
+        "digest": "sha256:35fd5ccd2fc408b7d0d4b2d46f963fd608c33c346a9726e0122c930b17cf31be",
+        "created_at": "2026-10-30T15:56:02Z",
+        "updated_at": "2026-10-30T15:56:02Z",
+        "expires_at": "2027-01-28T15:38:39Z",
+        "workflow_run": {
+          "id": 41082599800,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "da7e4c019461a6c467a9dd2de849f3b1a7494b86"
+        }
+      }
+    ]
+  },
+  "cleanup": "watch process exited/reaped; no local compiled products or background child remaining",
+  "failed_tests": [],
+  "transport_errors": []
+}

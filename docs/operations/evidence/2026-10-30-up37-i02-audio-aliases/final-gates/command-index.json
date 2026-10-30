@@ -1,0 +1,116 @@
+[
+  {
+    "name": "01-source-line-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-30T17:09:17.149012+00:00",
+    "exit": 0,
+    "wall_seconds": 0.09264037501998246,
+    "locked_seconds": 0.06663425001897849,
+    "queue_seconds": null,
+    "queue_plus_launch_overhead_seconds": 0.026006125001003966,
+    "disk_free_bytes": 102214230016,
+    "log": "01-source-line-tests.log"
+  },
+  {
+    "name": "02-source-lines",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-30T17:09:17.247164+00:00",
+    "exit": 0,
+    "wall_seconds": 8.017222707974724,
+    "locked_seconds": 7.989056167018134,
+    "queue_seconds": null,
+    "queue_plus_launch_overhead_seconds": 0.028166540956590325,
+    "disk_free_bytes": 102214971392,
+    "log": "02-source-lines.log"
+  },
+  {
+    "name": "03-doc-line-refs",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-30T17:09:25.270612+00:00",
+    "exit": 0,
+    "wall_seconds": 8.208790707984008,
+    "locked_seconds": 8.178139667026699,
+    "queue_seconds": null,
+    "queue_plus_launch_overhead_seconds": 0.030651040957309306,
+    "disk_free_bytes": 102231482368,
+    "log": "03-doc-line-refs.log"
+  },
+  {
+    "name": "04-preflight",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "wrapper_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "started_at": "2026-10-30T17:09:33.485282+00:00",
+    "exit": 0,
+    "wall_seconds": 327.4218344579858,
+    "locked_seconds": 327.3923024169926,
+    "queue_seconds": null,
+    "queue_plus_launch_overhead_seconds": 0.02953204099321738,
+    "disk_free_bytes": 101347581952,
+    "log": "04-preflight.log"
+  }
+]

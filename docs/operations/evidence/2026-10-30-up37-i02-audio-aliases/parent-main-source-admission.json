@@ -1,0 +1,23 @@
+{
+  "base": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "patch_sha256": "5a8a2d547ea6893009b2a8e9227e57349e7516f5957687af7c1391700fc84ef5",
+  "paths": {
+    "apps/web-client/scripts/original-resources.test.mjs": "a71bb0910880752e991cc2aa9d8400d9a571896655170b7bb26c384c7de37a7e",
+    "apps/web-client/src/engine/originalResources.ts": "ee55e8b3f786cff54d3aabcf45ca48b92ce85826e4873458f2d05e65f0d1a720",
+    "apps/web-client/src/views/CollectionView.vue": "1f68995cd7d0d68bcd467e6029fa9e0d18af81a943178164672405dc3b18484b",
+    "content/original/asset-manifest.json": "0cc7ef5beb65c4842335a186b64dff220176bd1364d2c16efdcd06f37f8744cf",
+    "scripts/sync-original-content.mjs": "6fd700ca69eaebf4b81b9c77dc568c229270fecb24a1731c644cc6f041a16230",
+    "scripts/test_original_resources.mjs": "36bfaa59362c29065a15237f755cd1e0dfb3adcbd4ed83402bbb0a3505d2225e",
+    "scripts/original-audio-resources.mjs": "647bd888ae90a41e133ac1b92fbfa12c1b46a6d88567c94b32b27a3e96df718b",
+    "scripts/original-source-ast.mjs": "88933a4ccbc789b847a9caac430f1b2f7c3c3ba44b5c7b8400ab9f2ff68cf352",
+    "scripts/test_original_audio_resources.mjs": "f85d97cfa92a2749fe5e3fd1b3b31bc64a6cc974ca304ed8ca4883f2fec36c0a"
+  },
+  "reviewed_private_files_exact": true,
+  "original_direct_rows": 12359,
+  "aliases": 23393,
+  "total_rows": 35752,
+  "nonassets_metadata_unchanged": true,
+  "source_applied": true,
+  "actual_browser_codec": "5 original Chrome failures retained; compatibility derivatives not included",
+  "index_empty": true
+}

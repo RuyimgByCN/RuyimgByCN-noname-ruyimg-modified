@@ -1,0 +1,2 @@
+{"head": true, "index": true, "source9": true, "protected": true, "upstream_source": true, "upstream_head": true, "modules": true, "dist": true, "guard": true}
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/accept.py", "after"], "exit": 0, "locked_seconds": 3.1472297080035787, "disk_free_bytes": 102407413760}

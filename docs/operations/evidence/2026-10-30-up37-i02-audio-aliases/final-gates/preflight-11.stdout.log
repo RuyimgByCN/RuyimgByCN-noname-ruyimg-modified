@@ -1,0 +1,38 @@
+source	packages	entries	upstream_path	class
+L03	boss-play-upstream-liuli,boss-zhugeliang-upstream-liuli	2	noname/extension/boss/extension.js	converted
+L06	wuxing-upstream-liuli	3	noname/extension/wuxing/extension.js	converted
+L10	epic-cards-upstream-liuli	2	noname/extension/史诗卡牌/extension.js	converted
+L19	doomsday-brawl-upstream-liuli	6	noname/extension/末日乱斗/extension.js	converted
+L20	mark-supplement-upstream-liuli	6	noname/extension/标记补充/extension.js	converted
+L27	select-beautify-upstream-liuli	14	noname/extension/选将美化/extension.js	converted
+L29	longxue-upstream-liuli	5	noname/extension/龙血玄黄/extension.js	converted
+U01	d3-upstream-noname	1	apps/core/extension/3D精选/	converted
+U05	shaai-ow-upstream-noname,shaai-xianjian-upstream-noname,shahai-gujian-upstream-noname,shahai-gwent-upstream-noname,shahai-hearth-upstream-noname,shahai-mtg-upstream-noname,shahai-swd-upstream-noname,shahai-yunchou-upstream-noname,shahai-zhenfa-upstream-noname	407	extension/杀海拾遗/character/ow/	converted
+U06	huanle-upstream-noname	9	apps/core/extension/欢乐卡牌/	converted
+U07	wudian-upstream-noname	36	apps/core/extension/玩点论杀/	converted
+U08	hero-kill-upstream-noname	10	apps/core/extension/英雄杀/character/skill.js	converted
+L01	ai-tuning-upstream-liuli	0	noname/extension/AI优化/extension.js	installed-empty
+L02	sj-settings-upstream-liuli	0	noname/extension/SJ Settings/extension.js	installed-empty
+L04	cardpile-upstream-liuli	0	noname/extension/cardpile/extension.js	installed-empty
+L05	coin-upstream-liuli	0	noname/extension/coin/extension.js	installed-empty
+L07	omnisearch-upstream-liuli	0		installed-empty
+L09	qhly-upstream-liuli	0	noname/extension/千幻聆音/extension.js	installed-empty
+L13	shousha-mvp-upstream-liuli	0	noname/extension/手杀MVP/extension.js	installed-empty
+L15	shousha-full-upstream-liuli	0	noname/extension/手杀全扩/extension.js	installed-empty
+L16	drag-read-upstream-liuli	0	noname/extension/拖拽读取/extension.js	installed-empty
+L17	douzhuan-xingyi-upstream-liuli	0	noname/extension/斗转星移/extension.js	installed-empty
+L18	update-guard-upstream-liuli	0	noname/extension/更新保护/extension.js	installed-empty
+L21	martial-upstream-liuli	0	noname/extension/武皇争霸/extension.js	installed-empty
+L22	elo-sanction-upstream-liuli	0	noname/extension/段位制裁/extension.js	installed-empty
+L23	desktop-adapt-upstream-liuli	0		installed-empty
+L24	skin-switch-upstream-liuli	0	noname/extension/皮肤切换/extension.js	installed-empty
+L26	fool-plugin-upstream-liuli	0	noname/extension/笨蛋插件/extension.js	installed-empty
+L28	thunder-upstream-liuli	0	noname/extension/雷霆万钧/extension.js	installed-empty
+U02	boss-play-upstream-noname	0	apps/core/extension/boss/extension.js	installed-empty
+U03	cardpile-upstream-noname	0	apps/core/extension/cardpile/extension.js	installed-empty
+U04	coin-upstream-noname	0		installed-empty
+L08		0		no-package
+L11		0		no-package
+L12		0		no-package
+L14		0		no-package
+L25		0		no-package

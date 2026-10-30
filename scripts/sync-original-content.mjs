@@ -19,6 +19,8 @@ import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import ts from "../apps/web-client/node_modules/typescript/lib/typescript.js";
 import { compareContentNames, compareFileNames, listFiles } from "./original-content-order.mjs";
+import { parseObjectFile, parseJavaScript, propertyName, safeLiteral } from "./original-source-ast.mjs";
+import { assertUniqueAssetPaths, declaredAudioAssets, loadAudioDeclarations, resolveAudioDeclarations, syncDeclaredAudio } from "./original-audio-resources.mjs";
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.includes("--help") || cliArgs.includes("-h")) {
@@ -261,6 +263,9 @@ if (astSelfCheck) {
   process.exit(0);
 }
 
+const audioSubstitutes = await coreCharacterSubstitutes(packNames);
+const audioPlan = resolveAudioDeclarations(await loadAudioDeclarations(coreSourceRoot), audioSubstitutes);
+
 if (resourcesOnly) {
   const manifestFile = path.join(outputRoot, "asset-manifest.json");
   const manifest = JSON.parse(await readFile(manifestFile, "utf8"));
@@ -268,6 +273,7 @@ if (resourcesOnly) {
   if (manifest.schema_version !== 2 || catalog.schema_version !== 4) {
     throw new Error("resource refresh requires the adopted manifest and catalog schemas");
   }
+  assertUniqueAssetPaths(manifest.assets);
   // Resource refreshes must stay on the already adopted source and skin policy.
   const provenance = await contentProvenance();
   assertJsonEqual("resource source provenance", manifest.sources, provenance);
@@ -283,7 +289,7 @@ if (resourcesOnly) {
       name, source_category: sourceCategory, files, bytes, hardlinked, copied,
     })),
   ];
-  const assets = await assetEntries();
+  const assets = await resourceAssets(verifyOnly);
   if (verifyOnly) {
     assertJsonEqual("asset manifest tree summaries", manifest.trees, summaries);
     assertJsonEqual("asset manifest entries", manifest.assets, assets);
@@ -362,7 +368,7 @@ await writeJson(path.join(outputRoot, "asset-manifest.json"), {
     hardlinked,
     copied,
   })),
-  assets: await assetEntries(),
+  assets: await resourceAssets(false),
 });
 
 const verified = [];
@@ -1055,6 +1061,13 @@ async function dynamicSkinCatalog() {
   };
 }
 
+async function resourceAssets(verify) {
+  const direct = await assetEntries();
+  const { assets } = declaredAudioAssets(audioPlan, direct);
+  await syncDeclaredAudio(assetRoot, assets, verify, sha256);
+  return [...direct, ...assets];
+}
+
 async function assetEntries() {
   const entries = [];
   for (const tree of availableTrees.filter((item) => item.name !== "legacy-source")) {
@@ -1117,31 +1130,6 @@ async function syncWebStandardAssets(catalog) {
   const generated = path.join(repoRoot, "apps/web-client/src/generated");
   await mkdir(generated, { recursive: true });
   await writeJson(path.join(generated, "standard-characters.json"), rows);
-}
-
-async function parseObjectFile(file, variableName, allowDiagnostics = false) {
-  const sourceFile = await parseJavaScript(file, allowDiagnostics);
-  for (const statement of sourceFile.statements) {
-    if (!ts.isVariableStatement(statement)) continue;
-    for (const declaration of statement.declarationList.declarations) {
-      if (
-        declaration.name.getText(sourceFile) === variableName &&
-        ts.isObjectLiteralExpression(declaration.initializer)
-      ) {
-        return { sourceFile, properties: declaration.initializer.properties };
-      }
-    }
-  }
-  throw new Error(`${file}: const ${variableName} = { ... } not found`);
-}
-
-async function parseJavaScript(file, allowDiagnostics = false) {
-  const source = await readFile(file, "utf8");
-  const sourceFile = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-  if (!allowDiagnostics && sourceFile.parseDiagnostics.length) {
-    throw new Error(`${file}: TypeScript parser reported ${sourceFile.parseDiagnostics.length} errors`);
-  }
-  return sourceFile;
 }
 
 function findNamedObjectProperty(sourceFile, name) {
@@ -1213,67 +1201,6 @@ function expressionPath(node) {
     return parent ? [...parent, node.argumentExpression.text] : null;
   }
   return null;
-}
-
-function safeLiteral(node, location = "$") {
-  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
-    return { ok: true, value: node.text, omitted: [] };
-  }
-  if (ts.isNumericLiteral(node)) {
-    const value = Number(node.text);
-    return Number.isFinite(value)
-      ? { ok: true, value, omitted: [] }
-      : { ok: false, omitted: [location] };
-  }
-  if (node.kind === ts.SyntaxKind.TrueKeyword) {
-    return { ok: true, value: true, omitted: [] };
-  }
-  if (node.kind === ts.SyntaxKind.FalseKeyword) {
-    return { ok: true, value: false, omitted: [] };
-  }
-  if (node.kind === ts.SyntaxKind.NullKeyword) {
-    return { ok: true, value: null, omitted: [] };
-  }
-  if (
-    ts.isPrefixUnaryExpression(node) &&
-    ts.isNumericLiteral(node.operand) &&
-    [ts.SyntaxKind.PlusToken, ts.SyntaxKind.MinusToken].includes(node.operator)
-  ) {
-    const unsigned = Number(node.operand.text);
-    const value = node.operator === ts.SyntaxKind.MinusToken ? -unsigned : unsigned;
-    return Number.isFinite(value)
-      ? { ok: true, value, omitted: [] }
-      : { ok: false, omitted: [location] };
-  }
-  if (ts.isArrayLiteralExpression(node)) {
-    const value = [];
-    const omitted = [];
-    for (const [index, element] of node.elements.entries()) {
-      if (ts.isSpreadElement(element)) return { ok: false, omitted: [`${location}[${index}]`] };
-      const parsed = safeLiteral(element, `${location}[${index}]`);
-      if (!parsed.ok) return { ok: false, omitted: parsed.omitted };
-      value.push(parsed.value);
-      omitted.push(...parsed.omitted);
-    }
-    return { ok: true, value, omitted };
-  }
-  if (ts.isObjectLiteralExpression(node)) {
-    const value = Object.create(null);
-    const omitted = [];
-    for (const property of node.properties) {
-      const name = propertyName(property);
-      if (!name || !ts.isPropertyAssignment(property) ||
-        ["__proto__", "prototype", "constructor"].includes(name)) {
-        omitted.push(`${location}.*`);
-        continue;
-      }
-      const parsed = safeLiteral(property.initializer, `${location}.${name}`);
-      if (parsed.ok) value[name] = parsed.value;
-      omitted.push(...parsed.omitted);
-    }
-    return { ok: true, value, omitted };
-  }
-  return { ok: false, omitted: [location] };
 }
 
 function isPlainObject(value) {
@@ -1354,13 +1281,6 @@ function literalValue(node) {
   }
   if (ts.isObjectLiteralExpression(node)) return objectValue(node);
   return undefined;
-}
-
-function propertyName(property) {
-  const name = property.name;
-  if (!name) return null;
-  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNumericLiteral(name)) return name.text;
-  return null;
 }
 
 async function removeStaleOptionalTargets() {
@@ -1703,12 +1623,13 @@ async function verifyCatalog(results) {
     }),
   );
   assertJsonEqual("asset manifest tree summaries", manifest.trees, expectedTrees);
-  const expectedAssetEntries = await assetEntries();
+  assertUniqueAssetPaths(manifest.assets);
+  const expectedAssetEntries = await resourceAssets(true);
   assertJsonEqual("asset manifest entries", manifest.assets, expectedAssetEntries);
   const expectedAssets = results
     .filter((tree) => tree.name !== "legacy-source")
     .reduce((sum, tree) => sum + tree.files, 0);
-  if (manifest.assets.length !== expectedAssets) throw new Error("asset manifest count mismatch");
+  if (manifest.assets.filter((asset) => !asset.path.startsWith("audio-declared/")).length !== expectedAssets) throw new Error("asset manifest count mismatch");
   const webCharacters = JSON.parse(
     await readFile(path.join(repoRoot, "apps/web-client/src/generated/standard-characters.json"), "utf8"),
   );

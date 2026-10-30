@@ -1,0 +1,17 @@
+{
+  "all_assertions_passed": true,
+  "artifact_count": 69,
+  "actual_count": 70,
+  "groups": {
+    "source9": 9,
+    "ci4": 4,
+    "A53": 53,
+    "modules": 18,
+    "tracked_dist": 37,
+    "parent_docs": 4,
+    "guard": 1
+  },
+  "parent_doc_changes": [],
+  "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "index_empty": true
+}

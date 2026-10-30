@@ -1,0 +1,28 @@
+## Review
+
+范围：仅审冻结 snapshot 的 schema4／内容身份／新旧 reader 接线，对照裁决26及已审合同；接受 parent 的 `identity.json all_equal=true`。使用原 handoff 指定的封存 diff、源码及证据索引，没有读取 writer 的 live 修改。
+
+- **Correct：schema 能力与产物版本已分离。** [version.rs:5](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-api/src/version.rs:5) 声明读取能力4；manifest ctor 仍写3。`required_content_schema()` 按真实排序元数据选择3/4；[compat.rs:31](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-runtime/src/compat.rs:31) 明确接受 host4→3/4、host3→3，并拒 host0。format1/API1/ABI758/WS6未随之提升。
+
+- **Correct：默认 logic hash 中性与非默认段的位置绑定符合合同。** [hashing.rs:102](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-schema/src/package/hashing.rs:102) 保留旧 trigger 输入，仅非默认条目原位追加段，编码数组位置、IDs、带长度的 event/module、entry_pc及固定宽度排序元组；filter仍参与原输入。重复 trigger ID 不会令元组换位保持原摘要。此结论仅涉及 logic hash，不等同原始 JSON content hash。
+
+- **Correct：正式边界与依赖接线总体保留。** [public bridge:266](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-native-loader/src/lib.rs:266) 先完整 `validate()`；PackageStore 在幂等分支前验证，frozen/server及Worker整包路径均继续经过包验证与 bridge。旧3角色的 module alias 只在唯一映射时转换，冲突拒绝，未改原包对象。direct ExtensionPack 新锁编码有序VM模块、递归filter与完整trigger meta；Cargo.toml/Cargo.lock只接入 workspace 已有的 `blake3`，没有新增第三方包版本。
+
+- **Finding：P1 — legacy 的末尾修正删掉既有 effect ABI 门禁。**  
+  位置：[load_package_checks.rs:9](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-core/src/content/registry/load_package_checks.rs:9)。封存 diff 明确把原 `pkg.validate_vm_effect_abi()` 替换成 schema 检查，没有保留原调用。  
+  调用链为 `Engine::load_package → ContentRegistry::load_package → load_package_inner → validate_package_for_load`；后续 `VerifiedModule::verify` 只验证字节码结构，不能替代 manifest ABI 检查。被删验证在 [package.rs:778](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-schema/src/package.rs:778) 明确拒 ABI754–757/effect656，以及 ABI<758/effect772。  
+  **小反例：**沿用 [pa12_tag656_compat.rs:12](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-core/tests/pa12_tag656_compat.rs:12) 的真实旧onlyOL包，将ABI置754–757并重算包logic hash，保持schema3默认排序。新schema门与hash门不能识别其歧义，直接registry入口失去原有拒绝。snapshot恢复仍另行检查，造成“可装载执行、保存后却拒恢复”的边界不一致；重算hash不能证明ABI语义合法。  
+  **最小修正：**保留当前schema门，同时恢复原 `validate_vm_effect_abi()`，置于幂等早退之前；无须恢复误伤rules-only standard包的presentation校验。修复后由执行方运行 `cargo test --offline -p engine-core --test misc pa12_tag656_compat::`，并保留现有schema定向检查。
+
+- **Finding：P1 — trigger-only多handler合并后，已允许的手牌上限modifier静默失效。**  
+  位置：[vm_active.rs:204](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/content-native-loader/src/vm_active.rs:204)。新增合并把顶层 `Declared` 换成 `Handlers`；各handler内部仍携带 `hand_limit_base_max_hp`，但 [rvm_bridge.rs:492](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/rvm_bridge.rs:492) 只识别顶层 `Declared`，遇 `Handlers` 返回 `None`。bridge末尾仍明确允许该modifier与多个trigger共存，因此不会拒装。  
+  **小反例：**同一logical skill有两个一致meta的trigger，无active，附 `modifier hand_limit_base_max_hp override 1;`。完整rehash后，schema3默认或schema4非默认均可过bridge；角色HP=2、maxHP=4且无其他修饰时，[core_ops.rs:850](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-review-freeze-chy7il8a/snapshot/crates/engine-native-kernel/src/state/core_ops.rs:850) 得到手牌上限2，而合同要求4，弃牌阶段可能多弃两张牌。包hash及direct锁仍绑定该modifier，但执行不再读取它。  
+  **最小修正：**让 `hand_limit_base` 读取 `Handlers` 中保留的声明modifier，保持其不依赖当前trigger是否匹配；补一个双handler、受伤角色的实际hand-limit断言，同时确认两个handler仍保留并执行。
+
+- **Fixed：**无；本次按要求只读。
+
+- **证据判读：**封存旧public日志记录合规4经schema门拒绝，旧formal日志记录先hash拒绝；恶意3按旧算法重hash后旧formal记录成功，符合已声明局限，不作为finding。`legacy-schema-final`只覆盖新增schema测试，不能证明被删除的ABI检查仍在；adapter历史全量失败也不能被随后定向pass覆盖。
+
+- **Merge verdict：BLOCK（仅本局部合同验收）。**上述两处均由冻结diff引入，需修复并定向验证；本报告不判断整C是否可合并、runtime全绿或wholeGoal完成。
+
+未执行compile/test/golden，未修改源码；未复核旧binary本体，也未重做全118哈希。反例结论来自源码可达性，修复后的实际运行结果仍须补证。

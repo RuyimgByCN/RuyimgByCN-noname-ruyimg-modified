@@ -1,0 +1,2 @@
+检查 1909 个文件，坏链 0
+{"command": ["python3", "-B", "scripts/check_local_links.py", "--all"], "exit": 0, "locked_seconds": 0.4120465420128312, "disk_free_bytes": 102411169792}

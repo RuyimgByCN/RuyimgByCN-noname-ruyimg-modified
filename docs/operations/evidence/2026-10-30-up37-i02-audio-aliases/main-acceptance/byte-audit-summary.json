@@ -1,0 +1,12 @@
+{
+  "manifest_rows": 35752,
+  "old_direct_rows_exact_in_order": 12359,
+  "nonassets_metadata_exact": true,
+  "aliases_verified_upstream_backing_target": 23393,
+  "target_files": 23393,
+  "unique_physical_payloads_hashed": 8824,
+  "hash_cache_key": "dev/inode/size/mtime; hardlinks share actual bytes, no redundant 12kcodec or full source reread",
+  "all_six_fields": true,
+  "new_material_bytes": 0,
+  "hardlink_chain_count": 23393
+}

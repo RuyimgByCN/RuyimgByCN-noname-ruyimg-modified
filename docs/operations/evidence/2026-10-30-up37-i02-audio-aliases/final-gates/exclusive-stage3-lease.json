@@ -1,0 +1,23 @@
+{
+  "time": "2026-10-30T17:09:17.028232+00:00",
+  "prior_lease": {
+    "time": "2026-10-30T14:32:53.623904+00:00",
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+    "prior_owner": "A330 phase1/phase2 completed",
+    "lsof_exit": 0,
+    "owners": [],
+    "exclusive_next_use": "main CI correction validation only; inc0/jobs2/global lock",
+    "handoff_allowed": true
+  },
+  "prior_lease_sha256": "21a72fab3cc9a7bec58fc781f7b631c3a528fbaa5f61c8c0bc9dbc3248515f66",
+  "lsof_exit": 1,
+  "lsof_stdout": "",
+  "lsof_stderr": "",
+  "exclusive_owner_pid": 95505,
+  "purpose": "main alias9 final four gates only",
+  "released": true,
+  "dependencies_retained_for": "parent next explicitly authorized acceptance",
+  "release_time": "2026-10-30T17:15:01.270188+00:00",
+  "target_preserved": true,
+  "cleanup_performed": false
+}

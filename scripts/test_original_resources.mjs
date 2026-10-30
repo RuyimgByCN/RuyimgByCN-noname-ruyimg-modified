@@ -16,17 +16,19 @@ test("resources-only refresh preserves catalog, legacy source and immutable pack
   for (const dir of ["scripts", "apps/web-client", "content/original/ported", "content/original/legacy-source"]) {
     mkdirSync(path.join(root, dir), { recursive: true });
   }
-  for (const dir of ["character", "image/character", "audio/skill"]) mkdirSync(path.join(source, dir), { recursive: true });
-  for (const name of ["sync-original-content.mjs", "original-content-order.mjs"]) {
+  for (const dir of ["character/pack", "image/character", "audio/skill"]) mkdirSync(path.join(source, dir), { recursive: true });
+  for (const name of ["sync-original-content.mjs", "original-content-order.mjs", "original-source-ast.mjs", "original-audio-resources.mjs"]) {
     copyFileSync(path.join(repo, "scripts", name), path.join(root, "scripts", name));
   }
   symlinkSync(path.join(repo, "apps/web-client/node_modules"), path.join(root, "apps/web-client/node_modules"));
   writeFileSync(path.join(source, "image/character/actor.jpg"), "portrait bytes");
   writeFileSync(path.join(source, "audio/skill/voice1.mp3"), "voice bytes");
+  writeFileSync(path.join(source, "character/pack/skill.js"), 'const skills = { voice: { audio: 1 }, alias: { audio: "voice" } };');
+  writeFileSync(path.join(source, "character/pack/character.js"), 'const characters = { actor: { skills: ["alias"] } };');
   const provenance = { core: {
     category: "core", root: "source", repository: null, repository_root: null,
     head: null, dirty: true, tracked_changes: [], tracked_change_count: 0,
-    untracked_count: 2, redistribution_status: "preserved_from_source_requires_review",
+    untracked_count: 4, redistribution_status: "preserved_from_source_requires_review",
   }, skin: null };
   const protectedFiles = {
     "content/original/catalog.json": JSON.stringify({ schema_version: 4, source: { provenance }, characters: [{ id: "sp:tangtang", def_id: 2295081372 }] }),
@@ -45,9 +47,31 @@ test("resources-only refresh preserves catalog, legacy source and immutable pack
   assert.equal(result.status, 0, result.stderr);
   for (const [name, bytes] of Object.entries(protectedFiles)) assert.equal(readFileSync(path.join(root, name), "utf8"), bytes);
   const manifest = JSON.parse(readFileSync(manifestFile));
-  assert.deepEqual(manifest.assets.map((asset) => asset.path), ["portraits/actor.jpg", "audio/skill/voice1.mp3"]);
+  assert.deepEqual(manifest.assets.map((asset) => asset.path), [
+    "portraits/actor.jpg", "audio/skill/voice1.mp3",
+    "audio-declared/pack/skill/alias/base/0001/voice1.mp3",
+    "audio-declared/pack/skill/voice/base/0001/voice1.mp3",
+    "audio-declared/pack/character/actor/skill/alias/base/0001/voice1.mp3",
+  ]);
   assert.equal(manifest.assets[1].source_path, "audio/skill/voice1.mp3");
   assert.equal(run("--verify-only").status, 0);
+  const alias = path.join(root, "content/original/assets", manifest.assets[2].path);
+  assert.equal(readFileSync(alias, "utf8"), "voice bytes");
+  rmSync(alias);
+  writeFileSync(alias, "bad alias");
+  const badAlias = run("--verify-only");
+  assert.notEqual(badAlias.status, 0);
+  assert.match(badAlias.stderr, /declared audio content differs/);
+  assert.equal(run().status, 0);
+  const validManifest = readFileSync(manifestFile, "utf8");
+  const duplicate = JSON.parse(validManifest);
+  duplicate.assets.push({ ...duplicate.assets[1], sha256: "a".repeat(64) });
+  writeFileSync(manifestFile, JSON.stringify(duplicate));
+  const duplicateRefresh = run();
+  assert.notEqual(duplicateRefresh.status, 0);
+  assert.match(duplicateRefresh.stderr, /duplicate canonical asset path/);
+  assert.equal(readFileSync(alias, "utf8"), "voice bytes", "rejection preserves adopted alias bytes");
+  writeFileSync(manifestFile, validManifest);
   const target = path.join(root, "content/original/assets/audio/skill/voice1.mp3");
   // Break the hardlink before corrupting the destination; the source stays read-only.
   rmSync(target);

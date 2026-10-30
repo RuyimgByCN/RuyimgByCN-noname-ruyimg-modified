@@ -1,0 +1,117 @@
+{
+  "completed_utc": "2026-10-30T16:43:14.033364+00:00",
+  "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "ABI": 758,
+    "WS": 6,
+    "asset_schema": 2,
+    "asset_fields": 6
+  },
+  "source9_exact_and_all_protected_unchanged": {
+    "head": true,
+    "index": true,
+    "source9": true,
+    "protected": true,
+    "upstream_source": true,
+    "upstream_head": true,
+    "modules": true,
+    "dist": true,
+    "guard": true
+  },
+  "protected_files": 17195,
+  "upstream_AST_source_files": 461,
+  "source_aggregates": {
+    "source9": "82fca1f0e76e48df0f557f095bacb1d8c6ce5280eb7beef12431418fd32de978",
+    "protected": "bee2635e1b5c65661236e2f10efbcba2d2817e55264a0e931749a567d46e3827",
+    "upstream_source": "6fd67cf22f9fb23a387c3631972396935bf3b60bc4113e3989dbc3c402663778",
+    "modules": "edc12a6b95b85318a9a138b81e9c8bd98a9d03dcb5a05dc3dac9fe74504916c6",
+    "dist": "7f2b2bb6394cc0ab3c2773e82856b28a55b106e3218f57b0ca0b5d0fb6ff4220"
+  },
+  "pipeline": {
+    "tests": 11,
+    "fail": 0
+  },
+  "frontend": {
+    "tests": 167,
+    "fail": 0
+  },
+  "browser": {
+    "roles": 15,
+    "decoded": 121,
+    "controls_played": 14,
+    "failure_isolation_scenes": 9,
+    "runtime_exceptions": 0,
+    "CDP_not_OS_HID_or_listening": true
+  },
+  "http": {
+    "get_count": 214,
+    "cross_pack_forms": 8,
+    "cross_pack_alias_requests": 91,
+    "source_manifest_browser_bytes_match": true
+  },
+  "generated_aliases": {
+    "manifest_rows": 35752,
+    "old_direct_rows_exact_in_order": 12359,
+    "nonassets_metadata_exact": true,
+    "aliases_verified_upstream_backing_target": 23393,
+    "target_files": 23393,
+    "unique_physical_payloads_hashed": 8824,
+    "hash_cache_key": "dev/inode/size/mtime; hardlinks share actual bytes, no redundant 12kcodec or full source reread",
+    "all_six_fields": true,
+    "new_material_bytes": 0,
+    "hardlink_chain_count": 23393
+  },
+  "native_wasm_sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+  "legacy_wasm_sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+  "both_wasm_bytes_in_current_external_products": true,
+  "known5_original_failures": "tsumugi_mugyu1..5.mp3 preserved and excluded; no decode rerun or derivative integration",
+  "top_level_command_count": 15,
+  "failed_commands_preserved": [
+    {
+      "name": "http",
+      "argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "python3",
+        "-B",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime.py"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 1,
+      "wall_seconds": 17.097391707997303,
+      "locked_seconds": 6.481553290999727,
+      "queue_estimate_seconds": 10.615838416997576,
+      "free_disk_bytes": 102387240960,
+      "log": "http.log"
+    }
+  ],
+  "cleanup_failure_resolution": "Happy121decode/14play passed; Chrome profile cleanup ENOTEMPTY caused initial exit1. Only own cleanup retry changed. Happy not repeated; separate runtime-resume completed remaining9scenes and214GET checks. Original result/log/process identity retained.",
+  "warnings": {
+    "node_experimental": 2,
+    "strict_docrefs": "\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n{\"command\": [\"python3\", \"-B\", \"scripts/check_doc_line_refs.py\", \"--strict\"], \"exit\": 0, \"locked_seconds\": 7.628156708989991, \"disk_free_bytes\": 102410936320}\n"
+  },
+  "cleanup": {
+    "owned_active_chrome": [],
+    "rust_children_waited": true,
+    "stores_removed": true,
+    "initial_leftover_profile_removed": true,
+    "default_dist_unchanged": true,
+    "resources_retained_for_product": true,
+    "borrowed_binary_preserved": true,
+    "stage3_or_default_target_not_used": true,
+    "free_disk_bytes": 102405468160
+  },
+  "no_staged_files": true,
+  "no_maintained_source_docs_expectation_guard_remote_edits": true,
+  "full_preflight": "Deferred to parent after documentation/evidence closure; not run",
+  "no_compile_or_ci_observation_repeat": true,
+  "scope_limits": [
+    "Not whole UP37/I02/37-source acceptance",
+    "2487 mappings lack backing;234 dynamic expressions remain recorded by maintained resolver",
+    "Known five original Chrome failures remain; timing/compatibility work private",
+    "Static retained329server only proves unchanged ServeDir chain; no330room/rules acceptance claimed"
+  ]
+}

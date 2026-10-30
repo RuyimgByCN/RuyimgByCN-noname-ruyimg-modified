@@ -1,0 +1,280 @@
+[
+  {
+    "name": "pipeline",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--test",
+      "scripts/test_original_audio_resources.mjs",
+      "scripts/test_original_resources.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 213.2875190420018,
+    "locked_seconds": 1.1879057089972775,
+    "queue_estimate_seconds": 212.09961333300453,
+    "free_disk_bytes": 102981832704,
+    "log": "pipeline.log"
+  },
+  {
+    "name": "frontend",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 72.9073818330071,
+    "locked_seconds": 0.9522280840028543,
+    "queue_estimate_seconds": 71.95515374900424,
+    "free_disk_bytes": 102594805760,
+    "log": "frontend.log"
+  },
+  {
+    "name": "typecheck",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "typecheck"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 20.867032875015866,
+    "locked_seconds": 1.5084338339802343,
+    "queue_estimate_seconds": 19.35859904103563,
+    "free_disk_bytes": 102576693248,
+    "log": "typecheck.log"
+  },
+  {
+    "name": "sync",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 22.586473417002708,
+    "locked_seconds": 22.559089832997415,
+    "queue_estimate_seconds": 0.027383584005292505,
+    "free_disk_bytes": 102660313088,
+    "log": "sync.log"
+  },
+  {
+    "name": "resources-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--resources-only",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 13.918820332997711,
+    "locked_seconds": 8.232592291024048,
+    "queue_estimate_seconds": 5.6862280419736635,
+    "free_disk_bytes": 102609620992,
+    "log": "resources-verify.log"
+  },
+  {
+    "name": "full-verify",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/sync-original-content.mjs",
+      "--verify-only"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 10.032908332999796,
+    "locked_seconds": 10.005255458003376,
+    "queue_estimate_seconds": 0.027652874996419996,
+    "free_disk_bytes": 102611841024,
+    "log": "full-verify.log"
+  },
+  {
+    "name": "mapping-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/mapping-audit.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 18.506548083008965,
+    "locked_seconds": 18.479321208025794,
+    "queue_estimate_seconds": 0.027226874983171,
+    "free_disk_bytes": 102611664896,
+    "log": "mapping-audit.log"
+  },
+  {
+    "name": "byte-audit",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/byte-audit.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 6.044075209007133,
+    "locked_seconds": 4.992960542003857,
+    "queue_estimate_seconds": 1.0511146670032758,
+    "free_disk_bytes": 102578188288,
+    "log": "byte-audit.log"
+  },
+  {
+    "name": "vite",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/vite-build.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.1364737919939216,
+    "locked_seconds": 1.110899374994915,
+    "queue_estimate_seconds": 0.025574416999006644,
+    "free_disk_bytes": 102536343552,
+    "log": "vite.log"
+  },
+  {
+    "name": "http",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "wall_seconds": 17.097391707997303,
+    "locked_seconds": 6.481553290999727,
+    "queue_estimate_seconds": 10.615838416997576,
+    "free_disk_bytes": 102387240960,
+    "log": "http.log"
+  },
+  {
+    "name": "http-resume",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime-resume.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 2.6198208749992773,
+    "locked_seconds": 2.5917762919852976,
+    "queue_estimate_seconds": 0.028044583013979718,
+    "free_disk_bytes": 102410735616,
+    "log": "http-resume.log"
+  },
+  {
+    "name": "caps-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.16239199999836273,
+    "locked_seconds": 0.1301959170086775,
+    "queue_estimate_seconds": 0.03219608298968524,
+    "free_disk_bytes": 102406148096,
+    "log": "caps-tests.log"
+  },
+  {
+    "name": "caps",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 7.866545208002208,
+    "locked_seconds": 7.839174374996219,
+    "queue_estimate_seconds": 0.02737083300598897,
+    "free_disk_bytes": 102407499776,
+    "log": "caps.log"
+  },
+  {
+    "name": "docrefs",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 7.653520458989078,
+    "locked_seconds": 7.628156708989991,
+    "queue_estimate_seconds": 0.025363749999087304,
+    "free_disk_bytes": 102410936320,
+    "log": "docrefs.log"
+  },
+  {
+    "name": "links",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.43750904200715013,
+    "locked_seconds": 0.4120465420128312,
+    "queue_estimate_seconds": 0.025462499994318932,
+    "free_disk_bytes": 102411169792,
+    "log": "links.log"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "head": true,
+  "index_paths": true,
+  "index_sha256": true,
+  "groups": true,
+  "guard_value": true,
+  "versions": true
+}

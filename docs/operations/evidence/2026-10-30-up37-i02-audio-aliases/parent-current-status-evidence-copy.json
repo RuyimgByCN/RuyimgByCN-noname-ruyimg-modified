@@ -1,0 +1,34 @@
+[
+  {
+    "path": "2026-10-30-nc10-continuations/private-ephemeral-checkpoint/handoff.raw.txt",
+    "sha256": "c48676efcd3316d7bdc0e972aa39892d3f3d537eb4de5a6e8ff2d8084e428897"
+  },
+  {
+    "path": "2026-10-30-nc10-continuations/private-ephemeral-checkpoint/core-blockers.raw.txt",
+    "sha256": "f2eafa331086f0a828b3e0c85ea9cc360c40bfcf18684d14d58063d92dfbc631"
+  },
+  {
+    "path": "2026-10-30-nc10-continuations/private-ephemeral-checkpoint/source-manifest.json",
+    "sha256": "987e8767e635f52ce0d9b44b4163a581be698f54ac97951290bf1709fb71b015"
+  },
+  {
+    "path": "2026-10-30-nc10-continuations/private-ephemeral-checkpoint/suite-counts-and-failures.json",
+    "sha256": "75a50cf584319ab03a05f1e4c63b7dc88a344daa0c71a7a34072633670fbd681"
+  },
+  {
+    "path": "2026-10-30-nc10-continuations/private-ephemeral-checkpoint/parent-two-callers-result.json",
+    "sha256": "342647a79f052e410897bc91137e45476fecece55816afda7095e2070731d15b"
+  },
+  {
+    "path": "2026-10-30-c331-schema-supplement/frozen-implementation-review/review-1.raw.txt",
+    "sha256": "2ab923917ef3878b19e02c64b162c96a889733c852a70c408e96e8da5bacc128"
+  },
+  {
+    "path": "2026-10-30-c331-schema-supplement/frozen-implementation-review/review-2.raw.txt",
+    "sha256": "3ebac2efbf0394c40553394abf61ec1e9a9fef24e2146bc75a7f27e66fc297a4"
+  },
+  {
+    "path": "2026-10-30-c331-schema-supplement/frozen-implementation-review/identity.json",
+    "sha256": "07fd0819330763bf6823adb5011045f22d0ef22efb50ee5da6c8b0773057c22d"
+  }
+]

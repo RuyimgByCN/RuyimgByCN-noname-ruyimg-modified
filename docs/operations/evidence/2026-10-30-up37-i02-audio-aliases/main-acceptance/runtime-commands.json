@@ -1,0 +1,14 @@
+[
+  {
+    "name": "happy",
+    "argv": [
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/browser-audio.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/happy",
+      "http://127.0.0.1:49194"
+    ],
+    "exit": 1,
+    "seconds": 6.2477391669817735
+  }
+]

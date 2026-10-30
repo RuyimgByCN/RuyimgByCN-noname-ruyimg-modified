@@ -1,0 +1,17 @@
+{
+  "name": "finalize",
+  "argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/finalize.py"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.21093212501727976,
+  "locked_seconds": 0.1804227500106208,
+  "queue_estimate_seconds": 0.030509375006658956,
+  "free_disk_bytes": 102405431296,
+  "log": "finalize.log"
+}

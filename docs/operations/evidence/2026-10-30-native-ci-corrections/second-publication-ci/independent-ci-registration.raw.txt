@@ -1,0 +1,55 @@
+## Review
+
+- **Correct：新真实 CI run 可独立登记为 10/10 green。** [run 41082599800](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41082599800) 的原始 API 明确绑定 `da7e4c019461a6c467a9dd2de849f3b1a7494b86`、`native-convergence`、`event=push`、`attempt=1`、`completed/success`；创建于 2026-10-30 15:38:39Z，最终更新于 16:10:45Z。
+- 已完整读取指定[发布报告](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/003b0151-d115-4ed3-977a-ee1e37663612/publication/native-ci-corrections-push-and-run.md:1)，并直接核对 raw API、各日志关键段、watch、checker 和发布证据；结论不只依赖 producer 汇总。
+- 原始证据目录：[E](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-da7e-observation-lkxhc3le)。以下每行均由 `jobs-final.stdout:1` 与对应 `job-ID-raw-log.stdout` 交叉核验；steps 包含 setup/post/cleanup。
+
+| Job | 实际 ID | Job 结论 | success/skipped steps | 实际执行证据 |
+| --- | ---: | --- | ---: | --- |
+| native-web | 124155333126 | success | 18/0 | Rust 1815 passed / 0 failed / 75 ignored；Worker 82；frontend 163；双 WASM 重建、typecheck、production build |
+| gates-ubuntu | 124155333420 | success | 19/0 | Rust 6894/0/77；行数、分层、native warnings-denied；conformance 19；cross-target hashes；完整 original verify |
+| perf-ubuntu-latest | 124155333608 | success | 9/0 | release tier list/report，server-baseline PASS |
+| desktop-windows-latest | 124155333632 | success | 15/1 | installer 生成及 artifact 上传成功 |
+| desktop-macos-latest | 124155333637 | success | 15/1 | installer 生成及 artifact 上传成功 |
+| perf-macos-latest | 124155333661 | success | 9/0 | release tier list/report，server-baseline PASS |
+| build-macos-latest | 124155333694 | success | 9/0 | workspace build；838 library tests passed / 0 failed / 0 ignored |
+| build-ubuntu-latest | 124155333727 | success | 9/0 | workspace build；838 library tests passed / 0 failed / 0 ignored |
+| desktop-ubuntu-latest | 124155333745 | success | 16/0 | Linux dependencies、installer 生成及 artifact 上传成功 |
+| build-windows-latest | 124155333890 | success | 9/0 | workspace build；838 library tests passed / 0 failed / 0 ignored |
+
+两处 skipped 均为 Win/Mac 的 `Install Linux Tauri dependencies`；没有 skipped job、failed job 或 failed step。API conclusion 不等于逐 step 数字 exit；watch 实际进程 exit=0，末尾十绿见 [watch.stdout](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-da7e-observation-lkxhc3le/watch.stdout:1583)。
+
+Rust 数字按各 job 的原始 suite 摘要分别汇总，不能跨 job 相加为唯一测试数；perf/desktop 没有 Rust suite 摘要，不能据此声称执行了零项测试。Worker 原日志含 `{"total":82,"failed":0}`，frontend TAP 为 163/163、fail=0。Gates 原日志明确 conformance `passed=19`、`ALL CROSS-TARGET CHECKS PASSED`，Gate4 Node 2/2，完整验证 legacy-source 366、portraits 2707、audio 9652 文件。
+
+| Perf 指标（µs） | 保持原门槛 | Ubuntu actual | macOS actual |
+| --- | ---: | ---: | ---: |
+| start-hash-p50 | 100 | 72 | 74 |
+| distance-query-p95 | 300 | 0 | 1 |
+| snapshot-restore | 200 | 60 | 141 |
+| observer-projection | 100 | 29 | 28 |
+
+两份 raw tier report 均为 PASS；保留此前已验收的未修改门槛结论。这些 hosted-run 样本不构成同设备前后收益证据。
+
+| Installer artifact | ID | API bytes | SHA256（API 与上传日志一致） |
+| --- | ---: | ---: | --- |
+| Windows | 12992007422 | 26273163 | acbff49717be3539754f31dd71f0fc6a5edccf0a6661b477aa1d23973efa858e |
+| Ubuntu | 12991606067 | 266337379 | 82b7c7c2fdb83513d4e865baba19783988939534dd057612a60017273db9f2dd |
+| macOS | 12990234641 | 32802348 | 35fd5ccd2fc408b7d0d4b2d46f963fd608c33c346a9726e0122c930b17cf31be |
+
+三个 artifact 的原始 metadata 均绑定本 run/exact SHA，快照中 `expired=false`；上传日志同时给出 ID、size、digest。此为上传归档的证据，未独立下载重算二进制摘要。
+
+发布证据：[result.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-native-ci-corrections/publication/increment-execution/result.json:1)、同目录 `scope.raw.json`、`scoped-pre-push.raw.txt`、push stdout/stderr 和两份 branch API 已核对。一次普通 nonforce push，exact URL `https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git`，仅既有 `native-convergence` 从 `9dbc65530feb695688d3160dc38b6cf64ad39ecd` 前进至 exact da7e；远端 main 保持 `47347c6608d651660ae9459e59eb529b3cef277f`。
+
+发布前后记录中的 HEAD/tree/index/tracked/staged 状态一致；原 hook SHA256 保持 `e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7`，命令仅 scoped hooksPath，持久 hooksPath 未设置。scope 八项 selftest 均符合预期；scope 的 `actual_push=not yet attempted` 是预推送快照，实际完成由 result/push/API 证明。
+
+Git progress 为 981 objects、354 deltas、17.41 MiB；MiB 是四舍五入显示，未测 exact wire bytes。locked 70.089s，总 push 153.303s；差额 83.214s 包含 queue/wrapper 开销，不能单列为独立 queue 测量。
+
+独立纯读命令由父代办：`python3 -B /tmp/parent-ci41082599800-review/audit-frozen-evidence.py`；已读取[脚本](/tmp/parent-ci41082599800-review/audit-frozen-evidence.py:1)、[完整结果](/tmp/parent-ci41082599800-review/independent-results.json:1)和 tool output。43 manifest 条目的 bytes/SHA256 全匹配；实际 44 文件，额外仅 manifest 自身；十份 raw logs 共 5,101,612 bytes。Windows desktop/build 的 4051/3821 个 CRLF 保留，原始 warnings/ignored 未过滤。producer checker 已阅读，本次未重跑。
+
+- **Fixed：** 无；本次仅返回独立登记报告，未修改 main/index/remote/配置或发布状态。
+- **Finding：** No issues found.
+- **Merge verdict：OK（仅本次 CI 证据独立登记）。** 旧 run `41053688083` 的 5 success / 5 failure 永久保留；此前 GitHubAtLeastOne 登记不回写。本次另登记 exact-da7e 的十绿，不推导整个 Goal 或 37 来源完成。
+- 发布 lease 于 push 完成后释放；当前 alias9 dirty 或后续父任务 commit 属于新工作，不视为发布快照漂移。
+
+未重复源码四组/13 文件审查、既有本地全验收，未构建、重跑 CI、调用 live API 或下载/安装 artifacts；临时原始证据仍需持久保全。
+风险边界：未验证安装、签名/公证或真机运行；十绿和 installer 上传不等于产品运行、native-default rollout 或完整上游规则等价。

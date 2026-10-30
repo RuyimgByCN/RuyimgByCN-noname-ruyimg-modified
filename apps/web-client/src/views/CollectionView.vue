@@ -76,7 +76,7 @@ const selectedAudio = computed(() => selected.value
   ? originalCharacterAudio(assetManifest.value, selected.value)
   : [],
 );
-const audioCount = computed(() => assetManifest.value.assets.filter((asset) => asset?.kind === "audio").length);
+const audioCount = computed(() => assetManifest.value.assets.filter((asset) => asset?.kind === "audio" && asset.path === asset.source_path).length);
 
 onMounted(loadCatalog);
 
@@ -200,7 +200,7 @@ function defaultContentBase(): string {
             <div v-if="audioErrors.has(voice.path)" class="error" role="alert">语音加载或解码失败，请检查本地资源。</div>
           </li>
         </ul>
-        <p v-else class="muted">当前资源清单未提供该武将的直接技能或阵亡语音。</p>
+        <p v-else class="muted">当前资源清单未提供该武将已声明且源文件可用的技能或阵亡语音。</p>
 
         <h3>静态皮肤（{{ selectedStaticSkins.length }}）</h3>
         <div v-if="selectedStaticSkins.length" class="skins">

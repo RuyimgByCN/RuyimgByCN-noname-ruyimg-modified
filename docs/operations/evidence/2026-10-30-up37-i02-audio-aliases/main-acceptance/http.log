@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime.py", line 19, in <module>
+    records.append({'name':name,'argv':args,'exit':p.returncode,'seconds':time.monotonic()-start});save('runtime-commands.json',records);assert p.returncode==0,(name,p.returncode)
+AssertionError: ('happy', 1)
+{"command": ["python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/runtime.py"], "exit": 1, "locked_seconds": 6.481553290999727, "disk_free_bytes": 102387240960}

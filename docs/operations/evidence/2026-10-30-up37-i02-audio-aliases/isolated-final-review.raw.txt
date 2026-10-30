@@ -1,0 +1,72 @@
+## Review
+
+**Merge verdict: OK with notes。原跨包 P1 与测试提前返回 P2 均已关闭；本次源码复审通过，main validation 仍由父线程执行。**
+
+No issues found.
+
+审查范围为 writer 最新 correction，相对已审 B 仅四文件变化；已完整读取最新 handoff、994 行 correction patch、当前解析模块及两个测试文件，并核对现有审计和运行证据。
+总改动仍为九文件，基准 `977cdf1f35bc3f08aba137528a3672f3dad5f391`，329／105／758／WS5 不变。
+
+父线程代做的入口及最终出口纯读核验确认九文件 SHA 全部匹配 `cross-pack/patch-files.json`，三份补丁身份均一致：
+
+| 补丁 | SHA256 |
+|---|---|
+| Correction | `e9f1d3f13815ab74a315dea8582ad1c3b5e837f8f231e33c30d7f0327b83e733` |
+| Total corrected | `5a8a2d547ea6893009b2a8e9227e57349e7516f5957687af7c1391700fc84ef5` |
+| 原已审 B，保留 | `82c2b2647fa47b23de70112243b3e700eb9f4a3f4080a79b11e9651793ec9a68` |
+
+证据：[身份及 JSON 核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/review-b/cross-pack-identity-and-json.json)、[最终出口](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/review-b/cross-pack-identity-exit.json)。
+
+- **Fixed — 原 P1：跨包 substitute 漏绑已由 writer 修复，复审确认关闭。**
+
+[original-audio-resources.mjs:249](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/worktree/scripts/original-audio-resources.mjs:249) 使用既有 AST 全局精确角色名索引，要求每条 substitute 恰有一个 owner；未知或歧义 owner 在生成计划返回、任何资源同步写入之前抛错。
+第 266 行关联条件只比较精确 `character.name`，已移除错误的声明包限制。
+第 292／299 行技能与阵亡 alias 继续使用实际 owner 的 `character.pack`，声明 pack／source／line 不变。
+未加入英雄硬编码、近似名字匹配、pool fallback 或第二注册表。
+新增测试覆盖跨包成功、alias 所属包、声明 provenance 保持、unknown 和 ambiguous owner 拒绝。
+
+真实周瑜两个红例均有闭环：
+`audio/die/pot_zhouyu_shadow.mp3` 与 `audio/skill/potchiyun_pot_zhouyu_shadow1.mp3` 在修复前均记录 `source_exists:true, selected:false`；
+修复后 [前端真实回归:120](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/worktree/apps/web-client/scripts/original-resources.test.mjs:120) 通过，实际 Collection 的势周瑜 30 条语音包含这两个路径。
+HTTP 证据分别记录 200、63111／112007 bytes 和对应 manifest SHA，浏览器结果记录成功解码。
+
+- **Fixed — 原 P2：失效拒绝测试已由 writer 合并修正，复审确认关闭。**
+
+[original-resources.test.mjs:62](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/worktree/apps/web-client/scripts/original-resources.test.mjs:62) 删除两组缺 pack 的提前返回测试，合并进有效 character／direct／alias fixture。
+第 68 行先证明正常 alias 确实可选，再逐项破坏来源、类型、长度、SHA、路径、backing、basename、重复 canonical 和角色／技能身份。
+第 82 行同时污染 backing 与 alias 的非法 SHA／size，仍要求拒绝，避免仅靠字段不匹配得到绿色；unsupported `.js` 也使用完整绑定验证。
+现有 helper 7/7、完整前端 160/160 与源码对应，计数变化可由删除两组、增加跨包回归解释。
+
+- **Correct：全部 79 条关联审计已摆脱旧同包过滤。**
+
+已读 [audit-all79.mjs](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/cross-pack/audit-all79.mjs)。
+它从 catalog 按全局精确角色名分组独立确定 owner，再比较实际 owner 路径下的形态 alias；没有复用原 `declaration.pack === owner.pack` 谓词。
+音频预期复用已审静态 pool、真实角色输入和 directive，只要求原 direct 表中有源的条目。
+审计覆盖 79 声明、8 条 mobile→bingshi 跨包关联、571 项有源形态映射；跨包新增 alias 共 91 条。
+标准刘备隔离断言和实际页面仍通过：刘备 5 条，不含刘禅／re_liubei／sbjijiang；缺角色绑定仍不回退到 pool。
+
+- **Correct：原资产、provenance 和冻结范围保持。**
+
+父线程完整 JSON 纯读比较确认原 12359 行仍为完全相等的前缀，所有 non-assets 字段深相等，包含原 provenance。
+旧 23302 条 alias 的内容及相对顺序全部保持；当前 23393 条 alias 均恰六字段，除 path 外五字段逐条等于原 direct backing，零 mismatch。
+新增 91 alias 引用 56 个既有源文件，manifest 共 35752 行，新独立素材为 0。
+已读 writer 字节审计脚本及结果：新增源／目标共 182 次长度与 SHA 检查通过；本 reviewer 未重读全部 payload。
+17124 protected 基准与 17501 并集、catalog、原 481 源文件及额外 player.js／character.js 保持的证据齐备；父线程另核 483 个源文件 SHA 全等。
+
+- **Correct：验证证据与范围说明一致。**
+
+| 层面 | 已核现有结果 |
+|---|---|
+| Pipeline／同步 | 最终 12/12；resources-only sync、资源 verify、完整 verify 均 exit0 |
+| 前端／行数 | 160/160、typecheck exit0；行数 unittest 2/2、8975-file 门禁通过 |
+| 页面／HTTP／解码 | 真实 Rust 329 ServeDir、自有端口与 stores；12 个角色、79 条音频 HTTP 请求完成源字节／SHA／长度比较和浏览器解码 |
+| 错误恢复 | 九场景通过：per-path MediaError、其他行成功、跨角色隔离、loadeddata 恢复、manifest503 保留 |
+| 输入／清理 | 原 329 的两个 pkg 实际共 12 文件，已私有冻结并核 SHA；自有进程、stores、profiles、lookup links 清理证据保留 |
+
+证据集中于 [cross-pack](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-audio-alias-l0wskj8i/evidence/cross-pack)，原 B patch、BLOCK 报告及历史 red／失败证据保留。
+本 reviewer 仅做源码和现有证据复审，未修改源码、index、main、canonical、remotes 或 cache，也未运行构建。
+
+**Merge verdict: OK with notes。** 原 P1/P2 不再阻断本补丁；父线程可进入 main validation，本报告不代表 main 已验收或整项 I02 完成。
+
+未重跑构建、HTTP／浏览器、全部 9652 codec、物理听感／OS-HID 或真机验收。
+234 个动态表达式、2487 条缺源 mapping 与未知引用仍是原有边界；79 条样本解码不能证明全部 payload 或 37 来源整包完成。

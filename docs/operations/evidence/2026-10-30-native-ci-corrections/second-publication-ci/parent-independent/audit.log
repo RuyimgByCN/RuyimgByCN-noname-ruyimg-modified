@@ -1,0 +1,222 @@
+{
+  "all_assertions_passed": true,
+  "manifest_entries": 43,
+  "actual_files": 44,
+  "jobs": [
+    {
+      "id": 124155333126,
+      "name": "native-web",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 18
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 48,
+      "rust_totals": {
+        "passed": 1815,
+        "failed": 0,
+        "ignored": 75,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 472955,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333420,
+      "name": "gates-ubuntu",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 19
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 164,
+      "rust_totals": {
+        "passed": 6894,
+        "failed": 0,
+        "ignored": 77,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 2224268,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333608,
+      "name": "perf-ubuntu-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 9
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 0,
+      "rust_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 197171,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333632,
+      "name": "desktop-windows-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 15,
+        "skipped": 1
+      },
+      "skipped_steps": [
+        "Install Linux Tauri dependencies"
+      ],
+      "rust_test_result_lines": 0,
+      "rust_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 308082,
+      "raw_log_crlf_sequences": 4051
+    },
+    {
+      "id": 124155333637,
+      "name": "desktop-macos-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 15,
+        "skipped": 1
+      },
+      "skipped_steps": [
+        "Install Linux Tauri dependencies"
+      ],
+      "rust_test_result_lines": 0,
+      "rust_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 183321,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333661,
+      "name": "perf-macos-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 9
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 0,
+      "rust_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 199073,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333694,
+      "name": "build-macos-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 9
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 26,
+      "rust_totals": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 360247,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333727,
+      "name": "build-ubuntu-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 9
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 26,
+      "rust_totals": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 358523,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333745,
+      "name": "desktop-ubuntu-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 16
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 0,
+      "rust_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 432050,
+      "raw_log_crlf_sequences": 0
+    },
+    {
+      "id": 124155333890,
+      "name": "build-windows-latest",
+      "conclusion": "success",
+      "step_counts": {
+        "success": 9
+      },
+      "skipped_steps": [],
+      "rust_test_result_lines": 26,
+      "rust_totals": {
+        "passed": 838,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filtered": 0
+      },
+      "raw_log_bytes": 365922,
+      "raw_log_crlf_sequences": 3821
+    }
+  ],
+  "watch": {
+    "command": [
+      "gh",
+      "run",
+      "watch",
+      "41082599800",
+      "--repo",
+      "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+      "--exit-status",
+      "--interval",
+      "30",
+      "--compact"
+    ],
+    "name": "watch",
+    "http1": false,
+    "exit": 0
+  },
+  "cleanup": "watch process exited/reaped; no local compiled products or background child remaining",
+  "result": "/tmp/parent-ci41082599800-review/independent-results.json"
+}

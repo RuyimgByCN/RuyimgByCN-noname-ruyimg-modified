@@ -1,0 +1,40 @@
+检查点已交付；整个NC10候选仍BLOCK，不能合入。本次只读封存，没有产品源修改、新实验或build。
+证据根目录：/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/checkpoint-recovered-2
+基线：977cdf1f35bc3f08aba137528a3672f3dad5f391；rules329/archive105/ABI758/WS5；main/Stage3/C331未接入。
+共62份dirty产品源已复制到source/；最后源修改时间 2026-10-30T16:09:49.648709+00:00。
+总patch：total-from-977.patch，SHA 4e5b885095e174c59532a4655f2406d52875337a798545f59fb22b757c028374。
+相对旧58源manifest增量：increment-from-58-manifest.patch，SHA 6b6dbc30063060c9fd0cad2e04205712175a2087d2463612915176f310d622d1。
+相对80min checkpoint增量：increment-from-80-checkpoint.patch，SHA e595bd2add9e42e53ca3747c3f1279428a4ef5ed4b378c564c8e075dad560c6e。
+本次交付增量为空；source-manifest.json逐文件SHA，delivery-invariance.json证明62源/head/index/guard未变、无staged。
+61个ABI/opcode/存档/快照/hash/规则/协议边界文件与HEAD逐字节相同；见frozen-boundaries.json。
+原query一行与Host Liaoyuan remap保持原SHA；原7源逐项对照已记录。scalar仅已有Result caller适配等差异，完整source diff单列，未删全Plan断言/自然18cmd。
+PID12109/12110已退出：最终rule-vm+native-WASM102/0；caller check exit101，未kill/重run。
+最后完整native3：1701pass/19fail/75ignored；19项均在取得Plan前NoCertifiedRoot，不能算隐私比较通过。
+上一combined run包含native-WASM77/1（stats.opaque断言），随后完整102/0已真正补跑；不能混报为同一全量绿。
+调用方明确剩2处：apps/desktop-client/tests/native_planner_measurement.rs:39、:43仍把Pool Result当Plan读.action；combined caller check未通过。
+全部suite目标/计数/失败/位置见suite-counts-and-failures.json；61条既有wrapper命令见command-index.json。
+19个root失败逐项见root-certificate-failures.json。已知旧rvm_choice/rvm_discard_pick/rvm_danshou_discard由VM catalog+任何choice的早期gate拒绝；trigger_confirm不在native白名单。
+其余若干driver失败未记录当时prompt/input/stats，不能只凭NoCert断言是哪条证书分支，也不是已观察到nodes不等；缺失context明确标注。
+正式错误链已查实：VmMachine::run Err→res.fault；resolution→Fault；Engine::finish_segment:270整段回滚并Rejected(VmFault)，不是假定所有fault都拒绝。
+proofs/fuel-0.archive、fuel-1.archive及完整hex/JSON均在：同完整PolicyInput/events/模块/Choice和公开scheduler约束，同Answer Tag(0)，A Accepted，B Rejected OutOfFuel（事件3）。
+B仅改private saved fuel_remaining=0，实际byte decode/restore成功，拒绝后archive不变；A初始debug布置后正式NextPhase，B未证自然可达。共享公开fuel上限，不是共享private剩余fuel。
+另有seed9 Pending-versus-Rejected反例：旧Planner相同Ok Sha0→1；A待respond_shan，B VmFault Host/DealDamage越界（事件1）。不是Accepted-versus-Rejected。
+该JSON的events字段是A执行后日志；执行前events等价虽已assert但未分别序列化。不得把此字段冒称完整pre-trace；详见core-blockers.md。
+当前sampled_pending_choice_does_not_certify_a_root_with_a_possible_vm_fault测试源码在source/engine/simulation.rs:359，final-packages.log真实pass：保留上述Formal差异，改选同一真实合法替代Plan并验证archive不变。
+独立root证书已与Complete/Pending结果分开；只覆盖保守native路由/active-only子集，手工event闭包及最坏预算证明仍需review，不是通用证书。
+Swd七类held公开event/owner排除、current-own-hand读取与神秘果缺牌排除已落地；缓存used即使owner也不放行，初始Swd Pool4/0实过。
+仍未核全Host/动态membership/native缓存/continuation；全VM catalog误挡所有窗口仍在，不能宣称保全合法知识。
+ReadSite记录模块/PC/tag，但ObserverQueryGate允许判断未使用site参数，依赖fresh marker和request类别；allow_resume在该marker后返回true，尚非完成的PC/handler授权证明。
+StorageGet/Has只在同trial已提交公开写后放行；queued write不作证书；zero删除、常量写/删除/no-write秘密分支、predicate tripwire等有测试。完整存在/删除/隐式控制/ownerless alias矩阵仍未证明。
+budget0 searchnodes保持0；reserve上限64候选×512scheduler×每新VM10000fuel，attempts/steps/instructions另计。自然case精确观测值在resource-observations.json。
+取消/deadline在尝试间检查；没有intra-VM/native硬时限或native分配上界的一般证明。
+原受控scalar、自然scalar在native最终全量都真实Ok、全Plan相等并合法apply；自然48现17/17节点，不强留20。
+真实direct WASM SHA59383c53ace4904f26b4251d2874b87e3edce567ebc68d4ea0260289d0605666，8root+8restore全输出deepEqual并apply成功。
+严格范围：该WASM矩阵只含natural18cmd及seat2重启、budget0/48；当前受控counter没有另跑direct-WASM，不能说原两例均已覆盖。
+真实production WASM既有error string/archive unchanged/requests1已过；IPC mock错误envelope8/0；均非direct Planner替代。
+当前native/WASM/proof binaries SHA及mtime在binary-sha256.json；完整natural traces/档在proofs/。
+质量仅8fixture×3budget×100重复，同dev profile，18/24组Ok（旧24/24），零完整对局，不是强度验收。
+当前public-VM fixture选Sha而非旧ActivateSkill，Liaoyuan48选Card98而非旧空答；见quality-comparison.json，不掩盖动作/可用性变化。
+本地no-autofix/no-format guard、只读archive/node_modules链接及热own target原样保留；本次没有清理产品/guard或删缓存。未stage/commit/push/merge。
+下一最小工作：先修2处Desktop Result；review证书/PC权限；捕获缺失driver context；基于两对完整档解决旧帧合同并恢复可证明公开路径；再验native3、callers、两例真实WASM与VM/Host对局质量。
+详细限制、源码链、scope与最小待办见core-blockers.md；现有19red保持注册，不能以局部绿验收NC10。

@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-30T16:50:45.072351+00:00",
+  "before_sha256": "f13bb5f00bb683e9dbd0d1cde2f33008a53eef5514c38ddef2dfa75d25f82135",
+  "after_sha256": "21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f",
+  "only_two_test_result_consumers_changed": true,
+  "source": "apps/desktop-client/tests/native_planner_measurement.rs",
+  "check": [
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "game-server",
+    "-p",
+    "desktop-client",
+    "--tests"
+  ],
+  "previous_check_exit": 101,
+  "exit": 0,
+  "elapsed_including_lock_queue_seconds": 2.500475250009913,
+  "disk_free_bytes": 102379966464,
+  "incremental_produced": false,
+  "scope": "Affected callers compile check only; native19 known failures, all NC10 privacy/quality/PC-authorization acceptance remain open."
+}

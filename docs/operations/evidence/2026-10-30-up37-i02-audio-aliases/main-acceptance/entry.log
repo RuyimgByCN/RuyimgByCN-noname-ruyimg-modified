@@ -1,0 +1,2 @@
+entry source9/protected/module/oldrows verified; target absent
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/accept.py", "entry"], "exit": 0, "locked_seconds": 3.866017082997132, "disk_free_bytes": 103094095872}

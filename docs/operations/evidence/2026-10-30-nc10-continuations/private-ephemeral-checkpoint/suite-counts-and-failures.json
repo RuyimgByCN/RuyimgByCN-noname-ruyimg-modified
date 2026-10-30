@@ -1,0 +1,1463 @@
+{
+  "recovered/final-packages.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/recovered/final-packages.log",
+    "totals": {
+      "engine-native": {
+        "passed": 1692,
+        "failed": 19,
+        "ignored": 75
+      },
+      "engine-native-content": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      "engine-native-kernel": {
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      "engine-native-wasm": {
+        "passed": 77,
+        "failed": 1,
+        "ignored": 0
+      },
+      "rule-vm": {
+        "passed": 24,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native-08e8d77716bbbe00)",
+        "package": "engine-native",
+        "passed": 17,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/g1.rs (../target/debug/deps/g1-838be0afa0bff26f)",
+        "package": "engine-native",
+        "passed": 166,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "target": "Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-6c3fb0efd565055b)",
+        "package": "engine-native",
+        "passed": 174,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/kernel.rs (../target/debug/deps/kernel-abbafa89d2e42e62)",
+        "package": "engine-native",
+        "passed": 435,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/l_rounds.rs (../target/debug/deps/l_rounds-d3a598b5b2efff3f)",
+        "package": "engine-native",
+        "passed": 43,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/misc.rs (../target/debug/deps/misc-35891a7399790036)",
+        "package": "engine-native",
+        "passed": 218,
+        "failed": 2,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/nc08.rs (../target/debug/deps/nc08-0f3109c0ac356778)",
+        "package": "engine-native",
+        "passed": 45,
+        "failed": 0,
+        "ignored": 50
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_a_k.rs (../target/debug/deps/nc08_upstream_a_k-bf64df49394801a1)",
+        "package": "engine-native",
+        "passed": 130,
+        "failed": 0,
+        "ignored": 9
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_l_z.rs (../target/debug/deps/nc08_upstream_l_z-48727570d9c62b95)",
+        "package": "engine-native",
+        "passed": 199,
+        "failed": 0,
+        "ignored": 8
+      },
+      {
+        "target": "Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-7e0e7dfa698d7cac)",
+        "package": "engine-native",
+        "passed": 130,
+        "failed": 17,
+        "ignored": 7
+      },
+      {
+        "target": "Running tests/groups/swd.rs (../target/debug/deps/swd-2cbe397cf532b80b)",
+        "package": "engine-native",
+        "passed": 134,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/test_registry.rs (../target/debug/deps/test_registry-99eecf9a416eec90)",
+        "package": "engine-native",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_content-53e8a2b27d1c1a03)",
+        "package": "engine-native-content",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_kernel-89dee828119244b2)",
+        "package": "engine-native-kernel",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_wasm-a37374325d6be5df)",
+        "package": "engine-native-wasm",
+        "passed": 27,
+        "failed": 1,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/adr0786_j2_cross_target.rs (../target/debug/deps/adr0786_j2_cross_target-bfb517b5883cdc3f)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_multiseat.rs (../target/debug/deps/cross_target_multiseat-1b064e516d2107b0)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_package.rs (../target/debug/deps/cross_target_package-5f9ea80af400528d)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/events_hash_export.rs (../target/debug/deps/events_hash_export-3e25687964861751)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/gt014_import_validation_parity.rs (../target/debug/deps/gt014_import_validation_parity-4e82432850e3dcdd)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/installed_package_payload.rs (../target/debug/deps/installed_package_payload-3a2f1e67361288b9)",
+        "package": "engine-native-wasm",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_actor_authorization.rs (../target/debug/deps/nc03_actor_authorization-c87d447dfaa18b7d)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_legal_actions_export.rs (../target/debug/deps/nc03_legal_actions_export-855068ba1ee31458)",
+        "package": "engine-native-wasm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_view_projection.rs (../target/debug/deps/nc03_view_projection-34101380afddd375)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc04_vm_control_flow.rs (../target/debug/deps/nc04_vm_control_flow-f23e23b3dc4aa25d)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc05_general_select_export.rs (../target/debug/deps/nc05_general_select_export-6a5e650396323907)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc06_skill_pile_restore.rs (../target/debug/deps/nc06_skill_pile_restore-c1186dd48b10a595)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc08_cross_target.rs (../target/debug/deps/nc08_cross_target-f68f7f82b531942d)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/pa09_native_session.rs (../target/debug/deps/pa09_native_session-934d8103c01368f4)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/restore_boundary_handle.rs (../target/debug/deps/restore_boundary_handle-4bb51720faf06969)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_module_hash.rs (../target/debug/deps/vm_module_hash-91bf296afd62aba8)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_integrity.rs (../target/debug/deps/vm_package_integrity-2b1c28d8e7a345bd)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_worker.rs (../target/debug/deps/vm_package_worker-f358fd2d0df35678)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/rule_vm-02f0cf80d1e836ed)",
+        "package": "rule-vm",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/control_flow_boundaries.rs (../target/debug/deps/control_flow_boundaries-4b68b1d7bd35aafa)",
+        "package": "rule-vm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/controlled.rs (../target/debug/deps/controlled-918f6a419aef4942)",
+        "package": "rule-vm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/effect_tag_656_772.rs (../target/debug/deps/effect_tag_656_772-dc73bd862fbfcc98)",
+        "package": "rule-vm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/fuel_exhaustion.rs (../target/debug/deps/fuel_exhaustion-bf33fd015ae11b24)",
+        "package": "rule-vm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native",
+        "package": "engine-native",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_content",
+        "package": "engine-native-content",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_kernel",
+        "package": "engine-native-kernel",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_wasm",
+        "package": "engine-native-wasm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests rule_vm",
+        "package": "rule-vm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [
+      {
+        "test": "ai_planner::plan_enumerates_confirm_and_cancel_fallbacks",
+        "detail": "thread 'ai_planner::plan_enumerates_confirm_and_cancel_fallbacks' (13038302) panicked at crates/engine-native/tests/groups/../ai_planner.rs:335:78:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:335:78:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic",
+        "detail": "thread 'ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic' (13038307) panicked at crates/engine-native/tests/groups/../ai_planner.rs:423:49:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:423:49:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores",
+        "detail": "thread 'nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores' (13039022) panicked at crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan",
+        "detail": "thread 'nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan' (13039107) panicked at crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_tiny_budget_still_legal",
+        "detail": "thread 'nc10_ai_bounds::nc10_tiny_budget_still_legal' (13039065) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:174:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:174:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information' (13039079) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_deterministic",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_deterministic' (13039055) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper",
+        "detail": "thread 'nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper' (13039121) panicked at crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order' (13039057) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_detects_own_hand_change",
+        "detail": "thread 'nc10_ai_information_boundary::planner_detects_own_hand_change' (13039087) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::planner_is_invariant_under_hidden_information' (13039093) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_leak_surface_quantified",
+        "detail": "thread 'nc10_ai_bounds::nc10_leak_surface_quantified' (13039053) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf",
+        "detail": "thread 'nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf' (13039202) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice",
+        "detail": "NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\nNC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]\n\nthread 'nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice' (13039220) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract' (13039269) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract' (13039270) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics",
+        "detail": "thread 'nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics' (13039280) panicked at crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free' (13039283) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free' (13039285) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "session::controlled_planning_tests::uncertified_auto_step_uses_existing_error_string_without_submit_or_retry",
+        "detail": "thread 'session::controlled_planning_tests::uncertified_auto_step_uses_existing_error_string_without_submit_or_retry' (13039506) panicked at crates/engine-native-wasm/src/session.rs:770:9:\nassertion failed: stats.opaque > 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native-wasm/src/session.rs:770:9:",
+        "rootException": "other"
+      }
+    ],
+    "wrapperExits": [
+      "101"
+    ]
+  },
+  "recovered/final-vm-wasm.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/recovered/final-vm-wasm.log",
+    "totals": {
+      "engine-native-wasm": {
+        "passed": 78,
+        "failed": 0,
+        "ignored": 0
+      },
+      "rule-vm": {
+        "passed": 24,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_wasm-16b044e1e1e1761c)",
+        "package": "engine-native-wasm",
+        "passed": 28,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/adr0786_j2_cross_target.rs (../target/debug/deps/adr0786_j2_cross_target-f88c870dac86d996)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_multiseat.rs (../target/debug/deps/cross_target_multiseat-0de7315db385fb95)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_package.rs (../target/debug/deps/cross_target_package-5cf474b37776b34c)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/events_hash_export.rs (../target/debug/deps/events_hash_export-fd4a441c91e247e4)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/gt014_import_validation_parity.rs (../target/debug/deps/gt014_import_validation_parity-17dbb1b9774508a9)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/installed_package_payload.rs (../target/debug/deps/installed_package_payload-3eec16bbc05ab4c5)",
+        "package": "engine-native-wasm",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_actor_authorization.rs (../target/debug/deps/nc03_actor_authorization-28d23558a41fee0f)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_legal_actions_export.rs (../target/debug/deps/nc03_legal_actions_export-d407035ecd9f6c83)",
+        "package": "engine-native-wasm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_view_projection.rs (../target/debug/deps/nc03_view_projection-9deae12846361914)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc04_vm_control_flow.rs (../target/debug/deps/nc04_vm_control_flow-e9aecabce3e536eb)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc05_general_select_export.rs (../target/debug/deps/nc05_general_select_export-7e3065565f1c0104)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc06_skill_pile_restore.rs (../target/debug/deps/nc06_skill_pile_restore-74069ae361627fe2)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc08_cross_target.rs (../target/debug/deps/nc08_cross_target-ce0fa2ff5e753ecc)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/pa09_native_session.rs (../target/debug/deps/pa09_native_session-13970f4637337d94)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/restore_boundary_handle.rs (../target/debug/deps/restore_boundary_handle-9b576047b8df418c)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_module_hash.rs (../target/debug/deps/vm_module_hash-566e72f5074187b8)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_integrity.rs (../target/debug/deps/vm_package_integrity-05adcd9e9ecf885c)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_worker.rs (../target/debug/deps/vm_package_worker-db0bdb2cfcc7dcc7)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/rule_vm-02f0cf80d1e836ed)",
+        "package": "rule-vm",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/control_flow_boundaries.rs (../target/debug/deps/control_flow_boundaries-4b68b1d7bd35aafa)",
+        "package": "rule-vm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/controlled.rs (../target/debug/deps/controlled-918f6a419aef4942)",
+        "package": "rule-vm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/effect_tag_656_772.rs (../target/debug/deps/effect_tag_656_772-dc73bd862fbfcc98)",
+        "package": "rule-vm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/fuel_exhaustion.rs (../target/debug/deps/fuel_exhaustion-bf33fd015ae11b24)",
+        "package": "rule-vm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_wasm",
+        "package": "engine-native-wasm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests rule_vm",
+        "package": "rule-vm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [],
+    "wrapperExits": [
+      "0"
+    ]
+  },
+  "recovered/error-channel-final.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/recovered/error-channel-final.log",
+    "totals": {
+      "engine-native-wasm": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_wasm-16b044e1e1e1761c)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [],
+    "wrapperExits": [
+      "0"
+    ]
+  },
+  "recovered/native3-with-fixtures.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/recovered/native3-with-fixtures.log",
+    "totals": {
+      "engine-native": {
+        "passed": 1691,
+        "failed": 19,
+        "ignored": 75
+      },
+      "engine-native-content": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      "engine-native-kernel": {
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native-93e440f1e35a06a2)",
+        "package": "engine-native",
+        "passed": 16,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/g1.rs (../target/debug/deps/g1-d7db121f3fa3a4da)",
+        "package": "engine-native",
+        "passed": 166,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "target": "Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-2d3ade89d410b9c7)",
+        "package": "engine-native",
+        "passed": 174,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/kernel.rs (../target/debug/deps/kernel-c66fa1d4f3fdb655)",
+        "package": "engine-native",
+        "passed": 435,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/l_rounds.rs (../target/debug/deps/l_rounds-e35cd4abfe202ac1)",
+        "package": "engine-native",
+        "passed": 43,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/misc.rs (../target/debug/deps/misc-6bce960f507446bf)",
+        "package": "engine-native",
+        "passed": 218,
+        "failed": 2,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/nc08.rs (../target/debug/deps/nc08-367a7dcb703d082a)",
+        "package": "engine-native",
+        "passed": 45,
+        "failed": 0,
+        "ignored": 50
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_a_k.rs (../target/debug/deps/nc08_upstream_a_k-c488c8c59d700f27)",
+        "package": "engine-native",
+        "passed": 130,
+        "failed": 0,
+        "ignored": 9
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_l_z.rs (../target/debug/deps/nc08_upstream_l_z-1df529cf4fcbbe12)",
+        "package": "engine-native",
+        "passed": 199,
+        "failed": 0,
+        "ignored": 8
+      },
+      {
+        "target": "Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-fb18dbc55758dba6)",
+        "package": "engine-native",
+        "passed": 130,
+        "failed": 17,
+        "ignored": 7
+      },
+      {
+        "target": "Running tests/groups/swd.rs (../target/debug/deps/swd-255d311151fe4f95)",
+        "package": "engine-native",
+        "passed": 134,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/test_registry.rs (../target/debug/deps/test_registry-aa71ab4f4fe36d6c)",
+        "package": "engine-native",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_content-d3e4272bfe7bd617)",
+        "package": "engine-native-content",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_kernel-d8af084864bb7b24)",
+        "package": "engine-native-kernel",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native",
+        "package": "engine-native",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_content",
+        "package": "engine-native-content",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_kernel",
+        "package": "engine-native-kernel",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [
+      {
+        "test": "ai_planner::plan_enumerates_confirm_and_cancel_fallbacks",
+        "detail": "thread 'ai_planner::plan_enumerates_confirm_and_cancel_fallbacks' (12906337) panicked at crates/engine-native/tests/groups/../ai_planner.rs:335:78:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:335:78:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic",
+        "detail": "thread 'ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic' (12906342) panicked at crates/engine-native/tests/groups/../ai_planner.rs:423:49:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:423:49:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores",
+        "detail": "thread 'nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores' (12907059) panicked at crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan",
+        "detail": "thread 'nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan' (12907145) panicked at crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_deterministic",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_deterministic' (12907098) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_tiny_budget_still_legal",
+        "detail": "thread 'nc10_ai_bounds::nc10_tiny_budget_still_legal' (12907102) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:174:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:174:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information' (12907121) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper",
+        "detail": "thread 'nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper' (12907161) panicked at crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order' (12907099) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_detects_own_hand_change",
+        "detail": "thread 'nc10_ai_information_boundary::planner_detects_own_hand_change' (12907126) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_leak_surface_quantified",
+        "detail": "thread 'nc10_ai_bounds::nc10_leak_surface_quantified' (12907096) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::planner_is_invariant_under_hidden_information' (12907128) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf",
+        "detail": "thread 'nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf' (12907209) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice",
+        "detail": "NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\nNC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]\n\nthread 'nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice' (12907245) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract' (12907316) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract' (12907315) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics",
+        "detail": "thread 'nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics' (12907338) panicked at crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free' (12907340) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free' (12907339) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:",
+        "rootException": "NoCertifiedRoot"
+      }
+    ],
+    "wrapperExits": [
+      "101"
+    ]
+  },
+  "last-native3.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/last-native3.log",
+    "totals": {
+      "engine-native": {
+        "passed": 1680,
+        "failed": 28,
+        "ignored": 75
+      },
+      "engine-native-content": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      "engine-native-kernel": {
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native-93e440f1e35a06a2)",
+        "package": "engine-native",
+        "passed": 14,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/g1.rs (../target/debug/deps/g1-d7db121f3fa3a4da)",
+        "package": "engine-native",
+        "passed": 166,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "target": "Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-2d3ade89d410b9c7)",
+        "package": "engine-native",
+        "passed": 174,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/kernel.rs (../target/debug/deps/kernel-c66fa1d4f3fdb655)",
+        "package": "engine-native",
+        "passed": 435,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/l_rounds.rs (../target/debug/deps/l_rounds-e35cd4abfe202ac1)",
+        "package": "engine-native",
+        "passed": 42,
+        "failed": 1,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/misc.rs (../target/debug/deps/misc-6bce960f507446bf)",
+        "package": "engine-native",
+        "passed": 218,
+        "failed": 2,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/nc08.rs (../target/debug/deps/nc08-367a7dcb703d082a)",
+        "package": "engine-native",
+        "passed": 45,
+        "failed": 0,
+        "ignored": 50
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_a_k.rs (../target/debug/deps/nc08_upstream_a_k-c488c8c59d700f27)",
+        "package": "engine-native",
+        "passed": 130,
+        "failed": 0,
+        "ignored": 9
+      },
+      {
+        "target": "Running tests/groups/nc08_upstream_l_z.rs (../target/debug/deps/nc08_upstream_l_z-1df529cf4fcbbe12)",
+        "package": "engine-native",
+        "passed": 199,
+        "failed": 0,
+        "ignored": 8
+      },
+      {
+        "target": "Running tests/groups/nc_rounds.rs (../target/debug/deps/nc_rounds-fb18dbc55758dba6)",
+        "package": "engine-native",
+        "passed": 122,
+        "failed": 25,
+        "ignored": 7
+      },
+      {
+        "target": "Running tests/groups/swd.rs (../target/debug/deps/swd-255d311151fe4f95)",
+        "package": "engine-native",
+        "passed": 134,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/groups/test_registry.rs (../target/debug/deps/test_registry-aa71ab4f4fe36d6c)",
+        "package": "engine-native",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_content-d3e4272bfe7bd617)",
+        "package": "engine-native-content",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_kernel-d8af084864bb7b24)",
+        "package": "engine-native-kernel",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native",
+        "package": "engine-native",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_content",
+        "package": "engine-native-content",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_kernel",
+        "package": "engine-native-kernel",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [
+      {
+        "test": "l01_ai_tuning_eight::l01_eight_dimension_from_fresh_install",
+        "detail": "thread 'l01_ai_tuning_eight::l01_eight_dimension_from_fresh_install' (12603465) panicked at crates/engine-native/tests/groups/../l01_ai_tuning_eight.rs:216:44:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../l01_ai_tuning_eight.rs:216:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "ai_planner::plan_enumerates_confirm_and_cancel_fallbacks",
+        "detail": "thread 'ai_planner::plan_enumerates_confirm_and_cancel_fallbacks' (12603546) panicked at crates/engine-native/tests/groups/../ai_planner.rs:335:78:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:335:78:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic",
+        "detail": "thread 'ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic' (12603552) panicked at crates/engine-native/tests/groups/../ai_planner.rs:423:49:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../ai_planner.rs:423:49:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores",
+        "detail": "thread 'nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores' (12604281) panicked at crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:\npublicly certified Plan: NoCertifiedRoot\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "location": "crates/engine-native/tests/groups/../nc07_discard_duplicate_probe.rs:75:50:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_boundary_and_cancel::stale_plan_is_rejected",
+        "detail": "thread 'nc10_ai_boundary_and_cancel::stale_plan_is_rejected' (12604308) panicked at crates/engine-native/tests/groups/../nc10_ai_boundary_and_cancel.rs:189:57:\ncertified seat0 Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_boundary_and_cancel.rs:189:57:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_boundary_and_cancel::tiny_budget_marks_exhausted",
+        "detail": "thread 'nc10_ai_boundary_and_cancel::tiny_budget_marks_exhausted' (12604310) panicked at crates/engine-native/tests/groups/../nc10_ai_boundary_and_cancel.rs:99:27:\ncertified seat0 Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_boundary_and_cancel.rs:99:27:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_leak_surface_quantified",
+        "detail": "thread 'nc10_ai_bounds::nc10_leak_surface_quantified' (12604313) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_deterministic",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_deterministic' (12604314) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order",
+        "detail": "thread 'nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order' (12604315) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_stale_plan_is_rejected",
+        "detail": "thread 'nc10_ai_bounds::nc10_stale_plan_is_rejected' (12604317) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan",
+        "detail": "thread 'nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan' (12604358) panicked at crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:168:46:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_bounds::nc10_tiny_budget_still_legal",
+        "detail": "thread 'nc10_ai_bounds::nc10_tiny_budget_still_legal' (12604322) panicked at crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_bounds.rs:60:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_detects_own_hand_change",
+        "detail": "thread 'nc10_ai_information_boundary::planner_detects_own_hand_change' (12604340) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information' (12604337) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper",
+        "detail": "thread 'nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper' (12604371) panicked at crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_live_hidden_cards.rs:78:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_ai_information_boundary::planner_is_invariant_under_hidden_information",
+        "detail": "thread 'nc10_ai_information_boundary::planner_is_invariant_under_hidden_information' (12604343) panicked at crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_ai_information_boundary.rs:87:44:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf",
+        "detail": "thread 'nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf' (12604382) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:274:14:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice",
+        "detail": "NC10_OPAQUE pc=26 local0=0 frames=[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\nNC10_OPAQUE pc=26 local0=4 frames=[2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0]\n\nthread 'nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice' (12604388) panicked at crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_opaque_vm_privacy.rs:150:40:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_multiple_hidden_traps::multiple_hidden_traps_do_not_change_simulation_or_plans",
+        "detail": "thread 'nc10_multiple_hidden_traps::multiple_hidden_traps_do_not_change_simulation_or_plans' (12604373) panicked at crates/engine-native/tests/groups/../nc10_multiple_hidden_traps.rs:124:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_multiple_hidden_traps.rs:124:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_planner_pool::nc10_pool_plans_are_revision_guarded",
+        "detail": "thread 'nc10_planner_pool::nc10_pool_plans_are_revision_guarded' (12604517) panicked at crates/engine-native/tests/groups/../nc10_planner_pool.rs:100:56:\ncertified current seat: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_planner_pool.rs:100:56:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_planner_pool::nc10_pool_reuses_workers_and_returns_legal_plans",
+        "detail": "thread 'nc10_planner_pool::nc10_pool_reuses_workers_and_returns_legal_plans' (12604519) panicked at crates/engine-native/tests/groups/../nc10_planner_pool.rs:42:71:\nassertion `left != right` failed\n  left: 0\n right: 0",
+        "location": "crates/engine-native/tests/groups/../nc10_planner_pool.rs:42:71:",
+        "rootException": "other"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract' (12604525) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract",
+        "detail": "thread 'nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract' (12604523) panicked at crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_redaction_helper_contract.rs:179:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics",
+        "detail": "thread 'nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics' (12604538) panicked at crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:51:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free' (12604540) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:115:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free",
+        "detail": "thread 'nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free' (12604539) panicked at crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc12_swd_authoritative_stability.rs:82:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_single_hidden_trap::hidden_trap_sampling_is_invariant_across_seeds",
+        "detail": "thread 'nc10_single_hidden_trap::hidden_trap_sampling_is_invariant_across_seeds' (12604526) panicked at crates/engine-native/tests/groups/../nc10_single_hidden_trap.rs:268:54:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_single_hidden_trap.rs:268:54:",
+        "rootException": "NoCertifiedRoot"
+      },
+      {
+        "test": "nc10_single_hidden_trap::single_opponent_trap_identity_cannot_change_planning",
+        "detail": "thread 'nc10_single_hidden_trap::single_opponent_trap_identity_cannot_change_planning' (12604530) panicked at crates/engine-native/tests/groups/../nc10_single_hidden_trap.rs:145:51:\npublicly certified Plan: NoCertifiedRoot",
+        "location": "crates/engine-native/tests/groups/../nc10_single_hidden_trap.rs:145:51:",
+        "rootException": "NoCertifiedRoot"
+      }
+    ],
+    "wrapperExits": [
+      "101"
+    ]
+  },
+  "last-vm-wasm-tests.log": {
+    "log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/last-vm-wasm-tests.log",
+    "totals": {
+      "engine-native-wasm": {
+        "passed": 78,
+        "failed": 0,
+        "ignored": 0
+      },
+      "rule-vm": {
+        "passed": 24,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    "targets": [
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/engine_native_wasm-16b044e1e1e1761c)",
+        "package": "engine-native-wasm",
+        "passed": 28,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/adr0786_j2_cross_target.rs (../target/debug/deps/adr0786_j2_cross_target-f88c870dac86d996)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_multiseat.rs (../target/debug/deps/cross_target_multiseat-0de7315db385fb95)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/cross_target_package.rs (../target/debug/deps/cross_target_package-5cf474b37776b34c)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/events_hash_export.rs (../target/debug/deps/events_hash_export-fd4a441c91e247e4)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/gt014_import_validation_parity.rs (../target/debug/deps/gt014_import_validation_parity-17dbb1b9774508a9)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/installed_package_payload.rs (../target/debug/deps/installed_package_payload-3eec16bbc05ab4c5)",
+        "package": "engine-native-wasm",
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_actor_authorization.rs (../target/debug/deps/nc03_actor_authorization-28d23558a41fee0f)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_legal_actions_export.rs (../target/debug/deps/nc03_legal_actions_export-d407035ecd9f6c83)",
+        "package": "engine-native-wasm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc03_view_projection.rs (../target/debug/deps/nc03_view_projection-9deae12846361914)",
+        "package": "engine-native-wasm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc04_vm_control_flow.rs (../target/debug/deps/nc04_vm_control_flow-e9aecabce3e536eb)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc05_general_select_export.rs (../target/debug/deps/nc05_general_select_export-7e3065565f1c0104)",
+        "package": "engine-native-wasm",
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc06_skill_pile_restore.rs (../target/debug/deps/nc06_skill_pile_restore-74069ae361627fe2)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/nc08_cross_target.rs (../target/debug/deps/nc08_cross_target-ce0fa2ff5e753ecc)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/pa09_native_session.rs (../target/debug/deps/pa09_native_session-13970f4637337d94)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/restore_boundary_handle.rs (../target/debug/deps/restore_boundary_handle-9b576047b8df418c)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_module_hash.rs (../target/debug/deps/vm_module_hash-566e72f5074187b8)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_integrity.rs (../target/debug/deps/vm_package_integrity-05adcd9e9ecf885c)",
+        "package": "engine-native-wasm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/vm_package_worker.rs (../target/debug/deps/vm_package_worker-db0bdb2cfcc7dcc7)",
+        "package": "engine-native-wasm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running unittests src/lib.rs (../target/debug/deps/rule_vm-02f0cf80d1e836ed)",
+        "package": "rule-vm",
+        "passed": 11,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/control_flow_boundaries.rs (../target/debug/deps/control_flow_boundaries-4b68b1d7bd35aafa)",
+        "package": "rule-vm",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/controlled.rs (../target/debug/deps/controlled-918f6a419aef4942)",
+        "package": "rule-vm",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/effect_tag_656_772.rs (../target/debug/deps/effect_tag_656_772-dc73bd862fbfcc98)",
+        "package": "rule-vm",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Running tests/fuel_exhaustion.rs (../target/debug/deps/fuel_exhaustion-bf33fd015ae11b24)",
+        "package": "rule-vm",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests engine_native_wasm",
+        "package": "engine-native-wasm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "target": "Doc-tests rule_vm",
+        "package": "rule-vm",
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ],
+    "failures": [],
+    "wrapperExits": [
+      "0"
+    ]
+  }
+}

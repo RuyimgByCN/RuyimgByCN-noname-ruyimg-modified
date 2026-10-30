@@ -1,0 +1,14 @@
+usage: check_doc_line_refs.py [-h] [--strict]
+
+Verify `path/to/file.rs:123` references in docs still point inside the file.
+Evidence documents cite exact source lines (`step/skills_cards.rs:2197`). The
+code they cite is **untracked** and being edited by other agents, so a
+citation can silently go stale — pointing past the end of a shrunken file, or
+at a file that moved. This check is deliberately shallow: it verifies the file
+exists and has at least as many lines as the citation claims. It **cannot**
+verify the line still means what the doc says — that would need semantic
+matching, and pretending otherwise would be worse than not checking.
+
+options:
+  -h, --help  show this help message and exit
+  --strict    exit 1 when a citation is stale

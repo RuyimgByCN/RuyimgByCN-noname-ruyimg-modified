@@ -1,0 +1,10 @@
+{
+  "time": "2026-10-30T16:21:41.157483+00:00",
+  "protected_files": 17195,
+  "upstream_AST_files": 461,
+  "original_rows_exact": 12359,
+  "aliases": 23393,
+  "full_preflight": "deferred",
+  "source_versions": "330/105/758/WS6;schema2sixfields",
+  "no_cargo_wasm_builds": true
+}

@@ -1,0 +1,553 @@
+{
+  "warning_occurrences": [
+    {
+      "log": "preflight-13.stderr.log",
+      "line": 2,
+      "text": "⚠ 「有引用」≠「行为正确」；效果正确性需逐张读效果步（本脚本不判断）。"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 1,
+      "text": "............................................................................................./Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 4,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 7,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 10,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 13,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 16,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 19,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 22,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 25,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 28,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 31,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 34,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 37,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 40,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 43,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 46,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 49,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 52,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 55,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 58,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 61,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 64,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 67,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 70,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 73,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 76,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 79,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 82,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 85,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 88,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 91,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 94,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 97,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 100,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 103,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 106,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 109,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 112,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 115,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 118,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 121,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 124,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 127,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 130,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 133,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 136,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 139,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 142,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 145,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 148,
+      "text": "................................................................./Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 151,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 154,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/doomsday-brawl-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 157,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 160,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/longxue-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 163,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 166,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/qhly-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 169,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 172,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 175,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/ai-tuning-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 178,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/sj-settings-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 181,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 184,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 187,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/mark-supplement-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 190,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 193,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/assets/pile.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 196,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/fool-plugin-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 199,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 202,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/hero-kill-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 205,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-zhugeliang-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 208,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 211,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 214,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/thunder-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 217,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-mvp-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 220,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 223,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 226,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/wuxing.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 229,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 232,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/coin-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 235,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 238,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/epic-cards-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 241,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 244,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/select-beautify-upstream-liuli/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 247,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 250,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 253,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/assets/pile.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 256,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/omnisearch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 259,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/update-guard-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 262,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/douzhuan-xingyi-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 265,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/martial-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 268,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 271,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/boss-play-upstream-noname/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 274,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shousha-full-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 277,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 280,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 283,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/elo-sanction-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 286,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/skin-switch-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 289,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/desktop-adapt-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "line": 292,
+      "text": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/report_phase_arms.py:117: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/drag-read-upstream-liuli/assets/config.json' mode='r' encoding='utf-8'>"
+    }
+  ],
+  "resource_warning_unclosed_file_count": 98,
+  "card_coverage_caution_count": 1,
+  "nonempty_stderr_logs": [
+    {
+      "log": "preflight-10.stderr.log",
+      "bytes": 166
+    },
+    {
+      "log": "preflight-11.stderr.log",
+      "bytes": 80
+    },
+    {
+      "log": "preflight-12.stderr.log",
+      "bytes": 52
+    },
+    {
+      "log": "preflight-13.stderr.log",
+      "bytes": 108
+    },
+    {
+      "log": "preflight-18.stderr.log",
+      "bytes": 40688
+    },
+    {
+      "log": "preflight-19.stderr.log",
+      "bytes": 278
+    }
+  ],
+  "failed_gate_commands": [],
+  "failed_preflight_children": [],
+  "skipped_tests": 0,
+  "preflight_gates_skipped": 0,
+  "known_docref_missing_kinds": [
+    "path.rs",
+    ".../gujian/skill.js",
+    "character/offline/.../offline_piracyS.js",
+    ".../swd/skill.js",
+    "schema/package.rs",
+    "step_skills_status.rs"
+  ],
+  "docrefs_out_of_bounds": 0,
+  "missing_paths_treated_by_existing_scanner_as_hints": true,
+  "warning_filters_added": false,
+  "prior_cleanup_red_preserved": {
+    "path": "../main-acceptance/initial-cleanup-red.json",
+    "original_runtime_exit": 1,
+    "reason": "Chrome profile ENOTEMPTY after successful121decode/14play; historical red retained; no runtime rerun in this task"
+  },
+  "unrun_by_scope": [
+    "main11Node/167frontend/typecheck/sync/verify/source8824inodebyte/realVue121decode14play/214GET9errors",
+    "Workspace/native3/conformance/Wasm/codec/performance",
+    "all17195/461/12359mediahash",
+    "compat14/private331/NC10"
+  ]
+}

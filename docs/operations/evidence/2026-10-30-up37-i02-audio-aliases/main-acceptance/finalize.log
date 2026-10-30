@@ -1,0 +1,26 @@
+{
+  "command_count": 15,
+  "source9_and_protected_unchanged": true,
+  "protected_files": 17195,
+  "AST_source_files": 461,
+  "browser": {
+    "roles": 15,
+    "decoded": 121,
+    "controls_played": 14,
+    "failure_isolation_scenes": 9,
+    "runtime_exceptions": 0,
+    "CDP_not_OS_HID_or_listening": true
+  },
+  "HTTP": {
+    "get_count": 214,
+    "cross_pack_forms": 8,
+    "cross_pack_alias_requests": 91,
+    "source_manifest_browser_bytes_match": true
+  },
+  "aliases": 23393,
+  "artifact_count": 105,
+  "cleanup_red_preserved": true,
+  "no_owned_runtime_processes": true,
+  "free_disk_bytes": 102405468160
+}
+{"command": ["python3", "-B", "docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/finalize.py"], "exit": 0, "locked_seconds": 0.1804227500106208, "disk_free_bytes": 102405431296}

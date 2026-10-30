@@ -1,0 +1,82 @@
+{
+  "started_utc": "2026-10-30T15:36:03.856649+00:00",
+  "accepted_commit": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+  "accepted_tree": "6c0c34e41647077fba17879bbf86103d63fa06e8",
+  "expected_old_remote": "9dbc65530feb695688d3160dc38b6cf64ad39ecd",
+  "push_attempts": 1,
+  "before": {
+    "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+    "tree": "6c0c34e41647077fba17879bbf86103d63fa06e8",
+    "index_sha256": "ad7b51d0ddf2d5c989df322cd6e0f54c515701e10627364f1b8de451d2e104e7",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_hook_sha256": "a317b35f0e19886117f865e580704fdac908cbdfe680b548537f5d81483da964",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "elapsed_seconds": 156.28939795898623,
+  "committed_ci_sha256": {
+    ".github/workflows/ci.yml": "4beaa951da275078cb20f885d3f11f97a3fb733f2e60632080e32d9a70c35698",
+    ".github/actions/prepare-original-content/action.yml": "3cd416135315d69f102e68d41927f33d1e2f0df24f83ed004835df3b79e28773",
+    ".github/actions/prepare-original-content/liuli-longxue.patch": "02e44c864e923794a5805d37a6934826597a898d795632d1c1e08e8dcb7036e9",
+    "docs/operations/native-ci.md": "02962346ecc393e5ca4302fe7e6170df17352a837748c9c96dc2d6ffb1bdab51"
+  },
+  "remote-before_exit": 0,
+  "remote_before_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "9dbc65530feb695688d3160dc38b6cf64ad39ecd"
+  },
+  "immediately_before_push": {
+    "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+    "tree": "6c0c34e41647077fba17879bbf86103d63fa06e8",
+    "index_sha256": "ad7b51d0ddf2d5c989df322cd6e0f54c515701e10627364f1b8de451d2e104e7",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_hook_sha256": "a317b35f0e19886117f865e580704fdac908cbdfe680b548537f5d81483da964",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "preflight_passed": true,
+  "push_command": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "git",
+    "-c",
+    "core.hooksPath=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-decision25-increment-hooks-te58j0wa",
+    "-c",
+    "credential.helper=",
+    "-c",
+    "credential.helper=!gh auth git-credential",
+    "-c",
+    "pack.threads=2",
+    "push",
+    "--progress",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "HEAD:refs/heads/native-convergence"
+  ],
+  "push_pid": 62040,
+  "push_exit": 0,
+  "push_seconds_including_queue": 153.30332170799375,
+  "branch-after_exit": 0,
+  "main-after_exit": 0,
+  "remote_after_refs": {
+    "refs/heads/native-convergence": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "remote_verified": true,
+  "after": {
+    "head": "da7e4c019461a6c467a9dd2de849f3b1a7494b86",
+    "tree": "6c0c34e41647077fba17879bbf86103d63fa06e8",
+    "index_sha256": "ad7b51d0ddf2d5c989df322cd6e0f54c515701e10627364f1b8de451d2e104e7",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "scoped_hook_sha256": "a317b35f0e19886117f865e580704fdac908cbdfe680b548537f5d81483da964",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "finished_utc": "2026-10-30T15:38:40.146630+00:00"
+}
